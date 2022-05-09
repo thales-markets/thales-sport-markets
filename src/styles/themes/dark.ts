@@ -28,7 +28,7 @@ export default {
         background: {
             primary: Colors.WHITE,
             selection: {
-                primary: Colors.PINK_LIGHT,
+                primary: Colors.GRAY_LIGHT,
             },
         },
         textColor: {

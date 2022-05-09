@@ -1,7 +1,7 @@
 import { Colors } from 'styles/common';
 
 export default {
-    background: { primary: Colors.WHITE, secondary: Colors.PINK_LIGHT, tertiary: Colors.WHITE },
+    background: { primary: Colors.WHITE, secondary: Colors.GRAY_LIGHT, tertiary: Colors.WHITE },
     textColor: {
         primary: Colors.PURPLE,
         secondary: Colors.GREEN,
@@ -28,7 +28,7 @@ export default {
         background: {
             primary: Colors.WHITE,
             selection: {
-                primary: Colors.PINK_LIGHT,
+                primary: Colors.GRAY_LIGHT,
             },
         },
         textColor: {

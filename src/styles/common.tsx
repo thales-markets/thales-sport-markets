@@ -41,8 +41,6 @@ export const Colors = {
     GRAY: '#303656',
     GRAY_LIGHT: '#5F6180',
     GRAY_DARK: '#1A1C2B',
-    PINK: '#ce348a',
-    PINK_LIGHT: '#F7CAD7',
     WHITE: '#FFFFFF',
     GREEN: '#5FC694',
     BLUE: '#40a1d8',
