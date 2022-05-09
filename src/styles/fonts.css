@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Nunito';
+    src: local('Nunito'), url(../assets/fonts/Nunito/Nunito.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'ExoticIcons';
+    src: local('ExoticIcons'), url(../assets/fonts/ExoticIcons/ExoticIcons.ttf) format('truetype');
+}
