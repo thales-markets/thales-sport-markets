@@ -1,0 +1,59 @@
+/* bnc-onboard wallet connector */
+
+onboard-custom {
+    z-index: 1301;
+}
+
+.bn-onboard-custom.bn-onboard-dark-mode {
+    border: 1px solid #f6f6fe;
+    background: linear-gradient(180deg, #5e2167 1.04%, #7760a8 100%) !important;
+}
+
+.bn-onboard-custom.bn-onboard-dark-mode-background.bn-onboard-custom {
+    background: linear-gradient(180deg, #ee5782 0%, #b81b8f 100%) !important;
+}
+
+.bn-onboard-custom.bn-onboard-dark-mode-background-hover:hover {
+    background: #f7cad7 !important;
+    color: #6c438a !important;
+}
+
+.bn-onboard-selected-wallet {
+    background: linear-gradient(180deg, #ee5782 0%, #b81b8f 100%) !important;
+}
+
+.bn-onboard-custom.bn-onboard-modal-content-close.bn-onboard-dark-mode-close-background {
+    background: transparent !important;
+}
+
+.bn-onboard-custom.bn-onboard-select-wallet-info {
+    color: #f6f6fe !important;
+}
+
+.bn-onboard-custom.bn-onboard-select-description a {
+    color: #f983a5;
+}
+
+.bn-onboard-custom.bn-onboard-select-description a:hover {
+    text-decoration: underline;
+}
+
+.bn-onboard-custom.bn-onboard-select-wallet-definition a {
+    color: #f983a5 !important;
+}
+
+.bn-onboard-custom.bn-onboard-select-wallet-definition a:hover {
+    text-decoration: underline;
+}
+
+/* react-toastify notifications */
+#root {
+    --toastify-text-color-light: #6c438a;
+    --toastify-spinner-color: #6c438a;
+    --toastify-spinner-color-empty-area: #e1d9e7;
+}
+
+/* react-modal */
+.ReactModal__Body--open {
+    overflow-y: hidden;
+}
