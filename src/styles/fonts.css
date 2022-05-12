@@ -1,6 +1,6 @@
 @font-face {
-    font-family: 'Nunito';
-    src: local('Nunito'), url(../assets/fonts/Nunito/Nunito.ttf) format('truetype');
+    font-family: 'Roboto';
+    src: local('Roboto'), url(../assets/fonts/Roboto/Roboto.ttf) format('truetype');
 }
 
 @font-face {

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 
 export const BondInfo = styled(FlexDivColumn)`
     font-size: 15px;
@@ -17,14 +17,14 @@ export const BondInfo = styled(FlexDivColumn)`
     }
 `;
 
-export const Info = styled(FlexDivCentered)<{ fontSize?: number; marginTop?: number; marginBottom?: number }>`
+export const Info = styled(FlexDiv)<{ fontSize?: number; marginTop?: number; marginBottom?: number }>`
     font-style: normal;
-    font-weight: 300;
-    font-size: ${(props) => props.fontSize || 15}px;
-    line-height: 120%;
-    white-space: nowrap;
+    font-weight: 400;
+    font-size: ${(props) => props.fontSize || 17}px;
+    line-height: 20px;
     margin-top: ${(props) => props.marginTop || 0}px;
     margin-bottom: ${(props) => props.marginBottom || 0}px;
+    text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
 `;
 
@@ -114,4 +114,87 @@ export const Checkmark = styled.span`
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);
     }
+`;
+
+export const MatchInfo = styled(FlexDivRow)`
+    margin-bottom: 20px;
+    align-items: center;
+    align-self: center;
+    width: 100%;
+    justify-content: space-around;
+`;
+
+export const MatchInfoColumn = styled(FlexDivColumnCentered)`
+    align-items: center;
+`;
+
+export const MatchDate = styled.label`
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 20px;
+    margin: 16px 11px;
+    text-align: center;
+    color: ${(props) => props.theme.textColor.primary};
+`;
+
+export const MatchVSLabel = styled.label`
+    font-style: normal;
+    font-weight: 200;
+    font-size: 23px;
+    line-height: 27px;
+    display: flex;
+    align-items: center;
+    height: 126px;
+    color: ${(props) => props.theme.textColor.primary};
+`;
+
+export const MatchParticipantImageContainer = styled(FlexDiv)`
+    border-radius: 50%;
+    border: 3px solid ${(props) => props.theme.borderColor.primary};
+    background: ${(props) => props.theme.background.secondary};
+    height: 126px;
+    width: 126px;
+    line-height: 100%;
+    align-items: center;
+    justify-content: center;
+    color: ${(props) => props.theme.textColor.primary};
+`;
+
+export const MatchParticipantImage = styled.img`
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+    line-height: 100%;
+    color: ${(props) => props.theme.textColor.primary};
+`;
+
+export const MatchParticipantName = styled.label`
+    display: flex;
+    margin-top: 11px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    text-transform: uppercase;
+    line-height: 20px;
+    height: 20px;
+    text-align: center;
+    color: ${(props) => props.theme.textColor.primary};
+`;
+
+export const OddsLabel = styled.label<{ isUP?: boolean; isDraw?: boolean }>`
+    display: flex;
+    margin-top: 4px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 23px;
+    text-transform: uppercase;
+    text-align: center;
+    color: ${(props) =>
+        props.isDraw
+            ? props.theme.oddsColor.tertiary
+            : props.isUP
+            ? props.theme.oddsColor.primary
+            : props.theme.oddsColor.secondary};
 `;

@@ -7,10 +7,15 @@ export default {
         secondary: Colors.GRAY_LIGHT,
         tertiary: Colors.GRAY_LIGHT,
     },
+    oddsColor: {
+        primary: Colors.GREEN,
+        secondary: Colors.RED,
+        tertiary: Colors.BLUE,
+    },
     borderColor: {
-        primary: Colors.WHITE,
-        secondary: Colors.GREEN,
-        tertiary: Colors.PURPLE,
+        primary: Colors.GRAY_LIGHT,
+        secondary: Colors.WHITE,
+        tertiary: Colors.GRAY_DARK,
     },
     button: {
         background: {

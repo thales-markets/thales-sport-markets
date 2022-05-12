@@ -1,6 +1,6 @@
 import useTagsQuery from 'queries/markets/useTagsQuery';
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
@@ -15,11 +15,11 @@ type TagsProps = {
 };
 
 const Tags: React.FC<TagsProps> = ({ tags, labelFontSize }) => {
-    const { t } = useTranslation();
+    // const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [availableTags, setAvailableTags] = useState<TagList>([]);
-
+    console.log(labelFontSize);
     const tagsQuery = useTagsQuery(networkId, {
         enabled: isAppReady,
     });
@@ -32,10 +32,13 @@ const Tags: React.FC<TagsProps> = ({ tags, labelFontSize }) => {
 
     return (
         <Container>
-            <TagLabel labelFontSize={labelFontSize}>{t('market.tags-label')}:</TagLabel>
             {tags.map((tag: number) => {
                 const findTagItem = availableTags.find((t) => t.id == tag);
-                return findTagItem ? <Tag key={findTagItem.label}>{findTagItem.label}</Tag> : null;
+                return findTagItem ? (
+                    <>
+                        <Tag key={findTagItem.label}>{findTagItem.label}</Tag> /
+                    </>
+                ) : null;
             })}
         </Container>
     );
@@ -44,6 +47,8 @@ const Tags: React.FC<TagsProps> = ({ tags, labelFontSize }) => {
 const Container = styled(FlexDivStart)`
     flex-wrap: wrap;
     align-items: center;
+    color: ${(props) => props.theme.textColor.primary};
+    margin-bottom: 5px;
 `;
 
 export const TagLabel = styled.span<{ labelFontSize?: number }>`
@@ -57,17 +62,15 @@ export const TagLabel = styled.span<{ labelFontSize?: number }>`
 `;
 
 const Tag = styled(FlexDivCentered)`
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
-    border-radius: 30px;
     font-style: normal;
-    font-weight: normal;
-    font-size: 15px;
-    line-height: 20px;
-    padding: 4px 8px;
-    margin-left: 6px;
-    height: 28px;
+    font-weight: 300;
+    font-size: 9px;
+    line-height: 10px;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    padding: 4px 4px;
     color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 4px;
 `;
 
 export default Tags;
