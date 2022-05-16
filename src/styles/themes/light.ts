@@ -21,9 +21,12 @@ export default {
         background: {
             primary: Colors.GREEN,
             secondary: Colors.PURPLE,
+            tertiary: Colors.GRAY_LIGHT,
         },
         textColor: {
             primary: Colors.WHITE,
+            secondary: Colors.GRAY_DARK,
+            tertiary: Colors.GRAY,
         },
         borderColor: {
             primary: Colors.WHITE,

@@ -13,8 +13,8 @@ type SortOptionProps = {
 const SortOption: React.FC<SortOptionProps> = ({ sortDirection, selected, disabled, onClick, children }) => {
     return (
         <Container className={`${disabled ? 'disabled' : ''} ${selected ? 'selected' : ''}`} onClick={onClick}>
-            <SortText>{children}</SortText>
             <SortIcon selected={selected} sortDirection={sortDirection} />
+            <SortText>{children}</SortText>
         </Container>
     );
 };
@@ -31,7 +31,7 @@ const Container = styled(FlexDivRowCentered)`
         cursor: default;
         opacity: 0.4;
     }
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
     margin-right: 40px;
     padding-bottom: 5px;
     -webkit-user-select: none;
@@ -40,6 +40,7 @@ const Container = styled(FlexDivRowCentered)`
     -o-user-select: none;
     user-select: none;
     margin-bottom: 10px;
+    justify-content: flex-start;
 `;
 
 const SortText = styled.span`
@@ -48,6 +49,7 @@ const SortText = styled.span`
 
 const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`
     font-size: ${(props) => (props.selected && props.sortDirection !== SortDirection.NONE ? 22 : 18)}px;
+    margin-right: 7px;
     &:before {
         font-family: ExoticIcons !important;
         content: ${(props) =>
@@ -58,7 +60,7 @@ const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`
                     ? "'\\0047'"
                     : "'\\0045'"
                 : "'\\0045'"};
-        color: ${(props) => props.theme.textColor.primary};
+        color: ${(props) => props.theme.textColor.secondary};
     }
 `;
 

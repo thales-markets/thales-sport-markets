@@ -1,9 +1,8 @@
 export enum GlobalFilterEnum {
     All = 'All',
-    Disputed = 'Disputed',
     YourPositions = 'YourPositions',
     Claim = 'Claim',
-    // History = 'History',
+    History = 'History',
 }
 
 export enum SortDirection {

@@ -12,8 +12,8 @@ type GlobalFilterProps = {
 const GlobalFilter: React.FC<GlobalFilterProps> = ({ disabled, selected, onClick, children, count }) => {
     return (
         <Container className={`${disabled ? 'disabled' : ''} ${selected ? 'selected' : ''}`} onClick={onClick}>
-            <Label>{children}</Label>
             {count !== undefined && <Count>{count}</Count>}
+            <Label>{children}</Label>
         </Container>
     );
 };
@@ -36,10 +36,11 @@ const Container = styled(FlexDivRowCentered)`
         cursor: default;
         opacity: 0.4;
     }
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
     margin-right: 30px;
     padding-bottom: 5px;
     margin-bottom: 10px;
+    justify-content: flex-start;
 `;
 
 const Label = styled.div`
@@ -53,10 +54,11 @@ const Label = styled.div`
 const Count = styled(FlexDivCentered)`
     min-width: 26px;
     height: 26px;
-    background: ${(props) => props.theme.button.background.secondary};
-    color: ${(props) => props.theme.button.textColor.primary};
+    background: ${(props) => props.theme.background.tertiary};
+    color: ${(props) => props.theme.textColor.primary};
     border-radius: 15px;
     margin-left: 4px;
+    margin-right: 7px;
     padding-left: 4px;
     padding-right: 4px;
 `;

@@ -25,25 +25,27 @@ const TagButton: React.FC<TagButtonProps> = ({ disabled, selected, onClick, chil
 };
 
 const Container = styled(FlexDivCentered)`
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
-    border-radius: 30px;
+    border: 1.5px solid ${(props) => props.theme.borderColor.primary};
+    border-radius: 5px;
     font-style: normal;
-    font-weight: normal;
+    font-weight: 500;
     font-size: 15px;
     line-height: 20px;
     padding: 4px 8px;
     margin-left: 6px;
-    height: 28px;
-    color: ${(props) => props.theme.textColor.primary};
+    height: 33px;
+    color: ${(props) => props.theme.textColor.secondary};
     margin-bottom: 4px;
     cursor: pointer;
     &.selected {
+        border: 1.5px solid ${(props) => props.theme.borderColor.primary};
         background: ${(props) => props.theme.button.background.secondary};
-        color: ${(props) => props.theme.button.textColor.primary};
+        color: ${(props) => props.theme.button.textColor.tertiary};
     }
     &:hover:not(.disabled) {
+        border: 1.5px solid ${(props) => props.theme.borderColor.primary};
         background: ${(props) => props.theme.button.background.secondary};
-        color: ${(props) => props.theme.button.textColor.primary};
+        color: ${(props) => props.theme.button.textColor.tertiary};
         opacity: 0.8;
     }
     &.disabled {

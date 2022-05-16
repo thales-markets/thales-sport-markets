@@ -5,21 +5,21 @@ onboard-custom {
 }
 
 .bn-onboard-custom.bn-onboard-dark-mode {
-    border: 1px solid #f6f6fe;
-    background: linear-gradient(180deg, #5e2167 1.04%, #7760a8 100%) !important;
+    border: 1px solid #ffffff;
+    background: linear-gradient(180deg, #1a1c2b 1.04%, #5f6180 100%) !important;
 }
 
 .bn-onboard-custom.bn-onboard-dark-mode-background.bn-onboard-custom {
-    background: linear-gradient(180deg, #ee5782 0%, #b81b8f 100%) !important;
+    background: linear-gradient(180deg, #303656 0%, #5f6180 100%) !important;
 }
 
 .bn-onboard-custom.bn-onboard-dark-mode-background-hover:hover {
-    background: #f7cad7 !important;
-    color: #6c438a !important;
+    background: #5f6180 !important;
+    color: #1a1c2b !important;
 }
 
 .bn-onboard-selected-wallet {
-    background: linear-gradient(180deg, #ee5782 0%, #b81b8f 100%) !important;
+    background: linear-gradient(180deg, #303656 0%, #5f6180 100%) !important;
 }
 
 .bn-onboard-custom.bn-onboard-modal-content-close.bn-onboard-dark-mode-close-background {
@@ -27,11 +27,11 @@ onboard-custom {
 }
 
 .bn-onboard-custom.bn-onboard-select-wallet-info {
-    color: #f6f6fe !important;
+    color: #ffffff !important;
 }
 
 .bn-onboard-custom.bn-onboard-select-description a {
-    color: #f983a5;
+    color: #5fc694;
 }
 
 .bn-onboard-custom.bn-onboard-select-description a:hover {
@@ -39,7 +39,7 @@ onboard-custom {
 }
 
 .bn-onboard-custom.bn-onboard-select-wallet-definition a {
-    color: #f983a5 !important;
+    color: #5fc694 !important;
 }
 
 .bn-onboard-custom.bn-onboard-select-wallet-definition a:hover {
@@ -48,8 +48,8 @@ onboard-custom {
 
 /* react-toastify notifications */
 #root {
-    --toastify-text-color-light: #6c438a;
-    --toastify-spinner-color: #6c438a;
+    --toastify-text-color-light: #5f6180;
+    --toastify-spinner-color: #5f6180;
     --toastify-spinner-color-empty-area: #e1d9e7;
 }
 
