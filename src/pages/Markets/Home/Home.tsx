@@ -23,7 +23,7 @@ import {
 } from 'types/markets';
 import GlobalFilter from '../components/GlobalFilter';
 import TagButton from '../../../components/TagButton';
-import { TagLabel } from '../components/Tags/Tags';
+// import { TagLabel } from '../components/Tags/Tags';
 import MarketsGrid from './MarketsGrid';
 import { navigateTo } from 'utils/routes';
 import ROUTES from 'constants/routes';
@@ -233,21 +233,6 @@ const Home: React.FC = () => {
     return (
         <Container>
             <FiltersContainer>
-                <TagsContainer>
-                    <TagLabel>{t('market.tags-label')}:</TagLabel>
-                    {availableTags.map((tag: TagInfo) => {
-                        return (
-                            <TagButton
-                                disabled={false}
-                                selected={tagFilter.id === tag.id}
-                                onClick={() => setTagFilter(tagFilter.id === tag.id ? allTagsFilterItem : tag)}
-                                key={tag.label}
-                            >
-                                {tag.label}
-                            </TagButton>
-                        );
-                    })}
-                </TagsContainer>
                 {!creationRestrictedToOwner && (
                     <ButtonsContainer>
                         <Button

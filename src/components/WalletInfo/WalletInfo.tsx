@@ -96,7 +96,7 @@ const WalletInfo: React.FC = () => {
 
 const Container = styled(FlexDivCentered)`
     position: relative;
-    height: 28px;
+    height: 34px;
     justify-content: end;
     min-width: 254px;
     @media (max-width: 767px) {
@@ -105,20 +105,21 @@ const Container = styled(FlexDivCentered)`
 `;
 
 const WalletContainer = styled(FlexDivRowCentered)`
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
-    border-radius: 30px;
+    border: 1px solid ${(props) => props.theme.borderColor.tertiary};
+    border-radius: 5px;
     height: 28px;
     padding: 0 20px;
     cursor: pointer;
     color: ${(props) => props.theme.textColor.primary};
+    background: ${(props) => props.theme.background.secondary};
     .wallet-info-hover {
         display: none;
     }
     :hover {
-        background: ${(props) => props.theme.button.background.secondary};
-        color: ${(props) => props.theme.button.textColor.primary};
+        background: ${(props) => props.theme.background.tertiary};
+        color: ${(props) => props.theme.textColor.primary};
         div {
-            border-color: ${(props) => props.theme.button.borderColor.primary};
+            border-color: ${(props) => props.theme.borderColor.secondary};
         }
         i {
             :before {
@@ -141,13 +142,13 @@ const Wallet = styled(FlexDivRowCentered)`
 `;
 
 const Balance = styled(FlexDivRowCentered)`
-    border-left: 1px solid ${(props) => props.theme.borderColor.primary};
+    border-left: 1px solid ${(props) => props.theme.borderColor.secondary};
     padding-left: 10px;
 `;
 
 const Info = styled.span`
     font-style: normal;
-    font-weight: normal;
+    font-weight: 400;
     font-size: 12.5px;
     line-height: 17px;
 `;
@@ -165,7 +166,7 @@ const WalletOptions = styled(FlexDivColumn)`
     height: 84px;
     border-radius: 5px;
     z-index: 100;
-    background: ${(props) => props.theme.button.background.secondary};
+    background: ${(props) => props.theme.background.secondary};
     color: ${(props) => props.theme.button.textColor.primary};
     @media (max-width: 767px) {
         right: -127px;
@@ -194,8 +195,9 @@ const WalletOption = styled(FlexDivCentered)`
     padding: 5px;
     text-align: center;
     cursor: pointer;
+    color: ${(props) => props.theme.textColor.primary};
     :hover {
-        background: #e1d9e7;
+        background: ${(props) => props.theme.background.tertiary};
         :last-child {
             border-radius: 0px 0px 5px 5px;
         }
@@ -211,7 +213,7 @@ const CloseIcon = styled.i`
     &:before {
         font-family: ExoticIcons !important;
         content: '\\004F';
-        color: ${(props) => props.theme.button.textColor.primary};
+        color: ${(props) => props.theme.textColor.primary};
     }
 `;
 
