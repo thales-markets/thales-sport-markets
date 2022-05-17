@@ -31,6 +31,9 @@ const Container = styled(FlexDivRowCentered)`
         cursor: default;
         opacity: 0.4;
     }
+    &:hover {
+        color: ${(props) => props.theme.textColor.primary};
+    }
     color: ${(props) => props.theme.textColor.secondary};
     margin-right: 40px;
     padding-bottom: 5px;

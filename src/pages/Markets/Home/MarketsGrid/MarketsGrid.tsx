@@ -41,6 +41,9 @@ const Container = styled(FlexDiv)`
     > div {
         display: flex;
         width: 100%;
+        > div {
+            flex-grow: 1;
+        }
     }
 `;
 

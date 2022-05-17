@@ -27,10 +27,9 @@ const Container = styled(FlexDivRowCentered)`
     text-transform: uppercase;
     cursor: pointer;
     height: 36px;
-    border-bottom: 5px solid transparent;
     &.selected,
     &:hover {
-        border-bottom: 5px solid ${(props) => props.theme.borderColor.secondary};
+        color: ${(props) => props.theme.textColor.primary};
     }
     &.disabled {
         cursor: default;
