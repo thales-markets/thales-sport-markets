@@ -5,6 +5,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
+import BackgroundImage from 'assets/images/background.svg';
 
 const HomeLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -12,7 +13,7 @@ const HomeLayout: React.FC = ({ children }) => {
     return (
         <>
             {isAppReady ? (
-                <Background>
+                <Background image={BackgroundImage}>
                     <Wrapper>{children}</Wrapper>
                 </Background>
             ) : (
@@ -22,10 +23,11 @@ const HomeLayout: React.FC = ({ children }) => {
     );
 };
 
-const Background = styled.section`
+const Background = styled.section<{ image: string }>`
     width: 100%;
     min-height: 100vh;
-    background: ${(props) => props.theme.background.primary};
+    background-image: ${(props) => `url(${props.image})`};
+    background-size: 100% 100%;
     font-size: 16px;
 `;
 
@@ -34,7 +36,6 @@ const Wrapper = styled(FlexDivColumn)`
     min-height: 100vh;
     margin: auto;
     max-width: 1220px;
-    padding: 40px 20px;
     align-items: center;
 `;
 

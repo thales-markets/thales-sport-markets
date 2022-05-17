@@ -2,11 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 // import Footer from './Footer';
-import { ReactComponent as HomepageExotic } from 'assets/images/home-exotic.svg';
+import { ReactComponent as HomepageSportsComingSoon } from 'assets/images/home-sports-coming-soon.svg';
 import SPAAnchor from 'components/SPAAnchor';
 import { buildHref } from 'utils/routes';
 import ROUTES from 'constants/routes';
 import { useTranslation } from 'react-i18next';
+
+const COMING_SOON = true;
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -14,13 +16,15 @@ const Home: React.FC = () => {
     return (
         <>
             <ContentContainer>
-                <StyledHomepageExotic />
-                <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
-                    <DappButtonContainer>
-                        {t('common.launch-dapp')}
-                        <RightIcon />
-                    </DappButtonContainer>
-                </SPAAnchor>
+                {COMING_SOON && <StyledHomepageSportsComingSoon />}
+                {!COMING_SOON && (
+                    <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
+                        <DappButtonContainer>
+                            {t('common.launch-dapp')}
+                            <RightIcon />
+                        </DappButtonContainer>
+                    </SPAAnchor>
+                )}
             </ContentContainer>
             {/* <Footer /> */}
         </>
@@ -28,12 +32,10 @@ const Home: React.FC = () => {
 };
 
 const ContentContainer = styled(FlexDivColumnCentered)`
-    margin-bottom: 60px;
     align-items: center;
 `;
 
-const StyledHomepageExotic = styled(HomepageExotic)`
-    margin-bottom: 60px;
+const StyledHomepageSportsComingSoon = styled(HomepageSportsComingSoon)`
     @media (max-width: 991px) {
         width: 100%;
         height: 100%;
