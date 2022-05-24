@@ -9,16 +9,19 @@ import networkConnector from 'utils/networkConnector';
 
 export const NetworkIdByName: Record<string, NetworkId> = {
     OptimsimMainnet: 10,
+    Kovan: 42,
     OptimsimKovan: 69,
 };
 
 export const NetworkNameById: Record<NetworkId, string> = {
     10: 'optimism mainnet',
+    42: 'kovan',
     69: 'optimism kovan',
 };
 
 export const InfuraNetworkNameById: Record<NetworkId, string> = {
     10: 'optimism-mainnet',
+    42: 'kovan',
     69: 'optimism-kovan',
 };
 
