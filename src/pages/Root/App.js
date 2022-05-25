@@ -21,7 +21,6 @@ import DappLayout from 'layouts/DappLayout';
 import HomeLayout from 'layouts/HomeLayout';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 
-const Home = lazy(() => import('pages/Home'));
 const Markets = lazy(() => import('pages/Markets/Home'));
 const CreateMarket = lazy(() => import('pages/Markets/CreateMarket'));
 const Market = lazy(() => import('pages/Markets/Market'));
@@ -152,9 +151,7 @@ const App = () => {
                                 </DappLayout>
                             </Route>
                             <Route exact path={ROUTES.Home}>
-                                <HomeLayout>
-                                    <Home />
-                                </HomeLayout>
+                                <HomeLayout />
                             </Route>
                         </Switch>
                     </Router>

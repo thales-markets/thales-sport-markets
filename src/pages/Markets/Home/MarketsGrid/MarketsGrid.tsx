@@ -24,7 +24,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) 
             <Masonry breakpointCols={breakpointColumnsObj} className="">
                 {markets.map((market, index) => {
                     return (
-                        <SPAAnchor key={index} href={buildMarketLink('0xC4e966CA68b40894Cce7B31aA3A1a229d28634Be')}>
+                        <SPAAnchor key={index} href={buildMarketLink(market.address)}>
                             <MarketCard market={market} accountPosition={accountPositions[market.address]} />
                         </SPAAnchor>
                     );

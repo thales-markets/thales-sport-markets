@@ -1,0 +1,40 @@
+.image-container {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+}
+.image-container section{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    animation-name: multiple-image-crossfade;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-duration: 9s;
+}
+.image-container section:nth-of-type(1) {
+    animation-delay: 6s;
+}
+.image-container section:nth-of-type(2) {
+    animation-delay: 3s;
+}
+.image-container section:nth-of-type(3) {
+    animation-delay: 0s;
+}
+@keyframes multiple-image-crossfade {
+    0% {
+        opacity:1;
+    }
+    18% {
+        opacity:1;
+    }
+    33% {
+        opacity:0;
+    }
+    85% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}
