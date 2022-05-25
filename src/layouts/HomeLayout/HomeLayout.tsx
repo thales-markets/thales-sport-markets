@@ -23,7 +23,7 @@ const HomeLayout: React.FC = ({ children }) => {
                     <div className="image-container">
                         <Background image={uno}>
                             <Wrapper style={{ justifyContent: 'flex-end' }}>
-                                <HomeText1 />
+                                <HomeText1 style={{ height: '80vh', width: '100vw' }} />
                             </Wrapper>
                         </Background>
                         <Background image={dos}>
@@ -33,7 +33,7 @@ const HomeLayout: React.FC = ({ children }) => {
                         </Background>
                         <Background image={tres}>
                             <Wrapper>
-                                <HomeText3 style={{ padding: '50px' }} />
+                                <HomeText3 style={{ padding: '50px', height: '100vh', width: '100vw' }} />
                             </Wrapper>
                         </Background>
                     </div>
