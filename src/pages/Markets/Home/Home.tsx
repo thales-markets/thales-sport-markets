@@ -95,10 +95,8 @@ const Home: React.FC = () => {
         return lastValidMarkets;
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data]);
 
-    useEffect(() => {}, [markets]);
-
     useEffect(() => {
-        setAvailableTags([allTagsFilterItem, ...TAGS_LIST]);
+        setAvailableTags([allTagsFilterItem, ...TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label))]);
     }, []);
 
     const accountPositionsQuery = useAccountPositionsQuery(walletAddress, networkId, {
@@ -448,12 +446,15 @@ const Container = styled(FlexDivColumn)`
 
 const RowContainer = styled(FlexDivRow)`
     width: 100%;
+    flex: 1 1 0%;
+    flex-direction: row;
+    justify-content: stretch;
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`
-    width: 100%;
     padding-top: 25px;
-    max-width: 314px;
+    max-width: 240px;
+    flex-grow: 1;
 `;
 
 const Wrapper = styled.div`
