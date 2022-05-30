@@ -36,6 +36,23 @@ export type MarketInfo = {
     cancelledByCreator: boolean;
 };
 
+export type SportMarketInfo = {
+    id: string;
+    address: string;
+    maturityDate: Date;
+    tags: number[];
+    isOpen: boolean;
+    isResolved: boolean;
+    finalResult: number;
+    poolSize: number;
+    numberOfParticipants: number;
+    homeTeam: string;
+    awayTeam: string;
+    homeOdds: number;
+    awayOdds: number;
+    drawOdds: number;
+};
+
 export type FixedMarketData = {
     winningAmountsNewUser: number[];
     winningAmountsNoPosition: number[];
@@ -62,6 +79,8 @@ export type MarketData = MarketInfo & {
 };
 
 export type Markets = MarketInfo[];
+
+export type SportMarkets = SportMarketInfo[];
 
 export type AccountMarketData = {
     claimAmount: number;

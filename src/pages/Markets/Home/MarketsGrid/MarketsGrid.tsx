@@ -1,14 +1,14 @@
 import SPAAnchor from 'components/SPAAnchor';
 import React from 'react';
+import Masonry from 'react-masonry-css';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { AccountPositionsMap, Markets } from 'types/markets';
+import { AccountPositionsMap, SportMarkets } from 'types/markets';
 import { buildMarketLink } from 'utils/routes';
 import MarketCard from '../MarketCard';
-import Masonry from 'react-masonry-css';
 
 type MarketsGridProps = {
-    markets: Markets;
+    markets: SportMarkets;
     accountPositions: AccountPositionsMap;
 };
 

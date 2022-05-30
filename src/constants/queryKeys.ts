@@ -1,7 +1,9 @@
+import { SportMarketInfo } from 'types/markets';
 import { NetworkId } from 'types/network';
 
 export const QUERY_KEYS = {
     Markets: (networkId: NetworkId) => ['markets', networkId],
+    SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
     Market: (marketAddress: string) => ['market', marketAddress],
     MarketTransactions: (marketAddress: string, networkId: NetworkId) => [
         'market',
@@ -24,6 +26,7 @@ export const QUERY_KEYS = {
     ],
     MarketsParameters: (networkId: NetworkId) => ['markets', 'parameters', networkId],
     Tags: (networkId: NetworkId) => ['tags', networkId],
+    NormalizedOdds: (sportMarket: SportMarketInfo, networkId: NetworkId) => ['normalizedOdds', sportMarket, networkId],
     AccountPositions: (walletAddress: string, networkId: NetworkId) => ['positions', walletAddress, networkId],
     Wallet: {
         PaymentTokenBalance: (walletAddress: string, networkId: NetworkId) => [

@@ -1,15 +1,15 @@
 import { ethers, Signer } from 'ethers';
 import { NetworkSettings } from 'types/network';
-import paymentTokenContract from './contracts/paymentTokenContract';
-import marketManagerContract from 'utils/contracts/exoticPositionalMarketManagerContract';
-import marketDataContract from 'utils/contracts/exoticPositionalMarketDataContract';
+// import paymentTokenContract from './contracts/paymentTokenContract';
+// import marketManagerContract from 'utils/contracts/exoticPositionalMarketManagerContract';
+// import marketDataContract from 'utils/contracts/exoticPositionalMarketDataContract';
 import sportMarketManagerContract from 'utils/contracts/sportPositionalMarketManagerContract';
 import sportMarketDataContract from 'utils/contracts/sportPositionalMarketDataContract';
-import thalesBondsContract from 'utils/contracts/thalesBondsContract';
-import tagsContract from 'utils/contracts/exoticPositionalTagsContract';
-import exoticUsdContract from 'utils/contracts/exoticUsdContract';
+// import thalesBondsContract from 'utils/contracts/thalesBondsContract';
+// import tagsContract from 'utils/contracts/exoticPositionalTagsContract';
+// import exoticUsdContract from 'utils/contracts/exoticUsdContract';
 import { NetworkIdByName } from './network';
-import theRundownConsumerContract from './contracts/theRundownConsumerContract';
+import theRundownConsumerContract from 'utils/contracts/theRundownConsumerContract';
 
 type NetworkConnector = {
     initialized: boolean;
@@ -35,15 +35,15 @@ const networkConnector: NetworkConnector = {
         this.initialized = true;
         this.signer = networkSettings.signer;
         this.provider = networkSettings.provider;
-        this.paymentTokenContract = initializeContract(paymentTokenContract, networkSettings);
-        this.marketManagerContract = initializeContract(marketManagerContract, networkSettings);
-        this.marketDataContract = initializeContract(marketDataContract, networkSettings);
+        // this.paymentTokenContract = initializeContract(paymentTokenContract, networkSettings);
+        // this.marketManagerContract = initializeContract(marketManagerContract, networkSettings);
+        // this.marketDataContract = initializeContract(marketDataContract, networkSettings);
         this.sportMarketManagerContract = initializeContract(sportMarketManagerContract, networkSettings);
         this.sportMarketDataContract = initializeContract(sportMarketDataContract, networkSettings);
         this.theRundownConsumerContract = initializeContract(theRundownConsumerContract, networkSettings);
-        this.thalesBondsContract = initializeContract(thalesBondsContract, networkSettings);
-        this.tagsContract = initializeContract(tagsContract, networkSettings);
-        this.exoticUsdContract = initializeContract(exoticUsdContract, networkSettings);
+        // this.thalesBondsContract = initializeContract(thalesBondsContract, networkSettings);
+        // this.tagsContract = initializeContract(tagsContract, networkSettings);
+        // this.exoticUsdContract = initializeContract(exoticUsdContract, networkSettings);
     },
 };
 

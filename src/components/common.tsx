@@ -117,7 +117,7 @@ export const Checkmark = styled.span`
 `;
 
 export const MatchInfo = styled(FlexDivRow)`
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     align-items: center;
     align-self: center;
     width: 100%;
@@ -133,7 +133,7 @@ export const MatchDate = styled.label`
     font-weight: 400;
     font-size: 17px;
     line-height: 20px;
-    margin: 16px 11px;
+    margin: 16px 11px 0px;
     text-align: center;
     color: ${(props) => props.theme.textColor.primary};
 `;
@@ -177,7 +177,8 @@ export const MatchParticipantName = styled.label`
     font-size: 17px;
     text-transform: uppercase;
     line-height: 20px;
-    height: 20px;
+    height: 40px;
+    align-items: center;
     text-align: center;
     color: ${(props) => props.theme.textColor.primary};
 `;
