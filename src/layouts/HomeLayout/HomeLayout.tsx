@@ -1,17 +1,21 @@
 import Loader from 'components/Loader';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
-import uno from 'assets/images/home-background-1.png';
-import dos from 'assets/images/home-background-2.png';
-import tres from 'assets/images/home-background-3.png';
+import soccer_pitch from 'assets/images/home-background-1.png';
+import tennis from 'assets/images/home-background-2.png';
+import soccer_ball from 'assets/images/home-background-3.png';
+import track from 'assets/images/home-background-4.png';
+import golf from 'assets/images/home-background-5.png';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import 'styles/coming-soon.css';
-import { ReactComponent as HomeText1 } from 'assets/images/home-text-1.svg';
-import { ReactComponent as HomeText2 } from 'assets/images/home-text-2.svg';
-import { ReactComponent as HomeText3 } from 'assets/images/home-text-3.svg';
+import { ReactComponent as SoccerPitchText } from 'assets/images/home-text-1.svg';
+import { ReactComponent as TennisText } from 'assets/images/home-text-2.svg';
+import { ReactComponent as SoccerBallText } from 'assets/images/home-text-3.svg';
+import { ReactComponent as TrackText } from 'assets/images/home-text-4.svg';
+import { ReactComponent as GolfText } from 'assets/images/home-text-5.svg';
 
 const shuffle = (array: any[]) => {
     let currentIndex = array.length,
@@ -33,37 +37,51 @@ const shuffle = (array: any[]) => {
 const HomeLayout: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
-    const images = [
-        {
-            image: uno,
-            wrapperStyle: { justifyContent: 'flex-end' },
-            textComponent: HomeText1,
-            textStyle: { height: '80vh', width: '100vw' },
-        },
-        {
-            image: dos,
-            wrapperStyle: { justifyContent: 'center' },
-            textComponent: HomeText2,
-            textStyle: {},
-        },
-        {
-            image: tres,
-            wrapperStyle: {},
-            textComponent: HomeText3,
-            textStyle: { padding: '50px', height: '100vh', width: '100vw' },
-        },
-    ];
-
+    const images = useMemo(() => {
+        return shuffle([
+            {
+                image: soccer_pitch,
+                wrapperStyle: { justifyContent: 'flex-end' },
+                textComponent: SoccerPitchText,
+                className: 'soccer-pitch-text',
+            },
+            {
+                image: tennis,
+                wrapperStyle: { justifyContent: 'center' },
+                textComponent: TennisText,
+                className: 'tennis-text',
+            },
+            {
+                image: soccer_ball,
+                wrapperStyle: {},
+                textComponent: SoccerBallText,
+                className: 'soccer-ball-text',
+            },
+            {
+                image: track,
+                wrapperStyle: {},
+                textComponent: TrackText,
+                className: 'track-text',
+            },
+            {
+                image: golf,
+                wrapperStyle: {},
+                textComponent: GolfText,
+                className: 'golf-text',
+            },
+        ]);
+    }, []);
+    console.log('dsads');
     return (
         <>
             {isAppReady ? (
                 <>
                     <div className="image-container">
-                        {shuffle(images).map((img, index) => {
+                        {images.map((img, index) => {
                             return (
                                 <Background key={index} image={img.image}>
                                     <Wrapper style={img.wrapperStyle}>
-                                        {React.createElement(img.textComponent, { style: img.textStyle })}
+                                        {React.createElement(img.textComponent, { className: img.className })}
                                     </Wrapper>
                                 </Background>
                             );

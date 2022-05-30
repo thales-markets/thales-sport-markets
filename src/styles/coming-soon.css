@@ -1,34 +1,11 @@
-.image-container {
-    position: relative;
-    height: 100vh;
-    width: 100vw;
-}
-.image-container section{
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    animation-name: multiple-image-crossfade;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-    animation-duration: 12s;
-}
-.image-container section:nth-of-type(1) {
-    animation-delay: 8s;
-}
-.image-container section:nth-of-type(2) {
-    animation-delay: 4s;
-}
-.image-container section:nth-of-type(3) {
-    animation-delay: 0s;
-}
 @keyframes multiple-image-crossfade {
     0% {
         opacity:1;
     }
-    25% {
+    12% {
         opacity:1;
     }
-    33% {
+    20% {
         opacity:0;
     }
     92% {
@@ -37,4 +14,68 @@
     100% {
         opacity:1;
     }
+}
+
+.image-container {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+}
+
+.image-container section{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    animation-name: multiple-image-crossfade;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-duration: 20s;
+}
+
+.image-container section:nth-of-type(1) {
+    animation-delay: 16s;
+}
+
+.image-container section:nth-of-type(2) {
+    animation-delay: 12s;
+}
+
+.image-container section:nth-of-type(3) {
+    animation-delay: 8s;
+}
+
+.image-container section:nth-of-type(4) {
+    animation-delay: 4s;
+}
+
+.image-container section:nth-of-type(5) {
+    animation-delay: 0s;
+}
+
+.soccer-pitch-text {
+    height: 80vh;
+    width: 100vw;
+}
+
+.tennis-text {
+    height: 80vh;
+    width: 100vw;
+}
+
+.soccer-ball-text {
+    height: 100vh;
+    width: 100vw;
+    padding: 5vh 13vw 0 10vw;
+}
+
+.track-text {
+    height: 100vh;
+    width: 100vw;
+    padding: 50vh 8vw 15vh 4vw;
+}
+
+.golf-text {
+    height: 100vh;
+    width: 100vw;
+    padding: 10vh 0 5vh 0;
 }
