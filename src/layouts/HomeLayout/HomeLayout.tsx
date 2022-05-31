@@ -1,5 +1,5 @@
 import Loader from 'components/Loader';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
@@ -44,9 +44,24 @@ const shuffle = (array: any[]) => {
     return array;
 };
 
+const cacheImages = async (srcArray: string[], setIsLoading: (isLoading: boolean) => void) => {
+    await Promise.all(
+        srcArray.map((src) => {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.src = src;
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(true);
+            });
+        })
+    );
+    setIsLoading(false);
+};
+
 const HomeLayout: React.FC = () => {
     const isMobile = window.innerWidth < 768;
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const [isLoading, setIsLoading] = useState(true);
 
     const images = useMemo(() => {
         return shuffle([
@@ -83,9 +98,16 @@ const HomeLayout: React.FC = () => {
         ]);
     }, []);
 
+    useEffect(() => {
+        cacheImages(
+            images.map((image) => image.image),
+            setIsLoading
+        );
+    }, [images]);
+
     return (
         <>
-            {isAppReady ? (
+            {isAppReady && !isLoading ? (
                 <>
                     <div className="image-container">
                         {images.map((img, index) => {

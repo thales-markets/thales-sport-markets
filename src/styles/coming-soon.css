@@ -26,7 +26,7 @@
     height: 100%;
     width: 100%;
     position: absolute;
-    /*animation-name: multiple-image-crossfade;*/
+    animation-name: multiple-image-crossfade;
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
     animation-duration: 40s;
