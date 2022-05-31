@@ -1,14 +1,14 @@
 import SPAAnchor from 'components/SPAAnchor';
 import React from 'react';
+import Masonry from 'react-masonry-css';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { AccountPositionsMap, Markets } from 'types/markets';
+import { AccountPositionsMap, SportMarkets } from 'types/markets';
 import { buildMarketLink } from 'utils/routes';
 import MarketCard from '../MarketCard';
-import Masonry from 'react-masonry-css';
 
 type MarketsGridProps = {
-    markets: Markets;
+    markets: SportMarkets;
     accountPositions: AccountPositionsMap;
 };
 
@@ -36,14 +36,12 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) 
 
 const Container = styled(FlexDiv)`
     flex-wrap: wrap;
-    max-width: 1700px;
+    max-width: 1220px;
     justify-content: center;
+    flex-grow: 2;
     > div {
         display: flex;
         width: 100%;
-        > div {
-            flex-grow: 1;
-        }
     }
 `;
 
