@@ -8,6 +8,11 @@ import tennis from 'assets/images/home-background-2.png';
 import soccer_ball from 'assets/images/home-background-3.png';
 import track from 'assets/images/home-background-4.png';
 import golf from 'assets/images/home-background-5.png';
+import soccer_pitch_mobile from 'assets/images/home-background-1-mobile.png';
+import tennis_mobile from 'assets/images/home-background-2-mobile.png';
+import soccer_ball_mobile from 'assets/images/home-background-3-mobile.png';
+import track_mobile from 'assets/images/home-background-4-mobile.png';
+import golf_mobile from 'assets/images/home-background-5-mobile.png';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import 'styles/coming-soon.css';
@@ -16,6 +21,11 @@ import { ReactComponent as TennisText } from 'assets/images/home-text-2.svg';
 import { ReactComponent as SoccerBallText } from 'assets/images/home-text-3.svg';
 import { ReactComponent as TrackText } from 'assets/images/home-text-4.svg';
 import { ReactComponent as GolfText } from 'assets/images/home-text-5.svg';
+import { ReactComponent as SoccerPitchTextMobile } from 'assets/images/home-text-1-mobile.svg';
+import { ReactComponent as TennisTextMobile } from 'assets/images/home-text-2-mobile.svg';
+import { ReactComponent as SoccerBallTextMobile } from 'assets/images/home-text-3-mobile.svg';
+import { ReactComponent as TrackTextMobile } from 'assets/images/home-text-4-mobile.svg';
+import { ReactComponent as GolfTextMobile } from 'assets/images/home-text-5-mobile.svg';
 
 const shuffle = (array: any[]) => {
     let currentIndex = array.length,
@@ -35,43 +45,44 @@ const shuffle = (array: any[]) => {
 };
 
 const HomeLayout: React.FC = () => {
+    const isMobile = window.innerWidth < 768;
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
     const images = useMemo(() => {
         return shuffle([
             {
-                image: soccer_pitch,
+                image: isMobile ? soccer_pitch_mobile : soccer_pitch,
                 wrapperStyle: { justifyContent: 'flex-end' },
-                textComponent: SoccerPitchText,
+                textComponent: isMobile ? SoccerPitchTextMobile : SoccerPitchText,
                 className: 'soccer-pitch-text',
             },
             {
-                image: tennis,
+                image: isMobile ? tennis_mobile : tennis,
                 wrapperStyle: { justifyContent: 'center' },
-                textComponent: TennisText,
+                textComponent: isMobile ? TennisTextMobile : TennisText,
                 className: 'tennis-text',
             },
             {
-                image: soccer_ball,
+                image: isMobile ? soccer_ball_mobile : soccer_ball,
                 wrapperStyle: {},
-                textComponent: SoccerBallText,
+                textComponent: isMobile ? SoccerBallTextMobile : SoccerBallText,
                 className: 'soccer-ball-text',
             },
             {
-                image: track,
+                image: isMobile ? track_mobile : track,
                 wrapperStyle: {},
-                textComponent: TrackText,
+                textComponent: isMobile ? TrackTextMobile : TrackText,
                 className: 'track-text',
             },
             {
-                image: golf,
+                image: isMobile ? golf_mobile : golf,
                 wrapperStyle: {},
-                textComponent: GolfText,
+                textComponent: isMobile ? GolfTextMobile : GolfText,
                 className: 'golf-text',
             },
         ]);
     }, []);
-    console.log('dsads');
+
     return (
         <>
             {isAppReady ? (
@@ -100,6 +111,7 @@ const Background = styled.section<{ image: string }>`
     min-height: 100vh;
     background-image: ${(props) => `url(${props.image})`};
     background-size: cover;
+    background-position: center center;
     font-size: 16px;
 `;
 
@@ -109,13 +121,6 @@ const Wrapper = styled(FlexDivColumn)`
     margin: auto;
     max-width: 1220px;
     align-items: center;
-    @media (max-width: 991px) {
-        justify-content: center !important;
-        svg {
-            width: 100%;
-            height: 100%;
-        }
-    }
 `;
 
 export default HomeLayout;

@@ -2,13 +2,13 @@
     0% {
         opacity:1;
     }
-    12% {
+    15% {
         opacity:1;
     }
     20% {
         opacity:0;
     }
-    92% {
+    95% {
         opacity:0;
     }
     100% {
@@ -26,26 +26,26 @@
     height: 100%;
     width: 100%;
     position: absolute;
-    animation-name: multiple-image-crossfade;
+    /*animation-name: multiple-image-crossfade;*/
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
-    animation-duration: 20s;
+    animation-duration: 40s;
 }
 
 .image-container section:nth-of-type(1) {
-    animation-delay: 16s;
+    animation-delay: 32s;
 }
 
 .image-container section:nth-of-type(2) {
-    animation-delay: 12s;
+    animation-delay: 24s;
 }
 
 .image-container section:nth-of-type(3) {
-    animation-delay: 8s;
+    animation-delay: 16s;
 }
 
 .image-container section:nth-of-type(4) {
-    animation-delay: 4s;
+    animation-delay: 8s;
 }
 
 .image-container section:nth-of-type(5) {
@@ -79,3 +79,37 @@
     width: 100vw;
     padding: 10vh 0 5vh 0;
 }
+
+@media only screen and (max-width: 768px) {
+    .soccer-pitch-text {
+        height: 80vh;
+        width: 100vw;
+        padding: 0 5vw;
+    }
+
+    .tennis-text {
+        height: 100vh;
+        width: 100vw;
+        padding: 2vh;
+    }
+
+    .soccer-ball-text {
+        height: 100vh;
+        width: 100vw;
+        padding: 2vh;
+    }
+
+    .track-text {
+        height: 59vh;
+        width: 63vw;
+        margin-left: 35vw;
+        padding: 0;
+    }
+
+    .golf-text {
+        height: 100vh;
+        width: 100vw;
+        padding: 2vh;
+    }
+}
+
