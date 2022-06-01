@@ -26,7 +26,7 @@
     height: 100%;
     width: 100%;
     position: absolute;
-    animation-name: multiple-image-crossfade;
+    /*animation-name: multiple-image-crossfade;*/
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
     animation-duration: 40s;
@@ -90,13 +90,13 @@
     .tennis-text {
         height: 100vh;
         width: 100vw;
-        padding: 2vh;
+        padding: 7vh 5vw;
     }
 
     .soccer-ball-text {
         height: 100vh;
         width: 100vw;
-        padding: 2vh;
+        padding: 6vh 5vw;
     }
 
     .track-text {
@@ -109,7 +109,8 @@
     .golf-text {
         height: 100vh;
         width: 100vw;
-        padding: 2vh;
+        padding-top: 15vh;
+        padding-bottom: 5vh;
     }
 }
 
