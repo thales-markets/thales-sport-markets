@@ -13,7 +13,7 @@ import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivStart } from '
 import {
     AccountPosition,
     AccountPositionsMap,
-    // MarketsParameters,
+    GamesOnDate,
     SortOptionType,
     SportMarketInfo,
     SportMarkets,
@@ -28,7 +28,6 @@ import MarketsGrid from './MarketsGrid';
 import { GlobalFilterEnum, SortDirection, DEFAULT_SORT_BY } from 'constants/markets';
 import SortOption from '../components/SortOption';
 import useAccountPositionsQuery from 'queries/markets/useAccountPositionsQuery';
-// import useMarketsParametersQuery from 'queries/markets/useMarketsParametersQuery';
 import Toggle from 'components/fields/Toggle';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useLocalStorage from 'hooks/useLocalStorage';
@@ -36,8 +35,7 @@ import { isClaimAvailable } from 'utils/markets';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
 import { TAGS_LIST } from 'constants/tags';
-
-// const DATES_TO_SHOW = 7;
+import HeaderDatepicker from './HeaderDatepicker';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -47,16 +45,13 @@ const Home: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
-    // const [firstDateIndex, setFirstDateIndex] = useState(0);
-    // const [hammerManager, setHammerManager] = useState<any>();
+
     const [globalFilter, setGlobalFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_GLOBAL, GlobalFilterEnum.All);
     const [sortDirection, setSortDirection] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_DIRECTION, SortDirection.ASC);
     const [sortBy, setSortBy] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_BY, DEFAULT_SORT_BY);
     const [showOpenMarkets, setShowOpenMarkets] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SHOW_OPEN_MARKETS, true);
     const [lastValidMarkets, setLastValidMarkets] = useState<SportMarkets>([]);
     const [accountPositions, setAccountPositions] = useState<AccountPositionsMap>({});
-    // const [datesMarketsMap, setDatesMarketsMap] = useState<{ [date: string]: MarketInfo }>({});
-    // const [marketsParameters, setMarketsParameters] = useState<MarketsParameters | undefined>(undefined);
 
     const sortOptions: SortOptionType[] = [
         { id: 1, title: t('market.time-remaining-label') },
@@ -67,18 +62,12 @@ const Home: React.FC = () => {
         id: 0,
         label: t('market.filter-label.all'),
     };
+
     const [tagFilter, setTagFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_TAGS, allTagsFilterItem);
     const [availableTags, setAvailableTags] = useState<Tags>([allTagsFilterItem]);
 
-    // const marketsParametersQuery = useMarketsParametersQuery(networkId, {
-    //     enabled: isAppReady,
-    // });
-
-    // useEffect(() => {
-    //     if (marketsParametersQuery.isSuccess && marketsParametersQuery.data) {
-    //         setMarketsParameters(marketsParametersQuery.data);
-    //     }
-    // }, [marketsParametersQuery.isSuccess, marketsParametersQuery.data]);
+    const [dateFilter, setDateFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_DATES, '');
+    const [gamesPerDay, setGamesPerDayMap] = useState<GamesOnDate[]>([]);
 
     const sportMarketsQuery = useSportMarketsQuery(networkId, { enabled: isAppReady });
 
@@ -98,6 +87,24 @@ const Home: React.FC = () => {
     useEffect(() => {
         setAvailableTags([allTagsFilterItem, ...TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label))]);
     }, []);
+
+    useEffect(() => {
+        const marketDates = markets
+            .filter((market: SportMarketInfo) => market.maturityDate >= new Date())
+            .map((market: SportMarketInfo) => market.maturityDate);
+        const uniqueSortedDates = marketDates
+            .filter((date, i, self) => self.findIndex((d) => d.toDateString() === date.toDateString()) === i)
+            .sort((a, b) => a.getTime() - b.getTime());
+
+        const daysNumberOfGames = new Array<GamesOnDate>();
+        uniqueSortedDates.forEach((date) => {
+            const gamesPerDay = markets.filter(
+                (market: SportMarketInfo) => market.maturityDate.toDateString() === date?.toDateString()
+            ).length;
+            daysNumberOfGames.push({ date: date.toDateString(), numberOfGames: gamesPerDay });
+        });
+        setGamesPerDayMap(daysNumberOfGames);
+    }, [markets]);
 
     const accountPositionsQuery = useAccountPositionsQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -123,8 +130,20 @@ const Home: React.FC = () => {
         DEFAULT_SEARCH_DEBOUNCE_MS
     );
 
-    const tagsFilteredMarkets = useMemo(() => {
+    const datesFilteredMarkets = useMemo(() => {
         let filteredMarkets = marketSearch ? searchFilteredMarkets : markets;
+
+        if (dateFilter !== '') {
+            filteredMarkets = filteredMarkets.filter(
+                (market: SportMarketInfo) => market.maturityDate.toDateString() === dateFilter
+            );
+        }
+
+        return filteredMarkets;
+    }, [markets, searchFilteredMarkets, dateFilter, marketSearch]);
+
+    const tagsFilteredMarkets = useMemo(() => {
+        let filteredMarkets = datesFilteredMarkets;
 
         if (tagFilter.id !== allTagsFilterItem.id) {
             filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) =>
@@ -133,7 +152,7 @@ const Home: React.FC = () => {
         }
 
         return filteredMarkets;
-    }, [markets, searchFilteredMarkets, tagFilter, marketSearch]);
+    }, [markets, datesFilteredMarkets, tagFilter, marketSearch]);
 
     const accountClaimsCount = useMemo(() => {
         return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
@@ -197,44 +216,6 @@ const Home: React.FC = () => {
         });
     }, [showOpenMarketsFilteredMarkets, sortBy, sortDirection, globalFilter, accountPositions]);
 
-    // const moveLeft = () => {
-    //     if (firstDateIndex === 0) setFirstDateIndex(currentMarkets.length - 1 - CARDS_TO_SHOW);
-    //     if (firstDateIndex > 0) setFirstDateIndex(firstDateIndex - 1);
-    // };
-
-    // const moveRight = () => {
-    //     setFirstDateIndex(firstDateIndex + CARDS_TO_SHOW < currentMarkets.length - 1 ? firstDateIndex + 1 : 0);
-    // };
-
-    // const slicedMarkets = useMemo(() => {
-    //     if (currentMarkets.length) {
-    //         const wrapper = document.getElementById('wrapper-cards');
-    //         if (wrapper) {
-    //             const hammer = new Hammer.Manager(wrapper);
-    //             if (!hammerManager) {
-    //                 setHammerManager(hammer);
-    //             } else {
-    //                 hammerManager.destroy();
-    //                 setHammerManager(hammer);
-    //             }
-
-    //             if (window.innerWidth <= 1250) {
-    //                 const swipe = new Hammer.Swipe();
-    //                 hammer.add(swipe);
-    //                 hammer.on('swipeleft', moveRight);
-    //                 hammer.on('swiperight', moveLeft);
-    //             }
-    //         }
-    //     }
-
-    //     return currentMarkets.slice(
-    //         firstDateIndex,
-    //         firstDateIndex + CARDS_TO_SHOW > currentMarkets.length - 1
-    //             ? firstDateIndex + CARDS_TO_SHOW - currentMarkets.length + 1
-    //             : firstDateIndex + CARDS_TO_SHOW
-    //     );
-    // }, [currentMarkets, firstDateIndex]);
-
     const setSort = (sortOption: SortOptionType) => {
         if (sortBy === sortOption.id) {
             switch (sortDirection) {
@@ -257,6 +238,7 @@ const Home: React.FC = () => {
 
     const resetFilters = () => {
         setGlobalFilter(GlobalFilterEnum.All);
+        setDateFilter('');
         setTagFilter(allTagsFilterItem);
         setShowOpenMarkets(true);
         dispatch(setMarketSearch(''));
@@ -267,78 +249,10 @@ const Home: React.FC = () => {
     return (
         <Container>
             <FiltersContainer>
-                <Wrapper id="wrapper-cards">
-                    {/* {currentMarkets.length > 0 ? ( */}
-                    {/* <>
-                        <Icon onClick={moveLeft} disabled={firstHotIndex == 0} className={'icon icon--left'} />
-                        {slicedMarkets.map((market, index) => (
-                            <HotMarketCard
-                                key={index}
-                                fullAssetName={market.fullAssetName}
-                                currencyKey={market.currencyKey}
-                                assetName={market.assetName}
-                                strikePrice={market.strikePrice}
-                                pricePerOption={market.pricePerOption}
-                                timeRemaining={market.timeRemaining}
-                                potentialProfit={market.potentialProfit}
-                                address={market.address}
-                            />
-                        ))}
-                        <Icon
-                            onClick={moveRight}
-                            disabled={firstHotIndex + 7 == currentMarkets?.length - 1}
-                            className={'icon icon--right'}
-                        />
-                    </> */}
-                    {/* ) : ( */}
-                    <>
-                        <LeftIcon /*onClick={moveLeft} disabled={firstHotIndex == 0}*/ />
-                        <DateContainer>
-                            <DayLabel>MON</DayLabel>
-                            <DateLabel>July 23</DateLabel>
-                            <GamesNumberLabel>25 games</GamesNumberLabel>
-                        </DateContainer>
-                        <DateContainer>
-                            <DayLabel>MON</DayLabel>
-                            <DateLabel>July 23</DateLabel>
-                            <GamesNumberLabel>0 games</GamesNumberLabel>
-                        </DateContainer>
-                        <DateContainer>
-                            <DayLabel>MON</DayLabel>
-                            <DateLabel>July 23</DateLabel>
-                            <GamesNumberLabel>3 games</GamesNumberLabel>
-                        </DateContainer>
-                        <DateContainer>
-                            <DayLabel>MON</DayLabel>
-                            <DateLabel>July 23</DateLabel>
-                            <GamesNumberLabel>7 games</GamesNumberLabel>
-                        </DateContainer>
-                        <DateContainer>
-                            <DayLabel>MON</DayLabel>
-                            <DateLabel>July 23</DateLabel>
-                            <GamesNumberLabel>16 games</GamesNumberLabel>
-                        </DateContainer>
-                        <DateContainer>
-                            <DayLabel>MON</DayLabel>
-                            <DateLabel>July 23</DateLabel>
-                            <GamesNumberLabel>43 games</GamesNumberLabel>
-                        </DateContainer>
-                        <DateContainer>
-                            <DayLabel>MON</DayLabel>
-                            <DateLabel>July 23</DateLabel>
-                            <GamesNumberLabel>12 games</GamesNumberLabel>
-                        </DateContainer>
-                        <RightIcon
-                        /* onClick={moveRight}
-                            disabled={firstHotIndex + 7 == currentMarkets?.length - 1}*/
-                        />
-                    </>
-                    {/* )} */}
-                </Wrapper>
+                <HeaderDatepicker gamesPerDay={gamesPerDay} dateFilter={dateFilter} setDateFilter={setDateFilter} />
             </FiltersContainer>
             <RowContainer>
                 <SidebarContainer></SidebarContainer>
-
                 {sportMarketsQuery.isLoading ? (
                     <LoaderContainer>
                         <SimpleLoader />
@@ -457,41 +371,6 @@ const SidebarContainer = styled(FlexDivColumn)`
     flex-grow: 1;
 `;
 
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 55px;
-    align-items: center;
-    @media (max-width: 1250px) and (min-width: 769px) {
-        & > div:nth-of-type(4),
-        & > div:last-of-type {
-            display: none;
-        }
-    }
-
-    @media (max-width: 768px) {
-        & > div {
-            box-shadow: var(--shadow);
-        }
-        & > div:first-of-type,
-        & > div:last-of-type {
-            opacity: 0.5;
-            box-shadow: none;
-        }
-    }
-
-    @media (max-width: 568px) {
-        & > div {
-            opacity: 0.5;
-        }
-
-        & > div:nth-of-type(3) {
-            opacity: 1;
-            box-shadow: var(--shadow);
-        }
-    }
-`;
-
 const ToggleContainer = styled(FlexDivColumn)`
     align-items: end;
     span {
@@ -524,34 +403,6 @@ const GlobalFiltersContainer = styled(FlexDivColumn)`
     flex: 0;
 `;
 
-const RightIcon = styled.i<{ disabled?: boolean }>`
-    font-size: 60px;
-    font-weight: 700;
-    cursor: pointer;
-    pointer-events: ${(_props) => (_props?.disabled ? 'none' : 'auto')};
-    &:before {
-        font-family: ExoticIcons !important;
-        content: '\\004B';
-        color: ${(props) => props.theme.button.textColor.primary};
-        cursor: pointer;
-        pointer-events: ${(_props) => (_props?.disabled ? 'none' : 'auto')};
-    }
-`;
-
-const LeftIcon = styled.i<{ disabled?: boolean }>`
-    font-size: 60px;
-    font-weight: 700;
-    cursor: pointer;
-    pointer-events: ${(_props) => (_props?.disabled ? 'none' : 'auto')};
-    &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0041';
-        color: ${(props) => props.theme.button.textColor.primary};
-        cursor: pointer;
-        pointer-events: ${(_props) => (_props?.disabled ? 'none' : 'auto')};
-    }
-`;
-
 const TagsContainer = styled(FlexDivStart)`
     flex-wrap: wrap;
     align-items: center;
@@ -577,37 +428,6 @@ const NoMarketsLabel = styled.span`
 const LoaderContainer = styled(FlexDivColumn)`
     position: relative;
     min-height: 300px;
-`;
-
-const DateContainer = styled(FlexDivColumn)<{ selected?: boolean }>`
-    margin-top: 10px;
-    width: 80px;
-    align-items: center;
-    justify-content: flex-end;
-    cursor: pointer;
-    &:not(:last-of-type) {
-        border-right: 2px solid ${(props) => props.theme.borderColor.secondary};
-    }
-`;
-
-const DayLabel = styled.span`
-    font-style: normal;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 24px;
-`;
-const DateLabel = styled.span`
-    font-style: normal;
-    font-weight: 300;
-    font-size: 14.8909px;
-    line-height: 17px;
-`;
-const GamesNumberLabel = styled.span`
-    font-style: normal;
-    font-weight: 600;
-    font-size: 11px;
-    line-height: 13px;
-    color: ${(props) => props.theme.textColor.secondary};
 `;
 
 export default Home;

@@ -217,3 +217,8 @@ export type MarketTransaction = {
 };
 
 export type MarketTransactions = MarketTransaction[];
+
+export type GamesOnDate = {
+    date: string;
+    numberOfGames: number;
+};
