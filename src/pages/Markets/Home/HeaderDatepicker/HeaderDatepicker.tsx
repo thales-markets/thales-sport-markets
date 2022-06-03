@@ -121,7 +121,7 @@ const RightIcon = styled.i<{ disabled?: boolean }>`
     font-weight: 700;
     cursor: pointer;
     pointer-events: ${(props) => (props?.disabled ? 'none' : 'auto')};
-    opacity: ${(props) => (props?.disabled ? '0.4' : '')};
+    display: ${(props) => (props?.disabled ? 'none' : '')};
     &:before {
         font-family: ExoticIcons !important;
         content: '\\004B';
@@ -136,7 +136,7 @@ const LeftIcon = styled.i<{ disabled?: boolean }>`
     font-weight: 700;
     cursor: pointer;
     pointer-events: ${(props) => (props?.disabled ? 'none' : 'auto')};
-    opacity: ${(props) => (props?.disabled ? '0.4' : '')};
+    display: ${(props) => (props?.disabled ? 'none' : '')};
     &:before {
         font-family: ExoticIcons !important;
         content: '\\0041';
