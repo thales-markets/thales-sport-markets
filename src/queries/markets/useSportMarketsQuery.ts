@@ -3,6 +3,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { SportMarketInfo, SportMarkets } from 'types/markets';
 import { NetworkId } from 'types/network';
+import { fixDuplicatedTeamName } from 'utils/formatters/string';
 
 const useSportMarketsQuery = (networkId: NetworkId, options?: UseQueryOptions<SportMarkets | undefined>) => {
     return useQuery<SportMarkets | undefined>(
@@ -14,7 +15,8 @@ const useSportMarketsQuery = (networkId: NetworkId, options?: UseQueryOptions<Sp
                 });
                 const mappedMarkets = markets.map((market: SportMarketInfo) => {
                     market.maturityDate = new Date(market.maturityDate);
-
+                    market.homeTeam = fixDuplicatedTeamName(market.homeTeam);
+                    market.awayTeam = fixDuplicatedTeamName(market.awayTeam);
                     return market;
                 });
 
