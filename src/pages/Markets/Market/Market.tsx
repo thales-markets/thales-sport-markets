@@ -13,7 +13,7 @@ import { MarketData } from 'types/markets';
 import { buildHref } from 'utils/routes';
 import BackToLink from '../components/BackToLink';
 import MarketDetails from './MarketDetails';
-import ResolveMarket from './ResolveMarket';
+// import ResolveMarket from './ResolveMarket';
 import Transactions from './Transactions';
 
 type MarketProps = RouteComponentProps<{
@@ -44,7 +44,7 @@ const Market: React.FC<MarketProps> = (props) => {
                 <>
                     <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
                     <MarketDetails market={market} />
-                    {market.canMarketBeResolved && !market.isPaused && <ResolveMarket market={market} />}
+                    {/*{market.canMarketBeResolved && !market.isPaused && <ResolveMarket market={market} />}*/}
                     <Transactions marketAddress={marketAddress} />
                 </>
             ) : (
@@ -55,7 +55,7 @@ const Market: React.FC<MarketProps> = (props) => {
 };
 
 const Container = styled(FlexDivColumn)`
-    width: 100%;
+    width: 70%;
     position: relative;
     align-items: center;
 `;

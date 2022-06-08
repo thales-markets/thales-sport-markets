@@ -8,7 +8,6 @@ import {
     OddsLabel,
     MatchVSLabel,
 } from 'components/common';
-import { TAGS_LIST } from 'constants/tags';
 import Tags from 'pages/Markets/components/Tags';
 import useNormalizedOddsQuery from 'queries/markets/useNormalizedOddsQuery';
 import React, { useEffect, useState } from 'react';
@@ -22,6 +21,7 @@ import { FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { isClaimAvailable } from 'utils/markets';
+import { getTeamImageSource } from 'utils/images';
 
 type MarketCardProps = {
     market: SportMarketInfo;
@@ -49,10 +49,11 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPosition }) => {
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer>
                         <MatchParticipantImage
-                            src={`/logos/${
-                                TAGS_LIST.find((t) => t.id == sportMarketWithNormalizedOdds.tags[0])?.label
-                            }/${sportMarketWithNormalizedOdds.homeTeam.trim().replaceAll(' ', '-').toLowerCase()}.png`}
-                        ></MatchParticipantImage>
+                            src={getTeamImageSource(
+                                sportMarketWithNormalizedOdds.homeTeam,
+                                sportMarketWithNormalizedOdds.tags[0]
+                            )}
+                        />
                     </MatchParticipantImageContainer>
                     <MatchParticipantName>{sportMarketWithNormalizedOdds.homeTeam}</MatchParticipantName>
                     <OddsLabel isUP={sportMarketWithNormalizedOdds.homeOdds >= 0.5}>
@@ -67,10 +68,11 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPosition }) => {
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer>
                         <MatchParticipantImage
-                            src={`/logos/${
-                                TAGS_LIST.find((t) => t.id == sportMarketWithNormalizedOdds.tags[0])?.label
-                            }/${sportMarketWithNormalizedOdds.awayTeam.replaceAll(' ', '-').toLowerCase()}.png`}
-                        ></MatchParticipantImage>
+                            src={getTeamImageSource(
+                                sportMarketWithNormalizedOdds.awayTeam,
+                                sportMarketWithNormalizedOdds.tags[0]
+                            )}
+                        />
                     </MatchParticipantImageContainer>
                     <MatchParticipantName>{sportMarketWithNormalizedOdds.awayTeam}</MatchParticipantName>
                     <OddsLabel isUP={sportMarketWithNormalizedOdds.awayOdds <= 0.5}>

@@ -4,6 +4,11 @@
 }
 
 @font-face {
+    font-family: 'RobotoThin';
+    src: local('RobotoThin'), url(../assets/fonts/Roboto/RobotoThin.ttf) format('truetype');
+}
+
+@font-face {
     font-family: 'ExoticIcons';
     src: local('ExoticIcons'), url(../assets/fonts/ExoticIcons/ExoticIcons.ttf) format('truetype');
 }

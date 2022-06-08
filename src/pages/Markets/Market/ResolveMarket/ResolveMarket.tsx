@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { getIsAppReady } from 'redux/modules/app';
-import { MarketData, MarketsParameters } from 'types/markets';
+import { MarketsParameters } from 'types/markets';
 import useMarketsParametersQuery from 'queries/markets/useMarketsParametersQuery';
 import networkConnector from 'utils/networkConnector';
 import { BigNumber, ethers } from 'ethers';
@@ -25,7 +25,7 @@ import { BondInfo } from 'components/common';
 import { refetchMarketData } from 'utils/queryConnector';
 
 type ResolveMarketProps = {
-    market: MarketData;
+    market: any;
 };
 
 const ResolveMarket: React.FC<ResolveMarketProps> = ({ market }) => {

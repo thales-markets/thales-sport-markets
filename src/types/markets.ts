@@ -59,23 +59,21 @@ export type FixedMarketData = {
     winningAmountPerTicket: number;
 };
 
-export type MarketData = MarketInfo & {
-    claimablePoolSize: number;
-    poolSizePerPosition: number[];
-    canUsersPlacePosition: boolean;
-    canMarketBeResolvedByPDAO: boolean;
-    disputePrice: number;
-    canCreatorCancelMarket: boolean;
-    fixedBondAmount: number;
-    safeBoxLowAmount: number;
-    arbitraryRewardForDisputor: number;
-    creatorBond: number;
-    creatorFee: number;
-    resolverFee: number;
-    safeBoxFee: number;
-    totalFees: number;
-    canIssueFees: boolean;
-    fixedMarketData?: FixedMarketData;
+export type GameDetails = {
+    gameId: string;
+    gameLabel: string;
+};
+
+export type MarketData = {
+    address: string;
+    gameDetails: GameDetails;
+    homeOdds: number;
+    awayOdds: number;
+    drawOdds: number;
+    tags: number[];
+    homeTeam: string;
+    awayTeam: string;
+    maturityDate: number;
 };
 
 export type Markets = MarketInfo[];

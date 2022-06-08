@@ -1,122 +1,156 @@
-import { Info, InfoContent, InfoLabel } from 'components/common';
-import { DEFAULT_CURRENCY_DECIMALS, PAYMENT_CURRENCY } from 'constants/currency';
-import { MarketStatus as MarketStatusEnum } from 'constants/markets';
-import MarketStatus from 'pages/Markets/components/MarketStatus';
+import {
+    MatchDate,
+    MatchInfoColumn,
+    MatchParticipantImage,
+    MatchParticipantImageContainer,
+    MatchVSLabel,
+} from 'components/common';
 import MarketTitle from 'pages/Markets/components/MarketTitle';
-import Tags from 'pages/Markets/components/Tags';
-import useAccountMarketDataQuery from 'queries/markets/useAccountMarketDataQuery';
-import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
-import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
-import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { AccountMarketData, MarketData } from 'types/markets';
-import { formatCurrencyWithKey } from 'utils/formatters/number';
-import MaturityPhaseTicket from './MaturityPhaseTicket';
-import PositioningPhaseOpenBid from './PositioningPhaseOpenBid';
-import PositioningPhaseTicket from './PositioningPhaseTicket';
+import React, { useState } from 'react';
+import { MarketData } from 'types/markets';
+import { formatDateWithTime } from 'utils/formatters/date';
+import { getTeamImageSource } from 'utils/images';
+import { formatPercentage } from '../../../../utils/formatters/number';
+import {
+    InfoRow,
+    InfoTitle,
+    InfoValue,
+    MarketContainer,
+    MatchInfo,
+    OddsContainer,
+    Option,
+    OptionTeamName,
+    Pick,
+    Slider,
+    SliderContainer,
+    SliderInfo,
+    StatusSourceContainer,
+    StatusSourceInfo,
+    SliderInfoTitle,
+    SliderInfoValue,
+    AmountToBuyInput,
+    SubmitButton,
+} from './styled-components/MarketDetails';
+import { FlexDivCentered } from '../../../../styles/common';
 
 type MarketDetailsProps = {
     market: MarketData;
 };
 
 const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
-    const { t } = useTranslation();
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const [isClaimAvailable, setIsClaimAvailable] = useState<boolean>(false);
-
-    const accountMarketDataQuery = useAccountMarketDataQuery(market.address, walletAddress, {
-        enabled: isAppReady && isWalletConnected,
-    });
-
-    useEffect(() => {
-        if (accountMarketDataQuery.isSuccess && accountMarketDataQuery.data !== undefined) {
-            setIsClaimAvailable((accountMarketDataQuery.data as AccountMarketData).canClaim && !market.isPaused);
-        }
-    }, [accountMarketDataQuery.isSuccess, accountMarketDataQuery.data]);
+    const [selectedSide, setSelectedSide] = useState<number | null>(null);
 
     return (
         <MarketContainer>
-            <MarketTitle fontSize={25} marginBottom={40}>
-                {market.question}
-            </MarketTitle>
-
-            {market.isTicketType && market.status === MarketStatusEnum.Open && (
-                <PositioningPhaseTicket market={market} />
-            )}
-            {market.isTicketType && market.status !== MarketStatusEnum.Open && <MaturityPhaseTicket market={market} />}
-
-            {!market.isTicketType && market.status === MarketStatusEnum.Open && (
-                <PositioningPhaseOpenBid market={market} />
-            )}
-
+            <MarketTitle fontSize={25} marginBottom={40}></MarketTitle>
+            <MatchInfo>
+                <MatchInfoColumn>
+                    <MatchParticipantImageContainer>
+                        <MatchParticipantImage src={getTeamImageSource(market.homeTeam, market.tags[0])} />
+                    </MatchParticipantImageContainer>
+                </MatchInfoColumn>
+                <MatchInfoColumn>
+                    <MatchVSLabel>VS</MatchVSLabel>
+                </MatchInfoColumn>
+                <MatchInfoColumn>
+                    <MatchParticipantImageContainer>
+                        <MatchParticipantImage src={getTeamImageSource(market.awayTeam, market.tags[0])} />
+                    </MatchParticipantImageContainer>
+                </MatchInfoColumn>
+            </MatchInfo>
+            <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
+            <OddsContainer>
+                <Pick selected={selectedSide === 1} onClick={() => setSelectedSide(selectedSide === 1 ? null : 1)}>
+                    <Option color="#50CE99">1</Option>
+                    <OptionTeamName>{market.homeTeam.toUpperCase()}</OptionTeamName>
+                    <InfoRow>
+                        <InfoTitle>ODDS:</InfoTitle>
+                        <InfoValue>{market.homeOdds.toFixed(2)}</InfoValue>
+                    </InfoRow>
+                    <InfoRow>
+                        <InfoTitle>ROI:</InfoTitle>
+                        <InfoValue>{formatPercentage(1 / market.homeOdds)}</InfoValue>
+                    </InfoRow>
+                    <InfoRow>
+                        <InfoTitle>POOL SIZE:</InfoTitle>
+                        <InfoValue>$20,000</InfoValue>
+                    </InfoRow>
+                </Pick>
+                {!!market.drawOdds && (
+                    <Pick selected={selectedSide === 0} onClick={() => setSelectedSide(selectedSide === 0 ? null : 0)}>
+                        <Option color="#40A1D8">X</Option>
+                        <OptionTeamName>DRAW</OptionTeamName>
+                        <InfoRow>
+                            <InfoTitle>ODDS:</InfoTitle>
+                            <InfoValue>{market.drawOdds.toFixed(2)}</InfoValue>
+                        </InfoRow>
+                        <InfoRow>
+                            <InfoTitle>ROI:</InfoTitle>
+                            <InfoValue>{formatPercentage(market.drawOdds ? 1 / market.drawOdds : 0)}</InfoValue>
+                        </InfoRow>
+                        <InfoRow>
+                            <InfoTitle>POOL SIZE:</InfoTitle>
+                            <InfoValue>$20,000</InfoValue>
+                        </InfoRow>
+                    </Pick>
+                )}
+                <Pick selected={selectedSide === 2} onClick={() => setSelectedSide(selectedSide === 2 ? null : 2)}>
+                    <Option color="#E26A78">2</Option>
+                    <OptionTeamName>{market.awayTeam.toUpperCase()}</OptionTeamName>
+                    <InfoRow>
+                        <InfoTitle>ODDS:</InfoTitle>
+                        <InfoValue>{market.awayOdds.toFixed(2)}</InfoValue>
+                    </InfoRow>
+                    <InfoRow>
+                        <InfoTitle>ROI:</InfoTitle>
+                        <InfoValue>{formatPercentage(1 / market.awayOdds)}</InfoValue>
+                    </InfoRow>
+                    <InfoRow>
+                        <InfoTitle>POOL SIZE:</InfoTitle>
+                        <InfoValue>$20,000</InfoValue>
+                    </InfoRow>
+                </Pick>
+            </OddsContainer>
+            <SliderContainer>
+                <Slider
+                    type="range"
+                    min={100}
+                    max={0}
+                    value={1}
+                    step={'0.1'}
+                    // onChange={(event) => onChangeHandler(event)}
+                    // disabled={disabled}
+                    // onFocus={onFocus}
+                    // onBlur={onBlur}
+                />
+                <SliderInfo>
+                    <SliderInfoTitle>Available to buy:</SliderInfoTitle>
+                    <SliderInfoValue>$ 270,745</SliderInfoValue>
+                </SliderInfo>
+                <SliderInfo>
+                    <SliderInfoTitle>Skew:</SliderInfoTitle>
+                    <SliderInfoValue>1%</SliderInfoValue>
+                </SliderInfo>
+            </SliderContainer>
+            <FlexDivCentered>AMOUNT TO BUY:</FlexDivCentered>
+            <FlexDivCentered>
+                <AmountToBuyInput type="number" />
+            </FlexDivCentered>
+            <FlexDivCentered>
+                <SliderInfo>
+                    <SliderInfoTitle>Potential profit:</SliderInfoTitle>
+                    <SliderInfoValue>$ 204,400.00 + 137.25%</SliderInfoValue>
+                </SliderInfo>
+            </FlexDivCentered>
+            <FlexDivCentered>
+                <SubmitButton>BUY</SubmitButton>
+            </FlexDivCentered>
             <StatusSourceContainer>
                 <StatusSourceInfo />
-                <MarketStatus market={market} fontSize={25} fontWeight={700} isClaimAvailable={isClaimAvailable} />
                 <StatusSourceInfo />
             </StatusSourceContainer>
-            <Footer>
-                <Tags tags={market.tags} />
-                <FlexDivColumnCentered>
-                    <Info>
-                        <InfoLabel>{t('market.total-pool-size-label')}:</InfoLabel>
-                        <InfoContent>
-                            {formatCurrencyWithKey(PAYMENT_CURRENCY, market.poolSize, DEFAULT_CURRENCY_DECIMALS, true)}
-                        </InfoContent>
-                    </Info>
-                    <Info>
-                        <InfoLabel>{t('market.number-of-participants-label')}:</InfoLabel>
-                        <InfoContent>{market.numberOfParticipants}</InfoContent>
-                    </Info>
-                </FlexDivColumnCentered>
-            </Footer>
         </MarketContainer>
     );
 };
-
-const MarketContainer = styled(FlexDivColumn)`
-    margin-top: 20px;
-    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.35);
-    border-radius: 25px;
-    width: 100%;
-    padding: 40px 40px 30px 40px;
-    background: ${(props) => props.theme.background.secondary};
-    flex: initial;
-    @media (max-width: 767px) {
-        padding: 30px 20px 20px 20px;
-    }
-`;
-
-const StatusSourceContainer = styled(FlexDivRow)`
-    align-items: end;
-    @media (max-width: 767px) {
-        flex-direction: column;
-        align-items: center;
-    }
-`;
-
-const StatusSourceInfo = styled(FlexDivRow)`
-    width: 146px;
-`;
-
-const Footer = styled(FlexDivRow)`
-    margin-top: 10px;
-    > div {
-        width: 33%;
-    }
-    @media (max-width: 767px) {
-        > div {
-            width: 100%;
-            margin-top: 10px;
-            justify-content: center;
-        }
-        flex-direction: column;
-    }
-`;
 
 export default MarketDetails;

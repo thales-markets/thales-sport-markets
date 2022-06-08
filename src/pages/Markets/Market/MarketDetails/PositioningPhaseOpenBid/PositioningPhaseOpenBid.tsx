@@ -6,7 +6,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
-import { MarketData, MarketsParameters } from 'types/markets';
+import { MarketsParameters } from 'types/markets';
 import { formatCurrencyWithKey, formatPercentage } from 'utils/formatters/number';
 import { PAYMENT_CURRENCY, DEFAULT_CURRENCY_DECIMALS } from 'constants/currency';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -28,7 +28,7 @@ import Tooltip from 'components/Tooltip';
 import { refetchMarketData } from 'utils/queryConnector';
 
 type PositioningPhaseOpenBidProps = {
-    market: MarketData;
+    market: any;
 };
 
 const PositioningPhaseOpenBid: React.FC<PositioningPhaseOpenBidProps> = ({ market }) => {
@@ -59,7 +59,7 @@ const PositioningPhaseOpenBid: React.FC<PositioningPhaseOpenBidProps> = ({ marke
     const accountMarketDataQuery = useAccountMarketOpenBidDataQuery(market.address, walletAddress, {
         enabled: isAppReady && isWalletConnected,
     });
-
+    console.log('dsaads');
     useEffect(() => {
         if (accountMarketDataQuery.isSuccess && accountMarketDataQuery.data) {
             setCurrentPositionsOnContract(accountMarketDataQuery.data.userPositions);

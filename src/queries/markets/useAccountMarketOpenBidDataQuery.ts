@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { AccountMarketOpenBidData } from 'types/markets';
 import { BigNumberish, ethers } from 'ethers';
-import marketContract from 'utils/contracts/exoticPositionalTicketMarketContract';
+import marketContract from 'utils/contracts/sportsMarketContract';
 import networkConnector from 'utils/networkConnector';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 
