@@ -32,6 +32,7 @@ import {
     SubmitButton,
 } from './styled-components/MarketDetails';
 import { FlexDivCentered } from '../../../../styles/common';
+import { Position } from '../../../../constants/options';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -60,7 +61,10 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
             </MatchInfo>
             <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
             <OddsContainer>
-                <Pick selected={selectedSide === 1} onClick={() => setSelectedSide(selectedSide === 1 ? null : 1)}>
+                <Pick
+                    selected={selectedSide === Position.HOME}
+                    onClick={() => setSelectedSide(selectedSide === Position.HOME ? null : Position.HOME)}
+                >
                     <Option color="#50CE99">1</Option>
                     <OptionTeamName>{market.homeTeam.toUpperCase()}</OptionTeamName>
                     <InfoRow>
@@ -77,7 +81,10 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     </InfoRow>
                 </Pick>
                 {!!market.drawOdds && (
-                    <Pick selected={selectedSide === 0} onClick={() => setSelectedSide(selectedSide === 0 ? null : 0)}>
+                    <Pick
+                        selected={selectedSide === Position.DRAW}
+                        onClick={() => setSelectedSide(selectedSide === Position.DRAW ? null : Position.DRAW)}
+                    >
                         <Option color="#40A1D8">X</Option>
                         <OptionTeamName>DRAW</OptionTeamName>
                         <InfoRow>
@@ -94,7 +101,10 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                         </InfoRow>
                     </Pick>
                 )}
-                <Pick selected={selectedSide === 2} onClick={() => setSelectedSide(selectedSide === 2 ? null : 2)}>
+                <Pick
+                    selected={selectedSide === Position.AWAY}
+                    onClick={() => setSelectedSide(selectedSide === Position.AWAY ? null : Position.AWAY)}
+                >
                     <Option color="#E26A78">2</Option>
                     <OptionTeamName>{market.awayTeam.toUpperCase()}</OptionTeamName>
                     <InfoRow>
