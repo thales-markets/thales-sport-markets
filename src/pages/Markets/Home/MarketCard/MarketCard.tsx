@@ -62,8 +62,12 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPosition }) => {
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchVSLabel>VS</MatchVSLabel>
-                    <MatchParticipantName>{'DRAW'}</MatchParticipantName>
-                    <OddsLabel isDraw={true}>{sportMarketWithNormalizedOdds.drawOdds.toFixed(2)}</OddsLabel>
+                    <MatchParticipantName isTwoPositioned={sportMarketWithNormalizedOdds.drawOdds === 0}>
+                        {'DRAW'}
+                    </MatchParticipantName>
+                    <OddsLabel isTwoPositioned={sportMarketWithNormalizedOdds.drawOdds === 0} isDraw={true}>
+                        {sportMarketWithNormalizedOdds.drawOdds.toFixed(2)}
+                    </OddsLabel>
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer>
