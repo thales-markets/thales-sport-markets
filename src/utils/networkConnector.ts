@@ -5,6 +5,8 @@ import { NetworkSettings } from 'types/network';
 // import marketDataContract from 'utils/contracts/exoticPositionalMarketDataContract';
 import sportMarketManagerContract from 'utils/contracts/sportPositionalMarketManagerContract';
 import sportMarketDataContract from 'utils/contracts/sportPositionalMarketDataContract';
+import sportsAMMContract from 'utils/contracts/sportsAMMContract';
+import sUSDContract from 'utils/contracts/sUSDContract';
 // import thalesBondsContract from 'utils/contracts/thalesBondsContract';
 // import tagsContract from 'utils/contracts/exoticPositionalTagsContract';
 // import exoticUsdContract from 'utils/contracts/exoticUsdContract';
@@ -21,16 +23,17 @@ type NetworkConnector = {
     marketDataContract?: ethers.Contract;
     sportMarketManagerContract?: ethers.Contract;
     sportMarketDataContract?: ethers.Contract;
+    sportsAMMContract?: ethers.Contract;
     theRundownConsumerContract?: ethers.Contract;
     thalesBondsContract?: ethers.Contract;
     tagsContract?: ethers.Contract;
     exoticUsdContract?: ethers.Contract;
+    sUSDContract?: ethers.Contract;
 };
 
 // @ts-ignore
 const networkConnector: NetworkConnector = {
     initialized: false,
-
     setNetworkSettings: function (networkSettings: NetworkSettings) {
         this.initialized = true;
         this.signer = networkSettings.signer;
@@ -41,6 +44,8 @@ const networkConnector: NetworkConnector = {
         this.sportMarketManagerContract = initializeContract(sportMarketManagerContract, networkSettings);
         this.sportMarketDataContract = initializeContract(sportMarketDataContract, networkSettings);
         this.theRundownConsumerContract = initializeContract(theRundownConsumerContract, networkSettings);
+        this.sportsAMMContract = initializeContract(sportsAMMContract, networkSettings);
+        this.sUSDContract = initializeContract(sUSDContract, networkSettings);
         // this.thalesBondsContract = initializeContract(thalesBondsContract, networkSettings);
         // this.tagsContract = initializeContract(tagsContract, networkSettings);
         // this.exoticUsdContract = initializeContract(exoticUsdContract, networkSettings);

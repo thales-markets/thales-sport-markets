@@ -3,3 +3,8 @@ export enum Position {
     AWAY = 1,
     DRAW = 2,
 }
+
+export enum Side {
+    BUY = 'BUY',
+    SELL = 'SELL',
+}

@@ -1,7 +1,7 @@
 export const sportsAMMContract = {
     addresses: {
         10: 'TBD',
-        42: '0x9656ce991ed988e83b8c67fbca91f1618bb09e54',
+        42: '0xEa71aACad9C7105859581AA7048126d6f98B391F',
     },
     abi: [
         {

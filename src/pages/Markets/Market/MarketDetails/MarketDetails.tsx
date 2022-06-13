@@ -5,8 +5,8 @@ import {
     MatchParticipantImageContainer,
     MatchVSLabel,
 } from 'components/common';
-import MarketTitle from 'pages/Markets/components/MarketTitle';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { BigNumber, ethers } from 'ethers';
 import { MarketData } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getTeamImageSource } from 'utils/images';
@@ -32,18 +32,139 @@ import {
     SubmitButton,
 } from './styled-components/MarketDetails';
 import { FlexDivCentered } from '../../../../styles/common';
-import { Position } from '../../../../constants/options';
+import { Position, Side } from '../../../../constants/options';
+import Toggle from '../../../../components/Toggle/Toggle';
+import networkConnector from '../../../../utils/networkConnector';
+import { checkAllowance } from '../../../../utils/network';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../redux/rootReducer';
+import { getIsWalletConnected, getWalletAddress } from '../../../../redux/modules/wallet';
+import ApprovalModal from '../../../../components/ApprovalModal/ApprovalModal';
+import { PAYMENT_CURRENCY } from '../../../../constants/currency';
+import { MAX_GAS_LIMIT } from '../../../../constants/network';
 
 type MarketDetailsProps = {
     market: MarketData;
 };
 
 const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
-    const [selectedSide, setSelectedSide] = useState<number | null>(null);
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+
+    const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
+    const [hasAllowance, setAllowance] = useState<boolean>(false);
+    const [isAllowing, setIsAllowing] = useState<boolean>(false);
+    const [amount, setAmount] = useState<number>(0);
+    const [selectedPosition, setSelectedPosition] = useState<Position>(Position.HOME);
+    const [selectedSide, setSelectedSide] = useState<Side>(Side.BUY);
+
+    useEffect(() => {
+        const { sportsAMMContract, sUSDContract, signer } = networkConnector;
+        if (sportsAMMContract && sUSDContract && signer) {
+            const sUSDTokenContractWithSigner = sUSDContract.connect(signer);
+            const getAllowance = async () => {
+                try {
+                    const parsedTicketPrice = ethers.utils.parseEther(Number(amount).toString());
+                    const allowance = await checkAllowance(
+                        parsedTicketPrice,
+                        sUSDTokenContractWithSigner,
+                        walletAddress,
+                        sportsAMMContract.address
+                    );
+                    setAllowance(allowance);
+                } catch (e) {
+                    console.log(e);
+                }
+            };
+            if (isWalletConnected) {
+                getAllowance();
+            }
+        }
+    }, [walletAddress, isWalletConnected, hasAllowance, isAllowing, amount]);
+
+    const fetchAmmQuote = async () => {
+        if (!!amount) {
+            const { sportsAMMContract, signer } = networkConnector;
+            if (sportsAMMContract && signer) {
+                const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
+                const parsedAmount = ethers.utils.parseEther(amount.toString());
+                const ammQuote = await (selectedSide === Side.BUY
+                    ? sportsAMMContractWithSigner?.buyFromAmmQuote(market.address, selectedPosition, parsedAmount)
+                    : sportsAMMContractWithSigner?.sellToAmmQuote(market.address, selectedPosition, parsedAmount));
+                console.log(ammQuote);
+                return ammQuote;
+            }
+        }
+    };
+
+    const handleSubmit = async () => {
+        if (!!amount) {
+            const { sportsAMMContract, signer } = networkConnector;
+            if (sportsAMMContract && signer) {
+                const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
+                const ammQuote = await fetchAmmQuote();
+                const parsedAmount = ethers.utils.parseEther(amount.toString());
+
+                console.log(market.address, selectedPosition, parsedAmount, ammQuote, ethers.utils.parseEther('0.02'));
+                if (selectedSide === Side.BUY) {
+                    await sportsAMMContractWithSigner?.buyFromAMM(
+                        market.address,
+                        selectedPosition,
+                        parsedAmount,
+                        ammQuote,
+                        ethers.utils.parseEther('0.02'),
+                        { gasLimit: 15000000 }
+                    );
+                } else {
+                    await sportsAMMContractWithSigner?.sellToAMM(
+                        market.address,
+                        selectedPosition,
+                        parsedAmount,
+                        ammQuote,
+                        ethers.utils.parseEther('0.02')
+                    );
+                }
+            }
+        }
+    };
+
+    const handleAllowance = async (approveAmount: BigNumber) => {
+        const { sportsAMMContract, sUSDContract, signer } = networkConnector;
+        if (sportsAMMContract && sUSDContract && signer) {
+            setIsAllowing(true);
+
+            try {
+                const sUSDTokenContractWithSigner = sUSDContract.connect(signer);
+                const addressToApprove = sportsAMMContract.address;
+
+                const tx = (await sUSDTokenContractWithSigner.approve(addressToApprove, approveAmount, {
+                    gasLimit: MAX_GAS_LIMIT,
+                })) as ethers.ContractTransaction;
+                setOpenApprovalModal(false);
+                const txResult = await tx.wait();
+
+                if (txResult && txResult.transactionHash) {
+                    setIsAllowing(false);
+                }
+            } catch (e) {
+                console.log(e);
+                setIsAllowing(false);
+            }
+        }
+    };
 
     return (
         <MarketContainer>
-            <MarketTitle fontSize={25} marginBottom={40}></MarketTitle>
+            <Toggle
+                label={{ firstLabel: Side.BUY, secondLabel: Side.SELL, fontSize: '18px' }}
+                active={selectedSide === Side.SELL}
+                dotSize="18px"
+                dotBackground="#303656"
+                dotBorder="3px solid #3FD1FF"
+                handleClick={() => {
+                    setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
+                }}
+            />
             <MatchInfo>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer>
@@ -61,39 +182,44 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
             </MatchInfo>
             <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
             <OddsContainer>
-                <Pick
-                    selected={selectedSide === Position.HOME}
-                    onClick={() => setSelectedSide(selectedSide === Position.HOME ? null : Position.HOME)}
-                >
+                <Pick selected={selectedPosition === Position.HOME} onClick={() => setSelectedPosition(Position.HOME)}>
                     <Option color="#50CE99">1</Option>
                     <OptionTeamName>{market.homeTeam.toUpperCase()}</OptionTeamName>
                     <InfoRow>
                         <InfoTitle>ODDS:</InfoTitle>
-                        <InfoValue>{market.homeOdds.toFixed(2)}</InfoValue>
+                        <InfoValue>{market.positions[Position.HOME].sides[selectedSide].odd.toFixed(2)}</InfoValue>
                     </InfoRow>
                     <InfoRow>
                         <InfoTitle>ROI:</InfoTitle>
-                        <InfoValue>{formatPercentage(1 / market.homeOdds)}</InfoValue>
+                        <InfoValue>
+                            {formatPercentage(1 / market.positions[Position.HOME].sides[selectedSide].odd)}
+                        </InfoValue>
                     </InfoRow>
                     <InfoRow>
                         <InfoTitle>POOL SIZE:</InfoTitle>
                         <InfoValue>$20,000</InfoValue>
                     </InfoRow>
                 </Pick>
-                {!!market.drawOdds && (
+                {!!market.positions[Position.DRAW].sides[selectedSide].odd && (
                     <Pick
-                        selected={selectedSide === Position.DRAW}
-                        onClick={() => setSelectedSide(selectedSide === Position.DRAW ? null : Position.DRAW)}
+                        selected={selectedPosition === Position.DRAW}
+                        onClick={() => setSelectedPosition(Position.DRAW)}
                     >
                         <Option color="#40A1D8">X</Option>
                         <OptionTeamName>DRAW</OptionTeamName>
                         <InfoRow>
                             <InfoTitle>ODDS:</InfoTitle>
-                            <InfoValue>{market.drawOdds.toFixed(2)}</InfoValue>
+                            <InfoValue>{market.positions[Position.DRAW].sides[selectedSide].odd.toFixed(2)}</InfoValue>
                         </InfoRow>
                         <InfoRow>
                             <InfoTitle>ROI:</InfoTitle>
-                            <InfoValue>{formatPercentage(market.drawOdds ? 1 / market.drawOdds : 0)}</InfoValue>
+                            <InfoValue>
+                                {formatPercentage(
+                                    market.positions[Position.DRAW].sides[selectedSide].odd
+                                        ? 1 / market.positions[Position.DRAW].sides[selectedSide].odd
+                                        : 0
+                                )}
+                            </InfoValue>
                         </InfoRow>
                         <InfoRow>
                             <InfoTitle>POOL SIZE:</InfoTitle>
@@ -101,19 +227,18 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                         </InfoRow>
                     </Pick>
                 )}
-                <Pick
-                    selected={selectedSide === Position.AWAY}
-                    onClick={() => setSelectedSide(selectedSide === Position.AWAY ? null : Position.AWAY)}
-                >
+                <Pick selected={selectedPosition === Position.AWAY} onClick={() => setSelectedPosition(Position.AWAY)}>
                     <Option color="#E26A78">2</Option>
                     <OptionTeamName>{market.awayTeam.toUpperCase()}</OptionTeamName>
                     <InfoRow>
                         <InfoTitle>ODDS:</InfoTitle>
-                        <InfoValue>{market.awayOdds.toFixed(2)}</InfoValue>
+                        <InfoValue>{market.positions[Position.AWAY].sides[selectedSide].odd.toFixed(2)}</InfoValue>
                     </InfoRow>
                     <InfoRow>
                         <InfoTitle>ROI:</InfoTitle>
-                        <InfoValue>{formatPercentage(1 / market.awayOdds)}</InfoValue>
+                        <InfoValue>
+                            {formatPercentage(1 / market.positions[Position.AWAY].sides[selectedSide].odd)}
+                        </InfoValue>
                     </InfoRow>
                     <InfoRow>
                         <InfoTitle>POOL SIZE:</InfoTitle>
@@ -135,7 +260,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 />
                 <SliderInfo>
                     <SliderInfoTitle>Available to buy:</SliderInfoTitle>
-                    <SliderInfoValue>$ 270,745</SliderInfoValue>
+                    <SliderInfoValue>
+                        {market.positions[selectedPosition].sides[selectedSide].available.toFixed(2)}
+                    </SliderInfoValue>
                 </SliderInfo>
                 <SliderInfo>
                     <SliderInfoTitle>Skew:</SliderInfoTitle>
@@ -144,21 +271,45 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
             </SliderContainer>
             <FlexDivCentered>AMOUNT TO BUY:</FlexDivCentered>
             <FlexDivCentered>
-                <AmountToBuyInput type="number" />
+                <AmountToBuyInput type="number" onChange={(e) => setAmount(+e.target.value)} />
             </FlexDivCentered>
             <FlexDivCentered>
                 <SliderInfo>
                     <SliderInfoTitle>Potential profit:</SliderInfoTitle>
-                    <SliderInfoValue>$ 204,400.00 + 137.25%</SliderInfoValue>
+                    <SliderInfoValue>
+                        ${((1 - market.positions[selectedPosition].sides[selectedSide].odd) * amount).toFixed(2)}
+                    </SliderInfoValue>
                 </SliderInfo>
             </FlexDivCentered>
             <FlexDivCentered>
-                <SubmitButton>BUY</SubmitButton>
+                <SubmitButton
+                    disabled={!amount}
+                    onClick={async () => {
+                        if (!!amount) {
+                            if (hasAllowance) {
+                                await handleSubmit();
+                            } else {
+                                setOpenApprovalModal(true);
+                            }
+                        }
+                    }}
+                >
+                    {hasAllowance ? selectedSide : 'APPROVE'}
+                </SubmitButton>
             </FlexDivCentered>
             <StatusSourceContainer>
                 <StatusSourceInfo />
                 <StatusSourceInfo />
             </StatusSourceContainer>
+            {openApprovalModal && (
+                <ApprovalModal
+                    defaultAmount={amount}
+                    tokenSymbol={PAYMENT_CURRENCY}
+                    isAllowing={isAllowing}
+                    onSubmit={handleAllowance}
+                    onClose={() => setOpenApprovalModal(false)}
+                />
+            )}
         </MarketContainer>
     );
 };

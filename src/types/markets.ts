@@ -1,4 +1,5 @@
 import { DisputeStatus, DisputeVotingOption, MarketStatus } from 'constants/markets';
+import { Position, Side } from '../constants/options';
 
 export type MarketInfo = {
     address: string;
@@ -64,16 +65,25 @@ export type GameDetails = {
     gameLabel: string;
 };
 
+export type AMMSide = {
+    available: number;
+    odd: number;
+};
+
+export type AMMPosition = {
+    position: Position;
+    sides: Record<Side, AMMSide>;
+};
+
 export type MarketData = {
     address: string;
     gameDetails: GameDetails;
-    homeOdds: number;
-    awayOdds: number;
-    drawOdds: number;
+    positions: Record<Position, AMMPosition>;
     tags: number[];
     homeTeam: string;
     awayTeam: string;
     maturityDate: number;
+    optionsAddresses: Record<string, string>;
 };
 
 export type Markets = MarketInfo[];

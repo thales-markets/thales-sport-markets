@@ -50,6 +50,12 @@ export const Pick = styled(FlexDivColumn)<{ selected?: boolean }>`
         border: 2px solid #5f6180;
         box-shadow: 0px 4px 24px 9px rgba(0, 0, 0, 0.25);
     }
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 `;
 
 export const Option = styled.div<{ color: string }>`
@@ -149,4 +155,9 @@ export const SubmitButton = styled.button`
     width: 100%;
     border: none;
     padding: 7px;
+    cursor: pointer;
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
 `;
