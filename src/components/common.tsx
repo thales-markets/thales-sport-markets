@@ -201,3 +201,22 @@ export const OddsLabel = styled.label<{ isUP?: boolean; isDraw?: boolean; isTwoP
             ? props.theme.oddsColor.primary
             : props.theme.oddsColor.secondary};
 `;
+
+export const OddsLabelSceleton = styled.div<{ isTwoPositioned?: boolean }>`
+    display: flex;
+    visibility: ${(props) => (props.isTwoPositioned ? 'hidden' : '')};
+    margin-top: 4px;
+    height: 23px;
+    width: 60px;
+    background: ${(props) => props.theme.background.primary};
+    color: ${(props) => props.theme.background.primary};
+    border-radius: 14px;
+    @keyframes shimmer {
+        100% {
+            -webkit-mask-position: left;
+        }
+    }
+    -webkit-mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/300% 100%;
+    background-repeat: no-repeat;
+    animation: shimmer 2.5s infinite;
+`;

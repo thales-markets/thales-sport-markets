@@ -12,6 +12,7 @@ export const fixDuplicatedTeamName = (name: string) => {
     if (firstHalf === secondHalf) {
         return firstHalf;
     }
+
     const splittedName = name.split(' ');
     const uniqueWordsInName = new Set(splittedName);
     if (uniqueWordsInName.size !== splittedName.length) {
