@@ -30,6 +30,8 @@ import {
     AmountToBuyInput,
     SubmitButton,
     AmountInfo,
+    MaxButton,
+    AmountToBuyContainer,
 } from './styled-components/MarketDetails';
 import { FlexDivCentered } from '../../../../styles/common';
 import { MAX_L2_GAS_LIMIT, Position, Side } from '../../../../constants/options';
@@ -38,12 +40,13 @@ import networkConnector from '../../../../utils/networkConnector';
 import { checkAllowance } from '../../../../utils/network';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/rootReducer';
-import { getIsWalletConnected, getWalletAddress } from '../../../../redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from '../../../../redux/modules/wallet';
 import ApprovalModal from '../../../../components/ApprovalModal/ApprovalModal';
 import { PAYMENT_CURRENCY } from '../../../../constants/currency';
 import { MAX_GAS_LIMIT } from '../../../../constants/network';
-import { formatPercentage } from '../../../../utils/formatters/number';
+import { formatCurrency, formatPercentage } from '../../../../utils/formatters/number';
 import usePositionPriceDetailsQuery from '../../../../queries/markets/usePositionPriceDetailsQuery';
+import usePaymentTokenBalanceQuery from '../../../../queries/wallet/usePaymentTokenBalanceQuery';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -52,7 +55,9 @@ type MarketDetailsProps = {
 const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
+    const [paymentTokenBalance, setPaymentTokenBalance] = useState<number | string>('');
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [hasAllowance, setAllowance] = useState<boolean>(false);
     const [isAllowing, setIsAllowing] = useState<boolean>(false);
@@ -74,11 +79,21 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         },
     });
 
+    const paymentTokenBalanceQuery = usePaymentTokenBalanceQuery(walletAddress, networkId, {
+        enabled: isWalletConnected,
+    });
+
     const positionPriceDetailsQuery = usePositionPriceDetailsQuery(
         market.address,
         selectedPosition,
         Number(amount) || 1
     );
+
+    useEffect(() => {
+        if (paymentTokenBalanceQuery.isSuccess && paymentTokenBalanceQuery.data !== undefined) {
+            setPaymentTokenBalance(Number(paymentTokenBalanceQuery.data));
+        }
+    }, [paymentTokenBalanceQuery.isSuccess, paymentTokenBalanceQuery.data]);
 
     useEffect(() => {
         if (positionPriceDetailsQuery.isSuccess && positionPriceDetailsQuery.data) {
@@ -110,16 +125,14 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         }
     }, [walletAddress, isWalletConnected, hasAllowance, isAllowing, amount]);
 
-    const fetchAmmQuote = async () => {
-        if (!!amount) {
-            const { sportsAMMContract, signer } = networkConnector;
-            if (sportsAMMContract && signer) {
-                const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
-                const parsedAmount = ethers.utils.parseEther(amount.toString());
-                return await (selectedSide === Side.BUY
-                    ? sportsAMMContractWithSigner?.buyFromAmmQuote(market.address, selectedPosition, parsedAmount)
-                    : sportsAMMContractWithSigner?.sellToAmmQuote(market.address, selectedPosition, parsedAmount));
-            }
+    const fetchAmmQuote = async (amountForQuote: number) => {
+        const { sportsAMMContract, signer } = networkConnector;
+        if (sportsAMMContract && signer) {
+            const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
+            const parsedAmount = ethers.utils.parseEther(amountForQuote.toString());
+            return await (selectedSide === Side.BUY
+                ? sportsAMMContractWithSigner?.buyFromAmmQuote(market.address, selectedPosition, parsedAmount)
+                : sportsAMMContractWithSigner?.sellToAmmQuote(market.address, selectedPosition, parsedAmount));
         }
     };
 
@@ -128,7 +141,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
             const { sportsAMMContract, signer } = networkConnector;
             if (sportsAMMContract && signer) {
                 const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
-                const ammQuote = await fetchAmmQuote();
+                const ammQuote = await fetchAmmQuote(+amount || 1);
                 const parsedAmount = ethers.utils.parseEther(amount.toString());
 
                 if (selectedSide === Side.BUY) {
@@ -175,6 +188,32 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 console.log(e);
                 setIsAllowing(false);
             }
+        }
+    };
+
+    const onMaxClick = async () => {
+        if (selectedSide === Side.BUY) {
+            const { sportsAMMContract, signer } = networkConnector;
+            if (sportsAMMContract && signer) {
+                const price = ammPosition.sides[selectedSide].quote / (+amount || 1);
+
+                if (price && paymentTokenBalance) {
+                    let tmpSuggestedAmount = Number(paymentTokenBalance) / Number(price);
+                    if (tmpSuggestedAmount > ammPosition.sides[selectedSide].available) {
+                        setAmount(ammPosition.sides[selectedSide].available);
+                        return;
+                    }
+
+                    const ammQuote = await fetchAmmQuote(tmpSuggestedAmount);
+
+                    const ammPrice = Number(ethers.utils.formatEther(ammQuote)) / Number(tmpSuggestedAmount);
+                    // 2 === slippage
+                    tmpSuggestedAmount = (Number(paymentTokenBalance) / Number(ammPrice)) * ((100 - 2) / 100);
+                    setAmount(Number(tmpSuggestedAmount.toFixed(2)));
+                }
+            }
+        } else {
+            // TODO: options token balance
         }
     };
 
@@ -246,7 +285,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                             <SliderInfoValue>
                                 {positionPriceDetailsQuery.isLoading
                                     ? '-'
-                                    : `${amount} = $${ammPosition.sides[selectedSide].quote.toFixed(2)}`}
+                                    : `${amount} = $${formatCurrency(ammPosition.sides[selectedSide].quote, 3, true)}`}
                             </SliderInfoValue>
                         </SliderInfo>
                     </AmountInfo>
@@ -280,7 +319,10 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
             </SliderContainer>
             <FlexDivCentered>AMOUNT TO BUY:</FlexDivCentered>
             <FlexDivCentered>
-                <AmountToBuyInput type="number" onChange={(e) => setAmount(e.target.value)} value={amount} />
+                <AmountToBuyContainer>
+                    <AmountToBuyInput type="number" onChange={(e) => setAmount(e.target.value)} value={amount} />
+                    <MaxButton onClick={onMaxClick}>Max</MaxButton>
+                </AmountToBuyContainer>
             </FlexDivCentered>
             <FlexDivCentered>
                 <SliderInfo>
@@ -288,9 +330,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     <SliderInfoValue>
                         {!amount || positionPriceDetailsQuery.isLoading
                             ? '-'
-                            : `$${(Number(amount) - ammPosition.sides[selectedSide].quote).toFixed(
-                                  2
-                              )} (${formatPercentage(1 / (ammPosition.sides[selectedSide].quote / Number(amount)))})`}
+                            : `$${formatCurrency(
+                                  Number(amount) - ammPosition.sides[selectedSide].quote
+                              )} (${formatPercentage(
+                                  1 / (ammPosition.sides[selectedSide].quote / Number(amount)) - 1
+                              )})`}
                     </SliderInfoValue>
                 </SliderInfo>
             </FlexDivCentered>

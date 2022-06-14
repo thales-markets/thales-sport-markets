@@ -140,6 +140,10 @@ export const SliderInfoValue = styled.div`
     line-height: 23px;
 `;
 
+export const AmountToBuyContainer = styled.div`
+    position: relative;
+`;
+
 export const AmountToBuyInput = styled.input`
     margin: 10px 0;
     border: 3px solid #3accfa;
@@ -173,4 +177,15 @@ export const AmountInfo = styled.div`
     top: -55px;
     left: 50%;
     transform: translateX(-50%);
+`;
+
+export const MaxButton = styled.button`
+    background: #3accfa;
+    font-size: 10px;
+    line-height: 12px;
+    position: absolute;
+    top: 16px;
+    right: 5px;
+    border: none;
+    cursor: pointer;
 `;

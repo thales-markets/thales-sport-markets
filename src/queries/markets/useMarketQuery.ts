@@ -14,7 +14,8 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
         async () => {
             try {
                 const contract = new ethers.Contract(marketAddress, marketContract.abi, networkConnector.provider);
-                const rundownConsumerContract = networkConnector.theRundownConsumerContract;
+                // const rundownConsumerContract = networkConnector.theRundownConsumerContract;
+                const sportsAMMContract = networkConnector.sportsAMMContract;
                 // const { marketDataContract, marketManagerContract, thalesBondsContract } = networkConnector;
                 const [gameDetails, tags, times, optionsAddresses] = await Promise.all([
                     contract?.getGameDetails(),
@@ -23,10 +24,13 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     contract?.options(),
                 ]);
 
-                const normalizedOdds = await rundownConsumerContract?.getNormalizedOdds(gameDetails.gameId);
-                const homeOdds = bigNumberFormatter(normalizedOdds[0]);
-                const awayOdds = bigNumberFormatter(normalizedOdds[1]);
-                const drawOdds = bigNumberFormatter(normalizedOdds[2]);
+                const [marketDefaultOdds] = await Promise.all([
+                    await sportsAMMContract?.getMarketDefaultOdds(marketAddress),
+                ]);
+
+                const homeOdds = bigNumberFormatter(marketDefaultOdds[0]);
+                const awayOdds = bigNumberFormatter(marketDefaultOdds[1]);
+                const drawOdds = bigNumberFormatter(marketDefaultOdds[2]);
 
                 const market: MarketData = {
                     address: marketAddress,

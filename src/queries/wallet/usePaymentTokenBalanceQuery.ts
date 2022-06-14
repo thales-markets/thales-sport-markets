@@ -14,9 +14,9 @@ const usePaymentTokenBalanceQuery = (
         QUERY_KEYS.Wallet.PaymentTokenBalance(walletAddress, networkId),
         async () => {
             try {
-                const { paymentTokenContract } = networkConnector;
-                if (paymentTokenContract) {
-                    const balance = bigNumberFormatter(await paymentTokenContract.balanceOf(walletAddress));
+                const { sUSDContract } = networkConnector;
+                if (sUSDContract) {
+                    const balance = bigNumberFormatter(await sUSDContract.balanceOf(walletAddress));
                     return balance < BALANCE_THRESHOLD ? 0 : balance;
                 }
                 return 0;
