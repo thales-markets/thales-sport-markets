@@ -1,10 +1,17 @@
 import { SportMarketInfo } from 'types/markets';
 import { NetworkId } from 'types/network';
+import { Position } from './options';
 
 export const QUERY_KEYS = {
     Markets: (networkId: NetworkId) => ['markets', networkId],
     SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
     Market: (marketAddress: string) => ['market', marketAddress],
+    PositionDetails: (marketAddress: string, position: Position, amount: number) => [
+        'market',
+        marketAddress,
+        position,
+        amount,
+    ],
     MarketTransactions: (marketAddress: string, networkId: NetworkId) => [
         'market',
         'transactions',

@@ -55,7 +55,7 @@ const Market: React.FC<MarketProps> = (props) => {
 };
 
 const Container = styled(FlexDivColumn)`
-    width: 70%;
+    width: 60%;
     position: relative;
     align-items: center;
 `;

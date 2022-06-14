@@ -14,8 +14,7 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
         async () => {
             try {
                 const contract = new ethers.Contract(marketAddress, marketContract.abi, networkConnector.provider);
-                // const rundownConsumerContract = networkConnector.theRundownConsumerContract;
-                const sportsAMMContract = networkConnector.sportsAMMContract;
+                const rundownConsumerContract = networkConnector.theRundownConsumerContract;
                 // const { marketDataContract, marketManagerContract, thalesBondsContract } = networkConnector;
                 const [gameDetails, tags, times, optionsAddresses] = await Promise.all([
                     contract?.getGameDetails(),
@@ -24,91 +23,42 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     contract?.options(),
                 ]);
 
-                // const normalizedOdds = await rundownConsumerContract?.getNormalizedOdds(gameDetails.gameId);
-                // const homeOdds = bigNumberFormatter(normalizedOdds[0]);
-                // const awayOdds = bigNumberFormatter(normalizedOdds[1]);
-                // const drawOdds = bigNumberFormatter(normalizedOdds[2]);
-
-                const [
-                    availableToBuyHome,
-                    availableToBuyAway,
-                    availableToBuyDraw,
-                    availableToSellHome,
-                    availableToSellAway,
-                    availableToSellDraw,
-                    buyFromAmmQuoteHome,
-                    buyFromAmmQuoteAway,
-                    buyFromAmmQuoteDraw,
-                    sellToAmmQuoteHome,
-                    sellToAmmQuoteAway,
-                    sellToAmmQuoteDraw,
-                ] = await Promise.all([
-                    await sportsAMMContract?.availableToBuyFromAMM(marketAddress, Position.HOME),
-                    await sportsAMMContract?.availableToBuyFromAMM(marketAddress, Position.AWAY),
-                    await sportsAMMContract?.availableToBuyFromAMM(marketAddress, Position.DRAW),
-                    await sportsAMMContract?.availableToSellToAMM(marketAddress, Position.HOME),
-                    await sportsAMMContract?.availableToSellToAMM(marketAddress, Position.AWAY),
-                    await sportsAMMContract?.availableToSellToAMM(marketAddress, Position.DRAW),
-                    await sportsAMMContract?.buyFromAmmQuote(
-                        marketAddress,
-                        Position.HOME,
-                        ethers.utils.parseEther('1')
-                    ),
-                    await sportsAMMContract?.buyFromAmmQuote(
-                        marketAddress,
-                        Position.AWAY,
-                        ethers.utils.parseEther('1')
-                    ),
-                    await sportsAMMContract?.buyFromAmmQuote(
-                        marketAddress,
-                        Position.DRAW,
-                        ethers.utils.parseEther('1')
-                    ),
-                    await sportsAMMContract?.sellToAmmQuote(marketAddress, Position.HOME, ethers.utils.parseEther('1')),
-                    await sportsAMMContract?.sellToAmmQuote(marketAddress, Position.AWAY, ethers.utils.parseEther('1')),
-                    await sportsAMMContract?.sellToAmmQuote(marketAddress, Position.DRAW, ethers.utils.parseEther('1')),
-                ]);
+                const normalizedOdds = await rundownConsumerContract?.getNormalizedOdds(gameDetails.gameId);
+                const homeOdds = bigNumberFormatter(normalizedOdds[0]);
+                const awayOdds = bigNumberFormatter(normalizedOdds[1]);
+                const drawOdds = bigNumberFormatter(normalizedOdds[2]);
 
                 const market: MarketData = {
                     address: marketAddress,
                     gameDetails,
                     positions: {
                         [Position.HOME]: {
-                            position: Position.HOME,
                             sides: {
                                 [Side.BUY]: {
-                                    available: bigNumberFormatter(availableToBuyHome),
-                                    odd: bigNumberFormatter(buyFromAmmQuoteHome),
+                                    odd: homeOdds,
                                 },
                                 [Side.SELL]: {
-                                    available: bigNumberFormatter(availableToSellHome),
-                                    odd: bigNumberFormatter(sellToAmmQuoteHome),
+                                    odd: homeOdds,
                                 },
                             },
                         },
                         [Position.AWAY]: {
-                            position: Position.AWAY,
                             sides: {
                                 [Side.BUY]: {
-                                    available: bigNumberFormatter(availableToBuyAway),
-                                    odd: bigNumberFormatter(buyFromAmmQuoteAway),
+                                    odd: awayOdds,
                                 },
                                 [Side.SELL]: {
-                                    available: bigNumberFormatter(availableToSellAway),
-                                    odd: bigNumberFormatter(sellToAmmQuoteAway),
+                                    odd: awayOdds,
                                 },
                             },
                         },
                         [Position.DRAW]: {
-                            position: Position.DRAW,
                             sides: {
                                 [Side.BUY]: {
-                                    available: bigNumberFormatter(availableToBuyDraw),
-                                    odd: bigNumberFormatter(buyFromAmmQuoteDraw),
+                                    odd: drawOdds,
                                 },
                                 [Side.SELL]: {
-                                    available: bigNumberFormatter(availableToSellDraw),
-                                    odd: bigNumberFormatter(sellToAmmQuoteDraw),
+                                    odd: drawOdds,
                                 },
                             },
                         },

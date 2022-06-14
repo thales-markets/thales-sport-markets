@@ -67,18 +67,18 @@ export type GameDetails = {
 
 export type AMMSide = {
     available: number;
-    odd: number;
+    quote: number;
+    priceImpact: number;
 };
 
 export type AMMPosition = {
-    position: Position;
     sides: Record<Side, AMMSide>;
 };
 
 export type MarketData = {
     address: string;
     gameDetails: GameDetails;
-    positions: Record<Position, AMMPosition>;
+    positions: Record<Position, { sides: Record<Side, { odd: number }> }>;
     tags: number[];
     homeTeam: string;
     awayTeam: string;
