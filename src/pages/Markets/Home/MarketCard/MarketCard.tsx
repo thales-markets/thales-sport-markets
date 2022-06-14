@@ -7,6 +7,7 @@ import {
     MatchParticipantName,
     OddsLabel,
     MatchVSLabel,
+    OddsLabelSceleton,
 } from 'components/common';
 import Tags from 'pages/Markets/components/Tags';
 import useNormalizedOddsQuery from 'queries/markets/useNormalizedOddsQuery';
@@ -33,7 +34,7 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPosition }) => {
     const claimAvailable = isClaimAvailable(market, accountPosition);
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const [sportMarketWithNormalizedOdds, setSportMarketWithNormalizedOdds] = useState<SportMarketInfo>(market);
+    const [sportMarketWithNormalizedOdds, setSportMarketWithNormalizedOdds] = useState<SportMarketInfo>();
     const normalizedOddsQuery = useNormalizedOddsQuery(market, networkId, { enabled: isAppReady });
 
     useEffect(() => {
@@ -44,56 +45,54 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPosition }) => {
 
     return (
         <Container isClaimAvailable={claimAvailable}>
-            <MatchDate>{formatDateWithTime(sportMarketWithNormalizedOdds.maturityDate)}</MatchDate>
+            <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
             <MatchInfo>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer>
-                        <MatchParticipantImage
-                            src={getTeamImageSource(
-                                sportMarketWithNormalizedOdds.homeTeam,
-                                sportMarketWithNormalizedOdds.tags[0]
-                            )}
-                        />
+                        <MatchParticipantImage src={getTeamImageSource(market.homeTeam, market.tags[0])} />
                     </MatchParticipantImageContainer>
-                    <MatchParticipantName>{sportMarketWithNormalizedOdds.homeTeam}</MatchParticipantName>
-                    <OddsLabel isUP={sportMarketWithNormalizedOdds.homeOdds >= 0.5}>
-                        {sportMarketWithNormalizedOdds.homeOdds.toFixed(2)}
-                    </OddsLabel>
+                    <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
+                    {sportMarketWithNormalizedOdds ? (
+                        <OddsLabel isUP={sportMarketWithNormalizedOdds.homeOdds >= 0.5}>
+                            {sportMarketWithNormalizedOdds.homeOdds.toFixed(2)}
+                        </OddsLabel>
+                    ) : (
+                        <OddsLabelSceleton />
+                    )}
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchVSLabel>VS</MatchVSLabel>
-                    <MatchParticipantName isTwoPositioned={sportMarketWithNormalizedOdds.drawOdds === 0}>
-                        {'DRAW'}
-                    </MatchParticipantName>
-                    <OddsLabel isTwoPositioned={sportMarketWithNormalizedOdds.drawOdds === 0} isDraw={true}>
-                        {sportMarketWithNormalizedOdds.drawOdds.toFixed(2)}
-                    </OddsLabel>
+                    <MatchParticipantName isTwoPositioned={market.drawOdds === 0}>{'DRAW'}</MatchParticipantName>
+                    {sportMarketWithNormalizedOdds ? (
+                        <OddsLabel isTwoPositioned={sportMarketWithNormalizedOdds.drawOdds === 0} isDraw={true}>
+                            {sportMarketWithNormalizedOdds.drawOdds.toFixed(2)}
+                        </OddsLabel>
+                    ) : (
+                        <OddsLabelSceleton isTwoPositioned={market.drawOdds === 0} />
+                    )}
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer>
-                        <MatchParticipantImage
-                            src={getTeamImageSource(
-                                sportMarketWithNormalizedOdds.awayTeam,
-                                sportMarketWithNormalizedOdds.tags[0]
-                            )}
-                        />
+                        <MatchParticipantImage src={getTeamImageSource(market.awayTeam, market.tags[0])} />
                     </MatchParticipantImageContainer>
-                    <MatchParticipantName>{sportMarketWithNormalizedOdds.awayTeam}</MatchParticipantName>
-                    <OddsLabel isUP={sportMarketWithNormalizedOdds.awayOdds <= 0.5}>
-                        {sportMarketWithNormalizedOdds.awayOdds.toFixed(2)}
-                    </OddsLabel>
+                    <MatchParticipantName>{market.awayTeam}</MatchParticipantName>
+                    {sportMarketWithNormalizedOdds ? (
+                        <OddsLabel isUP={sportMarketWithNormalizedOdds.awayOdds >= 0.5}>
+                            {sportMarketWithNormalizedOdds.awayOdds.toFixed(2)}
+                        </OddsLabel>
+                    ) : (
+                        <OddsLabelSceleton />
+                    )}
                 </MatchInfoColumn>
             </MatchInfo>
             <CardFooter>
-                <Tags tags={sportMarketWithNormalizedOdds.tags} />
+                <Tags tags={market.tags} />
             </CardFooter>
         </Container>
     );
 };
 
 const Container = styled(FlexDivColumnCentered)<{ isClaimAvailable: boolean }>`
-    // border: ${(props) => (props.isClaimAvailable ? 2 : 1)}px solid
-    //     ${(props) => (props.isClaimAvailable ? props.theme.borderColor.secondary : props.theme.borderColor.primary)};
     box-sizing: border-box;
     border-radius: 14px;
     padding: 16px 19px;
