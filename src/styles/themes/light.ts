@@ -1,11 +1,17 @@
 import { Colors } from 'styles/common';
 
 export default {
-    background: { primary: Colors.WHITE, secondary: Colors.GRAY_LIGHT, tertiary: Colors.WHITE },
+    background: {
+        primary: Colors.WHITE,
+        secondary: Colors.GRAY_LIGHT,
+        tertiary: Colors.WHITE,
+        quaternary: Colors.BLUE,
+    },
     textColor: {
         primary: Colors.PURPLE,
         secondary: Colors.GREEN,
         tertiary: Colors.WHITE,
+        quaternary: Colors.BLUE,
     },
     oddsColor: {
         primary: Colors.GREEN,
@@ -16,6 +22,10 @@ export default {
         primary: Colors.GRAY_LIGHT,
         secondary: Colors.WHITE,
         tertiary: Colors.PURPLE,
+    },
+    winnerLabelColors: {
+        primary: Colors.BLUE,
+        secondary: Colors.YELLOW,
     },
     button: {
         background: {

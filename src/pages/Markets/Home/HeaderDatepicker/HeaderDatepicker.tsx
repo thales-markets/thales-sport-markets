@@ -72,7 +72,7 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({ gamesPerDay, dateFi
                             <GamesNumberLabel>{data.numberOfGames + ' games'}</GamesNumberLabel>
                         </DateContainer>
                     ))}
-                    <RightIcon onClick={moveRight} disabled={farLeftDateIndex + DATES_TO_SHOW == gamesPerDay?.length} />
+                    <RightIcon onClick={moveRight} disabled={farLeftDateIndex + DATES_TO_SHOW >= gamesPerDay?.length} />
                 </>
             ) : (
                 <></>
@@ -168,7 +168,7 @@ const DateLabel = styled.span<{ selected?: boolean }>`
     font-weight: 300;
     font-size: 14.8909px;
     line-height: 17px;
-    color: ${(props) => (props.selected ? props.theme.oddsColor.primary : props.theme.textColor.primary)};
+    color: ${(props) => (props.selected ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
 `;
 const GamesNumberLabel = styled.span`
     font-style: normal;

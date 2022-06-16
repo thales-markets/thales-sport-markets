@@ -117,7 +117,6 @@ export const Checkmark = styled.span`
 `;
 
 export const MatchInfo = styled(FlexDivRow)`
-    margin-bottom: 10px;
     align-items: center;
     align-self: center;
     width: 100%;
@@ -126,6 +125,11 @@ export const MatchInfo = styled(FlexDivRow)`
 
 export const MatchInfoColumn = styled(FlexDivColumnCentered)`
     align-items: center;
+    height: 249px;
+    justify-content: flex-start;
+    &:nth-child(odd) {
+        margin-top: 40px;
+    }
 `;
 
 export const MatchDate = styled.label`
@@ -133,8 +137,10 @@ export const MatchDate = styled.label`
     font-weight: 400;
     font-size: 17px;
     line-height: 20px;
-    margin: 16px 11px 0px;
     text-align: center;
+    overflow: hidden;
+    width: 98px;
+    white-space: nowrap;
     color: ${(props) => props.theme.textColor.primary};
 `;
 
@@ -149,10 +155,15 @@ export const MatchVSLabel = styled.label`
     color: ${(props) => props.theme.textColor.primary};
 `;
 
-export const MatchParticipantImageContainer = styled(FlexDiv)`
+export const MatchParticipantImageContainer = styled(FlexDiv)<{ isWinner?: boolean; finalResult?: number }>`
     border-radius: 50%;
-    border: 3px solid ${(props) => props.theme.borderColor.primary};
+    border: 3px solid
+        ${(props) =>
+            props.isWinner && props.finalResult !== 0
+                ? props.theme.oddsColor.tertiary
+                : props.theme.borderColor.primary};
     background: ${(props) => props.theme.background.secondary};
+    opacity: ${(props) => (props.finalResult && !props.isWinner ? '0.5' : '')};
     height: 126px;
     width: 126px;
     line-height: 100%;
@@ -172,7 +183,6 @@ export const MatchParticipantImage = styled.img`
 export const MatchParticipantName = styled.label<{ isTwoPositioned?: boolean }>`
     display: flex;
     visibility: ${(props) => (props.isTwoPositioned ? 'hidden' : '')};
-    margin-top: 11px;
     font-style: normal;
     font-weight: 400;
     font-size: 17px;
@@ -184,9 +194,14 @@ export const MatchParticipantName = styled.label<{ isTwoPositioned?: boolean }>`
     color: ${(props) => props.theme.textColor.primary};
 `;
 
-export const OddsLabel = styled.label<{ isUP?: boolean; isDraw?: boolean; isTwoPositioned?: boolean }>`
+export const OddsLabel = styled.label<{
+    homeOdds?: boolean;
+    isDraw?: boolean;
+    isTwoPositioned?: boolean;
+    noOdds?: boolean;
+}>`
     display: flex;
-    visibility: ${(props) => (props.isTwoPositioned ? 'hidden' : '')};
+    visibility: ${(props) => (props.isTwoPositioned || props.noOdds ? 'hidden' : '')};
     margin-top: 4px;
     font-style: normal;
     font-weight: 700;
@@ -197,7 +212,7 @@ export const OddsLabel = styled.label<{ isUP?: boolean; isDraw?: boolean; isTwoP
     color: ${(props) =>
         props.isDraw
             ? props.theme.oddsColor.tertiary
-            : props.isUP
+            : props.homeOdds
             ? props.theme.oddsColor.primary
             : props.theme.oddsColor.secondary};
 `;
@@ -219,4 +234,28 @@ export const OddsLabelSceleton = styled.div<{ isTwoPositioned?: boolean }>`
     -webkit-mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/300% 100%;
     background-repeat: no-repeat;
     animation: shimmer 2.5s infinite;
+`;
+
+export const WinnerLabel = styled.label<{ isWinning: boolean; finalResult?: number }>`
+    display: flex;
+    visibility: ${(props) => (!props.isWinning ? 'hidden' : '')};
+    margin-top: 4px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 23px;
+    text-transform: uppercase;
+    text-align: center;
+    color: ${(props) =>
+        props.finalResult == 3 ? props.theme.winnerLabelColors.secondary : props.theme.winnerLabelColors.primary};
+`;
+
+export const ScoreLabel = styled.label`
+    display: flex;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 35px;
+    align-items: center;
+    color: ${(props) => props.theme.textColor.primary};
 `;
