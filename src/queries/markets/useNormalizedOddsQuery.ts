@@ -24,7 +24,6 @@ const useNormalizedOddsQuery = (
                 }
                 return sportMarket;
             } catch (e) {
-                console.log(e);
                 return sportMarket;
             }
         },

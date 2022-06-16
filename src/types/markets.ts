@@ -52,6 +52,8 @@ export type SportMarketInfo = {
     homeOdds: number;
     awayOdds: number;
     drawOdds: number;
+    homeScore: number;
+    awayScore: number;
 };
 
 export type FixedMarketData = {

@@ -43,6 +43,7 @@ export const Colors = {
     GRAY_DARK: '#1A1C2B',
     WHITE: '#FFFFFF',
     GREEN: '#5FC694',
-    BLUE: '#40a1d8',
+    BLUE: '#3FD1FF',
     RED: '#e26a78',
+    YELLOW: '#FAC439',
 };

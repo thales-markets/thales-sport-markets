@@ -5,11 +5,12 @@ import { FlexDivCentered, FlexDivStart } from 'styles/common';
 
 type TagsProps = {
     tags: number[];
+    isFinished?: boolean;
 };
 
-const Tags: React.FC<TagsProps> = ({ tags }) => {
+const Tags: React.FC<TagsProps> = ({ tags, isFinished }) => {
     return (
-        <Container>
+        <Container isFinished={isFinished}>
             {tags.map((tag: number) => {
                 const findTagItem = TAGS_LIST.find((t) => t.id == tag);
                 return findTagItem ? <Tag key={findTagItem.id}>{findTagItem.label}</Tag> : null;
@@ -18,11 +19,11 @@ const Tags: React.FC<TagsProps> = ({ tags }) => {
     );
 };
 
-const Container = styled(FlexDivStart)`
+const Container = styled(FlexDivStart)<{ isFinished?: boolean }>`
     flex-wrap: wrap;
     align-items: center;
     color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 5px;
+    margin-top: ${(props) => (props.isFinished ? '58px' : '18px')};
 `;
 
 export const TagLabel = styled.span<{ labelFontSize?: number }>`

@@ -401,12 +401,34 @@ const FiltersContainer = styled(FlexDivRow)`
 const GlobalFiltersContainer = styled(FlexDivColumn)`
     height: fit-content;
     flex: 0;
+    // border-top: 3px solid ${(props) => props.theme.borderColor.primary};
+    // border-bottom: 3px solid ${(props) => props.theme.borderColor.primary};
+    // border-radius: 3px;
+    margin-bottom: 10px;
+    padding-top: 20px;
+    &:before {
+        content: '';
+        height: 3px;
+        background: ${(props) => props.theme.borderColor.primary};
+        border-radius: 10px 10px 10px 10px;
+        margin-bottom: 20px;
+        margin-left: 10px;
+    }
+    &:after {
+        content: '';
+        height: 3px;
+        background: ${(props) => props.theme.borderColor.primary};
+        border-radius: 10px 10px 10px 10px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
 `;
 
 const TagsContainer = styled(FlexDivStart)`
     flex-wrap: wrap;
     align-items: center;
     margin-bottom: 10px;
+    margin-left: 20px;
 `;
 
 const NoMarketsContainer = styled(FlexDivColumnCentered)`

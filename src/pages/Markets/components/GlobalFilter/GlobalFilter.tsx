@@ -27,9 +27,10 @@ const Container = styled(FlexDivRowCentered)`
     text-transform: uppercase;
     cursor: pointer;
     height: 36px;
+    margin-left: 20px;
     &.selected,
     &:hover {
-        color: ${(props) => props.theme.textColor.primary};
+        color: ${(props) => props.theme.textColor.quaternary};
     }
     &.disabled {
         cursor: default;
@@ -53,7 +54,7 @@ const Label = styled.div`
 const Count = styled(FlexDivCentered)`
     min-width: 26px;
     height: 26px;
-    background: ${(props) => props.theme.background.tertiary};
+    background: ${(props) => props.theme.background.quaternary};
     color: ${(props) => props.theme.textColor.primary};
     border-radius: 15px;
     margin-left: 4px;
