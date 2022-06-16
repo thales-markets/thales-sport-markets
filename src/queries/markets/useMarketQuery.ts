@@ -17,11 +17,10 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                 // const rundownConsumerContract = networkConnector.theRundownConsumerContract;
                 const sportsAMMContract = networkConnector.sportsAMMContract;
                 // const { marketDataContract, marketManagerContract, thalesBondsContract } = networkConnector;
-                const [gameDetails, tags, times, optionsAddresses] = await Promise.all([
+                const [gameDetails, tags, times] = await Promise.all([
                     contract?.getGameDetails(),
                     contract?.tags(0),
                     contract?.times(),
-                    contract?.options(),
                 ]);
 
                 const [marketDefaultOdds] = await Promise.all([
@@ -30,7 +29,7 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
 
                 const homeOdds = bigNumberFormatter(marketDefaultOdds[0]);
                 const awayOdds = bigNumberFormatter(marketDefaultOdds[1]);
-                const drawOdds = bigNumberFormatter(marketDefaultOdds[2]);
+                const drawOdds = bigNumberFormatter(marketDefaultOdds[2] || 0);
 
                 const market: MarketData = {
                     address: marketAddress,
@@ -71,7 +70,6 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     homeTeam: fixDuplicatedTeamName(gameDetails.gameLabel.split('vs')[0].trim()),
                     awayTeam: fixDuplicatedTeamName(gameDetails.gameLabel.split('vs')[1].trim()),
                     maturityDate: Number(times.maturity) * 1000,
-                    optionsAddresses,
                 };
                 return market;
             } catch (e) {

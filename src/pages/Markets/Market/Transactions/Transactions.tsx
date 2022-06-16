@@ -50,7 +50,7 @@ const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
 };
 
 const Container = styled(FlexDivColumn)`
-    margin-top: 40px;
+    margin-top: 10px;
     border: 2px solid ${(props) => props.theme.borderColor.primary};
     border-radius: 15px;
     font-style: normal;

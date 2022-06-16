@@ -7,7 +7,7 @@ import {
 } from 'components/common';
 import React, { useEffect, useState } from 'react';
 import { BigNumber, ethers } from 'ethers';
-import { AMMPosition, MarketData } from 'types/markets';
+import { AMMPosition, Balances, MarketData } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getTeamImageSource } from 'utils/images';
 import {
@@ -47,6 +47,7 @@ import { MAX_GAS_LIMIT } from '../../../../constants/network';
 import { formatCurrency, formatPercentage } from '../../../../utils/formatters/number';
 import usePositionPriceDetailsQuery from '../../../../queries/markets/usePositionPriceDetailsQuery';
 import usePaymentTokenBalanceQuery from '../../../../queries/wallet/usePaymentTokenBalanceQuery';
+import useMarketBalancesQuery from '../../../../queries/markets/useMarketBalancesQuery';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -61,6 +62,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [hasAllowance, setAllowance] = useState<boolean>(false);
     const [isAllowing, setIsAllowing] = useState<boolean>(false);
+    const [isBuying, setIsBuying] = useState<boolean>(false);
     const [amount, setAmount] = useState<number | string>('');
     const [selectedPosition, setSelectedPosition] = useState<Position>(Position.HOME);
     const [selectedSide, setSelectedSide] = useState<Side>(Side.BUY);
@@ -77,6 +79,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 priceImpact: 0,
             },
         },
+    });
+    const [balances, setBalances] = useState<Balances | undefined>(undefined);
+
+    const marketBalancesQuery = useMarketBalancesQuery(market.address, walletAddress, {
+        enabled: !!market.address && isWalletConnected,
     });
 
     const paymentTokenBalanceQuery = usePaymentTokenBalanceQuery(walletAddress, networkId, {
@@ -100,6 +107,12 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
             setAmmPosition(positionPriceDetailsQuery.data);
         }
     }, [positionPriceDetailsQuery.isSuccess, positionPriceDetailsQuery.data]);
+
+    useEffect(() => {
+        if (marketBalancesQuery.isSuccess && marketBalancesQuery.data) {
+            setBalances(marketBalancesQuery.data);
+        }
+    }, [marketBalancesQuery.isSuccess, marketBalancesQuery.data]);
 
     useEffect(() => {
         const { sportsAMMContract, sUSDContract, signer } = networkConnector;
@@ -140,27 +153,42 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         if (!!amount) {
             const { sportsAMMContract, signer } = networkConnector;
             if (sportsAMMContract && signer) {
+                setIsBuying(true);
                 const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
                 const ammQuote = await fetchAmmQuote(+amount || 1);
                 const parsedAmount = ethers.utils.parseEther(amount.toString());
 
-                if (selectedSide === Side.BUY) {
-                    await sportsAMMContractWithSigner?.buyFromAMM(
-                        market.address,
-                        selectedPosition,
-                        parsedAmount,
-                        ammQuote,
-                        ethers.utils.parseEther('0.02'),
-                        { gasLimit: MAX_L2_GAS_LIMIT }
-                    );
-                } else {
-                    await sportsAMMContractWithSigner?.sellToAMM(
-                        market.address,
-                        selectedPosition,
-                        parsedAmount,
-                        ammQuote,
-                        ethers.utils.parseEther('0.02')
-                    );
+                try {
+                    if (selectedSide === Side.BUY) {
+                        const tx = await sportsAMMContractWithSigner?.buyFromAMM(
+                            market.address,
+                            selectedPosition,
+                            parsedAmount,
+                            ammQuote,
+                            ethers.utils.parseEther('0.02'),
+                            { gasLimit: MAX_L2_GAS_LIMIT }
+                        );
+                        const txResult = await tx.wait();
+                        if (txResult && txResult.transactionHash) {
+                            setIsBuying(false);
+                            setAmount(0);
+                        }
+                    } else {
+                        const tx = await sportsAMMContractWithSigner?.sellToAMM(
+                            market.address,
+                            selectedPosition,
+                            parsedAmount,
+                            ammQuote,
+                            ethers.utils.parseEther('0.02')
+                        );
+                        const txResult = await tx.wait();
+                        if (txResult && txResult.transactionHash) {
+                            setIsBuying(false);
+                            setAmount(0);
+                        }
+                    }
+                } catch (e) {
+                    setIsBuying(false);
                 }
             }
         }
@@ -213,7 +241,8 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 }
             }
         } else {
-            // TODO: options token balance
+            //@ts-ignore
+            setAmount(balances?.[Position[selectedPosition].toLowerCase()] || 0);
         }
     };
 
@@ -252,7 +281,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     <OptionTeamName>{market.homeTeam.toUpperCase()}</OptionTeamName>
                     <InfoRow>
                         <InfoTitle>PRICE:</InfoTitle>
-                        <InfoValue>{market.positions[Position.HOME].sides[selectedSide].odd.toFixed(2)}</InfoValue>
+                        <InfoValue>$ {market.positions[Position.HOME].sides[selectedSide].odd.toFixed(2)}</InfoValue>
                     </InfoRow>
                 </Pick>
                 {!!market.positions[Position.DRAW].sides[selectedSide].odd && (
@@ -264,7 +293,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                         <OptionTeamName>DRAW</OptionTeamName>
                         <InfoRow>
                             <InfoTitle>PRICE:</InfoTitle>
-                            <InfoValue>{market.positions[Position.DRAW].sides[selectedSide].odd.toFixed(2)}</InfoValue>
+                            <InfoValue>
+                                $ {market.positions[Position.DRAW].sides[selectedSide].odd.toFixed(2)}
+                            </InfoValue>
                         </InfoRow>
                     </Pick>
                 )}
@@ -273,7 +304,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     <OptionTeamName>{market.awayTeam.toUpperCase()}</OptionTeamName>
                     <InfoRow>
                         <InfoTitle>PRICE:</InfoTitle>
-                        <InfoValue>{market.positions[Position.AWAY].sides[selectedSide].odd.toFixed(2)}</InfoValue>
+                        <InfoValue>$ {market.positions[Position.AWAY].sides[selectedSide].odd.toFixed(2)}</InfoValue>
                     </InfoRow>
                 </Pick>
             </OddsContainer>
@@ -317,7 +348,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     </SliderInfoValue>
                 </SliderInfo>
             </SliderContainer>
-            <FlexDivCentered>AMOUNT TO BUY:</FlexDivCentered>
+            <FlexDivCentered>AMOUNT TO {selectedSide.toUpperCase()}:</FlexDivCentered>
             <FlexDivCentered>
                 <AmountToBuyContainer>
                     <AmountToBuyInput type="number" onChange={(e) => setAmount(e.target.value)} value={amount} />
@@ -340,7 +371,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
             </FlexDivCentered>
             <FlexDivCentered>
                 <SubmitButton
-                    disabled={!amount}
+                    disabled={!amount || isBuying || isAllowing}
                     onClick={async () => {
                         if (!!amount) {
                             if (hasAllowance) {

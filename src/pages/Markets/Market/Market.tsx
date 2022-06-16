@@ -15,6 +15,7 @@ import BackToLink from '../components/BackToLink';
 import MarketDetails from './MarketDetails';
 // import ResolveMarket from './ResolveMarket';
 import Transactions from './Transactions';
+import WalletInfo from './WalletInfo';
 
 type MarketProps = RouteComponentProps<{
     marketAddress: string;
@@ -44,6 +45,7 @@ const Market: React.FC<MarketProps> = (props) => {
                 <>
                     <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
                     <MarketDetails market={market} />
+                    <WalletInfo marketAddress={marketAddress} />
                     {/*{market.canMarketBeResolved && !market.isPaused && <ResolveMarket market={market} />}*/}
                     <Transactions marketAddress={marketAddress} />
                 </>

@@ -83,7 +83,6 @@ export type MarketData = {
     homeTeam: string;
     awayTeam: string;
     maturityDate: number;
-    optionsAddresses: Record<string, string>;
 };
 
 export type Markets = MarketInfo[];
@@ -229,4 +228,10 @@ export type MarketTransactions = MarketTransaction[];
 export type GamesOnDate = {
     date: string;
     numberOfGames: number;
+};
+
+export type Balances = {
+    home: number;
+    away: number;
+    draw: number;
 };
