@@ -15,6 +15,8 @@ import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
 import networkConnector from 'utils/networkConnector';
 import { ethers } from 'ethers';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { NetworkIdByName } from 'utils/network';
+import SwapModal from 'components/SwapModal';
 
 const FAUCET_ETH_AMOUNT_TO_SEND = 0.000001;
 
@@ -26,9 +28,10 @@ const GetUsd: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const [getUsdDefaultAmount, setGetUsdDefaultAmount] = useState<number | string>('');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [openSwapModal, setOpenSwapModal] = useState<boolean>(false);
 
     const getUsdDefaultAmountQuery = useGetUsdDefaultAmountQuery(networkId, {
-        enabled: isAppReady,
+        enabled: isAppReady && networkId === NetworkIdByName.OptimsimKovan,
     });
 
     useEffect(() => {
@@ -81,15 +84,29 @@ const GetUsd: React.FC = () => {
         <>
             {isWalletConnected && (
                 <Container>
-                    <Button type="secondary" onClick={handleGet} disabled={isSubmitting}>
+                    <GetUSDButton
+                        type="primary"
+                        onClick={() => {
+                            if (networkId === NetworkIdByName.OptimsimKovan) {
+                                handleGet();
+                            } else {
+                                setOpenSwapModal(true);
+                            }
+                        }}
+                        disabled={isSubmitting}
+                        fontSize={15}
+                    >
                         {isSubmitting
                             ? t('common.wallet.get-usd-progress', {
                                   amount: formattedAmount,
                               })
-                            : t('common.wallet.get-usd', {
+                            : networkId === NetworkIdByName.OptimsimKovan
+                            ? t('common.wallet.get-usd', {
                                   amount: formattedAmount,
-                              })}
-                    </Button>
+                              })
+                            : t('common.swap.title', { currencyKey: PAYMENT_CURRENCY })}
+                    </GetUSDButton>
+                    {openSwapModal && <SwapModal onClose={() => setOpenSwapModal(false)} />}
                 </Container>
             )}
         </>
@@ -102,6 +119,19 @@ const Container = styled(FlexDivCentered)`
     button {
         padding: 0 20px;
     }
+    @media (max-width: 500px) {
+        width: 100%;
+        button {
+            width: 100%;
+        }
+    }
+`;
+
+const GetUSDButton = styled(Button)`
+    background: ${(props) => props.theme.button.background.secondary};
+    border: 2px solid ${(props) => props.theme.button.borderColor.secondary};
+    color: ${(props) => props.theme.button.textColor.quaternary};
+    border-radius: 5px;
 `;
 
 export default GetUsd;

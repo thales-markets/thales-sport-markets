@@ -43,13 +43,16 @@ export const QUERY_KEYS = {
             walletAddress,
             networkId,
         ],
+        TokenBalance: (token: string, walletAddress: string, networkId: NetworkId) => [
+            'wallet',
+            'tokenBalance',
+            token,
+            walletAddress,
+            networkId,
+        ],
+        SwapApproveSpender: (networkId: NetworkId) => ['wallet', 'swap', 'approveSpender', networkId],
         GetUsdDefaultAmount: (networkId: NetworkId) => ['wallet', 'getUsdDefaultAmount', networkId],
     },
-    OracleCouncilMember: (walletAddress: string, networkId: NetworkId) => [
-        'oracleCouncilMember',
-        walletAddress,
-        networkId,
-    ],
 };
 
 export default QUERY_KEYS;

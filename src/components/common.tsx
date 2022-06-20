@@ -159,11 +159,11 @@ export const MatchParticipantImageContainer = styled(FlexDiv)<{ isWinner?: boole
     border-radius: 50%;
     border: 3px solid
         ${(props) =>
-            props.isWinner && props.finalResult !== 0
-                ? props.theme.oddsColor.tertiary
+            (props.isWinner && props.finalResult !== 0) || props.finalResult === 3
+                ? props.theme.winnerColors.primary
                 : props.theme.borderColor.primary};
     background: ${(props) => props.theme.background.secondary};
-    opacity: ${(props) => (props.finalResult && !props.isWinner ? '0.5' : '')};
+    opacity: ${(props) => (props.finalResult && props.finalResult !== 3 && !props.isWinner ? '0.5' : '')};
     height: 126px;
     width: 126px;
     line-height: 100%;
@@ -247,7 +247,7 @@ export const WinnerLabel = styled.label<{ isWinning: boolean; finalResult?: numb
     text-transform: uppercase;
     text-align: center;
     color: ${(props) =>
-        props.finalResult == 3 ? props.theme.winnerLabelColors.secondary : props.theme.winnerLabelColors.primary};
+        props.finalResult == 3 ? props.theme.winnerColors.secondary : props.theme.winnerColors.primary};
 `;
 
 export const ScoreLabel = styled.label`

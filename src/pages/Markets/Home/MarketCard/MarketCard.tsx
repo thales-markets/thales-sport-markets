@@ -36,6 +36,7 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPosition }) => {
     const claimAvailable = isClaimAvailable(market, accountPosition);
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    //TODO - THERE WILL BE NO NEED FOR QUERYING FOR NORMALIZED ODDS, SINCE CONTRACT SIDE WILL PROVIDE NORMALIZED ODDS SINCE MARKET CREATION EVENT - TO BE REMOVED
     const [sportMarketWithNormalizedOdds, setSportMarketWithNormalizedOdds] = useState<SportMarketInfo>();
     const normalizedOddsQuery = useNormalizedOddsQuery(market, networkId, { enabled: isAppReady });
 

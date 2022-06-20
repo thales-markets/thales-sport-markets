@@ -23,7 +23,7 @@ export default {
         secondary: Colors.WHITE,
         tertiary: Colors.PURPLE,
     },
-    winnerLabelColors: {
+    winnerColors: {
         primary: Colors.BLUE,
         secondary: Colors.YELLOW,
     },
@@ -37,9 +37,11 @@ export default {
             primary: Colors.WHITE,
             secondary: Colors.GRAY_DARK,
             tertiary: Colors.GRAY,
+            quaternary: Colors.BLUE,
         },
         borderColor: {
             primary: Colors.WHITE,
+            secondary: Colors.BLUE,
         },
     },
     input: {
