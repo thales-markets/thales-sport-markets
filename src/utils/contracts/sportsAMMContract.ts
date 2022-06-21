@@ -1,7 +1,7 @@
 export const sportsAMMContract = {
     addresses: {
         10: 'TBD',
-        42: '0xEa71aACad9C7105859581AA7048126d6f98B391F',
+        42: '0xc058844b73975458B8562F2CA0688aae8e18c076',
     },
     abi: [
         {
@@ -41,26 +41,8 @@ export const sportsAMMContract = {
         },
         {
             anonymous: false,
-            inputs: [
-                { indexed: false, internalType: 'bytes32', name: 'asset', type: 'bytes32' },
-                { indexed: false, internalType: 'uint256', name: '_cap', type: 'uint256' },
-            ],
-            name: 'SetCapPerAsset',
-            type: 'event',
-        },
-        {
-            anonymous: false,
-            inputs: [{ indexed: false, internalType: 'uint256', name: '_capPerMarket', type: 'uint256' }],
-            name: 'SetCapPerMarket',
-            type: 'event',
-        },
-        {
-            anonymous: false,
-            inputs: [
-                { indexed: false, internalType: 'bytes32', name: 'asset', type: 'bytes32' },
-                { indexed: false, internalType: 'uint256', name: '_impliedVolatility', type: 'uint256' },
-            ],
-            name: 'SetImpliedVolatilityPerAsset',
+            inputs: [{ indexed: false, internalType: 'uint256', name: '_defaultCapPerGame', type: 'uint256' }],
+            name: 'SetDefaultCapPerGame',
             type: 'event',
         },
         {
@@ -95,12 +77,6 @@ export const sportsAMMContract = {
         },
         {
             anonymous: false,
-            inputs: [{ indexed: false, internalType: 'address', name: '_manager', type: 'address' }],
-            name: 'SetPositionalMarketManager',
-            type: 'event',
-        },
-        {
-            anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: 'sUSD', type: 'address' }],
             name: 'SetSUSD',
             type: 'event',
@@ -115,6 +91,12 @@ export const sportsAMMContract = {
             anonymous: false,
             inputs: [{ indexed: false, internalType: 'uint256', name: '_safeBoxImpact', type: 'uint256' }],
             name: 'SetSafeBoxImpact',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: '_manager', type: 'address' }],
+            name: 'SetSportsPositionalMarketManager',
             type: 'event',
         },
         {
@@ -148,6 +130,13 @@ export const sportsAMMContract = {
             inputs: [{ indexed: false, internalType: 'address', name: 'account', type: 'address' }],
             name: 'Unpaused',
             type: 'event',
+        },
+        {
+            inputs: [],
+            name: 'MAX_APPROVAL',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
         },
         { inputs: [], name: 'acceptOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
         {
@@ -199,9 +188,38 @@ export const sportsAMMContract = {
                 { internalType: 'address', name: 'market', type: 'address' },
                 { internalType: 'enum SportsAMM.Position', name: 'position', type: 'uint8' },
                 { internalType: 'uint256', name: 'amount', type: 'uint256' },
+                { internalType: 'uint256', name: 'expectedPayout', type: 'uint256' },
+                { internalType: 'uint256', name: 'additionalSlippage', type: 'uint256' },
+                { internalType: 'address', name: 'collateral', type: 'address' },
+            ],
+            name: 'buyFromAMMWithDifferentCollateral',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'address', name: 'market', type: 'address' },
+                { internalType: 'enum SportsAMM.Position', name: 'position', type: 'uint8' },
+                { internalType: 'uint256', name: 'amount', type: 'uint256' },
             ],
             name: 'buyFromAmmQuote',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'address', name: 'market', type: 'address' },
+                { internalType: 'enum SportsAMM.Position', name: 'position', type: 'uint8' },
+                { internalType: 'uint256', name: 'amount', type: 'uint256' },
+                { internalType: 'address', name: 'collateral', type: 'address' },
+            ],
+            name: 'buyFromAmmQuoteWithDifferentCollateral',
+            outputs: [
+                { internalType: 'uint256', name: 'collateralQuote', type: 'uint256' },
+                { internalType: 'uint256', name: 'sUSDToPay', type: 'uint256' },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
@@ -225,7 +243,28 @@ export const sportsAMMContract = {
         },
         {
             inputs: [],
-            name: 'capPerMarket',
+            name: 'curveOnrampEnabled',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'curveSUSD',
+            outputs: [{ internalType: 'contract ICurveSUSD', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'dai',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'defaultCapPerGame',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
@@ -235,13 +274,6 @@ export const sportsAMMContract = {
             name: 'exerciseMaturedMarket',
             outputs: [],
             stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'bytes32', name: 'asset', type: 'bytes32' }],
-            name: 'getCapPerAsset',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-            stateMutability: 'view',
             type: 'function',
         },
         {
@@ -256,7 +288,7 @@ export const sportsAMMContract = {
             inputs: [
                 { internalType: 'address', name: '_owner', type: 'address' },
                 { internalType: 'contract IERC20Upgradeable', name: '_sUSD', type: 'address' },
-                { internalType: 'uint256', name: '_capPerMarket', type: 'uint256' },
+                { internalType: 'uint256', name: '_defaultCapPerGame', type: 'uint256' },
                 { internalType: 'uint256', name: '_min_spread', type: 'uint256' },
                 { internalType: 'uint256', name: '_max_spread', type: 'uint256' },
                 { internalType: 'uint256', name: '_minimalTimeLeftToMaturity', type: 'uint256' },
@@ -364,13 +396,6 @@ export const sportsAMMContract = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'address payable', name: 'account', type: 'address' }],
-            name: 'retrieveSUSD',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
             inputs: [
                 { internalType: 'address payable', name: 'account', type: 'address' },
                 { internalType: 'uint256', name: 'amount', type: 'uint256' },
@@ -438,17 +463,20 @@ export const sportsAMMContract = {
         },
         {
             inputs: [
-                { internalType: 'bytes32', name: 'asset', type: 'bytes32' },
-                { internalType: 'uint256', name: '_cap', type: 'uint256' },
+                { internalType: 'address', name: '_curveSUSD', type: 'address' },
+                { internalType: 'address', name: '_dai', type: 'address' },
+                { internalType: 'address', name: '_usdc', type: 'address' },
+                { internalType: 'address', name: '_usdt', type: 'address' },
+                { internalType: 'bool', name: '_curveOnrampEnabled', type: 'bool' },
             ],
-            name: 'setCapPerAsset',
+            name: 'setCurveSUSD',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'uint256', name: '_capPerMarket', type: 'uint256' }],
-            name: 'setCapPerMarket',
+            inputs: [{ internalType: 'uint256', name: '_defaultCapPerGame', type: 'uint256' }],
+            name: 'setDefaultCapPerGame',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -496,13 +524,6 @@ export const sportsAMMContract = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'address', name: '_manager', type: 'address' }],
-            name: 'setPositionalMarketManager',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
             inputs: [{ internalType: 'contract IERC20Upgradeable', name: '_sUSD', type: 'address' }],
             name: 'setSUSD',
             outputs: [],
@@ -524,6 +545,13 @@ export const sportsAMMContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'address', name: '_manager', type: 'address' }],
+            name: 'setSportsPositionalMarketManager',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'contract IStakingThales', name: '_stakingThales', type: 'address' }],
             name: 'setStakingThales',
             outputs: [],
@@ -531,25 +559,8 @@ export const sportsAMMContract = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'address', name: '_testOdds', type: 'address' }],
-            name: 'setTestOdds',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
             inputs: [{ internalType: 'address', name: '_theRundownConsumer', type: 'address' }],
             name: 'setTherundownConsumer',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
-            inputs: [
-                { internalType: 'address', name: '_address', type: 'address' },
-                { internalType: 'bool', name: 'enabled', type: 'bool' },
-            ],
-            name: 'setWhitelistedAddress',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -570,13 +581,6 @@ export const sportsAMMContract = {
         },
         {
             inputs: [],
-            name: 'testOdds',
-            outputs: [{ internalType: 'address', name: '', type: 'address' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [],
             name: 'theRundownConsumer',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
             stateMutability: 'view',
@@ -590,9 +594,16 @@ export const sportsAMMContract = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'address', name: '', type: 'address' }],
-            name: 'whitelistedAddresses',
-            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            inputs: [],
+            name: 'usdc',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'usdt',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
             stateMutability: 'view',
             type: 'function',
         },
