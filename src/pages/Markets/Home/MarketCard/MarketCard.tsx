@@ -2,29 +2,24 @@ import {
     MatchDate,
     MatchInfo,
     MatchInfoColumn,
-    MatchParticipantImageContainer,
     MatchParticipantImage,
+    MatchParticipantImageContainer,
     MatchParticipantName,
-    OddsLabel,
     MatchVSLabel,
+    OddsLabel,
     OddsLabelSceleton,
-    WinnerLabel,
     ScoreLabel,
+    WinnerLabel,
 } from 'components/common';
 import Tags from 'pages/Markets/components/Tags';
-import useNormalizedOddsQuery from 'queries/markets/useNormalizedOddsQuery';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
-import { getNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import React from 'react';
 // import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
 import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
-import { isClaimAvailable } from 'utils/markets';
 import { getTeamImageSource } from 'utils/images';
+import { isClaimAvailable } from 'utils/markets';
 
 type MarketCardProps = {
     market: SportMarketInfo;
@@ -34,17 +29,6 @@ type MarketCardProps = {
 const MarketCard: React.FC<MarketCardProps> = ({ market, accountPosition }) => {
     // const { t } = useTranslation();
     const claimAvailable = isClaimAvailable(market, accountPosition);
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    //TODO - THERE WILL BE NO NEED FOR QUERYING FOR NORMALIZED ODDS, SINCE CONTRACT SIDE WILL PROVIDE NORMALIZED ODDS SINCE MARKET CREATION EVENT - TO BE REMOVED
-    const [sportMarketWithNormalizedOdds, setSportMarketWithNormalizedOdds] = useState<SportMarketInfo>();
-    const normalizedOddsQuery = useNormalizedOddsQuery(market, networkId, { enabled: isAppReady });
-
-    useEffect(() => {
-        if (normalizedOddsQuery.isSuccess && normalizedOddsQuery.data) {
-            setSportMarketWithNormalizedOdds(normalizedOddsQuery.data);
-        }
-    }, [normalizedOddsQuery.isSuccess, normalizedOddsQuery.data]);
 
     return market.isResolved ? (
         <Container isClaimAvailable={claimAvailable}>
@@ -86,42 +70,22 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPosition }) => {
                     <MatchParticipantImageContainer>
                         <MatchParticipantImage src={getTeamImageSource(market.homeTeam, market.tags[0])} />
                     </MatchParticipantImageContainer>
-                    {sportMarketWithNormalizedOdds ? (
-                        <OddsLabel
-                            noOdds={
-                                sportMarketWithNormalizedOdds.awayOdds == 0 &&
-                                sportMarketWithNormalizedOdds.homeOdds == 0
-                            }
-                            homeOdds={true}
-                        >
-                            {sportMarketWithNormalizedOdds.homeOdds.toFixed(2)}
-                        </OddsLabel>
-                    ) : (
-                        <OddsLabelSceleton />
-                    )}
+                    <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
+                        {market.homeOdds.toFixed(2)}
+                    </OddsLabel>
+                    {/* <OddsLabelSceleton /> */}
                     <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
                     <MatchVSLabel>VS</MatchVSLabel>
-                    {sportMarketWithNormalizedOdds ? (
-                        <OddsLabel
-                            isTwoPositioned={
-                                sportMarketWithNormalizedOdds.drawOdds === 0 &&
-                                !(
-                                    sportMarketWithNormalizedOdds.awayOdds == 0 &&
-                                    sportMarketWithNormalizedOdds.homeOdds == 0
-                                )
-                            }
-                            isDraw={true}
-                        >
-                            {sportMarketWithNormalizedOdds.awayOdds == 0 && sportMarketWithNormalizedOdds.homeOdds == 0
-                                ? 'Coming Soon!'
-                                : sportMarketWithNormalizedOdds.drawOdds.toFixed(2)}
-                        </OddsLabel>
-                    ) : (
-                        <OddsLabelSceleton isTwoPositioned={market.drawOdds === 0} />
-                    )}
+                    <OddsLabel
+                        isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}
+                        isDraw={true}
+                    >
+                        {market.awayOdds == 0 && market.homeOdds == 0 ? 'Coming Soon!' : market.drawOdds.toFixed(2)}
+                    </OddsLabel>
+                    {/* <OddsLabelSceleton isTwoPositioned={market.drawOdds === 0} /> */}
                     <MatchParticipantName isTwoPositioned={market.drawOdds === 0}>{'DRAW'}</MatchParticipantName>
                     <Tags tags={market.tags} />
                 </MatchInfoColumn>
@@ -129,15 +93,9 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPosition }) => {
                     <MatchParticipantImageContainer>
                         <MatchParticipantImage src={getTeamImageSource(market.awayTeam, market.tags[0])} />
                     </MatchParticipantImageContainer>
-                    {sportMarketWithNormalizedOdds ? (
-                        <OddsLabel
-                            noOdds={
-                                sportMarketWithNormalizedOdds.awayOdds == 0 &&
-                                sportMarketWithNormalizedOdds.homeOdds == 0
-                            }
-                            homeOdds={false}
-                        >
-                            {sportMarketWithNormalizedOdds.awayOdds.toFixed(2)}
+                    {market ? (
+                        <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={false}>
+                            {market.awayOdds.toFixed(2)}
                         </OddsLabel>
                     ) : (
                         <OddsLabelSceleton />
