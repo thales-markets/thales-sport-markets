@@ -8,6 +8,8 @@ import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
+import { NetworkIdByName } from 'utils/network';
+import { getNetworkId } from 'redux/modules/wallet';
 
 type DappHeaderProps = {
     showSearch?: boolean;
@@ -15,6 +17,8 @@ type DappHeaderProps = {
 
 const DappHeader: React.FC<DappHeaderProps> = ({ showSearch }) => {
     const dispatch = useDispatch();
+
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
 
     return (
@@ -24,7 +28,7 @@ const DappHeader: React.FC<DappHeaderProps> = ({ showSearch }) => {
                 {showSearch && (
                     <Search text={marketSearch} handleChange={(value) => dispatch(setMarketSearch(value))} />
                 )}
-                <GetUsd />
+                {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
                 <WalletInfo />
             </RightContainer>
         </Container>

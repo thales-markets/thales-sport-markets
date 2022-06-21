@@ -52,7 +52,7 @@ export default {
             },
         },
         textColor: {
-            primary: Colors.PURPLE_DARK,
+            primary: Colors.GRAY_DARK,
         },
         borderColor: {
             primary: Colors.WHITE,

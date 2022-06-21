@@ -20,18 +20,15 @@ const Button: React.FC<ButtonProps> = ({ type, disabled, onClick, fontSize, chil
 };
 
 const StyledButton = styled.button<{ buttonType: ButtonType; fontSize?: number }>`
-    background: ${(props) =>
-        props.buttonType === 'secondary'
-            ? props.theme.button.background.secondary
-            : props.theme.button.background.primary};
+    background: ${(props) => props.theme.button.background.secondary};
+    border: 2px solid ${(props) => props.theme.button.borderColor.secondary};
+    color: ${(props) => props.theme.button.textColor.quaternary};
+    border-radius: 5px;
     padding: 1px 20px 0px 20px;
-    border-radius: 30px;
     font-style: normal;
-    font-weight: bold;
+    font-weight: 400;
     font-size: ${(props) => props.fontSize || 18}px;
-    color: ${(props) => props.theme.button.textColor.primary};
     text-align: center;
-    border: none;
     outline: none;
     text-transform: none;
     cursor: pointer;

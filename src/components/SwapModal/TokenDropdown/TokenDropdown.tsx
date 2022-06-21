@@ -89,7 +89,7 @@ const TokenButton = styled.button<{ readOnly?: boolean }>`
     padding-left: 15px;
     &:hover:not(.disabled) {
         cursor: ${(props) => (props.readOnly ? 'default' : 'pointer')};
-        background: ${(props) => (props.readOnly ? 'transparent' : '#e1d9e7')};
+        background: ${(props) => (props.readOnly ? 'transparent' : '#96e6ff')};
     }
     &.disabled {
         opacity: ${(props) => (props.readOnly ? 1 : 0.4)};
@@ -118,7 +118,7 @@ const DropDownItem = styled(FlexDiv)`
     padding: 7px 10px 9px 10px;
     cursor: pointer;
     &:hover {
-        background: #e1d9e7;
+        background: #96e6ff;
         border-radius: 12px;
     }
 `;

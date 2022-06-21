@@ -8,9 +8,9 @@ import { EthereumProvider, NetworkId } from 'types/network';
 import networkConnector from 'utils/networkConnector';
 
 export const NetworkIdByName: Record<string, NetworkId> = {
-    OptimsimMainnet: 10,
+    OptimismMainnet: 10,
     Kovan: 42,
-    OptimsimKovan: 69,
+    OptimismKovan: 69,
 };
 
 export const NetworkNameById: Record<NetworkId, string> = {

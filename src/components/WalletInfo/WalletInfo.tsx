@@ -98,7 +98,7 @@ const Container = styled(FlexDivCentered)`
     position: relative;
     height: 34px;
     justify-content: end;
-    min-width: 254px;
+    min-width: fit-content;
     @media (max-width: 767px) {
         min-width: auto;
     }

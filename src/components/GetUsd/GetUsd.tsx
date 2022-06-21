@@ -84,7 +84,7 @@ const GetUsd: React.FC = () => {
         <>
             {isWalletConnected && (
                 <Container>
-                    <GetUSDButton
+                    <Button
                         type="primary"
                         onClick={() => {
                             if (networkId === NetworkIdByName.OptimsimKovan) {
@@ -94,7 +94,7 @@ const GetUsd: React.FC = () => {
                             }
                         }}
                         disabled={isSubmitting}
-                        fontSize={15}
+                        fontSize={12.5}
                     >
                         {isSubmitting
                             ? t('common.wallet.get-usd-progress', {
@@ -105,7 +105,7 @@ const GetUsd: React.FC = () => {
                                   amount: formattedAmount,
                               })
                             : t('common.swap.title', { currencyKey: PAYMENT_CURRENCY })}
-                    </GetUSDButton>
+                    </Button>
                     {openSwapModal && <SwapModal onClose={() => setOpenSwapModal(false)} />}
                 </Container>
             )}
@@ -125,13 +125,6 @@ const Container = styled(FlexDivCentered)`
             width: 100%;
         }
     }
-`;
-
-const GetUSDButton = styled(Button)`
-    background: ${(props) => props.theme.button.background.secondary};
-    border: 2px solid ${(props) => props.theme.button.borderColor.secondary};
-    color: ${(props) => props.theme.button.textColor.quaternary};
-    border-radius: 5px;
 `;
 
 export default GetUsd;
