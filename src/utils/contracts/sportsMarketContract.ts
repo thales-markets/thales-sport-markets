@@ -1,7 +1,6 @@
 export const sportsMarketContract = {
     abi: [
         { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
-        { inputs: [], name: 'PositionCountMissmatch', type: 'error' },
         {
             anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: 'beneficiary', type: 'address' }],
@@ -65,25 +64,7 @@ export const sportsMarketContract = {
         {
             anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: '_address', type: 'address' }],
-            name: 'SetPriceFeed',
-            type: 'event',
-        },
-        {
-            anonymous: false,
-            inputs: [{ indexed: false, internalType: 'address', name: '_address', type: 'address' }],
             name: 'SetTherundownConsumer',
-            type: 'event',
-        },
-        {
-            anonymous: false,
-            inputs: [{ indexed: false, internalType: 'address', name: '_zeroExAddress', type: 'address' }],
-            name: 'SetZeroExAddress',
-            type: 'event',
-        },
-        {
-            anonymous: false,
-            inputs: [{ indexed: false, internalType: 'address', name: '_zeroExAddress', type: 'address' }],
-            name: 'SetZeroExAddressAtInit',
             type: 'event',
         },
         {
@@ -92,7 +73,24 @@ export const sportsMarketContract = {
             name: 'SetsUSD',
             type: 'event',
         },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'uint256', name: 'homeOdds', type: 'uint256' },
+                { indexed: false, internalType: 'uint256', name: 'awayOdds', type: 'uint256' },
+                { indexed: false, internalType: 'uint256', name: 'drawOdds', type: 'uint256' },
+            ],
+            name: 'StoredOddsOnCancellation',
+            type: 'event',
+        },
         { inputs: [], name: 'acceptOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
+        {
+            inputs: [],
+            name: 'awayOddsOnCancellation',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
         {
             inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
             name: 'balancesOf',
@@ -113,8 +111,26 @@ export const sportsMarketContract = {
         },
         { inputs: [], name: 'burnOptionsMaximum', outputs: [], stateMutability: 'nonpayable', type: 'function' },
         {
+            inputs: [
+                { internalType: 'uint256', name: '_homeBalance', type: 'uint256' },
+                { internalType: 'uint256', name: '_awayBalance', type: 'uint256' },
+                { internalType: 'uint256', name: '_drawBalance', type: 'uint256' },
+            ],
+            name: 'calculatePayoutOnCancellation',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [],
             name: 'canResolve',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'cancelled',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
             type: 'function',
@@ -129,6 +145,13 @@ export const sportsMarketContract = {
         {
             inputs: [],
             name: 'deposited',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'drawOddsOnCancellation',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
@@ -205,6 +228,13 @@ export const sportsMarketContract = {
         },
         {
             inputs: [],
+            name: 'homeOddsOnCancellation',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
             name: 'initialMint',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
@@ -222,8 +252,7 @@ export const sportsMarketContract = {
                         { internalType: 'uint256[2]', name: 'times', type: 'uint256[2]' },
                         { internalType: 'uint256', name: 'deposit', type: 'uint256' },
                         { internalType: 'address', name: 'theRundownConsumer', type: 'address' },
-                        { internalType: 'address', name: 'limitOrderProvider', type: 'address' },
-                        { internalType: 'address', name: 'thalesAMM', type: 'address' },
+                        { internalType: 'address', name: 'sportsAMM', type: 'address' },
                         { internalType: 'uint256', name: 'positionCount', type: 'uint256' },
                         { internalType: 'address[]', name: 'positions', type: 'address[]' },
                         { internalType: 'uint256[]', name: 'tags', type: 'uint256[]' },
@@ -241,6 +270,13 @@ export const sportsMarketContract = {
         {
             inputs: [],
             name: 'initialized',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'invalidOdds',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
             type: 'function',
@@ -311,6 +347,17 @@ export const sportsMarketContract = {
             name: 'resolved',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'uint256', name: '_homeOdds', type: 'uint256' },
+                { internalType: 'uint256', name: '_awayOdds', type: 'uint256' },
+                { internalType: 'uint256', name: '_drawOdds', type: 'uint256' },
+            ],
+            name: 'restoreInvalidOdds',
+            outputs: [],
+            stateMutability: 'nonpayable',
             type: 'function',
         },
         {
