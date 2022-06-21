@@ -1,7 +1,7 @@
 export const theRundownConsumerContract = {
     addresses: {
         10: 'TBD',
-        42: '0x8b6791d4925c03c424745AC387a66d4163893a47',
+        42: '0xd03f473caC24767134A86A298FeC38294986EcE6',
     },
     abi: [
         {
@@ -40,6 +40,7 @@ export const theRundownConsumerContract = {
                     type: 'tuple',
                 },
                 { indexed: false, internalType: 'uint256[]', name: '_tags', type: 'uint256[]' },
+                { indexed: false, internalType: 'uint256[]', name: '_normalizedOdds', type: 'uint256[]' },
             ],
             name: 'CreateSportsMarket',
             type: 'event',
@@ -66,6 +67,7 @@ export const theRundownConsumerContract = {
                     type: 'tuple',
                 },
                 { indexed: false, internalType: 'uint256', name: '_queueIndex', type: 'uint256' },
+                { indexed: false, internalType: 'uint256[]', name: '_normalizedOdds', type: 'uint256[]' },
             ],
             name: 'GameCreated',
             type: 'event',
@@ -87,6 +89,7 @@ export const theRundownConsumerContract = {
                     name: '_game',
                     type: 'tuple',
                 },
+                { indexed: false, internalType: 'uint256[]', name: '_normalizedOdds', type: 'uint256[]' },
             ],
             name: 'GameOddsAdded',
             type: 'event',
@@ -208,6 +211,13 @@ export const theRundownConsumerContract = {
         },
         {
             inputs: [],
+            name: 'CANCELLED',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
             name: 'HOME_WIN',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
@@ -233,6 +243,13 @@ export const theRundownConsumerContract = {
             name: 'addToWhitelist',
             outputs: [],
             stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'int256', name: '_americanOdd', type: 'int256' }],
+            name: 'calculateNormalizedOddFromAmerican',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'pure',
             type: 'function',
         },
         {
@@ -268,6 +285,7 @@ export const theRundownConsumerContract = {
                 { internalType: 'bytes32', name: '_requestId', type: 'bytes32' },
                 { internalType: 'bytes[]', name: '_games', type: 'bytes[]' },
                 { internalType: 'uint256', name: '_sportId', type: 'uint256' },
+                { internalType: 'uint256', name: '_date', type: 'uint256' },
             ],
             name: 'fulfillGamesCreated',
             outputs: [],
@@ -278,6 +296,7 @@ export const theRundownConsumerContract = {
             inputs: [
                 { internalType: 'bytes32', name: '_requestId', type: 'bytes32' },
                 { internalType: 'bytes[]', name: '_games', type: 'bytes[]' },
+                { internalType: 'uint256', name: '_date', type: 'uint256' },
             ],
             name: 'fulfillGamesOdds',
             outputs: [],
@@ -352,6 +371,16 @@ export const theRundownConsumerContract = {
                 { internalType: 'uint8', name: 'awayScore', type: 'uint8' },
                 { internalType: 'uint8', name: 'statusId', type: 'uint8' },
             ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'uint256', name: '', type: 'uint256' },
+                { internalType: 'uint256', name: '', type: 'uint256' },
+            ],
+            name: 'gamesPerDate',
+            outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
             stateMutability: 'view',
             type: 'function',
         },
@@ -466,13 +495,6 @@ export const theRundownConsumerContract = {
         },
         {
             inputs: [{ internalType: 'bytes32', name: '_gameId', type: 'bytes32' }],
-            name: 'getNormalizedOddsForTwoPosition',
-            outputs: [{ internalType: 'uint256[]', name: '', type: 'uint256[]' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'bytes32', name: '_gameId', type: 'bytes32' }],
             name: 'getOddsAwayTeam',
             outputs: [{ internalType: 'int24', name: '', type: 'int24' }],
             stateMutability: 'view',
@@ -496,6 +518,13 @@ export const theRundownConsumerContract = {
             inputs: [{ internalType: 'bytes32', name: '_gameId', type: 'bytes32' }],
             name: 'getResult',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            name: 'havingGamesPerDate',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
             type: 'function',
         },
@@ -534,6 +563,16 @@ export const theRundownConsumerContract = {
                 { internalType: 'string', name: '_teamB', type: 'string' },
             ],
             name: 'isSameTeamOrTBD',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'uint256', name: '', type: 'uint256' },
+                { internalType: 'uint256', name: '', type: 'uint256' },
+            ],
+            name: 'isSportOnADate',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
             type: 'function',
@@ -598,6 +637,13 @@ export const theRundownConsumerContract = {
             inputs: [],
             name: 'nominatedOwner',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            name: 'oddsLastPulledForDate',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
         },
