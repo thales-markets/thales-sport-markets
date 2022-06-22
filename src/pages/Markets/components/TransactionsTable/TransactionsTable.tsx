@@ -1,12 +1,10 @@
 import React, { FC, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CellProps } from 'react-table';
-import { formatCurrencyWithKey } from 'utils/formatters/number';
 import { formatTxTimestamp } from 'utils/formatters/date';
 import Table from 'components/Table';
 import ViewEtherscanLink from 'components/ViewEtherscanLink';
 import { MarketTransaction, MarketTransactions } from 'types/markets';
-import { PAYMENT_CURRENCY } from 'constants/currency';
 
 type TransactionsTableProps = {
     transactions: MarketTransactions;
@@ -52,7 +50,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                         sortType: 'basic',
                         accessor: 'amount',
                         Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['amount']>) => (
-                            <p>{formatCurrencyWithKey(PAYMENT_CURRENCY, cellProps.cell.value)}</p>
+                            <p>{cellProps.cell.value}</p>
                         ),
                         width: 150,
                         sortable: true,

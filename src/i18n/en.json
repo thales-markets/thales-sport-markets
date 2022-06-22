@@ -205,7 +205,9 @@
                 "bid": "Bid",
                 "withdrawal": "Withdrawal",
                 "changePosition": "Change position",
-                "claim": "Claim"
+                "claim": "Claim",
+                "buy": "BUY",
+                "sell": "CLAIM"
             },
             "no-results": "No transactions associated with this market."
         }

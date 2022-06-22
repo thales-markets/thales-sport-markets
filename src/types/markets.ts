@@ -222,7 +222,7 @@ export type MarketTransaction = {
     timestamp: number;
     amount: number | string;
     blockNumber: number;
-    position: string;
+    position: Position;
 };
 
 export type MarketTransactions = MarketTransaction[];
