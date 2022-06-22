@@ -1,10 +1,4 @@
-import {
-    MatchDate,
-    MatchInfoColumn,
-    MatchParticipantImage,
-    MatchParticipantImageContainer,
-    MatchVSLabel,
-} from 'components/common';
+import { MatchParticipantImage, MatchParticipantImageContainer, MatchVSLabel } from 'components/common';
 import React, { useEffect, useState } from 'react';
 import { BigNumber, ethers } from 'ethers';
 import { AMMPosition, Balances, MarketData } from 'types/markets';
@@ -32,6 +26,8 @@ import {
     AmountInfo,
     MaxButton,
     AmountToBuyContainer,
+    MatchDate,
+    MatchInfoColumn,
 } from './styled-components/MarketDetails';
 import { FlexDivCentered } from '../../../../styles/common';
 import { MAX_L2_GAS_LIMIT, Position, Side } from '../../../../constants/options';

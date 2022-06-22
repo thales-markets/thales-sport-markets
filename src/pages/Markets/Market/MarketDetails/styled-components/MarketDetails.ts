@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivRow } from '../../../../../styles/common';
+import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from '../../../../../styles/common';
 
 export const MarketContainer = styled(FlexDivColumn)`
     margin-top: 20px;
@@ -32,6 +32,21 @@ export const MatchInfo = styled(FlexDivRow)`
     align-self: center;
     width: 50%;
     justify-content: space-around;
+`;
+
+export const MatchInfoColumn = styled(FlexDivColumnCentered)`
+    align-items: center;
+`;
+
+export const MatchDate = styled.label`
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 20px;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 export const OddsContainer = styled(FlexDivRow)`
