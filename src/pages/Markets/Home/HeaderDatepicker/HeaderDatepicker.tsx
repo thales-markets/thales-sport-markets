@@ -9,11 +9,19 @@ type HeaderDatepickerProps = {
     gamesPerDay: GamesOnDate[];
     dateFilter: string;
     setDateFilter: (value: any) => void;
+    setStartDate: (value: any) => void;
+    setEndDate: (value: any) => void;
 };
 
 const DATES_TO_SHOW = 7;
 
-const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({ gamesPerDay, dateFilter, setDateFilter }) => {
+const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
+    gamesPerDay,
+    dateFilter,
+    setStartDate,
+    setEndDate,
+    setDateFilter,
+}) => {
     const [farLeftDateIndex, setFarLeftDateIndex] = useState(0);
     const [hammerManager, setHammerManager] = useState<any>();
 
@@ -63,7 +71,11 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({ gamesPerDay, dateFi
                         <DateContainer
                             key={index}
                             selected={dateFilter === data.date}
-                            onClick={() => setDateFilter(dateFilter === data.date ? '' : data.date)}
+                            onClick={() => {
+                                setStartDate(null);
+                                setEndDate(null);
+                                setDateFilter(dateFilter === data.date ? '' : data.date);
+                            }}
                         >
                             <DayLabel>{formatDayOfWeek(new Date(data.date)).toUpperCase()}</DayLabel>
                             <DateLabel selected={dateFilter === data.date}>

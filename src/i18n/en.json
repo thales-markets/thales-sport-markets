@@ -100,7 +100,7 @@
         "time-remaining-label": "Time remaining",
         "status-label": "Status",
         "tags-label": "Tags",
-        "search-placeholder": "Search markets",
+        "search-placeholder": "Search games",
         "open-markets-label": "Opened",
         "resolved-markets-label": "Resolved",
         "status": {
@@ -180,6 +180,14 @@
                 "yourpositions": "Your positions",
                 "claim": "Claimable",
                 "history": "History"
+            },
+            "sport": {
+                "basketball": "Basketball",
+                "soccer": "Soccer",
+                "hockey": "Hockey",
+                "tennis": "Tennis",
+                "football": "Football",
+                "baseball": "Baseball"
             },
             "all": "All"
         },

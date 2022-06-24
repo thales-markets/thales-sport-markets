@@ -1,19 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
+import { FlexDivRowCentered } from 'styles/common';
 
-type GlobalFilterProps = {
+type SportFilterProps = {
     disabled?: boolean;
     selected?: boolean;
     count?: number;
+    sport: string;
     onClick?: (param: any) => void;
 };
 
-const GlobalFilter: React.FC<GlobalFilterProps> = ({ disabled, selected, onClick, children, count }) => {
+const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, onClick, children }) => {
     return (
         <Container className={`${disabled ? 'disabled' : ''} ${selected ? 'selected' : ''}`} onClick={onClick}>
-            {count !== undefined && <Count>{count}</Count>}
-            {children == 'History' && <Icon className={`icon icon--${children.toString().toLowerCase()}`} />}
+            <SportIcon className={`icon icon--${sport.toLowerCase()}`} />
             <Label>{children}</Label>
         </Container>
     );
@@ -21,7 +21,7 @@ const GlobalFilter: React.FC<GlobalFilterProps> = ({ disabled, selected, onClick
 
 const Container = styled(FlexDivRowCentered)`
     font-style: normal;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 15px;
     line-height: 102.6%;
     letter-spacing: 0.035em;
@@ -52,23 +52,9 @@ const Label = styled.div`
     user-select: none;
 `;
 
-const Count = styled(FlexDivCentered)`
-    min-width: 26px;
-    height: 26px;
-    background: ${(props) => props.theme.background.quaternary};
-    color: ${(props) => props.theme.textColor.primary};
-    border-radius: 15px;
-    margin-left: 4px;
-    margin-right: 7px;
-    padding-left: 5px;
-    padding-top: 3px;
-    padding-right: 4px;
+const SportIcon = styled.i`
+    font-size: 35px;
+    margin-right: 15px;
 `;
 
-const Icon = styled.i`
-    font-size: 26px;
-    margin-left: 4px;
-    margin-right: 7px;
-`;
-
-export default GlobalFilter;
+export default SportFilter;

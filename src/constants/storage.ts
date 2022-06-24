@@ -8,4 +8,9 @@ export const LOCAL_STORAGE_KEYS = {
     FILTER_SHOW_OPEN_MARKETS: 'filterShowOpenMarkets',
     FILTER_TAGS: 'filterTags',
     FILTER_DATES: 'filterDates',
+    FILTER_SPORT: 'filterSport',
+    SORT_SPORTS: 'sortSports',
+    SORT_SPORTS_DIRECTION: 'sortSportsDirection',
+    FILTER_START_DATE: 'filterStartDate',
+    FILTER_END_DATE: 'filterEndDate',
 };

@@ -20,21 +20,24 @@ import {
     TagInfo,
     Tags,
 } from 'types/markets';
-import GlobalFilter from '../components/GlobalFilter';
 import TagButton from '../../../components/TagButton';
+import GlobalFilter from '../components/GlobalFilter';
 import MarketsGrid from './MarketsGrid';
 // import { navigateTo } from 'utils/routes';
 // import ROUTES from 'constants/routes';
-import { GlobalFilterEnum, SortDirection, DEFAULT_SORT_BY } from 'constants/markets';
-import SortOption from '../components/SortOption';
-import useAccountPositionsQuery from 'queries/markets/useAccountPositionsQuery';
 import Toggle from 'components/fields/Toggle';
+import RangedDatepicker from 'components/RangedDatepicker';
+import Search from 'components/Search';
+import { DEFAULT_SORT_BY, GlobalFilterEnum, SortDirection, SportFilterEnum } from 'constants/markets';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import useLocalStorage from 'hooks/useLocalStorage';
-import { isClaimAvailable } from 'utils/markets';
-import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
-import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
 import { TAGS_LIST } from 'constants/tags';
+import useLocalStorage from 'hooks/useLocalStorage';
+import useAccountPositionsQuery from 'queries/markets/useAccountPositionsQuery';
+import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
+import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
+import { isClaimAvailable } from 'utils/markets';
+import SortOption from '../components/SortOption';
+import SportFilter from '../components/SportFilter';
 import HeaderDatepicker from './HeaderDatepicker';
 
 const Home: React.FC = () => {
@@ -47,11 +50,19 @@ const Home: React.FC = () => {
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
 
     const [globalFilter, setGlobalFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_GLOBAL, GlobalFilterEnum.All);
+    const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_GLOBAL, SportFilterEnum.All);
+    const [sportsList, setSportsList] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_SPORTS, Object.values(SportFilterEnum));
     const [sortDirection, setSortDirection] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_DIRECTION, SortDirection.ASC);
+    const [sportsSortDirection, setSportsSortDirection] = useLocalStorage(
+        LOCAL_STORAGE_KEYS.SORT_SPORTS_DIRECTION,
+        SortDirection.ASC
+    );
     const [sortBy, setSortBy] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_BY, DEFAULT_SORT_BY);
     const [showOpenMarkets, setShowOpenMarkets] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SHOW_OPEN_MARKETS, true);
     const [lastValidMarkets, setLastValidMarkets] = useState<SportMarkets>([]);
     const [accountPositions, setAccountPositions] = useState<AccountPositionsMap>({});
+    const [startDate, setStartDate] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_START_DATE, null);
+    const [endDate, setEndDate] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_END_DATE, null);
 
     const sortOptions: SortOptionType[] = [
         { id: 1, title: t('market.time-remaining-label') },
@@ -142,8 +153,29 @@ const Home: React.FC = () => {
         return filteredMarkets;
     }, [markets, searchFilteredMarkets, dateFilter, marketSearch]);
 
+    const dateRangeFilteredMarkets = useMemo(() => {
+        let filteredMarkets = marketSearch ? searchFilteredMarkets : markets;
+
+        if (startDate !== null && endDate !== null) {
+            filteredMarkets = filteredMarkets.filter(
+                (market: SportMarketInfo) => market.maturityDate >= startDate && market.maturityDate <= endDate
+            );
+        }
+        return filteredMarkets;
+    }, [markets, startDate, endDate, marketSearch]);
+
+    const sportFilteredMarkets = useMemo(() => {
+        let filteredMarkets = startDate !== null && endDate !== null ? dateRangeFilteredMarkets : datesFilteredMarkets;
+
+        if (sportFilter !== SportFilterEnum.All) {
+            filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => market.sport === sportFilter);
+        }
+
+        return filteredMarkets;
+    }, [datesFilteredMarkets, sportFilter, markets, marketSearch, dateRangeFilteredMarkets]);
+
     const tagsFilteredMarkets = useMemo(() => {
-        let filteredMarkets = datesFilteredMarkets;
+        let filteredMarkets = sportFilteredMarkets;
 
         if (tagFilter.id !== allTagsFilterItem.id) {
             filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) =>
@@ -152,7 +184,7 @@ const Home: React.FC = () => {
         }
 
         return filteredMarkets;
-    }, [markets, datesFilteredMarkets, tagFilter, marketSearch]);
+    }, [markets, sportFilteredMarkets, tagFilter, marketSearch]);
 
     const accountClaimsCount = useMemo(() => {
         return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
@@ -236,9 +268,44 @@ const Home: React.FC = () => {
         }
     };
 
+    const setSportsSorting = () => {
+        switch (sportsSortDirection) {
+            case SortDirection.NONE:
+                setSportsSortDirection(SortDirection.ASC);
+                break;
+            case SortDirection.DESC:
+                setSportsSortDirection(SortDirection.ASC);
+                break;
+            case SortDirection.ASC:
+                setSportsSortDirection(SortDirection.DESC);
+                break;
+        }
+        const sortedSportsList = sportsList.sort((a: any, b: any) => {
+            if (sportsSortDirection === SortDirection.ASC) {
+                return a > b ? 1 : -1;
+            }
+            if (sportsSortDirection === SortDirection.DESC) {
+                return a > b ? -1 : 1;
+            }
+        });
+        setSportsList(sortedSportsList);
+    };
+
+    const onDateRangeChange = (dates: [Date | null, Date | null]) => {
+        setDateFilter('');
+        const [start, end] = dates;
+        setStartDate(start);
+        end?.setHours(end.getHours() + 23);
+        end?.setMinutes(end.getMinutes() + 59);
+        setEndDate(end);
+    };
+
     const resetFilters = () => {
         setGlobalFilter(GlobalFilterEnum.All);
+        setSportFilter(SportFilterEnum.All);
         setDateFilter('');
+        setStartDate(null);
+        setEndDate(null);
         setTagFilter(allTagsFilterItem);
         setShowOpenMarkets(true);
         dispatch(setMarketSearch(''));
@@ -249,10 +316,43 @@ const Home: React.FC = () => {
     return (
         <Container>
             <FiltersContainer>
-                <HeaderDatepicker gamesPerDay={gamesPerDay} dateFilter={dateFilter} setDateFilter={setDateFilter} />
+                <HeaderDatepicker
+                    gamesPerDay={gamesPerDay}
+                    dateFilter={dateFilter}
+                    setStartDate={setEndDate}
+                    setEndDate={setStartDate}
+                    setDateFilter={setDateFilter}
+                />
             </FiltersContainer>
             <RowContainer>
-                <SidebarContainer></SidebarContainer>
+                <SidebarContainer>
+                    <Search text={marketSearch} handleChange={(value) => dispatch(setMarketSearch(value))} />
+                    <SportFiltersContainer>
+                        {sportsList
+                            .filter((filterItem: any) => filterItem !== SportFilterEnum.All)
+                            .map((filterItem: any) => {
+                                return (
+                                    <SportFilter
+                                        disabled={false}
+                                        selected={sportFilter === filterItem}
+                                        sport={filterItem}
+                                        onClick={() => {
+                                            filterItem !== sportFilter
+                                                ? setSportFilter(filterItem)
+                                                : setSportFilter(SportFilterEnum.All);
+                                        }}
+                                        key={filterItem}
+                                    >
+                                        {t(`market.filter-label.sport.${filterItem.toLowerCase()}`)}
+                                    </SportFilter>
+                                );
+                            })}
+                    </SportFiltersContainer>
+                    <SortingButton onClick={setSportsSorting}>
+                        {sportsSortDirection == SortDirection.ASC ? 'Sports A-Z' : 'Sports Z-A'}
+                    </SortingButton>
+                    <RangedDatepicker onDateRangeChange={onDateRangeChange} startDate={startDate} endDate={endDate} />
+                </SidebarContainer>
                 {sportMarketsQuery.isLoading ? (
                     <LoaderContainer>
                         <SimpleLoader />
@@ -401,9 +501,6 @@ const FiltersContainer = styled(FlexDivRow)`
 const GlobalFiltersContainer = styled(FlexDivColumn)`
     height: fit-content;
     flex: 0;
-    // border-top: 3px solid ${(props) => props.theme.borderColor.primary};
-    // border-bottom: 3px solid ${(props) => props.theme.borderColor.primary};
-    // border-radius: 3px;
     margin-bottom: 10px;
     padding-top: 20px;
     &:before {
@@ -422,6 +519,13 @@ const GlobalFiltersContainer = styled(FlexDivColumn)`
         margin-bottom: 10px;
         margin-left: 10px;
     }
+`;
+
+const SportFiltersContainer = styled(FlexDivColumn)`
+    height: fit-content;
+    flex: 0;
+    margin-bottom: 10px;
+    padding-top: 20px;
 `;
 
 const TagsContainer = styled(FlexDivStart)`
@@ -450,6 +554,10 @@ const NoMarketsLabel = styled.span`
 const LoaderContainer = styled(FlexDivColumn)`
     position: relative;
     min-height: 300px;
+`;
+
+const SortingButton = styled(Button)`
+    width: 230px;
 `;
 
 export default Home;

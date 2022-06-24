@@ -1,4 +1,4 @@
-import { DisputeStatus, DisputeVotingOption, MarketStatus } from 'constants/markets';
+import { MarketStatus } from 'constants/markets';
 import { Position, Side } from '../constants/options';
 
 export type MarketInfo = {
@@ -54,6 +54,7 @@ export type SportMarketInfo = {
     drawOdds: number;
     homeScore: number;
     awayScore: number;
+    sport: string;
 };
 
 export type FixedMarketData = {
@@ -138,67 +139,7 @@ export type TagInfo = {
 
 export type Tags = TagInfo[];
 
-export type DisputeInfo = {
-    id: string;
-    timestamp: number;
-    creationDate: number;
-    disputeNumber: number;
-    market: string;
-    disputer: string;
-    reasonForDispute: string;
-    isInPositioningPhase: boolean;
-    disputeCode: number;
-    status: DisputeStatus;
-    statusSortingIndex: number;
-    isOpenForVoting: boolean;
-};
-
-export type Disputes = DisputeInfo[];
-
-export type DisputeContractData = {
-    timestamp: number;
-    disputer: string;
-    votedOption: number;
-    reasonForDispute: string;
-    isInPositioningPhase: boolean;
-    isMarketClosedForDisputes: boolean;
-    isOpenDisputeCancelled: boolean;
-    disputeWinningPositionChoosen: number;
-    firstMemberThatChooseWinningPosition: string;
-    acceptResultVotesCount: number;
-};
-
-export type DisputeVoteInfo = {
-    id: string;
-    timestamp: number;
-    market: string;
-    dispute: number;
-    voter: string;
-    vote: number;
-    position: number;
-};
-
-export type DisputeVotes = DisputeVoteInfo[];
-
-export type DisputeVotingResultInfo = {
-    votingOption: DisputeVotingOption;
-    position: number;
-    numberOfVotes: number;
-};
-
-export type DisputeVotingResults = DisputeVotingResultInfo[];
-
-export type DisputeData = {
-    disputeContractData: DisputeContractData;
-    disputeVotes: DisputeVotes;
-    disputeVotingResults: DisputeVotingResults;
-    status: DisputeStatus;
-    isOpenForVoting: boolean;
-};
-
-export type AccountDisputeData = {
-    canDisputorClaimbackBondFromUnclosedDispute: boolean;
-};
+export type SportsMap = Record<number, string>;
 
 export type AccountPosition = {
     market: string;

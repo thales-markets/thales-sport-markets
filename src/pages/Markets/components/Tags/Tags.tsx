@@ -4,16 +4,17 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivStart } from 'styles/common';
 
 type TagsProps = {
+    sport: string;
     tags: number[];
     isFinished?: boolean;
 };
 
-const Tags: React.FC<TagsProps> = ({ tags, isFinished }) => {
+const Tags: React.FC<TagsProps> = ({ sport, tags, isFinished }) => {
     return (
         <Container isFinished={isFinished}>
             {tags.map((tag: number) => {
                 const findTagItem = TAGS_LIST.find((t) => t.id == tag);
-                return findTagItem ? <Tag key={findTagItem.id}>{findTagItem.label}</Tag> : null;
+                return findTagItem ? <Tag key={findTagItem.id}>{sport + ' / ' + findTagItem.label}</Tag> : null;
             })}
         </Container>
     );

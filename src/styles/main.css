@@ -137,6 +137,7 @@ table {
 }
 
 @import './fonts.css';
+@import './icons.css';
 
 * {
     box-sizing: border-box;

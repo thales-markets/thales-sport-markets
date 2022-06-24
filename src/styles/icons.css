@@ -1,0 +1,58 @@
+.icon {
+    display: inline-block;
+    font-family: OvertimeIcons !important;
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.icon--overtime:before {
+    content: '\0041';
+}
+
+.icon--logo:before {
+    content: '\0042';
+}
+
+.icon--history:before {
+    content: '\0043';
+}
+
+.icon--soccer:before {
+    content: '\0044';
+}
+
+.icon--basketball:before {
+    content: '\0045';
+}
+
+.icon--volleyball:before {
+    content: '\0046';
+}
+
+.icon--football:before {
+    content: '\0047';
+}
+
+.icon--tennis:before {
+    content: '\0048';
+}
+
+.icon--boxing:before {
+    content: '\0049';
+}
+
+.icon--arrows-vertical:before {
+    content: '\004A';
+}
+
+.icon--grid:before {
+    content: '\004B';
+}
+
+.icon--list:before {
+    content: '\004C';
+}
+
+.icon--baseball:before {
+    content: '\004D';
+}

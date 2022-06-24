@@ -12,3 +12,8 @@
     font-family: 'ExoticIcons';
     src: local('ExoticIcons'), url(../assets/fonts/ExoticIcons/ExoticIcons.ttf) format('truetype');
 }
+
+@font-face {
+    font-family: 'OvertimeIcons';
+    src: local('OvertimeIcons'), url(../assets/fonts/OvertimeIcons/OvertimeIcons.ttf) format('truetype');
+}

@@ -49,7 +49,7 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPosition }) => {
                     <WinnerLabel isWinning={market.finalResult == 3} finalResult={market.finalResult}>
                         DRAW
                     </WinnerLabel>
-                    <Tags isFinished={market.finalResult != 0} tags={market.tags} />
+                    <Tags isFinished={market.finalResult != 0} sport={market.sport} tags={market.tags} />
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer isWinner={market.finalResult == 2} finalResult={market.finalResult}>
@@ -73,7 +73,6 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPosition }) => {
                     <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
                         {market.homeOdds.toFixed(2)}
                     </OddsLabel>
-                    {/* <OddsLabelSceleton /> */}
                     <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
                 </MatchInfoColumn>
                 <MatchInfoColumn>
@@ -85,9 +84,8 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPosition }) => {
                     >
                         {market.awayOdds == 0 && market.homeOdds == 0 ? 'Coming Soon!' : market.drawOdds.toFixed(2)}
                     </OddsLabel>
-                    {/* <OddsLabelSceleton isTwoPositioned={market.drawOdds === 0} /> */}
                     <MatchParticipantName isTwoPositioned={market.drawOdds === 0}>{'DRAW'}</MatchParticipantName>
-                    <Tags tags={market.tags} />
+                    <Tags sport={market.sport} tags={market.tags} />
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer>

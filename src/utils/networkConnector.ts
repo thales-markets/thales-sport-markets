@@ -4,7 +4,9 @@ import { NetworkSettings } from 'types/network';
 // import marketManagerContract from 'utils/contracts/exoticPositionalMarketManagerContract';
 // import marketDataContract from 'utils/contracts/exoticPositionalMarketDataContract';
 import sportMarketManagerContract from 'utils/contracts/sportPositionalMarketManagerContract';
-import sportMarketDataContract from 'utils/contracts/sportPositionalMarketDataContract';
+import sportMarketDataContract, {
+    sportPositionalMarketDataContract,
+} from 'utils/contracts/sportPositionalMarketDataContract';
 import sportsAMMContract from 'utils/contracts/sportsAMMContract';
 import sUSDContract from 'utils/contracts/sUSDContract';
 // import thalesBondsContract from 'utils/contracts/thalesBondsContract';
@@ -21,6 +23,7 @@ type NetworkConnector = {
     paymentTokenContract?: ethers.Contract;
     marketManagerContract?: ethers.Contract;
     marketDataContract?: ethers.Contract;
+    sportPositionalMarketDataContract?: ethers.Contract;
     sportMarketManagerContract?: ethers.Contract;
     sportMarketDataContract?: ethers.Contract;
     sportsAMMContract?: ethers.Contract;
@@ -41,6 +44,7 @@ const networkConnector: NetworkConnector = {
         // this.paymentTokenContract = initializeContract(paymentTokenContract, networkSettings);
         // this.marketManagerContract = initializeContract(marketManagerContract, networkSettings);
         // this.marketDataContract = initializeContract(marketDataContract, networkSettings);
+        this.sportPositionalMarketDataContract = initializeContract(sportPositionalMarketDataContract, networkSettings);
         this.sportMarketManagerContract = initializeContract(sportMarketManagerContract, networkSettings);
         this.sportMarketDataContract = initializeContract(sportMarketDataContract, networkSettings);
         this.theRundownConsumerContract = initializeContract(theRundownConsumerContract, networkSettings);

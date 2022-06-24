@@ -185,12 +185,13 @@ export const MatchParticipantName = styled.label<{ isTwoPositioned?: boolean }>`
     visibility: ${(props) => (props.isTwoPositioned ? 'hidden' : '')};
     font-style: normal;
     font-weight: 400;
-    font-size: 17px;
+    font-size: 16px;
     text-transform: uppercase;
     line-height: 20px;
     height: 40px;
     align-items: center;
     text-align: center;
+    margin-top: 5px;
     color: ${(props) => props.theme.textColor.primary};
 `;
 
