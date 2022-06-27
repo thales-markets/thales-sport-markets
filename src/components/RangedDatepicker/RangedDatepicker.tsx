@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
-// import { FlexDivColumn } from 'styles/common';
 
 type DatetimePickerProps = {
     startDate: Date | null;
@@ -14,15 +13,23 @@ export const RangedDatepicker: React.FC<DatetimePickerProps> = ({ startDate, end
     return (
         <DatePickerContainer>
             <ReactDatePicker
-                selected={startDate}
+                selected={checkTypeOf(startDate)}
                 onChange={onDateRangeChange}
-                startDate={startDate}
-                endDate={endDate}
+                startDate={checkTypeOf(startDate)}
+                endDate={checkTypeOf(endDate)}
                 selectsRange
                 inline
             />
         </DatePickerContainer>
     );
+};
+
+const checkTypeOf = (date: any) => {
+    if (typeof date === 'string') {
+        return new Date(date);
+    }
+
+    return date;
 };
 
 const DatePickerContainer = styled.div`

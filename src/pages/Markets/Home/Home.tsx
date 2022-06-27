@@ -319,8 +319,8 @@ const Home: React.FC = () => {
                 <HeaderDatepicker
                     gamesPerDay={gamesPerDay}
                     dateFilter={dateFilter}
-                    setStartDate={setEndDate}
-                    setEndDate={setStartDate}
+                    setStartDate={setStartDate}
+                    setEndDate={setEndDate}
                     setDateFilter={setDateFilter}
                 />
             </FiltersContainer>
