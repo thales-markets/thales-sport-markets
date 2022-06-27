@@ -104,6 +104,8 @@
         "search-placeholder": "Search games",
         "open-markets-label": "Opened",
         "resolved-markets-label": "Resolved",
+        "grid-view": "Grid view",
+        "list-view": "List view",
         "status": {
             "open": "Open",
             "cancelled-pending-confirmation": "Cancelled - pending confirmation",

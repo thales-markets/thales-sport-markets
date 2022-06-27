@@ -13,4 +13,5 @@ export const LOCAL_STORAGE_KEYS = {
     SORT_SPORTS_DIRECTION: 'sortSportsDirection',
     FILTER_START_DATE: 'filterStartDate',
     FILTER_END_DATE: 'filterEndDate',
+    GRID_VIEW: 'gridView',
 };

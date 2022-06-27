@@ -59,6 +59,7 @@ const Home: React.FC = () => {
     );
     const [sortBy, setSortBy] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_BY, DEFAULT_SORT_BY);
     const [showOpenMarkets, setShowOpenMarkets] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SHOW_OPEN_MARKETS, true);
+    const [showGridView, setGridView] = useLocalStorage(LOCAL_STORAGE_KEYS.GRID_VIEW, true);
     const [lastValidMarkets, setLastValidMarkets] = useState<SportMarkets>([]);
     const [accountPositions, setAccountPositions] = useState<AccountPositionsMap>({});
     const [startDate, setStartDate] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_START_DATE, null);
@@ -363,7 +364,11 @@ const Home: React.FC = () => {
                         <Button onClick={resetFilters}>{t('market.view-all-markets')}</Button>
                     </NoMarketsContainer>
                 ) : (
-                    <MarketsGrid markets={marketsList} accountPositions={accountPositions} />
+                    <MarketsGrid
+                        markets={marketsList}
+                        accountPositions={accountPositions}
+                        layoutType={showGridView ? 0 : 1}
+                    />
                 )}
                 <SidebarContainer>
                     <GlobalFiltersContainer>
@@ -423,6 +428,14 @@ const Home: React.FC = () => {
                         })}
                     </TagsContainer>
                     <ToggleContainer>
+                        <Toggle
+                            isLeftOptionSelected={showGridView}
+                            onClick={() => {
+                                setGridView(!showGridView);
+                            }}
+                            leftText={t('market.grid-view')}
+                            rightText={t('market.list-view')}
+                        />
                         <Toggle
                             isLeftOptionSelected={showOpenMarkets}
                             onClick={() => {
