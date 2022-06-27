@@ -6,6 +6,8 @@ export const Container = styled.div<{ backgroundColor?: string }>`
     width: 100%;
     padding: 10px 23px;
     border-radius: 5px;
+    margin-bottom: 15px;
+    cursor: pointer;
     background-color: ${(_props) => (_props?.backgroundColor ? _props.backgroundColor : '')};
 `;
 
@@ -13,12 +15,14 @@ export const ClubNameLabel = styled.span`
     font-weight: 400;
     font-size: 15px;
     margin-left: 10px;
+    width: 90px;
 `;
 
-export const ClubContainer = styled.div`
+export const ClubContainer = styled.div<{ away?: boolean }>`
     display: flex;
     flex-direction: row;
     align-items: center;
+    ${(_props) => (_props?.away ? `justify-content: end;` : '')};
 `;
 
 export const ClubVsClubContainer = styled.div`
@@ -26,6 +30,7 @@ export const ClubVsClubContainer = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    width: 35%;
 `;
 
 export const VSLabel = styled.span`

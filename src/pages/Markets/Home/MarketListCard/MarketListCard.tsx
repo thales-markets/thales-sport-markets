@@ -41,7 +41,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPosition 
             <MatchStatus
                 isResolved={market.isResolved}
                 isLive={false}
-                isClaimable={claimAvailable ? true : true}
+                isClaimable={claimAvailable}
                 result={`${market.homeScore}:${market.awayScore}`}
                 startsAt={formatDateWithTime(market.maturityDate)}
             />

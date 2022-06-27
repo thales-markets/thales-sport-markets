@@ -16,7 +16,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ isResolved, isLive, isClaimab
 
     return (
         <Container>
-            {!isResolved && <MatchStarts>{`${t('markets.market-card-list.starts')}${startsAt}`}</MatchStarts>}
+            {!isResolved && <MatchStarts>{`${t('markets.market-card-list.starts')}: ${startsAt}`}</MatchStarts>}
             {isResolved && !isClaimable && (
                 <>
                     <ResultLabel>{t('markets.market-card-list.result')}</ResultLabel>
@@ -77,6 +77,7 @@ const MatchStarts = styled.span`
     line-height: 20px;
     text-align: right;
     color: #ffffff;
+    text-transform: uppercase;
 `;
 
 const ClaimButton = styled.div`

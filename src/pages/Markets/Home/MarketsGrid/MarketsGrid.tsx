@@ -6,30 +6,49 @@ import { FlexDiv } from 'styles/common';
 import { AccountPositionsMap, SportMarkets } from 'types/markets';
 import { buildMarketLink } from 'utils/routes';
 import MarketCard from '../MarketCard';
+import MarketListCard from '../MarketListCard';
 
 type MarketsGridProps = {
     markets: SportMarkets;
     accountPositions: AccountPositionsMap;
+    layoutType?: number;
 };
 
-const breakpointColumnsObj = {
+export const breakpointColumnsObj = {
     default: 3,
     1200: 2,
     850: 1,
 };
 
-const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) => {
+const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions, layoutType = 0 }) => {
     return (
         <Container>
-            <Masonry breakpointCols={breakpointColumnsObj} className="">
-                {markets.map((market, index) => {
-                    return (
-                        <SPAAnchor key={index} href={buildMarketLink(market.address)}>
-                            <MarketCard market={market} accountPosition={accountPositions[market.address]} />
-                        </SPAAnchor>
-                    );
-                })}
-            </Masonry>
+            {layoutType == 0 && (
+                <Masonry breakpointCols={breakpointColumnsObj} className="">
+                    {markets.map((market, index) => {
+                        return (
+                            <SPAAnchor key={index} href={buildMarketLink(market.address)}>
+                                <MarketCard market={market} accountPosition={accountPositions[market.address]} />
+                            </SPAAnchor>
+                        );
+                    })}
+                </Masonry>
+            )}
+            {layoutType == 1 && (
+                <ListContainer>
+                    {markets.map((market, index) => {
+                        return (
+                            <SPAAnchor key={index} href={buildMarketLink(market.address)}>
+                                <MarketListCard
+                                    market={market}
+                                    key={index + 'list'}
+                                    accountPosition={accountPositions[market.address]}
+                                />
+                            </SPAAnchor>
+                        );
+                    })}
+                </ListContainer>
+            )}
         </Container>
     );
 };
@@ -43,6 +62,11 @@ const Container = styled(FlexDiv)`
         display: flex;
         width: 100%;
     }
+`;
+
+const ListContainer = styled.div`
+    display: flex;
+    flex-direction: column;
 `;
 
 export default MarketsGrid;
