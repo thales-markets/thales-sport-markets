@@ -52,3 +52,9 @@ export const isValidHttpsUrl = (text: string) => {
 
     return url.protocol === 'https:';
 };
+
+export const convertFinalResultToResultType = (result: number) => {
+    if (result == 1) return 0;
+    if (result == 2) return 1;
+    if (result == 3) return 2;
+};

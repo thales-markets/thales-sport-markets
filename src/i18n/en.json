@@ -1,5 +1,6 @@
 {
     "common": {
+        "winner": "Winner",
         "wallet": {
             "connect-your-wallet": "Connect wallet",
             "switch-wallet": "Switch wallet",
@@ -218,6 +219,16 @@
                 "sell": "CLAIM"
             },
             "no-results": "No transactions associated with this market."
+        }
+    },
+    "markets": {
+        "market-card-list": {
+            "starts": "starts",
+            "claimable": "Claimable",
+            "finished": "Finished",
+            "result": "Result",
+            "started": "Started",
+            "claim": "Claim"
         }
     }
 }
