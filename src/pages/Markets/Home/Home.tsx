@@ -203,7 +203,9 @@ const Home: React.FC = () => {
             );
         }
 
-        filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => market.isResolved !== showOpenMarkets);
+        filteredMarkets = filteredMarkets.filter(
+            (market: SportMarketInfo) => market.isResolved !== showOpenMarkets && !market.isCanceled
+        );
 
         return filteredMarkets;
     }, [tagsFilteredMarkets, tagFilter, showOpenMarkets]);

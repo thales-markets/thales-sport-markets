@@ -44,6 +44,7 @@ export type SportMarketInfo = {
     tags: number[];
     isOpen: boolean;
     isResolved: boolean;
+    isCanceled: boolean;
     finalResult: number;
     poolSize: number;
     numberOfParticipants: number;
