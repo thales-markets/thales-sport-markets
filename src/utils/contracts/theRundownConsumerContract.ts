@@ -1,7 +1,7 @@
 export const theRundownConsumerContract = {
     addresses: {
         10: 'TBD',
-        42: '0xd03f473caC24767134A86A298FeC38294986EcE6',
+        42: '0x2C19a76baAc63b136784308f667CB54046efAd0A',
     },
     abi: [
         {
