@@ -121,6 +121,7 @@ export const MatchInfo = styled(FlexDivRow)`
     align-self: center;
     width: 100%;
     justify-content: space-around;
+    cursor: pointer;
 `;
 
 export const MatchInfoColumn = styled(FlexDivColumnCentered)`
@@ -130,6 +131,7 @@ export const MatchInfoColumn = styled(FlexDivColumnCentered)`
     &:nth-child(odd) {
         margin-top: 40px;
     }
+    cursor: pointer;
 `;
 
 export const MatchDate = styled.label`
@@ -142,6 +144,7 @@ export const MatchDate = styled.label`
     width: 98px;
     white-space: nowrap;
     color: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
 `;
 
 export const MatchVSLabel = styled.label`
@@ -153,6 +156,7 @@ export const MatchVSLabel = styled.label`
     align-items: center;
     height: 126px;
     color: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
 `;
 
 export const MatchParticipantImageContainer = styled(FlexDiv)<{ isWinner?: boolean; finalResult?: number }>`
@@ -193,6 +197,7 @@ export const MatchParticipantName = styled.label<{ isTwoPositioned?: boolean }>`
     text-align: center;
     margin-top: 5px;
     color: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
 `;
 
 export const OddsLabel = styled.label<{
@@ -216,6 +221,7 @@ export const OddsLabel = styled.label<{
             : props.homeOdds
             ? props.theme.oddsColor.primary
             : props.theme.oddsColor.secondary};
+    cursor: pointer;
 `;
 
 export const OddsLabelSceleton = styled.div<{ isTwoPositioned?: boolean }>`
@@ -249,6 +255,7 @@ export const WinnerLabel = styled.label<{ isWinning: boolean; finalResult?: numb
     text-align: center;
     color: ${(props) =>
         props.finalResult == 3 ? props.theme.winnerColors.secondary : props.theme.winnerColors.primary};
+    cursor: pointer;
 `;
 
 export const ScoreLabel = styled.label`
@@ -259,4 +266,5 @@ export const ScoreLabel = styled.label`
     line-height: 35px;
     align-items: center;
     color: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
 `;

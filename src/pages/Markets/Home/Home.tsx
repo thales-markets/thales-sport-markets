@@ -194,33 +194,27 @@ const Home: React.FC = () => {
         }).length;
     }, [tagsFilteredMarkets, accountPositions]);
 
-    const showOpenMarketsFilteredMarkets = useMemo(() => {
-        let filteredMarkets = tagsFilteredMarkets;
-
-        if (tagFilter.id !== allTagsFilterItem.id) {
-            filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) =>
-                market.tags.map((tag) => Number(tag)).includes(tagFilter.id)
-            );
-        }
-
-        filteredMarkets = filteredMarkets.filter(
+    const totalCount = useMemo(() => {
+        return tagsFilteredMarkets.filter(
             (market: SportMarketInfo) => market.isResolved !== showOpenMarkets && !market.isCanceled
-        );
+        ).length;
+    }, [markets, tagsFilteredMarkets, tagFilter, marketSearch]);
 
-        return filteredMarkets;
-    }, [tagsFilteredMarkets, tagFilter, showOpenMarkets]);
-
-    const totalCount = showOpenMarketsFilteredMarkets.length;
+    const canceledCount = useMemo(() => {
+        return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
+            return market.isCanceled;
+        }).length;
+    }, [markets, tagsFilteredMarkets, tagFilter, marketSearch]);
 
     const accountPositionsCount = useMemo(() => {
-        return showOpenMarketsFilteredMarkets.filter((market: SportMarketInfo) => {
+        return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
             const accountPosition: AccountPosition = accountPositions[market.address];
             return !!accountPosition && accountPosition.position > 0;
         }).length;
-    }, [showOpenMarketsFilteredMarkets, accountPositions]);
+    }, [tagsFilteredMarkets, accountPositions]);
 
     const globalFilteredMarkets = useMemo(() => {
-        let filteredMarkets = showOpenMarketsFilteredMarkets;
+        let filteredMarkets = tagsFilteredMarkets;
 
         switch (globalFilter) {
             case GlobalFilterEnum.YourPositions:
@@ -234,6 +228,10 @@ const Home: React.FC = () => {
                     const accountPosition: AccountPosition = accountPositions[market.address];
                     return isClaimAvailable(market, accountPosition);
                 });
+                break;
+            case GlobalFilterEnum.Canceled:
+                filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => market.isCanceled);
+                console.log(filteredMarkets);
                 break;
             default:
                 break;
@@ -249,7 +247,7 @@ const Home: React.FC = () => {
                     return 0;
             }
         });
-    }, [showOpenMarketsFilteredMarkets, sortBy, sortDirection, globalFilter, accountPositions]);
+    }, [tagsFilteredMarkets, sortBy, sortDirection, globalFilter, accountPositions]);
 
     const setSort = (sortOption: SortOptionType) => {
         if (sortBy === sortOption.id) {
@@ -301,6 +299,21 @@ const Home: React.FC = () => {
         end?.setHours(end.getHours() + 23);
         end?.setMinutes(end.getMinutes() + 59);
         setEndDate(end);
+    };
+
+    const getCount = (filter: GlobalFilterEnum) => {
+        switch (filter) {
+            case GlobalFilterEnum.All:
+                return totalCount;
+            case GlobalFilterEnum.Canceled:
+                return canceledCount;
+            case GlobalFilterEnum.YourPositions:
+                return accountPositionsCount;
+            case GlobalFilterEnum.Claim:
+                return accountClaimsCount;
+            default:
+                return undefined;
+        }
     };
 
     const resetFilters = () => {
@@ -375,27 +388,21 @@ const Home: React.FC = () => {
                 <SidebarContainer>
                     <GlobalFiltersContainer>
                         {Object.values(GlobalFilterEnum).map((filterItem) => {
-                            const count =
-                                filterItem === GlobalFilterEnum.All
-                                    ? totalCount
-                                    : filterItem === GlobalFilterEnum.YourPositions
-                                    ? accountPositionsCount
-                                    : filterItem === GlobalFilterEnum.Claim
-                                    ? accountClaimsCount
-                                    : undefined;
-
                             return (
                                 <GlobalFilter
                                     disabled={false}
                                     selected={globalFilter === filterItem}
                                     onClick={() => {
-                                        if (filterItem === GlobalFilterEnum.Claim) {
+                                        if (
+                                            filterItem === GlobalFilterEnum.Claim ||
+                                            filterItem === GlobalFilterEnum.Canceled
+                                        ) {
                                             setShowOpenMarkets(false);
                                         }
                                         setGlobalFilter(filterItem);
                                     }}
                                     key={filterItem}
-                                    count={count}
+                                    count={getCount(filterItem)}
                                 >
                                     {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
                                 </GlobalFilter>

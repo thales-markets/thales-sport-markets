@@ -39,15 +39,12 @@ export const sportPositionalMarketDataContract = {
         },
         { inputs: [], name: 'acceptOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
         {
-            inputs: [
-                { internalType: 'uint256', name: 'index', type: 'uint256' },
-                { internalType: 'uint256', name: 'pageSize', type: 'uint256' },
-            ],
+            inputs: [],
             name: 'getOddsForAllActiveMarkets',
             outputs: [
                 {
                     components: [
-                        { internalType: 'address', name: 'market', type: 'address' },
+                        { internalType: 'bytes32', name: 'market', type: 'bytes32' },
                         { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
                     ],
                     internalType: 'struct SportPositionalMarketData.ActiveMarketsOdds[]',

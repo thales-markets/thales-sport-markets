@@ -2,6 +2,7 @@ export enum GlobalFilterEnum {
     All = 'All',
     YourPositions = 'YourPositions',
     Claim = 'Claim',
+    Canceled = 'Canceled',
     History = 'History',
 }
 

@@ -116,6 +116,7 @@ const Container = styled(FlexDivColumnCentered)<{ isClaimAvailable: boolean }>`
         border-color: transparent;
         background-origin: border-box;
     }
+    cursor: pointer;
 `;
 
 // const Checkmark = styled.span`

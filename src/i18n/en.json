@@ -182,7 +182,8 @@
                 "all": "All markets",
                 "yourpositions": "Your positions",
                 "claim": "Claimable",
-                "history": "History"
+                "history": "History",
+                "canceled": "Canceled"
             },
             "sport": {
                 "basketball": "Basketball",

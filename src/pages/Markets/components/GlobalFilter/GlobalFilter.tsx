@@ -5,7 +5,7 @@ import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
 type GlobalFilterProps = {
     disabled?: boolean;
     selected?: boolean;
-    count?: number;
+    count?: number | undefined;
     onClick?: (param: any) => void;
 };
 
