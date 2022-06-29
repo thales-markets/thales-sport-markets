@@ -17,7 +17,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPosition 
     const claimAvailable = isClaimAvailable(market, accountPosition);
 
     return (
-        <Container backgroundColor={'rgba(48, 54, 86, 0.5)'}>
+        <Container backgroundColor={'rgba(48, 54, 86, 0.5)'} claimBorder={claimAvailable}>
             <ClubVsClubContainer>
                 <ClubContainer>
                     <ClubLogo src={getTeamImageSource(market.homeTeam, market.tags[0])} />
@@ -33,9 +33,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPosition 
                 isResolved={market.isResolved}
                 finalResult={market.finalResult}
                 odds={{
-                    homeOdds: market.homeOdds / 1e18,
-                    awayOdds: market.awayOdds / 1e18,
-                    drawOdds: market.drawOdds / 1e18,
+                    homeOdds: market.homeOdds,
+                    awayOdds: market.awayOdds,
+                    drawOdds: market.drawOdds,
                 }}
             />
             <MatchStatus

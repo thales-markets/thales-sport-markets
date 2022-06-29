@@ -67,6 +67,7 @@ const Container = styled(FlexDiv)`
 const ListContainer = styled.div`
     display: flex;
     flex-direction: column;
+    padding: 20px;
 `;
 
 export default MarketsGrid;

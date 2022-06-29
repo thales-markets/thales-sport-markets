@@ -294,8 +294,8 @@ const Home: React.FC = () => {
     };
 
     const onDateRangeChange = (dates: [Date | null, Date | null]) => {
-        setDateFilter('');
         const [start, end] = dates;
+        end ? setDateFilter('') : '';
         setStartDate(start);
         end?.setHours(end.getHours() + 23);
         end?.setMinutes(end.getMinutes() + 59);
@@ -583,6 +583,9 @@ const LoaderContainer = styled(FlexDivColumn)`
 
 const SortingButton = styled(Button)`
     width: 230px;
+    border: none;
+    background: ${(props) => props.theme.background.secondary};
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 export default Home;

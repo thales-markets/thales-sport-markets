@@ -71,6 +71,7 @@ const DatePickerContainer = styled.div`
             border-radius: 30px !important;
             color: ${(props) => props.theme.textColor.tertiary} !important;
             background-color: ${(props) => props.theme.background.quaternary} !important;
+            opacity: 0.7;
         }
     }
 
@@ -84,10 +85,19 @@ const DatePickerContainer = styled.div`
         font-weight: 300;
     }
 
+    .react-datepicker__day--keyboard-selected {
+        background-color: transparent !important;
+        color: ${(props) => props.theme.textColor.primary} !important;
+    }
+
     .react-datepicker__navigation-icon {
         top: -4px;
         font-size: 10px;
         color: ${(props) => props.theme.textColor.primary} !important;
+    }
+
+    .react-datepicker__day--outside-month {
+        opacity: 0.4;
     }
 `;
 

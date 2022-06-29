@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div<{ backgroundColor?: string }>`
+export const Container = styled.div<{ backgroundColor?: string; claimBorder?: boolean }>`
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -9,6 +9,7 @@ export const Container = styled.div<{ backgroundColor?: string }>`
     margin-bottom: 15px;
     cursor: pointer;
     background-color: ${(_props) => (_props?.backgroundColor ? _props.backgroundColor : '')};
+    border: ${(_props) => (_props?.claimBorder ? '3px solid #3FD1FF' : '')};
 `;
 
 export const ClubNameLabel = styled.span`
