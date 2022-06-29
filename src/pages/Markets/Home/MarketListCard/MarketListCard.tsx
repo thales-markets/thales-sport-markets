@@ -17,7 +17,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPosition 
     const claimAvailable = isClaimAvailable(market, accountPosition);
 
     return (
-        <Container backgroundColor={'rgba(48, 54, 86, 0.5)'}>
+        <Container backgroundColor={'rgba(48, 54, 86, 0.5)'} claimBorder={claimAvailable}>
             <ClubVsClubContainer>
                 <ClubContainer>
                     <ClubLogo src={getTeamImageSource(market.homeTeam, market.tags[0])} />
