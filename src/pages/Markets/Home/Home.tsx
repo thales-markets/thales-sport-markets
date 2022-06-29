@@ -39,6 +39,7 @@ import { isClaimAvailable } from 'utils/markets';
 import SortOption from '../components/SortOption';
 import SportFilter from '../components/SportFilter';
 import HeaderDatepicker from './HeaderDatepicker';
+import UserHistory from './UserHistory';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -373,6 +374,8 @@ const Home: React.FC = () => {
                     <LoaderContainer>
                         <SimpleLoader />
                     </LoaderContainer>
+                ) : globalFilter === GlobalFilterEnum.History ? (
+                    <UserHistory />
                 ) : marketsList.length === 0 ? (
                     <NoMarketsContainer>
                         <NoMarketsLabel>{t('market.no-markets-found')}</NoMarketsLabel>

@@ -19,6 +19,12 @@ export const QUERY_KEYS = {
         marketAddress,
         networkId,
     ],
+    UserTransactions: (walletAddress: string, networkId: NetworkId) => [
+        'user',
+        'transactions',
+        walletAddress,
+        networkId,
+    ],
     AccountMarketData: (marketAddress: string, walletAddress: string) => ['market', marketAddress, walletAddress],
     AccountMarketTicketData: (marketAddress: string, walletAddress: string) => [
         'market',
