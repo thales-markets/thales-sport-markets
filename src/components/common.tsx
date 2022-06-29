@@ -147,6 +147,24 @@ export const MatchDate = styled.label`
     cursor: pointer;
 `;
 
+export const MatchInfoLabel = styled.label<{ isMaturedMarket?: boolean; isClaimAvailable?: boolean }>`
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 20px;
+    text-align: center;
+    overflow: hidden;
+    width: 98px;
+    white-space: nowrap;
+    color: ${(props) =>
+        props.isMaturedMarket
+            ? props.theme.oddsColor.secondary
+            : props.isClaimAvailable
+            ? props.theme.textColor.quaternary
+            : props.theme.textColor.primary};
+    cursor: pointer;
+`;
+
 export const MatchVSLabel = styled.label`
     font-style: normal;
     font-weight: 200;

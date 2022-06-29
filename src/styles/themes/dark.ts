@@ -22,6 +22,7 @@ export default {
         primary: Colors.GRAY_LIGHT,
         secondary: Colors.WHITE,
         tertiary: Colors.GRAY_DARK,
+        quaternary: Colors.BLUE,
     },
     winnerColors: {
         primary: Colors.BLUE,
