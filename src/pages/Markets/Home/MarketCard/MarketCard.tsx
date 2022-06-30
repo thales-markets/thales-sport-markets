@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
 import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { isClaimAvailable } from 'utils/markets';
+import MarketCardCanceled from './MarketCardCanceled';
 import MarketCardMatured from './MarketCardMatured';
 import MarketCardOpened from './MarketCardOpened';
 import MarketCardResolved from './MarketCardResolved';
@@ -19,6 +20,10 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPosition }) => {
         <Container isClaimAvailable={claimAvailable}>
             <MarketCardResolved isClaimAvailable={claimAvailable} market={market} />
         </Container>
+    ) : market.isCanceled ? (
+        <Container isCanceled={market.isCanceled}>
+            <MarketCardCanceled market={market} />
+        </Container>
     ) : market.maturityDate < new Date() ? (
         <Container>
             <MarketCardMatured market={market} />
@@ -30,16 +35,20 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPosition }) => {
     );
 };
 
-const Container = styled(FlexDivColumnCentered)<{ isClaimAvailable?: boolean }>`
+const Container = styled(FlexDivColumnCentered)<{ isClaimAvailable?: boolean; isCanceled?: boolean }>`
     box-sizing: border-box;
     border-radius: 14px;
     padding: 16px 19px;
     margin: 20px 10px;
     max-height: 275px;
     background: ${(props) => props.theme.background.secondary};
-    border: ${(props) => (props.isClaimAvailable ? '2px solid ' + props.theme.borderColor.quaternary : '')};
+    border: ${(props) =>
+        props.isClaimAvailable
+            ? '2px solid ' + props.theme.borderColor.quaternary
+            : props.isCanceled
+            ? '2px solid ' + props.theme.oddsColor.secondary
+            : ''};
     &:hover {
-        border-color: transparent;
         background-origin: border-box;
     }
     cursor: pointer;

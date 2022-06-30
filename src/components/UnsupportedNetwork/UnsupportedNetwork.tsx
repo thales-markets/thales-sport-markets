@@ -7,6 +7,7 @@ import { NetworkIdByName } from 'utils/network';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
+import Button from 'components/Button';
 
 const UnsupportedNetwork: React.FC = () => {
     const { t } = useTranslation();
@@ -90,26 +91,6 @@ const Description = styled.p`
 
 const ButtonContainer = styled.div`
     margin: 80px 0px;
-`;
-
-const Button = styled.button`
-    background: ${(props) => props.theme.button.background.primary};
-    padding: 4px 35px;
-    border-radius: 30px;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 20px;
-    line-height: 27px;
-    color: ${(props) => props.theme.button.textColor.primary};
-    text-align: center;
-    border: none;
-    outline: none;
-    text-transform: none !important;
-    cursor: pointer;
-    white-space: break-spaces;
-    &:hover {
-        opacity: 0.8;
-    }
 `;
 
 export default UnsupportedNetwork;

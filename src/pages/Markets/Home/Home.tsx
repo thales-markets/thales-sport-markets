@@ -237,7 +237,6 @@ const Home: React.FC = () => {
                 break;
             case GlobalFilterEnum.Canceled:
                 filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => market.isCanceled);
-                console.log(filteredMarkets);
                 break;
             default:
                 break;
@@ -416,10 +415,7 @@ const Home: React.FC = () => {
                                     disabled={false}
                                     selected={globalFilter === filterItem}
                                     onClick={() => {
-                                        if (
-                                            filterItem === GlobalFilterEnum.Claim ||
-                                            filterItem === GlobalFilterEnum.Canceled
-                                        ) {
+                                        if (filterItem === GlobalFilterEnum.Claim) {
                                             setShowOpenMarkets(false);
                                         }
                                         setGlobalFilter(filterItem);

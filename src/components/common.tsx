@@ -147,7 +147,11 @@ export const MatchDate = styled.label`
     cursor: pointer;
 `;
 
-export const MatchInfoLabel = styled.label<{ isMaturedMarket?: boolean; isClaimAvailable?: boolean }>`
+export const MatchInfoLabel = styled.label<{
+    isMaturedMarket?: boolean;
+    isClaimAvailable?: boolean;
+    isCanceledMarket?: boolean;
+}>`
     font-style: normal;
     font-weight: 400;
     font-size: 17px;
@@ -157,7 +161,7 @@ export const MatchInfoLabel = styled.label<{ isMaturedMarket?: boolean; isClaimA
     width: 98px;
     white-space: nowrap;
     color: ${(props) =>
-        props.isMaturedMarket
+        props.isMaturedMarket || props.isCanceledMarket
             ? props.theme.oddsColor.secondary
             : props.isClaimAvailable
             ? props.theme.textColor.quaternary

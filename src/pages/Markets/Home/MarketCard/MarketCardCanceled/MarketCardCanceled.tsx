@@ -14,11 +14,12 @@ import React from 'react';
 import { SportMarketInfo } from 'types/markets';
 import { getTeamImageSource } from 'utils/images';
 
-type MarketCardMaturedProps = {
+type MarketCardCanceledProps = {
     market: SportMarketInfo;
+    isClaimAvailable?: boolean;
 };
 
-const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
+const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market, isClaimAvailable }) => {
     // const { t } = useTranslation();
 
     return (
@@ -33,15 +34,13 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
                 <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
             </MatchInfoColumn>
             <MatchInfoColumn>
-                <MatchInfoLabel isMaturedMarket={true}>
-                    {market.awayOdds == 0 && market.homeOdds == 0 ? 'FINISHED' : 'STARTED'}
-                </MatchInfoLabel>
+                <MatchInfoLabel isCanceledMarket={true}>CANCELED</MatchInfoLabel>
                 <MatchVSLabel>VS</MatchVSLabel>
                 <OddsLabel
                     isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}
                     isDraw={true}
                 >
-                    {market.awayOdds == 0 && market.homeOdds == 0 ? 'TO BE RESOLVED!' : market.drawOdds.toFixed(2)}
+                    {isClaimAvailable ? 'Claim back your funds' : market.drawOdds.toFixed(2)}
                 </OddsLabel>
                 <MatchParticipantName isTwoPositioned={market.drawOdds === 0}>{'DRAW'}</MatchParticipantName>
                 <Tags sport={market.sport} tags={market.tags} />
@@ -59,4 +58,4 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
     );
 };
 
-export default MarketCardMatured;
+export default MarketCardCanceled;
