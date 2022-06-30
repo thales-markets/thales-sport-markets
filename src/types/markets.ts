@@ -165,9 +165,26 @@ export type MarketTransaction = {
     amount: number | string;
     blockNumber: number;
     position: Position;
+    market: string;
 };
 
 export type MarketTransactions = MarketTransaction[];
+
+export type UserTransaction = {
+    hash: string;
+    type: MarketTransactionType;
+    account: string;
+    timestamp: number;
+    amount: number | string;
+    blockNumber: number;
+    position: Position;
+    market: string;
+    game: string;
+    winner: string;
+    usdValue: number;
+};
+
+export type UserTransactions = UserTransaction[];
 
 export type GamesOnDate = {
     date: string;

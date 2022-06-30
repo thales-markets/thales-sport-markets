@@ -18,7 +18,6 @@ const useUserTransactionsQuery = (
                     account: walletAddress,
                     network: networkId,
                 });
-                console.log(marketTransactions);
                 return marketTransactions.map((tx: MarketTransaction) => ({ ...tx, position: Position[tx.position] }));
             } catch (e) {
                 console.log(e);

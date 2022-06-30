@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import useUserTransactionsQuery from '../../../../queries/markets/useUserTransactionsQuery';
@@ -6,17 +6,24 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/rootReducer';
 import { getNetworkId, getWalletAddress } from '../../../../redux/modules/wallet';
 import { useTranslation } from 'react-i18next';
-import TransactionsTable from '../../components/TransactionsTable/TransactionsTable';
-import { MarketTransactions } from '../../../../types/markets';
+import { MarketTransactions, SportMarkets, UserTransaction, UserTransactions } from '../../../../types/markets';
 import { orderBy } from 'lodash';
+import useSportMarketsQuery from '../../../../queries/markets/useSportMarketsQuery';
+import { getIsAppReady } from '../../../../redux/modules/app';
+import HistoryTable from '../../components/HistoryTable';
+import { Position } from '../../../../constants/options';
+import { getEtherscanTxLink } from '../../../../utils/etherscan';
 
 const UserHistory: React.FC = () => {
     const { t } = useTranslation();
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const userTransactionsQuery = useUserTransactionsQuery(walletAddress, networkId);
+    const userTransactionsQuery = useUserTransactionsQuery(walletAddress, networkId, { enabled: isAppReady });
+    const sportMarketsQuery = useSportMarketsQuery(networkId, { enabled: isAppReady });
 
     const [userTransactions, setUserTransactions] = useState<MarketTransactions>([]);
+    const [markets, setMarkets] = useState<SportMarkets>([]);
 
     useEffect(() => {
         if (userTransactionsQuery.isSuccess && userTransactionsQuery.data) {
@@ -24,14 +31,37 @@ const UserHistory: React.FC = () => {
         }
     }, [userTransactionsQuery.isSuccess, userTransactionsQuery.data]);
 
+    useEffect(() => {
+        if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
+            setMarkets(sportMarketsQuery.data);
+        }
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data]);
+
     const noResults = userTransactions.length === 0;
+
+    const userTransactionsWithMarket: UserTransactions = useMemo(() => {
+        return userTransactions.map((tx) => {
+            const market = markets.find((market) => tx.market === market.address);
+            if (market) {
+                return {
+                    ...tx,
+                    game: `${market.homeTeam} - ${market.awayTeam}`,
+                    winner: Position[market.finalResult],
+                    // @ts-ignore
+                    usdValue: +market[`${tx.position.toLowerCase()}Odds`] * +tx.amount,
+                    link: getEtherscanTxLink(networkId, tx.hash),
+                };
+            } else {
+                return tx as UserTransaction;
+            }
+        });
+    }, [markets, userTransactions]);
 
     return (
         <Container>
-            <Title>{t('market.table.title')}</Title>
             <TableContainer>
-                <TransactionsTable
-                    transactions={userTransactions}
+                <HistoryTable
+                    transactions={userTransactionsWithMarket}
                     isLoading={userTransactionsQuery.isLoading}
                     noResultsMessage={noResults ? <span>{t(`market.table.no-results`)}</span> : undefined}
                 />
@@ -42,8 +72,6 @@ const UserHistory: React.FC = () => {
 
 const Container = styled(FlexDivColumn)`
     margin-top: 10px;
-    border: 2px solid ${(props) => props.theme.borderColor.primary};
-    border-radius: 15px;
     font-style: normal;
     font-weight: normal;
     padding: 20px 20px 20px 20px;
@@ -58,16 +86,6 @@ const Container = styled(FlexDivColumn)`
     }
     max-height: 357px;
     min-height: 357px;
-`;
-
-const Title = styled.span`
-    font-style: normal;
-    font-weight: bold;
-    font-size: 25px;
-    line-height: 100%;
-    text-align: center;
-    color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 20px;
 `;
 
 const TableContainer = styled(FlexDivColumn)`
