@@ -13,7 +13,7 @@ const GlobalFilter: React.FC<GlobalFilterProps> = ({ disabled, selected, onClick
     return (
         <Container className={`${disabled ? 'disabled' : ''} ${selected ? 'selected' : ''}`} onClick={onClick}>
             {count !== undefined && <Count>{count}</Count>}
-            {children == 'History' && <Icon className={`icon icon--${children.toString().toLowerCase()}`} />}
+            {children == 'Your transactions' && <Icon className={`icon icon--history`} />}
             <Label>{children}</Label>
         </Container>
     );
@@ -50,6 +50,7 @@ const Label = styled.div`
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+    white-space: nowrap;
 `;
 
 const Count = styled(FlexDivCentered)`
