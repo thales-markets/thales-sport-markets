@@ -37,28 +37,12 @@ const Container = styled(FlexDivColumnCentered)<{ isClaimAvailable?: boolean }>`
     margin: 20px 10px;
     max-height: 275px;
     background: ${(props) => props.theme.background.secondary};
-    border: '2px solid' ${(props) => (props.isClaimAvailable ? props.theme.borderColor.quaternary : 'transparent')};
+    border: ${(props) => (props.isClaimAvailable ? '2px solid ' + props.theme.borderColor.quaternary : '')};
     &:hover {
         border-color: transparent;
         background-origin: border-box;
     }
     cursor: pointer;
 `;
-
-// const Checkmark = styled.span`
-//     :after {
-//         content: '';
-//         position: absolute;
-//         left: -17px;
-//         top: -1px;
-//         width: 5px;
-//         height: 14px;
-//         border: solid ${(props) => props.theme.borderColor.primary};
-//         border-width: 0 3px 3px 0;
-//         -webkit-transform: rotate(45deg);
-//         -ms-transform: rotate(45deg);
-//         transform: rotate(45deg);
-//     }
-// `;
 
 export default MarketCard;

@@ -1,4 +1,4 @@
-import { Tags, SportsMap } from 'types/markets';
+import { Tags, SportsMap, SportsTagsMap } from 'types/markets';
 
 export const TAGS_LIST: Tags = [
     { id: 9001, label: "NCAA Men's Football" },
@@ -26,10 +26,18 @@ export const SPORTS_MAP: SportsMap = {
     9006: 'Hockey',
     9008: 'Basketball',
     9010: 'Soccer',
-    9011: 'EPL',
+    9011: 'Soccer',
     9012: 'Soccer',
     9013: 'Soccer',
     9014: 'Soccer',
     9015: 'Soccer',
     9016: 'Soccer',
+};
+
+export const SPORTS_TAGS_MAP: SportsTagsMap = {
+    Football: [9001, 9002],
+    Baseball: [9003],
+    Basketball: [9004, 9005, 9008],
+    Hockey: [9006],
+    Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016],
 };

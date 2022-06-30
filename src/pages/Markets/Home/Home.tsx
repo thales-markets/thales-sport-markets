@@ -30,7 +30,7 @@ import RangedDatepicker from 'components/RangedDatepicker';
 import Search from 'components/Search';
 import { DEFAULT_SORT_BY, GlobalFilterEnum, SortDirection, SportFilterEnum } from 'constants/markets';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { TAGS_LIST } from 'constants/tags';
+import { SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useAccountPositionsQuery from 'queries/markets/useAccountPositionsQuery';
 import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
@@ -359,9 +359,24 @@ const Home: React.FC = () => {
                                         selected={sportFilter === filterItem}
                                         sport={filterItem}
                                         onClick={() => {
-                                            filterItem !== sportFilter
-                                                ? setSportFilter(filterItem)
-                                                : setSportFilter(SportFilterEnum.All);
+                                            if (filterItem !== sportFilter) {
+                                                setSportFilter(filterItem);
+                                                const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
+                                                if (tagsPerSport) {
+                                                    const filteredTags = availableTags.filter((tag: TagInfo) =>
+                                                        tagsPerSport.includes(tag.id)
+                                                    );
+                                                    setAvailableTags([allTagsFilterItem, ...filteredTags]);
+                                                } else {
+                                                    setAvailableTags([allTagsFilterItem]);
+                                                }
+                                            } else {
+                                                setSportFilter(SportFilterEnum.All);
+                                                setAvailableTags([
+                                                    allTagsFilterItem,
+                                                    ...TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label)),
+                                                ]);
+                                            }
                                         }}
                                         key={filterItem}
                                     >

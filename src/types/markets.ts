@@ -142,6 +142,8 @@ export type Tags = TagInfo[];
 
 export type SportsMap = Record<number, string>;
 
+export type SportsTagsMap = Record<string, number[]>;
+
 export type AccountPosition = {
     market: string;
     position: number;

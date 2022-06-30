@@ -24,7 +24,7 @@ const Container = styled(FlexDivStart)<{ isFinished?: boolean }>`
     flex-wrap: wrap;
     align-items: center;
     color: ${(props) => props.theme.textColor.primary};
-    margin-top: ${(props) => (props.isFinished ? '58px' : '18px')};
+    margin-top: ${(props) => (props.isFinished ? '58px' : '13px')};
 `;
 
 export const TagLabel = styled.span<{ labelFontSize?: number }>`
