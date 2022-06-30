@@ -35,9 +35,6 @@ export const FlexDivColumnCentered = styled(FlexDivColumn)`
 `;
 
 export const Colors = {
-    PURPLE: '#6c438a',
-    PURPLE_LIGHT: '#c4b3d0',
-    PURPLE_DARK: '#3B235F',
     GRAY: '#303656',
     GRAY_LIGHT: '#5F6180',
     GRAY_DARK: '#1A1C2B',

@@ -34,13 +34,15 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
                 <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
             </MatchInfoColumn>
             <MatchInfoColumn>
-                <MatchInfoLabel isMaturedMarket={true}>STARTED</MatchInfoLabel>
+                <MatchInfoLabel isMaturedMarket={true}>
+                    {market.awayOdds == 0 && market.homeOdds == 0 ? 'FINISHED' : 'STARTED'}
+                </MatchInfoLabel>
                 <MatchVSLabel>VS</MatchVSLabel>
                 <OddsLabel
                     isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}
                     isDraw={true}
                 >
-                    {market.awayOdds == 0 && market.homeOdds == 0 ? 'Coming Soon!' : market.drawOdds.toFixed(2)}
+                    {market.awayOdds == 0 && market.homeOdds == 0 ? 'TO BE RESOLVED!' : market.drawOdds.toFixed(2)}
                 </OddsLabel>
                 <MatchParticipantName isTwoPositioned={market.drawOdds === 0}>{'DRAW'}</MatchParticipantName>
                 <Tags sport={market.sport} tags={market.tags} />
