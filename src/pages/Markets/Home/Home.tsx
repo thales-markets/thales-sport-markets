@@ -63,8 +63,8 @@ const Home: React.FC = () => {
     const [showGridView, setGridView] = useLocalStorage(LOCAL_STORAGE_KEYS.GRID_VIEW, true);
     const [lastValidMarkets, setLastValidMarkets] = useState<SportMarkets>([]);
     const [accountPositions, setAccountPositions] = useState<AccountPositionsMap>({});
-    const [startDate, setStartDate] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_START_DATE, null);
-    const [endDate, setEndDate] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_END_DATE, null);
+    const [startDate, setStartDate] = useState<Date | null>(null);
+    const [endDate, setEndDate] = useState<Date | null>(null);
 
     const sortOptions: SortOptionType[] = [
         { id: 1, title: t('market.time-remaining-label') },
@@ -199,25 +199,30 @@ const Home: React.FC = () => {
         return tagsFilteredMarkets.filter(
             (market: SportMarketInfo) => market.isResolved !== showOpenMarkets && !market.isCanceled
         ).length;
-    }, [markets, tagsFilteredMarkets, tagFilter, marketSearch]);
+    }, [markets, tagsFilteredMarkets, tagFilter, marketSearch, showOpenMarkets]);
 
     const canceledCount = useMemo(() => {
         return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
             return market.isCanceled;
         }).length;
-    }, [markets, tagsFilteredMarkets, tagFilter, marketSearch]);
+    }, [markets, tagsFilteredMarkets, tagFilter, marketSearch, showOpenMarkets]);
 
     const accountPositionsCount = useMemo(() => {
         return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
             const accountPosition: AccountPosition = accountPositions[market.address];
             return !!accountPosition && accountPosition.position > 0;
         }).length;
-    }, [tagsFilteredMarkets, accountPositions]);
+    }, [tagsFilteredMarkets, accountPositions, showOpenMarkets]);
 
     const globalFilteredMarkets = useMemo(() => {
         let filteredMarkets = tagsFilteredMarkets;
 
         switch (globalFilter) {
+            case GlobalFilterEnum.All:
+                filteredMarkets = filteredMarkets.filter(
+                    (market: SportMarketInfo) => market.isResolved !== showOpenMarkets && !market.isCanceled
+                );
+                break;
             case GlobalFilterEnum.YourPositions:
                 filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => {
                     const accountPosition: AccountPosition = accountPositions[market.address];
@@ -248,7 +253,7 @@ const Home: React.FC = () => {
                     return 0;
             }
         });
-    }, [tagsFilteredMarkets, sortBy, sortDirection, globalFilter, accountPositions]);
+    }, [tagsFilteredMarkets, sortBy, sortDirection, globalFilter, accountPositions, showOpenMarkets]);
 
     const setSort = (sortOption: SortOptionType) => {
         if (sortBy === sortOption.id) {

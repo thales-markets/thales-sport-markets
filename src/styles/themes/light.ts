@@ -8,7 +8,7 @@ export default {
         quaternary: Colors.BLUE,
     },
     textColor: {
-        primary: Colors.PURPLE,
+        primary: Colors.GRAY,
         secondary: Colors.GREEN,
         tertiary: Colors.WHITE,
         quaternary: Colors.BLUE,
@@ -21,7 +21,7 @@ export default {
     borderColor: {
         primary: Colors.GRAY_LIGHT,
         secondary: Colors.WHITE,
-        tertiary: Colors.PURPLE,
+        tertiary: Colors.GRAY,
         quaternary: Colors.BLUE,
     },
     winnerColors: {
@@ -31,7 +31,7 @@ export default {
     button: {
         background: {
             primary: Colors.GREEN,
-            secondary: Colors.PURPLE,
+            secondary: Colors.GRAY,
             tertiary: Colors.GRAY_LIGHT,
         },
         textColor: {
