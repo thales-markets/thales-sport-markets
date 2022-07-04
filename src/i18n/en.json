@@ -99,6 +99,7 @@
     "market": {
         "question-label": "Question",
         "time-remaining-label": "Time remaining",
+        "pay-with": "Pay with",
         "status-label": "Status",
         "tags-label": "Tags",
         "search-placeholder": "Search games",
