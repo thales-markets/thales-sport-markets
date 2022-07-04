@@ -19,6 +19,18 @@ export const NetworkNameById: Record<NetworkId, string> = {
     69: 'optimism kovan',
 };
 
+export enum Network {
+    Mainnet = 1,
+    Ropsten = 3,
+    Rinkeby = 4,
+    Goerli = 5,
+    Kovan = 42,
+    'Mainnet-Ovm' = 10,
+    'Kovan-Ovm' = 69,
+    'POLYGON-MUMBAI' = 80001,
+    'POLYGON-MAINNET' = 137,
+}
+
 export const InfuraNetworkNameById: Record<NetworkId, string> = {
     10: 'optimism-mainnet',
     42: 'kovan',
