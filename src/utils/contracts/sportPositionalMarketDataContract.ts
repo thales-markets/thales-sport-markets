@@ -1,7 +1,7 @@
 export const sportPositionalMarketDataContract = {
     addresses: {
-        10: 'TBD',
-        42: '0xa463f269787f9d2446BB8d6916cbaE2cfdE08805',
+        10: '0x4f2B4e7d0A61622D2bBaeeCCD34888163e175647',
+        42: '0x05C370827A21E491953BD0b8B1ce3290584aC486',
     },
     abi: [
         {

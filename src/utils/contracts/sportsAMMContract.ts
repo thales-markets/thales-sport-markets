@@ -1,7 +1,7 @@
 export const sportsAMMContract = {
     addresses: {
-        10: 'TBD',
-        42: '0x763143FeB8d6A26275Fdb441dBf408a2c43AA7F3',
+        10: '0x170a5714112daEfF20E798B6e92e25B86Ea603C1',
+        42: '0x2d6455eE8615B8B5EA5CBc33c06E8376d70762A1',
     },
     abi: [
         {
@@ -54,6 +54,12 @@ export const sportsAMMContract = {
         {
             anonymous: false,
             inputs: [{ indexed: false, internalType: 'uint256', name: '_spread', type: 'uint256' }],
+            name: 'SetMaxSupportedOdds',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'uint256', name: '_spread', type: 'uint256' }],
             name: 'SetMaxSupportedPrice',
             type: 'event',
         },
@@ -66,7 +72,7 @@ export const sportsAMMContract = {
         {
             anonymous: false,
             inputs: [{ indexed: false, internalType: 'uint256', name: '_spread', type: 'uint256' }],
-            name: 'SetMinSupportedPrice',
+            name: 'SetMinSupportedOdds',
             type: 'event',
         },
         {
@@ -131,13 +137,6 @@ export const sportsAMMContract = {
             name: 'Unpaused',
             type: 'event',
         },
-        {
-            inputs: [],
-            name: 'MAX_APPROVAL',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
         { inputs: [], name: 'acceptOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
         {
             inputs: [
@@ -155,17 +154,6 @@ export const sportsAMMContract = {
                 { internalType: 'enum SportsAMM.Position', name: 'position', type: 'uint8' },
             ],
             name: 'availableToSellToAMM',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [
-                { internalType: 'address', name: 'market', type: 'address' },
-                { internalType: 'enum SportsAMM.Position', name: 'position', type: 'uint8' },
-                { internalType: 'uint256', name: 'amount', type: 'uint256' },
-            ],
-            name: 'balancePosition',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
@@ -314,7 +302,7 @@ export const sportsAMMContract = {
         },
         {
             inputs: [],
-            name: 'maxSupportedPrice',
+            name: 'maxSupportedOdds',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
@@ -328,7 +316,7 @@ export const sportsAMMContract = {
         },
         {
             inputs: [],
-            name: 'minSupportedPrice',
+            name: 'minSupportedOdds',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
@@ -382,16 +370,6 @@ export const sportsAMMContract = {
             inputs: [],
             name: 'paused',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [
-                { internalType: 'address', name: 'market', type: 'address' },
-                { internalType: 'enum SportsAMM.Position', name: 'position', type: 'uint8' },
-            ],
-            name: 'price',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
         },
@@ -489,8 +467,8 @@ export const sportsAMMContract = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'uint256', name: '_maxSupportedPrice', type: 'uint256' }],
-            name: 'setMaxSupportedPrice',
+            inputs: [{ internalType: 'uint256', name: '_maxSupportedOdds', type: 'uint256' }],
+            name: 'setMaxSupportedOdds',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -503,8 +481,8 @@ export const sportsAMMContract = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'uint256', name: '_minSupportedPrice', type: 'uint256' }],
-            name: 'setMinSupportedPrice',
+            inputs: [{ internalType: 'uint256', name: '_minSupportedOdds', type: 'uint256' }],
+            name: 'setMinSupportedOdds',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -567,7 +545,7 @@ export const sportsAMMContract = {
         },
         {
             inputs: [{ internalType: 'address', name: '', type: 'address' }],
-            name: 'spentOnMarket',
+            name: 'spentOnGame',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
@@ -577,6 +555,13 @@ export const sportsAMMContract = {
             name: 'stakingThales',
             outputs: [{ internalType: 'contract IStakingThales', name: '', type: 'address' }],
             stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '_market', type: 'address' }],
+            name: 'testGetMarketDefaultOdds',
+            outputs: [],
+            stateMutability: 'nonpayable',
             type: 'function',
         },
         {

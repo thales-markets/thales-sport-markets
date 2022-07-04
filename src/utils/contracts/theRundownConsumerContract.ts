@@ -1,12 +1,15 @@
 export const theRundownConsumerContract = {
     addresses: {
-        10: 'TBD',
-        42: '0x2C19a76baAc63b136784308f667CB54046efAd0A',
+        10: '0x2B91c14Ce9aa828eD124D12541452a017d8a2148',
+        42: '0x594FD9E527418Bde7F265aE7D422607C64ad1A8a',
     },
     abi: [
         {
             anonymous: false,
-            inputs: [{ indexed: false, internalType: 'address', name: '_whitelistAddress', type: 'address' }],
+            inputs: [
+                { indexed: false, internalType: 'address', name: '_whitelistAddress', type: 'address' },
+                { indexed: false, internalType: 'bool', name: '_flag', type: 'bool' },
+            ],
             name: 'AddedIntoWhitelist',
             type: 'event',
         },
@@ -119,6 +122,28 @@ export const theRundownConsumerContract = {
         },
         {
             anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'bytes32', name: '_requestId', type: 'bytes32' },
+                { indexed: false, internalType: 'address', name: '_marketAddress', type: 'address' },
+                { indexed: false, internalType: 'bytes32', name: '_id', type: 'bytes32' },
+                {
+                    components: [
+                        { internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
+                        { internalType: 'int24', name: 'homeOdds', type: 'int24' },
+                        { internalType: 'int24', name: 'awayOdds', type: 'int24' },
+                        { internalType: 'int24', name: 'drawOdds', type: 'int24' },
+                    ],
+                    indexed: false,
+                    internalType: 'struct TherundownConsumer.GameOdds',
+                    name: '_game',
+                    type: 'tuple',
+                },
+            ],
+            name: 'InvalidOddsForMarket',
+            type: 'event',
+        },
+        {
+            anonymous: false,
             inputs: [{ indexed: false, internalType: 'contract GamesQueue', name: '_queues', type: 'address' }],
             name: 'NewQueueAddress',
             type: 'event',
@@ -154,6 +179,15 @@ export const theRundownConsumerContract = {
             anonymous: false,
             inputs: [{ indexed: false, internalType: 'bool', name: 'isPaused', type: 'bool' }],
             name: 'PauseChanged',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'address', name: '_marketAddress', type: 'address' },
+                { indexed: false, internalType: 'bool', name: '_pause', type: 'bool' },
+            ],
+            name: 'PauseSportsMarket',
             type: 'event',
         },
         {
@@ -239,7 +273,10 @@ export const theRundownConsumerContract = {
         },
         { inputs: [], name: 'acceptOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
         {
-            inputs: [{ internalType: 'address', name: '_whitelistAddress', type: 'address' }],
+            inputs: [
+                { internalType: 'address', name: '_whitelistAddress', type: 'address' },
+                { internalType: 'bool', name: '_flag', type: 'bool' },
+            ],
             name: 'addToWhitelist',
             outputs: [],
             stateMutability: 'nonpayable',
@@ -385,13 +422,6 @@ export const theRundownConsumerContract = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
-            name: 'gemeIdPerRequestId',
-            outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
             inputs: [{ internalType: 'bytes32', name: '_gameId', type: 'bytes32' }],
             name: 'getGameCreatedById',
             outputs: [
@@ -487,6 +517,13 @@ export const theRundownConsumerContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'uint256', name: '_date', type: 'uint256' }],
+            name: 'getGamesPerdate',
+            outputs: [{ internalType: 'bytes32[]', name: '', type: 'bytes32[]' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'bytes32', name: '_gameId', type: 'bytes32' }],
             name: 'getNormalizedOdds',
             outputs: [{ internalType: 'uint256[]', name: '', type: 'uint256[]' }],
@@ -518,13 +555,6 @@ export const theRundownConsumerContract = {
             inputs: [{ internalType: 'bytes32', name: '_gameId', type: 'bytes32' }],
             name: 'getResult',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-            name: 'havingGamesPerDate',
-            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
             type: 'function',
         },
@@ -641,13 +671,6 @@ export const theRundownConsumerContract = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-            name: 'oddsLastPulledForDate',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
             inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
             name: 'oddsLastPulledForGame',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
@@ -659,6 +682,26 @@ export const theRundownConsumerContract = {
             name: 'owner',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
             stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'bytes32', name: '_gameId', type: 'bytes32' },
+                { internalType: 'bool', name: '_pause', type: 'bool' },
+            ],
+            name: 'pauseOrUnpauseGameManually',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'address', name: '_market', type: 'address' },
+                { internalType: 'bool', name: '_pause', type: 'bool' },
+            ],
+            name: 'pauseOrUnpauseMarketManually',
+            outputs: [],
+            stateMutability: 'nonpayable',
             type: 'function',
         },
         {
@@ -772,7 +815,7 @@ export const theRundownConsumerContract = {
         {
             inputs: [
                 { internalType: 'uint256', name: '_status', type: 'uint256' },
-                { internalType: 'bool', name: '_isSuported', type: 'bool' },
+                { internalType: 'bool', name: '_isSupported', type: 'bool' },
             ],
             name: 'setSupportedCancelStatuses',
             outputs: [],
@@ -782,7 +825,7 @@ export const theRundownConsumerContract = {
         {
             inputs: [
                 { internalType: 'uint256', name: '_status', type: 'uint256' },
-                { internalType: 'bool', name: '_isSuported', type: 'bool' },
+                { internalType: 'bool', name: '_isSupported', type: 'bool' },
             ],
             name: 'setSupportedResolvedStatuses',
             outputs: [],
@@ -792,16 +835,9 @@ export const theRundownConsumerContract = {
         {
             inputs: [
                 { internalType: 'uint256', name: '_sportId', type: 'uint256' },
-                { internalType: 'bool', name: '_isSuported', type: 'bool' },
+                { internalType: 'bool', name: '_isSupported', type: 'bool' },
             ],
             name: 'setSupportedSport',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'address', name: '_wrapperAddress', type: 'address' }],
-            name: 'setWrapperAddress',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -811,7 +847,14 @@ export const theRundownConsumerContract = {
                 { internalType: 'uint256', name: '_sportId', type: 'uint256' },
                 { internalType: 'bool', name: '_isTwoPosition', type: 'bool' },
             ],
-            name: 'setwoPositionSport',
+            name: 'setTwoPositionSport',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '_wrapperAddress', type: 'address' }],
+            name: 'setWrapperAddress',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -832,7 +875,7 @@ export const theRundownConsumerContract = {
         },
         {
             inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-            name: 'suportResolveGameStatuses',
+            name: 'supportResolveGameStatuses',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
             type: 'function',

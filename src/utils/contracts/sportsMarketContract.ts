@@ -63,6 +63,12 @@ export const sportsMarketContract = {
         },
         {
             anonymous: false,
+            inputs: [{ indexed: false, internalType: 'bool', name: '_paused', type: 'bool' }],
+            name: 'PauseUpdated',
+            type: 'event',
+        },
+        {
+            anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: '_address', type: 'address' }],
             name: 'SetTherundownConsumer',
             type: 'event',
@@ -166,16 +172,6 @@ export const sportsMarketContract = {
         },
         {
             inputs: [],
-            name: 'fees',
-            outputs: [
-                { internalType: 'uint256', name: 'poolFee', type: 'uint256' },
-                { internalType: 'uint256', name: 'creatorFee', type: 'uint256' },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [],
             name: 'finalResult',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
@@ -222,6 +218,17 @@ export const sportsMarketContract = {
                 { internalType: 'contract IPosition', name: 'home', type: 'address' },
                 { internalType: 'contract IPosition', name: 'away', type: 'address' },
                 { internalType: 'contract IPosition', name: 'draw', type: 'address' },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'getStampedOdds',
+            outputs: [
+                { internalType: 'uint256', name: '', type: 'uint256' },
+                { internalType: 'uint256', name: '', type: 'uint256' },
+                { internalType: 'uint256', name: '', type: 'uint256' },
             ],
             stateMutability: 'view',
             type: 'function',
@@ -329,6 +336,13 @@ export const sportsMarketContract = {
         },
         {
             inputs: [],
+            name: 'paused',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
             name: 'phase',
             outputs: [{ internalType: 'enum ISportPositionalMarket.Phase', name: '', type: 'uint8' }],
             stateMutability: 'view',
@@ -375,6 +389,13 @@ export const sportsMarketContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'bool', name: '_paused', type: 'bool' }],
+            name: 'setPaused',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'address', name: '_theRundownConsumer', type: 'address' }],
             name: 'setTherundownConsumer',
             outputs: [],
@@ -386,6 +407,13 @@ export const sportsMarketContract = {
             name: 'setsUSD',
             outputs: [],
             stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'sportsAMM',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
             type: 'function',
         },
         {
