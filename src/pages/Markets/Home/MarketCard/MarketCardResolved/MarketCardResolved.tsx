@@ -41,7 +41,7 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market, isClaim
                 <MatchInfoLabel isClaimAvailable={isClaimAvailable}>
                     {isClaimAvailable ? 'CLAIMABLE' : 'FINISHED'}
                 </MatchInfoLabel>
-                <ClaimButton onClick={(e: any) => e.preventDefault()}>CLAIM</ClaimButton>
+                <ClaimButton isClaimAvailable={isClaimAvailable}>CLAIM</ClaimButton>
                 <MatchVSLabel>VS</MatchVSLabel>
                 <WinnerLabel isWinning={market.finalResult == 3} finalResult={market.finalResult}>
                     DRAW

@@ -52,7 +52,7 @@ const Home: React.FC = () => {
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
 
     const [globalFilter, setGlobalFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_GLOBAL, GlobalFilterEnum.All);
-    const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_GLOBAL, SportFilterEnum.All);
+    const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SPORT, SportFilterEnum.All);
     const [sportsList, setSportsList] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_SPORTS, Object.values(SportFilterEnum));
     const [sortDirection, setSortDirection] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_DIRECTION, SortDirection.ASC);
     const [sportsSortDirection, setSportsSortDirection] = useLocalStorage(
@@ -152,7 +152,6 @@ const Home: React.FC = () => {
                 (market: SportMarketInfo) => market.maturityDate.toDateString() === dateFilter
             );
         }
-
         return filteredMarkets;
     }, [markets, searchFilteredMarkets, dateFilter, marketSearch]);
 
