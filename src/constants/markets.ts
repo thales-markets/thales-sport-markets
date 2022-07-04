@@ -23,8 +23,8 @@ export enum SportFilterEnum {
     Basketball = 'Basketball',
     Baseball = 'Baseball',
     Hockey = 'Hockey',
-    Tennis = 'Tennis',
     Football = 'Football',
+    // Tennis = 'Tennis',
 }
 
 export const DEFAULT_SORT_BY = 1;

@@ -56,3 +56,7 @@
 .icon--baseball:before {
     content: '\004D';
 }
+
+.icon--hockey:before {
+    content: '\004E';
+}

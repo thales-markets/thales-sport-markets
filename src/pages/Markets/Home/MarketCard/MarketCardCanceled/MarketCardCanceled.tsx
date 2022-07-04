@@ -25,7 +25,7 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market, isClaim
     return (
         <MatchInfo>
             <MatchInfoColumn>
-                <MatchParticipantImageContainer>
+                <MatchParticipantImageContainer isCanceled={true}>
                     <MatchParticipantImage src={getTeamImageSource(market.homeTeam, market.tags[0])} />
                 </MatchParticipantImageContainer>
                 <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
@@ -46,7 +46,7 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market, isClaim
                 <Tags sport={market.sport} tags={market.tags} />
             </MatchInfoColumn>
             <MatchInfoColumn>
-                <MatchParticipantImageContainer>
+                <MatchParticipantImageContainer isCanceled={true}>
                     <MatchParticipantImage src={getTeamImageSource(market.awayTeam, market.tags[0])} />
                 </MatchParticipantImageContainer>
                 <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={false}>

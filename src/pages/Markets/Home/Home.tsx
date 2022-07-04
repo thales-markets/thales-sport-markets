@@ -40,6 +40,7 @@ import SortOption from '../components/SortOption';
 import SportFilter from '../components/SportFilter';
 import HeaderDatepicker from './HeaderDatepicker';
 import UserHistory from './UserHistory';
+import ViewSwitch from '../components/ViewSwitch';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -345,44 +346,58 @@ const Home: React.FC = () => {
                     setDateFilter={setDateFilter}
                 />
             </FiltersContainer>
+            <ToggleContainer>
+                <Toggle
+                    isLeftOptionSelected={showOpenMarkets}
+                    onClick={() => {
+                        setShowOpenMarkets(!showOpenMarkets);
+                    }}
+                    leftText={t('market.open-markets-label')}
+                    rightText={t('market.resolved-markets-label')}
+                />
+                <ViewSwitch selected={showGridView} onClick={() => setGridView(true)}>
+                    {t('market.grid-view')}
+                </ViewSwitch>
+                <ViewSwitch selected={!showGridView} onClick={() => setGridView(false)}>
+                    {t('market.list-view')}
+                </ViewSwitch>
+            </ToggleContainer>
             <RowContainer>
                 <SidebarContainer>
                     <Search text={marketSearch} handleChange={(value) => dispatch(setMarketSearch(value))} />
                     <SportFiltersContainer>
-                        {sportsList
-                            .filter((filterItem: any) => filterItem !== SportFilterEnum.All)
-                            .map((filterItem: any) => {
-                                return (
-                                    <SportFilter
-                                        disabled={false}
-                                        selected={sportFilter === filterItem}
-                                        sport={filterItem}
-                                        onClick={() => {
-                                            if (filterItem !== sportFilter) {
-                                                setSportFilter(filterItem);
-                                                const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
-                                                if (tagsPerSport) {
-                                                    const filteredTags = availableTags.filter((tag: TagInfo) =>
-                                                        tagsPerSport.includes(tag.id)
-                                                    );
-                                                    setAvailableTags([allTagsFilterItem, ...filteredTags]);
-                                                } else {
-                                                    setAvailableTags([allTagsFilterItem]);
-                                                }
+                        {sportsList.map((filterItem: any) => {
+                            return (
+                                <SportFilter
+                                    disabled={false}
+                                    selected={sportFilter === filterItem}
+                                    sport={filterItem}
+                                    onClick={() => {
+                                        if (filterItem !== sportFilter) {
+                                            setSportFilter(filterItem);
+                                            const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
+                                            if (tagsPerSport) {
+                                                const filteredTags = TAGS_LIST.filter((tag: TagInfo) =>
+                                                    tagsPerSport.includes(tag.id)
+                                                );
+                                                setAvailableTags([allTagsFilterItem, ...filteredTags]);
                                             } else {
-                                                setSportFilter(SportFilterEnum.All);
-                                                setAvailableTags([
-                                                    allTagsFilterItem,
-                                                    ...TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label)),
-                                                ]);
+                                                setAvailableTags([allTagsFilterItem]);
                                             }
-                                        }}
-                                        key={filterItem}
-                                    >
-                                        {t(`market.filter-label.sport.${filterItem.toLowerCase()}`)}
-                                    </SportFilter>
-                                );
-                            })}
+                                        } else {
+                                            setSportFilter(SportFilterEnum.All);
+                                            setAvailableTags([
+                                                allTagsFilterItem,
+                                                ...TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label)),
+                                            ]);
+                                        }
+                                    }}
+                                    key={filterItem}
+                                >
+                                    {t(`market.filter-label.sport.${filterItem.toLowerCase()}`)}
+                                </SportFilter>
+                            );
+                        })}
                     </SportFiltersContainer>
                     <SortingButton onClick={setSportsSorting}>
                         {sportsSortDirection == SortDirection.ASC ? 'Sports A-Z' : 'Sports Z-A'}
@@ -455,24 +470,6 @@ const Home: React.FC = () => {
                             );
                         })}
                     </TagsContainer>
-                    <ToggleContainer>
-                        <Toggle
-                            isLeftOptionSelected={showGridView}
-                            onClick={() => {
-                                setGridView(!showGridView);
-                            }}
-                            leftText={t('market.grid-view')}
-                            rightText={t('market.list-view')}
-                        />
-                        <Toggle
-                            isLeftOptionSelected={showOpenMarkets}
-                            onClick={() => {
-                                setShowOpenMarkets(!showOpenMarkets);
-                            }}
-                            leftText={t('market.open-markets-label')}
-                            rightText={t('market.resolved-markets-label')}
-                        />
-                    </ToggleContainer>
                 </SidebarContainer>
             </RowContainer>
         </Container>
@@ -512,26 +509,14 @@ const SidebarContainer = styled(FlexDivColumn)`
     flex-grow: 1;
 `;
 
-const ToggleContainer = styled(FlexDivColumn)`
-    align-items: end;
-    span {
-        text-transform: uppercase;
-        margin-bottom: 5px;
-    }
-    > div {
-        margin-bottom: 0px;
-    }
-    .toogle {
-        font-size: 15px;
-        line-height: 102.6%;
-        padding-bottom: 5px;
-        margin-bottom: 10px;
-        height: 36px;
-        align-items: center;
-    }
-    i {
-        margin-top: -9px;
-    }
+const ToggleContainer = styled(FlexDivRow)`
+    width: 50%;
+    position: relative;
+    top: 20px;
+    align-self: end;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 10px;
 `;
 
 const FiltersContainer = styled(FlexDivRow)`

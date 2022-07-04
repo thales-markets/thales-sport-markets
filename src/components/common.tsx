@@ -132,6 +132,7 @@ export const MatchInfoColumn = styled(FlexDivColumnCentered)`
         margin-top: 40px;
     }
     cursor: pointer;
+    position: relative;
 `;
 
 export const MatchDate = styled.label`
@@ -181,12 +182,18 @@ export const MatchVSLabel = styled.label`
     cursor: pointer;
 `;
 
-export const MatchParticipantImageContainer = styled(FlexDiv)<{ isWinner?: boolean; finalResult?: number }>`
+export const MatchParticipantImageContainer = styled(FlexDiv)<{
+    isWinner?: boolean;
+    finalResult?: number;
+    isCanceled?: boolean;
+}>`
     border-radius: 50%;
     border: 3px solid
         ${(props) =>
             (props.isWinner && props.finalResult !== 0) || props.finalResult === 3
                 ? props.theme.winnerColors.primary
+                : props.isCanceled
+                ? props.theme.oddsColor.secondary
                 : props.theme.borderColor.primary};
     background: ${(props) => props.theme.background.secondary};
     opacity: ${(props) => (props.finalResult && props.finalResult !== 3 && !props.isWinner ? '0.5' : '')};
@@ -239,7 +246,7 @@ export const OddsLabel = styled.label<{
     text-align: center;
     color: ${(props) =>
         props.isDraw
-            ? props.theme.oddsColor.tertiary
+            ? props.theme.oddsColor.quaternary
             : props.homeOdds
             ? props.theme.oddsColor.primary
             : props.theme.oddsColor.secondary};
