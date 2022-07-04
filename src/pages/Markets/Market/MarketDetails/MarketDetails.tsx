@@ -44,6 +44,8 @@ import { formatCurrency, formatPercentage } from '../../../../utils/formatters/n
 import usePositionPriceDetailsQuery from '../../../../queries/markets/usePositionPriceDetailsQuery';
 import usePaymentTokenBalanceQuery from '../../../../queries/wallet/usePaymentTokenBalanceQuery';
 import useMarketBalancesQuery from '../../../../queries/markets/useMarketBalancesQuery';
+import CollateralSelector from './CollateralSelector';
+import { COLLATERALS } from 'constants/markets';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -58,6 +60,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [hasAllowance, setAllowance] = useState<boolean>(false);
     const [isAllowing, setIsAllowing] = useState<boolean>(false);
+    const [selectedStableIndex, setStableIndex] = useState<number>(0);
     const [isBuying, setIsBuying] = useState<boolean>(false);
     const [amount, setAmount] = useState<number | string>('');
     const [selectedPosition, setSelectedPosition] = useState<Position>(Position.HOME);
@@ -244,6 +247,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
 
     return (
         <MarketContainer>
+            <CollateralSelector
+                collateralArray={COLLATERALS}
+                selectedItem={selectedStableIndex}
+                onChangeCollateral={(index) => setStableIndex(index)}
+            />
             <Toggle
                 margin="0 0 30px 0"
                 label={{ firstLabel: Side.BUY, secondLabel: Side.SELL, fontSize: '18px' }}

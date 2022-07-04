@@ -154,6 +154,7 @@ table {
 }
 *::-webkit-scrollbar-track {
     background: #5f6180;
+    border-radius: 8px;
 }
 *::-webkit-scrollbar-thumb {
     border-radius: 8px;

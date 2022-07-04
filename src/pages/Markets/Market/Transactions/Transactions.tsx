@@ -86,6 +86,7 @@ const TableContainer = styled(FlexDivColumn)`
     }
     ::-webkit-scrollbar-track {
         background: #04045a;
+        border-radius: 8px;
     }
     ::-webkit-scrollbar-thumb {
         border-radius: 15px;

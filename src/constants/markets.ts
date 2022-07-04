@@ -1,3 +1,5 @@
+import { CRYPTO_CURRENCY_MAP } from './currency';
+
 export enum GlobalFilterEnum {
     All = 'All',
     YourPositions = 'YourPositions',
@@ -23,9 +25,16 @@ export enum SportFilterEnum {
     Basketball = 'Basketball',
     Baseball = 'Baseball',
     Hockey = 'Hockey',
-    Tennis = 'Tennis',
     Football = 'Football',
+    // Tennis = 'Tennis',
 }
+
+export const COLLATERALS = [
+    CRYPTO_CURRENCY_MAP.sUSD,
+    CRYPTO_CURRENCY_MAP.DAI,
+    CRYPTO_CURRENCY_MAP.USDC,
+    CRYPTO_CURRENCY_MAP.USDT,
+];
 
 export const DEFAULT_SORT_BY = 1;
 

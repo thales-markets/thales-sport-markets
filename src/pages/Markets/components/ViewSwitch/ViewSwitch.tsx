@@ -2,18 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
 
-type SportFilterProps = {
-    disabled?: boolean;
+type ViewSwitchProps = {
     selected?: boolean;
-    count?: number;
-    sport: string;
     onClick?: (param: any) => void;
 };
 
-const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, onClick, children }) => {
+const ViewSwitch: React.FC<ViewSwitchProps> = ({ selected, onClick, children }) => {
     return (
-        <Container className={`${disabled ? 'disabled' : ''} ${selected ? 'selected' : ''}`} onClick={onClick}>
-            <SportIcon className={`icon icon--${sport.toLowerCase() == 'all' ? 'logo' : sport.toLowerCase()}`} />
+        <Container className={`${selected ? 'selected' : ''}`} onClick={onClick}>
+            <Icon className={`icon icon--${children?.toString().toLowerCase()}`} />
             <Label>{children}</Label>
         </Container>
     );
@@ -21,24 +18,23 @@ const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, on
 
 const Container = styled(FlexDivRowCentered)`
     font-style: normal;
-    font-weight: 600;
+    font-weight: bold;
     font-size: 15px;
-    line-height: 102.6%;
-    letter-spacing: 0.035em;
-    text-transform: uppercase;
+    line-height: 18px;
     cursor: pointer;
     height: 36px;
-    margin-left: 20px;
-    &.selected,
     &:hover {
-        color: ${(props) => props.theme.textColor.quaternary};
+        color: ${(props) => props.theme.textColor.primary};
     }
     &.disabled {
         cursor: default;
         opacity: 0.4;
     }
     color: ${(props) => props.theme.textColor.secondary};
-    margin-right: 30px;
+    &.selected {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
+    margin-right: 20px;
     padding-bottom: 5px;
     margin-bottom: 10px;
     justify-content: flex-start;
@@ -50,11 +46,13 @@ const Label = styled.div`
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+    white-space: nowrap;
 `;
 
-const SportIcon = styled.i`
-    font-size: 35px;
-    margin-right: 15px;
+const Icon = styled.i`
+    font-size: 26px;
+    margin-left: 4px;
+    margin-right: 7px;
 `;
 
-export default SportFilter;
+export default ViewSwitch;

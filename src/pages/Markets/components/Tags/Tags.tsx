@@ -14,7 +14,12 @@ const Tags: React.FC<TagsProps> = ({ sport, tags, isFinished }) => {
         <Container isFinished={isFinished}>
             {tags.map((tag: number) => {
                 const findTagItem = TAGS_LIST.find((t) => t.id == tag);
-                return findTagItem ? <Tag key={findTagItem.id}>{sport + ' / ' + findTagItem.label}</Tag> : null;
+                return findTagItem ? (
+                    <>
+                        <SportIcon className={`icon icon--${sport.toLowerCase()}`} />{' '}
+                        <Tag key={findTagItem.id}>{sport + ' / ' + findTagItem.label}</Tag>
+                    </>
+                ) : null;
             })}
         </Container>
     );
@@ -23,8 +28,8 @@ const Tags: React.FC<TagsProps> = ({ sport, tags, isFinished }) => {
 const Container = styled(FlexDivStart)<{ isFinished?: boolean }>`
     flex-wrap: wrap;
     align-items: center;
-    color: ${(props) => props.theme.textColor.primary};
-    margin-top: ${(props) => (props.isFinished ? '58px' : '13px')};
+    color: ${(props) => props.theme.textColor.secondary};
+    margin-top: ${(props) => (props.isFinished ? '58px' : '11px')};
 `;
 
 export const TagLabel = styled.span<{ labelFontSize?: number }>`
@@ -33,7 +38,7 @@ export const TagLabel = styled.span<{ labelFontSize?: number }>`
     font-size: 15px;
     line-height: 100%;
     text-align: center;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
     margin-bottom: 4px;
 `;
 
@@ -46,7 +51,11 @@ const Tag = styled(FlexDivCentered)`
     align-items: center;
     text-transform: uppercase;
     padding: 4px 4px;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
+`;
+
+const SportIcon = styled.i`
+    font-size: 20px;
 `;
 
 export default Tags;
