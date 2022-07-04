@@ -11,7 +11,7 @@ import { orderBy } from 'lodash';
 import useSportMarketsQuery from '../../../../queries/markets/useSportMarketsQuery';
 import { getIsAppReady } from '../../../../redux/modules/app';
 import HistoryTable from '../../components/HistoryTable';
-import { Position } from '../../../../constants/options';
+import { Position, PositionName } from '../../../../constants/options';
 import { getEtherscanTxLink } from '../../../../utils/etherscan';
 
 const UserHistory: React.FC = () => {
@@ -46,9 +46,11 @@ const UserHistory: React.FC = () => {
                 return {
                     ...tx,
                     game: `${market.homeTeam} - ${market.awayTeam}`,
-                    winner: Position[market.finalResult],
+                    result: Position[market.finalResult] as PositionName,
                     // @ts-ignore
                     usdValue: +market[`${tx.position.toLowerCase()}Odds`] * +tx.amount,
+                    // @ts-ignore
+                    positionTeam: market[`${tx.position.toLowerCase()}Team`],
                     link: getEtherscanTxLink(networkId, tx.hash),
                 };
             } else {

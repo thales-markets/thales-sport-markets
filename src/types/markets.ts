@@ -1,5 +1,5 @@
 import { MarketStatus } from 'constants/markets';
-import { Position, Side } from '../constants/options';
+import { Position, PositionName, Side } from '../constants/options';
 
 export type MarketInfo = {
     address: string;
@@ -166,7 +166,7 @@ export type MarketTransaction = {
     timestamp: number;
     amount: number | string;
     blockNumber: number;
-    position: Position;
+    position: PositionName;
     market: string;
 };
 
@@ -179,10 +179,11 @@ export type UserTransaction = {
     timestamp: number;
     amount: number | string;
     blockNumber: number;
-    position: Position;
+    position: PositionName;
+    positionTeam: string;
     market: string;
     game: string;
-    winner: string;
+    result: PositionName;
     usdValue: number;
 };
 

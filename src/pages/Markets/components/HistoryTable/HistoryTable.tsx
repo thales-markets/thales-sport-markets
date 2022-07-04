@@ -5,6 +5,9 @@ import { formatTxTimestamp } from 'utils/formatters/date';
 import Table from 'components/Table';
 import { UserTransaction, UserTransactions } from 'types/markets';
 import { formatCurrency } from '../../../../utils/formatters/number';
+import styled from 'styled-components';
+import { ODDS_COLOR } from '../../../../constants/ui';
+import { POSITION_MAP } from 'constants/options';
 
 type HistoryPropsTable = {
     transactions: UserTransactions;
@@ -14,6 +17,7 @@ type HistoryPropsTable = {
 
 export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResultsMessage, isLoading }) => {
     const { t } = useTranslation();
+    // @ts-ignore
     return (
         <>
             <Table
@@ -42,13 +46,13 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                         Cell: (cellProps: CellProps<UserTransaction, UserTransaction['type']>) => (
                             <p>{t(`market.table.type.${cellProps.cell.value}`)}</p>
                         ),
-                        width: 150,
+                        width: 50,
                         sortable: true,
                     },
                     {
                         Header: <>{t('market.table.position-col')}</>,
-                        accessor: 'position',
-                        Cell: (cellProps: CellProps<UserTransaction, UserTransaction['position']>) => (
+                        accessor: 'positionTeam',
+                        Cell: (cellProps: CellProps<UserTransaction, UserTransaction['positionTeam']>) => (
                             <p>{cellProps.cell.value}</p>
                         ),
                         width: 150,
@@ -59,7 +63,12 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                         sortType: 'basic',
                         accessor: 'amount',
                         Cell: (cellProps: CellProps<UserTransaction, UserTransaction['amount']>) => (
-                            <p>{cellProps.cell.value}</p>
+                            <>
+                                <PositionCircle color={ODDS_COLOR[cellProps.row.original.position]}>
+                                    {POSITION_MAP[cellProps.row.original.position]}
+                                </PositionCircle>
+                                <p>{cellProps.cell.value}</p>
+                            </>
                         ),
                         width: 150,
                         sortable: true,
@@ -73,10 +82,12 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                         width: 150,
                     },
                     {
-                        Header: <>Winner</>,
-                        accessor: 'winner',
-                        Cell: (cellProps: CellProps<UserTransaction, UserTransaction['winner']>) => (
-                            <p>{cellProps.cell.value}</p>
+                        Header: <>Result</>,
+                        accessor: 'result',
+                        Cell: (cellProps: CellProps<UserTransaction, UserTransaction['result']>) => (
+                            <>
+                                <PositionCircle color="#3FD1FF">{POSITION_MAP[cellProps.cell.value]}</PositionCircle>
+                            </>
                         ),
                         width: 150,
                     },
@@ -91,5 +102,19 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
         </>
     );
 });
+
+const PositionCircle = styled.span<{ color: string }>`
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    display: inline-block;
+    text-align: center;
+    font-weight: bold;
+    margin-right: 10px;
+    line-height: 21px;
+    padding-left: 1px;
+    background-color: ${(props) => props.color};
+    color: #1a1c2b;
+`;
 
 export default HistoryTable;
