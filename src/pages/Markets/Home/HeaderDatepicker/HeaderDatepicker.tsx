@@ -96,7 +96,7 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
 const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
-    margin-bottom: 55px;
+    margin-bottom: 35px;
     align-items: center;
     @media (max-width: 1250px) and (min-width: 769px) {
         & > div:nth-of-type(4),

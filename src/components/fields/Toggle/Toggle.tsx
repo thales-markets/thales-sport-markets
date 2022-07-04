@@ -68,8 +68,8 @@ const Toggle: React.FC<ToggleProps> = ({
 const ToggleContainer = styled(FlexDivStart)`
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
-    line-height: 27px;
+    font-size: 15px;
+    line-height: 18px;
     cursor: pointer;
     color: ${(props) => props.theme.textColor.primary};
     &.disabled {
@@ -77,6 +77,11 @@ const ToggleContainer = styled(FlexDivStart)`
         cursor: default;
     }
     width: fit-content;
+    position: relative;
+    margin-bottom: 0px;
+    height: 100%;
+    margin-right: 15px;
+    margin-top: 7px;
 `;
 
 const ToggleText = styled.span`
@@ -101,7 +106,7 @@ const ToggleIcon = styled.i<{ isLeftOptionSelected: boolean }>`
     &:before {
         font-family: ExoticIcons !important;
         content: ${(props) => (props.isLeftOptionSelected ? "'\\0048'" : "'\\0049'")};
-        color: ${(props) => props.theme.textColor.primary};
+        color: ${(props) => props.theme.textColor.quaternary};
     }
 `;
 

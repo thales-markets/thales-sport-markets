@@ -1,3 +1,4 @@
+import Button from 'components/Button';
 import {
     MatchInfo,
     MatchInfoColumn,
@@ -11,6 +12,7 @@ import {
 } from 'components/common';
 import Tags from 'pages/Markets/components/Tags';
 import React from 'react';
+import styled from 'styled-components';
 // import { useTranslation } from 'react-i18next';
 import { SportMarketInfo } from 'types/markets';
 import { getTeamImageSource } from 'utils/images';
@@ -37,8 +39,9 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market, isClaim
             </MatchInfoColumn>
             <MatchInfoColumn>
                 <MatchInfoLabel isClaimAvailable={isClaimAvailable}>
-                    {isClaimAvailable ? 'Claimable' : 'Finished'}
+                    {isClaimAvailable ? 'CLAIMABLE' : 'FINISHED'}
                 </MatchInfoLabel>
+                <ClaimButton isClaimAvailable={isClaimAvailable}>CLAIM</ClaimButton>
                 <MatchVSLabel>VS</MatchVSLabel>
                 <WinnerLabel isWinning={market.finalResult == 3} finalResult={market.finalResult}>
                     DRAW
@@ -58,5 +61,16 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market, isClaim
         </MatchInfo>
     );
 };
+
+const ClaimButton = styled(Button)<{ isClaimAvailable?: boolean }>`
+    position: absolute;
+    top: 10%;
+    background: ${(props) => props.theme.background.quaternary};
+    color: ${(props) => props.theme.textColor.tertiary};
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.025em;
+    visibility: ${(props) => (!props.isClaimAvailable ? 'hidden' : '')};
+`;
 
 export default MarketCardResolved;

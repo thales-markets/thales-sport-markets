@@ -105,8 +105,8 @@
         "search-placeholder": "Search games",
         "open-markets-label": "Opened",
         "resolved-markets-label": "Resolved",
-        "grid-view": "Grid view",
-        "list-view": "List view",
+        "grid-view": "Grid",
+        "list-view": "List",
         "status": {
             "open": "Open",
             "cancelled-pending-confirmation": "Cancelled - pending confirmation",
@@ -187,6 +187,7 @@
                 "canceled": "Canceled"
             },
             "sport": {
+                "all": "All sports",
                 "basketball": "Basketball",
                 "soccer": "Soccer",
                 "hockey": "Hockey",

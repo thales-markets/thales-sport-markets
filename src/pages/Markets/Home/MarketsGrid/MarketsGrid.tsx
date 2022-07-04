@@ -62,6 +62,8 @@ const Container = styled(FlexDiv)`
         display: flex;
         width: 100%;
     }
+    overflow-y: auto;
+    max-height: 905px;
 `;
 
 const ListContainer = styled.div`
