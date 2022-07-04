@@ -62,7 +62,7 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market, isClaim
     );
 };
 
-const ClaimButton = styled(Button)`
+const ClaimButton = styled(Button)<{ isClaimAvailable?: boolean }>`
     position: absolute;
     top: 10%;
     background: ${(props) => props.theme.background.quaternary};
@@ -70,6 +70,7 @@ const ClaimButton = styled(Button)`
     font-weight: 700;
     font-size: 15px;
     letter-spacing: 0.025em;
+    visibility: ${(props) => (!props.isClaimAvailable ? 'hidden' : '')};
 `;
 
 export default MarketCardResolved;
