@@ -87,6 +87,11 @@ export type MarketData = {
     homeTeam: string;
     awayTeam: string;
     maturityDate: number;
+    resolved: boolean;
+    finalResult: number;
+    gameStarted: boolean;
+    homeScore?: number;
+    awayScore?: number;
 };
 
 export type Markets = MarketInfo[];

@@ -28,6 +28,8 @@ import {
     AmountToBuyContainer,
     MatchDate,
     MatchInfoColumn,
+    Status,
+    ClaimButton,
 } from './styled-components/MarketDetails';
 import { FlexDivCentered } from '../../../../styles/common';
 import { MAX_L2_GAS_LIMIT, Position, Side } from '../../../../constants/options';
@@ -47,6 +49,7 @@ import useMarketBalancesQuery from '../../../../queries/markets/useMarketBalance
 import CollateralSelector from './CollateralSelector';
 import { COLLATERALS } from 'constants/markets';
 import { getAMMSportsTransaction, getSportsAMMQuoteMethod } from 'utils/amm';
+import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -66,6 +69,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     const [amount, setAmount] = useState<number | string>('');
     const [selectedPosition, setSelectedPosition] = useState<Position>(Position.HOME);
     const [selectedSide, setSelectedSide] = useState<Side>(Side.BUY);
+    const [claimable, setClaimable] = useState<boolean>(false);
     const [ammPosition, setAmmPosition] = useState<AMMPosition>({
         sides: {
             [Side.BUY]: {
@@ -111,6 +115,12 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     useEffect(() => {
         if (marketBalancesQuery.isSuccess && marketBalancesQuery.data) {
             setBalances(marketBalancesQuery.data);
+            if (market.resolved) {
+                //@ts-ignore
+                if (marketBalancesQuery.data?.[Position[market.finalResult - 1].toLowerCase()] > 0) {
+                    setClaimable(true);
+                }
+            }
         }
     }, [marketBalancesQuery.isSuccess, marketBalancesQuery.data]);
 
@@ -237,6 +247,8 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         }
     };
 
+    console.log(market, balances, claimable);
+
     const onMaxClick = async () => {
         if (selectedSide === Side.BUY) {
             const { sportsAMMContract, signer } = networkConnector;
@@ -264,26 +276,49 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         }
     };
 
+    const claimReward = async () => {
+        const { signer } = networkConnector;
+        if (signer) {
+            const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
+            contract.connect(signer);
+            try {
+                await contract.exerciseOptions();
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    };
+
     return (
         <MarketContainer>
-            {selectedSide == Side.BUY && (
+            {selectedSide == Side.BUY && !market.resolved && (
                 <CollateralSelector
                     collateralArray={COLLATERALS}
                     selectedItem={selectedStableIndex}
                     onChangeCollateral={(index) => setStableIndex(index)}
                 />
             )}
-            <Toggle
-                margin="0 0 30px 0"
-                label={{ firstLabel: Side.BUY, secondLabel: Side.SELL, fontSize: '18px' }}
-                active={selectedSide === Side.SELL}
-                dotSize="18px"
-                dotBackground="#303656"
-                dotBorder="3px solid #3FD1FF"
-                handleClick={() => {
-                    setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
-                }}
-            />
+
+            {!market.resolved && (
+                <Toggle
+                    margin="0 0 30px 0"
+                    label={{ firstLabel: Side.BUY, secondLabel: Side.SELL, fontSize: '18px' }}
+                    active={selectedSide === Side.SELL}
+                    dotSize="18px"
+                    dotBackground="#303656"
+                    dotBorder="3px solid #3FD1FF"
+                    handleClick={() => {
+                        setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
+                    }}
+                />
+            )}
+
+            {market.gameStarted && (
+                <Status resolved={market.resolved} claimable={claimable}>
+                    {!market.resolved ? 'Started' : claimable ? 'Claimable' : 'Finished'}
+                </Status>
+            )}
+
             <MatchInfo>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer>
@@ -300,129 +335,155 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 </MatchInfoColumn>
             </MatchInfo>
             <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
-            <OddsContainer>
-                <Pick selected={selectedPosition === Position.HOME} onClick={() => setSelectedPosition(Position.HOME)}>
-                    <Option color="#50CE99">1</Option>
-                    <OptionTeamName>{market.homeTeam.toUpperCase()}</OptionTeamName>
-                    <InfoRow>
-                        <InfoTitle>PRICE:</InfoTitle>
-                        <InfoValue>$ {market.positions[Position.HOME].sides[selectedSide].odd.toFixed(2)}</InfoValue>
-                    </InfoRow>
-                </Pick>
-                {!!market.positions[Position.DRAW].sides[selectedSide].odd && (
+            {!market.gameStarted && (
+                <OddsContainer>
                     <Pick
-                        selected={selectedPosition === Position.DRAW}
-                        onClick={() => setSelectedPosition(Position.DRAW)}
+                        selected={selectedPosition === Position.HOME}
+                        onClick={() => setSelectedPosition(Position.HOME)}
                     >
-                        <Option color="#40A1D8">X</Option>
-                        <OptionTeamName>DRAW</OptionTeamName>
+                        <Option color="#50CE99">1</Option>
+                        <OptionTeamName>{market.homeTeam.toUpperCase()}</OptionTeamName>
                         <InfoRow>
                             <InfoTitle>PRICE:</InfoTitle>
                             <InfoValue>
-                                $ {market.positions[Position.DRAW].sides[selectedSide].odd.toFixed(2)}
+                                $ {market.positions[Position.HOME].sides[selectedSide].odd.toFixed(2)}
                             </InfoValue>
                         </InfoRow>
                     </Pick>
-                )}
-                <Pick selected={selectedPosition === Position.AWAY} onClick={() => setSelectedPosition(Position.AWAY)}>
-                    <Option color="#E26A78">2</Option>
-                    <OptionTeamName>{market.awayTeam.toUpperCase()}</OptionTeamName>
-                    <InfoRow>
-                        <InfoTitle>PRICE:</InfoTitle>
-                        <InfoValue>$ {market.positions[Position.AWAY].sides[selectedSide].odd.toFixed(2)}</InfoValue>
-                    </InfoRow>
-                </Pick>
-            </OddsContainer>
-            <SliderContainer>
-                {!!amount && (
-                    <AmountInfo>
+                    {!!market.positions[Position.DRAW].sides[selectedSide].odd && (
+                        <Pick
+                            selected={selectedPosition === Position.DRAW}
+                            onClick={() => setSelectedPosition(Position.DRAW)}
+                        >
+                            <Option color="#40A1D8">X</Option>
+                            <OptionTeamName>DRAW</OptionTeamName>
+                            <InfoRow>
+                                <InfoTitle>PRICE:</InfoTitle>
+                                <InfoValue>
+                                    $ {market.positions[Position.DRAW].sides[selectedSide].odd.toFixed(2)}
+                                </InfoValue>
+                            </InfoRow>
+                        </Pick>
+                    )}
+                    <Pick
+                        selected={selectedPosition === Position.AWAY}
+                        onClick={() => setSelectedPosition(Position.AWAY)}
+                    >
+                        <Option color="#E26A78">2</Option>
+                        <OptionTeamName>{market.awayTeam.toUpperCase()}</OptionTeamName>
+                        <InfoRow>
+                            <InfoTitle>PRICE:</InfoTitle>
+                            <InfoValue>
+                                $ {market.positions[Position.AWAY].sides[selectedSide].odd.toFixed(2)}
+                            </InfoValue>
+                        </InfoRow>
+                    </Pick>
+                </OddsContainer>
+            )}
+            {!market.gameStarted && (
+                <>
+                    {' '}
+                    <SliderContainer>
+                        {!!amount && (
+                            <AmountInfo>
+                                <SliderInfo>
+                                    <SliderInfoTitle>Amount to {selectedSide.toLowerCase()}:</SliderInfoTitle>
+                                    <SliderInfoValue>
+                                        {positionPriceDetailsQuery.isLoading
+                                            ? '-'
+                                            : `${amount} = $${formatCurrency(
+                                                  ammPosition.sides[selectedSide].quote,
+                                                  3,
+                                                  true
+                                              )}`}
+                                    </SliderInfoValue>
+                                </SliderInfo>
+                            </AmountInfo>
+                        )}
+                        <Slider
+                            type="range"
+                            min={0}
+                            max={ammPosition.sides[selectedSide].available}
+                            value={amount || 0}
+                            step={1}
+                            onChange={(event) => {
+                                setAmount(event.currentTarget.valueAsNumber);
+                            }}
+                        />
                         <SliderInfo>
-                            <SliderInfoTitle>Amount to {selectedSide.toLowerCase()}:</SliderInfoTitle>
+                            <SliderInfoTitle>Available to {selectedSide.toLowerCase()}:</SliderInfoTitle>
                             <SliderInfoValue>
                                 {positionPriceDetailsQuery.isLoading
                                     ? '-'
-                                    : `${amount} = $${formatCurrency(ammPosition.sides[selectedSide].quote, 3, true)}`}
+                                    : ammPosition.sides[selectedSide].available?.toFixed(2)}
                             </SliderInfoValue>
                         </SliderInfo>
-                    </AmountInfo>
-                )}
-                <Slider
-                    type="range"
-                    min={0}
-                    max={ammPosition.sides[selectedSide].available}
-                    value={amount || 0}
-                    step={1}
-                    onChange={(event) => {
-                        setAmount(event.currentTarget.valueAsNumber);
-                    }}
-                />
-                <SliderInfo>
-                    <SliderInfoTitle>Available to {selectedSide.toLowerCase()}:</SliderInfoTitle>
-                    <SliderInfoValue>
-                        {positionPriceDetailsQuery.isLoading
-                            ? '-'
-                            : ammPosition.sides[selectedSide].available?.toFixed(2)}
-                    </SliderInfoValue>
-                </SliderInfo>
-                <SliderInfo>
-                    <SliderInfoTitle>Skew:</SliderInfoTitle>
-                    <SliderInfoValue>
-                        {positionPriceDetailsQuery.isLoading
-                            ? '-'
-                            : formatPercentage(ammPosition.sides[selectedSide].priceImpact)}
-                    </SliderInfoValue>
-                </SliderInfo>
-            </SliderContainer>
-            <FlexDivCentered>AMOUNT TO {selectedSide.toUpperCase()}:</FlexDivCentered>
-            <FlexDivCentered>
-                <AmountToBuyContainer>
-                    <AmountToBuyInput type="number" onChange={(e) => setAmount(e.target.value)} value={amount} />
-                    <MaxButton onClick={onMaxClick}>Max</MaxButton>
-                </AmountToBuyContainer>
-            </FlexDivCentered>
-            <FlexDivCentered>
-                <SliderInfo>
-                    <SliderInfoTitle>Potential profit:</SliderInfoTitle>
-                    <SliderInfoValue>
-                        {!amount || positionPriceDetailsQuery.isLoading
-                            ? '-'
-                            : `$${formatCurrency(
-                                  Number(amount) - ammPosition.sides[selectedSide].quote
-                              )} (${formatPercentage(
-                                  1 / (ammPosition.sides[selectedSide].quote / Number(amount)) - 1
-                              )})`}
-                    </SliderInfoValue>
-                </SliderInfo>
-            </FlexDivCentered>
-            <FlexDivCentered>
-                <SubmitButton
-                    disabled={!amount || isBuying || isAllowing}
-                    onClick={async () => {
-                        if (!!amount) {
-                            if (hasAllowance) {
-                                await handleSubmit();
-                            } else {
-                                setOpenApprovalModal(true);
-                            }
-                        }
-                    }}
-                >
-                    {hasAllowance ? selectedSide : 'APPROVE'}
-                </SubmitButton>
-            </FlexDivCentered>
-            <StatusSourceContainer>
-                <StatusSourceInfo />
-                <StatusSourceInfo />
-            </StatusSourceContainer>
-            {openApprovalModal && (
-                <ApprovalModal
-                    defaultAmount={amount}
-                    tokenSymbol={PAYMENT_CURRENCY}
-                    isAllowing={isAllowing}
-                    onSubmit={handleAllowance}
-                    onClose={() => setOpenApprovalModal(false)}
-                />
+                        <SliderInfo>
+                            <SliderInfoTitle>Skew:</SliderInfoTitle>
+                            <SliderInfoValue>
+                                {positionPriceDetailsQuery.isLoading
+                                    ? '-'
+                                    : formatPercentage(ammPosition.sides[selectedSide].priceImpact)}
+                            </SliderInfoValue>
+                        </SliderInfo>
+                    </SliderContainer>
+                    <FlexDivCentered>AMOUNT TO {selectedSide.toUpperCase()}:</FlexDivCentered>
+                    <FlexDivCentered>
+                        <AmountToBuyContainer>
+                            <AmountToBuyInput
+                                type="number"
+                                onChange={(e) => setAmount(e.target.value)}
+                                value={amount}
+                            />
+                            <MaxButton onClick={onMaxClick}>Max</MaxButton>
+                        </AmountToBuyContainer>
+                    </FlexDivCentered>
+                    <FlexDivCentered>
+                        <SliderInfo>
+                            <SliderInfoTitle>Potential profit:</SliderInfoTitle>
+                            <SliderInfoValue>
+                                {!amount || positionPriceDetailsQuery.isLoading
+                                    ? '-'
+                                    : `$${formatCurrency(
+                                          Number(amount) - ammPosition.sides[selectedSide].quote
+                                      )} (${formatPercentage(
+                                          1 / (ammPosition.sides[selectedSide].quote / Number(amount)) - 1
+                                      )})`}
+                            </SliderInfoValue>
+                        </SliderInfo>
+                    </FlexDivCentered>
+                    <FlexDivCentered>
+                        <SubmitButton
+                            disabled={!amount || isBuying || isAllowing}
+                            onClick={async () => {
+                                if (!!amount) {
+                                    if (hasAllowance) {
+                                        await handleSubmit();
+                                    } else {
+                                        setOpenApprovalModal(true);
+                                    }
+                                }
+                            }}
+                        >
+                            {hasAllowance ? selectedSide : 'APPROVE'}
+                        </SubmitButton>
+                    </FlexDivCentered>
+                    <StatusSourceContainer>
+                        <StatusSourceInfo />
+                        <StatusSourceInfo />
+                    </StatusSourceContainer>
+                    {openApprovalModal && (
+                        <ApprovalModal
+                            defaultAmount={amount}
+                            tokenSymbol={PAYMENT_CURRENCY}
+                            isAllowing={isAllowing}
+                            onSubmit={handleAllowance}
+                            onClose={() => setOpenApprovalModal(false)}
+                        />
+                    )}
+                </>
             )}
+            {claimable && <ClaimButton onClick={claimReward.bind(this)}>Claim</ClaimButton>}
         </MarketContainer>
     );
 };
