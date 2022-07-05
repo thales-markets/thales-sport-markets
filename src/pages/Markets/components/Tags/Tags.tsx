@@ -15,10 +15,10 @@ const Tags: React.FC<TagsProps> = ({ sport, tags, isFinished }) => {
             {tags.map((tag: number) => {
                 const findTagItem = TAGS_LIST.find((t) => t.id == tag);
                 return findTagItem ? (
-                    <>
+                    <FlexDivCentered key={findTagItem.id}>
                         <SportIcon className={`icon icon--${sport.toLowerCase()}`} />{' '}
-                        <Tag key={findTagItem.id}>{sport + ' / ' + findTagItem.label}</Tag>
-                    </>
+                        <Tag>{sport + ' / ' + findTagItem.label}</Tag>
+                    </FlexDivCentered>
                 ) : null;
             })}
         </Container>

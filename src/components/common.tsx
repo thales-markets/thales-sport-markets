@@ -152,6 +152,7 @@ export const MatchInfoLabel = styled.label<{
     isMaturedMarket?: boolean;
     isClaimAvailable?: boolean;
     isCanceledMarket?: boolean;
+    pendingResolution?: boolean;
 }>`
     font-style: normal;
     font-weight: 400;
@@ -159,7 +160,7 @@ export const MatchInfoLabel = styled.label<{
     line-height: 20px;
     text-align: center;
     overflow: hidden;
-    width: 98px;
+    width: ${(props) => (props.pendingResolution ? '100%' : '98px')}
     white-space: nowrap;
     color: ${(props) =>
         props.isMaturedMarket || props.isCanceledMarket
@@ -168,9 +169,12 @@ export const MatchInfoLabel = styled.label<{
             ? props.theme.textColor.quaternary
             : props.theme.textColor.primary};
     cursor: pointer;
+    position: ${(props) => (props.pendingResolution ? 'fixed' : '')}
 `;
 
-export const MatchVSLabel = styled.label`
+export const MatchVSLabel = styled.label<{
+    pendingResolution?: boolean;
+}>`
     font-style: normal;
     font-weight: 200;
     font-size: 23px;
@@ -180,6 +184,7 @@ export const MatchVSLabel = styled.label`
     height: 126px;
     color: ${(props) => props.theme.textColor.primary};
     cursor: pointer;
+    margin-top: ${(props) => (props.pendingResolution ? '22px' : '')};
 `;
 
 export const MatchParticipantImageContainer = styled(FlexDiv)<{
