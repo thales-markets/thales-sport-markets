@@ -30,6 +30,7 @@ import {
     MatchInfoColumn,
     Status,
     ClaimButton,
+    ClaimableAmount,
 } from './styled-components/MarketDetails';
 import { FlexDivCentered } from '../../../../styles/common';
 import { MAX_L2_GAS_LIMIT, Position, Side } from '../../../../constants/options';
@@ -40,9 +41,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from '../../../../redux/modules/wallet';
 import ApprovalModal from '../../../../components/ApprovalModal/ApprovalModal';
-import { PAYMENT_CURRENCY } from '../../../../constants/currency';
+import { PAYMENT_CURRENCY, USD_SIGN } from '../../../../constants/currency';
 import { MAX_GAS_LIMIT } from '../../../../constants/network';
-import { formatCurrency, formatPercentage } from '../../../../utils/formatters/number';
+import { formatCurrency, formatCurrencyWithSign, formatPercentage } from '../../../../utils/formatters/number';
 import usePositionPriceDetailsQuery from '../../../../queries/markets/usePositionPriceDetailsQuery';
 import usePaymentTokenBalanceQuery from '../../../../queries/wallet/usePaymentTokenBalanceQuery';
 import useMarketBalancesQuery from '../../../../queries/markets/useMarketBalancesQuery';
@@ -71,6 +72,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     const [selectedPosition, setSelectedPosition] = useState<Position>(Position.HOME);
     const [selectedSide, setSelectedSide] = useState<Side>(Side.BUY);
     const [claimable, setClaimable] = useState<boolean>(false);
+    const [claimableAmount, setClaimableAmount] = useState<number>(0);
     const [availablePerSide, setavailablePerSide] = useState<AvailablePerSide>({
         positions: {
             [Position.HOME]: {
@@ -147,8 +149,13 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     balances?.[Position[market.finalResult - 1].toLowerCase()] > 0
                 ) {
                     setClaimable(true);
+                    //@ts-ignore
+                    setClaimableAmount(balances?.[Position[market.finalResult - 1].toLowerCase()] > 0);
                 } else if (market.finalResult === 0) {
-                    if (balances.home > 0 || balances.draw > 0 || balances.away > 0) setClaimable(true);
+                    if (balances.home > 0 || balances.draw > 0 || balances.away > 0) {
+                        setClaimable(true);
+                        setClaimableAmount(balances.home + balances.draw + balances.away);
+                    }
                 }
             }
         }
@@ -536,6 +543,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                         />
                     )}
                 </>
+            )}
+            {claimable && (
+                <ClaimableAmount>
+                    Amount Claimable: <span>{formatCurrencyWithSign(USD_SIGN, claimableAmount)}</span>
+                </ClaimableAmount>
             )}
             {claimable && <ClaimButton onClick={claimReward.bind(this)}>Claim</ClaimButton>}
         </MarketContainer>

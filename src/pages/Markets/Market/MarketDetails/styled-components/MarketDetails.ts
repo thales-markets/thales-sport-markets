@@ -234,6 +234,23 @@ export const ClaimButton = styled.button`
     line-height: 27px;
     letter-spacing: 0.025em;
     text-transform: capitalize;
-    margin-top: 20px;
+    margin-top: 10px;
     color: #303656;
+`;
+
+export const ClaimableAmount = styled.p`
+    font-style: normal;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 130%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    margin: auto;
+    margin-top: 20px;
+    span {
+        margin-left: 4px;
+        font-weight: 700 !important;
+    }
 `;
