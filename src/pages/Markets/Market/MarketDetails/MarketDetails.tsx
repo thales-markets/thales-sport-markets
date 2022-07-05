@@ -31,6 +31,7 @@ import {
     Status,
     ClaimButton,
     ClaimableAmount,
+    MarketHeader,
 } from './styled-components/MarketDetails';
 import { FlexDivCentered } from '../../../../styles/common';
 import { MAX_L2_GAS_LIMIT, Position, Side } from '../../../../constants/options';
@@ -328,27 +329,29 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
 
     return (
         <MarketContainer>
-            {selectedSide == Side.BUY && !market.resolved && (
-                <CollateralSelector
-                    collateralArray={COLLATERALS}
-                    selectedItem={selectedStableIndex}
-                    onChangeCollateral={(index) => setStableIndex(index)}
-                />
-            )}
-
-            {!market.resolved && (
-                <Toggle
-                    margin="0 0 30px 0"
-                    label={{ firstLabel: Side.BUY, secondLabel: Side.SELL, fontSize: '18px' }}
-                    active={selectedSide === Side.SELL}
-                    dotSize="18px"
-                    dotBackground="#303656"
-                    dotBorder="3px solid #3FD1FF"
-                    handleClick={() => {
-                        setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
-                    }}
-                />
-            )}
+            <MarketHeader>
+                {!market.resolved && (
+                    <FlexDivCentered>
+                        <Toggle
+                            label={{ firstLabel: Side.BUY, secondLabel: Side.SELL, fontSize: '18px' }}
+                            active={selectedSide === Side.SELL}
+                            dotSize="18px"
+                            dotBackground="#303656"
+                            dotBorder="3px solid #3FD1FF"
+                            handleClick={() => {
+                                setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
+                            }}
+                        />
+                    </FlexDivCentered>
+                )}
+                {selectedSide == Side.BUY && !market.resolved && (
+                    <CollateralSelector
+                        collateralArray={COLLATERALS}
+                        selectedItem={selectedStableIndex}
+                        onChangeCollateral={(index) => setStableIndex(index)}
+                    />
+                )}
+            </MarketHeader>
 
             {market.gameStarted && (
                 <Status resolved={market.resolved} claimable={claimable}>

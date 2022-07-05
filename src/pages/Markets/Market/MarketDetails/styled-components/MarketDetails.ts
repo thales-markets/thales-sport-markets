@@ -254,3 +254,7 @@ export const ClaimableAmount = styled.p`
         font-weight: 700 !important;
     }
 `;
+
+export const MarketHeader = styled(FlexDivRow)`
+    height: 100px;
+`;
