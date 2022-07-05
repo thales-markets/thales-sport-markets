@@ -46,6 +46,7 @@ import usePaymentTokenBalanceQuery from '../../../../queries/wallet/usePaymentTo
 import useMarketBalancesQuery from '../../../../queries/markets/useMarketBalancesQuery';
 import CollateralSelector from './CollateralSelector';
 import { COLLATERALS } from 'constants/markets';
+import { getAMMSportsTransaction, getSportsAMMQuoteMethod } from 'utils/amm';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -114,15 +115,22 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     }, [marketBalancesQuery.isSuccess, marketBalancesQuery.data]);
 
     useEffect(() => {
-        const { sportsAMMContract, sUSDContract, signer } = networkConnector;
-        if (sportsAMMContract && sUSDContract && signer) {
-            const sUSDTokenContractWithSigner = sUSDContract.connect(signer);
+        const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
+        if (sportsAMMContract && signer) {
+            let collateralContractWithSigner: ethers.Contract | undefined;
+
+            if (selectedStableIndex !== 0 && multipleCollateral) {
+                collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
+            } else {
+                collateralContractWithSigner = sUSDContract?.connect(signer);
+            }
+
             const getAllowance = async () => {
                 try {
                     const parsedTicketPrice = ethers.utils.parseEther(Number(amount).toString());
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
-                        sUSDTokenContractWithSigner,
+                        collateralContractWithSigner,
                         walletAddress,
                         sportsAMMContract.address
                     );
@@ -135,16 +143,28 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 getAllowance();
             }
         }
-    }, [walletAddress, isWalletConnected, hasAllowance, isAllowing, amount]);
+    }, [walletAddress, isWalletConnected, hasAllowance, isAllowing, amount, selectedStableIndex]);
 
     const fetchAmmQuote = async (amountForQuote: number) => {
         const { sportsAMMContract, signer } = networkConnector;
         if (sportsAMMContract && signer) {
             const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
             const parsedAmount = ethers.utils.parseEther(amountForQuote.toString());
-            return await (selectedSide === Side.BUY
-                ? sportsAMMContractWithSigner?.buyFromAmmQuote(market.address, selectedPosition, parsedAmount)
-                : sportsAMMContractWithSigner?.sellToAmmQuote(market.address, selectedPosition, parsedAmount));
+            const ammQuote = await getSportsAMMQuoteMethod(
+                selectedSide == Side.BUY,
+                selectedStableIndex,
+                networkId,
+                sportsAMMContractWithSigner,
+                market.address,
+                selectedPosition,
+                parsedAmount
+            );
+
+            if (selectedStableIndex !== 0) {
+                return ammQuote[0];
+            }
+
+            return ammQuote;
         }
     };
 
@@ -158,51 +178,50 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 const parsedAmount = ethers.utils.parseEther(amount.toString());
 
                 try {
-                    if (selectedSide === Side.BUY) {
-                        const tx = await sportsAMMContractWithSigner?.buyFromAMM(
-                            market.address,
-                            selectedPosition,
-                            parsedAmount,
-                            ammQuote,
-                            ethers.utils.parseEther('0.02'),
-                            { gasLimit: MAX_L2_GAS_LIMIT }
-                        );
-                        const txResult = await tx.wait();
-                        if (txResult && txResult.transactionHash) {
-                            setIsBuying(false);
-                            setAmount(0);
-                        }
-                    } else {
-                        const tx = await sportsAMMContractWithSigner?.sellToAMM(
-                            market.address,
-                            selectedPosition,
-                            parsedAmount,
-                            ammQuote,
-                            ethers.utils.parseEther('0.02')
-                        );
-                        const txResult = await tx.wait();
-                        if (txResult && txResult.transactionHash) {
-                            setIsBuying(false);
-                            setAmount(0);
-                        }
+                    const tx = await getAMMSportsTransaction(
+                        selectedSide === Side.BUY,
+                        selectedStableIndex,
+                        networkId,
+                        sportsAMMContractWithSigner,
+                        market.address,
+                        selectedPosition,
+                        parsedAmount,
+                        ammQuote,
+                        ethers.utils.parseEther('0.02'),
+                        { gasLimit: MAX_L2_GAS_LIMIT }
+                    );
+
+                    const txResult = await tx.wait();
+
+                    if (txResult && txResult.transactionHash) {
+                        setIsBuying(false);
+                        setAmount(0);
                     }
                 } catch (e) {
                     setIsBuying(false);
+                    console.log('Error ', e);
                 }
             }
         }
     };
 
     const handleAllowance = async (approveAmount: BigNumber) => {
-        const { sportsAMMContract, sUSDContract, signer } = networkConnector;
-        if (sportsAMMContract && sUSDContract && signer) {
+        const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
+        if (sportsAMMContract && signer) {
             setIsAllowing(true);
 
             try {
-                const sUSDTokenContractWithSigner = sUSDContract.connect(signer);
+                let collateralContractWithSigner: ethers.Contract | undefined;
+
+                if (selectedStableIndex !== 0 && multipleCollateral && multipleCollateral[selectedStableIndex]) {
+                    collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
+                } else {
+                    collateralContractWithSigner = sUSDContract?.connect(signer);
+                }
+
                 const addressToApprove = sportsAMMContract.address;
 
-                const tx = (await sUSDTokenContractWithSigner.approve(addressToApprove, approveAmount, {
+                const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
                     gasLimit: MAX_GAS_LIMIT,
                 })) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
@@ -247,11 +266,13 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
 
     return (
         <MarketContainer>
-            <CollateralSelector
-                collateralArray={COLLATERALS}
-                selectedItem={selectedStableIndex}
-                onChangeCollateral={(index) => setStableIndex(index)}
-            />
+            {selectedSide == Side.BUY && (
+                <CollateralSelector
+                    collateralArray={COLLATERALS}
+                    selectedItem={selectedStableIndex}
+                    onChangeCollateral={(index) => setStableIndex(index)}
+                />
+            )}
             <Toggle
                 margin="0 0 30px 0"
                 label={{ firstLabel: Side.BUY, secondLabel: Side.SELL, fontSize: '18px' }}

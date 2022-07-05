@@ -5,7 +5,7 @@ export const Container = styled.div`
     flex-direction: row;
     margin: 13px 0px;
     padding: 0px 8px;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: center;
 `;
 
@@ -43,4 +43,18 @@ export const CollateralIcon = styled.div<{ active?: boolean }>`
     margin-left: 10px;
     box-shadow: ${(_props) => (_props?.active ? 'var(--shadow)' : '')};
     cursor: pointer;
+`;
+
+export const CollateralContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+
+export const TokenBalance = styled.span`
+    font-weight: 600;
+    font-size: 13px;
+    color: #ffffff;
+    margin-left: 6px;
+    align-items: center;
 `;
