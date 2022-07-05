@@ -49,6 +49,12 @@ export const QUERY_KEYS = {
             walletAddress,
             networkId,
         ],
+        GetsUSDWalletBalance: (walletAddress: string, networkId: NetworkId) => [
+            'sUsd',
+            'balance',
+            walletAddress,
+            networkId,
+        ],
         TokenBalance: (token: string, walletAddress: string, networkId: NetworkId) => [
             'wallet',
             'tokenBalance',
