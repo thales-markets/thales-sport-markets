@@ -14,6 +14,7 @@ import sUSDContract from 'utils/contracts/sUSDContract';
 // import exoticUsdContract from 'utils/contracts/exoticUsdContract';
 import { NetworkIdByName } from './network';
 import theRundownConsumerContract from 'utils/contracts/theRundownConsumerContract';
+import multipleCollateral from './contracts/multipleCollateralContract';
 
 type NetworkConnector = {
     initialized: boolean;
@@ -21,6 +22,7 @@ type NetworkConnector = {
     signer: Signer | undefined;
     setNetworkSettings: (networkSettings: NetworkSettings) => void;
     paymentTokenContract?: ethers.Contract;
+    multipleCollateral?: Array<ethers.Contract | undefined>;
     marketManagerContract?: ethers.Contract;
     marketDataContract?: ethers.Contract;
     sportPositionalMarketDataContract?: ethers.Contract;
@@ -50,6 +52,13 @@ const networkConnector: NetworkConnector = {
         this.theRundownConsumerContract = initializeContract(theRundownConsumerContract, networkSettings);
         this.sportsAMMContract = initializeContract(sportsAMMContract, networkSettings);
         this.sUSDContract = initializeContract(sUSDContract, networkSettings);
+
+        this.multipleCollateral = [
+            initializeContract(multipleCollateral['sUSD'], networkSettings),
+            initializeContract(multipleCollateral['DAI'], networkSettings),
+            initializeContract(multipleCollateral['USDC'], networkSettings),
+            initializeContract(multipleCollateral['USDT'], networkSettings),
+        ];
         // this.thalesBondsContract = initializeContract(thalesBondsContract, networkSettings);
         // this.tagsContract = initializeContract(tagsContract, networkSettings);
         // this.exoticUsdContract = initializeContract(exoticUsdContract, networkSettings);

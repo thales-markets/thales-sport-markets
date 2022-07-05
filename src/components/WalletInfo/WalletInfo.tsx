@@ -182,7 +182,7 @@ const WalletOptionsHeader = styled(FlexDivCentered)`
     text-align: center;
     padding: 6px;
     border-bottom: 1px solid ${(props) => props.theme.button.borderColor.primary};
-    text-transform: ;
+    /* text-transform: ; */
 `;
 
 const WalletOptionsContent = styled(FlexDivColumn)``;
