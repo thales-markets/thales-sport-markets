@@ -150,7 +150,7 @@ export const MatchDate = styled.label`
 
 export const MatchInfoLabel = styled.label<{
     isMaturedMarket?: boolean;
-    isClaimAvailable?: boolean;
+    claimable?: boolean;
     isCanceledMarket?: boolean;
     pendingResolution?: boolean;
 }>`
@@ -165,7 +165,7 @@ export const MatchInfoLabel = styled.label<{
     color: ${(props) =>
         props.isMaturedMarket || props.isCanceledMarket
             ? props.theme.oddsColor.secondary
-            : props.isClaimAvailable
+            : props.claimable
             ? props.theme.textColor.quaternary
             : props.theme.textColor.primary};
     cursor: pointer;
@@ -301,4 +301,23 @@ export const ScoreLabel = styled.label`
     align-items: center;
     color: ${(props) => props.theme.textColor.primary};
     cursor: pointer;
+`;
+
+export const ProfitLabel = styled.label<{ claimable: boolean; profit: number }>`
+    display: flex;
+    visibility: ${(props) => (!props.claimable ? 'hidden' : '')};
+    font-style: normal;
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 20px;
+    text-transform: uppercase;
+    text-align: center;
+    color: ${(props) =>
+        props.profit === 0
+            ? props.theme.oddsColor.tertiary
+            : props.profit > 0
+            ? props.theme.oddsColor.primary
+            : props.theme.oddsColor.secondary};
+    cursor: pointer;
+    margin-top: 37px;
 `;

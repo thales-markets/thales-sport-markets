@@ -5,17 +5,19 @@ import { MarketTransaction, MarketTransactions } from 'types/markets';
 import { NetworkId } from 'types/network';
 import { Position } from 'constants/options';
 
-const useUserTransactionsQuery = (
+const useUserTransactionsPerMarketQuery = (
     walletAddress: string,
+    marketAddress: string,
     networkId: NetworkId,
     options?: UseQueryOptions<MarketTransactions | undefined>
 ) => {
     return useQuery<MarketTransactions | undefined>(
-        QUERY_KEYS.UserTransactions(walletAddress, networkId),
+        QUERY_KEYS.UserTransactionsPerMarket(walletAddress, marketAddress, networkId),
         async () => {
             try {
                 const marketTransactions = await thalesData.sportMarkets.marketTransactions({
                     account: walletAddress,
+                    market: marketAddress,
                     network: networkId,
                 });
                 return marketTransactions.map((tx: MarketTransaction) => ({ ...tx, position: Position[tx.position] }));
@@ -31,4 +33,4 @@ const useUserTransactionsQuery = (
     );
 };
 
-export default useUserTransactionsQuery;
+export default useUserTransactionsPerMarketQuery;

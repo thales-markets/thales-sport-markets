@@ -26,7 +26,7 @@ export default {
         quaternary: Colors.BLUE,
     },
     winnerColors: {
-        primary: Colors.BLUE,
+        primary: Colors.GREEN,
         secondary: Colors.YELLOW,
     },
     button: {
