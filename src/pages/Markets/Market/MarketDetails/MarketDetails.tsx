@@ -116,8 +116,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         if (marketBalancesQuery.isSuccess && marketBalancesQuery.data) {
             setBalances(marketBalancesQuery.data);
             if (market.resolved) {
-                //@ts-ignore
-                if (marketBalancesQuery.data?.[Position[market.finalResult - 1].toLowerCase()] > 0) {
+                if (
+                    market.finalResult !== 0 &&
+                    //@ts-ignore
+                    marketBalancesQuery.data?.[Position[market.finalResult - 1].toLowerCase()] > 0
+                ) {
                     setClaimable(true);
                 }
             }
