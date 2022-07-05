@@ -4,7 +4,6 @@ import { MarketData } from 'types/markets';
 import { ethers } from 'ethers';
 import networkConnector from 'utils/networkConnector';
 import marketContract from 'utils/contracts/sportsMarketContract';
-import rundownContract from 'utils/contracts/theRundownConsumerContract';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
 import { fixDuplicatedTeamName } from '../../utils/formatters/string';
 import { Position, Side } from '../../constants/options';
@@ -16,7 +15,7 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
             try {
                 const contract = new ethers.Contract(marketAddress, marketContract.abi, networkConnector.provider);
 
-                // const rundownConsumerContract = networkConnector.theRundownConsumerContract;
+                const rundownConsumerContract = networkConnector.theRundownConsumerContract;
                 const sportsAMMContract = networkConnector.sportsAMMContract;
                 // const { marketDataContract, marketManagerContract, thalesBondsContract } = networkConnector;
                 const [gameDetails, tags, times, resolved, finalResult] = await Promise.all([
@@ -39,12 +38,7 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                 let result;
 
                 if (resolved) {
-                    const rundownContractInit = new ethers.Contract(
-                        rundownContract.addresses[42],
-                        rundownContract.abi,
-                        networkConnector.provider
-                    );
-                    result = await rundownContractInit.getGameResolvedById(gameDetails.gameId);
+                    result = await rundownConsumerContract?.getGameResolvedById(gameDetails.gameId);
                 }
 
                 const market: MarketData = {
