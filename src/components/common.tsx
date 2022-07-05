@@ -160,7 +160,7 @@ export const MatchInfoLabel = styled.label<{
     line-height: 20px;
     text-align: center;
     overflow: hidden;
-    width: ${(props) => (props.pendingResolution ? '100%' : '98px')}
+    width: ${(props) => (props.pendingResolution ? 'fit-content' : '98px')};
     white-space: nowrap;
     color: ${(props) =>
         props.isMaturedMarket || props.isCanceledMarket
@@ -169,7 +169,7 @@ export const MatchInfoLabel = styled.label<{
             ? props.theme.textColor.quaternary
             : props.theme.textColor.primary};
     cursor: pointer;
-    position: ${(props) => (props.pendingResolution ? 'fixed' : '')}
+    position: ${(props) => (props.pendingResolution ? 'absolute' : '')};
 `;
 
 export const MatchVSLabel = styled.label<{
