@@ -115,6 +115,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     useEffect(() => {
         if (marketBalancesQuery.isSuccess && marketBalancesQuery.data) {
             setBalances(marketBalancesQuery.data);
+
             if (market.resolved) {
                 if (
                     market.finalResult !== 0 &&
@@ -125,11 +126,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 } else if (market.finalResult === 0) {
                     if (
                         //@ts-ignore
-                        marketBalancesQuery.data?.[Position.HOME] > 0 ||
+                        marketBalancesQuery.data?.[Position.HOME.toLowerCase()] > 0 ||
                         //@ts-ignore
-                        marketBalancesQuery.data?.[Position.AWAY] > 0 ||
+                        marketBalancesQuery.data?.[Position.AWAY.toLowerCase()] > 0 ||
                         //@ts-ignore
-                        marketBalancesQuery.data?.[Position.DRAW] > 0
+                        marketBalancesQuery.data?.[Position.DRAW.toLowerCase()] > 0
                     )
                         setClaimable(true);
                 }
