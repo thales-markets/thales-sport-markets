@@ -1,7 +1,7 @@
 import { MatchParticipantImage, MatchParticipantImageContainer, MatchVSLabel } from 'components/common';
 import React, { useEffect, useState } from 'react';
 import { BigNumber, ethers } from 'ethers';
-import { AMMPosition, Balances, MarketData } from 'types/markets';
+import { AMMPosition, AvailablePerSide, Balances, MarketData } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getTeamImageSource } from 'utils/images';
 import {
@@ -50,6 +50,7 @@ import CollateralSelector from './CollateralSelector';
 import { COLLATERALS } from 'constants/markets';
 import { getAMMSportsTransaction, getSportsAMMQuoteMethod } from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
+import useAvailablePerSideQuery from '../../../../queries/markets/useAvailablePerSideQuery';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -70,15 +71,26 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     const [selectedPosition, setSelectedPosition] = useState<Position>(Position.HOME);
     const [selectedSide, setSelectedSide] = useState<Side>(Side.BUY);
     const [claimable, setClaimable] = useState<boolean>(false);
+    const [availablePerSide, setavailablePerSide] = useState<AvailablePerSide>({
+        positions: {
+            [Position.HOME]: {
+                available: 0,
+            },
+            [Position.AWAY]: {
+                available: 0,
+            },
+            [Position.DRAW]: {
+                available: 0,
+            },
+        },
+    });
     const [ammPosition, setAmmPosition] = useState<AMMPosition>({
         sides: {
             [Side.BUY]: {
-                available: 0,
                 quote: 0,
                 priceImpact: 0,
             },
             [Side.SELL]: {
-                available: 0,
                 quote: 0,
                 priceImpact: 0,
             },
@@ -100,6 +112,8 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         Number(amount) || 1
     );
 
+    const availablePerSideQuery = useAvailablePerSideQuery(market.address, selectedSide);
+
     useEffect(() => {
         if (paymentTokenBalanceQuery.isSuccess && paymentTokenBalanceQuery.data !== undefined) {
             setPaymentTokenBalance(Number(paymentTokenBalanceQuery.data));
@@ -111,6 +125,12 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
             setAmmPosition(positionPriceDetailsQuery.data);
         }
     }, [positionPriceDetailsQuery.isSuccess, positionPriceDetailsQuery.data]);
+
+    useEffect(() => {
+        if (availablePerSideQuery.isSuccess && availablePerSideQuery.data) {
+            setavailablePerSide(availablePerSideQuery.data);
+        }
+    }, [availablePerSideQuery.isSuccess, availablePerSideQuery.data]);
 
     useEffect(() => {
         if (marketBalancesQuery.isSuccess && marketBalancesQuery.data) {
@@ -271,8 +291,8 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
 
                 if (price && paymentTokenBalance) {
                     let tmpSuggestedAmount = Number(paymentTokenBalance) / Number(price);
-                    if (tmpSuggestedAmount > ammPosition.sides[selectedSide].available) {
-                        setAmount(ammPosition.sides[selectedSide].available);
+                    if (tmpSuggestedAmount > availablePerSide.positions[selectedPosition].available) {
+                        setAmount(availablePerSide.positions[selectedPosition].available);
                         return;
                     }
 
@@ -363,6 +383,14 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                                 $ {market.positions[Position.HOME].sides[selectedSide].odd.toFixed(2)}
                             </InfoValue>
                         </InfoRow>
+                        <InfoRow>
+                            <InfoTitle>AVAILABLE:</InfoTitle>
+                            <InfoValue>
+                                {availablePerSideQuery.isLoading
+                                    ? '-'
+                                    : availablePerSide.positions[Position.HOME].available.toFixed(2)}
+                            </InfoValue>
+                        </InfoRow>
                     </Pick>
                     {!!market.positions[Position.DRAW].sides[selectedSide].odd && (
                         <Pick
@@ -377,6 +405,14 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                                     $ {market.positions[Position.DRAW].sides[selectedSide].odd.toFixed(2)}
                                 </InfoValue>
                             </InfoRow>
+                            <InfoRow>
+                                <InfoTitle>AVAILABLE:</InfoTitle>
+                                <InfoValue>
+                                    {availablePerSideQuery.isLoading
+                                        ? '-'
+                                        : availablePerSide.positions[Position.DRAW].available.toFixed(2)}
+                                </InfoValue>
+                            </InfoRow>
                         </Pick>
                     )}
                     <Pick
@@ -389,6 +425,14 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                             <InfoTitle>PRICE:</InfoTitle>
                             <InfoValue>
                                 $ {market.positions[Position.AWAY].sides[selectedSide].odd.toFixed(2)}
+                            </InfoValue>
+                        </InfoRow>
+                        <InfoRow>
+                            <InfoTitle>AVAILABLE:</InfoTitle>
+                            <InfoValue>
+                                {availablePerSideQuery.isLoading
+                                    ? '-'
+                                    : availablePerSide.positions[Position.AWAY].available.toFixed(2)}
                             </InfoValue>
                         </InfoRow>
                     </Pick>
@@ -417,7 +461,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                         <Slider
                             type="range"
                             min={0}
-                            max={ammPosition.sides[selectedSide].available}
+                            max={availablePerSide.positions[selectedPosition].available}
                             value={amount || 0}
                             step={1}
                             onChange={(event) => {
@@ -429,7 +473,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                             <SliderInfoValue>
                                 {positionPriceDetailsQuery.isLoading
                                     ? '-'
-                                    : ammPosition.sides[selectedSide].available?.toFixed(2)}
+                                    : availablePerSide.positions[selectedPosition].available?.toFixed(2)}
                             </SliderInfoValue>
                         </SliderInfo>
                         <SliderInfo>
