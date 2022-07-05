@@ -7,6 +7,7 @@ export const QUERY_KEYS = {
     SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
     Market: (marketAddress: string) => ['market', marketAddress],
     MarketBalances: (marketAddress: string, walletAddress: string) => ['marketBalances', marketAddress, walletAddress],
+    MarketCancellationOdds: (marketAddress: string) => ['marketCancellationOdds', marketAddress],
     PositionDetails: (marketAddress: string, position: Position, amount: number) => [
         'positionDetails',
         marketAddress,

@@ -199,3 +199,9 @@ export type Balances = {
     away: number;
     draw: number;
 };
+
+export type Odds = {
+    home: number;
+    away: number;
+    draw: number;
+};
