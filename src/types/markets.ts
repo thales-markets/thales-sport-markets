@@ -70,13 +70,16 @@ export type GameDetails = {
 };
 
 export type AMMSide = {
-    available: number;
     quote: number;
     priceImpact: number;
 };
 
 export type AMMPosition = {
     sides: Record<Side, AMMSide>;
+};
+
+export type AvailablePerSide = {
+    positions: Record<Position, { available: number }>;
 };
 
 export type MarketData = {
