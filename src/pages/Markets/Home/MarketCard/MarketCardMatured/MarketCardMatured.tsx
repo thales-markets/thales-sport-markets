@@ -20,7 +20,7 @@ type MarketCardMaturedProps = {
 
 const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
     // const { t } = useTranslation();
-    console.log(market);
+    const pendingResolution = market.awayOdds == 0 && market.homeOdds == 0 && market.awayOdds == 0;
     return (
         <MatchInfo>
             <MatchInfoColumn>
@@ -33,12 +33,12 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
                 <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
             </MatchInfoColumn>
             <MatchInfoColumn>
-                <MatchInfoLabel isMaturedMarket={true}>
-                    {market.awayOdds == 0 && market.homeOdds == 0 ? 'WAITING RESOLUTION' : 'STARTED'}
+                <MatchInfoLabel pendingResolution={pendingResolution} isMaturedMarket={true}>
+                    {pendingResolution ? 'PENDING RESOLUTION' : 'STARTED'}
                 </MatchInfoLabel>
-                <MatchVSLabel>VS</MatchVSLabel>
+                <MatchVSLabel pendingResolution={pendingResolution}>VS</MatchVSLabel>
                 <OddsLabel
-                    noOdds={market.awayOdds == 0 && market.homeOdds == 0 && market.drawOdds === 0}
+                    noOdds={pendingResolution}
                     isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}
                     isDraw={true}
                 >
