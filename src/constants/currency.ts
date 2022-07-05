@@ -30,3 +30,17 @@ export const currencyKeyToAssetIconMap = {
     [CRYPTO_CURRENCY_MAP.USDC]: USDCIcon,
     [CRYPTO_CURRENCY_MAP.USDT]: USDTIcon,
 };
+
+export enum COLLATERALS_INDEX {
+    'sUSD' = 0,
+    'DAI' = 1,
+    'USDC' = 2,
+    'USDT' = 3,
+}
+
+export const STABLE_DECIMALS = {
+    sUSD: 18,
+    DAI: 18,
+    USDC: 6,
+    USDT: 6,
+};
