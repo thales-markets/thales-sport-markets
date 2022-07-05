@@ -135,28 +135,24 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     useEffect(() => {
         if (marketBalancesQuery.isSuccess && marketBalancesQuery.data) {
             setBalances(marketBalancesQuery.data);
+        }
+    }, [marketBalancesQuery.isSuccess, marketBalancesQuery.data]);
 
+    useEffect(() => {
+        if (balances) {
             if (market.resolved) {
                 if (
                     market.finalResult !== 0 &&
                     //@ts-ignore
-                    marketBalancesQuery.data?.[Position[market.finalResult - 1].toLowerCase()] > 0
+                    balances?.[Position[market.finalResult - 1].toLowerCase()] > 0
                 ) {
                     setClaimable(true);
                 } else if (market.finalResult === 0) {
-                    if (
-                        //@ts-ignore
-                        marketBalancesQuery.data?.[Position.HOME.toLowerCase()] > 0 ||
-                        //@ts-ignore
-                        marketBalancesQuery.data?.[Position.AWAY.toLowerCase()] > 0 ||
-                        //@ts-ignore
-                        marketBalancesQuery.data?.[Position.DRAW.toLowerCase()] > 0
-                    )
-                        setClaimable(true);
+                    if (balances.home > 0 || balances.draw > 0 || balances.away > 0) setClaimable(true);
                 }
             }
         }
-    }, [marketBalancesQuery.isSuccess, marketBalancesQuery.data]);
+    }, [balances]);
 
     useEffect(() => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
