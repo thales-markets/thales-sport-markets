@@ -204,3 +204,36 @@ export const MaxButton = styled.button`
     border: none;
     cursor: pointer;
 `;
+
+export const Status = styled.p<{ resolved: boolean; claimable: boolean }>`
+    font-weight: 700;
+    font-size: 17.2944px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: ${(props) => (!props.claimable ? '#E26A78' : '#3fd1ff')};
+    &:after {
+        font-family: ExoticIcons !important;
+        content: '\\0044';
+        font-size: 16px;
+        line-height: 16px;
+        margin-left: 2px;
+        color: ${(props) => (!props.claimable ? '#E26A78' : '#3fd1ff')};
+    }
+`;
+
+export const ClaimButton = styled.button`
+    background: #3fd1ff;
+    border-radius: 5px;
+    padding: 4px;
+    border: none;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 27px;
+    letter-spacing: 0.025em;
+    text-transform: capitalize;
+    margin-top: 20px;
+    color: #303656;
+`;
