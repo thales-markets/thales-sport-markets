@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -8,10 +8,10 @@ import { useTranslation } from 'react-i18next';
 import { truncateAddress } from 'utils/formatters/string';
 import onboardConnector from 'utils/onboardConnector';
 import { getIsAppReady } from 'redux/modules/app';
-import usePaymentTokenBalanceQuery from 'queries/wallet/usePaymentTokenBalanceQuery';
 import { PAYMENT_CURRENCY } from 'constants/currency';
 import { formatCurrency } from 'utils/formatters/number';
 import OutsideClickHandler from 'react-outside-click-handler';
+import usesUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -19,18 +19,17 @@ const WalletInfo: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const [paymentTokenBalance, setPaymentTokenBalance] = useState<number | string>('');
     const [showWalletOptions, setShowWalletOptions] = useState<boolean>(false);
 
-    const paymentTokenBalanceQuery = usePaymentTokenBalanceQuery(walletAddress, networkId, {
+    const sUSDBalanceQuery = usesUSDWalletBalance(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
-
-    useEffect(() => {
-        if (paymentTokenBalanceQuery.isSuccess && paymentTokenBalanceQuery.data !== undefined) {
-            setPaymentTokenBalance(Number(paymentTokenBalanceQuery.data));
+    const sUSDBalance = useMemo(() => {
+        if (sUSDBalanceQuery.data) {
+            return formatCurrency(sUSDBalanceQuery?.data, 2);
         }
-    }, [paymentTokenBalanceQuery.isSuccess, paymentTokenBalanceQuery.data]);
+        return 0;
+    }, [sUSDBalanceQuery.isSuccess, sUSDBalanceQuery?.data]);
 
     return (
         <Container>
@@ -53,7 +52,7 @@ const WalletInfo: React.FC = () => {
                                 <Info>{t('common.wallet.wallet-options')}</Info>
                             </Wallet>
                             <Balance>
-                                <Info>{formatCurrency(paymentTokenBalance)}</Info>
+                                <Info>{sUSDBalance}</Info>
                                 <Currency>{PAYMENT_CURRENCY}</Currency>
                             </Balance>
                         </>
