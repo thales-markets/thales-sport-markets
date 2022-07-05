@@ -136,9 +136,22 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         if (marketBalancesQuery.isSuccess && marketBalancesQuery.data) {
             setBalances(marketBalancesQuery.data);
             if (market.resolved) {
-                //@ts-ignore
-                if (marketBalancesQuery.data?.[Position[market.finalResult - 1].toLowerCase()] > 0) {
+                if (
+                    market.finalResult !== 0 &&
+                    //@ts-ignore
+                    marketBalancesQuery.data?.[Position[market.finalResult - 1].toLowerCase()] > 0
+                ) {
                     setClaimable(true);
+                } else if (market.finalResult === 0) {
+                    if (
+                        //@ts-ignore
+                        marketBalancesQuery.data?.[Position.HOME] > 0 ||
+                        //@ts-ignore
+                        marketBalancesQuery.data?.[Position.AWAY] > 0 ||
+                        //@ts-ignore
+                        marketBalancesQuery.data?.[Position.DRAW] > 0
+                    )
+                        setClaimable(true);
                 }
             }
         }
@@ -355,7 +368,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 </MatchInfoColumn>
             </MatchInfo>
             <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
-            {!market.gameStarted && (
+            {!market.gameStarted && !market.resolved && (
                 <OddsContainer>
                     <Pick
                         selected={selectedPosition === Position.HOME}
@@ -424,7 +437,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     </Pick>
                 </OddsContainer>
             )}
-            {!market.gameStarted && (
+            {!market.gameStarted && !market.resolved && (
                 <>
                     {' '}
                     <SliderContainer>
