@@ -23,6 +23,7 @@ const BackToLink: React.FC<BackToLinkProps> = ({ link, text }) => {
 
 const Container = styled(FlexDivCentered)`
     margin-top: 30px;
+    cursor: pointer;
 `;
 
 const Link = styled(FlexDivCentered)`
