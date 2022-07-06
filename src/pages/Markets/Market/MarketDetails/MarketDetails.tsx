@@ -32,6 +32,8 @@ import {
     ClaimButton,
     ClaimableAmount,
     MarketHeader,
+    AmountToBuyLabel,
+    Separator,
 } from './styled-components/MarketDetails';
 import { FlexDivCentered } from '../../../../styles/common';
 import { MAX_L2_GAS_LIMIT, Position, Side } from '../../../../constants/options';
@@ -53,6 +55,7 @@ import { COLLATERALS } from 'constants/markets';
 import { getAMMSportsTransaction, getSportsAMMQuoteMethod } from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import useAvailablePerSideQuery from '../../../../queries/markets/useAvailablePerSideQuery';
+import { ODDS_COLOR } from '../../../../constants/ui';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -381,7 +384,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                         selected={selectedPosition === Position.HOME}
                         onClick={() => setSelectedPosition(Position.HOME)}
                     >
-                        <Option color="#50CE99">1</Option>
+                        <Option color={ODDS_COLOR.HOME}>1</Option>
                         <OptionTeamName>{market.homeTeam.toUpperCase()}</OptionTeamName>
                         <InfoRow>
                             <InfoTitle>PRICE:</InfoTitle>
@@ -403,7 +406,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                             selected={selectedPosition === Position.DRAW}
                             onClick={() => setSelectedPosition(Position.DRAW)}
                         >
-                            <Option color="#40A1D8">X</Option>
+                            <Option color={ODDS_COLOR.DRAW}>X</Option>
                             <OptionTeamName>DRAW</OptionTeamName>
                             <InfoRow>
                                 <InfoTitle>PRICE:</InfoTitle>
@@ -425,7 +428,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                         selected={selectedPosition === Position.AWAY}
                         onClick={() => setSelectedPosition(Position.AWAY)}
                     >
-                        <Option color="#E26A78">2</Option>
+                        <Option color={ODDS_COLOR.AWAY}>2</Option>
                         <OptionTeamName>{market.awayTeam.toUpperCase()}</OptionTeamName>
                         <InfoRow>
                             <InfoTitle>PRICE:</InfoTitle>
@@ -446,24 +449,29 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
             )}
             {!market.gameStarted && !market.resolved && (
                 <>
-                    {' '}
-                    <SliderContainer>
-                        {!!amount && (
+                    <AmountToBuyLabel>Amount to {selectedSide.toLowerCase()}:</AmountToBuyLabel>
+                    <FlexDivCentered>
+                        <AmountToBuyContainer>
+                            <AmountToBuyInput
+                                type="number"
+                                onChange={(e) => setAmount(e.target.value)}
+                                value={amount}
+                            />
+                            <MaxButton onClick={onMaxClick}>Max</MaxButton>
+                        </AmountToBuyContainer>
+                        <AmountToBuyContainer>
                             <AmountInfo>
-                                <SliderInfo>
-                                    <SliderInfoTitle>Amount to {selectedSide.toLowerCase()}:</SliderInfoTitle>
-                                    <SliderInfoValue>
-                                        {positionPriceDetailsQuery.isLoading
-                                            ? '-'
-                                            : `${amount} = $${formatCurrency(
-                                                  ammPosition.sides[selectedSide].quote,
-                                                  3,
-                                                  true
-                                              )}`}
-                                    </SliderInfoValue>
-                                </SliderInfo>
+                                <SliderInfoValue>
+                                    {`= $${
+                                        !amount || positionPriceDetailsQuery.isLoading
+                                            ? ''
+                                            : formatCurrency(ammPosition.sides[selectedSide].quote, 3, true)
+                                    }`}
+                                </SliderInfoValue>
                             </AmountInfo>
-                        )}
+                        </AmountToBuyContainer>
+                    </FlexDivCentered>
+                    <SliderContainer>
                         <Slider
                             type="range"
                             min={0}
@@ -474,48 +482,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                                 setAmount(event.currentTarget.valueAsNumber);
                             }}
                         />
-                        <SliderInfo>
-                            <SliderInfoTitle>Available to {selectedSide.toLowerCase()}:</SliderInfoTitle>
-                            <SliderInfoValue>
-                                {positionPriceDetailsQuery.isLoading
-                                    ? '-'
-                                    : availablePerSide.positions[selectedPosition].available?.toFixed(2)}
-                            </SliderInfoValue>
-                        </SliderInfo>
-                        <SliderInfo>
-                            <SliderInfoTitle>Skew:</SliderInfoTitle>
-                            <SliderInfoValue>
-                                {positionPriceDetailsQuery.isLoading
-                                    ? '-'
-                                    : formatPercentage(ammPosition.sides[selectedSide].priceImpact)}
-                            </SliderInfoValue>
-                        </SliderInfo>
                     </SliderContainer>
-                    <FlexDivCentered>AMOUNT TO {selectedSide.toUpperCase()}:</FlexDivCentered>
-                    <FlexDivCentered>
-                        <AmountToBuyContainer>
-                            <AmountToBuyInput
-                                type="number"
-                                onChange={(e) => setAmount(e.target.value)}
-                                value={amount}
-                            />
-                            <MaxButton onClick={onMaxClick}>Max</MaxButton>
-                        </AmountToBuyContainer>
-                    </FlexDivCentered>
-                    <FlexDivCentered>
-                        <SliderInfo>
-                            <SliderInfoTitle>Potential profit:</SliderInfoTitle>
-                            <SliderInfoValue>
-                                {!amount || positionPriceDetailsQuery.isLoading
-                                    ? '-'
-                                    : `$${formatCurrency(
-                                          Number(amount) - ammPosition.sides[selectedSide].quote
-                                      )} (${formatPercentage(
-                                          1 / (ammPosition.sides[selectedSide].quote / Number(amount)) - 1
-                                      )})`}
-                            </SliderInfoValue>
-                        </SliderInfo>
-                    </FlexDivCentered>
                     <FlexDivCentered>
                         <SubmitButton
                             disabled={!amount || isBuying || isAllowing}
@@ -531,6 +498,33 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                         >
                             {hasAllowance ? selectedSide : 'APPROVE'}
                         </SubmitButton>
+                    </FlexDivCentered>
+                    <FlexDivCentered>
+                        <SliderInfo>
+                            <SliderInfoTitle>Skew:</SliderInfoTitle>
+                            <SliderInfoValue>
+                                {positionPriceDetailsQuery.isLoading
+                                    ? '-'
+                                    : formatPercentage(ammPosition.sides[selectedSide].priceImpact)}
+                            </SliderInfoValue>
+                        </SliderInfo>
+                        {selectedSide === Side.BUY && (
+                            <>
+                                <Separator>|</Separator>
+                                <SliderInfo>
+                                    <SliderInfoTitle>Potential profit:</SliderInfoTitle>
+                                    <SliderInfoValue>
+                                        {!amount || positionPriceDetailsQuery.isLoading
+                                            ? '-'
+                                            : `$${formatCurrency(
+                                                  Number(amount) - ammPosition.sides[selectedSide].quote
+                                              )} (${formatPercentage(
+                                                  1 / (ammPosition.sides[selectedSide].quote / Number(amount)) - 1
+                                              )})`}
+                                    </SliderInfoValue>
+                                </SliderInfo>
+                            </>
+                        )}
                     </FlexDivCentered>
                     <StatusSourceContainer>
                         <StatusSourceInfo />

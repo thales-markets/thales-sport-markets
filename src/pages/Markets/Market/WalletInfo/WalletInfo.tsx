@@ -15,6 +15,8 @@ import { getIsWalletConnected, getWalletAddress } from '../../../../redux/module
 import useMarketQuery from '../../../../queries/markets/useMarketQuery';
 import { Balances, MarketData } from '../../../../types/markets';
 import { Position, Side } from '../../../../constants/options';
+import { ODDS_COLOR } from '../../../../constants/ui';
+import { ReactComponent as WalletIcon } from 'assets/images/wallet-icon.svg';
 
 type WalletInfoProps = {
     marketAddress: string;
@@ -47,11 +49,12 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ marketAddress }) => {
     return (
         <WalletInfoContainer hasBalances={!!balances?.home || !!balances?.away || !!balances?.draw}>
             <TokenInfo>
+                <WalletIcon />
                 <Title>IN WALLET:</Title>
                 <ValueContainer>
                     {!!balances?.home && (
                         <>
-                            <Token>1</Token>
+                            <Token color={ODDS_COLOR.HOME}>1</Token>
                             <Value>
                                 {market?.homeTeam.toUpperCase()}: {balances?.home}
                             </Value>
@@ -66,7 +69,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ marketAddress }) => {
                     )}
                     {!!balances?.away && (
                         <>
-                            <Token>2</Token>
+                            <Token color={ODDS_COLOR.AWAY}>2</Token>
                             <Value>
                                 {market?.awayTeam.toUpperCase()}: {balances?.away}
                             </Value>
@@ -81,7 +84,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ marketAddress }) => {
                     )}
                     {!!balances?.draw && (
                         <>
-                            <Token>X</Token>
+                            <Token color={ODDS_COLOR.DRAW}>X</Token>
                             <Value>DRAW: {balances?.draw}</Value>
                             <AlternateValue>
                                 (${' '}

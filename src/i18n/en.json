@@ -181,6 +181,8 @@
         "filter-label": {
             "global": {
                 "all": "All markets",
+                "openmarkets": "Open markets",
+                "resolvedmarkets": "Resolved markets",
                 "yourpositions": "Your positions",
                 "claim": "Claimable",
                 "history": "Your transactions",
@@ -221,7 +223,7 @@
                 "changePosition": "Change position",
                 "claim": "Claim",
                 "buy": "BUY",
-                "sell": "CLAIM"
+                "sell": "SELL"
             },
             "no-results": "No transactions associated with this market."
         }

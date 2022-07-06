@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from '../../../../../styles/common';
+import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from '../../../../../styles/common';
 
 export const MarketContainer = styled(FlexDivColumn)`
     margin-top: 20px;
@@ -109,7 +109,7 @@ export const SliderContainer = styled(FlexDivRow)`
     display: flex;
     position: relative;
     flex-direction: column;
-    margin: 80px 100px 0 100px;
+    margin: 20px 100px 0 100px;
 `;
 
 export const Slider = styled.input`
@@ -144,15 +144,16 @@ export const SliderInfo = styled(FlexDivRow)`
 
 export const SliderInfoTitle = styled.div`
     font-family: 'RobotoThin' !important;
-    font-size: 14px;
+    font-size: 18px;
     line-height: 23px;
-    margin-right: 5px;
+    margin-left: 5px;
 `;
 
 export const SliderInfoValue = styled.div`
     font-weight: 600;
-    font-size: 14px;
+    font-size: 18px;
     line-height: 23px;
+    padding-left: 5px;
 `;
 
 export const AmountToBuyContainer = styled.div`
@@ -162,6 +163,7 @@ export const AmountToBuyContainer = styled.div`
 export const AmountToBuyInput = styled.input`
     margin: 10px 0;
     border: 3px solid #3accfa;
+    width: 215px;
     border-radius: 5px;
     text-align: center;
     font-weight: bold;
@@ -174,7 +176,7 @@ export const SubmitButton = styled.button`
     margin: 20px 100px;
     font-size: 20px;
     line-height: 23px;
-    color: 303656;
+    color: #303656;
     width: 100%;
     border: none;
     padding: 7px;
@@ -186,12 +188,11 @@ export const SubmitButton = styled.button`
 `;
 
 export const AmountInfo = styled.div`
-    position: absolute;
     color: white;
-    padding: 10px;
-    top: -55px;
-    left: 50%;
-    transform: translateX(-50%);
+    margin-left: 10px;
+    border: 3px solid #3accfa;
+    border-radius: 5px;
+    width: 215px;
 `;
 
 export const MaxButton = styled.button`
@@ -257,4 +258,14 @@ export const ClaimableAmount = styled.p`
 
 export const MarketHeader = styled(FlexDivRow)`
     height: 100px;
+`;
+
+export const AmountToBuyLabel = styled(FlexDivCentered)`
+    margin-top: 40px;
+`;
+
+export const Separator = styled.span`
+    font-family: 'RobotoThin' !important;
+    font-size: 18px;
+    margin: 0 10px;
 `;
