@@ -233,6 +233,7 @@
             "finished": "Finished",
             "result": "Result",
             "started": "Started",
+            "canceled": "Canceled",
             "claim": "Claim"
         }
     }

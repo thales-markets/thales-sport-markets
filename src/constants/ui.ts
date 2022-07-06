@@ -22,4 +22,5 @@ export const STATUS_COLOR = {
     CLAIMABLE: '#3FD1FF',
     STARTED: '#E26A78',
     FINISHED: '#FFFFFF',
+    CANCELED: '#E26A78',
 };

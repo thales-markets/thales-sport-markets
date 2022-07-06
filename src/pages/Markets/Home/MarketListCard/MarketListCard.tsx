@@ -17,7 +17,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPosition 
     const claimAvailable = isClaimAvailable(market, accountPosition);
 
     return (
-        <Container backgroundColor={'rgba(48, 54, 86, 0.5)'} claimBorder={claimAvailable}>
+        <Container
+            backgroundColor={'rgba(48, 54, 86, 0.5)'}
+            claimBorder={claimAvailable}
+            isCanceled={market.isCanceled}
+        >
             <ClubVsClubContainer>
                 <ClubContainer>
                     <ClubLogo src={getTeamImageSource(market.homeTeam, market.tags[0])} />
@@ -41,6 +45,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPosition 
             <MatchStatus
                 isResolved={market.isResolved}
                 isLive={false}
+                isCanceled={market.isCanceled}
                 isClaimable={claimAvailable}
                 result={`${market.homeScore}:${market.awayScore}`}
                 startsAt={formatDateWithTime(market.maturityDate)}

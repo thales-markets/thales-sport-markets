@@ -6,17 +6,22 @@ import styled from 'styled-components';
 type MatchStatusProps = {
     isResolved: boolean;
     isLive?: boolean;
+    isCanceled?: boolean;
     isClaimable?: boolean;
     result?: string;
     startsAt?: string;
 };
 
-const MatchStatus: React.FC<MatchStatusProps> = ({ isResolved, isLive, isClaimable, result, startsAt }) => {
+const MatchStatus: React.FC<MatchStatusProps> = ({ isResolved, isLive, isCanceled, isClaimable, result, startsAt }) => {
     const { t } = useTranslation();
+
+    const canceledFlag = isCanceled && !isResolved;
+    const regularFlag = !isResolved && !isCanceled && !isLive && !isClaimable;
 
     return (
         <Container>
-            {!isResolved && <MatchStarts>{`${t('markets.market-card-list.starts')}: ${startsAt}`}</MatchStarts>}
+            {canceledFlag && <Status color={STATUS_COLOR.CANCELED}>{t('markets.market-card-list.canceled')}</Status>}
+            {regularFlag && <MatchStarts>{`${t('markets.market-card-list.starts')}: ${startsAt}`}</MatchStarts>}
             {isResolved && !isClaimable && (
                 <>
                     <ResultLabel>{t('markets.market-card-list.result')}</ResultLabel>

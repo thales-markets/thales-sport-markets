@@ -1,6 +1,7 @@
+import { STATUS_COLOR } from 'constants/ui';
 import styled from 'styled-components';
 
-export const Container = styled.div<{ backgroundColor?: string; claimBorder?: boolean }>`
+export const Container = styled.div<{ backgroundColor?: string; claimBorder?: boolean; isCanceled?: boolean }>`
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -10,6 +11,7 @@ export const Container = styled.div<{ backgroundColor?: string; claimBorder?: bo
     cursor: pointer;
     background-color: ${(_props) => (_props?.backgroundColor ? _props.backgroundColor : '')};
     border: ${(_props) => (_props?.claimBorder ? '3px solid #3FD1FF' : '')};
+    ${(_props) => (_props.isCanceled ? `border: 3px solid ${STATUS_COLOR.CANCELED};` : '')}
 `;
 
 export const ClubNameLabel = styled.span`
