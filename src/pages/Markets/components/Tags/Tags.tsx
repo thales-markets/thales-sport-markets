@@ -52,6 +52,7 @@ const Tag = styled(FlexDivCentered)`
     text-transform: uppercase;
     padding: 4px 4px;
     color: ${(props) => props.theme.textColor.secondary};
+    white-space: nowrap;
 `;
 
 const SportIcon = styled.i`

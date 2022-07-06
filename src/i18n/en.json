@@ -181,6 +181,8 @@
         "filter-label": {
             "global": {
                 "all": "All markets",
+                "openmarkets": "Open markets",
+                "resolvedmarkets": "Resolved markets",
                 "yourpositions": "Your positions",
                 "claim": "Claimable",
                 "history": "Your transactions",
