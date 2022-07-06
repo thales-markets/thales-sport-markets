@@ -37,7 +37,6 @@ const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
 
     return (
         <Container>
-            <Title>{t('market.table.title')}</Title>
             <TableContainer>
                 <TransactionsTable
                     transactions={marketTransactions}
@@ -51,7 +50,6 @@ const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
 
 const Container = styled(FlexDivColumn)`
     margin-top: 10px;
-    border: 2px solid ${(props) => props.theme.borderColor.primary};
     border-radius: 15px;
     font-style: normal;
     font-weight: normal;
@@ -67,16 +65,6 @@ const Container = styled(FlexDivColumn)`
     }
     max-height: 357px;
     min-height: 357px;
-`;
-
-const Title = styled.span`
-    font-style: normal;
-    font-weight: bold;
-    font-size: 25px;
-    line-height: 100%;
-    text-align: center;
-    color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 20px;
 `;
 
 const TableContainer = styled(FlexDivColumn)`
