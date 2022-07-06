@@ -25,7 +25,6 @@ import GlobalFilter from '../components/GlobalFilter';
 import MarketsGrid from './MarketsGrid';
 // import { navigateTo } from 'utils/routes';
 // import ROUTES from 'constants/routes';
-import Toggle from 'components/fields/Toggle';
 import RangedDatepicker from 'components/RangedDatepicker';
 import Search from 'components/Search';
 import { DEFAULT_SORT_BY, GlobalFilterEnum, SortDirection, SportFilterEnum } from 'constants/markets';
@@ -60,7 +59,6 @@ const Home: React.FC = () => {
         SortDirection.ASC
     );
     const [sortBy, setSortBy] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_BY, DEFAULT_SORT_BY);
-    const [showOpenMarkets, setShowOpenMarkets] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SHOW_OPEN_MARKETS, true);
     const [showGridView, setGridView] = useLocalStorage(LOCAL_STORAGE_KEYS.GRID_VIEW, true);
     const [lastValidMarkets, setLastValidMarkets] = useState<SportMarkets>([]);
     const [accountPositions, setAccountPositions] = useState<AccountPositionsMap>({});
@@ -196,31 +194,48 @@ const Home: React.FC = () => {
     }, [tagsFilteredMarkets, accountPositions]);
 
     const totalCount = useMemo(() => {
-        return tagsFilteredMarkets.filter(
-            (market: SportMarketInfo) => market.isResolved !== showOpenMarkets && !market.isCanceled
-        ).length;
-    }, [markets, tagsFilteredMarkets, tagFilter, marketSearch, showOpenMarkets]);
+        return tagsFilteredMarkets.length;
+    }, [markets, tagsFilteredMarkets, tagFilter, marketSearch]);
+
+    const openedMarketsCount = useMemo(() => {
+        return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
+            return market.isOpen && !market.isCanceled;
+        }).length;
+    }, [markets, tagsFilteredMarkets, tagFilter, marketSearch]);
+
+    const resolvedMarketsCount = useMemo(() => {
+        return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
+            return market.isResolved && !market.isCanceled;
+        }).length;
+    }, [markets, tagsFilteredMarkets, tagFilter, marketSearch]);
 
     const canceledCount = useMemo(() => {
         return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
             return market.isCanceled;
         }).length;
-    }, [markets, tagsFilteredMarkets, tagFilter, marketSearch, showOpenMarkets]);
+    }, [markets, tagsFilteredMarkets, tagFilter, marketSearch]);
 
     const accountPositionsCount = useMemo(() => {
         return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
             const accountPosition: AccountPosition = accountPositions[market.address];
             return !!accountPosition && accountPosition.position > 0;
         }).length;
-    }, [tagsFilteredMarkets, accountPositions, showOpenMarkets]);
+    }, [tagsFilteredMarkets, accountPositions]);
 
     const globalFilteredMarkets = useMemo(() => {
         let filteredMarkets = tagsFilteredMarkets;
 
         switch (globalFilter) {
             case GlobalFilterEnum.All:
+                break;
+            case GlobalFilterEnum.OpenMarkets:
                 filteredMarkets = filteredMarkets.filter(
-                    (market: SportMarketInfo) => market.isResolved !== showOpenMarkets && !market.isCanceled
+                    (market: SportMarketInfo) => market.isOpen && !market.isCanceled
+                );
+                break;
+            case GlobalFilterEnum.ResolvedMarkets:
+                filteredMarkets = filteredMarkets.filter(
+                    (market: SportMarketInfo) => market.isResolved && !market.isCanceled
                 );
                 break;
             case GlobalFilterEnum.YourPositions:
@@ -252,7 +267,7 @@ const Home: React.FC = () => {
                     return 0;
             }
         });
-    }, [tagsFilteredMarkets, sortBy, sortDirection, globalFilter, accountPositions, showOpenMarkets]);
+    }, [tagsFilteredMarkets, sortBy, sortDirection, globalFilter, accountPositions]);
 
     const setSort = (sortOption: SortOptionType) => {
         if (sortBy === sortOption.id) {
@@ -310,6 +325,10 @@ const Home: React.FC = () => {
         switch (filter) {
             case GlobalFilterEnum.All:
                 return totalCount;
+            case GlobalFilterEnum.OpenMarkets:
+                return openedMarketsCount;
+            case GlobalFilterEnum.ResolvedMarkets:
+                return resolvedMarketsCount;
             case GlobalFilterEnum.Canceled:
                 return canceledCount;
             case GlobalFilterEnum.YourPositions:
@@ -328,7 +347,6 @@ const Home: React.FC = () => {
         setStartDate(null);
         setEndDate(null);
         setTagFilter(allTagsFilterItem);
-        setShowOpenMarkets(true);
         dispatch(setMarketSearch(''));
     };
 
@@ -345,22 +363,14 @@ const Home: React.FC = () => {
                     setDateFilter={setDateFilter}
                 />
             </FiltersContainer>
-            <ToggleContainer>
-                <Toggle
-                    isLeftOptionSelected={showOpenMarkets}
-                    onClick={() => {
-                        setShowOpenMarkets(!showOpenMarkets);
-                    }}
-                    leftText={t('market.open-markets-label')}
-                    rightText={t('market.resolved-markets-label')}
-                />
+            <SwitchContainer>
                 <ViewSwitch selected={showGridView} onClick={() => setGridView(true)}>
                     {t('market.grid-view')}
                 </ViewSwitch>
                 <ViewSwitch selected={!showGridView} onClick={() => setGridView(false)}>
                     {t('market.list-view')}
                 </ViewSwitch>
-            </ToggleContainer>
+            </SwitchContainer>
             <RowContainer>
                 <SidebarContainer>
                     <Search text={marketSearch} handleChange={(value) => dispatch(setMarketSearch(value))} />
@@ -429,9 +439,6 @@ const Home: React.FC = () => {
                                     disabled={false}
                                     selected={globalFilter === filterItem}
                                     onClick={() => {
-                                        if (filterItem === GlobalFilterEnum.Claim) {
-                                            setShowOpenMarkets(false);
-                                        }
                                         setGlobalFilter(filterItem);
                                     }}
                                     key={filterItem}
@@ -508,13 +515,13 @@ const SidebarContainer = styled(FlexDivColumn)`
     flex-grow: 1;
 `;
 
-const ToggleContainer = styled(FlexDivRow)`
-    width: 50%;
+const SwitchContainer = styled(FlexDivRow)`
+    width: 25%;
     position: relative;
     top: 20px;
     align-self: end;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     margin-bottom: 10px;
 `;
 
