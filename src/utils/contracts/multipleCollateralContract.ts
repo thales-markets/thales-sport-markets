@@ -601,7 +601,7 @@ export const multipleCollateral = {
     sUSD: {
         addresses: {
             10: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9', // sUSD
-            42: '',
+            42: '0x5d7e13023a6f2245D7Af1eaE97dFF2EF1057F5b9',
             69: '',
         },
         abi,

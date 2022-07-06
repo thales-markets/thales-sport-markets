@@ -1,5 +1,5 @@
 import { MatchParticipantImage, MatchParticipantImageContainer, MatchVSLabel } from 'components/common';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { BigNumber, ethers } from 'ethers';
 import { AMMPosition, AvailablePerSide, Balances, MarketData } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
@@ -46,9 +46,13 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from '../../../.
 import ApprovalModal from '../../../../components/ApprovalModal/ApprovalModal';
 import { PAYMENT_CURRENCY, USD_SIGN } from '../../../../constants/currency';
 import { MAX_GAS_LIMIT } from '../../../../constants/network';
-import { formatCurrency, formatCurrencyWithSign, formatPercentage } from '../../../../utils/formatters/number';
+import {
+    floorNumberToDecimals,
+    formatCurrency,
+    formatCurrencyWithSign,
+    formatPercentage,
+} from '../../../../utils/formatters/number';
 import usePositionPriceDetailsQuery from '../../../../queries/markets/usePositionPriceDetailsQuery';
-import usePaymentTokenBalanceQuery from '../../../../queries/wallet/usePaymentTokenBalanceQuery';
 import useMarketBalancesQuery from '../../../../queries/markets/useMarketBalancesQuery';
 import CollateralSelector from './CollateralSelector';
 import { COLLATERALS } from 'constants/markets';
@@ -56,17 +60,19 @@ import { getAMMSportsTransaction, getSportsAMMQuoteMethod } from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import useAvailablePerSideQuery from '../../../../queries/markets/useAvailablePerSideQuery';
 import { ODDS_COLOR } from '../../../../constants/ui';
+import useMultipleCollateralBalanceQuery from '../../../../queries/wallet/useMultipleCollateralBalanceQuery';
+import { getIsAppReady } from '../../../../redux/modules/app';
 
 type MarketDetailsProps = {
     market: MarketData;
 };
 
 const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const [paymentTokenBalance, setPaymentTokenBalance] = useState<number | string>('');
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [hasAllowance, setAllowance] = useState<boolean>(false);
     const [isAllowing, setIsAllowing] = useState<boolean>(false);
@@ -108,23 +114,24 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         enabled: !!market.address && isWalletConnected,
     });
 
-    const paymentTokenBalanceQuery = usePaymentTokenBalanceQuery(walletAddress, networkId, {
-        enabled: isWalletConnected,
-    });
-
     const positionPriceDetailsQuery = usePositionPriceDetailsQuery(
         market.address,
         selectedPosition,
         Number(amount) || 1
     );
 
-    const availablePerSideQuery = useAvailablePerSideQuery(market.address, selectedSide);
+    const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+    });
 
-    useEffect(() => {
-        if (paymentTokenBalanceQuery.isSuccess && paymentTokenBalanceQuery.data !== undefined) {
-            setPaymentTokenBalance(Number(paymentTokenBalanceQuery.data));
+    const paymentTokenBalance = useMemo(() => {
+        if (multipleStableBalances.data && multipleStableBalances.isSuccess) {
+            return Number(multipleStableBalances.data[COLLATERALS[selectedStableIndex]].toFixed(2));
         }
-    }, [paymentTokenBalanceQuery.isSuccess, paymentTokenBalanceQuery.data]);
+        return 0;
+    }, [multipleStableBalances.data, selectedStableIndex]);
+
+    const availablePerSideQuery = useAvailablePerSideQuery(market.address, selectedSide);
 
     useEffect(() => {
         if (positionPriceDetailsQuery.isSuccess && positionPriceDetailsQuery.data) {
@@ -288,8 +295,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         }
     };
 
-    console.log(market, balances, claimable);
-
     const onMaxClick = async () => {
         if (selectedSide === Side.BUY) {
             const { sportsAMMContract, signer } = networkConnector;
@@ -299,7 +304,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 if (price && paymentTokenBalance) {
                     let tmpSuggestedAmount = Number(paymentTokenBalance) / Number(price);
                     if (tmpSuggestedAmount > availablePerSide.positions[selectedPosition].available) {
-                        setAmount(availablePerSide.positions[selectedPosition].available);
+                        setAmount(floorNumberToDecimals(availablePerSide.positions[selectedPosition].available));
                         return;
                     }
 
@@ -308,7 +313,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     const ammPrice = Number(ethers.utils.formatEther(ammQuote)) / Number(tmpSuggestedAmount);
                     // 2 === slippage
                     tmpSuggestedAmount = (Number(paymentTokenBalance) / Number(ammPrice)) * ((100 - 2) / 100);
-                    setAmount(Number(tmpSuggestedAmount.toFixed(2)));
+                    setAmount(floorNumberToDecimals(tmpSuggestedAmount));
                 }
             }
         } else {
@@ -329,6 +334,10 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
             }
         }
     };
+
+    const submitDisabled = useMemo(() => {
+        return !amount || isBuying || isAllowing || (selectedSide === Side.BUY && !paymentTokenBalance);
+    }, [amount, isBuying, isAllowing]);
 
     return (
         <MarketContainer>
@@ -382,7 +391,10 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 <OddsContainer>
                     <Pick
                         selected={selectedPosition === Position.HOME}
-                        onClick={() => setSelectedPosition(Position.HOME)}
+                        onClick={() => {
+                            setSelectedPosition(Position.HOME);
+                            setAmount('');
+                        }}
                     >
                         <Option color={ODDS_COLOR.HOME}>1</Option>
                         <OptionTeamName>{market.homeTeam.toUpperCase()}</OptionTeamName>
@@ -397,14 +409,17 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                             <InfoValue>
                                 {availablePerSideQuery.isLoading
                                     ? '-'
-                                    : availablePerSide.positions[Position.HOME].available.toFixed(2)}
+                                    : floorNumberToDecimals(availablePerSide.positions[Position.HOME].available)}
                             </InfoValue>
                         </InfoRow>
                     </Pick>
                     {!!market.positions[Position.DRAW].sides[selectedSide].odd && (
                         <Pick
                             selected={selectedPosition === Position.DRAW}
-                            onClick={() => setSelectedPosition(Position.DRAW)}
+                            onClick={() => {
+                                setSelectedPosition(Position.DRAW);
+                                setAmount('');
+                            }}
                         >
                             <Option color={ODDS_COLOR.DRAW}>X</Option>
                             <OptionTeamName>DRAW</OptionTeamName>
@@ -419,14 +434,17 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                                 <InfoValue>
                                     {availablePerSideQuery.isLoading
                                         ? '-'
-                                        : availablePerSide.positions[Position.DRAW].available.toFixed(2)}
+                                        : floorNumberToDecimals(availablePerSide.positions[Position.DRAW].available)}
                                 </InfoValue>
                             </InfoRow>
                         </Pick>
                     )}
                     <Pick
                         selected={selectedPosition === Position.AWAY}
-                        onClick={() => setSelectedPosition(Position.AWAY)}
+                        onClick={() => {
+                            setSelectedPosition(Position.AWAY);
+                            setAmount('');
+                        }}
                     >
                         <Option color={ODDS_COLOR.AWAY}>2</Option>
                         <OptionTeamName>{market.awayTeam.toUpperCase()}</OptionTeamName>
@@ -441,7 +459,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                             <InfoValue>
                                 {availablePerSideQuery.isLoading
                                     ? '-'
-                                    : availablePerSide.positions[Position.AWAY].available.toFixed(2)}
+                                    : floorNumberToDecimals(availablePerSide.positions[Position.AWAY].available)}
                             </InfoValue>
                         </InfoRow>
                     </Pick>
@@ -485,7 +503,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     </SliderContainer>
                     <FlexDivCentered>
                         <SubmitButton
-                            disabled={!amount || isBuying || isAllowing}
+                            disabled={submitDisabled}
                             onClick={async () => {
                                 if (!!amount) {
                                     if (hasAllowance) {
