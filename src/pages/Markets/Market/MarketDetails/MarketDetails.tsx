@@ -62,12 +62,16 @@ import useAvailablePerSideQuery from '../../../../queries/markets/useAvailablePe
 import { ODDS_COLOR } from '../../../../constants/ui';
 import useMultipleCollateralBalanceQuery from '../../../../queries/wallet/useMultipleCollateralBalanceQuery';
 import { getIsAppReady } from '../../../../redux/modules/app';
+import { toast } from 'react-toastify';
+import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
+import { useTranslation } from 'react-i18next';
 
 type MarketDetailsProps = {
     market: MarketData;
 };
 
 const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
+    const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -234,7 +238,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
                 const ammQuote = await fetchAmmQuote(+amount || 1);
                 const parsedAmount = ethers.utils.parseEther(amount.toString());
-
+                const id = toast.loading(t('market.toast-messsage.transaction-pending'));
                 try {
                     const tx = await getAMMSportsTransaction(
                         selectedSide === Side.BUY,
@@ -252,11 +256,13 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     const txResult = await tx.wait();
 
                     if (txResult && txResult.transactionHash) {
+                        toast.update(id, getSuccessToastOptions(t('market.toast-messsage.submit-success')));
                         setIsBuying(false);
                         setAmount(0);
                     }
                 } catch (e) {
                     setIsBuying(false);
+                    toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                     console.log('Error ', e);
                 }
             }
@@ -267,7 +273,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMContract && signer) {
             setIsAllowing(true);
-
+            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
             try {
                 let collateralContractWithSigner: ethers.Contract | undefined;
 
@@ -287,8 +293,10 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
 
                 if (txResult && txResult.transactionHash) {
                     setIsAllowing(false);
+                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.approve-success')));
                 }
             } catch (e) {
+                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 console.log(e);
                 setIsAllowing(false);
             }
@@ -327,9 +335,19 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         if (signer) {
             const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
             contract.connect(signer);
+            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
             try {
-                await contract.exerciseOptions();
+                const tx = await contract.exerciseOptions();
+                const txResult = await tx.wait();
+
+                if (txResult && txResult.transactionHash) {
+                    if (market.finalResult === 0) {
+                        toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-refund-success')));
+                    } else {
+                    }
+                }
             } catch (e) {
+                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 console.log(e);
             }
         }
