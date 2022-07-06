@@ -1,8 +1,9 @@
 import PositionSymbol from 'components/PositionSymbol';
-import { ODDS_COLOR } from 'constants/ui';
+import { ODDS_COLOR, STATUS_COLOR } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { convertFinalResultToResultType } from 'utils/markets';
+import { Status } from '../MatchStatus/MatchStatus';
 import { Container, OddsContainer, WinnerLabel } from './styled-components';
 
 type OddsProps = {
@@ -18,15 +19,24 @@ type OddsProps = {
 
 const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, odds }) => {
     const { t } = useTranslation();
+
+    const pendingResolution =
+        odds?.awayOdds == 0 && odds?.homeOdds == 0 && odds?.awayOdds == 0 && isLive && !isResolved;
+    const noOddsFlag = odds?.awayOdds == 0 && odds?.homeOdds == 0 && odds?.awayOdds == 0 && !isLive && !isResolved;
+    const resolvedGameFlag = isResolved && finalResult;
+    const showOdds = !pendingResolution && !noOddsFlag && !resolvedGameFlag;
     return (
         <Container>
-            {isResolved && finalResult && (
+            {noOddsFlag && (
+                <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card-list.coming-soon')}</Status>
+            )}
+            {resolvedGameFlag && (
                 <>
                     <PositionSymbol type={convertFinalResultToResultType(finalResult)} />
                     <WinnerLabel>{t('common.winner')}</WinnerLabel>
                 </>
             )}
-            {!isResolved && !isLive && (
+            {showOdds && (
                 <OddsContainer>
                     <PositionSymbol
                         type={0}

@@ -41,9 +41,9 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ isResolved, isLive, isCancele
             )}
             {isLive && (
                 <>
-                    <Result isLive={isLive}>{result}</Result>
+                    {/* <Result isLive={isLive}>{result}</Result> */}
                     <Status color={STATUS_COLOR.STARTED} style={{ fontWeight: '500' }}>
-                        {t('markets.market-card-list.started')}
+                        {t('markets.market-card-list.pending-resolution')}
                     </Status>
                 </>
             )}
@@ -59,7 +59,7 @@ const Container = styled.div`
     margin-left: auto;
 `;
 
-const Status = styled.span<{ color?: string }>`
+export const Status = styled.span<{ color?: string }>`
     text-transform: uppercase;
     color: ${(_props) => (_props?.color ? _props.color : '')};
 `;

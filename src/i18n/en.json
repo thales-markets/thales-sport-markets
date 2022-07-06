@@ -234,7 +234,9 @@
             "result": "Result",
             "started": "Started",
             "canceled": "Canceled",
-            "claim": "Claim"
+            "pending-resolution": "Pending resolution",
+            "claim": "Claim",
+            "coming-soon": "Coming soon"
         }
     }
 }
