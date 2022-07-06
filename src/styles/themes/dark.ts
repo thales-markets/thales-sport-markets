@@ -28,6 +28,7 @@ export default {
     winnerColors: {
         primary: Colors.GREEN,
         secondary: Colors.YELLOW,
+        tertiary: Colors.BLUE,
     },
     button: {
         background: {

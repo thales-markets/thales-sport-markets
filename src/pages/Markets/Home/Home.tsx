@@ -52,12 +52,7 @@ const Home: React.FC = () => {
 
     const [globalFilter, setGlobalFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_GLOBAL, GlobalFilterEnum.All);
     const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SPORT, SportFilterEnum.All);
-    const [sportsList, setSportsList] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_SPORTS, Object.values(SportFilterEnum));
     const [sortDirection, setSortDirection] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_DIRECTION, SortDirection.ASC);
-    const [sportsSortDirection, setSportsSortDirection] = useLocalStorage(
-        LOCAL_STORAGE_KEYS.SORT_SPORTS_DIRECTION,
-        SortDirection.ASC
-    );
     const [sortBy, setSortBy] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_BY, DEFAULT_SORT_BY);
     const [showGridView, setGridView] = useLocalStorage(LOCAL_STORAGE_KEYS.GRID_VIEW, true);
     const [lastValidMarkets, setLastValidMarkets] = useState<SportMarkets>([]);
@@ -67,7 +62,7 @@ const Home: React.FC = () => {
 
     const sortOptions: SortOptionType[] = [
         { id: 1, title: t('market.time-remaining-label') },
-        // { id: 2, title: t('market.question-label') },
+        { id: 2, title: t('market.sport') },
     ];
 
     const allTagsFilterItem: TagInfo = {
@@ -261,8 +256,8 @@ const Home: React.FC = () => {
             switch (sortBy) {
                 case 1:
                     return sortByField(a, b, sortDirection, 'maturityDate');
-                // case 2:
-                //     return sortByField(a, b, sortDirection, 'question');
+                case 2:
+                    return sortByField(a, b, sortDirection, 'sport');
                 default:
                     return 0;
             }
@@ -273,7 +268,7 @@ const Home: React.FC = () => {
         if (sortBy === sortOption.id) {
             switch (sortDirection) {
                 case SortDirection.NONE:
-                    setSortDirection(SortDirection.ASC);
+                    setSortDirection(SortDirection.DESC);
                     break;
                 case SortDirection.DESC:
                     setSortDirection(SortDirection.ASC);
@@ -285,31 +280,8 @@ const Home: React.FC = () => {
             }
         } else {
             setSortBy(sortOption.id);
-            setSortDirection(SortDirection.ASC);
+            setSortDirection(SortDirection.DESC);
         }
-    };
-
-    const setSportsSorting = () => {
-        switch (sportsSortDirection) {
-            case SortDirection.NONE:
-                setSportsSortDirection(SortDirection.ASC);
-                break;
-            case SortDirection.DESC:
-                setSportsSortDirection(SortDirection.ASC);
-                break;
-            case SortDirection.ASC:
-                setSportsSortDirection(SortDirection.DESC);
-                break;
-        }
-        const sortedSportsList = sportsList.sort((a: any, b: any) => {
-            if (sportsSortDirection === SortDirection.ASC) {
-                return a > b ? 1 : -1;
-            }
-            if (sportsSortDirection === SortDirection.DESC) {
-                return a > b ? -1 : 1;
-            }
-        });
-        setSportsList(sortedSportsList);
     };
 
     const onDateRangeChange = (dates: [Date | null, Date | null]) => {
@@ -375,7 +347,7 @@ const Home: React.FC = () => {
                 <SidebarContainer>
                     <Search text={marketSearch} handleChange={(value) => dispatch(setMarketSearch(value))} />
                     <SportFiltersContainer>
-                        {sportsList.map((filterItem: any) => {
+                        {Object.values(SportFilterEnum).map((filterItem: any) => {
                             return (
                                 <SportFilter
                                     disabled={false}
@@ -408,9 +380,6 @@ const Home: React.FC = () => {
                             );
                         })}
                     </SportFiltersContainer>
-                    <SortingButton onClick={setSportsSorting}>
-                        {sportsSortDirection == SortDirection.ASC ? 'Sports A-Z' : 'Sports Z-A'}
-                    </SortingButton>
                     <RangedDatepicker onDateRangeChange={onDateRangeChange} startDate={startDate} endDate={endDate} />
                 </SidebarContainer>
                 {sportMarketsQuery.isLoading ? (
@@ -586,13 +555,6 @@ const NoMarketsLabel = styled.span`
 const LoaderContainer = styled(FlexDivColumn)`
     position: relative;
     min-height: 300px;
-`;
-
-const SortingButton = styled(Button)`
-    width: 230px;
-    border: none;
-    background: ${(props) => props.theme.background.secondary};
-    color: ${(props) => props.theme.textColor.primary};
 `;
 
 export default Home;

@@ -99,6 +99,7 @@
     "market": {
         "question-label": "Question",
         "time-remaining-label": "Time remaining",
+        "sport": "Sport",
         "pay-with": "Pay with",
         "status-label": "Status",
         "tags-label": "Tags",
@@ -166,7 +167,8 @@
         },
         "toast-messsage": {
             "transaction-pending": "Transaction pending",
-            "approve-success": "{{token}} successfully approved",
+            "approve-success": "Successfully approved",
+            "submit-success": "Successfully bought",
             "create-market-success": "Market successfully created",
             "claim-winnings-success": "Winnings successfully claimed",
             "claim-refund-success": "Refund successfully claimed",
@@ -174,8 +176,6 @@
             "ticket-bid-success": "Bid successfully placed",
             "change-position-success": "Position successfully changed",
             "withdraw-success": "Successfuly withdrawn",
-            "vote-success": "Successfully voted",
-            "cancel-market-success": "Market successfully canceled",
             "get-usd-success": "{{amount}} successfully minted"
         },
         "filter-label": {

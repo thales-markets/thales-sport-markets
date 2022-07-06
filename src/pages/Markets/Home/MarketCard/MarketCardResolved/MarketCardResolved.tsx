@@ -21,7 +21,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-// import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Balances, MarketData, MarketTransactions, SportMarketInfo, UserTransactions } from 'types/markets';
 import { getEtherscanTxLink } from 'utils/etherscan';
 import { getTeamImageSource } from 'utils/images';
@@ -29,13 +29,15 @@ import { Position, PositionName } from 'constants/options';
 import { ethers } from 'ethers';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import networkConnector from 'utils/networkConnector';
+import { toast } from 'react-toastify';
+import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
 
 type MarketCardResolvedProps = {
     market: SportMarketInfo;
 };
 
 const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
-    // const { t } = useTranslation();
+    const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -103,9 +105,16 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
         if (signer) {
             const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
             contract.connect(signer);
+            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
             try {
-                await contract.exerciseOptions();
+                const tx = await contract.exerciseOptions();
+                const txResult = await tx.wait();
+
+                if (txResult && txResult.transactionHash) {
+                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
+                }
             } catch (e) {
+                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 console.log(e);
             }
         }

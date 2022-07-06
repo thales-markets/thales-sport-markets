@@ -26,7 +26,7 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
     const [hammerManager, setHammerManager] = useState<any>();
 
     const moveLeft = () => {
-        if (farLeftDateIndex === 0) setFarLeftDateIndex(0);
+        // if (farLeftDateIndex === 0) setFarLeftDateIndex(0);
         if (farLeftDateIndex > 0) setFarLeftDateIndex(farLeftDateIndex - 1);
     };
 
@@ -66,7 +66,10 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
         <Wrapper id="wrapper-cards">
             {gamesPerDay.length > 0 ? (
                 <>
-                    <LeftIcon onClick={moveLeft} disabled={farLeftDateIndex == 0} />
+                    <LeftIcon
+                        onClick={() => (farLeftDateIndex == 0 ? moveLeft() : '')}
+                        disabled={farLeftDateIndex == 0}
+                    />
                     {slicedDates.map((data: GamesOnDate, index: number) => (
                         <DateContainer
                             key={index}
@@ -84,7 +87,10 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
                             <GamesNumberLabel>{data.numberOfGames + ' games'}</GamesNumberLabel>
                         </DateContainer>
                     ))}
-                    <RightIcon onClick={moveRight} disabled={farLeftDateIndex + DATES_TO_SHOW >= gamesPerDay?.length} />
+                    <RightIcon
+                        onClick={() => (farLeftDateIndex + DATES_TO_SHOW >= gamesPerDay?.length ? moveRight() : '')}
+                        disabled={farLeftDateIndex + DATES_TO_SHOW >= gamesPerDay?.length}
+                    />
                 </>
             ) : (
                 <></>
@@ -131,30 +137,26 @@ const Wrapper = styled.div`
 const RightIcon = styled.i<{ disabled?: boolean }>`
     font-size: 60px;
     font-weight: 700;
-    cursor: pointer;
-    pointer-events: ${(props) => (props?.disabled ? 'none' : 'auto')};
-    display: ${(props) => (props?.disabled ? 'none' : '')};
+    cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
     &:before {
         font-family: ExoticIcons !important;
         content: '\\004B';
         color: ${(props) => props.theme.button.textColor.primary};
-        cursor: pointer;
-        pointer-events: ${(props) => (props?.disabled ? 'none' : 'auto')};
+        opacity: ${(props) => (props?.disabled ? '0.3' : '')};
+        cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
     }
 `;
 
 const LeftIcon = styled.i<{ disabled?: boolean }>`
     font-size: 60px;
     font-weight: 700;
-    cursor: pointer;
-    pointer-events: ${(props) => (props?.disabled ? 'none' : 'auto')};
-    display: ${(props) => (props?.disabled ? 'none' : '')};
+    cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
     &:before {
         font-family: ExoticIcons !important;
         content: '\\0041';
         color: ${(props) => props.theme.button.textColor.primary};
-        cursor: pointer;
-        pointer-events: ${(props) => (props?.disabled ? 'none' : 'auto')};
+        opacity: ${(props) => (props?.disabled ? '0.3' : '')};
+        cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
     }
 `;
 

@@ -195,8 +195,10 @@ export const MatchParticipantImageContainer = styled(FlexDiv)<{
     border-radius: 50%;
     border: 3px solid
         ${(props) =>
-            (props.isWinner && props.finalResult !== 0) || props.finalResult === 3
+            props.isWinner && props.finalResult !== 0
                 ? props.theme.winnerColors.primary
+                : props.finalResult === 3
+                ? props.theme.winnerColors.tertiary
                 : props.isCanceled
                 ? props.theme.oddsColor.secondary
                 : props.theme.borderColor.primary};
