@@ -105,13 +105,17 @@ const Home: React.FC = () => {
 
         const daysNumberOfGames = new Array<GamesOnDate>();
         uniqueSortedDates.forEach((date) => {
-            const gamesPerDay = markets.filter(
-                (market: SportMarketInfo) => market.maturityDate.toDateString() === date?.toDateString()
-            ).length;
+            const gamesPerDay = markets.filter((market: SportMarketInfo) => {
+                if (sportFilter !== SportFilterEnum.All) {
+                    return market.maturityDate.toDateString() === date?.toDateString() && market.sport === sportFilter;
+                } else {
+                    return market.maturityDate.toDateString() === date?.toDateString();
+                }
+            }).length;
             daysNumberOfGames.push({ date: date.toDateString(), numberOfGames: gamesPerDay });
         });
         setGamesPerDayMap(daysNumberOfGames);
-    }, [markets]);
+    }, [markets, sportFilter]);
 
     const accountPositionsQuery = useAccountPositionsQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -364,15 +368,15 @@ const Home: React.FC = () => {
                                     onClick={() => {
                                         if (filterItem !== sportFilter) {
                                             setSportFilter(filterItem);
+                                            setDateFilter('');
+                                            setStartDate(null);
+                                            setEndDate(null);
+                                            setTagFilter(allTagsFilterItem);
                                             if (filterItem === SportFilterEnum.All) {
                                                 setAvailableTags([
                                                     allTagsFilterItem,
                                                     ...TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label)),
                                                 ]);
-                                                setTagFilter(allTagsFilterItem);
-                                                setDateFilter('');
-                                                setStartDate(null);
-                                                setEndDate(null);
                                             } else {
                                                 const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
                                                 if (tagsPerSport) {
