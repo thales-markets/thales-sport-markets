@@ -1,4 +1,11 @@
-import { MatchParticipantImage, MatchParticipantImageContainer, MatchVSLabel } from 'components/common';
+import {
+    MatchParticipantImage,
+    MatchParticipantImageContainer,
+    MatchParticipantName,
+    MatchVSLabel,
+    ScoreLabel,
+    WinnerLabel,
+} from 'components/common';
 import React, { useEffect, useMemo, useState } from 'react';
 import { BigNumber, ethers } from 'ethers';
 import { AMMPosition, AvailablePerSide, Balances, MarketData } from 'types/markets';
@@ -390,8 +397,8 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
 
     return (
         <MarketContainer>
-            <MarketHeader>
-                {!market.resolved && (
+            {!market.resolved && (
+                <MarketHeader>
                     <FlexDivCentered>
                         <Toggle
                             label={{ firstLabel: Side.BUY, secondLabel: Side.SELL, fontSize: '18px' }}
@@ -405,15 +412,15 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                             }}
                         />
                     </FlexDivCentered>
-                )}
-                {selectedSide == Side.BUY && !market.resolved && (
-                    <CollateralSelector
-                        collateralArray={COLLATERALS}
-                        selectedItem={selectedStableIndex}
-                        onChangeCollateral={(index) => setStableIndex(index)}
-                    />
-                )}
-            </MarketHeader>
+                    {selectedSide == Side.BUY && !market.resolved && (
+                        <CollateralSelector
+                            collateralArray={COLLATERALS}
+                            selectedItem={selectedStableIndex}
+                            onChangeCollateral={(index) => setStableIndex(index)}
+                        />
+                    )}
+                </MarketHeader>
+            )}
 
             {market.gameStarted && (
                 <Status resolved={market.resolved} claimable={claimable}>
@@ -423,17 +430,32 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
 
             <MatchInfo>
                 <MatchInfoColumn>
-                    <MatchParticipantImageContainer>
+                    <MatchParticipantImageContainer isWinner={market.finalResult == 1} finalResult={market.finalResult}>
                         <MatchParticipantImage src={getTeamImageSource(market.homeTeam, market.tags[0])} />
                     </MatchParticipantImageContainer>
+                    {market.resolved && market.gameStarted && (
+                        <WinnerLabel isWinning={market.finalResult == 1} finalResult={market.finalResult}>
+                            WINNER
+                        </WinnerLabel>
+                    )}
+                    <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
+                    {market.resolved && market.gameStarted && <ScoreLabel>{market.homeScore}</ScoreLabel>}
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchVSLabel>VS</MatchVSLabel>
                 </MatchInfoColumn>
                 <MatchInfoColumn>
-                    <MatchParticipantImageContainer>
+                    <MatchParticipantImageContainer isWinner={market.finalResult == 2} finalResult={market.finalResult}>
                         <MatchParticipantImage src={getTeamImageSource(market.awayTeam, market.tags[0])} />
                     </MatchParticipantImageContainer>
+                    {market.resolved && market.gameStarted && (
+                        <WinnerLabel isWinning={market.finalResult == 2} finalResult={market.finalResult}>
+                            WINNER
+                        </WinnerLabel>
+                    )}
+
+                    <MatchParticipantName>{market.awayTeam}</MatchParticipantName>
+                    {market.resolved && market.gameStarted && <ScoreLabel>{market.awayScore}</ScoreLabel>}
                 </MatchInfoColumn>
             </MatchInfo>
             <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
