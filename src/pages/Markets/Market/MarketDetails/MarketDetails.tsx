@@ -73,6 +73,7 @@ import { getIsAppReady } from '../../../../redux/modules/app';
 import { toast } from 'react-toastify';
 import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
 import { useTranslation } from 'react-i18next';
+import WalletInfo from '../WalletInfo';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -424,6 +425,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
 
     return (
         <MarketContainer>
+            <WalletInfo marketAddress={market.address} />
             {!market.resolved && (
                 <MarketHeader>
                     <FlexDivCentered>
@@ -459,7 +461,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     Cancelled
                 </Status>
             )}
-
             <MatchInfo>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer isWinner={market.finalResult == 1} finalResult={market.finalResult}>
