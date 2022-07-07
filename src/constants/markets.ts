@@ -24,10 +24,10 @@ export enum MarketType {
 export enum SportFilterEnum {
     All = 'All',
     Soccer = 'Soccer',
-    Basketball = 'Basketball',
     Baseball = 'Baseball',
-    Hockey = 'Hockey',
-    Football = 'Football',
+    // Basketball = 'Basketball',
+    // Hockey = 'Hockey',
+    // Football = 'Football',
     // Tennis = 'Tennis',
 }
 
