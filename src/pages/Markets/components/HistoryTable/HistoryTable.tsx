@@ -3,11 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { CellProps } from 'react-table';
 import { formatTxTimestamp } from 'utils/formatters/date';
 import Table from 'components/Table';
-import { UserTransaction, UserTransactions } from 'types/markets';
+import { MarketTransaction, UserTransaction, UserTransactions } from 'types/markets';
 import { formatCurrency } from '../../../../utils/formatters/number';
 import styled from 'styled-components';
 import { ODDS_COLOR } from '../../../../constants/ui';
 import { POSITION_MAP } from 'constants/options';
+import { buildMarketLink } from '../../../../utils/routes';
+import SPAAnchor from '../../../../components/SPAAnchor';
+import ViewEtherscanLink from '../../../../components/ViewEtherscanLink';
+import './style.css';
 
 type HistoryPropsTable = {
     transactions: UserTransactions;
@@ -35,7 +39,13 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                         Header: <>Game</>,
                         accessor: 'game',
                         Cell: (cellProps: CellProps<UserTransaction, UserTransaction['game']>) => (
-                            <p>{cellProps.cell.value}</p>
+                            <SPAAnchor
+                                className="hover-underline"
+                                onClick={(e) => e.stopPropagation()}
+                                href={buildMarketLink(cellProps.row.original.market)}
+                            >
+                                {cellProps.cell.value}
+                            </SPAAnchor>
                         ),
                         width: 150,
                         sortable: true,
@@ -80,14 +90,28 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                             <p>${formatCurrency(cellProps.cell.value)}</p>
                         ),
                         width: 150,
+                        sortable: true,
                     },
                     {
                         Header: <>Result</>,
                         accessor: 'result',
                         Cell: (cellProps: CellProps<UserTransaction, UserTransaction['result']>) => (
                             <>
-                                <PositionCircle color="#3FD1FF">{POSITION_MAP[cellProps.cell.value]}</PositionCircle>
+                                {cellProps.cell.value && (
+                                    <PositionCircle color="#3FD1FF">
+                                        {POSITION_MAP[cellProps.cell.value]}
+                                    </PositionCircle>
+                                )}
                             </>
+                        ),
+                        width: 150,
+                        sortable: true,
+                    },
+                    {
+                        Header: <>{t('market.table.tx-status-col')}</>,
+                        accessor: 'hash',
+                        Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['hash']>) => (
+                            <ViewEtherscanLink hash={cellProps.cell.value} />
                         ),
                         width: 150,
                     },
@@ -95,9 +119,6 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                 data={transactions}
                 isLoading={isLoading}
                 noResultsMessage={noResultsMessage}
-                onTableRowClick={(e) => {
-                    window.open(e.original.link, '_blank');
-                }}
             />
         </>
     );
