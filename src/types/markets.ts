@@ -152,18 +152,33 @@ export type SportsMap = Record<number, string>;
 
 export type SportsTagsMap = Record<string, number[]>;
 
-export type AccountPosition = {
-    market: string;
-    position: number;
-    isWithdrawn: boolean;
-    isClaimed: boolean;
+enum PositionType {
+    home,
+    away,
+    draw,
+}
+
+export type AccountPositionGraph = {
+    id: string;
+    market: SportMarketInfo;
+    side: PositionType;
+    claimable: boolean;
 };
 
-export type AccountPositions = AccountPosition[];
-
-export type AccountPositionsMap = {
-    [market: string]: AccountPosition;
+export type PositionBalance = {
+    id: string;
+    account: string;
+    amount: number;
+    position: AccountPositionGraph;
 };
+
+export type AccountPosition = AccountPositionGraph & {
+    amount: number;
+};
+
+export type PositionBalances = PositionBalance[];
+
+export type AccountPositionsMap = Record<string, AccountPosition[]>;
 
 export type MarketTransactionType = 'bid' | 'changePosition' | 'withdrawal' | 'claim';
 

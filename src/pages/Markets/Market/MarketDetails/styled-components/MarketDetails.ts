@@ -225,8 +225,8 @@ export const Status = styled.p<{ resolved: boolean; claimable: boolean }>`
     }
 `;
 
-export const ClaimButton = styled.button`
-    background: #3fd1ff;
+export const ClaimButton = styled.button<{ cancelled?: boolean }>`
+    background: ${(props) => (props.cancelled ? '#E26A78' : '#3fd1ff')};
     border-radius: 5px;
     padding: 4px;
     border: none;
@@ -238,6 +238,7 @@ export const ClaimButton = styled.button`
     text-transform: capitalize;
     margin-top: 10px;
     color: #303656;
+    cursor: pointer;
 `;
 
 export const ClaimableAmount = styled.p`

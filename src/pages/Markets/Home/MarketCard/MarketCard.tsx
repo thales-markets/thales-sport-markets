@@ -10,11 +10,11 @@ import MarketCardResolved from './MarketCardResolved';
 
 type MarketCardProps = {
     market: SportMarketInfo;
-    accountPosition?: AccountPosition;
+    accountPositions?: AccountPosition[];
 };
 
-const MarketCard: React.FC<MarketCardProps> = ({ market, accountPosition }) => {
-    const claimAvailable = isClaimAvailable(market, accountPosition);
+const MarketCard: React.FC<MarketCardProps> = ({ market, accountPositions }) => {
+    const claimAvailable = isClaimAvailable(accountPositions);
 
     return market.isResolved ? (
         <Container isClaimAvailable={claimAvailable}>

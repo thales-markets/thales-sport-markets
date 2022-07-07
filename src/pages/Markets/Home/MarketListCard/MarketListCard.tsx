@@ -9,19 +9,14 @@ import { ClubContainer, ClubLogo, ClubNameLabel, ClubVsClubContainer, Container,
 
 type MarketRowCardProps = {
     market: SportMarketInfo;
-    accountPosition?: AccountPosition;
+    accountPositions?: AccountPosition[];
 };
 
-const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPosition }) => {
-    console.log('accountPosition ', accountPosition);
-    const claimAvailable = isClaimAvailable(market, accountPosition);
+const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions }) => {
+    const claimAvailable = isClaimAvailable(accountPositions);
 
     return (
-        <Container
-            backgroundColor={'rgba(48, 54, 86, 0.5)'}
-            claimBorder={claimAvailable}
-            isCanceled={market.isCanceled}
-        >
+        <Container backgroundColor={'rgba(48, 54, 86, 0.5)'} claimBorder={true} isCanceled={market.isCanceled}>
             <ClubVsClubContainer>
                 <ClubContainer>
                     <ClubLogo src={getTeamImageSource(market.homeTeam, market.tags[0])} />

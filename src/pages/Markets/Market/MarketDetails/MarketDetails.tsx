@@ -454,6 +454,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     {!market.resolved ? 'Started' : claimable ? 'Claimable' : 'Finished'}
                 </Status>
             )}
+            {market.resolved && !market.gameStarted && (
+                <Status resolved={market.resolved} claimable={false}>
+                    Cancelled
+                </Status>
+            )}
 
             <MatchInfo>
                 <MatchInfoColumn>
@@ -667,7 +672,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     Amount Claimable: <span>{formatCurrencyWithSign(USD_SIGN, claimableAmount)}</span>
                 </ClaimableAmount>
             )}
-            {claimable && <ClaimButton onClick={claimReward.bind(this)}>Claim</ClaimButton>}
+            {claimable && (
+                <ClaimButton cancelled={market.resolved && !market.gameStarted} onClick={claimReward.bind(this)}>
+                    {market.resolved && !market.gameStarted ? 'Claim Back' : 'Claim'}
+                </ClaimButton>
+            )}
         </MarketContainer>
     );
 };
