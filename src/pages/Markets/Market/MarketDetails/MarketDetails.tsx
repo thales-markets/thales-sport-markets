@@ -427,6 +427,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     {!market.resolved ? 'Started' : claimable ? 'Claimable' : 'Finished'}
                 </Status>
             )}
+            {market.resolved && !market.gameStarted && (
+                <Status resolved={market.resolved} claimable={false}>
+                    Cancelled
+                </Status>
+            )}
 
             <MatchInfo>
                 <MatchInfoColumn>
