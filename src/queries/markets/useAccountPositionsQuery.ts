@@ -3,6 +3,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { AccountPosition, AccountPositionsMap, PositionBalance } from 'types/markets';
 import thalesData from 'thales-data';
 import { NetworkId } from 'types/network';
+import { bigNumberFormatter } from 'utils/formatters/ethers';
 
 const useAccountPositionsQuery = (
     walletAddress: string,
@@ -24,17 +25,19 @@ const useAccountPositionsQuery = (
                     const marketAddress = positionBalance.position.market.address;
                     if (accountPositionsMap[marketAddress]) {
                         const existingPositions = accountPositionsMap[marketAddress];
+                        console.log(positionBalance.amount);
                         const position: AccountPosition = {
                             ...positionBalance.position,
-                            amount: positionBalance.amount,
+                            amount: bigNumberFormatter(positionBalance.amount),
                         };
                         existingPositions.push(position);
                         accountPositionsMap[marketAddress] = existingPositions;
                     } else {
+                        console.log(positionBalance.amount);
                         accountPositionsMap[marketAddress] = [
                             {
                                 ...positionBalance.position,
-                                amount: positionBalance.amount,
+                                amount: bigNumberFormatter(positionBalance.amount),
                             },
                         ];
                     }

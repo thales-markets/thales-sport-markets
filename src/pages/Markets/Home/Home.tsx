@@ -213,7 +213,11 @@ const Home: React.FC = () => {
     const accountPositionsCount = useMemo(() => {
         return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
             const accountPositionsPerMarket: AccountPosition[] = accountPositions[market.address];
-            return accountPositionsPerMarket?.length > 0;
+            let positionExists = false;
+            accountPositionsPerMarket?.forEach((accountPosition) =>
+                accountPosition.amount > 0 ? (positionExists = true) : ''
+            );
+            return positionExists;
         }).length;
     }, [tagsFilteredMarkets, accountPositions]);
 
@@ -236,7 +240,11 @@ const Home: React.FC = () => {
             case GlobalFilterEnum.YourPositions:
                 filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => {
                     const accountPositionsPerMarket: AccountPosition[] = accountPositions[market.address];
-                    return accountPositionsPerMarket?.length > 0;
+                    let positionExists = false;
+                    accountPositionsPerMarket?.forEach((accountPosition) =>
+                        accountPosition.amount > 0 ? (positionExists = true) : ''
+                    );
+                    return positionExists;
                 });
                 break;
             case GlobalFilterEnum.Claim:
@@ -356,14 +364,25 @@ const Home: React.FC = () => {
                                     onClick={() => {
                                         if (filterItem !== sportFilter) {
                                             setSportFilter(filterItem);
-                                            const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
-                                            if (tagsPerSport) {
-                                                const filteredTags = TAGS_LIST.filter((tag: TagInfo) =>
-                                                    tagsPerSport.includes(tag.id)
-                                                );
-                                                setAvailableTags([allTagsFilterItem, ...filteredTags]);
+                                            if (filterItem === SportFilterEnum.All) {
+                                                setAvailableTags([
+                                                    allTagsFilterItem,
+                                                    ...TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label)),
+                                                ]);
+                                                setTagFilter(allTagsFilterItem);
+                                                setDateFilter('');
+                                                setStartDate(null);
+                                                setEndDate(null);
                                             } else {
-                                                setAvailableTags([allTagsFilterItem]);
+                                                const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
+                                                if (tagsPerSport) {
+                                                    const filteredTags = TAGS_LIST.filter((tag: TagInfo) =>
+                                                        tagsPerSport.includes(tag.id)
+                                                    );
+                                                    setAvailableTags([allTagsFilterItem, ...filteredTags]);
+                                                } else {
+                                                    setAvailableTags([allTagsFilterItem]);
+                                                }
                                             }
                                         } else {
                                             setSportFilter(SportFilterEnum.All);
