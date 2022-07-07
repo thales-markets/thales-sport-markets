@@ -113,6 +113,8 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         },
     });
     const [balances, setBalances] = useState<Balances | undefined>(undefined);
+    const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
+    const [maxAmount, setMaxAmount] = useState<number>(0);
 
     const marketBalancesQuery = useMarketBalancesQuery(market.address, walletAddress, {
         enabled: !!market.address && isWalletConnected,
@@ -303,31 +305,40 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         }
     };
 
-    const onMaxClick = async () => {
-        if (selectedSide === Side.BUY) {
-            const { sportsAMMContract, signer } = networkConnector;
-            if (sportsAMMContract && signer) {
-                const price = ammPosition.sides[selectedSide].quote / (+amount || 1);
+    useEffect(() => {
+        const getMaxAmount = async () => {
+            if (selectedSide === Side.BUY) {
+                const { sportsAMMContract, signer } = networkConnector;
+                if (sportsAMMContract && signer) {
+                    const price = ammPosition.sides[selectedSide].quote / (+amount || 1);
 
-                if (price && paymentTokenBalance) {
-                    let tmpSuggestedAmount = Number(paymentTokenBalance) / Number(price);
-                    if (tmpSuggestedAmount > availablePerSide.positions[selectedPosition].available) {
-                        setAmount(floorNumberToDecimals(availablePerSide.positions[selectedPosition].available));
+                    if (price && paymentTokenBalance) {
+                        let tmpSuggestedAmount = Number(paymentTokenBalance) / Number(price);
+                        if (tmpSuggestedAmount > availablePerSide.positions[selectedPosition].available) {
+                            setMaxAmount(floorNumberToDecimals(availablePerSide.positions[selectedPosition].available));
+                            return;
+                        }
+
+                        const ammQuote = await fetchAmmQuote(tmpSuggestedAmount);
+
+                        const ammPrice = Number(ethers.utils.formatEther(ammQuote)) / Number(tmpSuggestedAmount);
+                        // 2 === slippage
+                        tmpSuggestedAmount = (Number(paymentTokenBalance) / Number(ammPrice)) * ((100 - 2) / 100);
+                        setMaxAmount(floorNumberToDecimals(tmpSuggestedAmount));
                         return;
                     }
-
-                    const ammQuote = await fetchAmmQuote(tmpSuggestedAmount);
-
-                    const ammPrice = Number(ethers.utils.formatEther(ammQuote)) / Number(tmpSuggestedAmount);
-                    // 2 === slippage
-                    tmpSuggestedAmount = (Number(paymentTokenBalance) / Number(ammPrice)) * ((100 - 2) / 100);
-                    setAmount(floorNumberToDecimals(tmpSuggestedAmount));
                 }
+            } else {
+                //@ts-ignore
+                setMaxAmount(balances?.[Position[selectedPosition].toLowerCase()] || 0);
+                return;
             }
-        } else {
-            //@ts-ignore
-            setAmount(balances?.[Position[selectedPosition].toLowerCase()] || 0);
-        }
+        };
+        getMaxAmount();
+    }, [selectedSide, amount, balances, paymentTokenBalance, ammPosition]);
+
+    const onMaxClick = async () => {
+        setAmount(maxAmount);
     };
 
     const claimReward = async () => {
@@ -353,9 +364,27 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         }
     };
 
-    const submitDisabled = useMemo(() => {
-        return !amount || isBuying || isAllowing || (selectedSide === Side.BUY && !paymentTokenBalance);
-    }, [amount, isBuying, isAllowing]);
+    useEffect(() => {
+        const checkDisabled = async () => {
+            if (!hasAllowance) {
+                setSubmitDisabled(false);
+                return;
+            }
+
+            if (!amount || isBuying || isAllowing) {
+                setSubmitDisabled(true);
+                return;
+            }
+
+            if (selectedSide === Side.BUY) {
+                setSubmitDisabled(!paymentTokenBalance || amount > maxAmount);
+                return;
+            }
+
+            setSubmitDisabled(false);
+        };
+        checkDisabled();
+    }, [amount, isBuying, isAllowing, hasAllowance]);
 
     return (
         <MarketContainer>
@@ -370,6 +399,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                             dotBorder="3px solid #3FD1FF"
                             handleClick={() => {
                                 setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
+                                setAmount('');
                             }}
                         />
                     </FlexDivCentered>
@@ -490,7 +520,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                         <AmountToBuyContainer>
                             <AmountToBuyInput
                                 type="number"
-                                onChange={(e) => setAmount(e.target.value)}
+                                onChange={(e) => {
+                                    if (Number(e.target.value) < maxAmount) {
+                                        setAmount(e.target.value);
+                                    }
+                                }}
                                 value={amount}
                             />
                             <MaxButton onClick={onMaxClick}>Max</MaxButton>
@@ -515,7 +549,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                             value={amount || 0}
                             step={1}
                             onChange={(event) => {
-                                setAmount(event.currentTarget.valueAsNumber);
+                                if (Number(event.currentTarget.valueAsNumber) < maxAmount) {
+                                    setAmount(event.currentTarget.valueAsNumber);
+                                }
                             }}
                         />
                     </SliderContainer>
