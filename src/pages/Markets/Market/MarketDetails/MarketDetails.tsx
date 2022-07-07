@@ -509,7 +509,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                             </InfoValue>
                         </InfoRow>
                         <InfoRow>
-                            <InfoTitle>AVAILABLE:</InfoTitle>
+                            <InfoTitle>LIQUIDITY:</InfoTitle>
                             <InfoValue>
                                 {availablePerSideQuery.isLoading
                                     ? '-'
@@ -534,7 +534,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                                 </InfoValue>
                             </InfoRow>
                             <InfoRow>
-                                <InfoTitle>AVAILABLE:</InfoTitle>
+                                <InfoTitle>LIQUIDITY:</InfoTitle>
                                 <InfoValue>
                                     {availablePerSideQuery.isLoading
                                         ? '-'
@@ -559,7 +559,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                             </InfoValue>
                         </InfoRow>
                         <InfoRow>
-                            <InfoTitle>AVAILABLE:</InfoTitle>
+                            <InfoTitle>LIQUIDITY:</InfoTitle>
                             <InfoValue>
                                 {availablePerSideQuery.isLoading
                                     ? '-'
