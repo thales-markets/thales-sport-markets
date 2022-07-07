@@ -168,7 +168,8 @@
         "toast-messsage": {
             "transaction-pending": "Transaction pending",
             "approve-success": "Successfully approved",
-            "submit-success": "Successfully bought",
+            "buy-success": "Successfully bought",
+            "sell-success": "Successfully sold",
             "create-market-success": "Market successfully created",
             "claim-winnings-success": "Winnings successfully claimed",
             "claim-refund-success": "Refund successfully claimed",

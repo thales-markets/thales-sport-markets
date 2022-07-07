@@ -258,7 +258,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     const txResult = await tx.wait();
 
                     if (txResult && txResult.transactionHash) {
-                        toast.update(id, getSuccessToastOptions(t('market.toast-messsage.submit-success')));
+                        selectedSide === Side.BUY
+                            ? toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')))
+                            : toast.update(id, getSuccessToastOptions(t('market.toast-messsage.sell-success')));
                         setIsBuying(false);
                         setAmount(0);
                     }
