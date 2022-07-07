@@ -28,7 +28,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions, la
                     {markets.map((market, index) => {
                         return (
                             <SPAAnchor key={index} href={buildMarketLink(market.address)}>
-                                <MarketCard market={market} accountPosition={accountPositions[market.address]} />
+                                <MarketCard market={market} accountPositions={accountPositions[market.address]} />
                             </SPAAnchor>
                         );
                     })}
@@ -42,7 +42,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions, la
                                 <MarketListCard
                                     market={market}
                                     key={index + 'list'}
-                                    accountPosition={accountPositions[market.address]}
+                                    accountPositions={accountPositions[market.address]}
                                 />
                             </SPAAnchor>
                         );

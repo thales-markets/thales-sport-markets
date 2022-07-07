@@ -34,12 +34,12 @@ import useLocalStorage from 'hooks/useLocalStorage';
 import useAccountPositionsQuery from 'queries/markets/useAccountPositionsQuery';
 import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
-import { isClaimAvailable } from 'utils/markets';
 import SortOption from '../components/SortOption';
 import SportFilter from '../components/SportFilter';
+import ViewSwitch from '../components/ViewSwitch';
 import HeaderDatepicker from './HeaderDatepicker';
 import UserHistory from './UserHistory';
-import ViewSwitch from '../components/ViewSwitch';
+import { isClaimAvailable } from 'utils/markets';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -183,8 +183,8 @@ const Home: React.FC = () => {
 
     const accountClaimsCount = useMemo(() => {
         return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
-            const accountPosition: AccountPosition = accountPositions[market.address];
-            return isClaimAvailable(market, accountPosition);
+            const accountPositionsPerMarket: AccountPosition[] = accountPositions[market.address];
+            return isClaimAvailable(accountPositionsPerMarket);
         }).length;
     }, [tagsFilteredMarkets, accountPositions]);
 
@@ -212,8 +212,8 @@ const Home: React.FC = () => {
 
     const accountPositionsCount = useMemo(() => {
         return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
-            const accountPosition: AccountPosition = accountPositions[market.address];
-            return !!accountPosition && accountPosition.position > 0;
+            const accountPositionsPerMarket: AccountPosition[] = accountPositions[market.address];
+            return accountPositionsPerMarket?.length > 0;
         }).length;
     }, [tagsFilteredMarkets, accountPositions]);
 
@@ -235,14 +235,14 @@ const Home: React.FC = () => {
                 break;
             case GlobalFilterEnum.YourPositions:
                 filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => {
-                    const accountPosition: AccountPosition = accountPositions[market.address];
-                    return !!accountPosition && accountPosition.position > 0;
+                    const accountPositionsPerMarket: AccountPosition[] = accountPositions[market.address];
+                    return accountPositionsPerMarket?.length > 0;
                 });
                 break;
             case GlobalFilterEnum.Claim:
                 filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => {
-                    const accountPosition: AccountPosition = accountPositions[market.address];
-                    return isClaimAvailable(market, accountPosition);
+                    const accountPositionsPerMarket: AccountPosition[] = accountPositions[market.address];
+                    return isClaimAvailable(accountPositionsPerMarket);
                 });
                 break;
             case GlobalFilterEnum.Canceled:

@@ -1,9 +1,8 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
-import { AccountPositions, AccountPositionsMap } from 'types/markets';
+import { AccountPosition, AccountPositionsMap, PositionBalance } from 'types/markets';
 import thalesData from 'thales-data';
 import { NetworkId } from 'types/network';
-import { keyBy } from 'lodash';
 
 const useAccountPositionsQuery = (
     walletAddress: string,
@@ -14,14 +13,34 @@ const useAccountPositionsQuery = (
         QUERY_KEYS.AccountPositions(walletAddress, networkId),
         async () => {
             try {
-                const positions: AccountPositions = await thalesData.exoticMarkets.positions({
+                const positionBalances: PositionBalance[] = await thalesData.sportMarkets.positionBalances({
                     account: walletAddress,
                     network: networkId,
                 });
 
-                const positionsMap: AccountPositionsMap = keyBy(positions, 'market');
+                const accountPositionsMap: AccountPositionsMap = {};
 
-                return positionsMap;
+                positionBalances.forEach((positionBalance) => {
+                    const marketAddress = positionBalance.position.market.address;
+                    if (accountPositionsMap[marketAddress]) {
+                        const existingPositions = accountPositionsMap[marketAddress];
+                        const position: AccountPosition = {
+                            ...positionBalance.position,
+                            amount: positionBalance.amount,
+                        };
+                        existingPositions.push(position);
+                        accountPositionsMap[marketAddress] = existingPositions;
+                    } else {
+                        accountPositionsMap[marketAddress] = [
+                            {
+                                ...positionBalance.position,
+                                amount: positionBalance.amount,
+                            },
+                        ];
+                    }
+                });
+
+                return accountPositionsMap;
             } catch (e) {
                 console.log(e);
                 return undefined;

@@ -1,17 +1,16 @@
 import { MarketStatus } from 'constants/markets';
-import { AccountPosition, MarketInfo, SportMarketInfo } from 'types/markets';
+import { AccountPosition, MarketInfo } from 'types/markets';
 
 export const getRoi = (ticketPrice: number, potentialWinnings: number, showRoi: boolean) =>
     showRoi ? (potentialWinnings - ticketPrice) / ticketPrice : 0;
 
-export const isClaimAvailable = (market: SportMarketInfo, accountPosition?: AccountPosition) =>
-    // !market.isPaused &&
-    !!accountPosition &&
-    // market.canUsersClaim &&
-    accountPosition.position > 0 &&
-    accountPosition.position === market.finalResult; //||
-// market.status === MarketStatus.CancelledConfirmed ||
-// market.noWinners);
+export const isClaimAvailable = (accountPositions?: AccountPosition[]) => {
+    let isClaimAvailable = false;
+    accountPositions?.forEach((accountPosition) =>
+        accountPosition.claimable && accountPosition.amount > 0 ? (isClaimAvailable = true) : ''
+    );
+    return isClaimAvailable;
+};
 
 export const getMarketStatus = (market: MarketInfo) => {
     if (market.isPaused) {
