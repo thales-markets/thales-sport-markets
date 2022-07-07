@@ -433,13 +433,13 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     <MatchParticipantImageContainer isWinner={market.finalResult == 1} finalResult={market.finalResult}>
                         <MatchParticipantImage src={getTeamImageSource(market.homeTeam, market.tags[0])} />
                     </MatchParticipantImageContainer>
-                    {market.resolved && (
+                    {market.resolved && market.gameStarted && (
                         <WinnerLabel isWinning={market.finalResult == 1} finalResult={market.finalResult}>
                             WINNER
                         </WinnerLabel>
                     )}
                     <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
-                    {market.resolved && <ScoreLabel>{market.homeScore}</ScoreLabel>}
+                    {market.resolved && market.gameStarted && <ScoreLabel>{market.homeScore}</ScoreLabel>}
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchVSLabel>VS</MatchVSLabel>
@@ -448,14 +448,14 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                     <MatchParticipantImageContainer isWinner={market.finalResult == 2} finalResult={market.finalResult}>
                         <MatchParticipantImage src={getTeamImageSource(market.awayTeam, market.tags[0])} />
                     </MatchParticipantImageContainer>
-                    {market.resolved && (
+                    {market.resolved && market.gameStarted && (
                         <WinnerLabel isWinning={market.finalResult == 2} finalResult={market.finalResult}>
                             WINNER
                         </WinnerLabel>
                     )}
 
                     <MatchParticipantName>{market.awayTeam}</MatchParticipantName>
-                    {market.resolved && <ScoreLabel>{market.awayScore}</ScoreLabel>}
+                    {market.resolved && market.gameStarted && <ScoreLabel>{market.awayScore}</ScoreLabel>}
                 </MatchInfoColumn>
             </MatchInfo>
             <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
