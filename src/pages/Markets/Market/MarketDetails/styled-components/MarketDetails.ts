@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Tooltip, withStyles } from '@material-ui/core';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from '../../../../../styles/common';
 
 export const MarketContainer = styled(FlexDivColumn)`
@@ -269,3 +270,14 @@ export const Separator = styled.span`
     font-size: 18px;
     margin: 0 10px;
 `;
+
+export const CustomTooltip = withStyles(() => ({
+    tooltip: {
+        minWidth: '100%',
+        width: '100%',
+        margin: '0',
+        backgroundColor: '#FDB7B7',
+        color: '#F30101',
+        fontSize: '12px',
+    },
+}))(Tooltip);

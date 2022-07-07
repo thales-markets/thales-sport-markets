@@ -41,6 +41,7 @@ import {
     MarketHeader,
     AmountToBuyLabel,
     Separator,
+    CustomTooltip,
 } from './styled-components/MarketDetails';
 import { FlexDivCentered } from '../../../../styles/common';
 import { MAX_L2_GAS_LIMIT, Position, Side } from '../../../../constants/options';
@@ -89,11 +90,12 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     const [isAllowing, setIsAllowing] = useState<boolean>(false);
     const [selectedStableIndex, setStableIndex] = useState<number>(0);
     const [isBuying, setIsBuying] = useState<boolean>(false);
-    const [amount, setAmount] = useState<number | string>('');
+    const [amount, setAmountValue] = useState<number | string>('');
     const [selectedPosition, setSelectedPosition] = useState<Position>(Position.HOME);
     const [selectedSide, setSelectedSide] = useState<Side>(Side.BUY);
     const [claimable, setClaimable] = useState<boolean>(false);
     const [claimableAmount, setClaimableAmount] = useState<number>(0);
+    const [tooltipText, setTooltipText] = useState<string>('');
     const [availablePerSide, setavailablePerSide] = useState<AvailablePerSide>({
         positions: {
             [Position.HOME]: {
@@ -395,6 +397,31 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
         checkDisabled();
     }, [amount, isBuying, isAllowing, hasAllowance]);
 
+    const setTooltipTextMessage = (value: string | number) => {
+        if (selectedSide === Side.BUY) {
+            if (Number(value) > availablePerSide.positions[selectedPosition].available) {
+                setTooltipText('Amount exceeded the amount available on AMM');
+            } else if (Number(value) > maxAmount) {
+                setTooltipText('Please ensure your wallet has enough funds');
+            } else {
+                setTooltipText('');
+            }
+        } else {
+            if (Number(value) > availablePerSide.positions[selectedPosition].available) {
+                setTooltipText('Amount exceeded the amount available on AMM');
+            } else if (Number(value) > maxAmount) {
+                setTooltipText('Please ensure your wallet has enough funds');
+            } else {
+                setTooltipText('');
+            }
+        }
+    };
+
+    const setAmount = (value: string | number) => {
+        setAmountValue(value);
+        setTooltipTextMessage(value);
+    };
+
     return (
         <MarketContainer>
             {!market.resolved && (
@@ -541,18 +568,18 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 <>
                     <AmountToBuyLabel>Amount to {selectedSide.toLowerCase()}:</AmountToBuyLabel>
                     <FlexDivCentered>
-                        <AmountToBuyContainer>
-                            <AmountToBuyInput
-                                type="number"
-                                onChange={(e) => {
-                                    if (Number(e.target.value) < maxAmount) {
+                        <CustomTooltip open={!!tooltipText} title={tooltipText}>
+                            <AmountToBuyContainer>
+                                <AmountToBuyInput
+                                    type="number"
+                                    onChange={(e) => {
                                         setAmount(e.target.value);
-                                    }
-                                }}
-                                value={amount}
-                            />
-                            <MaxButton onClick={onMaxClick}>Max</MaxButton>
-                        </AmountToBuyContainer>
+                                    }}
+                                    value={amount}
+                                />
+                                <MaxButton onClick={onMaxClick}>Max</MaxButton>
+                            </AmountToBuyContainer>
+                        </CustomTooltip>
                         <AmountToBuyContainer>
                             <AmountInfo>
                                 <SliderInfoValue>
@@ -573,9 +600,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                             value={amount || 0}
                             step={1}
                             onChange={(event) => {
-                                if (Number(event.currentTarget.valueAsNumber) < maxAmount) {
-                                    setAmount(event.currentTarget.valueAsNumber);
-                                }
+                                setAmount(event.currentTarget.valueAsNumber);
                             }}
                         />
                     </SliderContainer>
