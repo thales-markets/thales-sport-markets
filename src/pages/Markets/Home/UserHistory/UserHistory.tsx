@@ -46,11 +46,11 @@ const UserHistory: React.FC = () => {
                 return {
                     ...tx,
                     game: `${market.homeTeam} - ${market.awayTeam}`,
-                    result: Position[market.finalResult] as PositionName,
+                    result: Position[market.finalResult - 1] as PositionName,
                     // @ts-ignore
                     usdValue: +market[`${tx.position.toLowerCase()}Odds`] * +tx.amount,
                     // @ts-ignore
-                    positionTeam: market[`${tx.position.toLowerCase()}Team`],
+                    positionTeam: market[`${tx.position.toLowerCase()}Team`] || 'Draw',
                     link: getEtherscanTxLink(networkId, tx.hash),
                 };
             } else {

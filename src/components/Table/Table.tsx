@@ -89,6 +89,7 @@ const Table: React.FC<TableProps> = ({
                             return (
                                 <TableRow
                                     {...row.getRowProps()}
+                                    cursorPointer={!!onTableRowClick}
                                     onClick={onTableRowClick ? () => onTableRowClick(row) : undefined}
                                     key={rowIndex}
                                 >
@@ -122,7 +123,8 @@ const TableBody = styled.div`
     width: 100%;
 `;
 
-const TableRow = styled(FlexDiv)`
+const TableRow = styled(FlexDiv)<{ cursorPointer?: boolean }>`
+    cursor: ${(props) => (props.cursorPointer ? 'pointer' : 'default')};
     min-height: 38px;
     font-weight: 600;
     font-size: 14px;

@@ -27,6 +27,7 @@ const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
 
     useEffect(() => {
         if (marketTransactionsQuery.isSuccess && marketTransactionsQuery.data) {
+            console.log(marketTransactionsQuery.data);
             setMarketTransactions(
                 orderBy(marketTransactionsQuery.data, ['timestamp', 'blockNumber'], ['desc', 'desc'])
             );
@@ -38,6 +39,7 @@ const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
     return (
         <Container>
             <TableContainer>
+                <Title>{t('market.table.title')}</Title>
                 <TransactionsTable
                     transactions={marketTransactions}
                     isLoading={marketTransactionsQuery.isLoading}
@@ -47,6 +49,16 @@ const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
         </Container>
     );
 };
+
+const Title = styled.span`
+    font-style: normal;
+    font-weight: bold;
+    font-size: 25px;
+    line-height: 100%;
+    text-align: center;
+    color: ${(props) => props.theme.textColor.primary};
+    margin-bottom: 20px;
+`;
 
 const Container = styled(FlexDivColumn)`
     margin-top: 10px;
