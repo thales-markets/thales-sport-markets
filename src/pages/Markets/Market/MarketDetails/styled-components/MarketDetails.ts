@@ -237,6 +237,7 @@ export const ClaimButton = styled.button<{ cancelled?: boolean }>`
     text-transform: capitalize;
     margin-top: 10px;
     color: #303656;
+    cursor: pointer;
 `;
 
 export const ClaimableAmount = styled.p`
