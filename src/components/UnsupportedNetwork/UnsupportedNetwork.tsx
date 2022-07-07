@@ -1,20 +1,16 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
-import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
-import { L1_TO_L2_NETWORK_MAPPER, OPTIMISM_NETWORKS } from 'constants/network';
-import { NetworkIdByName } from 'utils/network';
-import { useSelector } from 'react-redux';
-import { getNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import Button from 'components/Button';
+import { OPTIMISM_NETWORKS } from 'constants/network';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
+import { NetworkIdByName } from 'utils/network';
 
 const UnsupportedNetwork: React.FC = () => {
     const { t } = useTranslation();
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const switchOrAddOptimismNetwork = async () => {
-        const switchTo = L1_TO_L2_NETWORK_MAPPER[networkId] ?? NetworkIdByName.OptimsimMainnet;
+        const switchTo = NetworkIdByName.OptimsimMainnet;
         const optimismNetworkParms = OPTIMISM_NETWORKS[switchTo];
 
         if (typeof window.ethereum !== 'undefined') {
