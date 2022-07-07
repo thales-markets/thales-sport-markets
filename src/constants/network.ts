@@ -6,7 +6,6 @@ export type NetworkMapper = Record<number, number>;
 export const L1_TO_L2_NETWORK_MAPPER: NetworkMapper = {
     1: 10,
     42: 69,
-    69: 1,
 };
 
 export const L2_TO_L1_NETWORK_MAPPER: NetworkMapper = {

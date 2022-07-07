@@ -4,16 +4,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
-import { NetworkIdByName } from 'utils/network';
 
 const UnsupportedNetwork: React.FC = () => {
     const { t } = useTranslation();
 
     const switchOrAddOptimismNetwork = async () => {
-        const switchTo = NetworkIdByName.OptimsimMainnet;
-        const optimismNetworkParms = OPTIMISM_NETWORKS[switchTo];
+        const optimismNetworkParms = OPTIMISM_NETWORKS[10];
 
         if (typeof window.ethereum !== 'undefined') {
+            console.log('proslo');
             try {
                 await (window.ethereum as any).request({
                     method: 'wallet_switchEthereumChain',
