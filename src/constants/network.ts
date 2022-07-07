@@ -30,13 +30,6 @@ export const OPTIMISM_NETWORKS: Record<number, OptimismNetwork> = {
         blockExplorerUrls: ['https://optimistic.etherscan.io/'],
         iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
     },
-    69: {
-        chainId: '0x45',
-        chainName: 'Optimism Kovan',
-        rpcUrls: ['https://kovan.optimism.io'],
-        blockExplorerUrls: ['https://kovan-optimistic.etherscan.io/'],
-        iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
-    },
 };
 
 export const OPTIMISM_OPTIONS = [
