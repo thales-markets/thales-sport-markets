@@ -61,7 +61,8 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ marketAddress }) => {
                             <AlternateValue>
                                 (${' '}
                                 {(
-                                    (market?.resolved
+                                    (market?.resolved && //@ts-ignore
+                                    Position[market.finalResult - 1] == Position.HOME
                                         ? 1
                                         : market?.positions[Position.HOME].sides[Side.SELL].odd || 0) *
                                     (balances?.home || 0)
@@ -79,7 +80,8 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ marketAddress }) => {
                             <AlternateValue>
                                 (${' '}
                                 {(
-                                    (market?.resolved
+                                    (market?.resolved && //@ts-ignore
+                                    Position[market.finalResult - 1] == Position.AWAY
                                         ? 1
                                         : market?.positions[Position.AWAY].sides[Side.SELL].odd || 0) *
                                     (balances?.away || 0)
@@ -95,7 +97,8 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ marketAddress }) => {
                             <AlternateValue>
                                 (${' '}
                                 {(
-                                    (market?.resolved
+                                    (market?.resolved && //@ts-ignore
+                                    Position[market.finalResult - 1] == Position.DRAW
                                         ? 1
                                         : market?.positions[Position.DRAW].sides[Side.SELL].odd || 0) *
                                     (balances?.draw || 0)
