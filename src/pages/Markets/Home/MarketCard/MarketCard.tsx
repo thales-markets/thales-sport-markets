@@ -17,7 +17,7 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPositions }) => 
     const claimAvailable = isClaimAvailable(accountPositions);
 
     return market.isResolved ? (
-        <Container isClaimAvailable={claimAvailable}>
+        <Container isResolved={market.isResolved} isClaimAvailable={claimAvailable}>
             <MarketCardResolved market={market} />
         </Container>
     ) : market.isCanceled ? (
@@ -35,13 +35,20 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPositions }) => 
     );
 };
 
-const Container = styled(FlexDivColumnCentered)<{ isClaimAvailable?: boolean; isCanceled?: boolean }>`
+const Container = styled(FlexDivColumnCentered)<{
+    isClaimAvailable?: boolean;
+    isCanceled?: boolean;
+    isResolved?: boolean;
+}>`
     box-sizing: border-box;
     border-radius: 14px;
     padding: 16px 19px;
     margin: 20px 10px;
     max-height: 275px;
-    background: ${(props) => props.theme.background.secondary};
+    background: ${(props) =>
+        (props.isResolved && !props.isClaimAvailable) || props.isCanceled
+            ? 'rgba(48, 54, 86, 0.5)'
+            : props.theme.background.secondary};
     border: ${(props) =>
         props.isClaimAvailable
             ? '2px solid ' + props.theme.borderColor.quaternary

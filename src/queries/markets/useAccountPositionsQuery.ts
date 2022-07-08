@@ -8,9 +8,9 @@ import { bigNumberFormatter } from 'utils/formatters/ethers';
 const useAccountPositionsQuery = (
     walletAddress: string,
     networkId: NetworkId,
-    options?: UseQueryOptions<AccountPositionsMap | undefined>
+    options?: UseQueryOptions<AccountPositionsMap>
 ) => {
-    return useQuery<AccountPositionsMap | undefined>(
+    return useQuery<AccountPositionsMap>(
         QUERY_KEYS.AccountPositions(walletAddress, networkId),
         async () => {
             try {
@@ -25,7 +25,6 @@ const useAccountPositionsQuery = (
                     const marketAddress = positionBalance.position.market.address;
                     if (accountPositionsMap[marketAddress]) {
                         const existingPositions = accountPositionsMap[marketAddress];
-                        console.log(positionBalance.amount);
                         const position: AccountPosition = {
                             ...positionBalance.position,
                             amount: bigNumberFormatter(positionBalance.amount),
@@ -46,7 +45,7 @@ const useAccountPositionsQuery = (
                 return accountPositionsMap;
             } catch (e) {
                 console.log(e);
-                return undefined;
+                return {};
             }
         },
         {

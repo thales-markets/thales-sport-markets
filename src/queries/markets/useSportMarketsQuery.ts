@@ -8,8 +8,8 @@ import { bigNumberFormatter } from 'utils/formatters/ethers';
 import { fixDuplicatedTeamName } from 'utils/formatters/string';
 import networkConnector from 'utils/networkConnector';
 
-const useSportMarketsQuery = (networkId: NetworkId, options?: UseQueryOptions<SportMarkets | undefined>) => {
-    return useQuery<SportMarkets | undefined>(
+const useSportMarketsQuery = (networkId: NetworkId, options?: UseQueryOptions<SportMarkets>) => {
+    return useQuery<SportMarkets>(
         QUERY_KEYS.SportMarkets(networkId),
         async () => {
             try {
@@ -36,11 +36,11 @@ const useSportMarketsQuery = (networkId: NetworkId, options?: UseQueryOptions<Sp
                     return market;
                 });
 
-                return mappedMarkets;
+                return mappedMarkets as SportMarkets;
             } catch (e) {
                 console.log(e);
-                return undefined;
             }
+            return [];
         },
         {
             refetchInterval: 5000,

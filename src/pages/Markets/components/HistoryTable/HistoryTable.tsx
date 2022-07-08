@@ -7,7 +7,7 @@ import { MarketTransaction, UserTransaction, UserTransactions } from 'types/mark
 import { formatCurrency } from '../../../../utils/formatters/number';
 import styled from 'styled-components';
 import { ODDS_COLOR } from '../../../../constants/ui';
-import { POSITION_MAP } from 'constants/options';
+import { Position, POSITION_MAP, PositionName } from 'constants/options';
 import { buildMarketLink } from '../../../../utils/routes';
 import SPAAnchor from '../../../../components/SPAAnchor';
 import ViewEtherscanLink from '../../../../components/ViewEtherscanLink';
@@ -38,6 +38,7 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                     {
                         Header: <>Game</>,
                         accessor: 'game',
+                        sortType: 'alphanumeric',
                         Cell: (cellProps: CellProps<UserTransaction, UserTransaction['game']>) => (
                             <SPAAnchor
                                 className="hover-underline"
@@ -53,6 +54,7 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                     {
                         Header: <>{t('market.table.type-col')}</>,
                         accessor: 'type',
+                        sortType: 'basic',
                         Cell: (cellProps: CellProps<UserTransaction, UserTransaction['type']>) => (
                             <p>{t(`market.table.type.${cellProps.cell.value}`)}</p>
                         ),
@@ -62,6 +64,7 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                     {
                         Header: <>{t('market.table.position-col')}</>,
                         accessor: 'positionTeam',
+                        sortType: 'alphanumeric',
                         Cell: (cellProps: CellProps<UserTransaction, UserTransaction['positionTeam']>) => (
                             <p>{cellProps.cell.value}</p>
                         ),
@@ -91,6 +94,7 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                         ),
                         width: 150,
                         sortable: true,
+                        sortType: 'basic',
                     },
                     {
                         Header: <>Result</>,
@@ -106,6 +110,17 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                         ),
                         width: 150,
                         sortable: true,
+                        sortType: (rowA: any, rowB: any, _columnId?: string, desc?: boolean) => {
+                            let aValue = (Position[rowA.original.result as PositionName] ?? -1) + 1;
+                            let bValue = (Position[rowB.original.result as PositionName] ?? -1) + 1;
+                            if (!aValue) {
+                                aValue = desc ? -1 : 3;
+                            }
+                            if (!bValue) {
+                                bValue = desc ? -1 : 3;
+                            }
+                            return aValue < bValue ? -1 : 1;
+                        },
                     },
                     {
                         Header: <>{t('market.table.tx-status-col')}</>,
