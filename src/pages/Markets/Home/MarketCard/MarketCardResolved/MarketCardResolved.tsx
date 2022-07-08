@@ -47,7 +47,7 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [claimable, setClaimable] = useState<boolean>(false);
     const userTransactionsQuery = useUserTransactionsPerMarketQuery(walletAddress, market.address, networkId, {
-        enabled: isAppReady,
+        enabled: isAppReady && isWalletConnected,
     });
     const marketBalancesQuery = useMarketBalancesQuery(market.address, walletAddress, {
         enabled: isWalletConnected,
@@ -162,7 +162,7 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
                 <WinnerLabel isWinning={market.finalResult == 3} finalResult={market.finalResult}>
                     DRAW
                 </WinnerLabel>
-                <ProfitLabel claimable={claimable} profit={profit}>{`$ ${profit}`}</ProfitLabel>
+                <ProfitLabel claimable={claimable} profit={profit}>{`$ ${profit.toFixed(2)}`}</ProfitLabel>
                 <Tags isFinished={market.finalResult != 0} sport={market.sport} tags={market.tags} />
             </MatchInfoColumn>
             <MatchInfoColumn>

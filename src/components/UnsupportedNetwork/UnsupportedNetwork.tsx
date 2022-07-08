@@ -12,7 +12,6 @@ const UnsupportedNetwork: React.FC = () => {
         const optimismNetworkParms = OPTIMISM_NETWORKS[10];
 
         if (typeof window.ethereum !== 'undefined') {
-            console.log('proslo');
             try {
                 await (window.ethereum as any).request({
                     method: 'wallet_switchEthereumChain',

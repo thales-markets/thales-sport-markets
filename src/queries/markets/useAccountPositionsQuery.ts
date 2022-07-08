@@ -25,7 +25,6 @@ const useAccountPositionsQuery = (
                     const marketAddress = positionBalance.position.market.address;
                     if (accountPositionsMap[marketAddress]) {
                         const existingPositions = accountPositionsMap[marketAddress];
-                        console.log(positionBalance.amount);
                         const position: AccountPosition = {
                             ...positionBalance.position,
                             amount: bigNumberFormatter(positionBalance.amount),
