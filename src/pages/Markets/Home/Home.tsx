@@ -344,6 +344,7 @@ const Home: React.FC = () => {
                                             setStartDate(null);
                                             setEndDate(null);
                                             setTagFilter(allTagsFilterItem);
+                                            setGlobalFilter(GlobalFilterEnum.All);
                                             if (filterItem === SportFilterEnum.All) {
                                                 setAvailableTags([
                                                     allTagsFilterItem,
