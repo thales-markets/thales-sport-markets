@@ -185,7 +185,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 ) {
                     setClaimable(true);
                     //@ts-ignore
-                    setClaimableAmount(balances?.[Position[market.finalResult - 1].toLowerCase()] > 0);
+                    setClaimableAmount(balances?.[Position[market.finalResult - 1].toLowerCase()]);
                 } else if (market.finalResult === 0) {
                     if (balances.home > 0 || balances.draw > 0 || balances.away > 0) {
                         setClaimable(true);

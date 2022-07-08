@@ -61,7 +61,10 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ marketAddress }) => {
                             <AlternateValue>
                                 (${' '}
                                 {(
-                                    (market?.positions[Position.HOME].sides[Side.SELL].odd || 0) * (balances?.home || 0)
+                                    (market?.resolved
+                                        ? 1
+                                        : market?.positions[Position.HOME].sides[Side.SELL].odd || 0) *
+                                    (balances?.home || 0)
                                 ).toFixed(2)}
                                 )
                             </AlternateValue>
@@ -76,7 +79,10 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ marketAddress }) => {
                             <AlternateValue>
                                 (${' '}
                                 {(
-                                    (market?.positions[Position.AWAY].sides[Side.SELL].odd || 0) * (balances?.away || 0)
+                                    (market?.resolved
+                                        ? 1
+                                        : market?.positions[Position.AWAY].sides[Side.SELL].odd || 0) *
+                                    (balances?.away || 0)
                                 ).toFixed(2)}
                                 )
                             </AlternateValue>
@@ -89,7 +95,10 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ marketAddress }) => {
                             <AlternateValue>
                                 (${' '}
                                 {(
-                                    (market?.positions[Position.DRAW].sides[Side.SELL].odd || 0) * (balances?.draw || 0)
+                                    (market?.resolved
+                                        ? 1
+                                        : market?.positions[Position.DRAW].sides[Side.SELL].odd || 0) *
+                                    (balances?.draw || 0)
                                 ).toFixed(2)}
                                 )
                             </AlternateValue>
