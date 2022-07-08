@@ -38,14 +38,14 @@ const Container = styled(FlexDivCentered)`
     margin-bottom: 4px;
     cursor: pointer;
     &.selected {
-        border: 1.5px solid ${(props) => props.theme.borderColor.primary};
-        background: ${(props) => props.theme.button.background.secondary};
-        color: ${(props) => props.theme.button.textColor.tertiary};
+        border: 1.5px solid ${(props) => props.theme.button.borderColor.secondary};
+        background: ${(props) => props.theme.button.background.tertiary};
+        color: ${(props) => props.theme.button.textColor.quaternary};
     }
     &:hover:not(.disabled) {
-        border: 1.5px solid ${(props) => props.theme.borderColor.primary};
-        background: ${(props) => props.theme.button.background.secondary};
-        color: ${(props) => props.theme.button.textColor.tertiary};
+        border: 1.5px solid ${(props) => props.theme.button.borderColor.secondary};
+        background: ${(props) => props.theme.button.background.tertiary};
+        color: ${(props) => props.theme.button.textColor.quaternary};
         opacity: 0.8;
     }
     &.disabled {

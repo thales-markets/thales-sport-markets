@@ -202,7 +202,7 @@ export const MatchParticipantImageContainer = styled(FlexDiv)<{
                 : props.isCanceled
                 ? props.theme.oddsColor.secondary
                 : props.theme.borderColor.primary};
-    background: ${(props) => props.theme.background.secondary};
+    background: transparent;
     opacity: ${(props) => (props.finalResult && props.finalResult !== 3 && !props.isWinner ? '0.5' : '')};
     height: 126px;
     width: 126px;
