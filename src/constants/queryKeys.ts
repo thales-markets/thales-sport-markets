@@ -8,12 +8,13 @@ export const QUERY_KEYS = {
     Market: (marketAddress: string) => ['market', marketAddress],
     MarketBalances: (marketAddress: string, walletAddress: string) => ['marketBalances', marketAddress, walletAddress],
     MarketCancellationOdds: (marketAddress: string) => ['marketCancellationOdds', marketAddress],
-    PositionDetails: (marketAddress: string, position: Position, amount: number) => [
-        'positionDetails',
-        marketAddress,
-        position,
-        amount,
-    ],
+    PositionDetails: (
+        marketAddress: string,
+        position: Position,
+        amount: number,
+        stableIndex: number,
+        networkId: NetworkId
+    ) => ['positionDetails', marketAddress, position, amount, stableIndex, networkId],
     AvailablePerSide: (marketAddress: string, side: Side) => ['availablePerSide', marketAddress, side],
     MarketTransactions: (marketAddress: string, networkId: NetworkId) => [
         'market',

@@ -133,7 +133,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     const positionPriceDetailsQuery = usePositionPriceDetailsQuery(
         market.address,
         selectedPosition,
-        Number(amount) || 1
+        Number(amount) || 1,
+        selectedStableIndex,
+        networkId
     );
 
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
@@ -152,6 +154,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     useEffect(() => {
         if (positionPriceDetailsQuery.isSuccess && positionPriceDetailsQuery.data) {
             setAmmPosition(positionPriceDetailsQuery.data);
+            console.log('positionPriceDetailsQuery ', positionPriceDetailsQuery?.data);
         }
     }, [positionPriceDetailsQuery.isSuccess, positionPriceDetailsQuery.data]);
 
@@ -347,7 +350,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
             }
         };
         getMaxAmount();
-    }, [selectedSide, amount, balances, paymentTokenBalance, ammPosition]);
+    }, [selectedSide, amount, balances, paymentTokenBalance, ammPosition, selectedStableIndex]);
 
     const onMaxClick = async () => {
         setAmount(maxAmount);
