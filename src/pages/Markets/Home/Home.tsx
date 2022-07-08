@@ -23,8 +23,6 @@ import {
 import TagButton from '../../../components/TagButton';
 import GlobalFilter from '../components/GlobalFilter';
 import MarketsGrid from './MarketsGrid';
-// import { navigateTo } from 'utils/routes';
-// import ROUTES from 'constants/routes';
 import RangedDatepicker from 'components/RangedDatepicker';
 import Search from 'components/Search';
 import { DEFAULT_SORT_BY, GlobalFilterEnum, SortDirection, SportFilterEnum } from 'constants/markets';
@@ -34,12 +32,12 @@ import useLocalStorage from 'hooks/useLocalStorage';
 import useAccountPositionsQuery from 'queries/markets/useAccountPositionsQuery';
 import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
+import { isClaimAvailable } from 'utils/markets';
 import SortOption from '../components/SortOption';
 import SportFilter from '../components/SportFilter';
 import ViewSwitch from '../components/ViewSwitch';
 import HeaderDatepicker from './HeaderDatepicker';
 import UserHistory from './UserHistory';
-import { isClaimAvailable } from 'utils/markets';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -406,6 +404,13 @@ const Home: React.FC = () => {
                                     disabled={false}
                                     selected={globalFilter === filterItem}
                                     onClick={() => {
+                                        if (filterItem === GlobalFilterEnum.All) {
+                                            setDateFilter('');
+                                            setStartDate(null);
+                                            setEndDate(null);
+                                            setTagFilter(allTagsFilterItem);
+                                            setSportFilter(SportFilterEnum.All);
+                                        }
                                         setGlobalFilter(filterItem);
                                     }}
                                     key={filterItem}
