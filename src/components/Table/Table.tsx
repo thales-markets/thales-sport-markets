@@ -7,7 +7,7 @@ import { FlexDiv, FlexDivCentered } from 'styles/common';
 import { SortDirection } from 'constants/markets';
 
 type ColumnWithSorting<D extends Record<string, unknown>> = Column<D> & {
-    sortType?: string;
+    sortType?: string | ((rowA: any, rowB: any, columnId?: string, desc?: boolean) => number);
     sortable?: boolean;
 };
 
