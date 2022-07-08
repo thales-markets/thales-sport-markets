@@ -196,7 +196,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     }, [balances]);
 
     useEffect(() => {
-        setAmount(0);
+        setMaxAmount(0);
     }, [selectedStableIndex]);
 
     useEffect(() => {
