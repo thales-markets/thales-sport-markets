@@ -32,7 +32,6 @@ const useAccountPositionsQuery = (
                         existingPositions.push(position);
                         accountPositionsMap[marketAddress] = existingPositions;
                     } else {
-                        console.log(positionBalance.amount);
                         accountPositionsMap[marketAddress] = [
                             {
                                 ...positionBalance.position,

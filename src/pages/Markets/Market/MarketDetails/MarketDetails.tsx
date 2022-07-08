@@ -42,6 +42,7 @@ import {
     AmountToBuyLabel,
     Separator,
     CustomTooltip,
+    LabelContainer,
 } from './styled-components/MarketDetails';
 import { FlexDivCentered } from '../../../../styles/common';
 import { MAX_L2_GAS_LIMIT, Position, Side } from '../../../../constants/options';
@@ -590,7 +591,10 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
             )}
             {!market.gameStarted && !market.resolved && (
                 <>
-                    <AmountToBuyLabel>Amount to {selectedSide.toLowerCase()}:</AmountToBuyLabel>
+                    <LabelContainer>
+                        <AmountToBuyLabel>Amount to {selectedSide.toLowerCase()}:</AmountToBuyLabel>
+                        <AmountToBuyLabel>Options value:</AmountToBuyLabel>
+                    </LabelContainer>
                     <FlexDivCentered>
                         <CustomTooltip open={!!tooltipText} title={tooltipText}>
                             <AmountToBuyContainer>

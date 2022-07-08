@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 import { Tooltip, withStyles } from '@material-ui/core';
-import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from '../../../../../styles/common';
+import {
+    FlexDiv,
+    FlexDivCentered,
+    FlexDivColumn,
+    FlexDivColumnCentered,
+    FlexDivRow,
+} from '../../../../../styles/common';
 
 export const MarketContainer = styled(FlexDivColumn)`
     margin-top: 20px;
@@ -264,6 +270,12 @@ export const MarketHeader = styled(FlexDivRow)`
 
 export const AmountToBuyLabel = styled(FlexDivCentered)`
     margin-top: 40px;
+`;
+
+export const LabelContainer = styled(FlexDiv)`
+    width: 50%;
+    align-self: center;
+    justify-content: space-around;
 `;
 
 export const Separator = styled.span`
