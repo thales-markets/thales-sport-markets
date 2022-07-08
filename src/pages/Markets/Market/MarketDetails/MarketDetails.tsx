@@ -127,6 +127,10 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     const [maxAmount, setMaxAmount] = useState<number>(0);
 
+    useEffect(() => {
+        setStableIndex(0);
+    }, [selectedSide]);
+
     const marketBalancesQuery = useMarketBalancesQuery(market.address, walletAddress, {
         enabled: !!market.address && isWalletConnected,
     });
@@ -258,6 +262,8 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 const ammQuote = await fetchAmmQuote(+amount || 1);
                 const parsedAmount = ethers.utils.parseEther(amount.toString());
                 const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+                console.log('selectedStableIndex ', selectedStableIndex);
+                console.log('parsedAmount ', parsedAmount);
                 try {
                     const tx = await getAMMSportsTransaction(
                         selectedSide === Side.BUY,
