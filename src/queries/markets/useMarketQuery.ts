@@ -27,7 +27,7 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                 ]);
 
                 const [marketDefaultOdds] = await Promise.all([
-                    await sportsAMMContract?.getMarketDefaultOdds(marketAddress),
+                    await sportsAMMContract?.getMarketDefaultOdds(marketAddress, false),
                 ]);
 
                 const homeOdds = bigNumberFormatter(marketDefaultOdds[0]);

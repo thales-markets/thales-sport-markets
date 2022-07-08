@@ -265,7 +265,10 @@ export const sportsAMMContract = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'address', name: '_market', type: 'address' }],
+            inputs: [
+                { internalType: 'address', name: '_market', type: 'address' },
+                { internalType: 'bool', name: 'isSell', type: 'bool' },
+            ],
             name: 'getMarketDefaultOdds',
             outputs: [{ internalType: 'uint256[]', name: '', type: 'uint256[]' }],
             stateMutability: 'view',
@@ -555,13 +558,6 @@ export const sportsAMMContract = {
             name: 'stakingThales',
             outputs: [{ internalType: 'contract IStakingThales', name: '', type: 'address' }],
             stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'address', name: '_market', type: 'address' }],
-            name: 'testGetMarketDefaultOdds',
-            outputs: [],
-            stateMutability: 'nonpayable',
             type: 'function',
         },
         {
