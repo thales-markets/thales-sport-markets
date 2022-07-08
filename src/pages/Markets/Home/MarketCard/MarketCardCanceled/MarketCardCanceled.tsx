@@ -21,10 +21,9 @@ import { getTeamImageSource } from 'utils/images';
 
 type MarketCardCanceledProps = {
     market: SportMarketInfo;
-    isClaimAvailable?: boolean;
 };
 
-const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market, isClaimAvailable }) => {
+const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
     // const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const marketCancellationOddsQuery = useMarketCancellationOddsQuery(market.address, { enabled: isAppReady });
@@ -35,7 +34,6 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market, isClaim
             setOddsOnCancellation(marketCancellationOddsQuery.data);
         }
     }, [marketCancellationOddsQuery.isSuccess, marketCancellationOddsQuery.data]);
-    console.log(isClaimAvailable);
 
     return (
         <MatchInfo>
