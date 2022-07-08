@@ -74,6 +74,7 @@ import { toast } from 'react-toastify';
 import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
 import { useTranslation } from 'react-i18next';
 import WalletInfo from '../WalletInfo';
+import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -154,7 +155,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     useEffect(() => {
         if (positionPriceDetailsQuery.isSuccess && positionPriceDetailsQuery.data) {
             setAmmPosition(positionPriceDetailsQuery.data);
-            console.log('positionPriceDetailsQuery ', positionPriceDetailsQuery?.data);
         }
     }, [positionPriceDetailsQuery.isSuccess, positionPriceDetailsQuery.data]);
 
@@ -190,6 +190,10 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
             }
         }
     }, [balances]);
+
+    useEffect(() => {
+        setAmount(0);
+    }, [selectedStableIndex]);
 
     useEffect(() => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
@@ -327,6 +331,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
                 if (sportsAMMContract && signer) {
                     const price = ammPosition.sides[selectedSide].quote / (+amount || 1);
 
+                    console.log('paymentTokenBalance ', paymentTokenBalance);
                     if (price && paymentTokenBalance) {
                         let tmpSuggestedAmount = Number(paymentTokenBalance) / Number(price);
                         if (tmpSuggestedAmount > availablePerSide.positions[selectedPosition].available) {
@@ -336,7 +341,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
 
                         const ammQuote = await fetchAmmQuote(tmpSuggestedAmount);
 
-                        const ammPrice = Number(ethers.utils.formatEther(ammQuote)) / Number(tmpSuggestedAmount);
+                        const ammPrice =
+                            bigNumberFormmaterWithDecimals(
+                                ammQuote,
+                                selectedStableIndex == 0 || selectedStableIndex == 1 ? 18 : 6
+                            ) / Number(tmpSuggestedAmount);
                         // 2 === slippage
                         tmpSuggestedAmount = (Number(paymentTokenBalance) / Number(ammPrice)) * ((100 - 2) / 100);
                         setMaxAmount(floorNumberToDecimals(tmpSuggestedAmount));
