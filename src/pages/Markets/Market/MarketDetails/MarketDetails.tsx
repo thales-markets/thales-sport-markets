@@ -79,9 +79,11 @@ import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 
 type MarketDetailsProps = {
     market: MarketData;
+    selectedSide: Side;
+    setSelectedSide: (side: Side) => void;
 };
 
-const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
+const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, setSelectedSide }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -95,7 +97,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
     const [isBuying, setIsBuying] = useState<boolean>(false);
     const [amount, setAmountValue] = useState<number | string>('');
     const [selectedPosition, setSelectedPosition] = useState<Position>(Position.HOME);
-    const [selectedSide, setSelectedSide] = useState<Side>(Side.BUY);
     const [claimable, setClaimable] = useState<boolean>(false);
     const [claimableAmount, setClaimableAmount] = useState<number>(0);
     const [tooltipText, setTooltipText] = useState<string>('');
@@ -444,7 +445,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market }) => {
 
     return (
         <MarketContainer>
-            <WalletInfo marketAddress={market.address} />
+            <WalletInfo market={market} />
             {!market.resolved && (
                 <MarketHeader>
                     <FlexDivCentered>

@@ -13,8 +13,8 @@ const queryConnector: QueryConnector = {
     },
 };
 
-export const refetchMarketData = (marketAddress: string, walletAddress: string) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Market(marketAddress));
+export const refetchMarketData = (marketAddress: string, walletAddress: string, isSell?: boolean) => {
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Market(marketAddress, !!isSell));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.AccountMarketTicketData(marketAddress, walletAddress));
 };
 

@@ -8,9 +8,9 @@ import { bigNumberFormatter } from '../../utils/formatters/ethers';
 import { fixDuplicatedTeamName } from '../../utils/formatters/string';
 import { Position, Side } from '../../constants/options';
 
-const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketData | undefined>) => {
+const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQueryOptions<MarketData | undefined>) => {
     return useQuery<MarketData | undefined>(
-        QUERY_KEYS.Market(marketAddress),
+        QUERY_KEYS.Market(marketAddress, isSell),
         async () => {
             try {
                 const contract = new ethers.Contract(marketAddress, marketContract.abi, networkConnector.provider);
@@ -27,7 +27,7 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                 ]);
 
                 const [marketDefaultOdds] = await Promise.all([
-                    await sportsAMMContract?.getMarketDefaultOdds(marketAddress, false),
+                    await sportsAMMContract?.getMarketDefaultOdds(marketAddress, isSell),
                 ]);
 
                 const homeOdds = bigNumberFormatter(marketDefaultOdds[0]);

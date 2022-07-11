@@ -12,33 +12,23 @@ import useMarketBalancesQuery from '../../../../queries/markets/useMarketBalance
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/rootReducer';
 import { getIsWalletConnected, getWalletAddress } from '../../../../redux/modules/wallet';
-import useMarketQuery from '../../../../queries/markets/useMarketQuery';
 import { Balances, MarketData } from '../../../../types/markets';
 import { Position, Side } from '../../../../constants/options';
 import { ODDS_COLOR } from '../../../../constants/ui';
 import { ReactComponent as WalletIcon } from 'assets/images/wallet-icon.svg';
 
 type WalletInfoProps = {
-    marketAddress: string;
+    market: MarketData | undefined;
 };
 
-const WalletInfo: React.FC<WalletInfoProps> = ({ marketAddress }) => {
+const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const [market, setMarket] = useState<MarketData | undefined>(undefined);
     const [balances, setBalances] = useState<Balances | undefined>(undefined);
 
-    const marketBalancesQuery = useMarketBalancesQuery(marketAddress, walletAddress, {
-        enabled: !!marketAddress && isWalletConnected,
+    const marketBalancesQuery = useMarketBalancesQuery(market?.address || '', walletAddress, {
+        enabled: !!market?.address && isWalletConnected,
     });
-
-    const marketQuery = useMarketQuery(marketAddress);
-
-    useEffect(() => {
-        if (marketQuery.isSuccess && marketQuery.data) {
-            setMarket(marketQuery.data);
-        }
-    }, [marketQuery.isSuccess, marketQuery.data]);
 
     useEffect(() => {
         if (marketBalancesQuery.isSuccess && marketBalancesQuery.data) {
