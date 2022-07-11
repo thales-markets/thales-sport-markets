@@ -229,6 +229,7 @@ export const Status = styled.p<{ resolved: boolean; claimable: boolean }>`
         margin-left: 2px;
         color: ${(props) => (!props.claimable ? '#E26A78' : '#3fd1ff')};
     }
+    margin-top: 10px;
 `;
 
 export const ClaimButton = styled.button<{ cancelled?: boolean }>`
