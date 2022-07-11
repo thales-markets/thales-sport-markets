@@ -340,8 +340,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 const { sportsAMMContract, signer } = networkConnector;
                 if (sportsAMMContract && signer) {
                     const price = ammPosition.sides[selectedSide].quote / (+amount || 1);
-
-                    if (price && paymentTokenBalance) {
+                    if (price > 0 && paymentTokenBalance) {
                         let tmpSuggestedAmount = Number(paymentTokenBalance) / Number(price);
                         if (tmpSuggestedAmount > availablePerSide.positions[selectedPosition].available) {
                             setMaxAmount(floorNumberToDecimals(availablePerSide.positions[selectedPosition].available));
@@ -358,19 +357,16 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             ) / Number(tmpSuggestedAmount);
                         // 2 === slippage
                         tmpSuggestedAmount = (Number(paymentTokenBalance) / Number(ammPrice)) * ((100 - 2) / 100);
-                        setIsFetching(false);
                         setMaxAmount(floorNumberToDecimals(tmpSuggestedAmount));
-                        return;
                     }
-                    setIsFetching(false);
                 }
                 setIsFetching(false);
             } else {
-                setIsFetching(false);
                 //@ts-ignore
                 setMaxAmount(balances?.[Position[selectedPosition].toLowerCase()] || 0);
-                return;
             }
+            setIsFetching(false);
+            return;
         };
         getMaxAmount();
     }, [selectedSide, amount, balances, paymentTokenBalance, ammPosition, selectedStableIndex]);
