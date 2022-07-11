@@ -19,6 +19,7 @@ type TableProps = {
     onTableRowClick?: (row: Row<any>) => void;
     isLoading?: boolean;
     noResultsMessage?: React.ReactNode;
+    tableRowStyles?: CSSProperties;
     tableHeadCellStyles?: CSSProperties;
     tableRowCellStyles?: CSSProperties;
 };
@@ -31,6 +32,7 @@ const Table: React.FC<TableProps> = ({
     noResultsMessage = null,
     onTableRowClick = undefined,
     isLoading = false,
+    tableRowStyles = {},
     tableHeadCellStyles = {},
     tableRowCellStyles = {},
 }) => {
@@ -88,6 +90,7 @@ const Table: React.FC<TableProps> = ({
 
                             return (
                                 <TableRow
+                                    style={tableRowStyles}
                                     {...row.getRowProps()}
                                     cursorPointer={!!onTableRowClick}
                                     onClick={onTableRowClick ? () => onTableRowClick(row) : undefined}

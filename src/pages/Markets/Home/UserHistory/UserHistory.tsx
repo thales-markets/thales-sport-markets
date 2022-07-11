@@ -88,6 +88,7 @@ const Container = styled(FlexDivColumn)`
     }
     max-height: 357px;
     min-height: 357px;
+    overflow-y: auto;
 `;
 
 const TableContainer = styled(FlexDivColumn)`

@@ -134,6 +134,7 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                 data={transactions}
                 isLoading={isLoading}
                 noResultsMessage={noResultsMessage}
+                tableRowStyles={{ minHeight: '50px' }}
             />
         </>
     );
