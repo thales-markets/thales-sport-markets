@@ -53,7 +53,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from '../../../../redux/modules/wallet';
 import ApprovalModal from '../../../../components/ApprovalModal/ApprovalModal';
-import { PAYMENT_CURRENCY, USD_SIGN } from '../../../../constants/currency';
+import { USD_SIGN } from '../../../../constants/currency';
 import { MAX_GAS_LIMIT } from '../../../../constants/network';
 import {
     floorNumberToDecimals,
@@ -95,6 +95,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const [isAllowing, setIsAllowing] = useState<boolean>(false);
     const [selectedStableIndex, setStableIndex] = useState<number>(0);
     const [isBuying, setIsBuying] = useState<boolean>(false);
+    const [isFetching, setIsFetching] = useState<boolean>(false);
     const [amount, setAmountValue] = useState<number | string>('');
     const [selectedPosition, setSelectedPosition] = useState<Position>(Position.HOME);
     const [claimable, setClaimable] = useState<boolean>(false);
@@ -334,15 +335,16 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
     useEffect(() => {
         const getMaxAmount = async () => {
+            setIsFetching(true);
             if (selectedSide === Side.BUY) {
                 const { sportsAMMContract, signer } = networkConnector;
                 if (sportsAMMContract && signer) {
                     const price = ammPosition.sides[selectedSide].quote / (+amount || 1);
-
-                    if (price && paymentTokenBalance) {
+                    if (price > 0 && paymentTokenBalance) {
                         let tmpSuggestedAmount = Number(paymentTokenBalance) / Number(price);
                         if (tmpSuggestedAmount > availablePerSide.positions[selectedPosition].available) {
                             setMaxAmount(floorNumberToDecimals(availablePerSide.positions[selectedPosition].available));
+                            setIsFetching(false);
                             return;
                         }
 
@@ -356,14 +358,15 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         // 2 === slippage
                         tmpSuggestedAmount = (Number(paymentTokenBalance) / Number(ammPrice)) * ((100 - 2) / 100);
                         setMaxAmount(floorNumberToDecimals(tmpSuggestedAmount));
-                        return;
                     }
                 }
+                setIsFetching(false);
             } else {
                 //@ts-ignore
                 setMaxAmount(balances?.[Position[selectedPosition].toLowerCase()] || 0);
-                return;
             }
+            setIsFetching(false);
+            return;
         };
         getMaxAmount();
     }, [selectedSide, amount, balances, paymentTokenBalance, ammPosition, selectedStableIndex]);
@@ -598,7 +601,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                     }}
                                     value={amount}
                                 />
-                                <MaxButton onClick={onMaxClick}>Max</MaxButton>
+                                <MaxButton disabled={isFetching} onClick={onMaxClick}>
+                                    Max
+                                </MaxButton>
                             </AmountToBuyContainer>
                         </CustomTooltip>
                         <AmountToBuyContainer>
@@ -675,7 +680,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     {openApprovalModal && (
                         <ApprovalModal
                             defaultAmount={amount}
-                            tokenSymbol={PAYMENT_CURRENCY}
+                            tokenSymbol={COLLATERALS[selectedStableIndex]}
                             isAllowing={isAllowing}
                             onSubmit={handleAllowance}
                             onClose={() => setOpenApprovalModal(false)}
