@@ -17,13 +17,13 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ isResolved, isLive, isCancele
 
     const canceledFlag = isCanceled && !isResolved;
     const regularFlag = !isResolved && !isCanceled && !isLive && !isClaimable;
-    const isPending = isLive && !isResolved && !isCanceled;
+    const isPending = isLive && !isResolved && !isCanceled && !isClaimable;
 
     return (
         <Container>
             {canceledFlag && <Status color={STATUS_COLOR.CANCELED}>{t('markets.market-card-list.canceled')}</Status>}
             {regularFlag && <MatchStarts>{`${t('markets.market-card-list.starts')}: ${startsAt}`}</MatchStarts>}
-            {isResolved && (
+            {isResolved && !isClaimable && (
                 <>
                     <ResultLabel>{t('markets.market-card-list.result')}</ResultLabel>
                     <Result isLive={isLive}>{result}</Result>
@@ -87,7 +87,7 @@ const MatchStarts = styled.span`
 `;
 
 const ClaimButton = styled.div`
-    margin-right: 100px;
+    margin-right: 20px;
     text-transform: uppercase;
     padding: 4px 11px;
     background-color: #3fd1ff;
