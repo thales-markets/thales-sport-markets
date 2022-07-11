@@ -506,7 +506,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     {market.resolved && market.gameStarted && <ScoreLabel>{market.awayScore}</ScoreLabel>}
                 </MatchInfoColumn>
             </MatchInfo>
-            <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
+            {market.resolved && !market.gameStarted && <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>}
             {!market.gameStarted && !market.resolved && (
                 <OddsContainer>
                     <Pick
