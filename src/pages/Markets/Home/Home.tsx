@@ -9,7 +9,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
+import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivStart } from 'styles/common';
 import {
     AccountPosition,
     AccountPositionsMap,
@@ -334,7 +334,11 @@ const Home: React.FC = () => {
                         {Object.values(SportFilterEnum).map((filterItem: any) => {
                             return (
                                 <SportFilter
-                                    disabled={false}
+                                    disabled={
+                                        filterItem !== SportFilterEnum.All &&
+                                        filterItem !== SportFilterEnum.Baseball &&
+                                        filterItem !== SportFilterEnum.Soccer
+                                    }
                                     selected={sportFilter === filterItem}
                                     sport={filterItem}
                                     onClick={() => {
@@ -375,7 +379,6 @@ const Home: React.FC = () => {
                                 </SportFilter>
                             );
                         })}
-                        <ComingSoonContainer>{t(`market.filter-label.sport.soon`)}</ComingSoonContainer>
                     </SportFiltersContainer>
                     <RangedDatepicker onDateRangeChange={onDateRangeChange} startDate={startDate} endDate={endDate} />
                 </SidebarContainer>
@@ -559,21 +562,6 @@ const NoMarketsLabel = styled.span`
 const LoaderContainer = styled(FlexDivColumn)`
     position: relative;
     min-height: 300px;
-`;
-
-const ComingSoonContainer = styled(FlexDivRowCentered)`
-    font-style: normal;
-    font-weight: 600;
-    font-size: 15px;
-    line-height: 102.6%;
-    letter-spacing: 0.035em;
-    text-transform: uppercase;
-    height: 36px;
-    color: ${(props) => props.theme.textColor.secondary};
-    padding-bottom: 5px;
-    margin-bottom: 10px;
-    justify-content: flex-start;
-    white-space: nowrap;
 `;
 
 export default Home;
