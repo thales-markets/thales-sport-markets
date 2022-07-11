@@ -10,6 +10,7 @@ type OddsProps = {
     isResolved?: boolean;
     finalResult?: number;
     isLive?: boolean;
+    isCancelled?: boolean;
     odds?: {
         homeOdds: number;
         awayOdds: number;
@@ -17,14 +18,14 @@ type OddsProps = {
     };
 };
 
-const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, odds }) => {
+const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelled, odds }) => {
     const { t } = useTranslation();
 
     const pendingResolution =
         odds?.awayOdds == 0 && odds?.homeOdds == 0 && odds?.awayOdds == 0 && isLive && !isResolved;
     const noOddsFlag = odds?.awayOdds == 0 && odds?.homeOdds == 0 && odds?.awayOdds == 0 && !isLive && !isResolved;
     const resolvedGameFlag = isResolved && finalResult;
-    const showOdds = !pendingResolution && !noOddsFlag && !resolvedGameFlag;
+    const showOdds = !pendingResolution && !noOddsFlag && !resolvedGameFlag && !isCancelled;
     return (
         <Container>
             {noOddsFlag && (

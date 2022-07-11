@@ -37,6 +37,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 isResolved={market.isResolved}
                 finalResult={market.finalResult}
                 isLive={market.maturityDate < new Date()}
+                isCancelled={market.isCanceled}
                 odds={{
                     homeOdds: market.homeOdds,
                     awayOdds: market.awayOdds,
