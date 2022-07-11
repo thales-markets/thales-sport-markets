@@ -53,7 +53,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from '../../../../redux/modules/wallet';
 import ApprovalModal from '../../../../components/ApprovalModal/ApprovalModal';
-import { PAYMENT_CURRENCY, USD_SIGN } from '../../../../constants/currency';
+import { USD_SIGN } from '../../../../constants/currency';
 import { MAX_GAS_LIMIT } from '../../../../constants/network';
 import {
     floorNumberToDecimals,
@@ -684,7 +684,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     {openApprovalModal && (
                         <ApprovalModal
                             defaultAmount={amount}
-                            tokenSymbol={PAYMENT_CURRENCY}
+                            tokenSymbol={COLLATERALS[selectedStableIndex]}
                             isAllowing={isAllowing}
                             onSubmit={handleAllowance}
                             onClose={() => setOpenApprovalModal(false)}
