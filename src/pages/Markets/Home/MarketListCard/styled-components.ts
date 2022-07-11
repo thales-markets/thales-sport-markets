@@ -1,7 +1,12 @@
 import { STATUS_COLOR } from 'constants/ui';
 import styled from 'styled-components';
 
-export const Container = styled.div<{ backgroundColor?: string; claimBorder?: boolean; isCanceled?: boolean }>`
+export const Container = styled.div<{
+    backgroundColor?: string;
+    claimBorder?: boolean;
+    isCanceled?: boolean;
+    isResolved?: boolean;
+}>`
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -9,7 +14,9 @@ export const Container = styled.div<{ backgroundColor?: string; claimBorder?: bo
     border-radius: 5px;
     margin-bottom: 15px;
     cursor: pointer;
-    background-color: ${(_props) => (_props?.backgroundColor ? _props.backgroundColor : '')};
+    /* background-color: ${(_props) => (_props?.backgroundColor ? _props.backgroundColor : '')}; */
+    background-color: ${(_props) =>
+        _props.isResolved && !_props.claimBorder ? 'rgb(36,41,64, 0.5)' : 'rgba(48, 54, 86, 0.5)'};
     border: ${(_props) => (_props?.claimBorder ? '3px solid #3FD1FF' : '')};
     ${(_props) => (_props.isCanceled ? `border: 3px solid ${STATUS_COLOR.CANCELED};` : '')}
 `;

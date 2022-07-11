@@ -17,7 +17,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ isResolved, isLive, isCancele
 
     const canceledFlag = isCanceled && !isResolved;
     const regularFlag = !isResolved && !isCanceled && !isLive && !isClaimable;
-    const isPending = isLive && !isResolved;
+    const isPending = isLive && !isResolved && !isCanceled;
 
     return (
         <Container>
