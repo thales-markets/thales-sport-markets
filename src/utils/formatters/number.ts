@@ -72,3 +72,7 @@ export const formatNumberShort = (value: number) => {
         ? formatCurrency(value / 1.0e3, 2, true) + 'k'
         : formatCurrency(value, 2, true);
 };
+
+export const floorNumberToDecimals = (value: number, decimals = DEFAULT_CURRENCY_DECIMALS) => {
+    return Math.floor(value * Math.pow(10, decimals)) / Math.pow(10, decimals);
+};

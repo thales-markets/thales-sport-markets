@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { AccountMarketTicketData, MarketData } from 'types/markets';
+import { AccountMarketTicketData } from 'types/markets';
 import { formatCurrencyWithKey, formatPercentage } from 'utils/formatters/number';
 import { PAYMENT_CURRENCY, DEFAULT_CURRENCY_DECIMALS } from 'constants/currency';
 import { RootState } from 'redux/rootReducer';
@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import useAccountMarketTicketDataQuery from 'queries/markets/useAccountMarketTicketDataQuery';
 import onboardConnector from 'utils/onboardConnector';
 import networkConnector from 'utils/networkConnector';
-import marketContract from 'utils/contracts/exoticPositionalTicketMarketContract';
+import marketContract from 'utils/contracts/sportsMarketContract';
 import { ethers } from 'ethers';
 import Button from 'components/Button';
 import { MarketStatus } from 'constants/markets';
@@ -24,7 +24,7 @@ import { refetchMarketData } from 'utils/queryConnector';
 import Tooltip from 'components/Tooltip';
 
 type MaturityPhaseTicketProps = {
-    market: MarketData;
+    market: any;
 };
 
 const MaturityPhaseTicket: React.FC<MaturityPhaseTicketProps> = ({ market }) => {

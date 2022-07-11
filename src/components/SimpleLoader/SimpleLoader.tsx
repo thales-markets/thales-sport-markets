@@ -7,7 +7,7 @@ const SimpleLoader: React.FC = () => {
     return (
         <Wrapper>
             <Oval
-                color="#ce348a"
+                color="#3FD1FF"
                 height={60}
                 width={60}
                 secondaryColor="#f6f6fe"

@@ -1,9 +1,9 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
-import { MarketTransactions, MarketTransaction } from 'types/markets';
+import { MarketTransaction, MarketTransactions } from 'types/markets';
 import { NetworkId } from 'types/network';
-import networkConnector from 'utils/networkConnector';
+import { Position } from '../../constants/options';
 
 const useMarketTransactionsQuery = (
     marketAddress: string,
@@ -14,24 +14,12 @@ const useMarketTransactionsQuery = (
         QUERY_KEYS.MarketTransactions(marketAddress, networkId),
         async () => {
             try {
-                const { marketDataContract } = networkConnector;
-
-                const [marketTransactions, marketData] = await Promise.all([
-                    thalesData.exoticMarkets.marketTransactions({
-                        market: marketAddress,
-                        network: networkId,
-                    }),
-                    marketDataContract?.getAllMarketData(marketAddress),
-                ]);
-
-                const marketPositions = marketData[10];
-
-                const mappedMarketTransactions = marketTransactions.map((tx: MarketTransaction) => {
-                    tx.position = marketPositions[Number(tx.position) - 1];
-                    return tx;
+                const marketTransactions = await thalesData.sportMarkets.marketTransactions({
+                    market: marketAddress,
+                    network: networkId,
                 });
 
-                return mappedMarketTransactions;
+                return marketTransactions.map((tx: MarketTransaction) => ({ ...tx, position: Position[tx.position] }));
             } catch (e) {
                 console.log(e);
                 return undefined;

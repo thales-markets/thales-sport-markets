@@ -4,25 +4,32 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivStart } from 'styles/common';
 
 type TagsProps = {
+    sport: string;
     tags: number[];
+    isFinished?: boolean;
 };
 
-const Tags: React.FC<TagsProps> = ({ tags }) => {
+const Tags: React.FC<TagsProps> = ({ sport, tags, isFinished }) => {
     return (
-        <Container>
+        <Container isFinished={isFinished}>
             {tags.map((tag: number) => {
                 const findTagItem = TAGS_LIST.find((t) => t.id == tag);
-                return findTagItem ? <Tag key={findTagItem.id}>{findTagItem.label}</Tag> : null;
+                return findTagItem ? (
+                    <FlexDivCentered key={findTagItem.id}>
+                        <SportIcon className={`icon icon--${sport.toLowerCase()}`} />{' '}
+                        <Tag>{sport + ' / ' + findTagItem.label}</Tag>
+                    </FlexDivCentered>
+                ) : null;
             })}
         </Container>
     );
 };
 
-const Container = styled(FlexDivStart)`
+const Container = styled(FlexDivStart)<{ isFinished?: boolean }>`
     flex-wrap: wrap;
     align-items: center;
-    color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 5px;
+    color: ${(props) => props.theme.textColor.secondary};
+    margin-top: ${(props) => (props.isFinished ? '0px' : '11px')};
 `;
 
 export const TagLabel = styled.span<{ labelFontSize?: number }>`
@@ -31,7 +38,7 @@ export const TagLabel = styled.span<{ labelFontSize?: number }>`
     font-size: 15px;
     line-height: 100%;
     text-align: center;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
     margin-bottom: 4px;
 `;
 
@@ -44,7 +51,12 @@ const Tag = styled(FlexDivCentered)`
     align-items: center;
     text-transform: uppercase;
     padding: 4px 4px;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
+    white-space: nowrap;
+`;
+
+const SportIcon = styled.i`
+    font-size: 20px;
 `;
 
 export default Tags;

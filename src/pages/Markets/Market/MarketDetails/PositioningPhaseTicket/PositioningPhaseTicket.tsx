@@ -6,7 +6,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
-import { MarketData, MarketsParameters } from 'types/markets';
+import { MarketsParameters } from 'types/markets';
 import { formatCurrencyWithKey, formatPercentage } from 'utils/formatters/number';
 import { PAYMENT_CURRENCY, DEFAULT_CURRENCY_DECIMALS } from 'constants/currency';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -15,7 +15,7 @@ import { BigNumber, ethers } from 'ethers';
 import networkConnector from 'utils/networkConnector';
 import { MAX_GAS_LIMIT } from 'constants/network';
 import ApprovalModal from 'components/ApprovalModal';
-import marketContract from 'utils/contracts/exoticPositionalTicketMarketContract';
+import marketContract from 'utils/contracts/sportsMarketContract';
 import usePaymentTokenBalanceQuery from 'queries/wallet/usePaymentTokenBalanceQuery';
 import onboardConnector from 'utils/onboardConnector';
 import useAccountMarketTicketDataQuery from 'queries/markets/useAccountMarketTicketDataQuery';
@@ -28,7 +28,7 @@ import Tooltip from 'components/Tooltip';
 import { refetchMarketData } from 'utils/queryConnector';
 
 type PositioningPhaseTicketProps = {
-    market: MarketData;
+    market: any;
 };
 
 const PositioningPhaseTicket: React.FC<PositioningPhaseTicketProps> = ({ market }) => {

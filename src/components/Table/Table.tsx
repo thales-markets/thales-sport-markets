@@ -7,7 +7,7 @@ import { FlexDiv, FlexDivCentered } from 'styles/common';
 import { SortDirection } from 'constants/markets';
 
 type ColumnWithSorting<D extends Record<string, unknown>> = Column<D> & {
-    sortType?: string;
+    sortType?: string | ((rowA: any, rowB: any, columnId?: string, desc?: boolean) => number);
     sortable?: boolean;
 };
 
@@ -19,6 +19,7 @@ type TableProps = {
     onTableRowClick?: (row: Row<any>) => void;
     isLoading?: boolean;
     noResultsMessage?: React.ReactNode;
+    tableRowStyles?: CSSProperties;
     tableHeadCellStyles?: CSSProperties;
     tableRowCellStyles?: CSSProperties;
 };
@@ -31,6 +32,7 @@ const Table: React.FC<TableProps> = ({
     noResultsMessage = null,
     onTableRowClick = undefined,
     isLoading = false,
+    tableRowStyles = {},
     tableHeadCellStyles = {},
     tableRowCellStyles = {},
 }) => {
@@ -88,7 +90,9 @@ const Table: React.FC<TableProps> = ({
 
                             return (
                                 <TableRow
+                                    style={tableRowStyles}
                                     {...row.getRowProps()}
+                                    cursorPointer={!!onTableRowClick}
                                     onClick={onTableRowClick ? () => onTableRowClick(row) : undefined}
                                     key={rowIndex}
                                 >
@@ -122,7 +126,8 @@ const TableBody = styled.div`
     width: 100%;
 `;
 
-const TableRow = styled(FlexDiv)`
+const TableRow = styled(FlexDiv)<{ cursorPointer?: boolean }>`
+    cursor: ${(props) => (props.cursorPointer ? 'pointer' : 'default')};
     min-height: 38px;
     font-weight: 600;
     font-size: 14px;

@@ -27,6 +27,7 @@ const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
 
     useEffect(() => {
         if (marketTransactionsQuery.isSuccess && marketTransactionsQuery.data) {
+            console.log(marketTransactionsQuery.data);
             setMarketTransactions(
                 orderBy(marketTransactionsQuery.data, ['timestamp', 'blockNumber'], ['desc', 'desc'])
             );
@@ -37,8 +38,8 @@ const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
 
     return (
         <Container>
-            <Title>{t('market.table.title')}</Title>
             <TableContainer>
+                <Title>{t('market.table.title')}</Title>
                 <TransactionsTable
                     transactions={marketTransactions}
                     isLoading={marketTransactionsQuery.isLoading}
@@ -49,9 +50,18 @@ const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
     );
 };
 
+const Title = styled.span`
+    font-style: normal;
+    font-weight: bold;
+    font-size: 25px;
+    line-height: 100%;
+    text-align: center;
+    color: ${(props) => props.theme.textColor.primary};
+    margin-bottom: 20px;
+`;
+
 const Container = styled(FlexDivColumn)`
-    margin-top: 40px;
-    border: 2px solid ${(props) => props.theme.borderColor.primary};
+    margin-top: 10px;
     border-radius: 15px;
     font-style: normal;
     font-weight: normal;
@@ -69,16 +79,6 @@ const Container = styled(FlexDivColumn)`
     min-height: 357px;
 `;
 
-const Title = styled.span`
-    font-style: normal;
-    font-weight: bold;
-    font-size: 25px;
-    line-height: 100%;
-    text-align: center;
-    color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 20px;
-`;
-
 const TableContainer = styled(FlexDivColumn)`
     overflow: auto;
     ::-webkit-scrollbar {
@@ -86,6 +86,7 @@ const TableContainer = styled(FlexDivColumn)`
     }
     ::-webkit-scrollbar-track {
         background: #04045a;
+        border-radius: 8px;
     }
     ::-webkit-scrollbar-thumb {
         border-radius: 15px;
