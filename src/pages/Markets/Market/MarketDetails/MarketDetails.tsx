@@ -95,6 +95,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const [isAllowing, setIsAllowing] = useState<boolean>(false);
     const [selectedStableIndex, setStableIndex] = useState<number>(0);
     const [isBuying, setIsBuying] = useState<boolean>(false);
+    const [isFetching, setIsFetching] = useState<boolean>(false);
     const [amount, setAmountValue] = useState<number | string>('');
     const [selectedPosition, setSelectedPosition] = useState<Position>(Position.HOME);
     const [claimable, setClaimable] = useState<boolean>(false);
@@ -334,6 +335,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
     useEffect(() => {
         const getMaxAmount = async () => {
+            setIsFetching(true);
             if (selectedSide === Side.BUY) {
                 const { sportsAMMContract, signer } = networkConnector;
                 if (sportsAMMContract && signer) {
@@ -343,6 +345,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         let tmpSuggestedAmount = Number(paymentTokenBalance) / Number(price);
                         if (tmpSuggestedAmount > availablePerSide.positions[selectedPosition].available) {
                             setMaxAmount(floorNumberToDecimals(availablePerSide.positions[selectedPosition].available));
+                            setIsFetching(false);
                             return;
                         }
 
@@ -355,11 +358,15 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             ) / Number(tmpSuggestedAmount);
                         // 2 === slippage
                         tmpSuggestedAmount = (Number(paymentTokenBalance) / Number(ammPrice)) * ((100 - 2) / 100);
+                        setIsFetching(false);
                         setMaxAmount(floorNumberToDecimals(tmpSuggestedAmount));
                         return;
                     }
+                    setIsFetching(false);
                 }
+                setIsFetching(false);
             } else {
+                setIsFetching(false);
                 //@ts-ignore
                 setMaxAmount(balances?.[Position[selectedPosition].toLowerCase()] || 0);
                 return;
@@ -598,7 +605,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                     }}
                                     value={amount}
                                 />
-                                <MaxButton onClick={onMaxClick}>Max</MaxButton>
+                                <MaxButton disabled={isFetching} onClick={onMaxClick}>
+                                    Max
+                                </MaxButton>
                             </AmountToBuyContainer>
                         </CustomTooltip>
                         <AmountToBuyContainer>
