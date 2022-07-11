@@ -339,7 +339,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 if (sportsAMMContract && signer) {
                     const price = ammPosition.sides[selectedSide].quote / (+amount || 1);
 
-                    console.log('paymentTokenBalance ', paymentTokenBalance);
                     if (price && paymentTokenBalance) {
                         let tmpSuggestedAmount = Number(paymentTokenBalance) / Number(price);
                         if (tmpSuggestedAmount > availablePerSide.positions[selectedPosition].available) {
@@ -411,6 +410,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             if (selectedSide === Side.BUY) {
                 setSubmitDisabled(!paymentTokenBalance || amount > maxAmount);
                 return;
+            } else {
+                setSubmitDisabled(amount > maxAmount);
+                return;
             }
 
             setSubmitDisabled(false);
@@ -419,22 +421,12 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     }, [amount, isBuying, isAllowing, hasAllowance]);
 
     const setTooltipTextMessage = (value: string | number) => {
-        if (selectedSide === Side.BUY) {
-            if (Number(value) > availablePerSide.positions[selectedPosition].available) {
-                setTooltipText('Amount exceeded the amount available on AMM');
-            } else if (Number(value) > maxAmount) {
-                setTooltipText('Please ensure your wallet has enough funds');
-            } else {
-                setTooltipText('');
-            }
+        if (Number(value) > availablePerSide.positions[selectedPosition].available) {
+            setTooltipText('Amount exceeded the amount available on AMM');
+        } else if (Number(value) > maxAmount) {
+            setTooltipText('Please ensure your wallet has enough funds');
         } else {
-            if (Number(value) > availablePerSide.positions[selectedPosition].available) {
-                setTooltipText('Amount exceeded the amount available on AMM');
-            } else if (Number(value) > maxAmount) {
-                setTooltipText('Please ensure your wallet has enough funds');
-            } else {
-                setTooltipText('');
-            }
+            setTooltipText('');
         }
     };
 
@@ -597,7 +589,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         <AmountToBuyLabel>Options value:</AmountToBuyLabel>
                     </LabelContainer>
                     <FlexDivCentered>
-                        <CustomTooltip open={!!tooltipText} title={tooltipText}>
+                        <CustomTooltip open={!!tooltipText && !openApprovalModal} title={tooltipText}>
                             <AmountToBuyContainer>
                                 <AmountToBuyInput
                                     type="number"
@@ -664,7 +656,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                 <SliderInfo>
                                     <SliderInfoTitle>Potential profit:</SliderInfoTitle>
                                     <SliderInfoValue>
-                                        {!amount || positionPriceDetailsQuery.isLoading
+                                        {!amount || positionPriceDetailsQuery.isLoading || !!tooltipText
                                             ? '-'
                                             : `$${formatCurrency(
                                                   Number(amount) - ammPosition.sides[selectedSide].quote
