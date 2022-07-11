@@ -18,12 +18,13 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                 const rundownConsumerContract = networkConnector.theRundownConsumerContract;
                 const sportsAMMContract = networkConnector.sportsAMMContract;
                 // const { marketDataContract, marketManagerContract, thalesBondsContract } = networkConnector;
-                const [gameDetails, tags, times, resolved, finalResult] = await Promise.all([
+                const [gameDetails, tags, times, resolved, finalResult, cancelled] = await Promise.all([
                     contract?.getGameDetails(),
                     contract?.tags(0),
                     contract?.times(),
                     contract?.resolved(),
                     contract?.finalResult(),
+                    contract?.cancelled(),
                 ]);
 
                 const [marketDefaultOdds] = await Promise.all([
@@ -34,7 +35,7 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                 const awayOdds = bigNumberFormatter(marketDefaultOdds[1]);
                 const drawOdds = bigNumberFormatter(marketDefaultOdds[2] || 0);
 
-                const gameStarted = Date.now() > Number(times.maturity) * 1000;
+                const gameStarted = cancelled ? false : Date.now() > Number(times.maturity) * 1000;
                 let result;
 
                 if (resolved) {
