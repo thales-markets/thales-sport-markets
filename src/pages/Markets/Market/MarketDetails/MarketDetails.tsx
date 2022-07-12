@@ -265,8 +265,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 const ammQuote = await fetchAmmQuote(+amount || 1);
                 const parsedAmount = ethers.utils.parseEther(amount.toString());
                 const id = toast.loading(t('market.toast-messsage.transaction-pending'));
-                console.log('selectedStableIndex ', selectedStableIndex);
-                console.log('parsedAmount ', parsedAmount);
+
                 try {
                     const tx = await getAMMSportsTransaction(
                         selectedSide === Side.BUY,
@@ -405,7 +404,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 return;
             }
 
-            if (!amount || isBuying || isAllowing) {
+            if (!Number(amount) || isBuying || isAllowing) {
                 setSubmitDisabled(true);
                 return;
             }
@@ -597,7 +596,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                 <AmountToBuyInput
                                     type="number"
                                     onChange={(e) => {
-                                        setAmount(e.target.value);
+                                        if (Number(e.target.value) >= 0) {
+                                            setAmount(e.target.value);
+                                        }
                                     }}
                                     value={amount}
                                 />
@@ -661,7 +662,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                 <SliderInfo>
                                     <SliderInfoTitle>Potential profit:</SliderInfoTitle>
                                     <SliderInfoValue>
-                                        {!amount || positionPriceDetailsQuery.isLoading || !!tooltipText
+                                        {!Number(amount) || positionPriceDetailsQuery.isLoading || !!tooltipText
                                             ? '-'
                                             : `$${formatCurrency(
                                                   Number(amount) - ammPosition.sides[selectedSide].quote
