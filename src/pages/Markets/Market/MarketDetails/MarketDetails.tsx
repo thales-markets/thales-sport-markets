@@ -467,7 +467,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
             {market.gameStarted && (
                 <Status resolved={market.resolved} claimable={claimable}>
-                    {!market.resolved ? 'Started' : claimable ? 'Claimable' : 'Finished'}
+                    {!market.resolved ? 'Pending resolution' : claimable ? 'Claimable' : 'Finished'}
                 </Status>
             )}
             {market.resolved && !market.gameStarted && (
