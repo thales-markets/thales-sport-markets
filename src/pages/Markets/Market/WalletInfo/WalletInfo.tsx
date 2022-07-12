@@ -60,6 +60,22 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
                             </AlternateValue>
                         </>
                     )}
+                    {!!balances?.draw && (
+                        <>
+                            <Token color={ODDS_COLOR.DRAW}>X</Token>
+                            <Value>DRAW: {balances?.draw}</Value>
+                            <AlternateValue>
+                                (${' '}
+                                {(market?.resolved && //@ts-ignore
+                                Position[market.finalResult - 1] == Position.DRAW
+                                    ? 1 * (balances?.draw || 0)
+                                    : (market?.positions[Position.DRAW].sides[Side.SELL].odd || 0) *
+                                      (balances?.draw || 0)
+                                ).toFixed(2)}
+                                )
+                            </AlternateValue>
+                        </>
+                    )}
                     {!!balances?.away && (
                         <>
                             <Token color={ODDS_COLOR.AWAY}>2</Token>
@@ -73,22 +89,6 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
                                     ? 1 * (balances?.away || 0)
                                     : (market?.positions[Position.AWAY].sides[Side.SELL].odd || 0) *
                                       (balances?.away || 0)
-                                ).toFixed(2)}
-                                )
-                            </AlternateValue>
-                        </>
-                    )}
-                    {!!balances?.draw && (
-                        <>
-                            <Token color={ODDS_COLOR.DRAW}>X</Token>
-                            <Value>DRAW: {balances?.draw}</Value>
-                            <AlternateValue>
-                                (${' '}
-                                {(market?.resolved && //@ts-ignore
-                                Position[market.finalResult - 1] == Position.DRAW
-                                    ? 1 * (balances?.draw || 0)
-                                    : (market?.positions[Position.DRAW].sides[Side.SELL].odd || 0) *
-                                      (balances?.draw || 0)
                                 ).toFixed(2)}
                                 )
                             </AlternateValue>

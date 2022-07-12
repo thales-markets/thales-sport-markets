@@ -404,7 +404,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 return;
             }
 
-            if (!Number(amount) || isBuying || isAllowing) {
+            if (!Number(amount) || Number(amount) < 0.1 || isBuying || isAllowing) {
                 setSubmitDisabled(true);
                 return;
             }
