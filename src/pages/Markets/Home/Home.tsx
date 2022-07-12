@@ -38,6 +38,7 @@ import SportFilter from '../components/SportFilter';
 import ViewSwitch from '../components/ViewSwitch';
 import HeaderDatepicker from './HeaderDatepicker';
 import UserHistory from './UserHistory';
+import burger from 'assets/images/burger.svg';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -319,15 +320,20 @@ const Home: React.FC = () => {
                     setDateFilter={setDateFilter}
                 />
             </FiltersContainer>
-            <SwitchContainer>
-                <ViewSwitch selected={showGridView} onClick={() => setGridView(true)}>
-                    {t('market.grid-view')}
-                </ViewSwitch>
-                <ViewSwitch selected={!showGridView} onClick={() => setGridView(false)}>
-                    {t('market.list-view')}
-                </ViewSwitch>
-            </SwitchContainer>
+            <FlexDivRow>
+                <BurgerMenu src={burger} />
+                <SwitchContainer>
+                    <ViewSwitch selected={showGridView} onClick={() => setGridView(true)}>
+                        {t('market.grid-view')}
+                    </ViewSwitch>
+                    <ViewSwitch selected={!showGridView} onClick={() => setGridView(false)}>
+                        {t('market.list-view')}
+                    </ViewSwitch>
+                </SwitchContainer>
+            </FlexDivRow>
+
             <RowContainer>
+                {/* LEFT FILTERS */}
                 <SidebarContainer>
                     <Search text={marketSearch} handleChange={(value) => dispatch(setMarketSearch(value))} />
                     <SportFiltersContainer>
@@ -382,6 +388,7 @@ const Home: React.FC = () => {
                     </SportFiltersContainer>
                     <RangedDatepicker onDateRangeChange={onDateRangeChange} startDate={startDate} endDate={endDate} />
                 </SidebarContainer>
+                {/* MAIN PART */}
                 {sportMarketsQuery.isLoading ? (
                     <LoaderContainer>
                         <SimpleLoader />
@@ -400,6 +407,7 @@ const Home: React.FC = () => {
                         layoutType={showGridView ? 0 : 1}
                     />
                 )}
+                {/* RIGHT FILTERS */}
                 <SidebarContainer>
                     <GlobalFiltersContainer>
                         {Object.values(GlobalFilterEnum).map((filterItem) => {
@@ -489,10 +497,24 @@ const SidebarContainer = styled(FlexDivColumn)`
     padding-top: 25px;
     max-width: 240px;
     flex-grow: 1;
+    @media (max-width: 950px) {
+        display: none;
+    }
+`;
+
+const BurgerMenu = styled.img`
+    position: relative;
+    top: 10px;
+    left: 10px;
+    display: none;
+    @media (max-width: 950px) {
+        display: block;
+    }
 `;
 
 const SwitchContainer = styled(FlexDivRow)`
     width: 25%;
+    min-width: 150px;
     position: relative;
     top: 20px;
     align-self: end;
