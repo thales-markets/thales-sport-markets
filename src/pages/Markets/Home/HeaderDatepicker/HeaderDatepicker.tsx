@@ -26,7 +26,6 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
     const [hammerManager, setHammerManager] = useState<any>();
 
     const moveLeft = () => {
-        // if (farLeftDateIndex === 0) setFarLeftDateIndex(0);
         if (farLeftDateIndex > 0) setFarLeftDateIndex(farLeftDateIndex - 1);
     };
 
@@ -67,7 +66,7 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
             {gamesPerDay.length > 0 ? (
                 <>
                     <LeftIcon
-                        onClick={() => (farLeftDateIndex == 0 ? moveLeft() : '')}
+                        onClick={() => (farLeftDateIndex !== 0 ? moveLeft() : '')}
                         disabled={farLeftDateIndex == 0}
                     />
                     {slicedDates.map((data: GamesOnDate, index: number) => (
@@ -88,7 +87,7 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
                         </DateContainer>
                     ))}
                     <RightIcon
-                        onClick={() => (farLeftDateIndex + DATES_TO_SHOW >= gamesPerDay?.length ? moveRight() : '')}
+                        onClick={() => (farLeftDateIndex + DATES_TO_SHOW < gamesPerDay?.length ? moveRight() : '')}
                         disabled={farLeftDateIndex + DATES_TO_SHOW >= gamesPerDay?.length}
                     />
                 </>

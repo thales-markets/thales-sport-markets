@@ -25,9 +25,9 @@ export enum SportFilterEnum {
     All = 'All',
     Soccer = 'Soccer',
     Baseball = 'Baseball',
-    // Basketball = 'Basketball',
-    // Hockey = 'Hockey',
-    // Football = 'Football',
+    Basketball = 'Basketball',
+    Hockey = 'Hockey',
+    Football = 'Football',
     // Tennis = 'Tennis',
 }
 

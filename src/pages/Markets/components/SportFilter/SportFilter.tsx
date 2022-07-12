@@ -7,14 +7,17 @@ type SportFilterProps = {
     selected?: boolean;
     count?: number;
     sport: string;
-    onClick?: (param: any) => void;
+    onClick: () => void;
 };
 
 const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, onClick, children }) => {
     return (
-        <Container className={`${disabled ? 'disabled' : ''} ${selected ? 'selected' : ''}`} onClick={onClick}>
+        <Container
+            className={`${disabled ? 'disabled' : ''} ${selected ? 'selected' : ''}`}
+            onClick={() => (!disabled ? onClick() : '')}
+        >
             <SportIcon className={`icon icon--${sport.toLowerCase() == 'all' ? 'logo' : sport.toLowerCase()}`} />
-            <Label>{children}</Label>
+            <Label>{`${disabled ? 'Coming soon!' : ''} ${children}`}</Label>
         </Container>
     );
 };
@@ -30,7 +33,7 @@ const Container = styled(FlexDivRowCentered)`
     height: 36px;
     margin-left: 20px;
     &.selected,
-    &:hover {
+    &:hover:not(.disabled) {
         color: ${(props) => props.theme.textColor.quaternary};
     }
     &.disabled {

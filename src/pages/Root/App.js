@@ -7,7 +7,7 @@ import React, { lazy, Suspense, useEffect } from 'react';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { useDispatch, useSelector } from 'react-redux';
-import { Route, Router, Switch } from 'react-router-dom';
+import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { getIsAppReady, setAppReady } from 'redux/modules/app';
 import { getNetworkId, updateNetworkSettings, updateWallet } from 'redux/modules/wallet';
 import { getDefaultNetworkId, isNetworkSupported } from 'utils/network';
@@ -18,7 +18,7 @@ import networkConnector from 'utils/networkConnector';
 import ROUTES from 'constants/routes';
 import Theme from 'layouts/Theme';
 import DappLayout from 'layouts/DappLayout';
-import HomeLayout from 'layouts/HomeLayout';
+// import HomeLayout from 'layouts/HomeLayout';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -145,7 +145,8 @@ const App = () => {
                                 </DappLayout>
                             </Route>
                             <Route exact path={ROUTES.Home}>
-                                <HomeLayout />
+                                <Redirect to={ROUTES.Markets.Home} />
+                                {/*<HomeLayout />*/}
                             </Route>
                         </Switch>
                     </Router>

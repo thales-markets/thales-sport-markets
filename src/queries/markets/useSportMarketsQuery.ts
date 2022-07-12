@@ -43,7 +43,7 @@ const useSportMarketsQuery = (networkId: NetworkId, options?: UseQueryOptions<Sp
             return [];
         },
         {
-            refetchInterval: 5000,
+            refetchInterval: 60 * 1000,
             ...options,
         }
     );

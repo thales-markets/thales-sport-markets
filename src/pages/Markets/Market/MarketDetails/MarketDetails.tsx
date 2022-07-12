@@ -265,8 +265,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 const ammQuote = await fetchAmmQuote(+amount || 1);
                 const parsedAmount = ethers.utils.parseEther(amount.toString());
                 const id = toast.loading(t('market.toast-messsage.transaction-pending'));
-                console.log('selectedStableIndex ', selectedStableIndex);
-                console.log('parsedAmount ', parsedAmount);
+
                 try {
                     const tx = await getAMMSportsTransaction(
                         selectedSide === Side.BUY,
@@ -405,7 +404,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 return;
             }
 
-            if (!amount || isBuying || isAllowing) {
+            if (!Number(amount) || isBuying || isAllowing) {
                 setSubmitDisabled(true);
                 return;
             }
@@ -468,7 +467,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
             {market.gameStarted && (
                 <Status resolved={market.resolved} claimable={claimable}>
-                    {!market.resolved ? 'Started' : claimable ? 'Claimable' : 'Finished'}
+                    {!market.resolved ? 'Pending resolution' : claimable ? 'Claimable' : 'Finished'}
                 </Status>
             )}
             {market.resolved && !market.gameStarted && (
@@ -506,7 +505,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     {market.resolved && market.gameStarted && <ScoreLabel>{market.awayScore}</ScoreLabel>}
                 </MatchInfoColumn>
             </MatchInfo>
-            <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
+            {market.resolved && !market.gameStarted && <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>}
             {!market.gameStarted && !market.resolved && (
                 <OddsContainer>
                     <Pick
@@ -597,7 +596,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                 <AmountToBuyInput
                                     type="number"
                                     onChange={(e) => {
-                                        setAmount(e.target.value);
+                                        if (Number(e.target.value) >= 0) {
+                                            setAmount(e.target.value);
+                                        }
                                     }}
                                     value={amount}
                                 />
@@ -661,7 +662,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                 <SliderInfo>
                                     <SliderInfoTitle>Potential profit:</SliderInfoTitle>
                                     <SliderInfoValue>
-                                        {!amount || positionPriceDetailsQuery.isLoading || !!tooltipText
+                                        {!Number(amount) || positionPriceDetailsQuery.isLoading || !!tooltipText
                                             ? '-'
                                             : `$${formatCurrency(
                                                   Number(amount) - ammPosition.sides[selectedSide].quote
