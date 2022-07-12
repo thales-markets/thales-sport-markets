@@ -182,6 +182,9 @@ export const MatchVSLabel = styled.label<{
     display: flex;
     align-items: center;
     height: 126px;
+    @media (max-width: 400px) {
+        height: 100px;
+    }
     color: ${(props) => props.theme.textColor.primary};
     cursor: pointer;
     margin-top: ${(props) => (props.pendingResolution ? '22px' : '')};
