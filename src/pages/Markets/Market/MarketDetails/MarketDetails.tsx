@@ -388,6 +388,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     if (market.finalResult === 0) {
                         toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-refund-success')));
                     } else {
+                        toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
                     }
                 }
             } catch (e) {
