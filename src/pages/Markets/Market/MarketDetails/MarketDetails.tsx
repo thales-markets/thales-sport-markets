@@ -43,6 +43,7 @@ import {
     Separator,
     CustomTooltip,
     LabelContainer,
+    FooterContainer,
 } from './styled-components/MarketDetails';
 import { FlexDivCentered } from '../../../../styles/common';
 import { MAX_L2_GAS_LIMIT, Position, Side } from '../../../../constants/options';
@@ -648,7 +649,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             {hasAllowance ? selectedSide : 'APPROVE'}
                         </SubmitButton>
                     </FlexDivCentered>
-                    <FlexDivCentered>
+                    <FooterContainer>
                         <SliderInfo>
                             <SliderInfoTitle>Skew:</SliderInfoTitle>
                             <SliderInfoValue>
@@ -674,7 +675,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                 </SliderInfo>
                             </>
                         )}
-                    </FlexDivCentered>
+                    </FooterContainer>
                     <StatusSourceContainer>
                         <StatusSourceInfo />
                         <StatusSourceInfo />

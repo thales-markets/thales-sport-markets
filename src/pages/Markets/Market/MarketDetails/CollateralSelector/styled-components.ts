@@ -7,6 +7,10 @@ export const Container = styled.div`
     padding: 0px 8px;
     /* justify-content: space-between; */
     align-items: center;
+    @media (max-width: 768px) {
+        justify-content: center;
+        margin-bottom: 20px;
+    }
 `;
 
 export const LabelValueContainer = styled.div`
