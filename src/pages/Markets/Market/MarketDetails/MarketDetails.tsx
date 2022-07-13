@@ -393,6 +393,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     } else {
                         toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
                     }
+                    setClaimable(false);
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
