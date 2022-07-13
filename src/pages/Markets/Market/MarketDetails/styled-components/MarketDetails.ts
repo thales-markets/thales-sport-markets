@@ -58,6 +58,9 @@ export const MatchDate = styled.label`
 
 export const OddsContainer = styled(FlexDivRow)`
     margin: 50px 72px 0 72px;
+    @media (max-width: 1440px) {
+        margin: 50px 0 0 0;
+    }
 `;
 
 export const Pick = styled(FlexDivColumn)<{ selected?: boolean }>`

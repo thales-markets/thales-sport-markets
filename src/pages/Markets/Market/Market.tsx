@@ -60,6 +60,9 @@ const Container = styled(FlexDivColumn)`
     width: 60%;
     position: relative;
     align-items: center;
+    @media (max-width: 1440px) {
+        width: 95%;
+    }
 `;
 
 export default Market;
