@@ -76,6 +76,7 @@ import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
 import { useTranslation } from 'react-i18next';
 import WalletInfo from '../WalletInfo';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
+import { refetchBalances } from 'utils/queryConnector';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -283,6 +284,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     const txResult = await tx.wait();
 
                     if (txResult && txResult.transactionHash) {
+                        refetchBalances(walletAddress, networkId);
                         selectedSide === Side.BUY
                             ? toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')))
                             : toast.update(id, getSuccessToastOptions(t('market.toast-messsage.sell-success')));
@@ -291,6 +293,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     }
                 } catch (e) {
                     setIsBuying(false);
+                    refetchBalances(walletAddress, networkId);
                     toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                     console.log('Error ', e);
                 }

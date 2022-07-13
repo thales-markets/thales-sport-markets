@@ -23,4 +23,10 @@ export const refetchMarkets = (networkId: NetworkId) => {
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.SportMarkets(networkId));
 };
 
+export const refetchBalances = (walletAddress: string, networkId: NetworkId) => {
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.PaymentTokenBalance(walletAddress, networkId));
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.GetsUSDWalletBalance(walletAddress, networkId));
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId));
+};
+
 export default queryConnector;
