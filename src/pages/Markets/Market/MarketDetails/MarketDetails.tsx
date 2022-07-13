@@ -696,7 +696,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             )}
             {claimable && (
                 <ClaimableAmount>
-                    Amount Claimable: <span>{formatCurrencyWithSign(USD_SIGN, claimableAmount)}</span>
+                    Amount Claimable: <span>{formatCurrencyWithSign(USD_SIGN, claimableAmount, 2)}</span>
                 </ClaimableAmount>
             )}
             {claimable && (
