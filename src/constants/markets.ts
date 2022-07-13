@@ -4,9 +4,9 @@ export enum GlobalFilterEnum {
     All = 'All',
     OpenMarkets = 'OpenMarkets',
     ResolvedMarkets = 'ResolvedMarkets',
+    Canceled = 'Canceled',
     YourPositions = 'YourPositions',
     Claim = 'Claim',
-    Canceled = 'Canceled',
     History = 'History',
 }
 

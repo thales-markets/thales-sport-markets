@@ -377,28 +377,68 @@ const Home: React.FC = () => {
                     })}
                 </SportFiltersContainer>
                 <GlobalFiltersContainer>
-                    {Object.values(GlobalFilterEnum).map((filterItem) => {
-                        return (
-                            <GlobalFilter
-                                disabled={false}
-                                selected={globalFilter === filterItem}
-                                onClick={() => {
-                                    if (filterItem === GlobalFilterEnum.All) {
-                                        setDateFilter('');
-                                        setStartDate(null);
-                                        setEndDate(null);
-                                        setTagFilter(allTagsFilterItem);
-                                        setSportFilter(SportFilterEnum.All);
-                                    }
-                                    setGlobalFilter(filterItem);
-                                }}
-                                key={filterItem}
-                                count={getCount(filterItem)}
-                            >
-                                {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
-                            </GlobalFilter>
-                        );
-                    })}
+                    {Object.values(GlobalFilterEnum)
+                        .filter(
+                            (filterItem) =>
+                                filterItem != GlobalFilterEnum.Claim &&
+                                filterItem != GlobalFilterEnum.History &&
+                                filterItem != GlobalFilterEnum.YourPositions
+                        )
+                        .map((filterItem) => {
+                            return (
+                                <GlobalFilter
+                                    disabled={false}
+                                    selected={globalFilter === filterItem}
+                                    onClick={() => {
+                                        if (filterItem === GlobalFilterEnum.All) {
+                                            setDateFilter('');
+                                            setStartDate(null);
+                                            setEndDate(null);
+                                            setTagFilter(allTagsFilterItem);
+                                            setSportFilter(SportFilterEnum.All);
+                                        }
+                                        setGlobalFilter(filterItem);
+                                    }}
+                                    key={filterItem}
+                                    count={getCount(filterItem)}
+                                >
+                                    {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
+                                </GlobalFilter>
+                            );
+                        })}
+                </GlobalFiltersContainer>
+                <UserRelatedFiltersContainer>
+                    {Object.values(GlobalFilterEnum)
+                        .filter(
+                            (filterItem) =>
+                                filterItem == GlobalFilterEnum.Claim ||
+                                filterItem == GlobalFilterEnum.History ||
+                                filterItem == GlobalFilterEnum.YourPositions
+                        )
+                        .map((filterItem) => {
+                            return (
+                                <GlobalFilter
+                                    disabled={false}
+                                    selected={globalFilter === filterItem}
+                                    onClick={() => {
+                                        if (filterItem === GlobalFilterEnum.All) {
+                                            setDateFilter('');
+                                            setStartDate(null);
+                                            setEndDate(null);
+                                            setTagFilter(allTagsFilterItem);
+                                            setSportFilter(SportFilterEnum.All);
+                                        }
+                                        setGlobalFilter(filterItem);
+                                    }}
+                                    key={filterItem}
+                                    count={getCount(filterItem)}
+                                >
+                                    {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
+                                </GlobalFilter>
+                            );
+                        })}
+                </UserRelatedFiltersContainer>
+                <SortingContainer>
                     {sortOptions.map((sortOption) => {
                         return (
                             <SortOption
@@ -414,7 +454,7 @@ const Home: React.FC = () => {
                             </SortOption>
                         );
                     })}
-                </GlobalFiltersContainer>
+                </SortingContainer>
             </BurgerFiltersContainer>
             <FiltersContainer>
                 <HeaderDatepicker
@@ -520,42 +560,84 @@ const Home: React.FC = () => {
                 {/* RIGHT FILTERS */}
                 <SidebarContainer>
                     <GlobalFiltersContainer>
-                        {Object.values(GlobalFilterEnum).map((filterItem) => {
-                            return (
-                                <GlobalFilter
-                                    disabled={false}
-                                    selected={globalFilter === filterItem}
-                                    onClick={() => {
-                                        if (filterItem === GlobalFilterEnum.All) {
-                                            setDateFilter('');
-                                            setStartDate(null);
-                                            setEndDate(null);
-                                            setTagFilter(allTagsFilterItem);
-                                            setSportFilter(SportFilterEnum.All);
-                                        }
-                                        setGlobalFilter(filterItem);
-                                    }}
-                                    key={filterItem}
-                                    count={getCount(filterItem)}
-                                >
-                                    {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
-                                </GlobalFilter>
-                            );
-                        })}
+                        {Object.values(GlobalFilterEnum)
+                            .filter(
+                                (filterItem) =>
+                                    filterItem != GlobalFilterEnum.Claim &&
+                                    filterItem != GlobalFilterEnum.History &&
+                                    filterItem != GlobalFilterEnum.YourPositions
+                            )
+                            .map((filterItem) => {
+                                return (
+                                    <GlobalFilter
+                                        disabled={false}
+                                        selected={globalFilter === filterItem}
+                                        onClick={() => {
+                                            if (filterItem === GlobalFilterEnum.All) {
+                                                setDateFilter('');
+                                                setStartDate(null);
+                                                setEndDate(null);
+                                                setTagFilter(allTagsFilterItem);
+                                                setSportFilter(SportFilterEnum.All);
+                                            }
+                                            setGlobalFilter(filterItem);
+                                        }}
+                                        key={filterItem}
+                                        count={getCount(filterItem)}
+                                    >
+                                        {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
+                                    </GlobalFilter>
+                                );
+                            })}
+                    </GlobalFiltersContainer>
+                    <UserRelatedFiltersContainer>
+                        {Object.values(GlobalFilterEnum)
+                            .filter(
+                                (filterItem) =>
+                                    filterItem == GlobalFilterEnum.Claim ||
+                                    filterItem == GlobalFilterEnum.History ||
+                                    filterItem == GlobalFilterEnum.YourPositions
+                            )
+                            .map((filterItem) => {
+                                return (
+                                    <GlobalFilter
+                                        disabled={false}
+                                        selected={globalFilter === filterItem}
+                                        onClick={() => {
+                                            if (filterItem === GlobalFilterEnum.All) {
+                                                setDateFilter('');
+                                                setStartDate(null);
+                                                setEndDate(null);
+                                                setTagFilter(allTagsFilterItem);
+                                                setSportFilter(SportFilterEnum.All);
+                                            }
+                                            setGlobalFilter(filterItem);
+                                        }}
+                                        key={filterItem}
+                                        count={getCount(filterItem)}
+                                    >
+                                        {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
+                                    </GlobalFilter>
+                                );
+                            })}
+                    </UserRelatedFiltersContainer>
+                    <SortingContainer>
                         {sortOptions.map((sortOption) => {
                             return (
                                 <SortOption
                                     disabled={false}
                                     selected={sortOption.id === sortBy}
                                     sortDirection={sortDirection}
-                                    onClick={() => setSort(sortOption)}
+                                    onClick={() => {
+                                        setSort(sortOption);
+                                    }}
                                     key={sortOption.title}
                                 >
                                     {sortOption.title}
                                 </SortOption>
                             );
                         })}
-                    </GlobalFiltersContainer>
+                    </SortingContainer>
                     <TagsContainer>
                         {availableTags.map((tag: TagInfo) => {
                             return (
@@ -668,7 +750,6 @@ const FiltersContainer = styled(FlexDivRow)`
 const GlobalFiltersContainer = styled(FlexDivColumn)`
     height: fit-content;
     flex: 0;
-    margin-bottom: 10px;
     padding-top: 20px;
     &:before {
         content: '';
@@ -678,6 +759,34 @@ const GlobalFiltersContainer = styled(FlexDivColumn)`
         margin-bottom: 20px;
         margin-left: 10px;
     }
+`;
+
+const UserRelatedFiltersContainer = styled(FlexDivColumn)`
+    height: fit-content;
+    flex: 0;
+    &:before {
+        content: '';
+        height: 3px;
+        background: ${(props) => props.theme.borderColor.primary};
+        border-radius: 10px 10px 10px 10px;
+        margin-bottom: 20px;
+        margin-left: 10px;
+    }
+    &:after {
+        content: '';
+        height: 3px;
+        background: ${(props) => props.theme.borderColor.primary};
+        border-radius: 10px 10px 10px 10px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+`;
+
+const SortingContainer = styled(FlexDivColumn)`
+    height: fit-content;
+    flex: 0;
+    margin-bottom: 10px;
+    padding-top: 10px;
     &:after {
         content: '';
         height: 3px;
