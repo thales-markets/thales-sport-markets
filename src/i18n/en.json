@@ -167,6 +167,7 @@
         },
         "toast-messsage": {
             "transaction-pending": "Transaction pending",
+            "swap-success": "Successfully swapped {{ currencyKey }}",
             "approve-success": "Successfully approved",
             "buy-success": "Successfully bought",
             "sell-success": "Successfully sold",
