@@ -27,7 +27,7 @@ import { MAX_GAS_LIMIT } from 'constants/network';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
 import useInterval from 'hooks/useInterval';
-import usePaymentTokenBalanceQuery from 'queries/wallet/usePaymentTokenBalanceQuery';
+import usesUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 
 type SwapModalProps = {
     onClose: () => void;
@@ -74,7 +74,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
         }
     }, [tokenBalanceQuery.isSuccess, tokenBalanceQuery.data]);
 
-    const paymentTokenBalanceQuery = usePaymentTokenBalanceQuery(walletAddress, networkId, {
+    const paymentTokenBalanceQuery = usesUSDWalletBalance(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
 
