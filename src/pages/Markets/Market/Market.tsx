@@ -16,6 +16,7 @@ import MarketDetails from './MarketDetails';
 // import ResolveMarket from './ResolveMarket';
 import Transactions from './Transactions';
 import { Side } from '../../../constants/options';
+import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 type MarketProps = RouteComponentProps<{
     marketAddress: string;
@@ -26,6 +27,7 @@ const Market: React.FC<MarketProps> = (props) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const [market, setMarket] = useState<MarketData | undefined>(undefined);
     const [selectedSide, setSelectedSide] = useState<Side>(Side.BUY);
+    const { trackPageView } = useMatomo();
 
     const { params } = props.match;
     const marketAddress = params && params.marketAddress ? params.marketAddress : '';
@@ -39,6 +41,10 @@ const Market: React.FC<MarketProps> = (props) => {
             setMarket(marketQuery.data);
         }
     }, [marketQuery.isSuccess, marketQuery.data]);
+
+    useEffect(() => {
+        trackPageView({});
+    }, []);
 
     return (
         <Container>

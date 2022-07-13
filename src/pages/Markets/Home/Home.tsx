@@ -40,6 +40,7 @@ import HeaderDatepicker from './HeaderDatepicker';
 import UserHistory from './UserHistory';
 import burger from 'assets/images/burger.svg';
 import Logo from 'components/Logo';
+import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -49,6 +50,7 @@ const Home: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
+    const { trackPageView } = useMatomo();
 
     const [globalFilter, setGlobalFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_GLOBAL, GlobalFilterEnum.All);
     const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SPORT, SportFilterEnum.All);
@@ -75,7 +77,7 @@ const Home: React.FC = () => {
         ...TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label)),
     ]);
 
-    const [dateFilter, setDateFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_DATES, '');
+    const [dateFilter, setDateFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_DATES, new Date().toDateString());
     const [gamesPerDay, setGamesPerDayMap] = useState<GamesOnDate[]>([]);
 
     const sportMarketsQuery = useSportMarketsQuery(networkId, { enabled: isAppReady });
@@ -241,7 +243,7 @@ const Home: React.FC = () => {
                 break;
         }
 
-        return filteredMarkets.sort((a, b) => {
+        const sortedFilteredMarkets = filteredMarkets.sort((a, b) => {
             switch (sortBy) {
                 case 1:
                     return sortByField(a, b, sortDirection, 'maturityDate');
@@ -251,6 +253,8 @@ const Home: React.FC = () => {
                     return 0;
             }
         });
+
+        return groupBySortedMarkets(sortedFilteredMarkets);
     }, [tagsFilteredMarkets, sortBy, sortDirection, globalFilter]);
 
     const setSort = (sortOption: SortOptionType) => {
@@ -310,6 +314,10 @@ const Home: React.FC = () => {
         setTagFilter(allTagsFilterItem);
         dispatch(setMarketSearch(''));
     };
+
+    useEffect(() => {
+        trackPageView({});
+    }, []);
 
     return (
         <Container>
@@ -417,7 +425,7 @@ const Home: React.FC = () => {
                     setDateFilter={setDateFilter}
                 />
             </FiltersContainer>
-            <FlexDivRow>
+            <BurgerAndSwitchSwitchContainer>
                 <BurgerMenu
                     src={burger}
                     onClick={() => {
@@ -432,7 +440,7 @@ const Home: React.FC = () => {
                         {t('market.list-view')}
                     </ViewSwitch>
                 </SwitchContainer>
-            </FlexDivRow>
+            </BurgerAndSwitchSwitchContainer>
 
             <RowContainer>
                 {/* LEFT FILTERS */}
@@ -584,6 +592,33 @@ const sortByField = (
     return 0;
 };
 
+const groupBySortedMarkets = (markets: SportMarkets) => {
+    const openMarkets: SportMarkets = [];
+    const comingSoonMarkets: SportMarkets = [];
+    const pendingResolutionMarkets: SportMarkets = [];
+    const finishedMarkets: SportMarkets = [];
+    const canceledMarkets: SportMarkets = [];
+
+    markets.forEach((market: SportMarketInfo) => {
+        if (market.isOpen && market.maturityDate > new Date() && market.homeOdds > 0 && market.awayOdds > 0)
+            openMarkets.push(market);
+        if (
+            market.isOpen &&
+            market.maturityDate > new Date() &&
+            market.homeOdds === 0 &&
+            market.awayOdds === 0 &&
+            market.drawOdds === 0
+        )
+            comingSoonMarkets.push(market);
+        if (market.maturityDate < new Date() && !market.isResolved && !market.isCanceled)
+            pendingResolutionMarkets.push(market);
+        if (market.isResolved) finishedMarkets.push(market);
+        if (market.isCanceled) canceledMarkets.push(market);
+    });
+
+    return [...openMarkets, ...comingSoonMarkets, ...pendingResolutionMarkets, ...finishedMarkets, ...canceledMarkets];
+};
+
 const Container = styled(FlexDivColumn)`
     width: 100%;
 `;
@@ -621,7 +656,7 @@ const SwitchContainer = styled(FlexDivRow)`
     top: 20px;
     align-self: end;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: flex-end;
     margin-bottom: 10px;
 `;
 
@@ -705,6 +740,16 @@ const LogoContainer = styled.div`
     margin-top: 20px;
     margin-bottom: 10px;
     text-align: center;
+`;
+
+const BurgerAndSwitchSwitchContainer = styled(FlexDivRow)`
+    justify-content: flex-end;
+    width: calc(100% - 240px);
+    @media (max-width: 950px) {
+        width: 100%;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
 `;
 
 export default Home;

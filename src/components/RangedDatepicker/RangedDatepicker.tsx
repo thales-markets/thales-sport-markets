@@ -93,7 +93,7 @@ const DatePickerContainer = styled.div`
 
     .react-datepicker__day--today {
         font-weight: 600;
-        color: ${(props) => props.theme.textColor.primary} !important;
+        color: ${(props) => props.theme.textColor.quaternary} !important;
     }
 
     .react-datepicker__navigation-icon {

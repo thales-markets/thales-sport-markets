@@ -77,6 +77,7 @@ import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
 import { useTranslation } from 'react-i18next';
 import WalletInfo from '../WalletInfo';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
+import { refetchBalances } from 'utils/queryConnector';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -284,6 +285,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     const txResult = await tx.wait();
 
                     if (txResult && txResult.transactionHash) {
+                        refetchBalances(walletAddress, networkId);
                         selectedSide === Side.BUY
                             ? toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')))
                             : toast.update(id, getSuccessToastOptions(t('market.toast-messsage.sell-success')));
@@ -292,6 +294,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     }
                 } catch (e) {
                     setIsBuying(false);
+                    refetchBalances(walletAddress, networkId);
                     toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                     console.log('Error ', e);
                 }
@@ -391,6 +394,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     } else {
                         toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
                     }
+                    setClaimable(false);
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -693,7 +697,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             )}
             {claimable && (
                 <ClaimableAmount>
-                    Amount Claimable: <span>{formatCurrencyWithSign(USD_SIGN, claimableAmount)}</span>
+                    Amount Claimable: <span>{formatCurrencyWithSign(USD_SIGN, claimableAmount, 2)}</span>
                 </ClaimableAmount>
             )}
             {claimable && (
