@@ -425,7 +425,7 @@ const Home: React.FC = () => {
                     setDateFilter={setDateFilter}
                 />
             </FiltersContainer>
-            <FlexDivRow>
+            <BurgerAndSwitchSwitchContainer>
                 <BurgerMenu
                     src={burger}
                     onClick={() => {
@@ -440,7 +440,7 @@ const Home: React.FC = () => {
                         {t('market.list-view')}
                     </ViewSwitch>
                 </SwitchContainer>
-            </FlexDivRow>
+            </BurgerAndSwitchSwitchContainer>
 
             <RowContainer>
                 {/* LEFT FILTERS */}
@@ -656,7 +656,7 @@ const SwitchContainer = styled(FlexDivRow)`
     top: 20px;
     align-self: end;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: flex-end;
     margin-bottom: 10px;
 `;
 
@@ -740,6 +740,15 @@ const LogoContainer = styled.div`
     margin-top: 20px;
     margin-bottom: 10px;
     text-align: center;
+`;
+
+const BurgerAndSwitchSwitchContainer = styled(FlexDivRow)`
+    justify-content: flex-end;
+    width: calc(100% - 240px);
+    @media (max-width: 950px) {
+        width: 100%;
+        justify-content: space-between;
+    }
 `;
 
 export default Home;
