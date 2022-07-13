@@ -40,6 +40,7 @@ import HeaderDatepicker from './HeaderDatepicker';
 import UserHistory from './UserHistory';
 import burger from 'assets/images/burger.svg';
 import Logo from 'components/Logo';
+import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -49,6 +50,7 @@ const Home: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
+    const { trackPageView } = useMatomo();
 
     const [globalFilter, setGlobalFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_GLOBAL, GlobalFilterEnum.All);
     const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SPORT, SportFilterEnum.All);
@@ -310,6 +312,10 @@ const Home: React.FC = () => {
         setTagFilter(allTagsFilterItem);
         dispatch(setMarketSearch(''));
     };
+
+    useEffect(() => {
+        trackPageView({});
+    }, []);
 
     return (
         <Container>

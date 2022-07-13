@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
@@ -12,6 +12,7 @@ import Loader from 'components/Loader';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DappFooter from './DappFooter';
+import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 type DappLayoutProps = {
     showSearch?: boolean;
@@ -20,6 +21,18 @@ type DappLayoutProps = {
 const DappLayout: React.FC<DappLayoutProps> = ({ children, showSearch }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const { trackPageView } = useMatomo();
+
+    useEffect(() => {
+        trackPageView({
+            customDimensions: [
+                {
+                    id: 1,
+                    value: networkId ? networkId?.toString() : '',
+                },
+            ],
+        });
+    }, [networkId]);
 
     return (
         <>
