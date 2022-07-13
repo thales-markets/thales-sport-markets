@@ -77,7 +77,7 @@ const Home: React.FC = () => {
         ...TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label)),
     ]);
 
-    const [dateFilter, setDateFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_DATES, '');
+    const [dateFilter, setDateFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_DATES, new Date().toDateString());
     const [gamesPerDay, setGamesPerDayMap] = useState<GamesOnDate[]>([]);
 
     const sportMarketsQuery = useSportMarketsQuery(networkId, { enabled: isAppReady });

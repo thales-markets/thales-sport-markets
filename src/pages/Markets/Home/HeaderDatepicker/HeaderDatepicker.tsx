@@ -73,6 +73,7 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
                         <DateContainer
                             key={index}
                             selected={dateFilter === data.date}
+                            noneSelected={dateFilter == ''}
                             onClick={() => {
                                 setStartDate(null);
                                 setEndDate(null);
@@ -161,15 +162,17 @@ const LeftIcon = styled.i<{ disabled?: boolean }>`
     }
 `;
 
-const DateContainer = styled(FlexDivColumn)<{ selected?: boolean }>`
+const DateContainer = styled(FlexDivColumn)<{ selected?: boolean; noneSelected?: boolean }>`
     margin-top: 10px;
     width: 80px;
     align-items: center;
     justify-content: flex-end;
     cursor: pointer;
+    color: ${(props) => (props.selected ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
     &:not(:last-of-type) {
         border-right: 2px solid ${(props) => props.theme.borderColor.secondary};
     }
+    opacity: ${(props) => (props.noneSelected ? 1 : props.selected ? 1 : 0.8)};
 `;
 
 const DayLabel = styled.span`
