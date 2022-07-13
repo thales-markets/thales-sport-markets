@@ -748,6 +748,7 @@ const BurgerAndSwitchSwitchContainer = styled(FlexDivRow)`
     @media (max-width: 950px) {
         width: 100%;
         justify-content: space-between;
+        margin-bottom: 10px;
     }
 `;
 

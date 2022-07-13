@@ -17,6 +17,10 @@ const ViewSwitch: React.FC<ViewSwitchProps> = ({ selected, onClick, children }) 
 };
 
 const Container = styled(FlexDivRowCentered)`
+    @media (max-width: 950px) {
+        display: none;
+    }
+
     font-style: normal;
     font-weight: bold;
     font-size: 15px;
