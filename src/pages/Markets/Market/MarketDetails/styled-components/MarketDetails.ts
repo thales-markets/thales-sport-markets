@@ -16,14 +16,14 @@ export const MarketContainer = styled(FlexDivColumn)`
     padding: 0 60px 30px 60px;
     background: ${(props) => props.theme.background.secondary};
     flex: initial;
-    @media (max-width: 767px) {
-        padding: 30px 20px 20px 20px;
+    @media (max-width: 768px) {
+        padding: 30px 10px 20px 10px;
     }
 `;
 
 export const StatusSourceContainer = styled(FlexDivRow)`
     align-items: end;
-    @media (max-width: 767px) {
+    @media (max-width: 768px) {
         flex-direction: column;
         align-items: center;
     }
@@ -39,6 +39,10 @@ export const MatchInfo = styled(FlexDivRow)`
     align-self: center;
     width: 50%;
     justify-content: space-around;
+    @media (max-width: 768px) {
+        width: 90%;
+        margin-top: 25px;
+    }
 `;
 
 export const MatchInfoColumn = styled(FlexDivColumnCentered)`
@@ -58,6 +62,12 @@ export const MatchDate = styled.label`
 
 export const OddsContainer = styled(FlexDivRow)`
     margin: 50px 72px 0 72px;
+    @media (max-width: 1440px) {
+        margin: 50px 0 0 0;
+    }
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
 `;
 
 export const Pick = styled(FlexDivColumn)<{ selected?: boolean }>`
@@ -117,6 +127,9 @@ export const SliderContainer = styled(FlexDivRow)`
     position: relative;
     flex-direction: column;
     margin: 20px 100px 0 100px;
+    @media (max-width: 768px) {
+        margin: 20px 20px 0 20px;
+    }
 `;
 
 export const Slider = styled.input`
@@ -161,6 +174,9 @@ export const SliderInfoValue = styled.div`
     font-size: 18px;
     line-height: 23px;
     padding-left: 5px;
+    @media (max-width: 768px) {
+        font-size: 15px;
+    }
 `;
 
 export const AmountToBuyContainer = styled.div`
@@ -175,6 +191,10 @@ export const AmountToBuyInput = styled.input`
     text-align: center;
     font-weight: bold;
     font-size: 18px;
+    @media (max-width: 768px) {
+        width: 130px;
+        font-size: 15px;
+    }
 `;
 
 export const SubmitButton = styled.button`
@@ -200,6 +220,9 @@ export const AmountInfo = styled.div`
     border: 3px solid #3accfa;
     border-radius: 5px;
     width: 215px;
+    @media (max-width: 768px) {
+        width: 130px;
+    }
 `;
 
 export const MaxButton = styled.button`
@@ -267,22 +290,35 @@ export const ClaimableAmount = styled.p`
 
 export const MarketHeader = styled(FlexDivRow)`
     height: 100px;
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
 `;
 
 export const AmountToBuyLabel = styled(FlexDivCentered)`
     margin-top: 40px;
+    @media (max-width: 768px) {
+        padding: 0 10px;
+    }
 `;
 
 export const LabelContainer = styled(FlexDiv)`
     width: 50%;
     align-self: center;
     justify-content: space-around;
+    @media (max-width: 768px) {
+        width: 100%;
+        justify-content: center;
+    }
 `;
 
 export const Separator = styled.span`
     font-family: 'RobotoThin' !important;
     font-size: 18px;
     margin: 0 10px;
+    @media (max-width: 768px) {
+        visibility: hidden;
+    }
 `;
 
 export const CustomTooltip = withStyles(() => ({
@@ -295,3 +331,9 @@ export const CustomTooltip = withStyles(() => ({
         fontSize: '12px',
     },
 }))(Tooltip);
+
+export const FooterContainer = styled(FlexDivCentered)`
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
+`;

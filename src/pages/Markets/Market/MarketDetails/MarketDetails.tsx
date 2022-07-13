@@ -43,6 +43,7 @@ import {
     Separator,
     CustomTooltip,
     LabelContainer,
+    FooterContainer,
 } from './styled-components/MarketDetails';
 import { FlexDivCentered } from '../../../../styles/common';
 import { MAX_L2_GAS_LIMIT, Position, Side } from '../../../../constants/options';
@@ -76,6 +77,7 @@ import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
 import { useTranslation } from 'react-i18next';
 import WalletInfo from '../WalletInfo';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
+import { refetchBalances } from 'utils/queryConnector';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -283,6 +285,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     const txResult = await tx.wait();
 
                     if (txResult && txResult.transactionHash) {
+                        refetchBalances(walletAddress, networkId);
                         selectedSide === Side.BUY
                             ? toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')))
                             : toast.update(id, getSuccessToastOptions(t('market.toast-messsage.sell-success')));
@@ -291,6 +294,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     }
                 } catch (e) {
                     setIsBuying(false);
+                    refetchBalances(walletAddress, networkId);
                     toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                     console.log('Error ', e);
                 }
@@ -388,7 +392,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     if (market.finalResult === 0) {
                         toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-refund-success')));
                     } else {
+                        toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
                     }
+                    setClaimable(false);
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -404,7 +410,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 return;
             }
 
-            if (!Number(amount) || isBuying || isAllowing) {
+            if (!Number(amount) || Number(amount) < 0.1 || isBuying || isAllowing) {
                 setSubmitDisabled(true);
                 return;
             }
@@ -647,7 +653,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             {hasAllowance ? selectedSide : 'APPROVE'}
                         </SubmitButton>
                     </FlexDivCentered>
-                    <FlexDivCentered>
+                    <FooterContainer>
                         <SliderInfo>
                             <SliderInfoTitle>Skew:</SliderInfoTitle>
                             <SliderInfoValue>
@@ -673,7 +679,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                 </SliderInfo>
                             </>
                         )}
-                    </FlexDivCentered>
+                    </FooterContainer>
                     <StatusSourceContainer>
                         <StatusSourceInfo />
                         <StatusSourceInfo />
@@ -691,7 +697,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             )}
             {claimable && (
                 <ClaimableAmount>
-                    Amount Claimable: <span>{formatCurrencyWithSign(USD_SIGN, claimableAmount)}</span>
+                    Amount Claimable: <span>{formatCurrencyWithSign(USD_SIGN, claimableAmount, 2)}</span>
                 </ClaimableAmount>
             )}
             {claimable && (

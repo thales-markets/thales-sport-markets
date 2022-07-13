@@ -17,7 +17,7 @@ const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, on
             onClick={() => (!disabled ? onClick() : '')}
         >
             <SportIcon className={`icon icon--${sport.toLowerCase() == 'all' ? 'logo' : sport.toLowerCase()}`} />
-            <Label>{`${disabled ? 'Coming soon!' : ''} ${children}`}</Label>
+            <Label>{`${children} ${disabled ? '\n Coming soon!' : ''} `}</Label>
         </Container>
     );
 };
@@ -48,6 +48,7 @@ const Container = styled(FlexDivRowCentered)`
 `;
 
 const Label = styled.div`
+    white-space: pre-line;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;

@@ -3,7 +3,7 @@ import { Subscriptions } from 'bnc-onboard/dist/src/interfaces';
 import { NetworkId } from 'types/network';
 import { getInfuraRpcURL, NetworkIdByName } from 'utils/network';
 import browserWalletIcon from 'assets/images/browser-wallet.svg';
-import disclaimer from 'assets/docs/exotic-markets-disclaimer.pdf';
+import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
 import i18n from 'i18n';
 
 export const initOnboard = (networkId: NetworkId, subscriptions: Subscriptions) => {
