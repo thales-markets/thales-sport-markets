@@ -243,7 +243,7 @@ const Home: React.FC = () => {
                 break;
         }
 
-        return filteredMarkets.sort((a, b) => {
+        const sortedFilteredMarkets = filteredMarkets.sort((a, b) => {
             switch (sortBy) {
                 case 1:
                     return sortByField(a, b, sortDirection, 'maturityDate');
@@ -253,6 +253,8 @@ const Home: React.FC = () => {
                     return 0;
             }
         });
+
+        return groupBySortedMarkets(sortedFilteredMarkets);
     }, [tagsFilteredMarkets, sortBy, sortDirection, globalFilter]);
 
     const setSort = (sortOption: SortOptionType) => {
@@ -588,6 +590,33 @@ const sortByField = (
     }
 
     return 0;
+};
+
+const groupBySortedMarkets = (markets: SportMarkets) => {
+    const openMarkets: SportMarkets = [];
+    const comingSoonMarkets: SportMarkets = [];
+    const pendingResolutionMarkets: SportMarkets = [];
+    const finishedMarkets: SportMarkets = [];
+    const canceledMarkets: SportMarkets = [];
+
+    markets.forEach((market: SportMarketInfo) => {
+        if (market.isOpen && market.maturityDate > new Date() && market.homeOdds > 0 && market.awayOdds > 0)
+            openMarkets.push(market);
+        if (
+            market.isOpen &&
+            market.maturityDate > new Date() &&
+            market.homeOdds === 0 &&
+            market.awayOdds === 0 &&
+            market.drawOdds === 0
+        )
+            comingSoonMarkets.push(market);
+        if (market.maturityDate < new Date() && !market.isResolved && !market.isCanceled)
+            pendingResolutionMarkets.push(market);
+        if (market.isResolved) finishedMarkets.push(market);
+        if (market.isCanceled) canceledMarkets.push(market);
+    });
+
+    return [...openMarkets, ...comingSoonMarkets, ...pendingResolutionMarkets, ...finishedMarkets, ...canceledMarkets];
 };
 
 const Container = styled(FlexDivColumn)`
