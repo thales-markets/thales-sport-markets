@@ -182,6 +182,9 @@ export const MatchVSLabel = styled.label<{
     display: flex;
     align-items: center;
     height: 126px;
+    @media (max-width: 400px) {
+        height: 100px;
+    }
     color: ${(props) => props.theme.textColor.primary};
     cursor: pointer;
     margin-top: ${(props) => (props.pendingResolution ? '22px' : '')};
@@ -210,12 +213,20 @@ export const MatchParticipantImageContainer = styled(FlexDiv)<{
     align-items: center;
     justify-content: center;
     color: ${(props) => props.theme.textColor.primary};
+    @media (max-width: 400px) {
+        height: 100px;
+        width: 100px;
+    }
 `;
 
 export const MatchParticipantImage = styled.img`
     border-radius: 50%;
     height: 100px;
     width: 100px;
+    @media (max-width: 400px) {
+        height: 80px;
+        width: 80px;
+    }
     line-height: 100%;
     color: ${(props) => props.theme.textColor.primary};
 `;

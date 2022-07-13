@@ -38,6 +38,8 @@ import SportFilter from '../components/SportFilter';
 import ViewSwitch from '../components/ViewSwitch';
 import HeaderDatepicker from './HeaderDatepicker';
 import UserHistory from './UserHistory';
+import burger from 'assets/images/burger.svg';
+import Logo from 'components/Logo';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -55,6 +57,7 @@ const Home: React.FC = () => {
     const [showGridView, setGridView] = useLocalStorage(LOCAL_STORAGE_KEYS.GRID_VIEW, true);
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
+    const [showBurger, setShowBurger] = useState<boolean>(false);
 
     const sortOptions: SortOptionType[] = [
         { id: 1, title: t('market.time-remaining-label') },
@@ -310,6 +313,101 @@ const Home: React.FC = () => {
 
     return (
         <Container>
+            <BurgerFiltersContainer show={showBurger} onClick={() => setShowBurger(false)}>
+                <LogoContainer>
+                    <Logo />
+                </LogoContainer>
+
+                <SportFiltersContainer>
+                    {Object.values(SportFilterEnum).map((filterItem: any) => {
+                        return (
+                            <SportFilter
+                                disabled={
+                                    filterItem !== SportFilterEnum.All &&
+                                    filterItem !== SportFilterEnum.Baseball &&
+                                    filterItem !== SportFilterEnum.Soccer
+                                }
+                                selected={sportFilter === filterItem}
+                                sport={filterItem}
+                                onClick={() => {
+                                    if (filterItem !== sportFilter) {
+                                        setSportFilter(filterItem);
+                                        setDateFilter('');
+                                        setStartDate(null);
+                                        setEndDate(null);
+                                        setTagFilter(allTagsFilterItem);
+                                        setGlobalFilter(GlobalFilterEnum.All);
+                                        if (filterItem === SportFilterEnum.All) {
+                                            setAvailableTags([
+                                                allTagsFilterItem,
+                                                ...TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label)),
+                                            ]);
+                                        } else {
+                                            const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
+                                            if (tagsPerSport) {
+                                                const filteredTags = TAGS_LIST.filter((tag: TagInfo) =>
+                                                    tagsPerSport.includes(tag.id)
+                                                );
+                                                setAvailableTags([allTagsFilterItem, ...filteredTags]);
+                                            } else {
+                                                setAvailableTags([allTagsFilterItem]);
+                                            }
+                                        }
+                                    } else {
+                                        setSportFilter(SportFilterEnum.All);
+                                        setAvailableTags([
+                                            allTagsFilterItem,
+                                            ...TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label)),
+                                        ]);
+                                    }
+                                }}
+                                key={filterItem}
+                            >
+                                {t(`market.filter-label.sport.${filterItem.toLowerCase()}`)}
+                            </SportFilter>
+                        );
+                    })}
+                </SportFiltersContainer>
+                <GlobalFiltersContainer>
+                    {Object.values(GlobalFilterEnum).map((filterItem) => {
+                        return (
+                            <GlobalFilter
+                                disabled={false}
+                                selected={globalFilter === filterItem}
+                                onClick={() => {
+                                    if (filterItem === GlobalFilterEnum.All) {
+                                        setDateFilter('');
+                                        setStartDate(null);
+                                        setEndDate(null);
+                                        setTagFilter(allTagsFilterItem);
+                                        setSportFilter(SportFilterEnum.All);
+                                    }
+                                    setGlobalFilter(filterItem);
+                                }}
+                                key={filterItem}
+                                count={getCount(filterItem)}
+                            >
+                                {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
+                            </GlobalFilter>
+                        );
+                    })}
+                    {sortOptions.map((sortOption) => {
+                        return (
+                            <SortOption
+                                disabled={false}
+                                selected={sortOption.id === sortBy}
+                                sortDirection={sortDirection}
+                                onClick={() => {
+                                    setSort(sortOption);
+                                }}
+                                key={sortOption.title}
+                            >
+                                {sortOption.title}
+                            </SortOption>
+                        );
+                    })}
+                </GlobalFiltersContainer>
+            </BurgerFiltersContainer>
             <FiltersContainer>
                 <HeaderDatepicker
                     gamesPerDay={gamesPerDay}
@@ -319,15 +417,25 @@ const Home: React.FC = () => {
                     setDateFilter={setDateFilter}
                 />
             </FiltersContainer>
-            <SwitchContainer>
-                <ViewSwitch selected={showGridView} onClick={() => setGridView(true)}>
-                    {t('market.grid-view')}
-                </ViewSwitch>
-                <ViewSwitch selected={!showGridView} onClick={() => setGridView(false)}>
-                    {t('market.list-view')}
-                </ViewSwitch>
-            </SwitchContainer>
+            <FlexDivRow>
+                <BurgerMenu
+                    src={burger}
+                    onClick={() => {
+                        setShowBurger(!showBurger);
+                    }}
+                />
+                <SwitchContainer>
+                    <ViewSwitch selected={showGridView} onClick={() => setGridView(true)}>
+                        {t('market.grid-view')}
+                    </ViewSwitch>
+                    <ViewSwitch selected={!showGridView} onClick={() => setGridView(false)}>
+                        {t('market.list-view')}
+                    </ViewSwitch>
+                </SwitchContainer>
+            </FlexDivRow>
+
             <RowContainer>
+                {/* LEFT FILTERS */}
                 <SidebarContainer>
                     <Search text={marketSearch} handleChange={(value) => dispatch(setMarketSearch(value))} />
                     <SportFiltersContainer>
@@ -382,6 +490,7 @@ const Home: React.FC = () => {
                     </SportFiltersContainer>
                     <RangedDatepicker onDateRangeChange={onDateRangeChange} startDate={startDate} endDate={endDate} />
                 </SidebarContainer>
+                {/* MAIN PART */}
                 {sportMarketsQuery.isLoading ? (
                     <LoaderContainer>
                         <SimpleLoader />
@@ -400,6 +509,7 @@ const Home: React.FC = () => {
                         layoutType={showGridView ? 0 : 1}
                     />
                 )}
+                {/* RIGHT FILTERS */}
                 <SidebarContainer>
                     <GlobalFiltersContainer>
                         {Object.values(GlobalFilterEnum).map((filterItem) => {
@@ -489,10 +599,24 @@ const SidebarContainer = styled(FlexDivColumn)`
     padding-top: 25px;
     max-width: 240px;
     flex-grow: 1;
+    @media (max-width: 950px) {
+        display: none;
+    }
+`;
+
+const BurgerMenu = styled.img`
+    position: relative;
+    top: 10px;
+    left: 10px;
+    display: none;
+    @media (max-width: 950px) {
+        display: block;
+    }
 `;
 
 const SwitchContainer = styled(FlexDivRow)`
     width: 25%;
+    min-width: 150px;
     position: relative;
     top: 20px;
     align-self: end;
@@ -562,6 +686,25 @@ const NoMarketsLabel = styled.span`
 const LoaderContainer = styled(FlexDivColumn)`
     position: relative;
     min-height: 300px;
+`;
+
+const BurgerFiltersContainer = styled(FlexDivColumn)<{ show: boolean }>`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    background: #303656;
+    display: ${(props) => (props.show ? 'flex' : 'none')};
+    z-index: 1000;
+`;
+
+const LogoContainer = styled.div`
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: center;
 `;
 
 export default Home;
