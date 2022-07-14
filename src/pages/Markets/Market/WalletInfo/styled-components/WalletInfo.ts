@@ -12,6 +12,12 @@ export const TokenInfo = styled(FlexDivCentered)`
     text-align: center;
     padding: 15px 30px;
     width: 100%;
+    @media (max-width: 768px) {
+        flex-direction: column;
+        & > * {
+            margin-top: 10px;
+        }
+    }
 `;
 
 export const Title = styled.div`
