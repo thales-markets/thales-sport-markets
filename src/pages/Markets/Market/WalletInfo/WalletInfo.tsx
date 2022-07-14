@@ -16,6 +16,7 @@ import { Balances, MarketData } from '../../../../types/markets';
 import { Position, Side } from '../../../../constants/options';
 import { ODDS_COLOR } from '../../../../constants/ui';
 import { ReactComponent as WalletIcon } from 'assets/images/wallet-icon.svg';
+import { FlexDivCentered } from '../../../../styles/common';
 
 type WalletInfoProps = {
     market: MarketData | undefined;
@@ -39,8 +40,10 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
     return (
         <WalletInfoContainer hasBalances={!!balances?.home || !!balances?.away || !!balances?.draw}>
             <TokenInfo>
-                <WalletIcon />
-                <Title>IN WALLET:</Title>
+                <FlexDivCentered>
+                    <WalletIcon />
+                    <Title>IN WALLET:</Title>
+                </FlexDivCentered>
                 <ValueContainer>
                     {!!balances?.home && (
                         <>
