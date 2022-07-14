@@ -78,6 +78,7 @@ import { useTranslation } from 'react-i18next';
 import WalletInfo from '../WalletInfo';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { refetchBalances } from 'utils/queryConnector';
+import onboardConnector from 'utils/onboardConnector';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -264,8 +265,8 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             if (sportsAMMContract && signer) {
                 setIsBuying(true);
                 const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
-                const ammQuote = await fetchAmmQuote(+amount || 1);
-                const parsedAmount = ethers.utils.parseEther(amount.toString());
+                const ammQuote = await fetchAmmQuote(+Number(amount).toFixed(2) || 1);
+                const parsedAmount = ethers.utils.parseEther(Number(amount).toFixed(2));
                 const id = toast.loading(t('market.toast-messsage.transaction-pending'));
 
                 try {
@@ -342,7 +343,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             if (selectedSide === Side.BUY) {
                 const { sportsAMMContract, signer } = networkConnector;
                 if (sportsAMMContract && signer) {
-                    const price = ammPosition.sides[selectedSide].quote / (+amount || 1);
+                    const price = ammPosition.sides[selectedSide].quote / (+Number(amount).toFixed(2) || 1);
                     if (price > 0 && paymentTokenBalance) {
                         let tmpSuggestedAmount = Number(paymentTokenBalance) / Number(price);
                         if (tmpSuggestedAmount > availablePerSide.positions[selectedPosition].available) {
@@ -441,6 +442,43 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const setAmount = (value: string | number) => {
         setAmountValue(value);
         setTooltipTextMessage(value);
+    };
+
+    const getSubmitButton = () => {
+        if (!isWalletConnected) {
+            return (
+                <SubmitButton disabled={submitDisabled} onClick={() => onboardConnector.connectWallet()}>
+                    {t('common.wallet.connect-your-wallet')}
+                </SubmitButton>
+            );
+        }
+        if (!hasAllowance) {
+            return (
+                <SubmitButton
+                    disabled={submitDisabled}
+                    onClick={async () => {
+                        if (!!amount) {
+                            setOpenApprovalModal(true);
+                        }
+                    }}
+                >
+                    {t('common.wallet.approve')}
+                </SubmitButton>
+            );
+        }
+
+        return (
+            <SubmitButton
+                disabled={submitDisabled}
+                onClick={async () => {
+                    if (!!amount) {
+                        handleSubmit();
+                    }
+                }}
+            >
+                {selectedSide}
+            </SubmitButton>
+        );
     };
 
     return (
@@ -637,22 +675,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             }}
                         />
                     </SliderContainer>
-                    <FlexDivCentered>
-                        <SubmitButton
-                            disabled={submitDisabled}
-                            onClick={async () => {
-                                if (!!amount) {
-                                    if (hasAllowance) {
-                                        await handleSubmit();
-                                    } else {
-                                        setOpenApprovalModal(true);
-                                    }
-                                }
-                            }}
-                        >
-                            {hasAllowance ? selectedSide : 'APPROVE'}
-                        </SubmitButton>
-                    </FlexDivCentered>
+                    <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
                     <FooterContainer>
                         <SliderInfo>
                             <SliderInfoTitle>Skew:</SliderInfoTitle>
