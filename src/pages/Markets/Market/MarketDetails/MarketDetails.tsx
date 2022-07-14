@@ -266,7 +266,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 setIsBuying(true);
                 const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
                 const ammQuote = await fetchAmmQuote(+Number(amount).toFixed(10) || 1);
-                const parsedAmount = ethers.utils.parseEther(amount.toString());
+                const parsedAmount = ethers.utils.parseEther(Number(amount).toFixed(10));
                 const id = toast.loading(t('market.toast-messsage.transaction-pending'));
 
                 try {
