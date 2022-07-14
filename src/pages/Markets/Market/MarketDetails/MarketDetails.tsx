@@ -265,8 +265,8 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             if (sportsAMMContract && signer) {
                 setIsBuying(true);
                 const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
-                const ammQuote = await fetchAmmQuote(+Number(amount).toFixed(10) || 1);
-                const parsedAmount = ethers.utils.parseEther(Number(amount).toFixed(10));
+                const ammQuote = await fetchAmmQuote(+Number(amount).toFixed(2) || 1);
+                const parsedAmount = ethers.utils.parseEther(Number(amount).toFixed(2));
                 const id = toast.loading(t('market.toast-messsage.transaction-pending'));
 
                 try {
@@ -343,7 +343,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             if (selectedSide === Side.BUY) {
                 const { sportsAMMContract, signer } = networkConnector;
                 if (sportsAMMContract && signer) {
-                    const price = ammPosition.sides[selectedSide].quote / (+Number(amount).toFixed(10) || 1);
+                    const price = ammPosition.sides[selectedSide].quote / (+Number(amount).toFixed(2) || 1);
                     if (price > 0 && paymentTokenBalance) {
                         let tmpSuggestedAmount = Number(paymentTokenBalance) / Number(price);
                         if (tmpSuggestedAmount > availablePerSide.positions[selectedPosition].available) {
