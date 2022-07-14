@@ -16,6 +16,7 @@ import { Balances, MarketData } from '../../../../types/markets';
 import { Position, Side } from '../../../../constants/options';
 import { ODDS_COLOR } from '../../../../constants/ui';
 import { ReactComponent as WalletIcon } from 'assets/images/wallet-icon.svg';
+import { FlexDivCentered } from '../../../../styles/common';
 
 type WalletInfoProps = {
     market: MarketData | undefined;
@@ -39,11 +40,13 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
     return (
         <WalletInfoContainer hasBalances={!!balances?.home || !!balances?.away || !!balances?.draw}>
             <TokenInfo>
-                <WalletIcon />
-                <Title>IN WALLET:</Title>
+                <FlexDivCentered>
+                    <WalletIcon />
+                    <Title>IN WALLET:</Title>
+                </FlexDivCentered>
                 <ValueContainer>
                     {!!balances?.home && (
-                        <>
+                        <FlexDivCentered>
                             <Token color={ODDS_COLOR.HOME}>1</Token>
                             <Value>
                                 {market?.homeTeam.toUpperCase()}: {balances?.home}
@@ -57,10 +60,10 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
                                 ).toFixed(2)}
                                 )
                             </AlternateValue>
-                        </>
+                        </FlexDivCentered>
                     )}
                     {!!balances?.draw && (
-                        <>
+                        <FlexDivCentered>
                             <Token color={ODDS_COLOR.DRAW}>X</Token>
                             <Value>DRAW: {balances?.draw}</Value>
                             <AlternateValue>
@@ -72,10 +75,10 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
                                 ).toFixed(2)}
                                 )
                             </AlternateValue>
-                        </>
+                        </FlexDivCentered>
                     )}
                     {!!balances?.away && (
-                        <>
+                        <FlexDivCentered>
                             <Token color={ODDS_COLOR.AWAY}>2</Token>
                             <Value>
                                 {market?.awayTeam.toUpperCase()}: {balances?.away}
@@ -89,7 +92,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
                                 ).toFixed(2)}
                                 )
                             </AlternateValue>
-                        </>
+                        </FlexDivCentered>
                     )}
                 </ValueContainer>
             </TokenInfo>
