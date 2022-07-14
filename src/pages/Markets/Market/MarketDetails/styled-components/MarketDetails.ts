@@ -17,7 +17,7 @@ export const MarketContainer = styled(FlexDivColumn)`
     background: ${(props) => props.theme.background.secondary};
     flex: initial;
     @media (max-width: 768px) {
-        padding: 30px 10px 20px 10px;
+        padding: 10px 10px 20px 10px;
     }
 `;
 
@@ -41,7 +41,7 @@ export const MatchInfo = styled(FlexDivRow)`
     justify-content: space-around;
     @media (max-width: 768px) {
         width: 90%;
-        margin-top: 25px;
+        margin-top: 55px;
     }
 `;
 

@@ -10,6 +10,8 @@ export const Container = styled.div`
     @media (max-width: 768px) {
         justify-content: center;
         margin-bottom: 20px;
+        margin-top: 20px;
+        flex-direction: column;
     }
 `;
 

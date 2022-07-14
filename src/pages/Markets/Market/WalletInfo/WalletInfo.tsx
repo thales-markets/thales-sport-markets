@@ -46,7 +46,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
                 </FlexDivCentered>
                 <ValueContainer>
                     {!!balances?.home && (
-                        <>
+                        <FlexDivCentered>
                             <Token color={ODDS_COLOR.HOME}>1</Token>
                             <Value>
                                 {market?.homeTeam.toUpperCase()}: {balances?.home}
@@ -60,10 +60,10 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
                                 ).toFixed(2)}
                                 )
                             </AlternateValue>
-                        </>
+                        </FlexDivCentered>
                     )}
                     {!!balances?.draw && (
-                        <>
+                        <FlexDivCentered>
                             <Token color={ODDS_COLOR.DRAW}>X</Token>
                             <Value>DRAW: {balances?.draw}</Value>
                             <AlternateValue>
@@ -75,10 +75,10 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
                                 ).toFixed(2)}
                                 )
                             </AlternateValue>
-                        </>
+                        </FlexDivCentered>
                     )}
                     {!!balances?.away && (
-                        <>
+                        <FlexDivCentered>
                             <Token color={ODDS_COLOR.AWAY}>2</Token>
                             <Value>
                                 {market?.awayTeam.toUpperCase()}: {balances?.away}
@@ -92,7 +92,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
                                 ).toFixed(2)}
                                 )
                             </AlternateValue>
-                        </>
+                        </FlexDivCentered>
                     )}
                 </ValueContainer>
             </TokenInfo>

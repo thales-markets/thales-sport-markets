@@ -14,6 +14,7 @@ export const TokenInfo = styled(FlexDivCentered)`
     width: 100%;
     @media (max-width: 768px) {
         flex-direction: column;
+        padding: 0 5px 30px 5px;
         & > * {
             margin-top: 10px;
         }
@@ -29,7 +30,15 @@ export const Title = styled.div`
 `;
 
 export const ValueContainer = styled.span`
+    display: flex;
     line-height: 22px;
+    @media (max-width: 768px) {
+        flex-direction: column;
+        & > * {
+            font-size: 14px;
+            margin-top: 8px;
+        }
+    }
 `;
 
 export const Value = styled.span``;
