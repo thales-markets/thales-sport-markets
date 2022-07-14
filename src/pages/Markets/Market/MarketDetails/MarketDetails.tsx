@@ -78,6 +78,7 @@ import { useTranslation } from 'react-i18next';
 import WalletInfo from '../WalletInfo';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { refetchBalances } from 'utils/queryConnector';
+import onboardConnector from 'utils/onboardConnector';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -443,6 +444,43 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
         setTooltipTextMessage(value);
     };
 
+    const getSubmitButton = () => {
+        if (!isWalletConnected) {
+            return (
+                <SubmitButton disabled={submitDisabled} onClick={() => onboardConnector.connectWallet()}>
+                    {t('common.wallet.connect-your-wallet')}
+                </SubmitButton>
+            );
+        }
+        if (!hasAllowance) {
+            return (
+                <SubmitButton
+                    disabled={submitDisabled}
+                    onClick={async () => {
+                        if (!!amount) {
+                            setOpenApprovalModal(true);
+                        }
+                    }}
+                >
+                    {t('common.wallet.approve')}
+                </SubmitButton>
+            );
+        }
+
+        return (
+            <SubmitButton
+                disabled={submitDisabled}
+                onClick={async () => {
+                    if (!!amount) {
+                        handleSubmit();
+                    }
+                }}
+            >
+                {selectedSide}
+            </SubmitButton>
+        );
+    };
+
     return (
         <MarketContainer>
             <WalletInfo market={market} />
@@ -637,22 +675,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             }}
                         />
                     </SliderContainer>
-                    <FlexDivCentered>
-                        <SubmitButton
-                            disabled={submitDisabled}
-                            onClick={async () => {
-                                if (!!amount) {
-                                    if (hasAllowance) {
-                                        await handleSubmit();
-                                    } else {
-                                        setOpenApprovalModal(true);
-                                    }
-                                }
-                            }}
-                        >
-                            {hasAllowance ? selectedSide : 'APPROVE'}
-                        </SubmitButton>
-                    </FlexDivCentered>
+                    <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
                     <FooterContainer>
                         <SliderInfo>
                             <SliderInfoTitle>Skew:</SliderInfoTitle>
