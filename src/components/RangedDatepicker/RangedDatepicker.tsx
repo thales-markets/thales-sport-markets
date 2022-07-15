@@ -80,20 +80,19 @@ const DatePickerContainer = styled.div`
         color: ${(props) => props.theme.textColor.primary} !important;
     }
 
+    .react-datepicker__day--today {
+        font-weight: 600;
+        color: ${(props) => props.theme.textColor.quaternary} !important;
+    }
+
     .react-datepicker__day--selected,
     .react-datepicker__day--in-selecting-range,
-    // .react-datepicker__day--keyboard-selected,
     .react-datepicker__day--in-range,
     .react-datepicker__day--range-end {
         border-radius: 30px !important;
         color: ${(props) => props.theme.textColor.tertiary} !important;
         background-color: ${(props) => props.theme.background.quaternary} !important;
         font-weight: 300;
-    }
-
-    .react-datepicker__day--today {
-        font-weight: 600;
-        color: ${(props) => props.theme.textColor.quaternary} !important;
     }
 
     .react-datepicker__navigation-icon {
