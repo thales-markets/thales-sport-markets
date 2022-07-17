@@ -16,4 +16,4 @@ export const LanguageNameMap = {
     [SupportedLanguages.CHINESE]: '中文',
 };
 
-export const DEFAULT_LANGUAGE = SupportedLanguages.CHINESE;
+export const DEFAULT_LANGUAGE = SupportedLanguages.ENGLISH;
