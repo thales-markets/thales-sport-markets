@@ -12,7 +12,7 @@
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use."
         },
         "referral": {
-            "link-copied": "Refferal link copied!",
+            "link-copied": "Referral link copied!",
             "button": {
                 "label": "Refer and earn",
                 "disbled-tooltip": "Connect wallet to generate a referral link.",
