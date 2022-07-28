@@ -11,6 +11,13 @@
             "get-usd-progress": "Minting {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use."
         },
+        "referral": {
+            "link-copied": "Refferal link copied!",
+            "link-failed": "Refferal link failed to generate!",
+            "button": {
+                "label": "Generate referral"
+            }
+        },
         "swap": {
             "title": "Get {{currencyKey}}",
             "from-label": "From",
