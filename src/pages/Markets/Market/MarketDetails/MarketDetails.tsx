@@ -79,6 +79,7 @@ import WalletInfo from '../WalletInfo';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { refetchBalances } from 'utils/queryConnector';
 import onboardConnector from 'utils/onboardConnector';
+import { getReferralId } from 'utils/referral';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -132,6 +133,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const [balances, setBalances] = useState<Balances | undefined>(undefined);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     const [maxAmount, setMaxAmount] = useState<number>(0);
+
+    const referralId =
+        walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase() ? getReferralId() : null;
 
     useEffect(() => {
         setStableIndex(0);
@@ -279,6 +283,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         selectedPosition,
                         parsedAmount,
                         ammQuote,
+                        referralId,
                         ethers.utils.parseEther('0.02'),
                         { gasLimit: MAX_L2_GAS_LIMIT }
                     );
