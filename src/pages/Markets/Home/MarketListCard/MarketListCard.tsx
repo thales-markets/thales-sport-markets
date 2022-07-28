@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
@@ -17,6 +17,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+
+    useEffect(() => {
+        setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
+        setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
+    }, [market.homeTeam, market.awayTeam]);
 
     return (
         <Container

@@ -484,6 +484,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
 
+    useEffect(() => {
+        setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
+        setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
+    }, [market.homeTeam, market.awayTeam]);
+
     return (
         <MarketContainer>
             <WalletInfo market={market} />

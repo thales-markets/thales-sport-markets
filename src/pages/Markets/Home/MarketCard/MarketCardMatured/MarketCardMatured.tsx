@@ -9,7 +9,7 @@ import {
     OddsLabel,
 } from 'components/common';
 import Tags from 'pages/Markets/components/Tags';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import { useTranslation } from 'react-i18next';
 import { SportMarketInfo } from 'types/markets';
 import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
@@ -24,6 +24,12 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+
+    useEffect(() => {
+        setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
+        setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
+    }, [market.homeTeam, market.awayTeam]);
+
     return (
         <MatchInfo>
             <MatchInfoColumn>
