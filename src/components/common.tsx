@@ -142,7 +142,7 @@ export const MatchDate = styled.label`
     line-height: 20px;
     text-align: center;
     overflow: hidden;
-    width: 98px;
+    width: 100px;
     white-space: nowrap;
     color: ${(props) => props.theme.textColor.primary};
     cursor: pointer;
@@ -160,7 +160,7 @@ export const MatchInfoLabel = styled.label<{
     line-height: 20px;
     text-align: center;
     overflow: hidden;
-    width: ${(props) => (props.pendingResolution ? 'fit-content' : '98px')};
+    width: ${(props) => (props.pendingResolution ? 'fit-content' : '100px')};
     white-space: nowrap;
     color: ${(props) =>
         props.isMaturedMarket || props.isCanceledMarket

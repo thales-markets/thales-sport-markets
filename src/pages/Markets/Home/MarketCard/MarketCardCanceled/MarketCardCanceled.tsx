@@ -17,7 +17,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 // import { useTranslation } from 'react-i18next';
 import { Odds, SportMarketInfo } from 'types/markets';
-import { getTeamImageSource } from 'utils/images';
+import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
 
 type MarketCardCanceledProps = {
     market: SportMarketInfo;
@@ -35,11 +35,19 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
         }
     }, [marketCancellationOddsQuery.isSuccess, marketCancellationOddsQuery.data]);
 
+    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
+    const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+
+    useEffect(() => {
+        setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
+        setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
+    }, [market.homeTeam, market.awayTeam]);
+
     return (
         <MatchInfo>
             <MatchInfoColumn>
                 <MatchParticipantImageContainer isCanceled={true}>
-                    <MatchParticipantImage src={getTeamImageSource(market.homeTeam, market.tags[0])} />
+                    <MatchParticipantImage src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
                 </MatchParticipantImageContainer>
                 {oddsOnCancellation ? (
                     <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
@@ -69,7 +77,7 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
             </MatchInfoColumn>
             <MatchInfoColumn>
                 <MatchParticipantImageContainer isCanceled={true}>
-                    <MatchParticipantImage src={getTeamImageSource(market.awayTeam, market.tags[0])} />
+                    <MatchParticipantImage src={awayLogoSrc} onError={() => setAwayLogoSrc(OVERTIME_LOGO)} />
                 </MatchParticipantImageContainer>
                 {oddsOnCancellation ? (
                     <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={false}>

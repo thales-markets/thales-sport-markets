@@ -682,7 +682,11 @@ const groupBySortedMarkets = (markets: SportMarkets) => {
     const canceledMarkets: SportMarkets = [];
 
     markets.forEach((market: SportMarketInfo) => {
-        if (market.isOpen && market.maturityDate > new Date() && market.homeOdds > 0 && market.awayOdds > 0)
+        if (
+            market.isOpen &&
+            market.maturityDate > new Date() &&
+            (market.homeOdds !== 0 || market.awayOdds !== 0 || market.drawOdds !== 0)
+        )
             openMarkets.push(market);
         if (
             market.isOpen &&

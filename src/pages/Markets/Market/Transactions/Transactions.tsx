@@ -27,7 +27,6 @@ const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
 
     useEffect(() => {
         if (marketTransactionsQuery.isSuccess && marketTransactionsQuery.data) {
-            console.log(marketTransactionsQuery.data);
             setMarketTransactions(
                 orderBy(marketTransactionsQuery.data, ['timestamp', 'blockNumber'], ['desc', 'desc'])
             );
