@@ -22,6 +22,7 @@ const Search: React.FC<SearchProps> = ({ text, handleChange }) => {
             <IconWrapper>
                 <SearchIcon />
             </IconWrapper>
+            {text !== '' && <ClearButton onClick={() => handleChange('')}>X</ClearButton>}
         </Wrapper>
     );
 };
@@ -67,6 +68,17 @@ const SearchIcon = styled.i`
         content: '\\0042';
         color: ${(props) => props.theme.background.secondary};
     }
+`;
+
+const ClearButton = styled.button`
+    height: 100%;
+    font-size: 18px;
+    position: absolute;
+    right: 5px;
+    background: ${(props) => props.theme.background.secondary};
+    color: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
+    border: none;
 `;
 
 export default Search;

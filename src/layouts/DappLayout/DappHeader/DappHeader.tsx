@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
 import { NetworkIdByName } from 'utils/network';
 import { getNetworkId } from 'redux/modules/wallet';
+import Referral from 'components/Referral';
 
 type DappHeaderProps = {
     showSearch?: boolean;
@@ -20,6 +21,7 @@ const DappHeader: React.FC<DappHeaderProps> = () => {
         <Container>
             <Logo />
             <RightContainer>
+                <Referral />
                 {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
                 <WalletInfo />
             </RightContainer>

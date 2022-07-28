@@ -16,4 +16,8 @@ export const buildHref = (route: string) => `${ifIpfsDeployment ? '#' : ''}${rou
 export const buildMarketLink = (marketAddress: string, excludeSlash = false) =>
     `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${ROUTES.Markets.Home}/${marketAddress}`;
 
+export const buildReferralLink = (route: string, referralId: string) => {
+    return `${ifIpfsDeployment ? '#' : ''}${route}?referralId=${referralId.toLowerCase()}`;
+};
+
 export { history };

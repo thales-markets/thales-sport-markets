@@ -24,7 +24,9 @@ const useSportMarketsQuery = (networkId: NetworkId, options?: UseQueryOptions<Sp
                 const mappedMarkets = markets.map((market: SportMarketInfo) => {
                     market.maturityDate = new Date(market.maturityDate);
                     market.homeTeam = fixDuplicatedTeamName(market.homeTeam);
+                    market.homeTeam.toLowerCase() == 'wolverhampton wanderers' ? (market.homeTeam = 'Wolves') : '';
                     market.awayTeam = fixDuplicatedTeamName(market.awayTeam);
+                    market.awayTeam.toLowerCase() == 'wolverhampton wanderers' ? (market.awayTeam = 'Wolves') : '';
                     market.sport = SPORTS_MAP[market.tags[0]];
                     marketsWithOdds
                         .filter((obj: any) => obj[0] === market.id)
