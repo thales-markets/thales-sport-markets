@@ -13,9 +13,10 @@
         },
         "referral": {
             "link-copied": "Refferal link copied!",
-            "link-failed": "Refferal link failed to generate!",
             "button": {
-                "label": "Generate referral"
+                "label": "Refer and earn",
+                "disbled-tooltip": "Connect wallet to generate a referral link.",
+                "enabled-tooltip": "Invite people to trade on overtime to earn fees from each trade they make."
             }
         },
         "swap": {
