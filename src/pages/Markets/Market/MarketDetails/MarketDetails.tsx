@@ -10,7 +10,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { BigNumber, ethers } from 'ethers';
 import { AMMPosition, AvailablePerSide, Balances, MarketData } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
-import { getTeamImageSource } from 'utils/images';
+import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
 import {
     InfoRow,
     InfoTitle,
@@ -481,6 +481,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
         );
     };
 
+    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
+    const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+
     return (
         <MarketContainer>
             <WalletInfo market={market} />
@@ -522,7 +525,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             <MatchInfo>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer isWinner={market.finalResult == 1} finalResult={market.finalResult}>
-                        <MatchParticipantImage src={getTeamImageSource(market.homeTeam, market.tags[0])} />
+                        <MatchParticipantImage src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
                     </MatchParticipantImageContainer>
                     {market.resolved && market.gameStarted && (
                         <WinnerLabel isWinning={market.finalResult == 1} finalResult={market.finalResult}>
@@ -537,7 +540,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer isWinner={market.finalResult == 2} finalResult={market.finalResult}>
-                        <MatchParticipantImage src={getTeamImageSource(market.awayTeam, market.tags[0])} />
+                        <MatchParticipantImage src={awayLogoSrc} onError={() => setAwayLogoSrc(OVERTIME_LOGO)} />
                     </MatchParticipantImageContainer>
                     {market.resolved && market.gameStarted && (
                         <WinnerLabel isWinning={market.finalResult == 2} finalResult={market.finalResult}>

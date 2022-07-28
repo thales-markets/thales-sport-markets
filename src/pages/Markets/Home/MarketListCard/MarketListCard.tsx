@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
-import { getTeamImageSource } from 'utils/images';
+import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
 import { isClaimAvailable } from 'utils/markets';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
@@ -15,6 +15,9 @@ type MarketRowCardProps = {
 const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions }) => {
     const claimAvailable = isClaimAvailable(accountPositions);
 
+    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
+    const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+
     return (
         <Container
             // backgroundColor={'rgba(48, 54, 86, 0.5)'}
@@ -24,12 +27,12 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
         >
             <ClubVsClubContainer>
                 <ClubContainer>
-                    <ClubLogo src={getTeamImageSource(market.homeTeam, market.tags[0])} />
+                    <ClubLogo src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
                     <ClubNameLabel>{market.homeTeam}</ClubNameLabel>
                 </ClubContainer>
                 <VSLabel>{'VS'}</VSLabel>
                 <ClubContainer>
-                    <ClubLogo src={getTeamImageSource(market.awayTeam, market.tags[0])} />
+                    <ClubLogo src={awayLogoSrc} onError={() => setAwayLogoSrc(OVERTIME_LOGO)} />
                     <ClubNameLabel>{market.awayTeam}</ClubNameLabel>
                 </ClubContainer>
             </ClubVsClubContainer>

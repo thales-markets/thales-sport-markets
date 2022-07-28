@@ -10,3 +10,5 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
               .trim()
               .replaceAll(' ', '-')
               .toLowerCase()}.svg`;
+
+export const OVERTIME_LOGO = '/logos/overtime-logo.png';

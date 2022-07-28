@@ -9,10 +9,10 @@ import {
     OddsLabel,
 } from 'components/common';
 import Tags from 'pages/Markets/components/Tags';
-import React from 'react';
+import React, { useState } from 'react';
 // import { useTranslation } from 'react-i18next';
 import { SportMarketInfo } from 'types/markets';
-import { getTeamImageSource } from 'utils/images';
+import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
 
 type MarketCardMaturedProps = {
     market: SportMarketInfo;
@@ -21,11 +21,14 @@ type MarketCardMaturedProps = {
 const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
     // const { t } = useTranslation();
     const noOdds = market.awayOdds == 0 && market.homeOdds == 0 && market.awayOdds == 0;
+
+    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
+    const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
     return (
         <MatchInfo>
             <MatchInfoColumn>
                 <MatchParticipantImageContainer>
-                    <MatchParticipantImage src={getTeamImageSource(market.homeTeam, market.tags[0])} />
+                    <MatchParticipantImage src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
                 </MatchParticipantImageContainer>
                 <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
                     {market.homeOdds.toFixed(2)}
@@ -49,7 +52,7 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
             </MatchInfoColumn>
             <MatchInfoColumn>
                 <MatchParticipantImageContainer>
-                    <MatchParticipantImage src={getTeamImageSource(market.awayTeam, market.tags[0])} />
+                    <MatchParticipantImage src={awayLogoSrc} onError={() => setAwayLogoSrc(OVERTIME_LOGO)} />
                 </MatchParticipantImageContainer>
                 <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={false}>
                     {market.awayOdds.toFixed(2)}
