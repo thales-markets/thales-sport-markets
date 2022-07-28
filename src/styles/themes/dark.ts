@@ -1,38 +1,61 @@
 import { Colors } from 'styles/common';
 
 export default {
-    background: { primary: Colors.GRAY_DARK, secondary: Colors.GRAY, tertiary: Colors.PURPLE },
+    background: {
+        primary: Colors.GRAY_DARK,
+        secondary: Colors.GRAY,
+        tertiary: Colors.GRAY_LIGHT,
+        quaternary: Colors.BLUE,
+    },
     textColor: {
         primary: Colors.WHITE,
         secondary: Colors.GRAY_LIGHT,
-        tertiary: Colors.GRAY_LIGHT,
+        tertiary: Colors.GRAY,
+        quaternary: Colors.BLUE,
+    },
+    oddsColor: {
+        primary: Colors.GREEN,
+        secondary: Colors.RED,
+        tertiary: Colors.BLUE,
+        quaternary: Colors.YELLOW,
     },
     borderColor: {
-        primary: Colors.WHITE,
-        secondary: Colors.GREEN,
-        tertiary: Colors.PURPLE,
+        primary: Colors.GRAY_LIGHT,
+        secondary: Colors.WHITE,
+        tertiary: Colors.GRAY_DARK,
+        quaternary: Colors.BLUE,
+    },
+    winnerColors: {
+        primary: Colors.GREEN,
+        secondary: Colors.YELLOW,
+        tertiary: Colors.BLUE,
     },
     button: {
         background: {
             primary: Colors.GREEN,
-            secondary: Colors.WHITE,
+            secondary: Colors.GRAY_LIGHT,
+            tertiary: Colors.GRAY_DARK,
         },
         textColor: {
             primary: Colors.GRAY_LIGHT,
+            secondary: Colors.GRAY_DARK,
+            tertiary: Colors.GRAY,
+            quaternary: Colors.BLUE,
         },
         borderColor: {
             primary: Colors.GRAY_LIGHT,
+            secondary: Colors.BLUE,
         },
     },
     input: {
         background: {
             primary: Colors.WHITE,
             selection: {
-                primary: Colors.PINK_LIGHT,
+                primary: Colors.GRAY_LIGHT,
             },
         },
         textColor: {
-            primary: Colors.PURPLE_DARK,
+            primary: Colors.GRAY_DARK,
         },
         borderColor: {
             primary: Colors.WHITE,

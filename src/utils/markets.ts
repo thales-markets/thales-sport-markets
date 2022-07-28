@@ -4,14 +4,13 @@ import { AccountPosition, MarketInfo } from 'types/markets';
 export const getRoi = (ticketPrice: number, potentialWinnings: number, showRoi: boolean) =>
     showRoi ? (potentialWinnings - ticketPrice) / ticketPrice : 0;
 
-export const isClaimAvailable = (market: MarketInfo, accountPosition?: AccountPosition) =>
-    !market.isPaused &&
-    !!accountPosition &&
-    market.canUsersClaim &&
-    accountPosition.position > 0 &&
-    (accountPosition.position === market.winningPosition ||
-        market.status === MarketStatus.CancelledConfirmed ||
-        market.noWinners);
+export const isClaimAvailable = (accountPositions?: AccountPosition[]) => {
+    let isClaimAvailable = false;
+    accountPositions?.forEach((accountPosition) =>
+        accountPosition.claimable && accountPosition.amount > 0 ? (isClaimAvailable = true) : ''
+    );
+    return isClaimAvailable;
+};
 
 export const getMarketStatus = (market: MarketInfo) => {
     if (market.isPaused) {
@@ -51,4 +50,10 @@ export const isValidHttpsUrl = (text: string) => {
     }
 
     return url.protocol === 'https:';
+};
+
+export const convertFinalResultToResultType = (result: number) => {
+    if (result == 1) return 0;
+    if (result == 2) return 1;
+    if (result == 3) return 2;
 };

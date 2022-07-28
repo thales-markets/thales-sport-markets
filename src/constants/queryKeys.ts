@@ -1,11 +1,38 @@
+import { SportMarketInfo } from 'types/markets';
 import { NetworkId } from 'types/network';
+import { Position, Side } from './options';
 
 export const QUERY_KEYS = {
     Markets: (networkId: NetworkId) => ['markets', networkId],
-    Market: (marketAddress: string) => ['market', marketAddress],
+    SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
+    Market: (marketAddress: string, isSell: boolean) => ['market', marketAddress, isSell],
+    MarketBalances: (marketAddress: string, walletAddress: string) => ['marketBalances', marketAddress, walletAddress],
+    MarketCancellationOdds: (marketAddress: string) => ['marketCancellationOdds', marketAddress],
+    PositionDetails: (
+        marketAddress: string,
+        position: Position,
+        amount: number,
+        stableIndex: number,
+        networkId: NetworkId
+    ) => ['positionDetails', marketAddress, position, amount, stableIndex, networkId],
+    AvailablePerSide: (marketAddress: string, side: Side) => ['availablePerSide', marketAddress, side],
     MarketTransactions: (marketAddress: string, networkId: NetworkId) => [
         'market',
         'transactions',
+        marketAddress,
+        networkId,
+    ],
+    UserTransactions: (walletAddress: string, networkId: NetworkId) => [
+        'user',
+        'transactions',
+        walletAddress,
+        networkId,
+    ],
+    UserTransactionsPerMarket: (walletAddress: string, marketAddress: string, networkId: NetworkId) => [
+        'user',
+        'market',
+        'transactions',
+        walletAddress,
         marketAddress,
         networkId,
     ],
@@ -24,6 +51,7 @@ export const QUERY_KEYS = {
     ],
     MarketsParameters: (networkId: NetworkId) => ['markets', 'parameters', networkId],
     Tags: (networkId: NetworkId) => ['tags', networkId],
+    NormalizedOdds: (sportMarket: SportMarketInfo, networkId: NetworkId) => ['normalizedOdds', sportMarket, networkId],
     AccountPositions: (walletAddress: string, networkId: NetworkId) => ['positions', walletAddress, networkId],
     Wallet: {
         PaymentTokenBalance: (walletAddress: string, networkId: NetworkId) => [
@@ -32,13 +60,27 @@ export const QUERY_KEYS = {
             walletAddress,
             networkId,
         ],
+        GetsUSDWalletBalance: (walletAddress: string, networkId: NetworkId) => [
+            'sUsd',
+            'balance',
+            walletAddress,
+            networkId,
+        ],
+        TokenBalance: (token: string, walletAddress: string, networkId: NetworkId) => [
+            'wallet',
+            'tokenBalance',
+            token,
+            walletAddress,
+            networkId,
+        ],
+        MultipleCollateral: (walletAddress: string, networkId: NetworkId) => [
+            'multipleCollateral',
+            walletAddress,
+            networkId,
+        ],
+        SwapApproveSpender: (networkId: NetworkId) => ['wallet', 'swap', 'approveSpender', networkId],
         GetUsdDefaultAmount: (networkId: NetworkId) => ['wallet', 'getUsdDefaultAmount', networkId],
     },
-    OracleCouncilMember: (walletAddress: string, networkId: NetworkId) => [
-        'oracleCouncilMember',
-        walletAddress,
-        networkId,
-    ],
 };
 
 export default QUERY_KEYS;

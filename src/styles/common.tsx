@@ -35,16 +35,12 @@ export const FlexDivColumnCentered = styled(FlexDivColumn)`
 `;
 
 export const Colors = {
-    PURPLE: '#6c438a',
-    PURPLE_LIGHT: '#c4b3d0',
-    PURPLE_DARK: '#3B235F',
     GRAY: '#303656',
     GRAY_LIGHT: '#5F6180',
     GRAY_DARK: '#1A1C2B',
-    PINK: '#ce348a',
-    PINK_LIGHT: '#F7CAD7',
     WHITE: '#FFFFFF',
     GREEN: '#5FC694',
-    BLUE: '#40a1d8',
+    BLUE: '#3FD1FF',
     RED: '#e26a78',
+    YELLOW: '#FAC439',
 };

@@ -13,8 +13,10 @@ import { MarketData } from 'types/markets';
 import { buildHref } from 'utils/routes';
 import BackToLink from '../components/BackToLink';
 import MarketDetails from './MarketDetails';
-import ResolveMarket from './ResolveMarket';
+// import ResolveMarket from './ResolveMarket';
 import Transactions from './Transactions';
+import { Side } from '../../../constants/options';
+import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 type MarketProps = RouteComponentProps<{
     marketAddress: string;
@@ -24,11 +26,13 @@ const Market: React.FC<MarketProps> = (props) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const [market, setMarket] = useState<MarketData | undefined>(undefined);
+    const [selectedSide, setSelectedSide] = useState<Side>(Side.BUY);
+    const { trackPageView } = useMatomo();
 
     const { params } = props.match;
     const marketAddress = params && params.marketAddress ? params.marketAddress : '';
 
-    const marketQuery = useMarketQuery(marketAddress, {
+    const marketQuery = useMarketQuery(marketAddress, selectedSide === Side.SELL, {
         enabled: isAppReady,
     });
 
@@ -38,13 +42,17 @@ const Market: React.FC<MarketProps> = (props) => {
         }
     }, [marketQuery.isSuccess, marketQuery.data]);
 
+    useEffect(() => {
+        trackPageView({});
+    }, []);
+
     return (
         <Container>
             {market ? (
                 <>
                     <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
-                    <MarketDetails market={market} />
-                    {market.canMarketBeResolved && !market.isPaused && <ResolveMarket market={market} />}
+                    <MarketDetails market={market} selectedSide={selectedSide} setSelectedSide={setSelectedSide} />
+                    {/*{market.canMarketBeResolved && !market.isPaused && <ResolveMarket market={market} />}*/}
                     <Transactions marketAddress={marketAddress} />
                 </>
             ) : (
@@ -55,9 +63,12 @@ const Market: React.FC<MarketProps> = (props) => {
 };
 
 const Container = styled(FlexDivColumn)`
-    width: 100%;
+    width: 60%;
     position: relative;
     align-items: center;
+    @media (max-width: 1440px) {
+        width: 95%;
+    }
 `;
 
 export default Market;

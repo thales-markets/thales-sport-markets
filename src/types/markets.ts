@@ -1,4 +1,5 @@
-import { DisputeStatus, DisputeVotingOption, MarketStatus } from 'constants/markets';
+import { MarketStatus } from 'constants/markets';
+import { Position, PositionName, Side } from '../constants/options';
 
 export type MarketInfo = {
     address: string;
@@ -36,32 +37,69 @@ export type MarketInfo = {
     cancelledByCreator: boolean;
 };
 
+export type SportMarketInfo = {
+    id: string;
+    address: string;
+    maturityDate: Date;
+    tags: number[];
+    isOpen: boolean;
+    isResolved: boolean;
+    isCanceled: boolean;
+    finalResult: number;
+    poolSize: number;
+    numberOfParticipants: number;
+    homeTeam: string;
+    awayTeam: string;
+    homeOdds: number;
+    awayOdds: number;
+    drawOdds: number;
+    homeScore: number;
+    awayScore: number;
+    sport: string;
+};
+
 export type FixedMarketData = {
     winningAmountsNewUser: number[];
     winningAmountsNoPosition: number[];
     winningAmountPerTicket: number;
 };
 
-export type MarketData = MarketInfo & {
-    claimablePoolSize: number;
-    poolSizePerPosition: number[];
-    canUsersPlacePosition: boolean;
-    canMarketBeResolvedByPDAO: boolean;
-    disputePrice: number;
-    canCreatorCancelMarket: boolean;
-    fixedBondAmount: number;
-    safeBoxLowAmount: number;
-    arbitraryRewardForDisputor: number;
-    creatorBond: number;
-    creatorFee: number;
-    resolverFee: number;
-    safeBoxFee: number;
-    totalFees: number;
-    canIssueFees: boolean;
-    fixedMarketData?: FixedMarketData;
+export type GameDetails = {
+    gameId: string;
+    gameLabel: string;
+};
+
+export type AMMSide = {
+    quote: number;
+    priceImpact: number;
+};
+
+export type AMMPosition = {
+    sides: Record<Side, AMMSide>;
+};
+
+export type AvailablePerSide = {
+    positions: Record<Position, { available: number }>;
+};
+
+export type MarketData = {
+    address: string;
+    gameDetails: GameDetails;
+    positions: Record<Position, { sides: Record<Side, { odd: number }> }>;
+    tags: number[];
+    homeTeam: string;
+    awayTeam: string;
+    maturityDate: number;
+    resolved: boolean;
+    finalResult: number;
+    gameStarted: boolean;
+    homeScore?: number;
+    awayScore?: number;
 };
 
 export type Markets = MarketInfo[];
+
+export type SportMarkets = SportMarketInfo[];
 
 export type AccountMarketData = {
     claimAmount: number;
@@ -110,80 +148,37 @@ export type TagInfo = {
 
 export type Tags = TagInfo[];
 
-export type DisputeInfo = {
+export type SportsMap = Record<number, string>;
+
+export type SportsTagsMap = Record<string, number[]>;
+
+enum PositionType {
+    home,
+    away,
+    draw,
+}
+
+export type AccountPositionGraph = {
     id: string;
-    timestamp: number;
-    creationDate: number;
-    disputeNumber: number;
-    market: string;
-    disputer: string;
-    reasonForDispute: string;
-    isInPositioningPhase: boolean;
-    disputeCode: number;
-    status: DisputeStatus;
-    statusSortingIndex: number;
-    isOpenForVoting: boolean;
+    market: SportMarketInfo;
+    side: PositionType;
+    claimable: boolean;
 };
 
-export type Disputes = DisputeInfo[];
-
-export type DisputeContractData = {
-    timestamp: number;
-    disputer: string;
-    votedOption: number;
-    reasonForDispute: string;
-    isInPositioningPhase: boolean;
-    isMarketClosedForDisputes: boolean;
-    isOpenDisputeCancelled: boolean;
-    disputeWinningPositionChoosen: number;
-    firstMemberThatChooseWinningPosition: string;
-    acceptResultVotesCount: number;
-};
-
-export type DisputeVoteInfo = {
+export type PositionBalance = {
     id: string;
-    timestamp: number;
-    market: string;
-    dispute: number;
-    voter: string;
-    vote: number;
-    position: number;
+    account: string;
+    amount: number;
+    position: AccountPositionGraph;
 };
 
-export type DisputeVotes = DisputeVoteInfo[];
-
-export type DisputeVotingResultInfo = {
-    votingOption: DisputeVotingOption;
-    position: number;
-    numberOfVotes: number;
+export type AccountPosition = AccountPositionGraph & {
+    amount: number;
 };
 
-export type DisputeVotingResults = DisputeVotingResultInfo[];
+export type PositionBalances = PositionBalance[];
 
-export type DisputeData = {
-    disputeContractData: DisputeContractData;
-    disputeVotes: DisputeVotes;
-    disputeVotingResults: DisputeVotingResults;
-    status: DisputeStatus;
-    isOpenForVoting: boolean;
-};
-
-export type AccountDisputeData = {
-    canDisputorClaimbackBondFromUnclosedDispute: boolean;
-};
-
-export type AccountPosition = {
-    market: string;
-    position: number;
-    isWithdrawn: boolean;
-    isClaimed: boolean;
-};
-
-export type AccountPositions = AccountPosition[];
-
-export type AccountPositionsMap = {
-    [market: string]: AccountPosition;
-};
+export type AccountPositionsMap = Record<string, AccountPosition[]>;
 
 export type MarketTransactionType = 'bid' | 'changePosition' | 'withdrawal' | 'claim';
 
@@ -194,7 +189,42 @@ export type MarketTransaction = {
     timestamp: number;
     amount: number | string;
     blockNumber: number;
-    position: string;
+    position: PositionName;
+    market: string;
 };
 
 export type MarketTransactions = MarketTransaction[];
+
+export type UserTransaction = {
+    hash: string;
+    type: MarketTransactionType;
+    account: string;
+    timestamp: number;
+    amount: number | string;
+    blockNumber: number;
+    position: PositionName;
+    positionTeam: string;
+    market: string;
+    game: string;
+    result: PositionName;
+    usdValue: number;
+};
+
+export type UserTransactions = UserTransaction[];
+
+export type GamesOnDate = {
+    date: string;
+    numberOfGames: number;
+};
+
+export type Balances = {
+    home: number;
+    away: number;
+    draw: number;
+};
+
+export type Odds = {
+    home: number;
+    away: number;
+    draw: number;
+};

@@ -36,6 +36,8 @@ const SPAAnchor: React.FC<FieldValidationMessageProps> = ({ onClick, children, h
     );
 };
 
-const Anchor = styled.a``;
+const Anchor = styled.a`
+    all: unset;
+`;
 
 export default SPAAnchor;

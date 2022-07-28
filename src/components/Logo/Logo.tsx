@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import ROUTES from 'constants/routes';
-import { ReactComponent as LogoIcon } from 'assets/images/logo.svg';
+import { ReactComponent as LogoIcon } from 'assets/images/overtime-logo.svg';
 import SPAAnchor from 'components/SPAAnchor';
 import { buildHref } from 'utils/routes';
 

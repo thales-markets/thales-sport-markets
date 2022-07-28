@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
@@ -12,6 +12,10 @@ import Loader from 'components/Loader';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DappFooter from './DappFooter';
+import { useMatomo } from '@datapunt/matomo-tracker-react';
+import queryString from 'query-string';
+import { setReferralId } from 'utils/referral';
+import { useLocation } from 'react-router-dom';
 
 type DappLayoutProps = {
     showSearch?: boolean;
@@ -20,6 +24,27 @@ type DappLayoutProps = {
 const DappLayout: React.FC<DappLayoutProps> = ({ children, showSearch }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const { trackPageView } = useMatomo();
+
+    const location = useLocation();
+    const queryParams: { referralId?: string } = queryString.parse(location.search);
+
+    useEffect(() => {
+        if (queryParams.referralId) {
+            setReferralId(queryParams.referralId);
+        }
+    }, []);
+
+    useEffect(() => {
+        trackPageView({
+            customDimensions: [
+                {
+                    id: 1,
+                    value: networkId ? networkId?.toString() : '',
+                },
+            ],
+        });
+    }, [networkId]);
 
     return (
         <>
@@ -55,7 +80,7 @@ const Wrapper = styled(FlexDivColumn)`
     margin-left: auto;
     margin-right: auto;
     padding: 40px 0px;
-    max-width: 1220px;
+    max-width: 1700px;
     min-height: 100vh;
     @media (max-width: 1260px) {
         padding: 40px 20px;

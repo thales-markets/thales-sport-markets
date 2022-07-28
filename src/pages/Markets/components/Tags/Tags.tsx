@@ -1,73 +1,62 @@
-import useTagsQuery from 'queries/markets/useTagsQuery';
-import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
-import { getNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { TAGS_LIST } from 'constants/tags';
+import React from 'react';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivStart } from 'styles/common';
-import { Tags as TagList } from 'types/markets';
 
 type TagsProps = {
+    sport: string;
     tags: number[];
-    labelFontSize?: number;
+    isFinished?: boolean;
 };
 
-const Tags: React.FC<TagsProps> = ({ tags, labelFontSize }) => {
-    const { t } = useTranslation();
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const [availableTags, setAvailableTags] = useState<TagList>([]);
-
-    const tagsQuery = useTagsQuery(networkId, {
-        enabled: isAppReady,
-    });
-
-    useEffect(() => {
-        if (tagsQuery.isSuccess && tagsQuery.data) {
-            setAvailableTags(tagsQuery.data);
-        }
-    }, [tagsQuery.isSuccess, tagsQuery.data]);
-
+const Tags: React.FC<TagsProps> = ({ sport, tags, isFinished }) => {
     return (
-        <Container>
-            <TagLabel labelFontSize={labelFontSize}>{t('market.tags-label')}:</TagLabel>
+        <Container isFinished={isFinished}>
             {tags.map((tag: number) => {
-                const findTagItem = availableTags.find((t) => t.id == tag);
-                return findTagItem ? <Tag key={findTagItem.label}>{findTagItem.label}</Tag> : null;
+                const findTagItem = TAGS_LIST.find((t) => t.id == tag);
+                return findTagItem ? (
+                    <FlexDivCentered key={findTagItem.id}>
+                        <SportIcon className={`icon icon--${sport.toLowerCase()}`} />{' '}
+                        <Tag>{sport + ' / ' + findTagItem.label}</Tag>
+                    </FlexDivCentered>
+                ) : null;
             })}
         </Container>
     );
 };
 
-const Container = styled(FlexDivStart)`
+const Container = styled(FlexDivStart)<{ isFinished?: boolean }>`
     flex-wrap: wrap;
     align-items: center;
+    color: ${(props) => props.theme.textColor.secondary};
+    margin-top: ${(props) => (props.isFinished ? '0px' : '11px')};
 `;
 
 export const TagLabel = styled.span<{ labelFontSize?: number }>`
     font-style: normal;
     font-weight: bold;
-    font-size: ${(props) => props.labelFontSize || 15}px;
+    font-size: 15px;
     line-height: 100%;
     text-align: center;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
     margin-bottom: 4px;
 `;
 
 const Tag = styled(FlexDivCentered)`
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
-    border-radius: 30px;
     font-style: normal;
-    font-weight: normal;
-    font-size: 15px;
-    line-height: 20px;
-    padding: 4px 8px;
-    margin-left: 6px;
-    height: 28px;
-    color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 4px;
+    font-weight: 300;
+    font-size: 9px;
+    line-height: 10px;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    padding: 4px 4px;
+    color: ${(props) => props.theme.textColor.secondary};
+    white-space: nowrap;
+`;
+
+const SportIcon = styled.i`
+    font-size: 20px;
 `;
 
 export default Tags;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 
 export const BondInfo = styled(FlexDivColumn)`
     font-size: 15px;
@@ -17,14 +17,14 @@ export const BondInfo = styled(FlexDivColumn)`
     }
 `;
 
-export const Info = styled(FlexDivCentered)<{ fontSize?: number; marginTop?: number; marginBottom?: number }>`
+export const Info = styled(FlexDiv)<{ fontSize?: number; marginTop?: number; marginBottom?: number }>`
     font-style: normal;
-    font-weight: 300;
-    font-size: ${(props) => props.fontSize || 15}px;
-    line-height: 120%;
-    white-space: nowrap;
+    font-weight: 400;
+    font-size: ${(props) => props.fontSize || 17}px;
+    line-height: 20px;
     margin-top: ${(props) => props.marginTop || 0}px;
     margin-bottom: ${(props) => props.marginBottom || 0}px;
+    text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
 `;
 
@@ -114,4 +114,223 @@ export const Checkmark = styled.span`
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);
     }
+`;
+
+export const MatchInfo = styled(FlexDivRow)`
+    align-items: center;
+    align-self: center;
+    width: 100%;
+    justify-content: space-around;
+    cursor: pointer;
+`;
+
+export const MatchInfoColumn = styled(FlexDivColumnCentered)`
+    align-items: center;
+    height: 249px;
+    justify-content: flex-start;
+    &:nth-child(odd) {
+        margin-top: 40px;
+    }
+    cursor: pointer;
+    position: relative;
+`;
+
+export const MatchDate = styled.label`
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 20px;
+    text-align: center;
+    overflow: hidden;
+    width: 100px;
+    white-space: nowrap;
+    color: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
+`;
+
+export const MatchInfoLabel = styled.label<{
+    isMaturedMarket?: boolean;
+    claimable?: boolean;
+    isCanceledMarket?: boolean;
+    pendingResolution?: boolean;
+}>`
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 20px;
+    text-align: center;
+    overflow: hidden;
+    width: ${(props) => (props.pendingResolution ? 'fit-content' : '100px')};
+    white-space: nowrap;
+    color: ${(props) =>
+        props.isMaturedMarket || props.isCanceledMarket
+            ? props.theme.oddsColor.secondary
+            : props.claimable
+            ? props.theme.textColor.quaternary
+            : props.theme.textColor.primary};
+    cursor: pointer;
+    position: ${(props) => (props.pendingResolution ? 'absolute' : '')};
+`;
+
+export const MatchVSLabel = styled.label<{
+    pendingResolution?: boolean;
+}>`
+    font-style: normal;
+    font-weight: 200;
+    font-size: 23px;
+    line-height: 27px;
+    display: flex;
+    align-items: center;
+    height: 126px;
+    @media (max-width: 400px) {
+        height: 100px;
+    }
+    color: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
+    margin-top: ${(props) => (props.pendingResolution ? '22px' : '')};
+`;
+
+export const MatchParticipantImageContainer = styled(FlexDiv)<{
+    isWinner?: boolean;
+    finalResult?: number;
+    isCanceled?: boolean;
+}>`
+    border-radius: 50%;
+    border: 3px solid
+        ${(props) =>
+            props.isWinner && props.finalResult !== 0
+                ? props.theme.winnerColors.primary
+                : props.finalResult === 3
+                ? props.theme.winnerColors.tertiary
+                : props.isCanceled
+                ? props.theme.oddsColor.secondary
+                : props.theme.borderColor.primary};
+    background: transparent;
+    opacity: ${(props) => (props.finalResult && props.finalResult !== 3 && !props.isWinner ? '0.5' : '')};
+    height: 126px;
+    width: 126px;
+    line-height: 100%;
+    align-items: center;
+    justify-content: center;
+    color: ${(props) => props.theme.textColor.primary};
+    @media (max-width: 400px) {
+        height: 100px;
+        width: 100px;
+    }
+`;
+
+export const MatchParticipantImage = styled.img`
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+    @media (max-width: 400px) {
+        height: 80px;
+        width: 80px;
+    }
+    line-height: 100%;
+    color: ${(props) => props.theme.textColor.primary};
+`;
+
+export const MatchParticipantName = styled.label<{ isTwoPositioned?: boolean }>`
+    display: flex;
+    visibility: ${(props) => (props.isTwoPositioned ? 'hidden' : '')};
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    text-transform: uppercase;
+    line-height: 20px;
+    height: 40px;
+    align-items: center;
+    text-align: center;
+    margin-top: 5px;
+    color: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
+`;
+
+export const OddsLabel = styled.label<{
+    homeOdds?: boolean;
+    isDraw?: boolean;
+    isTwoPositioned?: boolean;
+    noOdds?: boolean;
+}>`
+    display: flex;
+    visibility: ${(props) => (props.isTwoPositioned || props.noOdds ? 'hidden' : '')};
+    margin-top: 4px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 23px;
+    text-transform: uppercase;
+    text-align: center;
+    color: ${(props) =>
+        props.isDraw
+            ? props.theme.oddsColor.quaternary
+            : props.homeOdds
+            ? props.theme.oddsColor.primary
+            : props.theme.oddsColor.secondary};
+    cursor: pointer;
+`;
+
+export const OddsLabelSceleton = styled.div<{ isTwoPositioned?: boolean }>`
+    display: flex;
+    visibility: ${(props) => (props.isTwoPositioned ? 'hidden' : '')};
+    margin-top: 4px;
+    height: 23px;
+    width: 60px;
+    background: ${(props) => props.theme.background.primary};
+    color: ${(props) => props.theme.background.primary};
+    border-radius: 14px;
+    @keyframes shimmer {
+        100% {
+            -webkit-mask-position: left;
+        }
+    }
+    -webkit-mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/300% 100%;
+    background-repeat: no-repeat;
+    animation: shimmer 2.5s infinite;
+`;
+
+export const WinnerLabel = styled.label<{ isWinning: boolean; finalResult?: number }>`
+    display: flex;
+    visibility: ${(props) => (!props.isWinning ? 'hidden' : '')};
+    margin-top: 4px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 23px;
+    text-transform: uppercase;
+    text-align: center;
+    color: ${(props) =>
+        props.finalResult == 3 ? props.theme.winnerColors.secondary : props.theme.winnerColors.primary};
+    cursor: pointer;
+`;
+
+export const ScoreLabel = styled.label`
+    display: flex;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 35px;
+    align-items: center;
+    color: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
+`;
+
+export const ProfitLabel = styled.label<{ claimable: boolean; profit: number }>`
+    display: flex;
+    visibility: ${(props) => (!props.claimable ? 'hidden' : '')};
+    font-style: normal;
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 20px;
+    text-transform: uppercase;
+    text-align: center;
+    color: ${(props) =>
+        props.profit === 0
+            ? props.theme.oddsColor.tertiary
+            : props.profit > 0
+            ? props.theme.oddsColor.primary
+            : props.theme.oddsColor.secondary};
+    cursor: pointer;
+    margin-top: 37px;
 `;

@@ -5,15 +5,16 @@ import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
 type GlobalFilterProps = {
     disabled?: boolean;
     selected?: boolean;
-    count?: number;
+    count?: number | undefined;
     onClick?: (param: any) => void;
 };
 
 const GlobalFilter: React.FC<GlobalFilterProps> = ({ disabled, selected, onClick, children, count }) => {
     return (
         <Container className={`${disabled ? 'disabled' : ''} ${selected ? 'selected' : ''}`} onClick={onClick}>
-            <Label>{children}</Label>
             {count !== undefined && <Count>{count}</Count>}
+            {children == 'Your transactions' && <Icon className={`icon icon--history`} />}
+            <Label>{children}</Label>
         </Container>
     );
 };
@@ -27,19 +28,20 @@ const Container = styled(FlexDivRowCentered)`
     text-transform: uppercase;
     cursor: pointer;
     height: 36px;
-    border-bottom: 5px solid transparent;
+    margin-left: 20px;
     &.selected,
     &:hover {
-        border-bottom: 5px solid ${(props) => props.theme.borderColor.secondary};
+        color: ${(props) => props.theme.textColor.quaternary};
     }
     &.disabled {
         cursor: default;
         opacity: 0.4;
     }
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
     margin-right: 30px;
     padding-bottom: 5px;
     margin-bottom: 10px;
+    justify-content: flex-start;
 `;
 
 const Label = styled.div`
@@ -48,17 +50,26 @@ const Label = styled.div`
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+    white-space: nowrap;
 `;
 
 const Count = styled(FlexDivCentered)`
     min-width: 26px;
     height: 26px;
-    background: ${(props) => props.theme.button.background.secondary};
-    color: ${(props) => props.theme.button.textColor.primary};
+    background: ${(props) => props.theme.background.quaternary};
+    color: ${(props) => props.theme.textColor.primary};
     border-radius: 15px;
     margin-left: 4px;
-    padding-left: 4px;
+    margin-right: 7px;
+    padding-left: 5px;
+    padding-top: 3px;
     padding-right: 4px;
+`;
+
+const Icon = styled.i`
+    font-size: 26px;
+    margin-left: 4px;
+    margin-right: 7px;
 `;
 
 export default GlobalFilter;

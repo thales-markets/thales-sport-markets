@@ -1,9 +1,19 @@
 @font-face {
-    font-family: 'Nunito';
-    src: local('Nunito'), url(../assets/fonts/Nunito/Nunito.ttf) format('truetype');
+    font-family: 'Roboto';
+    src: local('Roboto'), url(../assets/fonts/Roboto/Roboto.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'RobotoThin';
+    src: local('RobotoThin'), url(../assets/fonts/Roboto/RobotoThin.ttf) format('truetype');
 }
 
 @font-face {
     font-family: 'ExoticIcons';
     src: local('ExoticIcons'), url(../assets/fonts/ExoticIcons/ExoticIcons.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'OvertimeIcons';
+    src: local('OvertimeIcons'), url(../assets/fonts/OvertimeIcons/OvertimeIcons.ttf) format('truetype');
 }

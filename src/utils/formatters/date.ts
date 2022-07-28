@@ -8,6 +8,10 @@ export const toJSTimestamp = (timestamp: number) => timestamp * 1000;
 export const formatShortDate = (date: Date | number) => format(date, 'MMM d, yyyy');
 export const formatShortDateWithTime = (date: Date | number) => format(date, 'MMM d, yyyy | HH:mm');
 
+export const formatDateWithTime = (date: Date | number) => format(date, 'dd MMM HH:mm');
+export const formatShortDateNoYear = (date: Date | number) => format(date, 'MMM d');
+export const formatDayOfWeek = (date: Date | number) => format(date, 'EEE');
+
 export const formattedDuration = (
     duration: Duration,
     dateTimeTranslationMap: any,
