@@ -1,7 +1,6 @@
 import Button from 'components/Button';
 import Tooltip from 'components/Tooltip';
 import ROUTES from 'constants/routes';
-// import React, { useEffect, useState } from 'react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
