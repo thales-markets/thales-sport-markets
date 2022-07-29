@@ -204,6 +204,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         setClaimableAmount(balances.home + balances.draw + balances.away);
                     }
                 }
+            } else if (market.cancelled) {
+                if (balances.home > 0 || balances.draw > 0 || balances.away > 0) {
+                    setClaimable(true);
+                    setClaimableAmount(balances.home + balances.draw + balances.away);
+                }
             }
         }
     }, [balances]);

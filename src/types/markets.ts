@@ -91,6 +91,7 @@ export type MarketData = {
     awayTeam: string;
     maturityDate: number;
     resolved: boolean;
+    cancelled: boolean;
     finalResult: number;
     gameStarted: boolean;
     homeScore?: number;
@@ -191,6 +192,7 @@ export type MarketTransaction = {
     blockNumber: number;
     position: PositionName;
     market: string;
+    paid: number;
 };
 
 export type MarketTransactions = MarketTransaction[];

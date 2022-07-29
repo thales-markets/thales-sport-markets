@@ -228,6 +228,7 @@
             "type-col": "type",
             "position-col": "position",
             "amount-col": "amount",
+            "paid-col": "paid",
             "tx-status-col": "tx status",
             "type": {
                 "bid": "Bid",

@@ -54,6 +54,7 @@ const UserHistory: React.FC = () => {
                     link: getEtherscanTxLink(networkId, tx.hash),
                 };
             } else {
+                // @ts-ignore
                 return tx as UserTransaction;
             }
         });

@@ -5,6 +5,7 @@ import { formatTxTimestamp } from 'utils/formatters/date';
 import Table from 'components/Table';
 import ViewEtherscanLink from 'components/ViewEtherscanLink';
 import { MarketTransaction, MarketTransactions } from 'types/markets';
+import { formatCurrency } from 'utils/formatters/number';
 
 type TransactionsTableProps = {
     transactions: MarketTransactions;
@@ -41,6 +42,16 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                         accessor: 'position',
                         Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['position']>) => (
                             <p>{cellProps.cell.value}</p>
+                        ),
+                        width: 150,
+                        sortable: true,
+                    },
+                    {
+                        Header: <>{t('market.table.paid-col')}</>,
+                        sortType: 'basic',
+                        accessor: 'paid',
+                        Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['paid']>) => (
+                            <p>$ {formatCurrency(cellProps.cell.value)}</p>
                         ),
                         width: 150,
                         sortable: true,

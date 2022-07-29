@@ -82,6 +82,7 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                     awayTeam: fixDuplicatedTeamName(gameDetails.gameLabel.split('vs')[1].trim()),
                     maturityDate: Number(times.maturity) * 1000,
                     resolved,
+                    cancelled,
                     finalResult: Number(finalResult),
                     gameStarted,
                     homeScore: result ? result.homeScore : undefined,
