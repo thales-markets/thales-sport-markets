@@ -191,6 +191,7 @@ export type MarketTransaction = {
     blockNumber: number;
     position: PositionName;
     market: string;
+    paid: number;
 };
 
 export type MarketTransactions = MarketTransaction[];
