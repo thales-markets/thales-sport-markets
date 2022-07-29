@@ -14,7 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import DappFooter from './DappFooter';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import queryString from 'query-string';
-import { setReferralId } from 'utils/referral';
+import { getReferralId, setReferralId } from 'utils/referral';
 import { useLocation } from 'react-router-dom';
 
 type DappLayoutProps = {
@@ -36,14 +36,22 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children, showSearch }) => {
     }, []);
 
     useEffect(() => {
-        trackPageView({
-            customDimensions: [
-                {
-                    id: 1,
-                    value: networkId ? networkId?.toString() : '',
-                },
-            ],
-        });
+        const customDimensions = [
+            {
+                id: 1,
+                value: networkId ? networkId?.toString() : '',
+            },
+        ];
+
+        const referralId = getReferralId();
+        if (referralId) {
+            customDimensions.push({
+                id: 2,
+                value: referralId,
+            });
+        }
+
+        trackPageView({ customDimensions });
     }, [networkId]);
 
     return (

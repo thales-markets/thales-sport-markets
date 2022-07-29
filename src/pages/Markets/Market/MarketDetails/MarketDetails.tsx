@@ -80,6 +80,7 @@ import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { refetchBalances } from 'utils/queryConnector';
 import onboardConnector from 'utils/onboardConnector';
 import { getReferralId } from 'utils/referral';
+import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -133,6 +134,8 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const [balances, setBalances] = useState<Balances | undefined>(undefined);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     const [maxAmount, setMaxAmount] = useState<number>(0);
+
+    const { trackEvent } = useMatomo();
 
     const referralId =
         walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase() ? getReferralId() : null;
@@ -297,6 +300,21 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             : toast.update(id, getSuccessToastOptions(t('market.toast-messsage.sell-success')));
                         setIsBuying(false);
                         setAmount(0);
+
+                        if (selectedSide === Side.BUY) {
+                            trackEvent({
+                                category: 'AMM',
+                                action: `buy-with-${
+                                    COLLATERALS[selectedStableIndex] + referralId ? '-using-referral-' + referralId : ''
+                                }`,
+                                value: Number(ammQuote),
+                            });
+                        } else {
+                            trackEvent({
+                                category: 'AMM',
+                                action: 'sell-to-amm',
+                            });
+                        }
                     }
                 } catch (e) {
                     setIsBuying(false);
