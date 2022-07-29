@@ -52,7 +52,6 @@ const Home: React.FC = () => {
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
     const { trackPageView } = useMatomo();
 
-    const [lastValidMarkets, setLastValidMarkets] = useState<SportMarkets>([]);
     const [globalFilter, setGlobalFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_GLOBAL, GlobalFilterEnum.All);
     const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SPORT, SportFilterEnum.All);
     const [sortDirection, setSortDirection] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_DIRECTION, SortDirection.ASC);
@@ -82,19 +81,7 @@ const Home: React.FC = () => {
     const [gamesPerDay, setGamesPerDayMap] = useState<GamesOnDate[]>([]);
 
     const sportMarketsQuery = useSportMarketsQuery(networkId, { enabled: isAppReady });
-
-    useEffect(() => {
-        if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            setLastValidMarkets(sportMarketsQuery.data);
-        }
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data]);
-
-    const markets: SportMarkets = useMemo(() => {
-        if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            return sportMarketsQuery.data;
-        }
-        return lastValidMarkets;
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data]);
+    const markets: SportMarkets = sportMarketsQuery.isSuccess ? sportMarketsQuery.data : [];
 
     useEffect(() => {
         const marketDates = markets
