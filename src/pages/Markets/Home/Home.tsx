@@ -94,7 +94,7 @@ const Home: React.FC = () => {
             return sportMarketsQuery.data;
         }
         return lastValidMarkets;
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data]);
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, lastValidMarkets]);
 
     useEffect(() => {
         const marketDates = markets
