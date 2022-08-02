@@ -88,16 +88,22 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            setLastValidMarkets(sportMarketsQuery.data);
+            // @ts-ignore
+            console.log(sportMarketsQuery.data[GlobalFilterEnum.OpenMarkets]);
+            // @ts-ignore
+            setLastValidMarkets(sportMarketsQuery.data[GlobalFilterEnum.OpenMarkets]);
         }
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data]);
 
     const markets: SportMarkets = useMemo(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            return sportMarketsQuery.data;
+            // @ts-ignore
+            return sportMarketsQuery.data[GlobalFilterEnum.OpenMarkets];
         }
         return lastValidMarkets;
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, lastValidMarkets]);
+
+    console.log(sportMarketsQuery.data);
 
     useEffect(() => {
         const marketDates = markets

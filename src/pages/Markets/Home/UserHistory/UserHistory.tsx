@@ -34,7 +34,8 @@ const UserHistory: React.FC = () => {
 
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            setMarkets(sportMarketsQuery.data);
+            // @ts-ignore
+            setMarkets(sportMarketsQuery.data[GlobalFilterEnum.OpenMarkets]);
         }
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data]);
 
