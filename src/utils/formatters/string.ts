@@ -1,3 +1,5 @@
+import { SportMarketInfo } from 'types/markets';
+
 export const truncateAddress = (address: string, first = 5, last = 5) =>
     address ? `${address.slice(0, first)}...${address.slice(-last, address.length)}` : null;
 
@@ -20,4 +22,12 @@ export const fixDuplicatedTeamName = (name: string) => {
     }
 
     return name;
+};
+
+export const fixLongTeamName = (market: SportMarketInfo) => {
+    market.homeTeam.toLowerCase() == 'wolverhampton wanderers' ? (market.homeTeam = 'Wolves') : '';
+    market.awayTeam.toLowerCase() == 'wolverhampton wanderers' ? (market.awayTeam = 'Wolves') : '';
+    market.homeTeam.toLowerCase() == 'borussia monchengladbach' ? (market.homeTeam = "Borussia M'gladbach") : '';
+    market.awayTeam.toLowerCase() == 'borussia monchengladbach' ? (market.awayTeam = "Borussia M'gladbach") : '';
+    return market;
 };

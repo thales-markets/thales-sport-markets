@@ -13,6 +13,7 @@ import { getIsAppReady } from '../../../../redux/modules/app';
 import HistoryTable from '../../components/HistoryTable';
 import { Position, PositionName } from '../../../../constants/options';
 import { getEtherscanTxLink } from '../../../../utils/etherscan';
+import { GlobalFilterEnum } from 'constants/markets';
 
 const UserHistory: React.FC = () => {
     const { t } = useTranslation();
@@ -20,7 +21,7 @@ const UserHistory: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const userTransactionsQuery = useUserTransactionsQuery(walletAddress, networkId, { enabled: isAppReady });
-    const sportMarketsQuery = useSportMarketsQuery(networkId, { enabled: isAppReady });
+    const sportMarketsQuery = useSportMarketsQuery(networkId, GlobalFilterEnum.All, { enabled: isAppReady });
 
     const [userTransactions, setUserTransactions] = useState<MarketTransactions>([]);
     const [markets, setMarkets] = useState<SportMarkets>([]);

@@ -11,7 +11,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { PAYMENT_CURRENCY } from 'constants/currency';
 import { formatCurrency } from 'utils/formatters/number';
 import OutsideClickHandler from 'react-outside-click-handler';
-import usesUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
+import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -21,7 +21,7 @@ const WalletInfo: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const [showWalletOptions, setShowWalletOptions] = useState<boolean>(false);
 
-    const sUSDBalanceQuery = usesUSDWalletBalance(walletAddress, networkId, {
+    const sUSDBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
     const sUSDBalance = useMemo(() => {

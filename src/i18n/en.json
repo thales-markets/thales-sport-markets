@@ -191,13 +191,15 @@
         },
         "filter-label": {
             "global": {
-                "all": "All markets",
+                "all": "All",
                 "openmarkets": "Open markets",
                 "resolvedmarkets": "Resolved markets",
                 "yourpositions": "Your positions",
                 "claim": "Claimable",
                 "history": "Your transactions",
-                "canceled": "Cancelled"
+                "canceled": "Cancelled",
+                "archivedmarkets": "Archived markets",
+                "tooltip": "Markets resolved more than 7 days ago"
             },
             "sport": {
                 "all": "All sports",
