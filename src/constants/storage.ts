@@ -8,5 +8,5 @@ export const LOCAL_STORAGE_KEYS = {
     FILTER_TAGS: 'filterTags',
     FILTER_DATES: 'filterDates',
     FILTER_SPORT: 'filterSport',
-    GRID_VIEW: 'gridView',
+    LIST_VIEW: 'listView',
 };

@@ -56,7 +56,7 @@ const Home: React.FC = () => {
     const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SPORT, SportFilterEnum.All);
     const [sortDirection, setSortDirection] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_DIRECTION, SortDirection.ASC);
     const [sortBy, setSortBy] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_BY, DEFAULT_SORT_BY);
-    const [showGridView, setGridView] = useLocalStorage(LOCAL_STORAGE_KEYS.GRID_VIEW, true);
+    const [showListView, setListView] = useLocalStorage(LOCAL_STORAGE_KEYS.LIST_VIEW, true);
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [showBurger, setShowBurger] = useState<boolean>(false);
@@ -473,10 +473,10 @@ const Home: React.FC = () => {
                     }}
                 />
                 <SwitchContainer>
-                    <ViewSwitch selected={showGridView} onClick={() => setGridView(true)}>
+                    <ViewSwitch selected={!showListView} onClick={() => setListView(false)}>
                         {t('market.grid-view')}
                     </ViewSwitch>
-                    <ViewSwitch selected={!showGridView} onClick={() => setGridView(false)}>
+                    <ViewSwitch selected={showListView} onClick={() => setListView(true)}>
                         {t('market.list-view')}
                     </ViewSwitch>
                 </SwitchContainer>
@@ -554,7 +554,7 @@ const Home: React.FC = () => {
                     <MarketsGrid
                         markets={marketsList}
                         accountPositions={accountPositions}
-                        layoutType={showGridView ? 0 : 1}
+                        layoutType={showListView ? 1 : 0}
                     />
                 )}
                 {/* RIGHT FILTERS */}
