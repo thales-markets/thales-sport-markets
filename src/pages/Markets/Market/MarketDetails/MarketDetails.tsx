@@ -669,7 +669,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 <>
                     <LabelContainer>
                         <AmountToBuyLabel>Amount to {selectedSide.toLowerCase()}:</AmountToBuyLabel>
-                        <AmountToBuyLabel>Options value:</AmountToBuyLabel>
+                        <AmountToBuyLabel>Total to pay:</AmountToBuyLabel>
                     </LabelContainer>
                     <FlexDivCentered>
                         <CustomTooltip open={!!tooltipText && !openApprovalModal} title={tooltipText}>
