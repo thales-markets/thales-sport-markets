@@ -20,7 +20,7 @@ const marketsParams = {
     [GlobalFilterEnum.History]: {},
 };
 
-const marketsCache = {
+export const marketsCache = {
     [GlobalFilterEnum.OpenMarkets]: [] as SportMarkets,
     [GlobalFilterEnum.Canceled]: [] as SportMarkets,
     [GlobalFilterEnum.ResolvedMarkets]: [] as SportMarkets,
@@ -113,6 +113,7 @@ const mapMarkets = (allMarkets: SportMarkets) => {
 const useSportMarketsQuery = (
     networkId: NetworkId,
     globalFilter: GlobalFilterEnum,
+    setMarketsCached: any,
     options?: UseQueryOptions<typeof marketsCache>
 ) => {
     return useQuery<typeof marketsCache>(
@@ -133,7 +134,9 @@ const useSportMarketsQuery = (
                     })
                     .then(async (result: any) => {
                         mapMarkets(await mapResult(result, GlobalFilterEnum.All));
+                        setMarketsCached({ ...marketsCache });
                     });
+                setMarketsCached({ ...marketsCache });
 
                 return marketsCache;
             } catch (e) {

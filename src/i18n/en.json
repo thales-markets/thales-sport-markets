@@ -191,7 +191,7 @@
         },
         "filter-label": {
             "global": {
-                "all": "All",
+                "allmarkets": "All markets",
                 "openmarkets": "Open markets",
                 "resolvedmarkets": "Resolved markets",
                 "yourpositions": "Your positions",

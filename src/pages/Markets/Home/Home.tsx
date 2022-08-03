@@ -40,7 +40,7 @@ import UserHistory from './UserHistory';
 import burger from 'assets/images/burger.svg';
 import Logo from 'components/Logo';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
+import useSportMarketsQuery, { marketsCache } from 'queries/markets/useSportMarketsQuery';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -63,6 +63,7 @@ const Home: React.FC = () => {
     const [showListView, setListView] = useLocalStorage(LOCAL_STORAGE_KEYS.LIST_VIEW, true);
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
+    const [marketsCached, setMarketsCached] = useState<typeof marketsCache>(marketsCache);
     const [showBurger, setShowBurger] = useState<boolean>(false);
 
     const sortOptions: SortOptionType[] = [
@@ -84,18 +85,18 @@ const Home: React.FC = () => {
     const [dateFilter, setDateFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_DATES, new Date().toDateString());
     const [gamesPerDay, setGamesPerDayMap] = useState<GamesOnDate[]>([]);
 
-    const sportMarketsQuery = useSportMarketsQuery(networkId, globalFilter, { enabled: isAppReady });
+    const sportMarketsQuery = useSportMarketsQuery(networkId, globalFilter, setMarketsCached, { enabled: isAppReady });
 
     // TODO: maybe remove
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            setLastValidMarkets(sportMarketsQuery.data[globalFilter]);
+            setLastValidMarkets(marketsCached[globalFilter]);
         }
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, globalFilter]);
 
     const markets: SportMarkets = useMemo(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            return sportMarketsQuery.data[globalFilter];
+            return marketsCached[globalFilter];
         }
         return lastValidMarkets;
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, lastValidMarkets, globalFilter]);
@@ -187,16 +188,48 @@ const Home: React.FC = () => {
     }, [sportFilteredMarkets, tagFilter.id, allTagsFilterItem.id]);
 
     const accountClaimsCount = useMemo(() => {
-        return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
-            const accountPositionsPerMarket: AccountPosition[] = accountPositions[market.address];
-            return isClaimAvailable(accountPositionsPerMarket);
-        }).length;
-    }, [tagsFilteredMarkets, accountPositions]);
+        if (sportMarketsQuery.data) {
+            const allMarketsFiltered = marketsCached[GlobalFilterEnum.All].filter((market) => {
+                if (
+                    marketSearch &&
+                    !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
+                    !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
+                ) {
+                    return false;
+                }
+                if (dateFilter !== '' && market.maturityDate.toDateString() !== dateFilter) {
+                    return false;
+                }
+                if (
+                    startDate !== null &&
+                    endDate !== null &&
+                    (market.maturityDate < startDate || market.maturityDate > endDate)
+                ) {
+                    return false;
+                }
+                if (sportFilter !== SportFilterEnum.All && market.sport !== sportFilter) {
+                    return false;
+                }
+                if (
+                    tagFilter.id !== allTagsFilterItem.id &&
+                    !market.tags.map((tag) => Number(tag)).includes(tagFilter.id)
+                ) {
+                    return false;
+                }
+                return true;
+            });
+
+            return allMarketsFiltered.filter((market: SportMarketInfo) => {
+                const accountPositionsPerMarket: AccountPosition[] = accountPositions[market.address];
+                return isClaimAvailable(accountPositionsPerMarket);
+            }).length;
+        }
+    }, [tagsFilteredMarkets, accountPositions, marketsCached]);
 
     const [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount] = useMemo(() => {
         let [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount] = [0, 0, 0, 0];
         if (sportMarketsQuery.data) {
-            const allMarketsFiltered = sportMarketsQuery.data[GlobalFilterEnum.All].filter((market) => {
+            const allMarketsFiltered = marketsCached[GlobalFilterEnum.All].filter((market) => {
                 if (
                     marketSearch &&
                     !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
@@ -227,7 +260,7 @@ const Home: React.FC = () => {
             });
             allMarketsCount = allMarketsFiltered.length;
 
-            const openedMarketsFiltered = sportMarketsQuery.data[GlobalFilterEnum.OpenMarkets].filter((market) => {
+            const openedMarketsFiltered = marketsCached[GlobalFilterEnum.OpenMarkets].filter((market) => {
                 if (
                     marketSearch &&
                     !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
@@ -258,7 +291,7 @@ const Home: React.FC = () => {
             });
             openedMarketsCount = openedMarketsFiltered.length;
 
-            const canceledMarketsFiltered = sportMarketsQuery.data[GlobalFilterEnum.Canceled].filter((market) => {
+            const canceledMarketsFiltered = marketsCached[GlobalFilterEnum.Canceled].filter((market) => {
                 if (
                     marketSearch &&
                     !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
@@ -289,37 +322,35 @@ const Home: React.FC = () => {
             });
             canceledCount = canceledMarketsFiltered.length;
 
-            const resolvedMarketsFiltered = sportMarketsQuery.data[GlobalFilterEnum.ResolvedMarkets].filter(
-                (market) => {
-                    if (
-                        marketSearch &&
-                        !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
-                        !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
-                    ) {
-                        return false;
-                    }
-                    if (dateFilter !== '' && market.maturityDate.toDateString() !== dateFilter) {
-                        return false;
-                    }
-                    if (
-                        startDate !== null &&
-                        endDate !== null &&
-                        (market.maturityDate < startDate || market.maturityDate > endDate)
-                    ) {
-                        return false;
-                    }
-                    if (sportFilter !== SportFilterEnum.All && market.sport !== sportFilter) {
-                        return false;
-                    }
-                    if (
-                        tagFilter.id !== allTagsFilterItem.id &&
-                        !market.tags.map((tag) => Number(tag)).includes(tagFilter.id)
-                    ) {
-                        return false;
-                    }
-                    return true;
+            const resolvedMarketsFiltered = marketsCached[GlobalFilterEnum.ResolvedMarkets].filter((market) => {
+                if (
+                    marketSearch &&
+                    !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
+                    !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
+                ) {
+                    return false;
                 }
-            );
+                if (dateFilter !== '' && market.maturityDate.toDateString() !== dateFilter) {
+                    return false;
+                }
+                if (
+                    startDate !== null &&
+                    endDate !== null &&
+                    (market.maturityDate < startDate || market.maturityDate > endDate)
+                ) {
+                    return false;
+                }
+                if (sportFilter !== SportFilterEnum.All && market.sport !== sportFilter) {
+                    return false;
+                }
+                if (
+                    tagFilter.id !== allTagsFilterItem.id &&
+                    !market.tags.map((tag) => Number(tag)).includes(tagFilter.id)
+                ) {
+                    return false;
+                }
+                return true;
+            });
             resolvedMarketsCount = resolvedMarketsFiltered.length;
         }
 
@@ -334,19 +365,47 @@ const Home: React.FC = () => {
         startDate,
         tagFilter.id,
         tagsFilteredMarkets,
-        sportMarketsQuery,
+        marketsCached,
     ]);
 
     const accountPositionsCount = useMemo(() => {
-        return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
-            const accountPositionsPerMarket: AccountPosition[] = accountPositions[market.address];
-            let positionExists = false;
-            accountPositionsPerMarket?.forEach((accountPosition) =>
-                accountPosition.amount > 0 ? (positionExists = true) : ''
-            );
-            return positionExists;
-        }).length;
-    }, [tagsFilteredMarkets, accountPositions]);
+        if (sportMarketsQuery.data) {
+            const allMarketsFiltered = marketsCached[GlobalFilterEnum.All].filter((market) => {
+                if (marketSearch && !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())) {
+                    return false;
+                }
+                if (dateFilter !== '' && market.maturityDate.toDateString() !== dateFilter) {
+                    return false;
+                }
+                if (
+                    startDate !== null &&
+                    endDate !== null &&
+                    (market.maturityDate < startDate || market.maturityDate > endDate)
+                ) {
+                    return false;
+                }
+                if (sportFilter !== SportFilterEnum.All && market.sport !== sportFilter) {
+                    return false;
+                }
+                if (
+                    tagFilter.id !== allTagsFilterItem.id &&
+                    !market.tags.map((tag) => Number(tag)).includes(tagFilter.id)
+                ) {
+                    return false;
+                }
+                return true;
+            });
+
+            return allMarketsFiltered.filter((market: SportMarketInfo) => {
+                const accountPositionsPerMarket: AccountPosition[] = accountPositions[market.address];
+                let positionExists = false;
+                accountPositionsPerMarket?.forEach((accountPosition) =>
+                    accountPosition.amount > 0 ? (positionExists = true) : ''
+                );
+                return positionExists;
+            }).length;
+        }
+    }, [tagsFilteredMarkets, accountPositions, marketsCached]);
 
     const marketsList = useMemo(() => {
         let filteredMarkets = tagsFilteredMarkets;

@@ -1,11 +1,11 @@
 import { CRYPTO_CURRENCY_MAP } from './currency';
 
 export enum GlobalFilterEnum {
-    All = 'All',
     OpenMarkets = 'OpenMarkets',
     ResolvedMarkets = 'ResolvedMarkets',
     Canceled = 'Canceled',
     Archived = 'ArchivedMarkets',
+    All = 'AllMarkets',
     YourPositions = 'YourPositions',
     Claim = 'Claim',
     History = 'History',
