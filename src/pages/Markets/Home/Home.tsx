@@ -193,29 +193,149 @@ const Home: React.FC = () => {
         }).length;
     }, [tagsFilteredMarkets, accountPositions]);
 
-    const [openedMarketsCount, resolvedMarketsCount, canceledCount] = useMemo(() => {
-        let [openedMarketsCount, resolvedMarketsCount, canceledCount] = [0, 0, 0];
-        tagsFilteredMarkets.map((market: SportMarketInfo) => {
-            if (
-                market.isOpen &&
-                !market.isCanceled &&
-                (market.homeOdds !== 0 || market.awayOdds !== 0 || market.drawOdds !== 0)
-            ) {
-                openedMarketsCount++;
-            }
-            if (
-                market.isResolved &&
-                !market.isCanceled &&
-                market.maturityDate.getTime() + 7 * 24 * 60 * 60 * 1000 > new Date().getTime()
-            ) {
-                resolvedMarketsCount++;
-            }
-            if (market.isCanceled) {
-                canceledCount++;
-            }
-        });
-        return [openedMarketsCount, resolvedMarketsCount, canceledCount];
-    }, [tagsFilteredMarkets]);
+    const [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount] = useMemo(() => {
+        let [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount] = [0, 0, 0, 0];
+        if (sportMarketsQuery.data) {
+            const allMarketsFiltered = sportMarketsQuery.data[GlobalFilterEnum.All].filter((market) => {
+                if (
+                    marketSearch &&
+                    !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
+                    !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
+                ) {
+                    return false;
+                }
+                if (dateFilter !== '' && market.maturityDate.toDateString() !== dateFilter) {
+                    return false;
+                }
+                if (
+                    startDate !== null &&
+                    endDate !== null &&
+                    (market.maturityDate < startDate || market.maturityDate > endDate)
+                ) {
+                    return false;
+                }
+                if (sportFilter !== SportFilterEnum.All && market.sport !== sportFilter) {
+                    return false;
+                }
+                if (
+                    tagFilter.id !== allTagsFilterItem.id &&
+                    !market.tags.map((tag) => Number(tag)).includes(tagFilter.id)
+                ) {
+                    return false;
+                }
+                return true;
+            });
+            allMarketsCount = allMarketsFiltered.length;
+
+            const openedMarketsFiltered = sportMarketsQuery.data[GlobalFilterEnum.OpenMarkets].filter((market) => {
+                if (
+                    marketSearch &&
+                    !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
+                    !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
+                ) {
+                    return false;
+                }
+                if (dateFilter !== '' && market.maturityDate.toDateString() !== dateFilter) {
+                    return false;
+                }
+                if (
+                    startDate !== null &&
+                    endDate !== null &&
+                    (market.maturityDate < startDate || market.maturityDate > endDate)
+                ) {
+                    return false;
+                }
+                if (sportFilter !== SportFilterEnum.All && market.sport !== sportFilter) {
+                    return false;
+                }
+                if (
+                    tagFilter.id !== allTagsFilterItem.id &&
+                    !market.tags.map((tag) => Number(tag)).includes(tagFilter.id)
+                ) {
+                    return false;
+                }
+                return true;
+            });
+            openedMarketsCount = openedMarketsFiltered.length;
+
+            const canceledMarketsFiltered = sportMarketsQuery.data[GlobalFilterEnum.Canceled].filter((market) => {
+                if (
+                    marketSearch &&
+                    !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
+                    !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
+                ) {
+                    return false;
+                }
+                if (dateFilter !== '' && market.maturityDate.toDateString() !== dateFilter) {
+                    return false;
+                }
+                if (
+                    startDate !== null &&
+                    endDate !== null &&
+                    (market.maturityDate < startDate || market.maturityDate > endDate)
+                ) {
+                    return false;
+                }
+                if (sportFilter !== SportFilterEnum.All && market.sport !== sportFilter) {
+                    return false;
+                }
+                if (
+                    tagFilter.id !== allTagsFilterItem.id &&
+                    !market.tags.map((tag) => Number(tag)).includes(tagFilter.id)
+                ) {
+                    return false;
+                }
+                return true;
+            });
+            canceledCount = canceledMarketsFiltered.length;
+
+            const resolvedMarketsFiltered = sportMarketsQuery.data[GlobalFilterEnum.ResolvedMarkets].filter(
+                (market) => {
+                    if (
+                        marketSearch &&
+                        !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
+                        !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
+                    ) {
+                        return false;
+                    }
+                    if (dateFilter !== '' && market.maturityDate.toDateString() !== dateFilter) {
+                        return false;
+                    }
+                    if (
+                        startDate !== null &&
+                        endDate !== null &&
+                        (market.maturityDate < startDate || market.maturityDate > endDate)
+                    ) {
+                        return false;
+                    }
+                    if (sportFilter !== SportFilterEnum.All && market.sport !== sportFilter) {
+                        return false;
+                    }
+                    if (
+                        tagFilter.id !== allTagsFilterItem.id &&
+                        !market.tags.map((tag) => Number(tag)).includes(tagFilter.id)
+                    ) {
+                        return false;
+                    }
+                    return true;
+                }
+            );
+            resolvedMarketsCount = resolvedMarketsFiltered.length;
+        }
+
+        return [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount];
+    }, [
+        allTagsFilterItem.id,
+        dateFilter,
+        endDate,
+        marketSearch,
+        markets,
+        sportFilter,
+        startDate,
+        tagFilter.id,
+        tagsFilteredMarkets,
+        sportMarketsQuery,
+    ]);
 
     const accountPositionsCount = useMemo(() => {
         return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
@@ -334,8 +454,7 @@ const Home: React.FC = () => {
             case GlobalFilterEnum.Claim:
                 return accountClaimsCount;
             case GlobalFilterEnum.All:
-                // @ts-ignore
-                return sportMarketsQuery.data?.[GlobalFilterEnum.All]?.length || 0;
+                return allMarketsCount;
             default:
                 return undefined;
         }
