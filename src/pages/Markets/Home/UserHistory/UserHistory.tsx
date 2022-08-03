@@ -21,7 +21,7 @@ const UserHistory: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const userTransactionsQuery = useUserTransactionsQuery(walletAddress, networkId, { enabled: isAppReady });
-    const sportMarketsQuery = useSportMarketsQuery(networkId, GlobalFilterEnum.All, { enabled: isAppReady });
+    const sportMarketsQuery = useSportMarketsQuery(networkId, GlobalFilterEnum.All, null, { enabled: isAppReady });
 
     const [userTransactions, setUserTransactions] = useState<MarketTransactions>([]);
     const [markets, setMarkets] = useState<SportMarkets>([]);

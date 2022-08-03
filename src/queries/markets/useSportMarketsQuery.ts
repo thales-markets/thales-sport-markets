@@ -134,9 +134,9 @@ const useSportMarketsQuery = (
                     })
                     .then(async (result: any) => {
                         mapMarkets(await mapResult(result, GlobalFilterEnum.All));
-                        setMarketsCached({ ...marketsCache });
+                        setMarketsCached ? setMarketsCached({ ...marketsCache }) : '';
                     });
-                setMarketsCached({ ...marketsCache });
+                setMarketsCached ? setMarketsCached({ ...marketsCache }) : '';
 
                 return marketsCache;
             } catch (e) {
