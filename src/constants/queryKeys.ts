@@ -1,11 +1,10 @@
 import { SportMarketInfo } from 'types/markets';
 import { NetworkId } from 'types/network';
-import { GlobalFilterEnum } from './markets';
 import { Position, Side } from './options';
 
 export const QUERY_KEYS = {
     Markets: (networkId: NetworkId) => ['markets', networkId],
-    SportMarkets: (networkId: NetworkId, globalFilter: GlobalFilterEnum) => ['sportMarkets', networkId, globalFilter],
+    SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
     OpenSportMarkets: (networkId: NetworkId) => ['openSportMarkets', networkId],
     CanceledSportMarkets: (networkId: NetworkId) => ['canceledSportMarkets', networkId],
     ResolvedSportMarkets: (networkId: NetworkId) => ['resolvedSportMarkets', networkId],

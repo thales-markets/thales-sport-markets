@@ -53,7 +53,7 @@ const Home: React.FC = () => {
     const { trackPageView } = useMatomo();
 
     const [lastValidMarkets, setLastValidMarkets] = useState<SportMarkets>([]);
-    const [globalFilter, setGlobalFilter] = useLocalStorage(
+    const [globalFilter, setGlobalFilter] = useLocalStorage<GlobalFilterEnum>(
         LOCAL_STORAGE_KEYS.FILTER_GLOBAL,
         GlobalFilterEnum.OpenMarkets
     );
@@ -86,24 +86,19 @@ const Home: React.FC = () => {
 
     const sportMarketsQuery = useSportMarketsQuery(networkId, globalFilter, { enabled: isAppReady });
 
+    // TODO: maybe remove
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            // @ts-ignore
-            console.log(sportMarketsQuery.data[GlobalFilterEnum.OpenMarkets]);
-            // @ts-ignore
-            setLastValidMarkets(sportMarketsQuery.data[GlobalFilterEnum.OpenMarkets]);
+            setLastValidMarkets(sportMarketsQuery.data[globalFilter]);
         }
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data]);
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, globalFilter]);
 
     const markets: SportMarkets = useMemo(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            // @ts-ignore
-            return sportMarketsQuery.data[GlobalFilterEnum.OpenMarkets];
+            return sportMarketsQuery.data[globalFilter];
         }
         return lastValidMarkets;
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, lastValidMarkets]);
-
-    console.log(sportMarketsQuery.data);
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, lastValidMarkets, globalFilter]);
 
     useEffect(() => {
         const marketDates = markets
@@ -189,7 +184,7 @@ const Home: React.FC = () => {
         }
 
         return filteredMarkets;
-    }, [markets, sportFilteredMarkets, tagFilter, marketSearch]);
+    }, [sportFilteredMarkets, tagFilter.id, allTagsFilterItem.id]);
 
     const accountClaimsCount = useMemo(() => {
         return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
@@ -220,7 +215,7 @@ const Home: React.FC = () => {
             }
         });
         return [openedMarketsCount, resolvedMarketsCount, canceledCount];
-    }, [markets, tagsFilteredMarkets, tagFilter, marketSearch]);
+    }, [tagsFilteredMarkets]);
 
     const accountPositionsCount = useMemo(() => {
         return tagsFilteredMarkets.filter((market: SportMarketInfo) => {
@@ -338,6 +333,9 @@ const Home: React.FC = () => {
                 return accountPositionsCount;
             case GlobalFilterEnum.Claim:
                 return accountClaimsCount;
+            case GlobalFilterEnum.All:
+                // @ts-ignore
+                return sportMarketsQuery.data?.[GlobalFilterEnum.All]?.length || 0;
             default:
                 return undefined;
         }

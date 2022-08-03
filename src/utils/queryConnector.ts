@@ -1,4 +1,3 @@
-import { GlobalFilterEnum } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { QueryClient } from 'react-query';
 import { NetworkId } from 'types/network';
@@ -20,8 +19,8 @@ export const refetchMarketData = (marketAddress: string, walletAddress: string, 
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.AccountMarketTicketData(marketAddress, walletAddress));
 };
 
-export const refetchMarkets = (networkId: NetworkId, globalFilter: GlobalFilterEnum) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.SportMarkets(networkId, globalFilter));
+export const refetchMarkets = (networkId: NetworkId) => {
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.SportMarkets(networkId));
 };
 
 export const refetchBalances = (walletAddress: string, networkId: NetworkId) => {
