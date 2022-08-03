@@ -24,12 +24,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
     }, [market.homeTeam, market.awayTeam]);
 
     return (
-        <Container
-            // backgroundColor={'rgba(48, 54, 86, 0.5)'}
-            claimBorder={claimAvailable}
-            isCanceled={market.isCanceled}
-            isResolved={market.isResolved}
-        >
+        <Container claimBorder={claimAvailable} isCanceled={market.isCanceled} isResolved={market.isResolved}>
             <ClubVsClubContainer>
                 <ClubContainer>
                     <ClubLogo src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
