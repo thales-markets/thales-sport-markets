@@ -35,7 +35,11 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market }) => {
         <MatchInfo>
             <MatchInfoColumn>
                 <MatchParticipantImageContainer>
-                    <MatchParticipantImage src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
+                    <MatchParticipantImage
+                        alt="Home team logo"
+                        src={homeLogoSrc}
+                        onError={() => setHomeLogoSrc(OVERTIME_LOGO)}
+                    />
                 </MatchParticipantImageContainer>
                 <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
                     {market.homeOdds.toFixed(2)}
@@ -57,7 +61,7 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market }) => {
             <MatchInfoColumn>
                 <MatchParticipantImageContainer>
                     <MatchParticipantImage
-                        alt={OVERTIME_LOGO}
+                        alt="Away team logo"
                         src={awayLogoSrc}
                         onError={() => setAwayLogoSrc(OVERTIME_LOGO)}
                     />

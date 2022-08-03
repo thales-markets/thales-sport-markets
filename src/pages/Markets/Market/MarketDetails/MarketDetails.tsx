@@ -559,7 +559,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             <MatchInfo>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer isWinner={market.finalResult == 1} finalResult={market.finalResult}>
-                        <MatchParticipantImage src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
+                        <MatchParticipantImage
+                            alt="Home team logo"
+                            src={homeLogoSrc}
+                            onError={() => setHomeLogoSrc(OVERTIME_LOGO)}
+                        />
                     </MatchParticipantImageContainer>
                     {market.resolved && market.gameStarted && (
                         <WinnerLabel isWinning={market.finalResult == 1} finalResult={market.finalResult}>
@@ -574,7 +578,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer isWinner={market.finalResult == 2} finalResult={market.finalResult}>
-                        <MatchParticipantImage src={awayLogoSrc} onError={() => setAwayLogoSrc(OVERTIME_LOGO)} />
+                        <MatchParticipantImage
+                            alt="Away team logo"
+                            src={awayLogoSrc}
+                            onError={() => setAwayLogoSrc(OVERTIME_LOGO)}
+                        />
                     </MatchParticipantImageContainer>
                     {market.resolved && market.gameStarted && (
                         <WinnerLabel isWinning={market.finalResult == 2} finalResult={market.finalResult}>

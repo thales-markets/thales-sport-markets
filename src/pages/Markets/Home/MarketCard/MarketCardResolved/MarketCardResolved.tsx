@@ -97,7 +97,11 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
         <MatchInfo>
             <MatchInfoColumn>
                 <MatchParticipantImageContainer isWinner={market.finalResult == 1} finalResult={market.finalResult}>
-                    <MatchParticipantImage src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
+                    <MatchParticipantImage
+                        alt="Home team logo"
+                        src={homeLogoSrc}
+                        onError={() => setHomeLogoSrc(OVERTIME_LOGO)}
+                    />
                 </MatchParticipantImageContainer>
                 <WinnerLabel isWinning={market.finalResult == 1} finalResult={market.finalResult}>
                     WINNER
@@ -128,7 +132,11 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
             </MatchInfoColumn>
             <MatchInfoColumn>
                 <MatchParticipantImageContainer isWinner={market.finalResult == 2} finalResult={market.finalResult}>
-                    <MatchParticipantImage src={awayLogoSrc} onError={() => setAwayLogoSrc(OVERTIME_LOGO)} />
+                    <MatchParticipantImage
+                        alt="Away team logo"
+                        src={awayLogoSrc}
+                        onError={() => setAwayLogoSrc(OVERTIME_LOGO)}
+                    />
                 </MatchParticipantImageContainer>
                 <WinnerLabel isWinning={market.finalResult == 2} finalResult={market.finalResult}>
                     WINNER

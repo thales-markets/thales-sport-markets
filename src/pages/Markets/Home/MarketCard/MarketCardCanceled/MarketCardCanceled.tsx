@@ -47,7 +47,11 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
         <MatchInfo>
             <MatchInfoColumn>
                 <MatchParticipantImageContainer isCanceled={true}>
-                    <MatchParticipantImage src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
+                    <MatchParticipantImage
+                        alt="Home team logo"
+                        src={homeLogoSrc}
+                        onError={() => setHomeLogoSrc(OVERTIME_LOGO)}
+                    />
                 </MatchParticipantImageContainer>
                 {oddsOnCancellation ? (
                     <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
@@ -77,7 +81,11 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
             </MatchInfoColumn>
             <MatchInfoColumn>
                 <MatchParticipantImageContainer isCanceled={true}>
-                    <MatchParticipantImage src={awayLogoSrc} onError={() => setAwayLogoSrc(OVERTIME_LOGO)} />
+                    <MatchParticipantImage
+                        alt="Away team logo"
+                        src={awayLogoSrc}
+                        onError={() => setAwayLogoSrc(OVERTIME_LOGO)}
+                    />
                 </MatchParticipantImageContainer>
                 {oddsOnCancellation ? (
                     <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={false}>

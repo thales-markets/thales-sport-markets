@@ -32,12 +32,12 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
         >
             <ClubVsClubContainer>
                 <ClubContainer>
-                    <ClubLogo src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
+                    <ClubLogo alt="Home team logo" src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
                     <ClubNameLabel>{market.homeTeam}</ClubNameLabel>
                 </ClubContainer>
                 <VSLabel>{'VS'}</VSLabel>
                 <ClubContainer>
-                    <ClubLogo src={awayLogoSrc} onError={() => setAwayLogoSrc(OVERTIME_LOGO)} />
+                    <ClubLogo alt="Away team logo" src={awayLogoSrc} onError={() => setAwayLogoSrc(OVERTIME_LOGO)} />
                     <ClubNameLabel>{market.awayTeam}</ClubNameLabel>
                 </ClubContainer>
             </ClubVsClubContainer>
