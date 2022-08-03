@@ -87,7 +87,6 @@ const Home: React.FC = () => {
 
     const sportMarketsQuery = useSportMarketsQuery(networkId, globalFilter, setMarketsCached, { enabled: isAppReady });
 
-    // TODO: maybe remove
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
             setLastValidMarkets(marketsCached[globalFilter]);
