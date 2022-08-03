@@ -201,8 +201,18 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
     useEffect(() => {
         if (balances) {
+            console.log(market.resolved);
             if (market.resolved) {
-                if (
+                if (market.cancelled) {
+                    if (balances.home > 0 || balances.draw > 0 || balances.away > 0) {
+                        setClaimable(true);
+                        setClaimableAmount(
+                            balances.home * (oddsOnCancellation?.home || 0) +
+                                balances.draw * (oddsOnCancellation?.draw || 0) +
+                                balances.away * (oddsOnCancellation?.away || 0)
+                        );
+                    }
+                } else if (
                     market.finalResult !== 0 &&
                     //@ts-ignore
                     balances?.[Position[market.finalResult - 1].toLowerCase()] > 0
@@ -215,15 +225,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         setClaimable(true);
                         setClaimableAmount(balances.home + balances.draw + balances.away);
                     }
-                }
-            } else if (market.cancelled) {
-                if (balances.home > 0 || balances.draw > 0 || balances.away > 0) {
-                    setClaimable(true);
-                    setClaimableAmount(
-                        balances.home * (oddsOnCancellation?.home || 0) +
-                            balances.draw * (oddsOnCancellation?.draw || 0) +
-                            balances.away * (oddsOnCancellation?.away || 0)
-                    );
                 }
             }
         }
