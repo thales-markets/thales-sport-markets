@@ -8,7 +8,7 @@ import {
 } from 'components/common';
 import React, { useEffect, useMemo, useState } from 'react';
 import { BigNumber, ethers } from 'ethers';
-import { AMMPosition, AvailablePerSide, Balances, MarketData } from 'types/markets';
+import { AMMPosition, AvailablePerSide, Balances, MarketData, Odds } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
 import {
@@ -81,6 +81,7 @@ import { refetchBalances } from 'utils/queryConnector';
 import onboardConnector from 'utils/onboardConnector';
 import { getReferralId } from 'utils/referral';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
+import useMarketCancellationOddsQuery from 'queries/markets/useMarketCancellationOddsQuery';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -105,6 +106,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const [selectedPosition, setSelectedPosition] = useState<Position>(Position.HOME);
     const [claimable, setClaimable] = useState<boolean>(false);
     const [claimableAmount, setClaimableAmount] = useState<number>(0);
+    const [oddsOnCancellation, setOddsOnCancellation] = useState<Odds | undefined>(undefined);
     const [tooltipText, setTooltipText] = useState<string>('');
     const [availablePerSide, setavailablePerSide] = useState<AvailablePerSide>({
         positions: {
@@ -187,6 +189,16 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
         }
     }, [marketBalancesQuery.isSuccess, marketBalancesQuery.data]);
 
+    const marketCancellationOddsQuery = useMarketCancellationOddsQuery(market?.address || '', {
+        enabled: market?.cancelled,
+    });
+
+    useEffect(() => {
+        if (marketCancellationOddsQuery.isSuccess && marketCancellationOddsQuery.data) {
+            setOddsOnCancellation(marketCancellationOddsQuery.data);
+        }
+    }, [marketCancellationOddsQuery.isSuccess, marketCancellationOddsQuery.data]);
+
     useEffect(() => {
         if (balances) {
             if (market.resolved) {
@@ -207,7 +219,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             } else if (market.cancelled) {
                 if (balances.home > 0 || balances.draw > 0 || balances.away > 0) {
                     setClaimable(true);
-                    setClaimableAmount(balances.home + balances.draw + balances.away);
+                    setClaimableAmount(
+                        balances.home * (oddsOnCancellation?.home || 0) +
+                            balances.draw * (oddsOnCancellation?.draw || 0) +
+                            balances.away * (oddsOnCancellation?.away || 0)
+                    );
                 }
             }
         }
