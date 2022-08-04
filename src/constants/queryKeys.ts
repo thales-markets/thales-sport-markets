@@ -5,6 +5,9 @@ import { Position, Side } from './options';
 export const QUERY_KEYS = {
     Markets: (networkId: NetworkId) => ['markets', networkId],
     SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
+    OpenSportMarkets: (networkId: NetworkId) => ['openSportMarkets', networkId],
+    CanceledSportMarkets: (networkId: NetworkId) => ['canceledSportMarkets', networkId],
+    ResolvedSportMarkets: (networkId: NetworkId) => ['resolvedSportMarkets', networkId],
     Market: (marketAddress: string, isSell: boolean) => ['market', marketAddress, isSell],
     MarketBalances: (marketAddress: string, walletAddress: string) => ['marketBalances', marketAddress, walletAddress],
     MarketCancellationOdds: (marketAddress: string) => ['marketCancellationOdds', marketAddress],

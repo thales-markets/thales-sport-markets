@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import networkConnector from 'utils/networkConnector';
 import marketContract from 'utils/contracts/sportsMarketContract';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
-import { fixDuplicatedTeamName } from '../../utils/formatters/string';
+import { fixDuplicatedTeamName, fixLongTeamNameString } from '../../utils/formatters/string';
 import { Position, Side } from '../../constants/options';
 
 const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQueryOptions<MarketData | undefined>) => {
@@ -78,8 +78,8 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                         },
                     },
                     tags: [Number(ethers.utils.formatUnits(tags, 0))],
-                    homeTeam: fixDuplicatedTeamName(gameDetails.gameLabel.split('vs')[0].trim()),
-                    awayTeam: fixDuplicatedTeamName(gameDetails.gameLabel.split('vs')[1].trim()),
+                    homeTeam: fixLongTeamNameString(fixDuplicatedTeamName(gameDetails.gameLabel.split('vs')[0].trim())),
+                    awayTeam: fixLongTeamNameString(fixDuplicatedTeamName(gameDetails.gameLabel.split('vs')[1].trim())),
                     maturityDate: Number(times.maturity) * 1000,
                     resolved,
                     cancelled,

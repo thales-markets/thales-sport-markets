@@ -1,0 +1,10 @@
+.icon-exotic {
+    display: inline-block;
+    font-family: ExoticIcons !important;
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.icon-exotic--info:before {
+    content: '\0044';
+}

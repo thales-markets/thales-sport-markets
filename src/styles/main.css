@@ -138,6 +138,7 @@ table {
 
 @import './fonts.css';
 @import './icons.css';
+@import './exotic-icons.css';
 
 * {
     box-sizing: border-box;
