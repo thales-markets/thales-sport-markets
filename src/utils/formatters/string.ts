@@ -31,3 +31,9 @@ export const fixLongTeamName = (market: SportMarketInfo) => {
     market.awayTeam.toLowerCase() == 'borussia monchengladbach' ? (market.awayTeam = "Borussia M'gladbach") : '';
     return market;
 };
+
+export const fixLongTeamNameString = (team: string) => {
+    team.toLowerCase() == 'wolverhampton wanderers' ? (team = 'Wolves') : '';
+    team.toLowerCase() == 'borussia monchengladbach' ? (team = "Borussia M'gladbach") : '';
+    return team;
+};
