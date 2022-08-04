@@ -62,7 +62,7 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
     }, [gamesPerDay, farLeftDateIndex]);
 
     return (
-        <Wrapper id="wrapper-cards">
+        <Wrapper id="wrapper-cards" hidden={gamesPerDay.length === 0}>
             {gamesPerDay.length > 0 ? (
                 <>
                     <LeftIcon
@@ -92,15 +92,17 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
                     />
                 </>
             ) : (
-                <></>
+                <Wrapper></Wrapper>
             )}
         </Wrapper>
     );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ hidden?: boolean }>`
     display: flex;
     flex-direction: row;
+    visibility: ${(props) => (props?.hidden ? 'hidden' : '')};
+    height: ${(props) => (props?.hidden ? '64px' : '')};
     margin-bottom: 35px;
     align-items: center;
     @media (max-width: 1250px) and (min-width: 769px) {

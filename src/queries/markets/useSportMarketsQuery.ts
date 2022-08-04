@@ -33,39 +33,55 @@ export const marketsCache = {
 
 const mapResult = async (markets: any, globalFilter: GlobalFilterEnum) => {
     const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
-    const marketsWithOdds = sportPositionalMarketDataContract
-        ?.getOddsForAllActiveMarkets()
-        .then((result: SportMarkets) => {
-            const mappedMarkets = markets.map((market: SportMarketInfo) => {
-                market.maturityDate = new Date(market.maturityDate);
-                market.homeTeam = fixDuplicatedTeamName(market.homeTeam);
-                market.awayTeam = fixDuplicatedTeamName(market.awayTeam);
-                market = fixLongTeamName(market);
-                market.sport = SPORTS_MAP[market.tags[0]];
-                if (market.isOpen) {
-                    result
-                        .filter((obj: any) => obj[0] === market.id)
-                        .map((obj: any) => {
-                            market.homeOdds = bigNumberFormatter(obj.odds[0]);
-                            market.awayOdds = bigNumberFormatter(obj.odds[1]);
-                            market.drawOdds = obj.odds[2] ? bigNumberFormatter(obj.odds[2]) : 0;
-                        });
-                }
+    if (globalFilter != GlobalFilterEnum.All && globalFilter != GlobalFilterEnum.OpenMarkets) {
+        const mappedMarkets = markets.map((market: SportMarketInfo) => {
+            market.maturityDate = new Date(market.maturityDate);
+            market.homeTeam = fixDuplicatedTeamName(market.homeTeam);
+            market.awayTeam = fixDuplicatedTeamName(market.awayTeam);
+            market = fixLongTeamName(market);
+            market.sport = SPORTS_MAP[market.tags[0]];
 
-                return market;
+            return market;
+        });
+        return mappedMarkets;
+    } else {
+        const marketsWithOdds = sportPositionalMarketDataContract
+            ?.getOddsForAllActiveMarkets()
+            .then((result: SportMarkets) => {
+                const mappedMarkets = markets.map((market: SportMarketInfo) => {
+                    market.maturityDate = new Date(market.maturityDate);
+                    market.homeTeam = fixDuplicatedTeamName(market.homeTeam);
+                    market.awayTeam = fixDuplicatedTeamName(market.awayTeam);
+                    market = fixLongTeamName(market);
+                    market.sport = SPORTS_MAP[market.tags[0]];
+                    if (market.isOpen) {
+                        result
+                            .filter((obj: any) => obj[0] === market.id)
+                            .map((obj: any) => {
+                                market.homeOdds = bigNumberFormatter(obj.odds[0]);
+                                market.awayOdds = bigNumberFormatter(obj.odds[1]);
+                                market.drawOdds = obj.odds[2] ? bigNumberFormatter(obj.odds[2]) : 0;
+                            });
+                    }
+
+                    return market;
+                });
+                if (globalFilter === GlobalFilterEnum.OpenMarkets) {
+                    return mappedMarkets.filter(
+                        (market: SportMarketInfo) =>
+                            market.isOpen &&
+                            !market.isCanceled &&
+                            (market.homeOdds !== 0 || market.awayOdds !== 0 || market.drawOdds !== 0)
+                    );
+                }
+                return mappedMarkets;
+            })
+            .catch((e: any) => {
+                console.log(e);
+                return marketsCache[globalFilter];
             });
-            if (globalFilter === GlobalFilterEnum.OpenMarkets) {
-                return mappedMarkets.filter(
-                    (market: SportMarketInfo) =>
-                        market.isOpen &&
-                        !market.isCanceled &&
-                        (market.homeOdds !== 0 || market.awayOdds !== 0 || market.drawOdds !== 0)
-                );
-            }
-            return mappedMarkets;
-        })
-        .catch((e: any) => console.log(e));
-    return (marketsWithOdds as SportMarkets) || marketsCache[globalFilter];
+        return marketsWithOdds;
+    }
 };
 
 const mapMarkets = (allMarkets: SportMarkets) => {
