@@ -576,11 +576,11 @@ const Home: React.FC = () => {
                     }}
                 />
                 <SwitchContainer>
-                    <ViewSwitch selected={!showListView} onClick={() => setListView(false)}>
-                        {t('market.grid-view')}
-                    </ViewSwitch>
                     <ViewSwitch selected={showListView} onClick={() => setListView(true)}>
                         {t('market.list-view')}
+                    </ViewSwitch>
+                    <ViewSwitch selected={!showListView} onClick={() => setListView(false)}>
+                        {t('market.grid-view')}
                     </ViewSwitch>
                 </SwitchContainer>
             </BurgerAndSwitchSwitchContainer>
