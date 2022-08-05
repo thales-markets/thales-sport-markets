@@ -153,10 +153,10 @@ export type SportsMap = Record<number, string>;
 
 export type SportsTagsMap = Record<string, number[]>;
 
-enum PositionType {
-    home,
-    away,
-    draw,
+export enum PositionType {
+    home = 'home',
+    away = 'away',
+    draw = 'draw',
 }
 
 export type AccountPositionGraph = {

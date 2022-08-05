@@ -231,7 +231,7 @@ export const MatchParticipantImage = styled.img`
     color: ${(props) => props.theme.textColor.primary};
 `;
 
-export const MatchParticipantName = styled.label<{ isTwoPositioned?: boolean }>`
+export const MatchParticipantName = styled.label<{ isTwoPositioned?: boolean; glow?: boolean; glowColor?: string }>`
     display: flex;
     visibility: ${(props) => (props.isTwoPositioned ? 'hidden' : '')};
     font-style: normal;
@@ -243,8 +243,9 @@ export const MatchParticipantName = styled.label<{ isTwoPositioned?: boolean }>`
     align-items: center;
     text-align: center;
     margin-top: 5px;
-    color: ${(props) => props.theme.textColor.primary};
     cursor: pointer;
+    color: ${(_props) => (_props?.glow ? _props.glowColor : _props.theme.textColor.primary)};
+    text-shadow: ${(_props) => (_props?.glow ? '0 0 15px ' + _props.glowColor : '')};
 `;
 
 export const OddsLabel = styled.label<{

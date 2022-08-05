@@ -46,6 +46,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                     awayOdds: market.awayOdds,
                     drawOdds: market.drawOdds,
                 }}
+                accountPositions={accountPositions}
             />
             <MatchStatus
                 isResolved={market.isResolved}

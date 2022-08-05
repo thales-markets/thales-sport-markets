@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { convertFinalResultToResultType } from 'utils/markets';
 import { Status } from '../MatchStatus/MatchStatus';
 import { Container, OddsContainer, WinnerLabel } from './styled-components';
+import { AccountPosition, PositionType } from '../../../../../../types/markets';
 
 type OddsProps = {
     isResolved?: boolean;
@@ -16,9 +17,10 @@ type OddsProps = {
         awayOdds: number;
         drawOdds?: number;
     };
+    accountPositions?: AccountPosition[];
 };
 
-const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelled, odds }) => {
+const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelled, odds, accountPositions }) => {
     const { t } = useTranslation();
 
     const pendingResolution =
@@ -26,6 +28,7 @@ const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelle
     const noOddsFlag = odds?.awayOdds == 0 && odds?.homeOdds == 0 && odds?.awayOdds == 0 && !isLive && !isResolved;
     const resolvedGameFlag = isResolved && finalResult;
     const showOdds = !pendingResolution && !noOddsFlag && !resolvedGameFlag && !isCancelled;
+
     return (
         <Container>
             {noOddsFlag && (
@@ -46,6 +49,10 @@ const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelle
                             firstText: odds?.homeOdds?.toFixed(2),
                             firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.HOME, marginLeft: '10px' },
                         }}
+                        glow={
+                            accountPositions &&
+                            !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.home)
+                        }
                     />
                     {odds?.drawOdds !== 0 && (
                         <PositionSymbol
@@ -55,6 +62,10 @@ const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelle
                                 firstText: odds?.drawOdds?.toFixed(2),
                                 firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.DRAW, marginLeft: '10px' },
                             }}
+                            glow={
+                                accountPositions &&
+                                !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.draw)
+                            }
                         />
                     )}
                     <PositionSymbol
@@ -64,6 +75,10 @@ const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelle
                             firstText: odds?.awayOdds?.toFixed(2),
                             firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.AWAY, marginLeft: '10px' },
                         }}
+                        glow={
+                            accountPositions &&
+                            !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.away)
+                        }
                     />
                 </OddsContainer>
             )}
