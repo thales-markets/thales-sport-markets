@@ -456,7 +456,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 return;
             }
 
-            if (!Number(amount) || Number(amount) < 0.1 || isBuying || isAllowing) {
+            if (!Number(amount) || Number(amount) < 1 || isBuying || isAllowing) {
                 setSubmitDisabled(true);
                 return;
             }
@@ -472,13 +472,15 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             setSubmitDisabled(false);
         };
         checkDisabled();
-    }, [amount, isBuying, isAllowing, hasAllowance]);
+    }, [amount, isBuying, isAllowing, hasAllowance, selectedSide, paymentTokenBalance, maxAmount]);
 
     const setTooltipTextMessage = (value: string | number) => {
         if (Number(value) > availablePerSide.positions[selectedPosition].available) {
             setTooltipText('Amount exceeded the amount available on AMM');
         } else if (Number(value) > maxAmount) {
             setTooltipText('Please ensure your wallet has enough funds');
+        } else if (value && Number(value) < 1) {
+            setTooltipText('Minimal amount is 1');
         } else {
             setTooltipText('');
         }
