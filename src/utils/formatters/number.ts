@@ -28,7 +28,7 @@ export const formatCurrencyWithPrecision = (value: NumericValue, trimDecimals = 
     formatCurrency(value, getPrecision(value), trimDecimals);
 
 export const formatCurrencyWithSign = (sign: string | null | undefined, value: NumericValue, decimals?: number) =>
-    `${sign}${formatCurrency(value, decimals || getPrecision(value))}`;
+    `${sign} ${formatCurrency(value, decimals || getPrecision(value))}`;
 
 export const formatCurrencyWithKey = (
     currencyKey: string,
