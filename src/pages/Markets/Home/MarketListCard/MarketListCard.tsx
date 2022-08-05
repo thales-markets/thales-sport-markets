@@ -24,20 +24,15 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
     }, [market.homeTeam, market.awayTeam]);
 
     return (
-        <Container
-            // backgroundColor={'rgba(48, 54, 86, 0.5)'}
-            claimBorder={claimAvailable}
-            isCanceled={market.isCanceled}
-            isResolved={market.isResolved}
-        >
+        <Container claimBorder={claimAvailable} isCanceled={market.isCanceled} isResolved={market.isResolved}>
             <ClubVsClubContainer>
                 <ClubContainer>
-                    <ClubLogo src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
+                    <ClubLogo alt="Home team logo" src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
                     <ClubNameLabel>{market.homeTeam}</ClubNameLabel>
                 </ClubContainer>
                 <VSLabel>{'VS'}</VSLabel>
                 <ClubContainer>
-                    <ClubLogo src={awayLogoSrc} onError={() => setAwayLogoSrc(OVERTIME_LOGO)} />
+                    <ClubLogo alt="Away team logo" src={awayLogoSrc} onError={() => setAwayLogoSrc(OVERTIME_LOGO)} />
                     <ClubNameLabel>{market.awayTeam}</ClubNameLabel>
                 </ClubContainer>
             </ClubVsClubContainer>
@@ -51,6 +46,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                     awayOdds: market.awayOdds,
                     drawOdds: market.drawOdds,
                 }}
+                accountPositions={accountPositions}
             />
             <MatchStatus
                 isResolved={market.isResolved}

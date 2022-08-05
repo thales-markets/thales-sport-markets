@@ -33,6 +33,7 @@ const InfoIcon = styled.i<{ iconFontSize?: number; marginLeft?: number; top?: nu
     position: relative;
     margin-left: ${(props) => props.marginLeft || 0}px;
     top: ${(props) => props.top || -1}px;
+    color: ${(props) => props.theme.textColor.primary};
     &:before {
         font-family: ExoticIcons !important;
         content: '\\0044';
