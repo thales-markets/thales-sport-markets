@@ -255,5 +255,15 @@
             "claim": "Claim",
             "coming-soon": "Coming soon"
         }
+    },
+    "rewards": {
+        "header": "Rewards",
+        "table": {
+            "wallet-address": "Wallet address",
+            "pnl": "PnL",
+            "percentage": "Percentage",
+            "reward-amount": "Reward",
+            "no-data-available": "No data available"
+        }
     }
 }
