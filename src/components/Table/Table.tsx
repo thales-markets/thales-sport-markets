@@ -81,7 +81,7 @@ const Table: React.FC<TableProps> = ({
                     <LoaderContainer>
                         <SimpleLoader />
                     </LoaderContainer>
-                ) : noResultsMessage != null ? (
+                ) : noResultsMessage != null && !data?.length ? (
                     <NoResultContainer>{noResultsMessage}</NoResultContainer>
                 ) : (
                     <TableBody {...getTableBodyProps()}>
