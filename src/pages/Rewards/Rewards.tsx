@@ -10,7 +10,7 @@ import Table from 'components/Table';
 import { CellProps } from 'react-table';
 import { truncateAddress } from 'utils/formatters/string';
 import { MarketContainer } from 'pages/Markets/Market/MarketDetails/styled-components/MarketDetails';
-import { Container, Description, SelectContainer, TableContainer, Title } from './styled-components';
+import { Container, Description, Row, SelectContainer, TableContainer, Title, TotalPnl } from './styled-components';
 import useRewardsDataQuery from 'queries/rewards/useRewardsDataQuery';
 import { getNetworkId } from 'redux/modules/wallet';
 import { useSelector } from 'react-redux';
@@ -45,8 +45,6 @@ const Rewards: React.FC = () => {
         return [];
     }, [rewardsDataQuery?.data?.users, rewardsDataQuery?.isSuccess]);
 
-    console.log('rewardsData ', rewardsData);
-
     const options = [
         {
             value: 0,
@@ -66,14 +64,19 @@ const Rewards: React.FC = () => {
                     <TableContainer>
                         <Title>{t('rewards.header')}</Title>
                         <Description>{t('rewards.description')}</Description>
-                        <SelectContainer>
-                            <SelectInput
-                                options={options}
-                                handleChange={(value) => setPeriod(Number(value))}
-                                defaultValue={period - 1}
-                                width={300}
-                            />
-                        </SelectContainer>
+                        <Row>
+                            <SelectContainer>
+                                <SelectInput
+                                    options={options}
+                                    handleChange={(value) => setPeriod(Number(value))}
+                                    defaultValue={0}
+                                    width={300}
+                                />
+                            </SelectContainer>
+                            <TotalPnl>{`${t('rewards.total-negative-pnl')} is ${Number(
+                                rewardsDataQuery?.data?.negativePnlTotal
+                            ).toFixed(2)}`}</TotalPnl>
+                        </Row>
                         <Table
                             columns={[
                                 {

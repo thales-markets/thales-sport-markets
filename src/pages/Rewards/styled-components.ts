@@ -55,3 +55,14 @@ export const SelectContainer = styled.div`
     margin-bottom: 10px;
     width: 300px;
 `;
+
+export const Row = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+export const TotalPnl = styled.span`
+    font-weight: bold;
+`;
