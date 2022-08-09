@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import BackToLink from 'pages/Markets/components/BackToLink';
+import SelectInput from 'components/SelectInput';
 
 import ROUTES from 'constants/routes';
 import { buildHref } from 'utils/routes';
 import Table from 'components/Table';
 import { CellProps } from 'react-table';
 import { formatCurrency } from 'utils/formatters/number';
-import { FlexDivColumn } from 'styles/common';
-import styled from 'styled-components';
+import { truncateAddress } from 'utils/formatters/string';
+import { MarketContainer } from 'pages/Markets/Market/MarketDetails/styled-components/MarketDetails';
+import { Container, Description, SelectContainer, TableContainer, Title } from './styled-components';
 
 type RewardsType = {
     walletAddress: string;
@@ -20,8 +22,9 @@ type RewardsType = {
 
 const Rewards: React.FC = () => {
     const { t } = useTranslation();
+    const [period, setPeriod] = useState<number>(0);
     const isLoading = false;
-    const data = [
+    const rewardData = [
         {
             walletAddress: '0xfd4da3a9ce0dbc4f7fd57fdafc2aa5145f5be200',
             pnl: '51',
@@ -84,86 +87,77 @@ const Rewards: React.FC = () => {
         // },
     ];
 
-    console.log('Data ', data);
+    const options = [
+        {
+            value: 0,
+            label: 'First period',
+        },
+        {
+            value: 1,
+            label: 'Second period',
+        },
+    ];
 
     return (
         <>
             <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
-            <TableContainer>
-                <Title>{t('rewards.header')}</Title>
-                <Table
-                    columns={[
-                        {
-                            Header: <>{t('rewards.table.wallet-address')}</>,
-                            accessor: 'walletAddress',
-                            Cell: (cellProps: CellProps<RewardsType, RewardsType['walletAddress']>) => (
-                                <p>{cellProps.cell.value}</p>
-                            ),
-                        },
-                        {
-                            Header: <>{t('rewards.table.pnl')}</>,
-                            accessor: 'pnl',
-                            Cell: (cellProps: CellProps<RewardsType, RewardsType['pnl']>) => (
-                                <p>{cellProps.cell.value}</p>
-                            ),
-                            sortable: true,
-                        },
-                        {
-                            Header: <>{t('rewards.table.percentage')}</>,
-                            accessor: 'percentage',
-                            Cell: (cellProps: CellProps<RewardsType, RewardsType['percentage']>) => (
-                                <p>{cellProps.cell.value}</p>
-                            ),
-                            sortable: true,
-                        },
-                        {
-                            Header: <>{t('rewards.table.reward-amount')}</>,
-                            sortType: 'basic',
-                            accessor: 'reward',
-                            Cell: (cellProps: CellProps<RewardsType, RewardsType['reward']>) => (
-                                <p>$ {formatCurrency(cellProps.cell.value)}</p>
-                            ),
-                            sortable: true,
-                        },
-                    ]}
-                    data={data}
-                    isLoading={isLoading ? false : false}
-                    noResultsMessage={t('rewards.table.no-data-available')}
-                />
-            </TableContainer>
+            <Container>
+                <MarketContainer>
+                    <TableContainer>
+                        <Title>{t('rewards.header')}</Title>
+                        <Description>{t('rewards.description')}</Description>
+                        <SelectContainer>
+                            <SelectInput
+                                options={options}
+                                handleChange={(value) => setPeriod(Number(value))}
+                                defaultValue={period - 1}
+                                width={300}
+                            />
+                        </SelectContainer>
+                        <Table
+                            columns={[
+                                {
+                                    Header: <>{t('rewards.table.wallet-address')}</>,
+                                    accessor: 'walletAddress',
+                                    Cell: (cellProps: CellProps<RewardsType, RewardsType['walletAddress']>) => (
+                                        <p>{truncateAddress(cellProps.cell.value, 5)}</p>
+                                    ),
+                                },
+                                {
+                                    Header: <>{t('rewards.table.pnl')}</>,
+                                    accessor: 'pnl',
+                                    Cell: (cellProps: CellProps<RewardsType, RewardsType['pnl']>) => (
+                                        <p>{cellProps.cell.value}</p>
+                                    ),
+                                    sortable: true,
+                                },
+                                {
+                                    Header: <>{t('rewards.table.percentage')}</>,
+                                    accessor: 'percentage',
+                                    Cell: (cellProps: CellProps<RewardsType, RewardsType['percentage']>) => (
+                                        <p>{cellProps.cell.value}</p>
+                                    ),
+                                    sortable: true,
+                                },
+                                {
+                                    Header: <>{t('rewards.table.reward-amount')}</>,
+                                    sortType: 'basic',
+                                    accessor: 'reward',
+                                    Cell: (cellProps: CellProps<RewardsType, RewardsType['reward']>) => (
+                                        <p>$ {formatCurrency(cellProps.cell.value)}</p>
+                                    ),
+                                    sortable: true,
+                                },
+                            ]}
+                            data={rewardData}
+                            isLoading={isLoading ? false : false}
+                            noResultsMessage={t('rewards.table.no-data-available')}
+                        />
+                    </TableContainer>
+                </MarketContainer>
+            </Container>
         </>
     );
 };
-
-const Title = styled.span`
-    font-style: normal;
-    font-weight: bold;
-    font-size: 25px;
-    line-height: 100%;
-    text-align: center;
-    color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 20px;
-`;
-
-const TableContainer = styled(FlexDivColumn)`
-    overflow: auto;
-    ::-webkit-scrollbar {
-        width: 5px;
-    }
-    ::-webkit-scrollbar-track {
-        background: #04045a;
-        border-radius: 8px;
-    }
-    ::-webkit-scrollbar-thumb {
-        border-radius: 15px;
-        background: #355dff;
-    }
-    ::-webkit-scrollbar-thumb:active {
-        background: #44e1e2;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: rgb(67, 116, 255);
-    }
-`;
 
 export default Rewards;
