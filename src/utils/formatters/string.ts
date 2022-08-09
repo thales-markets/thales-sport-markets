@@ -25,15 +25,15 @@ export const fixDuplicatedTeamName = (name: string) => {
 };
 
 export const fixLongTeamName = (market: SportMarketInfo) => {
-    market.homeTeam.toLowerCase() == 'wolverhampton wanderers' ? (market.homeTeam = 'Wolves') : '';
-    market.awayTeam.toLowerCase() == 'wolverhampton wanderers' ? (market.awayTeam = 'Wolves') : '';
+    market.homeTeam.toLowerCase() == 'wolverhampton' ? (market.homeTeam = 'Wolves') : '';
+    market.awayTeam.toLowerCase() == 'wolverhampton' ? (market.awayTeam = 'Wolves') : '';
     market.homeTeam.toLowerCase() == 'borussia monchengladbach' ? (market.homeTeam = "Borussia M'gladbach") : '';
     market.awayTeam.toLowerCase() == 'borussia monchengladbach' ? (market.awayTeam = "Borussia M'gladbach") : '';
     return market;
 };
 
 export const fixLongTeamNameString = (team: string) => {
-    team.toLowerCase() == 'wolverhampton wanderers' ? (team = 'Wolves') : '';
+    team.toLowerCase() == 'wolverhampton' ? (team = 'Wolves') : '';
     team.toLowerCase() == 'borussia monchengladbach' ? (team = "Borussia M'gladbach") : '';
     return team;
 };
