@@ -2,7 +2,7 @@ import Button from 'components/Button';
 import SimpleLoader from 'components/SimpleLoader';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'constants/defaults';
 import useDebouncedMemo from 'hooks/useDebouncedMemo';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
@@ -25,7 +25,14 @@ import GlobalFilter from '../components/GlobalFilter';
 import MarketsGrid from './MarketsGrid';
 import RangedDatepicker from 'components/RangedDatepicker';
 import Search from 'components/Search';
-import { DEFAULT_SORT_BY, GlobalFilterEnum, SortDirection, SportFilterEnum } from 'constants/markets';
+import {
+    DEFAULT_SORT_BY,
+    GlobalFilterEnum,
+    ODDS_TYPES,
+    OddsType,
+    SortDirection,
+    SportFilterEnum,
+} from 'constants/markets';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
@@ -41,6 +48,8 @@ import burger from 'assets/images/burger.svg';
 import Logo from 'components/Logo';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import useSportMarketsQuery, { marketsCache } from 'queries/markets/useSportMarketsQuery';
+import Dropdown from '../../../components/Dropdown';
+import { getOddsType, setOddsType } from '../../../redux/modules/ui';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -65,7 +74,13 @@ const Home: React.FC = () => {
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [marketsCached, setMarketsCached] = useState<typeof marketsCache>(marketsCache);
     const [showBurger, setShowBurger] = useState<boolean>(false);
-
+    const selectedOddsType = useSelector(getOddsType);
+    const setSelectedOddsType = useCallback(
+        (oddsType: OddsType) => {
+            return dispatch(setOddsType(oddsType));
+        },
+        [dispatch]
+    );
     const sortOptions: SortOptionType[] = [
         { id: 1, title: t('market.time-remaining-label') },
         { id: 2, title: t('market.sport') },
@@ -576,6 +591,12 @@ const Home: React.FC = () => {
                     }}
                 />
                 <SwitchContainer>
+                    <Dropdown<OddsType>
+                        list={ODDS_TYPES}
+                        selectedItem={selectedOddsType}
+                        onSelect={setSelectedOddsType}
+                        style={{ marginRight: '10px' }}
+                    />
                     <ViewSwitch selected={showListView} onClick={() => setListView(true)}>
                         {t('market.list-view')}
                     </ViewSwitch>
