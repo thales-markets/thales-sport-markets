@@ -131,6 +131,7 @@ const Rewards: React.FC = () => {
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['address']>) => (
                                         <p>{truncateAddress(cellProps.cell.value, 5)}</p>
                                     ),
+                                    sortable: false,
                                 },
                                 {
                                     Header: <>{t('rewards.table.pnl')}</>,
@@ -138,6 +139,7 @@ const Rewards: React.FC = () => {
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['pnl']>) => (
                                         <p>{`${Number(cellProps.cell.value).toFixed(2)} $`}</p>
                                     ),
+                                    sortType: pnlSort(),
                                     sortable: true,
                                 },
                                 {
@@ -146,17 +148,18 @@ const Rewards: React.FC = () => {
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['percentage']>) => (
                                         <p>{`${Number(cellProps.cell.value).toFixed(2)} %`}</p>
                                     ),
+                                    sortType: percentageSort(),
                                     sortable: true,
                                 },
                                 {
                                     Header: <>{t('rewards.table.reward-amount')}</>,
-                                    sortType: 'basic',
                                     accessor: 'rewards',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['rewards']>) => (
                                         <p>{`${Number(cellProps.cell.value?.op).toFixed(2)} OP + ${Number(
                                             cellProps.cell.value?.thales
                                         ).toFixed(2)} THALES`}</p>
                                     ),
+                                    sortType: rewardsSort(),
                                     sortable: true,
                                 },
                             ]}
@@ -169,6 +172,18 @@ const Rewards: React.FC = () => {
             </Container>
         </>
     );
+};
+
+const rewardsSort = () => (rowA: any, rowB: any) => {
+    return rowA.original.rewards.op - rowB.original.rewards.op;
+};
+
+const percentageSort = () => (rowA: any, rowB: any) => {
+    return rowA.original.percentage - rowB.original.percentage;
+};
+
+const pnlSort = () => (rowA: any, rowB: any) => {
+    return rowA.original.pnl - rowB.original.pnl;
 };
 
 export default Rewards;
