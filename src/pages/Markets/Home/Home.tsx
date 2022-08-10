@@ -3,7 +3,7 @@ import SimpleLoader from 'components/SimpleLoader';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'constants/defaults';
 import useDebouncedMemo from 'hooks/useDebouncedMemo';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -50,6 +50,9 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 import useSportMarketsQuery, { marketsCache } from 'queries/markets/useSportMarketsQuery';
 import Dropdown from '../../../components/Dropdown';
 import { getOddsType, setOddsType } from '../../../redux/modules/ui';
+import SPAAnchor from 'components/SPAAnchor';
+import { buildHref } from 'utils/routes';
+import ROUTES from 'constants/routes';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -439,6 +442,14 @@ const Home: React.FC = () => {
 
     return (
         <Container>
+            <Info>
+                <Trans
+                    i18nKey="rewards.op-rewards-banner-message"
+                    components={{
+                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                    }}
+                />
+            </Info>
             <BurgerFiltersContainer show={showBurger} onClick={() => setShowBurger(false)}>
                 <LogoContainer>
                     <Logo />
@@ -1020,6 +1031,32 @@ const BurgerAndSwitchSwitchContainer = styled(FlexDivRow)`
         width: 100%;
         justify-content: space-between;
         margin-bottom: 10px;
+    }
+`;
+
+const Info = styled.div`
+    width: 100%;
+    color: #ffffff;
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #303656;
+    box-shadow: 0px 0px 20px rgb(0 0 0 / 40%);
+    z-index: 2;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    strong {
+        font-weight: bold;
+        cursor: pointer;
+        margin-left: 0.2em;
+        color: #91bced;
+    }
+    a {
+        display: contents;
+        font-weight: bold;
+        cursor: pointer;
+        color: #91bced;
     }
 `;
 
