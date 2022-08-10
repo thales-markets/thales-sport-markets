@@ -30,7 +30,7 @@ export const Description = styled.p`
 `;
 
 export const TableContainer = styled(FlexDivColumn)`
-    overflow: auto;
+    overflow: visible;
     ::-webkit-scrollbar {
         width: 5px;
     }
@@ -61,8 +61,31 @@ export const Row = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    @media (max-width: 600px) {
+        flex-direction: column;
+    }
 `;
 
 export const TotalPnl = styled.span`
     font-weight: bold;
+`;
+
+export const HighlightRow = styled.div`
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    ${(_props) => `border: 1px solid ${_props?.theme?.textColor?.quaternary};`};
+    box-shadow: 0px 0px 26px 0px rgba(0, 0, 0, 0.75);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+`;
+
+export const HighlightColumn = styled.div`
+    font-weight: bold;
+    text-align: left;
+    padding-left: 5px;
+    width: 25%;
 `;

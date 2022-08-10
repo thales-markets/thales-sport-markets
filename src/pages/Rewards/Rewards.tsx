@@ -10,9 +10,19 @@ import Table from 'components/Table';
 import { CellProps } from 'react-table';
 import { truncateAddress } from 'utils/formatters/string';
 import { MarketContainer } from 'pages/Markets/Market/MarketDetails/styled-components/MarketDetails';
-import { Container, Description, Row, SelectContainer, TableContainer, Title, TotalPnl } from './styled-components';
+import {
+    Container,
+    Description,
+    HighlightColumn,
+    HighlightRow,
+    Row,
+    SelectContainer,
+    TableContainer,
+    Title,
+    TotalPnl,
+} from './styled-components';
 import useRewardsDataQuery from 'queries/rewards/useRewardsDataQuery';
-import { getNetworkId } from 'redux/modules/wallet';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsAppReady } from 'redux/modules/app';
@@ -32,6 +42,8 @@ const Rewards: React.FC = () => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+
     const [searchText, setSearchText] = useState<string>('');
     const [period, setPeriod] = useState<number>(0);
 
@@ -53,6 +65,8 @@ const Rewards: React.FC = () => {
 
         return [];
     }, [rewardsDataQuery?.data?.users, rewardsDataQuery?.isSuccess, searchText]);
+
+    const userRewardData = rewardsData?.find((entry: any) => entry?.address?.toLowerCase()?.includes(walletAddress));
 
     const options = [
         {
@@ -91,6 +105,18 @@ const Rewards: React.FC = () => {
                                 rewardsDataQuery?.data?.negativePnlTotal
                             ).toFixed(2)} $`}</TotalPnl>
                         </Row>
+                        {userRewardData && (
+                            <HighlightRow>
+                                <HighlightColumn>{'Your score'}</HighlightColumn>
+                                <HighlightColumn>{`${Number(userRewardData?.pnl).toFixed(2)} $`}</HighlightColumn>
+                                <HighlightColumn>{`${Number(userRewardData?.percentage).toFixed(
+                                    2
+                                )} %`}</HighlightColumn>
+                                <HighlightColumn>{`${Number(userRewardData?.rewards?.op).toFixed(2)} OP + ${Number(
+                                    userRewardData?.rewards?.thales
+                                ).toFixed(2)} THALES`}</HighlightColumn>
+                            </HighlightRow>
+                        )}
                         <Table
                             columns={[
                                 {
