@@ -66,7 +66,9 @@ const Rewards: React.FC = () => {
         return [];
     }, [rewardsDataQuery?.data?.users, rewardsDataQuery?.isSuccess, searchText]);
 
-    const userRewardData = rewardsData?.find((entry: any) => entry?.address?.toLowerCase()?.includes(walletAddress));
+    const userRewardData = walletAddress
+        ? rewardsData?.find((entry: any) => entry?.address?.toLowerCase()?.includes(walletAddress))
+        : null;
 
     const options = [
         {
