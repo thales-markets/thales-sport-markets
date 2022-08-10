@@ -16,6 +16,7 @@ import { getNetworkId } from 'redux/modules/wallet';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsAppReady } from 'redux/modules/app';
+import Search from 'components/Search';
 
 type RewardsType = {
     address: string;
@@ -31,6 +32,7 @@ const Rewards: React.FC = () => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const [searchText, setSearchText] = useState<string>('');
     const [period, setPeriod] = useState<number>(0);
 
     const rewardsDataQuery = useRewardsDataQuery(networkId, period, {
@@ -39,11 +41,18 @@ const Rewards: React.FC = () => {
 
     const rewardsData = useMemo(() => {
         if (rewardsDataQuery?.isSuccess && rewardsDataQuery?.data?.users) {
+            if (searchText !== '') {
+                const data = rewardsDataQuery?.data?.users?.filter((user: any) =>
+                    user?.address?.toLowerCase().includes(searchText)
+                );
+
+                return data;
+            }
             return rewardsDataQuery?.data?.users;
         }
 
         return [];
-    }, [rewardsDataQuery?.data?.users, rewardsDataQuery?.isSuccess]);
+    }, [rewardsDataQuery?.data?.users, rewardsDataQuery?.isSuccess, searchText]);
 
     const options = [
         {
@@ -64,6 +73,11 @@ const Rewards: React.FC = () => {
                     <TableContainer>
                         <Title>{t('rewards.header')}</Title>
                         <Description>{t('rewards.description')}</Description>
+                        <Search
+                            text={searchText}
+                            cunstomPlaceholder={t('rewards.search-placeholder')}
+                            handleChange={(e) => setSearchText(e)}
+                        />
                         <Row>
                             <SelectContainer>
                                 <SelectInput
@@ -90,7 +104,7 @@ const Rewards: React.FC = () => {
                                     Header: <>{t('rewards.table.pnl')}</>,
                                     accessor: 'pnl',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['pnl']>) => (
-                                        <p>{Number(cellProps.cell.value).toFixed(2)}</p>
+                                        <p>{`${Number(cellProps.cell.value).toFixed(2)} $`}</p>
                                     ),
                                     sortable: true,
                                 },
