@@ -23,6 +23,7 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
+const Rewards = lazy(() => import('pages/Rewards'));
 
 const App = () => {
     const dispatch = useDispatch();
@@ -147,6 +148,11 @@ const App = () => {
                             <Route exact path={ROUTES.Home}>
                                 <Redirect to={ROUTES.Markets.Home} />
                                 {/*<HomeLayout />*/}
+                            </Route>
+                            <Route exact path={ROUTES.Rewards}>
+                                <DappLayout showSearch>
+                                    <Rewards />
+                                </DappLayout>
                             </Route>
                         </Switch>
                     </Router>

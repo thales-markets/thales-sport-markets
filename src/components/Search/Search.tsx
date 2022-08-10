@@ -5,17 +5,18 @@ import { FlexDivStart } from 'styles/common';
 
 type SearchProps = {
     text: string;
+    cunstomPlaceholder?: string;
     handleChange: (event: any) => void;
 };
 
-const Search: React.FC<SearchProps> = ({ text, handleChange }) => {
+const Search: React.FC<SearchProps> = ({ text, cunstomPlaceholder, handleChange }) => {
     const { t } = useTranslation();
 
     return (
         <Wrapper>
             <Input
                 type="text"
-                placeholder={t('market.search-placeholder')}
+                placeholder={cunstomPlaceholder ? cunstomPlaceholder : t('market.search-placeholder')}
                 value={text}
                 onChange={(event) => handleChange(event.target.value)}
             />

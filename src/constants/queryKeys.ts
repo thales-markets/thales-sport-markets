@@ -3,6 +3,7 @@ import { NetworkId } from 'types/network';
 import { Position, Side } from './options';
 
 export const QUERY_KEYS = {
+    Rewards: (networkId: NetworkId, period: number) => ['rewards', networkId, period],
     Markets: (networkId: NetworkId) => ['markets', networkId],
     SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
     OpenSportMarkets: (networkId: NetworkId) => ['openSportMarkets', networkId],
