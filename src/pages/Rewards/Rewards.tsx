@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import BackToLink from 'pages/Markets/components/BackToLink';
 import SelectInput from 'components/SelectInput';
@@ -92,7 +92,9 @@ const Rewards: React.FC = () => {
                 <MarketContainer>
                     <TableContainer>
                         <Title>{t('rewards.header')}</Title>
-                        <Description>{t('rewards.description')}</Description>
+                        <Description>
+                            <Trans i18nKey={t('rewards.description')} />
+                        </Description>
                         <Search
                             text={searchText}
                             cunstomPlaceholder={t('rewards.search-placeholder')}
