@@ -97,8 +97,9 @@ const Rewards: React.FC = () => {
                         </Description>
                         <Search
                             text={searchText}
-                            cunstomPlaceholder={t('rewards.search-placeholder')}
+                            customPlaceholder={t('rewards.search-placeholder')}
                             handleChange={(e) => setSearchText(e)}
+                            customStyle={{ border: '1px solid #1A1C2B' }}
                         />
                         <Row>
                             <SelectContainer>
@@ -109,8 +110,8 @@ const Rewards: React.FC = () => {
                                     width={300}
                                 />
                             </SelectContainer>
-                            <TotalPnl>{`${t('rewards.total-negative-pnl')} is ${Number(
-                                rewardsDataQuery?.data?.negativePnlTotal
+                            <TotalPnl>{`${t('rewards.total-negative-pnl')} is ${Math.abs(
+                                Number(rewardsDataQuery?.data?.negativePnlTotal)
                             ).toFixed(2)} $`}</TotalPnl>
                         </Row>
                         {userRewardData && (
@@ -165,6 +166,14 @@ const Rewards: React.FC = () => {
                                     sortable: true,
                                 },
                             ]}
+                            initialState={{
+                                sortBy: [
+                                    {
+                                        id: 'rewards',
+                                        desc: true,
+                                    },
+                                ],
+                            }}
                             data={rewardsData}
                             isLoading={rewardsDataQuery?.isLoading}
                             noResultsMessage={t('rewards.table.no-data-available')}

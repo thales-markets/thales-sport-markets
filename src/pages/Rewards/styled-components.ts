@@ -61,6 +61,7 @@ export const Row = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    margin-top: 10px;
     @media (max-width: 600px) {
         flex-direction: column;
     }
