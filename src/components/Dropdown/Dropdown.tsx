@@ -73,7 +73,7 @@ const DropdownButton = styled.button`
     background: #252940;
     color: white;
     border-radius: 10px;
-    font-size: 18px;
+    font-size: 17px;
     line-height: 25px;
     padding-right: 45px;
     padding-left: 15px;
@@ -115,7 +115,7 @@ const DropDownItem = styled(FlexDiv)`
 
 const Label = styled.div`
     font-weight: 500;
-    font-size: 18px;
+    font-size: 17px;
     line-height: 20px;
     color: white;
     display: block;
@@ -123,7 +123,7 @@ const Label = styled.div`
 `;
 
 const ArrowDownIcon = styled.i`
-    font-size: 18px;
+    font-size: 17px;
     margin-left: 20px;
     position: absolute;
     top: 8px;

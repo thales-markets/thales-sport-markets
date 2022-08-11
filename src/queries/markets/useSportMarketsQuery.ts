@@ -33,7 +33,11 @@ export const marketsCache = {
 
 const mapResult = async (markets: any, globalFilter: GlobalFilterEnum) => {
     const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
-    if (globalFilter != GlobalFilterEnum.All && globalFilter != GlobalFilterEnum.OpenMarkets) {
+    if (
+        globalFilter != GlobalFilterEnum.All &&
+        globalFilter != GlobalFilterEnum.YourPositions &&
+        globalFilter != GlobalFilterEnum.OpenMarkets
+    ) {
         const mappedMarkets = markets.map((market: SportMarketInfo) => {
             market.maturityDate = new Date(market.maturityDate);
             market.homeTeam = fixDuplicatedTeamName(market.homeTeam);
