@@ -49,6 +49,9 @@ const Input = styled.input`
     &::placeholder {
         color: ${(props) => props.theme.textColor.primary};
     }
+    &:focus {
+        border: 1px solid #3fd1ff !important;
+    }
 `;
 
 const IconWrapper = styled.div`
