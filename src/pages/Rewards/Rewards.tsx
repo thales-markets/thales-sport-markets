@@ -109,8 +109,8 @@ const Rewards: React.FC = () => {
                                     width={300}
                                 />
                             </SelectContainer>
-                            <TotalPnl>{`${t('rewards.total-negative-pnl')} is ${Number(
-                                rewardsDataQuery?.data?.negativePnlTotal
+                            <TotalPnl>{`${t('rewards.total-negative-pnl')} is ${Math.abs(
+                                Number(rewardsDataQuery?.data?.negativePnlTotal)
                             ).toFixed(2)} $`}</TotalPnl>
                         </Row>
                         {userRewardData && (
