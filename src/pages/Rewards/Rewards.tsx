@@ -97,8 +97,9 @@ const Rewards: React.FC = () => {
                         </Description>
                         <Search
                             text={searchText}
-                            cunstomPlaceholder={t('rewards.search-placeholder')}
+                            customPlaceholder={t('rewards.search-placeholder')}
                             handleChange={(e) => setSearchText(e)}
+                            customStyle={{ border: '1px solid #3FD1FF' }}
                         />
                         <Row>
                             <SelectContainer>

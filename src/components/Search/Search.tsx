@@ -1,23 +1,25 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivStart } from 'styles/common';
 
 type SearchProps = {
     text: string;
-    cunstomPlaceholder?: string;
+    customPlaceholder?: string;
+    customStyle?: CSSProperties;
     handleChange: (event: any) => void;
 };
 
-const Search: React.FC<SearchProps> = ({ text, cunstomPlaceholder, handleChange }) => {
+const Search: React.FC<SearchProps> = ({ text, customPlaceholder, customStyle, handleChange }) => {
     const { t } = useTranslation();
 
     return (
         <Wrapper>
             <Input
                 type="text"
-                placeholder={cunstomPlaceholder ? cunstomPlaceholder : t('market.search-placeholder')}
+                placeholder={customPlaceholder ? customPlaceholder : t('market.search-placeholder')}
                 value={text}
+                style={customStyle}
                 onChange={(event) => handleChange(event.target.value)}
             />
             <IconWrapper>
