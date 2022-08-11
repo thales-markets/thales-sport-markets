@@ -606,7 +606,7 @@ const Home: React.FC = () => {
                         list={ODDS_TYPES}
                         selectedItem={selectedOddsType}
                         onSelect={setSelectedOddsType}
-                        style={{ marginRight: '10px', width: '200px' }}
+                        style={{ marginRight: '10px', width: 'max-content' }}
                     />
                     <ViewSwitch selected={showListView} onClick={() => setListView(true)}>
                         {t('market.list-view')}
