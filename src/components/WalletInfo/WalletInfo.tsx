@@ -33,34 +33,32 @@ const WalletInfo: React.FC = () => {
 
     return (
         <Container>
-            {!showWalletOptions && (
-                <WalletContainer
-                    onClick={() => {
-                        if (!isWalletConnected) {
-                            onboardConnector.connectWallet();
-                        } else {
-                            setShowWalletOptions(true);
-                        }
-                    }}
-                >
-                    {isWalletConnected ? (
-                        <>
-                            <Wallet className="wallet-info">
-                                <Info>{truncateAddress(walletAddress)}</Info>
-                            </Wallet>
-                            <Wallet className="wallet-info-hover">
-                                <Info>{t('common.wallet.wallet-options')}</Info>
-                            </Wallet>
-                            <Balance>
-                                <Info>{sUSDBalance}</Info>
-                                <Currency>{PAYMENT_CURRENCY}</Currency>
-                            </Balance>
-                        </>
-                    ) : (
-                        <Info>{t('common.wallet.connect-your-wallet')}</Info>
-                    )}
-                </WalletContainer>
-            )}
+            <WalletContainer
+                onClick={() => {
+                    if (!isWalletConnected) {
+                        onboardConnector.connectWallet();
+                    } else {
+                        setShowWalletOptions(true);
+                    }
+                }}
+            >
+                {isWalletConnected ? (
+                    <>
+                        <Wallet className="wallet-info">
+                            <Info>{truncateAddress(walletAddress)}</Info>
+                        </Wallet>
+                        <Wallet className="wallet-info-hover">
+                            <Info>{t('common.wallet.wallet-options')}</Info>
+                        </Wallet>
+                        <Balance>
+                            <Info>{sUSDBalance}</Info>
+                            <Currency>{PAYMENT_CURRENCY}</Currency>
+                        </Balance>
+                    </>
+                ) : (
+                    <Info>{t('common.wallet.connect-your-wallet')}</Info>
+                )}
+            </WalletContainer>
             {showWalletOptions && (
                 <OutsideClickHandler onOutsideClick={() => setShowWalletOptions(false)}>
                     <WalletOptions>

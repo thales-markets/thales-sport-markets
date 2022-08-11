@@ -5,5 +5,6 @@ export const ROUTES = {
         CreateMarket: '/markets/create-market',
         Market: '/markets/:marketAddress',
     },
+    Rewards: '/rewards',
 };
 export default ROUTES;

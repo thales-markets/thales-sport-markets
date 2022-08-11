@@ -325,10 +325,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         if (selectedSide === Side.BUY) {
                             trackEvent({
                                 category: 'AMM',
-                                action: `buy-with-${
-                                    COLLATERALS[selectedStableIndex] +
-                                    (referralId ? '-using-referral-' + referralId : '')
-                                }`,
+                                action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
                                 value: Number(formatCurrency(ammPosition.sides[Side.BUY].quote, 3, true)),
                             });
                         } else {

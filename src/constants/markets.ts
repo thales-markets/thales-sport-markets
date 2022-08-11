@@ -71,3 +71,11 @@ export enum MarketStatus {
     ResolvedDisputed = 'resolved-disputed',
     ResolvedConfirmed = 'resolved-confirmed',
 }
+
+export enum OddsType {
+    American = 'American Odds',
+    Decimal = 'Decimal Odds',
+    AMM = 'Normalized Implied Odds',
+}
+
+export const ODDS_TYPES = [OddsType.AMM, OddsType.Decimal, OddsType.American];

@@ -16,6 +16,9 @@ import { AccountPosition, PositionType, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
 import { ODDS_COLOR } from '../../../../../constants/ui';
+import { useSelector } from 'react-redux';
+import { getOddsType } from '../../../../../redux/modules/ui';
+import { formatMarketOdds } from '../../../../../utils/markets';
 
 type MarketCardOpenedProps = {
     market: SportMarketInfo;
@@ -27,6 +30,7 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+    const selectedOddsType = useSelector(getOddsType);
 
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
@@ -44,7 +48,7 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                     />
                 </MatchParticipantImageContainer>
                 <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
-                    {market.homeOdds.toFixed(2)}
+                    {formatMarketOdds(selectedOddsType, market.homeOdds).toFixed(2)}
                 </OddsLabel>
                 <MatchParticipantName
                     glowColor={ODDS_COLOR.HOME}
@@ -63,7 +67,9 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                     isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}
                     isDraw={true}
                 >
-                    {market.awayOdds == 0 && market.homeOdds == 0 ? 'Coming Soon!' : market.drawOdds.toFixed(2)}
+                    {market.awayOdds == 0 && market.homeOdds == 0
+                        ? 'Coming Soon!'
+                        : formatMarketOdds(selectedOddsType, market.drawOdds).toFixed(2)}
                 </OddsLabel>
                 <MatchParticipantName
                     isTwoPositioned={market.drawOdds === 0}
@@ -87,7 +93,7 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                 </MatchParticipantImageContainer>
                 {market ? (
                     <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={false}>
-                        {market.awayOdds.toFixed(2)}
+                        {formatMarketOdds(selectedOddsType, market.awayOdds).toFixed(2)}
                     </OddsLabel>
                 ) : (
                     <OddsLabelSceleton />

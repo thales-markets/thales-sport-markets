@@ -22,6 +22,7 @@ type TableProps = {
     tableRowStyles?: CSSProperties;
     tableHeadCellStyles?: CSSProperties;
     tableRowCellStyles?: CSSProperties;
+    initialState?: any;
 };
 
 const Table: React.FC<TableProps> = ({
@@ -35,6 +36,7 @@ const Table: React.FC<TableProps> = ({
     tableRowStyles = {},
     tableHeadCellStyles = {},
     tableRowCellStyles = {},
+    initialState = null,
 }) => {
     const { t } = useTranslation();
     const memoizedColumns = useMemo(() => columns, [...columnsDeps, t]);
@@ -43,6 +45,7 @@ const Table: React.FC<TableProps> = ({
             columns: memoizedColumns,
             data,
             ...options,
+            initialState,
             autoResetSortBy: false,
         },
         useSortBy
@@ -81,7 +84,7 @@ const Table: React.FC<TableProps> = ({
                     <LoaderContainer>
                         <SimpleLoader />
                     </LoaderContainer>
-                ) : noResultsMessage != null ? (
+                ) : noResultsMessage != null && !data?.length ? (
                     <NoResultContainer>{noResultsMessage}</NoResultContainer>
                 ) : (
                     <TableBody {...getTableBodyProps()}>

@@ -18,6 +18,8 @@ import { RootState } from 'redux/rootReducer';
 // import { useTranslation } from 'react-i18next';
 import { Odds, SportMarketInfo } from 'types/markets';
 import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
+import { formatMarketOdds } from '../../../../../utils/markets';
+import { getOddsType } from '../../../../../redux/modules/ui';
 
 type MarketCardCanceledProps = {
     market: SportMarketInfo;
@@ -28,6 +30,7 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const marketCancellationOddsQuery = useMarketCancellationOddsQuery(market.address, { enabled: isAppReady });
     const [oddsOnCancellation, setOddsOnCancellation] = useState<Odds | undefined>(undefined);
+    const selectedOddsType = useSelector(getOddsType);
 
     useEffect(() => {
         if (marketCancellationOddsQuery.isSuccess && marketCancellationOddsQuery.data) {
@@ -55,7 +58,7 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                 </MatchParticipantImageContainer>
                 {oddsOnCancellation ? (
                     <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
-                        {oddsOnCancellation.home.toFixed(2)}
+                        {formatMarketOdds(selectedOddsType, oddsOnCancellation?.home).toFixed(2)}
                     </OddsLabel>
                 ) : (
                     <OddsLabelSceleton />
@@ -71,7 +74,7 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                         isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}
                         isDraw={true}
                     >
-                        {oddsOnCancellation.draw.toFixed(2)}
+                        {formatMarketOdds(selectedOddsType, oddsOnCancellation?.draw).toFixed(2)}
                     </OddsLabel>
                 ) : (
                     <OddsLabelSceleton />
@@ -89,7 +92,7 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                 </MatchParticipantImageContainer>
                 {oddsOnCancellation ? (
                     <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={false}>
-                        {oddsOnCancellation?.away.toFixed(2)}
+                        {formatMarketOdds(selectedOddsType, oddsOnCancellation?.away).toFixed(2)}
                     </OddsLabel>
                 ) : (
                     <OddsLabelSceleton />

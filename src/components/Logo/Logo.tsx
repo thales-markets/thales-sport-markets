@@ -15,6 +15,7 @@ const Logo: React.FC = () => (
 
 const Container = styled.div`
     @media (max-width: 767px) {
+        margin-top: 25px;
         margin-bottom: 10px;
     }
 `;
