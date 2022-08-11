@@ -165,6 +165,14 @@ const Rewards: React.FC = () => {
                                     sortable: true,
                                 },
                             ]}
+                            initialState={{
+                                sortBy: [
+                                    {
+                                        id: 'rewards',
+                                        desc: true,
+                                    },
+                                ],
+                            }}
                             data={rewardsData}
                             isLoading={rewardsDataQuery?.isLoading}
                             noResultsMessage={t('rewards.table.no-data-available')}
