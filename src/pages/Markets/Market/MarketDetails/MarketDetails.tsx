@@ -46,7 +46,7 @@ import {
     FooterContainer,
 } from './styled-components/MarketDetails';
 import { FlexDivCentered } from '../../../../styles/common';
-import { MAX_L2_GAS_LIMIT, Position, Side } from '../../../../constants/options';
+import { DenominationType, MAX_L2_GAS_LIMIT, Position, Side } from '../../../../constants/options';
 import Toggle from '../../../../components/Toggle/Toggle';
 import networkConnector from '../../../../utils/networkConnector';
 import { checkAllowance } from '../../../../utils/network';
@@ -82,6 +82,7 @@ import onboardConnector from 'utils/onboardConnector';
 import { getReferralId } from 'utils/referral';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import useMarketCancellationOddsQuery from 'queries/markets/useMarketCancellationOddsQuery';
+import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -103,10 +104,15 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const [isBuying, setIsBuying] = useState<boolean>(false);
     const [isFetching, setIsFetching] = useState<boolean>(false);
     const [amount, setAmountValue] = useState<number | string>('');
+    const [usdAmountValue, setUSDAmountValue] = useState<number | string>('');
+    const [tokenAmount, setTokenAmount] = useState<number | string>('');
     const [selectedPosition, setSelectedPosition] = useState<Position>(Position.HOME);
     const [claimable, setClaimable] = useState<boolean>(false);
     const [claimableAmount, setClaimableAmount] = useState<number>(0);
     const [oddsOnCancellation, setOddsOnCancellation] = useState<Odds | undefined>(undefined);
+    const [denominationType, setDenominationType] = useState<DenominationType>(DenominationType.USD);
+    const [maxsUSDToSpend, setMaxsUSDToSpend] = useState<number>(0);
+    const [ammBalanceForSelectedPosition, setAmmBalanceForSelectedPosition] = useState<number>(0);
     const [tooltipText, setTooltipText] = useState<string>('');
     const [availablePerSide, setavailablePerSide] = useState<AvailablePerSide>({
         positions: {
@@ -170,6 +176,37 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     }, [multipleStableBalances.data, selectedStableIndex]);
 
     const availablePerSideQuery = useAvailablePerSideQuery(market.address, selectedSide);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const { sportsAMMContract, signer } = networkConnector;
+            if (signer && sportsAMMContract) {
+                const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
+                contract.connect(signer);
+                const parsedMaxAmount = ethers.utils.parseEther(
+                    floorNumberToDecimals(availablePerSide.positions[selectedPosition].available).toString()
+                );
+                const [sUSDToSpendForMaxAmount, ammBalances] = await Promise.all([
+                    sportsAMMContract?.buyFromAmmQuote(market.address, selectedPosition, parsedMaxAmount),
+                    contract.balancesOf(sportsAMMContract?.address),
+                ]);
+                const ammBalanceForSelectedPosition = ammBalances[selectedPosition];
+                setMaxsUSDToSpend(sUSDToSpendForMaxAmount);
+                setAmmBalanceForSelectedPosition(ammBalanceForSelectedPosition);
+            }
+        };
+
+        fetchData().catch((e) => console.log(e));
+        const X = fetchAmountOfTokensForXsUSDAmount(
+            Number(usdAmountValue),
+            Number((market.positions[selectedPosition] as any).sides[Side.BUY].odd / 1),
+            maxsUSDToSpend / 1e18,
+            availablePerSide.positions[selectedPosition].available,
+            ammBalanceForSelectedPosition / 1e18
+        );
+        console.log(X);
+        setTokenAmount(X);
+    }, [usdAmountValue]);
 
     useEffect(() => {
         if (positionPriceDetailsQuery.isSuccess && positionPriceDetailsQuery.data) {
@@ -282,7 +319,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             if (selectedStableIndex !== 0) {
                 return ammQuote[0];
             }
-
             return ammQuote;
         }
     };
@@ -690,53 +726,122 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             )}
             {!market.gameStarted && !market.resolved && (
                 <>
-                    <LabelContainer>
-                        <AmountToBuyLabel>Amount to {selectedSide.toLowerCase()}:</AmountToBuyLabel>
-                        <AmountToBuyLabel>
-                            {selectedSide === Side.BUY ? 'Total to pay' : 'Total to receive'}
-                        </AmountToBuyLabel>
-                    </LabelContainer>
-                    <FlexDivCentered>
-                        <CustomTooltip open={!!tooltipText && !openApprovalModal} title={tooltipText}>
-                            <AmountToBuyContainer>
-                                <AmountToBuyInput
-                                    type="number"
-                                    onChange={(e) => {
-                                        if (Number(e.target.value) >= 0) {
-                                            setAmount(e.target.value);
-                                        }
+                    <Toggle
+                        label={{ firstLabel: 'Enter tokens amount', secondLabel: 'Enter USD amount', fontSize: '18px' }}
+                        active={denominationType === DenominationType.USD}
+                        dotSize="18px"
+                        dotBackground="#303656"
+                        dotBorder="3px solid #3FD1FF"
+                        handleClick={() => {
+                            setAmount('');
+                            setUSDAmountValue('');
+                            setDenominationType(
+                                denominationType === DenominationType.TOKEN
+                                    ? DenominationType.USD
+                                    : DenominationType.TOKEN
+                            );
+                        }}
+                    />
+                    {denominationType === DenominationType.TOKEN && (
+                        <>
+                            <LabelContainer>
+                                <AmountToBuyLabel>Amount to {selectedSide.toLowerCase()}:</AmountToBuyLabel>
+                                <AmountToBuyLabel>
+                                    {selectedSide === Side.BUY ? 'Total to pay' : 'Total to receive'}:
+                                </AmountToBuyLabel>
+                            </LabelContainer>
+                            <FlexDivCentered>
+                                <CustomTooltip open={!!tooltipText && !openApprovalModal} title={tooltipText}>
+                                    <AmountToBuyContainer>
+                                        <AmountToBuyInput
+                                            type="number"
+                                            onChange={(e) => {
+                                                if (Number(e.target.value) >= 0) {
+                                                    setAmount(e.target.value);
+                                                }
+                                            }}
+                                            value={amount}
+                                        />
+                                        <MaxButton disabled={isFetching} onClick={onMaxClick}>
+                                            Max
+                                        </MaxButton>
+                                    </AmountToBuyContainer>
+                                </CustomTooltip>
+                                <AmountToBuyContainer>
+                                    <AmountInfo>
+                                        <SliderInfoValue>
+                                            {`= $${
+                                                !amount || positionPriceDetailsQuery.isLoading
+                                                    ? ''
+                                                    : formatCurrency(ammPosition.sides[selectedSide].quote, 3, true)
+                                            }`}
+                                        </SliderInfoValue>
+                                    </AmountInfo>
+                                </AmountToBuyContainer>
+                            </FlexDivCentered>
+                            <SliderContainer>
+                                <Slider
+                                    type="range"
+                                    min={0}
+                                    max={availablePerSide.positions[selectedPosition].available}
+                                    value={amount || 0}
+                                    step={1}
+                                    onChange={(event) => {
+                                        setAmount(event.currentTarget.valueAsNumber);
                                     }}
-                                    value={amount}
                                 />
-                                <MaxButton disabled={isFetching} onClick={onMaxClick}>
-                                    Max
-                                </MaxButton>
-                            </AmountToBuyContainer>
-                        </CustomTooltip>
-                        <AmountToBuyContainer>
-                            <AmountInfo>
-                                <SliderInfoValue>
-                                    {`= $${
-                                        !amount || positionPriceDetailsQuery.isLoading
-                                            ? ''
-                                            : formatCurrency(ammPosition.sides[selectedSide].quote, 3, true)
-                                    }`}
-                                </SliderInfoValue>
-                            </AmountInfo>
-                        </AmountToBuyContainer>
-                    </FlexDivCentered>
-                    <SliderContainer>
-                        <Slider
-                            type="range"
-                            min={0}
-                            max={availablePerSide.positions[selectedPosition].available}
-                            value={amount || 0}
-                            step={1}
-                            onChange={(event) => {
-                                setAmount(event.currentTarget.valueAsNumber);
-                            }}
-                        />
-                    </SliderContainer>
+                            </SliderContainer>
+                        </>
+                    )}
+                    {denominationType === DenominationType.USD && (
+                        <>
+                            <LabelContainer>
+                                <AmountToBuyLabel>Total to pay:</AmountToBuyLabel>
+                                <AmountToBuyLabel>Amount to {selectedSide.toLowerCase()}:</AmountToBuyLabel>
+                            </LabelContainer>
+                            <FlexDivCentered>
+                                <CustomTooltip open={!!tooltipText && !openApprovalModal} title={tooltipText}>
+                                    <AmountToBuyContainer>
+                                        <AmountToBuyInput
+                                            type="number"
+                                            onChange={(e) => {
+                                                if (Number(e.target.value) >= 0) {
+                                                    setUSDAmountValue(e.target.value);
+                                                }
+                                            }}
+                                            value={usdAmountValue}
+                                        />
+                                        <MaxButton disabled={isFetching} onClick={onMaxClick}>
+                                            Max
+                                        </MaxButton>
+                                    </AmountToBuyContainer>
+                                </CustomTooltip>
+                                <AmountToBuyContainer>
+                                    <AmountInfo>
+                                        <SliderInfoValue>
+                                            {`=${
+                                                !usdAmountValue || positionPriceDetailsQuery.isLoading
+                                                    ? ''
+                                                    : formatCurrency(tokenAmount, 3, true)
+                                            } tokens`}
+                                        </SliderInfoValue>
+                                    </AmountInfo>
+                                </AmountToBuyContainer>
+                            </FlexDivCentered>
+                            <SliderContainer>
+                                <Slider
+                                    type="range"
+                                    min={0}
+                                    max={availablePerSide.positions[selectedPosition].available}
+                                    value={amount || 0}
+                                    step={1}
+                                    onChange={(event) => {
+                                        setAmount(event.currentTarget.valueAsNumber);
+                                    }}
+                                />
+                            </SliderContainer>
+                        </>
+                    )}
                     <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
                     <FooterContainer>
                         <SliderInfo>

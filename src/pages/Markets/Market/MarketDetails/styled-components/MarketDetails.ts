@@ -337,3 +337,9 @@ export const FooterContainer = styled(FlexDivCentered)`
         flex-direction: column;
     }
 `;
+
+export const Icon = styled.i`
+    font-size: 20px;
+    margin-left: 4px;
+    margin-right: 7px;
+`;
