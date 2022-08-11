@@ -259,7 +259,7 @@
     "rewards": {
         "header": "Rewards",
         "search-placeholder": "Search wallet address",
-        "description": "There is a total of 10,000 OP and 10,000 THALES rewards allocated pro-rata based on the total negative PnL (profit and loss) in a period of 2 weeks.<br>All markets that have matured in that 2-week period are accounted for. Individual wallet's PnL on each market are added up to get the leaderboard results.<br> First 2-week period is from August 1st until August 15th. Second 2-week period is from August 16th until August 30th. This incentivized program will be revisited after the end of the second 2-week period.",
+        "description": "There is a total of 10,000 OP and 10,000 THALES rewards to be distributed in 4 weeks, divided in 2-week periods. 5,000 OP + 5,000 THALES will be allocated pro-rata based on the total negative PnL (profit and loss) for each 2-week period.<br>All markets that have matured in that 2-week period are accounted for. Individual wallet's PnL on each market are added up to get the leaderboard results.<br> First 2-week period is from August 1st until August 15th. Second 2-week period is from August 16th until August 30th. This incentivized program will be revisited after the end of the second 2-week period.",
         "total-negative-pnl": "Total negative PnL",
         "op-rewards-banner-message": "OP rewards have started, check how you can earn those on <bold>the OP rewards page</bold>",
         "table": {
