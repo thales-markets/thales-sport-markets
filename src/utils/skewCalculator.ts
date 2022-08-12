@@ -63,6 +63,9 @@ export const calculateAmountOfTokensForXsUSDOnOppositeSide = (
 ) => {
     const priceOfNoSkewTokens = basePrice * ammBalanceOfToken;
     const sUSDToSpendOnOptionsWithSkew = usdToSpend - priceOfNoSkewTokens;
+
+    if (sUSDToSpendOnOptionsWithSkew <= 0) return usdToSpend / basePrice;
+
     const amountOfTokensWithSkew = liquidity - ammBalanceOfToken;
     const priceOfTokensWithSkew = maxsUSDToSpend - priceOfNoSkewTokens;
 

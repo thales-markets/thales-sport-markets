@@ -111,8 +111,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const [claimableAmount, setClaimableAmount] = useState<number>(0);
     const [oddsOnCancellation, setOddsOnCancellation] = useState<Odds | undefined>(undefined);
     const [denominationType, setDenominationType] = useState<DenominationType>(DenominationType.USD);
-    const [maxsUSDToSpend, setMaxsUSDToSpend] = useState<number>(0);
-    const [ammBalanceForSelectedPosition, setAmmBalanceForSelectedPosition] = useState<number>(0);
     const [tooltipText, setTooltipText] = useState<string>('');
     const [availablePerSide, setavailablePerSide] = useState<AvailablePerSide>({
         positions: {
@@ -191,21 +189,39 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     contract.balancesOf(sportsAMMContract?.address),
                 ]);
                 const ammBalanceForSelectedPosition = ammBalances[selectedPosition];
-                setMaxsUSDToSpend(sUSDToSpendForMaxAmount);
-                setAmmBalanceForSelectedPosition(ammBalanceForSelectedPosition);
+
+                const X = fetchAmountOfTokensForXsUSDAmount(
+                    Number(usdAmountValue),
+                    Number((market.positions[selectedPosition] as any).sides[Side.BUY].odd / 1),
+                    sUSDToSpendForMaxAmount / 1e18,
+                    availablePerSide.positions[selectedPosition].available,
+                    ammBalanceForSelectedPosition / 1e18
+                );
+
+                const parsedAmount = ethers.utils.parseEther(floorNumberToDecimals(X).toString());
+                const quote = await sportsAMMContract?.buyFromAmmQuote(market.address, selectedPosition, parsedAmount);
+
+                const usdAmountValueAsNumber = Number(usdAmountValue);
+                const parsedQuote = quote / 1e18;
+
+                const recalculatedTokenAmount = (X * usdAmountValueAsNumber) / parsedQuote;
+
+                setTokenAmount(recalculatedTokenAmount);
+
+                const parsedRecalculatedAmount = ethers.utils.parseEther(
+                    floorNumberToDecimals(recalculatedTokenAmount).toString()
+                );
+                const recQuote = await sportsAMMContract?.buyFromAmmQuote(
+                    market.address,
+                    selectedPosition,
+                    parsedRecalculatedAmount
+                );
+
+                console.log(recQuote / 1e18);
             }
         };
 
         fetchData().catch((e) => console.log(e));
-        const X = fetchAmountOfTokensForXsUSDAmount(
-            Number(usdAmountValue),
-            Number((market.positions[selectedPosition] as any).sides[Side.BUY].odd / 1),
-            maxsUSDToSpend / 1e18,
-            availablePerSide.positions[selectedPosition].available,
-            ammBalanceForSelectedPosition / 1e18
-        );
-        console.log(X);
-        setTokenAmount(X);
     }, [usdAmountValue]);
 
     useEffect(() => {
