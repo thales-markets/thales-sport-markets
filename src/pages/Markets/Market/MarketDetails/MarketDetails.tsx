@@ -83,6 +83,7 @@ import { getReferralId } from 'utils/referral';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import useMarketCancellationOddsQuery from 'queries/markets/useMarketCancellationOddsQuery';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
+import debounce from 'lodash/debounce';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -223,6 +224,12 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
         fetchData().catch((e) => console.log(e));
     }, [usdAmountValue]);
+
+    const setUSDAmount = (event: any) => {
+        setUSDAmountValue(event.target.value);
+    };
+
+    const debouncedUSDAmountHandler = useMemo(() => debounce(setUSDAmount, 500), []);
 
     useEffect(() => {
         if (positionPriceDetailsQuery.isSuccess && positionPriceDetailsQuery.data) {
@@ -517,8 +524,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 setSubmitDisabled(amount > maxAmount);
                 return;
             }
-
-            setSubmitDisabled(false);
         };
         checkDisabled();
     }, [amount, isBuying, isAllowing, hasAllowance, selectedSide, paymentTokenBalance, maxAmount]);
@@ -818,15 +823,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             <FlexDivCentered>
                                 <CustomTooltip open={!!tooltipText && !openApprovalModal} title={tooltipText}>
                                     <AmountToBuyContainer>
-                                        <AmountToBuyInput
-                                            type="number"
-                                            onChange={(e) => {
-                                                if (Number(e.target.value) >= 0) {
-                                                    setUSDAmountValue(e.target.value);
-                                                }
-                                            }}
-                                            value={usdAmountValue}
-                                        />
+                                        <AmountToBuyInput type="number" onChange={debouncedUSDAmountHandler} />
                                         <MaxButton disabled={isFetching} onClick={onMaxClick}>
                                             Max
                                         </MaxButton>
