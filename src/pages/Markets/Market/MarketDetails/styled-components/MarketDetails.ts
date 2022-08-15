@@ -302,7 +302,7 @@ export const AmountToBuyLabel = styled(FlexDivCentered)`
     }
 `;
 
-export const LabelContainer = styled(FlexDiv)`
+export const LabelContainer = styled(FlexDivRow)`
     width: 50%;
     align-self: center;
     justify-content: space-around;
@@ -310,6 +310,20 @@ export const LabelContainer = styled(FlexDiv)`
         width: 100%;
         justify-content: center;
     }
+`;
+
+export const LabelsContainer = styled(FlexDivRow)`
+    width: 50%;
+    align-self: center;
+    justify-content: space-around;
+    @media (max-width: 768px) {
+        width: 100%;
+        justify-content: center;
+    }
+`;
+
+export const InputContainer = styled(FlexDiv)`
+    margin: 0px 5px;
 `;
 
 export const Separator = styled.span`
