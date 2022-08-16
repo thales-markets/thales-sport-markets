@@ -182,39 +182,42 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             if (fieldChanging == 'positionsAmount') {
                 return;
             }
+            const divider = selectedStableIndex == 0 || selectedStableIndex == 1 ? 1e18 : 1e6;
             const { sportsAMMContract, signer } = networkConnector;
             if (signer && sportsAMMContract) {
                 const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
                 contract.connect(signer);
                 const roundedMaxAmount = floorNumberToDecimals(availablePerSide.positions[selectedPosition].available);
-                const [sUSDToSpendForMaxAmount, ammBalances] = await Promise.all([
-                    fetchAmmQuote(roundedMaxAmount),
-                    contract.balancesOf(sportsAMMContract?.address),
-                ]);
-                const ammBalanceForSelectedPosition = ammBalances[selectedPosition];
+                if (roundedMaxAmount) {
+                    const [sUSDToSpendForMaxAmount, ammBalances] = await Promise.all([
+                        fetchAmmQuote(roundedMaxAmount),
+                        contract.balancesOf(sportsAMMContract?.address),
+                    ]);
+                    const ammBalanceForSelectedPosition = ammBalances[selectedPosition];
 
-                const X = fetchAmountOfTokensForXsUSDAmount(
-                    Number(usdAmountValue),
-                    Number((market.positions[selectedPosition] as any).sides[Side.BUY].odd / 1),
-                    sUSDToSpendForMaxAmount / 1e18,
-                    availablePerSide.positions[selectedPosition].available,
-                    ammBalanceForSelectedPosition / 1e18
-                );
+                    const X = fetchAmountOfTokensForXsUSDAmount(
+                        Number(usdAmountValue),
+                        Number((market.positions[selectedPosition] as any).sides[Side.BUY].odd / 1),
+                        sUSDToSpendForMaxAmount / divider,
+                        availablePerSide.positions[selectedPosition].available,
+                        ammBalanceForSelectedPosition / divider
+                    );
 
-                if (X > availablePerSide.positions[selectedPosition].available) {
-                    setTokenAmount(0);
-                    return;
+                    if (X > availablePerSide.positions[selectedPosition].available) {
+                        setTokenAmount(0);
+                        return;
+                    }
+
+                    const roundedAmount = floorNumberToDecimals(X);
+                    const quote = await fetchAmmQuote(roundedAmount);
+
+                    const usdAmountValueAsNumber = Number(usdAmountValue);
+                    const parsedQuote = quote / divider;
+
+                    const recalculatedTokenAmount = ((X * usdAmountValueAsNumber) / parsedQuote).toFixed(2);
+
+                    setTokenAmount(recalculatedTokenAmount);
                 }
-
-                const roundedAmount = floorNumberToDecimals(X);
-                const quote = await fetchAmmQuote(roundedAmount);
-
-                const usdAmountValueAsNumber = Number(usdAmountValue);
-                const parsedQuote = quote / 1e18;
-
-                const recalculatedTokenAmount = ((X * usdAmountValueAsNumber) / parsedQuote).toFixed(2);
-
-                setTokenAmount(recalculatedTokenAmount);
             }
         };
 
@@ -483,9 +486,10 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     const roundedMaxAmount = floorNumberToDecimals(
                         availablePerSide.positions[selectedPosition].available
                     );
+                    const divider = selectedStableIndex == 0 || selectedStableIndex == 1 ? 1e18 : 1e6;
                     const sUSDToSpendForMaxAmount = await fetchAmmQuote(roundedMaxAmount);
+                    const formattedsUSDToSpendForMaxAmount = sUSDToSpendForMaxAmount / divider;
 
-                    const formattedsUSDToSpendForMaxAmount = sUSDToSpendForMaxAmount / 1e18;
                     if (Number(paymentTokenBalance) > formattedsUSDToSpendForMaxAmount) {
                         if (formattedsUSDToSpendForMaxAmount <= Number(paymentTokenBalance) * 0.98) {
                             setMaxUsdAmount(floorNumberToDecimals(formattedsUSDToSpendForMaxAmount));
