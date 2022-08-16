@@ -222,7 +222,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
         };
 
         fetchData().catch((e) => console.log(e));
-    }, [usdAmountValue]);
+    }, [usdAmountValue, selectedStableIndex]);
 
     useEffect(() => {
         if (positionPriceDetailsQuery.isSuccess && positionPriceDetailsQuery.data) {
@@ -549,10 +549,24 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 return;
             }
 
-            if (!Number(usdAmountValue) || !Number(tokenAmount) || Number(tokenAmount) < 1 || isBuying || isAllowing) {
-                setSubmitDisabled(true);
-                return;
+            if (selectedSide === Side.BUY) {
+                if (
+                    !Number(usdAmountValue) ||
+                    !Number(tokenAmount) ||
+                    Number(tokenAmount) < 1 ||
+                    isBuying ||
+                    isAllowing
+                ) {
+                    setSubmitDisabled(true);
+                    return;
+                }
+            } else {
+                if (!Number(tokenAmount) || Number(tokenAmount) < 1 || isBuying || isAllowing) {
+                    setSubmitDisabled(true);
+                    return;
+                }
             }
+
             if (selectedSide === Side.BUY) {
                 setSubmitDisabled(
                     !paymentTokenBalance || tokenAmount > maxAmount || usdAmountValue > paymentTokenBalance
@@ -598,7 +612,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
         if (fieldChanging == 'positionsAmount') {
             Number(tokenAmount) >= 1 ? setUsdAmount(ammPosition.sides[selectedSide].quote.toFixed(2)) : setUsdAmount(0);
         }
-    }, [tokenAmount, ammPosition]);
+    }, [tokenAmount, ammPosition, selectedStableIndex]);
 
     const getSubmitButton = () => {
         if (!isWalletConnected) {
@@ -660,7 +674,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             handleClick={() => {
                                 setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
                                 setTokenAmount('');
-                                setUSDAmountValue('');
+                                setUsdAmount('');
                             }}
                         />
                     </FlexDivCentered>
