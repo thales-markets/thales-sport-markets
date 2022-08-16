@@ -76,8 +76,6 @@ import {
     OptionTeamName,
     Pick,
     Separator,
-    Slider,
-    SliderContainer,
     SliderInfo,
     SliderInfoTitle,
     SliderInfoValue,
@@ -218,7 +216,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     const usdAmountValueAsNumber = Number(usdAmountValue);
                     const parsedQuote = quote / 1e18;
 
-                    const recalculatedTokenAmount = ((X * usdAmountValueAsNumber) / parsedQuote).toFixed(3);
+                    const recalculatedTokenAmount = ((X * usdAmountValueAsNumber) / parsedQuote).toFixed(2);
 
                     setTokenAmount(recalculatedTokenAmount);
                 }
@@ -503,12 +501,12 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             const calculatedMaxAmount =
                                 formattedsUSDToSpendForMaxAmount -
                                 (formattedsUSDToSpendForMaxAmount - Number(paymentTokenBalance) * 0.98);
-                            setMaxUsdAmount(calculatedMaxAmount);
+                            setMaxUsdAmount(floorNumberToDecimals(calculatedMaxAmount));
                         }
                         setIsFetching(false);
                         return;
                     }
-                    setMaxUsdAmount(paymentTokenBalance * 0.98);
+                    setMaxUsdAmount(floorNumberToDecimals(paymentTokenBalance * 0.98));
                 }
                 setIsFetching(false);
             }
@@ -606,7 +604,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
         () => {
             if (fieldChanging == 'positionsAmount') {
                 Number(tokenAmount) >= 1
-                    ? setUsdAmount(ammPosition.sides[selectedSide].quote.toFixed(3))
+                    ? setUsdAmount(ammPosition.sides[selectedSide].quote.toFixed(2))
                     : setUsdAmount(0);
             }
         },
@@ -878,18 +876,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                     </CustomTooltip>
                                 </InputContainer>
                             </FlexDivCentered>
-                            <SliderContainer>
-                                <Slider
-                                    type="range"
-                                    min={0}
-                                    max={availablePerSide.positions[selectedPosition].available}
-                                    value={tokenAmount || 0}
-                                    step={1}
-                                    onChange={(event) => {
-                                        setTokenAmount(event.currentTarget.valueAsNumber);
-                                    }}
-                                />
-                            </SliderContainer>
                         </>
                     )}
 
@@ -931,18 +917,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                     </AmountInfo>
                                 </AmountToBuyContainer>
                             </FlexDivCentered>
-                            <SliderContainer>
-                                <Slider
-                                    type="range"
-                                    min={0}
-                                    max={availablePerSide.positions[selectedPosition].available}
-                                    value={tokenAmount || 0}
-                                    step={1}
-                                    onChange={(event) => {
-                                        setTokenAmount(event.currentTarget.valueAsNumber);
-                                    }}
-                                />
-                            </SliderContainer>
                         </>
                     )}
 
