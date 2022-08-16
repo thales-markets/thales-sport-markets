@@ -142,7 +142,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     const [maxAmount, setMaxAmount] = useState<number>(0);
     const [maxUsdAmount, setMaxUsdAmount] = useState<number>(0);
-    const [maxUSDToSpendForWholePool, setmaxUSDToSpendForWholePool] = useState<number>(0);
 
     const { trackEvent } = useMatomo();
 
@@ -487,7 +486,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     const sUSDToSpendForMaxAmount = await fetchAmmQuote(roundedMaxAmount);
 
                     const formattedsUSDToSpendForMaxAmount = sUSDToSpendForMaxAmount / 1e18;
-                    setmaxUSDToSpendForWholePool(formattedsUSDToSpendForMaxAmount);
                     if (Number(paymentTokenBalance) > formattedsUSDToSpendForMaxAmount) {
                         if (formattedsUSDToSpendForMaxAmount <= Number(paymentTokenBalance) * 0.98) {
                             setMaxUsdAmount(floorNumberToDecimals(formattedsUSDToSpendForMaxAmount));
@@ -562,13 +560,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             }
         };
         checkDisabled();
-    }, [tokenAmount, isBuying, isAllowing, hasAllowance, selectedSide, paymentTokenBalance, maxAmount]);
+    }, [tokenAmount, usdAmountValue, isBuying, isAllowing, hasAllowance, selectedSide, paymentTokenBalance, maxAmount]);
 
     const setTooltipTextMessageTokenAmount = (value: string | number) => {
         if (Number(value) > availablePerSide.positions[selectedPosition].available) {
             setTooltipTextTokenAmount('Amount exceeded the amount available on AMM');
-        } else if (Number(value) > maxAmount) {
-            setTooltipTextTokenAmount('Please ensure your wallet has enough funds');
         } else if (value && Number(value) < 1) {
             setTooltipTextTokenAmount('Minimal amount is 1');
         } else {
@@ -584,8 +580,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const setTooltipTextMessageUsdAmount = (value: string | number) => {
         if (Number(value) > paymentTokenBalance) {
             setTooltipTextUsdAmount('Please ensure your wallet has enough funds');
-        } else if (Number(value) > maxUSDToSpendForWholePool) {
-            setTooltipTextUsdAmount('Amount exceeded the amount available on AMM');
         } else {
             setTooltipTextUsdAmount('');
         }
