@@ -966,11 +966,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                     : tokenAmount
                             }
                             usdApproval={selectedSide == Side.BUY ? true : false}
-                            tokenSymbol={
-                                selectedSide == Side.BUY
-                                    ? COLLATERALS[selectedStableIndex]
-                                    : `${mapTokenName(selectedPosition, market)} token`
-                            }
+                            tokenSymbol={COLLATERALS[selectedStableIndex]}
                             isAllowing={isAllowing}
                             onSubmit={handleAllowance}
                             onClose={() => setOpenApprovalModal(false)}
@@ -990,20 +986,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             )}
         </MarketContainer>
     );
-};
-
-export const mapTokenName = (selectedPosition: Position, market: MarketData) => {
-    switch (selectedPosition) {
-        case Position.HOME:
-            return market.homeTeam;
-            break;
-        case Position.DRAW:
-            return market.awayTeam;
-            break;
-        case Position.AWAY:
-            return 'DRAW';
-            break;
-    }
 };
 
 export default MarketDetails;
