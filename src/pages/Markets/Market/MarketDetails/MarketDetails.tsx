@@ -178,55 +178,49 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
     const availablePerSideQuery = useAvailablePerSideQuery(market.address, selectedSide);
 
-    useDebouncedEffect(
-        () => {
-            const fetchData = async () => {
-                if (fieldChanging == 'positionsAmount') {
+    useDebouncedEffect(() => {
+        const fetchData = async () => {
+            if (fieldChanging == 'positionsAmount') {
+                return;
+            }
+            const { sportsAMMContract, signer } = networkConnector;
+            if (signer && sportsAMMContract) {
+                const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
+                contract.connect(signer);
+                const roundedMaxAmount = floorNumberToDecimals(availablePerSide.positions[selectedPosition].available);
+                const [sUSDToSpendForMaxAmount, ammBalances] = await Promise.all([
+                    fetchAmmQuote(roundedMaxAmount),
+                    contract.balancesOf(sportsAMMContract?.address),
+                ]);
+                const ammBalanceForSelectedPosition = ammBalances[selectedPosition];
+
+                const X = fetchAmountOfTokensForXsUSDAmount(
+                    Number(usdAmountValue),
+                    Number((market.positions[selectedPosition] as any).sides[Side.BUY].odd / 1),
+                    sUSDToSpendForMaxAmount / 1e18,
+                    availablePerSide.positions[selectedPosition].available,
+                    ammBalanceForSelectedPosition / 1e18
+                );
+
+                if (X > availablePerSide.positions[selectedPosition].available) {
+                    setTokenAmount(0);
                     return;
                 }
-                const { sportsAMMContract, signer } = networkConnector;
-                if (signer && sportsAMMContract) {
-                    const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
-                    contract.connect(signer);
-                    const roundedMaxAmount = floorNumberToDecimals(
-                        availablePerSide.positions[selectedPosition].available
-                    );
-                    const [sUSDToSpendForMaxAmount, ammBalances] = await Promise.all([
-                        fetchAmmQuote(roundedMaxAmount),
-                        contract.balancesOf(sportsAMMContract?.address),
-                    ]);
-                    const ammBalanceForSelectedPosition = ammBalances[selectedPosition];
 
-                    const X = fetchAmountOfTokensForXsUSDAmount(
-                        Number(usdAmountValue),
-                        Number((market.positions[selectedPosition] as any).sides[Side.BUY].odd / 1),
-                        sUSDToSpendForMaxAmount / 1e18,
-                        availablePerSide.positions[selectedPosition].available,
-                        ammBalanceForSelectedPosition / 1e18
-                    );
+                const roundedAmount = floorNumberToDecimals(X);
+                const quote = await fetchAmmQuote(roundedAmount);
 
-                    if (X > availablePerSide.positions[selectedPosition].available) {
-                        setTokenAmount(0);
-                        return;
-                    }
+                const usdAmountValueAsNumber = Number(usdAmountValue);
+                const parsedQuote = quote / 1e18;
 
-                    const roundedAmount = floorNumberToDecimals(X);
-                    const quote = await fetchAmmQuote(roundedAmount);
+                const recalculatedTokenAmount = ((X * usdAmountValueAsNumber) / parsedQuote).toFixed(2);
 
-                    const usdAmountValueAsNumber = Number(usdAmountValue);
-                    const parsedQuote = quote / 1e18;
+                setTokenAmount(recalculatedTokenAmount);
+            }
+        };
 
-                    const recalculatedTokenAmount = ((X * usdAmountValueAsNumber) / parsedQuote).toFixed(2);
-
-                    setTokenAmount(recalculatedTokenAmount);
-                }
-            };
-
-            fetchData().catch((e) => console.log(e));
-        },
-        [usdAmountValue],
-        400
-    );
+        fetchData().catch((e) => console.log(e));
+    }, [usdAmountValue]);
 
     useEffect(() => {
         if (positionPriceDetailsQuery.isSuccess && positionPriceDetailsQuery.data) {
@@ -602,17 +596,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
         setTooltipTextMessageUsdAmount(value);
     };
 
-    useDebouncedEffect(
-        () => {
-            if (fieldChanging == 'positionsAmount') {
-                Number(tokenAmount) >= 1
-                    ? setUsdAmount(ammPosition.sides[selectedSide].quote.toFixed(2))
-                    : setUsdAmount(0);
-            }
-        },
-        [tokenAmount, ammPosition],
-        400
-    );
+    useDebouncedEffect(() => {
+        if (fieldChanging == 'positionsAmount') {
+            Number(tokenAmount) >= 1 ? setUsdAmount(ammPosition.sides[selectedSide].quote.toFixed(2)) : setUsdAmount(0);
+        }
+    }, [tokenAmount, ammPosition]);
 
     const getSubmitButton = () => {
         if (!isWalletConnected) {
