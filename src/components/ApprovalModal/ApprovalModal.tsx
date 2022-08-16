@@ -17,6 +17,7 @@ type ApprovalModalProps = {
     defaultAmount: number | string;
     tokenSymbol: string;
     isAllowing: boolean;
+    usdApproval?: boolean;
     onSubmit: (approveAmount: BigNumber) => void;
     onClose: () => void;
 };
@@ -25,6 +26,7 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
     defaultAmount,
     tokenSymbol,
     isAllowing,
+    usdApproval,
     onSubmit,
     onClose,
 }) => {
@@ -92,6 +94,7 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
                     value={amount}
                     onChange={(_, value) => setAmount(value)}
                     disabled={approveAll || isAllowing}
+                    tooltip={usdApproval ? 'Placeholder text for reporting 2% buffer' : ''}
                     label={t('common.enable-wallet-access.custom-amount-label')}
                     currencyLabel={tokenSymbol}
                     showValidation={!approveAll && !isAmountValid}
