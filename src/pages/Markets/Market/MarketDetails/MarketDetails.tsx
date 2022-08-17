@@ -312,10 +312,19 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 }
             };
             if (isWalletConnected) {
-                getAllowance();
+                selectedSide == Side.SELL ? setAllowance(true) : getAllowance();
             }
         }
-    }, [walletAddress, isWalletConnected, hasAllowance, isAllowing, tokenAmount, usdAmountValue, selectedStableIndex]);
+    }, [
+        walletAddress,
+        isWalletConnected,
+        hasAllowance,
+        isAllowing,
+        tokenAmount,
+        usdAmountValue,
+        selectedStableIndex,
+        selectedSide,
+    ]);
 
     const fetchAmmQuote = async (amountForQuote: number) => {
         const { sportsAMMContract, signer } = networkConnector;
@@ -960,11 +969,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     {openApprovalModal && (
                         <ApprovalModal
                             // ADDING 3% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
-                            defaultAmount={
-                                selectedSide == Side.BUY
-                                    ? Number(usdAmountValue) + Number(usdAmountValue) * 0.03
-                                    : tokenAmount
-                            }
+                            defaultAmount={Number(usdAmountValue) + Number(usdAmountValue) * 0.03}
                             tokenSymbol={COLLATERALS[selectedStableIndex]}
                             isAllowing={isAllowing}
                             onSubmit={handleAllowance}
