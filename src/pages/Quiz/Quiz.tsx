@@ -65,7 +65,6 @@ const Rewards: React.FC = () => {
     const currentNumberOfQuestions = useSelector((state: RootState) => getCurrentNumberOfQuestions(state));
     const score = useSelector((state: RootState) => getScore(state));
     const endOfQuiz = useSelector((state: RootState) => getEndOfQuiz(state));
-
     const [twitterHandle, setTwitterHandle] = useState<string>('');
 
     const isStartQuizDisabled = !twitterHandle || twitterHandle.trim() === '';
@@ -110,13 +109,7 @@ const Rewards: React.FC = () => {
         }
     };
 
-    const handlePreviousQuestion = async () => {
-        try {
-            dispatch(previousQuestion());
-        } catch (e) {
-            console.log(e);
-        }
-    };
+    const handlePreviousQuestion = () => dispatch(previousQuestion());
 
     const handleFinishQuiz = async () => {
         try {
