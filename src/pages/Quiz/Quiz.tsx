@@ -265,10 +265,10 @@ const Rewards: React.FC = () => {
 };
 
 const Input = styled.input`
-    background: ${(props) => props.theme.background.secondary};
+    background: ${(props) => props.theme.input.background.primary};
     border-radius: 5px;
-    border: 2px solid #1a1c2b;
-    color: ${(props) => props.theme.textColor.primary};
+    border: 2px solid ${(props) => props.theme.borderColor.tertiary};
+    color: ${(props) => props.theme.input.textColor.primary};
     width: 300px;
     height: 34px;
     padding-left: 10px;
@@ -276,10 +276,10 @@ const Input = styled.input`
     font-size: 18px;
     outline: none;
     &::placeholder {
-        color: ${(props) => props.theme.textColor.primary};
+        color: ${(props) => props.theme.textColor.secondary};
     }
     &:focus {
-        border: 2px solid #3fd1ff !important;
+        border: 2px solid ${(props) => props.theme.borderColor.quaternary};
     }
 `;
 
