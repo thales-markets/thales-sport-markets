@@ -59,7 +59,7 @@ const App = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (isAppReady && networkId && isNetworkSupported(networkId)) {
+        if (isAppReady && networkId && isNetworkSupported(networkId) && setSelectedWallet) {
             const onboard = initOnboard(networkId, {
                 address: (walletAddress) => {
                     if (walletAddress) {
