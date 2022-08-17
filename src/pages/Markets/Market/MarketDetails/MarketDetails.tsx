@@ -959,13 +959,12 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     </StatusSourceContainer>
                     {openApprovalModal && (
                         <ApprovalModal
-                            // ADDING 2% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
+                            // ADDING 3% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
                             defaultAmount={
                                 selectedSide == Side.BUY
-                                    ? Number(usdAmountValue) + Number(usdAmountValue) * 0.02
+                                    ? Number(usdAmountValue) + Number(usdAmountValue) * 0.03
                                     : tokenAmount
                             }
-                            usdApproval={selectedSide == Side.BUY ? true : false}
                             tokenSymbol={COLLATERALS[selectedStableIndex]}
                             isAllowing={isAllowing}
                             onSubmit={handleAllowance}
