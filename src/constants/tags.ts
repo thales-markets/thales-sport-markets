@@ -14,7 +14,7 @@ export const TAGS_LIST: Tags = [
     { id: 9012, label: 'Ligue 1' },
     { id: 9013, label: 'Bundesliga' },
     { id: 9014, label: 'La Liga' },
-    { id: 9015, label: 'Seria A' },
+    { id: 9015, label: 'Serie A' },
     { id: 9016, label: 'UEFA Champions League' },
 ];
 
