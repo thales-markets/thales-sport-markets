@@ -100,3 +100,22 @@ export const ButtonContainer = styled(FlexDivCentered)`
         }
     }
 `;
+
+export const Input = styled.input`
+    background: ${(props) => props.theme.input.background.primary};
+    border-radius: 5px;
+    border: 2px solid ${(props) => props.theme.borderColor.tertiary};
+    color: ${(props) => props.theme.input.textColor.primary};
+    width: 300px;
+    height: 34px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 18px;
+    outline: none;
+    &::placeholder {
+        color: ${(props) => props.theme.textColor.secondary};
+    }
+    &:focus {
+        border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+    }
+`;

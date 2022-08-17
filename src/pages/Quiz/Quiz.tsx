@@ -16,6 +16,7 @@ import {
     FinishedInfoLabel,
     ButtonContainer,
     Header,
+    Input,
 } from './styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -39,7 +40,6 @@ import {
     setAnswer,
     getEndOfQuiz,
 } from 'redux/modules/quiz';
-import styled from 'styled-components';
 import RadioButton from 'components/fields/RadioButton';
 import TimeRemaining from 'components/TimeRemaining';
 import useInterval from 'hooks/useInterval';
@@ -52,7 +52,7 @@ import {
     START_QUIZ_PATH,
 } from 'constants/quiz';
 
-const Rewards: React.FC = () => {
+const Quiz: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -259,23 +259,4 @@ const Rewards: React.FC = () => {
     );
 };
 
-const Input = styled.input`
-    background: ${(props) => props.theme.input.background.primary};
-    border-radius: 5px;
-    border: 2px solid ${(props) => props.theme.borderColor.tertiary};
-    color: ${(props) => props.theme.input.textColor.primary};
-    width: 300px;
-    height: 34px;
-    padding-left: 10px;
-    padding-right: 10px;
-    font-size: 18px;
-    outline: none;
-    &::placeholder {
-        color: ${(props) => props.theme.textColor.secondary};
-    }
-    &:focus {
-        border: 2px solid ${(props) => props.theme.borderColor.quaternary};
-    }
-`;
-
-export default Rewards;
+export default Quiz;
