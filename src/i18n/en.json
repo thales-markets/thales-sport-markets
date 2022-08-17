@@ -270,5 +270,24 @@
             "reward-amount": "Reward",
             "no-data-available": "No data available"
         }
+    },
+    "quiz": {
+        "title": "Quiz",
+        "start-quiz-description": "Connect your wallet and enter your Twitter handle to start the quiz!",
+        "twitter-handle-placeholder": "Enter your Twitter handle",
+        "current-question-label": "Current question: {{currentQuestion}}/{{numberOfQuestions}}",
+        "time-reamining-label": "Time remaining: <0/>",
+        "point-label": "point",
+        "points-label": "points",
+        "quiz-finished-label": "Quiz finished!",
+        "your-score-label": "Your score: {{score}}",
+        "button": {
+            "start-quiz-label": "Start quiz",
+            "next-question-label": "Next question",
+            "previous-question-label": "Previous question",
+            "finish-quiz-label": "Finish quiz",
+            "try-again-label": "Try again",
+            "see-leaderboard-label": "See leaderboard"
+        }
     }
 }

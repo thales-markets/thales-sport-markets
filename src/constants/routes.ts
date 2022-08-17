@@ -6,5 +6,6 @@ export const ROUTES = {
         Market: '/markets/:marketAddress',
     },
     Rewards: '/rewards',
+    Quiz: '/quiz',
 };
 export default ROUTES;
