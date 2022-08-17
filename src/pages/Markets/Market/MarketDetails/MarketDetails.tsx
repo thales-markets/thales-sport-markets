@@ -824,7 +824,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         <>
                             <LabelsContainer>
                                 <LabelContainer>
-                                    <AmountToBuyLabel>$ amount:</AmountToBuyLabel>
+                                    <AmountToBuyLabel>USD amount:</AmountToBuyLabel>
                                 </LabelContainer>
                                 <LabelContainer>
                                     <AmountToBuyLabel>Positions amount:</AmountToBuyLabel>
