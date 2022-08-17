@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { QUIZ_DURATION } from 'constants/quiz';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
@@ -48,12 +49,7 @@ export const uiSlice = createSlice({
             state.isQuizStarted = true;
             state.playerUuid = action.payload;
             state.currentQuestionIndex = -1;
-
-            const endOfQuiz = new Date();
-            endOfQuiz.setMinutes(endOfQuiz.getMinutes() + 2);
-
-            state.endOfQuiz = endOfQuiz.getTime();
-
+            state.endOfQuiz = new Date().getTime() + QUIZ_DURATION;
             localStore.set(LOCAL_STORAGE_KEYS.QUIZ_STATE, state);
         },
         addQuizItem: (state, action: PayloadAction<QuizItem>) => {

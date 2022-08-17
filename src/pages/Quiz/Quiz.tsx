@@ -43,8 +43,7 @@ import styled from 'styled-components';
 import RadioButton from 'components/fields/RadioButton';
 import TimeRemaining from 'components/TimeRemaining';
 import useInterval from 'hooks/useInterval';
-
-const NUMBER_OF_QUESTIONS = 10;
+import { NUMBER_OF_QUESTIONS } from 'constants/quiz';
 
 const Rewards: React.FC = () => {
     const { t } = useTranslation();
@@ -237,7 +236,9 @@ const Rewards: React.FC = () => {
                             <FlexDivEnd>
                                 <Description>
                                     {`${currentQuizItem.points} ${
-                                        currentQuizItem.points === 1 ? t('quiz.point-label') : t('quiz.points-label')
+                                        Number(currentQuizItem.points) === 1
+                                            ? t('quiz.point-label')
+                                            : t('quiz.points-label')
                                     }`}
                                 </Description>
                             </FlexDivEnd>
@@ -250,7 +251,7 @@ const Rewards: React.FC = () => {
                                 <FinishedInfo>
                                     {t('quiz.your-score-label', {
                                         score: `${score} ${
-                                            score === 1 ? t('quiz.point-label') : t('quiz.points-label')
+                                            Number(score) === 1 ? t('quiz.point-label') : t('quiz.points-label')
                                         }`,
                                     })}
                                 </FinishedInfo>
