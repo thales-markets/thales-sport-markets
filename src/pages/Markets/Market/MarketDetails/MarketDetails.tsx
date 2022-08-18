@@ -21,7 +21,7 @@ import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod 
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
-import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
+import { getOnImageError, getTeamImageSource } from 'utils/images';
 import onboardConnector from 'utils/onboardConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -716,7 +716,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         <MatchParticipantImage
                             alt="Home team logo"
                             src={homeLogoSrc}
-                            onError={() => setHomeLogoSrc(OVERTIME_LOGO)}
+                            onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                         />
                     </MatchParticipantImageContainer>
                     {market.resolved && market.gameStarted && (
@@ -735,7 +735,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         <MatchParticipantImage
                             alt="Away team logo"
                             src={awayLogoSrc}
-                            onError={() => setAwayLogoSrc(OVERTIME_LOGO)}
+                            onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                         />
                     </MatchParticipantImageContainer>
                     {market.resolved && market.gameStarted && (
