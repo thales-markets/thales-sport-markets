@@ -29,7 +29,6 @@ import { RootState } from 'redux/rootReducer';
 import { getIsAppReady } from 'redux/modules/app';
 import Search from 'components/Search';
 import { getEtherscanAddressLink } from 'utils/etherscan';
-import { NetworkIdByName } from 'utils/network';
 
 type RewardsType = {
     address: string;
@@ -135,10 +134,7 @@ const Rewards: React.FC = () => {
                                     accessor: 'address',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['address']>) => (
                                         <AddressLink
-                                            href={getEtherscanAddressLink(
-                                                NetworkIdByName.OptimismMainnet,
-                                                cellProps.cell.value
-                                            )}
+                                            href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
                                             target="_blank"
                                             rel="noreferrer"
                                         >
