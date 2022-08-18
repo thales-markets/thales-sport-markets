@@ -102,13 +102,12 @@ export const getSportsAMMQuoteMethod: any = (
     }
 };
 
-export const getAmountForApproval = (stableIndex: number, usdAmountValue: string | number) => {
+export const getAmountForApproval = (stableIndex: number, amountToApprove: BigNumber) => {
     const stable = (COLLATERAL_INDEX_TO_COLLATERAL as any)[stableIndex];
-    const amountToApprove = Number(usdAmountValue).toString();
 
     let collateralDecimals = 18;
 
     if ((STABLE_DECIMALS as any)[stable]) collateralDecimals = (STABLE_DECIMALS as any)[stable];
 
-    return ethers.utils.parseUnits(amountToApprove, collateralDecimals);
+    return ethers.utils.parseUnits(ethers.utils.formatEther(amountToApprove), collateralDecimals);
 };
