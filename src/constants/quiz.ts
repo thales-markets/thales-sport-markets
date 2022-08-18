@@ -5,3 +5,4 @@ export const START_QUIZ_PATH = '/start';
 export const NEXT_QUESTION_PATH = '/next/question';
 export const ANSWER_QUESTION_PATH = '/answer';
 export const FINISH_QUIZ_PATH = '/finish';
+export const LEADERBOARD_PATH = '/leaderboard';

@@ -17,12 +17,13 @@ import {
     ButtonContainer,
     Header,
     Input,
+    QuestionWeightContainer,
 } from './styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import onboardConnector from 'utils/onboardConnector';
-import { FlexDivCentered, FlexDivEnd } from 'styles/common';
+import { FlexDivCentered } from 'styles/common';
 import {
     getIsQuizStarted,
     startQuiz,
@@ -51,6 +52,7 @@ import {
     QUIZ_API_URL,
     START_QUIZ_PATH,
 } from 'constants/quiz';
+import SPAAnchor from 'components/SPAAnchor';
 
 const Quiz: React.FC = () => {
     const { t } = useTranslation();
@@ -140,7 +142,9 @@ const Quiz: React.FC = () => {
             return (
                 <>
                     <SubmitButton onClick={handleNewQuiz}>{t('quiz.button.try-again-label')}</SubmitButton>
-                    <SubmitButton onClick={() => {}}>{t('quiz.button.see-leaderboard-label')}</SubmitButton>
+                    <SPAAnchor href={buildHref(ROUTES.QuizLeaderboard)}>
+                        <SubmitButton onClick={() => {}}>{t('quiz.button.see-leaderboard-label')}</SubmitButton>
+                    </SPAAnchor>
                 </>
             );
         }
@@ -227,15 +231,17 @@ const Quiz: React.FC = () => {
                                     />
                                 );
                             })}
-                            <FlexDivEnd>
+                            <QuestionWeightContainer>
                                 <Description>
-                                    {`${currentQuizItem.points} ${
-                                        Number(currentQuizItem.points) === 1
-                                            ? t('quiz.point-label')
-                                            : t('quiz.points-label')
-                                    }`}
+                                    {t('quiz.question-weight-label', {
+                                        points: `${currentQuizItem.points} ${
+                                            Number(currentQuizItem.points) === 1
+                                                ? t('quiz.point-label')
+                                                : t('quiz.points-label')
+                                        }`,
+                                    })}
                                 </Description>
-                            </FlexDivEnd>
+                            </QuestionWeightContainer>
                         </>
                     )}
                     {isQuizFinished && (

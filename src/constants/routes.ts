@@ -7,5 +7,6 @@ export const ROUTES = {
     },
     Rewards: '/rewards',
     Quiz: '/quiz',
+    QuizLeaderboard: '/quiz/leaderboard',
 };
 export default ROUTES;

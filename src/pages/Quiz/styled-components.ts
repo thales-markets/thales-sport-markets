@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivEnd } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
     width: 60%;
@@ -117,5 +117,19 @@ export const Input = styled.input`
     }
     &:focus {
         border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+    }
+`;
+
+export const AddressLink = styled.a`
+    color: ${(props) => props.theme.textColor.primary};
+    &:hover {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
+`;
+
+export const QuestionWeightContainer = styled(FlexDivEnd)`
+    @media (max-width: 575px) {
+        margin-top: 10px;
+        justify-content: start;
     }
 `;
