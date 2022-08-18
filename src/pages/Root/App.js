@@ -58,10 +58,10 @@ const App = () => {
         };
 
         init();
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
-        if (isAppReady && networkId && isNetworkSupported(networkId)) {
+        if (isAppReady && networkId && isNetworkSupported(networkId) && setSelectedWallet) {
             const onboard = initOnboard(networkId, {
                 address: (walletAddress) => {
                     if (walletAddress) {
@@ -114,7 +114,7 @@ const App = () => {
             });
             onboardConnector.setOnBoard(onboard);
         }
-    }, [isAppReady]);
+    }, [dispatch, isAppReady, networkId, setSelectedWallet]);
 
     // load previously saved wallet
     useEffect(() => {
@@ -125,7 +125,7 @@ const App = () => {
 
     useEffect(() => {
         trackPageView();
-    }, []);
+    }, [trackPageView]);
 
     return (
         <Theme>
