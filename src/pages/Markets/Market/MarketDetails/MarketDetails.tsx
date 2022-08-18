@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AMMPosition, AvailablePerSide, Balances, MarketData, Odds } from 'types/markets';
-import { getAMMSportsTransaction, getSportsAMMQuoteMethod } from 'utils/amm';
+import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
@@ -299,7 +299,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = ethers.utils.parseEther(Number(usdAmountValue).toString());
+                    const parsedTicketPrice = getAmountForApproval(selectedStableIndex, usdAmountValue);
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
                         collateralContractWithSigner,
@@ -421,9 +421,14 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     collateralContractWithSigner = sUSDContract?.connect(signer);
                 }
 
+                const amountToApprove = getAmountForApproval(
+                    selectedStableIndex,
+                    ethers.utils.formatEther(approveAmount)
+                );
+
                 const addressToApprove = sportsAMMContract.address;
 
-                const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
+                const tx = (await collateralContractWithSigner?.approve(addressToApprove, amountToApprove, {
                     gasLimit: MAX_GAS_LIMIT,
                 })) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);

@@ -38,6 +38,13 @@ export enum COLLATERALS_INDEX {
     'USDT' = 3,
 }
 
+export const COLLATERAL_INDEX_TO_COLLATERAL = {
+    0: 'sUSD',
+    1: 'DAI',
+    2: 'USDC',
+    3: 'USDT',
+};
+
 export const STABLE_DECIMALS = {
     sUSD: 18,
     DAI: 18,
