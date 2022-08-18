@@ -299,7 +299,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = getAmountForApproval(selectedStableIndex, usdAmountValue);
+                    const parsedTicketPrice = getAmountForApproval(selectedStableIndex, ethers.utils.parseEther(Number(amount).toString()));
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
                         collateralContractWithSigner,
@@ -421,10 +421,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     collateralContractWithSigner = sUSDContract?.connect(signer);
                 }
 
-                const amountToApprove = getAmountForApproval(
-                    selectedStableIndex,
-                    ethers.utils.formatEther(approveAmount)
-                );
+                const amountToApprove = getAmountForApproval(selectedStableIndex, approveAmount);
 
                 const addressToApprove = sportsAMMContract.address;
 
