@@ -421,9 +421,14 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     collateralContractWithSigner = sUSDContract?.connect(signer);
                 }
 
+                const amountToApprove = getAmountForApproval(
+                    selectedStableIndex,
+                    ethers.utils.formatEther(approveAmount)
+                );
+
                 const addressToApprove = sportsAMMContract.address;
 
-                const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
+                const tx = (await collateralContractWithSigner?.approve(addressToApprove, amountToApprove, {
                     gasLimit: MAX_GAS_LIMIT,
                 })) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
