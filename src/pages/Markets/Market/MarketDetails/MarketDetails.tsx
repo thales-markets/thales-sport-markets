@@ -299,7 +299,10 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = getAmountForApproval(selectedStableIndex, ethers.utils.parseEther(Number(amount).toString()));
+                    const parsedTicketPrice = getAmountForApproval(
+                        selectedStableIndex,
+                        Number(usdAmountValue).toString()
+                    );
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
                         collateralContractWithSigner,
@@ -421,11 +424,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     collateralContractWithSigner = sUSDContract?.connect(signer);
                 }
 
-                const amountToApprove = getAmountForApproval(selectedStableIndex, approveAmount);
-
                 const addressToApprove = sportsAMMContract.address;
 
-                const tx = (await collateralContractWithSigner?.approve(addressToApprove, amountToApprove, {
+                const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
                     gasLimit: MAX_GAS_LIMIT,
                 })) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
@@ -972,6 +973,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         <ApprovalModal
                             // ADDING 3% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
                             defaultAmount={Number(usdAmountValue) + Number(usdAmountValue) * 0.03}
+                            collateralIndex={selectedStableIndex}
                             tokenSymbol={COLLATERALS[selectedStableIndex]}
                             isAllowing={isAllowing}
                             onSubmit={handleAllowance}

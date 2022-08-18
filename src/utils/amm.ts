@@ -102,12 +102,12 @@ export const getSportsAMMQuoteMethod: any = (
     }
 };
 
-export const getAmountForApproval = (stableIndex: number, amountToApprove: BigNumber) => {
+export const getAmountForApproval = (stableIndex: number, amountToApprove: string) => {
     const stable = (COLLATERAL_INDEX_TO_COLLATERAL as any)[stableIndex];
 
     let collateralDecimals = 18;
 
     if ((STABLE_DECIMALS as any)[stable]) collateralDecimals = (STABLE_DECIMALS as any)[stable];
 
-    return ethers.utils.parseUnits(ethers.utils.formatEther(amountToApprove), collateralDecimals);
+    return ethers.utils.parseUnits(amountToApprove, collateralDecimals);
 };
