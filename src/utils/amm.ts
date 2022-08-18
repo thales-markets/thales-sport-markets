@@ -1,3 +1,4 @@
+import { COLLATERAL_INDEX_TO_COLLATERAL, STABLE_DECIMALS } from 'constants/currency';
 import { ZERO_ADDRESS } from 'constants/network';
 import { Position } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
@@ -99,4 +100,15 @@ export const getSportsAMMQuoteMethod: any = (
     } else {
         return sportsAMMContract.sellToAmmQuote(marketAddress, selectedPosition, parsedAmount);
     }
+};
+
+export const getAmountForApproval = (stableIndex: number, usdAmountValue: string | number) => {
+    const stable = (COLLATERAL_INDEX_TO_COLLATERAL as any)[stableIndex];
+    const amountToApprove = Number(usdAmountValue).toString();
+
+    let collateralDecimals = 18;
+
+    if ((STABLE_DECIMALS as any)[stable]) collateralDecimals = (STABLE_DECIMALS as any)[stable];
+
+    return ethers.utils.parseUnits(amountToApprove, collateralDecimals);
 };
