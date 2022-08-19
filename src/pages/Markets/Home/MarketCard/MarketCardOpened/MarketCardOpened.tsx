@@ -48,7 +48,7 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                     />
                 </MatchParticipantImageContainer>
                 <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
-                    {formatMarketOdds(selectedOddsType, market.homeOdds).toFixed(2)}
+                    {formatMarketOdds(selectedOddsType, market.homeOdds)}
                 </OddsLabel>
                 <MatchParticipantName
                     glowColor={ODDS_COLOR.HOME}
@@ -69,7 +69,7 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                 >
                     {market.awayOdds == 0 && market.homeOdds == 0
                         ? 'Coming Soon!'
-                        : formatMarketOdds(selectedOddsType, market.drawOdds).toFixed(2)}
+                        : formatMarketOdds(selectedOddsType, market.drawOdds)}
                 </OddsLabel>
                 <MatchParticipantName
                     isTwoPositioned={market.drawOdds === 0}
@@ -93,7 +93,7 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                 </MatchParticipantImageContainer>
                 {market ? (
                     <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={false}>
-                        {formatMarketOdds(selectedOddsType, market.awayOdds).toFixed(2)}
+                        {formatMarketOdds(selectedOddsType, market.awayOdds)}
                     </OddsLabel>
                 ) : (
                     <OddsLabelSceleton />

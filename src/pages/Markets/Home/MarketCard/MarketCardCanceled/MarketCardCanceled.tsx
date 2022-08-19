@@ -58,7 +58,7 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                 </MatchParticipantImageContainer>
                 {oddsOnCancellation ? (
                     <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
-                        {formatMarketOdds(selectedOddsType, oddsOnCancellation?.home).toFixed(2)}
+                        {formatMarketOdds(selectedOddsType, oddsOnCancellation?.home)}
                     </OddsLabel>
                 ) : (
                     <OddsLabelSceleton />
@@ -74,7 +74,7 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                         isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}
                         isDraw={true}
                     >
-                        {formatMarketOdds(selectedOddsType, oddsOnCancellation?.draw).toFixed(2)}
+                        {formatMarketOdds(selectedOddsType, oddsOnCancellation?.draw)}
                     </OddsLabel>
                 ) : (
                     <OddsLabelSceleton />
@@ -92,7 +92,7 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                 </MatchParticipantImageContainer>
                 {oddsOnCancellation ? (
                     <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={false}>
-                        {formatMarketOdds(selectedOddsType, oddsOnCancellation?.away).toFixed(2)}
+                        {formatMarketOdds(selectedOddsType, oddsOnCancellation?.away)}
                     </OddsLabel>
                 ) : (
                     <OddsLabelSceleton />
