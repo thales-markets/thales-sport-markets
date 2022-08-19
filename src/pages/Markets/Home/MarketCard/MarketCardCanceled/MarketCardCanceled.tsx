@@ -17,7 +17,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 // import { useTranslation } from 'react-i18next';
 import { Odds, SportMarketInfo } from 'types/markets';
-import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
+import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatMarketOdds } from '../../../../../utils/markets';
 import { getOddsType } from '../../../../../redux/modules/ui';
 
@@ -53,12 +53,12 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                     <MatchParticipantImage
                         alt="Home team logo"
                         src={homeLogoSrc}
-                        onError={() => setHomeLogoSrc(OVERTIME_LOGO)}
+                        onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                     />
                 </MatchParticipantImageContainer>
                 {oddsOnCancellation ? (
                     <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
-                        {formatMarketOdds(selectedOddsType, oddsOnCancellation?.home).toFixed(2)}
+                        {formatMarketOdds(selectedOddsType, oddsOnCancellation?.home)}
                     </OddsLabel>
                 ) : (
                     <OddsLabelSceleton />
@@ -74,7 +74,7 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                         isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}
                         isDraw={true}
                     >
-                        {formatMarketOdds(selectedOddsType, oddsOnCancellation?.draw).toFixed(2)}
+                        {formatMarketOdds(selectedOddsType, oddsOnCancellation?.draw)}
                     </OddsLabel>
                 ) : (
                     <OddsLabelSceleton />
@@ -87,12 +87,12 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                     <MatchParticipantImage
                         alt="Away team logo"
                         src={awayLogoSrc}
-                        onError={() => setAwayLogoSrc(OVERTIME_LOGO)}
+                        onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                     />
                 </MatchParticipantImageContainer>
                 {oddsOnCancellation ? (
                     <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={false}>
-                        {formatMarketOdds(selectedOddsType, oddsOnCancellation?.away).toFixed(2)}
+                        {formatMarketOdds(selectedOddsType, oddsOnCancellation?.away)}
                     </OddsLabel>
                 ) : (
                     <OddsLabelSceleton />

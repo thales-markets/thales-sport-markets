@@ -145,6 +145,7 @@ export type MarketsParameters = {
 export type TagInfo = {
     id: number;
     label: string;
+    logo?: string;
 };
 
 export type Tags = TagInfo[];

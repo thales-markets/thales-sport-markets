@@ -17,11 +17,11 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AMMPosition, AvailablePerSide, Balances, MarketData, Odds } from 'types/markets';
-import { getAMMSportsTransaction, getSportsAMMQuoteMethod } from 'utils/amm';
+import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
-import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
+import { getOnImageError, getTeamImageSource } from 'utils/images';
 import onboardConnector from 'utils/onboardConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -299,7 +299,10 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = ethers.utils.parseEther(Number(usdAmountValue).toString());
+                    const parsedTicketPrice = getAmountForApproval(
+                        selectedStableIndex,
+                        Number(usdAmountValue).toString()
+                    );
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
                         collateralContractWithSigner,
@@ -713,7 +716,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         <MatchParticipantImage
                             alt="Home team logo"
                             src={homeLogoSrc}
-                            onError={() => setHomeLogoSrc(OVERTIME_LOGO)}
+                            onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                         />
                     </MatchParticipantImageContainer>
                     {market.resolved && market.gameStarted && (
@@ -732,7 +735,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         <MatchParticipantImage
                             alt="Away team logo"
                             src={awayLogoSrc}
-                            onError={() => setAwayLogoSrc(OVERTIME_LOGO)}
+                            onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                         />
                     </MatchParticipantImageContainer>
                     {market.resolved && market.gameStarted && (
@@ -970,6 +973,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         <ApprovalModal
                             // ADDING 3% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
                             defaultAmount={Number(usdAmountValue) + Number(usdAmountValue) * 0.03}
+                            collateralIndex={selectedStableIndex}
                             tokenSymbol={COLLATERALS[selectedStableIndex]}
                             isAllowing={isAllowing}
                             onSubmit={handleAllowance}

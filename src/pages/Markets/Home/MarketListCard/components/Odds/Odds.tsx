@@ -49,7 +49,7 @@ const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelle
                         type={0}
                         symbolColor={ODDS_COLOR.HOME}
                         additionalText={{
-                            firstText: formatMarketOdds(selectedOddsType, odds?.homeOdds)?.toFixed(2),
+                            firstText: formatMarketOdds(selectedOddsType, odds?.homeOdds),
                             firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.HOME, marginLeft: '10px' },
                         }}
                         glow={
@@ -62,7 +62,7 @@ const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelle
                             type={2}
                             symbolColor={ODDS_COLOR.DRAW}
                             additionalText={{
-                                firstText: formatMarketOdds(selectedOddsType, odds?.drawOdds)?.toFixed(2),
+                                firstText: formatMarketOdds(selectedOddsType, odds?.drawOdds),
                                 firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.DRAW, marginLeft: '10px' },
                             }}
                             glow={
@@ -75,7 +75,7 @@ const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelle
                         type={1}
                         symbolColor={ODDS_COLOR.AWAY}
                         additionalText={{
-                            firstText: formatMarketOdds(selectedOddsType, odds?.awayOdds)?.toFixed(2),
+                            firstText: formatMarketOdds(selectedOddsType, odds?.awayOdds),
                             firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.AWAY, marginLeft: '10px' },
                         }}
                         glow={
