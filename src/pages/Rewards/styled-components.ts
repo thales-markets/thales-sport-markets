@@ -25,8 +25,20 @@ export const Description = styled.p`
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
+    line-height: 20px;
     margin-bottom: 20px;
+    text-align: justify;
     color: ${(props) => props.theme.textColor.primary};
+    div {
+        margin-bottom: 10px;
+    }
+    p:last-of-type {
+        margin-bottom: 10px;
+    }
+`;
+
+export const BoldText = styled.span`
+    font-weight: 600;
 `;
 
 export const TableContainer = styled(FlexDivColumn)`
