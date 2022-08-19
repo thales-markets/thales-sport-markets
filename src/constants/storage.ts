@@ -10,4 +10,5 @@ export const LOCAL_STORAGE_KEYS = {
     FILTER_SPORT: 'filterSport',
     LIST_VIEW: 'listView',
     ODDS_TYPE: 'oddsType',
+    QUIZ_STATE: 'quizState',
 };

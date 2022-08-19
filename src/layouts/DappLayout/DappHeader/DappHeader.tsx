@@ -10,11 +10,7 @@ import { NetworkIdByName } from 'utils/network';
 import { getNetworkId } from 'redux/modules/wallet';
 import Referral from 'components/Referral';
 
-type DappHeaderProps = {
-    showSearch?: boolean;
-};
-
-const DappHeader: React.FC<DappHeaderProps> = () => {
+const DappHeader: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     return (

@@ -63,9 +63,9 @@ const Container = styled.label`
     cursor: pointer;
     font-style: normal;
     font-weight: normal;
-    font-size: 25px;
-    line-height: 35px;
-    height: 35px;
+    font-size: 18px;
+    line-height: 25px;
+    min-height: 35px;
     color: ${(props) => props.theme.textColor.primary};
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -82,19 +82,19 @@ const Container = styled.label`
         opacity: 0.4;
         cursor: default;
     }
-    align-self: center;
+    align-self: start;
 `;
 
 const Checkmark = styled.span`
     position: absolute;
     top: 0;
     left: 0;
-    height: 20px;
-    width: 20px;
-    border: 4px solid ${(props) => props.theme.borderColor.primary};
+    height: 18px;
+    width: 18px;
+    border: 3px solid ${(props) => props.theme.borderColor.secondary};
     background-color: transparent;
     border-radius: 50%;
-    margin-top: 6px;
+    margin-top: 3px;
     :after {
         content: '';
         position: absolute;
@@ -104,7 +104,7 @@ const Checkmark = styled.span`
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: ${(props) => props.theme.borderColor.primary};
+        background: ${(props) => props.theme.borderColor.secondary};
         -webkit-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);

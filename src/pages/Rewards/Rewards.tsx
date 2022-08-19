@@ -11,6 +11,7 @@ import { CellProps } from 'react-table';
 import { truncateAddress } from 'utils/formatters/string';
 import { MarketContainer } from 'pages/Markets/Market/MarketDetails/styled-components/MarketDetails';
 import {
+    AddressLink,
     Container,
     Description,
     HighlightColumn,
@@ -27,6 +28,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsAppReady } from 'redux/modules/app';
 import Search from 'components/Search';
+import { getEtherscanAddressLink } from 'utils/etherscan';
 
 type RewardsType = {
     address: string;
@@ -66,8 +68,6 @@ const Rewards: React.FC = () => {
         return [];
     }, [rewardsDataQuery?.data?.users, rewardsDataQuery?.isSuccess, searchText]);
 
-    console.log('rewardsData ', rewardsData);
-
     const userRewardData = walletAddress
         ? rewardsData?.find((entry: any) =>
               entry?.address?.trim().toLowerCase()?.includes(walletAddress?.toLowerCase())
@@ -100,6 +100,7 @@ const Rewards: React.FC = () => {
                             customPlaceholder={t('rewards.search-placeholder')}
                             handleChange={(e) => setSearchText(e)}
                             customStyle={{ border: '1px solid #1A1C2B' }}
+                            width={300}
                         />
                         <Row>
                             <SelectContainer>
@@ -132,7 +133,13 @@ const Rewards: React.FC = () => {
                                     Header: <>{t('rewards.table.wallet-address')}</>,
                                     accessor: 'address',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['address']>) => (
-                                        <p>{truncateAddress(cellProps.cell.value, 5)}</p>
+                                        <AddressLink
+                                            href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            {truncateAddress(cellProps.cell.value, 5)}
+                                        </AddressLink>
                                     ),
                                     sortable: false,
                                 },

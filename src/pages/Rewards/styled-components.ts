@@ -90,3 +90,10 @@ export const HighlightColumn = styled.div`
     padding-left: 5px;
     width: 25%;
 `;
+
+export const AddressLink = styled.a`
+    color: ${(props) => props.theme.textColor.primary};
+    &:hover {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
+`;

@@ -17,11 +17,7 @@ import queryString from 'query-string';
 import { getReferralId, setReferralId } from 'utils/referral';
 import { useLocation } from 'react-router-dom';
 
-type DappLayoutProps = {
-    showSearch?: boolean;
-};
-
-const DappLayout: React.FC<DappLayoutProps> = ({ children, showSearch }) => {
+const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const { trackPageView } = useMatomo();
@@ -62,7 +58,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children, showSearch }) => {
                 ) : (
                     <Background>
                         <Wrapper>
-                            <DappHeader showSearch={showSearch} />
+                            <DappHeader />
                             {children}
                             <DappFooter />
                         </Wrapper>

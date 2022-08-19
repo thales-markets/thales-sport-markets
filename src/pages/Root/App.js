@@ -24,6 +24,8 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
 const Rewards = lazy(() => import('pages/Rewards'));
+// const Quiz = lazy(() => import('pages/Quiz'));
+// const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
 
 const App = () => {
     const dispatch = useDispatch();
@@ -141,7 +143,7 @@ const App = () => {
                                 )}
                             />
                             <Route exact path={ROUTES.Markets.Home}>
-                                <DappLayout showSearch>
+                                <DappLayout>
                                     <Markets />
                                 </DappLayout>
                             </Route>
@@ -150,10 +152,20 @@ const App = () => {
                                 {/*<HomeLayout />*/}
                             </Route>
                             <Route exact path={ROUTES.Rewards}>
-                                <DappLayout showSearch>
+                                <DappLayout>
                                     <Rewards />
                                 </DappLayout>
                             </Route>
+                            {/* <Route exact path={ROUTES.Quiz}>
+                                <DappLayout>
+                                    <Quiz />
+                                </DappLayout>
+                            </Route>
+                            <Route exact path={ROUTES.QuizLeaderboard}>
+                                <DappLayout>
+                                    <QuizLeaderboard />
+                                </DappLayout>
+                            </Route> */}
                         </Switch>
                     </Router>
                     <ReactQueryDevtools initialIsOpen={false} />
