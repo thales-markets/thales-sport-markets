@@ -17,7 +17,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 // import { useTranslation } from 'react-i18next';
 import { Odds, SportMarketInfo } from 'types/markets';
-import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
+import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatMarketOdds } from '../../../../../utils/markets';
 import { getOddsType } from '../../../../../redux/modules/ui';
 
@@ -53,7 +53,7 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                     <MatchParticipantImage
                         alt="Home team logo"
                         src={homeLogoSrc}
-                        onError={() => setHomeLogoSrc(OVERTIME_LOGO)}
+                        onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                     />
                 </MatchParticipantImageContainer>
                 {oddsOnCancellation ? (
@@ -87,7 +87,7 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                     <MatchParticipantImage
                         alt="Away team logo"
                         src={awayLogoSrc}
-                        onError={() => setAwayLogoSrc(OVERTIME_LOGO)}
+                        onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                     />
                 </MatchParticipantImageContainer>
                 {oddsOnCancellation ? (

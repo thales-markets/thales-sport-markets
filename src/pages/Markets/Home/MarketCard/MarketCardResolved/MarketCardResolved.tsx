@@ -26,7 +26,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { Balances, SportMarketInfo } from 'types/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
-import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
+import { getOnImageError, getTeamImageSource } from 'utils/images';
 import networkConnector from 'utils/networkConnector';
 
 type MarketCardResolvedProps = {
@@ -100,7 +100,7 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
                     <MatchParticipantImage
                         alt="Home team logo"
                         src={homeLogoSrc}
-                        onError={() => setHomeLogoSrc(OVERTIME_LOGO)}
+                        onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                     />
                 </MatchParticipantImageContainer>
                 <WinnerLabel isWinning={market.finalResult == 1} finalResult={market.finalResult}>
@@ -135,7 +135,7 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
                     <MatchParticipantImage
                         alt="Away team logo"
                         src={awayLogoSrc}
-                        onError={() => setAwayLogoSrc(OVERTIME_LOGO)}
+                        onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                     />
                 </MatchParticipantImageContainer>
                 <WinnerLabel isWinning={market.finalResult == 2} finalResult={market.finalResult}>

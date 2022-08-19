@@ -7,7 +7,7 @@ export const TAGS_LIST: Tags = [
     { id: 9004, label: 'NBA' },
     { id: 9005, label: "NCAA Men's Basketball" },
     { id: 9006, label: 'NHL' },
-    { id: 9007, label: 'UFC' },
+    { id: 9007, label: 'UFC', logo: '/logos/ufc-logo.png' },
     { id: 9008, label: 'WNBA' },
     { id: 9010, label: 'MLS' },
     { id: 9011, label: 'EPL' },

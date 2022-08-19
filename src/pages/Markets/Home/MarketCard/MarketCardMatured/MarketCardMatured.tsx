@@ -12,7 +12,7 @@ import Tags from 'pages/Markets/components/Tags';
 import React, { useEffect, useState } from 'react';
 // import { useTranslation } from 'react-i18next';
 import { SportMarketInfo } from 'types/markets';
-import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
+import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { useSelector } from 'react-redux';
 import { getOddsType } from '../../../../../redux/modules/ui';
 import { formatMarketOdds } from '../../../../../utils/markets';
@@ -41,7 +41,7 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
                     <MatchParticipantImage
                         alt="Home team logo"
                         src={homeLogoSrc}
-                        onError={() => setHomeLogoSrc(OVERTIME_LOGO)}
+                        onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                     />
                 </MatchParticipantImageContainer>
                 <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
@@ -69,7 +69,7 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
                     <MatchParticipantImage
                         alt="Away team logo"
                         src={awayLogoSrc}
-                        onError={() => setAwayLogoSrc(OVERTIME_LOGO)}
+                        onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                     />
                 </MatchParticipantImageContainer>
                 <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={false}>

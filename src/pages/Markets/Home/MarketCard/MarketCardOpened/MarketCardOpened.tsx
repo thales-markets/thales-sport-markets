@@ -14,7 +14,7 @@ import React, { useEffect, useState } from 'react';
 // import { useTranslation } from 'react-i18next';
 import { AccountPosition, PositionType, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
-import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
+import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { ODDS_COLOR } from '../../../../../constants/ui';
 import { useSelector } from 'react-redux';
 import { getOddsType } from '../../../../../redux/modules/ui';
@@ -44,7 +44,7 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                     <MatchParticipantImage
                         alt="Home team logo"
                         src={homeLogoSrc}
-                        onError={() => setHomeLogoSrc(OVERTIME_LOGO)}
+                        onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                     />
                 </MatchParticipantImageContainer>
                 <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
@@ -88,7 +88,7 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                     <MatchParticipantImage
                         alt="Away team logo"
                         src={awayLogoSrc}
-                        onError={() => setAwayLogoSrc(OVERTIME_LOGO)}
+                        onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                     />
                 </MatchParticipantImageContainer>
                 {market ? (
