@@ -33,6 +33,7 @@ export const marketsCache = {
 
 const mapResult = async (markets: any, globalFilter: GlobalFilterEnum) => {
     const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
+
     if (
         globalFilter != GlobalFilterEnum.All &&
         globalFilter != GlobalFilterEnum.YourPositions &&
@@ -47,11 +48,12 @@ const mapResult = async (markets: any, globalFilter: GlobalFilterEnum) => {
 
             return market;
         });
+
         return mappedMarkets;
     } else {
-        const marketsWithOdds = sportPositionalMarketDataContract
-            ?.getOddsForAllActiveMarkets()
-            .then((result: SportMarkets) => {
+        try {
+            const oddsFromContract = await sportPositionalMarketDataContract?.getOddsForAllActiveMarkets();
+            if (oddsFromContract) {
                 const mappedMarkets = markets.map((market: SportMarketInfo) => {
                     market.maturityDate = new Date(market.maturityDate);
                     market.homeTeam = fixDuplicatedTeamName(market.homeTeam);
@@ -59,7 +61,7 @@ const mapResult = async (markets: any, globalFilter: GlobalFilterEnum) => {
                     market = fixLongTeamName(market);
                     market.sport = SPORTS_MAP[market.tags[0]];
                     if (market.isOpen) {
-                        result
+                        oddsFromContract
                             .filter((obj: any) => obj[0] === market.id)
                             .map((obj: any) => {
                                 market.homeOdds = bigNumberFormatter(obj.odds[0]);
@@ -70,6 +72,7 @@ const mapResult = async (markets: any, globalFilter: GlobalFilterEnum) => {
 
                     return market;
                 });
+
                 if (globalFilter === GlobalFilterEnum.OpenMarkets) {
                     return mappedMarkets.filter(
                         (market: SportMarketInfo) =>
@@ -79,12 +82,23 @@ const mapResult = async (markets: any, globalFilter: GlobalFilterEnum) => {
                     );
                 }
                 return mappedMarkets;
-            })
-            .catch((e: any) => {
-                console.log(e);
-                return marketsCache[globalFilter];
-            });
-        return marketsWithOdds;
+            } else {
+                const mappedMarkets = markets.map((market: SportMarketInfo) => {
+                    market.maturityDate = new Date(market.maturityDate);
+                    market.homeTeam = fixDuplicatedTeamName(market.homeTeam);
+                    market.awayTeam = fixDuplicatedTeamName(market.awayTeam);
+                    market = fixLongTeamName(market);
+                    market.sport = SPORTS_MAP[market.tags[0]];
+
+                    return market;
+                });
+
+                return mappedMarkets;
+            }
+        } catch (e) {
+            console.log(e);
+            return marketsCache[globalFilter];
+        }
     }
 };
 
