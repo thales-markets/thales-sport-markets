@@ -108,14 +108,6 @@ const Wrapper = styled.div<{ hidden?: boolean }>`
     @media (max-width: 768px) {
         margin-top: 20px;
         margin-bottom: 20px;
-        & > div {
-            box-shadow: var(--shadow);
-        }
-        & > div:first-of-type,
-        & > div:last-of-type {
-            opacity: 0.5;
-            box-shadow: none;
-        }
     }
 
     @media (max-width: 568px) {

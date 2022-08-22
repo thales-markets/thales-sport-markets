@@ -920,6 +920,9 @@ const SwitchContainer = styled(FlexDivRow)`
     flex-direction: row;
     justify-content: flex-end;
     margin-bottom: 10px;
+    @media (max-width: 950px) {
+        top: 15px;
+    }
 `;
 
 const FiltersContainer = styled(FlexDivRow)`
