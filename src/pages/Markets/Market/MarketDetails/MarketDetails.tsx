@@ -7,6 +7,7 @@ import {
     ScoreLabel,
     WinnerLabel,
 } from 'components/common';
+import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERALS } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
@@ -59,6 +60,7 @@ import {
     ClaimButton,
     CustomTooltip,
     FooterContainer,
+    Icon,
     InfoRow,
     InfoTitle,
     InfoValue,
@@ -943,6 +945,13 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                     ? '-'
                                     : formatPercentage(ammPosition.sides[selectedSide].priceImpact)}
                             </SliderInfoValue>
+                            <Tooltip
+                                overlay={t(`market.skew-tooltip`)}
+                                component={<Icon className={`icon-exotic icon-exotic--info`} />}
+                                iconFontSize={23}
+                                marginLeft={2}
+                                top={0}
+                            />
                         </SliderInfo>
                         {selectedSide === Side.BUY && (
                             <>

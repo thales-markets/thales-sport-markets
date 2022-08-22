@@ -156,6 +156,7 @@
         "creator-fee-label": "Creator fee earnings",
         "resolver-fee-label": "Resolver fee earnings",
         "your-fee-label": "Your fee earnings",
+        "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
         "button": {
             "bid-label": "Bid",
             "bid-progress-label": "Bidding in progress...",

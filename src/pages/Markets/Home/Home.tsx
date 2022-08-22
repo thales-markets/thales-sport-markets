@@ -521,7 +521,10 @@ const Home: React.FC = () => {
                                     disabled={false}
                                     selected={globalFilter === filterItem}
                                     onClick={() => {
-                                        if (filterItem === GlobalFilterEnum.OpenMarkets) {
+                                        if (
+                                            filterItem === GlobalFilterEnum.OpenMarkets ||
+                                            filterItem === GlobalFilterEnum.YourPositions
+                                        ) {
                                             setDateFilter('');
                                             setStartDate(null);
                                             setEndDate(null);
@@ -917,6 +920,9 @@ const SwitchContainer = styled(FlexDivRow)`
     flex-direction: row;
     justify-content: flex-end;
     margin-bottom: 10px;
+    @media (max-width: 950px) {
+        top: 15px;
+    }
 `;
 
 const FiltersContainer = styled(FlexDivRow)`
