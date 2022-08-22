@@ -521,7 +521,10 @@ const Home: React.FC = () => {
                                     disabled={false}
                                     selected={globalFilter === filterItem}
                                     onClick={() => {
-                                        if (filterItem === GlobalFilterEnum.OpenMarkets) {
+                                        if (
+                                            filterItem === GlobalFilterEnum.OpenMarkets ||
+                                            filterItem === GlobalFilterEnum.YourPositions
+                                        ) {
                                             setDateFilter('');
                                             setStartDate(null);
                                             setEndDate(null);
