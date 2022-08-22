@@ -47,6 +47,7 @@ export const MatchInfo = styled(FlexDivRow)`
 
 export const MatchInfoColumn = styled(FlexDivColumnCentered)`
     align-items: center;
+    align-self: flex-start;
 `;
 
 export const MatchDate = styled.label`
@@ -58,6 +59,22 @@ export const MatchDate = styled.label`
     overflow: hidden;
     white-space: nowrap;
     color: ${(props) => props.theme.textColor.primary};
+`;
+
+export const MatchVSLabel = styled.label`
+    font-style: normal;
+    font-weight: 200;
+    font-size: 23px;
+    line-height: 27px;
+    display: flex;
+    align-items: center;
+    height: 126px;
+    @media (max-width: 400px) {
+        height: 100px;
+    }
+    color: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
+    margin-top: -20px;
 `;
 
 export const OddsContainer = styled(FlexDivRow)`
