@@ -13,8 +13,6 @@ type HeaderDatepickerProps = {
     setEndDate: (value: any) => void;
 };
 
-const DATES_TO_SHOW = 7;
-
 const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
     gamesPerDay,
     dateFilter,
@@ -24,6 +22,7 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
 }) => {
     const [farLeftDateIndex, setFarLeftDateIndex] = useState(0);
     const [hammerManager, setHammerManager] = useState<any>();
+    const DATES_TO_SHOW = Math.min(Math.round(window.innerWidth / 80) - 2, 7);
 
     const moveLeft = () => {
         if (farLeftDateIndex > 0) setFarLeftDateIndex(farLeftDateIndex - 1);
@@ -105,12 +104,6 @@ const Wrapper = styled.div<{ hidden?: boolean }>`
     height: ${(props) => (props?.hidden ? '64px' : '')};
     margin-bottom: 35px;
     align-items: center;
-    @media (max-width: 1250px) and (min-width: 769px) {
-        & > div:nth-of-type(4),
-        & > div:last-of-type {
-            display: none;
-        }
-    }
 
     @media (max-width: 768px) {
         margin-top: 20px;
@@ -126,10 +119,6 @@ const Wrapper = styled.div<{ hidden?: boolean }>`
     }
 
     @media (max-width: 568px) {
-        & > div {
-            opacity: 0.5;
-        }
-
         & > div:nth-of-type(3) {
             opacity: 1;
             box-shadow: var(--shadow);
