@@ -166,7 +166,7 @@ export const Input = styled.input`
     }
 `;
 
-export const AddressLink = styled.a`
+export const Link = styled.a`
     color: ${(props) => props.theme.textColor.primary};
     &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
@@ -178,4 +178,16 @@ export const QuestionWeightContainer = styled(FlexDivEnd)`
         margin-top: 10px;
         justify-content: start;
     }
+`;
+
+export const TwitterTableContainer = styled(FlexDivStart)`
+    align-items: center;
+`;
+
+export const TwitterImage = styled.img`
+    border-radius: 50%;
+    height: 24px;
+    width: 24px;
+    color: #ffffff;
+    margin-right: 6px;
 `;

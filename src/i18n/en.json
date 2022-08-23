@@ -301,6 +301,7 @@
                 "wallet-address-col": "Wallet address",
                 "twitter-col": "Twitter",
                 "points-col": "Points",
+                "time-col": "Time",
                 "no-data-available": "No data available"
             }
         }

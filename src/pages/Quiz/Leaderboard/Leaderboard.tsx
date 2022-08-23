@@ -9,9 +9,19 @@ import { truncateAddress } from 'utils/formatters/string';
 import Search from 'components/Search';
 import useQuizLeaderboardQuery from 'queries/quiz/useQuizLeaderboardQuery';
 import { LeaderboardItem, LeaderboardList } from 'types/quiz';
-import { QuizContainer, Container, Description, Title, AddressLink } from '../styled-components';
+import {
+    QuizContainer,
+    Container,
+    Description,
+    Title,
+    Link,
+    TwitterImage,
+    TwitterTableContainer,
+} from '../styled-components';
 import { getEtherscanAddressLink } from 'utils/etherscan';
 import { NetworkIdByName } from 'utils/network';
+import { getTwitterProfileLink } from 'utils/quiz';
+import { formatCurrency } from 'utils/formatters/number';
 
 const Leaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -59,7 +69,7 @@ const Leaderboard: React.FC = () => {
                                 Header: <>{t('quiz.leaderboard.table.wallet-address-col')}</>,
                                 accessor: 'wallet',
                                 Cell: (cellProps: CellProps<LeaderboardItem, LeaderboardItem['wallet']>) => (
-                                    <AddressLink
+                                    <Link
                                         href={getEtherscanAddressLink(
                                             NetworkIdByName.OptimismMainnet,
                                             cellProps.cell.value
@@ -68,7 +78,7 @@ const Leaderboard: React.FC = () => {
                                         rel="noreferrer"
                                     >
                                         {truncateAddress(cellProps.cell.value, 5)}
-                                    </AddressLink>
+                                    </Link>
                                 ),
                                 sortable: false,
                             },
@@ -76,7 +86,16 @@ const Leaderboard: React.FC = () => {
                                 Header: <>{t('quiz.leaderboard.table.twitter-col')}</>,
                                 accessor: 'name',
                                 Cell: (cellProps: CellProps<LeaderboardItem, LeaderboardItem['name']>) => (
-                                    <p>{cellProps.cell.value}</p>
+                                    <Link
+                                        href={getTwitterProfileLink(cellProps.cell.value)}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        <TwitterTableContainer>
+                                            <TwitterImage alt="twiiter" src={cellProps.cell.row.original.avatar} />
+                                            {cellProps.cell.value}
+                                        </TwitterTableContainer>
+                                    </Link>
                                 ),
                                 sortable: true,
                                 sortType: twitterSort(),
@@ -86,6 +105,14 @@ const Leaderboard: React.FC = () => {
                                 accessor: 'points',
                                 Cell: (cellProps: CellProps<LeaderboardItem, LeaderboardItem['points']>) => (
                                     <p>{cellProps.cell.value}</p>
+                                ),
+                                sortable: true,
+                            },
+                            {
+                                Header: <>{t('quiz.leaderboard.table.time-col')}</>,
+                                accessor: 'finishTime',
+                                Cell: (cellProps: CellProps<LeaderboardItem, LeaderboardItem['finishTime']>) => (
+                                    <p>{`${formatCurrency(cellProps.cell.value)}`}</p>
                                 ),
                                 sortable: true,
                             },
