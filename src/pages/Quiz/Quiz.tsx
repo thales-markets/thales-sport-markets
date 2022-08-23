@@ -115,6 +115,13 @@ const Quiz: React.FC = () => {
 
     const handleFinishQuiz = async () => {
         try {
+            if (currentQuizItem.answer && currentQuizItem.answer !== '') {
+                await axios.post(`${QUIZ_API_URL}${ANSWER_QUESTION_PATH}`, {
+                    playerUUID: playerUuid,
+                    answer: currentQuizItem.answer,
+                    questionNumber: currentQuizItem.questionNumber,
+                });
+            }
             if (isQuizStarted && !isQuizFinished) {
                 const finishQuizResponse = await axios.post(`${QUIZ_API_URL}${FINISH_QUIZ_PATH}`, {
                     playerUUID: playerUuid,
