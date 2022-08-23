@@ -600,6 +600,7 @@ const abi = [
 export const multipleCollateral = {
     sUSD: {
         addresses: {
+            5: '0x2851715A8d25e176413A77b495762435D5dDBd0d', // eUSD
             10: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9', // sUSD
             42: '0x5d7e13023a6f2245D7Af1eaE97dFF2EF1057F5b9',
             69: '',
@@ -608,6 +609,7 @@ export const multipleCollateral = {
     },
     DAI: {
         addresses: {
+            5: '',
             10: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
             42: '',
             69: '',
@@ -616,6 +618,7 @@ export const multipleCollateral = {
     },
     USDC: {
         addresses: {
+            5: '',
             10: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
             42: '',
             69: '',
@@ -624,6 +627,7 @@ export const multipleCollateral = {
     },
     USDT: {
         addresses: {
+            5: '',
             10: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58',
             42: '',
             69: '',

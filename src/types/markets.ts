@@ -182,7 +182,7 @@ export type PositionBalances = PositionBalance[];
 
 export type AccountPositionsMap = Record<string, AccountPosition[]>;
 
-export type MarketTransactionType = 'bid' | 'changePosition' | 'withdrawal' | 'claim';
+export type MarketTransactionType = 'bid' | 'changePosition' | 'withdrawal' | 'claim' | 'buy' | 'sell';
 
 export type MarketTransaction = {
     hash: string;
@@ -202,6 +202,7 @@ export type ClaimTransaction = {
     id: string;
     account: string;
     amount: number;
+    timestamp: number;
     market: MarketData;
 };
 

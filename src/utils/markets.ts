@@ -78,3 +78,9 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
             return `${formatCurrency(odds, 2)}`;
     }
 };
+
+export const convertFinalResultToPositionType = (result: number) => {
+    if (result == 1) return 'HOME';
+    if (result == 2) return 'AWAY';
+    if (result == 3) return 'DRAW';
+};
