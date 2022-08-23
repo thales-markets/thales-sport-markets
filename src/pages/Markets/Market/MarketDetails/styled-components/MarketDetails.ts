@@ -137,6 +137,8 @@ export const InfoValue = styled.div`
     font-weight: 600;
     font-size: 18px;
     line-height: 23px;
+    display: flex;
+    flex-direction: row;
 `;
 
 export const SliderContainer = styled(FlexDivRow)`

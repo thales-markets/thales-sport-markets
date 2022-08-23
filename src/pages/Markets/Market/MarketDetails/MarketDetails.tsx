@@ -767,6 +767,13 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             <InfoTitle>PRICE:</InfoTitle>
                             <InfoValue>
                                 $ {market.positions[Position.HOME].sides[selectedSide].odd.toFixed(2)}
+                                {market.positions[Position.HOME].sides[selectedSide].odd == 0 && (
+                                    <Tooltip
+                                        overlay={<>{t('markets.zero-odds-tooltip')}</>}
+                                        iconFontSize={10}
+                                        customIconStyling={{ marginTop: '-10px', display: 'flex', marginLeft: '3px' }}
+                                    />
+                                )}
                             </InfoValue>
                         </InfoRow>
                         <InfoRow>
@@ -819,6 +826,13 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             <InfoTitle>PRICE:</InfoTitle>
                             <InfoValue>
                                 $ {market.positions[Position.AWAY].sides[selectedSide].odd.toFixed(2)}
+                                {market.positions[Position.AWAY].sides[selectedSide].odd == 0 && (
+                                    <Tooltip
+                                        overlay={<>{t('markets.zero-odds-tooltip')}</>}
+                                        iconFontSize={10}
+                                        customIconStyling={{ marginTop: '-10px', display: 'flex', marginLeft: '3px' }}
+                                    />
+                                )}
                             </InfoValue>
                         </InfoRow>
                         <InfoRow>
