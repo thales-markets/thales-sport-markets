@@ -44,8 +44,8 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                     {showTooltip && (
                         <Tooltip
                             overlay={<>{t('markets.zero-odds-tooltip')}</>}
-                            iconFontSize={14}
-                            customIconStyling={{ marginTop: '-10px' }}
+                            iconFontSize={10}
+                            customIconStyling={{ marginTop: '-10px', display: 'flex', marginLeft: '3px' }}
                         />
                     )}
                 </AdditionalText>
@@ -79,6 +79,8 @@ const AdditionalText = styled.span`
     line-height: 120%;
     font-size: 13px;
     margin-right: 10px;
+    display: flex;
+    flex-direction: row;
 `;
 
 const Symbol = styled.span<{ color?: string }>`
