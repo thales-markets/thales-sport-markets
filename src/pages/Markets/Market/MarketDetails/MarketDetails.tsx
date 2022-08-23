@@ -963,6 +963,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                         <AmountToBuyInput
                                             type="number"
                                             onChange={(e) => {
+                                                if (countDecimals(Number(e.target.value)) > 2) {
+                                                    return;
+                                                }
                                                 if (Number(e.target.value) >= 0) {
                                                     setTokenAmount(e.target.value);
                                                 }
