@@ -11,6 +11,8 @@ import { CellProps } from 'react-table';
 import { truncateAddress } from 'utils/formatters/string';
 import { MarketContainer } from 'pages/Markets/Market/MarketDetails/styled-components/MarketDetails';
 import {
+    AddressLink,
+    BoldText,
     Container,
     Description,
     HighlightColumn,
@@ -27,6 +29,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsAppReady } from 'redux/modules/app';
 import Search from 'components/Search';
+import { getEtherscanAddressLink } from 'utils/etherscan';
 
 type RewardsType = {
     address: string;
@@ -43,9 +46,29 @@ const Rewards: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-
     const [searchText, setSearchText] = useState<string>('');
-    const [period, setPeriod] = useState<number>(0);
+    const PERIOD_DURATION_IN_DAYS = 14;
+    const START_DATE = new Date(Date.UTC(2022, 7, 1, 0, 0, 0));
+    const NOW = new Date();
+
+    let CALCULATED_START = new Date(START_DATE.getTime());
+    let PERIOD_COUNTER = 0;
+
+    const options: Array<{ value: number; label: string }> = [];
+
+    while (true) {
+        if (CALCULATED_START.getTime() < NOW.getTime()) {
+            CALCULATED_START = new Date(CALCULATED_START.getTime() + PERIOD_DURATION_IN_DAYS * 24 * 60 * 60 * 1000);
+            options.push({
+                value: PERIOD_COUNTER,
+                label: `${mapPeriod(PERIOD_COUNTER)} period`,
+            });
+            PERIOD_COUNTER++;
+        } else {
+            break;
+        }
+    }
+    const [period, setPeriod] = useState<number>(options.length > 0 ? options[options.length - 1].value : 0);
 
     const rewardsDataQuery = useRewardsDataQuery(networkId, period, {
         enabled: isAppReady,
@@ -66,24 +89,11 @@ const Rewards: React.FC = () => {
         return [];
     }, [rewardsDataQuery?.data?.users, rewardsDataQuery?.isSuccess, searchText]);
 
-    console.log('rewardsData ', rewardsData);
-
     const userRewardData = walletAddress
         ? rewardsData?.find((entry: any) =>
               entry?.address?.trim().toLowerCase()?.includes(walletAddress?.toLowerCase())
           )
         : null;
-
-    const options = [
-        {
-            value: 0,
-            label: 'First period',
-        },
-        {
-            value: 1,
-            label: 'Second period',
-        },
-    ];
 
     return (
         <>
@@ -93,20 +103,31 @@ const Rewards: React.FC = () => {
                     <TableContainer>
                         <Title>{t('rewards.header')}</Title>
                         <Description>
-                            <Trans i18nKey={t('rewards.description')} />
+                            <Trans
+                                i18nKey={t('rewards.description')}
+                                components={[
+                                    <div key="0">
+                                        <BoldText />
+                                    </div>,
+                                    <p key="1">
+                                        <BoldText />
+                                    </p>,
+                                ]}
+                            />
                         </Description>
                         <Search
                             text={searchText}
                             customPlaceholder={t('rewards.search-placeholder')}
                             handleChange={(e) => setSearchText(e)}
                             customStyle={{ border: '1px solid #1A1C2B' }}
+                            width={300}
                         />
                         <Row>
                             <SelectContainer>
                                 <SelectInput
                                     options={options}
                                     handleChange={(value) => setPeriod(Number(value))}
-                                    defaultValue={0}
+                                    defaultValue={period}
                                     width={300}
                                 />
                             </SelectContainer>
@@ -132,7 +153,13 @@ const Rewards: React.FC = () => {
                                     Header: <>{t('rewards.table.wallet-address')}</>,
                                     accessor: 'address',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['address']>) => (
-                                        <p>{truncateAddress(cellProps.cell.value, 5)}</p>
+                                        <AddressLink
+                                            href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            {truncateAddress(cellProps.cell.value, 5)}
+                                        </AddressLink>
                                     ),
                                     sortable: false,
                                 },
@@ -195,6 +222,23 @@ const percentageSort = () => (rowA: any, rowB: any) => {
 
 const pnlSort = () => (rowA: any, rowB: any) => {
     return rowA.original.pnl - rowB.original.pnl;
+};
+
+const mapPeriod = (period: number) => {
+    switch (period) {
+        case 0:
+            return 'First';
+        case 1:
+            return 'Second';
+        case 2:
+            return 'Third';
+        case 3:
+            return 'Fourth';
+        case 4:
+            return 'Fifth';
+        default:
+            return '';
+    }
 };
 
 export default Rewards;

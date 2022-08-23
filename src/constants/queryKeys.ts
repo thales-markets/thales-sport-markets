@@ -32,6 +32,7 @@ export const QUERY_KEYS = {
         walletAddress,
         networkId,
     ],
+    ClaimTx: (market: string, networkId: NetworkId) => ['claim', 'transactions', market, networkId],
     UserTransactionsPerMarket: (walletAddress: string, marketAddress: string, networkId: NetworkId) => [
         'user',
         'market',
@@ -84,6 +85,9 @@ export const QUERY_KEYS = {
         ],
         SwapApproveSpender: (networkId: NetworkId) => ['wallet', 'swap', 'approveSpender', networkId],
         GetUsdDefaultAmount: (networkId: NetworkId) => ['wallet', 'getUsdDefaultAmount', networkId],
+    },
+    Quiz: {
+        Leaderboard: () => ['quiz', 'leaderboard'],
     },
 };
 

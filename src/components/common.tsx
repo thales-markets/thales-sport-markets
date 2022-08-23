@@ -255,6 +255,7 @@ export const OddsLabel = styled.label<{
     noOdds?: boolean;
 }>`
     display: flex;
+    flex-direction: row;
     visibility: ${(props) => (props.isTwoPositioned || props.noOdds ? 'hidden' : '')};
     margin-top: 4px;
     font-style: normal;

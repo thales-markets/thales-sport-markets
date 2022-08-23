@@ -1,4 +1,6 @@
+import Tooltip from 'components/Tooltip';
 import React, { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 type SymbolProps = {
@@ -12,6 +14,7 @@ type SymbolProps = {
     };
     additionalStyle?: CSSProperties;
     children?: any;
+    showTooltip?: boolean;
     glow?: boolean;
 };
 
@@ -20,9 +23,11 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     type,
     symbolColor,
     additionalText,
+    showTooltip,
     additionalStyle,
     children,
 }) => {
+    const { t } = useTranslation();
     return (
         <Wrapper>
             <Container glow={glow} color={symbolColor} style={additionalStyle}>
@@ -33,7 +38,18 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                     {type == undefined && children}
                 </Symbol>
             </Container>
-            <AdditionalText style={additionalText?.firstTextStyle}>{additionalText?.firstText}</AdditionalText>
+            {additionalText?.firstText && (
+                <AdditionalText style={additionalText?.firstTextStyle}>
+                    {additionalText?.firstText}
+                    {showTooltip && (
+                        <Tooltip
+                            overlay={<>{t('markets.zero-odds-tooltip')}</>}
+                            iconFontSize={10}
+                            customIconStyling={{ marginTop: '-10px', display: 'flex', marginLeft: '3px' }}
+                        />
+                    )}
+                </AdditionalText>
+            )}
             <AdditionalText style={additionalText?.secondTextStyle}>{additionalText?.secondText}</AdditionalText>
         </Wrapper>
     );
@@ -63,6 +79,8 @@ const AdditionalText = styled.span`
     line-height: 120%;
     font-size: 13px;
     margin-right: 10px;
+    display: flex;
+    flex-direction: row;
 `;
 
 const Symbol = styled.span<{ color?: string }>`

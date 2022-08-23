@@ -45,7 +45,7 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
                     />
                 </MatchParticipantImageContainer>
                 <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
-                    {formatMarketOdds(selectedOddsType, market.homeOdds).toFixed(2)}
+                    {formatMarketOdds(selectedOddsType, market.homeOdds)}
                 </OddsLabel>
                 <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
             </MatchInfoColumn>
@@ -59,7 +59,7 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
                     isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}
                     isDraw={true}
                 >
-                    {formatMarketOdds(selectedOddsType, market.drawOdds).toFixed(2)}
+                    {formatMarketOdds(selectedOddsType, market.drawOdds)}
                 </OddsLabel>
                 <MatchParticipantName isTwoPositioned={market.drawOdds === 0}>{'DRAW'}</MatchParticipantName>
                 <Tags sport={market.sport} tags={market.tags} />
@@ -73,7 +73,7 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
                     />
                 </MatchParticipantImageContainer>
                 <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={false}>
-                    {formatMarketOdds(selectedOddsType, market.awayOdds).toFixed(2)}
+                    {formatMarketOdds(selectedOddsType, market.awayOdds)}
                 </OddsLabel>
                 <MatchParticipantName>{market.awayTeam}</MatchParticipantName>
             </MatchInfoColumn>
