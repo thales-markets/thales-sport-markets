@@ -1,9 +1,8 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
-import { ClaimTransaction, ClaimTransactions } from 'types/markets';
+import { ClaimTransactions } from 'types/markets';
 import { NetworkId } from 'types/network';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
 
 const useClaimTransactionsPerMarket = (
     marketAddress: string,
@@ -19,10 +18,9 @@ const useClaimTransactionsPerMarket = (
                     network: networkId,
                 });
 
-                return claimTransactions.map((tx: ClaimTransaction) => ({
-                    ...tx,
-                    amount: bigNumberFormatter(tx?.amount),
-                }));
+                console.log('claimTransactions ', claimTransactions);
+
+                return claimTransactions;
             } catch (e) {
                 console.log(e);
                 return undefined;

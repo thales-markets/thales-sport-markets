@@ -32,7 +32,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                         Header: <>{t('market.table.type-col')}</>,
                         accessor: 'type',
                         Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['type']>) => (
-                            <p>{t(`market.table.type.${cellProps.cell.value}`)}</p>
+                            <p>{t(`market.table.type.${cellProps.cell.value}`).toUpperCase()}</p>
                         ),
                         width: 150,
                         sortable: true,
