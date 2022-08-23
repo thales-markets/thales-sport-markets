@@ -22,6 +22,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                     {
                         Header: <>{t('market.table.date-time-col')}</>,
                         accessor: 'timestamp',
+                        sortType: timestampSort(),
                         Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['timestamp']>) => (
                             <p>{formatTxTimestamp(cellProps.cell.value)}</p>
                         ),
@@ -48,7 +49,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                     },
                     {
                         Header: <>{t('market.table.paid-col')}</>,
-                        sortType: 'basic',
+                        sortType: paidSort(),
                         accessor: 'paid',
                         Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['paid']>) => (
                             <p>$ {formatCurrency(cellProps.cell.value)}</p>
@@ -58,7 +59,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                     },
                     {
                         Header: <>{t('market.table.amount-col')}</>,
-                        sortType: 'basic',
+                        sortType: amountSort(),
                         accessor: 'amount',
                         Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['amount']>) => (
                             <p>{formatCurrency(cellProps.cell.value)}</p>
@@ -82,5 +83,17 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
         </>
     );
 });
+
+const paidSort = () => (rowA: any, rowB: any) => {
+    return rowA.original.paid - rowB.original.paid;
+};
+
+const amountSort = () => (rowA: any, rowB: any) => {
+    return rowA.original.amount - rowB.original.amount;
+};
+
+const timestampSort = () => (rowA: any, rowB: any) => {
+    return rowA.original.timestamp - rowB.original.timestamp;
+};
 
 export default TransactionsTable;
