@@ -32,7 +32,7 @@ const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
     });
 
     const marketTransactions: MarketTransactions = useMemo(() => {
-        const data: MarketTransaction[] = [];
+        let data: MarketTransaction[] = [];
 
         if (marketClaimTransactionsQuery?.isSuccess && marketClaimTransactionsQuery?.data) {
             marketClaimTransactionsQuery?.data.forEach((claimTx: ClaimTransaction) => {
@@ -66,7 +66,7 @@ const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
             });
         }
 
-        orderBy(data, ['timestamp'], ['desc']);
+        data = orderBy(data, ['timestamp'], ['desc']);
 
         return data;
     }, [
@@ -75,14 +75,6 @@ const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
         marketTransactionsQuery?.isSuccess,
         marketTransactionsQuery?.data,
     ]);
-
-    // useEffect(() => {
-    //     if (marketTransactionsQuery.isSuccess && marketTransactionsQuery.data) {
-    //         setMarketTransactions(
-    //             orderBy(marketTransactionsQuery.data, ['timestamp', 'blockNumber'], ['desc', 'desc'])
-    //         );
-    //     }
-    // }, [marketTransactionsQuery.isSuccess, marketTransactionsQuery.data]);
 
     const noResults = marketTransactions.length === 0;
     const isLoading = marketClaimTransactionsQuery?.isLoading || marketTransactionsQuery?.isLoading;
