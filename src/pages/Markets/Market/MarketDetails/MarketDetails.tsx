@@ -12,7 +12,7 @@ import { COLLATERALS } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useMarketCancellationOddsQuery from 'queries/markets/useMarketCancellationOddsQuery';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -41,6 +41,7 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from '../../../.
 import { RootState } from '../../../../redux/rootReducer';
 import { FlexDivCentered } from '../../../../styles/common';
 import {
+    countDecimals,
     floorNumberToDecimals,
     formatCurrency,
     formatCurrencyWithSign,
@@ -175,7 +176,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             return Number(multipleStableBalances.data[COLLATERALS[selectedStableIndex]].toFixed(2));
         }
         return 0;
-    }, [multipleStableBalances.data, selectedStableIndex]);
+    }, [multipleStableBalances.data, multipleStableBalances.isSuccess, selectedStableIndex]);
 
     const availablePerSideQuery = useAvailablePerSideQuery(market.address, selectedSide);
 
@@ -282,7 +283,15 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 }
             }
         }
-    }, [balances]);
+    }, [
+        balances,
+        market.cancelled,
+        market.finalResult,
+        market.resolved,
+        oddsOnCancellation?.away,
+        oddsOnCancellation?.draw,
+        oddsOnCancellation?.home,
+    ]);
 
     useEffect(() => {
         setMaxAmount(0);
@@ -331,27 +340,30 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
         selectedSide,
     ]);
 
-    const fetchAmmQuote = async (amountForQuote: number) => {
-        const { sportsAMMContract, signer } = networkConnector;
-        if (sportsAMMContract && signer) {
-            const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
-            const parsedAmount = ethers.utils.parseEther(amountForQuote.toString());
-            const ammQuote = await getSportsAMMQuoteMethod(
-                selectedSide == Side.BUY,
-                selectedStableIndex,
-                networkId,
-                sportsAMMContractWithSigner,
-                market.address,
-                selectedPosition,
-                parsedAmount
-            );
+    const fetchAmmQuote = useCallback(
+        async (amountForQuote: number) => {
+            const { sportsAMMContract, signer } = networkConnector;
+            if (sportsAMMContract && signer) {
+                const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
+                const parsedAmount = ethers.utils.parseEther(amountForQuote.toString());
+                const ammQuote = await getSportsAMMQuoteMethod(
+                    selectedSide == Side.BUY,
+                    selectedStableIndex,
+                    networkId,
+                    sportsAMMContractWithSigner,
+                    market.address,
+                    selectedPosition,
+                    parsedAmount
+                );
 
-            if (selectedStableIndex !== 0) {
-                return ammQuote[0];
+                if (selectedStableIndex !== 0) {
+                    return ammQuote[0];
+                }
+                return ammQuote;
             }
-            return ammQuote;
-        }
-    };
+        },
+        [market.address, networkId, selectedPosition, selectedSide, selectedStableIndex]
+    );
 
     const handleSubmit = async () => {
         if (!!tokenAmount) {
@@ -482,7 +494,17 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             return;
         };
         getMaxAmount();
-    }, [selectedSide, tokenAmount, balances, paymentTokenBalance, ammPosition, selectedStableIndex]);
+    }, [
+        selectedSide,
+        tokenAmount,
+        balances,
+        paymentTokenBalance,
+        ammPosition,
+        selectedStableIndex,
+        availablePerSide.positions,
+        selectedPosition,
+        fetchAmmQuote,
+    ]);
 
     const onMaxClick = async () => {
         setFieldChanging('positionsAmount');
@@ -524,7 +546,18 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             return;
         };
         getMaxUsdAmount();
-    }, [selectedSide, usdAmountValue, balances, paymentTokenBalance, ammPosition, selectedStableIndex]);
+    }, [
+        selectedSide,
+        usdAmountValue,
+        balances,
+        paymentTokenBalance,
+        ammPosition,
+        selectedStableIndex,
+        market.address,
+        availablePerSide.positions,
+        selectedPosition,
+        fetchAmmQuote,
+    ]);
 
     const onMaxUsdClick = async () => {
         setFieldChanging('usdAmount');
@@ -870,6 +903,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                                 type="number"
                                                 value={usdAmountValue}
                                                 onChange={(e) => {
+                                                    if (countDecimals(Number(e.target.value)) > 2) {
+                                                        return;
+                                                    }
                                                     setFieldChanging(e.target.name);
                                                     setUsdAmount(e.target.value);
                                                 }}
@@ -890,6 +926,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                                 name="positionsAmount"
                                                 type="number"
                                                 onChange={(e) => {
+                                                    if (countDecimals(Number(e.target.value)) > 2) {
+                                                        return;
+                                                    }
                                                     if (Number(e.target.value) >= 0) {
                                                         setFieldChanging(e.target.name);
                                                         setTokenAmount(e.target.value);
