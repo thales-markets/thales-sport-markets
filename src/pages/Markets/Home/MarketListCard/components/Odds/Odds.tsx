@@ -52,6 +52,7 @@ const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelle
                             firstText: formatMarketOdds(selectedOddsType, odds?.homeOdds),
                             firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.HOME, marginLeft: '10px' },
                         }}
+                        showTooltip={odds?.homeOdds == 0}
                         glow={
                             accountPositions &&
                             !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.home)
@@ -78,6 +79,7 @@ const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelle
                             firstText: formatMarketOdds(selectedOddsType, odds?.awayOdds),
                             firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.AWAY, marginLeft: '10px' },
                         }}
+                        showTooltip={odds?.awayOdds == 0}
                         glow={
                             accountPositions &&
                             !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.away)

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import ReactTooltip from 'rc-tooltip';
 import styled from 'styled-components';
 import 'styles/tooltip.css';
@@ -7,15 +7,20 @@ type TooltipProps = {
     component?: any;
     overlay: any;
     iconFontSize?: number;
+    customIconStyling?: CSSProperties;
     marginLeft?: number;
     top?: number;
 };
 
-const Tooltip: React.FC<TooltipProps> = ({ component, overlay, iconFontSize, marginLeft, top }) => {
+const Tooltip: React.FC<TooltipProps> = ({ component, overlay, iconFontSize, customIconStyling, marginLeft, top }) => {
     return (
         <Container>
             <ReactTooltip overlay={overlay} placement="top">
-                {component ? component : <InfoIcon iconFontSize={iconFontSize} marginLeft={marginLeft} top={top} />}
+                {component ? (
+                    component
+                ) : (
+                    <InfoIcon iconFontSize={iconFontSize} marginLeft={marginLeft} top={top} style={customIconStyling} />
+                )}
             </ReactTooltip>
         </Container>
     );

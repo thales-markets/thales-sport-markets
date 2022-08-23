@@ -156,6 +156,7 @@
         "creator-fee-label": "Creator fee earnings",
         "resolver-fee-label": "Resolver fee earnings",
         "your-fee-label": "Your fee earnings",
+        "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
         "button": {
             "bid-label": "Bid",
             "bid-progress-label": "Bidding in progress...",
@@ -255,7 +256,8 @@
             "pending-resolution": "Pending resolution",
             "claim": "Claim",
             "coming-soon": "Coming soon"
-        }
+        },
+        "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity."
     },
     "rewards": {
         "header": "Rewards",
