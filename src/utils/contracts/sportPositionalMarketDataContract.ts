@@ -1,5 +1,6 @@
 export const sportPositionalMarketDataContract = {
     addresses: {
+        5: '0xC7D8c34048D8bf6eB24FC76c7A61F47754990c81',
         10: '0x4f2B4e7d0A61622D2bBaeeCCD34888163e175647',
         42: '0x05C370827A21E491953BD0b8B1ce3290584aC486',
     },

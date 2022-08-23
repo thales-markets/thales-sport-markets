@@ -10,11 +10,13 @@ import networkConnector from 'utils/networkConnector';
 export const NetworkIdByName: Record<string, NetworkId> = {
     OptimismMainnet: 10,
     Kovan: 42,
+    Goerli: 5,
 };
 
 export const NetworkNameById: Record<NetworkId, string> = {
     10: 'optimism mainnet',
     42: 'kovan',
+    5: 'goerli',
 };
 
 export enum Network {
@@ -32,6 +34,7 @@ export enum Network {
 export const InfuraNetworkNameById: Record<NetworkId, string> = {
     10: 'optimism-mainnet',
     42: 'kovan',
+    5: 'goerli',
 };
 
 export const hasEthereumInjected = () => !!window.ethereum;
