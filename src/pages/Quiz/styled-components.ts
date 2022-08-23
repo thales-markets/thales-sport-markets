@@ -1,12 +1,5 @@
 import styled from 'styled-components';
-import {
-    FlexDivCentered,
-    FlexDivColumn,
-    FlexDivColumnCentered,
-    FlexDivRow,
-    FlexDivEnd,
-    FlexDivStart,
-} from 'styles/common';
+import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivStart } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
     width: 60%;
@@ -28,12 +21,11 @@ export const QuizContainer = styled(FlexDivColumn)`
     @media (max-width: 768px) {
         padding: 0px 20px 0px 20px;
     }
+    align-items: center;
 `;
 
-export const Header = styled(FlexDivRow)`
-    @media (max-width: 575px) {
-        flex-direction: column;
-    }
+export const LeaderboardContainer = styled(QuizContainer)`
+    align-items: initial;
 `;
 
 export const Title = styled.span`
@@ -74,9 +66,10 @@ export const TimeRemainingGraphicContainer = styled(FlexDivStart)`
     }
 `;
 
-export const TimeRemainingGraphicPercentage = styled(FlexDivStart)<{ width: number }>`
+export const TimeRemainingGraphicPercentage = styled(FlexDivStart)<{ width: number; firstUpdate: boolean }>`
     position: absolute;
     width: ${(props) => props.width}%;
+    transition: ${(props) => (props.firstUpdate ? 'none' : 'width 1s linear')};
     max-width: 565px;
     height: 10px;
     left: 2px;
@@ -92,9 +85,12 @@ export const TimeRemainingGraphicPercentage = styled(FlexDivStart)<{ width: numb
 `;
 
 export const Question = styled(Description)`
-    font-size: 20px;
-    font-weight: 600;
-    font-style: italic;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 30px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    text-align: center;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -109,16 +105,21 @@ export const FinishedInfoContainer = styled(FlexDivColumnCentered)`
 
 export const FinishedInfoLabel = styled(Description)`
     font-size: 25px;
-    font-weight: 600;
 `;
 
 export const FinishedInfo = styled(Description)`
-    font-size: 23px;
+    font-size: 30px;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 40px;
 `;
 
-export const SubmitButton = styled.button`
-    background: linear-gradient(88.84deg, #5fc694 19.98%, #1ca6b9 117.56%);
-    border-radius: 40px;
+export const SubmitButton = styled.button<{ isNavigation?: boolean }>`
+    background: ${(props) =>
+        props.isNavigation
+            ? 'linear-gradient(88.84deg, #5fc694 19.98%, #1ca6b9 117.56%)'
+            : 'linear-gradient(88.84deg, #2FC9DD 19.98%, #1CA6B9 117.56%);'};
+    border-radius: 8px;
     margin: 20px 20px;
     font-size: 20px;
     font-weight: 700;
@@ -136,7 +137,7 @@ export const SubmitButton = styled.button`
 `;
 
 export const ButtonContainer = styled(FlexDivCentered)`
-    @media (max-width: 575px) {
+    @media (max-width: 675px) {
         flex-direction: column;
         button {
             margin: 10px 10px;
@@ -164,6 +165,8 @@ export const Input = styled.input`
     &:focus {
         border: 2px solid ${(props) => props.theme.borderColor.quaternary};
     }
+    margin-top: 20px;
+    margin-bottom: 10px;
 `;
 
 export const Link = styled.a`
@@ -173,11 +176,16 @@ export const Link = styled.a`
     }
 `;
 
-export const QuestionWeightContainer = styled(FlexDivEnd)`
-    @media (max-width: 575px) {
-        margin-top: 10px;
-        justify-content: start;
-    }
+export const QuestionWeightContainer = styled(FlexDivColumnCentered)`
+    border: 2px solid #4673bd;
+    border-radius: 40px;
+    width: 150px;
+    min-height: 34px;
+    font-weight: 400;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
 `;
 
 export const TwitterTableContainer = styled(FlexDivStart)`
@@ -190,4 +198,26 @@ export const TwitterImage = styled.img`
     width: 24px;
     color: #ffffff;
     margin-right: 6px;
+`;
+
+export const OptionsContainer = styled(FlexDivColumnCentered)`
+    align-items: center;
+`;
+
+export const CurrentQuestion = styled(Description)`
+    margin-top: 30px;
+    margin-bottom: 10px;
+`;
+
+export const QuestionIndicator = styled(FlexDivCentered)<{ isPassed: boolean }>`
+    border-radius: 50%;
+    background: ${(props) => (props.isPassed ? '#2fc9dd' : '#303656')};
+    width: 24px;
+    height: 24px;
+    margin-right: 25px;
+`;
+
+export const Footer = styled(FlexDivColumn)`
+    margin-top: 20px;
+    align-items: center;
 `;

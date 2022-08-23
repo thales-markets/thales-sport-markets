@@ -10,7 +10,7 @@ import Search from 'components/Search';
 import useQuizLeaderboardQuery from 'queries/quiz/useQuizLeaderboardQuery';
 import { LeaderboardItem, LeaderboardList } from 'types/quiz';
 import {
-    QuizContainer,
+    LeaderboardContainer,
     Container,
     Description,
     Title,
@@ -50,7 +50,7 @@ const Leaderboard: React.FC = () => {
         <>
             <BackToLink link={buildHref(ROUTES.Quiz)} text={t('quiz.leaderboard.back-to-quiz')} />
             <Container>
-                <QuizContainer>
+                <LeaderboardContainer>
                     <Title>{t('quiz.leaderboard.title')}</Title>
                     <Description>
                         <Trans i18nKey={t('quiz.leaderboard.description')} />
@@ -92,7 +92,14 @@ const Leaderboard: React.FC = () => {
                                         rel="noreferrer"
                                     >
                                         <TwitterTableContainer>
-                                            <TwitterImage alt="twiiter" src={cellProps.cell.row.original.avatar} />
+                                            <TwitterImage
+                                                alt="twiiter"
+                                                src={
+                                                    cellProps.cell.row.original.avatar != ''
+                                                        ? cellProps.cell.row.original.avatar
+                                                        : 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png'
+                                                }
+                                            />
                                             {cellProps.cell.value}
                                         </TwitterTableContainer>
                                     </Link>
@@ -129,7 +136,7 @@ const Leaderboard: React.FC = () => {
                         isLoading={quizLeaderboardQuery.isLoading}
                         noResultsMessage={t('quiz.leaderboard.table.no-data-available')}
                     />
-                </QuizContainer>
+                </LeaderboardContainer>
             </Container>
         </>
     );

@@ -283,7 +283,7 @@
         "point-label": "point",
         "points-label": "points",
         "quiz-finished-label": "Quiz finished!",
-        "your-score-label": "Your score: {{score}}",
+        "your-score-label": "Your score: {{score}}/{{max}} points",
         "button": {
             "start-quiz-label": "Start quiz",
             "next-question-label": "Next question",

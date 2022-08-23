@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import axios from 'axios';
 import BackToLink from 'pages/Markets/components/BackToLink';
@@ -15,18 +15,21 @@ import {
     FinishedInfoContainer,
     FinishedInfoLabel,
     ButtonContainer,
-    Header,
     Input,
     QuestionWeightContainer,
     TimeRemainingText,
     TimeRemainingGraphicContainer,
     TimeRemainingGraphicPercentage,
+    OptionsContainer,
+    QuestionIndicator,
+    CurrentQuestion,
+    Footer,
 } from './styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import onboardConnector from 'utils/onboardConnector';
-import { FlexDivCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivStart } from 'styles/common';
 import {
     getIsQuizStarted,
     startQuiz,
@@ -50,6 +53,7 @@ import useInterval from 'hooks/useInterval';
 import {
     ANSWER_QUESTION_PATH,
     FINISH_QUIZ_PATH,
+    MAX_SCORE,
     NEXT_QUESTION_PATH,
     NUMBER_OF_QUESTIONS,
     QUIZ_API_URL,
@@ -73,6 +77,11 @@ const Quiz: React.FC = () => {
     const endOfQuiz = useSelector((state: RootState) => getEndOfQuiz(state));
     const [twitterHandle, setTwitterHandle] = useState<string>('');
     const [percentageTimeRemaining, setPercentageTimeRemaining] = useState<number>(0);
+
+    const firstUpdate = useRef(true);
+    useEffect(() => {
+        firstUpdate.current = false;
+    }, []);
 
     const isStartQuizDisabled = !twitterHandle || twitterHandle.trim() === '';
 
@@ -118,9 +127,9 @@ const Quiz: React.FC = () => {
 
     const handlePreviousQuestion = () => dispatch(previousQuestion());
 
-    const handleFinishQuiz = async () => {
+    const handleFinishQuiz = async (submitAnswer: boolean) => {
         try {
-            if (currentQuizItem && currentQuizItem.answer && currentQuizItem.answer !== '') {
+            if (currentQuizItem && currentQuizItem.answer && currentQuizItem.answer !== '' && submitAnswer) {
                 await axios.post(`${QUIZ_API_URL}${ANSWER_QUESTION_PATH}`, {
                     playerUUID: playerUuid,
                     answer: currentQuizItem.answer,
@@ -165,15 +174,19 @@ const Quiz: React.FC = () => {
             return (
                 <>
                     {currentQuestionIndex > 0 && (
-                        <SubmitButton onClick={handlePreviousQuestion}>
+                        <SubmitButton onClick={handlePreviousQuestion} isNavigation>
                             {t('quiz.button.previous-question-label')}
                         </SubmitButton>
                     )}
                     {currentQuestionIndex < NUMBER_OF_QUESTIONS - 1 && (
-                        <SubmitButton onClick={handleNextQuestion}>{t('quiz.button.next-question-label')}</SubmitButton>
+                        <SubmitButton onClick={handleNextQuestion} isNavigation>
+                            {t('quiz.button.next-question-label')}
+                        </SubmitButton>
                     )}
                     {currentQuestionIndex == NUMBER_OF_QUESTIONS - 1 && (
-                        <SubmitButton onClick={handleFinishQuiz}>{t('quiz.button.finish-quiz-label')}</SubmitButton>
+                        <SubmitButton onClick={() => handleFinishQuiz(true)} isNavigation>
+                            {t('quiz.button.finish-quiz-label')}
+                        </SubmitButton>
                     )}
                 </>
             );
@@ -189,7 +202,7 @@ const Quiz: React.FC = () => {
     useInterval(async () => {
         if (isQuizStarted && !isQuizFinished) {
             if (new Date().getTime() > endOfQuiz) {
-                handleFinishQuiz();
+                handleFinishQuiz(false);
             }
         }
     }, 1000);
@@ -200,7 +213,7 @@ const Quiz: React.FC = () => {
             const percentageRemaining = secondRemaining > 0 ? (secondRemaining * 100) / (QUIZ_DURATION / 1000) : 0;
             setPercentageTimeRemaining(percentageRemaining);
         }
-    }, 100);
+    }, 1000);
 
     return (
         <>
@@ -217,14 +230,15 @@ const Quiz: React.FC = () => {
                         <TimeRemainingGraphicContainer>
                             <TimeRemainingGraphicPercentage
                                 width={percentageTimeRemaining}
+                                firstUpdate={firstUpdate.current}
                             ></TimeRemainingGraphicPercentage>
                         </TimeRemainingGraphicContainer>
                     </>
                 )}
                 <QuizContainer>
-                    {!isQuizFinished && <Title>{isQuizFinished ? '' : t('quiz.title')}</Title>}
                     {!isQuizStarted && (
                         <>
+                            <Title>{t('quiz.title')}</Title>
                             <Description>{t('quiz.start-quiz-description')}</Description>
                             <FlexDivCentered>
                                 <Input
@@ -234,43 +248,34 @@ const Quiz: React.FC = () => {
                                     onChange={(event) => setTwitterHandle(event.target.value)}
                                 />
                             </FlexDivCentered>
+                            <ButtonContainer>{getSubmitButton()}</ButtonContainer>
                         </>
                     )}
                     {isQuizStarted && !isQuizFinished && currentQuizItem && (
                         <>
-                            <Header>
-                                <Description>
-                                    {t('quiz.current-question-label', {
-                                        currentQuestion: currentQuestionIndex + 1,
-                                        numberOfQuestions: NUMBER_OF_QUESTIONS,
-                                    })}
-                                </Description>
-                            </Header>
-                            <Question>{currentQuizItem.question}</Question>
-                            {currentQuizItem.options.map((option) => {
-                                return (
-                                    <RadioButton
-                                        checked={option === currentQuizItem.answer}
-                                        value={option}
-                                        onChange={() =>
-                                            dispatch(setAnswer({ index: currentQuestionIndex, answer: option }))
-                                        }
-                                        label={option}
-                                        key={`option${option}`}
-                                    />
-                                );
-                            })}
                             <QuestionWeightContainer>
-                                <Description>
-                                    {t('quiz.question-weight-label', {
-                                        points: `${currentQuizItem.points} ${
-                                            Number(currentQuizItem.points) === 1
-                                                ? t('quiz.point-label')
-                                                : t('quiz.points-label')
-                                        }`,
-                                    })}
-                                </Description>
+                                {`${currentQuizItem.points} ${
+                                    Number(currentQuizItem.points) === 1
+                                        ? t('quiz.point-label')
+                                        : t('quiz.points-label')
+                                }`}
                             </QuestionWeightContainer>
+                            <Question>{currentQuizItem.question}</Question>
+                            <OptionsContainer>
+                                {currentQuizItem.options.map((option) => {
+                                    return (
+                                        <RadioButton
+                                            checked={option === currentQuizItem.answer}
+                                            value={option}
+                                            onChange={() =>
+                                                dispatch(setAnswer({ index: currentQuestionIndex, answer: option }))
+                                            }
+                                            label={option}
+                                            key={`option${option}`}
+                                        />
+                                    );
+                                })}
+                            </OptionsContainer>
                         </>
                     )}
                     {isQuizFinished && (
@@ -279,16 +284,33 @@ const Quiz: React.FC = () => {
                                 <FinishedInfoLabel>{t('quiz.quiz-finished-label')}</FinishedInfoLabel>
                                 <FinishedInfo>
                                     {t('quiz.your-score-label', {
-                                        score: `${score} ${
-                                            Number(score) === 1 ? t('quiz.point-label') : t('quiz.points-label')
-                                        }`,
+                                        score: score,
+                                        max: MAX_SCORE,
                                     })}
                                 </FinishedInfo>
                             </FinishedInfoContainer>
+                            <ButtonContainer>{getSubmitButton()}</ButtonContainer>
                         </>
                     )}
-                    <ButtonContainer>{getSubmitButton()}</ButtonContainer>
                 </QuizContainer>
+                {isQuizStarted && !isQuizFinished && currentQuizItem && (
+                    <Footer>
+                        <ButtonContainer>{getSubmitButton()}</ButtonContainer>
+                        <CurrentQuestion>
+                            {t('quiz.current-question-label', {
+                                currentQuestion: currentQuestionIndex + 1,
+                                numberOfQuestions: NUMBER_OF_QUESTIONS,
+                            })}
+                        </CurrentQuestion>
+                        <FlexDivStart>
+                            {[...Array(NUMBER_OF_QUESTIONS)].map((_, i) => {
+                                return (
+                                    <QuestionIndicator key={i} isPassed={i <= currentQuestionIndex}></QuestionIndicator>
+                                );
+                            })}
+                        </FlexDivStart>
+                    </Footer>
+                )}
             </Container>
         </>
     );
