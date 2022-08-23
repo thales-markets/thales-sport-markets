@@ -18,6 +18,9 @@ import {
     Header,
     Input,
     QuestionWeightContainer,
+    TimeRemainingText,
+    TimeRemainingGraphicContainer,
+    TimeRemainingGraphicPercentage,
 } from './styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -50,6 +53,7 @@ import {
     NEXT_QUESTION_PATH,
     NUMBER_OF_QUESTIONS,
     QUIZ_API_URL,
+    QUIZ_DURATION,
     START_QUIZ_PATH,
 } from 'constants/quiz';
 import SPAAnchor from 'components/SPAAnchor';
@@ -68,6 +72,7 @@ const Quiz: React.FC = () => {
     const score = useSelector((state: RootState) => getScore(state));
     const endOfQuiz = useSelector((state: RootState) => getEndOfQuiz(state));
     const [twitterHandle, setTwitterHandle] = useState<string>('');
+    const [percentageTimeRemaining, setPercentageTimeRemaining] = useState<number>(0);
 
     const isStartQuizDisabled = !twitterHandle || twitterHandle.trim() === '';
 
@@ -115,7 +120,7 @@ const Quiz: React.FC = () => {
 
     const handleFinishQuiz = async () => {
         try {
-            if (currentQuizItem.answer && currentQuizItem.answer !== '') {
+            if (currentQuizItem && currentQuizItem.answer && currentQuizItem.answer !== '') {
                 await axios.post(`${QUIZ_API_URL}${ANSWER_QUESTION_PATH}`, {
                     playerUUID: playerUuid,
                     answer: currentQuizItem.answer,
@@ -182,15 +187,40 @@ const Quiz: React.FC = () => {
     };
 
     useInterval(async () => {
-        if (new Date().getTime() > endOfQuiz) {
-            handleFinishQuiz();
+        if (isQuizStarted && !isQuizFinished) {
+            if (new Date().getTime() > endOfQuiz) {
+                handleFinishQuiz();
+            }
         }
     }, 1000);
+
+    useInterval(async () => {
+        if (isQuizStarted && !isQuizFinished) {
+            const secondRemaining = (endOfQuiz - new Date().getTime()) / 1000;
+            const percentageRemaining = secondRemaining > 0 ? (secondRemaining * 100) / (QUIZ_DURATION / 1000) : 0;
+            setPercentageTimeRemaining(percentageRemaining);
+        }
+    }, 100);
 
     return (
         <>
             <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
             <Container>
+                {isQuizStarted && !isQuizFinished && currentQuizItem && (
+                    <>
+                        <TimeRemainingText>
+                            <Trans
+                                i18nKey="quiz.time-reamining-label"
+                                components={[<TimeRemaining end={endOfQuiz} fontSize={18} key="timeRemaining" />]}
+                            />
+                        </TimeRemainingText>
+                        <TimeRemainingGraphicContainer>
+                            <TimeRemainingGraphicPercentage
+                                width={percentageTimeRemaining}
+                            ></TimeRemainingGraphicPercentage>
+                        </TimeRemainingGraphicContainer>
+                    </>
+                )}
                 <QuizContainer>
                     {!isQuizFinished && <Title>{isQuizFinished ? '' : t('quiz.title')}</Title>}
                     {!isQuizStarted && (
@@ -214,14 +244,6 @@ const Quiz: React.FC = () => {
                                         currentQuestion: currentQuestionIndex + 1,
                                         numberOfQuestions: NUMBER_OF_QUESTIONS,
                                     })}
-                                </Description>
-                                <Description>
-                                    <Trans
-                                        i18nKey="quiz.time-reamining-label"
-                                        components={[
-                                            <TimeRemaining end={endOfQuiz} fontSize={18} key="timeRemaining" />,
-                                        ]}
-                                    />
                                 </Description>
                             </Header>
                             <Question>{currentQuizItem.question}</Question>

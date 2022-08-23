@@ -1,5 +1,12 @@
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivEnd } from 'styles/common';
+import {
+    FlexDivCentered,
+    FlexDivColumn,
+    FlexDivColumnCentered,
+    FlexDivRow,
+    FlexDivEnd,
+    FlexDivStart,
+} from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
     width: 60%;
@@ -47,6 +54,43 @@ export const Description = styled.p`
     color: ${(props) => props.theme.textColor.primary};
 `;
 
+export const TimeRemainingText = styled(Description)`
+    margin-top: 30px;
+    margin-bottom: 10px;
+`;
+
+export const TimeRemainingGraphicContainer = styled(FlexDivStart)`
+    position: relative;
+    width: 565px;
+    height: 14px;
+    background: #303656;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    @media (max-width: 767px) {
+        width: 400px;
+    }
+    @media (max-width: 575px) {
+        width: 300px;
+    }
+`;
+
+export const TimeRemainingGraphicPercentage = styled(FlexDivStart)<{ width: number }>`
+    position: absolute;
+    width: ${(props) => props.width}%;
+    max-width: 565px;
+    height: 10px;
+    left: 2px;
+    top: 2px;
+    background: linear-gradient(270deg, #3fd1ff 16.01%, #15bba7 89.24%);
+    border-radius: 15px;
+    @media (max-width: 767px) {
+        max-width: 400px;
+    }
+    @media (max-width: 575px) {
+        max-width: 300px;
+    }
+`;
+
 export const Question = styled(Description)`
     font-size: 20px;
     font-weight: 600;
@@ -73,16 +117,18 @@ export const FinishedInfo = styled(Description)`
 `;
 
 export const SubmitButton = styled.button`
-    background: #5fc694;
-    border-radius: 5px;
+    background: linear-gradient(88.84deg, #5fc694 19.98%, #1ca6b9 117.56%);
+    border-radius: 40px;
     margin: 20px 20px;
     font-size: 20px;
+    font-weight: 700;
     line-height: 23px;
-    color: #303656;
-    width: 200px;
+    color: #1a1c2b;
+    width: 252px;
     border: none;
     padding: 7px;
     cursor: pointer;
+    text-transform: uppercase;
     &:disabled {
         opacity: 0.4;
         cursor: not-allowed;
