@@ -376,7 +376,7 @@ const Home: React.FC = () => {
         });
 
         return groupBySortedMarkets(sortedFilteredMarkets);
-    }, [tagsFilteredMarkets, sortBy, sortDirection, globalFilter]);
+    }, [tagsFilteredMarkets, sortBy, sortDirection, globalFilter, walletAddress]);
 
     const setSort = (sortOption: SortOptionType) => {
         if (sortBy === sortOption.id) {
