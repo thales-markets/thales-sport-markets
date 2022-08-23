@@ -3,7 +3,6 @@ import {
     MatchParticipantImage,
     MatchParticipantImageContainer,
     MatchParticipantName,
-    MatchVSLabel,
     ScoreLabel,
     WinnerLabel,
 } from 'components/common';
@@ -72,6 +71,7 @@ import {
     MatchDate,
     MatchInfo,
     MatchInfoColumn,
+    MatchVSLabel,
     MaxButton,
     OddsContainer,
     Option,
@@ -730,6 +730,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     {market.resolved && market.gameStarted && <ScoreLabel>{market.homeScore}</ScoreLabel>}
                 </MatchInfoColumn>
                 <MatchInfoColumn>
+                    <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
                     <MatchVSLabel>VS</MatchVSLabel>
                 </MatchInfoColumn>
                 <MatchInfoColumn>
@@ -750,7 +751,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     {market.resolved && market.gameStarted && <ScoreLabel>{market.awayScore}</ScoreLabel>}
                 </MatchInfoColumn>
             </MatchInfo>
-            {market.resolved && !market.gameStarted && <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>}
             {!market.gameStarted && !market.resolved && (
                 <OddsContainer>
                     <Pick
