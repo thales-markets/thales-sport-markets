@@ -32,6 +32,7 @@ export const QUERY_KEYS = {
         walletAddress,
         networkId,
     ],
+    ClaimTx: (market: string, networkId: NetworkId) => ['claim', 'transactions', market, networkId],
     UserTransactionsPerMarket: (walletAddress: string, marketAddress: string, networkId: NetworkId) => [
         'user',
         'market',
