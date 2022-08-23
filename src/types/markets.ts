@@ -198,6 +198,15 @@ export type MarketTransaction = {
 
 export type MarketTransactions = MarketTransaction[];
 
+export type ClaimTransaction = {
+    id: string;
+    account: string;
+    amount: number;
+    market: MarketData;
+};
+
+export type ClaimTransactions = ClaimTransaction[];
+
 export type UserTransaction = {
     hash: string;
     type: MarketTransactionType;
