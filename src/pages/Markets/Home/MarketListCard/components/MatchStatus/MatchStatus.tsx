@@ -21,22 +21,22 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ isResolved, isLive, isCancele
 
     return (
         <Container>
-            {canceledFlag && <Status color={STATUS_COLOR.CANCELED}>{t('markets.market-card-list.canceled')}</Status>}
-            {regularFlag && <MatchStarts>{`${t('markets.market-card-list.starts')}: ${startsAt}`}</MatchStarts>}
+            {canceledFlag && <Status color={STATUS_COLOR.CANCELED}>{t('markets.market-card.canceled')}</Status>}
+            {regularFlag && <MatchStarts>{`${t('markets.market-card.starts')}: ${startsAt}`}</MatchStarts>}
             {isResolved && !isClaimable && (
                 <>
-                    <ResultLabel>{t('markets.market-card-list.result')}</ResultLabel>
+                    <ResultLabel>{t('markets.market-card.result')}</ResultLabel>
                     <Result isLive={isLive}>{result}</Result>
-                    <Status color={STATUS_COLOR.FINISHED}>{t('markets.market-card-list.finished')}</Status>
+                    <Status color={STATUS_COLOR.FINISHED}>{t('markets.market-card.finished')}</Status>
                 </>
             )}
             {isResolved && isClaimable && (
                 <>
-                    <ClaimButton>{t('markets.market-card-list.claim')}</ClaimButton>
-                    <ResultLabel>{t('markets.market-card-list.result')}</ResultLabel>
+                    <ClaimButton>{t('markets.market-card.claim')}</ClaimButton>
+                    <ResultLabel>{t('markets.market-card.result')}</ResultLabel>
                     <Result isLive={isLive}>{result}</Result>
                     <Status color={STATUS_COLOR.CLAIMABLE} style={{ fontWeight: '700' }}>
-                        {t('markets.market-card-list.claimable')}
+                        {t('markets.market-card.claimable')}
                     </Status>
                 </>
             )}
@@ -44,7 +44,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ isResolved, isLive, isCancele
                 <>
                     {/* <Result isLive={isLive}>{result}</Result> */}
                     <Status color={STATUS_COLOR.STARTED} style={{ fontWeight: '500' }}>
-                        {t('markets.market-card-list.pending-resolution')}
+                        {t('markets.market-card.pending-resolution')}
                     </Status>
                 </>
             )}
