@@ -1,3 +1,4 @@
+import { Tooltip, withStyles } from '@material-ui/core';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivStart } from 'styles/common';
 
@@ -103,6 +104,7 @@ export const Question = styled(Description)`
 export const FinishedInfoContainer = styled(FlexDivColumnCentered)`
     align-items: center;
     margin-top: 20px;
+    text-align: center;
 `;
 
 export const FinishedInfoLabel = styled(Description)`
@@ -134,7 +136,7 @@ export const SubmitButton = styled.button<{ isNavigation?: boolean }>`
     text-transform: uppercase;
     &:disabled {
         opacity: 0.4;
-        cursor: not-allowed;
+        cursor: default;
     }
 `;
 
@@ -208,7 +210,12 @@ export const OptionsContainer = styled(FlexDivColumnCentered)`
 
 export const CurrentQuestion = styled(Description)`
     margin-top: 30px;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
+`;
+
+export const QuestionIndicatorContainer = styled(FlexDivStart)`
+    flex-wrap: wrap;
+    justify-content: center;
 `;
 
 export const QuestionIndicator = styled(FlexDivCentered)<{ isPassed: boolean }>`
@@ -216,10 +223,37 @@ export const QuestionIndicator = styled(FlexDivCentered)<{ isPassed: boolean }>`
     background: ${(props) => (props.isPassed ? '#2fc9dd' : '#303656')};
     width: 24px;
     height: 24px;
-    margin-right: 25px;
+    :not(:last-child) {
+        margin-right: 25px;
+    }
+    margin-top: 10px;
+    @media (max-width: 575px) {
+        width: 18px;
+        height: 18px;
+        :not(:last-child) {
+            margin-right: 15px;
+        }
+    }
 `;
 
 export const Footer = styled(FlexDivColumn)`
     margin-top: 20px;
     align-items: center;
+`;
+
+export const ValidationTooltip = withStyles(() => ({
+    tooltip: {
+        minWidth: '100%',
+        width: '100%',
+        margin: '1px',
+        backgroundColor: '#FDB7B7',
+        color: '#F30101',
+        fontSize: '12px',
+    },
+}))(Tooltip);
+
+export const LoaderContainer = styled(FlexDivCentered)`
+    position: relative;
+    min-height: 298px;
+    width: 100%;
 `;

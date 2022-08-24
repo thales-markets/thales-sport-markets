@@ -277,6 +277,7 @@
         "title": "Quiz",
         "start-quiz-description": "Connect your wallet and enter your Twitter handle to start the quiz!",
         "twitter-handle-placeholder": "Enter your Twitter handle",
+        "twitter-handle-validation": "Invalid Twitter handle. Try again.",
         "current-question-label": "Current question: {{currentQuestion}}/{{numberOfQuestions}}",
         "time-reamining-label": "Time remaining: <0/>",
         "question-weight-label": "Question weight: {{points}}",

@@ -24,12 +24,15 @@ import {
     QuestionIndicator,
     CurrentQuestion,
     Footer,
+    ValidationTooltip,
+    LoaderContainer,
+    QuestionIndicatorContainer,
 } from './styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import onboardConnector from 'utils/onboardConnector';
-import { FlexDivCentered, FlexDivStart } from 'styles/common';
+import { FlexDivCentered } from 'styles/common';
 import {
     getIsQuizStarted,
     startQuiz,
@@ -61,6 +64,7 @@ import {
     START_QUIZ_PATH,
 } from 'constants/quiz';
 import SPAAnchor from 'components/SPAAnchor';
+import SimpleLoader from 'components/SimpleLoader';
 
 const Quiz: React.FC = () => {
     const { t } = useTranslation();
@@ -77,34 +81,40 @@ const Quiz: React.FC = () => {
     const endOfQuiz = useSelector((state: RootState) => getEndOfQuiz(state));
     const [twitterHandle, setTwitterHandle] = useState<string>('');
     const [percentageTimeRemaining, setPercentageTimeRemaining] = useState<number>(0);
+    const [isTwitterValid, setIsTwitterValid] = useState<boolean>(true);
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     const firstUpdate = useRef(true);
     useEffect(() => {
         firstUpdate.current = false;
     }, []);
 
-    const isStartQuizDisabled = !twitterHandle || twitterHandle.trim() === '';
+    const isStartQuizDisabled = !twitterHandle || twitterHandle.trim() === '' || isSubmitting;
+    const isQuizInProgress = isQuizStarted && !isQuizFinished && currentQuizItem;
 
     const handleStartQuiz = async () => {
+        setIsSubmitting(true);
         try {
             const startQuizResponse = await axios.post(`${QUIZ_API_URL}${START_QUIZ_PATH}`, {
-                twitter: twitterHandle,
+                twitter: twitterHandle.trim(),
                 wallet: walletAddress,
             });
             const playerUuid = startQuizResponse.data.data;
-            dispatch(startQuiz(playerUuid));
-
             const nextQuestionResponse = await axios.get(
                 `${QUIZ_API_URL}${NEXT_QUESTION_PATH}?playerUUID=${playerUuid}`
             );
+            dispatch(startQuiz(playerUuid));
             dispatch(addQuizItem(nextQuestionResponse.data.data));
             dispatch(nextQuestion());
         } catch (e) {
+            setIsTwitterValid(false);
             console.log(e);
         }
+        setIsSubmitting(false);
     };
 
     const handleNextQuestion = async () => {
+        setIsSubmitting(true);
         try {
             if (currentQuizItem.answer && currentQuizItem.answer !== '') {
                 await axios.post(`${QUIZ_API_URL}${ANSWER_QUESTION_PATH}`, {
@@ -123,13 +133,15 @@ const Quiz: React.FC = () => {
         } catch (e) {
             console.log(e);
         }
+        setIsSubmitting(false);
     };
 
     const handlePreviousQuestion = () => dispatch(previousQuestion());
 
     const handleFinishQuiz = async (submitAnswer: boolean) => {
+        setIsSubmitting(true);
         try {
-            if (currentQuizItem && currentQuizItem.answer && currentQuizItem.answer !== '' && submitAnswer) {
+            if (submitAnswer && currentQuizItem && currentQuizItem.answer && currentQuizItem.answer !== '') {
                 await axios.post(`${QUIZ_API_URL}${ANSWER_QUESTION_PATH}`, {
                     playerUUID: playerUuid,
                     answer: currentQuizItem.answer,
@@ -146,6 +158,7 @@ const Quiz: React.FC = () => {
         } catch (e) {
             console.log(e);
         }
+        setIsSubmitting(false);
     };
 
     const handleNewQuiz = () => dispatch(resetQuiz());
@@ -174,17 +187,17 @@ const Quiz: React.FC = () => {
             return (
                 <>
                     {currentQuestionIndex > 0 && (
-                        <SubmitButton onClick={handlePreviousQuestion} isNavigation>
+                        <SubmitButton onClick={handlePreviousQuestion} isNavigation disabled={isSubmitting}>
                             {t('quiz.button.previous-question-label')}
                         </SubmitButton>
                     )}
                     {currentQuestionIndex < NUMBER_OF_QUESTIONS - 1 && (
-                        <SubmitButton onClick={handleNextQuestion} isNavigation>
+                        <SubmitButton onClick={handleNextQuestion} isNavigation disabled={isSubmitting}>
                             {t('quiz.button.next-question-label')}
                         </SubmitButton>
                     )}
                     {currentQuestionIndex == NUMBER_OF_QUESTIONS - 1 && (
-                        <SubmitButton onClick={() => handleFinishQuiz(true)} isNavigation>
+                        <SubmitButton onClick={() => handleFinishQuiz(true)} isNavigation disabled={isSubmitting}>
                             {t('quiz.button.finish-quiz-label')}
                         </SubmitButton>
                     )}
@@ -219,7 +232,7 @@ const Quiz: React.FC = () => {
         <>
             <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
             <Container>
-                {isQuizStarted && !isQuizFinished && currentQuizItem && (
+                {isQuizInProgress && (
                     <>
                         <TimeRemainingText>
                             <Trans
@@ -236,64 +249,82 @@ const Quiz: React.FC = () => {
                     </>
                 )}
                 <QuizContainer>
-                    {!isQuizStarted && (
+                    {isSubmitting ? (
+                        <LoaderContainer>
+                            <SimpleLoader />
+                        </LoaderContainer>
+                    ) : (
                         <>
-                            <Title>{t('quiz.title')}</Title>
-                            <Description>{t('quiz.start-quiz-description')}</Description>
-                            <FlexDivCentered>
-                                <Input
-                                    type="text"
-                                    placeholder={t('quiz.twitter-handle-placeholder')}
-                                    value={twitterHandle}
-                                    onChange={(event) => setTwitterHandle(event.target.value)}
-                                />
-                            </FlexDivCentered>
-                            <ButtonContainer>{getSubmitButton()}</ButtonContainer>
-                        </>
-                    )}
-                    {isQuizStarted && !isQuizFinished && currentQuizItem && (
-                        <>
-                            <QuestionWeightContainer>
-                                {`${currentQuizItem.points} ${
-                                    Number(currentQuizItem.points) === 1
-                                        ? t('quiz.point-label')
-                                        : t('quiz.points-label')
-                                }`}
-                            </QuestionWeightContainer>
-                            <Question>{currentQuizItem.question}</Question>
-                            <OptionsContainer>
-                                {currentQuizItem.options.map((option) => {
-                                    return (
-                                        <RadioButton
-                                            checked={option === currentQuizItem.answer}
-                                            value={option}
-                                            onChange={() =>
-                                                dispatch(setAnswer({ index: currentQuestionIndex, answer: option }))
-                                            }
-                                            label={option}
-                                            key={`option${option}`}
-                                        />
-                                    );
-                                })}
-                            </OptionsContainer>
-                        </>
-                    )}
-                    {isQuizFinished && (
-                        <>
-                            <FinishedInfoContainer>
-                                <FinishedInfoLabel>{t('quiz.quiz-finished-label')}</FinishedInfoLabel>
-                                <FinishedInfo>
-                                    {t('quiz.your-score-label', {
-                                        score: score,
-                                        max: MAX_SCORE,
-                                    })}
-                                </FinishedInfo>
-                            </FinishedInfoContainer>
-                            <ButtonContainer>{getSubmitButton()}</ButtonContainer>
+                            {!isQuizStarted && (
+                                <>
+                                    <Title>{t('quiz.title')}</Title>
+                                    <Description>{t('quiz.start-quiz-description')}</Description>
+                                    <FlexDivCentered>
+                                        <ValidationTooltip
+                                            open={!isTwitterValid}
+                                            title={t('quiz.twitter-handle-validation') as string}
+                                        >
+                                            <Input
+                                                type="text"
+                                                placeholder={t('quiz.twitter-handle-placeholder')}
+                                                value={twitterHandle}
+                                                onChange={(event) => {
+                                                    setIsTwitterValid(true);
+                                                    setTwitterHandle(event.target.value);
+                                                }}
+                                            />
+                                        </ValidationTooltip>
+                                    </FlexDivCentered>
+                                    <ButtonContainer>{getSubmitButton()}</ButtonContainer>
+                                </>
+                            )}
+                            {isQuizInProgress && (
+                                <>
+                                    <QuestionWeightContainer>
+                                        {`${currentQuizItem.points} ${
+                                            Number(currentQuizItem.points) === 1
+                                                ? t('quiz.point-label')
+                                                : t('quiz.points-label')
+                                        }`}
+                                    </QuestionWeightContainer>
+                                    <Question>{currentQuizItem.question}</Question>
+                                    <OptionsContainer>
+                                        {currentQuizItem.options.map((option) => {
+                                            return (
+                                                <RadioButton
+                                                    checked={option === currentQuizItem.answer}
+                                                    value={option}
+                                                    onChange={() =>
+                                                        dispatch(
+                                                            setAnswer({ index: currentQuestionIndex, answer: option })
+                                                        )
+                                                    }
+                                                    label={option}
+                                                    key={`option${option}`}
+                                                />
+                                            );
+                                        })}
+                                    </OptionsContainer>
+                                </>
+                            )}
+                            {isQuizFinished && (
+                                <>
+                                    <FinishedInfoContainer>
+                                        <FinishedInfoLabel>{t('quiz.quiz-finished-label')}</FinishedInfoLabel>
+                                        <FinishedInfo>
+                                            {t('quiz.your-score-label', {
+                                                score: score,
+                                                max: MAX_SCORE,
+                                            })}
+                                        </FinishedInfo>
+                                    </FinishedInfoContainer>
+                                    <ButtonContainer>{getSubmitButton()}</ButtonContainer>
+                                </>
+                            )}
                         </>
                     )}
                 </QuizContainer>
-                {isQuizStarted && !isQuizFinished && currentQuizItem && (
+                {isQuizInProgress && (
                     <Footer>
                         <ButtonContainer>{getSubmitButton()}</ButtonContainer>
                         <CurrentQuestion>
@@ -302,13 +333,13 @@ const Quiz: React.FC = () => {
                                 numberOfQuestions: NUMBER_OF_QUESTIONS,
                             })}
                         </CurrentQuestion>
-                        <FlexDivStart>
+                        <QuestionIndicatorContainer>
                             {[...Array(NUMBER_OF_QUESTIONS)].map((_, i) => {
                                 return (
                                     <QuestionIndicator key={i} isPassed={i <= currentQuestionIndex}></QuestionIndicator>
                                 );
                             })}
-                        </FlexDivStart>
+                        </QuestionIndicatorContainer>
                     </Footer>
                 )}
             </Container>
