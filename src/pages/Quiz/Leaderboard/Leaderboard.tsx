@@ -64,7 +64,21 @@ const Leaderboard: React.FC = () => {
                         marginBottom={10}
                     />
                     <Table
+                        tableRowStyles={{
+                            fontSize: 18,
+                            minHeight: 46,
+                            borderBottom: 'none',
+                        }}
+                        tableRowHeadStyles={{ borderBottom: 'none', color: '#5F6180' }}
                         columns={[
+                            {
+                                Header: <>{t('quiz.leaderboard.table.position-col')}</>,
+                                accessor: 'position',
+                                Cell: (cellProps: CellProps<LeaderboardItem, LeaderboardItem['position']>) => (
+                                    <p>{cellProps.cell.value}</p>
+                                ),
+                                sortable: true,
+                            },
                             {
                                 Header: <>{t('quiz.leaderboard.table.wallet-address-col')}</>,
                                 accessor: 'wallet',
@@ -127,8 +141,8 @@ const Leaderboard: React.FC = () => {
                         initialState={{
                             sortBy: [
                                 {
-                                    id: 'points',
-                                    desc: true,
+                                    id: 'position',
+                                    desc: false,
                                 },
                             ],
                         }}

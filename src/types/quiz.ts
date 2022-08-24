@@ -4,6 +4,7 @@ export type LeaderboardItem = {
     points: number;
     avatar: string;
     finishTime: string;
+    position: string;
 };
 
 export type LeaderboardList = LeaderboardItem[];

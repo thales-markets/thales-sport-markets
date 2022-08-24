@@ -24,8 +24,10 @@ export const QuizContainer = styled(FlexDivColumn)`
     align-items: center;
 `;
 
-export const LeaderboardContainer = styled(QuizContainer)`
-    align-items: initial;
+export const LeaderboardContainer = styled(FlexDivColumn)`
+    margin-top: 20px;
+    flex: initial;
+    width: 100%;
 `;
 
 export const Title = styled.span`
@@ -194,8 +196,8 @@ export const TwitterTableContainer = styled(FlexDivStart)`
 
 export const TwitterImage = styled.img`
     border-radius: 50%;
-    height: 24px;
-    width: 24px;
+    height: 30px;
+    width: 30px;
     color: #ffffff;
     margin-right: 6px;
 `;

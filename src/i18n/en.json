@@ -298,6 +298,7 @@
             "back-to-quiz": "Back to quiz",
             "search-placeholder": "Search...",
             "table": {
+                "position-col": "Position",
                 "wallet-address-col": "Wallet address",
                 "twitter-col": "Twitter",
                 "points-col": "Points",

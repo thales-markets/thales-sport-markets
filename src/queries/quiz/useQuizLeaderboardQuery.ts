@@ -3,6 +3,7 @@ import QUERY_KEYS from '../../constants/queryKeys';
 import axios from 'axios';
 import { LeaderboardList } from 'types/quiz';
 import { LEADERBOARD_PATH, QUIZ_API_URL } from 'constants/quiz';
+import { orderBy } from 'lodash';
 
 const useQuizLeaderboardQuery = (options?: UseQueryOptions<LeaderboardList>) => {
     return useQuery<LeaderboardList>(
@@ -10,8 +11,13 @@ const useQuizLeaderboardQuery = (options?: UseQueryOptions<LeaderboardList>) => 
         async () => {
             try {
                 const leaderboardResponse = await axios.get(`${QUIZ_API_URL}${LEADERBOARD_PATH}`);
-
-                return leaderboardResponse.data.data;
+                const data = orderBy(leaderboardResponse.data.data, ['points', 'finishTime'], ['desc', 'asc']).map(
+                    (item, index) => {
+                        item.position = index + 1;
+                        return item;
+                    }
+                );
+                return data;
             } catch (e) {
                 console.log(e);
             }
