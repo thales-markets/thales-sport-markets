@@ -9,6 +9,9 @@ import { FlexDivRowCentered } from 'styles/common';
 import { NetworkIdByName } from 'utils/network';
 import { getNetworkId } from 'redux/modules/wallet';
 import Referral from 'components/Referral';
+import { buildHref } from 'utils/routes';
+import SPAAnchor from 'components/SPAAnchor';
+import ROUTES from 'constants/routes';
 
 const DappHeader: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -17,6 +20,9 @@ const DappHeader: React.FC = () => {
         <Container>
             <Logo />
             <RightContainer>
+                <SPAAnchor href={buildHref(ROUTES.Quiz)}>
+                    <StartQuizIcon />
+                </SPAAnchor>
                 <Referral />
                 {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
                 <WalletInfo />
@@ -27,6 +33,7 @@ const DappHeader: React.FC = () => {
 
 const Container = styled(FlexDivRowCentered)`
     width: 100%;
+    margin-top: 10px;
     @media (max-width: 767px) {
         flex-direction: column;
     }
@@ -44,6 +51,26 @@ const RightContainer = styled(FlexDivRowCentered)`
                 margin-bottom: 10px;
             }
         }
+    }
+`;
+
+const StartQuizIcon = styled.i`
+    font-size: 120px;
+    margin-right: 20px;
+    cursor: pointer;
+    max-height: 25px;
+    top: -48px;
+    display: flex;
+    position: relative;
+    &:before {
+        font-family: OvertimeIcons !important;
+        content: '\\0051';
+        color: #50ce99;
+    }
+    @media (max-width: 767px) {
+        flex-direction: column;
+        margin-bottom: 20px;
+        margin-right: 0px;
     }
 `;
 

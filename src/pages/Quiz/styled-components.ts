@@ -1,4 +1,4 @@
-import { Tooltip, withStyles } from '@material-ui/core';
+import { TablePagination, Tooltip, withStyles } from '@material-ui/core';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivStart } from 'styles/common';
 
@@ -13,8 +13,7 @@ export const Container = styled(FlexDivColumn)`
 
 export const QuizContainer = styled(FlexDivColumn)`
     margin-top: 20px;
-    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.35);
-    border-radius: 25px;
+    border-radius: 30px;
     width: 100%;
     padding: 20px 50px 20px 50px;
     background: ${(props) => props.theme.background.secondary};
@@ -23,6 +22,22 @@ export const QuizContainer = styled(FlexDivColumn)`
         padding: 0px 20px 0px 20px;
     }
     align-items: center;
+`;
+
+export const QuizFirstNextContainer = styled(FlexDivColumn)`
+    width: 95%;
+    background: #252940;
+    border-radius: 0 0 30px 30px;
+    min-height: 25px;
+    max-height: 25px;
+`;
+
+export const QuizSecondNextContainer = styled(FlexDivColumn)`
+    width: 90%;
+    background: #1e2134;
+    border-radius: 0 0 30px 30px;
+    min-height: 25px;
+    max-height: 25px;
 `;
 
 export const LeaderboardContainer = styled(FlexDivColumn)`
@@ -112,7 +127,7 @@ export const FinishedInfoLabel = styled(Description)`
 `;
 
 export const FinishedInfo = styled(Description)`
-    font-size: 30px;
+    font-size: 26px;
     font-weight: 600;
     margin-top: 30px;
     margin-bottom: 40px;
@@ -256,4 +271,34 @@ export const LoaderContainer = styled(FlexDivCentered)`
     position: relative;
     min-height: 298px;
     width: 100%;
+`;
+
+export const PaginationWrapper = styled(TablePagination)`
+    border: none !important;
+    display: flex;
+    width: 100%;
+    height: auto;
+    color: #f6f6fe !important;
+    .MuiToolbar-root {
+        padding: 0;
+        display: flex;
+        .MuiSelect-icon {
+            color: #f6f6fe;
+        }
+    }
+    .MuiIconButton-root.Mui-disabled {
+        color: #5f6180;
+    }
+    .MuiTablePagination-toolbar > .MuiTablePagination-caption:last-of-type {
+        display: block;
+    }
+    .MuiTablePagination-input {
+        margin-top: 2px;
+    }
+    .MuiTablePagination-selectRoot {
+        @media (max-width: 767px) {
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+    }
 `;

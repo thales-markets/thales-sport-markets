@@ -7,3 +7,26 @@ export const NEXT_QUESTION_PATH = '/next/question';
 export const ANSWER_QUESTION_PATH = '/answer';
 export const FINISH_QUIZ_PATH = '/finish';
 export const LEADERBOARD_PATH = '/leaderboard';
+
+export const REWARDS = [
+    10000,
+    5000,
+    2000,
+    1000,
+    1000,
+    1000,
+    500,
+    500,
+    500,
+    500,
+    100,
+    100,
+    100,
+    100,
+    100,
+    50,
+    50,
+    50,
+    50,
+    50,
+];

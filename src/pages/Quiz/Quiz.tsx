@@ -27,6 +27,8 @@ import {
     ValidationTooltip,
     LoaderContainer,
     QuestionIndicatorContainer,
+    QuizFirstNextContainer,
+    QuizSecondNextContainer,
 } from './styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -324,6 +326,12 @@ const Quiz: React.FC = () => {
                         </>
                     )}
                 </QuizContainer>
+                {isQuizInProgress && (
+                    <>
+                        {currentQuestionIndex < NUMBER_OF_QUESTIONS - 1 && <QuizFirstNextContainer />}
+                        {currentQuestionIndex < NUMBER_OF_QUESTIONS - 2 && <QuizSecondNextContainer />}
+                    </>
+                )}
                 {isQuizInProgress && (
                     <Footer>
                         <ButtonContainer>{getSubmitButton()}</ButtonContainer>

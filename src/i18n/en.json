@@ -299,11 +299,12 @@
             "back-to-quiz": "Back to quiz",
             "search-placeholder": "Search...",
             "table": {
-                "position-col": "Position",
+                "rank-col": "Rank",
                 "wallet-address-col": "Wallet address",
                 "twitter-col": "Twitter",
                 "points-col": "Points",
                 "time-col": "Time",
+                "rewards-col": "Rewards",
                 "no-data-available": "No data available"
             }
         }
