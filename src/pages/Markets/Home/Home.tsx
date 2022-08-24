@@ -53,7 +53,8 @@ import { getOddsType, setOddsType } from '../../../redux/modules/ui';
 import SPAAnchor from 'components/SPAAnchor';
 import { buildHref } from 'utils/routes';
 import { useLocation } from 'react-router-dom';
-import ROUTES from 'constants/routes';
+import { history } from 'utils/routes';
+import ROUTES, { RESET_STATE } from 'constants/routes';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -455,7 +456,7 @@ const Home: React.FC = () => {
         }
     };
 
-    const resetFilters = () => {
+    const resetFilters = useCallback(() => {
         setGlobalFilter(GlobalFilterEnum.OpenMarkets);
         setSportFilter(SportFilterEnum.All);
         setDateFilter('');
@@ -463,12 +464,14 @@ const Home: React.FC = () => {
         setEndDate(null);
         setTagFilter(allTagsFilterItem);
         dispatch(setMarketSearch(''));
-    };
+    }, [allTagsFilterItem, dispatch, setDateFilter, setGlobalFilter, setSportFilter, setTagFilter]);
 
     useEffect(() => {
-        resetFilters();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location]);
+        if (location.state === RESET_STATE) {
+            history.replace(location.pathname, '');
+            resetFilters();
+        }
+    }, [location, resetFilters]);
 
     useEffect(() => {
         trackPageView({});
