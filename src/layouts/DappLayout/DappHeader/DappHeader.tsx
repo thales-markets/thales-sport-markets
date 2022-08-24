@@ -9,6 +9,7 @@ import { FlexDivRowCentered } from 'styles/common';
 import { NetworkIdByName } from 'utils/network';
 import { getNetworkId } from 'redux/modules/wallet';
 import Referral from 'components/Referral';
+import LanguageSelector from 'components/LanguageSelector';
 
 const DappHeader: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -19,6 +20,7 @@ const DappHeader: React.FC = () => {
             <RightContainer>
                 <Referral />
                 {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
+                <LanguageSelector />
                 <WalletInfo />
             </RightContainer>
         </Container>

@@ -176,6 +176,7 @@ export const MatchInfoLabel = styled.label<{
             : props.theme.textColor.primary};
     cursor: pointer;
     position: ${(props) => (props.pendingResolution ? 'absolute' : '')};
+    text-transform: uppercase;
 `;
 
 export const MatchVSLabel = styled.label<{

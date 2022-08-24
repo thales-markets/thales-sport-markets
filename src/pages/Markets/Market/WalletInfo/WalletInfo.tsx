@@ -10,6 +10,7 @@ import {
 } from './styled-components/WalletInfo';
 import useMarketBalancesQuery from '../../../../queries/markets/useMarketBalancesQuery';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { RootState } from '../../../../redux/rootReducer';
 import { getIsWalletConnected, getWalletAddress } from '../../../../redux/modules/wallet';
 import { Balances, MarketData, Odds } from '../../../../types/markets';
@@ -24,6 +25,7 @@ type WalletInfoProps = {
 };
 
 const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
+    const { t } = useTranslation();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const [balances, setBalances] = useState<Balances | undefined>(undefined);
@@ -52,14 +54,14 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
             <TokenInfo>
                 <FlexDivCentered>
                     <WalletIcon />
-                    <Title>IN WALLET:</Title>
+                    <Title>{t('markets.market-details.wallet-info.title')}:</Title>
                 </FlexDivCentered>
                 <ValueContainer>
                     {!!balances?.home && (
                         <FlexDivCentered>
                             <Token color={ODDS_COLOR.HOME}>1</Token>
                             <Value>
-                                {market?.homeTeam.toUpperCase()}: {balances?.home}
+                                {market?.homeTeam}: {balances?.home}
                             </Value>
                             <AlternateValue>
                                 (${' '}
@@ -77,7 +79,9 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
                     {!!balances?.draw && (
                         <FlexDivCentered>
                             <Token color={ODDS_COLOR.DRAW}>X</Token>
-                            <Value>DRAW: {balances?.draw}</Value>
+                            <Value>
+                                {t('markets.market-card.draw')}: {balances?.draw}
+                            </Value>
                             <AlternateValue>
                                 (${' '}
                                 {(market?.resolved && !market?.cancelled && market.finalResult - 1 == Position.DRAW
@@ -95,7 +99,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
                         <FlexDivCentered>
                             <Token color={ODDS_COLOR.AWAY}>2</Token>
                             <Value>
-                                {market?.awayTeam.toUpperCase()}: {balances?.away}
+                                {market?.awayTeam}: {balances?.away}
                             </Value>
                             <AlternateValue>
                                 (${' '}

@@ -70,13 +70,13 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
             </MatchInfoColumn>
             <MatchInfoColumn>
                 <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
-                <MatchVSLabel>VS</MatchVSLabel>
+                <MatchVSLabel>{t('markets.market-card.vs')}</MatchVSLabel>
                 <OddsLabel
                     isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}
                     isDraw={true}
                 >
                     {market.awayOdds == 0 && market.homeOdds == 0
-                        ? 'Coming Soon!'
+                        ? t('markets.market-card.coming-soon')
                         : formatMarketOdds(selectedOddsType, market.drawOdds)}
                 </OddsLabel>
                 <MatchParticipantName
@@ -87,7 +87,7 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                         !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.draw)
                     }
                 >
-                    {'DRAW'}
+                    {t('markets.market-card.draw')}
                 </MatchParticipantName>
                 <Tags sport={market.sport} tags={market.tags} />
             </MatchInfoColumn>

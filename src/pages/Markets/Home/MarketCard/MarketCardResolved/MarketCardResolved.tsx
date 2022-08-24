@@ -107,7 +107,7 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
                     />
                 </MatchParticipantImageContainer>
                 <WinnerLabel isWinning={market.finalResult == 1} finalResult={market.finalResult}>
-                    WINNER
+                    {t('common.winner')}
                 </WinnerLabel>
                 <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
                 <ScoreLabel>{market.homeScore}</ScoreLabel>
@@ -115,7 +115,9 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
             <MatchInfoColumn>
                 <MarketInfoContainer>
                     <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
-                    <MatchInfoLabel claimable={claimable}>{claimable ? 'CLAIMABLE' : 'FINISHED'}</MatchInfoLabel>
+                    <MatchInfoLabel claimable={claimable}>
+                        {claimable ? t('markets.market-card.claimable') : t('markets.market-card.finished')}
+                    </MatchInfoLabel>
                     <ClaimButton
                         onClick={(e: any) => {
                             e.preventDefault();
@@ -124,12 +126,12 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
                         }}
                         claimable={claimable}
                     >
-                        CLAIM
+                        {t('markets.market-card.claim')}
                     </ClaimButton>
                 </MarketInfoContainer>
-                <MatchVSLabel>VS</MatchVSLabel>
+                <MatchVSLabel>{t('markets.market-card.vs')}</MatchVSLabel>
                 <WinnerLabel isWinning={market.finalResult == 3} finalResult={market.finalResult}>
-                    DRAW
+                    {t('markets.market-card.draw')}
                 </WinnerLabel>
                 <ProfitLabel claimable={claimable} profit={claimableAmount}>{`$ ${claimableAmount.toFixed(
                     2
@@ -145,7 +147,7 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
                     />
                 </MatchParticipantImageContainer>
                 <WinnerLabel isWinning={market.finalResult == 2} finalResult={market.finalResult}>
-                    WINNER
+                    {t('common.winner')}
                 </WinnerLabel>
                 <MatchParticipantName>{market.awayTeam}</MatchParticipantName>
                 <ScoreLabel>{market.awayScore}</ScoreLabel>

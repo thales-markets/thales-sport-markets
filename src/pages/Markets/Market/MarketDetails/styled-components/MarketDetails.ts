@@ -131,6 +131,7 @@ export const InfoTitle = styled.div`
     font-size: 18px;
     line-height: 23px;
     margin-right: 5px;
+    text-transform: uppercase;
 `;
 
 export const InfoValue = styled.div`
