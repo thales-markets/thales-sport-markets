@@ -48,6 +48,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ isResolved, isLive, isCancele
                     </Status>
                 </>
             )}
+            {!regularFlag && <MatchStarts>{`| ${startsAt}`}</MatchStarts>}
         </Container>
     );
 };
@@ -79,11 +80,10 @@ const ResultLabel = styled.span`
 
 const MatchStarts = styled.span`
     justify-self: end;
-    font-size: 17px;
-    line-height: 20px;
     text-align: right;
     color: #ffffff;
     text-transform: uppercase;
+    margin-left: 5px;
 `;
 
 const ClaimButton = styled.div`

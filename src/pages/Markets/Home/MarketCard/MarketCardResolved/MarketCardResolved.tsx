@@ -1,5 +1,7 @@
 import Button from 'components/Button';
 import {
+    MarketInfoContainer,
+    MatchDate,
     MatchInfo,
     MatchInfoColumn,
     MatchInfoLabel,
@@ -26,6 +28,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { Balances, SportMarketInfo } from 'types/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
+import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import networkConnector from 'utils/networkConnector';
 
@@ -110,17 +113,20 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
                 <ScoreLabel>{market.homeScore}</ScoreLabel>
             </MatchInfoColumn>
             <MatchInfoColumn>
-                <MatchInfoLabel claimable={claimable}>{claimable ? 'CLAIMABLE' : 'FINISHED'}</MatchInfoLabel>
-                <ClaimButton
-                    onClick={(e: any) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        claimReward();
-                    }}
-                    claimable={claimable}
-                >
-                    CLAIM
-                </ClaimButton>
+                <MarketInfoContainer>
+                    <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
+                    <MatchInfoLabel claimable={claimable}>{claimable ? 'CLAIMABLE' : 'FINISHED'}</MatchInfoLabel>
+                    <ClaimButton
+                        onClick={(e: any) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            claimReward();
+                        }}
+                        claimable={claimable}
+                    >
+                        CLAIM
+                    </ClaimButton>
+                </MarketInfoContainer>
                 <MatchVSLabel>VS</MatchVSLabel>
                 <WinnerLabel isWinning={market.finalResult == 3} finalResult={market.finalResult}>
                     DRAW
@@ -149,7 +155,7 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
 };
 
 const ClaimButton = styled(Button)<{ claimable?: boolean }>`
-    position: absolute;
+    /* position: absolute; */
     top: 10%;
     background: ${(props) => props.theme.background.quaternary};
     color: ${(props) => props.theme.textColor.tertiary};

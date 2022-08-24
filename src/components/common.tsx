@@ -148,6 +148,12 @@ export const MatchDate = styled.label`
     cursor: pointer;
 `;
 
+export const MarketInfoContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
 export const MatchInfoLabel = styled.label<{
     isMaturedMarket?: boolean;
     claimable?: boolean;
