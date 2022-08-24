@@ -52,6 +52,7 @@ import Dropdown from '../../../components/Dropdown';
 import { getOddsType, setOddsType } from '../../../redux/modules/ui';
 import SPAAnchor from 'components/SPAAnchor';
 import { buildHref } from 'utils/routes';
+import { useLocation } from 'react-router-dom';
 import ROUTES from 'constants/routes';
 
 const Home: React.FC = () => {
@@ -63,6 +64,7 @@ const Home: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
     const { trackPageView } = useMatomo();
+    const location = useLocation();
 
     const [lastValidMarkets, setLastValidMarkets] = useState<SportMarkets>([]);
     const [globalFilter, setGlobalFilter] = useLocalStorage<GlobalFilterEnum>(
@@ -462,6 +464,11 @@ const Home: React.FC = () => {
         setTagFilter(allTagsFilterItem);
         dispatch(setMarketSearch(''));
     };
+
+    useEffect(() => {
+        resetFilters();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location]);
 
     useEffect(() => {
         trackPageView({});

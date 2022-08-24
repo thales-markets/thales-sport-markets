@@ -22,6 +22,7 @@ const Container = styled.div`
 
 const StyledLogo = styled(LogoIcon)`
     fill: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
     height: 35px;
 `;
 
