@@ -1,4 +1,6 @@
 import {
+    MarketInfoContainer,
+    MatchDate,
     MatchInfo,
     MatchInfoColumn,
     MatchInfoLabel,
@@ -20,6 +22,7 @@ import { Odds, SportMarketInfo } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatMarketOdds } from '../../../../../utils/markets';
 import { getOddsType } from '../../../../../redux/modules/ui';
+import { formatDateWithTime } from 'utils/formatters/date';
 
 type MarketCardCanceledProps = {
     market: SportMarketInfo;
@@ -67,7 +70,10 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                 <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
             </MatchInfoColumn>
             <MatchInfoColumn>
-                <MatchInfoLabel isCanceledMarket={true}>CANCELED</MatchInfoLabel>
+                <MarketInfoContainer>
+                    <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
+                    <MatchInfoLabel isCanceledMarket={true}>CANCELED</MatchInfoLabel>
+                </MarketInfoContainer>
                 <MatchVSLabel>VS</MatchVSLabel>
                 {oddsOnCancellation ? (
                     <OddsLabel
