@@ -94,6 +94,11 @@ const LanguageButton = styled.button`
     position: relative;
     cursor: pointer;
     background: transparent;
+    &:hover {
+        & > i {
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+    }
 `;
 
 const FlagIcon = styled.i`
