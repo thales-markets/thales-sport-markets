@@ -44,7 +44,7 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
         setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
-    }, [market.homeTeam, market.awayTeam]);
+    }, [market.homeTeam, market.awayTeam, market.tags]);
 
     return (
         <MatchInfo>

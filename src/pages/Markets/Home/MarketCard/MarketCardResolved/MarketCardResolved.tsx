@@ -63,7 +63,7 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
                 setClaimable(true);
             }
         }
-    }, [balances]);
+    }, [balances, market.finalResult]);
 
     const claimReward = async () => {
         const { signer } = networkConnector;
@@ -91,7 +91,7 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
         setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
-    }, [market.homeTeam, market.awayTeam]);
+    }, [market.homeTeam, market.awayTeam, market.tags]);
 
     return (
         <MatchInfo>

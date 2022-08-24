@@ -6,6 +6,7 @@ import debounce from 'lodash/debounce';
 export function useDebouncedMemo<T>(factory: () => T, deps: DependencyList | undefined, debounceMs: number): T {
     const [state, setState] = useState(factory());
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const debouncedSetState = useCallback(debounce(setState, debounceMs), []);
 
     useEffect(() => {

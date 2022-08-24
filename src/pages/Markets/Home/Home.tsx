@@ -84,15 +84,19 @@ const Home: React.FC = () => {
         },
         [dispatch]
     );
-    const sortOptions: SortOptionType[] = [
-        { id: 1, title: t('market.time-remaining-label') },
-        { id: 2, title: t('market.sport') },
-    ];
+    const sortOptions: SortOptionType[] = useMemo(() => {
+        return [
+            { id: 1, title: t('market.time-remaining-label') },
+            { id: 2, title: t('market.sport') },
+        ];
+    }, [t]);
 
-    const allTagsFilterItem: TagInfo = {
-        id: 0,
-        label: t('market.filter-label.all'),
-    };
+    const allTagsFilterItem: TagInfo = useMemo(() => {
+        return {
+            id: 0,
+            label: t('market.filter-label.all'),
+        };
+    }, [t]);
 
     const [tagFilter, setTagFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_TAGS, allTagsFilterItem);
     const [availableTags, setAvailableTags] = useState<Tags>([
@@ -109,14 +113,14 @@ const Home: React.FC = () => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
             setLastValidMarkets(marketsCached[globalFilter]);
         }
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, globalFilter]);
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, globalFilter, marketsCached]);
 
     const markets: SportMarkets = useMemo(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
             return marketsCached[globalFilter];
         }
         return lastValidMarkets;
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, lastValidMarkets, globalFilter]);
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, lastValidMarkets, marketsCached, globalFilter]);
 
     useEffect(() => {
         const marketDates = markets
@@ -144,7 +148,9 @@ const Home: React.FC = () => {
         enabled: isAppReady && isWalletConnected,
     });
 
-    const accountPositions: AccountPositionsMap = accountPositionsQuery.isSuccess ? accountPositionsQuery.data : {};
+    const accountPositions: AccountPositionsMap = useMemo(() => {
+        return accountPositionsQuery.isSuccess ? accountPositionsQuery.data : {};
+    }, [accountPositionsQuery.data, accountPositionsQuery.isSuccess]);
 
     const searchFilteredMarkets = useDebouncedMemo(
         () => {
@@ -180,7 +186,7 @@ const Home: React.FC = () => {
             );
         }
         return filteredMarkets;
-    }, [markets, startDate, endDate, marketSearch]);
+    }, [marketSearch, searchFilteredMarkets, markets, startDate, endDate]);
 
     const sportFilteredMarkets = useMemo(() => {
         let filteredMarkets = startDate !== null && endDate !== null ? dateRangeFilteredMarkets : datesFilteredMarkets;
@@ -190,7 +196,7 @@ const Home: React.FC = () => {
         }
 
         return filteredMarkets;
-    }, [datesFilteredMarkets, sportFilter, markets, marketSearch, dateRangeFilteredMarkets]);
+    }, [startDate, endDate, dateRangeFilteredMarkets, datesFilteredMarkets, sportFilter]);
 
     const tagsFilteredMarkets = useMemo(() => {
         let filteredMarkets = sportFilteredMarkets;
@@ -222,7 +228,18 @@ const Home: React.FC = () => {
                 return isClaimAvailable(accountPositionsPerMarket);
             }).length;
         }
-    }, [tagsFilteredMarkets, accountPositions, marketsCached]);
+    }, [
+        sportMarketsQuery.data,
+        marketsCached,
+        marketSearch,
+        dateFilter,
+        startDate,
+        endDate,
+        sportFilter,
+        tagFilter,
+        allTagsFilterItem,
+        accountPositions,
+    ]);
 
     const [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount] = useMemo(() => {
         let [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount] = [0, 0, 0, 0];
@@ -278,16 +295,15 @@ const Home: React.FC = () => {
 
         return [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount];
     }, [
-        allTagsFilterItem.id,
-        dateFilter,
-        endDate,
-        marketSearch,
-        markets,
-        sportFilter,
-        startDate,
-        tagFilter.id,
-        tagsFilteredMarkets,
+        sportMarketsQuery.data,
         marketsCached,
+        marketSearch,
+        dateFilter,
+        startDate,
+        endDate,
+        sportFilter,
+        tagFilter,
+        allTagsFilterItem,
     ]);
 
     const accountPositionsCount = useMemo(() => {
@@ -312,7 +328,18 @@ const Home: React.FC = () => {
                 return positionExists;
             }).length;
         }
-    }, [tagsFilteredMarkets, accountPositions, marketsCached]);
+    }, [
+        sportMarketsQuery.data,
+        marketsCached,
+        marketSearch,
+        dateFilter,
+        startDate,
+        endDate,
+        sportFilter,
+        tagFilter,
+        allTagsFilterItem,
+        accountPositions,
+    ]);
 
     const marketsList = useMemo(() => {
         let filteredMarkets = tagsFilteredMarkets;
@@ -376,7 +403,7 @@ const Home: React.FC = () => {
         });
 
         return groupBySortedMarkets(sortedFilteredMarkets);
-    }, [tagsFilteredMarkets, sortBy, sortDirection, globalFilter, walletAddress]);
+    }, [tagsFilteredMarkets, globalFilter, accountPositions, sortBy, sortDirection]);
 
     const setSort = (sortOption: SortOptionType) => {
         if (sortBy === sortOption.id) {
@@ -438,7 +465,7 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         trackPageView({});
-    }, []);
+    }, [trackPageView]);
 
     return (
         <Container>

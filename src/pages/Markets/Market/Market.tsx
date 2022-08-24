@@ -43,7 +43,7 @@ const Market: React.FC<MarketProps> = (props) => {
 
     useEffect(() => {
         trackPageView({});
-    }, []);
+    }, [trackPageView]);
 
     return (
         <Container>

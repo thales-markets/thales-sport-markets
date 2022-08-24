@@ -21,7 +21,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
         setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
-    }, [market.homeTeam, market.awayTeam]);
+    }, [market.homeTeam, market.awayTeam, market.tags]);
 
     return (
         <Container claimBorder={claimAvailable} isCanceled={market.isCanceled} isResolved={market.isResolved}>

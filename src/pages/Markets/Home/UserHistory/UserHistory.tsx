@@ -60,7 +60,7 @@ const UserHistory: React.FC = () => {
                 return tx as UserTransaction;
             }
         });
-    }, [markets, userTransactions]);
+    }, [markets, networkId, userTransactions]);
 
     return (
         <Container>

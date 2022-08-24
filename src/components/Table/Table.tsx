@@ -39,6 +39,7 @@ const Table: React.FC<TableProps> = ({
     initialState = null,
 }) => {
     const { t } = useTranslation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const memoizedColumns = useMemo(() => columns, [...columnsDeps, t]);
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
         {
