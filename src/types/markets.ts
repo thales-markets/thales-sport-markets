@@ -203,6 +203,7 @@ export type ClaimTransaction = {
     account: string;
     amount: number;
     timestamp: number;
+    caller: string;
     market: MarketData;
 };
 
