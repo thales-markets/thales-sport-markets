@@ -75,11 +75,15 @@ const Table: React.FC<TableProps> = ({
     }, [state.sortBy]);
 
     useEffect(() => {
-        gotoPage(currentPage || 0);
+        if (currentPage !== undefined) {
+            gotoPage(currentPage);
+        }
     }, [currentPage]);
 
     useEffect(() => {
-        setPageSize(rowsPerPage || 0);
+        if (rowsPerPage !== undefined) {
+            setPageSize(rowsPerPage || 0);
+        }
     }, [rowsPerPage]);
 
     return (
@@ -186,7 +190,7 @@ const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string 
     flex: 1;
     min-width: 0px;
     max-width: ${(props) => (props.width ? props.width : 'initial')};
-    justify-content: ${(props) => SellAlignment[props.id] || 'left'};
+    justify-content: ${(props) => CellAlignment[props.id] || 'left'};
     &:first-child {
         padding-left: 18px;
     }
@@ -259,7 +263,7 @@ const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`
     }
 `;
 
-const SellAlignment: Record<string, string> = {
+const CellAlignment: Record<string, string> = {
     points: 'center',
     rewards: 'center',
     finishTime: 'center',
