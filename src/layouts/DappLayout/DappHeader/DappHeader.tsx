@@ -12,6 +12,7 @@ import Referral from 'components/Referral';
 import { buildHref } from 'utils/routes';
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
+import { ReactComponent as SportTriviaIcon } from 'assets/images/sport-trivia.svg';
 
 const DappHeader: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -21,7 +22,7 @@ const DappHeader: React.FC = () => {
             <Logo />
             <RightContainer>
                 <SPAAnchor href={buildHref(ROUTES.Quiz)}>
-                    <StartQuizIcon />
+                    <StyledSportTriviaIcon />
                 </SPAAnchor>
                 <Referral />
                 {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
@@ -54,22 +55,13 @@ const RightContainer = styled(FlexDivRowCentered)`
     }
 `;
 
-const StartQuizIcon = styled.i`
-    font-size: 120px;
+const StyledSportTriviaIcon = styled(SportTriviaIcon)`
     margin-right: 20px;
     cursor: pointer;
-    max-height: 25px;
-    top: -48px;
-    display: flex;
-    position: relative;
-    &:before {
-        font-family: OvertimeIcons !important;
-        content: '\\0051';
-        color: #50ce99;
-    }
+    height: 38px;
+    margin-bottom: -4px;
     @media (max-width: 767px) {
-        flex-direction: column;
-        margin-bottom: 20px;
+        margin-bottom: 5px;
         margin-right: 0px;
     }
 `;

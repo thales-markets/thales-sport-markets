@@ -12,11 +12,12 @@ import {
     LeaderboardContainer,
     Container,
     Description,
-    Title,
+    LeaderboardTitleContainer,
     Link,
     TwitterImage,
     TwitterTableContainer,
     PaginationWrapper,
+    LeaderboardIcon,
 } from '../styled-components';
 import { getTwitterProfileLink } from 'utils/quiz';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
@@ -64,7 +65,10 @@ const Leaderboard: React.FC = () => {
             <BackToLink link={buildHref(ROUTES.Quiz)} text={t('quiz.leaderboard.back-to-quiz')} />
             <Container>
                 <LeaderboardContainer>
-                    <Title>{t('quiz.leaderboard.title')}</Title>
+                    <LeaderboardTitleContainer>
+                        <LeaderboardIcon />
+                        {t('quiz.leaderboard.title')}
+                    </LeaderboardTitleContainer>
                     <Description>
                         <Trans i18nKey={t('quiz.leaderboard.description')} />
                     </Description>

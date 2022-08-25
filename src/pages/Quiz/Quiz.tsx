@@ -7,7 +7,6 @@ import { buildHref } from 'utils/routes';
 import {
     Container,
     QuizContainer,
-    Description,
     Title,
     Question,
     SubmitButton,
@@ -29,12 +28,15 @@ import {
     QuestionIndicatorContainer,
     QuizFirstNextContainer,
     QuizSecondNextContainer,
+    InputLabel,
+    InputContainer,
+    QuizLink,
+    Copy,
 } from './styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import onboardConnector from 'utils/onboardConnector';
-import { FlexDivCentered } from 'styles/common';
 import {
     getIsQuizStarted,
     startQuiz,
@@ -51,6 +53,10 @@ import {
     resetQuiz,
     setAnswer,
     getEndOfQuiz,
+    getTwitter,
+    getDiscord,
+    setTwitter,
+    setDiscord,
 } from 'redux/modules/quiz';
 import RadioButton from 'components/fields/RadioButton';
 import TimeRemaining from 'components/TimeRemaining';
@@ -67,6 +73,7 @@ import {
 } from 'constants/quiz';
 import SPAAnchor from 'components/SPAAnchor';
 import SimpleLoader from 'components/SimpleLoader';
+import { LINKS } from 'constants/links';
 
 const Quiz: React.FC = () => {
     const { t } = useTranslation();
@@ -79,9 +86,10 @@ const Quiz: React.FC = () => {
     const currentQuizItem = useSelector((state: RootState) => getCurrentQuizItem(state));
     const currentQuestionIndex = useSelector((state: RootState) => getCurrentQuestionIndex(state));
     const currentNumberOfQuestions = useSelector((state: RootState) => getCurrentNumberOfQuestions(state));
+    const twitter = useSelector((state: RootState) => getTwitter(state));
+    const discord = useSelector((state: RootState) => getDiscord(state));
     const score = useSelector((state: RootState) => getScore(state));
     const endOfQuiz = useSelector((state: RootState) => getEndOfQuiz(state));
-    const [twitterHandle, setTwitterHandle] = useState<string>('');
     const [percentageTimeRemaining, setPercentageTimeRemaining] = useState<number>(0);
     const [isTwitterValid, setIsTwitterValid] = useState<boolean>(true);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -91,15 +99,16 @@ const Quiz: React.FC = () => {
         firstUpdate.current = false;
     }, []);
 
-    const isStartQuizDisabled = !twitterHandle || twitterHandle.trim() === '' || isSubmitting;
+    const isStartQuizDisabled = !twitter || twitter.trim() === '' || isSubmitting;
     const isQuizInProgress = isQuizStarted && !isQuizFinished && currentQuizItem;
 
     const handleStartQuiz = async () => {
         setIsSubmitting(true);
         try {
             const startQuizResponse = await axios.post(`${QUIZ_API_URL}${START_QUIZ_PATH}`, {
-                twitter: twitterHandle.trim(),
+                twitter: twitter.trim(),
                 wallet: walletAddress,
+                discord: discord.trim(),
             });
             const playerUuid = startQuizResponse.data.data;
             const nextQuestionResponse = await axios.get(
@@ -260,8 +269,21 @@ const Quiz: React.FC = () => {
                             {!isQuizStarted && (
                                 <>
                                     <Title>{t('quiz.title')}</Title>
-                                    <Description>{t('quiz.start-quiz-description')}</Description>
-                                    <FlexDivCentered>
+                                    <Copy>
+                                        <Trans
+                                            i18nKey="quiz.start-quiz-description"
+                                            components={{
+                                                p: <p />,
+                                                quizRetweetLink: (
+                                                    <QuizLink href={LINKS.QuizRetweetLink} key="quizRetweetLink" />
+                                                ),
+                                                twitter: <QuizLink href={LINKS.Twitter} key="twitter" />,
+                                                discord: <QuizLink href={LINKS.ThalesDiscord} key="discord" />,
+                                            }}
+                                        />
+                                    </Copy>
+                                    <InputContainer>
+                                        <InputLabel>{t('quiz.twitter-handle-label')}:</InputLabel>
                                         <ValidationTooltip
                                             open={!isTwitterValid}
                                             title={t('quiz.twitter-handle-validation') as string}
@@ -269,14 +291,25 @@ const Quiz: React.FC = () => {
                                             <Input
                                                 type="text"
                                                 placeholder={t('quiz.twitter-handle-placeholder')}
-                                                value={twitterHandle}
+                                                value={twitter}
                                                 onChange={(event) => {
                                                     setIsTwitterValid(true);
-                                                    setTwitterHandle(event.target.value);
+                                                    dispatch(setTwitter(event.target.value));
                                                 }}
                                             />
                                         </ValidationTooltip>
-                                    </FlexDivCentered>
+                                    </InputContainer>
+                                    <InputContainer>
+                                        <InputLabel>{t('quiz.discord-label')}:</InputLabel>
+                                        <Input
+                                            type="text"
+                                            placeholder={t('quiz.discord-placeholder')}
+                                            value={discord}
+                                            onChange={(event) => {
+                                                dispatch(setDiscord(event.target.value));
+                                            }}
+                                        />
+                                    </InputContainer>
                                     <ButtonContainer>{getSubmitButton()}</ButtonContainer>
                                 </>
                             )}

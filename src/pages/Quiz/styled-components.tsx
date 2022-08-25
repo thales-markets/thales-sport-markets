@@ -1,4 +1,5 @@
 import { TablePagination, Tooltip, withStyles } from '@material-ui/core';
+import React from 'react';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivStart } from 'styles/common';
 
@@ -56,12 +57,34 @@ export const Title = styled.span`
     margin-bottom: 40px;
 `;
 
+export const LeaderboardTitleContainer = styled(FlexDivStart)`
+    align-items: center;
+    font-size: 25px;
+    line-height: 100%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    justify-content: center;
+`;
+
 export const Description = styled.p`
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
+    line-height: 20px;
     margin-bottom: 20px;
     color: ${(props) => props.theme.textColor.primary};
+`;
+
+export const Copy = styled.div`
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+    margin-bottom: 15px;
+    color: ${(props) => props.theme.textColor.primary};
+    p {
+        margin-bottom: 10px;
+    }
 `;
 
 export const TimeRemainingText = styled(Description)`
@@ -127,7 +150,7 @@ export const FinishedInfoLabel = styled(Description)`
 `;
 
 export const FinishedInfo = styled(Description)`
-    font-size: 26px;
+    font-size: 25px;
     font-weight: 600;
     margin-top: 30px;
     margin-bottom: 40px;
@@ -167,6 +190,19 @@ export const ButtonContainer = styled(FlexDivCentered)`
     }
 `;
 
+export const InputContainer = styled(FlexDivColumnCentered)`
+    margin-top: 5px;
+    margin-bottom: 10px;
+`;
+
+export const InputLabel = styled.p`
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    margin-bottom: 6px;
+    color: ${(props) => props.theme.textColor.primary};
+`;
+
 export const Input = styled.input`
     background: ${(props) => props.theme.input.background.primary};
     border-radius: 5px;
@@ -184,8 +220,6 @@ export const Input = styled.input`
     &:focus {
         border: 2px solid ${(props) => props.theme.borderColor.quaternary};
     }
-    margin-top: 20px;
-    margin-bottom: 10px;
 `;
 
 export const Link = styled.a`
@@ -300,5 +334,29 @@ export const PaginationWrapper = styled(TablePagination)`
             margin-left: 0px;
             margin-right: 0px;
         }
+    }
+`;
+
+export const TextLink = styled.a`
+    color: #91bced;
+    &:hover {
+        color: #00f9ff;
+    }
+`;
+
+export const QuizLink: React.FC<{ href: string }> = ({ children, href }) => {
+    return (
+        <TextLink target="_blank" rel="noreferrer" href={href}>
+            {children}
+        </TextLink>
+    );
+};
+
+export const LeaderboardIcon = styled.i`
+    font-size: 30px;
+    margin-right: 15px;
+    &:before {
+        font-family: OvertimeIcons !important;
+        content: '\\0053';
     }
 `;
