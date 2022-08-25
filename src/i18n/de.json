@@ -243,7 +243,6 @@
         }
     },
     "test": {
-        "test": "Prüfung",
-        "test2": "Prüfung"
+        "test": "Prüfung"
     }
 }
