@@ -37,6 +37,19 @@ Then, open `.env.local` and add the missing environment variables:
 -   `REACT_APP_THALES_API_URL` - The Thales API URL. Set to `https://api.thales.market`.
 -   `REACT_APP_IPFS_DEPLOYMENT` - Is dApp in the mode for deployment on IPFS. Set to `false`.
 
+### Set up Google Translate API
+
+This step is needed only if you wish to contribute to the project.
+
+On every commit a pre-commit hook is triggered to translate missing values from the en.json located in src/i18n.
+
+In order for this to work a Google Cloud account is needed and a system environment variable needs to be set pointing
+to a locally stored json provided by Google.
+
+Full Guide: https://github.com/googleapis/nodejs-translate#before-you-begin
+
+The translation script is located in check_translations.js.example. Create a new file called check_translations.js identical to check_translations.js.example and set the projectId variable to the project id provided by Google.
+
 ### Run
 
 ```bash
