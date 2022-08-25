@@ -23,6 +23,7 @@ import { getTwitterProfileLink } from 'utils/quiz';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
 import { CURRENCY_MAP } from 'constants/currency';
 import { truncateAddress } from 'utils/formatters/string';
+import HelpUsImprove from '../HelpUsImprove';
 
 const Leaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -194,6 +195,7 @@ const Leaderboard: React.FC = () => {
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
+                <HelpUsImprove />
             </Container>
         </>
     );

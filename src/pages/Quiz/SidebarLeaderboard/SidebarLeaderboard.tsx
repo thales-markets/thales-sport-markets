@@ -31,7 +31,7 @@ const SidebarLeaderboard: React.FC = () => {
 
     const leaderboard: LeaderboardList = useMemo(() => {
         if (quizLeaderboardQuery.isSuccess && quizLeaderboardQuery.data) {
-            return quizLeaderboardQuery.data.slice(0, 10);
+            return quizLeaderboardQuery.data.slice(0, 20);
         }
 
         return [];

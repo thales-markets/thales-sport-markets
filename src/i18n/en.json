@@ -240,6 +240,8 @@
                 "rewards-col": "Rewards",
                 "no-data-available": "No data available"
             }
-        }
+        },
+        "help-us-improve-label": "Help us improve",
+        "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database."
     }
 }

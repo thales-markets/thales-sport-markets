@@ -64,7 +64,6 @@ export const Rewards = styled(FlexDivColumn)`
 export const PointsInfo = styled(FlexDivColumn)`
     align-items: center;
     max-width: 60px;
-    margin-top: 4px;
 `;
 
 export const Points = styled(FlexDivColumn)`

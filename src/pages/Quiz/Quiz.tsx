@@ -74,6 +74,7 @@ import {
 import SPAAnchor from 'components/SPAAnchor';
 import SimpleLoader from 'components/SimpleLoader';
 import { LINKS } from 'constants/links';
+import HelpUsImprove from './HelpUsImprove';
 
 const Quiz: React.FC = () => {
     const { t } = useTranslation();
@@ -381,6 +382,11 @@ const Quiz: React.FC = () => {
                                 );
                             })}
                         </QuestionIndicatorContainer>
+                    </Footer>
+                )}
+                {!isQuizInProgress && (
+                    <Footer>
+                        <HelpUsImprove />
                     </Footer>
                 )}
             </Container>

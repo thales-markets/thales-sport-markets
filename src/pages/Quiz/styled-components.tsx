@@ -14,13 +14,14 @@ export const Container = styled(FlexDivColumn)`
 
 export const QuizContainer = styled(FlexDivColumn)`
     margin-top: 20px;
-    border-radius: 30px;
+    border-radius: 20px;
     width: 100%;
     padding: 20px 50px 20px 50px;
     background: ${(props) => props.theme.background.secondary};
     flex: initial;
     @media (max-width: 768px) {
         padding: 0px 20px 0px 20px;
+        border-radius: 20px;
     }
     align-items: center;
 `;
@@ -31,6 +32,10 @@ export const QuizFirstNextContainer = styled(FlexDivColumn)`
     border-radius: 0 0 30px 30px;
     min-height: 25px;
     max-height: 25px;
+    @media (max-width: 768px) {
+        width: 90%;
+        border-radius: 0 0 20px 20px;
+    }
 `;
 
 export const QuizSecondNextContainer = styled(FlexDivColumn)`
@@ -39,6 +44,10 @@ export const QuizSecondNextContainer = styled(FlexDivColumn)`
     border-radius: 0 0 30px 30px;
     min-height: 25px;
     max-height: 25px;
+    @media (max-width: 768px) {
+        width: 80%;
+        border-radius: 0 0 20px 20px;
+    }
 `;
 
 export const LeaderboardContainer = styled(FlexDivColumn)`
