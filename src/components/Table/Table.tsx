@@ -41,7 +41,7 @@ const Table: React.FC<TableProps> = ({
     tableRowStyles = {},
     tableHeadCellStyles = {},
     tableRowCellStyles = {},
-    initialState = null,
+    initialState = {},
     onSortByChanged = undefined,
     currentPage,
     rowsPerPage,
