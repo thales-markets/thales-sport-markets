@@ -1,5 +1,5 @@
 import { MarketStatus, OddsType } from 'constants/markets';
-import { AccountPosition, MarketInfo } from 'types/markets';
+import { AccountPosition, MarketData, MarketInfo } from 'types/markets';
 import { formatCurrency } from './formatters/number';
 
 export const getRoi = (ticketPrice: number, potentialWinnings: number, showRoi: boolean) =>
@@ -79,8 +79,14 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
     }
 };
 
-export const convertFinalResultToPositionType = (result: number) => {
-    if (result == 1) return 'HOME';
-    if (result == 2) return 'AWAY';
+export const convertFinalResultToWinnerName = (result: number, market: MarketData) => {
+    if (result == 1) return market.homeTeam;
+    if (result == 2) return market.awayTeam;
     if (result == 3) return 'DRAW';
+};
+
+export const convertPositionToTeamName = (result: number, market: MarketData) => {
+    if (result == 0) return market.homeTeam;
+    if (result == 1) return market.awayTeam;
+    if (result == 2) return 'DRAW';
 };

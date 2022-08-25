@@ -241,5 +241,8 @@
                 "no-data-available": "No data available"
             }
         }
+    },
+    "test": {
+        "test": "ทดสอบ"
     }
 }

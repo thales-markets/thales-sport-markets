@@ -9,25 +9,30 @@ import { orderBy } from 'lodash';
 import useMarketTransactionsQuery from 'queries/markets/useMarketTransactionsQuery';
 import TransactionsTable from 'pages/Markets/components/TransactionsTable';
 import { FlexDivColumn } from 'styles/common';
-import { ClaimTransaction, MarketTransaction, MarketTransactions, MarketTransactionType } from 'types/markets';
+import {
+    ClaimTransaction,
+    MarketData,
+    MarketTransaction,
+    MarketTransactions,
+    MarketTransactionType,
+} from 'types/markets';
 import useClaimTransactionsPerMarket from 'queries/markets/useClaimTransactionsPerMarket';
-import { PositionName } from 'constants/options';
-import { convertFinalResultToPositionType } from 'utils/markets';
+import { convertFinalResultToWinnerName, convertPositionToTeamName } from 'utils/markets';
 
 type TransactionsProps = {
-    marketAddress: string;
+    market: MarketData;
 };
 
-const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
+const Transactions: React.FC<TransactionsProps> = ({ market }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const marketTransactionsQuery = useMarketTransactionsQuery(marketAddress, networkId, {
+    const marketTransactionsQuery = useMarketTransactionsQuery(market.address, networkId, {
         enabled: isAppReady,
     });
 
-    const marketClaimTransactionsQuery = useClaimTransactionsPerMarket(marketAddress, networkId, {
+    const marketClaimTransactionsQuery = useClaimTransactionsPerMarket(market.address, networkId, {
         enabled: isAppReady,
     });
 
@@ -42,7 +47,7 @@ const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
                     account: claimTx.account,
                     timestamp: Number(claimTx.timestamp),
                     amount: claimTx.amount,
-                    position: convertFinalResultToPositionType(claimTx.market.finalResult) as PositionName,
+                    position: convertFinalResultToWinnerName(claimTx.market.finalResult, market),
                     market: claimTx?.market?.address,
                     paid: claimTx.amount,
                     blockNumber: 0,
@@ -58,7 +63,7 @@ const Transactions: React.FC<TransactionsProps> = ({ marketAddress }) => {
                     account: marketTransaction.account,
                     timestamp: marketTransaction.timestamp,
                     amount: marketTransaction.amount,
-                    position: marketTransaction.position,
+                    position: convertPositionToTeamName(marketTransaction.position, market),
                     market: marketTransaction?.market,
                     paid: marketTransaction?.paid,
                     blockNumber: 0,
