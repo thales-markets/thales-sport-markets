@@ -63,7 +63,7 @@ const Container = styled(FlexDiv)`
         width: 100%;
     }
     overflow-y: auto;
-    max-height: 905px;
+    max-height: 1210px;
 `;
 
 const ListContainer = styled.div`
