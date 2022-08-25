@@ -3,13 +3,14 @@ import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ClaimTransaction, ClaimTransactions } from 'types/markets';
 import { NetworkId } from 'types/network';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
 
 const useClaimTransactionsPerMarket = (
     marketAddress: string,
     networkId: NetworkId,
     options?: UseQueryOptions<ClaimTransactions | undefined>
 ) => {
+    const KEEPER_BOT_CALLER_ADDRESS = '0x3292e6583dfa145fc25cfe3a74d8f66846683633';
+
     return useQuery<ClaimTransactions | undefined>(
         QUERY_KEYS.ClaimTx(marketAddress, networkId),
         async () => {
@@ -19,10 +20,12 @@ const useClaimTransactionsPerMarket = (
                     network: networkId,
                 });
 
-                return claimTransactions.map((tx: ClaimTransaction) => ({
-                    ...tx,
-                    amount: bigNumberFormatter(tx?.amount),
-                }));
+                // Filter keeper bot transactions
+                const data = claimTransactions?.filter(
+                    (tx: ClaimTransaction) => tx?.caller?.toLowerCase() !== KEEPER_BOT_CALLER_ADDRESS
+                );
+
+                return data;
             } catch (e) {
                 console.log(e);
                 return undefined;

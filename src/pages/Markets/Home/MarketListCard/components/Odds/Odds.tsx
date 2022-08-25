@@ -34,9 +34,7 @@ const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelle
 
     return (
         <Container>
-            {noOddsFlag && (
-                <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card-list.coming-soon')}</Status>
-            )}
+            {noOddsFlag && <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>}
             {resolvedGameFlag && (
                 <>
                     <PositionSymbol type={convertFinalResultToResultType(finalResult)} />

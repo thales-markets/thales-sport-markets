@@ -76,3 +76,15 @@ export const formatNumberShort = (value: number) => {
 export const floorNumberToDecimals = (value: number, decimals = DEFAULT_CURRENCY_DECIMALS) => {
     return Math.floor(value * Math.pow(10, decimals)) / Math.pow(10, decimals);
 };
+
+export const countDecimals = (value: number) => {
+    if (Math.floor(value) === value) return 0;
+
+    const str = value.toString();
+    if (str.indexOf('.') !== -1 && str.indexOf('-') !== -1) {
+        return str.split('-')[1] || 0;
+    } else if (str.indexOf('.') !== -1) {
+        return str.split('.')[1].length || 0;
+    }
+    return str.split('-')[1] || 0;
+};

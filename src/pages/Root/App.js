@@ -121,7 +121,7 @@ const App = () => {
         if (onboardConnector.onboard && selectedWallet) {
             onboardConnector.onboard.walletSelect(selectedWallet);
         }
-    }, [isAppReady, onboardConnector.onboard, selectedWallet]);
+    }, [isAppReady, selectedWallet]);
 
     useEffect(() => {
         trackPageView();

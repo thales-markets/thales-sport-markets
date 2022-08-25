@@ -13,6 +13,7 @@ import { buildHref } from 'utils/routes';
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
 import { ReactComponent as SportTriviaIcon } from 'assets/images/sport-trivia.svg';
+import LanguageSelector from 'components/LanguageSelector';
 
 const DappHeader: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -26,6 +27,7 @@ const DappHeader: React.FC = () => {
                 </SPAAnchor>
                 <Referral />
                 {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
+                <LanguageSelector />
                 <WalletInfo />
             </RightContainer>
         </Container>

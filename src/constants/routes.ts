@@ -10,3 +10,5 @@ export const ROUTES = {
     QuizLeaderboard: '/quiz/leaderboard',
 };
 export default ROUTES;
+
+export const RESET_STATE = 'reset';

@@ -1,4 +1,6 @@
 import {
+    MarketInfoContainer,
+    MatchDate,
     MatchInfo,
     MatchInfoColumn,
     MatchInfoLabel,
@@ -15,18 +17,19 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
-// import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Odds, SportMarketInfo } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatMarketOdds } from '../../../../../utils/markets';
 import { getOddsType } from '../../../../../redux/modules/ui';
+import { formatDateWithTime } from 'utils/formatters/date';
 
 type MarketCardCanceledProps = {
     market: SportMarketInfo;
 };
 
 const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
-    // const { t } = useTranslation();
+    const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const marketCancellationOddsQuery = useMarketCancellationOddsQuery(market.address, { enabled: isAppReady });
     const [oddsOnCancellation, setOddsOnCancellation] = useState<Odds | undefined>(undefined);
@@ -44,7 +47,7 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
         setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
-    }, [market.homeTeam, market.awayTeam]);
+    }, [market.homeTeam, market.awayTeam, market.tags]);
 
     return (
         <MatchInfo>
@@ -67,8 +70,11 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                 <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
             </MatchInfoColumn>
             <MatchInfoColumn>
-                <MatchInfoLabel isCanceledMarket={true}>CANCELED</MatchInfoLabel>
-                <MatchVSLabel>VS</MatchVSLabel>
+                <MarketInfoContainer>
+                    <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
+                    <MatchInfoLabel isCanceledMarket={true}>{t('markets.market-card.canceled')}</MatchInfoLabel>
+                </MarketInfoContainer>
+                <MatchVSLabel>{t('markets.market-card.vs')}</MatchVSLabel>
                 {oddsOnCancellation ? (
                     <OddsLabel
                         isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}
@@ -79,7 +85,9 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                 ) : (
                     <OddsLabelSceleton />
                 )}
-                <MatchParticipantName isTwoPositioned={market.drawOdds === 0}>{'DRAW'}</MatchParticipantName>
+                <MatchParticipantName isTwoPositioned={market.drawOdds === 0}>
+                    {t('markets.market-card.draw')}
+                </MatchParticipantName>
                 <Tags sport={market.sport} tags={market.tags} />
             </MatchInfoColumn>
             <MatchInfoColumn>

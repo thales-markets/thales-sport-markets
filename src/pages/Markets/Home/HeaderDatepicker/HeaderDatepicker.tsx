@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { GamesOnDate } from 'types/markets';
@@ -22,17 +22,19 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
 }) => {
     const [farLeftDateIndex, setFarLeftDateIndex] = useState(0);
     const [hammerManager, setHammerManager] = useState<any>();
-    const DATES_TO_SHOW = Math.min(Math.round(window.innerWidth / 80) - 2, 7);
+    const DATES_TO_SHOW = useMemo(() => {
+        return Math.min(Math.round(window.innerWidth / 80) - 2, 7);
+    }, []);
 
-    const moveLeft = () => {
+    const moveLeft = useCallback(() => {
         if (farLeftDateIndex > 0) setFarLeftDateIndex(farLeftDateIndex - 1);
-    };
+    }, [farLeftDateIndex]);
 
-    const moveRight = () => {
+    const moveRight = useCallback(() => {
         setFarLeftDateIndex(
             farLeftDateIndex + DATES_TO_SHOW < gamesPerDay.length ? farLeftDateIndex + 1 : farLeftDateIndex
         );
-    };
+    }, [DATES_TO_SHOW, farLeftDateIndex, gamesPerDay.length]);
 
     const slicedDates = useMemo(() => {
         if (gamesPerDay.length) {
@@ -58,7 +60,8 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
             farLeftDateIndex,
             farLeftDateIndex === 0 ? DATES_TO_SHOW : farLeftDateIndex + DATES_TO_SHOW
         );
-    }, [gamesPerDay, farLeftDateIndex]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [gamesPerDay, farLeftDateIndex, DATES_TO_SHOW, moveRight, moveLeft]);
 
     return (
         <Wrapper id="wrapper-cards" hidden={gamesPerDay.length === 0}>

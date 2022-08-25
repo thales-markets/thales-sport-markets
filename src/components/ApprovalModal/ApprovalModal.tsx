@@ -70,7 +70,7 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
 
     useEffect(() => {
         setIsAmountValid(Number(amount) === 0 || (Number(amount) > 0 && Number(amount) <= maxApproveAmount));
-    }, [amount]);
+    }, [amount, maxApproveAmount]);
 
     return (
         <Modal

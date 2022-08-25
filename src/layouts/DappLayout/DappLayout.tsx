@@ -29,7 +29,7 @@ const DappLayout: React.FC = ({ children }) => {
         if (queryParams.referralId) {
             setReferralId(queryParams.referralId);
         }
-    }, []);
+    }, [queryParams.referralId]);
 
     useEffect(() => {
         const customDimensions = [
@@ -48,7 +48,7 @@ const DappLayout: React.FC = ({ children }) => {
         }
 
         trackPageView({ customDimensions });
-    }, [networkId]);
+    }, [networkId, trackPageView]);
 
     return (
         <>

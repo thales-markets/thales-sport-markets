@@ -47,6 +47,7 @@ const Table: React.FC<TableProps> = ({
     rowsPerPage,
 }) => {
     const { t } = useTranslation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const memoizedColumns = useMemo(() => columns, [...columnsDeps, t]);
     const {
         getTableProps,
