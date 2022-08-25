@@ -1,4 +1,7 @@
 {
+    "test": {
+        "test": "test"
+    },
     "common": {
         "winner": "Winner",
         "buy-side": "BUY",
