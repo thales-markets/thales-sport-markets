@@ -55,7 +55,7 @@ import { buildHref } from 'utils/routes';
 import { useLocation } from 'react-router-dom';
 import { history } from 'utils/routes';
 import ROUTES, { RESET_STATE } from 'constants/routes';
-import SidebarLeaderboard from 'pages/Quiz/SidebarLeaderboard';
+// import SidebarLeaderboard from 'pages/Quiz/SidebarLeaderboard';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -720,7 +720,7 @@ const Home: React.FC = () => {
                         })}
                     </SportFiltersContainer>
                     <RangedDatepicker onDateRangeChange={onDateRangeChange} startDate={startDate} endDate={endDate} />
-                    <SidebarLeaderboard />
+                    {/* <SidebarLeaderboard /> */}
                 </SidebarContainer>
                 {/* MAIN PART */}
                 {sportMarketsQuery.isLoading ? (
