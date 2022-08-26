@@ -24,16 +24,20 @@ const UserHistory: React.FC = () => {
     const userTransactionsQuery = useUserTransactionsQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
-    const sportMarketsQuery = useSportMarketsQuery(networkId, GlobalFilterEnum.All, null, { enabled: isAppReady });
+    const sportMarketsQuery = useSportMarketsQuery(networkId, GlobalFilterEnum.All, null, {
+        enabled: isAppReady && isWalletConnected,
+    });
 
     const [userTransactions, setUserTransactions] = useState<MarketTransactions>([]);
     const [markets, setMarkets] = useState<SportMarkets>([]);
 
     useEffect(() => {
-        if (userTransactionsQuery.isSuccess && userTransactionsQuery.data) {
+        if (userTransactionsQuery.isSuccess && userTransactionsQuery.data && isWalletConnected) {
             setUserTransactions(orderBy(userTransactionsQuery.data, ['timestamp', 'blockNumber'], ['desc', 'desc']));
+        } else {
+            setUserTransactions([]);
         }
-    }, [userTransactionsQuery.isSuccess, userTransactionsQuery.data]);
+    }, [userTransactionsQuery.isSuccess, userTransactionsQuery.data, isWalletConnected]);
 
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
