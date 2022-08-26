@@ -24,7 +24,7 @@ import {
 import { formatCurrencyWithKey } from 'utils/formatters/number';
 import { CURRENCY_MAP } from 'constants/currency';
 import SPAAnchor from 'components/SPAAnchor';
-import { NUMBER_OF_REWARDS } from 'constants/quiz';
+import { DEFAULT_TWITTER_PROFILE_IMAGE, NUMBER_OF_REWARDS } from 'constants/quiz';
 import { getTwitterProfileLink } from 'utils/quiz';
 
 const SidebarLeaderboard: React.FC = () => {
@@ -56,11 +56,7 @@ const SidebarLeaderboard: React.FC = () => {
                                 <Rank>{item.rank}</Rank>
                                 <TwitterImage
                                     alt="twiiter"
-                                    src={
-                                        item.avatar != ''
-                                            ? item.avatar
-                                            : 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png'
-                                    }
+                                    src={item.avatar != '' ? item.avatar : DEFAULT_TWITTER_PROFILE_IMAGE}
                                 />
                                 <MainInfo>
                                     <Twitter className="twitter">{item.name}</Twitter>

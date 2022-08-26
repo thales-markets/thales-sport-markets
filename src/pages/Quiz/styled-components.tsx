@@ -271,6 +271,14 @@ export const TwitterImage = styled.img`
     width: 30px;
     color: #ffffff;
     margin-right: 6px;
+    @media (max-width: 767px) {
+        height: 25px;
+        width: 25px;
+    }
+    @media (max-width: 512px) {
+        height: 20px;
+        width: 20px;
+    }
 `;
 
 export const OptionsContainer = styled(FlexDivColumnCentered)`
