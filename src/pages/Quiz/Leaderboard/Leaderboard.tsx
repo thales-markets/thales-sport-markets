@@ -162,7 +162,7 @@ const Leaderboard: React.FC = () => {
                                     <p>
                                         {cellProps.cell.value
                                             ? `${formatCurrencyWithKey(
-                                                  CURRENCY_MAP.THALES,
+                                                  CURRENCY_MAP.sUSD,
                                                   cellProps.cell.value,
                                                   0,
                                                   true

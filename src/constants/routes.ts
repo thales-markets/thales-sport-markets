@@ -6,8 +6,8 @@ export const ROUTES = {
         Market: '/markets/:marketAddress',
     },
     Rewards: '/rewards',
-    Quiz: '/quiz',
-    QuizLeaderboard: '/quiz/leaderboard',
+    Quiz: '/trivia',
+    QuizLeaderboard: '/trivia/leaderboard',
 };
 export default ROUTES;
 

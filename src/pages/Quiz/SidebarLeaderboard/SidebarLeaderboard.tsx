@@ -60,9 +60,7 @@ const SidebarLeaderboard: React.FC = () => {
                                 />
                                 <MainInfo>
                                     <Twitter className="twitter">{item.name}</Twitter>
-                                    <Rewards>
-                                        {formatCurrencyWithKey(CURRENCY_MAP.THALES, item.rewards, 0, true)}
-                                    </Rewards>
+                                    <Rewards>{formatCurrencyWithKey(CURRENCY_MAP.sUSD, item.rewards, 0, true)}</Rewards>
                                 </MainInfo>
                                 <PointsInfo>
                                     <Points>{item.points}</Points>
