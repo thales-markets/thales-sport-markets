@@ -114,7 +114,9 @@ const Quiz: React.FC = () => {
     const finishInfo: FinishInfo = useMemo(() => {
         if (quizLeaderboardQuery.isSuccess && quizLeaderboardQuery.data) {
             const leaderboard = quizLeaderboardQuery.data;
-            const leaderboardItem = leaderboard.find((item: LeaderboardItem) => item.name === twitter);
+            const leaderboardItem = leaderboard.find(
+                (item: LeaderboardItem) => item.name.trim().toLowerCase() === twitter.trim().toLowerCase()
+            );
             if (leaderboardItem) {
                 return {
                     rank: leaderboardItem.rank,
