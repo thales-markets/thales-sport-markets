@@ -152,6 +152,7 @@ export const FinishedInfoContainer = styled(FlexDivColumnCentered)`
     align-items: center;
     margin-top: 20px;
     text-align: center;
+    margin-bottom: 40px;
 `;
 
 export const FinishedInfoLabel = styled(Description)`
@@ -162,7 +163,6 @@ export const FinishedInfo = styled(Description)`
     font-size: 25px;
     font-weight: 600;
     margin-top: 30px;
-    margin-bottom: 40px;
 `;
 
 export const FinishedInfoMessagesContainer = styled(FlexDivColumnCentered)`
@@ -198,13 +198,16 @@ export const SubmitButton = styled.button<{ isNavigation?: boolean }>`
     }
 `;
 
-export const ButtonContainer = styled(FlexDivCentered)`
+export const ButtonContainer = styled(FlexDivCentered)<{ mobileDirection?: string }>`
     @media (max-width: 675px) {
-        flex-direction: column;
+        flex-direction: ${(props) => props.mobileDirection || 'column'};
         button {
             margin: 10px 10px;
+            :first-child {
+                margin-bottom: ${(props) => (props.mobileDirection ? '20px' : '10px')};
+            }
             :last-child {
-                margin-bottom: 20px;
+                margin-bottom: ${(props) => (props.mobileDirection ? '10px' : '20px')};
             }
         }
     }

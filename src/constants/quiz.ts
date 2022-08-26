@@ -1,6 +1,6 @@
 export const NUMBER_OF_QUESTIONS = 10;
 export const MAX_SCORE = 30;
-export const QUIZ_DURATION = 60 * 1000; // 60 seconds
+export const QUIZ_DURATION = 360 * 1000; // 60 seconds
 export const QUIZ_API_URL = 'https://overtime-trivia.herokuapp.com';
 export const START_QUIZ_PATH = '/start';
 export const NEXT_QUESTION_PATH = '/next/question';

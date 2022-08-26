@@ -384,6 +384,15 @@ const Quiz: React.FC = () => {
                                                 max: MAX_SCORE,
                                             })}
                                         </FinishedInfo>
+                                        <FinishedInfoMessage>
+                                            {t('quiz.finish-messages.your-best-result', {
+                                                points: finishInfo.points,
+                                                pointsLabel:
+                                                    Number(finishInfo.points) === 1
+                                                        ? t('quiz.point-label')
+                                                        : t('quiz.points-label'),
+                                            })}
+                                        </FinishedInfoMessage>
                                     </FinishedInfoContainer>
                                     <FinishedInfoMessagesContainer>
                                         <FinishedInfoMessage>
@@ -437,7 +446,7 @@ const Quiz: React.FC = () => {
                 )}
                 {isQuizInProgress && (
                     <Footer>
-                        <ButtonContainer>{getSubmitButton()}</ButtonContainer>
+                        <ButtonContainer mobileDirection="column-reverse">{getSubmitButton()}</ButtonContainer>
                         <CurrentQuestion>
                             {t('quiz.current-question-label', {
                                 currentQuestion: currentQuestionIndex + 1,
