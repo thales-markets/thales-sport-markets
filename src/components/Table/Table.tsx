@@ -200,11 +200,15 @@ const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string 
     }
     @media (max-width: 767px) {
         font-size: 12px;
+        &:first-child {
+            padding-left: 6px;
+        }
+        &:last-child {
+            padding-right: 6px;
+        }
     }
     @media (max-width: 512px) {
         font-size: 10px;
-        text-align: center;
-        justify-content: center;
         &:first-child {
             padding-left: 6px;
         }
@@ -266,6 +270,7 @@ const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`
 `;
 
 const CellAlignment: Record<string, string> = {
+    wallet: 'center',
     points: 'center',
     rewards: 'center',
     finishTime: 'center',

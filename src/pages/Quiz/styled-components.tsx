@@ -1,7 +1,13 @@
 import { TablePagination, Tooltip, withStyles } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivStart } from 'styles/common';
+import {
+    FlexDivCentered,
+    FlexDivColumn,
+    FlexDivColumnCentered,
+    FlexDivStart,
+    QuizQuestionDifficultyMap,
+} from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
     width: 60%;
@@ -14,15 +20,17 @@ export const Container = styled(FlexDivColumn)`
 
 export const QuizContainer = styled(FlexDivColumn)`
     margin-top: 20px;
-    border-radius: 30px;
+    border-radius: 20px;
     width: 100%;
     padding: 20px 50px 20px 50px;
     background: ${(props) => props.theme.background.secondary};
     flex: initial;
     @media (max-width: 768px) {
         padding: 0px 20px 0px 20px;
+        border-radius: 20px;
     }
     align-items: center;
+    position: relative;
 `;
 
 export const QuizFirstNextContainer = styled(FlexDivColumn)`
@@ -31,6 +39,10 @@ export const QuizFirstNextContainer = styled(FlexDivColumn)`
     border-radius: 0 0 30px 30px;
     min-height: 25px;
     max-height: 25px;
+    @media (max-width: 768px) {
+        width: 90%;
+        border-radius: 0 0 20px 20px;
+    }
 `;
 
 export const QuizSecondNextContainer = styled(FlexDivColumn)`
@@ -39,6 +51,10 @@ export const QuizSecondNextContainer = styled(FlexDivColumn)`
     border-radius: 0 0 30px 30px;
     min-height: 25px;
     max-height: 25px;
+    @media (max-width: 768px) {
+        width: 80%;
+        border-radius: 0 0 20px 20px;
+    }
 `;
 
 export const LeaderboardContainer = styled(FlexDivColumn)`
@@ -107,10 +123,10 @@ export const TimeRemainingGraphicContainer = styled(FlexDivStart)`
     }
 `;
 
-export const TimeRemainingGraphicPercentage = styled(FlexDivStart)<{ width: number; firstUpdate: boolean }>`
+export const TimeRemainingGraphicPercentage = styled(FlexDivStart)<{ width: number }>`
     position: absolute;
     width: ${(props) => props.width}%;
-    transition: ${(props) => (props.firstUpdate ? 'none' : 'width 1s linear')};
+    transition: width 1s linear;
     max-width: 565px;
     height: 10px;
     left: 2px;
@@ -143,6 +159,7 @@ export const FinishedInfoContainer = styled(FlexDivColumnCentered)`
     align-items: center;
     margin-top: 20px;
     text-align: center;
+    margin-bottom: 40px;
 `;
 
 export const FinishedInfoLabel = styled(Description)`
@@ -153,7 +170,17 @@ export const FinishedInfo = styled(Description)`
     font-size: 25px;
     font-weight: 600;
     margin-top: 30px;
-    margin-bottom: 40px;
+`;
+
+export const FinishedInfoMessagesContainer = styled(FlexDivColumnCentered)`
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+`;
+
+export const FinishedInfoMessage = styled(Description)`
+    margin-bottom: 0px;
+    line-height: 22px;
 `;
 
 export const SubmitButton = styled.button<{ isNavigation?: boolean }>`
@@ -178,13 +205,16 @@ export const SubmitButton = styled.button<{ isNavigation?: boolean }>`
     }
 `;
 
-export const ButtonContainer = styled(FlexDivCentered)`
+export const ButtonContainer = styled(FlexDivCentered)<{ mobileDirection?: string }>`
     @media (max-width: 675px) {
-        flex-direction: column;
+        flex-direction: ${(props) => props.mobileDirection || 'column'};
         button {
             margin: 10px 10px;
+            :first-child {
+                margin-bottom: ${(props) => (props.mobileDirection ? '20px' : '10px')};
+            }
             :last-child {
-                margin-bottom: 20px;
+                margin-bottom: ${(props) => (props.mobileDirection ? '10px' : '20px')};
             }
         }
     }
@@ -239,9 +269,12 @@ export const QuestionWeightContainer = styled(FlexDivColumnCentered)`
     text-align: center;
     margin-top: 10px;
     margin-bottom: 20px;
+    @media (max-width: 768px) {
+        margin-top: 4px;
+    }
 `;
 
-export const TwitterTableContainer = styled(FlexDivStart)`
+export const TwitterContainer = styled(FlexDivStart)`
     align-items: center;
 `;
 
@@ -251,6 +284,14 @@ export const TwitterImage = styled.img`
     width: 30px;
     color: #ffffff;
     margin-right: 6px;
+    @media (max-width: 767px) {
+        height: 25px;
+        width: 25px;
+    }
+    @media (max-width: 512px) {
+        height: 20px;
+        width: 20px;
+    }
 `;
 
 export const OptionsContainer = styled(FlexDivColumnCentered)`
@@ -359,4 +400,28 @@ export const LeaderboardIcon = styled.i`
         font-family: OvertimeIcons !important;
         content: '\\0053';
     }
+`;
+
+export const DifficultyContainer = styled(FlexDivStart)`
+    align-items: center;
+    position: absolute;
+    top: 37px;
+    right: 50px;
+    @media (max-width: 768px) {
+        margin-top: 12px;
+        position: relative;
+        top: auto;
+        right: auto;
+    }
+`;
+
+export const DifficultyLabel = styled(Description)`
+    margin-bottom: 0px;
+    margin-right: 4px;
+`;
+
+export const DifficultyInfo = styled(Description)<{ difficulty: number }>`
+    margin-bottom: 0px;
+    font-weight: 600;
+    color: ${(props) => QuizQuestionDifficultyMap[props.difficulty - 1]};
 `;

@@ -15,7 +15,7 @@ import {
     LeaderboardTitleContainer,
     Link,
     TwitterImage,
-    TwitterTableContainer,
+    TwitterContainer,
     PaginationWrapper,
     LeaderboardIcon,
 } from '../styled-components';
@@ -23,6 +23,8 @@ import { getTwitterProfileLink } from 'utils/quiz';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
 import { CURRENCY_MAP } from 'constants/currency';
 import { truncateAddress } from 'utils/formatters/string';
+import HelpUsImprove from '../HelpUsImprove';
+import { DEFAULT_TWITTER_PROFILE_IMAGE } from 'constants/quiz';
 
 const Leaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -60,6 +62,9 @@ const Leaderboard: React.FC = () => {
 
     useEffect(() => setPage(0), [searchText]);
 
+    const isMobile = window.innerWidth < 768;
+    const isSmallScreen = window.innerWidth <= 512;
+
     return (
         <>
             <BackToLink link={buildHref(ROUTES.Quiz)} text={t('quiz.leaderboard.back-to-quiz')} />
@@ -83,19 +88,19 @@ const Leaderboard: React.FC = () => {
                     <Table
                         tableRowStyles={{
                             fontSize: 16,
-                            minHeight: 48,
+                            minHeight: isSmallScreen ? 34 : isMobile ? 40 : 48,
                             borderBottom: '2px dotted rgba(255, 255, 255, 0.3)',
                         }}
                         tableRowHeadStyles={{ borderBottom: '2px solid rgba(255, 255, 255, 0.3)', color: '#5F6180' }}
                         columns={[
                             {
-                                Header: <>{t('quiz.leaderboard.table.rank-col')}</>,
+                                Header: <>{isMobile ? '#' : t('quiz.leaderboard.table.rank-col')}</>,
                                 accessor: 'rank',
                                 Cell: (cellProps: CellProps<LeaderboardItem, LeaderboardItem['rank']>) => (
                                     <p>{cellProps.cell.value}</p>
                                 ),
                                 sortable: true,
-                                width: '100px',
+                                width: isSmallScreen ? '35px' : isMobile ? '50px' : '100px',
                             },
                             {
                                 Header: <>{t('quiz.leaderboard.table.twitter-col')}</>,
@@ -106,17 +111,17 @@ const Leaderboard: React.FC = () => {
                                         target="_blank"
                                         rel="noreferrer"
                                     >
-                                        <TwitterTableContainer>
+                                        <TwitterContainer>
                                             <TwitterImage
                                                 alt="twiiter"
                                                 src={
                                                     cellProps.cell.row.original.avatar != ''
                                                         ? cellProps.cell.row.original.avatar
-                                                        : 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png'
+                                                        : DEFAULT_TWITTER_PROFILE_IMAGE
                                                 }
                                             />
                                             {cellProps.cell.value}
-                                        </TwitterTableContainer>
+                                        </TwitterContainer>
                                     </Link>
                                 ),
                                 sortable: true,
@@ -139,7 +144,7 @@ const Leaderboard: React.FC = () => {
                                     <p>{cellProps.cell.value}</p>
                                 ),
                                 sortable: true,
-                                width: 'initial',
+                                width: isSmallScreen ? '55px' : isMobile ? '100px' : 'initial',
                             },
                             {
                                 Header: <>{t('quiz.leaderboard.table.time-col')}</>,
@@ -148,7 +153,7 @@ const Leaderboard: React.FC = () => {
                                     <p>{`${formatCurrency(cellProps.cell.value)}`}</p>
                                 ),
                                 sortable: true,
-                                width: 'initial',
+                                width: isSmallScreen ? '50px' : isMobile ? '100px' : 'initial',
                             },
                             {
                                 Header: <>{t('quiz.leaderboard.table.rewards-col')}</>,
@@ -157,7 +162,7 @@ const Leaderboard: React.FC = () => {
                                     <p>
                                         {cellProps.cell.value
                                             ? `${formatCurrencyWithKey(
-                                                  CURRENCY_MAP.THALES,
+                                                  CURRENCY_MAP.sUSD,
                                                   cellProps.cell.value,
                                                   0,
                                                   true
@@ -166,7 +171,7 @@ const Leaderboard: React.FC = () => {
                                     </p>
                                 ),
                                 sortable: true,
-                                width: 'initial',
+                                width: isSmallScreen ? '70px' : isMobile ? '100px' : 'initial',
                             },
                         ]}
                         initialState={{
@@ -177,6 +182,7 @@ const Leaderboard: React.FC = () => {
                                 },
                             ],
                             pageIndex: 0,
+                            hiddenColumns: isMobile ? ['wallet'] : [],
                         }}
                         data={leaderboard}
                         isLoading={quizLeaderboardQuery.isLoading}
@@ -194,6 +200,7 @@ const Leaderboard: React.FC = () => {
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
+                <HelpUsImprove />
             </Container>
         </>
     );

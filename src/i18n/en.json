@@ -241,6 +241,23 @@
                 "rewards-col": "Rewards",
                 "no-data-available": "No data available"
             }
+        },
+        "help-us-improve-label": "Help us improve",
+        "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
+        "finish-messages": {
+            "your-best-result": "Your best result: {{points}} {{pointsLabel}}",
+            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants.",
+            "not-quilfied-for-rewards": "You are missing {{points}} {{pointsLabel}} to get into the TOP {{numberOfRewards}} and qualify for rewards. Try again and improve your score.",
+            "quilfied-for-rewards": "You are currently in the TOP {{numberOfRewards}} and qualified for rewards. Try again to get a better rank and higher rewards.",
+            "quilfied-for-rewards-first": "You are currently leading the leaderboard! Try again to get a better score and secure your spot."
+        },
+        "difficulty-label": "Difficulty",
+        "difficulty": {
+            "1": "Trivial",
+            "2": "Easy",
+            "3": "Moderate",
+            "4": "Challenging",
+            "5": "Hard"
         }
     }
 }
