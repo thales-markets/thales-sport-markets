@@ -19,10 +19,13 @@ import {
     PointsInfo,
     Points,
     LeaderboardWrapper,
+    Link,
 } from './styled-components';
 import { formatCurrencyWithKey } from 'utils/formatters/number';
 import { CURRENCY_MAP } from 'constants/currency';
 import SPAAnchor from 'components/SPAAnchor';
+import { NUMBER_OF_REWARDS } from 'constants/quiz';
+import { getTwitterProfileLink } from 'utils/quiz';
 
 const SidebarLeaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -31,7 +34,7 @@ const SidebarLeaderboard: React.FC = () => {
 
     const leaderboard: LeaderboardList = useMemo(() => {
         if (quizLeaderboardQuery.isSuccess && quizLeaderboardQuery.data) {
-            return quizLeaderboardQuery.data.slice(0, 20);
+            return quizLeaderboardQuery.data.slice(0, NUMBER_OF_REWARDS);
         }
 
         return [];
@@ -39,15 +42,17 @@ const SidebarLeaderboard: React.FC = () => {
 
     return (
         <LeaderboardWrapper>
-            <SPAAnchor href={buildHref(ROUTES.QuizLeaderboard)}>
-                <Container>
+            <Container>
+                <SPAAnchor href={buildHref(ROUTES.QuizLeaderboard)}>
                     <Title>
                         <LeaderboardIcon />
                         {t('quiz.leaderboard.title')}
                     </Title>
-                    <LeaderboardContainer>
-                        {leaderboard.map((item: LeaderboardItem) => (
-                            <LeaderboardRow key={item.rank}>
+                </SPAAnchor>
+                <LeaderboardContainer>
+                    {leaderboard.map((item: LeaderboardItem) => (
+                        <Link href={getTwitterProfileLink(item.name)} target="_blank" rel="noreferrer" key={item.rank}>
+                            <LeaderboardRow>
                                 <Rank>{item.rank}</Rank>
                                 <TwitterImage
                                     alt="twiiter"
@@ -58,7 +63,7 @@ const SidebarLeaderboard: React.FC = () => {
                                     }
                                 />
                                 <MainInfo>
-                                    <Twitter>{item.name}</Twitter>
+                                    <Twitter className="twitter">{item.name}</Twitter>
                                     <Rewards>
                                         {formatCurrencyWithKey(CURRENCY_MAP.THALES, item.rewards, 0, true)}
                                     </Rewards>
@@ -70,10 +75,10 @@ const SidebarLeaderboard: React.FC = () => {
                                     </PointsLabel>
                                 </PointsInfo>
                             </LeaderboardRow>
-                        ))}
-                    </LeaderboardContainer>
-                </Container>
-            </SPAAnchor>
+                        </Link>
+                    ))}
+                </LeaderboardContainer>
+            </Container>
         </LeaderboardWrapper>
     );
 };

@@ -15,7 +15,7 @@ import {
     LeaderboardTitleContainer,
     Link,
     TwitterImage,
-    TwitterTableContainer,
+    TwitterContainer,
     PaginationWrapper,
     LeaderboardIcon,
 } from '../styled-components';
@@ -107,7 +107,7 @@ const Leaderboard: React.FC = () => {
                                         target="_blank"
                                         rel="noreferrer"
                                     >
-                                        <TwitterTableContainer>
+                                        <TwitterContainer>
                                             <TwitterImage
                                                 alt="twiiter"
                                                 src={
@@ -117,7 +117,7 @@ const Leaderboard: React.FC = () => {
                                                 }
                                             />
                                             {cellProps.cell.value}
-                                        </TwitterTableContainer>
+                                        </TwitterContainer>
                                     </Link>
                                 ),
                                 sortable: true,

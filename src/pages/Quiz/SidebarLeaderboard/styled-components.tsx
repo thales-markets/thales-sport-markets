@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivStart } from 'styles/common';
 
 export const LeaderboardWrapper = styled(FlexDivColumn)`
-    margin-top: 20px;
+    margin-top: 30px;
 `;
 
 export const Container = styled(FlexDivColumn)`
@@ -14,6 +14,7 @@ export const LeaderboardContainer = styled(FlexDivColumn)`
     color: ${(props) => props.theme.textColor.primary};
     background: ${(props) => props.theme.background.secondary};
     padding: 10px 0;
+    margin-top: 20px;
 `;
 
 export const Title = styled(FlexDivStart)`
@@ -21,10 +22,11 @@ export const Title = styled(FlexDivStart)`
     font-size: 18px;
     font-weight: 600;
     line-height: 100%;
-    margin-top: 10px;
-    margin-bottom: 20px;
     justify-content: center;
     color: ${(props) => props.theme.textColor.secondary};
+    &:hover {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
 `;
 
 export const LeaderboardIcon = styled.i`
@@ -50,13 +52,13 @@ export const Rank = styled(FlexDivCentered)`
 export const MainInfo = styled(FlexDivColumn)``;
 
 export const Twitter = styled(FlexDivColumn)`
-    font-weight: 300;
-    font-size: 16px;
+    font-weight: 600;
+    font-size: 14px;
     line-height: 103.19%;
 `;
 
 export const Rewards = styled(FlexDivColumn)`
-    font-weight: 700;
+    font-weight: 300;
     font-size: 12px;
     line-height: 103.19%;
 `;
@@ -67,14 +69,23 @@ export const PointsInfo = styled(FlexDivColumn)`
 `;
 
 export const Points = styled(FlexDivColumn)`
-    font-weight: 700;
-    font-size: 15px;
+    font-weight: 300;
+    font-size: 14px;
     line-height: 103.19%;
 `;
 
 export const PointsLabel = styled(FlexDivColumn)`
-    font-weight: 300;
+    font-weight: 600;
     font-size: 12px;
     line-height: 103.19%;
     text-transform: uppercase;
+`;
+
+export const Link = styled.a`
+    color: ${(props) => props.theme.textColor.primary};
+    &:hover {
+        .twitter {
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+    }
 `;

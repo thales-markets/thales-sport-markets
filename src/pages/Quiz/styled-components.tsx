@@ -250,7 +250,7 @@ export const QuestionWeightContainer = styled(FlexDivColumnCentered)`
     margin-bottom: 20px;
 `;
 
-export const TwitterTableContainer = styled(FlexDivStart)`
+export const TwitterContainer = styled(FlexDivStart)`
     align-items: center;
 `;
 
