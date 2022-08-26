@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import axios from 'axios';
 import BackToLink from 'pages/Markets/components/BackToLink';
@@ -34,6 +34,9 @@ import {
     Copy,
     FinishedInfoMessage,
     FinishedInfoMessagesContainer,
+    DifficultyContainer,
+    DifficultyLabel,
+    DifficultyInfo,
 } from './styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -100,11 +103,6 @@ const Quiz: React.FC = () => {
     const [percentageTimeRemaining, setPercentageTimeRemaining] = useState<number>(0);
     const [isTwitterValid, setIsTwitterValid] = useState<boolean>(true);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
-    const firstUpdate = useRef(true);
-    useEffect(() => {
-        firstUpdate.current = false;
-    }, []);
 
     const isStartQuizDisabled = !twitter || twitter.trim() === '' || isSubmitting;
     const isQuizInProgress = isQuizStarted && !isQuizFinished && currentQuizItem;
@@ -288,7 +286,6 @@ const Quiz: React.FC = () => {
                         <TimeRemainingGraphicContainer>
                             <TimeRemainingGraphicPercentage
                                 width={percentageTimeRemaining}
-                                firstUpdate={firstUpdate.current}
                             ></TimeRemainingGraphicPercentage>
                         </TimeRemainingGraphicContainer>
                     </>
@@ -349,6 +346,12 @@ const Quiz: React.FC = () => {
                             )}
                             {isQuizInProgress && (
                                 <>
+                                    <DifficultyContainer>
+                                        <DifficultyLabel>{t('quiz.difficulty-label')}: </DifficultyLabel>
+                                        <DifficultyInfo difficulty={Number(currentQuizItem.points)}>
+                                            {t(`quiz.difficulty.${Number(currentQuizItem.points)}`)}
+                                        </DifficultyInfo>
+                                    </DifficultyContainer>
                                     <QuestionWeightContainer>
                                         {`${currentQuizItem.points} ${
                                             Number(currentQuizItem.points) === 1

@@ -1,7 +1,13 @@
 import { TablePagination, Tooltip, withStyles } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivStart } from 'styles/common';
+import {
+    FlexDivCentered,
+    FlexDivColumn,
+    FlexDivColumnCentered,
+    FlexDivStart,
+    QuizQuestionDifficultyMap,
+} from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
     width: 60%;
@@ -24,6 +30,7 @@ export const QuizContainer = styled(FlexDivColumn)`
         border-radius: 20px;
     }
     align-items: center;
+    position: relative;
 `;
 
 export const QuizFirstNextContainer = styled(FlexDivColumn)`
@@ -116,10 +123,10 @@ export const TimeRemainingGraphicContainer = styled(FlexDivStart)`
     }
 `;
 
-export const TimeRemainingGraphicPercentage = styled(FlexDivStart)<{ width: number; firstUpdate: boolean }>`
+export const TimeRemainingGraphicPercentage = styled(FlexDivStart)<{ width: number }>`
     position: absolute;
     width: ${(props) => props.width}%;
-    transition: ${(props) => (props.firstUpdate ? 'none' : 'width 1s linear')};
+    transition: width 1s linear;
     max-width: 565px;
     height: 10px;
     left: 2px;
@@ -262,6 +269,9 @@ export const QuestionWeightContainer = styled(FlexDivColumnCentered)`
     text-align: center;
     margin-top: 10px;
     margin-bottom: 20px;
+    @media (max-width: 768px) {
+        margin-top: 4px;
+    }
 `;
 
 export const TwitterContainer = styled(FlexDivStart)`
@@ -390,4 +400,28 @@ export const LeaderboardIcon = styled.i`
         font-family: OvertimeIcons !important;
         content: '\\0053';
     }
+`;
+
+export const DifficultyContainer = styled(FlexDivStart)`
+    align-items: center;
+    position: absolute;
+    top: 37px;
+    right: 50px;
+    @media (max-width: 768px) {
+        margin-top: 12px;
+        position: relative;
+        top: auto;
+        right: auto;
+    }
+`;
+
+export const DifficultyLabel = styled(Description)`
+    margin-bottom: 0px;
+    margin-right: 4px;
+`;
+
+export const DifficultyInfo = styled(Description)<{ difficulty: number }>`
+    margin-bottom: 0px;
+    font-weight: 600;
+    color: ${(props) => QuizQuestionDifficultyMap[props.difficulty - 1]};
 `;
