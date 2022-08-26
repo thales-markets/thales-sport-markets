@@ -191,7 +191,7 @@ export type MarketTransaction = {
     timestamp: number;
     amount: number | string;
     blockNumber: number;
-    position: PositionName;
+    position: any;
     market: string;
     paid: number;
 };

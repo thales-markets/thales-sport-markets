@@ -156,7 +156,8 @@
                 "buy": "BUY",
                 "sell": "SELL"
             },
-            "no-results": "No transactions associated with this market."
+            "no-results": "No transactions associated with this market.",
+            "no-results-for-wallet": "No hay transacciones asociadas con esta billetera."
         }
     },
     "markets": {
@@ -204,35 +205,45 @@
         }
     },
     "quiz": {
-        "title": "Quiz",
-        "start-quiz-description": "Connect your wallet and enter your Twitter handle to start the quiz!",
+        "title": "Sports Trivia",
+        "start-quiz-description": "<p>You have to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime</twitter> to be eligible.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via a Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
+        "twitter-handle-label": "Twitter handle",
         "twitter-handle-placeholder": "Enter your Twitter handle",
+        "twitter-handle-validation": "Invalid Twitter handle. Try again.",
+        "discord-label": "Discord ID (optional)",
+        "discord-placeholder": "Enter your Discord ID",
         "current-question-label": "Current question: {{currentQuestion}}/{{numberOfQuestions}}",
         "time-reamining-label": "Time remaining: <0/>",
         "question-weight-label": "Question weight: {{points}}",
         "point-label": "point",
         "points-label": "points",
-        "quiz-finished-label": "Quiz finished!",
-        "your-score-label": "Your score: {{score}}",
+        "quiz-finished-label": "Trivia finished!",
+        "your-score-label": "Your score: {{score}}/{{max}} points",
         "button": {
-            "start-quiz-label": "Start quiz",
+            "start-quiz-label": "Start trivia",
             "next-question-label": "Next question",
             "previous-question-label": "Previous question",
-            "finish-quiz-label": "Finish quiz",
+            "finish-quiz-label": "Finish trivia",
             "try-again-label": "Try again",
             "see-leaderboard-label": "See leaderboard"
         },
         "leaderboard": {
-            "title": "Quiz Leaderboard",
+            "title": "Trivia Leaderboard",
             "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            "back-to-quiz": "Back to quiz",
+            "back-to-quiz": "Back to trivia",
             "search-placeholder": "Search...",
             "table": {
+                "rank-col": "Rank",
                 "wallet-address-col": "Wallet address",
                 "twitter-col": "Twitter",
                 "points-col": "Points",
+                "time-col": "Time",
+                "rewards-col": "Rewards",
                 "no-data-available": "No data available"
             }
         }
+    },
+    "test": {
+        "test": "prueba"
     }
 }

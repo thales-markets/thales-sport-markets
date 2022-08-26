@@ -42,7 +42,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                         Header: <>{t('market.table.position-col')}</>,
                         accessor: 'position',
                         Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['position']>) => (
-                            <p>{cellProps.cell.value}</p>
+                            <p>{cellProps.cell.value.toUpperCase()}</p>
                         ),
                         width: 150,
                         sortable: true,
