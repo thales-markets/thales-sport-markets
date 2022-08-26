@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import axios from 'axios';
 import BackToLink from 'pages/Markets/components/BackToLink';
@@ -32,6 +32,8 @@ import {
     InputContainer,
     QuizLink,
     Copy,
+    FinishedInfoMessage,
+    FinishedInfoMessagesContainer,
 } from './styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -67,6 +69,7 @@ import {
     MAX_SCORE,
     NEXT_QUESTION_PATH,
     NUMBER_OF_QUESTIONS,
+    NUMBER_OF_REWARDS,
     QUIZ_API_URL,
     QUIZ_DURATION,
     START_QUIZ_PATH,
@@ -75,6 +78,9 @@ import SPAAnchor from 'components/SPAAnchor';
 import SimpleLoader from 'components/SimpleLoader';
 import { LINKS } from 'constants/links';
 import HelpUsImprove from './HelpUsImprove';
+import useQuizLeaderboardQuery from 'queries/quiz/useQuizLeaderboardQuery';
+import { FinishInfo, LeaderboardItem } from 'types/quiz';
+import ordinal from 'ordinal';
 
 const Quiz: React.FC = () => {
     const { t } = useTranslation();
@@ -102,6 +108,35 @@ const Quiz: React.FC = () => {
 
     const isStartQuizDisabled = !twitter || twitter.trim() === '' || isSubmitting;
     const isQuizInProgress = isQuizStarted && !isQuizFinished && currentQuizItem;
+
+    const quizLeaderboardQuery = useQuizLeaderboardQuery();
+
+    const finishInfo: FinishInfo = useMemo(() => {
+        if (quizLeaderboardQuery.isSuccess && quizLeaderboardQuery.data) {
+            const leaderboard = quizLeaderboardQuery.data;
+            const leaderboardItem = leaderboard.find((item: LeaderboardItem) => item.name === twitter);
+            if (leaderboardItem) {
+                return {
+                    rank: leaderboardItem.rank,
+                    points: leaderboardItem.points,
+                    totalParticipants: leaderboard.length,
+                    lastRankPointsWithRewards: (leaderboard.length > NUMBER_OF_REWARDS
+                        ? leaderboard[NUMBER_OF_REWARDS - 1]
+                        : leaderboard[leaderboard.length - 1]
+                    ).points,
+                    isQualifiedForRewards: leaderboardItem.rank <= NUMBER_OF_REWARDS,
+                };
+            }
+        }
+
+        return {
+            rank: 0,
+            points: 0,
+            totalParticipants: 0,
+            lastRankPointsWithRewards: 0,
+            isQualifiedForRewards: false,
+        };
+    }, [quizLeaderboardQuery.data, quizLeaderboardQuery.isSuccess, twitter]);
 
     const handleStartQuiz = async () => {
         setIsSubmitting(true);
@@ -165,6 +200,7 @@ const Quiz: React.FC = () => {
                     playerUUID: playerUuid,
                 });
                 const score = finishQuizResponse.data.data;
+                quizLeaderboardQuery.refetch();
                 dispatch(finishQuiz(score));
             }
         } catch (e) {
@@ -229,11 +265,6 @@ const Quiz: React.FC = () => {
             if (new Date().getTime() > endOfQuiz) {
                 handleFinishQuiz(false);
             }
-        }
-    }, 1000);
-
-    useInterval(async () => {
-        if (isQuizStarted && !isQuizFinished) {
             const secondRemaining = (endOfQuiz - new Date().getTime()) / 1000;
             const percentageRemaining = secondRemaining > 0 ? (secondRemaining * 100) / (QUIZ_DURATION / 1000) : 0;
             setPercentageTimeRemaining(percentageRemaining);
@@ -354,6 +385,44 @@ const Quiz: React.FC = () => {
                                             })}
                                         </FinishedInfo>
                                     </FinishedInfoContainer>
+                                    <FinishedInfoMessagesContainer>
+                                        <FinishedInfoMessage>
+                                            {t('quiz.finish-messages.rank-info', {
+                                                rank: ordinal(finishInfo.rank),
+                                                totalParticipants: finishInfo.totalParticipants,
+                                                points: finishInfo.points,
+                                                pointsLabel:
+                                                    Number(finishInfo.points) === 1
+                                                        ? t('quiz.point-label')
+                                                        : t('quiz.points-label'),
+                                            })}
+                                        </FinishedInfoMessage>
+                                        {!finishInfo.isQualifiedForRewards && (
+                                            <FinishedInfoMessage>
+                                                {t('quiz.finish-messages.not-quilfied-for-rewards', {
+                                                    points:
+                                                        finishInfo.lastRankPointsWithRewards + 1 - finishInfo.points,
+                                                    pointsLabel:
+                                                        Number(finishInfo.points) === 1
+                                                            ? t('quiz.point-label')
+                                                            : t('quiz.points-label'),
+                                                    numberOfRewards: NUMBER_OF_REWARDS,
+                                                })}
+                                            </FinishedInfoMessage>
+                                        )}
+                                        {finishInfo.isQualifiedForRewards && finishInfo.rank > 1 && (
+                                            <FinishedInfoMessage>
+                                                {t('quiz.finish-messages.quilfied-for-rewards', {
+                                                    numberOfRewards: NUMBER_OF_REWARDS,
+                                                })}
+                                            </FinishedInfoMessage>
+                                        )}
+                                        {finishInfo.isQualifiedForRewards && finishInfo.rank === 1 && (
+                                            <FinishedInfoMessage>
+                                                {t('quiz.finish-messages.quilfied-for-rewards-first')}
+                                            </FinishedInfoMessage>
+                                        )}
+                                    </FinishedInfoMessagesContainer>
                                     <ButtonContainer>{getSubmitButton()}</ButtonContainer>
                                 </>
                             )}

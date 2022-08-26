@@ -165,6 +165,17 @@ export const FinishedInfo = styled(Description)`
     margin-bottom: 40px;
 `;
 
+export const FinishedInfoMessagesContainer = styled(FlexDivColumnCentered)`
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+`;
+
+export const FinishedInfoMessage = styled(Description)`
+    margin-bottom: 0px;
+    line-height: 22px;
+`;
+
 export const SubmitButton = styled.button<{ isNavigation?: boolean }>`
     background: ${(props) =>
         props.isNavigation
