@@ -4,7 +4,7 @@ import { FlexDivColumn } from 'styles/common';
 import useUserTransactionsQuery from '../../../../queries/markets/useUserTransactionsQuery';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/rootReducer';
-import { getNetworkId, getWalletAddress } from '../../../../redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from '../../../../redux/modules/wallet';
 import { useTranslation } from 'react-i18next';
 import { MarketTransactions, SportMarkets, UserTransaction, UserTransactions } from '../../../../types/markets';
 import { orderBy } from 'lodash';
@@ -20,7 +20,10 @@ const UserHistory: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const userTransactionsQuery = useUserTransactionsQuery(walletAddress, networkId, { enabled: isAppReady });
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const userTransactionsQuery = useUserTransactionsQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+    });
     const sportMarketsQuery = useSportMarketsQuery(networkId, GlobalFilterEnum.All, null, { enabled: isAppReady });
 
     const [userTransactions, setUserTransactions] = useState<MarketTransactions>([]);
@@ -68,7 +71,7 @@ const UserHistory: React.FC = () => {
                 <HistoryTable
                     transactions={userTransactionsWithMarket}
                     isLoading={userTransactionsQuery.isLoading}
-                    noResultsMessage={noResults ? <span>{t(`market.table.no-results`)}</span> : undefined}
+                    noResultsMessage={noResults ? <span>{t(`market.table.no-results-for-wallet`)}</span> : undefined}
                 />
             </TableContainer>
         </Container>

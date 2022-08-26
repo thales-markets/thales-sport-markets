@@ -156,7 +156,8 @@
                 "buy": "BUY",
                 "sell": "SELL"
             },
-            "no-results": "No transactions associated with this market."
+            "no-results": "No transactions associated with this market.",
+            "no-results-for-wallet": "Нет транзакций, связанных с этим кошельком."
         }
     },
     "markets": {
