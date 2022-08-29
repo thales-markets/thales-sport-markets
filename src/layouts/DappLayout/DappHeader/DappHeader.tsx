@@ -40,6 +40,20 @@ const Container = styled(FlexDivRowCentered)`
     @media (max-width: 767px) {
         flex-direction: column;
     }
+    @keyframes pulsing {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
 `;
 
 const RightContainer = styled(FlexDivRowCentered)`
@@ -60,12 +74,14 @@ const RightContainer = styled(FlexDivRowCentered)`
 const StyledSportTriviaIcon = styled(SportTriviaIcon)`
     margin-right: 20px;
     cursor: pointer;
-    height: 38px;
+    height: 36px;
     margin-bottom: -4px;
     @media (max-width: 767px) {
         margin-bottom: 5px;
         margin-right: 0px;
     }
+    animation: pulsing 1s ease-in;
+    animation-iteration-count: infinite;
 `;
 
 export default DappHeader;
