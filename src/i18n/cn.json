@@ -11,7 +11,7 @@
             "get-usd": "获取 {{amount}}",
             "approve": "批准",
             "get-usd-progress": "铸造 {{amount}}...",
-            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use."
+            "disclaimer": "将你的钱包连接到Overtime意味着您已经阅读并理解了参与Overtime活动的风险 <a target=\"_blank\" href={{link}}>免责声明</a> 并决定继续使用."
         },
         "referral": {
             "link-copied": "推广链接已复制!",
@@ -43,46 +43,46 @@
             }
         },
         "errors": {
-            "unknown-error-try-again": "An unknown error occurred after you submitted. Please try again.",
-            "unknown-error-try-again-general": "An unknown error occurred. Please try again.",
-            "insufficient-balance": "Insufficient balance",
-            "enter-amount": "Enter amount",
-            "enter-price": "Enter price",
-            "insufficient-balance-wallet": "Please ensure your wallet has sufficient {{currencyKey}}",
+            "unknown-error-try-again": "提交后产生了一个未知的错误，请再试一次",
+            "unknown-error-try-again-general": "发生未知错误，请再试一次",
+            "insufficient-balance": "余额不足",
+            "enter-amount": "输入金额",
+            "enter-price": "输入价格",
+            "insufficient-balance-wallet": "请确认您的钱包中有足够的 {{currencyKey}}",
             "user-rejected-tx": "用户拒绝交易"
         },
         "time-remaining": {
             "ended": "ended",
-            "years": "years",
-            "year": "year",
-            "months": "months",
-            "month": "month",
-            "weeks": "weeks",
-            "week": "week",
-            "days": "days",
-            "day": "day",
-            "hours": "hours",
-            "hour": "hour",
-            "minutes": "minutes",
-            "minute": "minute",
-            "seconds": "seconds",
-            "second": "second",
-            "days-short": "d",
-            "hours-short": "h",
-            "minutes-short": "m",
-            "seconds-short": "s"
+            "years": "年",
+            "year": "年",
+            "months": "月",
+            "month": "月",
+            "weeks": "周",
+            "week": "周",
+            "days": "日",
+            "day": "日",
+            "hours": "小时",
+            "hour": "小时",
+            "minutes": "分钟",
+            "minute": "分钟",
+            "seconds": "秒",
+            "second": "秒",
+            "days-short": "天",
+            "hours-short": "小时",
+            "minutes-short": "分钟",
+            "seconds-short": "秒"
         },
-        "or": "or",
-        "dapp": "dapp",
-        "launch-dapp": "launch dapp",
-        "cancel": "Cancel",
-        "select-date": "Select date...",
-        "tags-placeholder": "Search tags...",
-        "remove-tag-tooltip": "Click to remove tag",
+        "or": "或",
+        "dapp": "应用",
+        "launch-dapp": "启动应用",
+        "cancel": "取消",
+        "select-date": "搜索日期...",
+        "tags-placeholder": "搜索标签...",
+        "remove-tag-tooltip": "点击删除标签",
         "input-characters-note": "{{entered }} / {{max}}",
         "view": "View",
-        "guidelines": "guidelines",
-        "built-on": "Built on"
+        "guidelines": "指南",
+        "built-on": "建立于"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利."
@@ -99,17 +99,17 @@
         "resolved-markets-label": "已结算的比赛",
         "grid-view": "网格",
         "list-view": "列表",
-        "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
+        "skew-tooltip": "偏度影响是指当前AMM持仓的分布也会影响投注价格。",
         "toast-messsage": {
-            "transaction-pending": "Transaction pending",
-            "swap-success": "Successfully swapped {{ currencyKey }}",
-            "approve-success": "Successfully approved",
-            "buy-success": "Successfully bought",
-            "sell-success": "Successfully sold",
-            "claim-winnings-success": "Winnings successfully claimed",
-            "claim-refund-success": "Refund successfully claimed",
-            "withdraw-success": "Successfuly withdrawn",
-            "get-usd-success": "{{amount}} successfully minted"
+            "transaction-pending": "待定事务",
+            "swap-success": "兑换 {{ currencyKey }} 成功",
+            "approve-success": "批准成功",
+            "buy-success": "买入成功",
+            "sell-success": "卖出成功",
+            "claim-winnings-success": "成功领取奖金",
+            "claim-refund-success": "成功领取退款",
+            "withdraw-success": "成功提款",
+            "get-usd-success": "成功铸造 {{amount}} 美元"
         },
 
         "filter-label": {
@@ -121,8 +121,8 @@
                 "claim": "结算参与的比赛",
                 "history": "竞猜记录",
                 "canceled": "已取消",
-                "archivedmarkets": "Archived markets",
-                "tooltip": "Markets resolved more than 7 days ago"
+                "archivedmarkets": "已存档的比赛",
+                "tooltip": "已结束超过7天的比赛"
             },
             "sport": {
                 "all": "所有运动",
@@ -135,10 +135,10 @@
                 "baseball": "棒球",
                 "soon": "即将开放!"
             },
-            "all": "All"
+            "all": "所有"
         },
         "back-to-markets": "查看其他比赛",
-        "back-to-market": "Back to market",
+        "back-to-market": "返回市场页面",
         "no-markets-found": "没有符合条件的比赛",
         "view-all-markets": "查看所有比赛",
         "table": {
@@ -150,9 +150,9 @@
             "paid-col": "支付",
             "tx-status-col": "状态",
             "type": {
-                "bid": "Bid",
-                "withdrawal": "Withdrawal",
-                "changePosition": "Change position",
+                "bid": "出价",
+                "withdrawal": "提款",
+                "changePosition": "改变投注方向",
                 "claim": "结算",
                 "buy": "买入",
                 "sell": "卖出"
@@ -170,95 +170,95 @@
             "started": "比赛开始",
             "canceled": "比赛取消",
             "pending-resolution": "等待结果",
-            "claim": "Claim",
+            "claim": "领取",
             "coming-soon": "即将开始",
             "vs": "vs",
             "draw": "平手"
         },
         "market-details": {
-            "price": "Price",
-            "liquidity": "Liquidity",
-            "usd-amount": "USD amount",
-            "positions-amount": "Positions amount",
-            "amount-to-sell": "Amount to sell",
-            "total-to-receive": "Total to receive",
-            "potential-profit": "Potential profit",
-            "amount-claimable": "Amount claimable",
-            "claim-back": "Claim back",
+            "price": "价格",
+            "liquidity": "流动性",
+            "usd-amount": "美元金额",
+            "positions-amount": "头寸数量",
+            "amount-to-sell": "卖出数量",
+            "total-to-receive": "收到的总金额",
+            "potential-profit": "潜在的利润",
+            "amount-claimable": "可领取数量",
+            "claim-back": "可退回数量",
             "wallet-info": {
                 "title": "钱包中"
             }
         },
-        "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity."
+        "zero-odds-tooltip": "Sports AMM 仅提供0.05美元至0.95美元价格范围内的流动性，这意味着，如果一个投注选择的赔率低于5%或者高于95%，该选择就不会有流动性。"
     },
     "rewards": {
-        "header": "Rewards",
-        "search-placeholder": "Search wallet address",
-        "description": "<0>There is a total of <0>10,000 OP</0> and <0>10,000 THALES</0> rewards to be distributed in 4 weeks, divided in 2-week periods. <0>5,000 OP + 5,000 THALES</0> will be allocated pro-rata based on the total negative PnL (profit and loss) for each 2-week period.</0><0>All markets that have matured in that 2-week period are accounted for. Individual wallet's PnL on each market are added up to get the leaderboard results.</0><1>- First 2-week period is from August 1st until August 14th.</1><1>- Second 2-week period is from August 15th until August 28th.</1><0>This incentivized program will be revisited after the end of the second 2-week period.</0>",
-        "total-negative-pnl": "Total negative PnL",
-        "op-rewards-banner-message": "OP rewards have started, check how you can earn those on <bold>the OP rewards page</bold>",
+        "header": "奖励",
+        "search-placeholder": "搜索钱包",
+        "description": "<0>奖励总额为 <0>10,000枚OP代币</0> 和 <0>10,000 枚THALES代币</0>，将在4周内完成分发（每轮持续2周），即每过2周，我们将根据用户亏损的总金额按比例分配<0>5,000 枚OP代币 + 5,000 枚THALES代币。</0><0>所有在这两周内的比赛结果都将被计入，每位用户在每一轮（两周）内参与的所有亏损都将被计入排行榜。</0><1>- 第一轮：8月1日至8月14日。</1><1>- 第二轮：8月15日至8月28日。</1><0>奖励计划将在第二轮结束后进行经调整。</0>",
+        "total-negative-pnl": "所有亏损金额",
+        "op-rewards-banner-message": "OP代币奖励已启动, 查看如何领取奖励的指南<bold>如何领取奖励的指南</bold>",
         "table": {
-            "wallet-address": "Wallet address",
-            "pnl": "PnL",
-            "percentage": "Percentage",
-            "reward-amount": "Reward",
-            "no-data-available": "No data available"
+            "wallet-address": "钱包地址",
+            "pnl": "盈亏金额",
+            "percentage": "百分比",
+            "reward-amount": "奖励数量",
+            "no-data-available": "无法获取数据"
         }
     },
     "quiz": {
-        "title": "Sports Trivia",
-        "start-quiz-description": "<p>You have to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime</twitter> to be eligible.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via a Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
-        "twitter-handle-label": "Twitter handle",
-        "twitter-handle-placeholder": "Enter your Twitter handle",
-        "twitter-handle-validation": "Invalid Twitter handle. Try again.",
-        "discord-label": "Discord ID (optional)",
-        "discord-placeholder": "Enter your Discord ID",
-        "current-question-label": "Current question: {{currentQuestion}}/{{numberOfQuestions}}",
-        "time-reamining-label": "Time remaining: <0/>",
-        "question-weight-label": "Question weight: {{points}}",
-        "point-label": "point",
-        "points-label": "points",
-        "quiz-finished-label": "Trivia finished!",
-        "your-score-label": "Your score: {{score}}/{{max}} points",
+        "title": "体育百科问答",
+        "start-quiz-description": "<p>您需要转推 <quizRetweetLink>贴文</quizRetweetLink> 并成为 <twitter>Overtime</twitter> 的追随者以获得参赛资格。</p><p>开始体育百科问答前，请连接钱包并输入您的推特账号！如果您赢得奖励，我们将会私信你的推特账号以确认地址。Discord账号非必填项，但是如果你希望在Discord获得一个体育百科问答相关的角色标签，我们建议您填写Discord账号。</p><p>如有任何其他问题，请加入我们的 <discord>Discord</discord>咨询。</p>",
+        "twitter-handle-label": "推特账号",
+        "twitter-handle-placeholder": "请输入您的推特账号",
+        "twitter-handle-validation": "无效的推特账号，请重新输入",
+        "discord-label": "Discord 账号 (可选)",
+        "discord-placeholder": "请输入您的Discord 账号",
+        "current-question-label": "当前问题: {{currentQuestion}}/{{numberOfQuestions}}",
+        "time-reamining-label": "剩余时间: <0/>",
+        "question-weight-label": "问题分数: {{points}}",
+        "point-label": "分数",
+        "points-label": "分数",
+        "quiz-finished-label": "问答完成!",
+        "your-score-label": "您的得分: {{score}}/{{max}} points",
         "button": {
-            "start-quiz-label": "Start trivia",
-            "next-question-label": "Next question",
-            "previous-question-label": "Previous question",
-            "finish-quiz-label": "Finish trivia",
-            "try-again-label": "Try again",
-            "see-leaderboard-label": "See leaderboard"
+            "start-quiz-label": "开始测试",
+            "next-question-label": "下一个问题",
+            "previous-question-label": "上一个问题",
+            "finish-quiz-label": "完成测试",
+            "try-again-label": "再次测试",
+            "see-leaderboard-label": "查看排行榜"
         },
         "leaderboard": {
-            "title": "Trivia Leaderboard",
+            "title": "体育百科问答排行榜",
             "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            "back-to-quiz": "Back to trivia",
-            "search-placeholder": "Search...",
+            "back-to-quiz": "返回测试",
+            "search-placeholder": "搜索...",
             "table": {
-                "rank-col": "Rank",
-                "wallet-address-col": "Wallet address",
-                "twitter-col": "Twitter",
-                "points-col": "Points",
-                "time-col": "Time",
-                "rewards-col": "Rewards",
-                "no-data-available": "No data available"
+                "rank-col": "排名",
+                "wallet-address-col": "钱包地址",
+                "twitter-col": "推特",
+                "points-col": "得分",
+                "time-col": "时间",
+                "rewards-col": "奖励",
+                "no-data-available": "无法获取数据"
             }
         },
-        "help-us-improve-label": "Help us improve",
-        "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
+        "help-us-improve-label": "帮助我们提高",
+        "help-us-improve-tooltip": "帮助我们的体育百科添加新的问题",
         "finish-messages": {
-            "your-best-result": "Your best result: {{points}} {{pointsLabel}}",
-            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants.",
-            "not-quilfied-for-rewards": "You are missing {{points}} {{pointsLabel}} to get into the TOP {{numberOfRewards}} and qualify for rewards. Try again and improve your score.",
-            "quilfied-for-rewards": "You are currently in the TOP {{numberOfRewards}} and qualified for rewards. Try again to get a better rank and higher rewards.",
-            "quilfied-for-rewards-first": "You are currently leading the leaderboard! Try again to get a better score and secure your spot."
+            "your-best-result": "你的最好成绩: {{points}} {{pointsLabel}}",
+            "rank-info": "你目前的成绩 {{points}} {{pointsLabel}} 在所有 {{totalParticipants}} 名参赛者中排名第 {{rank}} 。",
+            "not-quilfied-for-rewards": "你只差 {{points}} {{pointsLabel}} 就可以进入前 {{numberOfRewards}} 领取奖励。请继续尝试提高成绩。",
+            "quilfied-for-rewards": "你当前排名第 {{numberOfRewards}} ，已进入奖池。 请继续尝试以获得更好的排名和奖励。",
+            "quilfied-for-rewards-first": "你出于排行榜的第一名! 继续尝试获得更好的分数，让其他人难以超越。"
         },
         "difficulty-label": "难度",
         "difficulty": {
-            "1": "Trivial",
+            "1": "极容易",
             "2": "容易",
             "3": "中等",
-            "4": "Challenging",
-            "5": "Hard"
+            "4": "困难",
+            "5": "极困难"
         }
     },
     "test": {
