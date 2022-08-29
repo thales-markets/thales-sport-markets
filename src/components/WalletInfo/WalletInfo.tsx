@@ -12,6 +12,7 @@ import { PAYMENT_CURRENCY } from 'constants/currency';
 import { formatCurrency } from 'utils/formatters/number';
 import OutsideClickHandler from 'react-outside-click-handler';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
+import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -31,6 +32,16 @@ const WalletInfo: React.FC = () => {
         return 0;
     }, [sUSDBalanceQuery.data]);
 
+    const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+    });
+    const overtimeVoucher = useMemo(() => {
+        if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
+            return overtimeVoucherQuery.data;
+        }
+        return undefined;
+    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
+
     return (
         <Container>
             <WalletContainer
@@ -44,16 +55,32 @@ const WalletInfo: React.FC = () => {
             >
                 {isWalletConnected ? (
                     <>
-                        <Wallet className="wallet-info">
-                            <Info>{truncateAddress(walletAddress)}</Info>
-                        </Wallet>
-                        <Wallet className="wallet-info-hover">
-                            <Info>{t('common.wallet.wallet-options')}</Info>
-                        </Wallet>
-                        <Balance>
-                            <Info>{sUSDBalance}</Info>
-                            <Currency>{PAYMENT_CURRENCY}</Currency>
-                        </Balance>
+                        <>
+                            <Wallet className="wallet-info">
+                                <Info>{truncateAddress(walletAddress)}</Info>
+                            </Wallet>
+                            <Wallet className="wallet-info-hover">
+                                <Info>{t('common.wallet.wallet-options')}</Info>
+                            </Wallet>
+                            <Balance>
+                                <Info>{sUSDBalance}</Info>
+                                <Currency>{PAYMENT_CURRENCY}</Currency>
+                            </Balance>
+                        </>
+                        {overtimeVoucher && (
+                            <>
+                                <Wallet className="wallet-info">
+                                    <Info>VOUCHER</Info>
+                                </Wallet>
+                                <Wallet className="wallet-info-hover">
+                                    <Info>{t('common.wallet.wallet-options')}</Info>
+                                </Wallet>
+                                <Balance>
+                                    <Info>{overtimeVoucher.remainingAmount}</Info>
+                                    <Currency>{PAYMENT_CURRENCY}</Currency>
+                                </Balance>
+                            </>
+                        )}
                     </>
                 ) : (
                     <Info>{t('common.wallet.connect-your-wallet')}</Info>

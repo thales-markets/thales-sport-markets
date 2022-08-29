@@ -5,3 +5,11 @@ export type Token = {
     name: string;
     logoURI: string;
 };
+
+export type OvertimeVoucher = {
+    address: string;
+    id: number;
+    remainingAmount: number;
+};
+
+export type OvertimeVouchers = OvertimeVoucher[];

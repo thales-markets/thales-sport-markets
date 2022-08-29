@@ -9,6 +9,7 @@ import sUSDContract from 'utils/contracts/sUSDContract';
 import { NetworkIdByName } from './network';
 import theRundownConsumerContract from 'utils/contracts/theRundownConsumerContract';
 import multipleCollateral from './contracts/multipleCollateralContract';
+import overtimeVoucherContract from './contracts/overtimeVoucherContract';
 
 type NetworkConnector = {
     initialized: boolean;
@@ -28,6 +29,7 @@ type NetworkConnector = {
     tagsContract?: ethers.Contract;
     exoticUsdContract?: ethers.Contract;
     sUSDContract?: ethers.Contract;
+    overtimeVoucherContract?: ethers.Contract;
 };
 
 // @ts-ignore
@@ -43,6 +45,7 @@ const networkConnector: NetworkConnector = {
         this.theRundownConsumerContract = initializeContract(theRundownConsumerContract, networkSettings);
         this.sportsAMMContract = initializeContract(sportsAMMContract, networkSettings);
         this.sUSDContract = initializeContract(sUSDContract, networkSettings);
+        this.overtimeVoucherContract = initializeContract(overtimeVoucherContract, networkSettings);
 
         this.multipleCollateral = [
             initializeContract(multipleCollateral['sUSD'], networkSettings),
