@@ -1,3 +1,5 @@
+import { COLLATERAL_INDEX_TO_COLLATERAL, STABLE_DECIMALS } from 'constants/currency';
+import { ZERO_ADDRESS } from 'constants/network';
 import { Position } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
 import { NetworkId } from 'types/network';
@@ -12,6 +14,7 @@ export const getAMMSportsTransaction: any = (
     selectedPosition: Position,
     parsedAmount: BigNumber,
     ammQuote: any,
+    referral?: string | null,
     additionalSlippage?: BigNumber,
     providerOptions?: {
         gasLimit: number | null;
@@ -26,25 +29,36 @@ export const getAMMSportsTransaction: any = (
 
     if (isBuy) {
         if (stableIndex !== 0 && collateralAddress) {
-            return sportsAMMContract?.buyFromAMMWithDifferentCollateral(
+            return sportsAMMContract?.buyFromAMMWithDifferentCollateralAndReferrer(
                 marketAddress,
                 selectedPosition,
                 parsedAmount,
                 ammQuote,
                 additionalSlippage,
                 collateralAddress,
+                referral || ZERO_ADDRESS,
                 providerOptions
             );
         }
 
-        return sportsAMMContract?.buyFromAMM(
-            marketAddress,
-            selectedPosition,
-            parsedAmount,
-            ammQuote,
-            additionalSlippage,
-            providerOptions
-        );
+        return referral
+            ? sportsAMMContract?.buyFromAMMWithReferrer(
+                  marketAddress,
+                  selectedPosition,
+                  parsedAmount,
+                  ammQuote,
+                  additionalSlippage,
+                  referral,
+                  providerOptions
+              )
+            : sportsAMMContract?.buyFromAMM(
+                  marketAddress,
+                  selectedPosition,
+                  parsedAmount,
+                  ammQuote,
+                  additionalSlippage,
+                  providerOptions
+              );
     } else {
         return sportsAMMContract?.sellToAMM(
             marketAddress,
@@ -86,4 +100,14 @@ export const getSportsAMMQuoteMethod: any = (
     } else {
         return sportsAMMContract.sellToAmmQuote(marketAddress, selectedPosition, parsedAmount);
     }
+};
+
+export const getAmountForApproval = (stableIndex: number, amountToApprove: string) => {
+    const stable = (COLLATERAL_INDEX_TO_COLLATERAL as any)[stableIndex];
+
+    let collateralDecimals = 18;
+
+    if ((STABLE_DECIMALS as any)[stable]) collateralDecimals = (STABLE_DECIMALS as any)[stable];
+
+    return ethers.utils.parseUnits(amountToApprove, collateralDecimals);
 };

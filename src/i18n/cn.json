@@ -1,6 +1,8 @@
 {
     "common": {
         "winner": "获胜",
+        "buy-side": "买入",
+        "sell-side": "卖出",
         "wallet": {
             "connect-your-wallet": "链接钱包",
             "switch-wallet": "更换钱包",
@@ -10,6 +12,14 @@
             "approve": "批准",
             "get-usd-progress": "铸造 {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use."
+        },
+        "referral": {
+            "link-copied": "推广链接已复制!",
+            "button": {
+                "label": "通过推广赚取收益",
+                "disbled-tooltip": "链接钱包生成一个推广链接",
+                "enabled-tooltip": "邀请朋友在Overtime参与比赛预测，同时赚取收益分成。"
+            }
         },
         "swap": {
             "title": "获取 {{currencyKey}}",
@@ -36,30 +46,10 @@
             "unknown-error-try-again": "An unknown error occurred after you submitted. Please try again.",
             "unknown-error-try-again-general": "An unknown error occurred. Please try again.",
             "insufficient-balance": "Insufficient balance",
-            "insufficient-liquidity": "Insufficient liquidity",
             "enter-amount": "Enter amount",
             "enter-price": "Enter price",
-            "enter-valid-slippage": "Enter a valid slippage percentage",
-            "enter-market-data": "Enter market data",
-            "enter-question": "Enter question",
-            "enter-data-source": "Enter data source",
-            "enter-positions": "Enter positions",
-            "enter-ticket-price": "Enter ticket price",
-            "enter-tags": "Enter tags",
-            "enter-reason-for-dispute": "Enter reason for dispute",
-            "select-initial-position": "Select initial position",
-            "select-position": "Select position",
-            "different-position": "Positions must be different",
-            "select-vote": "Select vote",
-            "select-outcome": "Select outcome",
-            "select-result": "Select result",
-            "invalid-ticket-price": "Invalid ticket price",
-            "invalid-ticket-price-extended": "The ticket price must be between {{min}} and {{max}}",
-            "invalid-data-source": "Invalid data source",
-            "invalid-data-source-extended": "Data source is invalid. Data source must be a URL with https prefix.",
             "insufficient-balance-wallet": "Please ensure your wallet has sufficient {{currencyKey}}",
-            "invalid-slippage": "Invalid slippage",
-            "user-rejected-tx": "User rejected transaction"
+            "user-rejected-tx": "用户拒绝交易"
         },
         "time-remaining": {
             "ended": "ended",
@@ -95,101 +85,44 @@
         "built-on": "Built on"
     },
     "footer": {
-        "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED."
+        "all-rights-reserved": "© {{year}} eXoticV 保留所有权利."
     },
     "market": {
-        "question-label": "Question",
+        "question-label": "问题标签",
         "time-remaining-label": "按剩余时间排序",
         "sport": "按运动项目排序",
         "pay-with": "选择支付的稳定币:",
         "status-label": "状态",
         "tags-label": "标签",
         "search-placeholder": "搜索比赛",
-        "open-markets-label": "Opened",
-        "resolved-markets-label": "Resolved",
+        "open-markets-label": "开放竞猜的比赛",
+        "resolved-markets-label": "已结算的比赛",
         "grid-view": "网格",
         "list-view": "列表",
-        "status": {
-            "open": "Open",
-            "cancelled-pending-confirmation": "Cancelled - pending confirmation",
-            "cancelled-confirmed": "Cancelled",
-            "paused": "Paused",
-            "resolve-pending": "Resolve pending",
-            "resolved-pending-confirmation": "Resolved - pending confirmation",
-            "resolved-confirmed": "Resolved",
-            "claim-available": "Claim available",
-            "cancelled-refund-available": "Cancelled - refund available"
-        },
-        "pool-size-label": "Pool size",
-        "total-pool-size-label": "Total pool size",
-        "number-of-participants-label": "Number of participants",
-        "roi-label": "ROI",
-        "roi-tooltip": "Displayed ROI is not guaranteed. Profits are based on the current bids in the pool and they are prone to change. Actual ROI is determined at the end of the positioning phase.",
-        "winnings-per-ticket-label": "Winnings per ticket",
-        "claim-amount-ticket-label": "Claim amount per ticket",
-        "ticket-price-label": "Ticket price",
-        "return-label": "Potential max return",
-        "your-winnings-label": "Your winnings",
-        "your-refund-label": "Your refund",
-        "your-claim-amount-label": "Your claim amount",
-        "nothing-to-claim-label": "Nothing to claim",
-        "winnings-claimed-label": "Winnings claimed",
-        "refund-claimed-label": "Refund claimed",
-        "claimed-label": "Claimed",
-        "fees-bonds-distributed-label": "Fees and bonds distributed",
-        "bonds-distributed-label": "Bonds distributed",
-        "no-winners-label": "No winners on this market",
-        "data-source-label": "Data source",
-        "bid-fee-label": "Bid fee",
-        "bid-fee-tooltip": "<0>Each bid is subject to a total fee of {{bidPercentage}}%:</0><1>- {{creatorPercentage}}% goes to the market creator</1><1>- {{resolverPercentage}}% goes to the market resolver</1><1>- {{safeBoxPercentage}}% towards the Safe Box</1><0>The fees are only paid out in case market is not cancelled.</0>",
-        "withdrawal-fee-label": "Withdrawal fee",
-        "withdrawal-fee-tooltip": "<0>Withdrawal is subject to a total {{withdrawalPercentage}}% fee:</0><1>- {{creatorPercentage}}% paid to the market creator</1><1>- {{safeBoxPercentage}}% towards the Safe Box</1><0>These fees are paid within the withdrawal transactions.</0>",
-        "withdrawal-not-allowed": "Withdrawals are not allowed",
-        "creator-fee-label": "Creator fee earnings",
-        "resolver-fee-label": "Resolver fee earnings",
-        "your-fee-label": "Your fee earnings",
-        "button": {
-            "bid-label": "Bid",
-            "bid-progress-label": "Bidding in progress...",
-            "change-position-label": "Change position",
-            "change-position-progress-label": "Changing in progress...",
-            "withdraw-label": "Withdraw",
-            "withdraw-progress-label": "Withdrawal in progress...",
-            "resolve-market-label": "Resolve market",
-            "resolve-market-progress-label": "Resolving in progress...",
-            "claim-label": "Claim",
-            "claim-progress-label": "Claiming in progress...",
-            "cancel-label": "Cancel",
-            "cancel-market-label": "Cancel market",
-            "cancel-progress-label": "Canceling in progress...",
-            "distribute-fees-bonds-label": "Distribute fees and bonds",
-            "distribute-bonds-label": "Distribute bonds",
-            "distribute-progress-label": "Distributing in progress..."
-        },
+        "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
         "toast-messsage": {
             "transaction-pending": "Transaction pending",
             "swap-success": "Successfully swapped {{ currencyKey }}",
             "approve-success": "Successfully approved",
             "buy-success": "Successfully bought",
             "sell-success": "Successfully sold",
-            "create-market-success": "Market successfully created",
             "claim-winnings-success": "Winnings successfully claimed",
             "claim-refund-success": "Refund successfully claimed",
-            "resolve-market-success": "Market successfully resolved",
-            "ticket-bid-success": "Bid successfully placed",
-            "change-position-success": "Position successfully changed",
             "withdraw-success": "Successfuly withdrawn",
             "get-usd-success": "{{amount}} successfully minted"
         },
+
         "filter-label": {
             "global": {
-                "all": "所有比赛",
+                "allmarkets": "所有比赛",
                 "openmarkets": "开放中的比赛",
                 "resolvedmarkets": "已结束的比赛",
                 "yourpositions": "你参与的比赛",
                 "claim": "结算参与的比赛",
                 "history": "竞猜记录",
-                "canceled": "已取消"
+                "canceled": "已取消",
+                "archivedmarkets": "Archived markets",
+                "tooltip": "Markets resolved more than 7 days ago"
             },
             "sport": {
                 "all": "所有运动",
@@ -198,6 +131,7 @@
                 "hockey": "冰球",
                 "tennis": "网球",
                 "football": "橄榄球",
+                "ufc": "终极格斗",
                 "baseball": "棒球",
                 "soon": "即将开放!"
             },
@@ -207,19 +141,13 @@
         "back-to-market": "Back to market",
         "no-markets-found": "没有符合条件的比赛",
         "view-all-markets": "查看所有比赛",
-        "resolve-market": {
-            "title": "Choose a position to resolve the market with",
-            "cancel-tooltip": "If the market is not created according to the guidelines, use this option to cancel the market. Resolving a market with this position will allow anyone who placed a bid on the market to claim a full refund.",
-            "bond-info": "<0><0>In order to resolve the market, you need to deposit a bond of {{amount}} which will be used in case of a dispute.</0><0>If your result is not disputed and the market is formally resolved with your position, the bond will be returned to you.</0><0>{{resolverPercentage}}% of each bid goes to the market resolver in case the market is not cancelled.</0></0>",
-            "creator-bond-info": "<0><0>As a market creator, you don't need to submit a new bond, your initial bond will be used in case of a dispute.</0><0>{{resolverPercentage}}% of each bid goes to the market resolver in case the market is not cancelled.</0></0>"
-        },
-
         "table": {
             "title": "最近的竞猜记录",
             "date-time-col": "时间",
             "type-col": "类型",
             "position-col": "预测结果",
             "amount-col": "数量",
+            "paid-col": "支付",
             "tx-status-col": "状态",
             "type": {
                 "bid": "Bid",
@@ -229,11 +157,12 @@
                 "buy": "买入",
                 "sell": "卖出"
             },
-            "no-results": "当前的比赛还没有人参与竞猜。"
+            "no-results": "当前的比赛还没有人参与竞猜。",
+            "no-results-for-wallet": "没有与此钱包相关的交易。"
         }
     },
     "markets": {
-        "market-card-list": {
+        "market-card": {
             "starts": "开放时间",
             "claimable": "结算比赛结果",
             "finished": "已结束",
@@ -242,7 +171,97 @@
             "canceled": "比赛取消",
             "pending-resolution": "等待结果",
             "claim": "Claim",
-            "coming-soon": "即将开始"
+            "coming-soon": "即将开始",
+            "vs": "vs",
+            "draw": "平手"
+        },
+        "market-details": {
+            "price": "Price",
+            "liquidity": "Liquidity",
+            "usd-amount": "USD amount",
+            "positions-amount": "Positions amount",
+            "amount-to-sell": "Amount to sell",
+            "total-to-receive": "Total to receive",
+            "potential-profit": "Potential profit",
+            "amount-claimable": "Amount claimable",
+            "claim-back": "Claim back",
+            "wallet-info": {
+                "title": "钱包中"
+            }
+        },
+        "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity."
+    },
+    "rewards": {
+        "header": "Rewards",
+        "search-placeholder": "Search wallet address",
+        "description": "<0>There is a total of <0>10,000 OP</0> and <0>10,000 THALES</0> rewards to be distributed in 4 weeks, divided in 2-week periods. <0>5,000 OP + 5,000 THALES</0> will be allocated pro-rata based on the total negative PnL (profit and loss) for each 2-week period.</0><0>All markets that have matured in that 2-week period are accounted for. Individual wallet's PnL on each market are added up to get the leaderboard results.</0><1>- First 2-week period is from August 1st until August 14th.</1><1>- Second 2-week period is from August 15th until August 28th.</1><0>This incentivized program will be revisited after the end of the second 2-week period.</0>",
+        "total-negative-pnl": "Total negative PnL",
+        "op-rewards-banner-message": "OP rewards have started, check how you can earn those on <bold>the OP rewards page</bold>",
+        "table": {
+            "wallet-address": "Wallet address",
+            "pnl": "PnL",
+            "percentage": "Percentage",
+            "reward-amount": "Reward",
+            "no-data-available": "No data available"
         }
+    },
+    "quiz": {
+        "title": "Sports Trivia",
+        "start-quiz-description": "<p>You have to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime</twitter> to be eligible.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via a Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
+        "twitter-handle-label": "Twitter handle",
+        "twitter-handle-placeholder": "Enter your Twitter handle",
+        "twitter-handle-validation": "Invalid Twitter handle. Try again.",
+        "discord-label": "Discord ID (optional)",
+        "discord-placeholder": "Enter your Discord ID",
+        "current-question-label": "Current question: {{currentQuestion}}/{{numberOfQuestions}}",
+        "time-reamining-label": "Time remaining: <0/>",
+        "question-weight-label": "Question weight: {{points}}",
+        "point-label": "point",
+        "points-label": "points",
+        "quiz-finished-label": "Trivia finished!",
+        "your-score-label": "Your score: {{score}}/{{max}} points",
+        "button": {
+            "start-quiz-label": "Start trivia",
+            "next-question-label": "Next question",
+            "previous-question-label": "Previous question",
+            "finish-quiz-label": "Finish trivia",
+            "try-again-label": "Try again",
+            "see-leaderboard-label": "See leaderboard"
+        },
+        "leaderboard": {
+            "title": "Trivia Leaderboard",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+            "back-to-quiz": "Back to trivia",
+            "search-placeholder": "Search...",
+            "table": {
+                "rank-col": "Rank",
+                "wallet-address-col": "Wallet address",
+                "twitter-col": "Twitter",
+                "points-col": "Points",
+                "time-col": "Time",
+                "rewards-col": "Rewards",
+                "no-data-available": "No data available"
+            }
+        },
+        "help-us-improve-label": "Help us improve",
+        "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
+        "finish-messages": {
+            "your-best-result": "Your best result: {{points}} {{pointsLabel}}",
+            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants.",
+            "not-quilfied-for-rewards": "You are missing {{points}} {{pointsLabel}} to get into the TOP {{numberOfRewards}} and qualify for rewards. Try again and improve your score.",
+            "quilfied-for-rewards": "You are currently in the TOP {{numberOfRewards}} and qualified for rewards. Try again to get a better rank and higher rewards.",
+            "quilfied-for-rewards-first": "You are currently leading the leaderboard! Try again to get a better score and secure your spot."
+        },
+        "difficulty-label": "难度",
+        "difficulty": {
+            "1": "Trivial",
+            "2": "容易",
+            "3": "中等",
+            "4": "Challenging",
+            "5": "Hard"
+        }
+    },
+    "test": {
+        "test": "测试"
     }
 }

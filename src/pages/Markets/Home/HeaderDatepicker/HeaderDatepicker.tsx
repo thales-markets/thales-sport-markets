@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { GamesOnDate } from 'types/markets';
@@ -13,8 +13,6 @@ type HeaderDatepickerProps = {
     setEndDate: (value: any) => void;
 };
 
-const DATES_TO_SHOW = 7;
-
 const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
     gamesPerDay,
     dateFilter,
@@ -24,16 +22,19 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
 }) => {
     const [farLeftDateIndex, setFarLeftDateIndex] = useState(0);
     const [hammerManager, setHammerManager] = useState<any>();
+    const DATES_TO_SHOW = useMemo(() => {
+        return Math.min(Math.round(window.innerWidth / 80) - 2, 7);
+    }, []);
 
-    const moveLeft = () => {
+    const moveLeft = useCallback(() => {
         if (farLeftDateIndex > 0) setFarLeftDateIndex(farLeftDateIndex - 1);
-    };
+    }, [farLeftDateIndex]);
 
-    const moveRight = () => {
+    const moveRight = useCallback(() => {
         setFarLeftDateIndex(
             farLeftDateIndex + DATES_TO_SHOW < gamesPerDay.length ? farLeftDateIndex + 1 : farLeftDateIndex
         );
-    };
+    }, [DATES_TO_SHOW, farLeftDateIndex, gamesPerDay.length]);
 
     const slicedDates = useMemo(() => {
         if (gamesPerDay.length) {
@@ -59,10 +60,11 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
             farLeftDateIndex,
             farLeftDateIndex === 0 ? DATES_TO_SHOW : farLeftDateIndex + DATES_TO_SHOW
         );
-    }, [gamesPerDay, farLeftDateIndex]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [gamesPerDay, farLeftDateIndex, DATES_TO_SHOW, moveRight, moveLeft]);
 
     return (
-        <Wrapper id="wrapper-cards">
+        <Wrapper id="wrapper-cards" hidden={gamesPerDay.length === 0}>
             {gamesPerDay.length > 0 ? (
                 <>
                     <LeftIcon
@@ -92,42 +94,26 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
                     />
                 </>
             ) : (
-                <></>
+                <Wrapper></Wrapper>
             )}
         </Wrapper>
     );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ hidden?: boolean }>`
     display: flex;
     flex-direction: row;
+    visibility: ${(props) => (props?.hidden ? 'hidden' : '')};
+    height: ${(props) => (props?.hidden ? '64px' : '')};
     margin-bottom: 35px;
     align-items: center;
-    @media (max-width: 1250px) and (min-width: 769px) {
-        & > div:nth-of-type(4),
-        & > div:last-of-type {
-            display: none;
-        }
-    }
 
     @media (max-width: 768px) {
         margin-top: 20px;
         margin-bottom: 20px;
-        & > div {
-            box-shadow: var(--shadow);
-        }
-        & > div:first-of-type,
-        & > div:last-of-type {
-            opacity: 0.5;
-            box-shadow: none;
-        }
     }
 
     @media (max-width: 568px) {
-        & > div {
-            opacity: 0.5;
-        }
-
         & > div:nth-of-type(3) {
             opacity: 1;
             box-shadow: var(--shadow);

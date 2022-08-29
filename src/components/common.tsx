@@ -142,10 +142,16 @@ export const MatchDate = styled.label`
     line-height: 20px;
     text-align: center;
     overflow: hidden;
-    width: 98px;
+    width: 100px;
     white-space: nowrap;
     color: ${(props) => props.theme.textColor.primary};
     cursor: pointer;
+`;
+
+export const MarketInfoContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
 export const MatchInfoLabel = styled.label<{
@@ -160,7 +166,7 @@ export const MatchInfoLabel = styled.label<{
     line-height: 20px;
     text-align: center;
     overflow: hidden;
-    width: ${(props) => (props.pendingResolution ? 'fit-content' : '98px')};
+    width: ${(props) => (props.pendingResolution ? 'fit-content' : '100px')};
     white-space: nowrap;
     color: ${(props) =>
         props.isMaturedMarket || props.isCanceledMarket
@@ -170,6 +176,7 @@ export const MatchInfoLabel = styled.label<{
             : props.theme.textColor.primary};
     cursor: pointer;
     position: ${(props) => (props.pendingResolution ? 'absolute' : '')};
+    text-transform: uppercase;
 `;
 
 export const MatchVSLabel = styled.label<{
@@ -231,7 +238,7 @@ export const MatchParticipantImage = styled.img`
     color: ${(props) => props.theme.textColor.primary};
 `;
 
-export const MatchParticipantName = styled.label<{ isTwoPositioned?: boolean }>`
+export const MatchParticipantName = styled.label<{ isTwoPositioned?: boolean; glow?: boolean; glowColor?: string }>`
     display: flex;
     visibility: ${(props) => (props.isTwoPositioned ? 'hidden' : '')};
     font-style: normal;
@@ -243,8 +250,9 @@ export const MatchParticipantName = styled.label<{ isTwoPositioned?: boolean }>`
     align-items: center;
     text-align: center;
     margin-top: 5px;
-    color: ${(props) => props.theme.textColor.primary};
     cursor: pointer;
+    color: ${(_props) => (_props?.glow ? _props.glowColor : _props.theme.textColor.primary)};
+    text-shadow: ${(_props) => (_props?.glow ? '0 0 15px ' + _props.glowColor : '')};
 `;
 
 export const OddsLabel = styled.label<{
@@ -254,6 +262,7 @@ export const OddsLabel = styled.label<{
     noOdds?: boolean;
 }>`
     display: flex;
+    flex-direction: row;
     visibility: ${(props) => (props.isTwoPositioned || props.noOdds ? 'hidden' : '')};
     margin-top: 4px;
     font-style: normal;

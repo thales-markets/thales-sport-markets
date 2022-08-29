@@ -10,23 +10,29 @@ import {
 } from './styled-components/WalletInfo';
 import useMarketBalancesQuery from '../../../../queries/markets/useMarketBalancesQuery';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { RootState } from '../../../../redux/rootReducer';
 import { getIsWalletConnected, getWalletAddress } from '../../../../redux/modules/wallet';
-import { Balances, MarketData } from '../../../../types/markets';
+import { Balances, MarketData, Odds } from '../../../../types/markets';
 import { Position, Side } from '../../../../constants/options';
 import { ODDS_COLOR } from '../../../../constants/ui';
 import { ReactComponent as WalletIcon } from 'assets/images/wallet-icon.svg';
 import { FlexDivCentered } from '../../../../styles/common';
+import useMarketCancellationOddsQuery from 'queries/markets/useMarketCancellationOddsQuery';
 
 type WalletInfoProps = {
     market: MarketData | undefined;
 };
 
 const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
+    const { t } = useTranslation();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const [balances, setBalances] = useState<Balances | undefined>(undefined);
-
+    const [oddsOnCancellation, setOddsOnCancellation] = useState<Odds | undefined>(undefined);
+    const marketCancellationOddsQuery = useMarketCancellationOddsQuery(market?.address || '', {
+        enabled: market?.cancelled,
+    });
     const marketBalancesQuery = useMarketBalancesQuery(market?.address || '', walletAddress, {
         enabled: !!market?.address && isWalletConnected,
     });
@@ -37,24 +43,32 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
         }
     }, [marketBalancesQuery.isSuccess, marketBalancesQuery.data]);
 
+    useEffect(() => {
+        if (marketCancellationOddsQuery.isSuccess && marketCancellationOddsQuery.data) {
+            setOddsOnCancellation(marketCancellationOddsQuery.data);
+        }
+    }, [marketCancellationOddsQuery.isSuccess, marketCancellationOddsQuery.data]);
+
     return (
         <WalletInfoContainer hasBalances={!!balances?.home || !!balances?.away || !!balances?.draw}>
             <TokenInfo>
                 <FlexDivCentered>
                     <WalletIcon />
-                    <Title>IN WALLET:</Title>
+                    <Title>{t('markets.market-details.wallet-info.title')}:</Title>
                 </FlexDivCentered>
                 <ValueContainer>
                     {!!balances?.home && (
                         <FlexDivCentered>
                             <Token color={ODDS_COLOR.HOME}>1</Token>
                             <Value>
-                                {market?.homeTeam.toUpperCase()}: {balances?.home}
+                                {market?.homeTeam}: {balances?.home}
                             </Value>
                             <AlternateValue>
                                 (${' '}
-                                {(market?.resolved && market.finalResult - 1 == Position.HOME
+                                {(market?.resolved && !market?.cancelled && market.finalResult - 1 == Position.HOME
                                     ? 1 * (balances?.home || 0)
+                                    : market?.cancelled
+                                    ? (oddsOnCancellation?.home || 0) * (balances?.home || 0)
                                     : (market?.positions[Position.HOME].sides[Side.SELL].odd || 0) *
                                       (balances?.home || 0)
                                 ).toFixed(2)}
@@ -65,11 +79,15 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
                     {!!balances?.draw && (
                         <FlexDivCentered>
                             <Token color={ODDS_COLOR.DRAW}>X</Token>
-                            <Value>DRAW: {balances?.draw}</Value>
+                            <Value>
+                                {t('markets.market-card.draw')}: {balances?.draw}
+                            </Value>
                             <AlternateValue>
                                 (${' '}
-                                {(market?.resolved && market.finalResult - 1 == Position.DRAW
+                                {(market?.resolved && !market?.cancelled && market.finalResult - 1 == Position.DRAW
                                     ? 1 * (balances?.draw || 0)
+                                    : market?.cancelled
+                                    ? (oddsOnCancellation?.draw || 0) * (balances?.draw || 0)
                                     : (market?.positions[Position.DRAW].sides[Side.SELL].odd || 0) *
                                       (balances?.draw || 0)
                                 ).toFixed(2)}
@@ -81,12 +99,14 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
                         <FlexDivCentered>
                             <Token color={ODDS_COLOR.AWAY}>2</Token>
                             <Value>
-                                {market?.awayTeam.toUpperCase()}: {balances?.away}
+                                {market?.awayTeam}: {balances?.away}
                             </Value>
                             <AlternateValue>
                                 (${' '}
-                                {(market?.resolved && market.finalResult - 1 == Position.AWAY
+                                {(market?.resolved && !market?.cancelled && market.finalResult - 1 == Position.AWAY
                                     ? 1 * (balances?.away || 0)
+                                    : market?.cancelled
+                                    ? (oddsOnCancellation?.away || 0) * (balances?.away || 0)
                                     : (market?.positions[Position.AWAY].sides[Side.SELL].odd || 0) *
                                       (balances?.away || 0)
                                 ).toFixed(2)}

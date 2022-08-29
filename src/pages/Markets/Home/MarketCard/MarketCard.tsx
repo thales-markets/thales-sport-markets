@@ -30,7 +30,7 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPositions }) => 
         </Container>
     ) : (
         <Container>
-            <MarketCardOpened market={market} />
+            <MarketCardOpened accountPositions={accountPositions} market={market} />
         </Container>
     );
 };

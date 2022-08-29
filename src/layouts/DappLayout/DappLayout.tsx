@@ -13,26 +13,42 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DappFooter from './DappFooter';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
+import queryString from 'query-string';
+import { getReferralId, setReferralId } from 'utils/referral';
+import { useLocation } from 'react-router-dom';
 
-type DappLayoutProps = {
-    showSearch?: boolean;
-};
-
-const DappLayout: React.FC<DappLayoutProps> = ({ children, showSearch }) => {
+const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const { trackPageView } = useMatomo();
 
+    const location = useLocation();
+    const queryParams: { referralId?: string } = queryString.parse(location.search);
+
     useEffect(() => {
-        trackPageView({
-            customDimensions: [
-                {
-                    id: 1,
-                    value: networkId ? networkId?.toString() : '',
-                },
-            ],
-        });
-    }, [networkId]);
+        if (queryParams.referralId) {
+            setReferralId(queryParams.referralId);
+        }
+    }, [queryParams.referralId]);
+
+    useEffect(() => {
+        const customDimensions = [
+            {
+                id: 1,
+                value: networkId ? networkId?.toString() : '',
+            },
+        ];
+
+        const referralId = getReferralId();
+        if (referralId) {
+            customDimensions.push({
+                id: 2,
+                value: referralId,
+            });
+        }
+
+        trackPageView({ customDimensions });
+    }, [networkId, trackPageView]);
 
     return (
         <>
@@ -42,7 +58,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children, showSearch }) => {
                 ) : (
                     <Background>
                         <Wrapper>
-                            <DappHeader showSearch={showSearch} />
+                            <DappHeader />
                             {children}
                             <DappFooter />
                         </Wrapper>

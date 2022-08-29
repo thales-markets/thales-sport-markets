@@ -8,19 +8,26 @@ import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
 import { NetworkIdByName } from 'utils/network';
 import { getNetworkId } from 'redux/modules/wallet';
+import Referral from 'components/Referral';
+// import { buildHref } from 'utils/routes';
+// import SPAAnchor from 'components/SPAAnchor';
+// import ROUTES from 'constants/routes';
+// import { ReactComponent as SportTriviaIcon } from 'assets/images/sport-trivia.svg';
+import LanguageSelector from 'components/LanguageSelector';
 
-type DappHeaderProps = {
-    showSearch?: boolean;
-};
-
-const DappHeader: React.FC<DappHeaderProps> = () => {
+const DappHeader: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     return (
         <Container>
             <Logo />
             <RightContainer>
+                {/* <SPAAnchor href={buildHref(ROUTES.Quiz)}>
+                    <StyledSportTriviaIcon />
+                </SPAAnchor> */}
+                <Referral />
                 {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
+                <LanguageSelector />
                 <WalletInfo />
             </RightContainer>
         </Container>
@@ -29,6 +36,7 @@ const DappHeader: React.FC<DappHeaderProps> = () => {
 
 const Container = styled(FlexDivRowCentered)`
     width: 100%;
+    margin-top: 10px;
     @media (max-width: 767px) {
         flex-direction: column;
     }
@@ -48,5 +56,16 @@ const RightContainer = styled(FlexDivRowCentered)`
         }
     }
 `;
+
+// const StyledSportTriviaIcon = styled(SportTriviaIcon)`
+//     margin-right: 20px;
+//     cursor: pointer;
+//     height: 38px;
+//     margin-bottom: -4px;
+//     @media (max-width: 767px) {
+//         margin-bottom: 5px;
+//         margin-right: 0px;
+//     }
+// `;
 
 export default DappHeader;
