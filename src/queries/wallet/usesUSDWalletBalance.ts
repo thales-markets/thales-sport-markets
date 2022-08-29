@@ -4,7 +4,7 @@ import networkConnector from 'utils/networkConnector';
 import { NetworkId } from 'types/network';
 import { STABLE_DECIMALS } from 'constants/currency';
 
-const usesUSDWalletBalance = (
+const useSUSDWalletBalance = (
     walletAddress: string,
     networkId: NetworkId,
     options?: UseQueryOptions<number | undefined>
@@ -31,4 +31,4 @@ const usesUSDWalletBalance = (
     );
 };
 
-export default usesUSDWalletBalance;
+export default useSUSDWalletBalance;

@@ -47,6 +47,7 @@ export const MatchInfo = styled(FlexDivRow)`
 
 export const MatchInfoColumn = styled(FlexDivColumnCentered)`
     align-items: center;
+    align-self: flex-start;
 `;
 
 export const MatchDate = styled.label`
@@ -58,6 +59,22 @@ export const MatchDate = styled.label`
     overflow: hidden;
     white-space: nowrap;
     color: ${(props) => props.theme.textColor.primary};
+`;
+
+export const MatchVSLabel = styled.label`
+    font-style: normal;
+    font-weight: 200;
+    font-size: 23px;
+    line-height: 27px;
+    display: flex;
+    align-items: center;
+    height: 126px;
+    @media (max-width: 400px) {
+        height: 100px;
+    }
+    color: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
+    margin-top: -20px;
 `;
 
 export const OddsContainer = styled(FlexDivRow)`
@@ -114,12 +131,15 @@ export const InfoTitle = styled.div`
     font-size: 18px;
     line-height: 23px;
     margin-right: 5px;
+    text-transform: uppercase;
 `;
 
 export const InfoValue = styled.div`
     font-weight: 600;
     font-size: 18px;
     line-height: 23px;
+    display: flex;
+    flex-direction: row;
 `;
 
 export const SliderContainer = styled(FlexDivRow)`
@@ -302,7 +322,7 @@ export const AmountToBuyLabel = styled(FlexDivCentered)`
     }
 `;
 
-export const LabelContainer = styled(FlexDiv)`
+export const LabelContainer = styled(FlexDivRow)`
     width: 50%;
     align-self: center;
     justify-content: space-around;
@@ -310,6 +330,20 @@ export const LabelContainer = styled(FlexDiv)`
         width: 100%;
         justify-content: center;
     }
+`;
+
+export const LabelsContainer = styled(FlexDivRow)`
+    width: 50%;
+    align-self: center;
+    justify-content: space-around;
+    @media (max-width: 768px) {
+        width: 100%;
+        justify-content: center;
+    }
+`;
+
+export const InputContainer = styled(FlexDiv)`
+    margin: 0px 5px;
 `;
 
 export const Separator = styled.span`
@@ -336,4 +370,10 @@ export const FooterContainer = styled(FlexDivCentered)`
     @media (max-width: 768px) {
         flex-direction: column;
     }
+`;
+
+export const Icon = styled.i`
+    font-size: 20px;
+    margin-left: 4px;
+    margin-right: 7px;
 `;

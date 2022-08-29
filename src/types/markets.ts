@@ -91,6 +91,7 @@ export type MarketData = {
     awayTeam: string;
     maturityDate: number;
     resolved: boolean;
+    cancelled: boolean;
     finalResult: number;
     gameStarted: boolean;
     homeScore?: number;
@@ -144,6 +145,7 @@ export type MarketsParameters = {
 export type TagInfo = {
     id: number;
     label: string;
+    logo?: string;
 };
 
 export type Tags = TagInfo[];
@@ -152,10 +154,10 @@ export type SportsMap = Record<number, string>;
 
 export type SportsTagsMap = Record<string, number[]>;
 
-enum PositionType {
-    home,
-    away,
-    draw,
+export enum PositionType {
+    home = 'home',
+    away = 'away',
+    draw = 'draw',
 }
 
 export type AccountPositionGraph = {
@@ -180,7 +182,7 @@ export type PositionBalances = PositionBalance[];
 
 export type AccountPositionsMap = Record<string, AccountPosition[]>;
 
-export type MarketTransactionType = 'bid' | 'changePosition' | 'withdrawal' | 'claim';
+export type MarketTransactionType = 'bid' | 'changePosition' | 'withdrawal' | 'claim' | 'buy' | 'sell';
 
 export type MarketTransaction = {
     hash: string;
@@ -189,11 +191,23 @@ export type MarketTransaction = {
     timestamp: number;
     amount: number | string;
     blockNumber: number;
-    position: PositionName;
+    position: any;
     market: string;
+    paid: number;
 };
 
 export type MarketTransactions = MarketTransaction[];
+
+export type ClaimTransaction = {
+    id: string;
+    account: string;
+    amount: number;
+    timestamp: number;
+    caller: string;
+    market: MarketData;
+};
+
+export type ClaimTransactions = ClaimTransaction[];
 
 export type UserTransaction = {
     hash: string;

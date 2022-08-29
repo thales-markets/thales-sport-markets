@@ -13,7 +13,7 @@ export enum SupportedLanguages {
 
 export const LanguageNameMap = {
     [SupportedLanguages.ENGLISH]: 'English',
-    [SupportedLanguages.CHINESE]: '中文',
+    [SupportedLanguages.CHINESE]: 'Chinese',
 };
 
 export const DEFAULT_LANGUAGE = SupportedLanguages.ENGLISH;

@@ -11,7 +11,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { PAYMENT_CURRENCY } from 'constants/currency';
 import { formatCurrency } from 'utils/formatters/number';
 import OutsideClickHandler from 'react-outside-click-handler';
-import usesUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
+import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -21,7 +21,7 @@ const WalletInfo: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const [showWalletOptions, setShowWalletOptions] = useState<boolean>(false);
 
-    const sUSDBalanceQuery = usesUSDWalletBalance(walletAddress, networkId, {
+    const sUSDBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
     const sUSDBalance = useMemo(() => {
@@ -29,38 +29,36 @@ const WalletInfo: React.FC = () => {
             return formatCurrency(sUSDBalanceQuery?.data, 2);
         }
         return 0;
-    }, [sUSDBalanceQuery.isSuccess, sUSDBalanceQuery?.data]);
+    }, [sUSDBalanceQuery.data]);
 
     return (
         <Container>
-            {!showWalletOptions && (
-                <WalletContainer
-                    onClick={() => {
-                        if (!isWalletConnected) {
-                            onboardConnector.connectWallet();
-                        } else {
-                            setShowWalletOptions(true);
-                        }
-                    }}
-                >
-                    {isWalletConnected ? (
-                        <>
-                            <Wallet className="wallet-info">
-                                <Info>{truncateAddress(walletAddress)}</Info>
-                            </Wallet>
-                            <Wallet className="wallet-info-hover">
-                                <Info>{t('common.wallet.wallet-options')}</Info>
-                            </Wallet>
-                            <Balance>
-                                <Info>{sUSDBalance}</Info>
-                                <Currency>{PAYMENT_CURRENCY}</Currency>
-                            </Balance>
-                        </>
-                    ) : (
-                        <Info>{t('common.wallet.connect-your-wallet')}</Info>
-                    )}
-                </WalletContainer>
-            )}
+            <WalletContainer
+                onClick={() => {
+                    if (!isWalletConnected) {
+                        onboardConnector.connectWallet();
+                    } else {
+                        setShowWalletOptions(true);
+                    }
+                }}
+            >
+                {isWalletConnected ? (
+                    <>
+                        <Wallet className="wallet-info">
+                            <Info>{truncateAddress(walletAddress)}</Info>
+                        </Wallet>
+                        <Wallet className="wallet-info-hover">
+                            <Info>{t('common.wallet.wallet-options')}</Info>
+                        </Wallet>
+                        <Balance>
+                            <Info>{sUSDBalance}</Info>
+                            <Currency>{PAYMENT_CURRENCY}</Currency>
+                        </Balance>
+                    </>
+                ) : (
+                    <Info>{t('common.wallet.connect-your-wallet')}</Info>
+                )}
+            </WalletContainer>
             {showWalletOptions && (
                 <OutsideClickHandler onOutsideClick={() => setShowWalletOptions(false)}>
                     <WalletOptions>

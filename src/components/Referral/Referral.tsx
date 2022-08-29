@@ -1,4 +1,3 @@
-import Button from 'components/Button';
 import Tooltip from 'components/Tooltip';
 import ROUTES from 'constants/routes';
 import React from 'react';
@@ -11,7 +10,6 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
 import { buildReferralLink } from 'utils/routes';
-
 const Referral: React.FC = () => {
     const { t } = useTranslation();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -33,14 +31,9 @@ const Referral: React.FC = () => {
     };
 
     const getButtonComponent = () => (
-        <TooltipButton
-            type="primary"
-            onClick={referralClickHandler}
-            fontSize={12.5}
-            customDisabled={!isWalletConnected}
-        >
+        <StyledButton onClick={referralClickHandler} customDisabled={!isWalletConnected}>
             {t('common.referral.button.label')}
-        </TooltipButton>
+        </StyledButton>
     );
 
     return (
@@ -76,7 +69,22 @@ const Container = styled(FlexDivCentered)`
     }
 `;
 
-export const TooltipButton = styled(Button)<{ customDisabled?: boolean }>`
+const StyledButton = styled.button<{ customDisabled?: boolean }>`
+    background: ${(props) => props.theme.button.background.secondary};
+    border: 2px solid ${(props) => props.theme.button.borderColor.secondary};
+    color: ${(props) => props.theme.button.textColor.quaternary};
+    border-radius: 5px;
+    padding: 1px 20px 0px 20px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12.5px;
+    text-align: center;
+    outline: none;
+    text-transform: none;
+    cursor: pointer;
+    min-height: 28px;
+    width: fit-content;
+    white-space: nowrap;
     opacity: ${(props) => (props.customDisabled ? '0.4' : '1')};
     &:hover {
         cursor: ${(props) => (props.customDisabled ? 'default' : 'pointer')};

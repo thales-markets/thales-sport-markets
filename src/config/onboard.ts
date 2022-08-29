@@ -58,6 +58,7 @@ export const initOnboard = (networkId: NetworkId, subscriptions: Subscriptions) 
                     walletName: 'walletConnect',
                     rpc: {
                         [NetworkIdByName.Kovan]: getInfuraRpcURL(NetworkIdByName.Kovan),
+                        [NetworkIdByName.Goerli]: getInfuraRpcURL(NetworkIdByName.Goerli),
                         [NetworkIdByName.OptimismMainnet]: getInfuraRpcURL(NetworkIdByName.OptimismMainnet),
                         [NetworkIdByName.OptimismKovan]: getInfuraRpcURL(NetworkIdByName.OptimismKovan),
                     },

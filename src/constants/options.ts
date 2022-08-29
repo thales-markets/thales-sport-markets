@@ -17,4 +17,9 @@ export const POSITION_MAP: Record<PositionName, string> = {
     AWAY: '2',
 };
 
+export enum DenominationType {
+    TOKEN = 'TOKEN',
+    USD = 'USD',
+}
+
 export const MAX_L2_GAS_LIMIT = 15000000;
