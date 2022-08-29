@@ -23,8 +23,14 @@ const useTokenBalanceQuery = (
                 if (overtimeVouchers.length > 0) {
                     const overtimeVoucher = overtimeVouchers[0];
                     const { overtimeVoucherContract } = networkConnector;
-                    const remainingAmount = await overtimeVoucherContract?.amountInVoucher(overtimeVoucher.id);
+
+                    const [remainingAmount, image] = await Promise.all([
+                        overtimeVoucherContract?.amountInVoucher(overtimeVoucher.id),
+                        overtimeVoucherContract?.tokenURI(overtimeVoucher.id),
+                    ]);
+
                     overtimeVoucher.remainingAmount = bigNumberFormatter(remainingAmount);
+                    overtimeVoucher.image = image;
                     return overtimeVoucher;
                 }
             } catch (e) {

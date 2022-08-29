@@ -15,7 +15,7 @@ type TooltipProps = {
 const Tooltip: React.FC<TooltipProps> = ({ component, overlay, iconFontSize, customIconStyling, marginLeft, top }) => {
     return (
         <Container>
-            <ReactTooltip overlay={overlay} placement="top">
+            <ReactTooltip overlay={overlay} placement="top" visible>
                 {component ? (
                     component
                 ) : (

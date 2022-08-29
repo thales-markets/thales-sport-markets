@@ -13,6 +13,7 @@ import { formatCurrency } from 'utils/formatters/number';
 import OutsideClickHandler from 'react-outside-click-handler';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
+import Tooltip from 'components/Tooltip';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -67,25 +68,26 @@ const WalletInfo: React.FC = () => {
                                 <Currency>{PAYMENT_CURRENCY}</Currency>
                             </Balance>
                         </>
-                        {overtimeVoucher && (
-                            <>
-                                <Wallet className="wallet-info">
-                                    <Info>VOUCHER</Info>
-                                </Wallet>
-                                <Wallet className="wallet-info-hover">
-                                    <Info>{t('common.wallet.wallet-options')}</Info>
-                                </Wallet>
-                                <Balance>
-                                    <Info>{overtimeVoucher.remainingAmount}</Info>
-                                    <Currency>{PAYMENT_CURRENCY}</Currency>
-                                </Balance>
-                            </>
-                        )}
                     </>
                 ) : (
                     <Info>{t('common.wallet.connect-your-wallet')}</Info>
                 )}
             </WalletContainer>
+            {overtimeVoucher && (
+                <Tooltip
+                    overlay={<VoucherImage src={overtimeVoucher.image} />}
+                    component={
+                        <Wallet>
+                            <Info>VOUCHER: </Info>
+                            <Info>{overtimeVoucher.remainingAmount}</Info>
+                            <Currency>{PAYMENT_CURRENCY}</Currency>
+                        </Wallet>
+                    }
+                    iconFontSize={23}
+                    marginLeft={2}
+                    top={0}
+                />
+            )}
             {showWalletOptions && (
                 <OutsideClickHandler onOutsideClick={() => setShowWalletOptions(false)}>
                     <WalletOptions>
@@ -239,6 +241,10 @@ const CloseIcon = styled.i`
         content: '\\004F';
         color: ${(props) => props.theme.textColor.primary};
     }
+`;
+
+export const VoucherImage = styled.img`
+    height: 150px;
 `;
 
 export default WalletInfo;

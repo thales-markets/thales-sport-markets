@@ -10,6 +10,7 @@ export type OvertimeVoucher = {
     address: string;
     id: number;
     remainingAmount: number;
+    image: string;
 };
 
 export type OvertimeVouchers = OvertimeVoucher[];
