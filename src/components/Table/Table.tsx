@@ -73,19 +73,19 @@ const Table: React.FC<TableProps> = ({
 
     useEffect(() => {
         onSortByChanged && onSortByChanged();
-    }, [state.sortBy]);
+    }, [onSortByChanged, state.sortBy]);
 
     useEffect(() => {
         if (currentPage !== undefined) {
             gotoPage(currentPage);
         }
-    }, [currentPage]);
+    }, [currentPage, gotoPage]);
 
     useEffect(() => {
         if (rowsPerPage !== undefined) {
             setPageSize(rowsPerPage || 0);
         }
-    }, [rowsPerPage]);
+    }, [rowsPerPage, setPageSize]);
 
     return (
         <>
