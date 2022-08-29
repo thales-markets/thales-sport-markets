@@ -11,6 +11,14 @@
             "get-usd-progress": "Minting {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use."
         },
+        "referral": {
+            "link-copied": "Referral link copied!",
+            "button": {
+                "label": "Refer and earn",
+                "disbled-tooltip": "Connect wallet to generate a referral link.",
+                "enabled-tooltip": "Invite people to trade on overtime to earn fees from each trade they make."
+            }
+        },
         "swap": {
             "title": "Get {{currencyKey}}",
             "from-label": "From",

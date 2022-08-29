@@ -26,7 +26,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { Balances, SportMarketInfo } from 'types/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
-import { getTeamImageSource } from 'utils/images';
+import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
 import networkConnector from 'utils/networkConnector';
 
 type MarketCardResolvedProps = {
@@ -85,11 +85,19 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
         }
     };
 
+    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
+    const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+
+    useEffect(() => {
+        setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
+        setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
+    }, [market.homeTeam, market.awayTeam]);
+
     return (
         <MatchInfo>
             <MatchInfoColumn>
                 <MatchParticipantImageContainer isWinner={market.finalResult == 1} finalResult={market.finalResult}>
-                    <MatchParticipantImage src={getTeamImageSource(market.homeTeam, market.tags[0])} />
+                    <MatchParticipantImage src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
                 </MatchParticipantImageContainer>
                 <WinnerLabel isWinning={market.finalResult == 1} finalResult={market.finalResult}>
                     WINNER
@@ -120,7 +128,7 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
             </MatchInfoColumn>
             <MatchInfoColumn>
                 <MatchParticipantImageContainer isWinner={market.finalResult == 2} finalResult={market.finalResult}>
-                    <MatchParticipantImage src={getTeamImageSource(market.awayTeam, market.tags[0])} />
+                    <MatchParticipantImage src={awayLogoSrc} onError={() => setAwayLogoSrc(OVERTIME_LOGO)} />
                 </MatchParticipantImageContainer>
                 <WinnerLabel isWinning={market.finalResult == 2} finalResult={market.finalResult}>
                     WINNER

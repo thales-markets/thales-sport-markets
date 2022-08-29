@@ -10,7 +10,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { BigNumber, ethers } from 'ethers';
 import { AMMPosition, AvailablePerSide, Balances, MarketData } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
-import { getTeamImageSource } from 'utils/images';
+import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
 import {
     InfoRow,
     InfoTitle,
@@ -79,6 +79,7 @@ import WalletInfo from '../WalletInfo';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { refetchBalances } from 'utils/queryConnector';
 import onboardConnector from 'utils/onboardConnector';
+import { getReferralId } from 'utils/referral';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -132,6 +133,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const [balances, setBalances] = useState<Balances | undefined>(undefined);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     const [maxAmount, setMaxAmount] = useState<number>(0);
+
+    const referralId =
+        walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase() ? getReferralId() : null;
 
     useEffect(() => {
         setStableIndex(0);
@@ -279,6 +283,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         selectedPosition,
                         parsedAmount,
                         ammQuote,
+                        referralId,
                         ethers.utils.parseEther('0.02'),
                         { gasLimit: MAX_L2_GAS_LIMIT }
                     );
@@ -481,6 +486,14 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
         );
     };
 
+    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
+    const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+
+    useEffect(() => {
+        setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
+        setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
+    }, [market.homeTeam, market.awayTeam]);
+
     return (
         <MarketContainer>
             <WalletInfo market={market} />
@@ -522,7 +535,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             <MatchInfo>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer isWinner={market.finalResult == 1} finalResult={market.finalResult}>
-                        <MatchParticipantImage src={getTeamImageSource(market.homeTeam, market.tags[0])} />
+                        <MatchParticipantImage src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
                     </MatchParticipantImageContainer>
                     {market.resolved && market.gameStarted && (
                         <WinnerLabel isWinning={market.finalResult == 1} finalResult={market.finalResult}>
@@ -537,7 +550,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer isWinner={market.finalResult == 2} finalResult={market.finalResult}>
-                        <MatchParticipantImage src={getTeamImageSource(market.awayTeam, market.tags[0])} />
+                        <MatchParticipantImage src={awayLogoSrc} onError={() => setAwayLogoSrc(OVERTIME_LOGO)} />
                     </MatchParticipantImageContainer>
                     {market.resolved && market.gameStarted && (
                         <WinnerLabel isWinning={market.finalResult == 2} finalResult={market.finalResult}>
