@@ -1,0 +1,256 @@
+{
+    "common": {
+        "winner": "Gagnant",
+        "wallet": {
+            "connect-your-wallet": "Connecter un portefeuille",
+            "switch-wallet": "Changer de portefeuille",
+            "disconnect-wallet": "Déconnecter votre portefeuille",
+            "wallet-options": "Option du portefeuille",
+            "get-usd": "Obtenir {{amount}}",
+            "approve": "Autoriser",
+            "get-usd-progress": "Frappe {{amount}}...",
+            "disclaimer": "En connectant votre portefeuille vous reconnaissez que vous avez lu et compris <a target=\"_blank\" href={{link}}>disclaimer</a> d’Overtime et accepté les conditions d’utilisation."
+        },
+        "referral": {
+            "link-copied": "Lien de recommandation copié!",
+            "button": {
+                "label": "Recommander et gagner",
+                "disbled-tooltip": "Connecter votre portefeuille pour générer un lien de recommandation.",
+                "enabled-tooltip": "Inviter vos connaissances à participer sur la plateforme Overtime pour gagner les frais de chaque échange qu’ils font."
+            }
+        },
+        "swap": {
+            "title": "Obtenir {{currencyKey}}",
+            "from-label": "De",
+            "to-label": "À",
+            "balance-label": "Balance: {{amount}}",
+            "swap-label": "Échange",
+            "swap-progress-label": "Échange en cours..."
+        },
+        "enable-wallet-access": {
+            "approve-label": "Autoriser {{currencyKey}}",
+            "approve-progress-label": "Autoristation {{currencyKey}}...",
+            "approve-all-label": "Autoriser tout",
+            "custom-amount-label": "Autoriser montant de"
+        },
+        "unsupported-network": {
+            "title": "Oops! Vous êtes sur le mauvais réseau!",
+            "description": " Vous avez sélectionné le mauvais réseau dans votr portefeuille. Pour continuer, SVP changer votre réseau pour Optimism Mainnet.",
+            "button": {
+                "optimism": "Changer pour Optimism"
+            }
+        },
+        "errors": {
+            "unknown-error-try-again": "Une erreure inconnue est survenue après votre demande, SVP essayez de nouveau.",
+            "unknown-error-try-again-general": "Une erreur inconnue est survenue. SVP essayez de nouveau.",
+            "insufficient-balance": "Solde insuffisant",
+            "insufficient-liquidity": "Liquidité insuffisante",
+            "enter-amount": "Entrer le solde",
+            "enter-price": "Entrer le prix",
+            "enter-valid-slippage": "Entrer un pourcentage de glissement valide",
+            "enter-market-data": "Entrer les données du marché",
+            "enter-question": "Entrer la question",
+            "enter-data-source": "Entrer la source des données",
+            "enter-positions": "Enter les positions",
+            "enter-ticket-price": "Enter le prix du billet",
+            "enter-tags": "Entrer les mots clés",
+            "enter-reason-for-dispute": "Entrer la raison de la contestation",
+            "select-initial-position": "Sélectionner votre position initiale",
+            "select-position": "Sélectionner votr position",
+            "different-position": "Les positions doivent être différentes",
+            "select-vote": "Sélectionner le vote",
+            "select-outcome": "Sélectionner le résultat",
+            "select-result": "Sélectionner le résultat",
+            "invalid-ticket-price": "Prix du billet non valide",
+            "invalid-ticket-price-extended": "Le prix du billet doit être entre {{min}} et {{max}}",
+            "invalid-data-source": "Source de données non valide",
+            "invalid-data-source-extended": "Source de données non valide. La source de données doit être un URL avec https préfixe.",
+            "insufficient-balance-wallet": " SVP vous assurez que votre portefeuille a suffisamment {{currencyKey}}",
+            "invalid-slippage": "Glissement non valide",
+            "user-rejected-tx": "Utilisateur a rejeté la transaction"
+        },
+        "time-remaining": {
+            "ended": "terminé",
+            "years": "années",
+            "year": "année",
+            "months": "mois",
+            "month": "mois",
+            "weeks": "semaines",
+            "week": "semaine",
+            "days": "jours",
+            "day": "jour",
+            "hours": "heures",
+            "hour": "heure",
+            "minutes": "minutes",
+            "minute": "minute",
+            "seconds": "secondes",
+            "second": "seconde",
+            "days-short": "d",
+            "hours-short": "h",
+            "minutes-short": "m",
+            "seconds-short": "s"
+        },
+        "or": "ou",
+        "dapp": "dapp",
+        "launch-dapp": "lancer dapp",
+        "cancel": "Annuler",
+        "select-date": "Sélectionner la date...",
+        "tags-placeholder": "Chercher les mots clés...",
+        "remove-tag-tooltip": "Cliquer pour enlever un mot clé",
+        "input-characters-note": "{{entered }} / {{max}}",
+        "view": "Voir",
+        "guidelines": "Lignes directrices",
+        "built-on": "Bâtit sur"
+    },
+    "footer": {
+        "all-rights-reserved": "© {{year}} eXoticV TOUS DROITS RÉSERVÉS."
+    },
+    "market": {
+        "question-label": "Question",
+        "time-remaining-label": "Temps restant",
+        "sport": "Sport",
+        "pay-with": "Payer avec",
+        "status-label": "Statut",
+        "tags-label": "Mots clés",
+        "search-placeholder": "Chercher matchs",
+        "open-markets-label": "Ouvert",
+        "resolved-markets-label": "Résolu",
+        "grid-view": "Grille",
+        "list-view": "Liste",
+        "status": {
+            "open": "Ouvert",
+            "cancelled-pending-confirmation": "Annulé - en attente de confirmation",
+            "cancelled-confirmed": "Annulé",
+            "paused": "En pause",
+            "resolve-pending": "En attente de résolution",
+            "resolved-pending-confirmation": "Résoudre - en attent de confirmation",
+            "resolved-confirmed": "Résolu",
+            "claim-available": "Réclamation disponible",
+            "cancelled-refund-available": "Annulé - remboursement disponible"
+        },
+        "pool-size-label": "Grosseure de la réserve",
+        "total-pool-size-label": "Grosseure total de la réserve",
+        "number-of-participants-label": "Nombre de participants",
+        "roi-label": "ROI",
+        "roi-tooltip": "Le ROI affiché n'est pas garantt. Les profits sont basés sur les offres courantes dans la réserve et sont sujets au changement. Le ROI actuel est déterminé à la fin de la période de positionnement.",
+        "winnings-per-ticket-label": "Gains par billet",
+        "claim-amount-ticket-label": "Montant réclamable par billet",
+        "ticket-price-label": "Prix du billet",
+        "return-label": "Rendement maximal possible",
+        "your-winnings-label": "Vos gains",
+        "your-refund-label": "Vos remboursements",
+        "your-claim-amount-label": "Votre montant réclamable",
+        "nothing-to-claim-label": "Rien à réclamer",
+        "winnings-claimed-label": "Gains réclamés",
+        "refund-claimed-label": "Remboursements réclamés",
+        "claimed-label": "Réclamé",
+        "fees-bonds-distributed-label": "Frais et obligations distribués",
+        "bonds-distributed-label": "Obligations distribués",
+        "no-winners-label": "Aucun gagnant sur ce marché",
+        "data-source-label": "Source de données",
+        "bid-fee-label": "Frais de l'offer",
+        "bid-fee-tooltip": "<0>Chaque offre est sujette aux frais totaux de {{bidPercentage}}%:</0><1>- {{creatorPercentage}}% va au créateur du marché</1><1>- {{resolverPercentage}}% va au résolveur du marché</1><1>- {{safeBoxPercentage}}% va à Safe Box</1><0> Les frais sont déboursés seulement si le marché n'est pas annulé.</0>",
+        "withdrawal-fee-label": "Frais de retrait",
+        "withdrawal-fee-tooltip": "<0>Le retrait est sujet à un total {{withdrawalPercentage}}% fee:</0><1>- {{creatorPercentage}}% payé au créteur du marché</1><1>- {{safeBoxPercentage}}% vers Safe Box</1><0>Ces frais sont payés directement avec la transaction de retrait.</0>",
+        "withdrawal-not-allowed": "Les retraits ne sont pas autorisés",
+        "creator-fee-label": "Revenus des frais de créateur",
+        "resolver-fee-label": "Revenus des frais de résolveur",
+        "your-fee-label": "Vos revenus de frais",
+        "button": {
+            "bid-label": "Offre",
+            "bid-progress-label": "Offre en cours...",
+            "change-position-label": "Changer de position",
+            "change-position-progress-label": "Changement en cours...",
+            "withdraw-label": "Retrait",
+            "withdraw-progress-label": "Retrait en cours...",
+            "resolve-market-label": "Résoudre le marché",
+            "resolve-market-progress-label": "Résolution en cours...",
+            "claim-label": "Réclamer",
+            "claim-progress-label": "Réclamation en cours...",
+            "cancel-label": "Annuler",
+            "cancel-market-label": "Annuler le marché",
+            "cancel-progress-label": "Annulation en cours...",
+            "distribute-fees-bonds-label": "Distribuer les frais et les obligations",
+            "distribute-bonds-label": "Distribuer les obligations",
+            "distribute-progress-label": "Distribution en cours..."
+        },
+        "toast-messsage": {
+            "transaction-pending": "Transaction en cours",
+            "swap-success": "Échange réussi {{ currencyKey }}",
+            "approve-success": "Autorisation réussi",
+            "buy-success": "Achat réussi",
+            "sell-success": "Vente réussi",
+            "create-market-success": "Création du marché réussi",
+            "claim-winnings-success": "Réclamation des gains réussi",
+            "claim-refund-success": "Réclamation du remboursement réussi",
+            "resolve-market-success": "Résolution du marché réussi",
+            "ticket-bid-success": "Offre réussi",
+            "change-position-success": "Changement de position réussi",
+            "withdraw-success": "Retrait réussi",
+            "get-usd-success": "{{amount}} frappé avec succès"
+        },
+        "filter-label": {
+            "global": {
+                "all": "Tous les marchés",
+                "openmarkets": "Marchés ouverts",
+                "resolvedmarkets": "Marchés résolus",
+                "yourpositions": "Vos positions",
+                "claim": "Réclamable",
+                "history": "Vos transactions",
+                "canceled": "Annulé"
+            },
+            "sport": {
+                "all": "TOUS les sports",
+                "basketball": "Basketball",
+                "soccer": "Soccer",
+                "hockey": "Hockey",
+                "tennis": "Tennis",
+                "football": "Football",
+                "baseball": "Baseball",
+                "soon": "Plus de sports à venir!"
+            },
+            "all": "Tous"
+        },
+        "back-to-markets": "Retour au marchés",
+        "back-to-market": "Retour au marchés",
+        "no-markets-found": "Aucun marché disponible",
+        "view-all-markets": "Voir tous les marchés",
+        "resolve-market": {
+            "title": "Choissiser une position avec laquelle résoude le marché",
+            "cancel-tooltip": "If the market is not created according to the guidelines, use this option to cancel the market. Resolving a market with this position will allow anyone who placed a bid on the market to claim a full refund.",
+            "bond-info": "<0><0>In order to resolve the market, you need to deposit a bond of {{amount}} which will be used in case of a dispute.</0><0>If your result is not disputed and the market is formally resolved with your position, the bond will be returned to you.</0><0>{{resolverPercentage}}% of each bid goes to the market resolver in case the market is not cancelled.</0></0>",
+            "creator-bond-info": "<0><0>As a market creator, you don't need to submit a new bond, your initial bond will be used in case of a dispute.</0><0>{{resolverPercentage}}% of each bid goes to the market resolver in case the market is not cancelled.</0></0>"
+        },
+
+        "table": {
+            "title": "Activitée récente",
+            "date-time-col": "date | temps",
+            "type-col": "type",
+            "position-col": "position",
+            "amount-col": "nombre",
+            "tx-status-col": "statut tx",
+            "type": {
+                "bid": "Offre",
+                "withdrawal": "Retrait",
+                "changePosition": "Changer de position",
+                "claim": "Réclamer",
+                "buy": "ACHETER",
+                "sell": "VENDRE"
+            },
+            "no-results": "Aucune transaction est associée avec ce marché."
+        }
+    },
+    "markets": {
+        "market-card-list": {
+            "starts": "Commence",
+            "claimable": "Réclamable",
+            "finished": "achevé",
+            "result": "Resultat",
+            "started": "Commencé",
+            "canceled": "Annulé",
+            "pending-resolution": "En attente de résolution",
+            "claim": "Réclamer",
+            "coming-soon": "À venir"
+        }
+    }
+}
