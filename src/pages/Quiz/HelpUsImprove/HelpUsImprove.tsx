@@ -19,9 +19,6 @@ const HelpUsImprove: React.FC = () => {
                         </Title>
                     </Link>
                 }
-                iconFontSize={23}
-                marginLeft={2}
-                top={0}
             />
         </Container>
     );
