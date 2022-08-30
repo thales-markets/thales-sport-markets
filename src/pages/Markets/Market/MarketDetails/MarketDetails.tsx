@@ -346,7 +346,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 }
             };
             if (isWalletConnected) {
-                selectedSide == Side.SELL ? setAllowance(true) : getAllowance();
+                selectedSide == Side.SELL || isVoucherSelected ? setAllowance(true) : getAllowance();
             }
         }
     }, [
@@ -358,6 +358,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
         usdAmountValue,
         selectedStableIndex,
         selectedSide,
+        isVoucherSelected,
     ]);
 
     const fetchAmmQuote = useCallback(
@@ -637,11 +638,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     return;
                 }
             }
-
-            console.log('paymentTokenBalance', paymentTokenBalance);
-            console.log('tokenAmount', tokenAmount);
-            console.log('maxAmount', maxAmount);
-            console.log('usdAmountValue', usdAmountValue);
 
             if (selectedSide === Side.BUY) {
                 setSubmitDisabled(
