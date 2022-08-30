@@ -11,7 +11,7 @@ import { LeaderboardByWeeks, LeaderboardItem, LeaderboardList, WeeklyLeaderboard
 import {
     LeaderboardContainer,
     Container,
-    Description,
+    Copy,
     LeaderboardTitleContainer,
     Link,
     TwitterImage,
@@ -26,6 +26,7 @@ import {
     PeriodEndLabel,
     OvertimeVoucherPopup,
     Wrapper,
+    QuizLink,
 } from '../styled-components';
 import { getTwitterProfileLink } from 'utils/quiz';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
@@ -39,6 +40,7 @@ import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { Info } from 'pages/Markets/Home/Home';
 import SPAAnchor from 'components/SPAAnchor';
+import { LINKS } from 'constants/links';
 
 const Leaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -121,9 +123,16 @@ const Leaderboard: React.FC = () => {
                         <LeaderboardIcon />
                         {t('quiz.leaderboard.title')}
                     </LeaderboardTitleContainer>
-                    <Description>
-                        <Trans i18nKey={t('quiz.leaderboard.description')} />
-                    </Description>
+                    <Copy>
+                        <Trans
+                            i18nKey="quiz.leaderboard.description"
+                            components={{
+                                p: <p />,
+                                blogPost: <QuizLink href={LINKS.QuizBlogPost} key="blogPost" />,
+                                sportsTrivia: <SPAAnchor href={buildHref(ROUTES.Quiz)} key="sportsTrivia" />,
+                            }}
+                        />
+                    </Copy>
                     <LeaderboardHeader>
                         <PeriodContainer>
                             {!isInitialQueryLoad && (

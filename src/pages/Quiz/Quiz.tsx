@@ -84,6 +84,7 @@ import useQuizLeaderboardQuery from 'queries/quiz/useQuizLeaderboardQuery';
 import { FinishInfo, LeaderboardItem } from 'types/quiz';
 import ordinal from 'ordinal';
 import { Info } from 'pages/Markets/Home/Home';
+import useQuizTweetQuery from 'queries/quiz/useQuizTweetQuery';
 
 const Quiz: React.FC = () => {
     const { t } = useTranslation();
@@ -141,6 +142,16 @@ const Quiz: React.FC = () => {
             isQualifiedForRewards: false,
         };
     }, [quizLeaderboardQuery.data, quizLeaderboardQuery.isSuccess, twitter]);
+
+    const quizTweetQuery = useQuizTweetQuery();
+
+    const quizTweet: string = useMemo(() => {
+        if (quizTweetQuery.isSuccess && quizTweetQuery.data) {
+            return quizTweetQuery.data;
+        }
+
+        return LINKS.QuizRetweetLink;
+    }, [quizTweetQuery.data, quizTweetQuery.isSuccess]);
 
     const handleStartQuiz = async () => {
         setIsSubmitting(true);
@@ -317,9 +328,8 @@ const Quiz: React.FC = () => {
                                             i18nKey="quiz.start-quiz-description"
                                             components={{
                                                 p: <p />,
-                                                quizRetweetLink: (
-                                                    <QuizLink href={LINKS.QuizRetweetLink} key="quizRetweetLink" />
-                                                ),
+                                                blogPost: <QuizLink href={LINKS.QuizBlogPost} key="blogPost" />,
+                                                quizRetweetLink: <QuizLink href={quizTweet} key="quizRetweetLink" />,
                                                 twitter: <QuizLink href={LINKS.Twitter} key="twitter" />,
                                                 discord: <QuizLink href={LINKS.ThalesDiscord} key="discord" />,
                                             }}

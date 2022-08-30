@@ -107,6 +107,13 @@ export const Copy = styled.div`
     p {
         margin-bottom: 10px;
     }
+    a {
+        cursor: pointer;
+        color: #91bced;
+        &:hover {
+            color: #00f9ff;
+        }
+    }
 `;
 
 export const TimeRemainingText = styled(Description)`
