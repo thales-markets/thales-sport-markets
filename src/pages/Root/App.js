@@ -61,7 +61,7 @@ const App = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (isAppReady && networkId && isNetworkSupported(networkId) && setSelectedWallet) {
+        if (networkId && isNetworkSupported(networkId) && setSelectedWallet) {
             const onboard = initOnboard(networkId, {
                 address: (walletAddress) => {
                     if (walletAddress) {
@@ -114,7 +114,8 @@ const App = () => {
             });
             onboardConnector.setOnBoard(onboard);
         }
-    }, [dispatch, isAppReady, networkId, setSelectedWallet]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, isAppReady, setSelectedWallet]);
 
     // load previously saved wallet
     useEffect(() => {
