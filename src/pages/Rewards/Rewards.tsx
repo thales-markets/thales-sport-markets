@@ -57,7 +57,7 @@ const Rewards: React.FC = () => {
     const options: Array<{ value: number; label: string }> = [];
 
     while (true) {
-        if (CALCULATED_START.getTime() < NOW.getTime()) {
+        if (CALCULATED_START.getTime() < NOW.getTime() && PERIOD_COUNTER < 2) {
             CALCULATED_START = new Date(CALCULATED_START.getTime() + PERIOD_DURATION_IN_DAYS * 24 * 60 * 60 * 1000);
             options.push({
                 value: PERIOD_COUNTER,
