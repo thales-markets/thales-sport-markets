@@ -11,7 +11,7 @@ import { LeaderboardByWeeks, LeaderboardItem, LeaderboardList, WeeklyLeaderboard
 import {
     LeaderboardContainer,
     Container,
-    Description,
+    Copy,
     LeaderboardTitleContainer,
     Link,
     TwitterImage,
@@ -24,6 +24,8 @@ import {
     PeriodContainer,
     PeriodEndContainer,
     PeriodEndLabel,
+    Wrapper,
+    QuizLink,
 } from '../styled-components';
 import { getTwitterProfileLink } from 'utils/quiz';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
@@ -36,6 +38,9 @@ import overtimeVoucherIcon from 'assets/images/overtime-voucher.svg';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
+import { Info } from 'pages/Markets/Home/Home';
+import SPAAnchor from 'components/SPAAnchor';
+import { LINKS } from 'constants/links';
 
 const Leaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -62,7 +67,7 @@ const Leaderboard: React.FC = () => {
                 for (let index = 0; index < leaderboardByWeeks.length; index++) {
                     options.push({
                         value: index,
-                        label: `${t('quiz.leaderboard.week-label')} ${index}`,
+                        label: `${t('quiz.leaderboard.week-label')} ${index + 1}`,
                     });
                     setWeekOptions(options);
                 }
@@ -102,7 +107,15 @@ const Leaderboard: React.FC = () => {
     const isSmallScreen = window.innerWidth <= 512;
 
     return (
-        <>
+        <Wrapper>
+            <Info>
+                <Trans
+                    i18nKey="rewards.op-rewards-banner-message"
+                    components={{
+                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                    }}
+                />
+            </Info>
             <BackToLink link={buildHref(ROUTES.Quiz)} text={t('quiz.leaderboard.back-to-quiz')} />
             <Container>
                 <LeaderboardContainer>
@@ -110,9 +123,16 @@ const Leaderboard: React.FC = () => {
                         <LeaderboardIcon />
                         {t('quiz.leaderboard.title')}
                     </LeaderboardTitleContainer>
-                    <Description>
-                        <Trans i18nKey={t('quiz.leaderboard.description')} />
-                    </Description>
+                    <Copy>
+                        <Trans
+                            i18nKey="quiz.leaderboard.description"
+                            components={{
+                                p: <p />,
+                                blogPost: <QuizLink href={LINKS.QuizBlogPost} key="blogPost" />,
+                                sportsTrivia: <SPAAnchor href={buildHref(ROUTES.Quiz)} key="sportsTrivia" />,
+                            }}
+                        />
+                    </Copy>
                     <LeaderboardHeader>
                         <PeriodContainer>
                             {!isInitialQueryLoad && (
@@ -293,7 +313,7 @@ const Leaderboard: React.FC = () => {
                 />
                 <HelpUsImprove />
             </Container>
-        </>
+        </Wrapper>
     );
 };
 

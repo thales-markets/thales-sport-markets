@@ -23,7 +23,6 @@ import {
 import TagButton from '../../../components/TagButton';
 import GlobalFilter from '../components/GlobalFilter';
 import MarketsGrid from './MarketsGrid';
-import RangedDatepicker from 'components/RangedDatepicker';
 import Search from 'components/Search';
 import {
     DEFAULT_SORT_BY,
@@ -77,8 +76,6 @@ const Home: React.FC = () => {
     const [sortDirection, setSortDirection] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_DIRECTION, SortDirection.ASC);
     const [sortBy, setSortBy] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_BY, DEFAULT_SORT_BY);
     const [showListView, setListView] = useLocalStorage(LOCAL_STORAGE_KEYS.LIST_VIEW, true);
-    const [startDate, setStartDate] = useState<Date | null>(null);
-    const [endDate, setEndDate] = useState<Date | null>(null);
     const [marketsCached, setMarketsCached] = useState<typeof marketsCache>(marketsCache);
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const selectedOddsType = useSelector(getOddsType);
@@ -181,26 +178,15 @@ const Home: React.FC = () => {
         return filteredMarkets;
     }, [markets, searchFilteredMarkets, dateFilter, marketSearch]);
 
-    const dateRangeFilteredMarkets = useMemo(() => {
-        let filteredMarkets = marketSearch ? searchFilteredMarkets : markets;
-
-        if (startDate !== null && endDate !== null) {
-            filteredMarkets = filteredMarkets.filter(
-                (market: SportMarketInfo) => market.maturityDate >= startDate && market.maturityDate <= endDate
-            );
-        }
-        return filteredMarkets;
-    }, [marketSearch, searchFilteredMarkets, markets, startDate, endDate]);
-
     const sportFilteredMarkets = useMemo(() => {
-        let filteredMarkets = startDate !== null && endDate !== null ? dateRangeFilteredMarkets : datesFilteredMarkets;
+        let filteredMarkets = datesFilteredMarkets;
 
         if (sportFilter !== SportFilterEnum.All) {
             filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => market.sport === sportFilter);
         }
 
         return filteredMarkets;
-    }, [startDate, endDate, dateRangeFilteredMarkets, datesFilteredMarkets, sportFilter]);
+    }, [datesFilteredMarkets, sportFilter]);
 
     const tagsFilteredMarkets = useMemo(() => {
         let filteredMarkets = sportFilteredMarkets;
@@ -220,8 +206,6 @@ const Home: React.FC = () => {
                 marketsCached[GlobalFilterEnum.All],
                 marketSearch,
                 dateFilter,
-                startDate,
-                endDate,
                 sportFilter,
                 tagFilter,
                 allTagsFilterItem
@@ -237,8 +221,6 @@ const Home: React.FC = () => {
         marketsCached,
         marketSearch,
         dateFilter,
-        startDate,
-        endDate,
         sportFilter,
         tagFilter,
         allTagsFilterItem,
@@ -252,8 +234,6 @@ const Home: React.FC = () => {
                 marketsCached[GlobalFilterEnum.All],
                 marketSearch,
                 dateFilter,
-                startDate,
-                endDate,
                 sportFilter,
                 tagFilter,
                 allTagsFilterItem
@@ -264,8 +244,6 @@ const Home: React.FC = () => {
                 marketsCached[GlobalFilterEnum.OpenMarkets],
                 marketSearch,
                 dateFilter,
-                startDate,
-                endDate,
                 sportFilter,
                 tagFilter,
                 allTagsFilterItem
@@ -276,8 +254,6 @@ const Home: React.FC = () => {
                 marketsCached[GlobalFilterEnum.Canceled],
                 marketSearch,
                 dateFilter,
-                startDate,
-                endDate,
                 sportFilter,
                 tagFilter,
                 allTagsFilterItem
@@ -288,8 +264,6 @@ const Home: React.FC = () => {
                 marketsCached[GlobalFilterEnum.ResolvedMarkets],
                 marketSearch,
                 dateFilter,
-                startDate,
-                endDate,
                 sportFilter,
                 tagFilter,
                 allTagsFilterItem
@@ -298,17 +272,7 @@ const Home: React.FC = () => {
         }
 
         return [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount];
-    }, [
-        sportMarketsQuery.data,
-        marketsCached,
-        marketSearch,
-        dateFilter,
-        startDate,
-        endDate,
-        sportFilter,
-        tagFilter,
-        allTagsFilterItem,
-    ]);
+    }, [sportMarketsQuery.data, marketsCached, marketSearch, dateFilter, sportFilter, tagFilter, allTagsFilterItem]);
 
     const accountPositionsCount = useMemo(() => {
         if (sportMarketsQuery.data) {
@@ -316,8 +280,6 @@ const Home: React.FC = () => {
                 marketsCached[GlobalFilterEnum.All],
                 marketSearch,
                 dateFilter,
-                startDate,
-                endDate,
                 sportFilter,
                 tagFilter,
                 allTagsFilterItem
@@ -337,8 +299,6 @@ const Home: React.FC = () => {
         marketsCached,
         marketSearch,
         dateFilter,
-        startDate,
-        endDate,
         sportFilter,
         tagFilter,
         allTagsFilterItem,
@@ -429,15 +389,6 @@ const Home: React.FC = () => {
         }
     };
 
-    const onDateRangeChange = (dates: [Date | null, Date | null]) => {
-        const [start, end] = dates;
-        end ? setDateFilter('') : '';
-        setStartDate(start);
-        end?.setHours(end.getHours() + 23);
-        end?.setMinutes(end.getMinutes() + 59);
-        setEndDate(end);
-    };
-
     const getCount = (filter: GlobalFilterEnum) => {
         switch (filter) {
             case GlobalFilterEnum.OpenMarkets:
@@ -461,8 +412,6 @@ const Home: React.FC = () => {
         setGlobalFilter(GlobalFilterEnum.OpenMarkets);
         setSportFilter(SportFilterEnum.All);
         setDateFilter('');
-        setStartDate(null);
-        setEndDate(null);
         setTagFilter(allTagsFilterItem);
         dispatch(setMarketSearch(''));
     }, [allTagsFilterItem, dispatch, setDateFilter, setGlobalFilter, setSportFilter, setTagFilter]);
@@ -510,8 +459,6 @@ const Home: React.FC = () => {
                                     if (filterItem !== sportFilter) {
                                         setSportFilter(filterItem);
                                         setDateFilter('');
-                                        setStartDate(null);
-                                        setEndDate(null);
                                         setTagFilter(allTagsFilterItem);
                                         setGlobalFilter(GlobalFilterEnum.OpenMarkets);
                                         if (filterItem === SportFilterEnum.All) {
@@ -564,8 +511,6 @@ const Home: React.FC = () => {
                                             filterItem === GlobalFilterEnum.YourPositions
                                         ) {
                                             setDateFilter('');
-                                            setStartDate(null);
-                                            setEndDate(null);
                                             setTagFilter(allTagsFilterItem);
                                             setSportFilter(SportFilterEnum.All);
                                         }
@@ -598,8 +543,6 @@ const Home: React.FC = () => {
                                             filterItem === GlobalFilterEnum.YourPositions
                                         ) {
                                             setDateFilter('');
-                                            setStartDate(null);
-                                            setEndDate(null);
                                             setTagFilter(allTagsFilterItem);
                                             setSportFilter(SportFilterEnum.All);
                                         }
@@ -632,13 +575,7 @@ const Home: React.FC = () => {
                 </SortingContainer>
             </BurgerFiltersContainer>
             <FiltersContainer>
-                <HeaderDatepicker
-                    gamesPerDay={gamesPerDay}
-                    dateFilter={dateFilter}
-                    setStartDate={setStartDate}
-                    setEndDate={setEndDate}
-                    setDateFilter={setDateFilter}
-                />
+                <HeaderDatepicker gamesPerDay={gamesPerDay} dateFilter={dateFilter} setDateFilter={setDateFilter} />
             </FiltersContainer>
             <BurgerAndSwitchSwitchContainer>
                 <BurgerMenu
@@ -684,8 +621,6 @@ const Home: React.FC = () => {
                                         if (filterItem !== sportFilter) {
                                             setSportFilter(filterItem);
                                             setDateFilter('');
-                                            setStartDate(null);
-                                            setEndDate(null);
                                             setTagFilter(allTagsFilterItem);
                                             setGlobalFilter(GlobalFilterEnum.OpenMarkets);
                                             if (filterItem === SportFilterEnum.All) {
@@ -719,7 +654,6 @@ const Home: React.FC = () => {
                             );
                         })}
                     </SportFiltersContainer>
-                    <RangedDatepicker onDateRangeChange={onDateRangeChange} startDate={startDate} endDate={endDate} />
                     <SidebarLeaderboard />
                 </SidebarContainer>
                 {/* MAIN PART */}
@@ -762,8 +696,6 @@ const Home: React.FC = () => {
                                                 filterItem === GlobalFilterEnum.YourPositions
                                             ) {
                                                 setDateFilter('');
-                                                setStartDate(null);
-                                                setEndDate(null);
                                                 setTagFilter(allTagsFilterItem);
                                                 setSportFilter(SportFilterEnum.All);
                                             }
@@ -796,8 +728,6 @@ const Home: React.FC = () => {
                                                 filterItem === GlobalFilterEnum.YourPositions
                                             ) {
                                                 setDateFilter('');
-                                                setStartDate(null);
-                                                setEndDate(null);
                                                 setTagFilter(allTagsFilterItem);
                                                 setSportFilter(SportFilterEnum.All);
                                             }
@@ -899,8 +829,6 @@ const filterMarketsForCount = (
     markets: SportMarkets,
     marketSearch: string,
     dateFilter: any,
-    startDate: Date | null,
-    endDate: Date | null,
     sportFilter: any,
     tagFilter: any,
     allTagsFilterItem: TagInfo
@@ -910,13 +838,6 @@ const filterMarketsForCount = (
             return false;
         }
         if (dateFilter !== '' && market.maturityDate.toDateString() !== dateFilter) {
-            return false;
-        }
-        if (
-            startDate !== null &&
-            endDate !== null &&
-            (market.maturityDate < startDate || market.maturityDate > endDate)
-        ) {
             return false;
         }
         if (sportFilter !== SportFilterEnum.All && market.sport !== sportFilter) {
@@ -1092,7 +1013,7 @@ const BurgerAndSwitchSwitchContainer = styled(FlexDivRow)`
     }
 `;
 
-const Info = styled.div`
+export const Info = styled.div`
     width: 100%;
     color: #ffffff;
     text-align: center;

@@ -7,5 +7,6 @@ export const NEXT_QUESTION_PATH = '/next/question';
 export const ANSWER_QUESTION_PATH = '/answer';
 export const FINISH_QUIZ_PATH = '/finish';
 export const LEADERBOARD_PATH = '/leaderboardByWeeks';
+export const TWEET_PATH = '/tweeturl';
 export const DEFAULT_TWITTER_PROFILE_IMAGE =
     'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png';

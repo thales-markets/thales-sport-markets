@@ -94,6 +94,7 @@ export const QUERY_KEYS = {
     },
     Quiz: {
         Leaderboard: () => ['quiz', 'leaderboard'],
+        Tweet: () => ['quiz', 'tweet'],
     },
 };
 

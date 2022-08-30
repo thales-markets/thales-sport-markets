@@ -239,7 +239,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     const parsedQuote = quote / divider;
 
                     const recalculatedTokenAmount = ((X * usdAmountValueAsNumber) / parsedQuote).toFixed(2);
-
                     setTokenAmount(recalculatedTokenAmount);
                 }
             }
@@ -552,18 +551,18 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     const formattedsUSDToSpendForMaxAmount = sUSDToSpendForMaxAmount / divider;
 
                     if (Number(paymentTokenBalance) > formattedsUSDToSpendForMaxAmount) {
-                        if (formattedsUSDToSpendForMaxAmount <= Number(paymentTokenBalance) * 0.98) {
+                        if (formattedsUSDToSpendForMaxAmount <= Number(paymentTokenBalance) * 0.97) {
                             setMaxUsdAmount(floorNumberToDecimals(formattedsUSDToSpendForMaxAmount));
                         } else {
                             const calculatedMaxAmount =
                                 formattedsUSDToSpendForMaxAmount -
-                                (formattedsUSDToSpendForMaxAmount - Number(paymentTokenBalance) * 0.98);
+                                (formattedsUSDToSpendForMaxAmount - Number(paymentTokenBalance) * 0.97);
                             setMaxUsdAmount(floorNumberToDecimals(calculatedMaxAmount));
                         }
                         setIsFetching(false);
                         return;
                     }
-                    setMaxUsdAmount(floorNumberToDecimals(paymentTokenBalance * 0.98));
+                    setMaxUsdAmount(floorNumberToDecimals(paymentTokenBalance * 0.97));
                 }
                 setIsFetching(false);
             }
