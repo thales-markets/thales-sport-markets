@@ -198,7 +198,7 @@
         "op-rewards-banner-message": "OP rewards have started, check how you can earn those on <bold>the OP rewards page</bold>",
         "table": {
             "wallet-address": "Wallet address",
-            "pnl": "PnL",
+            "pnl": "Losses",
             "percentage": "Percentage",
             "reward-amount": "Reward",
             "no-data-available": "No data available"
