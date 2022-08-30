@@ -11,4 +11,5 @@ export const LOCAL_STORAGE_KEYS = {
     LIST_VIEW: 'listView',
     ODDS_TYPE: 'oddsType',
     QUIZ_STATE: 'quizState',
+    STOP_PULSING: 'stopPulsing',
 };

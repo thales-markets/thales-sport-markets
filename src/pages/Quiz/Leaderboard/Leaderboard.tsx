@@ -25,6 +25,7 @@ import {
     PeriodEndContainer,
     PeriodEndLabel,
     OvertimeVoucherPopup,
+    Wrapper,
 } from '../styled-components';
 import { getTwitterProfileLink } from 'utils/quiz';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
@@ -36,6 +37,8 @@ import SelectInput from 'components/SelectInput';
 import overtimeVoucherIcon from 'assets/images/overtime-voucher.svg';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
+import { Info } from 'pages/Markets/Home/Home';
+import SPAAnchor from 'components/SPAAnchor';
 
 const Leaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -102,7 +105,15 @@ const Leaderboard: React.FC = () => {
     const isSmallScreen = window.innerWidth <= 512;
 
     return (
-        <>
+        <Wrapper>
+            <Info>
+                <Trans
+                    i18nKey="rewards.op-rewards-banner-message"
+                    components={{
+                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                    }}
+                />
+            </Info>
             <BackToLink link={buildHref(ROUTES.Quiz)} text={t('quiz.leaderboard.back-to-quiz')} />
             <Container>
                 <LeaderboardContainer>
@@ -293,7 +304,7 @@ const Leaderboard: React.FC = () => {
                 />
                 <HelpUsImprove />
             </Container>
-        </>
+        </Wrapper>
     );
 };
 

@@ -10,6 +10,11 @@ import {
     FlexDivRow,
 } from 'styles/common';
 
+export const Wrapper = styled(FlexDivColumn)`
+    width: 100%;
+    align-items: center;
+`;
+
 export const Container = styled(FlexDivColumn)`
     width: 60%;
     position: relative;
@@ -146,7 +151,7 @@ export const Question = styled(Description)`
     font-weight: 700;
     font-size: 22px;
     line-height: 30px;
-    margin-top: 10px;
+    margin-top: 55px;
     margin-bottom: 30px;
     text-align: center;
     -webkit-user-select: none;
@@ -154,6 +159,9 @@ export const Question = styled(Description)`
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+    @media (max-width: 768px) {
+        margin-top: 20px;
+    }
 `;
 
 export const FinishedInfoContainer = styled(FlexDivColumnCentered)`
@@ -257,21 +265,6 @@ export const Link = styled.a`
     color: ${(props) => props.theme.textColor.primary};
     &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
-    }
-`;
-
-export const QuestionWeightContainer = styled(FlexDivColumnCentered)`
-    border: 2px solid #4673bd;
-    border-radius: 40px;
-    width: 150px;
-    min-height: 34px;
-    font-weight: 400;
-    font-size: 18px;
-    text-align: center;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    @media (max-width: 768px) {
-        margin-top: 4px;
     }
 `;
 
