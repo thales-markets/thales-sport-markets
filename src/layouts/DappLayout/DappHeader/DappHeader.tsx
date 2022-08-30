@@ -12,7 +12,7 @@ import Referral from 'components/Referral';
 import { buildHref } from 'utils/routes';
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
-import { ReactComponent as SportTriviaIcon } from 'assets/images/sport-trivia.svg';
+import sportTriviaIcon from 'assets/images/sport-trivia.svg';
 import LanguageSelector from 'components/LanguageSelector';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import useInterval from 'hooks/useInterval';
@@ -39,7 +39,7 @@ const DappHeader: React.FC = () => {
             <Logo />
             <RightContainer>
                 <SPAAnchor href={buildHref(ROUTES.Quiz)}>
-                    <StyledSportTriviaIcon stopPulsing={stopPulsing} />
+                    <StyledSportTriviaIcon stopPulsing={stopPulsing} src={sportTriviaIcon} />
                 </SPAAnchor>
                 <Referral />
                 {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
@@ -87,7 +87,7 @@ const RightContainer = styled(FlexDivRowCentered)`
     }
 `;
 
-const StyledSportTriviaIcon = styled(SportTriviaIcon)<{ stopPulsing: boolean }>`
+const StyledSportTriviaIcon = styled.img<{ stopPulsing: boolean }>`
     margin-right: 20px;
     cursor: pointer;
     height: 36px;
