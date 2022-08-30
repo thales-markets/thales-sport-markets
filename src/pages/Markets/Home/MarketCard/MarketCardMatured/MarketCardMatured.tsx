@@ -10,7 +10,7 @@ import {
 } from 'components/common';
 import Tags from 'pages/Markets/components/Tags';
 import React, { useEffect, useState } from 'react';
-// import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { SportMarketInfo } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { useSelector } from 'react-redux';
@@ -22,7 +22,7 @@ type MarketCardMaturedProps = {
 };
 
 const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
-    // const { t } = useTranslation();
+    const { t } = useTranslation();
     const noOdds = market.awayOdds == 0 && market.homeOdds == 0 && market.awayOdds == 0;
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
@@ -32,7 +32,7 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
         setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
-    }, [market.homeTeam, market.awayTeam]);
+    }, [market.homeTeam, market.awayTeam, market.tags]);
 
     return (
         <MatchInfo>
@@ -51,9 +51,9 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
             </MatchInfoColumn>
             <MatchInfoColumn>
                 <MatchInfoLabel pendingResolution={noOdds} isMaturedMarket={true}>
-                    {'PENDING RESOLUTION'}
+                    {t('markets.market-card.pending-resolution')}
                 </MatchInfoLabel>
-                <MatchVSLabel pendingResolution={noOdds}>VS</MatchVSLabel>
+                <MatchVSLabel pendingResolution={noOdds}>{t('markets.market-card.vs')}</MatchVSLabel>
                 <OddsLabel
                     noOdds={noOdds}
                     isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}
@@ -61,7 +61,9 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
                 >
                     {formatMarketOdds(selectedOddsType, market.drawOdds)}
                 </OddsLabel>
-                <MatchParticipantName isTwoPositioned={market.drawOdds === 0}>{'DRAW'}</MatchParticipantName>
+                <MatchParticipantName isTwoPositioned={market.drawOdds === 0}>
+                    {t('markets.market-card.draw').toUpperCase()}
+                </MatchParticipantName>
                 <Tags sport={market.sport} tags={market.tags} />
             </MatchInfoColumn>
             <MatchInfoColumn>

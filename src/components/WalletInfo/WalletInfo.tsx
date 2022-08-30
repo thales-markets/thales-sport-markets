@@ -29,7 +29,7 @@ const WalletInfo: React.FC = () => {
             return formatCurrency(sUSDBalanceQuery?.data, 2);
         }
         return 0;
-    }, [sUSDBalanceQuery.isSuccess, sUSDBalanceQuery?.data]);
+    }, [sUSDBalanceQuery.data]);
 
     return (
         <Container>

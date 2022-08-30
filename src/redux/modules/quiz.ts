@@ -27,6 +27,8 @@ type QuizSliceState = {
     quizItems: QuizItem[];
     score: number;
     endOfQuiz: number;
+    twitter: string;
+    discord: string;
 };
 
 const defaultState: QuizSliceState = {
@@ -37,6 +39,8 @@ const defaultState: QuizSliceState = {
     quizItems: [],
     score: 0,
     endOfQuiz: 0,
+    twitter: '',
+    discord: '',
 };
 
 const initialState: QuizSliceState = getInitialQuizState();
@@ -69,12 +73,25 @@ export const uiSlice = createSlice({
             state.score = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.QUIZ_STATE, state);
         },
-        resetQuiz: () => {
-            localStore.set(LOCAL_STORAGE_KEYS.QUIZ_STATE, defaultState);
-            return defaultState;
+        resetQuiz: (state) => {
+            const resetState = {
+                ...defaultState,
+                twitter: state.twitter,
+                discord: state.discord,
+            };
+            localStore.set(LOCAL_STORAGE_KEYS.QUIZ_STATE, resetState);
+            return resetState;
         },
         setAnswer: (state, action: PayloadAction<{ index: number; answer: string }>) => {
             state.quizItems[action.payload.index].answer = action.payload.answer;
+            localStore.set(LOCAL_STORAGE_KEYS.QUIZ_STATE, state);
+        },
+        setTwitter: (state, action: PayloadAction<string>) => {
+            state.twitter = action.payload;
+            localStore.set(LOCAL_STORAGE_KEYS.QUIZ_STATE, state);
+        },
+        setDiscord: (state, action: PayloadAction<string>) => {
+            state.discord = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.QUIZ_STATE, state);
         },
     },
@@ -88,6 +105,8 @@ export const {
     finishQuiz,
     resetQuiz,
     setAnswer,
+    setTwitter,
+    setDiscord,
 } = uiSlice.actions;
 
 export const getQuizState = (state: RootState) => state[sliceName];
@@ -100,5 +119,7 @@ export const getCurrentQuizItem = (state: RootState) =>
 export const getCurrentNumberOfQuestions = (state: RootState) => getQuizState(state).quizItems.length;
 export const getScore = (state: RootState) => getQuizState(state).score;
 export const getEndOfQuiz = (state: RootState) => getQuizState(state).endOfQuiz;
+export const getTwitter = (state: RootState) => getQuizState(state).twitter;
+export const getDiscord = (state: RootState) => getQuizState(state).discord;
 
 export default uiSlice.reducer;

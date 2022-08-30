@@ -27,6 +27,7 @@ export const Title = styled.div`
     line-height: 22px;
     margin-right: 10px;
     margin-left: 10px;
+    text-transform: uppercase;
 `;
 
 export const ValueContainer = styled.span`
@@ -41,7 +42,9 @@ export const ValueContainer = styled.span`
     }
 `;
 
-export const Value = styled.span``;
+export const Value = styled.span`
+    text-transform: uppercase;
+`;
 
 export const AlternateValue = styled.span`
     font-weight: bold;

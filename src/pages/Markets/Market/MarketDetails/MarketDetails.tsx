@@ -704,7 +704,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
         setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
-    }, [market.homeTeam, market.awayTeam]);
+    }, [market.homeTeam, market.awayTeam, market.tags]);
 
     return (
         <MarketContainer>
@@ -713,7 +713,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 <MarketHeader>
                     <FlexDivCentered>
                         <Toggle
-                            label={{ firstLabel: Side.BUY, secondLabel: Side.SELL, fontSize: '18px' }}
+                            label={{
+                                firstLabel: t('common.buy-side'),
+                                secondLabel: t('common.sell-side'),
+                                fontSize: '18px',
+                            }}
                             active={selectedSide === Side.SELL}
                             dotSize="18px"
                             dotBackground="#303656"
@@ -737,12 +741,16 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
             {market.gameStarted && (
                 <Status resolved={market.resolved} claimable={claimable}>
-                    {!market.resolved ? 'Pending resolution' : claimable ? 'Claimable' : 'Finished'}
+                    {!market.resolved
+                        ? t('markets.market-card.pending-resolution')
+                        : claimable
+                        ? t('markets.market-card.claimable')
+                        : t('markets.market-card.finished')}
                 </Status>
             )}
             {market.resolved && !market.gameStarted && (
                 <Status resolved={market.resolved} claimable={false}>
-                    Cancelled
+                    {t('markets.market-card.cancelled')}
                 </Status>
             )}
             <MatchInfo>
@@ -756,7 +764,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     </MatchParticipantImageContainer>
                     {market.resolved && market.gameStarted && (
                         <WinnerLabel isWinning={market.finalResult == 1} finalResult={market.finalResult}>
-                            WINNER
+                            {t('common.winner')}
                         </WinnerLabel>
                     )}
                     <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
@@ -776,7 +784,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     </MatchParticipantImageContainer>
                     {market.resolved && market.gameStarted && (
                         <WinnerLabel isWinning={market.finalResult == 2} finalResult={market.finalResult}>
-                            WINNER
+                            {t('common.winner')}
                         </WinnerLabel>
                     )}
 
@@ -797,7 +805,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         <Option color={ODDS_COLOR.HOME}>1</Option>
                         <OptionTeamName>{market.homeTeam.toUpperCase()}</OptionTeamName>
                         <InfoRow>
-                            <InfoTitle>PRICE:</InfoTitle>
+                            <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
                             <InfoValue>
                                 $ {market.positions[Position.HOME].sides[selectedSide].odd.toFixed(2)}
                                 {market.positions[Position.HOME].sides[selectedSide].odd == 0 && (
@@ -810,7 +818,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             </InfoValue>
                         </InfoRow>
                         <InfoRow>
-                            <InfoTitle>LIQUIDITY:</InfoTitle>
+                            <InfoTitle>{t('markets.market-details.liquidity')}:</InfoTitle>
                             <InfoValue>
                                 {availablePerSideQuery.isLoading
                                     ? '-'
@@ -828,15 +836,15 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             }}
                         >
                             <Option color={ODDS_COLOR.DRAW}>X</Option>
-                            <OptionTeamName>DRAW</OptionTeamName>
+                            <OptionTeamName>{t('markets.market-card.draw')}</OptionTeamName>
                             <InfoRow>
-                                <InfoTitle>PRICE:</InfoTitle>
+                                <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
                                 <InfoValue>
                                     $ {market.positions[Position.DRAW].sides[selectedSide].odd.toFixed(2)}
                                 </InfoValue>
                             </InfoRow>
                             <InfoRow>
-                                <InfoTitle>LIQUIDITY:</InfoTitle>
+                                <InfoTitle>{t('markets.market-details.liquidity')}:</InfoTitle>
                                 <InfoValue>
                                     {availablePerSideQuery.isLoading
                                         ? '-'
@@ -856,7 +864,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         <Option color={ODDS_COLOR.AWAY}>2</Option>
                         <OptionTeamName>{market.awayTeam.toUpperCase()}</OptionTeamName>
                         <InfoRow>
-                            <InfoTitle>PRICE:</InfoTitle>
+                            <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
                             <InfoValue>
                                 $ {market.positions[Position.AWAY].sides[selectedSide].odd.toFixed(2)}
                                 {market.positions[Position.AWAY].sides[selectedSide].odd == 0 && (
@@ -869,7 +877,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             </InfoValue>
                         </InfoRow>
                         <InfoRow>
-                            <InfoTitle>LIQUIDITY:</InfoTitle>
+                            <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
                             <InfoValue>
                                 {availablePerSideQuery.isLoading
                                     ? '-'
@@ -885,10 +893,10 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         <>
                             <LabelsContainer>
                                 <LabelContainer>
-                                    <AmountToBuyLabel>USD amount:</AmountToBuyLabel>
+                                    <AmountToBuyLabel>{t('markets.market-details.usd-amount')}:</AmountToBuyLabel>
                                 </LabelContainer>
                                 <LabelContainer>
-                                    <AmountToBuyLabel>Positions amount:</AmountToBuyLabel>
+                                    <AmountToBuyLabel>{t('markets.market-details.positions-amount')}:</AmountToBuyLabel>
                                 </LabelContainer>
                             </LabelsContainer>
                             <FlexDivCentered>
@@ -951,8 +959,8 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     {selectedSide === Side.SELL && (
                         <>
                             <LabelContainer>
-                                <AmountToBuyLabel>Amount to sell:</AmountToBuyLabel>
-                                <AmountToBuyLabel>Total to receive:</AmountToBuyLabel>
+                                <AmountToBuyLabel>{t('markets.market-details.amount-to-sell')}:</AmountToBuyLabel>
+                                <AmountToBuyLabel>{t('markets.market-details.total-to-receive')}:</AmountToBuyLabel>
                             </LabelContainer>
                             <FlexDivCentered>
                                 <CustomTooltip
@@ -1013,7 +1021,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             <>
                                 <Separator>|</Separator>
                                 <SliderInfo>
-                                    <SliderInfoTitle>Potential profit:</SliderInfoTitle>
+                                    <SliderInfoTitle>{t('markets.market-details.potential-profit')}:</SliderInfoTitle>
                                     <SliderInfoValue>
                                         {!Number(tokenAmount) ||
                                         positionPriceDetailsQuery.isLoading ||
@@ -1049,12 +1057,15 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             )}
             {claimable && (
                 <ClaimableAmount>
-                    Amount Claimable: <span>{formatCurrencyWithSign(USD_SIGN, claimableAmount, 2)}</span>
+                    {t(`markets.market-details.amount-claimable`)}:{' '}
+                    <span>{formatCurrencyWithSign(USD_SIGN, claimableAmount, 2)}</span>
                 </ClaimableAmount>
             )}
             {claimable && (
                 <ClaimButton cancelled={market.resolved && !market.gameStarted} onClick={claimReward.bind(this)}>
-                    {market.resolved && !market.gameStarted ? 'Claim Back' : 'Claim'}
+                    {market.resolved && !market.gameStarted
+                        ? t(`markets.market-details.claim-back`)
+                        : t(`markets.market-card.claim`)}
                 </ClaimButton>
             )}
         </MarketContainer>

@@ -43,7 +43,7 @@ const Market: React.FC<MarketProps> = (props) => {
 
     useEffect(() => {
         trackPageView({});
-    }, []);
+    }, [trackPageView]);
 
     return (
         <Container>
@@ -51,7 +51,7 @@ const Market: React.FC<MarketProps> = (props) => {
                 <>
                     <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
                     <MarketDetails market={market} selectedSide={selectedSide} setSelectedSide={setSelectedSide} />
-                    <Transactions marketAddress={marketAddress} />
+                    <Transactions market={market} />
                 </>
             ) : (
                 <SimpleLoader />

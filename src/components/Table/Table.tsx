@@ -1,5 +1,5 @@
-import React, { useMemo, DependencyList, CSSProperties } from 'react';
-import { useTable, useSortBy, Column, Row } from 'react-table';
+import React, { useMemo, DependencyList, CSSProperties, useEffect } from 'react';
+import { useTable, useSortBy, Column, Row, usePagination } from 'react-table';
 import SimpleLoader from 'components/SimpleLoader';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
@@ -19,10 +19,14 @@ type TableProps = {
     onTableRowClick?: (row: Row<any>) => void;
     isLoading?: boolean;
     noResultsMessage?: React.ReactNode;
+    tableRowHeadStyles?: CSSProperties;
     tableRowStyles?: CSSProperties;
     tableHeadCellStyles?: CSSProperties;
     tableRowCellStyles?: CSSProperties;
     initialState?: any;
+    onSortByChanged?: any;
+    currentPage?: number;
+    rowsPerPage?: number;
 };
 
 const Table: React.FC<TableProps> = ({
@@ -33,14 +37,29 @@ const Table: React.FC<TableProps> = ({
     noResultsMessage = null,
     onTableRowClick = undefined,
     isLoading = false,
+    tableRowHeadStyles = {},
     tableRowStyles = {},
     tableHeadCellStyles = {},
     tableRowCellStyles = {},
-    initialState = null,
+    initialState = {},
+    onSortByChanged = undefined,
+    currentPage,
+    rowsPerPage,
 }) => {
     const { t } = useTranslation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const memoizedColumns = useMemo(() => columns, [...columnsDeps, t]);
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+        state,
+        gotoPage,
+        setPageSize,
+        page,
+    } = useTable(
         {
             columns: memoizedColumns,
             data,
@@ -48,18 +67,37 @@ const Table: React.FC<TableProps> = ({
             initialState,
             autoResetSortBy: false,
         },
-        useSortBy
+        useSortBy,
+        usePagination
     );
+
+    useEffect(() => {
+        onSortByChanged && onSortByChanged();
+    }, [onSortByChanged, state.sortBy]);
+
+    useEffect(() => {
+        if (currentPage !== undefined) {
+            gotoPage(currentPage);
+        }
+    }, [currentPage, gotoPage]);
+
+    useEffect(() => {
+        if (rowsPerPage !== undefined) {
+            setPageSize(rowsPerPage || 0);
+        }
+    }, [rowsPerPage, setPageSize]);
 
     return (
         <>
             {headerGroups.map((headerGroup, headerGroupIndex: any) => (
-                <TableRowHead {...headerGroup.getHeaderGroupProps()} key={headerGroupIndex}>
+                <TableRowHead style={tableRowHeadStyles} {...headerGroup.getHeaderGroupProps()} key={headerGroupIndex}>
                     {headerGroup.headers.map((column: any, headerIndex: any) => (
                         <TableCellHead
                             {...column.getHeaderProps(column.sortable ? column.getSortByToggleProps() : undefined)}
                             key={headerIndex}
                             style={column.sortable ? { cursor: 'pointer', ...tableHeadCellStyles } : {}}
+                            width={column.width}
+                            id={column.id}
                         >
                             <HeaderTitle>{column.render('Header')}</HeaderTitle>
                             {column.sortable && (
@@ -88,7 +126,7 @@ const Table: React.FC<TableProps> = ({
                     <NoResultContainer>{noResultsMessage}</NoResultContainer>
                 ) : (
                     <TableBody {...getTableBodyProps()}>
-                        {rows.map((row, rowIndex: any) => {
+                        {(currentPage !== undefined ? page : rows).map((row, rowIndex: any) => {
                             prepareRow(row);
 
                             return (
@@ -100,7 +138,13 @@ const Table: React.FC<TableProps> = ({
                                     key={rowIndex}
                                 >
                                     {row.cells.map((cell, cellIndex: any) => (
-                                        <TableCell style={tableRowCellStyles} {...cell.getCellProps()} key={cellIndex}>
+                                        <TableCell
+                                            style={tableRowCellStyles}
+                                            {...cell.getCellProps()}
+                                            key={cellIndex}
+                                            width={cell.column.width}
+                                            id={cell.column.id}
+                                        >
                                             {cell.render('Cell')}
                                         </TableCell>
                                     ))}
@@ -143,11 +187,11 @@ const TableRowHead = styled(TableRow)`
     min-height: 40px;
 `;
 
-const TableCell = styled(FlexDivCentered)`
+const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string }>`
     flex: 1;
     min-width: 0px;
-    width: 150px;
-    justify-content: left;
+    max-width: ${(props) => (props.width ? props.width : 'initial')};
+    justify-content: ${(props) => CellAlignment[props.id] || 'left'};
     &:first-child {
         padding-left: 18px;
     }
@@ -156,11 +200,15 @@ const TableCell = styled(FlexDivCentered)`
     }
     @media (max-width: 767px) {
         font-size: 12px;
+        &:first-child {
+            padding-left: 6px;
+        }
+        &:last-child {
+            padding-right: 6px;
+        }
     }
     @media (max-width: 512px) {
         font-size: 10px;
-        justify-content: center;
-        text-align: center;
         &:first-child {
             padding-left: 6px;
         }
@@ -218,8 +266,14 @@ const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`
                     ? "'\\0047'"
                     : "'\\0045'"
                 : "'\\0045'"};
-        color: ${(props) => props.theme.textColor.primary};
     }
 `;
+
+const CellAlignment: Record<string, string> = {
+    wallet: 'center',
+    points: 'center',
+    rewards: 'center',
+    finishTime: 'center',
+};
 
 export default Table;
