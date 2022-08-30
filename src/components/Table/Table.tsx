@@ -73,7 +73,8 @@ const Table: React.FC<TableProps> = ({
 
     useEffect(() => {
         onSortByChanged && onSortByChanged();
-    }, [onSortByChanged, state.sortBy]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [state.sortBy]);
 
     useEffect(() => {
         if (currentPage !== undefined) {

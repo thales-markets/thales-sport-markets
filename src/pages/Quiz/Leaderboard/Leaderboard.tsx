@@ -83,7 +83,7 @@ const Leaderboard: React.FC = () => {
             setLeaderboard(currentLeaderboard);
             setWeekEnd(new Date(weeklyLeaderboard.weekEnd).getTime());
         }
-    }, [quizLeaderboardQuery.data, quizLeaderboardQuery.isSuccess, searchText, week]);
+    }, [quizLeaderboardQuery.data, quizLeaderboardQuery.isSuccess, searchText, week, isInitialQueryLoad, t]);
 
     const [page, setPage] = useState(0);
     const handleChangePage = (_event: unknown, newPage: number) => {
