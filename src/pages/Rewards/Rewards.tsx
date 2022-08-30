@@ -48,7 +48,7 @@ const Rewards: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const [searchText, setSearchText] = useState<string>('');
     const PERIOD_DURATION_IN_DAYS = 14;
-    const START_DATE = new Date(Date.UTC(2022, 7, 1, 0, 0, 0));
+    const START_DATE = new Date(Date.UTC(2022, 7, 29, 0, 0, 0));
     const NOW = new Date();
 
     let CALCULATED_START = new Date(START_DATE.getTime());
@@ -70,7 +70,7 @@ const Rewards: React.FC = () => {
     }
     const [period, setPeriod] = useState<number>(options.length > 0 ? options[options.length - 1].value : 0);
 
-    const rewardsDataQuery = useRewardsDataQuery(networkId, period, {
+    const rewardsDataQuery = useRewardsDataQuery(networkId, period + 2, {
         enabled: isAppReady,
     });
 
