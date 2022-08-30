@@ -69,6 +69,7 @@ const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaul
                 handleChange(Number(_props?.value));
             }}
             defaultValue={defaultOption}
+            isSearchable={false}
         />
     );
 };
