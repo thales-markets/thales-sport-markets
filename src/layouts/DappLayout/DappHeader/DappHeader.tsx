@@ -17,7 +17,7 @@ import LanguageSelector from 'components/LanguageSelector';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import useInterval from 'hooks/useInterval';
 
-const PULSING_COUNT = 5;
+const PULSING_COUNT = 10;
 
 const DappHeader: React.FC = () => {
     const dispatch = useDispatch();
@@ -97,7 +97,7 @@ const StyledSportTriviaIcon = styled.img<{ stopPulsing: boolean }>`
         margin-right: 0px;
     }
     animation: ${(props) => (props.stopPulsing ? 'none' : 'pulsing 1s ease-in')};
-    animation-iteration-count: 5;
+    animation-iteration-count: 10;
 `;
 
 export default DappHeader;
