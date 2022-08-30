@@ -468,29 +468,3 @@ export const PeriodEndLabel = styled.span`
     font-size: 18px;
     margin-right: 6px;
 `;
-
-export const OvertimeVoucherImage = styled.img`
-    width: 220px;
-    cursor: pointer;
-`;
-
-export const OvertimeVoucherPopupContainer = styled(FlexDivColumnCentered)`
-    text-align: center;
-`;
-
-export const OvertimeVoucherPopupTitle = styled.span`
-    font-size: 14px;
-    font-weight: 600;
-    text-transform: uppercase;
-`;
-
-export const OvertimeVoucherPopup: React.FC<{ title: string; imageSrc: string }> = ({ title, imageSrc }) => {
-    return (
-        <OvertimeVoucherPopupContainer>
-            <OvertimeVoucherPopupTitle>{title}</OvertimeVoucherPopupTitle>
-            <a href={imageSrc} target="_blank" rel="noreferrer">
-                <OvertimeVoucherImage src={imageSrc} />
-            </a>
-        </OvertimeVoucherPopupContainer>
-    );
-};

@@ -9,11 +9,12 @@ import { truncateAddress } from 'utils/formatters/string';
 import onboardConnector from 'utils/onboardConnector';
 import { getIsAppReady } from 'redux/modules/app';
 import { PAYMENT_CURRENCY } from 'constants/currency';
-import { formatCurrency } from 'utils/formatters/number';
+import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
 import OutsideClickHandler from 'react-outside-click-handler';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import Tooltip from 'components/Tooltip';
+import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -45,49 +46,58 @@ const WalletInfo: React.FC = () => {
 
     return (
         <Container>
-            <WalletContainer
-                onClick={() => {
-                    if (!isWalletConnected) {
-                        onboardConnector.connectWallet();
-                    } else {
-                        setShowWalletOptions(true);
-                    }
-                }}
-            >
-                {isWalletConnected ? (
-                    <>
+            <FlexDivColumn>
+                <WalletContainer
+                    onClick={() => {
+                        if (!isWalletConnected) {
+                            onboardConnector.connectWallet();
+                        } else {
+                            setShowWalletOptions(true);
+                        }
+                    }}
+                >
+                    {isWalletConnected ? (
                         <>
-                            <Wallet className="wallet-info">
-                                <Info>{truncateAddress(walletAddress)}</Info>
-                            </Wallet>
-                            <Wallet className="wallet-info-hover">
-                                <Info>{t('common.wallet.wallet-options')}</Info>
-                            </Wallet>
-                            <Balance>
-                                <Info>{sUSDBalance}</Info>
-                                <Currency>{PAYMENT_CURRENCY}</Currency>
-                            </Balance>
+                            <>
+                                <Wallet className="wallet-info">
+                                    <Info>{truncateAddress(walletAddress)}</Info>
+                                </Wallet>
+                                <Wallet className="wallet-info-hover">
+                                    <Info>{t('common.wallet.wallet-options')}</Info>
+                                </Wallet>
+                                <Balance>
+                                    <Info>{sUSDBalance}</Info>
+                                    <Currency>{PAYMENT_CURRENCY}</Currency>
+                                </Balance>
+                            </>
                         </>
-                    </>
-                ) : (
-                    <Info>{t('common.wallet.connect-your-wallet')}</Info>
+                    ) : (
+                        <Info>{t('common.wallet.connect-your-wallet')}</Info>
+                    )}
+                </WalletContainer>
+                {overtimeVoucher && (
+                    <Tooltip
+                        overlay={
+                            <OvertimeVoucherPopup
+                                title={t('quiz.leaderboard.overtime-voucher')}
+                                imageSrc={overtimeVoucher.image}
+                                text={`Remaining amount: ${formatCurrencyWithKey(
+                                    PAYMENT_CURRENCY,
+                                    overtimeVoucher.remainingAmount
+                                )}`}
+                            />
+                        }
+                        component={
+                            <Wallet>
+                                <Info>VOUCHER: </Info>
+                                <Info>{overtimeVoucher.remainingAmount}</Info>
+                                <Currency>{PAYMENT_CURRENCY}</Currency>
+                            </Wallet>
+                        }
+                        overlayClassName="overtime-voucher-overlay"
+                    />
                 )}
-            </WalletContainer>
-            {overtimeVoucher && (
-                <Tooltip
-                    overlay={<VoucherImage src={overtimeVoucher.image} />}
-                    component={
-                        <Wallet>
-                            <Info>VOUCHER: </Info>
-                            <Info>{overtimeVoucher.remainingAmount}</Info>
-                            <Currency>{PAYMENT_CURRENCY}</Currency>
-                        </Wallet>
-                    }
-                    iconFontSize={23}
-                    marginLeft={2}
-                    top={0}
-                />
-            )}
+            </FlexDivColumn>
             {showWalletOptions && (
                 <OutsideClickHandler onOutsideClick={() => setShowWalletOptions(false)}>
                     <WalletOptions>

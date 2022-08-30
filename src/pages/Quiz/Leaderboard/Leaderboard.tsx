@@ -24,7 +24,6 @@ import {
     PeriodContainer,
     PeriodEndContainer,
     PeriodEndLabel,
-    OvertimeVoucherPopup,
 } from '../styled-components';
 import { getTwitterProfileLink } from 'utils/quiz';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
@@ -36,6 +35,7 @@ import SelectInput from 'components/SelectInput';
 import overtimeVoucherIcon from 'assets/images/overtime-voucher.svg';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
+import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
 
 const Leaderboard: React.FC = () => {
     const { t } = useTranslation();

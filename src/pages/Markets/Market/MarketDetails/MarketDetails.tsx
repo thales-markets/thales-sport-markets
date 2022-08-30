@@ -12,6 +12,7 @@ import { COLLATERALS } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useMarketCancellationOddsQuery from 'queries/markets/useMarketCancellationOddsQuery';
+import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -145,6 +146,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     const [maxAmount, setMaxAmount] = useState<number>(0);
     const [maxUsdAmount, setMaxUsdAmount] = useState<number>(0);
+    const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(false);
 
     const { trackEvent } = useMatomo();
 
@@ -170,13 +172,33 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
+    const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+    });
+    const overtimeVoucher = useMemo(() => {
+        if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
+            setIsVoucherSelected(true);
+            return overtimeVoucherQuery.data;
+        }
+        setIsVoucherSelected(false);
+        return undefined;
+    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
 
     const paymentTokenBalance = useMemo(() => {
+        if (overtimeVoucher && isVoucherSelected) {
+            return Number(overtimeVoucher.remainingAmount.toFixed(2));
+        }
         if (multipleStableBalances.data && multipleStableBalances.isSuccess) {
             return Number(multipleStableBalances.data[COLLATERALS[selectedStableIndex]].toFixed(2));
         }
         return 0;
-    }, [multipleStableBalances.data, multipleStableBalances.isSuccess, selectedStableIndex]);
+    }, [
+        multipleStableBalances.data,
+        multipleStableBalances.isSuccess,
+        selectedStableIndex,
+        overtimeVoucher,
+        isVoucherSelected,
+    ]);
 
     const availablePerSideQuery = useAvailablePerSideQuery(market.address, selectedSide);
 
@@ -210,7 +232,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         setTokenAmount(0);
                         return;
                     }
-
                     const roundedAmount = floorNumberToDecimals(X);
                     const quote = await fetchAmmQuote(roundedAmount);
 
@@ -367,10 +388,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
     const handleSubmit = async () => {
         if (!!tokenAmount) {
-            const { sportsAMMContract, signer } = networkConnector;
-            if (sportsAMMContract && signer) {
+            const { sportsAMMContract, overtimeVoucherContract, signer } = networkConnector;
+            if (sportsAMMContract && overtimeVoucherContract && signer) {
                 setIsBuying(true);
                 const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
+                const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
                 const ammQuote = await fetchAmmQuote(+Number(tokenAmount).toFixed(2) || 1);
                 const parsedAmount = ethers.utils.parseEther(Number(tokenAmount).toFixed(2));
                 const id = toast.loading(t('market.toast-messsage.transaction-pending'));
@@ -378,9 +400,12 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 try {
                     const tx = await getAMMSportsTransaction(
                         selectedSide === Side.BUY,
+                        isVoucherSelected,
+                        overtimeVoucher ? overtimeVoucher.id : 0,
                         selectedStableIndex,
                         networkId,
                         sportsAMMContractWithSigner,
+                        overtimeVoucherContractWithSigner,
                         market.address,
                         selectedPosition,
                         parsedAmount,
@@ -614,6 +639,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 }
             }
 
+            console.log('paymentTokenBalance', paymentTokenBalance);
+            console.log('tokenAmount', tokenAmount);
+            console.log('maxAmount', maxAmount);
+            console.log('usdAmountValue', usdAmountValue);
+
             if (selectedSide === Side.BUY) {
                 setSubmitDisabled(
                     !paymentTokenBalance || tokenAmount > maxAmount || usdAmountValue > paymentTokenBalance
@@ -734,6 +764,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             collateralArray={COLLATERALS}
                             selectedItem={selectedStableIndex}
                             onChangeCollateral={(index) => setStableIndex(index)}
+                            overtimeVoucher={overtimeVoucher}
+                            isVoucherSelected={isVoucherSelected}
+                            setIsVoucherSelected={setIsVoucherSelected}
                         />
                     )}
                 </MarketHeader>

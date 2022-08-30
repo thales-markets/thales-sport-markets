@@ -17,17 +17,25 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { getIsAppReady } from 'redux/modules/app';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import { formatCurrency } from 'utils/formatters/number';
+import { OvertimeVoucher } from 'types/tokens';
+import { ReactComponent as OvertimeVoucherIcon } from 'assets/images/overtime-voucher.svg';
 
 type CollateralSelectorProps = {
     collateralArray: Array<string>;
     selectedItem: number;
     onChangeCollateral: (index: number) => void;
+    overtimeVoucher?: OvertimeVoucher;
+    isVoucherSelected: boolean;
+    setIsVoucherSelected: any;
 };
 
 const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     collateralArray,
     selectedItem,
     onChangeCollateral,
+    overtimeVoucher,
+    isVoucherSelected,
+    setIsVoucherSelected,
 }) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -50,6 +58,31 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                 {/* <CollateralName>{collateralArray[selectedItem]}</CollateralName> */}
             </LabelValueContainer>
             <AssetContainer>
+                {overtimeVoucher && (
+                    <CollateralContainer>
+                        <CollateralIcon active={isVoucherSelected}>
+                            <OvertimeVoucherIcon
+                                onClick={() => {
+                                    setIsVoucherSelected(true);
+                                    onChangeCollateral(0);
+                                }}
+                                style={{
+                                    ...(isVoucherSelected
+                                        ? {
+                                              opacity: '1',
+                                          }
+                                        : {
+                                              opacity: '0.5',
+                                          }),
+                                    marginRight: 7,
+                                    width: '40px',
+                                    height: '40px',
+                                }}
+                            />
+                        </CollateralIcon>
+                        <TokenBalance>{formatCurrency(overtimeVoucher.remainingAmount, 2)}</TokenBalance>
+                    </CollateralContainer>
+                )}
                 {collateralArray.length &&
                     collateralArray.map((item, index) => {
                         const AssetIcon = getStableIcon(item as StablecoinKey);
@@ -58,9 +91,12 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                 <CollateralIcon active={selectedItem == index} key={index}>
                                     <AssetIcon
                                         key={index}
-                                        onClick={() => onChangeCollateral(index)}
+                                        onClick={() => {
+                                            setIsVoucherSelected(false);
+                                            onChangeCollateral(index);
+                                        }}
                                         style={{
-                                            ...(selectedItem == index
+                                            ...(selectedItem == index && !isVoucherSelected
                                                 ? {
                                                       opacity: '1',
                                                   }
