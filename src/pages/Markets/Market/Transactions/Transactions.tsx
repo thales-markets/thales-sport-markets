@@ -79,6 +79,7 @@ const Transactions: React.FC<TransactionsProps> = ({ market }) => {
         marketClaimTransactionsQuery?.data,
         marketTransactionsQuery?.isSuccess,
         marketTransactionsQuery?.data,
+        market,
     ]);
 
     const noResults = marketTransactions.length === 0;
