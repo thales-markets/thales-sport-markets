@@ -240,7 +240,11 @@
                 "time-col": "Time",
                 "rewards-col": "Rewards",
                 "no-data-available": "No data available"
-            }
+            },
+            "period-end-label": "The period ends in",
+            "period-ended-label": "Period ended",
+            "week-label": "Week",
+            "overtime-voucher": "Overtime voucher"
         },
         "help-us-improve-label": "Help us improve",
         "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",

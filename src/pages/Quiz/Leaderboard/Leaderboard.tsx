@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import BackToLink from 'pages/Markets/components/BackToLink';
 import ROUTES from 'constants/routes';
@@ -7,17 +7,26 @@ import Table from 'components/Table';
 import { CellProps } from 'react-table';
 import Search from 'components/Search';
 import useQuizLeaderboardQuery from 'queries/quiz/useQuizLeaderboardQuery';
-import { LeaderboardItem, LeaderboardList } from 'types/quiz';
+import { LeaderboardByWeeks, LeaderboardItem, LeaderboardList, WeeklyLeaderboard } from 'types/quiz';
 import {
     LeaderboardContainer,
     Container,
-    Description,
+    Copy,
     LeaderboardTitleContainer,
     Link,
     TwitterImage,
     TwitterContainer,
     PaginationWrapper,
     LeaderboardIcon,
+    SelectContainer,
+    LeaderboardHeader,
+    OvertimeVoucherIcon,
+    PeriodContainer,
+    PeriodEndContainer,
+    PeriodEndLabel,
+    OvertimeVoucherPopup,
+    Wrapper,
+    QuizLink,
 } from '../styled-components';
 import { getTwitterProfileLink } from 'utils/quiz';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
@@ -25,29 +34,61 @@ import { CURRENCY_MAP } from 'constants/currency';
 import { truncateAddress } from 'utils/formatters/string';
 import HelpUsImprove from '../HelpUsImprove';
 import { DEFAULT_TWITTER_PROFILE_IMAGE } from 'constants/quiz';
+import SelectInput from 'components/SelectInput';
+import overtimeVoucherIcon from 'assets/images/overtime-voucher.svg';
+import TimeRemaining from 'components/TimeRemaining';
+import Tooltip from 'components/Tooltip';
+import { Info } from 'pages/Markets/Home/Home';
+import SPAAnchor from 'components/SPAAnchor';
+import { LINKS } from 'constants/links';
 
 const Leaderboard: React.FC = () => {
     const { t } = useTranslation();
     const [searchText, setSearchText] = useState<string>('');
+    const [isInitialQueryLoad, setIsInitialQueryLoad] = useState<boolean>(true);
+    const [leaderboard, setLeaderboard] = useState<LeaderboardList>([]);
+    const [weekEnd, setWeekEnd] = useState<number>(0);
+    const [weekOptions, setWeekOptions] = useState<Array<{ value: number; label: string }>>([]);
+    const [week, setWeek] = useState<number>(0);
+
+    const NOW = new Date();
 
     const quizLeaderboardQuery = useQuizLeaderboardQuery();
 
-    const leaderboard: LeaderboardList = useMemo(() => {
+    useEffect(() => {
         if (quizLeaderboardQuery.isSuccess && quizLeaderboardQuery.data) {
+            const leaderboardByWeeks: LeaderboardByWeeks = quizLeaderboardQuery.data;
+            let selectedWeek = week;
+            if (isInitialQueryLoad) {
+                selectedWeek =
+                    leaderboardByWeeks.length > 0 ? leaderboardByWeeks[leaderboardByWeeks.length - 1].week : 0;
+
+                const options: Array<{ value: number; label: string }> = [];
+                for (let index = 0; index < leaderboardByWeeks.length; index++) {
+                    options.push({
+                        value: index,
+                        label: `${t('quiz.leaderboard.week-label')} ${index + 1}`,
+                    });
+                    setWeekOptions(options);
+                }
+                setWeek(selectedWeek);
+                setIsInitialQueryLoad(false);
+            }
+
+            const weeklyLeaderboard: WeeklyLeaderboard = leaderboardByWeeks[selectedWeek];
+            let currentLeaderboard = weeklyLeaderboard.leaderboard;
+
             if (searchText.trim() !== '') {
-                const data = quizLeaderboardQuery.data.filter(
+                currentLeaderboard = currentLeaderboard.filter(
                     (item: LeaderboardItem) =>
                         item.wallet.toLowerCase().includes(searchText.toLowerCase()) ||
                         item.name.toLowerCase().includes(searchText.toLowerCase())
                 );
-
-                return data;
             }
-            return quizLeaderboardQuery.data;
+            setLeaderboard(currentLeaderboard);
+            setWeekEnd(new Date(weeklyLeaderboard.weekEnd).getTime());
         }
-
-        return [];
-    }, [quizLeaderboardQuery.data, quizLeaderboardQuery.isSuccess, searchText]);
+    }, [quizLeaderboardQuery.data, quizLeaderboardQuery.isSuccess, searchText, week, isInitialQueryLoad, t]);
 
     const [page, setPage] = useState(0);
     const handleChangePage = (_event: unknown, newPage: number) => {
@@ -60,13 +101,21 @@ const Leaderboard: React.FC = () => {
         setPage(0);
     };
 
-    useEffect(() => setPage(0), [searchText]);
+    useEffect(() => setPage(0), [searchText, week]);
 
     const isMobile = window.innerWidth < 768;
     const isSmallScreen = window.innerWidth <= 512;
 
     return (
-        <>
+        <Wrapper>
+            <Info>
+                <Trans
+                    i18nKey="rewards.op-rewards-banner-message"
+                    components={{
+                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                    }}
+                />
+            </Info>
             <BackToLink link={buildHref(ROUTES.Quiz)} text={t('quiz.leaderboard.back-to-quiz')} />
             <Container>
                 <LeaderboardContainer>
@@ -74,17 +123,49 @@ const Leaderboard: React.FC = () => {
                         <LeaderboardIcon />
                         {t('quiz.leaderboard.title')}
                     </LeaderboardTitleContainer>
-                    <Description>
-                        <Trans i18nKey={t('quiz.leaderboard.description')} />
-                    </Description>
-                    <Search
-                        text={searchText}
-                        customPlaceholder={t('quiz.leaderboard.search-placeholder')}
-                        handleChange={(e) => setSearchText(e)}
-                        customStyle={{ border: '1px solid #1A1C2B' }}
-                        width={300}
-                        marginBottom={10}
-                    />
+                    <Copy>
+                        <Trans
+                            i18nKey="quiz.leaderboard.description"
+                            components={{
+                                p: <p />,
+                                blogPost: <QuizLink href={LINKS.QuizBlogPost} key="blogPost" />,
+                                sportsTrivia: <SPAAnchor href={buildHref(ROUTES.Quiz)} key="sportsTrivia" />,
+                            }}
+                        />
+                    </Copy>
+                    <LeaderboardHeader>
+                        <PeriodContainer>
+                            {!isInitialQueryLoad && (
+                                <>
+                                    <SelectContainer>
+                                        <SelectInput
+                                            options={weekOptions}
+                                            handleChange={(value) => setWeek(Number(value))}
+                                            defaultValue={week}
+                                            width={200}
+                                        />
+                                    </SelectContainer>
+                                    {NOW.getTime() < weekEnd ? (
+                                        <PeriodEndContainer>
+                                            <PeriodEndLabel>{t('quiz.leaderboard.period-end-label')}:</PeriodEndLabel>
+                                            <TimeRemaining end={weekEnd} fontSize={18} showFullCounter />
+                                        </PeriodEndContainer>
+                                    ) : (
+                                        <PeriodEndContainer>
+                                            <PeriodEndLabel>{t('quiz.leaderboard.period-ended-label')}</PeriodEndLabel>
+                                        </PeriodEndContainer>
+                                    )}
+                                </>
+                            )}
+                        </PeriodContainer>
+                        <Search
+                            text={searchText}
+                            customPlaceholder={t('quiz.leaderboard.search-placeholder')}
+                            handleChange={(e) => setSearchText(e)}
+                            customStyle={{ border: '1px solid #1A1C2B' }}
+                            width={200}
+                        />
+                    </LeaderboardHeader>
                     <Table
                         tableRowStyles={{
                             fontSize: 16,
@@ -95,8 +176,8 @@ const Leaderboard: React.FC = () => {
                         columns={[
                             {
                                 Header: <>{isMobile ? '#' : t('quiz.leaderboard.table.rank-col')}</>,
-                                accessor: 'rank',
-                                Cell: (cellProps: CellProps<LeaderboardItem, LeaderboardItem['rank']>) => (
+                                accessor: 'ranking',
+                                Cell: (cellProps: CellProps<LeaderboardItem, LeaderboardItem['ranking']>) => (
                                     <p>{cellProps.cell.value}</p>
                                 ),
                                 sortable: true,
@@ -113,7 +194,7 @@ const Leaderboard: React.FC = () => {
                                     >
                                         <TwitterContainer>
                                             <TwitterImage
-                                                alt="twiiter"
+                                                alt="tw"
                                                 src={
                                                     cellProps.cell.row.original.avatar != ''
                                                         ? cellProps.cell.row.original.avatar
@@ -157,19 +238,49 @@ const Leaderboard: React.FC = () => {
                             },
                             {
                                 Header: <>{t('quiz.leaderboard.table.rewards-col')}</>,
-                                accessor: 'rewards',
-                                Cell: (cellProps: CellProps<LeaderboardItem, LeaderboardItem['rewards']>) => (
-                                    <p>
-                                        {cellProps.cell.value
-                                            ? `${formatCurrencyWithKey(
-                                                  CURRENCY_MAP.sUSD,
-                                                  cellProps.cell.value,
-                                                  0,
-                                                  true
-                                              )}`
-                                            : ''}
-                                    </p>
-                                ),
+                                accessor: 'price',
+                                Cell: (cellProps: CellProps<LeaderboardItem, LeaderboardItem['price']>) => {
+                                    return cellProps.cell.value > 0 ? (
+                                        <Tooltip
+                                            overlay={
+                                                <OvertimeVoucherPopup
+                                                    title={t('quiz.leaderboard.overtime-voucher')}
+                                                    imageSrc={cellProps.row.original.voucherUrl}
+                                                />
+                                            }
+                                            component={
+                                                <p style={{ display: 'flex', alignItems: 'center' }}>
+                                                    {cellProps.cell.value > 0 && (
+                                                        <OvertimeVoucherIcon src={overtimeVoucherIcon} />
+                                                    )}
+                                                    {cellProps.cell.value
+                                                        ? `${formatCurrencyWithKey(
+                                                              CURRENCY_MAP.sUSD,
+                                                              cellProps.cell.value,
+                                                              0,
+                                                              true
+                                                          )}`
+                                                        : ''}
+                                                </p>
+                                            }
+                                            overlayClassName="overtime-voucher-overlay"
+                                        />
+                                    ) : (
+                                        <p style={{ display: 'flex', alignItems: 'center' }}>
+                                            {cellProps.cell.value > 0 && (
+                                                <OvertimeVoucherIcon src={overtimeVoucherIcon} />
+                                            )}
+                                            {cellProps.cell.value
+                                                ? `${formatCurrencyWithKey(
+                                                      CURRENCY_MAP.sUSD,
+                                                      cellProps.cell.value,
+                                                      0,
+                                                      true
+                                                  )}`
+                                                : ''}
+                                        </p>
+                                    );
+                                },
                                 sortable: true,
                                 width: isSmallScreen ? '70px' : isMobile ? '100px' : 'initial',
                             },
@@ -177,7 +288,7 @@ const Leaderboard: React.FC = () => {
                         initialState={{
                             sortBy: [
                                 {
-                                    id: 'rank',
+                                    id: 'ranking',
                                     desc: false,
                                 },
                             ],
@@ -185,7 +296,7 @@ const Leaderboard: React.FC = () => {
                             hiddenColumns: isMobile ? ['wallet'] : [],
                         }}
                         data={leaderboard}
-                        isLoading={quizLeaderboardQuery.isLoading}
+                        isLoading={quizLeaderboardQuery.isLoading || isInitialQueryLoad}
                         noResultsMessage={t('quiz.leaderboard.table.no-data-available')}
                         onSortByChanged={() => setPage(0)}
                         currentPage={page}
@@ -202,7 +313,7 @@ const Leaderboard: React.FC = () => {
                 />
                 <HelpUsImprove />
             </Container>
-        </>
+        </Wrapper>
     );
 };
 

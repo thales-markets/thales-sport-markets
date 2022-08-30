@@ -7,7 +7,13 @@ import {
     FlexDivColumnCentered,
     FlexDivStart,
     QuizQuestionDifficultyMap,
+    FlexDivRow,
 } from 'styles/common';
+
+export const Wrapper = styled(FlexDivColumn)`
+    width: 100%;
+    align-items: center;
+`;
 
 export const Container = styled(FlexDivColumn)`
     width: 60%;
@@ -101,6 +107,13 @@ export const Copy = styled.div`
     p {
         margin-bottom: 10px;
     }
+    a {
+        cursor: pointer;
+        color: #91bced;
+        &:hover {
+            color: #00f9ff;
+        }
+    }
 `;
 
 export const TimeRemainingText = styled(Description)`
@@ -145,7 +158,7 @@ export const Question = styled(Description)`
     font-weight: 700;
     font-size: 22px;
     line-height: 30px;
-    margin-top: 10px;
+    margin-top: 55px;
     margin-bottom: 30px;
     text-align: center;
     -webkit-user-select: none;
@@ -153,6 +166,9 @@ export const Question = styled(Description)`
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+    @media (max-width: 768px) {
+        margin-top: 20px;
+    }
 `;
 
 export const FinishedInfoContainer = styled(FlexDivColumnCentered)`
@@ -256,21 +272,6 @@ export const Link = styled.a`
     color: ${(props) => props.theme.textColor.primary};
     &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
-    }
-`;
-
-export const QuestionWeightContainer = styled(FlexDivColumnCentered)`
-    border: 2px solid #4673bd;
-    border-radius: 40px;
-    width: 150px;
-    min-height: 34px;
-    font-weight: 400;
-    font-size: 18px;
-    text-align: center;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    @media (max-width: 768px) {
-        margin-top: 4px;
     }
 `;
 
@@ -425,3 +426,71 @@ export const DifficultyInfo = styled(Description)<{ difficulty: number }>`
     font-weight: 600;
     color: ${(props) => QuizQuestionDifficultyMap[props.difficulty - 1]};
 `;
+
+export const SelectContainer = styled.div`
+    margin-left: 1px;
+    width: 200px;
+`;
+
+export const LeaderboardHeader = styled(FlexDivRow)`
+    align-items: center;
+    margin-bottom: 10px;
+    @media screen and (max-width: 767px) {
+        flex-direction: column;
+    }
+`;
+
+export const OvertimeVoucherIcon = styled.img`
+    width: 18px;
+    margin-right: 4px;
+    margin-bottom: 2px;
+`;
+
+export const PeriodContainer = styled(FlexDivStart)`
+    align-items: center;
+    @media screen and (max-width: 767px) {
+        flex-direction: column;
+    }
+`;
+
+export const PeriodEndContainer = styled(FlexDivStart)`
+    margin-left: 10px;
+    margin-right: 10px;
+    @media screen and (max-width: 767px) {
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-top: 6px;
+        margin-bottom: 15px;
+    }
+`;
+
+export const PeriodEndLabel = styled.span`
+    font-size: 18px;
+    margin-right: 6px;
+`;
+
+export const OvertimeVoucherImage = styled.img`
+    width: 220px;
+    cursor: pointer;
+`;
+
+export const OvertimeVoucherPopupContainer = styled(FlexDivColumnCentered)`
+    text-align: center;
+`;
+
+export const OvertimeVoucherPopupTitle = styled.span`
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+`;
+
+export const OvertimeVoucherPopup: React.FC<{ title: string; imageSrc: string }> = ({ title, imageSrc }) => {
+    return (
+        <OvertimeVoucherPopupContainer>
+            <OvertimeVoucherPopupTitle>{title}</OvertimeVoucherPopupTitle>
+            <a href={imageSrc} target="_blank" rel="noreferrer">
+                <OvertimeVoucherImage src={imageSrc} />
+            </a>
+        </OvertimeVoucherPopupContainer>
+    );
+};

@@ -20,20 +20,28 @@ const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaul
             color: state.selectProps.menuColor,
             backgroundColor: '#2f3656',
             border: '1px solid #191C2B',
+            marginTop: 5,
+            borderRadius: 10,
         }),
         option: (provided: any, state: any) => ({
             ...provided,
-            color: state?.isFocused || state.isSelected ? '#191C2B' : '#FFFFFF',
-            backgroundColor: state?.isFocused || state.isSelected ? '#FFFFFF' : '#191C2B',
-            opacity: state.isSelected ? 0.7 : 1,
+            color: '#FFFFFF',
+            backgroundColor: state?.isFocused ? '#252940' : state.isSelected ? '#1e2134' : 'transparent',
+            cursor: 'pointer',
         }),
         control: (provided: any) => ({
             ...provided,
             backgroundColor: '#2f3656',
             borderColor: '#191C2B',
             color: '#FFFFFF',
-            borderRadius: '15px',
+            borderRadius: '10px',
             width: width,
+            cursor: 'pointer',
+            boxShadow: 'none',
+            '&:hover': {
+                border: '1px solid #3fd1ff',
+                boxShadow: 'none',
+            },
         }),
         placeholder: (provided: any) => ({
             ...provided,
@@ -61,6 +69,7 @@ const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaul
                 handleChange(Number(_props?.value));
             }}
             defaultValue={defaultOption}
+            isSearchable={false}
         />
     );
 };

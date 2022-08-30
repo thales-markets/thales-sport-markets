@@ -15,7 +15,6 @@ import {
     FinishedInfoLabel,
     ButtonContainer,
     Input,
-    QuestionWeightContainer,
     TimeRemainingText,
     TimeRemainingGraphicContainer,
     TimeRemainingGraphicPercentage,
@@ -37,6 +36,7 @@ import {
     DifficultyContainer,
     DifficultyLabel,
     DifficultyInfo,
+    Wrapper,
 } from './styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -72,7 +72,6 @@ import {
     MAX_SCORE,
     NEXT_QUESTION_PATH,
     NUMBER_OF_QUESTIONS,
-    NUMBER_OF_REWARDS,
     QUIZ_API_URL,
     QUIZ_DURATION,
     START_QUIZ_PATH,
@@ -84,6 +83,8 @@ import HelpUsImprove from './HelpUsImprove';
 import useQuizLeaderboardQuery from 'queries/quiz/useQuizLeaderboardQuery';
 import { FinishInfo, LeaderboardItem } from 'types/quiz';
 import ordinal from 'ordinal';
+import { Info } from 'pages/Markets/Home/Home';
+import useQuizTweetQuery from 'queries/quiz/useQuizTweetQuery';
 
 const Quiz: React.FC = () => {
     const { t } = useTranslation();
@@ -103,6 +104,7 @@ const Quiz: React.FC = () => {
     const [percentageTimeRemaining, setPercentageTimeRemaining] = useState<number>(0);
     const [isTwitterValid, setIsTwitterValid] = useState<boolean>(true);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [numberOfRewards, setNumberOfRewards] = useState<number>(0);
 
     const isStartQuizDisabled = !twitter || twitter.trim() === '' || isSubmitting;
     const isQuizInProgress = isQuizStarted && !isQuizFinished && currentQuizItem;
@@ -111,20 +113,23 @@ const Quiz: React.FC = () => {
 
     const finishInfo: FinishInfo = useMemo(() => {
         if (quizLeaderboardQuery.isSuccess && quizLeaderboardQuery.data) {
-            const leaderboard = quizLeaderboardQuery.data;
+            const leaderboard = quizLeaderboardQuery.data[quizLeaderboardQuery.data.length - 1].leaderboard;
+            const numberOfRewards = leaderboard.filter((item: LeaderboardItem) => item.price > 0).length;
+            setNumberOfRewards(numberOfRewards);
+
             const leaderboardItem = leaderboard.find(
                 (item: LeaderboardItem) => item.name.trim().toLowerCase() === twitter.trim().toLowerCase()
             );
             if (leaderboardItem) {
                 return {
-                    rank: leaderboardItem.rank,
+                    rank: leaderboardItem.ranking,
                     points: leaderboardItem.points,
                     totalParticipants: leaderboard.length,
-                    lastRankPointsWithRewards: (leaderboard.length > NUMBER_OF_REWARDS
-                        ? leaderboard[NUMBER_OF_REWARDS - 1]
+                    lastRankPointsWithRewards: (leaderboard.length > numberOfRewards
+                        ? leaderboard[numberOfRewards - 1]
                         : leaderboard[leaderboard.length - 1]
                     ).points,
-                    isQualifiedForRewards: leaderboardItem.rank <= NUMBER_OF_REWARDS,
+                    isQualifiedForRewards: leaderboardItem.ranking <= numberOfRewards,
                 };
             }
         }
@@ -137,6 +142,16 @@ const Quiz: React.FC = () => {
             isQualifiedForRewards: false,
         };
     }, [quizLeaderboardQuery.data, quizLeaderboardQuery.isSuccess, twitter]);
+
+    const quizTweetQuery = useQuizTweetQuery();
+
+    const quizTweet: string = useMemo(() => {
+        if (quizTweetQuery.isSuccess && quizTweetQuery.data) {
+            return quizTweetQuery.data;
+        }
+
+        return LINKS.QuizRetweetLink;
+    }, [quizTweetQuery.data, quizTweetQuery.isSuccess]);
 
     const handleStartQuiz = async () => {
         setIsSubmitting(true);
@@ -272,7 +287,15 @@ const Quiz: React.FC = () => {
     }, 1000);
 
     return (
-        <>
+        <Wrapper>
+            <Info>
+                <Trans
+                    i18nKey="rewards.op-rewards-banner-message"
+                    components={{
+                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                    }}
+                />
+            </Info>
             <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
             <Container>
                 {isQuizInProgress && (
@@ -305,9 +328,8 @@ const Quiz: React.FC = () => {
                                             i18nKey="quiz.start-quiz-description"
                                             components={{
                                                 p: <p />,
-                                                quizRetweetLink: (
-                                                    <QuizLink href={LINKS.QuizRetweetLink} key="quizRetweetLink" />
-                                                ),
+                                                blogPost: <QuizLink href={LINKS.QuizBlogPost} key="blogPost" />,
+                                                quizRetweetLink: <QuizLink href={quizTweet} key="quizRetweetLink" />,
                                                 twitter: <QuizLink href={LINKS.Twitter} key="twitter" />,
                                                 discord: <QuizLink href={LINKS.ThalesDiscord} key="discord" />,
                                             }}
@@ -349,16 +371,15 @@ const Quiz: React.FC = () => {
                                     <DifficultyContainer>
                                         <DifficultyLabel>{t('quiz.difficulty-label')}: </DifficultyLabel>
                                         <DifficultyInfo difficulty={Number(currentQuizItem.points)}>
-                                            {t(`quiz.difficulty.${Number(currentQuizItem.points)}`)}
+                                            {`${t(`quiz.difficulty.${Number(currentQuizItem.points)}`)} (${
+                                                currentQuizItem.points
+                                            } ${
+                                                Number(currentQuizItem.points) === 1
+                                                    ? t('quiz.point-label')
+                                                    : t('quiz.points-label')
+                                            })`}
                                         </DifficultyInfo>
                                     </DifficultyContainer>
-                                    <QuestionWeightContainer>
-                                        {`${currentQuizItem.points} ${
-                                            Number(currentQuizItem.points) === 1
-                                                ? t('quiz.point-label')
-                                                : t('quiz.points-label')
-                                        }`}
-                                    </QuestionWeightContainer>
                                     <Question>{currentQuizItem.question}</Question>
                                     <OptionsContainer>
                                         {currentQuizItem.options.map((option) => {
@@ -420,14 +441,14 @@ const Quiz: React.FC = () => {
                                                         Number(finishInfo.points) === 1
                                                             ? t('quiz.point-label')
                                                             : t('quiz.points-label'),
-                                                    numberOfRewards: NUMBER_OF_REWARDS,
+                                                    numberOfRewards: numberOfRewards,
                                                 })}
                                             </FinishedInfoMessage>
                                         )}
                                         {finishInfo.isQualifiedForRewards && finishInfo.rank > 1 && (
                                             <FinishedInfoMessage>
                                                 {t('quiz.finish-messages.quilfied-for-rewards', {
-                                                    numberOfRewards: NUMBER_OF_REWARDS,
+                                                    numberOfRewards: numberOfRewards,
                                                 })}
                                             </FinishedInfoMessage>
                                         )}
@@ -473,7 +494,7 @@ const Quiz: React.FC = () => {
                     </Footer>
                 )}
             </Container>
-        </>
+        </Wrapper>
     );
 };
 
