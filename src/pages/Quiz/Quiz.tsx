@@ -72,7 +72,6 @@ import {
     MAX_SCORE,
     NEXT_QUESTION_PATH,
     NUMBER_OF_QUESTIONS,
-    NUMBER_OF_REWARDS,
     QUIZ_API_URL,
     QUIZ_DURATION,
     START_QUIZ_PATH,
@@ -103,6 +102,7 @@ const Quiz: React.FC = () => {
     const [percentageTimeRemaining, setPercentageTimeRemaining] = useState<number>(0);
     const [isTwitterValid, setIsTwitterValid] = useState<boolean>(true);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [numberOfRewards, setNumberOfRewards] = useState<number>(0);
 
     const isStartQuizDisabled = !twitter || twitter.trim() === '' || isSubmitting;
     const isQuizInProgress = isQuizStarted && !isQuizFinished && currentQuizItem;
@@ -111,20 +111,23 @@ const Quiz: React.FC = () => {
 
     const finishInfo: FinishInfo = useMemo(() => {
         if (quizLeaderboardQuery.isSuccess && quizLeaderboardQuery.data) {
-            const leaderboard = quizLeaderboardQuery.data;
+            const leaderboard = quizLeaderboardQuery.data[quizLeaderboardQuery.data.length - 1].leaderboard;
+            const numberOfRewards = leaderboard.filter((item: LeaderboardItem) => item.price > 0).length;
+            setNumberOfRewards(numberOfRewards);
+
             const leaderboardItem = leaderboard.find(
                 (item: LeaderboardItem) => item.name.trim().toLowerCase() === twitter.trim().toLowerCase()
             );
             if (leaderboardItem) {
                 return {
-                    rank: leaderboardItem.rank,
+                    rank: leaderboardItem.ranking,
                     points: leaderboardItem.points,
                     totalParticipants: leaderboard.length,
-                    lastRankPointsWithRewards: (leaderboard.length > NUMBER_OF_REWARDS
-                        ? leaderboard[NUMBER_OF_REWARDS - 1]
+                    lastRankPointsWithRewards: (leaderboard.length > numberOfRewards
+                        ? leaderboard[numberOfRewards - 1]
                         : leaderboard[leaderboard.length - 1]
                     ).points,
-                    isQualifiedForRewards: leaderboardItem.rank <= NUMBER_OF_REWARDS,
+                    isQualifiedForRewards: leaderboardItem.ranking <= numberOfRewards,
                 };
             }
         }
@@ -420,14 +423,14 @@ const Quiz: React.FC = () => {
                                                         Number(finishInfo.points) === 1
                                                             ? t('quiz.point-label')
                                                             : t('quiz.points-label'),
-                                                    numberOfRewards: NUMBER_OF_REWARDS,
+                                                    numberOfRewards: numberOfRewards,
                                                 })}
                                             </FinishedInfoMessage>
                                         )}
                                         {finishInfo.isQualifiedForRewards && finishInfo.rank > 1 && (
                                             <FinishedInfoMessage>
                                                 {t('quiz.finish-messages.quilfied-for-rewards', {
-                                                    numberOfRewards: NUMBER_OF_REWARDS,
+                                                    numberOfRewards: numberOfRewards,
                                                 })}
                                             </FinishedInfoMessage>
                                         )}

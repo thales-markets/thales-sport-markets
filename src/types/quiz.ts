@@ -4,11 +4,21 @@ export type LeaderboardItem = {
     points: number;
     avatar: string;
     finishTime: number;
-    rank: number;
-    rewards: number;
+    ranking: number;
+    price: number;
+    voucherUrl: string;
 };
 
 export type LeaderboardList = LeaderboardItem[];
+
+export type WeeklyLeaderboard = {
+    week: number;
+    weekStart: Date;
+    weekEnd: Date;
+    leaderboard: LeaderboardList;
+};
+
+export type LeaderboardByWeeks = WeeklyLeaderboard[];
 
 export type FinishInfo = {
     rank: number;

@@ -24,8 +24,8 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
 const Rewards = lazy(() => import('pages/Rewards'));
-// const Quiz = lazy(() => import('pages/Quiz'));
-// const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
+const Quiz = lazy(() => import('pages/Quiz'));
+const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
 
 const App = () => {
     const dispatch = useDispatch();
@@ -61,7 +61,7 @@ const App = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (isAppReady && networkId && isNetworkSupported(networkId) && setSelectedWallet) {
+        if (networkId && isNetworkSupported(networkId) && setSelectedWallet) {
             const onboard = initOnboard(networkId, {
                 address: (walletAddress) => {
                     if (walletAddress) {
@@ -114,7 +114,8 @@ const App = () => {
             });
             onboardConnector.setOnBoard(onboard);
         }
-    }, [dispatch, isAppReady, networkId, setSelectedWallet]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, isAppReady, setSelectedWallet]);
 
     // load previously saved wallet
     useEffect(() => {
@@ -156,7 +157,7 @@ const App = () => {
                                     <Rewards />
                                 </DappLayout>
                             </Route>
-                            {/* <Route exact path={ROUTES.Quiz}>
+                            <Route exact path={ROUTES.Quiz}>
                                 <DappLayout>
                                     <Quiz />
                                 </DappLayout>
@@ -165,7 +166,7 @@ const App = () => {
                                 <DappLayout>
                                     <QuizLeaderboard />
                                 </DappLayout>
-                            </Route> */}
+                            </Route>
                         </Switch>
                     </Router>
                     <ReactQueryDevtools initialIsOpen={false} />

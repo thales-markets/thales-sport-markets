@@ -24,7 +24,7 @@ import {
 import { formatCurrencyWithKey } from 'utils/formatters/number';
 import { CURRENCY_MAP } from 'constants/currency';
 import SPAAnchor from 'components/SPAAnchor';
-import { DEFAULT_TWITTER_PROFILE_IMAGE, NUMBER_OF_REWARDS } from 'constants/quiz';
+import { DEFAULT_TWITTER_PROFILE_IMAGE } from 'constants/quiz';
 import { getTwitterProfileLink } from 'utils/quiz';
 
 const SidebarLeaderboard: React.FC = () => {
@@ -34,7 +34,10 @@ const SidebarLeaderboard: React.FC = () => {
 
     const leaderboard: LeaderboardList = useMemo(() => {
         if (quizLeaderboardQuery.isSuccess && quizLeaderboardQuery.data) {
-            return quizLeaderboardQuery.data.slice(0, NUMBER_OF_REWARDS);
+            const leaderboard = quizLeaderboardQuery.data[quizLeaderboardQuery.data.length - 1].leaderboard;
+            const numberOfRewards = leaderboard.filter((item: LeaderboardItem) => item.price > 0).length;
+
+            return leaderboard.slice(0, numberOfRewards);
         }
 
         return [];
@@ -51,16 +54,21 @@ const SidebarLeaderboard: React.FC = () => {
                 </SPAAnchor>
                 <LeaderboardContainer>
                     {leaderboard.map((item: LeaderboardItem) => (
-                        <Link href={getTwitterProfileLink(item.name)} target="_blank" rel="noreferrer" key={item.rank}>
+                        <Link
+                            href={getTwitterProfileLink(item.name)}
+                            target="_blank"
+                            rel="noreferrer"
+                            key={item.ranking}
+                        >
                             <LeaderboardRow>
-                                <Rank>{item.rank}</Rank>
+                                <Rank>{item.ranking}</Rank>
                                 <TwitterImage
-                                    alt="twiiter"
+                                    alt="tw"
                                     src={item.avatar != '' ? item.avatar : DEFAULT_TWITTER_PROFILE_IMAGE}
                                 />
                                 <MainInfo>
                                     <Twitter className="twitter">{item.name}</Twitter>
-                                    <Rewards>{formatCurrencyWithKey(CURRENCY_MAP.sUSD, item.rewards, 0, true)}</Rewards>
+                                    <Rewards>{formatCurrencyWithKey(CURRENCY_MAP.sUSD, item.price, 0, true)}</Rewards>
                                 </MainInfo>
                                 <PointsInfo>
                                     <Points>{item.points}</Points>
