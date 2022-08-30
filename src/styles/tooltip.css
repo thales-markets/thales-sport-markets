@@ -175,3 +175,9 @@
 .rc-tooltip-placement-bottomRight .rc-tooltip-arrow {
     right: 15%;
 }
+
+.overtime-voucher-overlay .rc-tooltip-inner {
+    padding: 5px 5px 2px 5px;
+    background-color: #d0e3f0;
+    border-radius: 10px;
+}

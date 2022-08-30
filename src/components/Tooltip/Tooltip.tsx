@@ -10,12 +10,21 @@ type TooltipProps = {
     customIconStyling?: CSSProperties;
     marginLeft?: number;
     top?: number;
+    overlayClassName?: string;
 };
 
-const Tooltip: React.FC<TooltipProps> = ({ component, overlay, iconFontSize, customIconStyling, marginLeft, top }) => {
+const Tooltip: React.FC<TooltipProps> = ({
+    component,
+    overlay,
+    iconFontSize,
+    customIconStyling,
+    marginLeft,
+    top,
+    overlayClassName,
+}) => {
     return (
         <Container>
-            <ReactTooltip overlay={overlay} placement="top">
+            <ReactTooltip overlay={overlay} placement="top" overlayClassName={overlayClassName || ''}>
                 {component ? (
                     component
                 ) : (

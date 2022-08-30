@@ -240,8 +240,12 @@
                 "points-col": "得分",
                 "time-col": "时间",
                 "rewards-col": "奖励",
-                "no-data-available": "无法获取数据"
-            }
+                "no-data-available": "无法获取数据
+            },      
+            "period-end-label": "期间结束于",
+            "period-ended-label": "期间结束",
+            "week-label": "星期",
+            "overtime-voucher": "Overtime 代金券",
         },
         "help-us-improve-label": "帮助我们提高",
         "help-us-improve-tooltip": "帮助我们的体育百科添加新的问题",
