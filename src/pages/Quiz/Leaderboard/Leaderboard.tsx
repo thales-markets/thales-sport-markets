@@ -62,7 +62,7 @@ const Leaderboard: React.FC = () => {
                 for (let index = 0; index < leaderboardByWeeks.length; index++) {
                     options.push({
                         value: index,
-                        label: `${t('quiz.leaderboard.week-label')} ${index}`,
+                        label: `${t('quiz.leaderboard.week-label')} ${index + 1}`,
                     });
                     setWeekOptions(options);
                 }
