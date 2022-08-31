@@ -240,7 +240,11 @@
                 "time-col": "Time",
                 "rewards-col": "Rewards",
                 "no-data-available": "No data available"
-            }
+            },
+            "overtime-voucher": "Vale de horas extras",
+            "week-label": "Semana",
+            "period-end-label": "El período termina en",
+            "period-ended-label": "Período terminado"
         },
         "help-us-improve-label": "Help us improve",
         "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
