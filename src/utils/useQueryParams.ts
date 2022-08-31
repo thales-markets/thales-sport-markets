@@ -24,6 +24,12 @@ const useQueryParam = (key: string, defaultVal: string): [string, (val: string) 
         } else {
             query.delete(key);
         }
+
+        if (typeof window !== 'undefined') {
+            const { protocol, pathname, host } = window.location;
+            const newUrl = `${protocol}//${host}${pathname}?${query.toString()}`;
+            window.history.pushState({}, '', newUrl);
+        }
     };
 
     return [query, updateUrl];
