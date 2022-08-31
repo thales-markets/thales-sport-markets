@@ -65,9 +65,9 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                     <Tooltip
                         overlay={
                             <OvertimeVoucherPopup
-                                title={t('quiz.leaderboard.overtime-voucher')}
+                                title={t('common.wallet.overtime-voucher')}
                                 imageSrc={overtimeVoucher.image}
-                                text={`Remaining amount: ${formatCurrencyWithKey(
+                                text={`${t('common.wallet.remaining-amount')}: ${formatCurrencyWithKey(
                                     PAYMENT_CURRENCY,
                                     overtimeVoucher.remainingAmount
                                 )}`}
