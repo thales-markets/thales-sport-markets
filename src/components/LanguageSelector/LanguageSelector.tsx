@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import Tooltip from 'components/Tooltip';
 import i18n from 'i18n';
+import { DEFAULT_LANGUAGE, LanguageNameMap, SupportedLanguages } from 'i18n/config';
+import React, { useState } from 'react';
+import Flag from 'react-flagpack';
+import { withTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import styled from 'styled-components';
-import { DEFAULT_LANGUAGE, LanguageNameMap, SupportedLanguages } from 'i18n/config';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
-import Tooltip from 'components/Tooltip';
-import Flag from 'react-flagpack';
 
 type LanguageSelectorProps = {
     isBurger?: boolean;
@@ -154,7 +154,7 @@ const LanguageName = styled.div`
 `;
 
 const Icon = styled.i`
-    font-size: 26px;
+    font-size: 20px;
     margin-left: 4px;
     margin-right: 7px;
 `;
@@ -163,26 +163,20 @@ const LanguageFlag = (language: SupportedLanguages | any) => {
     switch (language) {
         case SupportedLanguages.ENGLISH:
             return <Flag code="GB-UKM" />;
-
         case SupportedLanguages.CHINESE:
             return <Flag code="CN" />;
-
-        case SupportedLanguages.FRENCH:
-            return <Flag code="FR" />;
-
-        case SupportedLanguages.GERMAN:
-            return <Flag code="DE" />;
-        case SupportedLanguages.ITALIAN:
-            return <Flag code="IT" />;
-
-        case SupportedLanguages.RUSSIAN:
-            return <Flag code="RU" />;
-
-        case SupportedLanguages.SPANISH:
-            return <Flag code="ES" />;
-        case SupportedLanguages.THAI:
-            return <Flag code="TH" />;
-
+        // case SupportedLanguages.FRENCH:
+        //     return <Flag code="FR" />;
+        // case SupportedLanguages.GERMAN:
+        //     return <Flag code="DE" />;
+        // case SupportedLanguages.ITALIAN:
+        //     return <Flag code="IT" />;
+        // case SupportedLanguages.RUSSIAN:
+        //     return <Flag code="RU" />;
+        // case SupportedLanguages.SPANISH:
+        //     return <Flag code="ES" />;
+        // case SupportedLanguages.THAI:
+        //     return <Flag code="TH" />;
         default:
             return <Flag code="GB-UKM" />;
     }
