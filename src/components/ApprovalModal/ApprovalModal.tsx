@@ -123,6 +123,7 @@ const CheckboxContainer = styled(FlexDivCentered)`
         font-size: 25px;
         line-height: 52px;
         padding-left: 32px;
+        font-weight: bold;
     }
     span {
         :after {
@@ -134,6 +135,9 @@ const CheckboxContainer = styled(FlexDivCentered)`
         }
         height: 25px;
         width: 25px;
+        border-radius: 5px;
+        margin-top: 12px;
+        border: 3px solid ${(props) => props.theme.borderColor.secondary};
     }
 `;
 

@@ -80,9 +80,9 @@ const WalletInfo: React.FC = () => {
                     <Tooltip
                         overlay={
                             <OvertimeVoucherPopup
-                                title={t('common.wallet.overtime-voucher')}
+                                title={t('common.voucher.overtime-voucher')}
                                 imageSrc={overtimeVoucher.image}
-                                text={`${t('common.wallet.remaining-amount')}: ${formatCurrencyWithKey(
+                                text={`${t('common.voucher.remaining-amount')}: ${formatCurrencyWithKey(
                                     PAYMENT_CURRENCY,
                                     overtimeVoucher.remainingAmount
                                 )}`}
@@ -91,7 +91,7 @@ const WalletInfo: React.FC = () => {
                         component={
                             <VoucherContainer>
                                 <Wallet>
-                                    <VoucherInfo>{t('common.wallet.voucher')}:</VoucherInfo>
+                                    <VoucherInfo>{t('common.voucher.voucher')}:</VoucherInfo>
                                 </Wallet>
                                 <VoucherBalance>
                                     <Info>{formatCurrency(overtimeVoucher.remainingAmount, 2)}</Info>
@@ -209,9 +209,6 @@ const WalletOptions = styled(FlexDivColumn)`
     z-index: 100;
     background: ${(props) => props.theme.background.secondary};
     color: ${(props) => props.theme.button.textColor.primary};
-    @media (max-width: 767px) {
-        right: -127px;
-    }
 `;
 
 const WalletOptionsHeader = styled(FlexDivCentered)`
