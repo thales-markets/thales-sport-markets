@@ -9,9 +9,15 @@ type HeaderDatepickerProps = {
     gamesPerDay: GamesOnDate[];
     dateFilter: string;
     setDateFilter: (value: any) => void;
+    setDateParam: (value: any) => void;
 };
 
-const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({ gamesPerDay, dateFilter, setDateFilter }) => {
+const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
+    gamesPerDay,
+    dateFilter,
+    setDateFilter,
+    setDateParam,
+}) => {
     const [farLeftDateIndex, setFarLeftDateIndex] = useState(0);
     const [hammerManager, setHammerManager] = useState<any>();
     const DATES_TO_SHOW = useMemo(() => {
@@ -69,6 +75,7 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({ gamesPerDay, dateFi
                             selected={dateFilter === data.date}
                             onClick={() => {
                                 setDateFilter(dateFilter === data.date ? '' : data.date);
+                                setDateParam(dateFilter === data.date ? '' : data.date);
                             }}
                         >
                             <DayLabel>{formatDayOfWeek(new Date(data.date)).toUpperCase()}</DayLabel>
@@ -162,6 +169,7 @@ const DateLabel = styled.span<{ selected?: boolean }>`
     line-height: 17px;
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
 `;
+
 const GamesNumberLabel = styled.span`
     font-style: normal;
     font-weight: 600;

@@ -1,7 +1,12 @@
 import { TAGS_LIST } from '../constants/tags';
 
 export const getTeamImageSource = (team: string, leagueTag: number) =>
-    leagueTag == 9010 || leagueTag == 9012 || leagueTag == 9015 || leagueTag == 9014 || leagueTag == 9007
+    leagueTag == 9010 ||
+    leagueTag == 9012 ||
+    leagueTag == 9015 ||
+    leagueTag == 9014 ||
+    leagueTag == 9007 ||
+    leagueTag == 9016
         ? `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${team
               .trim()
               .replaceAll(' ', '-')
