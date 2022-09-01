@@ -213,20 +213,20 @@
     "rewards": {
         "header": "奖励",
         "search-placeholder": "搜索钱包",
-        "description": "<0>奖励总额为 <0>10,000枚OP代币</0> 和 <0>10,000 枚THALES代币</0>，将在4周内完成分发（每轮持续2周），即每过2周，我们将根据用户亏损的总金额按比例分配<0>5,000 枚OP代币 + 5,000 枚THALES代币。</0><0>所有在这两周内的比赛结果都将被计入，每位用户在每一轮（两周）内参与的所有亏损都将被计入排行榜。</0><1>- 第一轮：8月1日至8月14日。</1><1>- 第二轮：8月15日至8月28日。</1><0>奖励计划将在第二轮结束后进行经调整。</0>",
-        "total-negative-pnl": "所有亏损金额",
+        "description": "<0>There is a total of <0>16,000 OP</0> and <0>16,000 THALES</0> rewards to be distributed in 4 weeks, divided in 2-week periods. <0>8,000 OP + 8,000 THALES</0> will be allocated pro-rata based on the total sum of losses per wallet for each 2-week period.</0><0>All markets that have matured in that 2-week period are accounted for. Individual wallet's losses on each market are added up to get the leaderboard results.</0><1>- First 2-week round is from <0>00:00 UTC August 29</0> until <0>00:00 UTC September 12</0></1><1>- Second 2-week round is from <0>00:00 UTC September 12</0> until <0>00:00 UTC September 26</0></1><0>This incentivized program will be revisited after September 26.</0>",
+        "total-negative-pnl": "Total losses",
         "op-rewards-banner-message": "OP代币奖励已启动, 查看如何领取奖励的指南<bold>如何领取奖励的指南</bold>",
         "table": {
             "wallet-address": "钱包地址",
-            "pnl": "盈亏金额",
+            "pnl": "Losses",
             "percentage": "百分比",
             "reward-amount": "奖励数量",
             "no-data-available": "无法获取数据"
         }
     },
     "quiz": {
-        "title": "体育百科问答",
-        "start-quiz-description": "<p>您需要转推 <quizRetweetLink>贴文</quizRetweetLink> 并成为 <twitter>Overtime</twitter> 的追随者以获得参赛资格。</p><p>开始体育百科问答前，请连接钱包并输入您的推特账号！如果您赢得奖励，我们将会私信你的推特账号以确认地址。Discord账号非必填项，但是如果你希望在Discord获得一个体育百科问答相关的角色标签，我们建议您填写Discord账号。</p><p>如有任何其他问题，请加入我们的 <discord>Discord</discord>咨询。</p>",
+        "title": "Sports Trivia competition",
+        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition where weekly winners will receive NFT Vouchers that can be used instead of sUSD to participate in any sports market you like.</p><p>Read all the information about this trivia in our <blogPost>blog post</blogPost>.</p><p>How to participate? The trivia is available to everyone to test their knowledge and compete, but to be eligible for rewards you need to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime's Twitter</twitter>.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
         "twitter-handle-label": "推特账号",
         "twitter-handle-placeholder": "请输入您的推特账号",
         "twitter-handle-validation": "无效的推特账号，请重新输入",
@@ -249,7 +249,7 @@
         },
         "leaderboard": {
             "title": "体育百科问答排行榜",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition for any given week.</p><p>All the details about how to participate for NFT sUSD vouchers that can be used on any sports market available <blogPost>here</blogPost>.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
             "back-to-quiz": "返回测试",
             "search-placeholder": "搜索...",
             "table": {
@@ -283,8 +283,5 @@
             "4": "困难",
             "5": "极困难"
         }
-    },
-    "test": {
-        "test": "测试"
     }
 }
