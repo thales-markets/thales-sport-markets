@@ -35,7 +35,7 @@
         },
         "unsupported-network": {
             "title": "Oops! Vous êtes sur le mauvais réseau!",
-            "description": " Vous avez sélectionné le mauvais réseau dans votr portefeuille. Pour continuer, SVP changer votre réseau pour Optimism Mainnet.",
+            "description": " Vous avez sélectionné le mauvais réseau dans votre portefeuille. Pour continuer, SVP changer votre réseau pour Optimism Mainnet.",
             "button": {
                 "optimism": "Changer pour Optimism"
             }
