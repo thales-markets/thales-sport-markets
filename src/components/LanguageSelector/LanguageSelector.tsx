@@ -84,7 +84,6 @@ export const LanguageSelectorV2: React.FC<LanguageSelectorProps> = ({ isBurger }
 
 const Container = styled(FlexDivColumnCentered)`
     position: relative;
-    z-index: 1000;
     align-items: flex-end;
     &.burger {
         top: -27px;

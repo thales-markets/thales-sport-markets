@@ -609,7 +609,7 @@ export const multipleCollateral = {
     },
     DAI: {
         addresses: {
-            5: '',
+            5: '0x11fe4b6ae13d2a6055c8d9cf65c55bac32b5d844',
             10: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
             42: '',
             69: '',
@@ -618,7 +618,7 @@ export const multipleCollateral = {
     },
     USDC: {
         addresses: {
-            5: '',
+            5: '0x07865c6e87b9f70255377e024ace6630c1eaa37f',
             10: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
             42: '',
             69: '',

@@ -85,6 +85,12 @@ export const QUERY_KEYS = {
         ],
         SwapApproveSpender: (networkId: NetworkId) => ['wallet', 'swap', 'approveSpender', networkId],
         GetUsdDefaultAmount: (networkId: NetworkId) => ['wallet', 'getUsdDefaultAmount', networkId],
+        OvertimeVoucher: (walletAddress: string, networkId: NetworkId) => [
+            'wallet',
+            'overtimeVoucher',
+            walletAddress,
+            networkId,
+        ],
     },
     Quiz: {
         Leaderboard: () => ['quiz', 'leaderboard'],
