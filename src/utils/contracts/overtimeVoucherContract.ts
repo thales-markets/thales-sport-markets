@@ -1,7 +1,7 @@
 export const overtimeVoucherContract = {
     addresses: {
         5: '0x671f9654a594f8966b19c0b466f306E1dFe912a6',
-        10: '',
+        10: '0xC9183E3306A06E64c2A83E655756F70A83152536',
     },
     abi: [
         {
