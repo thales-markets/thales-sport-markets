@@ -22,7 +22,7 @@
             }
         },
         "swap": {
-            "title": "{{amount}} erhalten",
+            "title": "{{currencyKey}} erhalten",
             "from-label": "Von",
             "to-label": "Zu",
             "balance-label": "Guthaben: {{amount}}",

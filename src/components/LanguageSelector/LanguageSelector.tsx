@@ -1,4 +1,4 @@
-import Tooltip from 'components/Tooltip';
+// import Tooltip from 'components/Tooltip';
 import i18n from 'i18n';
 import { DEFAULT_LANGUAGE, LanguageNameMap, SupportedLanguages } from 'i18n/config';
 import React, { useState } from 'react';
@@ -42,36 +42,18 @@ export const LanguageSelectorV2: React.FC<LanguageSelectorProps> = ({ isBurger }
                                 <DropDownItem
                                     key={language}
                                     onClick={() => {
-                                        i18n.changeLanguage(DEFAULT_LANGUAGE);
+                                        i18n.changeLanguage(language);
                                         setDropdownIsOpen(false);
                                     }}
                                 >
-                                    {language !== SupportedLanguages.ENGLISH ? (
-                                        <>
-                                            {LanguageFlag(language as any)}
-                                            <FlexDivCentered>
-                                                <LanguageName style={{ color: 'grey' }} key={language}>
-                                                    {(LanguageNameMap as any)[language] + '*'}
-                                                </LanguageName>
-                                                <Tooltip
-                                                    overlay={'Coming soon'}
-                                                    component={<Icon className={`icon-exotic icon-exotic--info`} />}
-                                                    iconFontSize={23}
-                                                    marginLeft={2}
-                                                    top={0}
-                                                />
-                                            </FlexDivCentered>
-                                        </>
-                                    ) : (
-                                        <>
-                                            {LanguageFlag(language as any)}
-                                            <FlexDivCentered>
-                                                <LanguageName key={language}>
-                                                    {(LanguageNameMap as any)[language]}
-                                                </LanguageName>
-                                            </FlexDivCentered>
-                                        </>
-                                    )}
+                                    <>
+                                        {LanguageFlag(language as any)}
+                                        <FlexDivCentered>
+                                            <LanguageName key={language}>
+                                                {(LanguageNameMap as any)[language]}
+                                            </LanguageName>
+                                        </FlexDivCentered>
+                                    </>
                                 </DropDownItem>
                             ))}
                         </DropDown>
@@ -153,11 +135,11 @@ const LanguageName = styled.div`
     text-transform: uppercase;
 `;
 
-const Icon = styled.i`
-    font-size: 20px;
-    margin-left: 4px;
-    margin-right: 7px;
-`;
+// const Icon = styled.i`
+//     font-size: 20px;
+//     margin-left: 4px;
+//     margin-right: 7px;
+// `;
 
 const LanguageFlag = (language: SupportedLanguages | any) => {
     switch (language) {
@@ -165,16 +147,16 @@ const LanguageFlag = (language: SupportedLanguages | any) => {
             return <Flag code="GB-UKM" />;
         case SupportedLanguages.CHINESE:
             return <Flag code="CN" />;
-        // case SupportedLanguages.FRENCH:
-        //     return <Flag code="FR" />;
-        // case SupportedLanguages.GERMAN:
-        //     return <Flag code="DE" />;
+        case SupportedLanguages.FRENCH:
+            return <Flag code="FR" />;
+        case SupportedLanguages.GERMAN:
+            return <Flag code="DE" />;
         // case SupportedLanguages.ITALIAN:
         //     return <Flag code="IT" />;
         // case SupportedLanguages.RUSSIAN:
         //     return <Flag code="RU" />;
-        // case SupportedLanguages.SPANISH:
-        //     return <Flag code="ES" />;
+        case SupportedLanguages.SPANISH:
+            return <Flag code="ES" />;
         // case SupportedLanguages.THAI:
         //     return <Flag code="TH" />;
         default:
