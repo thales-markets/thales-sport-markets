@@ -11,6 +11,24 @@
             "get-usd-progress": "Frappe {{amount}}...",
             "disclaimer": "En connectant votre portefeuille vous reconnaissez que vous avez lu et compris <a target=\"_blank\" href={{link}}>disclaimer</a> d’Overtime et accepté les conditions d’utilisation."
         },
+        "voucher": {
+            "remaining-amount": "Remaining amount",
+            "overtime-voucher": "Overtime voucher",
+            "voucher": "Voucher",
+            "mint-voucher": "Mint voucher",
+            "modal": {
+                "title": "Mint Overtime voucher",
+                "voucher-amount-label": "Voucher amount",
+                "another-wallet-label": "Send a voucher to another wallet",
+                "recipient-wallet-label": "Recipient wallet",
+                "recipient-wallet-placeholder": "Enter recipient address",
+                "button": {
+                    "mint-label": "Mint",
+                    "mint-progress-label": "Minting in progress...",
+                    "confirmation-message": "Voucher successfully minted"
+                }
+            }
+        },
         "referral": {
             "link-copied": "Lien de recommandation copié!",
             "button": {
@@ -67,7 +85,9 @@
             "invalid-data-source-extended": "Source de données non valide. La source de données doit être un URL avec https préfixe.",
             "insufficient-balance-wallet": " SVP vous assurez que votre portefeuille a suffisamment {{currencyKey}}",
             "invalid-slippage": "Glissement non valide",
-            "user-rejected-tx": "Utilisateur a rejeté la transaction"
+            "user-rejected-tx": "Utilisateur a rejeté la transaction",
+            "enter-address": "Enter address",
+            "invalid-address": "Invalid address"
         },
         "time-remaining": {
             "ended": "terminé",

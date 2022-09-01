@@ -13,6 +13,24 @@
             "get-usd-progress": "{{amount}} wird gemintet...",
             "disclaimer": "Indem Sie ein Wallet verbinden, bestätigen Sie, dass Sie den Overtime Markets <a target=\"_blank\" href={{link}}>Haftungsausschluss</a> gelesen und verstanden haben und mit den Nutzungsbedingungen einverstanden sind."
         },
+        "voucher": {
+            "remaining-amount": "Remaining amount",
+            "overtime-voucher": "Overtime voucher",
+            "voucher": "Voucher",
+            "mint-voucher": "Mint voucher",
+            "modal": {
+                "title": "Mint Overtime voucher",
+                "voucher-amount-label": "Voucher amount",
+                "another-wallet-label": "Send a voucher to another wallet",
+                "recipient-wallet-label": "Recipient wallet",
+                "recipient-wallet-placeholder": "Enter recipient address",
+                "button": {
+                    "mint-label": "Mint",
+                    "mint-progress-label": "Minting in progress...",
+                    "confirmation-message": "Voucher successfully minted"
+                }
+            }
+        },
         "referral": {
             "link-copied": "Empfehlungs-Link kopiert!",
             "button": {
@@ -49,7 +67,9 @@
             "enter-amount": "Betrag eingeben",
             "enter-price": "Preis eigeben",
             "insufficient-balance-wallet": "Bitte stellen Sie sicher, dass Ihr Wallet genügend {{currencyKey}} enthält",
-            "user-rejected-tx": "Benutzer hat die Transaktion abgelehnt"
+            "user-rejected-tx": "Benutzer hat die Transaktion abgelehnt",
+            "enter-address": "Enter address",
+            "invalid-address": "Invalid address"
         },
         "time-remaining": {
             "ended": "zu Ende",

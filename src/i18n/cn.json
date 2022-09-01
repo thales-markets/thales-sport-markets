@@ -13,6 +13,24 @@
             "get-usd-progress": "铸造 {{amount}}...",
             "disclaimer": "将你的钱包连接到Overtime意味着您已经阅读并理解了参与Overtime活动的风险 <a target=\"_blank\" href={{link}}>免责声明</a> 并决定继续使用."
         },
+        "voucher": {
+            "remaining-amount": "Remaining amount",
+            "overtime-voucher": "Overtime voucher",
+            "voucher": "Voucher",
+            "mint-voucher": "Mint voucher",
+            "modal": {
+                "title": "Mint Overtime voucher",
+                "voucher-amount-label": "Voucher amount",
+                "another-wallet-label": "Send a voucher to another wallet",
+                "recipient-wallet-label": "Recipient wallet",
+                "recipient-wallet-placeholder": "Enter recipient address",
+                "button": {
+                    "mint-label": "Mint",
+                    "mint-progress-label": "Minting in progress...",
+                    "confirmation-message": "Voucher successfully minted"
+                }
+            }
+        },
         "referral": {
             "link-copied": "推广链接已复制!",
             "button": {
@@ -49,7 +67,9 @@
             "enter-amount": "输入金额",
             "enter-price": "输入价格",
             "insufficient-balance-wallet": "请确认您的钱包中有足够的 {{currencyKey}}",
-            "user-rejected-tx": "用户拒绝交易"
+            "user-rejected-tx": "用户拒绝交易",
+            "enter-address": "Enter address",
+            "invalid-address": "Invalid address"
         },
         "time-remaining": {
             "ended": "ended",
