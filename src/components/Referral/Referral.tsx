@@ -20,11 +20,15 @@ const Referral: React.FC = () => {
         if (!walletAddress) {
             return;
         }
-
         const referralPath = matchPath(location.pathname, ROUTES.Markets.Market)
             ? location.pathname
             : ROUTES.Markets.Home;
-        const referralLink = `${window.location.origin}${buildReferralLink(referralPath, walletAddress)}`;
+
+        const referralLink = `${window.location.origin}${buildReferralLink(
+            referralPath,
+            window.location.search,
+            walletAddress
+        )}`;
 
         navigator.clipboard.writeText(referralLink);
         toast(t('common.referral.link-copied'), { type: 'success' });
