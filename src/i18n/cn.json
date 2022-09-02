@@ -20,6 +20,7 @@
             "mint-voucher": "铸造代金券",
             "modal": {
                 "title": "铸造 Overtime 代金券",
+                "description": "<p>Overtime voucher functionality has been implemented per <tip>TIP-76</tip><p/>.",
                 "voucher-amount-label": "代金券金额",
                 "another-wallet-label": "将代金券发送到另一个钱包",
                 "recipient-wallet-label": "代金券的收件人",
@@ -177,7 +178,15 @@
                 "sell": "卖出"
             },
             "no-results": "当前的比赛还没有人参与竞猜。",
-            "no-results-for-wallet": "没有与此钱包相关的交易。"
+            "no-results-for-wallet": "没有与此钱包相关的交易。",
+            "game-col": "游戏",
+            "usd-value-col": "美元价值",
+            "result-col": "结果"
+        },
+        "tooltip": {
+            "amount-exceeded": "Amount exceeded the amount available on AMM",
+            "minimal-amount": "Minimal amount is 1",
+            "no-funds": "Please ensure your wallet has enough funds"
         }
     },
     "markets": {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -22,6 +22,7 @@ import SelectInput from 'components/SelectInput';
 import Checkbox from 'components/fields/Checkbox';
 import { getAddress, isAddress } from 'ethers/lib/utils';
 import { ValidationTooltip } from 'pages/Quiz/styled-components';
+import { LINKS } from 'constants/links';
 
 type MintVoucherModalProps = {
     onClose: () => void;
@@ -215,6 +216,15 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
             shouldCloseOnOverlayClick={false}
         >
             <Container>
+                <Description>
+                    <Trans
+                        i18nKey="common.voucher.modal.description"
+                        components={{
+                            p: <p />,
+                            tip: <DescriptionLink href={LINKS.TIP76} key="tip" />,
+                        }}
+                    />
+                </Description>
                 <InputContainer>
                     <InputLabel>{t('common.voucher.modal.voucher-amount-label')}:</InputLabel>
                     <SelectContainer>
@@ -277,6 +287,40 @@ const Container = styled(FlexDivColumnCentered)`
         width: auto;
     }
 `;
+
+const Description = styled.div`
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+    margin-bottom: 15px;
+    color: ${(props) => props.theme.textColor.primary};
+    p {
+        margin-bottom: 10px;
+    }
+    a {
+        cursor: pointer;
+        color: #91bced;
+        &:hover {
+            color: #00f9ff;
+        }
+    }
+`;
+
+const TextLink = styled.a`
+    color: #91bced;
+    &:hover {
+        color: #00f9ff;
+    }
+`;
+
+const DescriptionLink: React.FC<{ href: string }> = ({ children, href }) => {
+    return (
+        <TextLink target="_blank" rel="noreferrer" href={href}>
+            {children}
+        </TextLink>
+    );
+};
 
 const SelectContainer = styled.div`
     width: 200px;

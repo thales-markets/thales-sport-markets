@@ -654,9 +654,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
     const setTooltipTextMessageTokenAmount = (value: string | number) => {
         if (Number(value) > availablePerSide.positions[selectedPosition].available) {
-            setTooltipTextTokenAmount('Amount exceeded the amount available on AMM');
+            setTooltipTextTokenAmount(t('market.tooltip.amount-exceeded'));
         } else if (value && Number(value) < 1) {
-            setTooltipTextTokenAmount('Minimal amount is 1');
+            setTooltipTextTokenAmount(t('market.tooltip.minimal-amount'));
         } else {
             setTooltipTextTokenAmount('');
         }
@@ -669,7 +669,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
     const setTooltipTextMessageUsdAmount = (value: string | number) => {
         if (Number(value) > paymentTokenBalance) {
-            setTooltipTextUsdAmount('Please ensure your wallet has enough funds');
+            setTooltipTextUsdAmount(t('market.tooltip.no-funds'));
         } else {
             setTooltipTextUsdAmount('');
         }
@@ -718,7 +718,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     }
                 }}
             >
-                {selectedSide}
+                {t(`common.${selectedSide.toLowerCase()}-side`)}
             </SubmitButton>
         );
     };
@@ -734,7 +734,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     return (
         <MarketContainer>
             <WalletInfo market={market} />
-            {!market.resolved && (
+            {!market.gameStarted && (
                 <MarketHeader>
                     <FlexDivCentered>
                         <Toggle
@@ -754,7 +754,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             }}
                         />
                     </FlexDivCentered>
-                    {selectedSide == Side.BUY && !market.resolved && (
+                    {selectedSide == Side.BUY && !market.gameStarted && (
                         <CollateralSelector
                             collateralArray={COLLATERALS}
                             selectedItem={selectedStableIndex}
