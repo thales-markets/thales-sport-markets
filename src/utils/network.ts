@@ -45,7 +45,7 @@ export async function getDefaultNetworkId(): Promise<NetworkId> {
             const provider = (await detectEthereumProvider()) as EthereumProvider;
             if (provider && (provider as any).networkVersion != null) {
                 const networkId = Number((provider as any).networkVersion) as NetworkId;
-                return (networkId | DEFAULT_NETWORK_ID) as NetworkId;
+                return (networkId || DEFAULT_NETWORK_ID) as NetworkId;
             }
         }
         return DEFAULT_NETWORK_ID;
