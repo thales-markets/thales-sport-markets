@@ -10,4 +10,6 @@ export const LINKS = {
     QuizRetweetLink: 'https://twitter.com/OvertimeMarkets',
     QuizSuggestions:
         'https://docs.google.com/forms/d/e/1FAIpQLSc1sRJImAiwDmir6z1cvE5LXjshdxE7OUqzjy96ZdlDw98CAw/viewform',
+    TIP76:
+        'https://thalesmarket.io/governance/thalesgov.eth/0x990df5d0127c63ebddca0f5a75fabf3921741d3b61270106006c3a81bd4c7370',
 };
