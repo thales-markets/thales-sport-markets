@@ -734,7 +734,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     return (
         <MarketContainer>
             <WalletInfo market={market} />
-            {!market.resolved && (
+            {!market.gameStarted && (
                 <MarketHeader>
                     <FlexDivCentered>
                         <Toggle
@@ -754,7 +754,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             }}
                         />
                     </FlexDivCentered>
-                    {selectedSide == Side.BUY && !market.resolved && (
+                    {selectedSide == Side.BUY && !market.gameStarted && (
                         <CollateralSelector
                             collateralArray={COLLATERALS}
                             selectedItem={selectedStableIndex}
