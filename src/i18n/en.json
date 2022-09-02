@@ -13,6 +13,25 @@
             "get-usd-progress": "Minting {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use."
         },
+        "voucher": {
+            "remaining-amount": "Remaining amount",
+            "overtime-voucher": "Overtime voucher",
+            "voucher": "Voucher",
+            "mint-voucher": "Mint voucher",
+            "modal": {
+                "title": "Mint Overtime voucher",
+                "description": "<p>Overtime voucher functionality has been implemented per <tip>TIP-76</tip>.<p/>",
+                "voucher-amount-label": "Voucher amount",
+                "another-wallet-label": "Send a voucher to another wallet",
+                "recipient-wallet-label": "Recipient wallet",
+                "recipient-wallet-placeholder": "Enter recipient address",
+                "button": {
+                    "mint-label": "Mint",
+                    "mint-progress-label": "Minting in progress...",
+                    "confirmation-message": "Voucher successfully minted"
+                }
+            }
+        },
         "referral": {
             "link-copied": "Referral link copied!",
             "button": {
@@ -49,7 +68,9 @@
             "enter-amount": "Enter amount",
             "enter-price": "Enter price",
             "insufficient-balance-wallet": "Please ensure your wallet has sufficient {{currencyKey}}",
-            "user-rejected-tx": "User rejected transaction"
+            "user-rejected-tx": "User rejected transaction",
+            "enter-address": "Enter address",
+            "invalid-address": "Invalid address"
         },
         "time-remaining": {
             "ended": "ended",
@@ -147,6 +168,9 @@
             "position-col": "position",
             "amount-col": "amount",
             "paid-col": "paid",
+            "game-col": "game",
+            "usd-value-col": "usd value",
+            "result-col": "result",
             "tx-status-col": "tx status",
             "type": {
                 "bid": "Bid",
@@ -158,6 +182,11 @@
             },
             "no-results": "No transactions associated with this market.",
             "no-results-for-wallet": "No transactions associated with this wallet."
+        },
+        "tooltip": {
+            "amount-exceeded": "Amount exceeded the amount available on AMM",
+            "minimal-amount": "Minimal amount is 1",
+            "no-funds": "Please ensure your wallet has enough funds"
         }
     },
     "markets": {

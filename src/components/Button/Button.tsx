@@ -24,7 +24,7 @@ const StyledButton = styled.button<{ buttonType: ButtonType; fontSize?: number }
     border: 2px solid ${(props) => props.theme.button.borderColor.secondary};
     color: ${(props) => props.theme.button.textColor.quaternary};
     border-radius: 5px;
-    padding: 1px 20px 0px 20px;
+    padding: 1px 20px 1px 20px;
     font-style: normal;
     font-weight: 400;
     font-size: ${(props) => props.fontSize || 18}px;

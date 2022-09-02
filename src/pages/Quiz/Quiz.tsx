@@ -220,6 +220,8 @@ const Quiz: React.FC = () => {
             }
         } catch (e) {
             console.log(e);
+            // reset quiz when it is stuck in the "try finish" loop
+            handleNewQuiz();
         }
         setIsSubmitting(false);
     };

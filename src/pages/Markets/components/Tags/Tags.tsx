@@ -17,12 +17,21 @@ const Tags: React.FC<TagsProps> = ({ sport, tags, isFinished }) => {
                 return findTagItem ? (
                     <FlexDivCentered key={findTagItem.id}>
                         <SportIcon className={`icon icon--${sport.toLowerCase()}`} />{' '}
-                        <Tag>{sport + ' / ' + findTagItem.label}</Tag>
+                        <Tag>{sport + ' / ' + formatTagLabel(findTagItem.label)}</Tag>
                     </FlexDivCentered>
                 ) : null;
             })}
         </Container>
     );
+};
+
+const formatTagLabel = (label: string) => {
+    switch (label) {
+        case 'UEFA Champions League':
+            return 'UEFA CL';
+        default:
+            return label;
+    }
 };
 
 const Container = styled(FlexDivStart)<{ isFinished?: boolean }>`
