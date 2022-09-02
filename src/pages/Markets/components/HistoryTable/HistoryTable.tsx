@@ -36,7 +36,7 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                         sortable: true,
                     },
                     {
-                        Header: <>Game</>,
+                        Header: <>{t('market.table.game-col')}</>,
                         accessor: 'game',
                         sortType: 'alphanumeric',
                         Cell: (cellProps: CellProps<UserTransaction, UserTransaction['game']>) => (
@@ -87,7 +87,7 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                         sortable: true,
                     },
                     {
-                        Header: <>Usd Value</>,
+                        Header: <>{t('market.table.usd-value-col')}</>,
                         accessor: 'usdValue',
                         Cell: (cellProps: CellProps<UserTransaction, UserTransaction['usdValue']>) => (
                             <p>${formatCurrency(cellProps.cell.value)}</p>
@@ -97,7 +97,7 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                         sortType: 'basic',
                     },
                     {
-                        Header: <>Result</>,
+                        Header: <>{t('market.table.result-col')}</>,
                         accessor: 'result',
                         Cell: (cellProps: CellProps<UserTransaction, UserTransaction['result']>) => (
                             <>

@@ -177,7 +177,10 @@
                 "sell": "SELL"
             },
             "no-results": "No transactions associated with this market.",
-            "no-results-for-wallet": "No transactions associated with this wallet."
+            "no-results-for-wallet": "No transactions associated with this wallet.",
+            "game-col": "เกม",
+            "usd-value-col": "มูลค่าดอลลาร์สหรัฐ",
+            "result-col": "ผลลัพธ์"
         }
     },
     "markets": {
