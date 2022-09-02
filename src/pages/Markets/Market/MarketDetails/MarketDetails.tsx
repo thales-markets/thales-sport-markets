@@ -905,7 +905,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             </InfoValue>
                         </InfoRow>
                         <InfoRow>
-                            <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
+                            <InfoTitle>{t('markets.market-details.liquidity')}:</InfoTitle>
                             <InfoValue>
                                 {availablePerSideQuery.isLoading
                                     ? '-'
