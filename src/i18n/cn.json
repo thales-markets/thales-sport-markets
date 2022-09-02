@@ -14,20 +14,20 @@
             "disclaimer": "将你的钱包连接到Overtime意味着您已经阅读并理解了参与Overtime活动的风险 <a target=\"_blank\" href={{link}}>免责声明</a> 并决定继续使用."
         },
         "voucher": {
-            "remaining-amount": "Remaining amount",
-            "overtime-voucher": "Overtime voucher",
-            "voucher": "Voucher",
-            "mint-voucher": "Mint voucher",
+            "remaining-amount": "余额",
+            "overtime-voucher": "Overtime 代金券",
+            "voucher": "代金券",
+            "mint-voucher": "铸造代金券",
             "modal": {
-                "title": "Mint Overtime voucher",
-                "voucher-amount-label": "Voucher amount",
-                "another-wallet-label": "Send a voucher to another wallet",
-                "recipient-wallet-label": "Recipient wallet",
-                "recipient-wallet-placeholder": "Enter recipient address",
+                "title": "铸造 Overtime 代金券",
+                "voucher-amount-label": "代金券金额",
+                "another-wallet-label": "将代金券发送到另一个钱包",
+                "recipient-wallet-label": "代金券的收件人",
+                "recipient-wallet-placeholder": "输入收件人的钱包",
                 "button": {
-                    "mint-label": "Mint",
-                    "mint-progress-label": "Minting in progress...",
-                    "confirmation-message": "Voucher successfully minted"
+                    "mint-label": "铸造",
+                    "mint-progress-label": "铸造中...",
+                    "confirmation-message": "代金券铸造成功"
                 }
             }
         },
@@ -191,7 +191,7 @@
             "pending-resolution": "等待结果",
             "claim": "领取",
             "coming-soon": "即将开始",
-            "vs": "vs",
+            "vs": "对决",
             "draw": "平手"
         },
         "market-details": {
@@ -213,20 +213,20 @@
     "rewards": {
         "header": "奖励",
         "search-placeholder": "搜索钱包",
-        "description": "<0>奖励总额为 <0>10,000枚OP代币</0> 和 <0>10,000 枚THALES代币</0>，将在4周内完成分发（每轮持续2周），即每过2周，我们将根据用户亏损的总金额按比例分配<0>5,000 枚OP代币 + 5,000 枚THALES代币。</0><0>所有在这两周内的比赛结果都将被计入，每位用户在每一轮（两周）内参与的所有亏损都将被计入排行榜。</0><1>- 第一轮：8月1日至8月14日。</1><1>- 第二轮：8月15日至8月28日。</1><0>奖励计划将在第二轮结束后进行经调整。</0>",
+        "description": "<0>奖励总额为 <0>16,000枚OP代币</0> 和 <0>16,000 枚THALES代币</0>，将在4周内完成分发（每轮持续2周），即每过2周，我们将根据用户亏损的总金额按比例分配<0>8,000 枚OP代币 + 8,000 枚THALES代币。</0><0>所有在这两周内的比赛结果都将被计入，每位用户在每一轮（两周）内参与的所有亏损都将被计入排行榜。</0><1>- 第一轮：8月29日至9月12日。</1><1>- 第二轮：9月12日至9月26日。</1><0>奖励计划将在第二轮结束后进行经调整。</0>",
         "total-negative-pnl": "所有亏损金额",
         "op-rewards-banner-message": "OP代币奖励已启动, 查看如何领取<bold>OP代币奖励攻略</bold>",
         "table": {
             "wallet-address": "钱包地址",
-            "pnl": "Losses",
+            "pnl": "亏损金额",
             "percentage": "百分比",
             "reward-amount": "奖励数量",
             "no-data-available": "无法获取数据"
         }
     },
     "quiz": {
-        "title": "Sports Trivia competition",
-        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition where weekly winners will receive NFT Vouchers that can be used instead of sUSD to participate in any sports market you like.</p><p>Read all the information about this trivia in our <blogPost>blog post</blogPost>.</p><p>How to participate? The trivia is available to everyone to test their knowledge and compete, but to be eligible for rewards you need to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime's Twitter</twitter>.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
+        "title": "体育百科竞赛",
+        "start-quiz-description": "<p>学富五车的体育迷们，准备用你的知识赢得奖金了吗？</p><p>Overtime启动了体育百科问答竞赛，每周排行榜上的赢家都将获得可在平台使用的sUSD代金券（NFT）。</p><p>阅读这篇<blogPost>攻略</blogPost>可以获得关于体育百科问答的所有信息。</p><p>如何参与呢? 体育百科问答竞赛是一个开放的竞技平台，参与者只需要转发这篇<quizRetweetLink>推文</quizRetweetLink> 并赶住 <twitter>Overtime的推特账号</twitter>即可获得参与资格。</p><p>现在就连上你的钱包，输入推特账号，参与知识问答吧！注意当你获得奖励资格时，我们会私信你的推特账户以确认钱包地址。另外，如果你想让自己在Discord上获得一个额外的“体育百科知识胜者”的身份，那么也可以输入Discord账号。</p><p>如果有其他任何问题，请加入我们的<discord>Discord</discord>.</p>",
         "twitter-handle-label": "推特账号",
         "twitter-handle-placeholder": "请输入您的推特账号",
         "twitter-handle-validation": "无效的推特账号，请重新输入",
@@ -238,7 +238,7 @@
         "point-label": "分",
         "points-label": "分",
         "quiz-finished-label": "问答完成!",
-        "your-score-label": "您的得分: {{score}}/{{max}} points",
+        "your-score-label": "您的得分: {{score}}/{{max}} 分",
         "button": {
             "start-quiz-label": "开始测试",
             "next-question-label": "下一个问题",
@@ -248,8 +248,8 @@
             "see-leaderboard-label": "查看排行榜"
         },
         "leaderboard": {
-            "title": "体育百科问答排行榜",
-            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition for any given week.</p><p>All the details about how to participate for NFT sUSD vouchers that can be used on any sports market available <blogPost>here</blogPost>.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
+            "title": "体育百科竞赛排行榜",
+            "description": "<p>这是体育百科知识竞赛的排行榜，您可以在这里看到自己参赛的表现。</p><p>阅读这篇<blogPost>攻略</blogPost>，获得所有关于赢得Overtime代金券的信息。</p><p>您可以不限次数地参加<sportsTrivia>体育百科知识竞赛</sportsTrivia>以获得最满意的成绩。</p>",
             "back-to-quiz": "返回测试",
             "search-placeholder": "搜索...",
             "table": {
