@@ -181,6 +181,11 @@
             "result-col": "risultato",
             "usd-value-col": "valore in usd",
             "game-col": "gioco"
+        },
+        "tooltip": {
+            "amount-exceeded": "Amount exceeded the amount available on AMM",
+            "minimal-amount": "Minimal amount is 1",
+            "no-funds": "Please ensure your wallet has enough funds"
         }
     },
     "markets": {
