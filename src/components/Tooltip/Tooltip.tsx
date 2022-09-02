@@ -23,22 +23,15 @@ const Tooltip: React.FC<TooltipProps> = ({
     overlayClassName,
 }) => {
     return (
-        <Container>
-            <ReactTooltip overlay={overlay} placement="top" overlayClassName={overlayClassName || ''}>
-                {component ? (
-                    component
-                ) : (
-                    <InfoIcon iconFontSize={iconFontSize} marginLeft={marginLeft} top={top} style={customIconStyling} />
-                )}
-            </ReactTooltip>
-        </Container>
+        <ReactTooltip overlay={overlay} placement="top" overlayClassName={overlayClassName || ''}>
+            {component ? (
+                component
+            ) : (
+                <InfoIcon iconFontSize={iconFontSize} marginLeft={marginLeft} top={top} style={customIconStyling} />
+            )}
+        </ReactTooltip>
     );
 };
-
-const Container = styled.span`
-    position: relative;
-    width: fit-content;
-`;
 
 const InfoIcon = styled.i<{ iconFontSize?: number; marginLeft?: number; top?: number }>`
     font-size: ${(props) => props.iconFontSize || 17}px;

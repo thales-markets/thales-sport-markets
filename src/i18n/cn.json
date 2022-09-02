@@ -13,6 +13,24 @@
             "get-usd-progress": "铸造 {{amount}}...",
             "disclaimer": "将你的钱包连接到Overtime意味着您已经阅读并理解了参与Overtime活动的风险 <a target=\"_blank\" href={{link}}>免责声明</a> 并决定继续使用."
         },
+        "voucher": {
+            "remaining-amount": "Remaining amount",
+            "overtime-voucher": "Overtime voucher",
+            "voucher": "Voucher",
+            "mint-voucher": "Mint voucher",
+            "modal": {
+                "title": "Mint Overtime voucher",
+                "voucher-amount-label": "Voucher amount",
+                "another-wallet-label": "Send a voucher to another wallet",
+                "recipient-wallet-label": "Recipient wallet",
+                "recipient-wallet-placeholder": "Enter recipient address",
+                "button": {
+                    "mint-label": "Mint",
+                    "mint-progress-label": "Minting in progress...",
+                    "confirmation-message": "Voucher successfully minted"
+                }
+            }
+        },
         "referral": {
             "link-copied": "推广链接已复制!",
             "button": {
@@ -49,7 +67,9 @@
             "enter-amount": "输入金额",
             "enter-price": "输入价格",
             "insufficient-balance-wallet": "请确认您的钱包中有足够的 {{currencyKey}}",
-            "user-rejected-tx": "用户拒绝交易"
+            "user-rejected-tx": "用户拒绝交易",
+            "enter-address": "Enter address",
+            "invalid-address": "Invalid address"
         },
         "time-remaining": {
             "ended": "ended",
@@ -91,7 +111,7 @@
         "question-label": "问题标签",
         "time-remaining-label": "按剩余时间排序",
         "sport": "按运动项目排序",
-        "pay-with": "选择支付的稳定币:",
+        "pay-with": "选择支付的稳定币",
         "status-label": "状态",
         "tags-label": "标签",
         "search-placeholder": "搜索比赛",
@@ -145,8 +165,8 @@
             "date-time-col": "时间",
             "type-col": "类型",
             "position-col": "预测结果",
-            "amount-col": "数量",
-            "paid-col": "支付",
+            "amount-col": "头寸数量",
+            "paid-col": "支付金额",
             "tx-status-col": "状态",
             "type": {
                 "bid": "出价",
@@ -157,7 +177,10 @@
                 "sell": "卖出"
             },
             "no-results": "当前的比赛还没有人参与竞猜。",
-            "no-results-for-wallet": "没有与此钱包相关的交易。"
+            "no-results-for-wallet": "没有与此钱包相关的交易。",
+            "game-col": "游戏",
+            "usd-value-col": "美元价值",
+            "result-col": "结果"
         }
     },
     "markets": {
@@ -195,18 +218,18 @@
         "search-placeholder": "搜索钱包",
         "description": "<0>奖励总额为 <0>10,000枚OP代币</0> 和 <0>10,000 枚THALES代币</0>，将在4周内完成分发（每轮持续2周），即每过2周，我们将根据用户亏损的总金额按比例分配<0>5,000 枚OP代币 + 5,000 枚THALES代币。</0><0>所有在这两周内的比赛结果都将被计入，每位用户在每一轮（两周）内参与的所有亏损都将被计入排行榜。</0><1>- 第一轮：8月1日至8月14日。</1><1>- 第二轮：8月15日至8月28日。</1><0>奖励计划将在第二轮结束后进行经调整。</0>",
         "total-negative-pnl": "所有亏损金额",
-        "op-rewards-banner-message": "OP代币奖励已启动, 查看如何领取奖励的指南<bold>如何领取奖励的指南</bold>",
+        "op-rewards-banner-message": "OP代币奖励已启动, 查看如何领取<bold>OP代币奖励攻略</bold>",
         "table": {
             "wallet-address": "钱包地址",
-            "pnl": "盈亏金额",
+            "pnl": "Losses",
             "percentage": "百分比",
             "reward-amount": "奖励数量",
             "no-data-available": "无法获取数据"
         }
     },
     "quiz": {
-        "title": "体育百科问答",
-        "start-quiz-description": "<p>您需要转推 <quizRetweetLink>贴文</quizRetweetLink> 并成为 <twitter>Overtime</twitter> 的追随者以获得参赛资格。</p><p>开始体育百科问答前，请连接钱包并输入您的推特账号！如果您赢得奖励，我们将会私信你的推特账号以确认地址。Discord账号非必填项，但是如果你希望在Discord获得一个体育百科问答相关的角色标签，我们建议您填写Discord账号。</p><p>如有任何其他问题，请加入我们的 <discord>Discord</discord>咨询。</p>",
+        "title": "Sports Trivia competition",
+        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition where weekly winners will receive NFT Vouchers that can be used instead of sUSD to participate in any sports market you like.</p><p>Read all the information about this trivia in our <blogPost>blog post</blogPost>.</p><p>How to participate? The trivia is available to everyone to test their knowledge and compete, but to be eligible for rewards you need to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime's Twitter</twitter>.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
         "twitter-handle-label": "推特账号",
         "twitter-handle-placeholder": "请输入您的推特账号",
         "twitter-handle-validation": "无效的推特账号，请重新输入",
@@ -215,8 +238,8 @@
         "current-question-label": "当前问题: {{currentQuestion}}/{{numberOfQuestions}}",
         "time-reamining-label": "剩余时间: <0/>",
         "question-weight-label": "问题分数: {{points}}",
-        "point-label": "分数",
-        "points-label": "分数",
+        "point-label": "分",
+        "points-label": "分",
         "quiz-finished-label": "问答完成!",
         "your-score-label": "您的得分: {{score}}/{{max}} points",
         "button": {
@@ -229,7 +252,7 @@
         },
         "leaderboard": {
             "title": "体育百科问答排行榜",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition for any given week.</p><p>All the details about how to participate for NFT sUSD vouchers that can be used on any sports market available <blogPost>here</blogPost>.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
             "back-to-quiz": "返回测试",
             "search-placeholder": "搜索...",
             "table": {
@@ -263,8 +286,5 @@
             "4": "困难",
             "5": "极困难"
         }
-    },
-    "test": {
-        "test": "测试"
     }
 }

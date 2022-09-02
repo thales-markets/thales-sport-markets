@@ -39,12 +39,11 @@ const Input = styled.input`
 const Container = styled.label`
     display: block;
     position: relative;
-    padding-left: 35px;
+    padding-left: 25px;
     cursor: pointer;
     font-style: normal;
-    font-weight: bold;
-    font-size: 40px;
-    line-height: 55px;
+    font-size: 18px;
+    line-height: 20px;
     color: ${(props) => props.theme.textColor.primary};
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -61,7 +60,7 @@ const Container = styled.label`
         opacity: 0.4;
         cursor: default;
     }
-    align-self: center;
+    align-self: start;
     white-space: nowrap;
 `;
 
@@ -69,22 +68,21 @@ const Checkmark = styled.span`
     position: absolute;
     top: 0;
     left: 0;
-    height: 29px;
-    width: 29px;
-    border: 3px solid ${(props) => props.theme.borderColor.primary};
+    height: 19px;
+    width: 19px;
+    border: 2px solid ${(props) => props.theme.borderColor.secondary};
     background-color: transparent;
-    border-radius: 5px;
-    margin-top: 12px;
+    border-radius: 3px;
     :after {
         content: '';
         position: absolute;
         display: none;
-        left: 7px;
-        top: -2px;
-        width: 6px;
-        height: 19px;
-        border: solid ${(props) => props.theme.borderColor.primary};
-        border-width: 0 3px 3px 0;
+        left: 5px;
+        top: -1px;
+        width: 4px;
+        height: 12px;
+        border: solid ${(props) => props.theme.borderColor.secondary};
+        border-width: 0 2px 2px 0;
         -webkit-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);

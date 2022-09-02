@@ -67,7 +67,9 @@
             "invalid-data-source-extended": "Source de données non valide. La source de données doit être un URL avec https préfixe.",
             "insufficient-balance-wallet": " SVP vous assurez que votre portefeuille a suffisamment {{currencyKey}}",
             "invalid-slippage": "Glissement non valide",
-            "user-rejected-tx": "Utilisateur a rejeté la transaction"
+            "user-rejected-tx": "Utilisateur a rejeté la transaction",
+            "invalid-address": "Adresse invalide",
+            "enter-address": "Entrer l'adresse"
         },
         "time-remaining": {
             "ended": "terminé",
@@ -102,7 +104,25 @@
         "guidelines": "Lignes directrices",
         "built-on": "Bâtit sur",
         "sell-side": "VENDRE",
-        "buy-side": "ACHETER"
+        "buy-side": "ACHETER",
+        "voucher": {
+            "modal": {
+                "button": {
+                    "confirmation-message": "Coupon émis avec succès",
+                    "mint-label": "Comme",
+                    "mint-progress-label": "Frappe en cours..."
+                },
+                "recipient-wallet-placeholder": "Saisissez l'adresse du destinataire",
+                "voucher-amount-label": "Montant du bon d'achat",
+                "another-wallet-label": "Envoyer un bon vers un autre wallet",
+                "title": "Bon d'heures supplémentaires à la menthe",
+                "recipient-wallet-label": "Portefeuille du destinataire"
+            },
+            "overtime-voucher": "Bon d'heures supplémentaires",
+            "remaining-amount": "Montant restant",
+            "mint-voucher": "Bon d'achat",
+            "voucher": "Bon"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TOUS DROITS RÉSERVÉS."
@@ -244,7 +264,10 @@
             },
             "no-results": "Aucune transaction est associée avec ce marché.",
             "paid-col": "payé",
-            "no-results-for-wallet": "Aucune transaction associée à ce portefeuille."
+            "no-results-for-wallet": "Aucune transaction associée à ce portefeuille.",
+            "usd-value-col": "valeur en USD",
+            "result-col": "résultat",
+            "game-col": "Jeu"
         },
         "skew-tooltip": "Skew Impact est le montant de la prime ajoutée à un prix de position basé sur le risque actuel que l'AMM encourt sur ce marché spécifique."
     },

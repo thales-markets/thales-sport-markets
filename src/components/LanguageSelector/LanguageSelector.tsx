@@ -66,7 +66,6 @@ export const LanguageSelectorV2: React.FC<LanguageSelectorProps> = ({ isBurger }
 
 const Container = styled(FlexDivColumnCentered)`
     position: relative;
-    z-index: 1000;
     align-items: flex-end;
     &.burger {
         top: -27px;
@@ -94,6 +93,7 @@ const DropDown = styled(FlexDivColumn)`
     padding: 8px;
     top: 40px;
     left: 0;
+    z-index: 1000;
     &.language-dropdown {
         position: relative;
         box-shadow: none;

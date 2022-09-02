@@ -38,17 +38,17 @@ const App = () => {
 
     useEffect(() => {
         const init = async () => {
-            const networkId = await getDefaultNetworkId();
+            const providerNetworkId = await getDefaultNetworkId();
             try {
-                dispatch(updateNetworkSettings({ networkId }));
+                dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
                 if (!networkConnector.initialized) {
                     const provider = loadProvider({
-                        networkId,
+                        networkId: providerNetworkId,
                         infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
                         provider: window.ethereum,
                     });
 
-                    networkConnector.setNetworkSettings({ networkId, provider });
+                    networkConnector.setNetworkSettings({ networkId: providerNetworkId, provider });
                 }
                 dispatch(setAppReady());
             } catch (e) {
@@ -58,6 +58,14 @@ const App = () => {
         };
 
         init();
+    }, [dispatch, networkId]);
+
+    useEffect(() => {
+        if (window.ethereum) {
+            window.ethereum.on('chainChanged', (chainId) => {
+                dispatch(updateNetworkSettings({ networkId: parseInt(chainId, 16) }));
+            });
+        }
     }, [dispatch]);
 
     useEffect(() => {

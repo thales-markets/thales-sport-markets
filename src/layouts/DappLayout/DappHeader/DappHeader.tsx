@@ -16,6 +16,7 @@ import sportTriviaIcon from 'assets/images/sport-trivia.svg';
 import LanguageSelector from 'components/LanguageSelector';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import useInterval from 'hooks/useInterval';
+import MintVoucher from 'components/MintVoucher';
 
 const PULSING_COUNT = 10;
 
@@ -43,6 +44,7 @@ const DappHeader: React.FC = () => {
                 </SPAAnchor>
                 <Referral />
                 {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
+                <MintVoucher />
                 <LanguageSelector />
                 <WalletInfo />
             </RightContainer>
