@@ -59,7 +59,7 @@ const UserHistory: React.FC = () => {
                     // @ts-ignore
                     usdValue: tx.paid,
                     // @ts-ignore
-                    positionTeam: market[`${tx.position.toLowerCase()}Team`] || 'Draw',
+                    positionTeam: market[`${tx.position.toLowerCase()}Team`] || t('markets.market-card.draw'),
                     link: getEtherscanTxLink(networkId, tx.hash),
                 };
             } else {

@@ -177,7 +177,10 @@
                 "sell": "SELL"
             },
             "no-results": "No transactions associated with this market.",
-            "no-results-for-wallet": "No transactions associated with this wallet."
+            "no-results-for-wallet": "No transactions associated with this wallet.",
+            "usd-value-col": "стоимость в долларах",
+            "game-col": "игра",
+            "result-col": "результат"
         }
     },
     "markets": {

@@ -177,7 +177,10 @@
                 "sell": "VENDER"
             },
             "no-results": "No hay transacciones asociadas con este mercado.",
-            "no-results-for-wallet": "No hay transacciones asociadas con esta billetera."
+            "no-results-for-wallet": "No hay transacciones asociadas con esta billetera.",
+            "usd-value-col": "valor usd",
+            "game-col": "juego",
+            "result-col": "resultado"
         }
     },
     "markets": {

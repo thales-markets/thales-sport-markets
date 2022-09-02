@@ -167,6 +167,9 @@
             "position-col": "position",
             "amount-col": "amount",
             "paid-col": "paid",
+            "game-col": "game",
+            "usd-value-col": "usd value",
+            "result-col": "result",
             "tx-status-col": "tx status",
             "type": {
                 "bid": "Bid",

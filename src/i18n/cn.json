@@ -177,7 +177,10 @@
                 "sell": "卖出"
             },
             "no-results": "当前的比赛还没有人参与竞猜。",
-            "no-results-for-wallet": "没有与此钱包相关的交易。"
+            "no-results-for-wallet": "没有与此钱包相关的交易。",
+            "game-col": "游戏",
+            "usd-value-col": "美元价值",
+            "result-col": "结果"
         }
     },
     "markets": {
