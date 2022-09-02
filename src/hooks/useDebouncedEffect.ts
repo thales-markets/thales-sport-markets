@@ -13,6 +13,7 @@ export function useDebouncedEffect(
     const { leading, trailing } = options;
     const [_dependency, _setdependency] = useState(dependency);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const makeChangeTodependency = useCallback(
         debounce(
             (dependency) => {
@@ -28,8 +29,9 @@ export function useDebouncedEffect(
         if (dependency) {
             makeChangeTodependency(dependency);
         }
-    }, dependency);
+    }, [dependency, makeChangeTodependency]);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(callback, _dependency);
 }
 

@@ -1,3 +1,4 @@
+import { COLLATERAL_INDEX_TO_COLLATERAL, STABLE_DECIMALS } from 'constants/currency';
 import { ZERO_ADDRESS } from 'constants/network';
 import { Position } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
@@ -6,9 +7,12 @@ import { getCollateralAddress } from './collaterals';
 
 export const getAMMSportsTransaction: any = (
     isBuy: boolean,
+    isVoucherSelected: boolean,
+    voucherId: number,
     stableIndex: number,
     networkId: NetworkId,
     sportsAMMContract: ethers.Contract,
+    overtimeVoucherContract: ethers.Contract,
     marketAddress: string,
     selectedPosition: Position,
     parsedAmount: BigNumber,
@@ -27,6 +31,15 @@ export const getAMMSportsTransaction: any = (
     );
 
     if (isBuy) {
+        if (isVoucherSelected) {
+            return overtimeVoucherContract?.buyFromAMMWithVoucher(
+                marketAddress,
+                selectedPosition,
+                parsedAmount,
+                voucherId
+            );
+        }
+
         if (stableIndex !== 0 && collateralAddress) {
             return sportsAMMContract?.buyFromAMMWithDifferentCollateralAndReferrer(
                 marketAddress,
@@ -99,4 +112,14 @@ export const getSportsAMMQuoteMethod: any = (
     } else {
         return sportsAMMContract.sellToAmmQuote(marketAddress, selectedPosition, parsedAmount);
     }
+};
+
+export const getAmountForApproval = (stableIndex: number, amountToApprove: string) => {
+    const stable = (COLLATERAL_INDEX_TO_COLLATERAL as any)[stableIndex];
+
+    let collateralDecimals = 18;
+
+    if ((STABLE_DECIMALS as any)[stable]) collateralDecimals = (STABLE_DECIMALS as any)[stable];
+
+    return ethers.utils.parseUnits(amountToApprove, collateralDecimals);
 };

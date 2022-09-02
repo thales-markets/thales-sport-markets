@@ -23,6 +23,9 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
+const Rewards = lazy(() => import('pages/Rewards'));
+const Quiz = lazy(() => import('pages/Quiz'));
+const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
 
 const App = () => {
     const dispatch = useDispatch();
@@ -35,17 +38,17 @@ const App = () => {
 
     useEffect(() => {
         const init = async () => {
-            const networkId = await getDefaultNetworkId();
+            const providerNetworkId = await getDefaultNetworkId();
             try {
-                dispatch(updateNetworkSettings({ networkId }));
+                dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
                 if (!networkConnector.initialized) {
                     const provider = loadProvider({
-                        networkId,
+                        networkId: providerNetworkId,
                         infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
                         provider: window.ethereum,
                     });
 
-                    networkConnector.setNetworkSettings({ networkId, provider });
+                    networkConnector.setNetworkSettings({ networkId: providerNetworkId, provider });
                 }
                 dispatch(setAppReady());
             } catch (e) {
@@ -55,10 +58,18 @@ const App = () => {
         };
 
         init();
-    }, []);
+    }, [dispatch, networkId]);
 
     useEffect(() => {
-        if (isAppReady && networkId && isNetworkSupported(networkId)) {
+        if (window.ethereum) {
+            window.ethereum.on('chainChanged', (chainId) => {
+                dispatch(updateNetworkSettings({ networkId: parseInt(chainId, 16) }));
+            });
+        }
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (networkId && isNetworkSupported(networkId) && setSelectedWallet) {
             const onboard = initOnboard(networkId, {
                 address: (walletAddress) => {
                     if (walletAddress) {
@@ -111,18 +122,19 @@ const App = () => {
             });
             onboardConnector.setOnBoard(onboard);
         }
-    }, [isAppReady]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, isAppReady, setSelectedWallet]);
 
     // load previously saved wallet
     useEffect(() => {
         if (onboardConnector.onboard && selectedWallet) {
             onboardConnector.onboard.walletSelect(selectedWallet);
         }
-    }, [isAppReady, onboardConnector.onboard, selectedWallet]);
+    }, [isAppReady, selectedWallet]);
 
     useEffect(() => {
         trackPageView();
-    }, []);
+    }, [trackPageView]);
 
     return (
         <Theme>
@@ -140,13 +152,28 @@ const App = () => {
                                 )}
                             />
                             <Route exact path={ROUTES.Markets.Home}>
-                                <DappLayout showSearch>
+                                <DappLayout>
                                     <Markets />
                                 </DappLayout>
                             </Route>
                             <Route exact path={ROUTES.Home}>
                                 <Redirect to={ROUTES.Markets.Home} />
                                 {/*<HomeLayout />*/}
+                            </Route>
+                            <Route exact path={ROUTES.Rewards}>
+                                <DappLayout>
+                                    <Rewards />
+                                </DappLayout>
+                            </Route>
+                            <Route exact path={ROUTES.Quiz}>
+                                <DappLayout>
+                                    <Quiz />
+                                </DappLayout>
+                            </Route>
+                            <Route exact path={ROUTES.QuizLeaderboard}>
+                                <DappLayout>
+                                    <QuizLeaderboard />
+                                </DappLayout>
                             </Route>
                         </Switch>
                     </Router>

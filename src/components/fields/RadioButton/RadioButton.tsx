@@ -35,7 +35,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
                 className={className}
                 disabled={disabled}
             />
-            <Checkmark className="checkmark" />
+            <Checkmark className="checkmark" checked={checked} />
             {tooltip && (
                 <Tooltip
                     overlay={<OverlayContainer>{tooltip}</OverlayContainer>}
@@ -59,13 +59,13 @@ const Input = styled.input`
 const Container = styled.label`
     display: flex;
     position: relative;
-    padding-left: 25px;
+    padding-left: 32px;
     cursor: pointer;
     font-style: normal;
-    font-weight: normal;
-    font-size: 25px;
-    line-height: 35px;
-    height: 35px;
+    font-weight: 600;
+    font-size: 19px;
+    line-height: 25px;
+    min-height: 35px;
     color: ${(props) => props.theme.textColor.primary};
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -82,29 +82,30 @@ const Container = styled.label`
         opacity: 0.4;
         cursor: default;
     }
-    align-self: center;
+    margin-bottom: 6px;
+    align-self: start;
 `;
 
-const Checkmark = styled.span`
+const Checkmark = styled.span<{ checked: boolean }>`
     position: absolute;
     top: 0;
     left: 0;
-    height: 20px;
-    width: 20px;
-    border: 4px solid ${(props) => props.theme.borderColor.primary};
+    height: 24px;
+    width: 24px;
+    border: 4px solid ${(props) => (props.checked ? '#5fc694' : '#5F6180')};
     background-color: transparent;
     border-radius: 50%;
-    margin-top: 6px;
+    margin-top: 0px;
     :after {
         content: '';
         position: absolute;
         display: none;
-        left: 2px;
-        top: 2px;
-        width: 8px;
-        height: 8px;
+        left: 3px;
+        top: 3px;
+        width: 10px;
+        height: 10px;
         border-radius: 50%;
-        background: ${(props) => props.theme.borderColor.primary};
+        background: #5fc694;
         -webkit-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);

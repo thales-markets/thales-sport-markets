@@ -12,9 +12,11 @@ import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
+import { getAmountForApproval } from 'utils/amm';
 
 type ApprovalModalProps = {
     defaultAmount: number | string;
+    collateralIndex?: number;
     tokenSymbol: string;
     isAllowing: boolean;
     onSubmit: (approveAmount: BigNumber) => void;
@@ -23,6 +25,7 @@ type ApprovalModalProps = {
 
 export const ApprovalModal: React.FC<ApprovalModalProps> = ({
     defaultAmount,
+    collateralIndex,
     tokenSymbol,
     isAllowing,
     onSubmit,
@@ -38,6 +41,8 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
     const isAmountEntered = Number(amount) > 0;
     const isButtonDisabled = !isWalletConnected || isAllowing || (!approveAll && (!isAmountEntered || !isAmountValid));
 
+    const amountConverted = getAmountForApproval(collateralIndex ? collateralIndex : 0, Number(amount).toString());
+
     const getSubmitButton = () => {
         if (!isWalletConnected) {
             return (
@@ -52,11 +57,7 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
         return (
             <ModalButton
                 disabled={isButtonDisabled}
-                onClick={() =>
-                    onSubmit(
-                        approveAll ? ethers.constants.MaxUint256 : ethers.utils.parseEther(Number(amount).toString())
-                    )
-                }
+                onClick={() => onSubmit(approveAll ? ethers.constants.MaxUint256 : amountConverted)}
             >
                 {!isAllowing
                     ? t('common.enable-wallet-access.approve-label', { currencyKey: tokenSymbol })
@@ -69,7 +70,7 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
 
     useEffect(() => {
         setIsAmountValid(Number(amount) === 0 || (Number(amount) > 0 && Number(amount) <= maxApproveAmount));
-    }, [amount]);
+    }, [amount, maxApproveAmount]);
 
     return (
         <Modal
@@ -122,6 +123,7 @@ const CheckboxContainer = styled(FlexDivCentered)`
         font-size: 25px;
         line-height: 52px;
         padding-left: 32px;
+        font-weight: bold;
     }
     span {
         :after {
@@ -133,6 +135,9 @@ const CheckboxContainer = styled(FlexDivCentered)`
         }
         height: 25px;
         width: 25px;
+        border-radius: 5px;
+        margin-top: 12px;
+        border: 3px solid ${(props) => props.theme.borderColor.secondary};
     }
 `;
 

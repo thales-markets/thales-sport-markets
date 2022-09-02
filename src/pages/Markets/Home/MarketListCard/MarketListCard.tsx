@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
-import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
+import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isClaimAvailable } from 'utils/markets';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
@@ -21,23 +21,26 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
         setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
-    }, [market.homeTeam, market.awayTeam]);
+    }, [market.homeTeam, market.awayTeam, market.tags]);
 
     return (
-        <Container
-            // backgroundColor={'rgba(48, 54, 86, 0.5)'}
-            claimBorder={claimAvailable}
-            isCanceled={market.isCanceled}
-            isResolved={market.isResolved}
-        >
+        <Container claimBorder={claimAvailable} isCanceled={market.isCanceled} isResolved={market.isResolved}>
             <ClubVsClubContainer>
                 <ClubContainer>
-                    <ClubLogo src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
+                    <ClubLogo
+                        alt="Home team logo"
+                        src={homeLogoSrc}
+                        onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
+                    />
                     <ClubNameLabel>{market.homeTeam}</ClubNameLabel>
                 </ClubContainer>
                 <VSLabel>{'VS'}</VSLabel>
                 <ClubContainer>
-                    <ClubLogo src={awayLogoSrc} onError={() => setAwayLogoSrc(OVERTIME_LOGO)} />
+                    <ClubLogo
+                        alt="Away team logo"
+                        src={awayLogoSrc}
+                        onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
+                    />
                     <ClubNameLabel>{market.awayTeam}</ClubNameLabel>
                 </ClubContainer>
             </ClubVsClubContainer>
@@ -51,6 +54,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                     awayOdds: market.awayOdds,
                     drawOdds: market.drawOdds,
                 }}
+                accountPositions={accountPositions}
             />
             <MatchStatus
                 isResolved={market.isResolved}
