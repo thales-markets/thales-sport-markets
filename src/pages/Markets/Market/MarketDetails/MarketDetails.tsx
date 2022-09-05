@@ -1031,7 +1031,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
                     <FooterContainer>
                         <SliderInfo>
-                            <SliderInfoTitle>Skew:</SliderInfoTitle>
+                            <SliderInfoTitle>{t('markets.market-details.skew')}:</SliderInfoTitle>
                             <SliderInfoValue>
                                 {positionPriceDetailsQuery.isLoading
                                     ? '-'

@@ -199,7 +199,7 @@
             "canceled": "Annulé",
             "pending-resolution": "En attente de résolution",
             "claim": "Réclamer",
-            "coming-soon": "À venir"
+            "coming-soon": "À venir",
             "vs": "VS",
             "draw": "Nul"
         },
@@ -215,7 +215,8 @@
             "claim-back": "Réclamer",
             "wallet-info": {
                 "title": "Dans votre portefeuille"
-            }
+            },
+            "skew": "Fausser"
         },
         "zero-odds-tooltip": "L'AMM de sport offre de la liquité seulement entre $0.05 to $0.95.En effet, cela signifie que si les cotes d'une position sont inférieures à 5 % ou supérieures à 95 %, cette position n'aura pas de liquidité."
     },

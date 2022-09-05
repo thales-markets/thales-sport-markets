@@ -213,6 +213,7 @@
             "potential-profit": "Potential profit",
             "amount-claimable": "Amount claimable",
             "claim-back": "Claim back",
+            "skew": "Skew",
             "wallet-info": {
                 "title": "In wallet"
             }

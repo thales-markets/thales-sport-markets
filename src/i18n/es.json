@@ -215,7 +215,8 @@
             "claim-back": "Reclamar de vuelta",
             "wallet-info": {
                 "title": "En la billetera"
-            }
+            },
+            "skew": "Sesgar"
         },
         "zero-odds-tooltip": "El AMM de deportes sólo ofrece liquidez si el rango de precios ofrecido es entre 0.05 y 0.95 USD. Esto significa que si las probabilidades de una posición son menores a 5% o mayores a 95%, esa posición no tendrá liquidez."
     },
