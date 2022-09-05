@@ -778,7 +778,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             )}
             {market.resolved && !market.gameStarted && (
                 <Status resolved={market.resolved} claimable={false}>
-                    {t('markets.market-card.cancelled')}
+                    {t('markets.market-card.canceled')}
                 </Status>
             )}
             <MatchInfo>
