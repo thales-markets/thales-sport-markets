@@ -4,12 +4,44 @@ import { Store } from 'redux';
 import App from 'pages/Root/App';
 import dotenv from 'dotenv';
 import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react';
+import '@rainbow-me/rainbowkit/dist/index.css';
+import { connectorsForWallets, wallet, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
+import { infuraProvider } from 'wagmi/providers/infura';
+import { publicProvider } from 'wagmi/providers/public';
 
 dotenv.config();
 
 type RootProps = {
     store: Store;
 };
+
+const { chains, provider } = configureChains(
+    [chain.optimism],
+    [infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID }), publicProvider()]
+);
+
+const connectors = connectorsForWallets([
+    {
+        groupName: 'Recommended',
+        wallets: [
+            wallet.metaMask({ chains }),
+            wallet.walletConnect({ chains }),
+            wallet.brave({ chains }),
+            wallet.ledger({ chains }),
+            wallet.trust({ chains }),
+            wallet.coinbase({ appName: 'Overtime', chains }),
+            wallet.rainbow({ chains }),
+            wallet.imToken({ chains }),
+        ],
+    },
+]);
+
+const wagmiClient = createClient({
+    autoConnect: true,
+    connectors,
+    provider,
+});
 
 const instance = createInstance({
     urlBase: 'https://data.thalesmarket.io',
@@ -33,7 +65,11 @@ const Root: React.FC<RootProps> = ({ store }) => {
     return (
         <Provider store={store}>
             <MatomoProvider value={instance}>
-                <App />
+                <WagmiConfig client={wagmiClient}>
+                    <RainbowKitProvider chains={chains}>
+                        <App />
+                    </RainbowKitProvider>
+                </WagmiConfig>
             </MatomoProvider>
         </Provider>
     );
