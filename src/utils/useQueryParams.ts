@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ifIpfsDeployment } from './routes';
 
 const getQuery = () => {
     if (typeof window !== 'undefined') {
@@ -26,8 +27,8 @@ const useQueryParam = (key: string, defaultVal: string): [string, (val: string) 
         }
 
         if (typeof window !== 'undefined') {
-            const { protocol, pathname, host } = window.location;
-            const newUrl = `${protocol}//${host}${pathname}?${query.toString()}`;
+            const { pathname } = window.location;
+            const newUrl = `${ifIpfsDeployment ? '/#' : ''}${pathname}?${query.toString()}`;
             window.history.pushState({}, '', newUrl);
         }
     };
