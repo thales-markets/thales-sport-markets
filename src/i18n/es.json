@@ -20,6 +20,7 @@
             "mint-voucher": "Mint voucher",
             "modal": {
                 "title": "Mint Overtime voucher",
+                "description": "<p>Overtime voucher functionality has been implemented per <tip>TIP-76</tip><p/>.",
                 "voucher-amount-label": "Voucher amount",
                 "another-wallet-label": "Send a voucher to another wallet",
                 "recipient-wallet-label": "Recipient wallet",
@@ -181,6 +182,11 @@
             "usd-value-col": "valor usd",
             "game-col": "juego",
             "result-col": "resultado"
+        },
+        "tooltip": {
+            "amount-exceeded": "Amount exceeded the amount available on AMM",
+            "minimal-amount": "Minimal amount is 1",
+            "no-funds": "Please ensure your wallet has enough funds"
         }
     },
     "markets": {
@@ -209,7 +215,8 @@
             "claim-back": "Reclamar de vuelta",
             "wallet-info": {
                 "title": "En la billetera"
-            }
+            },
+            "skew": "Sesgar"
         },
         "zero-odds-tooltip": "El AMM de deportes sólo ofrece liquidez si el rango de precios ofrecido es entre 0.05 y 0.95 USD. Esto significa que si las probabilidades de una posición son menores a 5% o mayores a 95%, esa posición no tendrá liquidez."
     },

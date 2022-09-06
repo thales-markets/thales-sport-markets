@@ -20,6 +20,7 @@
             "mint-voucher": "Mint voucher",
             "modal": {
                 "title": "Mint Overtime voucher",
+                "description": "<p>Overtime voucher functionality has been implemented per <tip>TIP-76</tip><p/>.",
                 "voucher-amount-label": "Voucher amount",
                 "another-wallet-label": "Send a voucher to another wallet",
                 "recipient-wallet-label": "Recipient wallet",
@@ -181,6 +182,11 @@
             "result-col": "Ergebnis",
             "usd-value-col": "USD-Wert",
             "game-col": "Spiel"
+        },
+        "tooltip": {
+            "amount-exceeded": "Amount exceeded the amount available on AMM",
+            "minimal-amount": "Minimal amount is 1",
+            "no-funds": "Please ensure your wallet has enough funds"
         }
     },
     "markets": {
@@ -209,7 +215,8 @@
             "claim-back": "Rückerstattung verlangen",
             "wallet-info": {
                 "title": "Im Wallet"
-            }
+            },
+            "skew": "Schräg"
         },
         "zero-odds-tooltip": "Sports AMM bietet nur Liquidität in der Preisspanne von $0,05 bis $0,95. Dies bedeutet, dass wenn die Quoten für eine Position weniger als 5% oder mehr als 95% betragen, diese Position keine Liquidität hat."
     },

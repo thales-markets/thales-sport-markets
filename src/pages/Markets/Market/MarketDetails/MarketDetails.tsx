@@ -654,9 +654,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
     const setTooltipTextMessageTokenAmount = (value: string | number) => {
         if (Number(value) > availablePerSide.positions[selectedPosition].available) {
-            setTooltipTextTokenAmount('Amount exceeded the amount available on AMM');
+            setTooltipTextTokenAmount(t('market.tooltip.amount-exceeded'));
         } else if (value && Number(value) < 1) {
-            setTooltipTextTokenAmount('Minimal amount is 1');
+            setTooltipTextTokenAmount(t('market.tooltip.minimal-amount'));
         } else {
             setTooltipTextTokenAmount('');
         }
@@ -669,7 +669,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
     const setTooltipTextMessageUsdAmount = (value: string | number) => {
         if (Number(value) > paymentTokenBalance) {
-            setTooltipTextUsdAmount('Please ensure your wallet has enough funds');
+            setTooltipTextUsdAmount(t('market.tooltip.no-funds'));
         } else {
             setTooltipTextUsdAmount('');
         }
@@ -718,7 +718,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     }
                 }}
             >
-                {selectedSide}
+                {t(`common.${selectedSide.toLowerCase()}-side`)}
             </SubmitButton>
         );
     };
@@ -778,7 +778,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             )}
             {market.resolved && !market.gameStarted && (
                 <Status resolved={market.resolved} claimable={false}>
-                    {t('markets.market-card.cancelled')}
+                    {t('markets.market-card.canceled')}
                 </Status>
             )}
             <MatchInfo>
@@ -1031,7 +1031,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
                     <FooterContainer>
                         <SliderInfo>
-                            <SliderInfoTitle>Skew:</SliderInfoTitle>
+                            <SliderInfoTitle>{t('markets.market-details.skew')}:</SliderInfoTitle>
                             <SliderInfoValue>
                                 {positionPriceDetailsQuery.isLoading
                                     ? '-'

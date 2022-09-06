@@ -20,6 +20,7 @@
             "mint-voucher": "Mint voucher",
             "modal": {
                 "title": "Mint Overtime voucher",
+                "description": "<p>Overtime voucher functionality has been implemented per <tip>TIP-76</tip>.<p/>",
                 "voucher-amount-label": "Voucher amount",
                 "another-wallet-label": "Send a voucher to another wallet",
                 "recipient-wallet-label": "Recipient wallet",
@@ -181,6 +182,11 @@
             },
             "no-results": "No transactions associated with this market.",
             "no-results-for-wallet": "No transactions associated with this wallet."
+        },
+        "tooltip": {
+            "amount-exceeded": "Amount exceeded the amount available on AMM",
+            "minimal-amount": "Minimal amount is 1",
+            "no-funds": "Please ensure your wallet has enough funds"
         }
     },
     "markets": {
@@ -207,6 +213,7 @@
             "potential-profit": "Potential profit",
             "amount-claimable": "Amount claimable",
             "claim-back": "Claim back",
+            "skew": "Skew",
             "wallet-info": {
                 "title": "In wallet"
             }
