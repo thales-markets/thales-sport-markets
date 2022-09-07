@@ -8,7 +8,7 @@ import {
 } from 'components/common';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { COLLATERALS } from 'constants/markets';
+import { APPROVAL_BUFFER, COLLATERALS, MAX_TOKEN_SLIPPAGE, MAX_USD_SLIPPAGE } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useMarketCancellationOddsQuery from 'queries/markets/useMarketCancellationOddsQuery';
@@ -506,7 +506,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                 selectedStableIndex == 0 || selectedStableIndex == 1 ? 18 : 6
                             ) / Number(tmpSuggestedAmount);
                         // 2 === slippage
-                        tmpSuggestedAmount = (Number(paymentTokenBalance) / Number(ammPrice)) * ((100 - 2) / 100);
+                        tmpSuggestedAmount = (Number(paymentTokenBalance) / Number(ammPrice)) * MAX_TOKEN_SLIPPAGE;
                         setMaxAmount(floorNumberToDecimals(tmpSuggestedAmount));
                     }
                 }
@@ -552,18 +552,18 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     const formattedsUSDToSpendForMaxAmount = sUSDToSpendForMaxAmount / divider;
 
                     if (Number(paymentTokenBalance) > formattedsUSDToSpendForMaxAmount) {
-                        if (formattedsUSDToSpendForMaxAmount <= Number(paymentTokenBalance) * 0.97) {
+                        if (formattedsUSDToSpendForMaxAmount <= Number(paymentTokenBalance) * MAX_USD_SLIPPAGE) {
                             setMaxUsdAmount(floorNumberToDecimals(formattedsUSDToSpendForMaxAmount));
                         } else {
                             const calculatedMaxAmount =
                                 formattedsUSDToSpendForMaxAmount -
-                                (formattedsUSDToSpendForMaxAmount - Number(paymentTokenBalance) * 0.97);
+                                (formattedsUSDToSpendForMaxAmount - Number(paymentTokenBalance) * MAX_USD_SLIPPAGE);
                             setMaxUsdAmount(floorNumberToDecimals(calculatedMaxAmount));
                         }
                         setIsFetching(false);
                         return;
                     }
-                    setMaxUsdAmount(floorNumberToDecimals(paymentTokenBalance * 0.97));
+                    setMaxUsdAmount(floorNumberToDecimals(paymentTokenBalance * MAX_USD_SLIPPAGE));
                 }
                 setIsFetching(false);
             }
@@ -1072,8 +1072,8 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     </StatusSourceContainer>
                     {openApprovalModal && (
                         <ApprovalModal
-                            // ADDING 3% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
-                            defaultAmount={Number(usdAmountValue) + Number(usdAmountValue) * 0.03}
+                            // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
+                            defaultAmount={Number(usdAmountValue) + Number(usdAmountValue) * APPROVAL_BUFFER}
                             collateralIndex={selectedStableIndex}
                             tokenSymbol={COLLATERALS[selectedStableIndex]}
                             isAllowing={isAllowing}
