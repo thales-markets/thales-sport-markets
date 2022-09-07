@@ -1,12 +1,13 @@
 // import Tooltip from 'components/Tooltip';
 import i18n from 'i18n';
 import { DEFAULT_LANGUAGE, LanguageNameMap, SupportedLanguages } from 'i18n/config';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Flag from 'react-flagpack';
 import { withTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
+import useQueryParam from 'utils/useQueryParams';
 
 type LanguageSelectorProps = {
     isBurger?: boolean;
@@ -21,9 +22,19 @@ export const LanguageSelectorV2: React.FC<LanguageSelectorProps> = ({ isBurger }
         setLanguageDropdownIsOpen(isOpen);
     };
 
-    const selectedLanguage = (Object.values(SupportedLanguages) as string[]).includes(i18n.language)
-        ? i18n.language
-        : DEFAULT_LANGUAGE;
+    const [selectedLanguage, setSelectedLanguage] = useQueryParam('lang', '');
+
+    useEffect(
+        () => {
+            setSelectedLanguage(
+                (Object.values(SupportedLanguages) as string[]).includes(i18n.language)
+                    ? i18n.language
+                    : DEFAULT_LANGUAGE
+            );
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []
+    );
 
     return (
         <>
@@ -44,6 +55,7 @@ export const LanguageSelectorV2: React.FC<LanguageSelectorProps> = ({ isBurger }
                                     onClick={() => {
                                         i18n.changeLanguage(language);
                                         setDropdownIsOpen(false);
+                                        setSelectedLanguage(language);
                                     }}
                                 >
                                     <>
