@@ -103,7 +103,12 @@
         "input-characters-note": "{{entered }} / {{max}}",
         "view": "View",
         "guidelines": "guidelines",
-        "built-on": "Built on"
+        "built-on": "Built on",
+        "odds": {
+            "american-odds": "อัตราต่อรองแบบอเมริกัน",
+            "normalized-implied-odds": "อัตราต่อรองโดยนัยที่ทำให้เป็นมาตรฐาน",
+            "decimal-odds": "อัตราต่อรองทศนิยม"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED."

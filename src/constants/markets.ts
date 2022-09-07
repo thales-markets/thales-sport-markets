@@ -74,9 +74,9 @@ export enum MarketStatus {
 }
 
 export enum OddsType {
-    American = 'American Odds',
-    Decimal = 'Decimal Odds',
-    AMM = 'Normalized Implied Odds',
+    American = 'american-odds',
+    Decimal = 'decimal-odds',
+    AMM = 'normalized-implied-odds',
 }
 
 export const ODDS_TYPES = [OddsType.AMM, OddsType.Decimal, OddsType.American];

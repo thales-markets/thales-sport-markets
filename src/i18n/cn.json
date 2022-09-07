@@ -103,7 +103,12 @@
         "input-characters-note": "{{entered }} / {{max}}",
         "view": "View",
         "guidelines": "指南",
-        "built-on": "建立于"
+        "built-on": "建立于",
+        "odds": {
+            "american-odds": "美国赔率",
+            "decimal-odds": "小数赔率",
+            "normalized-implied-odds": "标准化隐含赔率"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利."

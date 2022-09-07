@@ -103,7 +103,12 @@
         "input-characters-note": "{{entered }} / {{max}}",
         "view": "View",
         "guidelines": "guidelines",
-        "built-on": "Built on"
+        "built-on": "Built on",
+        "odds": {
+            "decimal-odds": "Десятичные коэффициенты",
+            "american-odds": "Американские коэффициенты",
+            "normalized-implied-odds": "Нормализованные потенциальные шансы"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED."

@@ -103,7 +103,12 @@
         "input-characters-note": "{{entered }} / {{max}}",
         "view": "Ansehen",
         "guidelines": "Richtlinien",
-        "built-on": "Aufgebaut auf"
+        "built-on": "Aufgebaut auf",
+        "odds": {
+            "american-odds": "Amerikanische Quoten",
+            "normalized-implied-odds": "Normalisierte implizite Quoten",
+            "decimal-odds": "Dezimalquoten"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN."

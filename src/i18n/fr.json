@@ -123,6 +123,11 @@
             "remaining-amount": "Montant restant",
             "mint-voucher": "Bon d'achat",
             "voucher": "Bon"
+        },
+        "odds": {
+            "normalized-implied-odds": "Cotes implicites normalisées",
+            "decimal-odds": "Cotes décimales",
+            "american-odds": "Cotes américaines"
         }
     },
     "footer": {
