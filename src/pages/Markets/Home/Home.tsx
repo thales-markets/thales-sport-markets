@@ -907,7 +907,11 @@ const filterMarketsForCount = (
     allTagsFilterItem: TagInfo
 ) => {
     return markets.filter((market) => {
-        if (marketSearch && !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())) {
+        if (
+            marketSearch &&
+            !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
+            !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
+        ) {
             return false;
         }
         if (dateFilter !== '' && market.maturityDate.toDateString() !== dateFilter) {

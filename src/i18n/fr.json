@@ -1,6 +1,8 @@
 {
     "common": {
         "winner": "Gagnant",
+        "buy-side": "ACHETER",
+        "sell-side": "VENDRE",
         "wallet": {
             "connect-your-wallet": "Connecter un portefeuille",
             "switch-wallet": "Changer de portefeuille",
@@ -11,6 +13,25 @@
             "get-usd-progress": "Frappe {{amount}}...",
             "disclaimer": "En connectant votre portefeuille vous reconnaissez que vous avez lu et compris <a target=\"_blank\" href={{link}}>disclaimer</a> d’Overtime et accepté les conditions d’utilisation."
         },
+        "voucher": {
+            "remaining-amount": "Montant restant",
+            "overtime-voucher": "Bon Overtime",
+            "voucher": "Bon",
+            "mint-voucher": "Frapper le bon",
+            "modal": {
+                "title": "Frapper le bon d'Overtime",
+                "description": "<p>Les fonctionnalités des bons pour Overtime ont été mis en place en fonction du <tip>TIP-76</tip><p/>.",
+                "voucher-amount-label": "Montant du bon",
+                "another-wallet-label": "Enovyer un bon vers un autre portefeuille",
+                "recipient-wallet-label": "Portefuille du destinataire",
+                "recipient-wallet-placeholder": "Entrer l'adresses du destinataire",
+                "button": {
+                    "mint-label": "Frapper",
+                    "mint-progress-label": "Frappe en cours...",
+                    "confirmation-message": "Bon frappé avec succès"
+                }
+            }
+        },
         "referral": {
             "link-copied": "Lien de recommandation copié!",
             "button": {
@@ -20,7 +41,7 @@
             }
         },
         "swap": {
-            "title": "Obtenir {{currencyKey}}",
+            "title": "Get {{currencyKey}}",
             "from-label": "De",
             "to-label": "À",
             "balance-label": "Balance: {{amount}}",
@@ -31,11 +52,11 @@
             "approve-label": "Autoriser {{currencyKey}}",
             "approve-progress-label": "Autoristation {{currencyKey}}...",
             "approve-all-label": "Autoriser tout",
-            "custom-amount-label": "Autoriser montant de"
+            "custom-amount-label": "Autoriser un montant de"
         },
         "unsupported-network": {
             "title": "Oops! Vous êtes sur le mauvais réseau!",
-            "description": " Vous avez sélectionné le mauvais réseau dans votr portefeuille. Pour continuer, SVP changer votre réseau pour Optimism Mainnet.",
+            "description": "Vous avez sélectionné le mauvais réseau dans votre portefeuille. Pour continuer, SVP changer votre réseau pour Optimism Mainnet.",
             "button": {
                 "optimism": "Changer pour Optimism"
             }
@@ -44,30 +65,12 @@
             "unknown-error-try-again": "Une erreure inconnue est survenue après votre demande, SVP essayez de nouveau.",
             "unknown-error-try-again-general": "Une erreur inconnue est survenue. SVP essayez de nouveau.",
             "insufficient-balance": "Solde insuffisant",
-            "insufficient-liquidity": "Liquidité insuffisante",
             "enter-amount": "Entrer le solde",
             "enter-price": "Entrer le prix",
-            "enter-valid-slippage": "Entrer un pourcentage de glissement valide",
-            "enter-market-data": "Entrer les données du marché",
-            "enter-question": "Entrer la question",
-            "enter-data-source": "Entrer la source des données",
-            "enter-positions": "Enter les positions",
-            "enter-ticket-price": "Enter le prix du billet",
-            "enter-tags": "Entrer les mots clés",
-            "enter-reason-for-dispute": "Entrer la raison de la contestation",
-            "select-initial-position": "Sélectionner votre position initiale",
-            "select-position": "Sélectionner votr position",
-            "different-position": "Les positions doivent être différentes",
-            "select-vote": "Sélectionner le vote",
-            "select-outcome": "Sélectionner le résultat",
-            "select-result": "Sélectionner le résultat",
-            "invalid-ticket-price": "Prix du billet non valide",
-            "invalid-ticket-price-extended": "Le prix du billet doit être entre {{min}} et {{max}}",
-            "invalid-data-source": "Source de données non valide",
-            "invalid-data-source-extended": "Source de données non valide. La source de données doit être un URL avec https préfixe.",
-            "insufficient-balance-wallet": " SVP vous assurez que votre portefeuille a suffisamment {{currencyKey}}",
-            "invalid-slippage": "Glissement non valide",
-            "user-rejected-tx": "Utilisateur a rejeté la transaction"
+            "insufficient-balance-wallet": "SVP vous assurez que votre portefeuille a suffisamment {{currencyKey}}",
+            "user-rejected-tx": "L'utilisateur a rejeté la transaction",
+            "enter-address": "Entrer l'adresse",
+            "invalid-address": "Adresse invalide"
         },
         "time-remaining": {
             "ended": "terminé",
@@ -92,17 +95,15 @@
         },
         "or": "ou",
         "dapp": "dapp",
-        "launch-dapp": "lancer dapp",
+        "launch-dapp": "lancer le dapp",
         "cancel": "Annuler",
         "select-date": "Sélectionner la date...",
         "tags-placeholder": "Chercher les mots clés...",
         "remove-tag-tooltip": "Cliquer pour enlever un mot clé",
         "input-characters-note": "{{entered }} / {{max}}",
         "view": "Voir",
-        "guidelines": "Lignes directrices",
-        "built-on": "Bâtit sur",
-        "sell-side": "VENDRE",
-        "buy-side": "ACHETER"
+        "guidelines": "lignes directrices",
+        "built-on": "Bâtit sur"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TOUS DROITS RÉSERVÉS."
@@ -119,120 +120,54 @@
         "resolved-markets-label": "Résolu",
         "grid-view": "Grille",
         "list-view": "Liste",
-        "status": {
-            "open": "Ouvert",
-            "cancelled-pending-confirmation": "Annulé - en attente de confirmation",
-            "cancelled-confirmed": "Annulé",
-            "paused": "En pause",
-            "resolve-pending": "En attente de résolution",
-            "resolved-pending-confirmation": "Résoudre - en attent de confirmation",
-            "resolved-confirmed": "Résolu",
-            "claim-available": "Réclamation disponible",
-            "cancelled-refund-available": "Annulé - remboursement disponible"
-        },
-        "pool-size-label": "Grosseure de la réserve",
-        "total-pool-size-label": "Grosseure total de la réserve",
-        "number-of-participants-label": "Nombre de participants",
-        "roi-label": "ROI",
-        "roi-tooltip": "Le ROI affiché n'est pas garantt. Les profits sont basés sur les offres courantes dans la réserve et sont sujets au changement. Le ROI actuel est déterminé à la fin de la période de positionnement.",
-        "winnings-per-ticket-label": "Gains par billet",
-        "claim-amount-ticket-label": "Montant réclamable par billet",
-        "ticket-price-label": "Prix du billet",
-        "return-label": "Rendement maximal possible",
-        "your-winnings-label": "Vos gains",
-        "your-refund-label": "Vos remboursements",
-        "your-claim-amount-label": "Votre montant réclamable",
-        "nothing-to-claim-label": "Rien à réclamer",
-        "winnings-claimed-label": "Gains réclamés",
-        "refund-claimed-label": "Remboursements réclamés",
-        "claimed-label": "Réclamé",
-        "fees-bonds-distributed-label": "Frais et obligations distribués",
-        "bonds-distributed-label": "Obligations distribués",
-        "no-winners-label": "Aucun gagnant sur ce marché",
-        "data-source-label": "Source de données",
-        "bid-fee-label": "Frais de l'offer",
-        "bid-fee-tooltip": "<0>Chaque offre est sujette aux frais totaux de {{bidPercentage}}%:</0><1>- {{creatorPercentage}}% va au créateur du marché</1><1>- {{resolverPercentage}}% va au résolveur du marché</1><1>- {{safeBoxPercentage}}% va à Safe Box</1><0> Les frais sont déboursés seulement si le marché n'est pas annulé.</0>",
-        "withdrawal-fee-label": "Frais de retrait",
-        "withdrawal-fee-tooltip": "<0>Le retrait est sujet à un total {{withdrawalPercentage}}% fee:</0><1>- {{creatorPercentage}}% payé au créteur du marché</1><1>- {{safeBoxPercentage}}% vers Safe Box</1><0>Ces frais sont payés directement avec la transaction de retrait.</0>",
-        "withdrawal-not-allowed": "Les retraits ne sont pas autorisés",
-        "creator-fee-label": "Revenus des frais de créateur",
-        "resolver-fee-label": "Revenus des frais de résolveur",
-        "your-fee-label": "Vos revenus de frais",
-        "button": {
-            "bid-label": "Offre",
-            "bid-progress-label": "Offre en cours...",
-            "change-position-label": "Changer de position",
-            "change-position-progress-label": "Changement en cours...",
-            "withdraw-label": "Retrait",
-            "withdraw-progress-label": "Retrait en cours...",
-            "resolve-market-label": "Résoudre le marché",
-            "resolve-market-progress-label": "Résolution en cours...",
-            "claim-label": "Réclamer",
-            "claim-progress-label": "Réclamation en cours...",
-            "cancel-label": "Annuler",
-            "cancel-market-label": "Annuler le marché",
-            "cancel-progress-label": "Annulation en cours...",
-            "distribute-fees-bonds-label": "Distribuer les frais et les obligations",
-            "distribute-bonds-label": "Distribuer les obligations",
-            "distribute-progress-label": "Distribution en cours..."
-        },
+        "skew-tooltip": "Skew Impact est le montant de la prime ajoutée à un prix de position basé sur le risque actuel que l'AMM encourt sur ce marché spécifique.",
         "toast-messsage": {
             "transaction-pending": "Transaction en cours",
             "swap-success": "Échange réussi {{ currencyKey }}",
             "approve-success": "Autorisation réussi",
             "buy-success": "Achat réussi",
             "sell-success": "Vente réussi",
-            "create-market-success": "Création du marché réussi",
             "claim-winnings-success": "Réclamation des gains réussi",
             "claim-refund-success": "Réclamation du remboursement réussi",
-            "resolve-market-success": "Résolution du marché réussi",
-            "ticket-bid-success": "Offre réussi",
-            "change-position-success": "Changement de position réussi",
             "withdraw-success": "Retrait réussi",
             "get-usd-success": "{{amount}} frappé avec succès"
         },
         "filter-label": {
             "global": {
-                "all": "Tous les marchés",
+                "allmarkets": "Tous les marchés",
                 "openmarkets": "Marchés ouverts",
                 "resolvedmarkets": "Marchés résolus",
                 "yourpositions": "Vos positions",
                 "claim": "Réclamable",
                 "history": "Vos transactions",
                 "canceled": "Annulé",
-                "allmarkets": "Tous les marchés",
-                "tooltip": "Les marchés ont été résolus il y a plus de 7 jours",
-                "archivedmarkets": "Marchés archivés"
+                "archivedmarkets": "Marchés archivés",
+                "tooltip": "Les marchés ont été résolus il y a plus de 7 jours"
             },
             "sport": {
-                "all": "TOUS les sports",
+                "all": "Tous les sports",
                 "basketball": "Basketball",
                 "soccer": "Soccer",
                 "hockey": "Hockey",
                 "tennis": "Tennis",
                 "football": "Football",
+                "ufc": "MMA",
                 "baseball": "Baseball",
-                "soon": "Plus de sports à venir!",
-                "ufc": "BIEN"
+                "soon": "Plus de sports à venir!"
             },
-            "all": "Tous"
+            "all": "All"
         },
-        "back-to-markets": "Retour au marchés",
-        "back-to-market": "Retour au marchés",
+        "back-to-markets": "Retour aux marchés",
+        "back-to-market": "Retour au marché",
         "no-markets-found": "Aucun marché disponible",
         "view-all-markets": "Voir tous les marchés",
-        "resolve-market": {
-            "title": "Choissiser une position avec laquelle résoude le marché",
-            "cancel-tooltip": "If the market is not created according to the guidelines, use this option to cancel the market. Resolving a market with this position will allow anyone who placed a bid on the market to claim a full refund.",
-            "bond-info": "<0><0>In order to resolve the market, you need to deposit a bond of {{amount}} which will be used in case of a dispute.</0><0>If your result is not disputed and the market is formally resolved with your position, the bond will be returned to you.</0><0>{{resolverPercentage}}% of each bid goes to the market resolver in case the market is not cancelled.</0></0>",
-            "creator-bond-info": "<0><0>As a market creator, you don't need to submit a new bond, your initial bond will be used in case of a dispute.</0><0>{{resolverPercentage}}% of each bid goes to the market resolver in case the market is not cancelled.</0></0>"
-        },
         "table": {
             "title": "Activitée récente",
             "date-time-col": "date | temps",
             "type-col": "type",
             "position-col": "position",
             "amount-col": "nombre",
+            "paid-col": "payé",
             "tx-status-col": "statut tx",
             "type": {
                 "bid": "Offre",
@@ -243,13 +178,19 @@
                 "sell": "VENDRE"
             },
             "no-results": "Aucune transaction est associée avec ce marché.",
-            "paid-col": "payé",
-            "no-results-for-wallet": "Aucune transaction associée à ce portefeuille."
+            "no-results-for-wallet": "Aucune transaction associée à ce portefeuille.",
+            "game-col": "Jeu",
+            "usd-value-col": "valeur en USD",
+            "result-col": "résultat"
         },
-        "skew-tooltip": "Skew Impact est le montant de la prime ajoutée à un prix de position basé sur le risque actuel que l'AMM encourt sur ce marché spécifique."
+        "tooltip": {
+            "amount-exceeded": "Le montant a dépassé le montant disponible sur l'AMM",
+            "minimal-amount": "Le montant minimum est 1",
+            "no-funds": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds"
+        }
     },
     "markets": {
-        "market-card-list": {
+        "market-card": {
             "starts": "Commence",
             "claimable": "Réclamable",
             "finished": "achevé",
@@ -258,109 +199,99 @@
             "canceled": "Annulé",
             "pending-resolution": "En attente de résolution",
             "claim": "Réclamer",
-            "coming-soon": "À venir"
-        },
-        "market-card": {
-            "finished": "Achevé",
-            "starts": "départs",
-            "draw": "Dessiner",
-            "started": "A débuté",
-            "vs": "CONTRE",
-            "claim": "Prétendre",
-            "pending-resolution": "En attente de résolution",
-            "canceled": "Annulé",
-            "claimable": "Réclamable",
-            "result": "Résultat",
-            "coming-soon": "Bientôt disponible"
+            "coming-soon": "À venir",
+            "vs": "VS",
+            "draw": "Nul"
         },
         "market-details": {
-            "wallet-info": {
-                "title": "En portefeuille"
-            },
-            "amount-claimable": "Montant à réclamer",
             "price": "Prix",
-            "usd-amount": "Montant en USD",
-            "total-to-receive": "Total à recevoir",
-            "amount-to-sell": "Montant à vendre",
             "liquidity": "Liquidité",
-            "positions-amount": "Montant des positions",
+            "usd-amount": "Montant en USD",
+            "positions-amount": "Positions amount",
+            "amount-to-sell": "Montant à vendre",
+            "total-to-receive": "Total à recevoie",
             "potential-profit": "Gain potentiel",
-            "claim-back": "Réclamer"
+            "amount-claimable": "Montant à réclamer",
+            "claim-back": "Réclamer",
+            "wallet-info": {
+                "title": "Dans votre portefeuille"
+            },
+            "skew": "Fausser"
         },
-        "zero-odds-tooltip": "Sports AMM n'offre des liquidités que dans la fourchette de prix de 0,05 $ à 0,95 $. En fait, cela signifie que si les cotes d'une position sont inférieures à 5 % ou supérieures à 95 %, cette position n'aura pas de liquidité."
+        "zero-odds-tooltip": "L'AMM de sport offre de la liquité seulement entre $0.05 to $0.95.En effet, cela signifie que si les cotes d'une position sont inférieures à 5 % ou supérieures à 95 %, cette position n'aura pas de liquidité."
     },
     "rewards": {
-        "table": {
-            "percentage": "Pourcentage",
-            "pnl": "Pertes",
-            "reward-amount": "Récompense",
-            "no-data-available": "Pas de données disponibles",
-            "wallet-address": "Adresse du portefeuille"
-        },
         "header": "Récompenses",
+        "search-placeholder": "Chercher l'adresse de votre portefeuille",
+        "description": "<0>Il y a un total de <0>16,000 OP</0> et <0>16,000 THALES</0> récompenses à distribuer en 4 semaines. Le tout divisé en périodes de 2 semaines. <0>8,000 OP + 8,000 THALES</0> seront alloués au prorata en fonction de la somme totale des pertes par portefeuille pour chaque période de 2 semaines.</0><0>Tous les marchés arrivés à maturité au cours de cette période de 2 semaines sont pris en compte. Les pertes du portefeuille individuel sur chaque marché sont additionnées pour obtenir les résultats du classement.</0><1>-La première période de 2 semaines est du <0>00:00 UTC August 29</0> jusqu'au <0>00:00 UTC September 12</0></1><1>- La deuxième période est du <0>00:00 UTC September 12</0> jusqu'au <0>00:00 UTC September 26</0></1><0>Ce programme incitatif sera revisité après le 26 septembre.</0>",
+        "total-negative-pnl": "Pertes totales",
         "op-rewards-banner-message": "Les récompenses OP ont commencé, vérifiez comment vous pouvez les gagner sur <bold>la page des récompenses OP</bold>",
-        "search-placeholder": "Rechercher l'adresse du portefeuille",
-        "description": "<0>Il y a un total de <0>16 000 OP</0> et de <0>16 000 THALES</0> à distribuer en 4 semaines, divisées en périodes de 2 semaines. <0>8 000 OP + 8 000 THALES</0> seront alloués au prorata en fonction de la somme totale des pertes par portefeuille pour chaque période de 2 semaines.</0><0>Tous les marchés arrivés à maturité au cours de cette période de 2 semaines semaine sont pris en compte. Les pertes du portefeuille individuel sur chaque marché sont additionnées pour obtenir les résultats du classement.</0><1>- Le premier tour de 2 semaines est de <0>00:00 UTC le 29 août</0> jusqu'à <0>00:00 UTC le 12 septembre</0></1><1>- Le deuxième cycle de 2 semaines s'étend du <0>00:00 UTC le 12 septembre</0> au <0>00:00 UTC le 26 septembre</0>< /1><0>Ce programme incitatif sera revisité après le 26 septembre.</0>",
-        "total-negative-pnl": "Pertes totales"
+        "table": {
+            "wallet-address": "Adresse du portefeuille",
+            "pnl": "Pertes",
+            "percentage": "Pourcentage",
+            "reward-amount": "Récompense",
+            "no-data-available": "Aucune donnée disponible"
+        }
     },
     "quiz": {
+        "title": "Concours de trivia sportif",
+        "start-quiz-description": "<p>Salut les fans de sport ! Prêt à tester vos connaissances sur le terrain?</p><p>Overtime a lancé un concours de trivia sportif où les gagnants hebdomadaires recevront des bons NFT qui peuvent être utilisés à la place de sUSD pour participer à n'importe quel marché sportif.</p><p>Lisez toutes les informations sur ce jeu-questionnaire dans notre <blogPost>article de blog</blogPost>.</p><p>Comment participer? Le jeu-questionnaire est accessible à tous, mais pour être éligible aux récompenses, vous devez retweeter ce <quizRetweetLink>tweet</quizRetweetLink> et suivre <twitter>Overtime's Twitter</twitter>.</p><p>Connectez votre portefeuille et entrez votre identifiant Twitter pour commencer le quiz! Si vous gagnez des récompenses, nous vous demanderons de confirmer votre adresse via Twitter DM.Le nom d'utilisateur Discord est facultatif si vous souhaitez recevoir un rôle Discord en tant que gagnant potentiel du jeu-questionnaire.</p><p>Pour toute question, veuillez rejoindre notre <discord>Discord</discord>.</p>",
+        "twitter-handle-label": "Identifiant Twitter",
+        "twitter-handle-placeholder": "Entrer votre identifiant Twitter",
+        "twitter-handle-validation": "Identifiant Twitter non valide. Essayez de nouveau.",
+        "discord-label": "Nom d'utilisateur Discord (optional)",
+        "discord-placeholder": "Entrer votre nom d'utilisateur Discord",
+        "current-question-label": "Question actuelle: {{currentQuestion}}/{{numberOfQuestions}}",
+        "time-reamining-label": "Temps restant: <0/>",
+        "question-weight-label": "Valeur de la question: {{points}}",
+        "point-label": "point",
+        "points-label": "points",
+        "quiz-finished-label": "Trivia terminé!",
+        "your-score-label": "Votre pointage: {{score}}/{{max}} points",
         "button": {
+            "start-quiz-label": "Commencer le trivia",
+            "next-question-label": "Prochaine question",
             "previous-question-label": "Question précédente",
-            "see-leaderboard-label": "Voir le classement",
-            "next-question-label": "Question suivante",
-            "try-again-label": "Réessayer",
-            "start-quiz-label": "Commencer le jeu-questionnaire",
-            "finish-quiz-label": "Terminer le jeu-questionnaire"
+            "finish-quiz-label": "Terminer le trivia",
+            "try-again-label": "Essayer de nouveau",
+            "see-leaderboard-label": "Voir le classement"
         },
         "leaderboard": {
-            "table": {
-                "rank-col": "Rang",
-                "no-data-available": "Pas de données disponibles",
-                "twitter-col": "Twitter",
-                "wallet-address-col": "Adresse du portefeuille",
-                "time-col": "Temps",
-                "points-col": "Points",
-                "rewards-col": "Récompenses"
-            },
-            "title": "Classement Trivia",
-            "overtime-voucher": "Bon d'heures supplémentaires",
-            "back-to-quiz": "Retour aux anecdotes",
-            "period-ended-label": "Période terminée",
+            "title": "Classement du Trivia",
+            "description": "<p>C'est le classement du trivia où vous pouvez voir votre classement par rapport à la concurrence pour une semaine donnée.</p><p>Lire tous les détails sur la façon de participer aux bons NFT sUSD qui peuvent être utilisés sur Overtime <blogPost>ici</blogPost>.</p><p>Vous pouvez prendre le jeu-questionnaire autant de fois que vous le souhaitez <sportsTrivia>ici</sportsTrivia>.</p>",
+            "back-to-quiz": "De retour au trivia",
             "search-placeholder": "Chercher...",
-            "week-label": "La semaine",
-            "description": "<p>Il s&#39;agit du classement trivia où vous pouvez voir comment vous vous en sortez par rapport à la concurrence pour une semaine donnée.</p><p> Tous les détails sur la façon de participer aux bons NFT sUSD qui peuvent être utilisés sur n&#39;importe quel marché du sport disponible<blogPost> ici</blogPost> .</p><p> Vous pouvez prendre le jeu-questionnaire autant de fois que vous le souhaitez<sportsTrivia> ici</sportsTrivia> .</p>",
-            "period-end-label": "La période se termine en"
+            "table": {
+                "rank-col": "Classement",
+                "wallet-address-col": "Adresse de portefeuille",
+                "twitter-col": "Twitter",
+                "points-col": "Points",
+                "time-col": "Temps",
+                "rewards-col": "Récompenses",
+                "no-data-available": "Aucune donnée disponible"
+            },
+            "period-end-label": "Cette période se termine dans",
+            "period-ended-label": "Période terminée",
+            "week-label": "Semaine",
+            "overtime-voucher": "Bon Overtime"
         },
+        "help-us-improve-label": "Aidez nous à nous améliorer",
+        "help-us-improve-tooltip": "Aidez-nous à améliorer le trivia sportifs en ajoutant de nouvelles questions à la base de données",
         "finish-messages": {
-            "quilfied-for-rewards-first": "Vous êtes actuellement en tête du classement ! Réessayez pour obtenir un meilleur score et sécuriser votre place.",
-            "your-best-result": "Votre meilleur résultat : {{points}} {{pointsLabel}}",
-            "quilfied-for-rewards": "Vous êtes actuellement dans le TOP {{numberOfRewards}} et qualifié pour les récompenses. Réessayez pour obtenir un meilleur classement et des récompenses plus élevées.",
+            "your-best-result": "Votre meilleur résultat: {{points}} {{pointsLabel}}",
             "rank-info": "Avec {{points}} {{pointsLabel}} vous êtes classé {{rank}} sur {{totalParticipants}} participants.",
-            "not-quilfied-for-rewards": "Il vous manque {{points}} {{pointsLabel}} pour entrer dans le TOP {{numberOfRewards}} et vous qualifier pour des récompenses. Réessayez et améliorez votre score."
+            "not-quilfied-for-rewards": "Il vous manque {{points}} {{pointsLabel}} pour être au TOP {{numberOfRewards}} et vous qualifié pour des récompenses. Réessayez et améliorez votre score.",
+            "quilfied-for-rewards": "Vous êtes présentement dans le TOP {{numberOfRewards}} et êtes qualifié pour des récompenses. Réessayez pour obtenir un meilleur classement et plus de récompenses.",
+            "quilfied-for-rewards-first": "Vous êtes actuellement en tête du classement ! Réessayez pour obtenir un meilleur score et sécuriser votre place."
         },
+        "difficulty-label": "Difficulty",
         "difficulty": {
             "1": "Banal",
             "2": "Facile",
-            "3": "Modéré",
+            "3": "Moyens",
             "4": "Difficile",
             "5": "Dur"
-        },
-        "quiz-finished-label": "Trivia terminé !",
-        "discord-placeholder": "Entrez votre identifiant Discord",
-        "twitter-handle-label": "Nom d'utilisateur Twitter",
-        "points-label": "points",
-        "time-reamining-label": "Temps restant : <0/>",
-        "your-score-label": "Votre score : {{score}}/{{max}} points",
-        "current-question-label": "Question actuelle : {{currentQuestion}}/{{numberOfQuestions}}",
-        "title": "Concours de jeux-questionnaires sportifs",
-        "discord-label": "Identifiant Discord (facultatif)",
-        "twitter-handle-validation": "Identifiant Twitter non valide. Réessayer.",
-        "difficulty-label": "Difficulté",
-        "help-us-improve-label": "Aidez nous à améliorer",
-        "twitter-handle-placeholder": "Entrez votre identifiant Twitter",
-        "point-label": "indiquer",
-        "start-quiz-description": "<p>Salut les fans de sport ! Prêt à tester vos connaissances et à battre le terrain ?</p><p> Overtime a lancé un concours de jeux-questionnaires sportifs où les gagnants hebdomadaires recevront des bons NFT qui peuvent être utilisés à la place de sUSD pour participer à n&#39;importe quel marché sportif que vous aimez.</p><p> Lisez toutes les informations sur ce jeu-questionnaire dans notre<blogPost> article de blog</blogPost> .</p><p> Comment participer ? Le jeu-questionnaire est accessible à tous pour tester leurs connaissances et concourir, mais pour être éligible aux récompenses, vous devez retweeter ceci<quizRetweetLink> tweeter</quizRetweetLink> et suivre<twitter> Twitter des heures supplémentaires</twitter> .</p><p> Connectez votre portefeuille et entrez votre identifiant Twitter pour commencer le quiz ! Si vous gagnez des récompenses, nous vous demanderons de confirmer votre adresse via Twitter DM. L&#39;identifiant Discord est facultatif si vous souhaitez recevoir un rôle Discord en tant que gagnant potentiel du jeu-questionnaire.</p><p> Pour toute question, veuillez rejoindre notre<discord> Discorde</discord> .</p>",
-        "question-weight-label": "Poids de la question : {{points}}",
-        "help-us-improve-tooltip": "Aidez-nous à améliorer les jeux-questionnaires sportifs en ajoutant de nouvelles questions à la base de données de questions."
+        }
     }
 }

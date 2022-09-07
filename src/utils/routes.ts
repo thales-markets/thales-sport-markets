@@ -20,4 +20,4 @@ export const buildReferralLink = (route: string, search: string, referralId: str
     return `${ifIpfsDeployment ? '/#' : ''}${route}${search}&referralId=${referralId.toLowerCase()}`;
 };
 
-export { history };
+export { history, ifIpfsDeployment };
