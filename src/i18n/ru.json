@@ -237,6 +237,13 @@
             "percentage": "Percentage",
             "reward-amount": "Reward",
             "no-data-available": "No data available"
+        },
+        "periods": {
+            "first-period": "Первый период",
+            "fifth-period": "Пятый период",
+            "third-period": "Третий период",
+            "fourth-period": "Четвертый период",
+            "second-period": "Второй период"
         }
     },
     "quiz": {

@@ -237,6 +237,13 @@
             "percentage": "Percentage",
             "reward-amount": "Reward",
             "no-data-available": "No data available"
+        },
+        "periods": {
+            "first-period": "Primo periodo",
+            "second-period": "Secondo periodo",
+            "fifth-period": "Quinto periodo",
+            "fourth-period": "Quarto periodo",
+            "third-period": "Terzo periodo"
         }
     },
     "quiz": {

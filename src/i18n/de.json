@@ -237,6 +237,13 @@
             "percentage": "Prozent",
             "reward-amount": "Preis",
             "no-data-available": "Keine Daten verfügbar"
+        },
+        "periods": {
+            "second-period": "Zweite Periode",
+            "first-period": "Erste Periode",
+            "third-period": "Dritte Periode",
+            "fourth-period": "Vierte Periode",
+            "fifth-period": "Fünfte Periode"
         }
     },
     "quiz": {

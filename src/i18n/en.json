@@ -237,6 +237,13 @@
             "percentage": "Percentage",
             "reward-amount": "Reward",
             "no-data-available": "No data available"
+        },
+        "periods": {
+            "first-period": "First period",
+            "second-period": "Second period",
+            "third-period": "Third period",
+            "fourth-period": "Fourth period",
+            "fifth-period": "Fifth period"
         }
     },
     "quiz": {

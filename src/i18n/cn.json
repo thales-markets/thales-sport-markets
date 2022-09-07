@@ -237,6 +237,13 @@
             "percentage": "百分比",
             "reward-amount": "奖励数量",
             "no-data-available": "无法获取数据"
+        },
+        "periods": {
+            "first-period": "第一节课",
+            "second-period": "第二阶段",
+            "third-period": "第三期",
+            "fifth-period": "第五期",
+            "fourth-period": "第四期"
         }
     },
     "quiz": {

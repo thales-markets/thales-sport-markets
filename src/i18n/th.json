@@ -237,6 +237,13 @@
             "percentage": "Percentage",
             "reward-amount": "Reward",
             "no-data-available": "No data available"
+        },
+        "periods": {
+            "second-period": "ช่วงที่สอง",
+            "first-period": "ช่วงแรก",
+            "fourth-period": "ช่วงที่สี่",
+            "third-period": "ช่วงที่สาม",
+            "fifth-period": "ช่วงที่ห้า"
         }
     },
     "quiz": {
