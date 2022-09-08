@@ -64,6 +64,7 @@ export const initOnboard = (networkId: NetworkId, subscriptions: Subscriptions) 
                         [NetworkIdByName.Goerli]: getInfuraRpcURL(NetworkIdByName.Goerli),
                         [NetworkIdByName.OptimismMainnet]: getInfuraRpcURL(NetworkIdByName.OptimismMainnet),
                         [NetworkIdByName.OptimismKovan]: getInfuraRpcURL(NetworkIdByName.OptimismKovan),
+                        [NetworkIdByName.OptimismGoerli]: getInfuraRpcURL(NetworkIdByName.OptimismGoerli),
                     },
                     preferred: true,
                 },
