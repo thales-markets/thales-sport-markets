@@ -201,9 +201,9 @@
             "result-col": "resultado"
         },
         "tooltip": {
-            "amount-exceeded": "Amount exceeded the amount available on AMM",
-            "minimal-amount": "Minimal amount is 1",
-            "no-funds": "Please ensure your wallet has enough funds"
+            "amount-exceeded": "Cantidad excede la disponibilidad del AMM",
+            "minimal-amount": "Cantidad minima es 1",
+            "no-funds": "Por favor asegurese que su billetera tenga fondos suficientes"
         }
     },
     "markets": {
