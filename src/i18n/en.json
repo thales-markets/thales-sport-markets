@@ -121,7 +121,8 @@
             "american-odds": "American Odds",
             "decimal-odds": "Decimal Odds",
             "normalized-implied-odds": "Normalized Implied Odds"
-        }
+        },
+        "coming-soon": "Coming soon!"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED."

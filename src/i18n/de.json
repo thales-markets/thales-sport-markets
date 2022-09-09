@@ -121,7 +121,8 @@
         "pagination": {
             "rows-per-page": "Zeilen pro Seite:",
             "page": "Buchseite"
-        }
+        },
+        "coming-soon": "Demnächst!"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN."

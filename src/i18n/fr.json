@@ -141,7 +141,8 @@
         "pagination": {
             "rows-per-page": "Lignes par page :",
             "page": "Page"
-        }
+        },
+        "coming-soon": "Bientôt disponible!"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TOUS DROITS RÉSERVÉS."

@@ -121,7 +121,8 @@
         "pagination": {
             "page": "Страница",
             "rows-per-page": "Рядов на странице:"
-        }
+        },
+        "coming-soon": "Вскоре!"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED."
