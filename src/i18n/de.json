@@ -29,7 +29,7 @@
             "mint-voucher": "Gutschein minten",
             "modal": {
                 "title": "Overtime Gutschein minten",
-                "description": "<p>Die Funktionalität des Overtime Gutscheins wurde implementiert per<tip>TIP-76</tip><p/>.",
+                "description": "<p>Die Funktionalität des Overtime Gutscheins wurde implementiert per <tip>TIP-76.</tip><p/>",
                 "voucher-amount-label": "Gutschein Betrag",
                 "another-wallet-label": "Gutschein an einen anderen Wallet senden",
                 "recipient-wallet-label": "Empfänge Wallet",
@@ -273,7 +273,7 @@
         "discord-label": "Discord ID (optional)",
         "discord-placeholder": "Gib deine Discord ID ein",
         "current-question-label": "Aktuelle Frage: {{currentQuestion}}/{{numberOfQuestions}}",
-        "time-reamining-label": "Zeit übrig<0/>",
+        "time-reamining-label": "Zeit übrig <0/>",
         "question-weight-label": "Schwierigkeit der Frage: {{points}}",
         "point-label": "Punkt",
         "points-label": "Punkte",
@@ -289,7 +289,7 @@
         },
         "leaderboard": {
             "title": "Quiz Rangliste",
-            "description": "<p>Dies ist die Quiz-Rangliste, in der du sehen kannst, wie du im Vergleich zur Konkurrenz in jeder bestimmten Woche abschneidest</p><p>Alle Details zur Teilnahme und zum Gewinn von NFT sUSD-Gutscheinen, die für jeden Sportmarkt verwendet werden können, finden Sie <blogPost>hier</blogPost>.</p><p>Du kannst das Quiz<sportsTrivia>hier</sportsTrivia> so oft wiederholen, wie du willst.</p>",
+            "description": "<p>Dies ist die Quiz-Rangliste, in der du sehen kannst, wie du im Vergleich zur Konkurrenz in jeder bestimmten Woche abschneidest</p><p>Alle Details zur Teilnahme und zum Gewinn von NFT sUSD-Gutscheinen, die für jeden Sportmarkt verwendet werden können, finden Sie <blogPost>hier</blogPost>.</p><p>Du kannst das Quiz <sportsTrivia>hier</sportsTrivia> so oft wiederholen, wie du willst.</p>",
             "back-to-quiz": "Zurück zum Quiz",
             "search-placeholder": "Suchen...",
             "table": {
