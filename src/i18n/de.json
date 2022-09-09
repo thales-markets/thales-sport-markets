@@ -310,8 +310,8 @@
         "help-us-improve-tooltip": "Helfen Sie uns, Sport-Quiz zu verbessern, indem Sie neue Fragen in die Fragen-Datenbank eintragen.",
         "finish-messages": {
             "your-best-result": "Ihr bestes Resultat: {{points}} {{pointsLabel}}",
-            "rank-info": "Mit {{Punkte}} {{PunkteLabel}} sind Sie auf der Rangliste {{Rang}} von {{GesamtTeilnehmer}} Teilnehmern.",
-            "not-quilfied-for-rewards": "Es fehlen Ihnen {{Punkte}} {{pointsLabel}}, um in die TOP {{numberOfRewards}} zu kommen und sich für Preise zu qualifizieren. Versuchen Sie es erneut und verbessern Sie Ihre Punktzahl.",
+            "rank-info": "Mit {{points}} {{pointsLabel}} sind Sie auf der Rangliste {{rank}} von {{totalParticipants}} Teilnehmern.",
+            "not-quilfied-for-rewards": "Es fehlen Ihnen {{points}} {{pointsLabel}}, um in die TOP {{numberOfRewards}} zu kommen und sich für Preise zu qualifizieren. Versuchen Sie es erneut und verbessern Sie Ihre Punktzahl.",
             "quilfied-for-rewards": "Du bist derzeit in der TOP {{numberOfRewards}} und für Preise qualifiziert. Versuchen Sie es erneut, um einen besseren Rang und höhere Belohnungen zu erhalten.",
             "quilfied-for-rewards-first": "Sie führen derzeit die Rangliste an! Versuchen Sie es noch einmal, um eine bessere Punktzahl zu erreichen und Ihren Platz zu sichern."
         },
