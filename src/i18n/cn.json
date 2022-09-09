@@ -218,6 +218,7 @@
             "potential-profit": "潜在的利润",
             "amount-claimable": "可领取数量",
             "claim-back": "可退回数量",
+            "max": "最大",
             "wallet-info": {
                 "title": "钱包中"
             },

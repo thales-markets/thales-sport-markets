@@ -218,6 +218,7 @@
             "potential-profit": "Potenzieller Profit",
             "amount-claimable": "Einforderbarer Gewinn",
             "claim-back": "Rückerstattung verlangen",
+            "max": "Max",
             "wallet-info": {
                 "title": "Im Wallet"
             },

@@ -219,6 +219,7 @@
             "amount-claimable": "Amount claimable",
             "claim-back": "Claim back",
             "skew": "Skew",
+            "max": "Max",
             "wallet-info": {
                 "title": "In wallet"
             }
