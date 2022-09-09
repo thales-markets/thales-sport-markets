@@ -117,6 +117,10 @@
             "american-odds": "Odds americanas",
             "decimal-odds": "Probabilidades decimales",
             "normalized-implied-odds": "Odds implícitas normalizadas"
+        },
+        "pagination": {
+            "page": "Página",
+            "rows-per-page": "Filas por página:"
         }
     },
     "footer": {

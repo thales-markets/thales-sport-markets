@@ -117,6 +117,10 @@
             "american-odds": "美国赔率",
             "decimal-odds": "小数赔率",
             "normalized-implied-odds": "标准化隐含赔率"
+        },
+        "pagination": {
+            "rows-per-page": "每页行数：",
+            "page": "页"
         }
     },
     "footer": {

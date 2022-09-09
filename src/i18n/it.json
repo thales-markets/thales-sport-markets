@@ -117,6 +117,10 @@
             "sun": "sole",
             "mon": "mio ",
             "thu": "raccogliere"
+        },
+        "pagination": {
+            "rows-per-page": "Righe per pagina:",
+            "page": "Pagina"
         }
     },
     "footer": {

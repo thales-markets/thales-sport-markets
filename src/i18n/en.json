@@ -12,6 +12,10 @@
             "sat": "sat",
             "sun": "sun"
         },
+        "pagination": {
+            "page": "Page",
+            "rows-per-page": "Rows per page:"
+        },
         "wallet": {
             "connect-your-wallet": "Connect wallet",
             "switch-wallet": "Switch wallet",

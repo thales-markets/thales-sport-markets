@@ -117,6 +117,10 @@
             "american-odds": "Amerikanische Quoten",
             "normalized-implied-odds": "Normalisierte implizite Quoten",
             "decimal-odds": "Dezimalquoten"
+        },
+        "pagination": {
+            "rows-per-page": "Zeilen pro Seite:",
+            "page": "Buchseite"
         }
     },
     "footer": {

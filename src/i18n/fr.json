@@ -137,6 +137,10 @@
             "normalized-implied-odds": "Cotes implicites normalisées",
             "decimal-odds": "Cotes décimales",
             "american-odds": "Cotes américaines"
+        },
+        "pagination": {
+            "rows-per-page": "Lignes par page :",
+            "page": "Page"
         }
     },
     "footer": {
