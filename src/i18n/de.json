@@ -241,7 +241,7 @@
     "rewards": {
         "header": "Preise",
         "search-placeholder": "Wallet Addresse suchen",
-        "description": "<0>There is a total of <0>16,000 OP</0> and <0>16,000 THALES</0> rewards to be distributed in 4 weeks, divided in 2-week periods. <0>8,000 OP + 8,000 THALES</0> will be allocated pro-rata based on the total sum of losses per wallet for each 2-week period.</0><0>All markets that have matured in that 2-week period are accounted for. Individual wallet's losses on each market are added up to get the leaderboard results.</0><1>- First 2-week round is from <0>00:00 UTC August 29</0> until <0>00:00 UTC September 12</0></1><1>- Second 2-week round is from <0>00:00 UTC September 12</0> until <0>00:00 UTC September 26</0></1><0>This incentivized program will be revisited after September 26.</0>",
+        "description": "<0>Es gibt insgesamt <0>16.000 OP</0> und <0>16.000 THALES</0> Preise, die in 4 Wochen verteilt werden, aufgeteilt in 2-Wochen-Perioden. <0>8.000 OP + 8.000 THALES</0> werden anteilig auf Basis der Gesamtsumme der Verluste pro Wallet für jede 2-Wochen-Periode verteilt.</0><0>Alle Märkte, die in dieser 2-Wochen-Periode reif geworden sind, werden berücksichtigt. Die Verluste der einzelnen Wallets auf jedem Markt werden addiert, um die Ergebnisse der Rangliste zu erhalten.</0><1>- Die erste 2-Wochen-Runde dauert von <0>00:00 UTC 29. August</0> bis <0>00:00 UTC 12. September</0></1><1>- Die zweite 2-Wochen-Runde dauert von <0>00:00 UTC 12. September</0> bis <0>00:00 UTC 26. September</0></1><0>Dieses Incentive-Programm wird möglicherweise nach dem 26. September wieder aufgegriffen.</0>",
         "total-negative-pnl": "Total losses",
         "op-rewards-banner-message": "Die OP-Preise haben begonnen. Wie ihr sie verdienen könnt, erfahrt ihr auf <bold>der OP-Preisseite</bold>.",
         "table": {
@@ -284,7 +284,7 @@
         },
         "leaderboard": {
             "title": "Quiz Rangliste",
-            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition for any given week.</p><p>All the details about how to participate for NFT sUSD vouchers that can be used on any sports market available <blogPost>here</blogPost>.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
+            "description": "<p>Dies ist die Quiz-Rangliste, in der du sehen kannst, wie du im Vergleich zur Konkurrenz in jeder bestimmten Woche abschneidest</p><p>Alle Details zur Teilnahme und zum Gewinn von NFT sUSD-Gutscheinen, die für jeden Sportmarkt verwendet werden können, finden Sie <blogPost>hier</blogPost>.</p><p>Du kannst das Quiz<sportsTrivia>hier</sportsTrivia> so oft wiederholen, wie du willst.</p>",
             "back-to-quiz": "Zurück zum Quiz",
             "search-placeholder": "Suchen...",
             "table": {
