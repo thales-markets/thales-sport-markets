@@ -351,12 +351,13 @@
         "description": "<0>Il y a un total de <0>16 000 OP</0> et de <0>16 000 THALES</0> à distribuer en 4 semaines, divisées en périodes de 2 semaines. <0>8 000 OP + 8 000 THALES</0> seront alloués au prorata en fonction de la somme totale des pertes par portefeuille pour chaque période de 2 semaines.</0><0>Tous les marchés arrivés à maturité au cours de cette période de 2 semaines semaine sont pris en compte. Les pertes du portefeuille individuel sur chaque marché sont additionnées pour obtenir les résultats du classement.</0><1>- Le premier tour de 2 semaines est de <0>00:00 UTC le 29 août</0> jusqu'à <0>00:00 UTC le 12 septembre</0></1><1>- Le deuxième cycle de 2 semaines s'étend du <0>00:00 UTC le 12 septembre</0> au <0>00:00 UTC le 26 septembre</0>< /1><0>Ce programme incitatif sera revisité après le 26 septembre.</0>",
         "total-negative-pnl": "Pertes totales",
         "periods": {
-            "first-period": "Première période",
-            "fifth-period": "Cinquième période",
-            "third-period": "Troisième période",
-            "second-period": "Deuxième période",
-            "fourth-period": "Quatrième période"
-        }
+            "period-0": "Première période",
+            "period-1": "Cinquième période",
+            "period-2": "Troisième période",
+            "period-3": "Deuxième période",
+            "period-4": "Quatrième période"
+        },
+        "your-score": "Ton score"
     },
     "quiz": {
         "button": {

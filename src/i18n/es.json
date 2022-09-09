@@ -252,12 +252,13 @@
             "no-data-available": "No hay datos disponibles"
         },
         "periods": {
-            "first-period": "Primer periodo",
-            "fourth-period": "Cuarto periodo",
-            "second-period": "Segundo período",
-            "third-period": "Tercer periodo",
-            "fifth-period": "Quinto periodo"
-        }
+            "period-0": "Primer periodo",
+            "period-1": "Cuarto periodo",
+            "period-2": "Segundo período",
+            "period-3": "Tercer periodo",
+            "period-4": "Quinto periodo"
+        },
+        "your-score": "Tu puntuación"
     },
     "quiz": {
         "title": "Competencia de trivia sobre deportes (en ingles)",

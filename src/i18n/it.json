@@ -252,12 +252,13 @@
             "no-data-available": "No data available"
         },
         "periods": {
-            "first-period": "Primo periodo",
-            "second-period": "Secondo periodo",
-            "fifth-period": "Quinto periodo",
-            "fourth-period": "Quarto periodo",
-            "third-period": "Terzo periodo"
-        }
+            "period-1": "Secondo periodo",
+            "period-2": "Terzo periodo",
+            "period-0": "Primo periodo",
+            "period-4": "Quinto periodo",
+            "period-3": "Quarto periodo"
+        },
+        "your-score": "Il tuo punteggio"
     },
     "quiz": {
         "title": "Sports Trivia competition",

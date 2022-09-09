@@ -256,8 +256,14 @@
             "first-period": "ช่วงแรก",
             "fourth-period": "ช่วงที่สี่",
             "third-period": "ช่วงที่สาม",
-            "fifth-period": "ช่วงที่ห้า"
-        }
+            "fifth-period": "ช่วงที่ห้า",
+            "period-0": "ช่วงแรก",
+            "period-4": "ช่วงที่ห้า",
+            "period-3": "ช่วงที่สี่",
+            "period-2": "ช่วงที่สาม",
+            "period-1": "ช่วงที่สอง"
+        },
+        "your-score": "คะแนนของคุณ"
     },
     "quiz": {
         "title": "Sports Trivia competition",

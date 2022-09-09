@@ -244,6 +244,7 @@
         "description": "<0>There is a total of <0>16,000 OP</0> and <0>16,000 THALES</0> rewards to be distributed in 4 weeks, divided in 2-week periods. <0>8,000 OP + 8,000 THALES</0> will be allocated pro-rata based on the total sum of losses per wallet for each 2-week period.</0><0>All markets that have matured in that 2-week period are accounted for. Individual wallet's losses on each market are added up to get the leaderboard results.</0><1>- First 2-week round is from <0>00:00 UTC August 29</0> until <0>00:00 UTC September 12</0></1><1>- Second 2-week round is from <0>00:00 UTC September 12</0> until <0>00:00 UTC September 26</0></1><0>This incentivized program will be revisited after September 26.</0>",
         "total-negative-pnl": "Total losses",
         "op-rewards-banner-message": "OP rewards have started, check how you can earn those on <bold>the OP rewards page</bold>",
+        "your-score": "Your score",
         "table": {
             "wallet-address": "Wallet address",
             "pnl": "Losses",
@@ -252,11 +253,11 @@
             "no-data-available": "No data available"
         },
         "periods": {
-            "first-period": "First period",
-            "second-period": "Second period",
-            "third-period": "Third period",
-            "fourth-period": "Fourth period",
-            "fifth-period": "Fifth period"
+            "period-0": "First period",
+            "period-1": "Second period",
+            "period-2": "Third period",
+            "period-3": "Fourth period",
+            "period-4": "Fifth period"
         }
     },
     "quiz": {

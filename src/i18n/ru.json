@@ -252,12 +252,13 @@
             "no-data-available": "No data available"
         },
         "periods": {
-            "first-period": "Первый период",
-            "fifth-period": "Пятый период",
-            "third-period": "Третий период",
-            "fourth-period": "Четвертый период",
-            "second-period": "Второй период"
-        }
+            "period-3": "Четвертый период",
+            "period-4": "Пятый период",
+            "period-2": "Третий период",
+            "period-0": "Первый период",
+            "period-1": "Второй период"
+        },
+        "your-score": "Твой счет"
     },
     "quiz": {
         "title": "Sports Trivia competition",

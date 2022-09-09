@@ -252,12 +252,13 @@
             "no-data-available": "无法获取数据"
         },
         "periods": {
-            "first-period": "第一节课",
-            "second-period": "第二阶段",
-            "third-period": "第三期",
-            "fifth-period": "第五期",
-            "fourth-period": "第四期"
-        }
+            "period-0": "第一节课",
+            "period-1": "第二阶段",
+            "period-2": "第三期",
+            "period-3": "第五期",
+            "period-4": "第四期"
+        },
+        "your-score": "你的分数"
     },
     "quiz": {
         "title": "体育百科竞赛",
