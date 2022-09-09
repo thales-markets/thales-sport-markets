@@ -306,6 +306,7 @@ const Leaderboard: React.FC = () => {
                 <PaginationWrapper
                     rowsPerPageOptions={[10, 20, 50, 100]}
                     count={leaderboard.length ? leaderboard.length : 0}
+                    labelRowsPerPage={t(`common.pagination.rows-per-page`)}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}

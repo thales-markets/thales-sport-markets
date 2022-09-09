@@ -103,7 +103,26 @@
         "input-characters-note": "{{entered }} / {{max}}",
         "view": "View",
         "guidelines": "guidelines",
-        "built-on": "Built on"
+        "built-on": "Built on",
+        "odds": {
+            "american-odds": "อัตราต่อรองแบบอเมริกัน",
+            "normalized-implied-odds": "อัตราต่อรองโดยนัยที่ทำให้เป็นมาตรฐาน",
+            "decimal-odds": "อัตราต่อรองทศนิยม"
+        },
+        "days-of-week": {
+            "tue": "อ.",
+            "sun": "ดวงอาทิตย์",
+            "mon": "ของฉัน ",
+            "fri": "วันศุกร์",
+            "sat": "นั่ง",
+            "wed": "พุธ",
+            "thu": "เก็บรวบรวม"
+        },
+        "pagination": {
+            "page": "หน้าหนังสือ",
+            "rows-per-page": "แถวต่อหน้า:"
+        },
+        "coming-soon": "เร็วๆ นี้!"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED."
@@ -155,7 +174,10 @@
                 "baseball": "Baseball",
                 "soon": "More sports coming soon!"
             },
-            "all": "All"
+            "all": "All",
+            "datepicker": {
+                "games": "{{numberOfGames}} เกม"
+            }
         },
         "back-to-markets": "Back to markets",
         "back-to-market": "Back to market",
@@ -215,7 +237,9 @@
             "claim-back": "Claim back",
             "wallet-info": {
                 "title": "In wallet"
-            }
+            },
+            "skew": "ลาด",
+            "max": "แม็กซ์"
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity."
     },
@@ -223,7 +247,6 @@
         "header": "Rewards",
         "search-placeholder": "Search wallet address",
         "description": "<0>There is a total of <0>16,000 OP</0> and <0>16,000 THALES</0> rewards to be distributed in 4 weeks, divided in 2-week periods. <0>8,000 OP + 8,000 THALES</0> will be allocated pro-rata based on the total sum of losses per wallet for each 2-week period.</0><0>All markets that have matured in that 2-week period are accounted for. Individual wallet's losses on each market are added up to get the leaderboard results.</0><1>- First 2-week round is from <0>00:00 UTC August 29</0> until <0>00:00 UTC September 12</0></1><1>- Second 2-week round is from <0>00:00 UTC September 12</0> until <0>00:00 UTC September 26</0></1><0>This incentivized program will be revisited after September 26.</0>",
-        "total-negative-pnl": "Total losses",
         "op-rewards-banner-message": "OP rewards have started, check how you can earn those on <bold>the OP rewards page</bold>",
         "table": {
             "wallet-address": "Wallet address",
@@ -231,7 +254,21 @@
             "percentage": "Percentage",
             "reward-amount": "Reward",
             "no-data-available": "No data available"
-        }
+        },
+        "periods": {
+            "second-period": "ช่วงที่สอง",
+            "first-period": "ช่วงแรก",
+            "fourth-period": "ช่วงที่สี่",
+            "third-period": "ช่วงที่สาม",
+            "fifth-period": "ช่วงที่ห้า",
+            "period-0": "ช่วงแรก",
+            "period-4": "ช่วงที่ห้า",
+            "period-3": "ช่วงที่สี่",
+            "period-2": "ช่วงที่สาม",
+            "period-1": "ช่วงที่สอง"
+        },
+        "your-score": "คะแนนของคุณ",
+        "total-negative-pnl": "ขาดทุนทั้งหมด"
     },
     "quiz": {
         "title": "Sports Trivia competition",

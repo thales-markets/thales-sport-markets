@@ -4,6 +4,7 @@ export const erc20Contract = {
         10: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9',
         42: '0x5d7e13023a6f2245D7Af1eaE97dFF2EF1057F5b9',
         69: '0xaA5068dC2B3AADE533d3e52C6eeaadC6a8154c57',
+        420: '0xE1ceaa829525a08C1d39A5CEBe4b42aF58d77198',
     },
     abi: [
         { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },

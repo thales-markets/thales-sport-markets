@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
 
@@ -11,13 +12,14 @@ type SportFilterProps = {
 };
 
 const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, onClick, children }) => {
+    const { t } = useTranslation();
     return (
         <Container
             className={`${disabled ? 'disabled' : ''} ${selected ? 'selected' : ''}`}
             onClick={() => (!disabled ? onClick() : '')}
         >
             <SportIcon className={`icon icon--${sport.toLowerCase() == 'all' ? 'logo' : sport.toLowerCase()}`} />
-            <Label>{`${children} ${disabled ? '\n Coming soon!' : ''} `}</Label>
+            <Label>{`${children} ${disabled ? `\n ${t('common.coming-soon')}` : ''} `}</Label>
         </Container>
     );
 };

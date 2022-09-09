@@ -3,6 +3,15 @@
         "winner": "获胜",
         "buy-side": "买入",
         "sell-side": "卖出",
+        "days-of-week": {
+            "mon": "周一",
+            "tue": "周二",
+            "wed": "周三",
+            "thu": "周四",
+            "fri": "星期五",
+            "sat": "周六",
+            "sun": "星期日"
+        },
         "wallet": {
             "connect-your-wallet": "链接钱包",
             "switch-wallet": "更换钱包",
@@ -101,9 +110,19 @@
         "tags-placeholder": "搜索标签...",
         "remove-tag-tooltip": "点击删除标签",
         "input-characters-note": "{{entered }} / {{max}}",
-        "view": "View",
+        "view": "看",
         "guidelines": "指南",
-        "built-on": "建立于"
+        "built-on": "建立于",
+        "odds": {
+            "american-odds": "美国赔率",
+            "decimal-odds": "小数赔率",
+            "normalized-implied-odds": "标准化隐含赔率"
+        },
+        "pagination": {
+            "rows-per-page": "每页行数：",
+            "page": "页"
+        },
+        "coming-soon": "快来了！"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利."
@@ -155,7 +174,10 @@
                 "baseball": "棒球",
                 "soon": "即将开放!"
             },
-            "all": "所有"
+            "all": "所有",
+            "datepicker": {
+                "games": "{{numberOfGames}} 场比赛"
+            }
         },
         "back-to-markets": "查看其他比赛",
         "back-to-market": "返回市场页面",
@@ -213,9 +235,11 @@
             "potential-profit": "潜在的利润",
             "amount-claimable": "可领取数量",
             "claim-back": "可退回数量",
+            "max": "最大",
             "wallet-info": {
                 "title": "钱包中"
-            }
+            },
+            "skew": "偏斜"
         },
         "zero-odds-tooltip": "Sports AMM 仅提供0.05美元至0.95美元价格范围内的流动性，这意味着，如果一个投注选择的赔率低于5%或者高于95%，该选择就不会有流动性。"
     },
@@ -231,7 +255,15 @@
             "percentage": "百分比",
             "reward-amount": "奖励数量",
             "no-data-available": "无法获取数据"
-        }
+        },
+        "periods": {
+            "period-0": "第一节课",
+            "period-1": "第二阶段",
+            "period-2": "第三期",
+            "period-3": "第五期",
+            "period-4": "第四期"
+        },
+        "your-score": "你的分数"
     },
     "quiz": {
         "title": "体育百科竞赛",

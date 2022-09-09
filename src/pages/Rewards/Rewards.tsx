@@ -61,7 +61,7 @@ const Rewards: React.FC = () => {
             CALCULATED_START = new Date(CALCULATED_START.getTime() + PERIOD_DURATION_IN_DAYS * 24 * 60 * 60 * 1000);
             options.push({
                 value: PERIOD_COUNTER,
-                label: `${mapPeriod(PERIOD_COUNTER)} period`,
+                label: t(`rewards.periods.period-${PERIOD_COUNTER}`),
             });
             PERIOD_COUNTER++;
         } else {
@@ -137,7 +137,7 @@ const Rewards: React.FC = () => {
                         </Row>
                         {userRewardData && (
                             <HighlightRow>
-                                <HighlightColumn>{'Your score'}</HighlightColumn>
+                                <HighlightColumn>{t('rewards.your-score')}</HighlightColumn>
                                 <HighlightColumn>{`${Number(userRewardData?.pnl).toFixed(2)} $`}</HighlightColumn>
                                 <HighlightColumn>{`${Number(userRewardData?.percentage).toFixed(
                                     2
@@ -222,23 +222,6 @@ const percentageSort = () => (rowA: any, rowB: any) => {
 
 const pnlSort = () => (rowA: any, rowB: any) => {
     return rowA.original.pnl - rowB.original.pnl;
-};
-
-const mapPeriod = (period: number) => {
-    switch (period) {
-        case 0:
-            return 'First';
-        case 1:
-            return 'Second';
-        case 2:
-            return 'Third';
-        case 3:
-            return 'Fourth';
-        case 4:
-            return 'Fifth';
-        default:
-            return '';
-    }
 };
 
 export default Rewards;
