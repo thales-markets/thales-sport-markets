@@ -644,10 +644,10 @@ const Home: React.FC = () => {
                         onSelect={setSelectedOddsType}
                         style={{ marginRight: '10px', width: 'max-content' }}
                     />
-                    <ViewSwitch selected={showListView} onClick={() => setListView(true)}>
+                    <ViewSwitch selected={showListView} onClick={() => setListView(true)} type={'list'}>
                         {t('market.list-view')}
                     </ViewSwitch>
-                    <ViewSwitch selected={!showListView} onClick={() => setListView(false)}>
+                    <ViewSwitch selected={!showListView} onClick={() => setListView(false)} type={'grid'}>
                         {t('market.grid-view')}
                     </ViewSwitch>
                 </SwitchContainer>
