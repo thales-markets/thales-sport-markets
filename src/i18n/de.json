@@ -23,21 +23,21 @@
             "disclaimer": "Indem Sie ein Wallet verbinden, bestätigen Sie, dass Sie den Overtime Markets <a target=\"_blank\" href={{link}}>Haftungsausschluss</a> gelesen und verstanden haben und mit den Nutzungsbedingungen einverstanden sind."
         },
         "voucher": {
-            "remaining-amount": "Remaining amount",
-            "overtime-voucher": "Overtime voucher",
-            "voucher": "Voucher",
-            "mint-voucher": "Mint voucher",
+            "remaining-amount": "Verbleibender Betrag",
+            "overtime-voucher": "Overtime Gutschein",
+            "voucher": "Gutschein",
+            "mint-voucher": "Gutschein minten",
             "modal": {
-                "title": "Mint Overtime voucher",
-                "description": "<p>Overtime voucher functionality has been implemented per <tip>TIP-76</tip><p/>.",
-                "voucher-amount-label": "Voucher amount",
-                "another-wallet-label": "Send a voucher to another wallet",
-                "recipient-wallet-label": "Recipient wallet",
-                "recipient-wallet-placeholder": "Enter recipient address",
+                "title": "Overtime Gutschein minten",
+                "description": "<p>Die Funktionalität des Overtime Gutscheins wurde implementiert per<tip>TIP-76</tip><p/>.",
+                "voucher-amount-label": "Gutschein Betrag",
+                "another-wallet-label": "Gutschein an einen anderen Wallet senden",
+                "recipient-wallet-label": "Empfänge Wallet",
+                "recipient-wallet-placeholder": "Die Addresse des Empfängers eingeben",
                 "button": {
-                    "mint-label": "Mint",
-                    "mint-progress-label": "Minting in progress...",
-                    "confirmation-message": "Voucher successfully minted"
+                    "mint-label": "Minten",
+                    "mint-progress-label": "Gutschein wird gemintet...",
+                    "confirmation-message": "Gutschein erfolgreich gemintet"
                 }
             }
         },
@@ -78,8 +78,8 @@
             "enter-price": "Preis eigeben",
             "insufficient-balance-wallet": "Bitte stellen Sie sicher, dass Ihr Wallet genügend {{currencyKey}} enthält",
             "user-rejected-tx": "Benutzer hat die Transaktion abgelehnt",
-            "enter-address": "Enter address",
-            "invalid-address": "Invalid address"
+            "enter-address": "Adresse eingeben",
+            "invalid-address": "Ungültige Adresse"
         },
         "time-remaining": {
             "ended": "zu Ende",
@@ -201,9 +201,9 @@
             "game-col": "Spiel"
         },
         "tooltip": {
-            "amount-exceeded": "Amount exceeded the amount available on AMM",
-            "minimal-amount": "Minimal amount is 1",
-            "no-funds": "Please ensure your wallet has enough funds"
+            "amount-exceeded": "Der Betrag überstieg den auf der AMM verfügbaren Betrag",
+            "minimal-amount": "Der Mindestbetrag ist 1",
+            "no-funds": "Bitte stellen Sie sicher, dass Ihr Wallet ausreichend USD enthält"
         }
     },
     "markets": {
@@ -234,7 +234,7 @@
             "wallet-info": {
                 "title": "Im Wallet"
             },
-            "skew": "Schräg"
+            "skew": "Skew"
         },
         "zero-odds-tooltip": "Sports AMM bietet nur Liquidität in der Preisspanne von $0,05 bis $0,95. Dies bedeutet, dass wenn die Quoten für eine Position weniger als 5% oder mehr als 95% betragen, diese Position keine Liquidität hat."
     },
@@ -260,8 +260,8 @@
         }
     },
     "quiz": {
-        "title": "Sports Trivia competition",
-        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition where weekly winners will receive NFT Vouchers that can be used instead of sUSD to participate in any sports market you like.</p><p>Read all the information about this trivia in our <blogPost>blog post</blogPost>.</p><p>How to participate? The trivia is available to everyone to test their knowledge and compete, but to be eligible for rewards you need to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime's Twitter</twitter>.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
+        "title": "Sport Trivia Wettbewerb",
+        "start-quiz-description": "<p>Hallo Sportfans! Bist du bereit, dein Wissen zu testen?</p><p>Overtime hat einen Sport-Trivia-Wettbewerb ins Leben gerufen, bei dem die wöchentlichen Gewinner NFT-Gutscheine erhalten, die anstelle von SUSD für die Teilnahme an einem beliebigen Sportmarkt verwendet werden können.</p><p>Lies alle Informationen zu diesem Quiz in unserem <blogPost>Blogpost</blogPost>.</p><p>Wie kann man teilnehmen? Das Quiz steht jedem zur Verfügung, um sein Wissen zu testen und sich zu wettkämpfen, aber um sich für die Preise zu qualifizieren, müssen Sie dieses <quizRetweetLink>Tweet</quizRetweetLink> retweeten und <twitter>Overtime's Twitter</twitter> folgen.</p><p>Verbinden Sie Ihr Wallet und geben Sie Ihren Twitter-Handle ein, um das Quiz zu starten! Wenn du Belohnungen gewinnst, werden wir dich bitten, deine Adresse per Twitter-DM zu bestätigen. Die Discord-ID ist optional, wenn du als potenzieller Gewinner eine Discord-Rolle erhalten möchtest.</p><p>Für Fragen kannst du unserem <discord>Discord</discord> beitreten.</p>",
         "twitter-handle-label": "Twitter Handle",
         "twitter-handle-placeholder": "Geben Sie Ihr Twitter-Handle ein",
         "twitter-handle-validation": "Ungültiger Twitter-Handle. Versuchen Sie es erneut.",
@@ -299,7 +299,7 @@
             "period-end-label": "Die Frist endet in",
             "period-ended-label": "Zeitraum beendet",
             "week-label": "Woche",
-            "overtime-voucher": "Overtime guschein"
+            "overtime-voucher": "Overtime Gutschein"
         },
         "help-us-improve-label": "Helfen sie uns, den Quiz zu verbessern",
         "help-us-improve-tooltip": "Helfen Sie uns, Sport-Quiz zu verbessern, indem Sie neue Fragen in die Fragen-Datenbank eintragen.",
