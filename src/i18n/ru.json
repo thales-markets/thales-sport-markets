@@ -108,6 +108,15 @@
             "decimal-odds": "Десятичные коэффициенты",
             "american-odds": "Американские коэффициенты",
             "normalized-implied-odds": "Нормализованные потенциальные шансы"
+        },
+        "days-of-week": {
+            "fri": "пт",
+            "wed": "мы б",
+            "sat": "сидел",
+            "tue": "вт",
+            "sun": "солнце",
+            "mon": "мой ",
+            "thu": "собирать"
         }
     },
     "footer": {
@@ -160,7 +169,10 @@
                 "baseball": "Baseball",
                 "soon": "More sports coming soon!"
             },
-            "all": "All"
+            "all": "All",
+            "datepicker": {
+                "games": "{{numberOfGames}} игр"
+            }
         },
         "back-to-markets": "Back to markets",
         "back-to-market": "Back to market",

@@ -108,6 +108,15 @@
             "american-odds": "Quote americane",
             "normalized-implied-odds": "Quote implicite normalizzate",
             "decimal-odds": "Quote decimali"
+        },
+        "days-of-week": {
+            "wed": "mer",
+            "sat": "sab",
+            "fri": "ven",
+            "tue": "mar",
+            "sun": "sole",
+            "mon": "mio ",
+            "thu": "raccogliere"
         }
     },
     "footer": {
@@ -160,7 +169,10 @@
                 "baseball": "Baseball",
                 "soon": "More sports coming soon!"
             },
-            "all": "All"
+            "all": "All",
+            "datepicker": {
+                "games": "{{numberOfGames}} giochi"
+            }
         },
         "back-to-markets": "Back to markets",
         "back-to-market": "Back to market",

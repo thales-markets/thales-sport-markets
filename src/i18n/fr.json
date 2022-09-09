@@ -1,6 +1,15 @@
 {
     "common": {
         "winner": "Gagnant",
+        "days-of-week": {
+            "mon": "lun",
+            "tue": "mar",
+            "wed": "mer",
+            "thu": "jeu",
+            "fri": "ven",
+            "sat": "sam",
+            "sun": "dim"
+        },
         "wallet": {
             "connect-your-wallet": "Connecter un portefeuille",
             "switch-wallet": "Changer de portefeuille",
@@ -241,7 +250,10 @@
                 "soon": "Plus de sports à venir!",
                 "ufc": "BIEN"
             },
-            "all": "Tous"
+            "all": "Tous",
+            "datepicker": {
+                "games": "{{numberOfGames}} jeux"
+            }
         },
         "back-to-markets": "Retour au marchés",
         "back-to-market": "Retour au marchés",

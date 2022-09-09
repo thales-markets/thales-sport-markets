@@ -3,6 +3,15 @@
         "winner": "Sieger",
         "buy-side": "KAUFEN",
         "sell-side": "VERKAUFEN",
+        "days-of-week": {
+            "mon": "mon",
+            "tue": "die",
+            "wed": "mit",
+            "thu": "don",
+            "fri": "fre",
+            "sat": "sam",
+            "sun": "son"
+        },
         "wallet": {
             "connect-your-wallet": "Wallet verbinden",
             "switch-wallet": "Wallet ändern",
@@ -160,7 +169,10 @@
                 "baseball": "Baseball",
                 "soon": "Bald mehr Sportarten!"
             },
-            "all": "Alles"
+            "all": "Alles",
+            "datepicker": {
+                "games": "{{numberOfGames}} Spiele"
+            }
         },
         "back-to-markets": "Zurück zu den Märkten",
         "back-to-market": "Zurück zum Märkt",

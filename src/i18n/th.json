@@ -108,6 +108,15 @@
             "american-odds": "อัตราต่อรองแบบอเมริกัน",
             "normalized-implied-odds": "อัตราต่อรองโดยนัยที่ทำให้เป็นมาตรฐาน",
             "decimal-odds": "อัตราต่อรองทศนิยม"
+        },
+        "days-of-week": {
+            "tue": "อ.",
+            "sun": "ดวงอาทิตย์",
+            "mon": "ของฉัน ",
+            "fri": "วันศุกร์",
+            "sat": "นั่ง",
+            "wed": "พุธ",
+            "thu": "เก็บรวบรวม"
         }
     },
     "footer": {
@@ -160,7 +169,10 @@
                 "baseball": "Baseball",
                 "soon": "More sports coming soon!"
             },
-            "all": "All"
+            "all": "All",
+            "datepicker": {
+                "games": "{{numberOfGames}} เกม"
+            }
         },
         "back-to-markets": "Back to markets",
         "back-to-market": "Back to market",

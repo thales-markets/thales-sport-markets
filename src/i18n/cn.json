@@ -3,6 +3,15 @@
         "winner": "获胜",
         "buy-side": "买入",
         "sell-side": "卖出",
+        "days-of-week": {
+            "mon": "周一",
+            "tue": "周二",
+            "wed": "周三",
+            "thu": "周四",
+            "fri": "星期五",
+            "sat": "周六",
+            "sun": "星期日"
+        },
         "wallet": {
             "connect-your-wallet": "链接钱包",
             "switch-wallet": "更换钱包",
@@ -160,7 +169,10 @@
                 "baseball": "棒球",
                 "soon": "即将开放!"
             },
-            "all": "所有"
+            "all": "所有",
+            "datepicker": {
+                "games": "{{numberOfGames}} 场比赛"
+            }
         },
         "back-to-markets": "查看其他比赛",
         "back-to-market": "返回市场页面",
