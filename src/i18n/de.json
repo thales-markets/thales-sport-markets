@@ -3,6 +3,15 @@
         "winner": "Sieger",
         "buy-side": "KAUFEN",
         "sell-side": "VERKAUFEN",
+        "days-of-week": {
+            "mon": "mon",
+            "tue": "die",
+            "wed": "mit",
+            "thu": "don",
+            "fri": "fre",
+            "sat": "sam",
+            "sun": "son"
+        },
         "wallet": {
             "connect-your-wallet": "Wallet verbinden",
             "switch-wallet": "Wallet ändern",
@@ -13,6 +22,25 @@
             "get-usd-progress": "{{amount}} wird gemintet...",
             "disclaimer": "Indem Sie ein Wallet verbinden, bestätigen Sie, dass Sie den Overtime Markets <a target=\"_blank\" href={{link}}>Haftungsausschluss</a> gelesen und verstanden haben und mit den Nutzungsbedingungen einverstanden sind."
         },
+        "voucher": {
+            "remaining-amount": "Verbleibender Betrag",
+            "overtime-voucher": "Overtime Gutschein",
+            "voucher": "Gutschein",
+            "mint-voucher": "Gutschein minten",
+            "modal": {
+                "title": "Overtime Gutschein minten",
+                "description": "<p>Die Funktionalität des Overtime Gutscheins wurde implementiert per<tip>TIP-76</tip><p/>.",
+                "voucher-amount-label": "Gutschein Betrag",
+                "another-wallet-label": "Gutschein an einen anderen Wallet senden",
+                "recipient-wallet-label": "Empfänge Wallet",
+                "recipient-wallet-placeholder": "Die Addresse des Empfängers eingeben",
+                "button": {
+                    "mint-label": "Minten",
+                    "mint-progress-label": "Gutschein wird gemintet...",
+                    "confirmation-message": "Gutschein erfolgreich gemintet"
+                }
+            }
+        },
         "referral": {
             "link-copied": "Empfehlungs-Link kopiert!",
             "button": {
@@ -22,7 +50,7 @@
             }
         },
         "swap": {
-            "title": "{{amount}} erhalten",
+            "title": "{{currencyKey}} erhalten",
             "from-label": "Von",
             "to-label": "Zu",
             "balance-label": "Guthaben: {{amount}}",
@@ -49,7 +77,9 @@
             "enter-amount": "Betrag eingeben",
             "enter-price": "Preis eigeben",
             "insufficient-balance-wallet": "Bitte stellen Sie sicher, dass Ihr Wallet genügend {{currencyKey}} enthält",
-            "user-rejected-tx": "Benutzer hat die Transaktion abgelehnt"
+            "user-rejected-tx": "Benutzer hat die Transaktion abgelehnt",
+            "enter-address": "Adresse eingeben",
+            "invalid-address": "Ungültige Adresse"
         },
         "time-remaining": {
             "ended": "zu Ende",
@@ -82,7 +112,12 @@
         "input-characters-note": "{{entered }} / {{max}}",
         "view": "Ansehen",
         "guidelines": "Richtlinien",
-        "built-on": "Aufgebaut auf"
+        "built-on": "Aufgebaut auf",
+        "odds": {
+            "american-odds": "Amerikanische Quoten",
+            "normalized-implied-odds": "Normalisierte implizite Quoten",
+            "decimal-odds": "Dezimalquoten"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN."
@@ -134,7 +169,10 @@
                 "baseball": "Baseball",
                 "soon": "Bald mehr Sportarten!"
             },
-            "all": "Alles"
+            "all": "Alles",
+            "datepicker": {
+                "games": "{{numberOfGames}} Spiele"
+            }
         },
         "back-to-markets": "Zurück zu den Märkten",
         "back-to-market": "Zurück zum Märkt",
@@ -157,7 +195,15 @@
                 "sell": "VERKAUFEN"
             },
             "no-results": "Keine Transaktionen verbunden mit diesem Markt.",
-            "no-results-for-wallet": "Mit diesen Wallet sind keine Transaktionen verbunden."
+            "no-results-for-wallet": "Mit diesen Wallet sind keine Transaktionen verbunden.",
+            "result-col": "Ergebnis",
+            "usd-value-col": "USD-Wert",
+            "game-col": "Spiel"
+        },
+        "tooltip": {
+            "amount-exceeded": "Der Betrag überstieg den auf der AMM verfügbaren Betrag",
+            "minimal-amount": "Der Mindestbetrag ist 1",
+            "no-funds": "Bitte stellen Sie sicher, dass Ihr Wallet ausreichend USD enthält"
         }
     },
     "markets": {
@@ -184,29 +230,38 @@
             "potential-profit": "Potenzieller Profit",
             "amount-claimable": "Einforderbarer Gewinn",
             "claim-back": "Rückerstattung verlangen",
+            "max": "Max",
             "wallet-info": {
                 "title": "Im Wallet"
-            }
+            },
+            "skew": "Skew"
         },
         "zero-odds-tooltip": "Sports AMM bietet nur Liquidität in der Preisspanne von $0,05 bis $0,95. Dies bedeutet, dass wenn die Quoten für eine Position weniger als 5% oder mehr als 95% betragen, diese Position keine Liquidität hat."
     },
     "rewards": {
         "header": "Preise",
         "search-placeholder": "Wallet Addresse suchen",
-        "description": "<0>Es gibt insgesamt <0>10.000 OP</0> und <0>10.000 THALES</0> Preise, die in 4 Wochen verteilt werden, aufgeteilt in 2-Wochen-Perioden. <0>5.000 OP + 5.000 THALES</0> werden anteilig auf Basis der gesamten negativen PnL (Gewinn und Verlust) für jede 2-Wochen-Periode zugeteilt.</0><0>Alle Märkte, die in dieser 2-Wochen-Periode gereift sind, werden berücksichtigt. Die PnL der einzelnen Wallets auf jedem Markt werden zusammengezählt, um die Ergebnisse der Rangliste zu erhalten.</0><1>- Der erste 2-Wochen-Zeitraum geht vom 1. August bis zum 14. August.</1><1>- Der zweite 2-Wochen-Zeitraum geht vom 15. August bis zum 28. August.</1><0>Dieses Incentive-Programm wird nach dem Ende des zweiten 2-Wochen-Zeitraums erneut überprüft.</0>",
-        "total-negative-pnl": "Gesamte negative PnL",
+        "description": "<0>There is a total of <0>16,000 OP</0> and <0>16,000 THALES</0> rewards to be distributed in 4 weeks, divided in 2-week periods. <0>8,000 OP + 8,000 THALES</0> will be allocated pro-rata based on the total sum of losses per wallet for each 2-week period.</0><0>All markets that have matured in that 2-week period are accounted for. Individual wallet's losses on each market are added up to get the leaderboard results.</0><1>- First 2-week round is from <0>00:00 UTC August 29</0> until <0>00:00 UTC September 12</0></1><1>- Second 2-week round is from <0>00:00 UTC September 12</0> until <0>00:00 UTC September 26</0></1><0>This incentivized program will be revisited after September 26.</0>",
+        "total-negative-pnl": "Total losses",
         "op-rewards-banner-message": "Die OP-Preise haben begonnen. Wie ihr sie verdienen könnt, erfahrt ihr auf <bold>der OP-Preisseite</bold>.",
         "table": {
             "wallet-address": "Wallet Addresse",
-            "pnl": "PnL",
+            "pnl": "Losses",
             "percentage": "Prozent",
             "reward-amount": "Preis",
             "no-data-available": "Keine Daten verfügbar"
+        },
+        "periods": {
+            "second-period": "Zweite Periode",
+            "first-period": "Erste Periode",
+            "third-period": "Dritte Periode",
+            "fourth-period": "Vierte Periode",
+            "fifth-period": "Fünfte Periode"
         }
     },
     "quiz": {
-        "title": "Sport-Quiz",
-        "start-quiz-description": "<p>Du musst dieses <quizRetweetLink>tweet</quizRetweetLink> retweeten und <twitter>Overtime</twitter> folgen, um teilnahmeberechtigt zu sein.</p><p>Verbinde deine Brieftasche und gib deinen Twitter-Handle ein, um das Quiz zu starten! Wenn du Preise gewinnst, bitten wir dich, deine Adresse über eine Twitter-DM zu bestätigen. Die Discord-ID ist optional, wenn du als potenzieller Gewinner eine Discord-Rolle erhalten möchtest.</p><p>Für Fragen kannst du unserem <discord>Discord</discord> beitreten.</p>",
+        "title": "Sport Trivia Wettbewerb",
+        "start-quiz-description": "<p>Hallo Sportfans! Bist du bereit, dein Wissen zu testen?</p><p>Overtime hat einen Sport-Trivia-Wettbewerb ins Leben gerufen, bei dem die wöchentlichen Gewinner NFT-Gutscheine erhalten, die anstelle von SUSD für die Teilnahme an einem beliebigen Sportmarkt verwendet werden können.</p><p>Lies alle Informationen zu diesem Quiz in unserem <blogPost>Blogpost</blogPost>.</p><p>Wie kann man teilnehmen? Das Quiz steht jedem zur Verfügung, um sein Wissen zu testen und sich zu wettkämpfen, aber um sich für die Preise zu qualifizieren, müssen Sie dieses <quizRetweetLink>Tweet</quizRetweetLink> retweeten und <twitter>Overtime's Twitter</twitter> folgen.</p><p>Verbinden Sie Ihr Wallet und geben Sie Ihren Twitter-Handle ein, um das Quiz zu starten! Wenn du Belohnungen gewinnst, werden wir dich bitten, deine Adresse per Twitter-DM zu bestätigen. Die Discord-ID ist optional, wenn du als potenzieller Gewinner eine Discord-Rolle erhalten möchtest.</p><p>Für Fragen kannst du unserem <discord>Discord</discord> beitreten.</p>",
         "twitter-handle-label": "Twitter Handle",
         "twitter-handle-placeholder": "Geben Sie Ihr Twitter-Handle ein",
         "twitter-handle-validation": "Ungültiger Twitter-Handle. Versuchen Sie es erneut.",
@@ -229,7 +284,7 @@
         },
         "leaderboard": {
             "title": "Quiz Rangliste",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition for any given week.</p><p>All the details about how to participate for NFT sUSD vouchers that can be used on any sports market available <blogPost>here</blogPost>.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
             "back-to-quiz": "Zurück zum Quiz",
             "search-placeholder": "Suchen...",
             "table": {
@@ -244,8 +299,7 @@
             "period-end-label": "Die Frist endet in",
             "period-ended-label": "Zeitraum beendet",
             "week-label": "Woche",
-            "overtime-voucher": "Overtime guschein"
-
+            "overtime-voucher": "Overtime Gutschein"
         },
         "help-us-improve-label": "Helfen sie uns, den Quiz zu verbessern",
         "help-us-improve-tooltip": "Helfen Sie uns, Sport-Quiz zu verbessern, indem Sie neue Fragen in die Fragen-Datenbank eintragen.",
@@ -264,8 +318,5 @@
             "4": "Herausfordernd",
             "5": "Schwer"
         }
-    },
-    "test": {
-        "test": "Prüfung"
     }
 }
