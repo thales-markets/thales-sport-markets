@@ -16,6 +16,7 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 import queryString from 'query-string';
 import { getReferralId, setReferralId } from 'utils/referral';
 import { useLocation } from 'react-router-dom';
+import i18n from 'i18n';
 
 const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -44,6 +45,15 @@ const DappLayout: React.FC = ({ children }) => {
             customDimensions.push({
                 id: 2,
                 value: referralId,
+            });
+        }
+
+        const language = i18n.language;
+
+        if (language) {
+            customDimensions.push({
+                id: 3,
+                value: language,
             });
         }
 

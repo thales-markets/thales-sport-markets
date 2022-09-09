@@ -8,10 +8,11 @@ import {
 } from 'components/common';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { COLLATERALS } from 'constants/markets';
+import { APPROVAL_BUFFER, COLLATERALS, MAX_TOKEN_SLIPPAGE, MAX_USD_SLIPPAGE } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useMarketCancellationOddsQuery from 'queries/markets/useMarketCancellationOddsQuery';
+import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -145,6 +146,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     const [maxAmount, setMaxAmount] = useState<number>(0);
     const [maxUsdAmount, setMaxUsdAmount] = useState<number>(0);
+    const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(false);
 
     const { trackEvent } = useMatomo();
 
@@ -170,13 +172,33 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
+    const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+    });
+    const overtimeVoucher = useMemo(() => {
+        if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
+            setIsVoucherSelected(true);
+            return overtimeVoucherQuery.data;
+        }
+        setIsVoucherSelected(false);
+        return undefined;
+    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
 
     const paymentTokenBalance = useMemo(() => {
+        if (overtimeVoucher && isVoucherSelected) {
+            return Number(overtimeVoucher.remainingAmount.toFixed(2));
+        }
         if (multipleStableBalances.data && multipleStableBalances.isSuccess) {
             return Number(multipleStableBalances.data[COLLATERALS[selectedStableIndex]].toFixed(2));
         }
         return 0;
-    }, [multipleStableBalances.data, multipleStableBalances.isSuccess, selectedStableIndex]);
+    }, [
+        multipleStableBalances.data,
+        multipleStableBalances.isSuccess,
+        selectedStableIndex,
+        overtimeVoucher,
+        isVoucherSelected,
+    ]);
 
     const availablePerSideQuery = useAvailablePerSideQuery(market.address, selectedSide);
 
@@ -210,7 +232,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         setTokenAmount(0);
                         return;
                     }
-
                     const roundedAmount = floorNumberToDecimals(X);
                     const quote = await fetchAmmQuote(roundedAmount);
 
@@ -218,7 +239,6 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     const parsedQuote = quote / divider;
 
                     const recalculatedTokenAmount = ((X * usdAmountValueAsNumber) / parsedQuote).toFixed(2);
-
                     setTokenAmount(recalculatedTokenAmount);
                 }
             }
@@ -326,7 +346,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 }
             };
             if (isWalletConnected) {
-                selectedSide == Side.SELL ? setAllowance(true) : getAllowance();
+                selectedSide == Side.SELL || isVoucherSelected ? setAllowance(true) : getAllowance();
             }
         }
     }, [
@@ -338,6 +358,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
         usdAmountValue,
         selectedStableIndex,
         selectedSide,
+        isVoucherSelected,
     ]);
 
     const fetchAmmQuote = useCallback(
@@ -367,10 +388,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
     const handleSubmit = async () => {
         if (!!tokenAmount) {
-            const { sportsAMMContract, signer } = networkConnector;
-            if (sportsAMMContract && signer) {
+            const { sportsAMMContract, overtimeVoucherContract, signer } = networkConnector;
+            if (sportsAMMContract && overtimeVoucherContract && signer) {
                 setIsBuying(true);
                 const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
+                const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
                 const ammQuote = await fetchAmmQuote(+Number(tokenAmount).toFixed(2) || 1);
                 const parsedAmount = ethers.utils.parseEther(Number(tokenAmount).toFixed(2));
                 const id = toast.loading(t('market.toast-messsage.transaction-pending'));
@@ -378,9 +400,12 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 try {
                     const tx = await getAMMSportsTransaction(
                         selectedSide === Side.BUY,
+                        isVoucherSelected,
+                        overtimeVoucher ? overtimeVoucher.id : 0,
                         selectedStableIndex,
                         networkId,
                         sportsAMMContractWithSigner,
+                        overtimeVoucherContractWithSigner,
                         market.address,
                         selectedPosition,
                         parsedAmount,
@@ -481,7 +506,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                 selectedStableIndex == 0 || selectedStableIndex == 1 ? 18 : 6
                             ) / Number(tmpSuggestedAmount);
                         // 2 === slippage
-                        tmpSuggestedAmount = (Number(paymentTokenBalance) / Number(ammPrice)) * ((100 - 2) / 100);
+                        tmpSuggestedAmount = (Number(paymentTokenBalance) / Number(ammPrice)) * MAX_TOKEN_SLIPPAGE;
                         setMaxAmount(floorNumberToDecimals(tmpSuggestedAmount));
                     }
                 }
@@ -527,18 +552,18 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     const formattedsUSDToSpendForMaxAmount = sUSDToSpendForMaxAmount / divider;
 
                     if (Number(paymentTokenBalance) > formattedsUSDToSpendForMaxAmount) {
-                        if (formattedsUSDToSpendForMaxAmount <= Number(paymentTokenBalance) * 0.98) {
+                        if (formattedsUSDToSpendForMaxAmount <= Number(paymentTokenBalance) * MAX_USD_SLIPPAGE) {
                             setMaxUsdAmount(floorNumberToDecimals(formattedsUSDToSpendForMaxAmount));
                         } else {
                             const calculatedMaxAmount =
                                 formattedsUSDToSpendForMaxAmount -
-                                (formattedsUSDToSpendForMaxAmount - Number(paymentTokenBalance) * 0.98);
+                                (formattedsUSDToSpendForMaxAmount - Number(paymentTokenBalance) * MAX_USD_SLIPPAGE);
                             setMaxUsdAmount(floorNumberToDecimals(calculatedMaxAmount));
                         }
                         setIsFetching(false);
                         return;
                     }
-                    setMaxUsdAmount(floorNumberToDecimals(paymentTokenBalance * 0.98));
+                    setMaxUsdAmount(floorNumberToDecimals(paymentTokenBalance * MAX_USD_SLIPPAGE));
                 }
                 setIsFetching(false);
             }
@@ -629,9 +654,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
     const setTooltipTextMessageTokenAmount = (value: string | number) => {
         if (Number(value) > availablePerSide.positions[selectedPosition].available) {
-            setTooltipTextTokenAmount('Amount exceeded the amount available on AMM');
+            setTooltipTextTokenAmount(t('market.tooltip.amount-exceeded'));
         } else if (value && Number(value) < 1) {
-            setTooltipTextTokenAmount('Minimal amount is 1');
+            setTooltipTextTokenAmount(t('market.tooltip.minimal-amount'));
         } else {
             setTooltipTextTokenAmount('');
         }
@@ -644,7 +669,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
     const setTooltipTextMessageUsdAmount = (value: string | number) => {
         if (Number(value) > paymentTokenBalance) {
-            setTooltipTextUsdAmount('Please ensure your wallet has enough funds');
+            setTooltipTextUsdAmount(t('market.tooltip.no-funds'));
         } else {
             setTooltipTextUsdAmount('');
         }
@@ -693,7 +718,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     }
                 }}
             >
-                {selectedSide}
+                {t(`common.${selectedSide.toLowerCase()}-side`)}
             </SubmitButton>
         );
     };
@@ -709,7 +734,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     return (
         <MarketContainer>
             <WalletInfo market={market} />
-            {!market.resolved && (
+            {!market.gameStarted && (
                 <MarketHeader>
                     <FlexDivCentered>
                         <Toggle
@@ -729,11 +754,14 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             }}
                         />
                     </FlexDivCentered>
-                    {selectedSide == Side.BUY && !market.resolved && (
+                    {selectedSide == Side.BUY && !market.gameStarted && (
                         <CollateralSelector
                             collateralArray={COLLATERALS}
                             selectedItem={selectedStableIndex}
                             onChangeCollateral={(index) => setStableIndex(index)}
+                            overtimeVoucher={overtimeVoucher}
+                            isVoucherSelected={isVoucherSelected}
+                            setIsVoucherSelected={setIsVoucherSelected}
                         />
                     )}
                 </MarketHeader>
@@ -750,7 +778,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             )}
             {market.resolved && !market.gameStarted && (
                 <Status resolved={market.resolved} claimable={false}>
-                    {t('markets.market-card.cancelled')}
+                    {t('markets.market-card.canceled')}
                 </Status>
             )}
             <MatchInfo>
@@ -877,7 +905,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             </InfoValue>
                         </InfoRow>
                         <InfoRow>
-                            <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
+                            <InfoTitle>{t('markets.market-details.liquidity')}:</InfoTitle>
                             <InfoValue>
                                 {availablePerSideQuery.isLoading
                                     ? '-'
@@ -919,7 +947,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                                 }}
                                             />
                                             <MaxButton disabled={isFetching} onClick={onMaxUsdClick}>
-                                                Max
+                                                {t('markets.market-details.max')}
                                             </MaxButton>
                                         </AmountToBuyContainer>
                                     </CustomTooltip>
@@ -947,7 +975,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                                 value={tokenAmount}
                                             />
                                             <MaxButton disabled={isFetching} onClick={onMaxClick}>
-                                                Max
+                                                {t('markets.market-details.max')}
                                             </MaxButton>
                                         </AmountToBuyContainer>
                                     </CustomTooltip>
@@ -1003,7 +1031,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
                     <FooterContainer>
                         <SliderInfo>
-                            <SliderInfoTitle>Skew:</SliderInfoTitle>
+                            <SliderInfoTitle>{t('markets.market-details.skew')}:</SliderInfoTitle>
                             <SliderInfoValue>
                                 {positionPriceDetailsQuery.isLoading
                                     ? '-'
@@ -1044,8 +1072,8 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     </StatusSourceContainer>
                     {openApprovalModal && (
                         <ApprovalModal
-                            // ADDING 3% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
-                            defaultAmount={Number(usdAmountValue) + Number(usdAmountValue) * 0.03}
+                            // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
+                            defaultAmount={Number(usdAmountValue) + Number(usdAmountValue) * APPROVAL_BUFFER}
                             collateralIndex={selectedStableIndex}
                             tokenSymbol={COLLATERALS[selectedStableIndex]}
                             isAllowing={isAllowing}

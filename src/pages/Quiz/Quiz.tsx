@@ -15,7 +15,6 @@ import {
     FinishedInfoLabel,
     ButtonContainer,
     Input,
-    QuestionWeightContainer,
     TimeRemainingText,
     TimeRemainingGraphicContainer,
     TimeRemainingGraphicPercentage,
@@ -37,6 +36,7 @@ import {
     DifficultyContainer,
     DifficultyLabel,
     DifficultyInfo,
+    Wrapper,
 } from './styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -83,6 +83,8 @@ import HelpUsImprove from './HelpUsImprove';
 import useQuizLeaderboardQuery from 'queries/quiz/useQuizLeaderboardQuery';
 import { FinishInfo, LeaderboardItem } from 'types/quiz';
 import ordinal from 'ordinal';
+import { Info } from 'pages/Markets/Home/Home';
+import useQuizTweetQuery from 'queries/quiz/useQuizTweetQuery';
 
 const Quiz: React.FC = () => {
     const { t } = useTranslation();
@@ -140,6 +142,16 @@ const Quiz: React.FC = () => {
             isQualifiedForRewards: false,
         };
     }, [quizLeaderboardQuery.data, quizLeaderboardQuery.isSuccess, twitter]);
+
+    const quizTweetQuery = useQuizTweetQuery();
+
+    const quizTweet: string = useMemo(() => {
+        if (quizTweetQuery.isSuccess && quizTweetQuery.data) {
+            return quizTweetQuery.data;
+        }
+
+        return LINKS.QuizRetweetLink;
+    }, [quizTweetQuery.data, quizTweetQuery.isSuccess]);
 
     const handleStartQuiz = async () => {
         setIsSubmitting(true);
@@ -208,6 +220,8 @@ const Quiz: React.FC = () => {
             }
         } catch (e) {
             console.log(e);
+            // reset quiz when it is stuck in the "try finish" loop
+            handleNewQuiz();
         }
         setIsSubmitting(false);
     };
@@ -275,7 +289,15 @@ const Quiz: React.FC = () => {
     }, 1000);
 
     return (
-        <>
+        <Wrapper>
+            <Info>
+                <Trans
+                    i18nKey="rewards.op-rewards-banner-message"
+                    components={{
+                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                    }}
+                />
+            </Info>
             <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
             <Container>
                 {isQuizInProgress && (
@@ -308,9 +330,8 @@ const Quiz: React.FC = () => {
                                             i18nKey="quiz.start-quiz-description"
                                             components={{
                                                 p: <p />,
-                                                quizRetweetLink: (
-                                                    <QuizLink href={LINKS.QuizRetweetLink} key="quizRetweetLink" />
-                                                ),
+                                                blogPost: <QuizLink href={LINKS.QuizBlogPost} key="blogPost" />,
+                                                quizRetweetLink: <QuizLink href={quizTweet} key="quizRetweetLink" />,
                                                 twitter: <QuizLink href={LINKS.Twitter} key="twitter" />,
                                                 discord: <QuizLink href={LINKS.ThalesDiscord} key="discord" />,
                                             }}
@@ -352,16 +373,15 @@ const Quiz: React.FC = () => {
                                     <DifficultyContainer>
                                         <DifficultyLabel>{t('quiz.difficulty-label')}: </DifficultyLabel>
                                         <DifficultyInfo difficulty={Number(currentQuizItem.points)}>
-                                            {t(`quiz.difficulty.${Number(currentQuizItem.points)}`)}
+                                            {`${t(`quiz.difficulty.${Number(currentQuizItem.points)}`)} (${
+                                                currentQuizItem.points
+                                            } ${
+                                                Number(currentQuizItem.points) === 1
+                                                    ? t('quiz.point-label')
+                                                    : t('quiz.points-label')
+                                            })`}
                                         </DifficultyInfo>
                                     </DifficultyContainer>
-                                    <QuestionWeightContainer>
-                                        {`${currentQuizItem.points} ${
-                                            Number(currentQuizItem.points) === 1
-                                                ? t('quiz.point-label')
-                                                : t('quiz.points-label')
-                                        }`}
-                                    </QuestionWeightContainer>
                                     <Question>{currentQuizItem.question}</Question>
                                     <OptionsContainer>
                                         {currentQuizItem.options.map((option) => {
@@ -476,7 +496,7 @@ const Quiz: React.FC = () => {
                     </Footer>
                 )}
             </Container>
-        </>
+        </Wrapper>
     );
 };
 

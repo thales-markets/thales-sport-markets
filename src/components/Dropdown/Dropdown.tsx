@@ -2,6 +2,7 @@ import React, { CSSProperties, useState } from 'react';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered } from '../../styles/common';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { useTranslation } from 'react-i18next';
 
 type DropdownProperties<T> = {
     disabled?: boolean;
@@ -13,6 +14,7 @@ type DropdownProperties<T> = {
 };
 
 function Dropdown<T>({ list, onSelect, disabled, itemRenderer, selectedItem, style }: DropdownProperties<T>) {
+    const { t } = useTranslation();
     const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
     const setItemDropdownIsOpen = (isOpen: boolean) => {
         if (!isOpen && !dropdownIsOpen) {
@@ -31,7 +33,7 @@ function Dropdown<T>({ list, onSelect, disabled, itemRenderer, selectedItem, sty
                         }}
                         className={disabled ? 'disabled' : ''}
                     >
-                        {selectedItem}
+                        {t(`common.odds.${selectedItem}`)}
                         <FlexDiv>
                             <ArrowDownIcon />
                         </FlexDiv>
@@ -48,7 +50,11 @@ function Dropdown<T>({ list, onSelect, disabled, itemRenderer, selectedItem, sty
                                         }}
                                     >
                                         <FlexDivCentered>
-                                            {itemRenderer ? itemRenderer(item) : <Label>{item}</Label>}
+                                            {itemRenderer ? (
+                                                itemRenderer(item)
+                                            ) : (
+                                                <Label> {t(`common.odds.${item}`)}</Label>
+                                            )}
                                         </FlexDivCentered>
                                     </DropDownItem>
                                 ))}

@@ -61,7 +61,7 @@ const Rewards: React.FC = () => {
             CALCULATED_START = new Date(CALCULATED_START.getTime() + PERIOD_DURATION_IN_DAYS * 24 * 60 * 60 * 1000);
             options.push({
                 value: PERIOD_COUNTER,
-                label: `${mapPeriod(PERIOD_COUNTER)} period`,
+                label: mapPeriod(PERIOD_COUNTER as any, t),
             });
             PERIOD_COUNTER++;
         } else {
@@ -224,18 +224,18 @@ const pnlSort = () => (rowA: any, rowB: any) => {
     return rowA.original.pnl - rowB.original.pnl;
 };
 
-const mapPeriod = (period: number) => {
+const mapPeriod = (period: number, t: any) => {
     switch (period) {
         case 0:
-            return 'First';
+            return t('rewards.periods.first-period');
         case 1:
-            return 'Second';
+            return t('rewards.periods.second-period');
         case 2:
-            return 'Third';
+            return t('rewards.periods.third-period');
         case 3:
-            return 'Fourth';
+            return t('rewards.periods.fourth-period');
         case 4:
-            return 'Fifth';
+            return t('rewards.periods.fifth-period');
         default:
             return '';
     }

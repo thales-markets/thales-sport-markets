@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+// import Tooltip from 'components/Tooltip';
 import i18n from 'i18n';
+import { DEFAULT_LANGUAGE, LanguageNameMap, SupportedLanguages } from 'i18n/config';
+import React, { useEffect, useState } from 'react';
+import Flag from 'react-flagpack';
+import { withTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import styled from 'styled-components';
-import { DEFAULT_LANGUAGE, LanguageNameMap, SupportedLanguages } from 'i18n/config';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
-import Tooltip from 'components/Tooltip';
+import useQueryParam from 'utils/useQueryParams';
+
 type LanguageSelectorProps = {
     isBurger?: boolean;
 };
@@ -19,9 +22,19 @@ export const LanguageSelectorV2: React.FC<LanguageSelectorProps> = ({ isBurger }
         setLanguageDropdownIsOpen(isOpen);
     };
 
-    const selectedLanguage = (Object.values(SupportedLanguages) as string[]).includes(i18n.language)
-        ? i18n.language
-        : DEFAULT_LANGUAGE;
+    const [selectedLanguage, setSelectedLanguage] = useQueryParam('lang', '');
+
+    useEffect(
+        () => {
+            setSelectedLanguage(
+                (Object.values(SupportedLanguages) as string[]).includes(i18n.language)
+                    ? i18n.language
+                    : DEFAULT_LANGUAGE
+            );
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []
+    );
 
     return (
         <>
@@ -40,36 +53,19 @@ export const LanguageSelectorV2: React.FC<LanguageSelectorProps> = ({ isBurger }
                                 <DropDownItem
                                     key={language}
                                     onClick={() => {
-                                        i18n.changeLanguage(DEFAULT_LANGUAGE);
+                                        i18n.changeLanguage(language);
                                         setDropdownIsOpen(false);
+                                        setSelectedLanguage(language);
                                     }}
                                 >
-                                    {language !== SupportedLanguages.ENGLISH ? (
-                                        <>
-                                            {LanguageFlag(language as any, true)}
-                                            <FlexDivCentered>
-                                                <LanguageName style={{ color: 'grey' }} key={language}>
-                                                    {(LanguageNameMap as any)[language] + '*'}
-                                                </LanguageName>
-                                                <Tooltip
-                                                    overlay={'Coming soon'}
-                                                    component={<Icon className={`icon-exotic icon-exotic--info`} />}
-                                                    iconFontSize={23}
-                                                    marginLeft={2}
-                                                    top={0}
-                                                />
-                                            </FlexDivCentered>
-                                        </>
-                                    ) : (
-                                        <>
-                                            {LanguageFlag(language as any)}
-                                            <FlexDivCentered>
-                                                <LanguageName key={language}>
-                                                    {(LanguageNameMap as any)[language]}
-                                                </LanguageName>
-                                            </FlexDivCentered>
-                                        </>
-                                    )}
+                                    <>
+                                        {LanguageFlag(language as any)}
+                                        <FlexDivCentered>
+                                            <LanguageName key={language}>
+                                                {(LanguageNameMap as any)[language]}
+                                            </LanguageName>
+                                        </FlexDivCentered>
+                                    </>
                                 </DropDownItem>
                             ))}
                         </DropDown>
@@ -82,7 +78,6 @@ export const LanguageSelectorV2: React.FC<LanguageSelectorProps> = ({ isBurger }
 
 const Container = styled(FlexDivColumnCentered)`
     position: relative;
-    z-index: 1000;
     align-items: flex-end;
     &.burger {
         top: -27px;
@@ -101,18 +96,6 @@ const LanguageButton = styled.button`
     }
 `;
 
-const FlagIcon = styled.i`
-    font-size: 2.4em;
-    @media (max-width: 1024px) {
-        font-size: 2.1em;
-    }
-    &.disabled {
-        cursor: default;
-        opacity: 0.4;
-    }
-    color: ${(props) => props.theme.textColor.secondary};
-`;
-
 const DropDown = styled(FlexDivColumn)`
     background: ${(props) => props.theme.background.secondary};
     box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.4);
@@ -122,6 +105,7 @@ const DropDown = styled(FlexDivColumn)`
     padding: 8px;
     top: 40px;
     left: 0;
+    z-index: 1000;
     &.language-dropdown {
         position: relative;
         box-shadow: none;
@@ -163,27 +147,32 @@ const LanguageName = styled.div`
     text-transform: uppercase;
 `;
 
-const Icon = styled.i`
-    font-size: 26px;
-    margin-left: 4px;
-    margin-right: 7px;
-`;
+// const Icon = styled.i`
+//     font-size: 20px;
+//     margin-left: 4px;
+//     margin-right: 7px;
+// `;
 
-const LanguageFlag = (language: SupportedLanguages | any, notSupported?: boolean) => {
+const LanguageFlag = (language: SupportedLanguages | any) => {
     switch (language) {
         case SupportedLanguages.ENGLISH:
-            return <FlagIcon className="icon-homepage icon-homepage--en" />;
-
-        // case SupportedLanguages.RUSSIAN:
-        //     return <FlagIcon style={{ color: 'grey' }} className="icon-home icon-home--ru" />;
-
+            return <Flag code="GB-UKM" />;
         case SupportedLanguages.CHINESE:
-            return (
-                <FlagIcon style={{ color: notSupported ? 'gray' : '' }} className="icon-homepage icon-homepage--cn" />
-            );
-
+            return <Flag code="CN" />;
+        case SupportedLanguages.FRENCH:
+            return <Flag code="FR" />;
+        case SupportedLanguages.GERMAN:
+            return <Flag code="DE" />;
+        // case SupportedLanguages.ITALIAN:
+        //     return <Flag code="IT" />;
+        // case SupportedLanguages.RUSSIAN:
+        //     return <Flag code="RU" />;
+        case SupportedLanguages.SPANISH:
+            return <Flag code="ES" />;
+        // case SupportedLanguages.THAI:
+        //     return <Flag code="TH" />;
         default:
-            return <FlagIcon className="icon-homepage icon-homepage--en" />;
+            return <Flag code="GB-UKM" />;
     }
 };
 

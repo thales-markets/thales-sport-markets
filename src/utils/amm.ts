@@ -7,9 +7,12 @@ import { getCollateralAddress } from './collaterals';
 
 export const getAMMSportsTransaction: any = (
     isBuy: boolean,
+    isVoucherSelected: boolean,
+    voucherId: number,
     stableIndex: number,
     networkId: NetworkId,
     sportsAMMContract: ethers.Contract,
+    overtimeVoucherContract: ethers.Contract,
     marketAddress: string,
     selectedPosition: Position,
     parsedAmount: BigNumber,
@@ -28,6 +31,15 @@ export const getAMMSportsTransaction: any = (
     );
 
     if (isBuy) {
+        if (isVoucherSelected) {
+            return overtimeVoucherContract?.buyFromAMMWithVoucher(
+                marketAddress,
+                selectedPosition,
+                parsedAmount,
+                voucherId
+            );
+        }
+
         if (stableIndex !== 0 && collateralAddress) {
             return sportsAMMContract?.buyFromAMMWithDifferentCollateralAndReferrer(
                 marketAddress,

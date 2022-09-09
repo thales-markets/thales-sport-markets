@@ -4,22 +4,22 @@ import { FlexDivColumn } from 'styles/common';
 import { GamesOnDate } from 'types/markets';
 import { formatDayOfWeek, formatShortDateNoYear } from 'utils/formatters/date';
 import Hammer, { DIRECTION_HORIZONTAL } from 'hammerjs';
+import { useTranslation } from 'react-i18next';
 
 type HeaderDatepickerProps = {
     gamesPerDay: GamesOnDate[];
     dateFilter: string;
     setDateFilter: (value: any) => void;
-    setStartDate: (value: any) => void;
-    setEndDate: (value: any) => void;
+    setDateParam: (value: any) => void;
 };
 
 const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
     gamesPerDay,
     dateFilter,
-    setStartDate,
-    setEndDate,
     setDateFilter,
+    setDateParam,
 }) => {
+    const { t } = useTranslation();
     const [farLeftDateIndex, setFarLeftDateIndex] = useState(0);
     const [hammerManager, setHammerManager] = useState<any>();
     const DATES_TO_SHOW = useMemo(() => {
@@ -76,16 +76,19 @@ const HeaderDatepicker: React.FC<HeaderDatepickerProps> = ({
                             key={index}
                             selected={dateFilter === data.date}
                             onClick={() => {
-                                setStartDate(null);
-                                setEndDate(null);
                                 setDateFilter(dateFilter === data.date ? '' : data.date);
+                                setDateParam(dateFilter === data.date ? '' : data.date);
                             }}
                         >
-                            <DayLabel>{formatDayOfWeek(new Date(data.date)).toUpperCase()}</DayLabel>
+                            <DayLabel>
+                                {t(`common.days-of-week.${formatDayOfWeek(new Date(data.date)).toLowerCase()}`)}
+                            </DayLabel>
                             <DateLabel selected={dateFilter === data.date}>
                                 {formatShortDateNoYear(new Date(data.date)).toUpperCase()}
                             </DateLabel>
-                            <GamesNumberLabel>{data.numberOfGames + ' games'}</GamesNumberLabel>
+                            <GamesNumberLabel>
+                                {t(`market.filter-label.datepicker.games`, { numberOfGames: data.numberOfGames })}
+                            </GamesNumberLabel>
                         </DateContainer>
                     ))}
                     <RightIcon
@@ -164,6 +167,7 @@ const DayLabel = styled.span`
     font-weight: 700;
     font-size: 20px;
     line-height: 24px;
+    text-transform: uppercase;
 `;
 const DateLabel = styled.span<{ selected?: boolean }>`
     font-style: normal;
@@ -172,6 +176,7 @@ const DateLabel = styled.span<{ selected?: boolean }>`
     line-height: 17px;
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
 `;
+
 const GamesNumberLabel = styled.span`
     font-style: normal;
     font-weight: 600;

@@ -13,6 +13,25 @@
             "get-usd-progress": "Minting {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use."
         },
+        "voucher": {
+            "remaining-amount": "Remaining amount",
+            "overtime-voucher": "Overtime voucher",
+            "voucher": "Voucher",
+            "mint-voucher": "Mint voucher",
+            "modal": {
+                "title": "Mint Overtime voucher",
+                "description": "<p>Overtime voucher functionality has been implemented per <tip>TIP-76</tip><p/>.",
+                "voucher-amount-label": "Voucher amount",
+                "another-wallet-label": "Send a voucher to another wallet",
+                "recipient-wallet-label": "Recipient wallet",
+                "recipient-wallet-placeholder": "Enter recipient address",
+                "button": {
+                    "mint-label": "Mint",
+                    "mint-progress-label": "Minting in progress...",
+                    "confirmation-message": "Voucher successfully minted"
+                }
+            }
+        },
         "referral": {
             "link-copied": "Referral link copied!",
             "button": {
@@ -49,7 +68,9 @@
             "enter-amount": "Enter amount",
             "enter-price": "Enter price",
             "insufficient-balance-wallet": "Please ensure your wallet has sufficient {{currencyKey}}",
-            "user-rejected-tx": "User rejected transaction"
+            "user-rejected-tx": "User rejected transaction",
+            "enter-address": "Enter address",
+            "invalid-address": "Invalid address"
         },
         "time-remaining": {
             "ended": "ended",
@@ -82,7 +103,21 @@
         "input-characters-note": "{{entered }} / {{max}}",
         "view": "View",
         "guidelines": "guidelines",
-        "built-on": "Built on"
+        "built-on": "Built on",
+        "odds": {
+            "american-odds": "Quote americane",
+            "normalized-implied-odds": "Quote implicite normalizzate",
+            "decimal-odds": "Quote decimali"
+        },
+        "days-of-week": {
+            "wed": "mer",
+            "sat": "sab",
+            "fri": "ven",
+            "tue": "mar",
+            "sun": "sole",
+            "mon": "mio ",
+            "thu": "raccogliere"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED."
@@ -134,7 +169,10 @@
                 "baseball": "Baseball",
                 "soon": "More sports coming soon!"
             },
-            "all": "All"
+            "all": "All",
+            "datepicker": {
+                "games": "{{numberOfGames}} giochi"
+            }
         },
         "back-to-markets": "Back to markets",
         "back-to-market": "Back to market",
@@ -157,7 +195,15 @@
                 "sell": "SELL"
             },
             "no-results": "No transactions associated with this market.",
-            "no-results-for-wallet": "Nessuna transazione associata a questo portafoglio."
+            "no-results-for-wallet": "No transactions associated with this wallet.",
+            "result-col": "risultato",
+            "usd-value-col": "valore in usd",
+            "game-col": "gioco"
+        },
+        "tooltip": {
+            "amount-exceeded": "Amount exceeded the amount available on AMM",
+            "minimal-amount": "Minimal amount is 1",
+            "no-funds": "Please ensure your wallet has enough funds"
         }
     },
     "markets": {
@@ -186,27 +232,36 @@
             "claim-back": "Claim back",
             "wallet-info": {
                 "title": "In wallet"
-            }
+            },
+            "max": "Max",
+            "skew": "Storto"
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity."
     },
     "rewards": {
         "header": "Rewards",
         "search-placeholder": "Search wallet address",
-        "description": "<0>There is a total of <0>10,000 OP</0> and <0>10,000 THALES</0> rewards to be distributed in 4 weeks, divided in 2-week periods. <0>5,000 OP + 5,000 THALES</0> will be allocated pro-rata based on the total negative PnL (profit and loss) for each 2-week period.</0><0>All markets that have matured in that 2-week period are accounted for. Individual wallet's PnL on each market are added up to get the leaderboard results.</0><1>- First 2-week period is from August 1st until August 14th.</1><1>- Second 2-week period is from August 15th until August 28th.</1><0>This incentivized program will be revisited after the end of the second 2-week period.</0>",
-        "total-negative-pnl": "Total negative PnL",
+        "description": "<0>There is a total of <0>16,000 OP</0> and <0>16,000 THALES</0> rewards to be distributed in 4 weeks, divided in 2-week periods. <0>8,000 OP + 8,000 THALES</0> will be allocated pro-rata based on the total sum of losses per wallet for each 2-week period.</0><0>All markets that have matured in that 2-week period are accounted for. Individual wallet's losses on each market are added up to get the leaderboard results.</0><1>- First 2-week round is from <0>00:00 UTC August 29</0> until <0>00:00 UTC September 12</0></1><1>- Second 2-week round is from <0>00:00 UTC September 12</0> until <0>00:00 UTC September 26</0></1><0>This incentivized program will be revisited after September 26.</0>",
+        "total-negative-pnl": "Total losses",
         "op-rewards-banner-message": "OP rewards have started, check how you can earn those on <bold>the OP rewards page</bold>",
         "table": {
             "wallet-address": "Wallet address",
-            "pnl": "PnL",
+            "pnl": "Losses",
             "percentage": "Percentage",
             "reward-amount": "Reward",
             "no-data-available": "No data available"
+        },
+        "periods": {
+            "first-period": "Primo periodo",
+            "second-period": "Secondo periodo",
+            "fifth-period": "Quinto periodo",
+            "fourth-period": "Quarto periodo",
+            "third-period": "Terzo periodo"
         }
     },
     "quiz": {
-        "title": "Sports Trivia",
-        "start-quiz-description": "<p>You have to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime</twitter> to be eligible.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via a Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
+        "title": "Sports Trivia competition",
+        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition where weekly winners will receive NFT Vouchers that can be used instead of sUSD to participate in any sports market you like.</p><p>Read all the information about this trivia in our <blogPost>blog post</blogPost>.</p><p>How to participate? The trivia is available to everyone to test their knowledge and compete, but to be eligible for rewards you need to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime's Twitter</twitter>.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
         "twitter-handle-label": "Twitter handle",
         "twitter-handle-placeholder": "Enter your Twitter handle",
         "twitter-handle-validation": "Invalid Twitter handle. Try again.",
@@ -229,7 +284,7 @@
         },
         "leaderboard": {
             "title": "Trivia Leaderboard",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition for any given week.</p><p>All the details about how to participate for NFT sUSD vouchers that can be used on any sports market available <blogPost>here</blogPost>.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
             "back-to-quiz": "Back to trivia",
             "search-placeholder": "Search...",
             "table": {
@@ -263,8 +318,5 @@
             "4": "Challenging",
             "5": "Hard"
         }
-    },
-    "test": {
-        "test": "test"
     }
 }
