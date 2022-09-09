@@ -42,8 +42,8 @@
         },
         "swap": {
             "title": "Obtener {{currencyKey}}",
-            "from-label": "De",
-            "to-label": "Hacia",
+            "from-label": "Envio",
+            "to-label": "Recibo",
             "balance-label": "Balance: {{amount}}",
             "swap-label": "Intercambiar",
             "swap-progress-label": "Intercambio en progreso..."
@@ -105,9 +105,9 @@
         "guidelines": "guias",
         "built-on": "Desarrollado sobre",
         "odds": {
-            "american-odds": "Cuotas americanas",
+            "american-odds": "Odds americanas",
             "decimal-odds": "Probabilidades decimales",
-            "normalized-implied-odds": "Cuotas implícitas normalizadas"
+            "normalized-implied-odds": "Odds implícitas normalizadas"
         }
     },
     "footer": {
@@ -118,7 +118,7 @@
         "time-remaining-label": "Tiempo restante",
         "sport": "Deporte",
         "pay-with": "Pagar con",
-        "status-label": "Status",
+        "status-label": "Estado",
         "tags-label": "Etiquetas",
         "search-placeholder": "Buscar juegos",
         "open-markets-label": "Abierto",
@@ -155,7 +155,7 @@
                 "soccer": "Futbol",
                 "hockey": "Hockey",
                 "tennis": "Tenis",
-                "football": "Football americano",
+                "football": "Futbol americano",
                 "ufc": "MMA",
                 "baseball": "Beisbol",
                 "soon": "Más deportes pronto!"
@@ -211,8 +211,8 @@
         "market-details": {
             "price": "Precio",
             "liquidity": "Liquidez",
-            "usd-amount": "cantidad en USD",
-            "positions-amount": "cantidad de posiciones",
+            "usd-amount": "Cantidad en USD",
+            "positions-amount": "Numero de posiciones",
             "amount-to-sell": "Monto a vender",
             "total-to-receive": "Total a recibir",
             "potential-profit": "Ganancia potencial",
