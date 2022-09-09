@@ -30,7 +30,7 @@ const formatTagLabel = (label: string) => {
         case 'UEFA Champions League':
             return 'UEFA CL';
         case `NCAA Men's Football`:
-            return 'NCAA Football';
+            return 'NCAA';
         default:
             return label;
     }
