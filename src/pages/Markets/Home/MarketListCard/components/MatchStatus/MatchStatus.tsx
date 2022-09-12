@@ -67,7 +67,7 @@ export const Status = styled.span<{ color?: string }>`
 `;
 
 const Result = styled.span<{ isLive?: boolean }>`
-    font-size: ${(_props) => (_props?.isLive ? '17px' : '20px')};
+    font-size: ${(_props) => (_props?.isLive ? '16px' : '20px')};
     font-weight: ${(_props) => (_props?.isLive ? '400' : '700')};
     margin-right: ${(_props) => (_props?.isLive ? '7px' : '50px')};
 `;
