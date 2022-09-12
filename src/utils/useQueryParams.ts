@@ -25,6 +25,7 @@ const useQueryParam = (key: string, defaultVal: string): [string, (val: string) 
 
         const query = getQuery();
 
+        query.delete('undefined');
         if (newVal.trim() !== '') {
             query.set(key, newVal);
         } else {
