@@ -5,7 +5,7 @@ const getQuery = () => {
     if (typeof window !== 'undefined') {
         if (ifIpfsDeployment) {
             const { hash } = window.location;
-            const queryParamsAsText = hash.split('?');
+            const queryParamsAsText = hash.split('?')[1];
             return new URLSearchParams('?' + queryParamsAsText);
         }
         return new URLSearchParams(window.location.search);
