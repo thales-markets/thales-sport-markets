@@ -30,11 +30,13 @@ const useQueryParam = (key: string, defaultVal: string): [string, (val: string) 
         if (typeof window !== 'undefined') {
             if (ifIpfsDeployment) {
                 const { protocol, pathname, host, hash, search } = window.location;
+                console.log(query.toString());
                 console.log(protocol, pathname, host, hash, search);
                 const newUrl = `?${query.toString()}`;
-                history.replace(newUrl, '');
+                history.push(newUrl, '');
             } else {
                 const { protocol, pathname, host } = window.location;
+                console.log(query.toString());
                 const newUrl = `${protocol}//${host}${pathname}?${query.toString()}`;
                 window.history.pushState({}, '', newUrl);
             }
