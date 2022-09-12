@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import { ifIpfsDeployment } from './routes';
-import ROUTES from 'constants/routes';
 
 const getQuery = () => {
     if (typeof window !== 'undefined') {
+        if (ifIpfsDeployment) {
+            const { hash } = window.location;
+            const queryParamsAsText = hash.split('?');
+            return new URLSearchParams('?' + queryParamsAsText);
+        }
         return new URLSearchParams(window.location.search);
     }
     return new URLSearchParams();
@@ -29,8 +33,7 @@ const useQueryParam = (key: string, defaultVal: string): [string, (val: string) 
 
         if (typeof window !== 'undefined') {
             if (ifIpfsDeployment) {
-                const { protocol, pathname, host } = window.location;
-                const newUrl = `${protocol}//${host}${pathname}#${ROUTES.Markets.Home}?${query.toString()}`;
+                const newUrl = `?${query.toString()}`;
                 window.history.pushState({}, '', newUrl);
             } else {
                 const { protocol, pathname, host } = window.location;
