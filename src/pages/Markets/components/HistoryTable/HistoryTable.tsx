@@ -12,6 +12,7 @@ import { buildMarketLink } from '../../../../utils/routes';
 import SPAAnchor from '../../../../components/SPAAnchor';
 import ViewEtherscanLink from '../../../../components/ViewEtherscanLink';
 import './style.css';
+import i18n from 'i18n';
 
 type HistoryPropsTable = {
     transactions: UserTransactions;
@@ -21,6 +22,7 @@ type HistoryPropsTable = {
 
 export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResultsMessage, isLoading }) => {
     const { t } = useTranslation();
+    const language = i18n.language;
     // @ts-ignore
     return (
         <>
@@ -43,7 +45,7 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                             <SPAAnchor
                                 className="hover-underline"
                                 onClick={(e) => e.stopPropagation()}
-                                href={buildMarketLink(cellProps.row.original.market)}
+                                href={buildMarketLink(cellProps.row.original.market, language)}
                             >
                                 {cellProps.cell.value}
                             </SPAAnchor>

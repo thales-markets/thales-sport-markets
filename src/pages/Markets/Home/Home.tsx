@@ -56,6 +56,7 @@ import { history } from 'utils/routes';
 import ROUTES, { RESET_STATE } from 'constants/routes';
 import SidebarLeaderboard from 'pages/Quiz/SidebarLeaderboard';
 import useQueryParam from 'utils/useQueryParams';
+import i18n from 'i18n';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -109,19 +110,25 @@ const Home: React.FC = () => {
     const [dateFilter, setDateFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_DATES, '');
     const [gamesPerDay, setGamesPerDayMap] = useState<GamesOnDate[]>([]);
 
-    const [sportParam, setSportParam] = useQueryParam('sport', SportFilterEnum.All);
-    const [globalFilterParam, setGlobalFilterParam] = useQueryParam('globalFilter', GlobalFilterEnum.OpenMarkets);
+    const [sportParam, setSportParam] = useQueryParam('sport', '');
+    const [globalFilterParam, setGlobalFilterParam] = useQueryParam('globalFilter', '');
     const [searchParam, setSearchParam] = useQueryParam('searchParam', '');
-    const [dateParam, setDateParam] = useQueryParam('date', dateFilter);
-    const [tagParam, setTagParam] = useQueryParam('tag', allTagsFilterItem.label);
+    const [dateParam, setDateParam] = useQueryParam('date', '');
+    const [tagParam, setTagParam] = useQueryParam('tag', '');
+    const [selectedLanguage, setSelectedLanguage] = useQueryParam('lang', '');
 
     useEffect(
         () => {
-            setSportFilter(sportParam as SportFilterEnum);
-            setGlobalFilter(globalFilterParam as GlobalFilterEnum);
-            setTagFilter(availableTags.find((tag) => tag.label === tagParam) || allTagsFilterItem);
-            dispatch(setMarketSearch(searchParam));
-            setDateFilter(dateParam);
+            sportParam != '' ? setSportFilter(sportParam as SportFilterEnum) : setSportParam(sportFilter);
+            globalFilterParam != ''
+                ? setGlobalFilter(globalFilterParam as GlobalFilterEnum)
+                : setGlobalFilterParam(globalFilter);
+            dateParam != '' ? setDateFilter(dateParam) : setDateParam(dateFilter);
+            tagParam != ''
+                ? setTagFilter(availableTags.find((tag) => tag.label === tagParam) || allTagsFilterItem)
+                : setTagParam(tagFilter.label);
+            searchParam != '' ? dispatch(setMarketSearch(searchParam)) : '';
+            selectedLanguage == '' ? setSelectedLanguage(i18n.language) : '';
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
