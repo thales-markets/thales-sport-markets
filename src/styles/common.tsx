@@ -44,3 +44,5 @@ export const Colors = {
     RED: '#e26a78',
     YELLOW: '#FAC439',
 };
+
+export const QuizQuestionDifficultyMap = ['#4673BD', '#50CE99', '#F4CF73', '#FA9E2F', '#C3244A'];

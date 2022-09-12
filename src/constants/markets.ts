@@ -1,10 +1,11 @@
 import { CRYPTO_CURRENCY_MAP } from './currency';
 
 export enum GlobalFilterEnum {
-    All = 'All',
     OpenMarkets = 'OpenMarkets',
     ResolvedMarkets = 'ResolvedMarkets',
     Canceled = 'Canceled',
+    Archived = 'ArchivedMarkets',
+    All = 'AllMarkets',
     YourPositions = 'YourPositions',
     Claim = 'Claim',
     History = 'History',
@@ -24,10 +25,11 @@ export enum MarketType {
 export enum SportFilterEnum {
     All = 'All',
     Soccer = 'Soccer',
+    Football = 'Football',
+    UFC = 'UFC',
     Baseball = 'Baseball',
     Basketball = 'Basketball',
     Hockey = 'Hockey',
-    Football = 'Football',
     // Tennis = 'Tennis',
 }
 
@@ -70,3 +72,15 @@ export enum MarketStatus {
     ResolvedDisputed = 'resolved-disputed',
     ResolvedConfirmed = 'resolved-confirmed',
 }
+
+export enum OddsType {
+    American = 'american-odds',
+    Decimal = 'decimal-odds',
+    AMM = 'normalized-implied-odds',
+}
+
+export const ODDS_TYPES = [OddsType.AMM, OddsType.Decimal, OddsType.American];
+
+export const MAX_TOKEN_SLIPPAGE = 0.995;
+export const MAX_USD_SLIPPAGE = 0.99;
+export const APPROVAL_BUFFER = 0.01;

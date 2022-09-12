@@ -13,11 +13,13 @@ export const navigateTo = (path: string, replacePath = false, scrollToTop = fals
 
 export const buildHref = (route: string) => `${ifIpfsDeployment ? '#' : ''}${route}`;
 
-export const buildMarketLink = (marketAddress: string, excludeSlash = false) =>
-    `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${ROUTES.Markets.Home}/${marketAddress}`;
+export const buildMarketLink = (marketAddress: string, searchParams: URLSearchParams, excludeSlash = false) =>
+    `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${ROUTES.Markets.Home}/${marketAddress}?lang=${searchParams.get(
+        'lang'
+    )}`;
 
-export const buildReferralLink = (route: string, referralId: string) => {
-    return `${ifIpfsDeployment ? '#' : ''}${route}?referralId=${referralId.toLowerCase()}`;
+export const buildReferralLink = (route: string, search: string, referralId: string) => {
+    return `${ifIpfsDeployment ? '/#' : ''}${route}${search}&referralId=${referralId.toLowerCase()}`;
 };
 
-export { history };
+export { history, ifIpfsDeployment };

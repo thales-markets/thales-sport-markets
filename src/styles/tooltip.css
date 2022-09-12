@@ -84,7 +84,7 @@
 }
 .rc-tooltip-inner {
     padding: 15px 15px;
-    color: #6a3e85;
+    color: #303656;
     font-weight: 400;
     font-size: 15px;
     line-height: 100%;
@@ -174,4 +174,10 @@
 }
 .rc-tooltip-placement-bottomRight .rc-tooltip-arrow {
     right: 15%;
+}
+
+.overtime-voucher-overlay .rc-tooltip-inner {
+    padding: 5px 5px 2px 5px;
+    background-color: #d0e3f0;
+    border-radius: 10px;
 }

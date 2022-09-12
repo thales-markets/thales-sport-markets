@@ -14,14 +14,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import DappFooter from './DappFooter';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import queryString from 'query-string';
-import { setReferralId } from 'utils/referral';
+import { getReferralId, setReferralId } from 'utils/referral';
 import { useLocation } from 'react-router-dom';
+import i18n from 'i18n';
 
-type DappLayoutProps = {
-    showSearch?: boolean;
-};
-
-const DappLayout: React.FC<DappLayoutProps> = ({ children, showSearch }) => {
+const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const { trackPageView } = useMatomo();
@@ -33,18 +30,35 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children, showSearch }) => {
         if (queryParams.referralId) {
             setReferralId(queryParams.referralId);
         }
-    }, []);
+    }, [queryParams.referralId]);
 
     useEffect(() => {
-        trackPageView({
-            customDimensions: [
-                {
-                    id: 1,
-                    value: networkId ? networkId?.toString() : '',
-                },
-            ],
-        });
-    }, [networkId]);
+        const customDimensions = [
+            {
+                id: 1,
+                value: networkId ? networkId?.toString() : '',
+            },
+        ];
+
+        const referralId = getReferralId();
+        if (referralId) {
+            customDimensions.push({
+                id: 2,
+                value: referralId,
+            });
+        }
+
+        const language = i18n.language;
+
+        if (language) {
+            customDimensions.push({
+                id: 3,
+                value: language,
+            });
+        }
+
+        trackPageView({ customDimensions });
+    }, [networkId, trackPageView]);
 
     return (
         <>
@@ -54,7 +68,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children, showSearch }) => {
                 ) : (
                     <Background>
                         <Wrapper>
-                            <DappHeader showSearch={showSearch} />
+                            <DappHeader />
                             {children}
                             <DappFooter />
                         </Wrapper>

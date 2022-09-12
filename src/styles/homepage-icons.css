@@ -1,0 +1,18 @@
+.icon-homepage {
+    display: inline-block;
+    font-family: HomepageIcons !important;
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.icon-homepage--cn:before {
+    content: '\004B';
+}
+
+.icon-homepage--en:before {
+    content: '\004C';
+}
+
+.icon-homepage--ru:before {
+    content: '\004D';
+}

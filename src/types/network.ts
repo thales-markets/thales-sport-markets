@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 
-export type NetworkId = 10 | 42;
+export type NetworkId = 5 | 10 | 42 | 420;
 
 export type EthereumProvider = {
     isMetaMask: boolean;

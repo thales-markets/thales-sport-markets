@@ -21,6 +21,7 @@ type HistoryPropsTable = {
 
 export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResultsMessage, isLoading }) => {
     const { t } = useTranslation();
+    const searchParams = new URLSearchParams(window.location.search);
     // @ts-ignore
     return (
         <>
@@ -36,14 +37,14 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                         sortable: true,
                     },
                     {
-                        Header: <>Game</>,
+                        Header: <>{t('market.table.game-col')}</>,
                         accessor: 'game',
                         sortType: 'alphanumeric',
                         Cell: (cellProps: CellProps<UserTransaction, UserTransaction['game']>) => (
                             <SPAAnchor
                                 className="hover-underline"
                                 onClick={(e) => e.stopPropagation()}
-                                href={buildMarketLink(cellProps.row.original.market)}
+                                href={buildMarketLink(cellProps.row.original.market, searchParams)}
                             >
                                 {cellProps.cell.value}
                             </SPAAnchor>
@@ -87,7 +88,7 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                         sortable: true,
                     },
                     {
-                        Header: <>Usd Value</>,
+                        Header: <>{t('market.table.usd-value-col')}</>,
                         accessor: 'usdValue',
                         Cell: (cellProps: CellProps<UserTransaction, UserTransaction['usdValue']>) => (
                             <p>${formatCurrency(cellProps.cell.value)}</p>
@@ -97,7 +98,7 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                         sortType: 'basic',
                     },
                     {
-                        Header: <>Result</>,
+                        Header: <>{t('market.table.result-col')}</>,
                         accessor: 'result',
                         Cell: (cellProps: CellProps<UserTransaction, UserTransaction['result']>) => (
                             <>

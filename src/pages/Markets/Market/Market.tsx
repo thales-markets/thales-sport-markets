@@ -13,7 +13,6 @@ import { MarketData } from 'types/markets';
 import { buildHref } from 'utils/routes';
 import BackToLink from '../components/BackToLink';
 import MarketDetails from './MarketDetails';
-// import ResolveMarket from './ResolveMarket';
 import Transactions from './Transactions';
 import { Side } from '../../../constants/options';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
@@ -44,7 +43,7 @@ const Market: React.FC<MarketProps> = (props) => {
 
     useEffect(() => {
         trackPageView({});
-    }, []);
+    }, [trackPageView]);
 
     return (
         <Container>
@@ -52,8 +51,7 @@ const Market: React.FC<MarketProps> = (props) => {
                 <>
                     <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
                     <MarketDetails market={market} selectedSide={selectedSide} setSelectedSide={setSelectedSide} />
-                    {/*{market.canMarketBeResolved && !market.isPaused && <ResolveMarket market={market} />}*/}
-                    <Transactions marketAddress={marketAddress} />
+                    <Transactions market={market} />
                 </>
             ) : (
                 <SimpleLoader />

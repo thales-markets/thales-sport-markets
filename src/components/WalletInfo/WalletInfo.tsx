@@ -9,9 +9,12 @@ import { truncateAddress } from 'utils/formatters/string';
 import onboardConnector from 'utils/onboardConnector';
 import { getIsAppReady } from 'redux/modules/app';
 import { PAYMENT_CURRENCY } from 'constants/currency';
-import { formatCurrency } from 'utils/formatters/number';
+import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
 import OutsideClickHandler from 'react-outside-click-handler';
-import usesUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
+import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
+import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
+import Tooltip from 'components/Tooltip';
+import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -21,7 +24,7 @@ const WalletInfo: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const [showWalletOptions, setShowWalletOptions] = useState<boolean>(false);
 
-    const sUSDBalanceQuery = usesUSDWalletBalance(walletAddress, networkId, {
+    const sUSDBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
     const sUSDBalance = useMemo(() => {
@@ -29,11 +32,21 @@ const WalletInfo: React.FC = () => {
             return formatCurrency(sUSDBalanceQuery?.data, 2);
         }
         return 0;
-    }, [sUSDBalanceQuery.isSuccess, sUSDBalanceQuery?.data]);
+    }, [sUSDBalanceQuery.data]);
+
+    const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+    });
+    const overtimeVoucher = useMemo(() => {
+        if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
+            return overtimeVoucherQuery.data;
+        }
+        return undefined;
+    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
 
     return (
-        <Container>
-            {!showWalletOptions && (
+        <Container hasVoucher={!!overtimeVoucher}>
+            <FlexDivColumn>
                 <WalletContainer
                     onClick={() => {
                         if (!isWalletConnected) {
@@ -42,25 +55,54 @@ const WalletInfo: React.FC = () => {
                             setShowWalletOptions(true);
                         }
                     }}
+                    hasVoucher={!!overtimeVoucher}
                 >
                     {isWalletConnected ? (
                         <>
-                            <Wallet className="wallet-info">
-                                <Info>{truncateAddress(walletAddress)}</Info>
-                            </Wallet>
-                            <Wallet className="wallet-info-hover">
-                                <Info>{t('common.wallet.wallet-options')}</Info>
-                            </Wallet>
-                            <Balance>
-                                <Info>{sUSDBalance}</Info>
-                                <Currency>{PAYMENT_CURRENCY}</Currency>
-                            </Balance>
+                            <>
+                                <Wallet className="wallet-info">
+                                    <Info>{truncateAddress(walletAddress)}</Info>
+                                </Wallet>
+                                <Wallet className="wallet-info-hover">
+                                    <Info>{t('common.wallet.wallet-options')}</Info>
+                                </Wallet>
+                                <Balance hasVoucher={!!overtimeVoucher}>
+                                    <Info>{sUSDBalance}</Info>
+                                    <Currency>{PAYMENT_CURRENCY}</Currency>
+                                </Balance>
+                            </>
                         </>
                     ) : (
                         <Info>{t('common.wallet.connect-your-wallet')}</Info>
                     )}
                 </WalletContainer>
-            )}
+                {overtimeVoucher && (
+                    <Tooltip
+                        overlay={
+                            <OvertimeVoucherPopup
+                                title={t('common.voucher.overtime-voucher')}
+                                imageSrc={overtimeVoucher.image}
+                                text={`${t('common.voucher.remaining-amount')}: ${formatCurrencyWithKey(
+                                    PAYMENT_CURRENCY,
+                                    overtimeVoucher.remainingAmount
+                                )}`}
+                            />
+                        }
+                        component={
+                            <VoucherContainer>
+                                <Wallet>
+                                    <VoucherInfo>{t('common.voucher.voucher')}:</VoucherInfo>
+                                </Wallet>
+                                <VoucherBalance>
+                                    <Info>{formatCurrency(overtimeVoucher.remainingAmount, 2)}</Info>
+                                    <Currency>{PAYMENT_CURRENCY}</Currency>
+                                </VoucherBalance>
+                            </VoucherContainer>
+                        }
+                        overlayClassName="overtime-voucher-overlay"
+                    />
+                )}
+            </FlexDivColumn>
             {showWalletOptions && (
                 <OutsideClickHandler onOutsideClick={() => setShowWalletOptions(false)}>
                     <WalletOptions>
@@ -93,33 +135,31 @@ const WalletInfo: React.FC = () => {
     );
 };
 
-const Container = styled(FlexDivCentered)`
+const Container = styled(FlexDivCentered)<{ hasVoucher: boolean }>`
+    border: 1px solid ${(props) => props.theme.borderColor.tertiary};
+    color: ${(props) => props.theme.textColor.primary};
+    background: ${(props) => props.theme.background.secondary};
+    border-radius: 5px;
     position: relative;
-    height: 34px;
     justify-content: end;
     min-width: fit-content;
+    margin-bottom: ${(props) => (props.hasVoucher ? '-28px' : '0px')};
     @media (max-width: 767px) {
         min-width: auto;
+        margin-bottom: ${(props) => (props.hasVoucher ? '-10px' : '0px')};
     }
 `;
 
-const WalletContainer = styled(FlexDivRowCentered)`
-    border: 1px solid ${(props) => props.theme.borderColor.tertiary};
-    border-radius: 5px;
+const WalletContainer = styled(FlexDivRowCentered)<{ hasVoucher: boolean }>`
     height: 28px;
     padding: 0 20px;
     cursor: pointer;
-    color: ${(props) => props.theme.textColor.primary};
-    background: ${(props) => props.theme.background.secondary};
     .wallet-info-hover {
         display: none;
     }
     :hover {
         background: ${(props) => props.theme.background.tertiary};
         color: ${(props) => props.theme.textColor.primary};
-        div {
-            border-color: ${(props) => props.theme.borderColor.secondary};
-        }
         i {
             :before {
                 color: ${(props) => props.theme.button.textColor.primary};
@@ -132,6 +172,8 @@ const WalletContainer = styled(FlexDivRowCentered)`
             display: inline;
         }
     }
+    border-radius: ${(props) => (props.hasVoucher ? '5px 5px 0px 0px' : '5px')};
+    overflow: hidden;
 `;
 
 const Wallet = styled(FlexDivRowCentered)`
@@ -140,8 +182,8 @@ const Wallet = styled(FlexDivRowCentered)`
     text-align: center;
 `;
 
-const Balance = styled(FlexDivRowCentered)`
-    border-left: 1px solid ${(props) => props.theme.borderColor.secondary};
+const Balance = styled(FlexDivRowCentered)<{ hasVoucher: boolean }>`
+    border-left: 1px solid ${(props) => (props.hasVoucher ? 'transparent' : props.theme.borderColor.secondary)};
     padding-left: 10px;
 `;
 
@@ -167,9 +209,6 @@ const WalletOptions = styled(FlexDivColumn)`
     z-index: 100;
     background: ${(props) => props.theme.background.secondary};
     color: ${(props) => props.theme.button.textColor.primary};
-    @media (max-width: 767px) {
-        right: -127px;
-    }
 `;
 
 const WalletOptionsHeader = styled(FlexDivCentered)`
@@ -214,6 +253,27 @@ const CloseIcon = styled.i`
         content: '\\004F';
         color: ${(props) => props.theme.textColor.primary};
     }
+`;
+
+export const VoucherImage = styled.img`
+    height: 150px;
+`;
+
+const VoucherContainer = styled(FlexDivRowCentered)`
+    height: 28px;
+    margin: 0 10px;
+    cursor: pointer;
+    border-top: 1px solid ${(props) => props.theme.borderColor.secondary};
+`;
+
+const VoucherInfo = styled(Info)`
+    text-transform: uppercase;
+    padding-left: 10px;
+`;
+
+const VoucherBalance = styled(FlexDivRowCentered)`
+    padding-left: 10px;
+    padding-right: 10px;
 `;
 
 export default WalletInfo;

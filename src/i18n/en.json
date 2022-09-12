@@ -1,6 +1,21 @@
 {
     "common": {
         "winner": "Winner",
+        "buy-side": "BUY",
+        "sell-side": "SELL",
+        "days-of-week": {
+            "mon": "mon",
+            "tue": "tue",
+            "wed": "wed",
+            "thu": "thu",
+            "fri": "fri",
+            "sat": "sat",
+            "sun": "sun"
+        },
+        "pagination": {
+            "page": "Page",
+            "rows-per-page": "Rows per page:"
+        },
         "wallet": {
             "connect-your-wallet": "Connect wallet",
             "switch-wallet": "Switch wallet",
@@ -10,6 +25,25 @@
             "approve": "Approve",
             "get-usd-progress": "Minting {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use."
+        },
+        "voucher": {
+            "remaining-amount": "Remaining amount",
+            "overtime-voucher": "Overtime voucher",
+            "voucher": "Voucher",
+            "mint-voucher": "Mint voucher",
+            "modal": {
+                "title": "Mint Overtime voucher",
+                "description": "<p>Overtime voucher functionality has been implemented per <tip>TIP-76</tip>.<p/>",
+                "voucher-amount-label": "Voucher amount",
+                "another-wallet-label": "Send a voucher to another wallet",
+                "recipient-wallet-label": "Recipient wallet",
+                "recipient-wallet-placeholder": "Enter recipient address",
+                "button": {
+                    "mint-label": "Mint",
+                    "mint-progress-label": "Minting in progress...",
+                    "confirmation-message": "Voucher successfully minted"
+                }
+            }
         },
         "referral": {
             "link-copied": "Referral link copied!",
@@ -44,30 +78,12 @@
             "unknown-error-try-again": "An unknown error occurred after you submitted. Please try again.",
             "unknown-error-try-again-general": "An unknown error occurred. Please try again.",
             "insufficient-balance": "Insufficient balance",
-            "insufficient-liquidity": "Insufficient liquidity",
             "enter-amount": "Enter amount",
             "enter-price": "Enter price",
-            "enter-valid-slippage": "Enter a valid slippage percentage",
-            "enter-market-data": "Enter market data",
-            "enter-question": "Enter question",
-            "enter-data-source": "Enter data source",
-            "enter-positions": "Enter positions",
-            "enter-ticket-price": "Enter ticket price",
-            "enter-tags": "Enter tags",
-            "enter-reason-for-dispute": "Enter reason for dispute",
-            "select-initial-position": "Select initial position",
-            "select-position": "Select position",
-            "different-position": "Positions must be different",
-            "select-vote": "Select vote",
-            "select-outcome": "Select outcome",
-            "select-result": "Select result",
-            "invalid-ticket-price": "Invalid ticket price",
-            "invalid-ticket-price-extended": "The ticket price must be between {{min}} and {{max}}",
-            "invalid-data-source": "Invalid data source",
-            "invalid-data-source-extended": "Data source is invalid. Data source must be a URL with https prefix.",
             "insufficient-balance-wallet": "Please ensure your wallet has sufficient {{currencyKey}}",
-            "invalid-slippage": "Invalid slippage",
-            "user-rejected-tx": "User rejected transaction"
+            "user-rejected-tx": "User rejected transaction",
+            "enter-address": "Enter address",
+            "invalid-address": "Invalid address"
         },
         "time-remaining": {
             "ended": "ended",
@@ -100,7 +116,13 @@
         "input-characters-note": "{{entered }} / {{max}}",
         "view": "View",
         "guidelines": "guidelines",
-        "built-on": "Built on"
+        "built-on": "Built on",
+        "odds": {
+            "american-odds": "American Odds",
+            "decimal-odds": "Decimal Odds",
+            "normalized-implied-odds": "Normalized Implied Odds"
+        },
+        "coming-soon": "Coming soon!"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED."
@@ -117,87 +139,29 @@
         "resolved-markets-label": "Resolved",
         "grid-view": "Grid",
         "list-view": "List",
-        "status": {
-            "open": "Open",
-            "cancelled-pending-confirmation": "Cancelled - pending confirmation",
-            "cancelled-confirmed": "Cancelled",
-            "paused": "Paused",
-            "resolve-pending": "Resolve pending",
-            "resolved-pending-confirmation": "Resolved - pending confirmation",
-            "resolved-confirmed": "Resolved",
-            "claim-available": "Claim available",
-            "cancelled-refund-available": "Cancelled - refund available"
-        },
-        "pool-size-label": "Pool size",
-        "total-pool-size-label": "Total pool size",
-        "number-of-participants-label": "Number of participants",
-        "roi-label": "ROI",
-        "roi-tooltip": "Displayed ROI is not guaranteed. Profits are based on the current bids in the pool and they are prone to change. Actual ROI is determined at the end of the positioning phase.",
-        "winnings-per-ticket-label": "Winnings per ticket",
-        "claim-amount-ticket-label": "Claim amount per ticket",
-        "ticket-price-label": "Ticket price",
-        "return-label": "Potential max return",
-        "your-winnings-label": "Your winnings",
-        "your-refund-label": "Your refund",
-        "your-claim-amount-label": "Your claim amount",
-        "nothing-to-claim-label": "Nothing to claim",
-        "winnings-claimed-label": "Winnings claimed",
-        "refund-claimed-label": "Refund claimed",
-        "claimed-label": "Claimed",
-        "fees-bonds-distributed-label": "Fees and bonds distributed",
-        "bonds-distributed-label": "Bonds distributed",
-        "no-winners-label": "No winners on this market",
-        "data-source-label": "Data source",
-        "bid-fee-label": "Bid fee",
-        "bid-fee-tooltip": "<0>Each bid is subject to a total fee of {{bidPercentage}}%:</0><1>- {{creatorPercentage}}% goes to the market creator</1><1>- {{resolverPercentage}}% goes to the market resolver</1><1>- {{safeBoxPercentage}}% towards the Safe Box</1><0>The fees are only paid out in case market is not cancelled.</0>",
-        "withdrawal-fee-label": "Withdrawal fee",
-        "withdrawal-fee-tooltip": "<0>Withdrawal is subject to a total {{withdrawalPercentage}}% fee:</0><1>- {{creatorPercentage}}% paid to the market creator</1><1>- {{safeBoxPercentage}}% towards the Safe Box</1><0>These fees are paid within the withdrawal transactions.</0>",
-        "withdrawal-not-allowed": "Withdrawals are not allowed",
-        "creator-fee-label": "Creator fee earnings",
-        "resolver-fee-label": "Resolver fee earnings",
-        "your-fee-label": "Your fee earnings",
-        "button": {
-            "bid-label": "Bid",
-            "bid-progress-label": "Bidding in progress...",
-            "change-position-label": "Change position",
-            "change-position-progress-label": "Changing in progress...",
-            "withdraw-label": "Withdraw",
-            "withdraw-progress-label": "Withdrawal in progress...",
-            "resolve-market-label": "Resolve market",
-            "resolve-market-progress-label": "Resolving in progress...",
-            "claim-label": "Claim",
-            "claim-progress-label": "Claiming in progress...",
-            "cancel-label": "Cancel",
-            "cancel-market-label": "Cancel market",
-            "cancel-progress-label": "Canceling in progress...",
-            "distribute-fees-bonds-label": "Distribute fees and bonds",
-            "distribute-bonds-label": "Distribute bonds",
-            "distribute-progress-label": "Distributing in progress..."
-        },
+        "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
         "toast-messsage": {
             "transaction-pending": "Transaction pending",
             "swap-success": "Successfully swapped {{ currencyKey }}",
             "approve-success": "Successfully approved",
             "buy-success": "Successfully bought",
             "sell-success": "Successfully sold",
-            "create-market-success": "Market successfully created",
             "claim-winnings-success": "Winnings successfully claimed",
             "claim-refund-success": "Refund successfully claimed",
-            "resolve-market-success": "Market successfully resolved",
-            "ticket-bid-success": "Bid successfully placed",
-            "change-position-success": "Position successfully changed",
             "withdraw-success": "Successfuly withdrawn",
             "get-usd-success": "{{amount}} successfully minted"
         },
         "filter-label": {
             "global": {
-                "all": "All markets",
+                "allmarkets": "All markets",
                 "openmarkets": "Open markets",
                 "resolvedmarkets": "Resolved markets",
                 "yourpositions": "Your positions",
                 "claim": "Claimable",
                 "history": "Your transactions",
-                "canceled": "Cancelled"
+                "canceled": "Cancelled",
+                "archivedmarkets": "Archived markets",
+                "tooltip": "Markets resolved more than 7 days ago"
             },
             "sport": {
                 "all": "All sports",
@@ -206,28 +170,29 @@
                 "hockey": "Hockey",
                 "tennis": "Tennis",
                 "football": "Football",
+                "ufc": "MMA",
                 "baseball": "Baseball",
                 "soon": "More sports coming soon!"
             },
-            "all": "All"
+            "all": "All",
+            "datepicker": {
+                "games": "{{numberOfGames}} games"
+            }
         },
         "back-to-markets": "Back to markets",
         "back-to-market": "Back to market",
         "no-markets-found": "No markets found",
         "view-all-markets": "View all markets",
-        "resolve-market": {
-            "title": "Choose a position to resolve the market with",
-            "cancel-tooltip": "If the market is not created according to the guidelines, use this option to cancel the market. Resolving a market with this position will allow anyone who placed a bid on the market to claim a full refund.",
-            "bond-info": "<0><0>In order to resolve the market, you need to deposit a bond of {{amount}} which will be used in case of a dispute.</0><0>If your result is not disputed and the market is formally resolved with your position, the bond will be returned to you.</0><0>{{resolverPercentage}}% of each bid goes to the market resolver in case the market is not cancelled.</0></0>",
-            "creator-bond-info": "<0><0>As a market creator, you don't need to submit a new bond, your initial bond will be used in case of a dispute.</0><0>{{resolverPercentage}}% of each bid goes to the market resolver in case the market is not cancelled.</0></0>"
-        },
-
         "table": {
             "title": "Recent activity",
             "date-time-col": "date | time",
             "type-col": "type",
             "position-col": "position",
             "amount-col": "amount",
+            "paid-col": "paid",
+            "game-col": "game",
+            "usd-value-col": "usd value",
+            "result-col": "result",
             "tx-status-col": "tx status",
             "type": {
                 "bid": "Bid",
@@ -237,11 +202,17 @@
                 "buy": "BUY",
                 "sell": "SELL"
             },
-            "no-results": "No transactions associated with this market."
+            "no-results": "No transactions associated with this market.",
+            "no-results-for-wallet": "No transactions associated with this wallet."
+        },
+        "tooltip": {
+            "amount-exceeded": "Amount exceeded the amount available on AMM",
+            "minimal-amount": "Minimal amount is 1",
+            "no-funds": "Please ensure your wallet has enough funds"
         }
     },
     "markets": {
-        "market-card-list": {
+        "market-card": {
             "starts": "starts",
             "claimable": "Claimable",
             "finished": "Finished",
@@ -250,7 +221,108 @@
             "canceled": "Cancelled",
             "pending-resolution": "Pending resolution",
             "claim": "Claim",
-            "coming-soon": "Coming soon"
+            "coming-soon": "Coming soon",
+            "vs": "VS",
+            "draw": "Draw"
+        },
+        "market-details": {
+            "price": "Price",
+            "liquidity": "Liquidity",
+            "usd-amount": "USD amount",
+            "positions-amount": "Positions amount",
+            "amount-to-sell": "Amount to sell",
+            "total-to-receive": "Total to receive",
+            "potential-profit": "Potential profit",
+            "amount-claimable": "Amount claimable",
+            "claim-back": "Claim back",
+            "skew": "Skew",
+            "max": "Max",
+            "wallet-info": {
+                "title": "In wallet"
+            }
+        },
+        "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity."
+    },
+    "rewards": {
+        "header": "Rewards",
+        "search-placeholder": "Search wallet address",
+        "description": "<0>There is a total of <0>16,000 OP</0> and <0>16,000 THALES</0> rewards to be distributed in 4 weeks, divided in 2-week periods. <0>8,000 OP + 8,000 THALES</0> will be allocated pro-rata based on the total sum of losses per wallet for each 2-week period.</0><0>All markets that have matured in that 2-week period are accounted for. Individual wallet's losses on each market are added up to get the leaderboard results.</0><1>- First 2-week round is from <0>00:00 UTC August 29</0> until <0>00:00 UTC September 12</0></1><1>- Second 2-week round is from <0>00:00 UTC September 12</0> until <0>00:00 UTC September 26</0></1><0>This incentivized program will be revisited after September 26.</0>",
+        "total-negative-pnl": "Total losses",
+        "op-rewards-banner-message": "OP rewards have started, check how you can earn those on <bold>the OP rewards page</bold>",
+        "your-score": "Your score",
+        "table": {
+            "wallet-address": "Wallet address",
+            "pnl": "Losses",
+            "percentage": "Percentage",
+            "reward-amount": "Reward",
+            "no-data-available": "No data available"
+        },
+        "periods": {
+            "period-0": "First period",
+            "period-1": "Second period",
+            "period-2": "Third period",
+            "period-3": "Fourth period",
+            "period-4": "Fifth period"
+        }
+    },
+    "quiz": {
+        "title": "Sports Trivia competition",
+        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition where weekly winners will receive NFT Vouchers that can be used instead of sUSD to participate in any sports market you like.</p><p>Read all the information about this trivia in our <blogPost>blog post</blogPost>.</p><p>How to participate? The trivia is available to everyone to test their knowledge and compete, but to be eligible for rewards you need to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime's Twitter</twitter>.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
+        "twitter-handle-label": "Twitter handle",
+        "twitter-handle-placeholder": "Enter your Twitter handle",
+        "twitter-handle-validation": "Invalid Twitter handle. Try again.",
+        "discord-label": "Discord ID (optional)",
+        "discord-placeholder": "Enter your Discord ID",
+        "current-question-label": "Current question: {{currentQuestion}}/{{numberOfQuestions}}",
+        "time-reamining-label": "Time remaining: <0/>",
+        "question-weight-label": "Question weight: {{points}}",
+        "point-label": "point",
+        "points-label": "points",
+        "quiz-finished-label": "Trivia finished!",
+        "your-score-label": "Your score: {{score}}/{{max}} points",
+        "button": {
+            "start-quiz-label": "Start trivia",
+            "next-question-label": "Next question",
+            "previous-question-label": "Previous question",
+            "finish-quiz-label": "Finish trivia",
+            "try-again-label": "Try again",
+            "see-leaderboard-label": "See leaderboard"
+        },
+        "leaderboard": {
+            "title": "Trivia Leaderboard",
+            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition for any given week.</p><p>All the details about how to participate for NFT sUSD vouchers that can be used on any sports market available <blogPost>here</blogPost>.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
+            "back-to-quiz": "Back to trivia",
+            "search-placeholder": "Search...",
+            "table": {
+                "rank-col": "Rank",
+                "wallet-address-col": "Wallet address",
+                "twitter-col": "Twitter",
+                "points-col": "Points",
+                "time-col": "Time",
+                "rewards-col": "Rewards",
+                "no-data-available": "No data available"
+            },
+            "period-end-label": "The period ends in",
+            "period-ended-label": "Period ended",
+            "week-label": "Week",
+            "overtime-voucher": "Overtime voucher"
+        },
+        "help-us-improve-label": "Help us improve",
+        "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
+        "finish-messages": {
+            "your-best-result": "Your best result: {{points}} {{pointsLabel}}",
+            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants.",
+            "not-quilfied-for-rewards": "You are missing {{points}} {{pointsLabel}} to get into the TOP {{numberOfRewards}} and qualify for rewards. Try again and improve your score.",
+            "quilfied-for-rewards": "You are currently in the TOP {{numberOfRewards}} and qualified for rewards. Try again to get a better rank and higher rewards.",
+            "quilfied-for-rewards-first": "You are currently leading the leaderboard! Try again to get a better score and secure your spot."
+        },
+        "difficulty-label": "Difficulty",
+        "difficulty": {
+            "1": "Trivial",
+            "2": "Easy",
+            "3": "Moderate",
+            "4": "Challenging",
+            "5": "Hard"
         }
     }
 }

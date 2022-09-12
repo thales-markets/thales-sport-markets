@@ -3,14 +3,15 @@ import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
 
 type ViewSwitchProps = {
+    type: string;
     selected?: boolean;
     onClick?: (param: any) => void;
 };
 
-const ViewSwitch: React.FC<ViewSwitchProps> = ({ selected, onClick, children }) => {
+const ViewSwitch: React.FC<ViewSwitchProps> = ({ selected, onClick, children, type }) => {
     return (
         <Container className={`${selected ? 'selected' : ''}`} onClick={onClick}>
-            <Icon className={`icon icon--${children?.toString().toLowerCase()}`} />
+            <Icon className={`icon icon--${type}`} />
             <Label>{children}</Label>
         </Container>
     );

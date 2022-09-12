@@ -1,5 +1,7 @@
 import Button from 'components/Button';
 import {
+    MarketInfoContainer,
+    MatchDate,
     MatchInfo,
     MatchInfoColumn,
     MatchInfoLabel,
@@ -26,7 +28,8 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { Balances, SportMarketInfo } from 'types/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
-import { getTeamImageSource, OVERTIME_LOGO } from 'utils/images';
+import { formatDateWithTime } from 'utils/formatters/date';
+import { getOnImageError, getTeamImageSource } from 'utils/images';
 import networkConnector from 'utils/networkConnector';
 
 type MarketCardResolvedProps = {
@@ -63,7 +66,7 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
                 setClaimable(true);
             }
         }
-    }, [balances]);
+    }, [balances, market.finalResult]);
 
     const claimReward = async () => {
         const { signer } = networkConnector;
@@ -91,35 +94,44 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
         setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
-    }, [market.homeTeam, market.awayTeam]);
+    }, [market.homeTeam, market.awayTeam, market.tags]);
 
     return (
         <MatchInfo>
             <MatchInfoColumn>
                 <MatchParticipantImageContainer isWinner={market.finalResult == 1} finalResult={market.finalResult}>
-                    <MatchParticipantImage src={homeLogoSrc} onError={() => setHomeLogoSrc(OVERTIME_LOGO)} />
+                    <MatchParticipantImage
+                        alt="Home team logo"
+                        src={homeLogoSrc}
+                        onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
+                    />
                 </MatchParticipantImageContainer>
                 <WinnerLabel isWinning={market.finalResult == 1} finalResult={market.finalResult}>
-                    WINNER
+                    {t('common.winner')}
                 </WinnerLabel>
                 <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
                 <ScoreLabel>{market.homeScore}</ScoreLabel>
             </MatchInfoColumn>
             <MatchInfoColumn>
-                <MatchInfoLabel claimable={claimable}>{claimable ? 'CLAIMABLE' : 'FINISHED'}</MatchInfoLabel>
-                <ClaimButton
-                    onClick={(e: any) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        claimReward();
-                    }}
-                    claimable={claimable}
-                >
-                    CLAIM
-                </ClaimButton>
-                <MatchVSLabel>VS</MatchVSLabel>
+                <MarketInfoContainer>
+                    <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
+                    <MatchInfoLabel claimable={claimable}>
+                        {claimable ? t('markets.market-card.claimable') : t('markets.market-card.finished')}
+                    </MatchInfoLabel>
+                    <ClaimButton
+                        onClick={(e: any) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            claimReward();
+                        }}
+                        claimable={claimable}
+                    >
+                        {t('markets.market-card.claim')}
+                    </ClaimButton>
+                </MarketInfoContainer>
+                <MatchVSLabel>{t('markets.market-card.vs')}</MatchVSLabel>
                 <WinnerLabel isWinning={market.finalResult == 3} finalResult={market.finalResult}>
-                    DRAW
+                    {t('markets.market-card.draw')}
                 </WinnerLabel>
                 <ProfitLabel claimable={claimable} profit={claimableAmount}>{`$ ${claimableAmount.toFixed(
                     2
@@ -128,10 +140,14 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
             </MatchInfoColumn>
             <MatchInfoColumn>
                 <MatchParticipantImageContainer isWinner={market.finalResult == 2} finalResult={market.finalResult}>
-                    <MatchParticipantImage src={awayLogoSrc} onError={() => setAwayLogoSrc(OVERTIME_LOGO)} />
+                    <MatchParticipantImage
+                        alt="Away team logo"
+                        src={awayLogoSrc}
+                        onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
+                    />
                 </MatchParticipantImageContainer>
                 <WinnerLabel isWinning={market.finalResult == 2} finalResult={market.finalResult}>
-                    WINNER
+                    {t('common.winner')}
                 </WinnerLabel>
                 <MatchParticipantName>{market.awayTeam}</MatchParticipantName>
                 <ScoreLabel>{market.awayScore}</ScoreLabel>
@@ -141,7 +157,7 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
 };
 
 const ClaimButton = styled(Button)<{ claimable?: boolean }>`
-    position: absolute;
+    /* position: absolute; */
     top: 10%;
     background: ${(props) => props.theme.background.quaternary};
     color: ${(props) => props.theme.textColor.tertiary};

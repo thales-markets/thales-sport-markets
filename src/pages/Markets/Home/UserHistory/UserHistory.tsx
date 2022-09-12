@@ -4,7 +4,7 @@ import { FlexDivColumn } from 'styles/common';
 import useUserTransactionsQuery from '../../../../queries/markets/useUserTransactionsQuery';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/rootReducer';
-import { getNetworkId, getWalletAddress } from '../../../../redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from '../../../../redux/modules/wallet';
 import { useTranslation } from 'react-i18next';
 import { MarketTransactions, SportMarkets, UserTransaction, UserTransactions } from '../../../../types/markets';
 import { orderBy } from 'lodash';
@@ -13,27 +13,36 @@ import { getIsAppReady } from '../../../../redux/modules/app';
 import HistoryTable from '../../components/HistoryTable';
 import { Position, PositionName } from '../../../../constants/options';
 import { getEtherscanTxLink } from '../../../../utils/etherscan';
+import { GlobalFilterEnum } from 'constants/markets';
 
 const UserHistory: React.FC = () => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const userTransactionsQuery = useUserTransactionsQuery(walletAddress, networkId, { enabled: isAppReady });
-    const sportMarketsQuery = useSportMarketsQuery(networkId, { enabled: isAppReady });
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const userTransactionsQuery = useUserTransactionsQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+    });
+    const sportMarketsQuery = useSportMarketsQuery(networkId, GlobalFilterEnum.All, null, {
+        enabled: isAppReady && isWalletConnected,
+    });
 
     const [userTransactions, setUserTransactions] = useState<MarketTransactions>([]);
     const [markets, setMarkets] = useState<SportMarkets>([]);
 
     useEffect(() => {
-        if (userTransactionsQuery.isSuccess && userTransactionsQuery.data) {
+        if (userTransactionsQuery.isSuccess && userTransactionsQuery.data && isWalletConnected) {
             setUserTransactions(orderBy(userTransactionsQuery.data, ['timestamp', 'blockNumber'], ['desc', 'desc']));
+        } else {
+            setUserTransactions([]);
         }
-    }, [userTransactionsQuery.isSuccess, userTransactionsQuery.data]);
+    }, [userTransactionsQuery.isSuccess, userTransactionsQuery.data, isWalletConnected]);
 
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            setMarkets(sportMarketsQuery.data);
+            // @ts-ignore
+            setMarkets(sportMarketsQuery.data[GlobalFilterEnum.All]);
         }
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data]);
 
@@ -48,16 +57,17 @@ const UserHistory: React.FC = () => {
                     game: `${market.homeTeam} - ${market.awayTeam}`,
                     result: Position[market.finalResult - 1] as PositionName,
                     // @ts-ignore
-                    usdValue: +market[`${tx.position.toLowerCase()}Odds`] * +tx.amount,
+                    usdValue: tx.paid,
                     // @ts-ignore
-                    positionTeam: market[`${tx.position.toLowerCase()}Team`] || 'Draw',
+                    positionTeam: market[`${tx.position.toLowerCase()}Team`] || t('markets.market-card.draw'),
                     link: getEtherscanTxLink(networkId, tx.hash),
                 };
             } else {
+                // @ts-ignore
                 return tx as UserTransaction;
             }
         });
-    }, [markets, userTransactions]);
+    }, [markets, networkId, userTransactions, t]);
 
     return (
         <Container>
@@ -65,7 +75,7 @@ const UserHistory: React.FC = () => {
                 <HistoryTable
                     transactions={userTransactionsWithMarket}
                     isLoading={userTransactionsQuery.isLoading}
-                    noResultsMessage={noResults ? <span>{t(`market.table.no-results`)}</span> : undefined}
+                    noResultsMessage={noResults ? <span>{t(`market.table.no-results-for-wallet`)}</span> : undefined}
                 />
             </TableContainer>
         </Container>

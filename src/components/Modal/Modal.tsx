@@ -68,14 +68,14 @@ const Header = styled(FlexDivRow)`
 const Title = styled(FlexDiv)`
     font-style: normal;
     font-weight: bold;
-    font-size: 25px;
+    font-size: 20px;
     line-height: 100%;
     text-align: center;
     color: ${(props) => props.theme.textColor.primary};
 `;
 
 const CloseIcon = styled.i`
-    font-size: 18px;
+    font-size: 16px;
     margin-top: 1px;
     cursor: pointer;
     &:before {
