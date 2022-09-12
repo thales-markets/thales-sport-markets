@@ -21,6 +21,7 @@ type HistoryPropsTable = {
 
 export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResultsMessage, isLoading }) => {
     const { t } = useTranslation();
+    const searchParams = new URLSearchParams(window.location.search);
     // @ts-ignore
     return (
         <>
@@ -43,7 +44,7 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                             <SPAAnchor
                                 className="hover-underline"
                                 onClick={(e) => e.stopPropagation()}
-                                href={buildMarketLink(cellProps.row.original.market)}
+                                href={buildMarketLink(cellProps.row.original.market, searchParams)}
                             >
                                 {cellProps.cell.value}
                             </SPAAnchor>

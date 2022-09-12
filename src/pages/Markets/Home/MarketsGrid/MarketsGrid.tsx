@@ -22,13 +22,14 @@ export const breakpointColumnsObj = {
 
 const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions, layoutType = 0 }) => {
     const mobileGridView = window.innerWidth < 950;
+    const searchParams = new URLSearchParams(window.location.search);
     return (
         <Container>
             {mobileGridView || layoutType == 0 ? (
                 <Masonry breakpointCols={breakpointColumnsObj} className="">
                     {markets.map((market, index) => {
                         return (
-                            <SPAAnchor key={index} href={buildMarketLink(market.address)}>
+                            <SPAAnchor key={index} href={buildMarketLink(market.address, searchParams)}>
                                 <MarketCard market={market} accountPositions={accountPositions[market.address]} />
                             </SPAAnchor>
                         );
@@ -38,7 +39,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions, la
                 <ListContainer>
                     {markets.map((market, index) => {
                         return (
-                            <SPAAnchor key={index} href={buildMarketLink(market.address)}>
+                            <SPAAnchor key={index} href={buildMarketLink(market.address, searchParams)}>
                                 <MarketListCard
                                     market={market}
                                     key={index + 'list'}
