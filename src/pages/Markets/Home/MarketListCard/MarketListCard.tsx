@@ -1,8 +1,14 @@
+import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
+import { ethers } from 'ethers';
+import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { AccountPosition, SportMarketInfo } from 'types/markets';
+import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isClaimAvailable } from 'utils/markets';
+import networkConnector from 'utils/networkConnector';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
 import { ClubContainer, ClubLogo, ClubNameLabel, ClubVsClubContainer, Container, VSLabel } from './styled-components';
@@ -17,6 +23,26 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+
+    const claimReward = async () => {
+        const { signer } = networkConnector;
+        if (signer) {
+            const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
+            contract.connect(signer);
+            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            try {
+                const tx = await contract.exerciseOptions();
+                const txResult = await tx.wait();
+
+                if (txResult && txResult.transactionHash) {
+                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
+                }
+            } catch (e) {
+                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                console.log(e);
+            }
+        }
+    };
 
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
@@ -63,6 +89,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 isClaimable={claimAvailable}
                 result={`${market.homeScore}:${market.awayScore}`}
                 startsAt={formatDateWithTime(market.maturityDate)}
+                claimReward={claimReward}
             />
         </Container>
     );
