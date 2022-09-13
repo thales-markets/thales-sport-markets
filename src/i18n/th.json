@@ -127,11 +127,11 @@
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
         "tutorial": "กวดวิชา",
-        "discord": "ความไม่ลงรอยกัน",
-        "twitter": "ทวิตเตอร์",
         "github": "GitHub",
-        "medium": "ปานกลาง",
-        "docs": "เอกสาร"
+        "docs": "เอกสาร",
+        "medium": "Medium",
+        "twitter": "Twitter",
+        "discord": "Discord"
     },
     "market": {
         "question-label": "Question",

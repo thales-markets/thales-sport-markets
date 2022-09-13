@@ -129,9 +129,9 @@
         "tutorial": "Tutorial",
         "github": "GitHub",
         "docs": "Documentos",
-        "twitter": "Gorjeo",
-        "medium": "Medio",
-        "discord": "Discordia"
+        "medium": "Medium",
+        "twitter": "Twitter",
+        "discord": "Discord"
     },
     "market": {
         "question-label": "Pregunta",
