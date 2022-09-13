@@ -125,7 +125,13 @@
         "coming-soon": "快来了！"
     },
     "footer": {
-        "all-rights-reserved": "© {{year}} eXoticV 保留所有权利."
+        "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",
+        "tutorial": "教程",
+        "medium": "中等的",
+        "twitter": "推特",
+        "discord": "不和谐",
+        "docs": "文档",
+        "github": "GitHub"
     },
     "market": {
         "question-label": "问题标签",

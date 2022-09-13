@@ -125,7 +125,13 @@
         "coming-soon": "Вскоре!"
     },
     "footer": {
-        "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED."
+        "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
+        "medium": "Середина",
+        "docs": "Документы",
+        "twitter": "Твиттер",
+        "github": "Гитхаб",
+        "discord": "Раздор",
+        "tutorial": "Руководство"
     },
     "market": {
         "question-label": "Question",
