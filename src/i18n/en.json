@@ -125,7 +125,13 @@
         "coming-soon": "Coming soon!"
     },
     "footer": {
-        "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED."
+        "all-rights-reserved": "© {{year}} Overtime Markets ALL RIGHTS RESERVED.",
+        "twitter": "Twitter",
+        "discord": "Discord",
+        "docs": "Docs",
+        "medium": "Medium",
+        "tutorial": "Tutorial",
+        "github": "GitHub"
     },
     "market": {
         "question-label": "Question",
