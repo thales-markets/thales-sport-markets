@@ -26,6 +26,7 @@ const Referral: React.FC = () => {
 
         const referralLink = `${window.location.origin}${buildReferralLink(
             referralPath,
+            window.location.hash,
             window.location.search,
             walletAddress
         )}`;
