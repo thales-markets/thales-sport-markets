@@ -55,7 +55,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
                     <ResultLabel>{t('markets.market-card.result')}</ResultLabel>
                     <Result isLive={isLive}>{result}</Result>
                     <Status color={STATUS_COLOR.CLAIMABLE} style={{ fontWeight: '700' }}>
-                        {t('markets.market-card.claimable')}
+                        {t('markets.market-card.finished')}
                     </Status>
                 </>
             )}

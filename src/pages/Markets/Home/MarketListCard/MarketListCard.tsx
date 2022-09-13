@@ -5,6 +5,7 @@ import useMarketBalancesQuery from 'queries/markets/useMarketBalancesQuery';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { Position } from 'constants/options';
 import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
