@@ -125,7 +125,13 @@
         "coming-soon": "Demnächst!"
     },
     "footer": {
-        "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN."
+        "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",
+        "github": "GitHub",
+        "docs": "Dokumente",
+        "twitter": "Twitter",
+        "medium": "Mittel",
+        "discord": "Zwietracht",
+        "tutorial": "Lernprogramm"
     },
     "market": {
         "question-label": "Frage",
@@ -223,7 +229,7 @@
             "claim": "Einfordern",
             "coming-soon": "Bald",
             "vs": "VS",
-            "draw": "Unentschieden"
+            "draw": "Remis"
         },
         "market-details": {
             "price": "Preis",

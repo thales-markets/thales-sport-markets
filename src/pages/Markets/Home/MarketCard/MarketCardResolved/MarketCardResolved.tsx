@@ -116,7 +116,7 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
                 <MarketInfoContainer>
                     <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
                     <MatchInfoLabel claimable={claimable}>
-                        {claimable ? t('markets.market-card.claimable') : t('markets.market-card.finished')}
+                        {claimable ? '' : t('markets.market-card.finished')}
                     </MatchInfoLabel>
                     <ClaimButton
                         onClick={(e: any) => {

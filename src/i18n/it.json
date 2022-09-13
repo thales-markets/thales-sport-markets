@@ -125,7 +125,13 @@
         "coming-soon": "Prossimamente!"
     },
     "footer": {
-        "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED."
+        "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
+        "medium": "medio",
+        "discord": "Discordia",
+        "twitter": "Twitter",
+        "docs": "documenti",
+        "tutorial": "Esercitazione",
+        "github": "GitHub"
     },
     "market": {
         "question-label": "Question",
