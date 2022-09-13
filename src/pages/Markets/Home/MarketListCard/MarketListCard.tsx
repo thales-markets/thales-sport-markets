@@ -1,13 +1,17 @@
 import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
 import { ethers } from 'ethers';
 import { t } from 'i18next';
+import useMarketBalancesQuery from 'queries/markets/useMarketBalancesQuery';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AccountPosition, SportMarketInfo } from 'types/markets';
+import { getIsAppReady } from 'redux/modules/app';
+import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import { AccountPosition, Balances, SportMarketInfo } from 'types/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isClaimAvailable } from 'utils/markets';
 import networkConnector from 'utils/networkConnector';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
@@ -19,10 +23,36 @@ type MarketRowCardProps = {
 };
 
 const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions }) => {
-    const claimAvailable = isClaimAvailable(accountPositions);
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const [claimable, setClaimable] = useState<boolean>(false);
+    const [balances, setBalances] = useState<Balances | undefined>(undefined);
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+
+    const marketBalancesQuery = useMarketBalancesQuery(market.address, walletAddress, {
+        enabled: isWalletConnected && isAppReady,
+    });
+
+    useEffect(() => {
+        if (marketBalancesQuery.isSuccess && marketBalancesQuery.data) {
+            setBalances(marketBalancesQuery.data);
+        }
+    }, [marketBalancesQuery.isSuccess, marketBalancesQuery.data]);
+
+    useEffect(() => {
+        if (balances) {
+            if (
+                market.finalResult !== 0 &&
+                //@ts-ignore
+                balances?.[Position[market.finalResult - 1].toLowerCase()] > 0
+            ) {
+                setClaimable(true);
+            }
+        }
+    }, [balances, market.finalResult]);
 
     const claimReward = async () => {
         const { signer } = networkConnector;
@@ -50,7 +80,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
     }, [market.homeTeam, market.awayTeam, market.tags]);
 
     return (
-        <Container claimBorder={claimAvailable} isCanceled={market.isCanceled} isResolved={market.isResolved}>
+        <Container claimBorder={claimable} isCanceled={market.isCanceled} isResolved={market.isResolved}>
             <ClubVsClubContainer>
                 <ClubContainer>
                     <ClubLogo
@@ -86,7 +116,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 isResolved={market.isResolved}
                 isLive={market.maturityDate < new Date()}
                 isCanceled={market.isCanceled}
-                isClaimable={claimAvailable}
+                isClaimable={claimable}
                 result={`${market.homeScore}:${market.awayScore}`}
                 startsAt={formatDateWithTime(market.maturityDate)}
                 claimReward={claimReward}
