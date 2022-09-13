@@ -9,53 +9,74 @@ const DappFooter: React.FC = () => {
     const { t } = useTranslation();
 
     return (
-        <LinksContainer>
-            <Link target="_blank" rel="noreferrer" href={LINKS.Thales}>
+        <Container>
+            <ThalesLink mobile={true} target="_blank" rel="noreferrer" href={LINKS.Thales}>
                 <LinkContent>
                     <StyledLogo />
                 </LinkContent>
-            </Link>
-            <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Medium}>
-                <LinkContent>
-                    <MediumIcon />
-                    <LinkText>{t('footer.medium')}</LinkText>
-                </LinkContent>
-            </Link>
-            <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Twitter}>
-                <LinkContent>
-                    <TwitterIcon />
-                    <LinkText>{t('footer.twitter')}</LinkText>
-                </LinkContent>
-            </Link>
-            <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Discord}>
-                <LinkContent>
-                    <DiscordIcon />
-                    <LinkText>{t('footer.discord')}</LinkText>
-                </LinkContent>
-            </Link>
-            <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Docs}>
-                <LinkContent>
-                    <DocsIcon />
-                    <LinkText>{t('footer.docs')}</LinkText>
-                </LinkContent>
-            </Link>
-            <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Tutorial}>
-                <LinkContent>
-                    <YoutubeIcon />
-                    <LinkText>{t('footer.tutorial')}</LinkText>
-                </LinkContent>
-            </Link>
-            <Link target="_blank" rel="noreferrer" href={LINKS.Footer.GitHub}>
-                <LinkContent>
-                    <GithubIcon />
-                    <LinkText>{t('footer.github')}</LinkText>
-                </LinkContent>
-            </Link>
-        </LinksContainer>
+            </ThalesLink>
+            <LinksContainer>
+                <ThalesLink mobile={false} target="_blank" rel="noreferrer" href={LINKS.Thales}>
+                    <LinkContent>
+                        <StyledLogo />
+                    </LinkContent>
+                </ThalesLink>
+                <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Medium}>
+                    <LinkContent>
+                        <MediumIcon />
+                        <LinkText>{t('footer.medium')}</LinkText>
+                    </LinkContent>
+                </Link>
+                <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Twitter}>
+                    <LinkContent>
+                        <TwitterIcon />
+                        <LinkText>{t('footer.twitter')}</LinkText>
+                    </LinkContent>
+                </Link>
+                <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Discord}>
+                    <LinkContent>
+                        <DiscordIcon />
+                        <LinkText>{t('footer.discord')}</LinkText>
+                    </LinkContent>
+                </Link>
+                <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Docs}>
+                    <LinkContent>
+                        <DocsIcon />
+                        <LinkText>{t('footer.docs')}</LinkText>
+                    </LinkContent>
+                </Link>
+                <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Tutorial}>
+                    <LinkContent>
+                        <YoutubeIcon />
+                        <LinkText>{t('footer.tutorial')}</LinkText>
+                    </LinkContent>
+                </Link>
+                <Link target="_blank" rel="noreferrer" href={LINKS.Footer.GitHub}>
+                    <LinkContent>
+                        <GithubIcon />
+                        <LinkText>{t('footer.github')}</LinkText>
+                    </LinkContent>
+                </Link>
+            </LinksContainer>
+        </Container>
     );
 };
 
+const Container = styled(FlexDivColumnCentered)`
+    max-height: 75px;
+    @media (max-width: 400px) {
+        margin-top: 15px;
+    }
+`;
+
 const Link = styled.a``;
+
+const ThalesLink = styled.a<{ mobile?: boolean }>`
+    display: ${(props) => (props.mobile ? 'none' : '')};
+    @media (max-width: 600px) {
+        display: ${(props) => (props.mobile ? 'block' : 'none')};
+    }
+`;
 
 const StyledLogo = styled(ThalesLogo)`
     margin-left: 6px;
