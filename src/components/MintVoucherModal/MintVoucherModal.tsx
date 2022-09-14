@@ -32,6 +32,7 @@ const VOUCHER_OPTIONS: Array<{ value: number; label: string }> = [
     { value: 20, label: '20 sUSD' },
     { value: 50, label: '50 sUSD' },
     { value: 100, label: '100 sUSD' },
+    { value: 200, label: '200 sUSD' },
     { value: 500, label: '500 sUSD' },
     { value: 1000, label: '1000 sUSD' },
 ];
