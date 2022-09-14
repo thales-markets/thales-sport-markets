@@ -629,7 +629,7 @@ const Home: React.FC = () => {
                     })}
                 </SortingContainer>
             </BurgerFiltersContainer>
-            <FiltersContainer>
+            <FiltersContainer hidden={globalFilter === GlobalFilterEnum.Claim}>
                 <HeaderDatepicker
                     gamesPerDay={gamesPerDay}
                     dateFilter={dateFilter}
@@ -980,9 +980,10 @@ const SwitchContainer = styled(FlexDivRow)`
     }
 `;
 
-const FiltersContainer = styled(FlexDivRow)`
+const FiltersContainer = styled(FlexDivRow)<{ hidden: boolean }>`
     align-self: center;
     margin-bottom: 4px;
+    visibility: ${(props) => (props.hidden ? 'hidden' : '')};
 `;
 
 const GlobalFiltersContainer = styled(FlexDivColumn)`
