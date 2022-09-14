@@ -333,7 +333,7 @@ const InputContainer = styled(FlexDivColumnCentered)`
 `;
 
 const CheckboxContainer = styled(InputContainer)<{ isAnotherWallet: boolean }>`
-    margin-top: 15px;
+    margin-top: 25px;
     margin-bottom: ${(props) => (props.isAnotherWallet ? '10px' : '30px')};
     margin-left: 2px;
 `;
@@ -371,7 +371,7 @@ const Input = styled.input`
 `;
 
 const ButtonContainer = styled(FlexDivCentered)`
-    margin: 20px 0 10px 0;
+    margin: 30px 0 20px 0;
 `;
 
 const ModalButton = styled(Button)``;
