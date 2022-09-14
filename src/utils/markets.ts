@@ -1,6 +1,7 @@
-import { MarketStatus, OddsType } from 'constants/markets';
-import { AccountPosition, MarketData, MarketInfo } from 'types/markets';
+import { APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
+import { AccountPosition, MarketData, MarketInfo, SportMarketInfo } from 'types/markets';
 import { formatCurrency } from './formatters/number';
+import ordinal from 'ordinal';
 
 export const getRoi = (ticketPrice: number, potentialWinnings: number, showRoi: boolean) =>
     showRoi ? (potentialWinnings - ticketPrice) / ticketPrice : 0;
@@ -89,4 +90,42 @@ export const convertPositionToTeamName = (result: number, market: MarketData) =>
     if (result == 0) return market.homeTeam;
     if (result == 1) return market.awayTeam;
     if (result == 2) return 'DRAW';
+};
+
+export const isApexGame = (tag: number) => tag >= APEX_GAME_MIN_TAG;
+
+export const getScoreForApexGame = (resultDetails: string, defaultHomeScore: string, defaultAwayScore: string) => {
+    if (resultDetails !== null && resultDetails.indexOf('/')) {
+        const splittedResultDetails = resultDetails.split('/');
+        let homeScore = splittedResultDetails[0];
+        let awayScore = splittedResultDetails[1];
+        if (!isNaN(parseInt(homeScore))) {
+            homeScore = ordinal(Number(homeScore));
+        }
+        if (!isNaN(parseInt(awayScore))) {
+            awayScore = ordinal(Number(awayScore));
+        }
+        return {
+            homeScore,
+            awayScore,
+        };
+    }
+
+    return {
+        homeScore: defaultHomeScore,
+        awayScore: defaultAwayScore,
+    };
+};
+
+export const fixScoresForApexGame = (market: SportMarketInfo) => {
+    if (market.isApex) {
+        const score = getScoreForApexGame(
+            market.resultDetails,
+            market.homeScore.toString(),
+            market.awayScore.toString()
+        );
+        market.homeScore = score.homeScore;
+        market.awayScore = score.awayScore;
+    }
+    return market;
 };

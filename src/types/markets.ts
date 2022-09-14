@@ -53,9 +53,11 @@ export type SportMarketInfo = {
     homeOdds: number;
     awayOdds: number;
     drawOdds: number;
-    homeScore: number;
-    awayScore: number;
+    homeScore: number | string;
+    awayScore: number | string;
     sport: string;
+    isApex: boolean;
+    resultDetails: string;
 };
 
 export type FixedMarketData = {

@@ -679,7 +679,9 @@ const Home: React.FC = () => {
                                         filterItem !== SportFilterEnum.Baseball &&
                                         filterItem !== SportFilterEnum.Soccer &&
                                         filterItem !== SportFilterEnum.Football &&
-                                        filterItem !== SportFilterEnum.UFC
+                                        filterItem !== SportFilterEnum.UFC &&
+                                        filterItem !== SportFilterEnum.Formula1 &&
+                                        filterItem !== SportFilterEnum.MotoGP
                                     }
                                     selected={sportFilter === filterItem}
                                     sport={filterItem}
