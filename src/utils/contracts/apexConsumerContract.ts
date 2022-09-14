@@ -1,7 +1,7 @@
 export const apexConsumerContract = {
     addresses: {
         5: '0x03500619C58F4377c047A8918AE09594adb23f11',
-        10: 'TBD',
+        10: '0x0a6851C7D112A27019d84DCCb9cE0c0cd8b75325',
         42: 'TBD',
         69: 'TBD',
         420: 'TBD',
