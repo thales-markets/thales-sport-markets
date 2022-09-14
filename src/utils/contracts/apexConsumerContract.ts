@@ -1,6 +1,6 @@
 export const apexConsumerContract = {
     addresses: {
-        5: '0x29aD846e57b0986c92c447c5f27Db69eaB3C9657',
+        5: '0x03500619C58F4377c047A8918AE09594adb23f11',
         10: 'TBD',
         42: 'TBD',
         69: 'TBD',
@@ -66,6 +66,11 @@ export const apexConsumerContract = {
                             internalType: 'bytes32',
                             name: 'gameId',
                             type: 'bytes32',
+                        },
+                        {
+                            internalType: 'string',
+                            name: 'raceId',
+                            type: 'string',
                         },
                         {
                             internalType: 'uint256',
@@ -146,6 +151,11 @@ export const apexConsumerContract = {
                             internalType: 'bytes32',
                             name: 'gameId',
                             type: 'bytes32',
+                        },
+                        {
+                            internalType: 'string',
+                            name: 'raceId',
+                            type: 'string',
                         },
                         {
                             internalType: 'uint256',
@@ -769,6 +779,11 @@ export const apexConsumerContract = {
                     name: '_sport',
                     type: 'string',
                 },
+                {
+                    internalType: 'string',
+                    name: '_eventId',
+                    type: 'string',
+                },
             ],
             name: 'fulfillMatchup',
             outputs: [],
@@ -784,27 +799,27 @@ export const apexConsumerContract = {
                 },
                 {
                     internalType: 'string',
-                    name: '_event_id',
+                    name: '_eventId',
                     type: 'string',
                 },
                 {
                     internalType: 'string',
-                    name: '_bet_type',
+                    name: '_betType',
                     type: 'string',
                 },
                 {
                     internalType: 'string',
-                    name: '_event_name',
+                    name: '_eventName',
                     type: 'string',
                 },
                 {
                     internalType: 'uint256',
-                    name: '_qualifying_start_time',
+                    name: '_qualifyingStartTime',
                     type: 'uint256',
                 },
                 {
                     internalType: 'uint256',
-                    name: '_race_start_time',
+                    name: '_raceStartTime',
                     type: 'uint256',
                 },
                 {
@@ -865,6 +880,11 @@ export const apexConsumerContract = {
                     internalType: 'bytes32',
                     name: 'gameId',
                     type: 'bytes32',
+                },
+                {
+                    internalType: 'string',
+                    name: 'raceId',
+                    type: 'string',
                 },
                 {
                     internalType: 'uint256',
@@ -1070,6 +1090,11 @@ export const apexConsumerContract = {
                             internalType: 'bytes32',
                             name: 'gameId',
                             type: 'bytes32',
+                        },
+                        {
+                            internalType: 'string',
+                            name: 'raceId',
+                            type: 'string',
                         },
                         {
                             internalType: 'uint256',
@@ -1371,6 +1396,25 @@ export const apexConsumerContract = {
         {
             inputs: [
                 {
+                    internalType: 'string',
+                    name: '',
+                    type: 'string',
+                },
+            ],
+            name: 'latestRaceIdPerSport',
+            outputs: [
+                {
+                    internalType: 'string',
+                    name: '',
+                    type: 'string',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
                     internalType: 'address',
                     name: '',
                     type: 'address',
@@ -1484,24 +1528,6 @@ export const apexConsumerContract = {
             type: 'function',
         },
         {
-            inputs: [
-                {
-                    internalType: 'address',
-                    name: '_market',
-                    type: 'address',
-                },
-                {
-                    internalType: 'bool',
-                    name: '_pause',
-                    type: 'bool',
-                },
-            ],
-            name: 'pauseOrUnpauseMarketManually',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
             inputs: [],
             name: 'paused',
             outputs: [
@@ -1553,6 +1579,25 @@ export const apexConsumerContract = {
                     internalType: 'string',
                     name: 'betType',
                     type: 'string',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'string',
+                    name: '',
+                    type: 'string',
+                },
+            ],
+            name: 'raceFulfilledCreated',
+            outputs: [
+                {
+                    internalType: 'bool',
+                    name: '',
+                    type: 'bool',
                 },
             ],
             stateMutability: 'view',

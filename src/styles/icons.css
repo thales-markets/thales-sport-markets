@@ -60,3 +60,11 @@
 .icon--hockey:before {
     content: '\004E';
 }
+
+.icon--formula1:before {
+    content: '\0056';
+}
+
+.icon--motogp:before {
+    content: '\0055';
+}
