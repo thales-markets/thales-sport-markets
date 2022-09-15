@@ -122,7 +122,8 @@
             "page": "หน้าหนังสือ",
             "rows-per-page": "แถวต่อหน้า:"
         },
-        "coming-soon": "เร็วๆ นี้!"
+        "coming-soon": "เร็วๆ นี้!",
+        "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
