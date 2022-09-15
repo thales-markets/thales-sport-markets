@@ -50,12 +50,18 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
 
                 let homeScore = result ? result.homeScore : undefined;
                 let awayScore = result ? result.awayScore : undefined;
-
+                let raceName;
                 if (isApex) {
-                    const gameResults = await apexConsumerContract?.gameResults(gameDetails.gameId);
+                    const [gameResults, gameCreated] = await Promise.all([
+                        apexConsumerContract?.gameResults(gameDetails.gameId),
+                        apexConsumerContract?.gameCreated(gameDetails.gameId),
+                    ]);
                     const score = getScoreForApexGame(gameResults.resultDetails, homeScore, awayScore);
                     homeScore = score.homeScore;
                     awayScore = score.awayScore;
+
+                    const raceCreated = await apexConsumerContract?.raceCreated(gameCreated.raceId);
+                    raceName = raceCreated.eventName;
                 }
 
                 const market: MarketData = {
@@ -103,6 +109,7 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                     gameStarted,
                     homeScore,
                     awayScore,
+                    raceName,
                 };
                 return market;
             } catch (e) {

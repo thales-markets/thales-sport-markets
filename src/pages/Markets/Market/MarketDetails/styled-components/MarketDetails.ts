@@ -77,6 +77,22 @@ export const MatchVSLabel = styled.label`
     margin-top: -20px;
 `;
 
+export const RaceNameLabel = styled.label`
+    font-style: normal;
+    font-weight: 200;
+    font-size: 14px;
+    line-height: 18px;
+    display: flex;
+    align-items: center;
+    color: ${(props) => props.theme.textColor.primary};
+    margin-top: -40px;
+    text-align: center;
+    @media (max-width: 400px) {
+        font-size: 12px;
+        margin-top: -35px;
+    }
+`;
+
 export const OddsContainer = styled(FlexDivRow)`
     margin: 50px 72px 0 72px;
     @media (max-width: 1440px) {

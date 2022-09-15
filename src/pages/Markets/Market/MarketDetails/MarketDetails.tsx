@@ -23,6 +23,7 @@ import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
+import { isApexGame } from 'utils/markets';
 import onboardConnector from 'utils/onboardConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -74,6 +75,7 @@ import {
     MatchInfo,
     MatchInfoColumn,
     MatchVSLabel,
+    RaceNameLabel,
     MaxButton,
     OddsContainer,
     Option,
@@ -800,7 +802,13 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
-                    <MatchVSLabel>VS</MatchVSLabel>
+                    <MatchVSLabel>
+                        VS{' '}
+                        {isApexGame(market.tags[0]) && (
+                            <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
+                        )}
+                    </MatchVSLabel>
+                    {market.raceName && <RaceNameLabel>{market.raceName}</RaceNameLabel>}
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer isWinner={market.finalResult == 2} finalResult={market.finalResult}>

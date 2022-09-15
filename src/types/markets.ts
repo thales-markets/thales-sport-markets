@@ -98,6 +98,7 @@ export type MarketData = {
     gameStarted: boolean;
     homeScore?: number;
     awayScore?: number;
+    raceName?: string;
 };
 
 export type Markets = MarketInfo[];
