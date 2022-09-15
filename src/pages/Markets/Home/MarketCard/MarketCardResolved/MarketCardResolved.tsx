@@ -13,6 +13,7 @@ import {
     ScoreLabel,
     WinnerLabel,
 } from 'components/common';
+import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { Position } from 'constants/options';
 import { ethers } from 'ethers';
@@ -30,6 +31,7 @@ import { Balances, SportMarketInfo } from 'types/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
+import { isApexGame } from 'utils/markets';
 import networkConnector from 'utils/networkConnector';
 
 type MarketCardResolvedProps = {
@@ -129,7 +131,12 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
                         {t('markets.market-card.claim')}
                     </ClaimButton>
                 </MarketInfoContainer>
-                <MatchVSLabel>{t('markets.market-card.vs')}</MatchVSLabel>
+                <MatchVSLabel>
+                    {t('markets.market-card.vs')}
+                    {isApexGame(market.tags[0]) && (
+                        <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
+                    )}
+                </MatchVSLabel>
                 <WinnerLabel isWinning={market.finalResult == 3} finalResult={market.finalResult}>
                     {t('markets.market-card.draw')}
                 </WinnerLabel>

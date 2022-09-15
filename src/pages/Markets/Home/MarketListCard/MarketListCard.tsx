@@ -17,6 +17,8 @@ import networkConnector from 'utils/networkConnector';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
 import { ClubContainer, ClubLogo, ClubNameLabel, ClubVsClubContainer, Container, VSLabel } from './styled-components';
+import Tooltip from 'components/Tooltip';
+import { isApexGame } from 'utils/markets';
 
 type MarketRowCardProps = {
     market: SportMarketInfo;
@@ -91,7 +93,12 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                     />
                     <ClubNameLabel>{market.homeTeam}</ClubNameLabel>
                 </ClubContainer>
-                <VSLabel>{'VS'}</VSLabel>
+                <VSLabel>
+                    {'VS'}
+                    {isApexGame(market.tags[0]) && (
+                        <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={17} marginLeft={2} />
+                    )}
+                </VSLabel>
                 <ClubContainer>
                     <ClubLogo
                         alt="Away team logo"

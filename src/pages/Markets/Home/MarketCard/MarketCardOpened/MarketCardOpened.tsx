@@ -18,7 +18,7 @@ import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { ODDS_COLOR } from '../../../../../constants/ui';
 import { useSelector } from 'react-redux';
 import { getOddsType } from '../../../../../redux/modules/ui';
-import { formatMarketOdds } from '../../../../../utils/markets';
+import { formatMarketOdds, isApexGame } from '../../../../../utils/markets';
 import Tooltip from 'components/Tooltip';
 
 type MarketCardOpenedProps = {
@@ -70,7 +70,12 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
             </MatchInfoColumn>
             <MatchInfoColumn>
                 <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
-                <MatchVSLabel>{t('markets.market-card.vs')}</MatchVSLabel>
+                <MatchVSLabel>
+                    {t('markets.market-card.vs')}
+                    {isApexGame(market.tags[0]) && (
+                        <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
+                    )}
+                </MatchVSLabel>
                 <OddsLabel
                     isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}
                     isDraw={true}
