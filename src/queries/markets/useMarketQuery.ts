@@ -110,7 +110,7 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                     gameStarted,
                     homeScore,
                     awayScore,
-                    raceName,
+                    leagueRaceName: raceName,
                     paused,
                 };
                 return market;

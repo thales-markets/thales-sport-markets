@@ -811,7 +811,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
                         )}
                     </MatchVSLabel>
-                    {market.raceName && <RaceNameLabel>{market.raceName}</RaceNameLabel>}
+                    {market.leagueRaceName && <RaceNameLabel>{market.leagueRaceName}</RaceNameLabel>}
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer isWinner={market.finalResult == 2} finalResult={market.finalResult}>
