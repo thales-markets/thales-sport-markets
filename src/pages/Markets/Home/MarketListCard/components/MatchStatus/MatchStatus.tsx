@@ -1,33 +1,58 @@
 import Button from 'components/Button';
+import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
 import { STATUS_COLOR } from 'constants/ui';
+import { ethers } from 'ethers';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
+import sportsMarketContract from 'utils/contracts/sportsMarketContract';
+import networkConnector from 'utils/networkConnector';
 
 type MatchStatusProps = {
+    address: string;
     isResolved: boolean;
     isLive?: boolean;
     isCanceled?: boolean;
     isClaimable?: boolean;
     result?: string;
     startsAt?: string;
-    claimReward: () => void;
 };
 
 const MatchStatus: React.FC<MatchStatusProps> = ({
+    address,
     isResolved,
     isLive,
     isCanceled,
     isClaimable,
     result,
     startsAt,
-    claimReward,
 }) => {
     const { t } = useTranslation();
 
     const canceledFlag = isCanceled && !isResolved;
     const regularFlag = !isResolved && !isCanceled && !isLive && !isClaimable;
     const isPending = isLive && !isResolved && !isCanceled && !isClaimable;
+
+    const claimReward = async () => {
+        const { signer } = networkConnector;
+        if (signer) {
+            const contract = new ethers.Contract(address, sportsMarketContract.abi, signer);
+            contract.connect(signer);
+            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            try {
+                const tx = await contract.exerciseOptions();
+                const txResult = await tx.wait();
+
+                if (txResult && txResult.transactionHash) {
+                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
+                }
+            } catch (e) {
+                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                console.log(e);
+            }
+        }
+    };
 
     return (
         <Container>
@@ -61,7 +86,6 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
             )}
             {isPending && (
                 <>
-                    {/* <Result isLive={isLive}>{result}</Result> */}
                     <Status color={STATUS_COLOR.STARTED} style={{ fontWeight: '500' }}>
                         {t('markets.market-card.pending-resolution')}
                     </Status>
