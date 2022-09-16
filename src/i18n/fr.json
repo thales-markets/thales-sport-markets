@@ -331,7 +331,8 @@
             "canceled": "Annulé",
             "claimable": "Réclamable",
             "result": "Résultat",
-            "coming-soon": "Bientôt disponible"
+            "coming-soon": "Bientôt disponible",
+            "paused": "En pause"
         },
         "market-details": {
             "wallet-info": {

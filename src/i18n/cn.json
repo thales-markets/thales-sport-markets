@@ -232,7 +232,8 @@
             "claim": "领取",
             "coming-soon": "即将开始",
             "vs": "对决",
-            "draw": "平手"
+            "draw": "平手",
+            "paused": "暂停"
         },
         "market-details": {
             "price": "价格",

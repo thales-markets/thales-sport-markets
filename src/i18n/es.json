@@ -232,7 +232,8 @@
             "claim": "Reclamar",
             "coming-soon": "Pronto",
             "vs": "VS",
-            "draw": "Empate"
+            "draw": "Empate",
+            "paused": "En pausa"
         },
         "market-details": {
             "price": "Precio",

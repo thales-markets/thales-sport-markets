@@ -232,7 +232,8 @@
             "claim": "Claim",
             "coming-soon": "Coming soon",
             "vs": "VS",
-            "draw": "Draw"
+            "draw": "Draw",
+            "paused": "Paused"
         },
         "market-details": {
             "price": "Price",

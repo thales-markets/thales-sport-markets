@@ -232,7 +232,8 @@
             "claim": "Einfordern",
             "coming-soon": "Bald",
             "vs": "VS",
-            "draw": "X"
+            "draw": "X",
+            "paused": "Pausiert"
         },
         "market-details": {
             "price": "Preis",
