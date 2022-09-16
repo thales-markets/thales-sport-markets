@@ -23,6 +23,7 @@ import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
+import { isApexGame } from 'utils/markets';
 import onboardConnector from 'utils/onboardConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -74,6 +75,7 @@ import {
     MatchInfo,
     MatchInfoColumn,
     MatchVSLabel,
+    RaceNameLabel,
     MaxButton,
     OddsContainer,
     Option,
@@ -734,52 +736,55 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     return (
         <MarketContainer>
             <WalletInfo market={market} />
-            {!market.gameStarted && (
-                <MarketHeader>
-                    <FlexDivCentered>
-                        <Toggle
-                            label={{
-                                firstLabel: t('common.buy-side'),
-                                secondLabel: t('common.sell-side'),
-                                fontSize: '18px',
-                            }}
-                            active={selectedSide === Side.SELL}
-                            dotSize="18px"
-                            dotBackground="#303656"
-                            dotBorder="3px solid #3FD1FF"
-                            handleClick={() => {
-                                setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
-                                setTokenAmount('');
-                                setUsdAmount('');
-                            }}
-                        />
-                    </FlexDivCentered>
-                    {selectedSide == Side.BUY && !market.gameStarted && (
-                        <CollateralSelector
-                            collateralArray={COLLATERALS}
-                            selectedItem={selectedStableIndex}
-                            onChangeCollateral={(index) => setStableIndex(index)}
-                            overtimeVoucher={overtimeVoucher}
-                            isVoucherSelected={isVoucherSelected}
-                            setIsVoucherSelected={setIsVoucherSelected}
-                        />
+            {market.paused ? (
+                <Status claimable={false}>{t('markets.market-card.paused')}</Status>
+            ) : (
+                <>
+                    {!market.gameStarted && !market.cancelled && (
+                        <MarketHeader>
+                            <FlexDivCentered>
+                                <Toggle
+                                    label={{
+                                        firstLabel: t('common.buy-side'),
+                                        secondLabel: t('common.sell-side'),
+                                        fontSize: '18px',
+                                    }}
+                                    active={selectedSide === Side.SELL}
+                                    dotSize="18px"
+                                    dotBackground="#303656"
+                                    dotBorder="3px solid #3FD1FF"
+                                    handleClick={() => {
+                                        setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
+                                        setTokenAmount('');
+                                        setUsdAmount('');
+                                    }}
+                                />
+                            </FlexDivCentered>
+                            {selectedSide == Side.BUY && !market.gameStarted && (
+                                <CollateralSelector
+                                    collateralArray={COLLATERALS}
+                                    selectedItem={selectedStableIndex}
+                                    onChangeCollateral={(index) => setStableIndex(index)}
+                                    overtimeVoucher={overtimeVoucher}
+                                    isVoucherSelected={isVoucherSelected}
+                                    setIsVoucherSelected={setIsVoucherSelected}
+                                />
+                            )}
+                        </MarketHeader>
                     )}
-                </MarketHeader>
-            )}
-
-            {market.gameStarted && (
-                <Status resolved={market.resolved} claimable={claimable}>
-                    {!market.resolved
-                        ? t('markets.market-card.pending-resolution')
-                        : claimable
-                        ? t('markets.market-card.claimable')
-                        : t('markets.market-card.finished')}
-                </Status>
-            )}
-            {market.resolved && !market.gameStarted && (
-                <Status resolved={market.resolved} claimable={false}>
-                    {t('markets.market-card.canceled')}
-                </Status>
+                    {market.gameStarted && (
+                        <Status claimable={claimable}>
+                            {!market.resolved
+                                ? t('markets.market-card.pending-resolution')
+                                : claimable
+                                ? t('markets.market-card.claimable')
+                                : t('markets.market-card.finished')}
+                        </Status>
+                    )}
+                    {!market.gameStarted && market.resolved && (
+                        <Status claimable={false}>{t('markets.market-card.canceled')}</Status>
+                    )}
+                </>
             )}
             <MatchInfo>
                 <MatchInfoColumn>
@@ -800,7 +805,13 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
-                    <MatchVSLabel>VS</MatchVSLabel>
+                    <MatchVSLabel>
+                        VS{' '}
+                        {isApexGame(market.tags[0]) && (
+                            <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
+                        )}
+                    </MatchVSLabel>
+                    {market.leagueRaceName && <RaceNameLabel>{market.leagueRaceName}</RaceNameLabel>}
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchParticipantImageContainer isWinner={market.finalResult == 2} finalResult={market.finalResult}>
@@ -820,55 +831,34 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     {market.resolved && market.gameStarted && <ScoreLabel>{market.awayScore}</ScoreLabel>}
                 </MatchInfoColumn>
             </MatchInfo>
-            {!market.gameStarted && !market.resolved && (
-                <OddsContainer>
-                    <Pick
-                        selected={selectedPosition === Position.HOME}
-                        onClick={() => {
-                            setSelectedPosition(Position.HOME);
-                            setTokenAmount('');
-                            setUsdAmount('');
-                        }}
-                    >
-                        <Option color={ODDS_COLOR.HOME}>1</Option>
-                        <OptionTeamName>{market.homeTeam.toUpperCase()}</OptionTeamName>
-                        <InfoRow>
-                            <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
-                            <InfoValue>
-                                $ {market.positions[Position.HOME].sides[selectedSide].odd.toFixed(2)}
-                                {market.positions[Position.HOME].sides[selectedSide].odd == 0 && (
-                                    <Tooltip
-                                        overlay={<>{t('markets.zero-odds-tooltip')}</>}
-                                        iconFontSize={10}
-                                        customIconStyling={{ marginTop: '-10px', display: 'flex', marginLeft: '3px' }}
-                                    />
-                                )}
-                            </InfoValue>
-                        </InfoRow>
-                        <InfoRow>
-                            <InfoTitle>{t('markets.market-details.liquidity')}:</InfoTitle>
-                            <InfoValue>
-                                {availablePerSideQuery.isLoading
-                                    ? '-'
-                                    : floorNumberToDecimals(availablePerSide.positions[Position.HOME].available)}
-                            </InfoValue>
-                        </InfoRow>
-                    </Pick>
-                    {!!market.positions[Position.DRAW].sides[selectedSide].odd && (
+            {!market.paused && !market.gameStarted && !market.resolved && (
+                <>
+                    <OddsContainer>
                         <Pick
-                            selected={selectedPosition === Position.DRAW}
+                            selected={selectedPosition === Position.HOME}
                             onClick={() => {
-                                setSelectedPosition(Position.DRAW);
+                                setSelectedPosition(Position.HOME);
                                 setTokenAmount('');
                                 setUsdAmount('');
                             }}
                         >
-                            <Option color={ODDS_COLOR.DRAW}>X</Option>
-                            <OptionTeamName>{t('markets.market-card.draw')}</OptionTeamName>
+                            <Option color={ODDS_COLOR.HOME}>1</Option>
+                            <OptionTeamName>{market.homeTeam.toUpperCase()}</OptionTeamName>
                             <InfoRow>
                                 <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
                                 <InfoValue>
-                                    $ {market.positions[Position.DRAW].sides[selectedSide].odd.toFixed(2)}
+                                    $ {market.positions[Position.HOME].sides[selectedSide].odd.toFixed(2)}
+                                    {market.positions[Position.HOME].sides[selectedSide].odd == 0 && (
+                                        <Tooltip
+                                            overlay={<>{t('markets.zero-odds-tooltip')}</>}
+                                            iconFontSize={10}
+                                            customIconStyling={{
+                                                marginTop: '-10px',
+                                                display: 'flex',
+                                                marginLeft: '3px',
+                                            }}
+                                        />
+                                    )}
                                 </InfoValue>
                             </InfoRow>
                             <InfoRow>
@@ -876,47 +866,76 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                 <InfoValue>
                                     {availablePerSideQuery.isLoading
                                         ? '-'
-                                        : floorNumberToDecimals(availablePerSide.positions[Position.DRAW].available)}
+                                        : floorNumberToDecimals(availablePerSide.positions[Position.HOME].available)}
                                 </InfoValue>
                             </InfoRow>
                         </Pick>
-                    )}
-                    <Pick
-                        selected={selectedPosition === Position.AWAY}
-                        onClick={() => {
-                            setSelectedPosition(Position.AWAY);
-                            setTokenAmount('');
-                            setUsdAmount('');
-                        }}
-                    >
-                        <Option color={ODDS_COLOR.AWAY}>2</Option>
-                        <OptionTeamName>{market.awayTeam.toUpperCase()}</OptionTeamName>
-                        <InfoRow>
-                            <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
-                            <InfoValue>
-                                $ {market.positions[Position.AWAY].sides[selectedSide].odd.toFixed(2)}
-                                {market.positions[Position.AWAY].sides[selectedSide].odd == 0 && (
-                                    <Tooltip
-                                        overlay={<>{t('markets.zero-odds-tooltip')}</>}
-                                        iconFontSize={10}
-                                        customIconStyling={{ marginTop: '-10px', display: 'flex', marginLeft: '3px' }}
-                                    />
-                                )}
-                            </InfoValue>
-                        </InfoRow>
-                        <InfoRow>
-                            <InfoTitle>{t('markets.market-details.liquidity')}:</InfoTitle>
-                            <InfoValue>
-                                {availablePerSideQuery.isLoading
-                                    ? '-'
-                                    : floorNumberToDecimals(availablePerSide.positions[Position.AWAY].available)}
-                            </InfoValue>
-                        </InfoRow>
-                    </Pick>
-                </OddsContainer>
-            )}
-            {!market.gameStarted && !market.resolved && (
-                <>
+                        {!!market.positions[Position.DRAW].sides[selectedSide].odd && (
+                            <Pick
+                                selected={selectedPosition === Position.DRAW}
+                                onClick={() => {
+                                    setSelectedPosition(Position.DRAW);
+                                    setTokenAmount('');
+                                    setUsdAmount('');
+                                }}
+                            >
+                                <Option color={ODDS_COLOR.DRAW}>X</Option>
+                                <OptionTeamName>{t('markets.market-card.draw')}</OptionTeamName>
+                                <InfoRow>
+                                    <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
+                                    <InfoValue>
+                                        $ {market.positions[Position.DRAW].sides[selectedSide].odd.toFixed(2)}
+                                    </InfoValue>
+                                </InfoRow>
+                                <InfoRow>
+                                    <InfoTitle>{t('markets.market-details.liquidity')}:</InfoTitle>
+                                    <InfoValue>
+                                        {availablePerSideQuery.isLoading
+                                            ? '-'
+                                            : floorNumberToDecimals(
+                                                  availablePerSide.positions[Position.DRAW].available
+                                              )}
+                                    </InfoValue>
+                                </InfoRow>
+                            </Pick>
+                        )}
+                        <Pick
+                            selected={selectedPosition === Position.AWAY}
+                            onClick={() => {
+                                setSelectedPosition(Position.AWAY);
+                                setTokenAmount('');
+                                setUsdAmount('');
+                            }}
+                        >
+                            <Option color={ODDS_COLOR.AWAY}>2</Option>
+                            <OptionTeamName>{market.awayTeam.toUpperCase()}</OptionTeamName>
+                            <InfoRow>
+                                <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
+                                <InfoValue>
+                                    $ {market.positions[Position.AWAY].sides[selectedSide].odd.toFixed(2)}
+                                    {market.positions[Position.AWAY].sides[selectedSide].odd == 0 && (
+                                        <Tooltip
+                                            overlay={<>{t('markets.zero-odds-tooltip')}</>}
+                                            iconFontSize={10}
+                                            customIconStyling={{
+                                                marginTop: '-10px',
+                                                display: 'flex',
+                                                marginLeft: '3px',
+                                            }}
+                                        />
+                                    )}
+                                </InfoValue>
+                            </InfoRow>
+                            <InfoRow>
+                                <InfoTitle>{t('markets.market-details.liquidity')}:</InfoTitle>
+                                <InfoValue>
+                                    {availablePerSideQuery.isLoading
+                                        ? '-'
+                                        : floorNumberToDecimals(availablePerSide.positions[Position.AWAY].available)}
+                                </InfoValue>
+                            </InfoRow>
+                        </Pick>
+                    </OddsContainer>
                     {selectedSide === Side.BUY && (
                         <>
                             <LabelsContainer>
@@ -1083,18 +1102,25 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     )}
                 </>
             )}
-            {claimable && (
-                <ClaimableAmount>
-                    {t(`markets.market-details.amount-claimable`)}:{' '}
-                    <span>{formatCurrencyWithSign(USD_SIGN, claimableAmount, 2)}</span>
-                </ClaimableAmount>
-            )}
-            {claimable && (
-                <ClaimButton cancelled={market.resolved && !market.gameStarted} onClick={claimReward.bind(this)}>
-                    {market.resolved && !market.gameStarted
-                        ? t(`markets.market-details.claim-back`)
-                        : t(`markets.market-card.claim`)}
-                </ClaimButton>
+            {!market.paused && (
+                <>
+                    {claimable && (
+                        <ClaimableAmount>
+                            {t(`markets.market-details.amount-claimable`)}:{' '}
+                            <span>{formatCurrencyWithSign(USD_SIGN, claimableAmount, 2)}</span>
+                        </ClaimableAmount>
+                    )}
+                    {claimable && (
+                        <ClaimButton
+                            cancelled={market.resolved && !market.gameStarted}
+                            onClick={claimReward.bind(this)}
+                        >
+                            {market.resolved && !market.gameStarted
+                                ? t(`markets.market-details.claim-back`)
+                                : t(`markets.market-card.claim`)}
+                        </ClaimButton>
+                    )}
+                </>
             )}
         </MarketContainer>
     );

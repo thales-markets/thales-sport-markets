@@ -122,7 +122,8 @@
             "rows-per-page": "每页行数：",
             "page": "页"
         },
-        "coming-soon": "快来了！"
+        "coming-soon": "快来了！",
+        "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",
@@ -231,7 +232,8 @@
             "claim": "领取",
             "coming-soon": "即将开始",
             "vs": "对决",
-            "draw": "平手"
+            "draw": "平手",
+            "paused": "暂停"
         },
         "market-details": {
             "price": "价格",

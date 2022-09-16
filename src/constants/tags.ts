@@ -1,11 +1,11 @@
 import { Tags, SportsMap, SportsTagsMap } from 'types/markets';
 
 export const TAGS_LIST: Tags = [
-    { id: 9001, label: "NCAA Men's Football" },
+    { id: 9001, label: 'NCAA Football' },
     { id: 9002, label: 'NFL' },
     { id: 9003, label: 'MLB' },
     { id: 9004, label: 'NBA' },
-    { id: 9005, label: "NCAA Men's Basketball" },
+    { id: 9005, label: 'NCAA Basketball' },
     { id: 9006, label: 'NHL' },
     { id: 9007, label: 'UFC', logo: '/logos/ufc-logo.png' },
     { id: 9008, label: 'WNBA' },

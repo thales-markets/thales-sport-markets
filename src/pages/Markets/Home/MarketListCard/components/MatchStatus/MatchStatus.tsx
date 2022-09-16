@@ -1,27 +1,34 @@
 import Button from 'components/Button';
+import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
 import { STATUS_COLOR } from 'constants/ui';
+import { ethers } from 'ethers';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
+import sportsMarketContract from 'utils/contracts/sportsMarketContract';
+import networkConnector from 'utils/networkConnector';
 
 type MatchStatusProps = {
+    address: string;
     isResolved: boolean;
     isLive?: boolean;
     isCanceled?: boolean;
     isClaimable?: boolean;
     result?: string;
     startsAt?: string;
-    claimReward: () => void;
+    isPaused: boolean;
 };
 
 const MatchStatus: React.FC<MatchStatusProps> = ({
+    address,
     isResolved,
     isLive,
     isCanceled,
     isClaimable,
     result,
     startsAt,
-    claimReward,
+    isPaused,
 }) => {
     const { t } = useTranslation();
 
@@ -29,45 +36,74 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
     const regularFlag = !isResolved && !isCanceled && !isLive && !isClaimable;
     const isPending = isLive && !isResolved && !isCanceled && !isClaimable;
 
+    const claimReward = async () => {
+        const { signer } = networkConnector;
+        if (signer) {
+            const contract = new ethers.Contract(address, sportsMarketContract.abi, signer);
+            contract.connect(signer);
+            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            try {
+                const tx = await contract.exerciseOptions();
+                const txResult = await tx.wait();
+
+                if (txResult && txResult.transactionHash) {
+                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
+                }
+            } catch (e) {
+                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                console.log(e);
+            }
+        }
+    };
+
     return (
         <Container>
-            {canceledFlag && <Status color={STATUS_COLOR.CANCELED}>{t('markets.market-card.canceled')}</Status>}
-            {regularFlag && <MatchStarts>{`${t('markets.market-card.starts')}: ${startsAt}`}</MatchStarts>}
-            {isResolved && !isClaimable && (
+            {isPaused ? (
                 <>
-                    <ResultLabel>{t('markets.market-card.result')}</ResultLabel>
-                    <Result isLive={isLive}>{result}</Result>
-                    <Status color={STATUS_COLOR.FINISHED}>{t('markets.market-card.finished')}</Status>
+                    <Status color={STATUS_COLOR.PAUSED}>{t('markets.market-card.paused')}</Status>
+                    <MatchStarts>{`| ${startsAt}`}</MatchStarts>
+                </>
+            ) : (
+                <>
+                    {canceledFlag && <Status color={STATUS_COLOR.CANCELED}>{t('markets.market-card.canceled')}</Status>}
+                    {regularFlag && <MatchStarts>{`${t('markets.market-card.starts')}: ${startsAt}`}</MatchStarts>}
+                    {isResolved && !isClaimable && (
+                        <>
+                            <ResultLabel>{t('markets.market-card.result')}</ResultLabel>
+                            <Result isLive={isLive}>{result}</Result>
+                            <Status color={STATUS_COLOR.FINISHED}>{t('markets.market-card.finished')}</Status>
+                        </>
+                    )}
+                    {isResolved && isClaimable && (
+                        <>
+                            <ClaimButton
+                                onClick={(e: any) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    claimReward();
+                                }}
+                                claimable={isClaimable}
+                            >
+                                {t('markets.market-card.claim')}
+                            </ClaimButton>
+                            <ResultLabel>{t('markets.market-card.result')}</ResultLabel>
+                            <Result isLive={isLive}>{result}</Result>
+                            <Status color={STATUS_COLOR.CLAIMABLE} style={{ fontWeight: '700' }}>
+                                {t('markets.market-card.finished')}
+                            </Status>
+                        </>
+                    )}
+                    {!regularFlag && <MatchStarts>{`| ${startsAt}`}</MatchStarts>}
+                    {isPending && (
+                        <>
+                            <Status color={STATUS_COLOR.STARTED} style={{ fontWeight: '500' }}>
+                                {t('markets.market-card.pending-resolution')}
+                            </Status>
+                        </>
+                    )}
+                    {!regularFlag && <MatchStarts>{`| ${startsAt}`}</MatchStarts>}
                 </>
             )}
-            {isResolved && isClaimable && (
-                <>
-                    <ClaimButton
-                        onClick={(e: any) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            claimReward();
-                        }}
-                        claimable={isClaimable}
-                    >
-                        {t('markets.market-card.claim')}
-                    </ClaimButton>
-                    <ResultLabel>{t('markets.market-card.result')}</ResultLabel>
-                    <Result isLive={isLive}>{result}</Result>
-                    <Status color={STATUS_COLOR.CLAIMABLE} style={{ fontWeight: '700' }}>
-                        {t('markets.market-card.finished')}
-                    </Status>
-                </>
-            )}
-            {isPending && (
-                <>
-                    {/* <Result isLive={isLive}>{result}</Result> */}
-                    <Status color={STATUS_COLOR.STARTED} style={{ fontWeight: '500' }}>
-                        {t('markets.market-card.pending-resolution')}
-                    </Status>
-                </>
-            )}
-            {!regularFlag && <MatchStarts>{`| ${startsAt}`}</MatchStarts>}
         </Container>
     );
 };

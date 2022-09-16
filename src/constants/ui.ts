@@ -24,4 +24,5 @@ export const STATUS_COLOR = {
     FINISHED: '#FFFFFF',
     CANCELED: '#E26A78',
     COMING_SOON: '#FAC439',
+    PAUSED: '#E26A78',
 };

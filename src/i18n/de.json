@@ -122,7 +122,8 @@
             "rows-per-page": "Zeilen pro Seite:",
             "page": "Buchseite"
         },
-        "coming-soon": "Demnächst!"
+        "coming-soon": "Demnächst!",
+        "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",
@@ -231,7 +232,8 @@
             "claim": "Einfordern",
             "coming-soon": "Bald",
             "vs": "VS",
-            "draw": "X"
+            "draw": "X",
+            "paused": "Pausiert"
         },
         "market-details": {
             "price": "Preis",

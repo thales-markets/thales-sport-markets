@@ -122,7 +122,8 @@
             "page": "Страница",
             "rows-per-page": "Рядов на странице:"
         },
-        "coming-soon": "Вскоре!"
+        "coming-soon": "Вскоре!",
+        "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -231,7 +232,8 @@
             "claim": "Claim",
             "coming-soon": "Coming soon",
             "vs": "VS",
-            "draw": "Draw"
+            "draw": "Draw",
+            "paused": "Paused"
         },
         "market-details": {
             "price": "Price",

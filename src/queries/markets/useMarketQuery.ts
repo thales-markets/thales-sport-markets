@@ -20,13 +20,14 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                 const apexConsumerContract = networkConnector.apexConsumerContract;
                 const sportsAMMContract = networkConnector.sportsAMMContract;
                 // const { marketDataContract, marketManagerContract, thalesBondsContract } = networkConnector;
-                const [gameDetails, tags, times, resolved, finalResult, cancelled] = await Promise.all([
+                const [gameDetails, tags, times, resolved, finalResult, cancelled, paused] = await Promise.all([
                     contract?.getGameDetails(),
                     contract?.tags(0),
                     contract?.times(),
                     contract?.resolved(),
                     contract?.finalResult(),
                     contract?.cancelled(),
+                    contract?.paused(),
                 ]);
 
                 const [marketDefaultOdds] = await Promise.all([
@@ -50,12 +51,18 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
 
                 let homeScore = result ? result.homeScore : undefined;
                 let awayScore = result ? result.awayScore : undefined;
-
+                let raceName;
                 if (isApex) {
-                    const gameResults = await apexConsumerContract?.gameResults(gameDetails.gameId);
+                    const [gameResults, gameCreated] = await Promise.all([
+                        apexConsumerContract?.gameResults(gameDetails.gameId),
+                        apexConsumerContract?.gameCreated(gameDetails.gameId),
+                    ]);
                     const score = getScoreForApexGame(gameResults.resultDetails, homeScore, awayScore);
                     homeScore = score.homeScore;
                     awayScore = score.awayScore;
+
+                    const raceCreated = await apexConsumerContract?.raceCreated(gameCreated.raceId);
+                    raceName = raceCreated.eventName;
                 }
 
                 const market: MarketData = {
@@ -103,6 +110,8 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                     gameStarted,
                     homeScore,
                     awayScore,
+                    leagueRaceName: raceName,
+                    paused,
                 };
                 return market;
             } catch (e) {

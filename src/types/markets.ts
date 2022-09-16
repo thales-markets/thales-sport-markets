@@ -58,6 +58,8 @@ export type SportMarketInfo = {
     sport: string;
     isApex: boolean;
     resultDetails: string;
+    isPaused: boolean;
+    leagueRaceName?: string;
 };
 
 export type FixedMarketData = {
@@ -98,6 +100,8 @@ export type MarketData = {
     gameStarted: boolean;
     homeScore?: number;
     awayScore?: number;
+    leagueRaceName?: string;
+    paused: boolean;
 };
 
 export type Markets = MarketInfo[];

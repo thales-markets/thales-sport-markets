@@ -20,9 +20,10 @@ import { RootState } from 'redux/rootReducer';
 import { useTranslation } from 'react-i18next';
 import { Odds, SportMarketInfo } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { formatMarketOdds } from '../../../../../utils/markets';
+import { formatMarketOdds, isApexGame } from '../../../../../utils/markets';
 import { getOddsType } from '../../../../../redux/modules/ui';
 import { formatDateWithTime } from 'utils/formatters/date';
+import Tooltip from 'components/Tooltip';
 
 type MarketCardCanceledProps = {
     market: SportMarketInfo;
@@ -72,9 +73,16 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
             <MatchInfoColumn>
                 <MarketInfoContainer>
                     <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
-                    <MatchInfoLabel isCanceledMarket={true}>{t('markets.market-card.canceled')}</MatchInfoLabel>
+                    <MatchInfoLabel isCanceledMarket={true} isPaused={market.isPaused}>
+                        {market.isPaused ? t('markets.market-card.paused') : t('markets.market-card.canceled')}
+                    </MatchInfoLabel>
                 </MarketInfoContainer>
-                <MatchVSLabel>{t('markets.market-card.vs')}</MatchVSLabel>
+                <MatchVSLabel>
+                    {t('markets.market-card.vs')}
+                    {isApexGame(market.tags[0]) && (
+                        <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
+                    )}
+                </MatchVSLabel>
                 {oddsOnCancellation ? (
                     <OddsLabel
                         isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}

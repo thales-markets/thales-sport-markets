@@ -122,7 +122,8 @@
             "decimal-odds": "Decimal Odds",
             "normalized-implied-odds": "Normalized Implied Odds"
         },
-        "coming-soon": "Coming soon!"
+        "coming-soon": "Coming soon!",
+        "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime Markets ALL RIGHTS RESERVED.",
@@ -231,7 +232,8 @@
             "claim": "Claim",
             "coming-soon": "Coming soon",
             "vs": "VS",
-            "draw": "Draw"
+            "draw": "Draw",
+            "paused": "Paused"
         },
         "market-details": {
             "price": "Price",
