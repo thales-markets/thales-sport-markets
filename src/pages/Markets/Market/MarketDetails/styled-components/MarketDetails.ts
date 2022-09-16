@@ -272,7 +272,7 @@ export const MaxButton = styled.button`
     cursor: pointer;
 `;
 
-export const Status = styled.p<{ resolved: boolean; claimable: boolean }>`
+export const Status = styled.p<{ claimable: boolean }>`
     font-weight: 700;
     font-size: 17.2944px;
     line-height: 24px;
@@ -280,15 +280,9 @@ export const Status = styled.p<{ resolved: boolean; claimable: boolean }>`
     align-items: center;
     justify-content: center;
     color: ${(props) => (!props.claimable ? '#E26A78' : '#3fd1ff')};
-    &:after {
-        font-family: ExoticIcons !important;
-        content: '\\0044';
-        font-size: 16px;
-        line-height: 16px;
-        margin-left: 2px;
-        color: ${(props) => (!props.claimable ? '#E26A78' : '#3fd1ff')};
-    }
     margin-top: 10px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
 `;
 
 export const ClaimButton = styled.button<{ cancelled?: boolean }>`

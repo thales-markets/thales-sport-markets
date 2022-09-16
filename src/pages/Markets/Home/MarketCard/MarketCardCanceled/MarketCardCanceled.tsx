@@ -73,7 +73,9 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
             <MatchInfoColumn>
                 <MarketInfoContainer>
                     <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
-                    <MatchInfoLabel isCanceledMarket={true}>{t('markets.market-card.canceled')}</MatchInfoLabel>
+                    <MatchInfoLabel isCanceledMarket={true} isPaused={market.isPaused}>
+                        {market.isPaused ? t('markets.market-card.paused') : t('markets.market-card.canceled')}
+                    </MatchInfoLabel>
                 </MarketInfoContainer>
                 <MatchVSLabel>
                     {t('markets.market-card.vs')}

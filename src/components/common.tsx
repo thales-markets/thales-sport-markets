@@ -159,6 +159,7 @@ export const MatchInfoLabel = styled.label<{
     claimable?: boolean;
     isCanceledMarket?: boolean;
     pendingResolution?: boolean;
+    isPaused?: boolean;
 }>`
     font-style: normal;
     font-weight: 400;
@@ -169,7 +170,7 @@ export const MatchInfoLabel = styled.label<{
     width: ${(props) => (props.pendingResolution ? 'fit-content' : '100px')};
     white-space: nowrap;
     color: ${(props) =>
-        props.isMaturedMarket || props.isCanceledMarket
+        props.isMaturedMarket || props.isCanceledMarket || props.isPaused
             ? props.theme.oddsColor.secondary
             : props.claimable
             ? props.theme.textColor.quaternary

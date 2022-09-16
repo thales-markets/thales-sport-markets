@@ -62,6 +62,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                     drawOdds: market.drawOdds,
                 }}
                 accountPositions={accountPositions}
+                isPaused={market.isPaused}
             />
             <MatchStatus
                 address={market.address}
@@ -71,6 +72,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 isClaimable={claimAvailable}
                 result={`${market.homeScore}:${market.awayScore}`}
                 startsAt={formatDateWithTime(market.maturityDate)}
+                isPaused={market.isPaused}
             />
         </Container>
     );

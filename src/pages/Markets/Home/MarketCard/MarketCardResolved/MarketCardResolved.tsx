@@ -117,19 +117,25 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
             <MatchInfoColumn>
                 <MarketInfoContainer>
                     <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
-                    <MatchInfoLabel claimable={claimable}>
-                        {claimable ? '' : t('markets.market-card.finished')}
+                    <MatchInfoLabel claimable={claimable} isPaused={market.isPaused}>
+                        {market.isPaused
+                            ? t('markets.market-card.paused')
+                            : claimable
+                            ? ''
+                            : t('markets.market-card.finished')}
                     </MatchInfoLabel>
-                    <ClaimButton
-                        onClick={(e: any) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            claimReward();
-                        }}
-                        claimable={claimable}
-                    >
-                        {t('markets.market-card.claim')}
-                    </ClaimButton>
+                    {market.isPaused && (
+                        <ClaimButton
+                            onClick={(e: any) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                claimReward();
+                            }}
+                            claimable={claimable}
+                        >
+                            {t('markets.market-card.claim')}
+                        </ClaimButton>
+                    )}
                 </MarketInfoContainer>
                 <MatchVSLabel>
                     {t('markets.market-card.vs')}

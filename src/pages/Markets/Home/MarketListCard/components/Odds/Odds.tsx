@@ -20,9 +20,18 @@ type OddsProps = {
         drawOdds?: number;
     };
     accountPositions?: AccountPosition[];
+    isPaused: boolean;
 };
 
-const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelled, odds, accountPositions }) => {
+const Odds: React.FC<OddsProps> = ({
+    isResolved,
+    finalResult,
+    isLive,
+    isCancelled,
+    odds,
+    accountPositions,
+    isPaused,
+}) => {
     const { t } = useTranslation();
 
     const pendingResolution =
@@ -34,7 +43,9 @@ const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelle
 
     return (
         <Container>
-            {noOddsFlag && <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>}
+            {noOddsFlag && !isPaused && (
+                <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>
+            )}
             {resolvedGameFlag && (
                 <>
                     <PositionSymbol type={convertFinalResultToResultType(finalResult)} />

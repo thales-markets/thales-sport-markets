@@ -20,13 +20,14 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                 const apexConsumerContract = networkConnector.apexConsumerContract;
                 const sportsAMMContract = networkConnector.sportsAMMContract;
                 // const { marketDataContract, marketManagerContract, thalesBondsContract } = networkConnector;
-                const [gameDetails, tags, times, resolved, finalResult, cancelled] = await Promise.all([
+                const [gameDetails, tags, times, resolved, finalResult, cancelled, paused] = await Promise.all([
                     contract?.getGameDetails(),
                     contract?.tags(0),
                     contract?.times(),
                     contract?.resolved(),
                     contract?.finalResult(),
                     contract?.cancelled(),
+                    contract?.paused(),
                 ]);
 
                 const [marketDefaultOdds] = await Promise.all([
@@ -110,6 +111,7 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                     homeScore,
                     awayScore,
                     raceName,
+                    paused,
                 };
                 return market;
             } catch (e) {

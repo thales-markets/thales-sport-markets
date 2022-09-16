@@ -51,8 +51,8 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
                 <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
             </MatchInfoColumn>
             <MatchInfoColumn>
-                <MatchInfoLabel pendingResolution={noOdds} isMaturedMarket={true}>
-                    {t('markets.market-card.pending-resolution')}
+                <MatchInfoLabel pendingResolution={noOdds} isMaturedMarket={true} isPaused={market.isPaused}>
+                    {market.isPaused ? t('markets.market-card.paused') : t('markets.market-card.pending-resolution')}
                 </MatchInfoLabel>
                 <MatchVSLabel pendingResolution={noOdds}>
                     {t('markets.market-card.vs')}
