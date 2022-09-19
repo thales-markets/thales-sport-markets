@@ -45,7 +45,7 @@ const Odds: React.FC<OddsProps> = ({
         !isCancelled &&
         !isPaused;
     const resolvedGameFlag = isResolved && finalResult;
-    const showOdds = !pendingResolution && !noOddsFlag && !resolvedGameFlag && !isCancelled;
+    const showOdds = !pendingResolution && !noOddsFlag && !resolvedGameFlag && !isCancelled && !isPaused;
     const selectedOddsType = useSelector(getOddsType);
 
     return (
