@@ -93,7 +93,6 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
                             </Status>
                         </>
                     )}
-                    {!regularFlag && <MatchStarts>{`| ${startsAt}`}</MatchStarts>}
                     {isPending && (
                         <>
                             <Status color={STATUS_COLOR.STARTED} style={{ fontWeight: '500' }}>
