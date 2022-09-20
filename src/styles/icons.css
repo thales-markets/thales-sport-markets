@@ -61,10 +61,26 @@
     content: '\004E';
 }
 
+.icon--motogp:before {
+    content: '\0055';
+}
+
 .icon--formula1:before {
     content: '\0056';
 }
 
-.icon--motogp:before {
-    content: '\0055';
+.icon--star-full:before {
+    content: '\0057';
+}
+
+.icon--star-empty:before {
+    content: '\0058';
+}
+
+.icon--cross-button:before {
+    content: '\0059';
+}
+
+.icon--revert:before {
+    content: '\005A';
 }

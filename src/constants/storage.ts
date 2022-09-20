@@ -12,4 +12,5 @@ export const LOCAL_STORAGE_KEYS = {
     ODDS_TYPE: 'typeOdds',
     QUIZ_STATE: 'quizState',
     STOP_PULSING: 'stopPulsing',
+    FAVOURITE_LEAGUES: 'favouriteLeagues',
 };

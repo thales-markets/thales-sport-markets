@@ -1,21 +1,21 @@
 import { Tags, SportsMap, SportsTagsMap } from 'types/markets';
 
 export const TAGS_LIST: Tags = [
-    { id: 9001, label: 'NCAA Football' },
-    { id: 9002, label: 'NFL' },
-    { id: 9003, label: 'MLB' },
-    { id: 9004, label: 'NBA' },
-    { id: 9005, label: 'NCAA Basketball' },
-    { id: 9006, label: 'NHL' },
-    { id: 9007, label: 'UFC', logo: '/logos/ufc-logo.png' },
-    { id: 9008, label: 'WNBA' },
-    { id: 9010, label: 'MLS' },
-    { id: 9011, label: 'EPL' },
-    { id: 9012, label: 'Ligue 1' },
-    { id: 9013, label: 'Bundesliga' },
-    { id: 9014, label: 'La Liga' },
-    { id: 9015, label: 'Serie A' },
-    { id: 9016, label: 'UEFA CL' },
+    { id: 9001, label: 'NCAA Football', favourite: false, hidden: false },
+    { id: 9002, label: 'NFL', favourite: false, hidden: false },
+    { id: 9003, label: 'MLB', favourite: false, hidden: false },
+    { id: 9004, label: 'NBA', favourite: false, hidden: false },
+    { id: 9005, label: 'NCAA Basketball', favourite: false, hidden: false },
+    { id: 9006, label: 'NHL', favourite: false, hidden: false },
+    { id: 9007, label: 'UFC', logo: '/logos/ufc-logo.png', favourite: false, hidden: false },
+    { id: 9008, label: 'WNBA', favourite: false, hidden: false },
+    { id: 9010, label: 'MLS', favourite: false, hidden: false },
+    { id: 9011, label: 'EPL', favourite: false, hidden: false },
+    { id: 9012, label: 'Ligue 1', favourite: false, hidden: false },
+    { id: 9013, label: 'Bundesliga', favourite: false, hidden: false },
+    { id: 9014, label: 'La Liga', favourite: false, hidden: false },
+    { id: 9015, label: 'Serie A', favourite: false, hidden: false },
+    { id: 9016, label: 'UEFA CL', favourite: false, hidden: false },
     // { id: 9100, label: 'Formula1' },
     // { id: 9101, label: 'MotoGP' },
 ];
@@ -36,8 +36,8 @@ export const SPORTS_MAP: SportsMap = {
     9014: 'Soccer',
     9015: 'Soccer',
     9016: 'Soccer',
-    // 9100: 'Formula1',
-    // 9101: 'MotoGP',
+    9100: 'Formula1',
+    9101: 'MotoGP',
 };
 
 export const SPORTS_TAGS_MAP: SportsTagsMap = {

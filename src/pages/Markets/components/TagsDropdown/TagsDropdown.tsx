@@ -4,6 +4,8 @@ import Flag from 'react-flagpack';
 import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
+import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
+import { useDispatch, useSelector } from 'react-redux';
 
 type TagsDropdownProps = {
     open: boolean;
@@ -15,23 +17,84 @@ type TagsDropdownProps = {
 };
 
 const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, allTag, setTagFilter, setTagParam }) => {
+    const dispatch = useDispatch();
+    const favouriteLeagues = useSelector(getFavouriteLeagues);
+
     return (
         <Container open={open}>
-            {tags.map((tag: TagInfo) => {
-                return (
-                    <TagContainer
-                        key={tag.id}
-                        className={`${tagFilter.id == tag.id ? 'selected' : ''}`}
-                        onClick={() => {
-                            setTagFilter(tagFilter.id === tag.id ? allTag : tag);
-                            setTagParam(tagFilter.id === tag.id ? allTag.label : tag.label);
-                        }}
-                    >
-                        {LeagueFlag(tag.id)}
-                        <Label>{tag.label}</Label>
-                    </TagContainer>
-                );
-            })}
+            {tags
+                .filter((tag) => {
+                    return !favouriteLeagues.filter((league: TagInfo) => league.id == tag.id)[0].hidden;
+                })
+                .sort((a, b) => {
+                    const isFavouriteA = Number(
+                        favouriteLeagues.filter((league: TagInfo) => league.id == a.id)[0].favourite
+                    );
+                    const isFavouriteB = Number(
+                        favouriteLeagues.filter((league: TagInfo) => league.id == b.id)[0].favourite
+                    );
+                    if (isFavouriteA == isFavouriteB) {
+                        return a.label > b.label ? 1 : -1;
+                    } else {
+                        return isFavouriteB - isFavouriteA;
+                    }
+                })
+                .map((tag: TagInfo) => {
+                    const isFavourite = favouriteLeagues.filter((league: TagInfo) => league.id == tag.id)[0].favourite;
+                    return (
+                        <TagContainer key={tag.id} className={`${tagFilter.id == tag.id ? 'selected' : ''}`}>
+                            <StarIcon
+                                onClick={() => {
+                                    const newFavourites = favouriteLeagues.map((league: TagInfo) => {
+                                        if (league.id == tag.id) {
+                                            let newFavouriteFlag;
+                                            league.favourite ? (newFavouriteFlag = false) : (newFavouriteFlag = true);
+                                            return {
+                                                id: league.id,
+                                                label: league.label,
+                                                logo: league.logo,
+                                                favourite: newFavouriteFlag,
+                                                hidden: league.hidden,
+                                            };
+                                        }
+                                        return league;
+                                    });
+                                    dispatch(setFavouriteLeagues(newFavourites));
+                                }}
+                                className={`icon icon--${isFavourite ? 'star-full selected' : 'star-empty'} `}
+                            />
+                            <LabelContainer
+                                onClick={() => {
+                                    setTagFilter(tagFilter.id === tag.id ? allTag : tag);
+                                    setTagParam(tagFilter.id === tag.id ? allTag.label : tag.label);
+                                }}
+                            >
+                                {LeagueFlag(tag.id)}
+                                <Label>{tag.label}</Label>
+                            </LabelContainer>
+                            <XButton
+                                onClick={() => {
+                                    const newFavourites = favouriteLeagues.map((league: TagInfo) => {
+                                        if (league.id == tag.id) {
+                                            let newHiddenFlag;
+                                            !league.hidden ? (newHiddenFlag = true) : '';
+                                            return {
+                                                id: league.id,
+                                                label: league.label,
+                                                logo: league.logo,
+                                                favourite: league.favourite,
+                                                hidden: newHiddenFlag,
+                                            };
+                                        }
+                                        return league;
+                                    });
+                                    dispatch(setFavouriteLeagues(newFavourites));
+                                }}
+                                className={`icon icon--cross-button`}
+                            />
+                        </TagContainer>
+                    );
+                })}
         </Container>
     );
 };
@@ -88,7 +151,14 @@ const TagContainer = styled(FlexDivRowCentered)`
     text-transform: uppercase;
     cursor: pointer;
     height: 25px;
-    margin-left: 60px;
+    color: ${(props) => props.theme.textColor.secondary};
+    margin-bottom: 5px;
+    justify-content: flex-start;
+    position: relative;
+`;
+
+const LabelContainer = styled(FlexDivRowCentered)`
+    margin-left: 20px;
     &.selected,
     &:hover:not(.disabled) {
         color: ${(props) => props.theme.textColor.quaternary};
@@ -97,9 +167,6 @@ const TagContainer = styled(FlexDivRowCentered)`
         cursor: default;
         opacity: 0.4;
     }
-    color: ${(props) => props.theme.textColor.secondary};
-    margin-bottom: 5px;
-    justify-content: flex-start;
 `;
 
 const Label = styled.div`
@@ -110,6 +177,25 @@ const Label = styled.div`
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+`;
+
+const StarIcon = styled.i`
+    font-size: 15px;
+    margin-left: 25px;
+    &.selected,
+    &:hover {
+        color: #fac439;
+    }
+`;
+
+const XButton = styled.i`
+    font-size: 15px;
+    position: absolute;
+    right: 2px;
+    color: #ca4c53;
+    &:hover {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
 `;
 
 export default TagsDropdown;

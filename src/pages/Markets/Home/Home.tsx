@@ -69,6 +69,7 @@ const Home: React.FC = () => {
     const location = useLocation();
 
     const [lastValidMarkets, setLastValidMarkets] = useState<SportMarkets>([]);
+
     const [globalFilter, setGlobalFilter] = useLocalStorage<GlobalFilterEnum>(
         LOCAL_STORAGE_KEYS.FILTER_GLOBAL,
         GlobalFilterEnum.OpenMarkets

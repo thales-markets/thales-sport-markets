@@ -152,6 +152,8 @@ export type TagInfo = {
     id: number;
     label: string;
     logo?: string;
+    favourite?: boolean;
+    hidden?: boolean;
 };
 
 export type Tags = TagInfo[];
