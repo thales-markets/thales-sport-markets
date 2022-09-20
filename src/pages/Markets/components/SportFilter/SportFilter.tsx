@@ -6,7 +6,6 @@ import { FlexDivRowCentered } from 'styles/common';
 type SportFilterProps = {
     disabled?: boolean;
     selected?: boolean;
-    count?: number;
     sport: string;
     onClick: () => void;
 };
@@ -27,8 +26,8 @@ const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, on
 const Container = styled(FlexDivRowCentered)`
     font-style: normal;
     font-weight: 600;
-    font-size: 15px;
-    line-height: 102.6%;
+    font-size: 12px;
+    line-height: 13px;
     letter-spacing: 0.035em;
     text-transform: uppercase;
     cursor: pointer;
@@ -44,8 +43,7 @@ const Container = styled(FlexDivRowCentered)`
     }
     color: ${(props) => props.theme.textColor.secondary};
     margin-right: 30px;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     justify-content: flex-start;
 `;
 
@@ -59,7 +57,7 @@ const Label = styled.div`
 `;
 
 const SportIcon = styled.i`
-    font-size: 35px;
+    font-size: 25px;
     margin-right: 15px;
 `;
 

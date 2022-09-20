@@ -15,9 +15,9 @@ export const TAGS_LIST: Tags = [
     { id: 9013, label: 'Bundesliga' },
     { id: 9014, label: 'La Liga' },
     { id: 9015, label: 'Serie A' },
-    { id: 9016, label: 'UEFA Champions League' },
-    { id: 9100, label: 'Formula1' },
-    { id: 9101, label: 'MotoGP' },
+    { id: 9016, label: 'UEFA CL' },
+    // { id: 9100, label: 'Formula1' },
+    // { id: 9101, label: 'MotoGP' },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -36,8 +36,8 @@ export const SPORTS_MAP: SportsMap = {
     9014: 'Soccer',
     9015: 'Soccer',
     9016: 'Soccer',
-    9100: 'Formula1',
-    9101: 'MotoGP',
+    // 9100: 'Formula1',
+    // 9101: 'MotoGP',
 };
 
 export const SPORTS_TAGS_MAP: SportsTagsMap = {
@@ -47,6 +47,26 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Hockey: [9006],
     Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016],
     UFC: [9007],
-    Formula1: [9100],
-    MotoGP: [9101],
+    // Formula1: [9100],
+    // MotoGP: [9101],
 };
+
+export enum TAGS_FLAGS {
+    NCAA_FOOTBALL = 9001,
+    NFL = 9002,
+    MLB = 9003,
+    NBA = 9004,
+    NCAA_BASKETBALL = 9005,
+    NHL = 9006,
+    UFC = 9007,
+    WNBA = 9008,
+    MLS = 9010,
+    EPL = 9011,
+    LIGUE_ONE = 9012,
+    BUNDESLIGA = 9013,
+    LA_LIGA = 9014,
+    SERIE_A = 9015,
+    UEFA_CL = 9016,
+    // FORMULA1 = 9100,
+    // MOTOGP = 9101,
+}

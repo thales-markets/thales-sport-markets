@@ -27,8 +27,6 @@ const Tags: React.FC<TagsProps> = ({ sport, tags, isFinished }) => {
 
 const formatTagLabel = (label: string) => {
     switch (label) {
-        case 'UEFA Champions League':
-            return 'UEFA CL';
         case `NCAA Football`:
             return 'NCAA';
         default:
