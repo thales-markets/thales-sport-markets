@@ -1,23 +1,23 @@
 import { Tags, SportsMap, SportsTagsMap } from 'types/markets';
 
 export const TAGS_LIST: Tags = [
-    { id: 9001, label: 'NCAA Football' },
-    { id: 9002, label: 'NFL' },
-    { id: 9003, label: 'MLB' },
-    { id: 9004, label: 'NBA' },
+    { id: 9001, label: 'NCAA Football', logo: `/logos/leagueLogos/ncaa.png` },
+    { id: 9002, label: 'NFL', logo: `/logos/leagueLogos/nfl.png` },
+    { id: 9003, label: 'MLB', logo: `/logos/leagueLogos/mlb.svg` },
+    { id: 9004, label: 'NBA', logo: `/logos/leagueLogos/nba.svg` },
     { id: 9005, label: 'NCAA Basketball' },
-    { id: 9006, label: 'NHL' },
+    { id: 9006, label: 'NHL', logo: `/logos/leagueLogos/nhl.png` },
     { id: 9007, label: 'UFC', logo: '/logos/ufc-logo.png' },
     { id: 9008, label: 'WNBA' },
-    { id: 9010, label: 'MLS' },
-    { id: 9011, label: 'EPL' },
-    { id: 9012, label: 'Ligue 1' },
-    { id: 9013, label: 'Bundesliga' },
-    { id: 9014, label: 'La Liga' },
-    { id: 9015, label: 'Serie A' },
-    { id: 9016, label: 'UEFA Champions League' },
-    { id: 9100, label: 'Formula1' },
-    { id: 9101, label: 'MotoGP' },
+    { id: 9010, label: 'MLS', logo: `/logos/leagueLogos/mls.png` },
+    { id: 9011, label: 'EPL', logo: `/logos/leagueLogos/EPL.png` },
+    { id: 9012, label: 'Ligue 1', logo: `/logos/leagueLogos/Ligue1.png` },
+    { id: 9013, label: 'Bundesliga', logo: '/logos/leagueLogos/bundesliga.png' },
+    { id: 9014, label: 'La Liga', logo: `/logos/leagueLogos/LaLiga.png` },
+    { id: 9015, label: 'Serie A', logo: `/logos/leagueLogos/seriea.png` },
+    { id: 9016, label: 'UEFA Champions League', logo: `/logos/leagueLogos/ucl-white.png` },
+    { id: 9100, label: 'Formula1', logo: '/logos/leagueLogos/f1.png' },
+    { id: 9101, label: 'MotoGP', logo: `/logos/leagueLogos/motogp.png` },
 ];
 
 export const SPORTS_MAP: SportsMap = {
