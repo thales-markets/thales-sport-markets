@@ -16,6 +16,7 @@ import MarketDetails from './MarketDetails';
 import Transactions from './Transactions';
 import { Side } from '../../../constants/options';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
+import MarketDetailsV2 from './MarketDetailsV2';
 
 type MarketProps = RouteComponentProps<{
     marketAddress: string;
@@ -50,6 +51,7 @@ const Market: React.FC<MarketProps> = (props) => {
             {market ? (
                 <>
                     <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
+                    <MarketDetailsV2 market={market} />
                     <MarketDetails market={market} selectedSide={selectedSide} setSelectedSide={setSelectedSide} />
                     <Transactions market={market} />
                 </>
