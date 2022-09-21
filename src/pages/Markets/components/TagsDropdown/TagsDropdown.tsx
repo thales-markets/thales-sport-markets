@@ -110,31 +110,31 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, setT
 const LeagueFlag = (tagId: number | any) => {
     switch (tagId) {
         case TAGS_FLAGS.NCAA_FOOTBALL:
-            return <Flag size="m" hasBorder={true} hasBorderRadius={false} code="USA" />;
+            return <Flag size="m" code="USA" />;
         case TAGS_FLAGS.NFL:
-            return <Flag size="m" hasBorder={true} hasBorderRadius={false} code="USA" />;
+            return <Flag size="m" code="USA" />;
         case TAGS_FLAGS.MLB:
-            return <Flag size="m" hasBorder={true} hasBorderRadius={false} code="USA" />;
+            return <Flag size="m" code="USA" />;
         case TAGS_FLAGS.NBA:
-            return <Flag size="m" hasBorder={true} hasBorderRadius={false} code="USA" />;
+            return <Flag size="m" code="USA" />;
         case TAGS_FLAGS.NCAA_BASKETBALL:
-            return <Flag size="m" hasBorder={true} hasBorderRadius={false} code="USA" />;
+            return <Flag size="m" code="USA" />;
         case TAGS_FLAGS.NHL:
-            return <Flag size="m" hasBorder={true} hasBorderRadius={false} code="USA" />;
+            return <Flag size="m" code="USA" />;
         case TAGS_FLAGS.WNBA:
-            return <Flag size="m" hasBorder={true} hasBorderRadius={false} code="USA" />;
+            return <Flag size="m" code="USA" />;
         case TAGS_FLAGS.MLS:
-            return <Flag size="m" hasBorder={true} hasBorderRadius={false} code="USA" />;
+            return <Flag size="m" code="USA" />;
         case TAGS_FLAGS.EPL:
-            return <Flag size="m" hasBorder={true} hasBorderRadius={false} code="GB-ENG" />;
+            return <Flag size="m" code="GB-ENG" />;
         case TAGS_FLAGS.LIGUE_ONE:
-            return <Flag size="m" hasBorder={true} hasBorderRadius={false} code="FR" />;
+            return <Flag size="m" code="FR" />;
         case TAGS_FLAGS.BUNDESLIGA:
-            return <Flag size="m" hasBorder={true} hasBorderRadius={false} code="DE" />;
+            return <Flag size="m" code="DE" />;
         case TAGS_FLAGS.LA_LIGA:
-            return <Flag size="m" hasBorder={true} hasBorderRadius={false} code="ES" />;
+            return <Flag size="m" code="ES" />;
         case TAGS_FLAGS.SERIE_A:
-            return <Flag size="m" hasBorder={true} hasBorderRadius={false} code="IT" />;
+            return <Flag size="m" code="IT" />;
         // case TAGS_FLAGS.UEFA_CL:
         //     return <Flag code="EU" />;
         // case TAGS_FLAGS.FORMULA1:
@@ -142,7 +142,7 @@ const LeagueFlag = (tagId: number | any) => {
         // case TAGS_FLAGS.MOTOGP:
         //     return <Flag code="EU" />;
         default:
-            return <Flag size="m" code="USA" />;
+            return <FlagWorld alt="World flag" src="/world-flag.png" />;
     }
 };
 
@@ -204,6 +204,12 @@ const XButton = styled.i`
     &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
     }
+`;
+
+const FlagWorld = styled.img`
+    width: 20px;
+    height: 15px;
+    border-radius: 1.5px;
 `;
 
 export default TagsDropdown;

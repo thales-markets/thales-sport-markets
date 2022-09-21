@@ -12,7 +12,6 @@ import MarketListCard from '../MarketListCard';
 type MarketsGridProps = {
     markets: SportMarkets;
     accountPositions: AccountPositionsMap;
-    layoutType?: number;
 };
 
 export const breakpointColumnsObj = {
@@ -21,12 +20,12 @@ export const breakpointColumnsObj = {
     1200: 1,
 };
 
-const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions, layoutType = 0 }) => {
+const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) => {
     const mobileGridView = window.innerWidth < 950;
     const language = i18n.language;
     return (
         <Container>
-            {mobileGridView || layoutType == 0 ? (
+            {mobileGridView ? (
                 <Masonry breakpointCols={breakpointColumnsObj} className="">
                     {markets.map((market, index) => {
                         return (

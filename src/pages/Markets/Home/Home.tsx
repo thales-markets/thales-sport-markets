@@ -52,7 +52,6 @@ import GlobalFilter from '../components/GlobalFilter';
 import SortOption from '../components/SortOption';
 import SportFilter from '../components/SportFilter';
 import TagsDropdown from '../components/TagsDropdown';
-import ViewSwitch from '../components/ViewSwitch';
 import HeaderDatepicker from './HeaderDatepicker';
 import MarketsGrid from './MarketsGrid';
 import UserHistory from './UserHistory';
@@ -77,7 +76,6 @@ const Home: React.FC = () => {
     const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SPORT, SportFilterEnum.All);
     const [sortDirection, setSortDirection] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_DIRECTION, SortDirection.ASC);
     const [sortBy, setSortBy] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_BY, DEFAULT_SORT_BY);
-    const [showListView, setListView] = useLocalStorage(LOCAL_STORAGE_KEYS.LIST_VIEW, true);
     const [marketsCached, setMarketsCached] = useState<typeof marketsCache>(marketsCache);
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const selectedOddsType = useSelector(getOddsType);
@@ -635,12 +633,6 @@ const Home: React.FC = () => {
                         onSelect={setSelectedOddsType}
                         style={{ marginRight: '10px', width: 'max-content' }}
                     />
-                    <ViewSwitch selected={showListView} onClick={() => setListView(true)} type={'list'}>
-                        {t('market.list-view')}
-                    </ViewSwitch>
-                    <ViewSwitch selected={!showListView} onClick={() => setListView(false)} type={'grid'}>
-                        {t('market.grid-view')}
-                    </ViewSwitch>
                 </SwitchContainer>
             </BurgerAndSwitchSwitchContainer>
 
@@ -735,11 +727,7 @@ const Home: React.FC = () => {
                         <Button onClick={resetFilters}>{t('market.view-all-markets')}</Button>
                     </NoMarketsContainer>
                 ) : (
-                    <MarketsGrid
-                        markets={marketsList}
-                        accountPositions={accountPositions}
-                        layoutType={showListView ? 1 : 0}
-                    />
+                    <MarketsGrid markets={marketsList} accountPositions={accountPositions} />
                 )}
                 {/* RIGHT FILTERS */}
                 <SidebarContainer>
@@ -953,6 +941,7 @@ const SwitchContainer = styled(FlexDivRow)`
     flex-direction: row;
     justify-content: flex-end;
     margin-bottom: 10px;
+    margin-right: 28px;
     @media (max-width: 950px) {
         top: 15px;
     }
