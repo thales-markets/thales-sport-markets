@@ -219,7 +219,8 @@
             "amount-exceeded": "Cantidad excede la disponibilidad del AMM",
             "minimal-amount": "Cantidad minima es 1",
             "no-funds": "Por favor asegurese que su billetera tenga fondos suficientes"
-        }
+        },
+        "match-time": "tiempo de partido"
     },
     "markets": {
         "market-card": {

@@ -1,23 +1,23 @@
 import { Tags, SportsMap, SportsTagsMap } from 'types/markets';
 
 export const TAGS_LIST: Tags = [
-    { id: 9001, label: 'NCAA Football', favourite: false, hidden: false },
-    { id: 9002, label: 'NFL', favourite: false, hidden: false },
-    { id: 9003, label: 'MLB', favourite: false, hidden: false },
-    { id: 9004, label: 'NBA', favourite: false, hidden: false },
+    { id: 9001, label: 'NCAA Football', logo: `/logos/leagueLogos/ncaa.png`, favourite: false, hidden: false },
+    { id: 9002, label: 'NFL', logo: `/logos/leagueLogos/nfl.png`, favourite: false, hidden: false },
+    { id: 9003, label: 'MLB', logo: `/logos/leagueLogos/mlb.svg`, favourite: false, hidden: false },
+    { id: 9004, label: 'NBA', logo: `/logos/leagueLogos/nba.svg`, favourite: false, hidden: false },
     { id: 9005, label: 'NCAA Basketball', favourite: false, hidden: false },
-    { id: 9006, label: 'NHL', favourite: false, hidden: false },
+    { id: 9006, label: 'NHL', logo: `/logos/leagueLogos/nhl.png`, favourite: false, hidden: false },
     { id: 9007, label: 'UFC', logo: '/logos/ufc-logo.png', favourite: false, hidden: false },
     { id: 9008, label: 'WNBA', favourite: false, hidden: false },
-    { id: 9010, label: 'MLS', favourite: false, hidden: false },
-    { id: 9011, label: 'EPL', favourite: false, hidden: false },
-    { id: 9012, label: 'Ligue 1', favourite: false, hidden: false },
-    { id: 9013, label: 'Bundesliga', favourite: false, hidden: false },
-    { id: 9014, label: 'La Liga', favourite: false, hidden: false },
-    { id: 9015, label: 'Serie A', favourite: false, hidden: false },
-    { id: 9016, label: 'UEFA CL', favourite: false, hidden: false },
-    { id: 9100, label: 'Formula 1', favourite: false, hidden: false },
-    { id: 9101, label: 'MotoGP', favourite: false, hidden: false },
+    { id: 9010, label: 'MLS', logo: `/logos/leagueLogos/mls.png`, favourite: false, hidden: false },
+    { id: 9011, label: 'EPL', logo: `/logos/leagueLogos/EPL.png`, favourite: false, hidden: false },
+    { id: 9012, label: 'Ligue 1', logo: `/logos/leagueLogos/Ligue1.png`, favourite: false, hidden: false },
+    { id: 9013, label: 'Bundesliga', logo: '/logos/leagueLogos/bundesliga.png', favourite: false, hidden: false },
+    { id: 9014, label: 'La Liga', logo: `/logos/leagueLogos/LaLiga.png`, favourite: false, hidden: false },
+    { id: 9015, label: 'Serie A', logo: `/logos/leagueLogos/seriea.png`, favourite: false, hidden: false },
+    { id: 9016, label: 'UEFA CL', logo: `/logos/leagueLogos/ucl-white.png`, favourite: false, hidden: false },
+    { id: 9100, label: 'Formula 1', logo: '/logos/leagueLogos/f1.png', favourite: false, hidden: false },
+    { id: 9101, label: 'MotoGP', logo: `/logos/leagueLogos/motogp.png`, favourite: false, hidden: false },
 ];
 
 export const TAGS_LIST_REDUX: Tags = [

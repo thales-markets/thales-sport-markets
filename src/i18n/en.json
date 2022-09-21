@@ -135,6 +135,7 @@
         "github": "GitHub"
     },
     "market": {
+        "match-time": "Match time",
         "question-label": "Question",
         "time-remaining-label": "Time remaining",
         "sport": "Sport",

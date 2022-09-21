@@ -219,7 +219,8 @@
             "amount-exceeded": "金额超过AMM的余额。",
             "minimal-amount": "最小数量为1",
             "no-funds": "请确认您的钱包有足够余额"
-        }
+        },
+        "match-time": "比赛时间"
     },
     "markets": {
         "market-card": {

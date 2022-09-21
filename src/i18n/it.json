@@ -219,7 +219,8 @@
             "amount-exceeded": "Amount exceeded the amount available on AMM",
             "minimal-amount": "Minimal amount is 1",
             "no-funds": "Please ensure your wallet has enough funds"
-        }
+        },
+        "match-time": "Tempo di partita"
     },
     "markets": {
         "market-card": {

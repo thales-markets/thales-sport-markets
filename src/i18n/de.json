@@ -219,7 +219,8 @@
             "amount-exceeded": "Der Betrag überstieg den auf der AMM verfügbaren Betrag",
             "minimal-amount": "Der Mindestbetrag ist 1",
             "no-funds": "Bitte stellen Sie sicher, dass Ihr Wallet ausreichend USD enthält"
-        }
+        },
+        "match-time": "Spielzeit"
     },
     "markets": {
         "market-card": {
