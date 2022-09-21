@@ -181,7 +181,8 @@
                 "baseball": "棒球",
                 "formula1": "一级方程式赛车",
                 "motogp": "世界摩托车锦标赛",
-                "soon": "即将开放!"
+                "soon": "即将开放!",
+                "motosport": "摩托车运动"
             },
             "all": "所有",
             "datepicker": {

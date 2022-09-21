@@ -127,7 +127,7 @@ const Home: React.FC = () => {
             searchParam != '' ? dispatch(setMarketSearch(searchParam)) : '';
             selectedLanguage == '' ? setSelectedLanguage(i18n.language) : '';
 
-            const tagsPerSport = SPORTS_TAGS_MAP[sportParam];
+            const tagsPerSport = SPORTS_TAGS_MAP[sportFilter];
             if (tagsPerSport) {
                 const filteredTags = TAGS_LIST.filter((tag: TagInfo) => tagsPerSport.includes(tag.id));
                 setAvailableTags(filteredTags);
@@ -499,8 +499,7 @@ const Home: React.FC = () => {
                                         filterItem !== SportFilterEnum.Soccer &&
                                         filterItem !== SportFilterEnum.Football &&
                                         filterItem !== SportFilterEnum.UFC &&
-                                        filterItem !== SportFilterEnum.Formula1 &&
-                                        filterItem !== SportFilterEnum.MotoGP
+                                        filterItem !== SportFilterEnum.Motosport
                                     }
                                     selected={sportFilter === filterItem}
                                     sport={filterItem}
@@ -695,8 +694,7 @@ const Home: React.FC = () => {
                                             filterItem !== SportFilterEnum.Soccer &&
                                             filterItem !== SportFilterEnum.Football &&
                                             filterItem !== SportFilterEnum.UFC &&
-                                            filterItem !== SportFilterEnum.Formula1 &&
-                                            filterItem !== SportFilterEnum.MotoGP
+                                            filterItem !== SportFilterEnum.Motosport
                                         }
                                         selected={sportFilter === filterItem}
                                         sport={filterItem}

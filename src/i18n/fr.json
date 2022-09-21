@@ -262,7 +262,8 @@
                 "formula1": "Formule 1",
                 "motogp": "MotoGP",
                 "soon": "Plus de sports à venir!",
-                "ufc": "MMA"
+                "ufc": "MMA",
+                "motosport": "Sport automobile"
             },
             "all": "Tous",
             "datepicker": {

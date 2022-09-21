@@ -42,7 +42,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, allT
                 .map((tag: TagInfo) => {
                     const isFavourite = favouriteLeagues.filter((league: TagInfo) => league.id == tag.id)[0].favourite;
                     return (
-                        <TagContainer key={tag.id} className={`${tagFilter.id == tag.id ? 'selected' : ''}`}>
+                        <TagContainer key={tag.id}>
                             <StarIcon
                                 onClick={() => {
                                     const newFavourites = favouriteLeagues.map((league: TagInfo) => {
@@ -64,6 +64,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, allT
                                 className={`icon icon--${isFavourite ? 'star-full selected' : 'star-empty'} `}
                             />
                             <LabelContainer
+                                className={`${tagFilter.id == tag.id ? 'selected' : ''}`}
                                 onClick={() => {
                                     setTagFilter(tagFilter.id === tag.id ? allTag : tag);
                                     setTagParam(tagFilter.id === tag.id ? allTag.label : tag.label);
