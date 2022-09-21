@@ -10,15 +10,15 @@ import { useDispatch, useSelector } from 'react-redux';
 type TagsDropdownProps = {
     open: boolean;
     tags: Tags;
-    tagFilter: TagInfo;
-    allTag: TagInfo;
+    tagFilter: Tags;
     setTagFilter: any;
     setTagParam: any;
 };
 
-const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, allTag, setTagFilter, setTagParam }) => {
+const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, setTagFilter, setTagParam }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
+    const tagFilterIds = tagFilter.map((tag) => tag.id);
 
     return (
         <Container open={open}>
@@ -64,10 +64,17 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, allT
                                 className={`icon icon--${isFavourite ? 'star-full selected' : 'star-empty'} `}
                             />
                             <LabelContainer
-                                className={`${tagFilter.id == tag.id ? 'selected' : ''}`}
+                                className={`${tagFilterIds.includes(tag.id) ? 'selected' : ''}`}
                                 onClick={() => {
-                                    setTagFilter(tagFilter.id === tag.id ? allTag : tag);
-                                    setTagParam(tagFilter.id === tag.id ? allTag.label : tag.label);
+                                    if (tagFilterIds.includes(tag.id)) {
+                                        const newTagFilters = tagFilter.filter((tagInfo) => tagInfo.id != tag.id);
+                                        setTagFilter(newTagFilters);
+                                        const newTagParam = newTagFilters.map((tagInfo) => tagInfo.label).toString();
+                                        setTagParam(newTagParam);
+                                    } else {
+                                        setTagFilter([...tagFilter, tag]);
+                                        setTagParam([...tagFilter, tag].map((tagInfo) => tagInfo.label).toString());
+                                    }
                                 }}
                             >
                                 {LeagueFlag(tag.id)}

@@ -94,14 +94,7 @@ const Home: React.FC = () => {
         ];
     }, [t]);
 
-    const allTagsFilterItem: TagInfo = useMemo(() => {
-        return {
-            id: 0,
-            label: t('market.filter-label.all'),
-        };
-    }, [t]);
-
-    const [tagFilter, setTagFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_TAGS, allTagsFilterItem);
+    const [tagFilter, setTagFilter] = useLocalStorage<Tags>(LOCAL_STORAGE_KEYS.FILTER_TAGS, []);
     const [availableTags, setAvailableTags] = useState<Tags>(TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label)));
 
     const [dateFilter, setDateFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_DATES, '');
@@ -121,9 +114,13 @@ const Home: React.FC = () => {
                 ? setGlobalFilter(globalFilterParam as GlobalFilterEnum)
                 : setGlobalFilterParam(globalFilter);
             dateParam != '' ? setDateFilter(dateParam) : setDateParam(dateFilter);
-            tagParam != ''
-                ? setTagFilter(availableTags.find((tag) => tag.label === tagParam) || allTagsFilterItem)
-                : setTagParam(tagFilter.label);
+            if (tagParam != '') {
+                const tagParamsSplitted = tagParam.split(',');
+                const filteredTags = availableTags.filter((tag) => tagParamsSplitted.includes(tag.label));
+                filteredTags.length > 0 ? setTagFilter(filteredTags) : setTagFilter([]);
+            } else {
+                setTagParam(tagFilter.map((tag) => tag.label).toString());
+            }
             searchParam != '' ? dispatch(setMarketSearch(searchParam)) : '';
             selectedLanguage == '' ? setSelectedLanguage(i18n.language) : '';
 
@@ -220,14 +217,14 @@ const Home: React.FC = () => {
     const tagsFilteredMarkets = useMemo(() => {
         let filteredMarkets = sportFilteredMarkets;
 
-        if (tagFilter.id !== allTagsFilterItem.id) {
+        if (tagFilter.length > 0) {
             filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) =>
-                market.tags.map((tag) => Number(tag)).includes(tagFilter.id)
+                tagFilter.map((tag) => tag.id).includes(market.tags.map((tag) => Number(tag))[0])
             );
         }
 
         return filteredMarkets;
-    }, [sportFilteredMarkets, tagFilter.id, allTagsFilterItem.id]);
+    }, [sportFilteredMarkets, tagFilter]);
 
     const accountClaimsCount = useMemo(() => {
         if (sportMarketsQuery.data) {
@@ -236,8 +233,7 @@ const Home: React.FC = () => {
                 marketSearch,
                 dateFilter,
                 sportFilter,
-                tagFilter,
-                allTagsFilterItem
+                tagFilter
             );
 
             return allMarketsFiltered.filter((market: SportMarketInfo) => {
@@ -245,16 +241,7 @@ const Home: React.FC = () => {
                 return isClaimAvailable(accountPositionsPerMarket);
             }).length;
         }
-    }, [
-        sportMarketsQuery.data,
-        marketsCached,
-        marketSearch,
-        dateFilter,
-        sportFilter,
-        tagFilter,
-        allTagsFilterItem,
-        accountPositions,
-    ]);
+    }, [sportMarketsQuery.data, marketsCached, marketSearch, dateFilter, sportFilter, tagFilter, accountPositions]);
 
     const [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount] = useMemo(() => {
         let [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount] = [0, 0, 0, 0];
@@ -264,8 +251,7 @@ const Home: React.FC = () => {
                 marketSearch,
                 dateFilter,
                 sportFilter,
-                tagFilter,
-                allTagsFilterItem
+                tagFilter
             );
             allMarketsCount = allMarketsFiltered.length;
 
@@ -274,8 +260,7 @@ const Home: React.FC = () => {
                 marketSearch,
                 dateFilter,
                 sportFilter,
-                tagFilter,
-                allTagsFilterItem
+                tagFilter
             );
             openedMarketsCount = openedMarketsFiltered.length;
 
@@ -284,8 +269,7 @@ const Home: React.FC = () => {
                 marketSearch,
                 dateFilter,
                 sportFilter,
-                tagFilter,
-                allTagsFilterItem
+                tagFilter
             );
             canceledCount = canceledMarketsFiltered.length;
 
@@ -294,14 +278,13 @@ const Home: React.FC = () => {
                 marketSearch,
                 dateFilter,
                 sportFilter,
-                tagFilter,
-                allTagsFilterItem
+                tagFilter
             );
             resolvedMarketsCount = resolvedMarketsFiltered.length;
         }
 
         return [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount];
-    }, [sportMarketsQuery.data, marketsCached, marketSearch, dateFilter, sportFilter, tagFilter, allTagsFilterItem]);
+    }, [sportMarketsQuery.data, marketsCached, marketSearch, dateFilter, sportFilter, tagFilter]);
 
     const accountPositionsCount = useMemo(() => {
         if (sportMarketsQuery.data) {
@@ -310,8 +293,7 @@ const Home: React.FC = () => {
                 marketSearch,
                 dateFilter,
                 sportFilter,
-                tagFilter,
-                allTagsFilterItem
+                tagFilter
             );
 
             return allMarketsFiltered.filter((market: SportMarketInfo) => {
@@ -323,16 +305,7 @@ const Home: React.FC = () => {
                 return positionExists;
             }).length;
         }
-    }, [
-        sportMarketsQuery.data,
-        marketsCached,
-        marketSearch,
-        dateFilter,
-        sportFilter,
-        tagFilter,
-        allTagsFilterItem,
-        accountPositions,
-    ]);
+    }, [sportMarketsQuery.data, marketsCached, marketSearch, dateFilter, sportFilter, tagFilter, accountPositions]);
 
     const marketsList = useMemo(() => {
         let filteredMarkets = tagsFilteredMarkets;
@@ -444,12 +417,11 @@ const Home: React.FC = () => {
         setSportParam(SportFilterEnum.All);
         setDateFilter('');
         setDateParam('');
-        setTagFilter(allTagsFilterItem);
-        setTagParam(allTagsFilterItem.label);
+        setTagFilter([]);
+        setTagParam('');
         setSearchParam('');
         dispatch(setMarketSearch(''));
     }, [
-        allTagsFilterItem,
         dispatch,
         setDateFilter,
         setGlobalFilter,
@@ -509,8 +481,8 @@ const Home: React.FC = () => {
                                             setSportParam(filterItem);
                                             setDateFilter('');
                                             setDateParam('');
-                                            setTagFilter(allTagsFilterItem);
-                                            setTagParam(allTagsFilterItem.label);
+                                            setTagFilter([]);
+                                            setTagParam('');
                                             setGlobalFilter(GlobalFilterEnum.OpenMarkets);
                                             setGlobalFilterParam(GlobalFilterEnum.OpenMarkets);
                                             if (filterItem === SportFilterEnum.All) {
@@ -531,8 +503,8 @@ const Home: React.FC = () => {
                                         } else {
                                             setSportFilter(SportFilterEnum.All);
                                             setSportParam(SportFilterEnum.All);
-                                            setTagFilter(allTagsFilterItem);
-                                            setTagParam(allTagsFilterItem.label);
+                                            setTagFilter([]);
+                                            setTagParam('');
                                             setAvailableTags(TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label)));
                                         }
                                     }}
@@ -545,7 +517,6 @@ const Home: React.FC = () => {
                                     key={filterItem + '1'}
                                     tags={availableTags}
                                     tagFilter={tagFilter}
-                                    allTag={allTagsFilterItem}
                                     setTagFilter={setTagFilter}
                                     setTagParam={setTagParam}
                                 ></TagsDropdown>
@@ -573,8 +544,8 @@ const Home: React.FC = () => {
                                         ) {
                                             setDateFilter('');
                                             setDateParam('');
-                                            setTagFilter(allTagsFilterItem);
-                                            setTagParam(allTagsFilterItem.label);
+                                            setTagFilter([]);
+                                            setTagParam('');
                                             setSportFilter(SportFilterEnum.All);
                                             setSportParam(SportFilterEnum.All);
                                         }
@@ -608,8 +579,8 @@ const Home: React.FC = () => {
                                             filterItem === GlobalFilterEnum.YourPositions
                                         ) {
                                             setDateParam('');
-                                            setTagFilter(allTagsFilterItem);
-                                            setTagParam(allTagsFilterItem.label);
+                                            setTagFilter([]);
+                                            setTagParam('');
                                             setSportFilter(SportFilterEnum.All);
                                             setSportParam(SportFilterEnum.All);
                                         }
@@ -704,8 +675,8 @@ const Home: React.FC = () => {
                                                 setSportParam(filterItem);
                                                 setDateFilter('');
                                                 setDateParam('');
-                                                setTagFilter(allTagsFilterItem);
-                                                setTagParam(allTagsFilterItem.label);
+                                                setTagFilter([]);
+                                                setTagParam('');
                                                 setGlobalFilter(GlobalFilterEnum.OpenMarkets);
                                                 setGlobalFilterParam(GlobalFilterEnum.OpenMarkets);
                                                 if (filterItem === SportFilterEnum.All) {
@@ -726,8 +697,8 @@ const Home: React.FC = () => {
                                             } else {
                                                 setSportFilter(SportFilterEnum.All);
                                                 setSportParam(SportFilterEnum.All);
-                                                setTagFilter(allTagsFilterItem);
-                                                setTagParam(allTagsFilterItem.label);
+                                                setTagFilter([]);
+                                                setTagParam('');
                                                 setAvailableTags(
                                                     TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label))
                                                 );
@@ -742,7 +713,6 @@ const Home: React.FC = () => {
                                         key={filterItem + '1'}
                                         tags={availableTags}
                                         tagFilter={tagFilter}
-                                        allTag={allTagsFilterItem}
                                         setTagFilter={setTagFilter}
                                         setTagParam={setTagParam}
                                     ></TagsDropdown>
@@ -792,8 +762,8 @@ const Home: React.FC = () => {
                                                 filterItem === GlobalFilterEnum.YourPositions
                                             ) {
                                                 setDateParam('');
-                                                setTagFilter(allTagsFilterItem);
-                                                setTagParam(allTagsFilterItem.label);
+                                                setTagFilter([]);
+                                                setTagParam('');
                                                 setSportFilter(SportFilterEnum.All);
                                                 setSportParam(SportFilterEnum.All);
                                             }
@@ -827,8 +797,8 @@ const Home: React.FC = () => {
                                                 filterItem === GlobalFilterEnum.YourPositions
                                             ) {
                                                 setDateParam('');
-                                                setTagFilter(allTagsFilterItem);
-                                                setTagParam(allTagsFilterItem.label);
+                                                setTagFilter([]);
+                                                setTagParam('');
                                                 setSportFilter(SportFilterEnum.All);
                                                 setSportParam(SportFilterEnum.All);
                                             }
@@ -918,8 +888,7 @@ const filterMarketsForCount = (
     marketSearch: string,
     dateFilter: any,
     sportFilter: any,
-    tagFilter: any,
-    allTagsFilterItem: TagInfo
+    tagFilter: any
 ) => {
     return markets.filter((market) => {
         if (
@@ -935,7 +904,10 @@ const filterMarketsForCount = (
         if (sportFilter !== SportFilterEnum.All && market.sport !== sportFilter) {
             return false;
         }
-        if (tagFilter.id !== allTagsFilterItem.id && !market.tags.map((tag) => Number(tag)).includes(tagFilter.id)) {
+        if (
+            tagFilter.length > 0 &&
+            !tagFilter.map((tag: TagInfo) => tag.id).includes(market.tags.map((tag) => Number(tag))[0])
+        ) {
             return false;
         }
         return true;
