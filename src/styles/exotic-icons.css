@@ -8,3 +8,7 @@
 .icon-exotic--info:before {
     content: '\0044';
 }
+
+.icon-exotic--down:before {
+    content: '\004D';
+}

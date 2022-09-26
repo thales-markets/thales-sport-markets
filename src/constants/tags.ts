@@ -20,26 +20,6 @@ export const TAGS_LIST: Tags = [
     { id: 9101, label: 'MotoGP', logo: `/logos/leagueLogos/motogp.png`, favourite: false, hidden: false },
 ];
 
-export const TAGS_LIST_REDUX: Tags = [
-    { id: 9001, label: 'NCAA Football', favourite: false, hidden: false },
-    { id: 9002, label: 'NFL', favourite: false, hidden: false },
-    { id: 9003, label: 'MLB', favourite: false, hidden: false },
-    { id: 9004, label: 'NBA', favourite: false, hidden: false },
-    { id: 9005, label: 'NCAA Basketball', favourite: false, hidden: false },
-    { id: 9006, label: 'NHL', favourite: false, hidden: false },
-    { id: 9007, label: 'UFC', logo: '/logos/ufc-logo.png', favourite: false, hidden: false },
-    { id: 9008, label: 'WNBA', favourite: false, hidden: false },
-    { id: 9010, label: 'MLS', favourite: false, hidden: false },
-    { id: 9011, label: 'EPL', favourite: false, hidden: false },
-    { id: 9012, label: 'Ligue 1', favourite: false, hidden: false },
-    { id: 9013, label: 'Bundesliga', favourite: false, hidden: false },
-    { id: 9014, label: 'La Liga', favourite: false, hidden: false },
-    { id: 9015, label: 'Serie A', favourite: false, hidden: false },
-    { id: 9016, label: 'UEFA CL', favourite: false, hidden: false },
-    { id: 9100, label: 'Formula 1', favourite: false, hidden: false },
-    { id: 9101, label: 'MotoGP', favourite: false, hidden: false },
-];
-
 export const SPORTS_MAP: SportsMap = {
     9001: 'Football',
     9002: 'Football',

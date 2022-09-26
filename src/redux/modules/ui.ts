@@ -4,7 +4,7 @@ import { Theme } from 'constants/ui';
 import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
 import { OddsType } from '../../constants/markets';
-import { TAGS_LIST_REDUX } from 'constants/tags';
+import { TAGS_LIST } from 'constants/tags';
 import { Tags } from 'types/markets';
 
 const sliceName = 'ui';
@@ -26,7 +26,7 @@ const getDefaultStopPulsing = (): boolean => {
 
 const getDefaultFavouriteLeagues = (): Tags => {
     const lsFavouriteLeagues = localStore.get(LOCAL_STORAGE_KEYS.FAVOURITE_LEAGUES);
-    return (lsFavouriteLeagues !== undefined ? lsFavouriteLeagues : TAGS_LIST_REDUX) as Tags;
+    return (lsFavouriteLeagues !== undefined ? lsFavouriteLeagues : TAGS_LIST) as Tags;
 };
 
 type UISliceState = {

@@ -167,6 +167,8 @@ const TagContainer = styled(FlexDivRowCentered)`
 
 const LabelContainer = styled(FlexDivRowCentered)`
     margin-left: 20px;
+    width: 100%;
+    justify-content: flex-start;
     &.selected,
     &:hover:not(.disabled) {
         color: ${(props) => props.theme.textColor.quaternary};

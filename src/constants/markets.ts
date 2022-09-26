@@ -1,6 +1,6 @@
 import { CRYPTO_CURRENCY_MAP } from './currency';
 
-export enum GlobalFilterEnum {
+export enum MarketFiltersEnum {
     OpenMarkets = 'OpenMarkets',
     ResolvedMarkets = 'ResolvedMarkets',
     Canceled = 'Canceled',
