@@ -143,7 +143,8 @@ const Rewards: React.FC = () => {
                         {userRewardData && (
                             <HighlightRow>
                                 <HighlightColumn>{t('rewards.your-score')}</HighlightColumn>
-                                <HighlightColumn>{`${Number(userRewardData?.pnl).toFixed(2)} $`}</HighlightColumn>
+                                <HighlightColumn>{`${Number(userRewardData?.volume).toFixed(2)} $`}</HighlightColumn>
+                                <HighlightColumn>{`${Number(userRewardData?.rebates).toFixed(2)} $`}</HighlightColumn>
                                 <HighlightColumn>{`${Number(userRewardData?.percentage).toFixed(
                                     2
                                 )} %`}</HighlightColumn>
