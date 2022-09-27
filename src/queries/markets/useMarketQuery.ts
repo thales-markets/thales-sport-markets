@@ -52,10 +52,13 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                 let homeScore = result ? result.homeScore : undefined;
                 let awayScore = result ? result.awayScore : undefined;
                 let raceName;
+                let pausedByNonExistingOdds = false;
+
                 if (isApex) {
-                    const [gameResults, gameCreated] = await Promise.all([
+                    const [gameResults, gameCreated, isGamePausedByNonExistingPostQualifyingOdds] = await Promise.all([
                         apexConsumerContract?.gameResults(gameDetails.gameId),
                         apexConsumerContract?.gameCreated(gameDetails.gameId),
+                        apexConsumerContract?.isGamePausedByNonExistingPostQualifyingOdds(gameDetails.gameId),
                     ]);
                     const score = getScoreForApexGame(gameResults.resultDetails, homeScore, awayScore);
                     homeScore = score.homeScore;
@@ -63,6 +66,7 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
 
                     const raceCreated = await apexConsumerContract?.raceCreated(gameCreated.raceId);
                     raceName = raceCreated.eventName;
+                    pausedByNonExistingOdds = isGamePausedByNonExistingPostQualifyingOdds;
                 }
 
                 const market: MarketData = {
@@ -111,7 +115,7 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                     homeScore,
                     awayScore,
                     leagueRaceName: raceName,
-                    paused,
+                    paused: paused || pausedByNonExistingOdds,
                 };
                 return market;
             } catch (e) {
