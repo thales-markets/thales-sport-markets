@@ -263,7 +263,10 @@
             "pnl": "Losses",
             "percentage": "Percentage",
             "reward-amount": "Reward",
-            "no-data-available": "No data available"
+            "no-data-available": "No data available",
+            "volume": "ปริมาณ",
+            "rebates": "ส่วนลด",
+            "safebox": "ค่าธรรมเนียม SafeBox"
         },
         "periods": {
             "second-period": "ช่วงที่สอง",
@@ -278,7 +281,9 @@
             "period-1": "ช่วงที่สอง"
         },
         "your-score": "คะแนนของคุณ",
-        "total-negative-pnl": "ขาดทุนทั้งหมด"
+        "total-negative-pnl": "ขาดทุนทั้งหมด",
+        "twap": "หนึ่งสัปดาห์ TWAP",
+        "total-global-rebates": "รวมเงินคืนที่ต้องจ่าย"
     },
     "quiz": {
         "title": "Sports Trivia competition",

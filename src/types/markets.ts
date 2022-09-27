@@ -60,6 +60,8 @@ export type SportMarketInfo = {
     resultDetails: string;
     isPaused: boolean;
     leagueRaceName?: string;
+    qualifyingStartTime?: number;
+    arePostQualifyingOddsFetched: boolean;
 };
 
 export type FixedMarketData = {
