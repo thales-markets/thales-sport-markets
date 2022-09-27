@@ -1,4 +1,4 @@
-import { MarketFiltersEnum } from 'constants/markets';
+import { GlobalFiltersEnum } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { SPORTS_MAP } from 'constants/tags';
 import { useQuery, UseQueryOptions } from 'react-query';
@@ -11,34 +11,32 @@ import { fixScoresForApexGame } from 'utils/markets';
 import networkConnector from 'utils/networkConnector';
 
 const marketsParams = {
-    [MarketFiltersEnum.OpenMarkets]: { isOpen: true },
-    [MarketFiltersEnum.Canceled]: { isCanceled: true },
-    [MarketFiltersEnum.ResolvedMarkets]: { isResolved: true },
-    [MarketFiltersEnum.All]: {},
-    [MarketFiltersEnum.YourPositions]: {},
-    [MarketFiltersEnum.Claim]: { isOpen: false },
-    [MarketFiltersEnum.Archived]: {},
-    [MarketFiltersEnum.History]: {},
+    [GlobalFiltersEnum.OpenMarkets]: { isOpen: true },
+    [GlobalFiltersEnum.Canceled]: { isCanceled: true },
+    [GlobalFiltersEnum.ResolvedMarkets]: { isResolved: true },
+    [GlobalFiltersEnum.All]: {},
+    [GlobalFiltersEnum.YourPositions]: {},
+    [GlobalFiltersEnum.Claim]: { isOpen: false },
+    [GlobalFiltersEnum.History]: {},
 };
 
 export const marketsCache = {
-    [MarketFiltersEnum.OpenMarkets]: [] as SportMarkets,
-    [MarketFiltersEnum.Canceled]: [] as SportMarkets,
-    [MarketFiltersEnum.ResolvedMarkets]: [] as SportMarkets,
-    [MarketFiltersEnum.All]: [] as SportMarkets,
-    [MarketFiltersEnum.YourPositions]: [] as SportMarkets,
-    [MarketFiltersEnum.Claim]: [] as SportMarkets,
-    [MarketFiltersEnum.Archived]: [] as SportMarkets,
-    [MarketFiltersEnum.History]: [] as SportMarkets,
+    [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,
+    [GlobalFiltersEnum.Canceled]: [] as SportMarkets,
+    [GlobalFiltersEnum.ResolvedMarkets]: [] as SportMarkets,
+    [GlobalFiltersEnum.All]: [] as SportMarkets,
+    [GlobalFiltersEnum.YourPositions]: [] as SportMarkets,
+    [GlobalFiltersEnum.Claim]: [] as SportMarkets,
+    [GlobalFiltersEnum.History]: [] as SportMarkets,
 };
 
-const mapResult = async (markets: any, globalFilter: MarketFiltersEnum) => {
+const mapResult = async (markets: any, globalFilter: GlobalFiltersEnum) => {
     const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
 
     if (
-        globalFilter != MarketFiltersEnum.All &&
-        globalFilter != MarketFiltersEnum.YourPositions &&
-        globalFilter != MarketFiltersEnum.OpenMarkets
+        globalFilter != GlobalFiltersEnum.All &&
+        globalFilter != GlobalFiltersEnum.YourPositions &&
+        globalFilter != GlobalFiltersEnum.OpenMarkets
     ) {
         const mappedMarkets = markets.map((market: SportMarketInfo) => {
             market.maturityDate = new Date(market.maturityDate);
@@ -84,7 +82,7 @@ const mapResult = async (markets: any, globalFilter: MarketFiltersEnum) => {
                     return market;
                 });
 
-                if (globalFilter === MarketFiltersEnum.OpenMarkets) {
+                if (globalFilter === GlobalFiltersEnum.OpenMarkets) {
                     return mappedMarkets.filter(
                         (market: SportMarketInfo) =>
                             market.isOpen &&
@@ -123,7 +121,6 @@ const mapMarkets = (allMarkets: SportMarkets) => {
     const openMarkets = [] as SportMarkets;
     const canceledMarkets = [] as SportMarkets;
     const resolvedMarkets = [] as SportMarkets;
-    const archivedMarkets = [] as SportMarkets;
 
     allMarkets.forEach((market) => {
         if (
@@ -143,27 +140,20 @@ const mapMarkets = (allMarkets: SportMarkets) => {
         if (market.isCanceled) {
             canceledMarkets.push(market);
         }
-        if (
-            (market.isResolved || market.isCanceled) &&
-            market.maturityDate.getTime() + 7 * 24 * 60 * 60 * 1000 < new Date().getTime()
-        ) {
-            archivedMarkets.push(market);
-        }
     });
 
-    marketsCache[MarketFiltersEnum.OpenMarkets] = openMarkets;
-    marketsCache[MarketFiltersEnum.ResolvedMarkets] = resolvedMarkets;
-    marketsCache[MarketFiltersEnum.Canceled] = canceledMarkets;
-    marketsCache[MarketFiltersEnum.Archived] = archivedMarkets;
-    marketsCache[MarketFiltersEnum.All] = allMarkets;
-    marketsCache[MarketFiltersEnum.Claim] = allMarkets;
-    marketsCache[MarketFiltersEnum.YourPositions] = allMarkets;
-    marketsCache[MarketFiltersEnum.History] = allMarkets;
+    marketsCache[GlobalFiltersEnum.OpenMarkets] = openMarkets;
+    marketsCache[GlobalFiltersEnum.ResolvedMarkets] = resolvedMarkets;
+    marketsCache[GlobalFiltersEnum.Canceled] = canceledMarkets;
+    marketsCache[GlobalFiltersEnum.All] = allMarkets;
+    marketsCache[GlobalFiltersEnum.Claim] = allMarkets;
+    marketsCache[GlobalFiltersEnum.YourPositions] = allMarkets;
+    marketsCache[GlobalFiltersEnum.History] = allMarkets;
 };
 
 const useSportMarketsQuery = (
     networkId: NetworkId,
-    globalFilter: MarketFiltersEnum,
+    globalFilter: GlobalFiltersEnum,
     setMarketsCached: any,
     options?: UseQueryOptions<typeof marketsCache>
 ) => {
@@ -184,7 +174,7 @@ const useSportMarketsQuery = (
                         network: networkId,
                     })
                     .then(async (result: any) => {
-                        mapMarkets(await mapResult(result, MarketFiltersEnum.All));
+                        mapMarkets(await mapResult(result, GlobalFiltersEnum.All));
                         setMarketsCached ? setMarketsCached({ ...marketsCache }) : '';
                     });
                 setMarketsCached ? setMarketsCached({ ...marketsCache }) : '';

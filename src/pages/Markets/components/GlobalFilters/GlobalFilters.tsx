@@ -1,20 +1,36 @@
 import Dropdown from 'components/Dropdown';
-import { OddsType, ODDS_TYPES } from 'constants/markets';
+import { GlobalFiltersEnum, OddsType, ODDS_TYPES, SportFilterEnum } from 'constants/markets';
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOddsType, setOddsType } from 'redux/modules/ui';
-// import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-// import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
 
 type GlobalFiltersProps = {
     setDateFilter: (value: any) => void;
     setDateParam: (value: any) => void;
+    setGlobalFilter: (value: any) => void;
+    setGlobalFilterParam: (value: any) => void;
+    setTagFilter: (value: any) => void;
+    setTagParam: (value: any) => void;
+    setSportFilter: (value: any) => void;
+    setSportParam: (value: any) => void;
+    globalFilter: GlobalFiltersEnum;
 };
 
-const GlobalFilters: React.FC<GlobalFiltersProps> = ({ setDateFilter, setDateParam }) => {
-    // const { t } = useTranslation();
+const GlobalFilters: React.FC<GlobalFiltersProps> = ({
+    setDateFilter,
+    setDateParam,
+    setGlobalFilter,
+    setGlobalFilterParam,
+    setTagFilter,
+    setTagParam,
+    setSportFilter,
+    setSportParam,
+    globalFilter,
+}) => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
 
     const [selectedPeriod, setSelectedPeriod] = useState<number>(0);
@@ -30,10 +46,38 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({ setDateFilter, setDatePar
         <Container>
             <Filters>
                 <FilterTypeContainer>
-                    <GlobalFilter>ALL</GlobalFilter>
-                    <GlobalFilter>LIVE</GlobalFilter>
-                    <GlobalFilter>FINISHED</GlobalFilter>
-                    <GlobalFilter>SCHEDULED</GlobalFilter>
+                    {Object.values(GlobalFiltersEnum)
+                        .filter(
+                            (filterItem) =>
+                                filterItem != GlobalFiltersEnum.Claim &&
+                                filterItem != GlobalFiltersEnum.History &&
+                                filterItem != GlobalFiltersEnum.YourPositions
+                        )
+                        .map((filterItem) => {
+                            return (
+                                <GlobalFilter
+                                    selected={globalFilter === filterItem}
+                                    onClick={() => {
+                                        if (
+                                            filterItem === GlobalFiltersEnum.OpenMarkets ||
+                                            filterItem === GlobalFiltersEnum.YourPositions
+                                        ) {
+                                            setDateFilter(0);
+                                            setDateParam('');
+                                            setTagFilter([]);
+                                            setTagParam('');
+                                            setSportFilter(SportFilterEnum.All);
+                                            setSportParam(SportFilterEnum.All);
+                                        }
+                                        setGlobalFilter(filterItem);
+                                        setGlobalFilterParam(filterItem);
+                                    }}
+                                    key={filterItem}
+                                >
+                                    {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
+                                </GlobalFilter>
+                            );
+                        })}
                     <Dropdown<OddsType>
                         list={ODDS_TYPES}
                         selectedItem={selectedOddsType}
@@ -45,9 +89,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({ setDateFilter, setDatePar
                     <TimeFilterContainer
                         selected={selectedPeriod == 1}
                         onClick={() => {
-                            console.log(selectedPeriod);
                             if (selectedPeriod == 1) {
-                                console.log('prolaz');
                                 setDateFilter(0);
                                 setDateParam('');
                                 setSelectedPeriod(0);
@@ -66,7 +108,6 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({ setDateFilter, setDatePar
                         selected={selectedPeriod == 3}
                         onClick={() => {
                             if (selectedPeriod == 3) {
-                                console.log('prolaz');
                                 setDateFilter(0);
                                 setDateParam('');
                                 setSelectedPeriod(0);
@@ -85,7 +126,6 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({ setDateFilter, setDatePar
                         selected={selectedPeriod == 12}
                         onClick={() => {
                             if (selectedPeriod == 12) {
-                                console.log('prolaz');
                                 setDateFilter(0);
                                 setDateParam('');
                                 setSelectedPeriod(0);
@@ -104,7 +144,6 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({ setDateFilter, setDatePar
                         selected={selectedPeriod == 24}
                         onClick={() => {
                             if (selectedPeriod == 24) {
-                                console.log('prolaz');
                                 setDateFilter(0);
                                 setDateParam('');
                                 setSelectedPeriod(0);
@@ -123,7 +162,6 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({ setDateFilter, setDatePar
                         selected={selectedPeriod == 168}
                         onClick={() => {
                             if (selectedPeriod == 168) {
-                                console.log('prolaz');
                                 setDateFilter(0);
                                 setDateParam('');
                                 setSelectedPeriod(0);
@@ -175,7 +213,8 @@ export const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: bo
     justify-content: ${(props) => (props.timeFilters ? 'flex-end' : 'space-around')};
 `;
 
-export const GlobalFilter = styled.span`
+export const GlobalFilter = styled.span<{ selected?: boolean }>`
+    color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
     &:hover {
         cursor: pointer;
         color: ${(props) => props.theme.textColor.quaternary};

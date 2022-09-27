@@ -6,7 +6,7 @@ import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
 import SPAAnchor from 'components/SPAAnchor';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'constants/defaults';
-import { DEFAULT_SORT_BY, MarketFiltersEnum, SortDirection, SportFilterEnum } from 'constants/markets';
+import { DEFAULT_SORT_BY, GlobalFiltersEnum, SortDirection, SportFilterEnum } from 'constants/markets';
 import ROUTES, { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
@@ -61,9 +61,9 @@ const Home: React.FC = () => {
 
     const [lastValidMarkets, setLastValidMarkets] = useState<SportMarkets>([]);
 
-    const [globalFilter, setGlobalFilter] = useLocalStorage<MarketFiltersEnum>(
+    const [globalFilter, setGlobalFilter] = useLocalStorage<GlobalFiltersEnum>(
         LOCAL_STORAGE_KEYS.FILTER_GLOBAL,
-        MarketFiltersEnum.OpenMarkets
+        GlobalFiltersEnum.OpenMarkets
     );
     const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SPORT, SportFilterEnum.All);
     const [sortDirection, setSortDirection] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_DIRECTION, SortDirection.ASC);
@@ -86,7 +86,6 @@ const Home: React.FC = () => {
     const [availableTags, setAvailableTags] = useState<Tags>(tagsList.sort((a, b) => a.label.localeCompare(b.label)));
 
     const [dateFilter, setDateFilter] = useLocalStorage<number>(LOCAL_STORAGE_KEYS.FILTER_DATES, 0);
-    // const [gamesPerDay, setGamesPerDayMap] = useState<GamesOnDate[]>([]);
 
     const [sportParam, setSportParam] = useQueryParam('sport', '');
     const [globalFilterParam, setGlobalFilterParam] = useQueryParam('globalFilter', '');
@@ -99,7 +98,7 @@ const Home: React.FC = () => {
         () => {
             sportParam != '' ? setSportFilter(sportParam as SportFilterEnum) : setSportParam(sportFilter);
             globalFilterParam != ''
-                ? setGlobalFilter(globalFilterParam as MarketFiltersEnum)
+                ? setGlobalFilter(globalFilterParam as GlobalFiltersEnum)
                 : setGlobalFilterParam(globalFilter);
             console.log(dateFilter);
             dateParam != ''
@@ -139,28 +138,6 @@ const Home: React.FC = () => {
         }
         return lastValidMarkets;
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, lastValidMarkets, marketsCached, globalFilter]);
-
-    // useEffect(() => {
-    //     const marketDates = markets
-    //         .filter((market: SportMarketInfo) => market.maturityDate >= new Date())
-    //         .map((market: SportMarketInfo) => market.maturityDate);
-    //     const uniqueSortedDates = marketDates
-    //         .filter((date, i, self) => self.findIndex((d) => d.toDateString() === date.toDateString()) === i)
-    //         .sort((a, b) => a.getTime() - b.getTime());
-
-    //     const daysNumberOfGames = new Array<GamesOnDate>();
-    //     uniqueSortedDates.forEach((date) => {
-    //         const gamesPerDay = markets.filter((market: SportMarketInfo) => {
-    //             if (sportFilter !== SportFilterEnum.All) {
-    //                 return market.maturityDate.toDateString() === date?.toDateString() && market.sport === sportFilter;
-    //             } else {
-    //                 return market.maturityDate.toDateString() === date?.toDateString();
-    //             }
-    //         }).length;
-    //         daysNumberOfGames.push({ date: date.toDateString(), numberOfGames: gamesPerDay });
-    //     });
-    //     setGamesPerDayMap(daysNumberOfGames);
-    // }, [markets, sportFilter]);
 
     const accountPositionsQuery = useAccountPositionsQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -220,7 +197,7 @@ const Home: React.FC = () => {
     const accountClaimsCount = useMemo(() => {
         if (sportMarketsQuery.data) {
             const allMarketsFiltered = filterMarketsForCount(
-                marketsCached[MarketFiltersEnum.All],
+                marketsCached[GlobalFiltersEnum.All],
                 marketSearch,
                 dateFilter,
                 sportFilter,
@@ -238,7 +215,7 @@ const Home: React.FC = () => {
         let [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount] = [0, 0, 0, 0];
         if (sportMarketsQuery.data) {
             const allMarketsFiltered = filterMarketsForCount(
-                marketsCached[MarketFiltersEnum.All],
+                marketsCached[GlobalFiltersEnum.All],
                 marketSearch,
                 dateFilter,
                 sportFilter,
@@ -247,7 +224,7 @@ const Home: React.FC = () => {
             allMarketsCount = allMarketsFiltered.length;
 
             const openedMarketsFiltered = filterMarketsForCount(
-                marketsCached[MarketFiltersEnum.OpenMarkets],
+                marketsCached[GlobalFiltersEnum.OpenMarkets],
                 marketSearch,
                 dateFilter,
                 sportFilter,
@@ -256,7 +233,7 @@ const Home: React.FC = () => {
             openedMarketsCount = openedMarketsFiltered.length;
 
             const canceledMarketsFiltered = filterMarketsForCount(
-                marketsCached[MarketFiltersEnum.Canceled],
+                marketsCached[GlobalFiltersEnum.Canceled],
                 marketSearch,
                 dateFilter,
                 sportFilter,
@@ -265,7 +242,7 @@ const Home: React.FC = () => {
             canceledCount = canceledMarketsFiltered.length;
 
             const resolvedMarketsFiltered = filterMarketsForCount(
-                marketsCached[MarketFiltersEnum.ResolvedMarkets],
+                marketsCached[GlobalFiltersEnum.ResolvedMarkets],
                 marketSearch,
                 dateFilter,
                 sportFilter,
@@ -280,7 +257,7 @@ const Home: React.FC = () => {
     const accountPositionsCount = useMemo(() => {
         if (sportMarketsQuery.data) {
             const allMarketsFiltered = filterMarketsForCount(
-                marketsCached[MarketFiltersEnum.All],
+                marketsCached[GlobalFiltersEnum.All],
                 marketSearch,
                 dateFilter,
                 sportFilter,
@@ -302,7 +279,7 @@ const Home: React.FC = () => {
         let filteredMarkets = tagsFilteredMarkets;
 
         switch (globalFilter) {
-            case MarketFiltersEnum.OpenMarkets:
+            case GlobalFiltersEnum.OpenMarkets:
                 filteredMarkets = filteredMarkets.filter(
                     (market: SportMarketInfo) =>
                         market.isOpen &&
@@ -310,7 +287,7 @@ const Home: React.FC = () => {
                         (market.homeOdds !== 0 || market.awayOdds !== 0 || market.drawOdds !== 0)
                 );
                 break;
-            case MarketFiltersEnum.ResolvedMarkets:
+            case GlobalFiltersEnum.ResolvedMarkets:
                 filteredMarkets = filteredMarkets.filter(
                     (market: SportMarketInfo) =>
                         market.isResolved &&
@@ -318,7 +295,7 @@ const Home: React.FC = () => {
                         market.maturityDate.getTime() + 7 * 24 * 60 * 60 * 1000 > new Date().getTime()
                 );
                 break;
-            case MarketFiltersEnum.YourPositions:
+            case GlobalFiltersEnum.YourPositions:
                 filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => {
                     const accountPositionsPerMarket: AccountPosition[] = accountPositions[market.address];
                     let positionExists = false;
@@ -328,21 +305,14 @@ const Home: React.FC = () => {
                     return positionExists;
                 });
                 break;
-            case MarketFiltersEnum.Claim:
+            case GlobalFiltersEnum.Claim:
                 filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => {
                     const accountPositionsPerMarket: AccountPosition[] = accountPositions[market.address];
                     return isClaimAvailable(accountPositionsPerMarket);
                 });
                 break;
-            case MarketFiltersEnum.Canceled:
+            case GlobalFiltersEnum.Canceled:
                 filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => market.isCanceled);
-                break;
-            case MarketFiltersEnum.Archived:
-                filteredMarkets = filteredMarkets.filter(
-                    (market: SportMarketInfo) =>
-                        (market.isResolved || market.isCanceled) &&
-                        market.maturityDate.getTime() + 7 * 24 * 60 * 60 * 1000 < new Date().getTime()
-                );
                 break;
             default:
                 break;
@@ -382,19 +352,19 @@ const Home: React.FC = () => {
         }
     };
 
-    const getCount = (filter: MarketFiltersEnum) => {
+    const getCount = (filter: GlobalFiltersEnum) => {
         switch (filter) {
-            case MarketFiltersEnum.OpenMarkets:
+            case GlobalFiltersEnum.OpenMarkets:
                 return openedMarketsCount;
-            case MarketFiltersEnum.ResolvedMarkets:
+            case GlobalFiltersEnum.ResolvedMarkets:
                 return resolvedMarketsCount;
-            case MarketFiltersEnum.Canceled:
+            case GlobalFiltersEnum.Canceled:
                 return canceledCount;
-            case MarketFiltersEnum.YourPositions:
+            case GlobalFiltersEnum.YourPositions:
                 return accountPositionsCount;
-            case MarketFiltersEnum.Claim:
+            case GlobalFiltersEnum.Claim:
                 return accountClaimsCount;
-            case MarketFiltersEnum.All:
+            case GlobalFiltersEnum.All:
                 return allMarketsCount;
             default:
                 return undefined;
@@ -402,8 +372,8 @@ const Home: React.FC = () => {
     };
 
     const resetFilters = useCallback(() => {
-        setGlobalFilter(MarketFiltersEnum.OpenMarkets);
-        setGlobalFilterParam(MarketFiltersEnum.OpenMarkets);
+        setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
+        setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
         setSportFilter(SportFilterEnum.All);
         setSportParam(SportFilterEnum.All);
         setDateFilter(0);
@@ -474,8 +444,8 @@ const Home: React.FC = () => {
                                             setDateParam('');
                                             setTagFilter([]);
                                             setTagParam('');
-                                            setGlobalFilter(MarketFiltersEnum.OpenMarkets);
-                                            setGlobalFilterParam(MarketFiltersEnum.OpenMarkets);
+                                            setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
+                                            setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
                                             if (filterItem === SportFilterEnum.All) {
                                                 setAvailableTags(
                                                     TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label))
@@ -516,12 +486,12 @@ const Home: React.FC = () => {
                     })}
                 </SportFiltersContainer>
                 <GlobalFiltersContainer>
-                    {Object.values(MarketFiltersEnum)
+                    {Object.values(GlobalFiltersEnum)
                         .filter(
                             (filterItem) =>
-                                filterItem != MarketFiltersEnum.Claim &&
-                                filterItem != MarketFiltersEnum.History &&
-                                filterItem != MarketFiltersEnum.YourPositions
+                                filterItem != GlobalFiltersEnum.Claim &&
+                                filterItem != GlobalFiltersEnum.History &&
+                                filterItem != GlobalFiltersEnum.YourPositions
                         )
                         .map((filterItem) => {
                             return (
@@ -530,8 +500,8 @@ const Home: React.FC = () => {
                                     selected={globalFilter === filterItem}
                                     onClick={() => {
                                         if (
-                                            filterItem === MarketFiltersEnum.OpenMarkets ||
-                                            filterItem === MarketFiltersEnum.YourPositions
+                                            filterItem === GlobalFiltersEnum.OpenMarkets ||
+                                            filterItem === GlobalFiltersEnum.YourPositions
                                         ) {
                                             setDateFilter(0);
                                             setDateParam('');
@@ -552,12 +522,12 @@ const Home: React.FC = () => {
                         })}
                 </GlobalFiltersContainer>
                 <UserRelatedFiltersContainer>
-                    {Object.values(MarketFiltersEnum)
+                    {Object.values(GlobalFiltersEnum)
                         .filter(
                             (filterItem) =>
-                                filterItem == MarketFiltersEnum.Claim ||
-                                filterItem == MarketFiltersEnum.History ||
-                                filterItem == MarketFiltersEnum.YourPositions
+                                filterItem == GlobalFiltersEnum.Claim ||
+                                filterItem == GlobalFiltersEnum.History ||
+                                filterItem == GlobalFiltersEnum.YourPositions
                         )
                         .map((filterItem) => {
                             return (
@@ -566,8 +536,8 @@ const Home: React.FC = () => {
                                     selected={globalFilter === filterItem}
                                     onClick={() => {
                                         if (
-                                            filterItem === MarketFiltersEnum.OpenMarkets ||
-                                            filterItem === MarketFiltersEnum.YourPositions
+                                            filterItem === GlobalFiltersEnum.OpenMarkets ||
+                                            filterItem === GlobalFiltersEnum.YourPositions
                                         ) {
                                             setDateParam('');
                                             setTagFilter([]);
@@ -604,7 +574,7 @@ const Home: React.FC = () => {
                     })}
                 </SortingContainer>
             </BurgerFiltersContainer>
-            <FiltersContainer hidden={globalFilter === MarketFiltersEnum.Claim}></FiltersContainer>
+            <FiltersContainer hidden={globalFilter === GlobalFiltersEnum.Claim}></FiltersContainer>
             <BurgerAndSwitchSwitchContainer>
                 <BurgerMenu
                     src={burger}
@@ -648,8 +618,8 @@ const Home: React.FC = () => {
                                                 setDateParam('');
                                                 setTagFilter([]);
                                                 setTagParam('');
-                                                setGlobalFilter(MarketFiltersEnum.OpenMarkets);
-                                                setGlobalFilterParam(MarketFiltersEnum.OpenMarkets);
+                                                setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
+                                                setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
                                                 if (filterItem === SportFilterEnum.All) {
                                                     setAvailableTags(
                                                         TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label))
@@ -698,11 +668,21 @@ const Home: React.FC = () => {
                     <LoaderContainer>
                         <SimpleLoader />
                     </LoaderContainer>
-                ) : globalFilter === MarketFiltersEnum.History ? (
+                ) : globalFilter === GlobalFiltersEnum.History ? (
                     <UserHistory />
                 ) : (
                     <MainContainer>
-                        <GlobalFilters setDateFilter={setDateFilter} setDateParam={setDateParam} />
+                        <GlobalFilters
+                            setDateFilter={setDateFilter}
+                            setDateParam={setDateParam}
+                            setGlobalFilter={setGlobalFilter}
+                            setGlobalFilterParam={setGlobalFilterParam}
+                            setTagFilter={setTagFilter}
+                            setTagParam={setTagParam}
+                            setSportFilter={setSportFilter}
+                            setSportParam={setSportParam}
+                            globalFilter={globalFilter}
+                        />
                         {marketsList.length === 0 ? (
                             <NoMarketsContainer>
                                 <NoMarketsLabel>{t('market.no-markets-found')}</NoMarketsLabel>
@@ -716,12 +696,12 @@ const Home: React.FC = () => {
                 {/* RIGHT FILTERS */}
                 <SidebarContainer>
                     <GlobalFiltersContainer>
-                        {Object.values(MarketFiltersEnum)
+                        {Object.values(GlobalFiltersEnum)
                             .filter(
                                 (filterItem) =>
-                                    filterItem != MarketFiltersEnum.Claim &&
-                                    filterItem != MarketFiltersEnum.History &&
-                                    filterItem != MarketFiltersEnum.YourPositions
+                                    filterItem != GlobalFiltersEnum.Claim &&
+                                    filterItem != GlobalFiltersEnum.History &&
+                                    filterItem != GlobalFiltersEnum.YourPositions
                             )
                             .map((filterItem) => {
                                 return (
@@ -730,8 +710,8 @@ const Home: React.FC = () => {
                                         selected={globalFilter === filterItem}
                                         onClick={() => {
                                             if (
-                                                filterItem === MarketFiltersEnum.OpenMarkets ||
-                                                filterItem === MarketFiltersEnum.YourPositions
+                                                filterItem === GlobalFiltersEnum.OpenMarkets ||
+                                                filterItem === GlobalFiltersEnum.YourPositions
                                             ) {
                                                 setDateParam('');
                                                 setTagFilter([]);
@@ -751,12 +731,12 @@ const Home: React.FC = () => {
                             })}
                     </GlobalFiltersContainer>
                     <UserRelatedFiltersContainer>
-                        {Object.values(MarketFiltersEnum)
+                        {Object.values(GlobalFiltersEnum)
                             .filter(
                                 (filterItem) =>
-                                    filterItem == MarketFiltersEnum.Claim ||
-                                    filterItem == MarketFiltersEnum.History ||
-                                    filterItem == MarketFiltersEnum.YourPositions
+                                    filterItem == GlobalFiltersEnum.Claim ||
+                                    filterItem == GlobalFiltersEnum.History ||
+                                    filterItem == GlobalFiltersEnum.YourPositions
                             )
                             .map((filterItem) => {
                                 return (
@@ -765,8 +745,8 @@ const Home: React.FC = () => {
                                         selected={globalFilter === filterItem}
                                         onClick={() => {
                                             if (
-                                                filterItem === MarketFiltersEnum.OpenMarkets ||
-                                                filterItem === MarketFiltersEnum.YourPositions
+                                                filterItem === GlobalFiltersEnum.OpenMarkets ||
+                                                filterItem === GlobalFiltersEnum.YourPositions
                                             ) {
                                                 setDateParam('');
                                                 setTagFilter([]);
