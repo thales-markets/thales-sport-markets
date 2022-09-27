@@ -263,7 +263,10 @@
             "pnl": "Losses",
             "percentage": "Percentage",
             "reward-amount": "Reward",
-            "no-data-available": "No data available"
+            "no-data-available": "No data available",
+            "safebox": "Commissioni SafeBox",
+            "rebates": "Sconti",
+            "volume": "Volume"
         },
         "periods": {
             "period-1": "Secondo periodo",
@@ -273,7 +276,9 @@
             "period-3": "Quarto periodo"
         },
         "your-score": "Il tuo punteggio",
-        "total-negative-pnl": "Perdite totali"
+        "total-negative-pnl": "Perdite totali",
+        "twap": "TWAP di una settimana",
+        "total-global-rebates": "Sconti totali da pagare"
     },
     "quiz": {
         "title": "Sports Trivia competition",

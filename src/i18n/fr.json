@@ -358,7 +358,10 @@
             "pnl": "Pertes",
             "reward-amount": "Récompense",
             "no-data-available": "Pas de données disponibles",
-            "wallet-address": "Adresse du portefeuille"
+            "wallet-address": "Adresse du portefeuille",
+            "safebox": "Frais SafeBox",
+            "rebates": "Rabais",
+            "volume": "Le volume"
         },
         "header": "Récompenses",
         "op-rewards-banner-message": "Les récompenses OP ont commencé, vérifiez comment vous pouvez les obtenir via <bold>la page des récompenses OP</bold>",
@@ -372,7 +375,9 @@
             "period-3": "Quatrième période",
             "period-4": "Cinquième période"
         },
-        "your-score": "Ton score"
+        "your-score": "Ton score",
+        "total-global-rebates": "Remises totales à payer",
+        "twap": "TWAP d'une semaine"
     },
     "quiz": {
         "button": {

@@ -263,7 +263,10 @@
             "pnl": "Losses",
             "percentage": "Percentage",
             "reward-amount": "Reward",
-            "no-data-available": "No data available"
+            "no-data-available": "No data available",
+            "volume": "Объем",
+            "rebates": "Скидки",
+            "safebox": "Плата за сейфы"
         },
         "periods": {
             "period-3": "Четвертый период",
@@ -273,7 +276,9 @@
             "period-1": "Второй период"
         },
         "your-score": "Твой счет",
-        "total-negative-pnl": "Общие потери"
+        "total-negative-pnl": "Общие потери",
+        "twap": "TWAP на неделю",
+        "total-global-rebates": "Всего скидок к оплате"
     },
     "quiz": {
         "title": "Sports Trivia competition",

@@ -263,7 +263,10 @@
             "pnl": "Losses",
             "percentage": "Porcentaje",
             "reward-amount": "Recompensa",
-            "no-data-available": "No hay datos disponibles"
+            "no-data-available": "No hay datos disponibles",
+            "volume": "Volumen",
+            "rebates": "Reembolsos",
+            "safebox": "Tarifas de SafeBox"
         },
         "periods": {
             "period-0": "Primer periodo",
@@ -273,7 +276,9 @@
             "period-4": "Quinto periodo"
         },
         "your-score": "Tu puntuación",
-        "total-negative-pnl": "pérdidas totales"
+        "total-negative-pnl": "pérdidas totales",
+        "twap": "TWAP de una semana",
+        "total-global-rebates": "Reembolsos totales a pagar"
     },
     "quiz": {
         "title": "Competencia de trivia sobre deportes (en ingles)",
