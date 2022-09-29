@@ -190,6 +190,7 @@ const addHoursToCurrentDate = (numberOfHours: number) => {
 
 export const Container = styled(FlexDiv)`
     width: 100%;
+    max-width: 750px;
 `;
 
 export const Filters = styled(FlexDivRow)`
@@ -209,11 +210,13 @@ export const Filters = styled(FlexDivRow)`
 `;
 
 export const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: boolean }>`
-    width: 50%;
+    width: ${(props) => (props.timeFilters ? '30%' : '70%')};
     justify-content: ${(props) => (props.timeFilters ? 'flex-end' : 'space-around')};
 `;
 
 export const GlobalFilter = styled.span<{ selected?: boolean }>`
+    margin: 0px 5px;
+    text-transform: uppercase;
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
     &:hover {
         cursor: pointer;
@@ -222,7 +225,7 @@ export const GlobalFilter = styled.span<{ selected?: boolean }>`
 `;
 
 export const TimeFilterContainer = styled(FlexDivRow)<{ selected: boolean }>`
-    margin: 0px 10px;
+    margin: 0px 5px;
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
     & > div {
         background-color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};

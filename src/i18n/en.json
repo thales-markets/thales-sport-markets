@@ -161,9 +161,9 @@
         },
         "filter-label": {
             "global": {
-                "allmarkets": "All markets",
-                "openmarkets": "Open markets",
-                "resolvedmarkets": "Resolved markets",
+                "allmarkets": "All",
+                "openmarkets": "Open",
+                "resolvedmarkets": "Resolved",
                 "yourpositions": "Your positions",
                 "claim": "Claimable",
                 "history": "Your transactions",
@@ -227,7 +227,7 @@
             "starts": "starts",
             "claimable": "Claimable",
             "finished": "Finished",
-            "result": "Result",
+            "result": "Final result",
             "started": "Started",
             "canceled": "Cancelled",
             "pending-resolution": "Pending resolution",

@@ -866,7 +866,7 @@ const filterMarketsForCount = (
     });
 };
 
-const Container = styled(FlexDivColumn)`
+const Container = styled(FlexDivColumnCentered)`
     width: 100%;
 `;
 
@@ -874,12 +874,13 @@ const RowContainer = styled(FlexDivRow)`
     width: 100%;
     flex: 1 1 0%;
     flex-direction: row;
-    justify-content: stretch;
+    justify-content: center;
 `;
 
 const MainContainer = styled(FlexDivColumn)`
     padding-top: 25px;
     width: 100%;
+    max-width: 750px;
     flex-grow: 1;
 `;
 

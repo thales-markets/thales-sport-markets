@@ -10,7 +10,7 @@ export const Container = styled.div<{
     display: flex;
     flex-direction: row;
     width: 100%;
-    padding: 10px 23px;
+    padding: 10px 12px;
     border-radius: 5px;
     margin-bottom: 15px;
     cursor: pointer;
@@ -23,8 +23,9 @@ export const Container = styled.div<{
 
 export const ClubNameLabel = styled.span`
     font-weight: 400;
-    font-size: 15px;
-    margin-left: 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-left: 5px;
     width: 90px;
 `;
 
@@ -40,16 +41,16 @@ export const ClubVsClubContainer = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    width: 35%;
+    width: 33%;
 `;
 
 export const VSLabel = styled.span`
-    margin: 0 20px;
+    margin: 0 10px;
     font-weight: 400;
-    font-size: 15px;
+    font-size: 12px;
 `;
 
 export const ClubLogo = styled.img<{ width?: string; height?: string }>`
-    height: ${(_props) => (_props?.height ? _props.height : '40px')};
-    width: ${(_props) => (_props?.width ? _props.width : '40px')};
+    height: ${(_props) => (_props?.height ? _props.height : '30px')};
+    width: ${(_props) => (_props?.width ? _props.width : '30px')};
 `;

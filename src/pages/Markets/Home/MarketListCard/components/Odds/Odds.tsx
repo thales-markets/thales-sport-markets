@@ -49,7 +49,7 @@ const Odds: React.FC<OddsProps> = ({
     const selectedOddsType = useSelector(getOddsType);
 
     return (
-        <Container>
+        <Container resolved={!!resolvedGameFlag}>
             {noOddsFlag && <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>}
             {resolvedGameFlag && (
                 <>
@@ -64,7 +64,7 @@ const Odds: React.FC<OddsProps> = ({
                         symbolColor={ODDS_COLOR.HOME}
                         additionalText={{
                             firstText: formatMarketOdds(selectedOddsType, odds?.homeOdds),
-                            firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.HOME, marginLeft: '10px' },
+                            firstTextStyle: { color: ODDS_COLOR.HOME, marginLeft: '5px' },
                         }}
                         showTooltip={odds?.homeOdds == 0}
                         glow={
@@ -78,7 +78,7 @@ const Odds: React.FC<OddsProps> = ({
                             symbolColor={ODDS_COLOR.DRAW}
                             additionalText={{
                                 firstText: formatMarketOdds(selectedOddsType, odds?.drawOdds),
-                                firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.DRAW, marginLeft: '10px' },
+                                firstTextStyle: { color: ODDS_COLOR.DRAW, marginLeft: '5px' },
                             }}
                             glow={
                                 accountPositions &&
@@ -91,7 +91,7 @@ const Odds: React.FC<OddsProps> = ({
                         symbolColor={ODDS_COLOR.AWAY}
                         additionalText={{
                             firstText: formatMarketOdds(selectedOddsType, odds?.awayOdds),
-                            firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.AWAY, marginLeft: '10px' },
+                            firstTextStyle: { color: ODDS_COLOR.AWAY, marginLeft: '5px' },
                         }}
                         showTooltip={odds?.awayOdds == 0}
                         glow={

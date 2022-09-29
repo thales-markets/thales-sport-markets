@@ -63,21 +63,22 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div<{ glow?: boolean; color?: string }>`
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     border-radius: 60%;
     border: 3px solid #5f6180;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: row;
+    font-size: 14px;
     border: ${(_props) => (_props?.glow ? '3px solid ' + _props.color : '3px solid #5f6180')};
     box-shadow: ${(_props) => (_props?.glow ? '0 0 6px 2px ' + _props.color : '')};
 `;
 
 const AdditionalText = styled.span`
     line-height: 120%;
-    font-size: 13px;
+    font-size: 14px;
     margin-right: 10px;
     display: flex;
     flex-direction: row;
