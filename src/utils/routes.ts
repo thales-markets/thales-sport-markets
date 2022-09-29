@@ -21,7 +21,6 @@ export const buildReferralLink = (route: string, hash: string, search: string, r
         if (hash.includes('referralId')) {
             const reg = /referralId=\w{1,42}/;
             const replacedReferral = hash.replace(reg, `referralId=${referralId.toLowerCase()}`);
-            console.log(replacedReferral);
             return `/${replacedReferral}`;
         }
         return `/${hash}&referralId=${referralId.toLowerCase()}`;
@@ -29,7 +28,6 @@ export const buildReferralLink = (route: string, hash: string, search: string, r
         if (search.includes('referralId')) {
             const reg = /referralId=\w{1,42}/;
             const replacedReferral = search.replace(reg, `referralId=${referralId.toLowerCase()}`);
-            console.log(replacedReferral);
             return `${route}${replacedReferral}`;
         }
         return `${route}${search}&referralId=${referralId.toLowerCase()}`;
