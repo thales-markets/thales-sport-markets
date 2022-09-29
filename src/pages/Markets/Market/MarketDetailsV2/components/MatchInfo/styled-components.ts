@@ -1,3 +1,4 @@
+import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 
@@ -13,10 +14,12 @@ export const ParticipantsContainer = styled(FlexDiv)`
     flex-direction: row;
 `;
 
-export const ParticipantLogoContainer = styled.div<{ awayTeam?: boolean }>`
+export const ParticipantLogoContainer = styled.div<{ awayTeam?: boolean; isWinner?: boolean; isDraw?: boolean }>`
     ${(_props) => (_props?.awayTeam ? 'margin-left: -1vw;' : '')}
     background-color: #1A1C2B;
-    border-color: #5f6180;
+    border-color: ${(_props) =>
+        _props?.isWinner ? `${MAIN_COLORS.BORDERS.WINNER} !important` : MAIN_COLORS.BORDERS.GRAY};
+    ${(_props) => (_props?.isWinner || _props?.isDraw ? `box-shadow: ${MAIN_COLORS.SHADOWS.WINNER};` : '')}
     width: 100px;
     height: 100px;
     padding: 5px;

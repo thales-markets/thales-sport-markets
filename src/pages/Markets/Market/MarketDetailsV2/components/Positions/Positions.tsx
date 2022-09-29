@@ -17,11 +17,15 @@ type PositionsProps = {
 const Positions: React.FC<PositionsProps> = ({ market, selectedSide, availablePerSide }) => {
     const { t } = useTranslation();
 
-    const displayDrawOption =
-        market?.positions[Position.DRAW]?.sides?.BUY?.odd > 0 || market?.positions[Position.DRAW]?.sides?.SELL?.odd > 0;
+    const disabledDrawOption = !(market?.positions[Position.DRAW]?.sides[selectedSide]?.odd > 0);
+    const disableddHomeOption = !(market?.positions[Position.HOME]?.sides[selectedSide]?.odd > 0);
+    const disabledAwayOption = !(market?.positions[Position.AWAY]?.sides[selectedSide]?.odd > 0);
+
+    // const showDrawOdds = getVisibilityOfDrawOptionByTagId(market.tags);
+
     return (
         <Wrapper>
-            <TeamOptionContainer>
+            <TeamOptionContainer disabled={disableddHomeOption}>
                 <InnerContrainer>
                     <PositionSymbol
                         type={0}
@@ -47,7 +51,7 @@ const Positions: React.FC<PositionsProps> = ({ market, selectedSide, availablePe
                     </Value>
                 </InnerContrainer>
             </TeamOptionContainer>
-            <TeamOptionContainer disabled={!displayDrawOption}>
+            <TeamOptionContainer disabled={disabledDrawOption}>
                 <InnerContrainer>
                     <PositionSymbol
                         type={2}
@@ -73,7 +77,7 @@ const Positions: React.FC<PositionsProps> = ({ market, selectedSide, availablePe
                     </Value>
                 </InnerContrainer>
             </TeamOptionContainer>
-            <TeamOptionContainer>
+            <TeamOptionContainer disabled={disabledAwayOption}>
                 <InnerContrainer>
                     <PositionSymbol
                         type={1}
