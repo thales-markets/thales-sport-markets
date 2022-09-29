@@ -26,3 +26,9 @@ export const STATUS_COLOR = {
     COMING_SOON: '#FAC439',
     PAUSED: '#E26A78',
 };
+
+export const MAIN_COLORS = {
+    LIGHT_GRAY: '#303656',
+    DARK_GRAY: '#1A1C2B',
+    DISABLED_GRAY: '#303656',
+};
