@@ -77,6 +77,22 @@ export const MatchVSLabel = styled.label`
     margin-top: -20px;
 `;
 
+export const RaceNameLabel = styled.label`
+    font-style: normal;
+    font-weight: 200;
+    font-size: 14px;
+    line-height: 18px;
+    display: flex;
+    align-items: center;
+    color: ${(props) => props.theme.textColor.primary};
+    margin-top: -40px;
+    text-align: center;
+    @media (max-width: 400px) {
+        font-size: 12px;
+        margin-top: -35px;
+    }
+`;
+
 export const OddsContainer = styled(FlexDivRow)`
     margin: 50px 72px 0 72px;
     @media (max-width: 1440px) {
@@ -256,7 +272,7 @@ export const MaxButton = styled.button`
     cursor: pointer;
 `;
 
-export const Status = styled.p<{ resolved: boolean; claimable: boolean }>`
+export const Status = styled.p<{ claimable: boolean }>`
     font-weight: 700;
     font-size: 17.2944px;
     line-height: 24px;
@@ -264,15 +280,9 @@ export const Status = styled.p<{ resolved: boolean; claimable: boolean }>`
     align-items: center;
     justify-content: center;
     color: ${(props) => (!props.claimable ? '#E26A78' : '#3fd1ff')};
-    &:after {
-        font-family: ExoticIcons !important;
-        content: '\\0044';
-        font-size: 16px;
-        line-height: 16px;
-        margin-left: 2px;
-        color: ${(props) => (!props.claimable ? '#E26A78' : '#3fd1ff')};
-    }
     margin-top: 10px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
 `;
 
 export const ClaimButton = styled.button<{ cancelled?: boolean }>`

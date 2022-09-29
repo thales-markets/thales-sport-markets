@@ -1,7 +1,9 @@
 import {
+    MarketInfoContainer,
     MatchDate,
     MatchInfo,
     MatchInfoColumn,
+    MatchInfoLabel,
     MatchParticipantImage,
     MatchParticipantImageContainer,
     MatchParticipantName,
@@ -18,7 +20,7 @@ import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { ODDS_COLOR } from '../../../../../constants/ui';
 import { useSelector } from 'react-redux';
 import { getOddsType } from '../../../../../redux/modules/ui';
-import { formatMarketOdds } from '../../../../../utils/markets';
+import { formatMarketOdds, isApexGame } from '../../../../../utils/markets';
 import Tooltip from 'components/Tooltip';
 
 type MarketCardOpenedProps = {
@@ -69,16 +71,28 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                 </MatchParticipantName>
             </MatchInfoColumn>
             <MatchInfoColumn>
-                <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
-                <MatchVSLabel>{t('markets.market-card.vs')}</MatchVSLabel>
-                <OddsLabel
-                    isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}
-                    isDraw={true}
-                >
-                    {market.awayOdds == 0 && market.homeOdds == 0
-                        ? t('markets.market-card.coming-soon')
-                        : formatMarketOdds(selectedOddsType, market.drawOdds)}
-                </OddsLabel>
+                <MarketInfoContainer>
+                    <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
+                    {market.isPaused && (
+                        <MatchInfoLabel isPaused={market.isPaused}>{t('markets.market-card.paused')}</MatchInfoLabel>
+                    )}
+                </MarketInfoContainer>
+                <MatchVSLabel>
+                    {t('markets.market-card.vs')}
+                    {isApexGame(market.tags[0]) && (
+                        <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
+                    )}
+                </MatchVSLabel>
+                {!market.isPaused && (
+                    <OddsLabel
+                        isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}
+                        isDraw={true}
+                    >
+                        {market.awayOdds == 0 && market.homeOdds == 0
+                            ? t('markets.market-card.coming-soon')
+                            : formatMarketOdds(selectedOddsType, market.drawOdds)}
+                    </OddsLabel>
+                )}
                 <MatchParticipantName
                     isTwoPositioned={market.drawOdds === 0}
                     glowColor={ODDS_COLOR.DRAW}

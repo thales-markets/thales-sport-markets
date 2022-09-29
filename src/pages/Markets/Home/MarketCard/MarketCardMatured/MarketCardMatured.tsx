@@ -15,7 +15,8 @@ import { SportMarketInfo } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { useSelector } from 'react-redux';
 import { getOddsType } from '../../../../../redux/modules/ui';
-import { formatMarketOdds } from '../../../../../utils/markets';
+import { formatMarketOdds, isApexGame } from '../../../../../utils/markets';
+import Tooltip from 'components/Tooltip';
 
 type MarketCardMaturedProps = {
     market: SportMarketInfo;
@@ -50,10 +51,15 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
                 <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
             </MatchInfoColumn>
             <MatchInfoColumn>
-                <MatchInfoLabel pendingResolution={noOdds} isMaturedMarket={true}>
-                    {t('markets.market-card.pending-resolution')}
+                <MatchInfoLabel pendingResolution={noOdds} isMaturedMarket={true} isPaused={market.isPaused}>
+                    {market.isPaused ? t('markets.market-card.paused') : t('markets.market-card.pending-resolution')}
                 </MatchInfoLabel>
-                <MatchVSLabel pendingResolution={noOdds}>{t('markets.market-card.vs')}</MatchVSLabel>
+                <MatchVSLabel pendingResolution={noOdds}>
+                    {t('markets.market-card.vs')}
+                    {isApexGame(market.tags[0]) && (
+                        <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
+                    )}
+                </MatchVSLabel>
                 <OddsLabel
                     noOdds={noOdds}
                     isTwoPositioned={market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)}

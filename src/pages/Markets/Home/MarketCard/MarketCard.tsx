@@ -18,7 +18,7 @@ const MarketCard: React.FC<MarketCardProps> = ({ market, accountPositions }) => 
 
     return market.isResolved ? (
         <Container isResolved={market.isResolved} isClaimAvailable={claimAvailable}>
-            <MarketCardResolved market={market} />
+            <MarketCardResolved market={market} accountPositions={accountPositions} />
         </Container>
     ) : market.isCanceled ? (
         <Container isCanceled={market.isCanceled}>

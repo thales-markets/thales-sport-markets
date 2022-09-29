@@ -1,11 +1,11 @@
 import { Tags, SportsMap, SportsTagsMap } from 'types/markets';
 
 export const TAGS_LIST: Tags = [
-    { id: 9001, label: "NCAA Men's Football" },
+    { id: 9001, label: 'NCAA Football' },
     { id: 9002, label: 'NFL' },
     { id: 9003, label: 'MLB' },
     { id: 9004, label: 'NBA' },
-    { id: 9005, label: "NCAA Men's Basketball" },
+    { id: 9005, label: 'NCAA Basketball' },
     { id: 9006, label: 'NHL' },
     { id: 9007, label: 'UFC', logo: '/logos/ufc-logo.png' },
     { id: 9008, label: 'WNBA' },
@@ -16,6 +16,8 @@ export const TAGS_LIST: Tags = [
     { id: 9014, label: 'La Liga' },
     { id: 9015, label: 'Serie A' },
     { id: 9016, label: 'UEFA Champions League' },
+    { id: 9100, label: 'Formula1' },
+    { id: 9101, label: 'MotoGP' },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -34,6 +36,8 @@ export const SPORTS_MAP: SportsMap = {
     9014: 'Soccer',
     9015: 'Soccer',
     9016: 'Soccer',
+    9100: 'Formula1',
+    9101: 'MotoGP',
 };
 
 export const SPORTS_TAGS_MAP: SportsTagsMap = {
@@ -43,4 +47,6 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Hockey: [9006],
     Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016],
     UFC: [9007],
+    Formula1: [9100],
+    MotoGP: [9101],
 };

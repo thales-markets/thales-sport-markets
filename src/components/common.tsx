@@ -159,6 +159,7 @@ export const MatchInfoLabel = styled.label<{
     claimable?: boolean;
     isCanceledMarket?: boolean;
     pendingResolution?: boolean;
+    isPaused?: boolean;
 }>`
     font-style: normal;
     font-weight: 400;
@@ -169,7 +170,7 @@ export const MatchInfoLabel = styled.label<{
     width: ${(props) => (props.pendingResolution ? 'fit-content' : '100px')};
     white-space: nowrap;
     color: ${(props) =>
-        props.isMaturedMarket || props.isCanceledMarket
+        props.isMaturedMarket || props.isCanceledMarket || props.isPaused
             ? props.theme.oddsColor.secondary
             : props.claimable
             ? props.theme.textColor.quaternary
@@ -325,7 +326,7 @@ export const ScoreLabel = styled.label`
     cursor: pointer;
 `;
 
-export const ProfitLabel = styled.label<{ claimable: boolean; profit: number }>`
+export const ProfitLabel = styled.label<{ claimable: boolean }>`
     display: flex;
     visibility: ${(props) => (!props.claimable ? 'hidden' : '')};
     font-style: normal;
@@ -334,12 +335,6 @@ export const ProfitLabel = styled.label<{ claimable: boolean; profit: number }>`
     line-height: 20px;
     text-transform: uppercase;
     text-align: center;
-    color: ${(props) =>
-        props.profit === 0
-            ? props.theme.oddsColor.tertiary
-            : props.profit > 0
-            ? props.theme.oddsColor.primary
-            : props.theme.oddsColor.secondary};
     cursor: pointer;
     margin-top: 37px;
 `;

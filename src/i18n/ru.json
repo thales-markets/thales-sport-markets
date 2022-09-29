@@ -122,7 +122,8 @@
             "page": "Страница",
             "rows-per-page": "Рядов на странице:"
         },
-        "coming-soon": "Вскоре!"
+        "coming-soon": "Вскоре!",
+        "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -178,6 +179,8 @@
                 "football": "Football",
                 "ufc": "MMA",
                 "baseball": "Baseball",
+                "formula1": "Formula 1",
+                "motogp": "MotoGP",
                 "soon": "More sports coming soon!"
             },
             "all": "All",
@@ -229,7 +232,8 @@
             "claim": "Claim",
             "coming-soon": "Coming soon",
             "vs": "VS",
-            "draw": "Draw"
+            "draw": "Draw",
+            "paused": "Paused"
         },
         "market-details": {
             "price": "Price",
@@ -259,7 +263,10 @@
             "pnl": "Losses",
             "percentage": "Percentage",
             "reward-amount": "Reward",
-            "no-data-available": "No data available"
+            "no-data-available": "No data available",
+            "volume": "Объем",
+            "rebates": "Скидки",
+            "safebox": "Плата за сейфы"
         },
         "periods": {
             "period-3": "Четвертый период",
@@ -269,7 +276,9 @@
             "period-1": "Второй период"
         },
         "your-score": "Твой счет",
-        "total-negative-pnl": "Общие потери"
+        "total-negative-pnl": "Общие потери",
+        "twap": "TWAP на неделю",
+        "total-global-rebates": "Всего скидок к оплате"
     },
     "quiz": {
         "title": "Sports Trivia competition",

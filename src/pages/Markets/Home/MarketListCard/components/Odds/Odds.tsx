@@ -20,16 +20,32 @@ type OddsProps = {
         drawOdds?: number;
     };
     accountPositions?: AccountPosition[];
+    isPaused: boolean;
 };
 
-const Odds: React.FC<OddsProps> = ({ isResolved, finalResult, isLive, isCancelled, odds, accountPositions }) => {
+const Odds: React.FC<OddsProps> = ({
+    isResolved,
+    finalResult,
+    isLive,
+    isCancelled,
+    odds,
+    accountPositions,
+    isPaused,
+}) => {
     const { t } = useTranslation();
 
     const pendingResolution =
         odds?.awayOdds == 0 && odds?.homeOdds == 0 && odds?.awayOdds == 0 && isLive && !isResolved;
-    const noOddsFlag = odds?.awayOdds == 0 && odds?.homeOdds == 0 && odds?.awayOdds == 0 && !isLive && !isResolved;
+    const noOddsFlag =
+        odds?.awayOdds == 0 &&
+        odds?.homeOdds == 0 &&
+        odds?.awayOdds == 0 &&
+        !isLive &&
+        !isResolved &&
+        !isCancelled &&
+        !isPaused;
     const resolvedGameFlag = isResolved && finalResult;
-    const showOdds = !pendingResolution && !noOddsFlag && !resolvedGameFlag && !isCancelled;
+    const showOdds = !pendingResolution && !noOddsFlag && !resolvedGameFlag && !isCancelled && !isPaused;
     const selectedOddsType = useSelector(getOddsType);
 
     return (

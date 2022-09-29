@@ -122,7 +122,8 @@
             "rows-per-page": "Zeilen pro Seite:",
             "page": "Buchseite"
         },
-        "coming-soon": "Demnächst!"
+        "coming-soon": "Demnächst!",
+        "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",
@@ -178,6 +179,8 @@
                 "football": "American Football",
                 "ufc": "MMA",
                 "baseball": "Baseball",
+                "formula1": "Formel 1",
+                "motogp": "MotoGP",
                 "soon": "Bald mehr Sportarten!"
             },
             "all": "Alles",
@@ -229,7 +232,8 @@
             "claim": "Einfordern",
             "coming-soon": "Bald",
             "vs": "VS",
-            "draw": "Remis"
+            "draw": "X",
+            "paused": "Pausiert"
         },
         "market-details": {
             "price": "Preis",
@@ -252,14 +256,17 @@
     "rewards": {
         "header": "Preise",
         "search-placeholder": "Wallet Addresse suchen",
-        "description": "<0>Es gibt insgesamt <0>16.000 OP</0> und <0>16.000 THALES</0> Preise, die in 4 Wochen verteilt werden, aufgeteilt in 2-Wochen-Perioden. <0>8.000 OP + 8.000 THALES</0> werden anteilig auf Basis der Gesamtsumme der Verluste pro Wallet für jede 2-Wochen-Periode verteilt.</0><0>Alle Märkte, die in dieser 2-Wochen-Periode reif geworden sind, werden berücksichtigt. Die Verluste der einzelnen Wallets auf jedem Markt werden addiert, um die Ergebnisse der Rangliste zu erhalten.</0><1>- Die erste 2-Wochen-Runde dauert von <0>00:00 UTC 29. August</0> bis <0>00:00 UTC 12. September</0></1><1>- Die zweite 2-Wochen-Runde dauert von <0>00:00 UTC 12. September</0> bis <0>00:00 UTC 26. September</0></1><0>Dieses Incentive-Programm wird möglicherweise nach dem 26. September wieder aufgegriffen.</0>",
+        "description": "<0> Insgesamt 8.000 OP und 8.000 Thales werden vom 26. September bis zum 10. Oktober 00:00 UTC verteilt, um die an die SafeBox-Verträge gezahlten Gebühren auszugleichen. </0> <0> Die Rangliste berechnet die Belohnungen als 90% Rabatt auf die SafeBox-Gebühr, die 2% des Gesamtbetrags in sUSD beträgt. </0> <0> Der $-Wert von OP und THALES wird mit einem 7-Tage-Twap zu Beginn des Zeitraums berechnet. </0> <0>Wenn am Ende des zweiwöchigen Zeitraums die Gesamtrebatte mehr als der anfängliche Twap-Wert der OP- und THALES-Tokens beträgt, wird der Rabatt für jeden Trader proportional reduziert.</0>",
         "op-rewards-banner-message": "Die OP-Preise haben begonnen. Wie ihr sie verdienen könnt, erfahrt ihr auf <bold>der OP-Preisseite</bold>.",
         "table": {
             "wallet-address": "Wallet Addresse",
             "pnl": "Losses",
             "percentage": "Prozent",
             "reward-amount": "Preis",
-            "no-data-available": "Keine Daten verfügbar"
+            "no-data-available": "Keine Daten verfügbar",
+            "volume": "Volumen",
+            "safebox": "SafeBox-Gebühren",
+            "rebates": "Rabatte"
         },
         "periods": {
             "period-0": "Zweite Periode",
@@ -269,7 +276,9 @@
             "period-4": "Fünfte Periode"
         },
         "your-score": "Ihr Ergebnis",
-        "total-negative-pnl": "Totalverluste"
+        "total-negative-pnl": "Totalverluste",
+        "twap": "Eine Woche TWAP",
+        "total-global-rebates": "Gesamtrabatte zu zahlen"
     },
     "quiz": {
         "title": "Sport Trivia Wettbewerb",
