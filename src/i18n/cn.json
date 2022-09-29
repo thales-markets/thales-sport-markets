@@ -3,6 +3,15 @@
         "winner": "获胜",
         "buy-side": "买入",
         "sell-side": "卖出",
+        "days-of-week": {
+            "mon": "周一",
+            "tue": "周二",
+            "wed": "周三",
+            "thu": "周四",
+            "fri": "星期五",
+            "sat": "周六",
+            "sun": "星期日"
+        },
         "wallet": {
             "connect-your-wallet": "链接钱包",
             "switch-wallet": "更换钱包",
@@ -14,21 +23,21 @@
             "disclaimer": "将你的钱包连接到Overtime意味着您已经阅读并理解了参与Overtime活动的风险 <a target=\"_blank\" href={{link}}>免责声明</a> 并决定继续使用."
         },
         "voucher": {
-            "remaining-amount": "Remaining amount",
-            "overtime-voucher": "Overtime voucher",
-            "voucher": "Voucher",
-            "mint-voucher": "Mint voucher",
+            "remaining-amount": "余额",
+            "overtime-voucher": "Overtime 代金券",
+            "voucher": "代金券",
+            "mint-voucher": "铸造代金券",
             "modal": {
-                "title": "Mint Overtime voucher",
-                "description": "<p>Overtime voucher functionality has been implemented per <tip>TIP-76</tip><p/>.",
-                "voucher-amount-label": "Voucher amount",
-                "another-wallet-label": "Send a voucher to another wallet",
-                "recipient-wallet-label": "Recipient wallet",
-                "recipient-wallet-placeholder": "Enter recipient address",
+                "title": "铸造 Overtime 代金券",
+                "description": "<p>Overtime 代金券的功能依据<tip>TIP-76</tip>实现。<p/>",
+                "voucher-amount-label": "代金券金额",
+                "another-wallet-label": "将代金券发送到另一个钱包",
+                "recipient-wallet-label": "代金券的收件人",
+                "recipient-wallet-placeholder": "输入收件人的钱包",
                 "button": {
-                    "mint-label": "Mint",
-                    "mint-progress-label": "Minting in progress...",
-                    "confirmation-message": "Voucher successfully minted"
+                    "mint-label": "铸造",
+                    "mint-progress-label": "铸造中...",
+                    "confirmation-message": "代金券铸造成功"
                 }
             }
         },
@@ -101,12 +110,29 @@
         "tags-placeholder": "搜索标签...",
         "remove-tag-tooltip": "点击删除标签",
         "input-characters-note": "{{entered }} / {{max}}",
-        "view": "View",
+        "view": "看",
         "guidelines": "指南",
-        "built-on": "建立于"
+        "built-on": "建立于",
+        "odds": {
+            "american-odds": "美国赔率",
+            "decimal-odds": "小数赔率",
+            "normalized-implied-odds": "标准化隐含赔率"
+        },
+        "pagination": {
+            "rows-per-page": "每页行数：",
+            "page": "页"
+        },
+        "coming-soon": "快来了！",
+        "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race."
     },
     "footer": {
-        "all-rights-reserved": "© {{year}} eXoticV 保留所有权利."
+        "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",
+        "tutorial": "教程",
+        "medium": "Medium",
+        "twitter": "Twitter",
+        "discord": "Discord",
+        "docs": "文档",
+        "github": "GitHub"
     },
     "market": {
         "question-label": "问题标签",
@@ -153,9 +179,14 @@
                 "football": "橄榄球",
                 "ufc": "终极格斗",
                 "baseball": "棒球",
+                "formula1": "一级方程式赛车",
+                "motogp": "世界摩托车锦标赛",
                 "soon": "即将开放!"
             },
-            "all": "所有"
+            "all": "所有",
+            "datepicker": {
+                "games": "{{numberOfGames}} 场比赛"
+            }
         },
         "back-to-markets": "查看其他比赛",
         "back-to-market": "返回市场页面",
@@ -184,9 +215,9 @@
             "result-col": "结果"
         },
         "tooltip": {
-            "amount-exceeded": "Amount exceeded the amount available on AMM",
-            "minimal-amount": "Minimal amount is 1",
-            "no-funds": "Please ensure your wallet has enough funds"
+            "amount-exceeded": "金额超过AMM的余额。",
+            "minimal-amount": "最小数量为1",
+            "no-funds": "请确认您的钱包有足够余额"
         }
     },
     "markets": {
@@ -200,8 +231,9 @@
             "pending-resolution": "等待结果",
             "claim": "领取",
             "coming-soon": "即将开始",
-            "vs": "vs",
-            "draw": "平手"
+            "vs": "对决",
+            "draw": "平手",
+            "paused": "暂停"
         },
         "market-details": {
             "price": "价格",
@@ -213,29 +245,44 @@
             "potential-profit": "潜在的利润",
             "amount-claimable": "可领取数量",
             "claim-back": "可退回数量",
+            "max": "最大",
             "wallet-info": {
                 "title": "钱包中"
-            }
+            },
+            "skew": "偏斜"
         },
         "zero-odds-tooltip": "Sports AMM 仅提供0.05美元至0.95美元价格范围内的流动性，这意味着，如果一个投注选择的赔率低于5%或者高于95%，该选择就不会有流动性。"
     },
     "rewards": {
         "header": "奖励",
         "search-placeholder": "搜索钱包",
-        "description": "<0>奖励总额为 <0>10,000枚OP代币</0> 和 <0>10,000 枚THALES代币</0>，将在4周内完成分发（每轮持续2周），即每过2周，我们将根据用户亏损的总金额按比例分配<0>5,000 枚OP代币 + 5,000 枚THALES代币。</0><0>所有在这两周内的比赛结果都将被计入，每位用户在每一轮（两周）内参与的所有亏损都将被计入排行榜。</0><1>- 第一轮：8月1日至8月14日。</1><1>- 第二轮：8月15日至8月28日。</1><0>奖励计划将在第二轮结束后进行经调整。</0>",
+        "description": "<0>总额为 8,000 枚OP代币和 8,000 枚THALES代币，将用于补贴用户在9月26日至10月10日支付的手续费。</0>  <0>排行榜将以用户手续费的90%作为返利的基准（用户手续费为sUSD交易金额的2%）</0>   <0>OP和THALES代币的美元价值将以7天加权平均价格为准（9月26日） </0>   <0> 如果两周后，总手续费的返利超过OP和THALES代币的总价值，那么返利将会按总手续费的比例降低。 </0> <0> 本次的手续费补贴项目将可能在10月10日活动结束后修改。</0> ",
         "total-negative-pnl": "所有亏损金额",
         "op-rewards-banner-message": "OP代币奖励已启动, 查看如何领取<bold>OP代币奖励攻略</bold>",
         "table": {
             "wallet-address": "钱包地址",
-            "pnl": "Losses",
+            "pnl": "亏损金额",
             "percentage": "百分比",
             "reward-amount": "奖励数量",
-            "no-data-available": "无法获取数据"
-        }
+            "no-data-available": "无法获取数据",
+            "rebates": "回扣",
+            "volume": "体积",
+            "safebox": "保险箱费用"
+        },
+        "periods": {
+            "period-0": "第一节课",
+            "period-1": "第二阶段",
+            "period-2": "第三期",
+            "period-3": "第五期",
+            "period-4": "第四期"
+        },
+        "your-score": "你的分数",
+        "twap": "一周TWAP",
+        "total-global-rebates": "要支付的总回扣"
     },
     "quiz": {
-        "title": "Sports Trivia competition",
-        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition where weekly winners will receive NFT Vouchers that can be used instead of sUSD to participate in any sports market you like.</p><p>Read all the information about this trivia in our <blogPost>blog post</blogPost>.</p><p>How to participate? The trivia is available to everyone to test their knowledge and compete, but to be eligible for rewards you need to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime's Twitter</twitter>.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
+        "title": "体育百科竞赛",
+        "start-quiz-description": "<p>学富五车的体育迷们，准备用你的知识赢得奖金了吗？</p><p>Overtime启动了体育百科问答竞赛，每周排行榜上的赢家都将获得可在平台使用的sUSD代金券（NFT）。</p><p>阅读这篇<blogPost>攻略</blogPost>可以获得关于体育百科问答的所有信息。</p><p>如何参与呢? 体育百科问答竞赛是一个开放的竞技平台，参与者只需要转发这篇<quizRetweetLink>推文</quizRetweetLink> 并赶住 <twitter>Overtime的推特账号</twitter>即可获得参与资格。</p><p>现在就连上你的钱包，输入推特账号，参与知识问答吧！注意当你获得奖励资格时，我们会私信你的推特账户以确认钱包地址。另外，如果你想让自己在Discord上获得一个额外的“体育百科知识胜者”的身份，那么也可以输入Discord账号。</p><p>如果有其他任何问题，请加入我们的<discord>Discord</discord>.</p>",
         "twitter-handle-label": "推特账号",
         "twitter-handle-placeholder": "请输入您的推特账号",
         "twitter-handle-validation": "无效的推特账号，请重新输入",
@@ -247,7 +294,7 @@
         "point-label": "分",
         "points-label": "分",
         "quiz-finished-label": "问答完成!",
-        "your-score-label": "您的得分: {{score}}/{{max}} points",
+        "your-score-label": "您的得分: {{score}}/{{max}} 分",
         "button": {
             "start-quiz-label": "开始测试",
             "next-question-label": "下一个问题",
@@ -257,8 +304,8 @@
             "see-leaderboard-label": "查看排行榜"
         },
         "leaderboard": {
-            "title": "体育百科问答排行榜",
-            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition for any given week.</p><p>All the details about how to participate for NFT sUSD vouchers that can be used on any sports market available <blogPost>here</blogPost>.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
+            "title": "体育百科竞赛排行榜",
+            "description": "<p>这是体育百科知识竞赛的排行榜，您可以在这里看到自己参赛的表现。</p><p>阅读这篇<blogPost>攻略</blogPost>，获得所有关于赢得Overtime代金券的信息。</p><p>您可以不限次数地参加<sportsTrivia>体育百科知识竞赛</sportsTrivia>以获得最满意的成绩。</p>",
             "back-to-quiz": "返回测试",
             "search-placeholder": "搜索...",
             "table": {

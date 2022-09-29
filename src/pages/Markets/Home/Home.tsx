@@ -56,6 +56,7 @@ import { history } from 'utils/routes';
 import ROUTES, { RESET_STATE } from 'constants/routes';
 import SidebarLeaderboard from 'pages/Quiz/SidebarLeaderboard';
 import useQueryParam from 'utils/useQueryParams';
+import i18n from 'i18n';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -109,19 +110,25 @@ const Home: React.FC = () => {
     const [dateFilter, setDateFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_DATES, '');
     const [gamesPerDay, setGamesPerDayMap] = useState<GamesOnDate[]>([]);
 
-    const [sportParam, setSportParam] = useQueryParam('sport', SportFilterEnum.All);
-    const [globalFilterParam, setGlobalFilterParam] = useQueryParam('globalFilter', GlobalFilterEnum.OpenMarkets);
+    const [sportParam, setSportParam] = useQueryParam('sport', '');
+    const [globalFilterParam, setGlobalFilterParam] = useQueryParam('globalFilter', '');
     const [searchParam, setSearchParam] = useQueryParam('searchParam', '');
-    const [dateParam, setDateParam] = useQueryParam('date', dateFilter);
-    const [tagParam, setTagParam] = useQueryParam('tag', allTagsFilterItem.label);
+    const [dateParam, setDateParam] = useQueryParam('date', '');
+    const [tagParam, setTagParam] = useQueryParam('tag', '');
+    const [selectedLanguage, setSelectedLanguage] = useQueryParam('lang', '');
 
     useEffect(
         () => {
-            setSportFilter(sportParam as SportFilterEnum);
-            setGlobalFilter(globalFilterParam as GlobalFilterEnum);
-            setTagFilter(availableTags.find((tag) => tag.label === tagParam) || allTagsFilterItem);
-            dispatch(setMarketSearch(searchParam));
-            setDateFilter(dateParam);
+            sportParam != '' ? setSportFilter(sportParam as SportFilterEnum) : setSportParam(sportFilter);
+            globalFilterParam != ''
+                ? setGlobalFilter(globalFilterParam as GlobalFilterEnum)
+                : setGlobalFilterParam(globalFilter);
+            dateParam != '' ? setDateFilter(dateParam) : setDateParam(dateFilter);
+            tagParam != ''
+                ? setTagFilter(availableTags.find((tag) => tag.label === tagParam) || allTagsFilterItem)
+                : setTagParam(tagFilter.label);
+            searchParam != '' ? dispatch(setMarketSearch(searchParam)) : '';
+            selectedLanguage == '' ? setSelectedLanguage(i18n.language) : '';
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
@@ -487,7 +494,9 @@ const Home: React.FC = () => {
                                     filterItem !== SportFilterEnum.Baseball &&
                                     filterItem !== SportFilterEnum.Soccer &&
                                     filterItem !== SportFilterEnum.Football &&
-                                    filterItem !== SportFilterEnum.UFC
+                                    filterItem !== SportFilterEnum.UFC &&
+                                    filterItem !== SportFilterEnum.Formula1 &&
+                                    filterItem !== SportFilterEnum.MotoGP
                                 }
                                 selected={sportFilter === filterItem}
                                 sport={filterItem}
@@ -622,7 +631,7 @@ const Home: React.FC = () => {
                     })}
                 </SortingContainer>
             </BurgerFiltersContainer>
-            <FiltersContainer>
+            <FiltersContainer hidden={globalFilter === GlobalFilterEnum.Claim}>
                 <HeaderDatepicker
                     gamesPerDay={gamesPerDay}
                     dateFilter={dateFilter}
@@ -644,10 +653,10 @@ const Home: React.FC = () => {
                         onSelect={setSelectedOddsType}
                         style={{ marginRight: '10px', width: 'max-content' }}
                     />
-                    <ViewSwitch selected={showListView} onClick={() => setListView(true)}>
+                    <ViewSwitch selected={showListView} onClick={() => setListView(true)} type={'list'}>
                         {t('market.list-view')}
                     </ViewSwitch>
-                    <ViewSwitch selected={!showListView} onClick={() => setListView(false)}>
+                    <ViewSwitch selected={!showListView} onClick={() => setListView(false)} type={'grid'}>
                         {t('market.grid-view')}
                     </ViewSwitch>
                 </SwitchContainer>
@@ -672,7 +681,9 @@ const Home: React.FC = () => {
                                         filterItem !== SportFilterEnum.Baseball &&
                                         filterItem !== SportFilterEnum.Soccer &&
                                         filterItem !== SportFilterEnum.Football &&
-                                        filterItem !== SportFilterEnum.UFC
+                                        filterItem !== SportFilterEnum.UFC &&
+                                        filterItem !== SportFilterEnum.Formula1 &&
+                                        filterItem !== SportFilterEnum.MotoGP
                                     }
                                     selected={sportFilter === filterItem}
                                     sport={filterItem}
@@ -907,7 +918,11 @@ const filterMarketsForCount = (
     allTagsFilterItem: TagInfo
 ) => {
     return markets.filter((market) => {
-        if (marketSearch && !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())) {
+        if (
+            marketSearch &&
+            !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
+            !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
+        ) {
             return false;
         }
         if (dateFilter !== '' && market.maturityDate.toDateString() !== dateFilter) {
@@ -967,9 +982,10 @@ const SwitchContainer = styled(FlexDivRow)`
     }
 `;
 
-const FiltersContainer = styled(FlexDivRow)`
+const FiltersContainer = styled(FlexDivRow)<{ hidden: boolean }>`
     align-self: center;
     margin-bottom: 4px;
+    visibility: ${(props) => (props.hidden ? 'hidden' : '')};
 `;
 
 const GlobalFiltersContainer = styled(FlexDivColumn)`

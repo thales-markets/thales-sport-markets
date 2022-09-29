@@ -19,13 +19,7 @@ const GlobalFilter: React.FC<GlobalFilterProps> = ({ disabled, selected, onClick
             {children == 'Your transactions' && <Icon className={`icon icon--history`} />}
             <Label>{children}</Label>
             {children == 'Archived markets' && (
-                <Tooltip
-                    overlay={t(`market.filter-label.global.tooltip`)}
-                    component={<Icon className={`icon-exotic icon-exotic--info`} />}
-                    iconFontSize={23}
-                    marginLeft={2}
-                    top={0}
-                />
+                <Tooltip overlay={t(`market.filter-label.global.tooltip`)} iconFontSize={18} marginLeft={2} top={0} />
             )}
         </Container>
     );

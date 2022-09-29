@@ -13,60 +13,29 @@ import {
     ScoreLabel,
     WinnerLabel,
 } from 'components/common';
+import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { Position } from 'constants/options';
 import { ethers } from 'ethers';
 import Tags from 'pages/Markets/components/Tags';
-import useMarketBalancesQuery from 'queries/markets/useMarketBalancesQuery';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsAppReady } from 'redux/modules/app';
-import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { Balances, SportMarketInfo } from 'types/markets';
+import { AccountPosition, SportMarketInfo } from 'types/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
+import { isApexGame, isClaimAvailable } from 'utils/markets';
 import networkConnector from 'utils/networkConnector';
 
 type MarketCardResolvedProps = {
     market: SportMarketInfo;
+    accountPositions?: AccountPosition[];
 };
 
-const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
+const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market, accountPositions }) => {
     const { t } = useTranslation();
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const [balances, setBalances] = useState<Balances | undefined>(undefined);
-    const [claimable, setClaimable] = useState<boolean>(false);
-    const [claimableAmount, setClaimableAmount] = useState<number>(0);
-    const marketBalancesQuery = useMarketBalancesQuery(market.address, walletAddress, {
-        enabled: isWalletConnected && isAppReady,
-    });
-
-    useEffect(() => {
-        if (marketBalancesQuery.isSuccess && marketBalancesQuery.data) {
-            setBalances(marketBalancesQuery.data);
-        }
-    }, [marketBalancesQuery.isSuccess, marketBalancesQuery.data]);
-
-    useEffect(() => {
-        if (balances) {
-            if (
-                market.finalResult !== 0 &&
-                //@ts-ignore
-                balances?.[Position[market.finalResult - 1].toLowerCase()] > 0
-            ) {
-                //@ts-ignore
-                setClaimableAmount(balances?.[Position[market.finalResult - 1].toLowerCase()] * 1);
-                setClaimable(true);
-            }
-        }
-    }, [balances, market.finalResult]);
+    const claimable = isClaimAvailable(accountPositions);
 
     const claimReward = async () => {
         const { signer } = networkConnector;
@@ -115,27 +84,36 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market }) => {
             <MatchInfoColumn>
                 <MarketInfoContainer>
                     <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
-                    <MatchInfoLabel claimable={claimable}>
-                        {claimable ? t('markets.market-card.claimable') : t('markets.market-card.finished')}
+                    <MatchInfoLabel claimable={claimable} isPaused={market.isPaused}>
+                        {market.isPaused
+                            ? t('markets.market-card.paused')
+                            : claimable
+                            ? ''
+                            : t('markets.market-card.finished')}
                     </MatchInfoLabel>
-                    <ClaimButton
-                        onClick={(e: any) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            claimReward();
-                        }}
-                        claimable={claimable}
-                    >
-                        {t('markets.market-card.claim')}
-                    </ClaimButton>
+                    {market.isPaused && (
+                        <ClaimButton
+                            onClick={(e: any) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                claimReward();
+                            }}
+                            claimable={claimable}
+                        >
+                            {t('markets.market-card.claim')}
+                        </ClaimButton>
+                    )}
                 </MarketInfoContainer>
-                <MatchVSLabel>{t('markets.market-card.vs')}</MatchVSLabel>
+                <MatchVSLabel>
+                    {t('markets.market-card.vs')}
+                    {isApexGame(market.tags[0]) && (
+                        <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
+                    )}
+                </MatchVSLabel>
                 <WinnerLabel isWinning={market.finalResult == 3} finalResult={market.finalResult}>
                     {t('markets.market-card.draw')}
                 </WinnerLabel>
-                <ProfitLabel claimable={claimable} profit={claimableAmount}>{`$ ${claimableAmount.toFixed(
-                    2
-                )}`}</ProfitLabel>
+                <ProfitLabel claimable={false}>{''}</ProfitLabel>
                 <Tags isFinished={market.finalResult != 0} sport={market.sport} tags={market.tags} />
             </MatchInfoColumn>
             <MatchInfoColumn>

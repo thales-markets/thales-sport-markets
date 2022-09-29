@@ -1,8 +1,10 @@
+import Tooltip from 'components/Tooltip';
+import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isClaimAvailable } from 'utils/markets';
+import { isApexGame, isClaimAvailable } from 'utils/markets';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
 import { ClubContainer, ClubLogo, ClubNameLabel, ClubVsClubContainer, Container, VSLabel } from './styled-components';
@@ -34,7 +36,12 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                     />
                     <ClubNameLabel>{market.homeTeam}</ClubNameLabel>
                 </ClubContainer>
-                <VSLabel>{'VS'}</VSLabel>
+                <VSLabel>
+                    {'VS'}
+                    {isApexGame(market.tags[0]) && (
+                        <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={17} marginLeft={2} />
+                    )}
+                </VSLabel>
                 <ClubContainer>
                     <ClubLogo
                         alt="Away team logo"
@@ -55,14 +62,17 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                     drawOdds: market.drawOdds,
                 }}
                 accountPositions={accountPositions}
+                isPaused={market.isPaused}
             />
             <MatchStatus
+                address={market.address}
                 isResolved={market.isResolved}
                 isLive={market.maturityDate < new Date()}
                 isCanceled={market.isCanceled}
                 isClaimable={claimAvailable}
                 result={`${market.homeScore}:${market.awayScore}`}
                 startsAt={formatDateWithTime(market.maturityDate)}
+                isPaused={market.isPaused}
             />
         </Container>
     );

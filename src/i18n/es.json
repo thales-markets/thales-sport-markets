@@ -3,6 +3,15 @@
         "winner": "Ganador",
         "buy-side": "COMPRAR",
         "sell-side": "VENDER",
+        "days-of-week": {
+            "mon": "lun",
+            "tue": "mar",
+            "wed": "mie",
+            "thu": "jue",
+            "fri": "vie",
+            "sat": "sab",
+            "sun": "dom"
+        },
         "wallet": {
             "connect-your-wallet": "Conecta tu billetera",
             "switch-wallet": "Cambia tu billetera",
@@ -42,8 +51,8 @@
         },
         "swap": {
             "title": "Obtener {{currencyKey}}",
-            "from-label": "De",
-            "to-label": "Hacia",
+            "from-label": "Envio",
+            "to-label": "Recibo",
             "balance-label": "Balance: {{amount}}",
             "swap-label": "Intercambiar",
             "swap-progress-label": "Intercambio en progreso..."
@@ -103,17 +112,34 @@
         "input-characters-note": "{{entered }} / {{max}}",
         "view": "Ver",
         "guidelines": "guias",
-        "built-on": "Desarrollado sobre"
+        "built-on": "Desarrollado sobre",
+        "odds": {
+            "american-odds": "Odds americanas",
+            "decimal-odds": "Probabilidades decimales",
+            "normalized-implied-odds": "Odds implícitas normalizadas"
+        },
+        "pagination": {
+            "page": "Página",
+            "rows-per-page": "Filas por página:"
+        },
+        "coming-soon": "Pronto!",
+        "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race."
     },
     "footer": {
-        "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS."
+        "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS.",
+        "tutorial": "Tutorial",
+        "github": "GitHub",
+        "docs": "Documentos",
+        "medium": "Medium",
+        "twitter": "Twitter",
+        "discord": "Discord"
     },
     "market": {
         "question-label": "Pregunta",
         "time-remaining-label": "Tiempo restante",
         "sport": "Deporte",
         "pay-with": "Pagar con",
-        "status-label": "Status",
+        "status-label": "Estado",
         "tags-label": "Etiquetas",
         "search-placeholder": "Buscar juegos",
         "open-markets-label": "Abierto",
@@ -150,12 +176,17 @@
                 "soccer": "Futbol",
                 "hockey": "Hockey",
                 "tennis": "Tenis",
-                "football": "Football americano",
+                "football": "Futbol americano",
                 "ufc": "MMA",
                 "baseball": "Beisbol",
+                "formula1": "Fórmula 1",
+                "motogp": "MotoGP",
                 "soon": "Más deportes pronto!"
             },
-            "all": "Todo"
+            "all": "Todo",
+            "datepicker": {
+                "games": "{{numberOfGames}} juegos"
+            }
         },
         "back-to-markets": "Volver a los mercados",
         "back-to-market": "Volver al mercado",
@@ -184,9 +215,9 @@
             "result-col": "resultado"
         },
         "tooltip": {
-            "amount-exceeded": "Amount exceeded the amount available on AMM",
-            "minimal-amount": "Minimal amount is 1",
-            "no-funds": "Please ensure your wallet has enough funds"
+            "amount-exceeded": "Cantidad excede la disponibilidad del AMM",
+            "minimal-amount": "Cantidad minima es 1",
+            "no-funds": "Por favor asegurese que su billetera tenga fondos suficientes"
         }
     },
     "markets": {
@@ -201,74 +232,90 @@
             "claim": "Reclamar",
             "coming-soon": "Pronto",
             "vs": "VS",
-            "draw": "Empate"
+            "draw": "Empate",
+            "paused": "En pausa"
         },
         "market-details": {
             "price": "Precio",
             "liquidity": "Liquidez",
-            "usd-amount": "cantidad en USD",
-            "positions-amount": "cantidad de posiciones",
+            "usd-amount": "Cantidad en USD",
+            "positions-amount": "Numero de posiciones",
             "amount-to-sell": "Monto a vender",
             "total-to-receive": "Total a recibir",
             "potential-profit": "Ganancia potencial",
             "amount-claimable": "Cantidad reclamable",
             "claim-back": "Reclamar de vuelta",
+            "max": "Max",
             "wallet-info": {
                 "title": "En la billetera"
-            }
+            },
+            "skew": "Sesgar"
         },
         "zero-odds-tooltip": "El AMM de deportes sólo ofrece liquidez si el rango de precios ofrecido es entre 0.05 y 0.95 USD. Esto significa que si las probabilidades de una posición son menores a 5% o mayores a 95%, esa posición no tendrá liquidez."
     },
     "rewards": {
         "header": "Recompensas",
         "search-placeholder": "Buscar dirección de billetera",
-        "description": "<0>There is a total of <0>16,000 OP</0> and <0>16,000 THALES</0> rewards to be distributed in 4 weeks, divided in 2-week periods. <0>8,000 OP + 8,000 THALES</0> will be allocated pro-rata based on the total sum of losses per wallet for each 2-week period.</0><0>All markets that have matured in that 2-week period are accounted for. Individual wallet's losses on each market are added up to get the leaderboard results.</0><1>- First 2-week round is from <0>00:00 UTC August 29</0> until <0>00:00 UTC September 12</0></1><1>- Second 2-week round is from <0>00:00 UTC September 12</0> until <0>00:00 UTC September 26</0></1><0>This incentivized program will be revisited after September 26.</0>",
-        "total-negative-pnl": "Total losses",
+        "description": "<0>Un total de 8.000 OP y 8.000 THALES seran distribuidos entre el 26 de Septiembre y el 10 de Octubre 00:00 UTC para compensar la comisión pagada al contrato SafeBox. </0>  <0> Esta tabla de posiciones calcula las recompensas como un reembolso del 90% de la comisión que va al contrato SafeBox, que es 2% de la cantidad pagada en sUSD. </0>  <0> El valor en USD de los tokens OP y THALES será calculado usando una medida de TWAP (compras promediadas en el tiempo) de 7 días desde el comienzo de el periodo de recompensas. </0>  <0> Si al final de este periodo de 2 semanas los reembolsos totales terminan siendo mayores que el valor inicial TWAP de los tokens OP y THALES, entonces el reembolso será reducido proporcionalmente por cada participante. </0>",
         "op-rewards-banner-message": "Las recompensas en OP han comenzado, revisa como obtenerlas en <bold>la pagína de recompensas OP</bold>",
         "table": {
             "wallet-address": "Dirección de billetera",
             "pnl": "Losses",
             "percentage": "Porcentaje",
             "reward-amount": "Recompensa",
-            "no-data-available": "No hay datos disponibles"
-        }
+            "no-data-available": "No hay datos disponibles",
+            "volume": "Volumen",
+            "rebates": "Reembolsos",
+            "safebox": "Tarifas de SafeBox"
+        },
+        "periods": {
+            "period-0": "Primer periodo",
+            "period-1": "Cuarto periodo",
+            "period-2": "Segundo período",
+            "period-3": "Tercer periodo",
+            "period-4": "Quinto periodo"
+        },
+        "your-score": "Tu puntuación",
+        "total-negative-pnl": "pérdidas totales",
+        "twap": "TWAP de una semana",
+        "total-global-rebates": "Reembolsos totales a pagar"
     },
     "quiz": {
-        "title": "Sports Trivia competition",
-        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition where weekly winners will receive NFT Vouchers that can be used instead of sUSD to participate in any sports market you like.</p><p>Read all the information about this trivia in our <blogPost>blog post</blogPost>.</p><p>How to participate? The trivia is available to everyone to test their knowledge and compete, but to be eligible for rewards you need to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime's Twitter</twitter>.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
-        "twitter-handle-label": "Twitter handle",
-        "twitter-handle-placeholder": "Enter your Twitter handle",
-        "twitter-handle-validation": "Invalid Twitter handle. Try again.",
-        "discord-label": "Discord ID (optional)",
-        "discord-placeholder": "Enter your Discord ID",
-        "current-question-label": "Current question: {{currentQuestion}}/{{numberOfQuestions}}",
-        "time-reamining-label": "Time remaining: <0/>",
-        "question-weight-label": "Question weight: {{points}}",
-        "point-label": "point",
-        "points-label": "points",
-        "quiz-finished-label": "Trivia finished!",
-        "your-score-label": "Your score: {{score}}/{{max}} points",
+        "title": "Competencia de trivia sobre deportes (en ingles)",
+        "start-quiz-description": "<p>Hey fanaticos de los deportes! Listos para probar sus conocimientos?</p><p>Overtime ha inaugurado esta competencia de trivia sobre deportes en donde los ganadores semanales recibiran NFT Vouchers que podran ser utilizados en vez de sUSD para participar en cualquier mercado deportivo.</p><p>Puede leer toda la informacion sobre esta iniciative en nuestro <blogPost>blog post (ingles)</blogPost>.</p><p>Como participar? Esta trivia es abierta para que cualquiera pueda participar y probar su conocimiento, pero para calificar y obtener las recompensas se necesita retwittear este  <quizRetweetLink>tweet</quizRetweetLink> y seguir <twitter>la cuenta de Twitter de Overtime</twitter>.</p><p>Conecta tu billetera e ingresa tu nombre de Twitter para comenzar la trivia! Si ganas recompensas, te pediremos confirmes tu cuenta mediante mensaje privado en Twitter. La identificacion de Discord es opcional si quieres recibir ademas un rol en Discord como potencial ganador de la trivia.</p><p>Si tienes preguntas por favor ingresa a nuestro <discord>Discord</discord>.</p>",
+        "twitter-handle-label": "Nombre en Twitter",
+        "twitter-handle-placeholder": "Ingresa tu nombre en Twitter",
+        "twitter-handle-validation": "Nombre en Twitter invalido. Por favor intenta nuevamente.",
+        "discord-label": "Discord ID (opcional)",
+        "discord-placeholder": "Ingresa tu Discord ID",
+        "current-question-label": "Pregunta actual: {{currentQuestion}}/{{numberOfQuestions}}",
+        "time-reamining-label": "Tiempo restante: <0/>",
+        "question-weight-label": "Dificultad de pregunta: {{points}}",
+        "point-label": "punto",
+        "points-label": "puntos",
+        "quiz-finished-label": "Trivia finalizada!",
+        "your-score-label": "Tu puntaje: {{score}}/{{max}} puntos",
         "button": {
-            "start-quiz-label": "Start trivia",
-            "next-question-label": "Next question",
-            "previous-question-label": "Previous question",
-            "finish-quiz-label": "Finish trivia",
-            "try-again-label": "Try again",
-            "see-leaderboard-label": "See leaderboard"
+            "start-quiz-label": "Comenzar trivia",
+            "next-question-label": "Siguiente pregunta",
+            "previous-question-label": "Pregunta anterior",
+            "finish-quiz-label": "Finalizar trivia",
+            "try-again-label": "Intentar nuevamente",
+            "see-leaderboard-label": "Ver leaderboard"
         },
         "leaderboard": {
             "title": "Trivia Leaderboard",
-            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition for any given week.</p><p>All the details about how to participate for NFT sUSD vouchers that can be used on any sports market available <blogPost>here</blogPost>.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
-            "back-to-quiz": "Back to trivia",
-            "search-placeholder": "Search...",
+            "description": "<p>Este es el leaderboard de la trivia en donde podras ver tu posicion con respecto a la competencia por cada semana.</p><p>Todos los detalles sobre como participar por NFT Vouchers que representan sUSD y pueden ser utilizados en cualquier mercado deportivo <blogPost>aqui</blogPost>.</p><p>Puedes participar en la trivia tantas veces como desees <sportsTrivia>aqui</sportsTrivia>.</p>",
+            "back-to-quiz": "Volver a trivia",
+            "search-placeholder": "Buscar...",
             "table": {
-                "rank-col": "Rank",
-                "wallet-address-col": "Wallet address",
+                "rank-col": "Ranking",
+                "wallet-address-col": "Direccion de billetera",
                 "twitter-col": "Twitter",
-                "points-col": "Points",
-                "time-col": "Time",
-                "rewards-col": "Rewards",
-                "no-data-available": "No data available"
+                "points-col": "Puntos",
+                "time-col": "Tiempo",
+                "rewards-col": "Recompensas",
+                "no-data-available": "Datos no disponibles"
             },
             "overtime-voucher": "Vale de horas extras",
             "week-label": "Semana",
