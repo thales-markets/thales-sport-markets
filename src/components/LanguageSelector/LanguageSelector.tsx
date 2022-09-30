@@ -163,8 +163,8 @@ const LanguageFlag = (language: SupportedLanguages | any) => {
         //     return <Flag code="RU" />;
         case SupportedLanguages.SPANISH:
             return <Flag code="ES" />;
-        case SupportedLanguages.THAI:
-            return <Flag code="TH" />;
+        // case SupportedLanguages.THAI:
+        //     return <Flag code="TH" />;
         default:
             return <Flag code="GB-UKM" />;
     }

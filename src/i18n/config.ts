@@ -5,7 +5,7 @@ import deTranslation from './de.json';
 // import itTranslation from './it.json';
 // import ruTranslation from './ru.json';
 import esTranslation from './es.json';
-import thTranslation from './th.json';
+// import thTranslation from './th.json';
 
 export const resources = {
     en: { translation: enTranslation },
@@ -15,7 +15,7 @@ export const resources = {
     // it: { translation: itTranslation },
     // ru: { translation: ruTranslation },
     es: { translation: esTranslation },
-    th: { translation: thTranslation },
+    // th: { translation: thTranslation },
 };
 
 export enum SupportedLanguages {
@@ -26,7 +26,7 @@ export enum SupportedLanguages {
     // ITALIAN = 'it',
     // RUSSIAN = 'ru',
     SPANISH = 'es',
-    THAI = 'th',
+    // THAI = 'th',
 }
 
 export const LanguageNameMap = {
@@ -37,7 +37,7 @@ export const LanguageNameMap = {
     // [SupportedLanguages.ITALIAN]: 'Italian',
     // [SupportedLanguages.RUSSIAN]: 'Russian',
     [SupportedLanguages.SPANISH]: 'Spanish',
-    [SupportedLanguages.THAI]: 'Thai',
+    // [SupportedLanguages.THAI]: 'Thai',
 };
 
 export const DEFAULT_LANGUAGE = SupportedLanguages.ENGLISH;
