@@ -71,10 +71,11 @@ const Match: React.FC<MatchProps> = ({ market }) => {
                     },
                 }}
             />
-            {/* TODO: */}
-            <div
-                style={{ width: '30px', height: '30px', cursor: 'pointer' }}
-                onClick={() => dispatch(removeFromParlay(market.id))}
+            <XButton
+                onClick={() => {
+                    dispatch(removeFromParlay(market.id));
+                }}
+                className={`icon icon--cross-button`}
             />
         </>
     );
@@ -112,6 +113,16 @@ const ClubName = styled.span`
     line-height: 9px;
     text-transform: uppercase;
     color: #ffffff;
+`;
+
+const XButton = styled.i`
+    font-size: 15px;
+    font-weight: 700;
+    color: #ca4c53;
+    cursor: pointer;
+    &:hover {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
 `;
 
 export default Match;

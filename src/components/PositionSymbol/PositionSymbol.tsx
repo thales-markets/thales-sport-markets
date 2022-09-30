@@ -77,7 +77,7 @@ const Container = styled.div<{ glow?: boolean; color?: string }>`
 `;
 
 const AdditionalText = styled.span`
-    line-height: 120%;
+    line-height: normal;
     font-size: 14px;
     margin-right: 10px;
     display: flex;
