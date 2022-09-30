@@ -46,6 +46,7 @@ import SportFilter from '../components/SportFilter';
 import TagsDropdown from '../components/TagsDropdown';
 // import HeaderDatepicker from './HeaderDatepicker';
 import MarketsGrid from './MarketsGrid';
+import Parlay from './Parlay';
 import UserHistory from './UserHistory';
 
 const Home: React.FC = () => {
@@ -693,95 +694,9 @@ const Home: React.FC = () => {
                         )}
                     </MainContainer>
                 )}
-                {/* RIGHT FILTERS */}
+                {/* RIGHT PART */}
                 <SidebarContainer>
-                    <GlobalFiltersContainer>
-                        {Object.values(GlobalFiltersEnum)
-                            .filter(
-                                (filterItem) =>
-                                    filterItem != GlobalFiltersEnum.Claim &&
-                                    filterItem != GlobalFiltersEnum.History &&
-                                    filterItem != GlobalFiltersEnum.YourPositions
-                            )
-                            .map((filterItem) => {
-                                return (
-                                    <GlobalFilter
-                                        disabled={false}
-                                        selected={globalFilter === filterItem}
-                                        onClick={() => {
-                                            if (
-                                                filterItem === GlobalFiltersEnum.OpenMarkets ||
-                                                filterItem === GlobalFiltersEnum.YourPositions
-                                            ) {
-                                                setDateParam('');
-                                                setTagFilter([]);
-                                                setTagParam('');
-                                                setSportFilter(SportFilterEnum.All);
-                                                setSportParam(SportFilterEnum.All);
-                                            }
-                                            setGlobalFilter(filterItem);
-                                            setGlobalFilterParam(filterItem);
-                                        }}
-                                        key={filterItem}
-                                        count={getCount(filterItem)}
-                                    >
-                                        {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
-                                    </GlobalFilter>
-                                );
-                            })}
-                    </GlobalFiltersContainer>
-                    <UserRelatedFiltersContainer>
-                        {Object.values(GlobalFiltersEnum)
-                            .filter(
-                                (filterItem) =>
-                                    filterItem == GlobalFiltersEnum.Claim ||
-                                    filterItem == GlobalFiltersEnum.History ||
-                                    filterItem == GlobalFiltersEnum.YourPositions
-                            )
-                            .map((filterItem) => {
-                                return (
-                                    <GlobalFilter
-                                        disabled={false}
-                                        selected={globalFilter === filterItem}
-                                        onClick={() => {
-                                            if (
-                                                filterItem === GlobalFiltersEnum.OpenMarkets ||
-                                                filterItem === GlobalFiltersEnum.YourPositions
-                                            ) {
-                                                setDateParam('');
-                                                setTagFilter([]);
-                                                setTagParam('');
-                                                setSportFilter(SportFilterEnum.All);
-                                                setSportParam(SportFilterEnum.All);
-                                            }
-                                            setGlobalFilter(filterItem);
-                                            setGlobalFilterParam(filterItem);
-                                        }}
-                                        key={filterItem}
-                                        count={getCount(filterItem)}
-                                    >
-                                        {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
-                                    </GlobalFilter>
-                                );
-                            })}
-                    </UserRelatedFiltersContainer>
-                    <SortingContainer>
-                        {sortOptions.map((sortOption) => {
-                            return (
-                                <SortOption
-                                    disabled={false}
-                                    selected={sortOption.id === sortBy}
-                                    sortDirection={sortDirection}
-                                    onClick={() => {
-                                        setSort(sortOption);
-                                    }}
-                                    key={sortOption.title}
-                                >
-                                    {sortOption.title}
-                                </SortOption>
-                            );
-                        })}
-                    </SortingContainer>
+                    <Parlay />
                 </SidebarContainer>
             </RowContainer>
         </Container>

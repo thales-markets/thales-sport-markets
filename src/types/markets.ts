@@ -250,3 +250,7 @@ export type Odds = {
     away: number;
     draw: number;
 };
+
+export type UserMarket = SportMarketInfo & {
+    position: Position;
+};

@@ -86,6 +86,7 @@ const AdditionalText = styled.span`
 
 const Symbol = styled.span<{ color?: string }>`
     color: ${(_props) => (_props?.color ? _props.color : '')};
+    font-size: 12px;
 `;
 
 export default PositionSymbol;
