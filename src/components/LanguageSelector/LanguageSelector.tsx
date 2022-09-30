@@ -147,12 +147,6 @@ const LanguageName = styled.div`
     text-transform: uppercase;
 `;
 
-// const Icon = styled.i`
-//     font-size: 20px;
-//     margin-left: 4px;
-//     margin-right: 7px;
-// `;
-
 const LanguageFlag = (language: SupportedLanguages | any) => {
     switch (language) {
         case SupportedLanguages.ENGLISH:
