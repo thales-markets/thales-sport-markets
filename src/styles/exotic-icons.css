@@ -9,6 +9,14 @@
     content: '\0044';
 }
 
+.icon-exotic--right:before {
+    content: '\004B';
+}
+
 .icon-exotic--down:before {
     content: '\004D';
+}
+
+.icon-exotic--link:before {
+    content: '\004E';
 }

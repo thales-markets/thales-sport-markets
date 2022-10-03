@@ -33,6 +33,8 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) 
         marketsMap.set(marketArrayByTag[0].tags[0], marketArrayByTag)
     );
 
+    const marketsKeys = Array.from(marketsMap.keys());
+
     return (
         <Container>
             {mobileGridView ? (
@@ -47,7 +49,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) 
                 </Masonry>
             ) : (
                 <ListContainer>
-                    {Array.from(marketsMap.keys())
+                    {marketsKeys
                         .sort((a, b) => {
                             const leagueNameA = TAGS_LIST.find((t: TagInfo) => t.id == a)?.label;
                             const leagueNameB = TAGS_LIST.find((t: TagInfo) => t.id == b)?.label;

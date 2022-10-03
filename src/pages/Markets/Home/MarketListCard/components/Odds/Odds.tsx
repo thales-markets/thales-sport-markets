@@ -14,6 +14,7 @@ type OddsProps = {
     finalResult?: number;
     isLive?: boolean;
     isCancelled?: boolean;
+    marketId: string;
     odds?: {
         homeOdds: number;
         awayOdds: number;
@@ -28,6 +29,7 @@ const Odds: React.FC<OddsProps> = ({
     finalResult,
     isLive,
     isCancelled,
+    marketId,
     odds,
     accountPositions,
     isPaused,
@@ -60,6 +62,7 @@ const Odds: React.FC<OddsProps> = ({
             {showOdds && (
                 <OddsContainer>
                     <PositionSymbol
+                        marketId={marketId}
                         type={0}
                         symbolColor={ODDS_COLOR.HOME}
                         additionalText={{
@@ -74,6 +77,7 @@ const Odds: React.FC<OddsProps> = ({
                     />
                     {odds?.drawOdds !== 0 && (
                         <PositionSymbol
+                            marketId={marketId}
                             type={2}
                             symbolColor={ODDS_COLOR.DRAW}
                             additionalText={{
@@ -87,6 +91,7 @@ const Odds: React.FC<OddsProps> = ({
                         />
                     )}
                     <PositionSymbol
+                        marketId={marketId}
                         type={1}
                         symbolColor={ODDS_COLOR.AWAY}
                         additionalText={{

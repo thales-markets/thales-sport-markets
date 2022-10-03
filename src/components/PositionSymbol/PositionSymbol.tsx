@@ -1,6 +1,9 @@
 import Tooltip from 'components/Tooltip';
+import { Position } from 'constants/options';
 import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { updateParlay } from 'redux/modules/parlay';
 import styled from 'styled-components';
 
 type SymbolProps = {
@@ -16,6 +19,7 @@ type SymbolProps = {
     children?: any;
     showTooltip?: boolean;
     glow?: boolean;
+    marketId?: string;
 };
 
 const PositionSymbol: React.FC<SymbolProps> = ({
@@ -25,11 +29,20 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     additionalText,
     showTooltip,
     additionalStyle,
+    marketId,
     children,
 }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
     return (
-        <Wrapper>
+        <Wrapper
+            onClick={() => {
+                if (marketId) {
+                    const selectedPosition = type == 0 ? Position.HOME : type == 1 ? Position.AWAY : Position.DRAW;
+                    dispatch(updateParlay({ sportMarketId: marketId, position: selectedPosition }));
+                }
+            }}
+        >
             <Container glow={glow} color={symbolColor} style={additionalStyle}>
                 <Symbol color={symbolColor}>
                     {type == 0 && '1'}

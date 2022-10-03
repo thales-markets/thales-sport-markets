@@ -1,10 +1,8 @@
-import SPAAnchor from 'components/SPAAnchor';
 import { TAGS_FLAGS, TAGS_LIST } from 'constants/tags';
 import React, { useState } from 'react';
 import Flag from 'react-flagpack';
 import styled from 'styled-components';
 import { AccountPositionsMap, SportMarkets, TagInfo } from 'types/markets';
-import { buildMarketLink } from 'utils/routes';
 import MarketListCard from '../MarketListCard';
 
 type MarketsList = {
@@ -17,8 +15,6 @@ type MarketsList = {
 const MarketsList: React.FC<MarketsList> = ({ markets, league, language, accountPositions }) => {
     const [hideLeague, setHideLeague] = useState<boolean>(false);
     const leagueName = TAGS_LIST.find((t: TagInfo) => t.id == league)?.label;
-    console.log(hideLeague);
-    console.log(markets);
     return (
         <>
             <LeagueCard>
@@ -33,19 +29,22 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language, account
                 >
                     {LeagueFlag(Number(league))}
                     <LeagueName>{leagueName}</LeagueName>
-                    <ArrowDownIcon className={`icon-exotic icon-exotic--down`} />
+                    {hideLeague ? (
+                        <ArrowIcon className={`icon-exotic icon-exotic--right`} />
+                    ) : (
+                        <ArrowIcon down={true} className={`icon-exotic icon-exotic--down`} />
+                    )}
                 </LeagueInfo>
             </LeagueCard>
             <GamesContainer hidden={hideLeague}>
                 {markets.map((market: any, index: number) => {
                     return (
-                        <SPAAnchor key={index} href={buildMarketLink(market.address, language)}>
-                            <MarketListCard
-                                market={market}
-                                key={index + 'list'}
-                                accountPositions={accountPositions[market.address]}
-                            />
-                        </SPAAnchor>
+                        <MarketListCard
+                            language={language}
+                            market={market}
+                            key={index + 'list'}
+                            accountPositions={accountPositions[market.address]}
+                        />
                     );
                 })}
             </GamesContainer>
@@ -129,10 +128,11 @@ const LeagueName = styled.label`
     }
 `;
 
-const ArrowDownIcon = styled.i`
+const ArrowIcon = styled.i<{ down?: boolean }>`
     font-size: 16px;
     margin-left: 10px;
-    margin-top: 5px;
+    margin-top: ${(props) => (props.down ? '5px' : '')};
+    margin-bottom: ${(props) => (props.down ? '' : '2px')};
     &:hover {
         cursor: pointer;
         color: ${(props) => props.theme.textColor.quaternary};

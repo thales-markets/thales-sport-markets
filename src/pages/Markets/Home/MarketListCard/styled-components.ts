@@ -54,3 +54,14 @@ export const ClubLogo = styled.img<{ width?: string; height?: string }>`
     height: ${(_props) => (_props?.height ? _props.height : '30px')};
     width: ${(_props) => (_props?.width ? _props.width : '30px')};
 `;
+
+export const LinkIcon = styled.i`
+    font-size: 16px;
+    margin-left: 10px;
+    margin-top: 5px;
+    color: ${(props) => props.theme.textColor.secondary};
+    &:hover {
+        cursor: pointer;
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
+`;

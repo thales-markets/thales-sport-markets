@@ -424,14 +424,6 @@ const Home: React.FC = () => {
                         return (
                             <>
                                 <SportFilter
-                                    disabled={
-                                        filterItem !== SportFilterEnum.All &&
-                                        filterItem !== SportFilterEnum.Baseball &&
-                                        filterItem !== SportFilterEnum.Soccer &&
-                                        filterItem !== SportFilterEnum.Football &&
-                                        filterItem !== SportFilterEnum.UFC &&
-                                        filterItem !== SportFilterEnum.Motosport
-                                    }
                                     selected={sportFilter === filterItem}
                                     sport={filterItem}
                                     onClick={() => {
@@ -598,14 +590,6 @@ const Home: React.FC = () => {
                             return (
                                 <>
                                     <SportFilter
-                                        disabled={
-                                            filterItem !== SportFilterEnum.All &&
-                                            filterItem !== SportFilterEnum.Baseball &&
-                                            filterItem !== SportFilterEnum.Soccer &&
-                                            filterItem !== SportFilterEnum.Football &&
-                                            filterItem !== SportFilterEnum.UFC &&
-                                            filterItem !== SportFilterEnum.Motosport
-                                        }
                                         selected={sportFilter === filterItem}
                                         sport={filterItem}
                                         onClick={() => {
