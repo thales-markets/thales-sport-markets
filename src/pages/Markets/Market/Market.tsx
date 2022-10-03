@@ -51,7 +51,7 @@ const Market: React.FC<MarketProps> = (props) => {
             {market ? (
                 <>
                     <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
-                    <MarketDetailsV2 market={market} />
+                    <MarketDetailsV2 market={market} selectedSide={selectedSide} setSelectedSide={setSelectedSide} />
                     <MarketDetails market={market} selectedSide={selectedSide} setSelectedSide={setSelectedSide} />
                     <Transactions market={market} />
                 </>

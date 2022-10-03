@@ -26,3 +26,22 @@ export const STATUS_COLOR = {
     COMING_SOON: '#FAC439',
     PAUSED: '#E26A78',
 };
+
+export const MAIN_COLORS = {
+    LIGHT_GRAY: '#303656',
+    DARK_GRAY: '#1A1C2B',
+    DISABLED_GRAY: '#303656',
+    BORDERS: {
+        GRAY: '#5f6180',
+        WINNER: '#3FD1FF',
+    },
+    SHADOWS: {
+        WINNER: '0px 0px 33px -7px rgba(63,209,255,1)',
+        DRAW: '0px 0px 33px -7px rgba(63,209,255,1)',
+        POSITION_HOVER: '0px 0px 11px -3px rgba(255,255,255,1)',
+    },
+    TEXT: {
+        BLUE: '#64D9FE',
+        WHITE: '#FFFFFF',
+    },
+};

@@ -2,6 +2,7 @@ import { APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
 import { AccountPosition, MarketData, MarketInfo, SportMarketInfo } from 'types/markets';
 import { formatCurrency } from './formatters/number';
 import ordinal from 'ordinal';
+import { TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
 
 export const getRoi = (ticketPrice: number, potentialWinnings: number, showRoi: boolean) =>
     showRoi ? (potentialWinnings - ticketPrice) / ticketPrice : 0;
@@ -128,4 +129,10 @@ export const fixScoresForApexGame = (market: SportMarketInfo) => {
         market.awayScore = score.awayScore;
     }
     return market;
+};
+
+export const getVisibilityOfDrawOptionByTagId = (tags: Array<number>) => {
+    const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(element));
+    if (tag) return false;
+    return true;
 };
