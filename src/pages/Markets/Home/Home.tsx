@@ -489,16 +489,6 @@ const Home: React.FC = () => {
                     {Object.values(SportFilterEnum).map((filterItem: any) => {
                         return (
                             <SportFilter
-                                disabled={
-                                    filterItem !== SportFilterEnum.All &&
-                                    filterItem !== SportFilterEnum.Baseball &&
-                                    filterItem !== SportFilterEnum.Soccer &&
-                                    filterItem !== SportFilterEnum.Football &&
-                                    filterItem !== SportFilterEnum.UFC &&
-                                    filterItem !== SportFilterEnum.Formula1 &&
-                                    filterItem !== SportFilterEnum.MotoGP &&
-                                    filterItem !== SportFilterEnum.Hockey
-                                }
                                 selected={sportFilter === filterItem}
                                 sport={filterItem}
                                 onClick={() => {
@@ -677,16 +667,6 @@ const Home: React.FC = () => {
                         {Object.values(SportFilterEnum).map((filterItem: any) => {
                             return (
                                 <SportFilter
-                                    disabled={
-                                        filterItem !== SportFilterEnum.All &&
-                                        filterItem !== SportFilterEnum.Baseball &&
-                                        filterItem !== SportFilterEnum.Soccer &&
-                                        filterItem !== SportFilterEnum.Football &&
-                                        filterItem !== SportFilterEnum.UFC &&
-                                        filterItem !== SportFilterEnum.Formula1 &&
-                                        filterItem !== SportFilterEnum.MotoGP &&
-                                        filterItem !== SportFilterEnum.Hockey
-                                    }
                                     selected={sportFilter === filterItem}
                                     sport={filterItem}
                                     onClick={() => {
