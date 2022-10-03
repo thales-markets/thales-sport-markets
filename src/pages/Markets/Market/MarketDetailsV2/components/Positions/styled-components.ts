@@ -1,7 +1,7 @@
 import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 
-export const TeamOptionContainer = styled.div<{ disabled?: boolean }>`
+export const TeamOptionContainer = styled.div<{ disabled?: boolean; selected?: boolean }>`
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -12,6 +12,11 @@ export const TeamOptionContainer = styled.div<{ disabled?: boolean }>`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 7px;
+    cursor: pointer;
+    box-shadow: ${(_props) => (_props?.selected ? `${MAIN_COLORS.SHADOWS.POSITION_HOVER}` : '')};
+    :hover {
+        box-shadow: ${MAIN_COLORS.SHADOWS.POSITION_HOVER};
+    }
 `;
 
 export const Wrapper = styled.div`

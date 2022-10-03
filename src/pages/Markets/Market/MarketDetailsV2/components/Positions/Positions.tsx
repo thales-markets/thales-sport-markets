@@ -13,9 +13,17 @@ type PositionsProps = {
     market: MarketData;
     selectedSide: Side;
     availablePerSide: AvailablePerSide | null;
+    selectedPosition: Position;
+    setSelectedPosition: (index: number) => void;
 };
 
-const Positions: React.FC<PositionsProps> = ({ market, selectedSide, availablePerSide }) => {
+const Positions: React.FC<PositionsProps> = ({
+    market,
+    selectedSide,
+    availablePerSide,
+    selectedPosition,
+    setSelectedPosition,
+}) => {
     const { t } = useTranslation();
 
     const disabledDrawOption = !(market?.positions[Position.DRAW]?.sides[selectedSide]?.odd > 0);
@@ -26,7 +34,11 @@ const Positions: React.FC<PositionsProps> = ({ market, selectedSide, availablePe
 
     return (
         <Wrapper>
-            <TeamOptionContainer disabled={disableddHomeOption}>
+            <TeamOptionContainer
+                disabled={disableddHomeOption}
+                selected={selectedPosition == Position.HOME}
+                onClick={() => setSelectedPosition(Position.HOME)}
+            >
                 <InnerContrainer>
                     <PositionSymbol
                         type={0}
@@ -53,7 +65,11 @@ const Positions: React.FC<PositionsProps> = ({ market, selectedSide, availablePe
                 </InnerContrainer>
             </TeamOptionContainer>
             {showDrawOdds && (
-                <TeamOptionContainer disabled={disabledDrawOption}>
+                <TeamOptionContainer
+                    disabled={disabledDrawOption}
+                    selected={selectedPosition == Position.DRAW}
+                    onClick={() => setSelectedPosition(Position.DRAW)}
+                >
                     <InnerContrainer>
                         <PositionSymbol
                             type={2}
@@ -84,7 +100,11 @@ const Positions: React.FC<PositionsProps> = ({ market, selectedSide, availablePe
                     </InnerContrainer>
                 </TeamOptionContainer>
             )}
-            <TeamOptionContainer disabled={disabledAwayOption}>
+            <TeamOptionContainer
+                disabled={disabledAwayOption}
+                selected={selectedPosition == Position.AWAY}
+                onClick={() => setSelectedPosition(Position.AWAY)}
+            >
                 <InnerContrainer>
                     <PositionSymbol
                         type={1}
