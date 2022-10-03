@@ -13,4 +13,5 @@ export const LOCAL_STORAGE_KEYS = {
     QUIZ_STATE: 'quizState',
     STOP_PULSING: 'stopPulsing',
     FAVOURITE_LEAGUES: 'favouriteLeagues',
+    PARLAY: 'parlay',
 };
