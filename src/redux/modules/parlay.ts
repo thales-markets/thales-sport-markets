@@ -1,18 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { UserMarket } from 'types/markets';
+import { ParlaysMarketPosition } from 'types/markets';
 import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
 
 const sliceName = 'parlay';
 
-const getDefaultParlay = (): UserMarket[] => {
+const getDefaultParlay = (): ParlaysMarketPosition[] => {
     const lsParlay = localStore.get(LOCAL_STORAGE_KEYS.PARLAY);
-    return lsParlay !== undefined ? (lsParlay as UserMarket[]) : [];
+    return lsParlay !== undefined ? (lsParlay as ParlaysMarketPosition[]) : [];
 };
 
 type ParlaySliceState = {
-    parlay: UserMarket[];
+    parlay: ParlaysMarketPosition[];
 };
 
 const initialState: ParlaySliceState = {
@@ -23,8 +23,8 @@ export const parlaySlice = createSlice({
     name: sliceName,
     initialState,
     reducers: {
-        updateParlay: (state, action: PayloadAction<UserMarket>) => {
-            const index = state.parlay.findIndex((el) => el.id === action.payload.id);
+        updateParlay: (state, action: PayloadAction<ParlaysMarketPosition>) => {
+            const index = state.parlay.findIndex((el) => el.sportMarketId === action.payload.sportMarketId);
             if (index === -1) {
                 state.parlay.push(action.payload);
             } else {
@@ -36,7 +36,7 @@ export const parlaySlice = createSlice({
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
         },
         removeFromParlay: (state, action: PayloadAction<string>) => {
-            state.parlay = state.parlay.filter((market) => market.id !== action.payload);
+            state.parlay = state.parlay.filter((market) => market.sportMarketId !== action.payload);
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
         },
     },

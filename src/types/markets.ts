@@ -251,6 +251,11 @@ export type Odds = {
     draw: number;
 };
 
-export type UserMarket = SportMarketInfo & {
+export type ParlaysMarketPosition = {
+    sportMarketId: string;
+    position: Position;
+};
+
+export type ParlaysMarket = SportMarketInfo & {
     position: Position;
 };

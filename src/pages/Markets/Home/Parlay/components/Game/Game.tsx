@@ -6,13 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { removeFromParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
-import { UserMarket } from 'types/markets';
+import { ParlaysMarket } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatMarketOdds } from 'utils/markets';
 
-type MatchProps = { market: UserMarket };
+type GameProps = { market: ParlaysMarket };
 
-const Match: React.FC<MatchProps> = ({ market }) => {
+const Game: React.FC<GameProps> = ({ market }) => {
     const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
 
@@ -32,7 +32,7 @@ const Match: React.FC<MatchProps> = ({ market }) => {
             : ODDS_COLOR.DRAW;
     };
 
-    const getPositionOdds = (market: UserMarket) => {
+    const getPositionOdds = (market: ParlaysMarket) => {
         return market.position === Position.HOME
             ? market.homeOdds
             : market.position === Position.AWAY
@@ -85,7 +85,7 @@ const GameLogo = styled.div`
     display: flex;
     position: relative;
     align-items: center;
-    width: 70px;
+    width: 100%;
     height: 100%;
 `;
 
@@ -100,7 +100,7 @@ const ClubLogo = styled.img<{ awayTeam?: boolean }>`
 const GameLabel = styled.div`
     display: block;
     width: 100%;
-    padding: 0 2px;
+    margin-right: 10px;
 `;
 
 const ClubName = styled.span`
@@ -125,4 +125,4 @@ const XButton = styled.i`
     }
 `;
 
-export default Match;
+export default Game;
