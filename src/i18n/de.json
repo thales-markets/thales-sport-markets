@@ -20,7 +20,10 @@
             "get-usd": "{{amount}} erhalten",
             "approve": "Genehmigen",
             "get-usd-progress": "{{amount}} wird gemintet...",
-            "disclaimer": "Indem Sie ein Wallet verbinden, bestätigen Sie, dass Sie den Overtime Markets <a target=\"_blank\" href={{link}}>Haftungsausschluss</a> gelesen und verstanden haben und mit den Nutzungsbedingungen einverstanden sind."
+            "disclaimer": "Indem Sie ein Wallet verbinden, bestätigen Sie, dass Sie den Overtime Markets <a target=\"_blank\" href={{link}}>Haftungsausschluss</a> gelesen und verstanden haben und mit den Nutzungsbedingungen einverstanden sind.",
+            "disclaimer1": "Indem Sie eine Brieftasche verbinden, bestätigen Sie, dass Sie die Overtime Markets gelesen und verstanden haben",
+            "disclaimer2": "und stimme den Nutzungsbedingungen zu.",
+            "disclaimer-lowercase": "Haftungsausschluss"
         },
         "voucher": {
             "remaining-amount": "Verbleibender Betrag",

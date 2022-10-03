@@ -5,10 +5,12 @@ import App from 'pages/Root/App';
 import dotenv from 'dotenv';
 import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react';
 import '@rainbow-me/rainbowkit/dist/index.css';
-import { connectorsForWallets, wallet, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { connectorsForWallets, wallet, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { publicProvider } from 'wagmi/providers/public';
+import WalletDisclaimer from 'components/WalletDisclaimer';
+import { merge } from 'lodash';
 
 dotenv.config();
 
@@ -17,7 +19,7 @@ type RootProps = {
 };
 
 const { chains, provider } = configureChains(
-    [chain.optimism],
+    [chain.optimism, chain.goerli, chain.optimismGoerli],
     [infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID }), publicProvider()]
 );
 
@@ -61,12 +63,21 @@ const instance = createInstance({
     linkTracking: true, // optional, default value: true
 });
 
+const customTheme = merge(darkTheme(), { colors: { modalBackground: '#1A1C2B' } });
+
 const Root: React.FC<RootProps> = ({ store }) => {
     return (
         <Provider store={store}>
             <MatomoProvider value={instance}>
                 <WagmiConfig client={wagmiClient}>
-                    <RainbowKitProvider chains={chains}>
+                    <RainbowKitProvider
+                        chains={chains}
+                        theme={customTheme}
+                        appInfo={{
+                            appName: 'Overtime',
+                            disclaimer: WalletDisclaimer,
+                        }}
+                    >
                         <App />
                     </RainbowKitProvider>
                 </WagmiConfig>
