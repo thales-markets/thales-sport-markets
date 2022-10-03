@@ -29,7 +29,6 @@ import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common'
 import {
     AccountPosition,
     AccountPositionsMap,
-    // GamesOnDate,
     SortOptionType,
     SportMarketInfo,
     SportMarkets,
@@ -44,7 +43,6 @@ import GlobalFilters from '../components/GlobalFilters';
 import SortOption from '../components/SortOption';
 import SportFilter from '../components/SportFilter';
 import TagsDropdown from '../components/TagsDropdown';
-// import HeaderDatepicker from './HeaderDatepicker';
 import MarketsGrid from './MarketsGrid';
 import UserHistory from './UserHistory';
 
@@ -100,7 +98,6 @@ const Home: React.FC = () => {
             globalFilterParam != ''
                 ? setGlobalFilter(globalFilterParam as GlobalFiltersEnum)
                 : setGlobalFilterParam(globalFilter);
-            console.log(dateFilter);
             dateParam != ''
                 ? setDateFilter(new Date(dateParam).getTime())
                 : setDateParam(dateFilter !== 0 ? new Date(dateFilter).toDateString() : '');
