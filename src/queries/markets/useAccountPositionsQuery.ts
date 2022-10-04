@@ -21,25 +21,27 @@ const useAccountPositionsQuery = (
 
                 const accountPositionsMap: AccountPositionsMap = {};
 
-                positionBalances.forEach((positionBalance) => {
-                    const marketAddress = positionBalance.position.market.address;
-                    if (accountPositionsMap[marketAddress]) {
-                        const existingPositions = accountPositionsMap[marketAddress];
-                        const position: AccountPosition = {
-                            ...positionBalance.position,
-                            amount: bigNumberFormatter(positionBalance.amount),
-                        };
-                        existingPositions.push(position);
-                        accountPositionsMap[marketAddress] = existingPositions;
-                    } else {
-                        accountPositionsMap[marketAddress] = [
-                            {
+                positionBalances
+                    .filter((positionBalance) => positionBalance.amount > 0)
+                    .forEach((positionBalance) => {
+                        const marketAddress = positionBalance.position.market.address;
+                        if (accountPositionsMap[marketAddress]) {
+                            const existingPositions = accountPositionsMap[marketAddress];
+                            const position: AccountPosition = {
                                 ...positionBalance.position,
                                 amount: bigNumberFormatter(positionBalance.amount),
-                            },
-                        ];
-                    }
-                });
+                            };
+                            existingPositions.push(position);
+                            accountPositionsMap[marketAddress] = existingPositions;
+                        } else {
+                            accountPositionsMap[marketAddress] = [
+                                {
+                                    ...positionBalance.position,
+                                    amount: bigNumberFormatter(positionBalance.amount),
+                                },
+                            ];
+                        }
+                    });
 
                 return accountPositionsMap;
             } catch (e) {

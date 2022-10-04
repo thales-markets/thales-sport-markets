@@ -11,7 +11,10 @@
             "get-usd": "Get {{amount}}",
             "approve": "Approve",
             "get-usd-progress": "Minting {{amount}}...",
-            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use."
+            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use.",
+            "disclaimer-lowercase": "disclaimer",
+            "disclaimer1": "Collegando un portafoglio dichiari di aver letto e compreso i Mercati Straordinari",
+            "disclaimer2": "e accetta le sue condizioni d'uso."
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -251,7 +254,9 @@
                 "title": "In wallet"
             },
             "max": "Max",
-            "skew": "Storto"
+            "skew": "Storto",
+            "available": "A disposizione",
+            "amount-to-buy": "Importo da acquistare"
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity."
     },
@@ -265,7 +270,10 @@
             "pnl": "Losses",
             "percentage": "Percentage",
             "reward-amount": "Reward",
-            "no-data-available": "No data available"
+            "no-data-available": "No data available",
+            "safebox": "Commissioni SafeBox",
+            "rebates": "Sconti",
+            "volume": "Volume"
         },
         "periods": {
             "period-1": "Secondo periodo",
@@ -275,7 +283,9 @@
             "period-3": "Quarto periodo"
         },
         "your-score": "Il tuo punteggio",
-        "total-negative-pnl": "Perdite totali"
+        "total-negative-pnl": "Perdite totali",
+        "twap": "TWAP di una settimana",
+        "total-global-rebates": "Sconti totali da pagare"
     },
     "quiz": {
         "title": "Sports Trivia competition",

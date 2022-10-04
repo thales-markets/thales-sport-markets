@@ -11,7 +11,10 @@
             "get-usd": "Get {{amount}}",
             "approve": "Approve",
             "get-usd-progress": "Minting {{amount}}...",
-            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use."
+            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use.",
+            "disclaimer-lowercase": "отказ от ответственности",
+            "disclaimer2": "и соглашаетесь с его условиями использования.",
+            "disclaimer1": "Подключая кошелек, вы подтверждаете, что прочитали и поняли Overtime Markets."
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -251,7 +254,9 @@
                 "title": "In wallet"
             },
             "max": "Max",
-            "skew": "перекос"
+            "skew": "перекос",
+            "available": "Доступный",
+            "amount-to-buy": "Сумма покупки"
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity."
     },
@@ -265,7 +270,10 @@
             "pnl": "Losses",
             "percentage": "Percentage",
             "reward-amount": "Reward",
-            "no-data-available": "No data available"
+            "no-data-available": "No data available",
+            "volume": "Объем",
+            "rebates": "Скидки",
+            "safebox": "Плата за сейфы"
         },
         "periods": {
             "period-3": "Четвертый период",
@@ -275,7 +283,9 @@
             "period-1": "Второй период"
         },
         "your-score": "Твой счет",
-        "total-negative-pnl": "Общие потери"
+        "total-negative-pnl": "Общие потери",
+        "twap": "TWAP на неделю",
+        "total-global-rebates": "Всего скидок к оплате"
     },
     "quiz": {
         "title": "Sports Trivia competition",

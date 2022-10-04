@@ -24,7 +24,6 @@ import { formatDateWithTime } from 'utils/formatters/date';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isApexGame } from 'utils/markets';
-import onboardConnector from 'utils/onboardConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
@@ -90,6 +89,7 @@ import {
     StatusSourceInfo,
     SubmitButton,
 } from './styled-components/MarketDetails';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -149,7 +149,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const [maxAmount, setMaxAmount] = useState<number>(0);
     const [maxUsdAmount, setMaxUsdAmount] = useState<number>(0);
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(false);
-
+    const { openConnectModal } = useConnectModal();
     const { trackEvent } = useMatomo();
 
     const referralId =
@@ -321,6 +321,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
     useEffect(() => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
+
         if (sportsAMMContract && signer) {
             let collateralContractWithSigner: ethers.Contract | undefined;
 
@@ -691,7 +692,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const getSubmitButton = () => {
         if (!isWalletConnected) {
             return (
-                <SubmitButton disabled={submitDisabled} onClick={() => onboardConnector.connectWallet()}>
+                <SubmitButton onClick={() => openConnectModal?.()}>
                     {t('common.wallet.connect-your-wallet')}
                 </SubmitButton>
             );
