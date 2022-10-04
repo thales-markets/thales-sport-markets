@@ -26,7 +26,16 @@ export const AMMContent = styled.div`
     margin: 0 auto;
 `;
 
-export const Label = styled.span`
+export const SubmitButtonContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 310px;
+    margin: 0 auto;
+    margin-top: 19px;
+`;
+
+export const PrimaryLabel = styled.span`
     text-transform: uppercase;
     font-weight: 400;
     font-size: 15px;
@@ -37,10 +46,17 @@ export const Label = styled.span`
     }
 `;
 
+export const PrimaryValue = styled.span<{ color?: string }>`
+    font-size: 15px;
+    line-height: 22.5px;
+    color: ${(_props) => (_props?.color ? _props.color : '')};
+`;
+
 export const SecondaryLabel = styled.span`
     font-weight: 300;
     font-size: 11px;
     line-height: 13px;
+    text-transform: uppercase;
     color: ${MAIN_COLORS.TEXT.WHITE};
     ::after {
         content: ':';
@@ -51,6 +67,7 @@ export const SecondaryValue = styled.span`
     font-size: 11px;
     line-height: 13px;
     font-weight: 700;
+    text-transform: uppercase;
 `;
 
 export const AmountToBuyContainer = styled.div`
@@ -92,3 +109,61 @@ export const CustomTooltip = withStyles(() => ({
         fontSize: '12px',
     },
 }))(Tooltip);
+
+export const SubmitButton = styled.button`
+    background: #5fc694;
+    border-radius: 5px;
+    /* margin: 20px 100px; */
+    font-size: 20px;
+    line-height: 23px;
+    color: #303656;
+    width: 100%;
+    border: none;
+    padding: 7px;
+    cursor: pointer;
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+`;
+
+export const InputDetails = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: -5px;
+`;
+
+export const DetailContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+export const PotentialProfitContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+`;
+
+export const PotentialProfit = styled(PrimaryValue)`
+    font-weight: 700;
+    color: ${MAIN_COLORS.TEXT.POTENTIAL_PROFIT};
+`;
+
+export const CollateralInfoContainer = styled(PotentialProfitContainer)``;
+
+export const CollateralInfo = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+export const Collateral = styled(PrimaryValue)`
+    font-weight: 700;
+    margin-right: 5px;
+`;
+
+export const StableBalance = styled(PrimaryValue)`
+    text-transform: uppercase;
+`;
