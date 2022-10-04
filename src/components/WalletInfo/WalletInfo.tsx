@@ -1,20 +1,17 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 import { useTranslation } from 'react-i18next';
-import { truncateAddress } from 'utils/formatters/string';
-import onboardConnector from 'utils/onboardConnector';
 import { getIsAppReady } from 'redux/modules/app';
 import { PAYMENT_CURRENCY } from 'constants/currency';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
-import OutsideClickHandler from 'react-outside-click-handler';
-import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import Tooltip from 'components/Tooltip';
 import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
+import ConnectButton from 'components/ConnectButton';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -22,17 +19,6 @@ const WalletInfo: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const [showWalletOptions, setShowWalletOptions] = useState<boolean>(false);
-
-    const sUSDBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
-    const sUSDBalance = useMemo(() => {
-        if (sUSDBalanceQuery.data) {
-            return formatCurrency(sUSDBalanceQuery?.data, 2);
-        }
-        return 0;
-    }, [sUSDBalanceQuery.data]);
 
     const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -47,35 +33,7 @@ const WalletInfo: React.FC = () => {
     return (
         <Container hasVoucher={!!overtimeVoucher}>
             <FlexDivColumn>
-                <WalletContainer
-                    onClick={() => {
-                        if (!isWalletConnected) {
-                            onboardConnector.connectWallet();
-                        } else {
-                            setShowWalletOptions(true);
-                        }
-                    }}
-                    hasVoucher={!!overtimeVoucher}
-                >
-                    {isWalletConnected ? (
-                        <>
-                            <>
-                                <Wallet className="wallet-info">
-                                    <Info>{truncateAddress(walletAddress)}</Info>
-                                </Wallet>
-                                <Wallet className="wallet-info-hover">
-                                    <Info>{t('common.wallet.wallet-options')}</Info>
-                                </Wallet>
-                                <Balance hasVoucher={!!overtimeVoucher}>
-                                    <Info>{sUSDBalance}</Info>
-                                    <Currency>{PAYMENT_CURRENCY}</Currency>
-                                </Balance>
-                            </>
-                        </>
-                    ) : (
-                        <Info>{t('common.wallet.connect-your-wallet')}</Info>
-                    )}
-                </WalletContainer>
+                <ConnectButton />
                 {overtimeVoucher && (
                     <Tooltip
                         overlay={
@@ -103,34 +61,6 @@ const WalletInfo: React.FC = () => {
                     />
                 )}
             </FlexDivColumn>
-            {showWalletOptions && (
-                <OutsideClickHandler onOutsideClick={() => setShowWalletOptions(false)}>
-                    <WalletOptions>
-                        <WalletOptionsHeader>
-                            {t('common.wallet.wallet-options')}
-                            <CloseIcon onClick={() => setShowWalletOptions(false)} />
-                        </WalletOptionsHeader>
-                        <WalletOptionsContent>
-                            <WalletOption
-                                onClick={() => {
-                                    onboardConnector.onboard.walletSelect();
-                                    setShowWalletOptions(false);
-                                }}
-                            >
-                                {t('common.wallet.switch-wallet')}
-                            </WalletOption>
-                            <WalletOption
-                                onClick={() => {
-                                    onboardConnector.disconnectWallet();
-                                    setShowWalletOptions(false);
-                                }}
-                            >
-                                {t('common.wallet.disconnect-wallet')}
-                            </WalletOption>
-                        </WalletOptionsContent>
-                    </WalletOptions>
-                </OutsideClickHandler>
-            )}
         </Container>
     );
 };
@@ -150,41 +80,10 @@ const Container = styled(FlexDivCentered)<{ hasVoucher: boolean }>`
     }
 `;
 
-const WalletContainer = styled(FlexDivRowCentered)<{ hasVoucher: boolean }>`
-    height: 28px;
-    padding: 0 20px;
-    cursor: pointer;
-    .wallet-info-hover {
-        display: none;
-    }
-    :hover {
-        background: ${(props) => props.theme.background.tertiary};
-        color: ${(props) => props.theme.textColor.primary};
-        i {
-            :before {
-                color: ${(props) => props.theme.button.textColor.primary};
-            }
-        }
-        .wallet-info {
-            display: none;
-        }
-        .wallet-info-hover {
-            display: inline;
-        }
-    }
-    border-radius: ${(props) => (props.hasVoucher ? '5px 5px 0px 0px' : '5px')};
-    overflow: hidden;
-`;
-
 const Wallet = styled(FlexDivRowCentered)`
     padding-right: 10px;
     width: 95px;
     text-align: center;
-`;
-
-const Balance = styled(FlexDivRowCentered)<{ hasVoucher: boolean }>`
-    border-left: 1px solid ${(props) => (props.hasVoucher ? 'transparent' : props.theme.borderColor.secondary)};
-    padding-left: 10px;
 `;
 
 const Info = styled.span`
@@ -197,62 +96,6 @@ const Info = styled.span`
 const Currency = styled(Info)`
     font-weight: bold;
     margin-left: 4px;
-`;
-
-const WalletOptions = styled(FlexDivColumn)`
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 254px;
-    height: 84px;
-    border-radius: 5px;
-    z-index: 100;
-    background: ${(props) => props.theme.background.secondary};
-    color: ${(props) => props.theme.button.textColor.primary};
-`;
-
-const WalletOptionsHeader = styled(FlexDivCentered)`
-    position: relative;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 15px;
-    line-height: 17px;
-    text-align: center;
-    padding: 6px;
-    border-bottom: 1px solid ${(props) => props.theme.button.borderColor.primary};
-    /* text-transform: ; */
-`;
-
-const WalletOptionsContent = styled(FlexDivColumn)``;
-
-const WalletOption = styled(FlexDivCentered)`
-    font-style: normal;
-    font-weight: 600;
-    font-size: 15px;
-    line-height: 17px;
-    padding: 5px;
-    text-align: center;
-    cursor: pointer;
-    color: ${(props) => props.theme.textColor.primary};
-    :hover {
-        background: ${(props) => props.theme.background.tertiary};
-        :last-child {
-            border-radius: 0px 0px 5px 5px;
-        }
-    }
-`;
-
-const CloseIcon = styled.i`
-    font-size: 10px;
-    cursor: pointer;
-    position: absolute;
-    top: 6px;
-    right: 10px;
-    &:before {
-        font-family: ExoticIcons !important;
-        content: '\\004F';
-        color: ${(props) => props.theme.textColor.primary};
-    }
 `;
 
 export const VoucherImage = styled.img`

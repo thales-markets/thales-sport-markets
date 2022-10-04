@@ -5,7 +5,6 @@ import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected } from 'redux/modules/wallet';
 import { BigNumber, ethers } from 'ethers';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
-import onboardConnector from 'utils/onboardConnector';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import Checkbox from 'components/fields/Checkbox';
@@ -13,6 +12,7 @@ import NumericInput from 'components/fields/NumericInput';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import { getAmountForApproval } from 'utils/amm';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 type ApprovalModalProps = {
     defaultAmount: number | string;
@@ -37,6 +37,8 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
     const [approveAll, setApproveAll] = useState<boolean>(true);
     const [isAmountValid, setIsAmountValid] = useState<boolean>(true);
 
+    const { openConnectModal } = useConnectModal();
+
     const maxApproveAmount = bigNumberFormatter(ethers.constants.MaxUint256);
     const isAmountEntered = Number(amount) > 0;
     const isButtonDisabled = !isWalletConnected || isAllowing || (!approveAll && (!isAmountEntered || !isAmountValid));
@@ -46,9 +48,7 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
     const getSubmitButton = () => {
         if (!isWalletConnected) {
             return (
-                <ModalButton onClick={() => onboardConnector.connectWallet()}>
-                    {t('common.wallet.connect-your-wallet')}
-                </ModalButton>
+                <ModalButton onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</ModalButton>
             );
         }
         if (!approveAll && !isAmountEntered) {
