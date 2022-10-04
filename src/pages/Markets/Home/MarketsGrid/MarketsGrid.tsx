@@ -4,6 +4,8 @@ import i18n from 'i18n';
 import _ from 'lodash';
 import React from 'react';
 import Masonry from 'react-masonry-css';
+import { useSelector } from 'react-redux';
+import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { AccountPositionsMap, SportMarkets, TagInfo } from 'types/markets';
@@ -25,6 +27,7 @@ export const breakpointColumnsObj = {
 const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) => {
     const mobileGridView = window.innerWidth < 950;
     const language = i18n.language;
+    const favouriteLeagues = useSelector(getFavouriteLeagues);
     const marketsMap = new Map();
 
     const marketsPartintionedByTag = _(markets).groupBy('tags[0]').values().value();
@@ -51,9 +54,19 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) 
                 <ListContainer>
                     {marketsKeys
                         .sort((a, b) => {
+                            const isFavouriteA = Number(
+                                favouriteLeagues.filter((league: TagInfo) => league.id == a)[0].favourite
+                            );
+                            const isFavouriteB = Number(
+                                favouriteLeagues.filter((league: TagInfo) => league.id == b)[0].favourite
+                            );
                             const leagueNameA = TAGS_LIST.find((t: TagInfo) => t.id == a)?.label;
                             const leagueNameB = TAGS_LIST.find((t: TagInfo) => t.id == b)?.label;
-                            return (leagueNameA || '') > (leagueNameB || '') ? 1 : -1;
+                            if (isFavouriteA == isFavouriteB) {
+                                return (leagueNameA || '') > (leagueNameB || '') ? 1 : -1;
+                            } else {
+                                return isFavouriteB - isFavouriteA;
+                            }
                         })
                         .map((leagueId: number, index: number) => {
                             return (

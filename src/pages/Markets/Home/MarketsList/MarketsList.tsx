@@ -1,6 +1,8 @@
 import { TAGS_FLAGS, TAGS_LIST } from 'constants/tags';
 import React, { useState } from 'react';
 import Flag from 'react-flagpack';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { AccountPositionsMap, SportMarkets, TagInfo } from 'types/markets';
 import MarketListCard from '../MarketListCard';
@@ -15,6 +17,10 @@ type MarketsList = {
 const MarketsList: React.FC<MarketsList> = ({ markets, league, language, accountPositions }) => {
     const [hideLeague, setHideLeague] = useState<boolean>(false);
     const leagueName = TAGS_LIST.find((t: TagInfo) => t.id == league)?.label;
+    const dispatch = useDispatch();
+    const favouriteLeagues = useSelector(getFavouriteLeagues);
+    const isFavourite = favouriteLeagues.filter((favourite: TagInfo) => favourite.id == league)[0].favourite;
+
     return (
         <>
             <LeagueCard>
@@ -35,6 +41,26 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language, account
                         <ArrowIcon down={true} className={`icon-exotic icon-exotic--down`} />
                     )}
                 </LeagueInfo>
+                <StarIcon
+                    onClick={() => {
+                        const newFavourites = favouriteLeagues.map((favourite: TagInfo) => {
+                            if (favourite.id == league) {
+                                let newFavouriteFlag;
+                                favourite.favourite ? (newFavouriteFlag = false) : (newFavouriteFlag = true);
+                                return {
+                                    id: favourite.id,
+                                    label: favourite.label,
+                                    logo: favourite.logo,
+                                    favourite: newFavouriteFlag,
+                                    hidden: favourite.hidden,
+                                };
+                            }
+                            return favourite;
+                        });
+                        dispatch(setFavouriteLeagues(newFavourites));
+                    }}
+                    className={`icon icon--${isFavourite ? 'star-full selected' : 'star-empty'} `}
+                />
             </LeagueCard>
             <GamesContainer hidden={hideLeague}>
                 {markets.map((market: any, index: number) => {
@@ -113,8 +139,8 @@ const GamesContainer = styled.div<{ hidden?: boolean }>`
 `;
 
 const FlagWorld = styled.img`
-    width: 40px;
-    height: 30px;
+    width: 32px;
+    height: 24px;
     border-radius: 1.5px;
     cursor: pointer;
 `;
@@ -136,6 +162,17 @@ const ArrowIcon = styled.i<{ down?: boolean }>`
     &:hover {
         cursor: pointer;
         color: ${(props) => props.theme.textColor.quaternary};
+    }
+`;
+
+const StarIcon = styled.i`
+    font-size: 20px;
+    position: absolute;
+    right: 10px;
+    color: ${(props) => props.theme.textColor.secondary};
+    &.selected,
+    &:hover {
+        color: #fac439;
     }
 `;
 

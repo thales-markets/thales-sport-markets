@@ -58,7 +58,7 @@ export const ClubLogo = styled.img<{ width?: string; height?: string }>`
 export const LinkIcon = styled.i`
     font-size: 16px;
     margin-left: 10px;
-    margin-top: 5px;
+    margin-top: 7px;
     color: ${(props) => props.theme.textColor.secondary};
     &:hover {
         cursor: pointer;

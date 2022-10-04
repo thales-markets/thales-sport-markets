@@ -2,8 +2,8 @@ import Tooltip from 'components/Tooltip';
 import { Position } from 'constants/options';
 import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { updateParlay } from 'redux/modules/parlay';
+import { useDispatch, useSelector } from 'react-redux';
+import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import styled from 'styled-components';
 
 type SymbolProps = {
@@ -34,17 +34,30 @@ const PositionSymbol: React.FC<SymbolProps> = ({
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const parlay = useSelector(getParlay);
+
+    const addedToParlay = parlay.filter((game: any) => game.sportMarketId == marketId)[0];
+
     return (
         <Wrapper
             onClick={() => {
                 if (marketId) {
-                    const selectedPosition = type == 0 ? Position.HOME : type == 1 ? Position.AWAY : Position.DRAW;
-                    dispatch(updateParlay({ sportMarketId: marketId, position: selectedPosition }));
+                    if (addedToParlay && addedToParlay.position == type) {
+                        dispatch(removeFromParlay(marketId));
+                    } else {
+                        const selectedPosition = type == 0 ? Position.HOME : type == 1 ? Position.AWAY : Position.DRAW;
+                        dispatch(updateParlay({ sportMarketId: marketId, position: selectedPosition }));
+                    }
                 }
             }}
         >
-            <Container glow={glow} color={symbolColor} style={additionalStyle}>
-                <Symbol color={symbolColor}>
+            <Container
+                glow={glow}
+                color={symbolColor}
+                style={additionalStyle}
+                addedToParlay={addedToParlay && addedToParlay.position == type}
+            >
+                <Symbol color={symbolColor} addedToParlay={addedToParlay && addedToParlay.position == type}>
                     {type == 0 && '1'}
                     {type == 1 && '2'}
                     {type == 2 && 'X'}
@@ -75,7 +88,7 @@ const Wrapper = styled.div`
     flex-direction: row;
 `;
 
-const Container = styled.div<{ glow?: boolean; color?: string }>`
+const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: boolean }>`
     width: 30px;
     height: 30px;
     border-radius: 60%;
@@ -85,7 +98,8 @@ const Container = styled.div<{ glow?: boolean; color?: string }>`
     justify-content: center;
     flex-direction: row;
     font-size: 14px;
-    border: ${(_props) => (_props?.glow ? '3px solid ' + _props.color : '3px solid #5f6180')};
+    border: ${(_props) =>
+        _props?.glow ? '3px solid ' + _props.color : _props.addedToParlay ? '3px solid #64D9FE' : '3px solid #5f6180'};
     box-shadow: ${(_props) => (_props?.glow ? '0 0 6px 2px ' + _props.color : '')};
 `;
 
@@ -97,8 +111,8 @@ const AdditionalText = styled.span`
     flex-direction: row;
 `;
 
-const Symbol = styled.span<{ color?: string }>`
-    color: ${(_props) => (_props?.color ? _props.color : '')};
+const Symbol = styled.span<{ color?: string; addedToParlay?: boolean }>`
+    color: ${(_props) => (_props.addedToParlay ? '#64D9FE' : _props?.color ? _props.color : '')};
     font-size: 12px;
 `;
 
