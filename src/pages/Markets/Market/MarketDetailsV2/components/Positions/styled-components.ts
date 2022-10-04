@@ -13,9 +13,9 @@ export const TeamOptionContainer = styled.div<{ disabled?: boolean; selected?: b
     align-items: center;
     margin-bottom: 7px;
     cursor: pointer;
-    box-shadow: ${(_props) => (_props?.selected ? `${MAIN_COLORS.SHADOWS.POSITION_HOVER}` : '')};
+    border: ${(_props) => (_props?.selected ? `0.5px solid ${MAIN_COLORS.LIGHT_BLUE}` : '0.5px solid transparent')};
     :hover {
-        box-shadow: ${MAIN_COLORS.SHADOWS.POSITION_HOVER};
+        border: ${(_props) => (!_props?.disabled ? `0.5px solid ${MAIN_COLORS.LIGHT_BLUE}` : undefined)};
     }
 `;
 
