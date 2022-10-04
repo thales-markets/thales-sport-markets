@@ -1,33 +1,64 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import useDebouncedEffect from 'hooks/useDebouncedEffect';
+import { BigNumber, ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
+import networkConnector from 'utils/networkConnector';
 import {
     AMMContainer,
     AMMContent,
     AmountToBuyContainer,
     AmountToBuyInput,
     CustomTooltip,
-    Label,
+    DetailContainer,
+    InputDetails,
+    PrimaryLabel,
     MaxButton,
+    SecondaryLabel,
+    SecondaryValue,
+    SubmitButton,
+    PotentialProfitContainer,
+    PotentialProfit,
+    CollateralInfoContainer,
+    CollateralInfo,
+    Collateral,
+    StableBalance,
+    SubmitButtonContainer,
 } from './styled-components';
+import { toast } from 'react-toastify';
+import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
+import useMarketBalancesQuery from 'queries/markets/useMarketBalancesQuery';
+import usePositionPriceDetailsQuery from 'queries/markets/usePositionPriceDetailsQuery';
+import { refetchBalances } from 'utils/queryConnector';
 
-import { Position, Side } from 'constants/options';
-import { AvailablePerSide, Balances, MarketData } from 'types/markets';
-import { countDecimals, floorNumberToDecimals } from 'utils/formatters/number';
+import { MAX_L2_GAS_LIMIT, Position, Side } from 'constants/options';
+import { AMMPosition, AvailablePerSide, Balances, MarketData } from 'types/markets';
+import {
+    countDecimals,
+    floorNumberToDecimals,
+    formatCurrency,
+    formatCurrencyWithSign,
+    formatPercentage,
+} from 'utils/formatters/number';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import { COLLATERALS, MAX_USD_SLIPPAGE } from 'constants/markets';
-import networkConnector from 'utils/networkConnector';
-import { ethers } from 'ethers';
+import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE } from 'constants/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
-import { getSportsAMMQuoteMethod } from 'utils/amm';
-import useDebouncedEffect from 'hooks/useDebouncedEffect';
+import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
+import { MAX_GAS_LIMIT } from 'constants/network';
+import { getReferralId } from 'utils/referral';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import onboardConnector from 'utils/onboardConnector';
+import { checkAllowance } from 'utils/network';
+import ApprovalModal from 'components/ApprovalModal';
+import CollateralSelector from '../CollateralSelector';
+import { USD_SIGN } from 'constants/currency';
 
 type AMMProps = {
     market: MarketData;
@@ -38,6 +69,7 @@ type AMMProps = {
 
 const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, availablePerSide }) => {
     const { t } = useTranslation();
+    const { trackEvent } = useMatomo();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -52,10 +84,30 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
     const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState<string>('');
     const [isFetching, setIsFetching] = useState<boolean>(false);
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
-
+    const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
+    const [isAllowing, setIsAllowing] = useState<boolean>(false);
+    const [hasAllowance, setAllowance] = useState<boolean>(false);
+    const [maxAmount, setMaxAmount] = useState<number>(0);
+    const [isBuying, setIsBuying] = useState<boolean>(false);
+    const [ammPosition, setAmmPosition] = useState<AMMPosition>({
+        sides: {
+            [Side.BUY]: {
+                quote: 0,
+                priceImpact: 0,
+            },
+            [Side.SELL]: {
+                quote: 0,
+                priceImpact: 0,
+            },
+        },
+    });
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(false);
 
     const [balances, setBalances] = useState<Balances | undefined>(undefined);
+
+    const marketBalancesQuery = useMarketBalancesQuery(market.address, walletAddress, {
+        enabled: !!market.address && isWalletConnected,
+    });
 
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -64,9 +116,34 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         enabled: isAppReady && isWalletConnected,
     });
 
-    console.log(tokenAmount);
-    console.log(setBalances);
-    console.log(setOpenApprovalModal);
+    const stableBalances = useMemo(() => {
+        return multipleStableBalances.data;
+    }, [multipleStableBalances.data]);
+
+    console.log('stableBalances ', stableBalances);
+
+    const positionPriceDetailsQuery = usePositionPriceDetailsQuery(
+        market.address,
+        selectedPosition,
+        Number(tokenAmount) || 1,
+        selectedStableIndex,
+        networkId
+    );
+
+    useEffect(() => {
+        if (positionPriceDetailsQuery.isSuccess && positionPriceDetailsQuery.data) {
+            setAmmPosition(positionPriceDetailsQuery.data);
+        }
+    }, [positionPriceDetailsQuery.isSuccess, positionPriceDetailsQuery.data]);
+
+    useEffect(() => {
+        if (marketBalancesQuery.isSuccess && marketBalancesQuery.data) {
+            setBalances(marketBalancesQuery.data);
+        }
+    }, [marketBalancesQuery.isSuccess, marketBalancesQuery.data]);
+
+    const referralId =
+        walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase() ? getReferralId() : null;
 
     const overtimeVoucher = useMemo(() => {
         if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
@@ -94,8 +171,50 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
     ]);
 
     useEffect(() => {
+        setMaxAmount(0);
+    }, [selectedStableIndex]);
+
+    useEffect(() => {
         setStableIndex(0);
     }, [selectedSide]);
+
+    useEffect(() => {
+        const checkDisabled = async () => {
+            if (!hasAllowance) {
+                setSubmitDisabled(false);
+                return;
+            }
+
+            if (selectedSide === Side.BUY) {
+                if (
+                    !Number(usdAmountValue) ||
+                    !Number(tokenAmount) ||
+                    Number(tokenAmount) < 1 ||
+                    isBuying ||
+                    isAllowing
+                ) {
+                    setSubmitDisabled(true);
+                    return;
+                }
+            } else {
+                if (!Number(tokenAmount) || Number(tokenAmount) < 1 || isBuying || isAllowing) {
+                    setSubmitDisabled(true);
+                    return;
+                }
+            }
+
+            if (selectedSide === Side.BUY) {
+                setSubmitDisabled(
+                    !paymentTokenBalance || tokenAmount > maxAmount || usdAmountValue > paymentTokenBalance
+                );
+                return;
+            } else {
+                setSubmitDisabled(tokenAmount > maxAmount);
+                return;
+            }
+        };
+        checkDisabled();
+    }, [tokenAmount, usdAmountValue, isBuying, isAllowing, hasAllowance, selectedSide, paymentTokenBalance, maxAmount]);
 
     const setTooltipTextMessageUsdAmount = (value: string | number) => {
         if (Number(value) > paymentTokenBalance) {
@@ -188,6 +307,50 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
     }, [usdAmountValue, selectedStableIndex]);
 
     useEffect(() => {
+        const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
+        if (sportsAMMContract && signer) {
+            let collateralContractWithSigner: ethers.Contract | undefined;
+
+            if (selectedStableIndex !== 0 && multipleCollateral) {
+                collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
+            } else {
+                collateralContractWithSigner = sUSDContract?.connect(signer);
+            }
+
+            const getAllowance = async () => {
+                try {
+                    const parsedTicketPrice = getAmountForApproval(
+                        selectedStableIndex,
+                        Number(usdAmountValue).toString()
+                    );
+                    const allowance = await checkAllowance(
+                        parsedTicketPrice,
+                        collateralContractWithSigner,
+                        walletAddress,
+                        sportsAMMContract.address
+                    );
+                    setAllowance(allowance);
+                } catch (e) {
+                    console.log(e);
+                }
+            };
+            if (isWalletConnected) {
+                selectedSide == Side.SELL || isVoucherSelected ? setAllowance(true) : getAllowance();
+            }
+        }
+    }, [
+        walletAddress,
+        isWalletConnected,
+        hasAllowance,
+        isAllowing,
+        tokenAmount,
+        usdAmountValue,
+        selectedStableIndex,
+        selectedSide,
+        isVoucherSelected,
+    ]);
+
+    useEffect(() => {
         const getMaxUsdAmount = async () => {
             setIsFetching(true);
             if (selectedSide === Side.BUY) {
@@ -234,31 +397,233 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         availablePerSide,
     ]);
 
+    const handleSubmit = async () => {
+        if (!!tokenAmount) {
+            const { sportsAMMContract, overtimeVoucherContract, signer } = networkConnector;
+            if (sportsAMMContract && overtimeVoucherContract && signer) {
+                setIsBuying(true);
+                const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
+                const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
+                const ammQuote = await fetchAmmQuote(+Number(tokenAmount).toFixed(2) || 1);
+                const parsedAmount = ethers.utils.parseEther(Number(tokenAmount).toFixed(2));
+                const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+
+                try {
+                    const tx = await getAMMSportsTransaction(
+                        selectedSide === Side.BUY,
+                        isVoucherSelected,
+                        overtimeVoucher ? overtimeVoucher.id : 0,
+                        selectedStableIndex,
+                        networkId,
+                        sportsAMMContractWithSigner,
+                        overtimeVoucherContractWithSigner,
+                        market.address,
+                        selectedPosition,
+                        parsedAmount,
+                        ammQuote,
+                        referralId,
+                        ethers.utils.parseEther('0.02'),
+                        { gasLimit: MAX_L2_GAS_LIMIT }
+                    );
+
+                    const txResult = await tx.wait();
+
+                    if (txResult && txResult.transactionHash) {
+                        refetchBalances(walletAddress, networkId);
+                        selectedSide === Side.BUY
+                            ? toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')))
+                            : toast.update(id, getSuccessToastOptions(t('market.toast-messsage.sell-success')));
+                        setIsBuying(false);
+                        setTokenAmountValue(0);
+                        setUsdAmount(0);
+
+                        if (selectedSide === Side.BUY) {
+                            trackEvent({
+                                category: 'AMM',
+                                action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
+                                value: Number(formatCurrency(ammPosition.sides[Side.BUY].quote, 3, true)),
+                            });
+                        } else {
+                            trackEvent({
+                                category: 'AMM',
+                                action: 'sell-to-amm',
+                            });
+                        }
+                    }
+                } catch (e) {
+                    setIsBuying(false);
+                    refetchBalances(walletAddress, networkId);
+                    toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                    console.log('Error ', e);
+                }
+            }
+        }
+    };
+
+    const handleAllowance = async (approveAmount: BigNumber) => {
+        const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
+        if (sportsAMMContract && signer) {
+            setIsAllowing(true);
+            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            try {
+                let collateralContractWithSigner: ethers.Contract | undefined;
+
+                if (selectedStableIndex !== 0 && multipleCollateral && multipleCollateral[selectedStableIndex]) {
+                    collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
+                } else {
+                    collateralContractWithSigner = sUSDContract?.connect(signer);
+                }
+
+                const addressToApprove = sportsAMMContract.address;
+
+                const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
+                    gasLimit: MAX_GAS_LIMIT,
+                })) as ethers.ContractTransaction;
+                setOpenApprovalModal(false);
+                const txResult = await tx.wait();
+
+                if (txResult && txResult.transactionHash) {
+                    setIsAllowing(false);
+                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.approve-success')));
+                }
+            } catch (e) {
+                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                console.log(e);
+                setIsAllowing(false);
+            }
+        }
+    };
+
+    const getSubmitButton = () => {
+        if (!isWalletConnected) {
+            return (
+                <SubmitButton disabled={submitDisabled} onClick={() => onboardConnector.connectWallet()}>
+                    {t('common.wallet.connect-your-wallet')}
+                </SubmitButton>
+            );
+        }
+        if (!hasAllowance) {
+            return (
+                <SubmitButton
+                    disabled={submitDisabled}
+                    onClick={async () => {
+                        if (!!tokenAmount) {
+                            setOpenApprovalModal(true);
+                        }
+                    }}
+                >
+                    {t('common.wallet.approve')}
+                </SubmitButton>
+            );
+        }
+
+        return (
+            <SubmitButton
+                disabled={submitDisabled}
+                onClick={async () => {
+                    if (!!tokenAmount) {
+                        handleSubmit();
+                    }
+                }}
+            >
+                {t(`common.${selectedSide.toLowerCase()}-side`)}
+            </SubmitButton>
+        );
+    };
+
+    const showPotentialProfit = !Number(tokenAmount) || positionPriceDetailsQuery.isLoading || !!tooltipTextUsdAmount;
+    const liqudityInfo = floorNumberToDecimals(availablePerSide.positions[selectedPosition].available);
+    const showCollateralSelector = selectedSide == Side.BUY && !market.gameStarted;
+    const skew = positionPriceDetailsQuery.isLoading
+        ? '-'
+        : formatPercentage(ammPosition.sides[selectedSide].priceImpact);
+
     return (
-        <AMMContainer>
-            <AMMContent>
-                <Label>{t('markets.market-details.usd-amount')}</Label>
-                <CustomTooltip open={!!tooltipTextUsdAmount && !openApprovalModal} title={tooltipTextUsdAmount}>
-                    <AmountToBuyContainer>
-                        <AmountToBuyInput
-                            name="usdAmount"
-                            type="number"
-                            value={usdAmountValue}
-                            onChange={(e) => {
-                                if (countDecimals(Number(e.target.value)) > 2) {
-                                    return;
-                                }
-                                setFieldChanging(e.target.name);
-                                setUsdAmount(e.target.value);
-                            }}
+        <>
+            <AMMContainer>
+                <AMMContent>
+                    <PrimaryLabel>{t('markets.market-details.amount-to-buy')}</PrimaryLabel>
+                    <CustomTooltip open={!!tooltipTextUsdAmount && !openApprovalModal} title={tooltipTextUsdAmount}>
+                        <AmountToBuyContainer>
+                            <AmountToBuyInput
+                                name="usdAmount"
+                                type="number"
+                                value={usdAmountValue}
+                                onChange={(e) => {
+                                    if (countDecimals(Number(e.target.value)) > 2) {
+                                        return;
+                                    }
+                                    setFieldChanging(e.target.name);
+                                    setUsdAmount(e.target.value);
+                                }}
+                            />
+                            <MaxButton disabled={isFetching} onClick={onMaxUsdClick}>
+                                {t('markets.market-details.max')}
+                            </MaxButton>
+                        </AmountToBuyContainer>
+                    </CustomTooltip>
+                    <InputDetails>
+                        <DetailContainer>
+                            <SecondaryLabel>{t('markets.market-details.liquidity')}</SecondaryLabel>
+                            <SecondaryValue>{liqudityInfo}</SecondaryValue>
+                        </DetailContainer>
+                        <DetailContainer>
+                            <SecondaryLabel>{t('markets.market-details.skew')}</SecondaryLabel>
+                            <SecondaryValue>{skew}</SecondaryValue>
+                        </DetailContainer>
+                    </InputDetails>
+                    <PotentialProfitContainer>
+                        <PrimaryLabel>{t('markets.market-details.potential-profit')}</PrimaryLabel>
+                        <PotentialProfit>
+                            {showPotentialProfit
+                                ? '-'
+                                : `$${formatCurrency(
+                                      Number(tokenAmount) - ammPosition.sides[selectedSide].quote
+                                  )} (${formatPercentage(
+                                      1 / (ammPosition.sides[selectedSide].quote / Number(tokenAmount)) - 1
+                                  )})`}
+                        </PotentialProfit>
+                    </PotentialProfitContainer>
+                    <CollateralInfoContainer>
+                        <PrimaryLabel>{t('market.pay-with')}</PrimaryLabel>
+                        <CollateralInfo>
+                            <Collateral>{COLLATERALS[selectedStableIndex]}</Collateral>
+                            <StableBalance>
+                                {`${t('markets.market-details.available')} ${formatCurrencyWithSign(
+                                    USD_SIGN,
+                                    stableBalances ? stableBalances[COLLATERALS[selectedStableIndex]] : 0,
+                                    2
+                                )}`}
+                            </StableBalance>
+                        </CollateralInfo>
+                    </CollateralInfoContainer>
+                    {showCollateralSelector && (
+                        <CollateralSelector
+                            collateralArray={COLLATERALS}
+                            selectedItem={selectedStableIndex}
+                            onChangeCollateral={(index) => setStableIndex(index)}
+                            overtimeVoucher={overtimeVoucher}
+                            isVoucherSelected={isVoucherSelected}
+                            setIsVoucherSelected={setIsVoucherSelected}
                         />
-                        <MaxButton disabled={isFetching} onClick={onMaxUsdClick}>
-                            {t('markets.market-details.max')}
-                        </MaxButton>
-                    </AmountToBuyContainer>
-                </CustomTooltip>
-            </AMMContent>
-        </AMMContainer>
+                    )}
+                </AMMContent>
+                {openApprovalModal && (
+                    <ApprovalModal
+                        // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
+                        defaultAmount={Number(usdAmountValue) + Number(usdAmountValue) * APPROVAL_BUFFER}
+                        collateralIndex={selectedStableIndex}
+                        tokenSymbol={COLLATERALS[selectedStableIndex]}
+                        isAllowing={isAllowing}
+                        onSubmit={handleAllowance}
+                        onClose={() => setOpenApprovalModal(false)}
+                    />
+                )}
+            </AMMContainer>
+            <SubmitButtonContainer>
+                <>{getSubmitButton()}</>
+            </SubmitButtonContainer>
+        </>
     );
 };
 

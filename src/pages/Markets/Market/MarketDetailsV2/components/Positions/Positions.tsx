@@ -37,7 +37,7 @@ const Positions: React.FC<PositionsProps> = ({
             <TeamOptionContainer
                 disabled={disableddHomeOption}
                 selected={selectedPosition == Position.HOME}
-                onClick={() => setSelectedPosition(Position.HOME)}
+                onClick={!disableddHomeOption ? () => setSelectedPosition(Position.HOME) : undefined}
             >
                 <InnerContrainer>
                     <PositionSymbol
@@ -68,7 +68,7 @@ const Positions: React.FC<PositionsProps> = ({
                 <TeamOptionContainer
                     disabled={disabledDrawOption}
                     selected={selectedPosition == Position.DRAW}
-                    onClick={() => setSelectedPosition(Position.DRAW)}
+                    onClick={!disabledDrawOption ? () => setSelectedPosition(Position.DRAW) : undefined}
                 >
                     <InnerContrainer>
                         <PositionSymbol
@@ -103,7 +103,7 @@ const Positions: React.FC<PositionsProps> = ({
             <TeamOptionContainer
                 disabled={disabledAwayOption}
                 selected={selectedPosition == Position.AWAY}
-                onClick={() => setSelectedPosition(Position.AWAY)}
+                onClick={!disabledAwayOption ? () => setSelectedPosition(Position.AWAY) : undefined}
             >
                 <InnerContrainer>
                     <PositionSymbol

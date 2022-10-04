@@ -243,10 +243,12 @@
             "usd-amount": "USD amount",
             "positions-amount": "Positions amount",
             "amount-to-sell": "Amount to sell",
+            "amount-to-buy": "Amount to buy",
             "total-to-receive": "Total to receive",
             "potential-profit": "Potential profit",
             "amount-claimable": "Amount claimable",
             "claim-back": "Claim back",
+            "available": "Available",
             "skew": "Skew",
             "max": "Max",
             "wallet-info": {
