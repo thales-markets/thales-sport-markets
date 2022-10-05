@@ -7,7 +7,15 @@ import { useTranslation } from 'react-i18next';
 import { AvailablePerSide, MarketData } from 'types/markets';
 import { floorNumberToDecimals, formatCurrencyWithKey } from 'utils/formatters/number';
 import { getVisibilityOfDrawOptionByTagId } from 'utils/markets';
-import { InnerContrainer, Label, TeamOptionContainer, Value, Wrapper } from './styled-components';
+import {
+    InnerContrainer,
+    Label,
+    LiquidityInfoContainer,
+    PositionContainer,
+    TeamOptionContainer,
+    Value,
+    Wrapper,
+} from './styled-components';
 
 type PositionsProps = {
     market: MarketData;
@@ -39,7 +47,7 @@ const Positions: React.FC<PositionsProps> = ({
                 selected={selectedPosition == Position.HOME}
                 onClick={!disableddHomeOption ? () => setSelectedPosition(Position.HOME) : undefined}
             >
-                <InnerContrainer>
+                <PositionContainer>
                     <PositionSymbol
                         type={0}
                         symbolColor={ODDS_COLOR.HOME}
@@ -48,21 +56,21 @@ const Positions: React.FC<PositionsProps> = ({
                             firstTextStyle: { fontSize: '19px', marginLeft: '15px', textTransform: 'uppercase' },
                         }}
                     />
-                </InnerContrainer>
+                </PositionContainer>
                 <InnerContrainer>
                     <Label>{t('markets.market-details.price')}</Label>
                     <Value>
                         {formatCurrencyWithKey(USD_SIGN, market.positions[Position.HOME]?.sides[selectedSide]?.odd, 2)}
                     </Value>
                 </InnerContrainer>
-                <InnerContrainer>
+                <LiquidityInfoContainer>
                     <Label>{t('markets.market-details.liquidity')}</Label>
                     <Value>
                         {availablePerSide
                             ? floorNumberToDecimals(availablePerSide.positions[Position.HOME].available)
                             : '-'}
                     </Value>
-                </InnerContrainer>
+                </LiquidityInfoContainer>
             </TeamOptionContainer>
             {showDrawOdds && (
                 <TeamOptionContainer
@@ -70,7 +78,7 @@ const Positions: React.FC<PositionsProps> = ({
                     selected={selectedPosition == Position.DRAW}
                     onClick={!disabledDrawOption ? () => setSelectedPosition(Position.DRAW) : undefined}
                 >
-                    <InnerContrainer>
+                    <PositionContainer>
                         <PositionSymbol
                             type={2}
                             symbolColor={ODDS_COLOR.DRAW}
@@ -79,7 +87,7 @@ const Positions: React.FC<PositionsProps> = ({
                                 firstTextStyle: { fontSize: '19px', marginLeft: '15px', textTransform: 'uppercase' },
                             }}
                         />
-                    </InnerContrainer>
+                    </PositionContainer>
                     <InnerContrainer>
                         <Label>{t('markets.market-details.price')}</Label>
                         <Value>
@@ -90,14 +98,14 @@ const Positions: React.FC<PositionsProps> = ({
                             )}
                         </Value>
                     </InnerContrainer>
-                    <InnerContrainer>
+                    <LiquidityInfoContainer>
                         <Label>{t('markets.market-details.liquidity')}</Label>
                         <Value>
                             {availablePerSide
                                 ? floorNumberToDecimals(availablePerSide.positions[Position.DRAW].available)
                                 : '-'}
                         </Value>
-                    </InnerContrainer>
+                    </LiquidityInfoContainer>
                 </TeamOptionContainer>
             )}
             <TeamOptionContainer
@@ -105,7 +113,7 @@ const Positions: React.FC<PositionsProps> = ({
                 selected={selectedPosition == Position.AWAY}
                 onClick={!disabledAwayOption ? () => setSelectedPosition(Position.AWAY) : undefined}
             >
-                <InnerContrainer>
+                <PositionContainer>
                     <PositionSymbol
                         type={1}
                         symbolColor={ODDS_COLOR.AWAY}
@@ -114,21 +122,21 @@ const Positions: React.FC<PositionsProps> = ({
                             firstTextStyle: { fontSize: '19px', marginLeft: '15px', textTransform: 'uppercase' },
                         }}
                     />
-                </InnerContrainer>
+                </PositionContainer>
                 <InnerContrainer>
                     <Label>{t('markets.market-details.price')}</Label>
                     <Value>
                         {formatCurrencyWithKey(USD_SIGN, market.positions[Position.AWAY]?.sides[selectedSide]?.odd, 2)}
                     </Value>
                 </InnerContrainer>
-                <InnerContrainer>
+                <LiquidityInfoContainer>
                     <Label>{t('markets.market-details.liquidity')}</Label>
                     <Value>
                         {availablePerSide
                             ? floorNumberToDecimals(availablePerSide.positions[Position.AWAY].available)
                             : '-'}
                     </Value>
-                </InnerContrainer>
+                </LiquidityInfoContainer>
             </TeamOptionContainer>
         </Wrapper>
     );

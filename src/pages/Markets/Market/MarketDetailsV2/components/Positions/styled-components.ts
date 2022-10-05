@@ -32,6 +32,18 @@ export const InnerContrainer = styled.div`
     width: 33%;
 `;
 
+export const PositionContainer = styled(InnerContrainer)`
+    @media (max-width: 768px) {
+        width: 50%;
+    }
+`;
+
+export const LiquidityInfoContainer = styled(InnerContrainer)`
+    @media (max-width: 768px) {
+        display: none;
+    }
+`;
+
 export const Label = styled.span`
     font-weight: 400;
     ::after {
