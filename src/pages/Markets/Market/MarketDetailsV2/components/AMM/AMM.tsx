@@ -1,41 +1,52 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import useDebouncedEffect from 'hooks/useDebouncedEffect';
+import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { BigNumber, ethers } from 'ethers';
+import useDebouncedEffect from 'hooks/useDebouncedEffect';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import networkConnector from 'utils/networkConnector';
 import {
     AMMContainer,
     AMMContent,
     AmountToBuyContainer,
     AmountToBuyInput,
+    Collateral,
+    CollateralInfo,
+    CollateralInfoContainer,
     CustomTooltip,
     DetailContainer,
     InputDetails,
-    PrimaryLabel,
     MaxButton,
+    PotentialProfit,
+    PotentialProfitContainer,
+    PrimaryLabel,
     SecondaryLabel,
     SecondaryValue,
-    SubmitButton,
-    PotentialProfitContainer,
-    PotentialProfit,
-    CollateralInfoContainer,
-    CollateralInfo,
-    Collateral,
     StableBalance,
+    SubmitButton,
     SubmitButtonContainer,
 } from './styled-components';
-import { toast } from 'react-toastify';
-import { useMatomo } from '@datapunt/matomo-tracker-react';
 
-import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
-import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useMarketBalancesQuery from 'queries/markets/useMarketBalancesQuery';
 import usePositionPriceDetailsQuery from 'queries/markets/usePositionPriceDetailsQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
+import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import { refetchBalances } from 'utils/queryConnector';
 
+import ApprovalModal from 'components/ApprovalModal';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { USD_SIGN } from 'constants/currency';
+import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE } from 'constants/markets';
+import { MAX_GAS_LIMIT } from 'constants/network';
 import { MAX_L2_GAS_LIMIT, Position, Side } from 'constants/options';
+import { useSelector } from 'react-redux';
+import { getIsAppReady } from 'redux/modules/app';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import { AMMPosition, AvailablePerSide, Balances, MarketData } from 'types/markets';
+import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
+import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
     countDecimals,
     floorNumberToDecimals,
@@ -43,22 +54,10 @@ import {
     formatCurrencyWithSign,
     formatPercentage,
 } from 'utils/formatters/number';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
-import { getIsAppReady } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE } from 'constants/markets';
-import sportsMarketContract from 'utils/contracts/sportsMarketContract';
-import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
-import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
-import { MAX_GAS_LIMIT } from 'constants/network';
-import { getReferralId } from 'utils/referral';
-import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import onboardConnector from 'utils/onboardConnector';
 import { checkAllowance } from 'utils/network';
-import ApprovalModal from 'components/ApprovalModal';
+import { getReferralId } from 'utils/referral';
+import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
 import CollateralSelector from '../CollateralSelector';
-import { USD_SIGN } from 'constants/currency';
 
 type AMMProps = {
     market: MarketData;
@@ -495,13 +494,13 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
     };
 
     const getSubmitButton = () => {
-        if (!isWalletConnected) {
-            return (
-                <SubmitButton disabled={submitDisabled} onClick={() => onboardConnector.connectWallet()}>
-                    {t('common.wallet.connect-your-wallet')}
-                </SubmitButton>
-            );
-        }
+        // if (!isWalletConnected) {
+        //     return (
+        //         <SubmitButton disabled={submitDisabled} onClick={() => onboardConnector.connectWallet()}>
+        //             {t('common.wallet.connect-your-wallet')}
+        //         </SubmitButton>
+        //     );
+        // }
         if (!hasAllowance) {
             return (
                 <SubmitButton
