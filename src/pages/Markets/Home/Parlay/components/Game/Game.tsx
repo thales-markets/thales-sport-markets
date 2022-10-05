@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { ParlaysMarket } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatMarketOdds } from 'utils/markets';
+import { getPositionOdds } from '../../Parlay';
 
 type GameProps = { market: ParlaysMarket };
 
@@ -30,14 +31,6 @@ const Game: React.FC<GameProps> = ({ market }) => {
             : position === Position.AWAY
             ? ODDS_COLOR.AWAY
             : ODDS_COLOR.DRAW;
-    };
-
-    const getPositionOdds = (market: ParlaysMarket) => {
-        return market.position === Position.HOME
-            ? market.homeOdds
-            : market.position === Position.AWAY
-            ? market.awayOdds
-            : market.drawOdds;
     };
 
     return (
@@ -67,7 +60,7 @@ const Game: React.FC<GameProps> = ({ market }) => {
                     firstTextStyle: {
                         fontSize: '11px',
                         color: getPositionColor(market.position),
-                        marginLeft: '10px',
+                        marginLeft: '5px',
                     },
                 }}
             />
@@ -85,7 +78,7 @@ const GameLogo = styled.div`
     display: flex;
     position: relative;
     align-items: center;
-    width: 100%;
+    width: 120px;
     height: 100%;
 `;
 
@@ -100,7 +93,7 @@ const ClubLogo = styled.img<{ awayTeam?: boolean }>`
 const GameLabel = styled.div`
     display: block;
     width: 100%;
-    margin-right: 10px;
+    margin-right: 5px;
 `;
 
 const ClubName = styled.span`
