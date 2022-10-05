@@ -16,6 +16,7 @@ export const AMMContainer = styled.div`
     width: 100%;
     margin-top: 15px;
     padding-top: 20px;
+    padding-bottom: 20px;
 `;
 
 export const AMMContent = styled.div`

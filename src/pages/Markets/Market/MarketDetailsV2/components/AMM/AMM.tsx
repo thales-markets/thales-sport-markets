@@ -120,8 +120,6 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         return multipleStableBalances.data;
     }, [multipleStableBalances.data]);
 
-    console.log('stableBalances ', stableBalances);
-
     const positionPriceDetailsQuery = usePositionPriceDetailsQuery(
         market.address,
         selectedPosition,
@@ -531,6 +529,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         );
     };
 
+    const isBuy = selectedSide == Side.BUY;
     const showPotentialProfit = !Number(tokenAmount) || positionPriceDetailsQuery.isLoading || !!tooltipTextUsdAmount;
     const liqudityInfo = floorNumberToDecimals(availablePerSide.positions[selectedPosition].available);
     const showCollateralSelector = selectedSide == Side.BUY && !market.gameStarted;
@@ -542,7 +541,11 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         <>
             <AMMContainer>
                 <AMMContent>
-                    <PrimaryLabel>{t('markets.market-details.amount-to-buy')}</PrimaryLabel>
+                    <PrimaryLabel>
+                        {isBuying
+                            ? t('markets.market-details.amount-to-buy')
+                            : t('markets.market-details.amount-to-sell')}
+                    </PrimaryLabel>
                     <CustomTooltip open={!!tooltipTextUsdAmount && !openApprovalModal} title={tooltipTextUsdAmount}>
                         <AmountToBuyContainer>
                             <AmountToBuyInput
@@ -572,31 +575,35 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                             <SecondaryValue>{skew}</SecondaryValue>
                         </DetailContainer>
                     </InputDetails>
-                    <PotentialProfitContainer>
-                        <PrimaryLabel>{t('markets.market-details.potential-profit')}</PrimaryLabel>
-                        <PotentialProfit>
-                            {showPotentialProfit
-                                ? '-'
-                                : `$${formatCurrency(
-                                      Number(tokenAmount) - ammPosition.sides[selectedSide].quote
-                                  )} (${formatPercentage(
-                                      1 / (ammPosition.sides[selectedSide].quote / Number(tokenAmount)) - 1
-                                  )})`}
-                        </PotentialProfit>
-                    </PotentialProfitContainer>
-                    <CollateralInfoContainer>
-                        <PrimaryLabel>{t('market.pay-with')}</PrimaryLabel>
-                        <CollateralInfo>
-                            <Collateral>{COLLATERALS[selectedStableIndex]}</Collateral>
-                            <StableBalance>
-                                {`${t('markets.market-details.available')} ${formatCurrencyWithSign(
-                                    USD_SIGN,
-                                    stableBalances ? stableBalances[COLLATERALS[selectedStableIndex]] : 0,
-                                    2
-                                )}`}
-                            </StableBalance>
-                        </CollateralInfo>
-                    </CollateralInfoContainer>
+                    {isBuy && (
+                        <PotentialProfitContainer>
+                            <PrimaryLabel>{t('markets.market-details.potential-profit')}</PrimaryLabel>
+                            <PotentialProfit>
+                                {showPotentialProfit
+                                    ? '-'
+                                    : `$${formatCurrency(
+                                          Number(tokenAmount) - ammPosition.sides[selectedSide].quote
+                                      )} (${formatPercentage(
+                                          1 / (ammPosition.sides[selectedSide].quote / Number(tokenAmount)) - 1
+                                      )})`}
+                            </PotentialProfit>
+                        </PotentialProfitContainer>
+                    )}
+                    {isBuy && (
+                        <CollateralInfoContainer>
+                            <PrimaryLabel>{t('market.pay-with')}</PrimaryLabel>
+                            <CollateralInfo>
+                                <Collateral>{COLLATERALS[selectedStableIndex]}</Collateral>
+                                <StableBalance>
+                                    {`${t('markets.market-details.available')} ${formatCurrencyWithSign(
+                                        USD_SIGN,
+                                        stableBalances ? stableBalances[COLLATERALS[selectedStableIndex]] : 0,
+                                        2
+                                    )}`}
+                                </StableBalance>
+                            </CollateralInfo>
+                        </CollateralInfoContainer>
+                    )}
                     {showCollateralSelector && (
                         <CollateralSelector
                             collateralArray={COLLATERALS}
