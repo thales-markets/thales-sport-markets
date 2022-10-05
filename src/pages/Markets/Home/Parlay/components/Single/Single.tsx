@@ -32,7 +32,6 @@ import {
 } from 'utils/formatters/number';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
-import onboardConnector from 'utils/onboardConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
@@ -55,6 +54,7 @@ import {
     SummaryValue,
 } from '../../styled-components';
 import CollateralSelector from '../CollateralSelector';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -63,6 +63,8 @@ type SingleProps = {
 const Single: React.FC<SingleProps> = ({ market }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
+    const { openConnectModal } = useConnectModal();
+
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -436,7 +438,7 @@ const Single: React.FC<SingleProps> = ({ market }) => {
     const getSubmitButton = () => {
         if (!isWalletConnected) {
             return (
-                <SubmitButton disabled={submitDisabled} onClick={() => onboardConnector.connectWallet()}>
+                <SubmitButton onClick={() => openConnectModal?.()}>
                     {t('common.wallet.connect-your-wallet')}
                 </SubmitButton>
             );
