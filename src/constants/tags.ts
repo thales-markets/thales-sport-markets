@@ -15,7 +15,7 @@ export const TAGS_LIST: Tags = [
     { id: 9013, label: 'Bundesliga', logo: '/logos/leagueLogos/bundesliga.png', favourite: false, hidden: false },
     { id: 9014, label: 'La Liga', logo: `/logos/leagueLogos/LaLiga.png`, favourite: false, hidden: false },
     { id: 9015, label: 'Serie A', logo: `/logos/leagueLogos/seriea.png`, favourite: false, hidden: false },
-    { id: 9016, label: 'UEFA CL', logo: `/logos/leagueLogos/ucl-white.png`, favourite: false, hidden: false },
+    { id: 9016, label: 'Champions League', logo: `/logos/leagueLogos/ucl-white.png`, favourite: false, hidden: false },
     { id: 9100, label: 'Formula 1', logo: '/logos/leagueLogos/f1.png', favourite: false, hidden: false },
     { id: 9101, label: 'MotoGP', logo: `/logos/leagueLogos/motogp.png`, favourite: false, hidden: false },
 ];
@@ -39,6 +39,8 @@ export const SPORTS_MAP: SportsMap = {
     9100: 'Motosport',
     9101: 'Motosport',
 };
+
+export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [9002, 9003, 9004, 9005, 9006, 9008, 9007, 9100, 9101];
 
 export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Football: [9001, 9002],

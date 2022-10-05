@@ -148,7 +148,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                                 setDateParam('');
                                 setSelectedPeriod(0);
                             } else {
-                                const calculatedDate = addHoursToCurrentDate(24);
+                                const calculatedDate = addHoursToCurrentDate(24, true);
                                 setDateFilter(calculatedDate.getTime());
                                 setDateParam(calculatedDate.toDateString());
                                 setSelectedPeriod(24);
@@ -166,7 +166,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                                 setDateParam('');
                                 setSelectedPeriod(0);
                             } else {
-                                const calculatedDate = addHoursToCurrentDate(168);
+                                const calculatedDate = addHoursToCurrentDate(168, true);
                                 setDateFilter(calculatedDate.getTime());
                                 setDateParam(calculatedDate.toDateString());
                                 setSelectedPeriod(168);
@@ -182,9 +182,14 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
     );
 };
 
-const addHoursToCurrentDate = (numberOfHours: number) => {
+const addHoursToCurrentDate = (numberOfHours: number, setToEOD?: boolean) => {
     const newDateFilter = new Date();
-    newDateFilter.setTime(newDateFilter.getTime() + numberOfHours * 60 * 60 * 1000);
+    if (setToEOD) {
+        newDateFilter.setHours(23, 59, 59, 999);
+        newDateFilter.setTime(newDateFilter.getTime() + numberOfHours * 60 * 60 * 1000);
+    } else {
+        newDateFilter.setTime(newDateFilter.getTime() + numberOfHours * 60 * 60 * 1000);
+    }
     return newDateFilter;
 };
 

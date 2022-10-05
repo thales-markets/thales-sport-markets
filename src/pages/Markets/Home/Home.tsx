@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
+import { getFavouriteLeagues } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -29,7 +30,6 @@ import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common'
 import {
     AccountPosition,
     AccountPositionsMap,
-    // GamesOnDate,
     SortOptionType,
     SportMarketInfo,
     SportMarkets,
@@ -44,7 +44,6 @@ import GlobalFilters from '../components/GlobalFilters';
 import SortOption from '../components/SortOption';
 import SportFilter from '../components/SportFilter';
 import TagsDropdown from '../components/TagsDropdown';
-// import HeaderDatepicker from './HeaderDatepicker';
 import MarketsGrid from './MarketsGrid';
 import Parlay from './Parlay';
 import UserHistory from './UserHistory';
@@ -83,6 +82,8 @@ const Home: React.FC = () => {
         return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite, hidden: tag.hidden };
     });
 
+    const favouriteLeagues = useSelector(getFavouriteLeagues);
+
     const [tagFilter, setTagFilter] = useLocalStorage<Tags>(LOCAL_STORAGE_KEYS.FILTER_TAGS, []);
     const [availableTags, setAvailableTags] = useState<Tags>(tagsList.sort((a, b) => a.label.localeCompare(b.label)));
 
@@ -101,7 +102,6 @@ const Home: React.FC = () => {
             globalFilterParam != ''
                 ? setGlobalFilter(globalFilterParam as GlobalFiltersEnum)
                 : setGlobalFilterParam(globalFilter);
-            console.log(dateFilter);
             dateParam != ''
                 ? setDateFilter(new Date(dateParam).getTime())
                 : setDateParam(dateFilter !== 0 ? new Date(dateFilter).toDateString() : '');
@@ -180,8 +180,19 @@ const Home: React.FC = () => {
             filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => market.sport === sportFilter);
         }
 
-        return filteredMarkets;
-    }, [datesFilteredMarkets, sportFilter]);
+        let favouriteMarkets = datesFilteredMarkets;
+        if (favouriteLeagues.length > 0) {
+            favouriteMarkets = favouriteMarkets.filter((market: SportMarketInfo) =>
+                favouriteLeagues
+                    .filter((league) => league.favourite)
+                    .map((league) => league.id)
+                    .includes(market.tags.map((tag) => Number(tag))[0])
+            );
+        }
+        const marketUnion = new Set<SportMarketInfo>([...filteredMarkets, ...favouriteMarkets]);
+
+        return Array.from(marketUnion);
+    }, [datesFilteredMarkets, sportFilter, favouriteLeagues]);
 
     const tagsFilteredMarkets = useMemo(() => {
         let filteredMarkets = sportFilteredMarkets;
@@ -192,93 +203,22 @@ const Home: React.FC = () => {
             );
         }
 
-        return filteredMarkets;
-    }, [sportFilteredMarkets, tagFilter]);
-
-    const accountClaimsCount = useMemo(() => {
-        if (sportMarketsQuery.data) {
-            const allMarketsFiltered = filterMarketsForCount(
-                marketsCached[GlobalFiltersEnum.All],
-                marketSearch,
-                dateFilter,
-                sportFilter,
-                tagFilter
+        let favouriteMarkets = sportFilteredMarkets;
+        if (favouriteLeagues.length > 0) {
+            favouriteMarkets = favouriteMarkets.filter((market: SportMarketInfo) =>
+                favouriteLeagues
+                    .filter((league) => league.favourite)
+                    .map((league) => league.id)
+                    .includes(market.tags.map((tag) => Number(tag))[0])
             );
-
-            return allMarketsFiltered.filter((market: SportMarketInfo) => {
-                const accountPositionsPerMarket: AccountPosition[] = accountPositions[market.address];
-                return isClaimAvailable(accountPositionsPerMarket);
-            }).length;
         }
-    }, [sportMarketsQuery.data, marketsCached, marketSearch, dateFilter, sportFilter, tagFilter, accountPositions]);
+        const marketUnion = new Set<SportMarketInfo>([...filteredMarkets, ...favouriteMarkets]);
 
-    const [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount] = useMemo(() => {
-        let [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount] = [0, 0, 0, 0];
-        if (sportMarketsQuery.data) {
-            const allMarketsFiltered = filterMarketsForCount(
-                marketsCached[GlobalFiltersEnum.All],
-                marketSearch,
-                dateFilter,
-                sportFilter,
-                tagFilter
-            );
-            allMarketsCount = allMarketsFiltered.length;
-
-            const openedMarketsFiltered = filterMarketsForCount(
-                marketsCached[GlobalFiltersEnum.OpenMarkets],
-                marketSearch,
-                dateFilter,
-                sportFilter,
-                tagFilter
-            );
-            openedMarketsCount = openedMarketsFiltered.length;
-
-            const canceledMarketsFiltered = filterMarketsForCount(
-                marketsCached[GlobalFiltersEnum.Canceled],
-                marketSearch,
-                dateFilter,
-                sportFilter,
-                tagFilter
-            );
-            canceledCount = canceledMarketsFiltered.length;
-
-            const resolvedMarketsFiltered = filterMarketsForCount(
-                marketsCached[GlobalFiltersEnum.ResolvedMarkets],
-                marketSearch,
-                dateFilter,
-                sportFilter,
-                tagFilter
-            );
-            resolvedMarketsCount = resolvedMarketsFiltered.length;
-        }
-
-        return [allMarketsCount, openedMarketsCount, resolvedMarketsCount, canceledCount];
-    }, [sportMarketsQuery.data, marketsCached, marketSearch, dateFilter, sportFilter, tagFilter]);
-
-    const accountPositionsCount = useMemo(() => {
-        if (sportMarketsQuery.data) {
-            const allMarketsFiltered = filterMarketsForCount(
-                marketsCached[GlobalFiltersEnum.All],
-                marketSearch,
-                dateFilter,
-                sportFilter,
-                tagFilter
-            );
-
-            return allMarketsFiltered.filter((market: SportMarketInfo) => {
-                const accountPositionsPerMarket: AccountPosition[] = accountPositions[market.address];
-                let positionExists = false;
-                accountPositionsPerMarket?.forEach((accountPosition) =>
-                    accountPosition.amount > 0 ? (positionExists = true) : ''
-                );
-                return positionExists;
-            }).length;
-        }
-    }, [sportMarketsQuery.data, marketsCached, marketSearch, dateFilter, sportFilter, tagFilter, accountPositions]);
+        return Array.from(marketUnion);
+    }, [sportFilteredMarkets, tagFilter, favouriteLeagues]);
 
     const marketsList = useMemo(() => {
         let filteredMarkets = tagsFilteredMarkets;
-
         switch (globalFilter) {
             case GlobalFiltersEnum.OpenMarkets:
                 filteredMarkets = filteredMarkets.filter(
@@ -353,25 +293,6 @@ const Home: React.FC = () => {
         }
     };
 
-    const getCount = (filter: GlobalFiltersEnum) => {
-        switch (filter) {
-            case GlobalFiltersEnum.OpenMarkets:
-                return openedMarketsCount;
-            case GlobalFiltersEnum.ResolvedMarkets:
-                return resolvedMarketsCount;
-            case GlobalFiltersEnum.Canceled:
-                return canceledCount;
-            case GlobalFiltersEnum.YourPositions:
-                return accountPositionsCount;
-            case GlobalFiltersEnum.Claim:
-                return accountClaimsCount;
-            case GlobalFiltersEnum.All:
-                return allMarketsCount;
-            default:
-                return undefined;
-        }
-    };
-
     const resetFilters = useCallback(() => {
         setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
         setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
@@ -427,14 +348,6 @@ const Home: React.FC = () => {
                         return (
                             <>
                                 <SportFilter
-                                    disabled={
-                                        filterItem !== SportFilterEnum.All &&
-                                        filterItem !== SportFilterEnum.Baseball &&
-                                        filterItem !== SportFilterEnum.Soccer &&
-                                        filterItem !== SportFilterEnum.Football &&
-                                        filterItem !== SportFilterEnum.UFC &&
-                                        filterItem !== SportFilterEnum.Motosport
-                                    }
                                     selected={sportFilter === filterItem}
                                     sport={filterItem}
                                     onClick={() => {
@@ -515,7 +428,6 @@ const Home: React.FC = () => {
                                         setGlobalFilterParam(filterItem);
                                     }}
                                     key={filterItem}
-                                    count={getCount(filterItem)}
                                 >
                                     {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
                                 </GlobalFilter>
@@ -550,7 +462,6 @@ const Home: React.FC = () => {
                                         setGlobalFilterParam(filterItem);
                                     }}
                                     key={filterItem}
-                                    count={getCount(filterItem)}
                                 >
                                     {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
                                 </GlobalFilter>
@@ -601,14 +512,6 @@ const Home: React.FC = () => {
                             return (
                                 <>
                                     <SportFilter
-                                        disabled={
-                                            filterItem !== SportFilterEnum.All &&
-                                            filterItem !== SportFilterEnum.Baseball &&
-                                            filterItem !== SportFilterEnum.Soccer &&
-                                            filterItem !== SportFilterEnum.Football &&
-                                            filterItem !== SportFilterEnum.UFC &&
-                                            filterItem !== SportFilterEnum.Motosport
-                                        }
                                         selected={sportFilter === filterItem}
                                         sport={filterItem}
                                         onClick={() => {
@@ -748,37 +651,6 @@ const groupBySortedMarkets = (markets: SportMarkets) => {
     });
 
     return [...openMarkets, ...comingSoonMarkets, ...pendingResolutionMarkets, ...finishedMarkets, ...canceledMarkets];
-};
-
-const filterMarketsForCount = (
-    markets: SportMarkets,
-    marketSearch: string,
-    dateFilter: any,
-    sportFilter: any,
-    tagFilter: any
-) => {
-    return markets.filter((market) => {
-        if (
-            marketSearch &&
-            !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
-            !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
-        ) {
-            return false;
-        }
-        if (dateFilter !== 0 && market.maturityDate.getTime() <= dateFilter) {
-            return false;
-        }
-        if (sportFilter !== SportFilterEnum.All && market.sport !== sportFilter) {
-            return false;
-        }
-        if (
-            tagFilter.length > 0 &&
-            !tagFilter.map((tag: TagInfo) => tag.id).includes(market.tags.map((tag) => Number(tag))[0])
-        ) {
-            return false;
-        }
-        return true;
-    });
 };
 
 const Container = styled(FlexDivColumnCentered)`

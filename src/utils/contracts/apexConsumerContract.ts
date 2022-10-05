@@ -240,6 +240,11 @@ export const apexConsumerContract = {
                             name: 'drawOdds',
                             type: 'uint256',
                         },
+                        {
+                            internalType: 'bool',
+                            name: 'arePostQualifyingOddsFetched',
+                            type: 'bool',
+                        },
                     ],
                     indexed: false,
                     internalType: 'struct ApexConsumer.GameOdds',
@@ -399,6 +404,11 @@ export const apexConsumerContract = {
                             internalType: 'uint256',
                             name: 'drawOdds',
                             type: 'uint256',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'arePostQualifyingOddsFetched',
+                            type: 'bool',
                         },
                     ],
                     indexed: false,
@@ -1007,6 +1017,11 @@ export const apexConsumerContract = {
                     name: 'drawOdds',
                     type: 'uint256',
                 },
+                {
+                    internalType: 'bool',
+                    name: 'arePostQualifyingOddsFetched',
+                    type: 'bool',
+                },
             ],
             stateMutability: 'view',
             type: 'function',
@@ -1227,25 +1242,6 @@ export const apexConsumerContract = {
         {
             inputs: [
                 {
-                    internalType: 'bytes32',
-                    name: '_gameId',
-                    type: 'bytes32',
-                },
-            ],
-            name: 'getResult',
-            outputs: [
-                {
-                    internalType: 'uint256',
-                    name: '_result',
-                    type: 'uint256',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [
-                {
                     internalType: 'address',
                     name: '_owner',
                     type: 'address',
@@ -1313,6 +1309,25 @@ export const apexConsumerContract = {
                 },
             ],
             name: 'isGameInResolvedStatus',
+            outputs: [
+                {
+                    internalType: 'bool',
+                    name: '',
+                    type: 'bool',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bytes32',
+                    name: '_gameId',
+                    type: 'bytes32',
+                },
+            ],
+            name: 'isGamePausedByNonExistingPostQualifyingOdds',
             outputs: [
                 {
                     internalType: 'bool',
@@ -1601,34 +1616,6 @@ export const apexConsumerContract = {
                 },
             ],
             stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [
-                {
-                    internalType: 'bytes32',
-                    name: '_gameId',
-                    type: 'bytes32',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '_outcome',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'uint8',
-                    name: '_homeScore',
-                    type: 'uint8',
-                },
-                {
-                    internalType: 'uint8',
-                    name: '_awayScore',
-                    type: 'uint8',
-                },
-            ],
-            name: 'resolveGameManually',
-            outputs: [],
-            stateMutability: 'nonpayable',
             type: 'function',
         },
         {

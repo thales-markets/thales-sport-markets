@@ -2,6 +2,7 @@ import { APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
 import { AccountPosition, MarketData, MarketInfo, SportMarketInfo } from 'types/markets';
 import { formatCurrency } from './formatters/number';
 import ordinal from 'ordinal';
+import { TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
 
 export const getRoi = (ticketPrice: number, potentialWinnings: number, showRoi: boolean) =>
     showRoi ? (potentialWinnings - ticketPrice) / ticketPrice : 0;
@@ -117,15 +118,23 @@ export const getScoreForApexGame = (resultDetails: string, defaultHomeScore: str
     };
 };
 
-export const fixScoresForApexGame = (market: SportMarketInfo) => {
-    if (market.isApex) {
-        const score = getScoreForApexGame(
-            market.resultDetails,
-            market.homeScore.toString(),
-            market.awayScore.toString()
-        );
-        market.homeScore = score.homeScore;
-        market.awayScore = score.awayScore;
-    }
+export const appplyLogicForApexGame = (market: SportMarketInfo) => {
+    // parse result and set score
+    const score = getScoreForApexGame(market.resultDetails, market.homeScore.toString(), market.awayScore.toString());
+    market.homeScore = score.homeScore;
+    market.awayScore = score.awayScore;
+
+    // show market as paused if there are no new odds for post qualifying phase
+    market.isPaused =
+        !!market.qualifyingStartTime &&
+        market.qualifyingStartTime < new Date().getTime() &&
+        market.maturityDate.getTime() > new Date().getTime() &&
+        !market.arePostQualifyingOddsFetched;
     return market;
+};
+
+export const getVisibilityOfDrawOptionByTagId = (tags: Array<number>) => {
+    const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(element));
+    if (tag) return false;
+    return true;
 };

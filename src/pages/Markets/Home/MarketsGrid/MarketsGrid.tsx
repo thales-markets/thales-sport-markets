@@ -1,13 +1,17 @@
 import SPAAnchor from 'components/SPAAnchor';
+import { TAGS_LIST } from 'constants/tags';
 import i18n from 'i18n';
+import _ from 'lodash';
 import React from 'react';
 import Masonry from 'react-masonry-css';
+import { useSelector } from 'react-redux';
+import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { AccountPositionsMap, SportMarkets } from 'types/markets';
+import { AccountPositionsMap, SportMarkets, TagInfo } from 'types/markets';
 import { buildMarketLink } from 'utils/routes';
 import MarketCard from '../MarketCard';
-import MarketListCard from '../MarketListCard';
+import MarketsList from '../MarketsList';
 
 type MarketsGridProps = {
     markets: SportMarkets;
@@ -23,6 +27,17 @@ export const breakpointColumnsObj = {
 const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) => {
     const mobileGridView = window.innerWidth < 950;
     const language = i18n.language;
+    const favouriteLeagues = useSelector(getFavouriteLeagues);
+    const marketsMap = new Map();
+
+    const marketsPartintionedByTag = _(markets).groupBy('tags[0]').values().value();
+
+    marketsPartintionedByTag.forEach((marketArrayByTag) =>
+        marketsMap.set(marketArrayByTag[0].tags[0], marketArrayByTag)
+    );
+
+    const marketsKeys = Array.from(marketsMap.keys());
+
     return (
         <Container>
             {mobileGridView ? (
@@ -37,17 +52,33 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) 
                 </Masonry>
             ) : (
                 <ListContainer>
-                    {markets.map((market, index) => {
-                        return (
-                            <SPAAnchor key={index} href={buildMarketLink(market.address, language)}>
-                                <MarketListCard
-                                    market={market}
-                                    key={index + 'list'}
-                                    accountPositions={accountPositions[market.address]}
+                    {marketsKeys
+                        .sort((a, b) => {
+                            const isFavouriteA = Number(
+                                favouriteLeagues.filter((league: TagInfo) => league.id == a)[0].favourite
+                            );
+                            const isFavouriteB = Number(
+                                favouriteLeagues.filter((league: TagInfo) => league.id == b)[0].favourite
+                            );
+                            const leagueNameA = TAGS_LIST.find((t: TagInfo) => t.id == a)?.label;
+                            const leagueNameB = TAGS_LIST.find((t: TagInfo) => t.id == b)?.label;
+                            if (isFavouriteA == isFavouriteB) {
+                                return (leagueNameA || '') > (leagueNameB || '') ? 1 : -1;
+                            } else {
+                                return isFavouriteB - isFavouriteA;
+                            }
+                        })
+                        .map((leagueId: number, index: number) => {
+                            return (
+                                <MarketsList
+                                    key={index}
+                                    league={leagueId}
+                                    markets={marketsMap.get(leagueId)}
+                                    language={language}
+                                    accountPositions={accountPositions}
                                 />
-                            </SPAAnchor>
-                        );
-                    })}
+                            );
+                        })}
                 </ListContainer>
             )}
         </Container>
@@ -64,7 +95,15 @@ const Container = styled(FlexDiv)`
         width: 100%;
     }
     overflow-y: auto;
+    // TODO - maybe remove max-height and scrolling, enable whole page scroll
     max-height: 1210px;
+    scrollbar-width: 5px; /* Firefox */
+    -ms-overflow-style: none;
+    ::-webkit-scrollbar {
+        /* WebKit */
+        width: 5px;
+        height: 5px;
+    }
 `;
 
 const ListContainer = styled.div`

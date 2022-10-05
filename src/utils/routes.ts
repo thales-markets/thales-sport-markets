@@ -18,8 +18,18 @@ export const buildMarketLink = (marketAddress: string, language: string, exclude
 
 export const buildReferralLink = (route: string, hash: string, search: string, referralId: string) => {
     if (ifIpfsDeployment) {
+        if (hash.includes('referralId')) {
+            const reg = /referralId=\w{1,42}/;
+            const replacedReferral = hash.replace(reg, `referralId=${referralId.toLowerCase()}`);
+            return `/${replacedReferral}`;
+        }
         return `/${hash}&referralId=${referralId.toLowerCase()}`;
     } else {
+        if (search.includes('referralId')) {
+            const reg = /referralId=\w{1,42}/;
+            const replacedReferral = search.replace(reg, `referralId=${referralId.toLowerCase()}`);
+            return `${route}${replacedReferral}`;
+        }
         return `${route}${search}&referralId=${referralId.toLowerCase()}`;
     }
 };

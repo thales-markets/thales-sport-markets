@@ -7,7 +7,7 @@ import { SportMarketInfo, SportMarkets } from 'types/markets';
 import { NetworkId } from 'types/network';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import { fixApexName, fixDuplicatedTeamName, fixLongTeamName } from 'utils/formatters/string';
-import { fixScoresForApexGame } from 'utils/markets';
+import { appplyLogicForApexGame } from 'utils/markets';
 import networkConnector from 'utils/networkConnector';
 
 const marketsParams = {
@@ -45,7 +45,7 @@ const mapResult = async (markets: any, globalFilter: GlobalFiltersEnum) => {
             market = fixLongTeamName(market);
             market.sport = SPORTS_MAP[market.tags[0]];
             if (market.isApex) {
-                market = fixScoresForApexGame(market);
+                market = appplyLogicForApexGame(market);
             }
 
             return market;
@@ -76,7 +76,7 @@ const mapResult = async (markets: any, globalFilter: GlobalFiltersEnum) => {
                             });
                     }
                     if (market.isApex) {
-                        market = fixScoresForApexGame(market);
+                        market = appplyLogicForApexGame(market);
                     }
 
                     return market;
@@ -103,7 +103,7 @@ const mapResult = async (markets: any, globalFilter: GlobalFiltersEnum) => {
                     market = fixLongTeamName(market);
                     market.sport = SPORTS_MAP[market.tags[0]];
                     if (market.isApex) {
-                        market = fixScoresForApexGame(market);
+                        market = appplyLogicForApexGame(market);
                     }
                     return market;
                 });

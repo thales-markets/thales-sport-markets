@@ -11,7 +11,10 @@
             "get-usd": "Get {{amount}}",
             "approve": "Approve",
             "get-usd-progress": "Minting {{amount}}...",
-            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use."
+            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use.",
+            "disclaimer2": "และยอมรับเงื่อนไขการใช้งาน",
+            "disclaimer-lowercase": "ข้อจำกัดความรับผิดชอบ",
+            "disclaimer1": "โดยการเชื่อมต่อกระเป๋าเงิน คุณรับทราบว่าคุณได้อ่านและเข้าใจตลาดการทำงานล่วงเวลาแล้ว"
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -251,7 +254,9 @@
                 "title": "In wallet"
             },
             "skew": "ลาด",
-            "max": "แม็กซ์"
+            "max": "แม็กซ์",
+            "amount-to-buy": "จำนวนเงินที่จะซื้อ",
+            "available": "มีอยู่"
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity."
     },
@@ -265,7 +270,10 @@
             "pnl": "Losses",
             "percentage": "Percentage",
             "reward-amount": "Reward",
-            "no-data-available": "No data available"
+            "no-data-available": "No data available",
+            "safebox": "ค่าธรรมเนียม SafeBox",
+            "volume": "ปริมาณ",
+            "rebates": "ส่วนลด"
         },
         "periods": {
             "second-period": "ช่วงที่สอง",
@@ -280,7 +288,9 @@
             "period-1": "ช่วงที่สอง"
         },
         "your-score": "คะแนนของคุณ",
-        "total-negative-pnl": "ขาดทุนทั้งหมด"
+        "total-negative-pnl": "ขาดทุนทั้งหมด",
+        "total-global-rebates": "รวมเงินคืนที่ต้องจ่าย",
+        "twap": "หนึ่งสัปดาห์ TWAP"
     },
     "quiz": {
         "title": "Sports Trivia competition",

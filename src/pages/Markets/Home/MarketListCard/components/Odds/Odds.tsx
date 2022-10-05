@@ -14,6 +14,7 @@ type OddsProps = {
     finalResult?: number;
     isLive?: boolean;
     isCancelled?: boolean;
+    marketId: string;
     odds?: {
         homeOdds: number;
         awayOdds: number;
@@ -28,6 +29,7 @@ const Odds: React.FC<OddsProps> = ({
     finalResult,
     isLive,
     isCancelled,
+    marketId,
     odds,
     accountPositions,
     isPaused,
@@ -60,11 +62,12 @@ const Odds: React.FC<OddsProps> = ({
             {showOdds && (
                 <OddsContainer>
                     <PositionSymbol
+                        marketId={marketId}
                         type={0}
                         symbolColor={ODDS_COLOR.HOME}
                         additionalText={{
                             firstText: formatMarketOdds(selectedOddsType, odds?.homeOdds),
-                            firstTextStyle: { color: ODDS_COLOR.HOME, marginLeft: '5px' },
+                            firstTextStyle: { color: ODDS_COLOR.HOME, marginLeft: '7px' },
                         }}
                         showTooltip={odds?.homeOdds == 0}
                         glow={
@@ -74,11 +77,12 @@ const Odds: React.FC<OddsProps> = ({
                     />
                     {odds?.drawOdds !== 0 && (
                         <PositionSymbol
+                            marketId={marketId}
                             type={2}
                             symbolColor={ODDS_COLOR.DRAW}
                             additionalText={{
                                 firstText: formatMarketOdds(selectedOddsType, odds?.drawOdds),
-                                firstTextStyle: { color: ODDS_COLOR.DRAW, marginLeft: '5px' },
+                                firstTextStyle: { color: ODDS_COLOR.DRAW, marginLeft: '7px' },
                             }}
                             glow={
                                 accountPositions &&
@@ -87,11 +91,12 @@ const Odds: React.FC<OddsProps> = ({
                         />
                     )}
                     <PositionSymbol
+                        marketId={marketId}
                         type={1}
                         symbolColor={ODDS_COLOR.AWAY}
                         additionalText={{
                             firstText: formatMarketOdds(selectedOddsType, odds?.awayOdds),
-                            firstTextStyle: { color: ODDS_COLOR.AWAY, marginLeft: '5px' },
+                            firstTextStyle: { color: ODDS_COLOR.AWAY, marginLeft: '7px' },
                         }}
                         showTooltip={odds?.awayOdds == 0}
                         glow={

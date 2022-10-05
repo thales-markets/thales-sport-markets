@@ -135,12 +135,6 @@ const LeagueFlag = (tagId: number | any) => {
             return <Flag size="m" code="ES" />;
         case TAGS_FLAGS.SERIE_A:
             return <Flag size="m" code="IT" />;
-        // case TAGS_FLAGS.UEFA_CL:
-        //     return <Flag code="EU" />;
-        // case TAGS_FLAGS.FORMULA1:
-        //     return <Flag code="EU" />;
-        // case TAGS_FLAGS.MOTOGP:
-        //     return <Flag code="EU" />;
         default:
             return <FlagWorld alt="World flag" src="/world-flag.png" />;
     }

@@ -3,7 +3,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import onboardConnector from 'utils/onboardConnector';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import Button from 'components/Button';
@@ -23,6 +22,7 @@ import Checkbox from 'components/fields/Checkbox';
 import { getAddress, isAddress } from 'ethers/lib/utils';
 import { ValidationTooltip } from 'pages/Quiz/styled-components';
 import { LINKS } from 'constants/links';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 type MintVoucherModalProps = {
     onClose: () => void;
@@ -48,6 +48,8 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [paymentTokenBalance, setPaymentTokenBalance] = useState<number | string>('');
+
+    const { openConnectModal } = useConnectModal();
 
     const [amount, setAmount] = useState<number>(-1);
     const [isAnotherWallet, setIsAnotherWallet] = useState<boolean>(false);
@@ -173,9 +175,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
     const getSubmitButton = () => {
         if (!isWalletConnected) {
             return (
-                <ModalButton onClick={() => onboardConnector.connectWallet()}>
-                    {t('common.wallet.connect-your-wallet')}
-                </ModalButton>
+                <ModalButton onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</ModalButton>
             );
         }
         if (insufficientBalance) {
