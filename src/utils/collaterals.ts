@@ -1,4 +1,4 @@
-import { COLLATERAL_INDEX_TO_COLLATERAL, currencyKeyToAssetIconMap, STABLE_DECIMALS } from 'constants/currency';
+import { currencyKeyToAssetIconMap } from 'constants/currency';
 import { COLLATERALS } from 'constants/markets';
 import { NetworkId } from 'types/network';
 import multipleCollateral from './contracts/multipleCollateralContract';
@@ -24,9 +24,4 @@ export const getCollateralAddress = (
     }
 
     return undefined;
-};
-
-export const getDecimalsByStableCoinIndex = (stableIndex: number) => {
-    const collateralKey = COLLATERAL_INDEX_TO_COLLATERAL[stableIndex];
-    return STABLE_DECIMALS[collateralKey];
 };

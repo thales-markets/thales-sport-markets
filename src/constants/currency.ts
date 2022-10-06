@@ -4,7 +4,6 @@ import { ReactComponent as sUSDIcon } from 'assets/currencies/sUSD.svg';
 import { ReactComponent as DAIIcon } from 'assets/currencies/DAI.svg';
 import { ReactComponent as USDCIcon } from 'assets/currencies/USDC.svg';
 import { ReactComponent as USDTIcon } from 'assets/currencies/USDT.svg';
-import { StablecoinKey } from 'utils/collaterals';
 
 export const CURRENCY_MAP = {
     sUSD: 'sUSD',
@@ -39,7 +38,12 @@ export enum COLLATERALS_INDEX {
     'USDT' = 3,
 }
 
-export const COLLATERAL_INDEX_TO_COLLATERAL: StablecoinKey[] = ['sUSD', 'DAI', 'USDC', 'USDT'];
+export const COLLATERAL_INDEX_TO_COLLATERAL = {
+    0: 'sUSD',
+    1: 'DAI',
+    2: 'USDC',
+    3: 'USDT',
+};
 
 export const STABLE_DECIMALS = {
     sUSD: 18,
