@@ -44,11 +44,12 @@ const mapResult = async (markets: any, globalFilter: GlobalFilterEnum) => {
             market.maturityDate = new Date(market.maturityDate);
             market.homeTeam = market.isApex ? fixApexName(market.homeTeam) : fixDuplicatedTeamName(market.homeTeam);
             market.awayTeam = market.isApex ? fixApexName(market.awayTeam) : fixDuplicatedTeamName(market.awayTeam);
-            market = fixLongTeamName(market);
-            market.sport = SPORTS_MAP[market.tags[0]];
             if (market.isApex) {
                 market = appplyLogicForApexGame(market);
+            } else {
+                market = fixLongTeamName(market);
             }
+            market.sport = SPORTS_MAP[market.tags[0]];
 
             return market;
         });
@@ -66,7 +67,11 @@ const mapResult = async (markets: any, globalFilter: GlobalFilterEnum) => {
                     market.awayTeam = market.isApex
                         ? fixApexName(market.awayTeam)
                         : fixDuplicatedTeamName(market.awayTeam);
-                    market = fixLongTeamName(market);
+                    if (market.isApex) {
+                        market = appplyLogicForApexGame(market);
+                    } else {
+                        market = fixLongTeamName(market);
+                    }
                     market.sport = SPORTS_MAP[market.tags[0]];
                     if (market.isOpen) {
                         oddsFromContract
@@ -76,9 +81,6 @@ const mapResult = async (markets: any, globalFilter: GlobalFilterEnum) => {
                                 market.awayOdds = bigNumberFormatter(obj.odds[1]);
                                 market.drawOdds = obj.odds[2] ? bigNumberFormatter(obj.odds[2]) : 0;
                             });
-                    }
-                    if (market.isApex) {
-                        market = appplyLogicForApexGame(market);
                     }
 
                     return market;
@@ -102,11 +104,12 @@ const mapResult = async (markets: any, globalFilter: GlobalFilterEnum) => {
                     market.awayTeam = market.isApex
                         ? fixApexName(market.awayTeam)
                         : fixDuplicatedTeamName(market.awayTeam);
-                    market = fixLongTeamName(market);
-                    market.sport = SPORTS_MAP[market.tags[0]];
                     if (market.isApex) {
                         market = appplyLogicForApexGame(market);
+                    } else {
+                        market = fixLongTeamName(market);
                     }
+                    market.sport = SPORTS_MAP[market.tags[0]];
                     return market;
                 });
 

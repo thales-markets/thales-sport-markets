@@ -41,7 +41,6 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
-import onboardConnector from 'utils/onboardConnector';
 import {
     getIsQuizStarted,
     startQuiz,
@@ -85,6 +84,7 @@ import { FinishInfo, LeaderboardItem } from 'types/quiz';
 import ordinal from 'ordinal';
 import { Info } from 'pages/Markets/Home/Home';
 import useQuizTweetQuery from 'queries/quiz/useQuizTweetQuery';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 const Quiz: React.FC = () => {
     const { t } = useTranslation();
@@ -105,6 +105,8 @@ const Quiz: React.FC = () => {
     const [isTwitterValid, setIsTwitterValid] = useState<boolean>(true);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [numberOfRewards, setNumberOfRewards] = useState<number>(0);
+
+    const { openConnectModal } = useConnectModal();
 
     const isStartQuizDisabled = !twitter || twitter.trim() === '' || isSubmitting;
     const isQuizInProgress = isQuizStarted && !isQuizFinished && currentQuizItem;
@@ -231,7 +233,7 @@ const Quiz: React.FC = () => {
     const getSubmitButton = () => {
         if (!isWalletConnected && !isQuizFinished) {
             return (
-                <SubmitButton onClick={() => onboardConnector.connectWallet()}>
+                <SubmitButton onClick={() => openConnectModal?.()}>
                     {t('common.wallet.connect-your-wallet')}
                 </SubmitButton>
             );

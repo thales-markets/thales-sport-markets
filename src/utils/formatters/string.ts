@@ -39,8 +39,10 @@ export const fixLongTeamNameString = (team: string) => {
 };
 
 export const fixApexName = (team: string) =>
-    team
-        .toLowerCase()
-        .split(' ')
-        .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
-        .join(' ');
+    team !== null
+        ? team
+              .toLowerCase()
+              .split(' ')
+              .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
+              .join(' ')
+        : '';
