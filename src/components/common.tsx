@@ -224,6 +224,8 @@ export const BetTypeInfo = styled.label`
     cursor: pointer;
     @media (max-width: 575px) {
         width: auto;
+        font-size: 15px;
+        line-height: 18px;
     }
 `;
 
