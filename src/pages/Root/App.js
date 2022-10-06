@@ -15,7 +15,9 @@ import Theme from 'layouts/Theme';
 import DappLayout from 'layouts/DappLayout';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useAccount, useProvider, useSigner } from 'wagmi';
+import LandingPageLayout from 'layouts/LandingPageLayout';
 
+const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
 const Rewards = lazy(() => import('pages/Rewards'));
@@ -87,10 +89,6 @@ const App = () => {
                                     <Markets />
                                 </DappLayout>
                             </Route>
-                            <Route exact path={ROUTES.Home}>
-                                <Redirect to={ROUTES.Markets.Home} />
-                                {/*<HomeLayout />*/}
-                            </Route>
                             <Route exact path={ROUTES.Rewards}>
                                 <DappLayout>
                                     <Rewards />
@@ -105,6 +103,17 @@ const App = () => {
                                 <DappLayout>
                                     <QuizLeaderboard />
                                 </DappLayout>
+                            </Route>
+                            <Route exact path={ROUTES.Home}>
+                                <LandingPageLayout>
+                                    <LandingPage />
+                                </LandingPageLayout>
+                            </Route>
+                            <Route>
+                                <Redirect to={ROUTES.Home} />
+                                <LandingPageLayout>
+                                    <LandingPage />
+                                </LandingPageLayout>
                             </Route>
                         </Switch>
                     </Router>
