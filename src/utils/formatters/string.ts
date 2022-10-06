@@ -38,13 +38,11 @@ export const fixLongTeamNameString = (team: string) => {
     return team;
 };
 
-export const fixApexName = (team: string) => {
-    if (!team) {
-        return '';
-    }
-    return team
-        .toLowerCase()
-        .split(' ')
-        .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
-        .join(' ');
-};
+export const fixApexName = (team: string) =>
+    team !== null
+        ? team
+              .toLowerCase()
+              .split(' ')
+              .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
+              .join(' ')
+        : '';

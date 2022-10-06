@@ -13,7 +13,8 @@ import { getIsAppReady } from '../../../../redux/modules/app';
 import HistoryTable from '../../components/HistoryTable';
 import { Position, PositionName } from '../../../../constants/options';
 import { getEtherscanTxLink } from '../../../../utils/etherscan';
-import { GlobalFilterEnum } from 'constants/markets';
+import { ApexBetTypeKeyMapping, GlobalFilterEnum } from 'constants/markets';
+import { getIsApexTopGame } from 'utils/markets';
 
 const UserHistory: React.FC = () => {
     const { t } = useTranslation();
@@ -52,15 +53,23 @@ const UserHistory: React.FC = () => {
         return userTransactions.map((tx) => {
             const market = markets.find((market) => tx.market === market.address);
             if (market) {
+                const isApexTopGame = getIsApexTopGame(market.isApex, market.betType);
                 return {
                     ...tx,
-                    game: `${market.homeTeam} - ${market.awayTeam}`,
+                    game: isApexTopGame
+                        ? `${market.homeTeam} - ${t(`common.${ApexBetTypeKeyMapping[market.betType]}`)}`
+                        : `${market.homeTeam} - ${market.awayTeam}`,
                     result: Position[market.finalResult - 1] as PositionName,
                     // @ts-ignore
                     usdValue: tx.paid,
-                    // @ts-ignore
-                    positionTeam: market[`${tx.position.toLowerCase()}Team`] || t('markets.market-card.draw'),
+                    positionTeam: isApexTopGame
+                        ? tx.position === 'HOME'
+                            ? t(`common.yes`)
+                            : t(`common.no`)
+                        : // @ts-ignore
+                          market[`${tx.position.toLowerCase()}Team`] || t('markets.market-card.draw'),
                     link: getEtherscanTxLink(networkId, tx.hash),
+                    isApexTopGame: isApexTopGame,
                 };
             } else {
                 // @ts-ignore
