@@ -16,6 +16,7 @@ export const TAGS_LIST: Tags = [
     { id: 9014, label: 'La Liga' },
     { id: 9015, label: 'Serie A' },
     { id: 9016, label: 'UEFA Champions League' },
+    { id: 9018, label: 'FIFA World Cup' },
     { id: 9100, label: 'Formula1' },
     { id: 9101, label: 'MotoGP' },
 ];
@@ -36,6 +37,7 @@ export const SPORTS_MAP: SportsMap = {
     9014: 'Soccer',
     9015: 'Soccer',
     9016: 'Soccer',
+    9018: 'Soccer',
     9100: 'Formula1',
     9101: 'MotoGP',
 };
@@ -45,7 +47,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Baseball: [9003],
     Basketball: [9004, 9005, 9008],
     Hockey: [9006],
-    Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016],
+    Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9018],
     UFC: [9007],
     Formula1: [9100],
     MotoGP: [9101],
