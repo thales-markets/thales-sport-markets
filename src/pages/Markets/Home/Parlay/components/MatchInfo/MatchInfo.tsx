@@ -8,12 +8,11 @@ import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { ParlaysMarket } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { formatMarketOdds } from 'utils/markets';
-import { getPositionOdds } from '../../Parlay';
+import { formatMarketOdds, getPositionOdds } from 'utils/markets';
 
-type GameProps = { market: ParlaysMarket };
+type MatchInfoProps = { market: ParlaysMarket };
 
-const Game: React.FC<GameProps> = ({ market }) => {
+const MatchInfo: React.FC<MatchInfoProps> = ({ market }) => {
     const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
 
@@ -35,7 +34,7 @@ const Game: React.FC<GameProps> = ({ market }) => {
 
     return (
         <>
-            <GameLogo>
+            <MatchLogo>
                 <ClubLogo
                     alt="Home team logo"
                     src={homeLogoSrc}
@@ -47,11 +46,11 @@ const Game: React.FC<GameProps> = ({ market }) => {
                     src={awayLogoSrc}
                     onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                 />
-            </GameLogo>
-            <GameLabel>
+            </MatchLogo>
+            <MatchLabel>
                 <ClubName>{market.homeTeam}</ClubName>
                 <ClubName>{market.awayTeam}</ClubName>
-            </GameLabel>
+            </MatchLabel>
             <PositionSymbol
                 type={market.position}
                 symbolColor={getPositionColor(market.position)}
@@ -74,7 +73,7 @@ const Game: React.FC<GameProps> = ({ market }) => {
     );
 };
 
-const GameLogo = styled.div`
+const MatchLogo = styled.div`
     display: flex;
     position: relative;
     align-items: center;
@@ -90,7 +89,7 @@ const ClubLogo = styled.img<{ awayTeam?: boolean }>`
     z-index: ${(_props) => (_props?.awayTeam ? '1' : '2')};
 `;
 
-const GameLabel = styled.div`
+const MatchLabel = styled.div`
     display: block;
     width: 100%;
     margin-right: 5px;
@@ -118,4 +117,4 @@ const XButton = styled.i`
     }
 `;
 
-export default Game;
+export default MatchInfo;

@@ -344,9 +344,9 @@ const Home: React.FC = () => {
                 </LogoContainer>
 
                 <SportFiltersContainer>
-                    {Object.values(SportFilterEnum).map((filterItem: any) => {
+                    {Object.values(SportFilterEnum).map((filterItem: any, index) => {
                         return (
-                            <>
+                            <React.Fragment key={index}>
                                 <SportFilter
                                     selected={sportFilter === filterItem}
                                     sport={filterItem}
@@ -395,7 +395,7 @@ const Home: React.FC = () => {
                                     setTagFilter={setTagFilter}
                                     setTagParam={setTagParam}
                                 ></TagsDropdown>
-                            </>
+                            </React.Fragment>
                         );
                     })}
                 </SportFiltersContainer>
@@ -508,9 +508,9 @@ const Home: React.FC = () => {
                         }}
                     />
                     <SportFiltersContainer>
-                        {Object.values(SportFilterEnum).map((filterItem: any) => {
+                        {Object.values(SportFilterEnum).map((filterItem: any, index) => {
                             return (
-                                <>
+                                <React.Fragment key={index}>
                                     <SportFilter
                                         selected={sportFilter === filterItem}
                                         sport={filterItem}
@@ -561,7 +561,7 @@ const Home: React.FC = () => {
                                         setTagFilter={setTagFilter}
                                         setTagParam={setTagParam}
                                     ></TagsDropdown>
-                                </>
+                                </React.Fragment>
                             );
                         })}
                     </SportFiltersContainer>

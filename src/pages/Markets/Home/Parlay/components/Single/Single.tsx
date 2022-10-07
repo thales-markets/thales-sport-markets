@@ -1,4 +1,5 @@
 import { useMatomo } from '@datapunt/matomo-tracker-react';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERALS_INDEX, COLLATERAL_INDEX_TO_COLLATERAL, USD_SIGN } from 'constants/currency';
@@ -30,12 +31,12 @@ import {
     formatPercentage,
     roundNumberToDecimals,
 } from 'utils/formatters/number';
+import { getPositionOdds } from 'utils/markets';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
-import { getPositionOdds } from '../../Parlay';
 import {
     AmountToBuyContainer,
     AmountToBuyInput,
@@ -54,7 +55,6 @@ import {
     SummaryValue,
 } from '../../styled-components';
 import CollateralSelector from '../CollateralSelector';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -142,48 +142,6 @@ const Single: React.FC<SingleProps> = ({ market }) => {
         isVoucherSelected,
     ]);
 
-    useEffect(() => {
-        const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
-        if (sportsAMMContract && signer) {
-            let collateralContractWithSigner: ethers.Contract | undefined;
-
-            if (selectedStableIndex !== 0 && multipleCollateral) {
-                collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
-            } else {
-                collateralContractWithSigner = sUSDContract?.connect(signer);
-            }
-
-            const getAllowance = async () => {
-                try {
-                    const parsedTicketPrice = getAmountForApproval(
-                        selectedStableIndex,
-                        Number(usdAmountValue).toString()
-                    );
-                    const allowance = await checkAllowance(
-                        parsedTicketPrice,
-                        collateralContractWithSigner,
-                        walletAddress,
-                        sportsAMMContract.address
-                    );
-                    setAllowance(allowance);
-                } catch (e) {
-                    console.log(e);
-                }
-            };
-            if (isWalletConnected) {
-                isVoucherSelected ? setAllowance(true) : getAllowance();
-            }
-        }
-    }, [
-        walletAddress,
-        isWalletConnected,
-        hasAllowance,
-        isAllowing,
-        usdAmountValue,
-        selectedStableIndex,
-        isVoucherSelected,
-    ]);
-
     const fetchAmmQuote = useCallback(
         async (amountForQuote: number) => {
             const { sportsAMMContract, signer } = networkConnector;
@@ -221,14 +179,14 @@ const Single: React.FC<SingleProps> = ({ market }) => {
                     selectedStableIndex === COLLATERALS_INDEX.sUSD || selectedStableIndex == COLLATERALS_INDEX.DAI
                         ? 1e18
                         : 1e6;
-                const sUSDToSpendForMaxAmount = await fetchAmmQuote(roundedMaxAmount);
-                const formattedsUSDToSpendForMaxAmount = sUSDToSpendForMaxAmount / divider;
+                const susdToSpendForMaxAmount = await fetchAmmQuote(roundedMaxAmount);
+                const decimalSusdToSpendForMaxAmount = susdToSpendForMaxAmount / divider;
 
-                setAvailableUsdAmount(floorNumberToDecimals(formattedsUSDToSpendForMaxAmount));
+                setAvailableUsdAmount(floorNumberToDecimals(decimalSusdToSpendForMaxAmount));
 
-                if (paymentTokenBalance > formattedsUSDToSpendForMaxAmount) {
-                    if (formattedsUSDToSpendForMaxAmount <= paymentTokenBalance * MAX_USD_SLIPPAGE) {
-                        setMaxUsdAmount(floorNumberToDecimals(formattedsUSDToSpendForMaxAmount));
+                if (paymentTokenBalance > decimalSusdToSpendForMaxAmount) {
+                    if (paymentTokenBalance * MAX_USD_SLIPPAGE >= decimalSusdToSpendForMaxAmount) {
+                        setMaxUsdAmount(floorNumberToDecimals(decimalSusdToSpendForMaxAmount));
                     } else {
                         const calculatedMaxAmount = paymentTokenBalance * MAX_USD_SLIPPAGE;
                         setMaxUsdAmount(floorNumberToDecimals(calculatedMaxAmount));
@@ -252,26 +210,6 @@ const Single: React.FC<SingleProps> = ({ market }) => {
         availablePerSide.positions,
         fetchAmmQuote,
     ]);
-
-    const MIN_TOKEN_AMOUNT = 1;
-
-    useEffect(() => {
-        const checkDisabled = async () => {
-            if (!hasAllowance) {
-                setSubmitDisabled(false);
-                return;
-            }
-
-            if (!Number(usdAmountValue) || !tokenAmount || tokenAmount < MIN_TOKEN_AMOUNT || isBuying || isAllowing) {
-                setSubmitDisabled(true);
-                return;
-            }
-
-            setSubmitDisabled(!paymentTokenBalance || usdAmountValue > paymentTokenBalance);
-            return;
-        };
-        checkDisabled();
-    }, [usdAmountValue, isBuying, isAllowing, hasAllowance, paymentTokenBalance, tokenAmount]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -344,6 +282,48 @@ const Single: React.FC<SingleProps> = ({ market }) => {
             setAvailablePerSide(availablePerSideQuery.data);
         }
     }, [availablePerSideQuery.isSuccess, availablePerSideQuery.data]);
+
+    useEffect(() => {
+        const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
+        if (sportsAMMContract && signer) {
+            let collateralContractWithSigner: ethers.Contract | undefined;
+
+            if (selectedStableIndex !== 0 && multipleCollateral) {
+                collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
+            } else {
+                collateralContractWithSigner = sUSDContract?.connect(signer);
+            }
+
+            const getAllowance = async () => {
+                try {
+                    const parsedTicketPrice = getAmountForApproval(
+                        selectedStableIndex,
+                        Number(usdAmountValue).toString()
+                    );
+                    const allowance = await checkAllowance(
+                        parsedTicketPrice,
+                        collateralContractWithSigner,
+                        walletAddress,
+                        sportsAMMContract.address
+                    );
+                    setAllowance(allowance);
+                } catch (e) {
+                    console.log(e);
+                }
+            };
+            if (isWalletConnected) {
+                isVoucherSelected ? setAllowance(true) : getAllowance();
+            }
+        }
+    }, [
+        walletAddress,
+        isWalletConnected,
+        hasAllowance,
+        isAllowing,
+        usdAmountValue,
+        selectedStableIndex,
+        isVoucherSelected,
+    ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
@@ -435,6 +415,26 @@ const Single: React.FC<SingleProps> = ({ market }) => {
         }
     };
 
+    useEffect(() => {
+        const MIN_TOKEN_AMOUNT = 1;
+
+        const checkDisabled = async () => {
+            if (!hasAllowance) {
+                setSubmitDisabled(false);
+                return;
+            }
+
+            if (!Number(usdAmountValue) || !tokenAmount || tokenAmount < MIN_TOKEN_AMOUNT || isBuying || isAllowing) {
+                setSubmitDisabled(true);
+                return;
+            }
+
+            setSubmitDisabled(!paymentTokenBalance || usdAmountValue > paymentTokenBalance);
+            return;
+        };
+        checkDisabled();
+    }, [usdAmountValue, isBuying, isAllowing, hasAllowance, paymentTokenBalance, tokenAmount]);
+
     const getSubmitButton = () => {
         if (!isWalletConnected) {
             return (
@@ -522,8 +522,11 @@ const Single: React.FC<SingleProps> = ({ market }) => {
                         ? '-'
                         : `${formatCurrencyWithSign(
                               USD_SIGN,
-                              tokenAmount - ammPosition.sides[Side.BUY].quote
-                          )} (${formatPercentage(1 / (ammPosition.sides[Side.BUY].quote / tokenAmount) - 1)})`}
+                              tokenAmount - ammPosition.sides[Side.BUY].quote,
+                              2
+                          )} (${formatPercentage(
+                              (tokenAmount - ammPosition.sides[Side.BUY].quote) / ammPosition.sides[Side.BUY].quote
+                          )})`}
                 </SummaryValue>
             </RowSummary>
             <RowSummary>

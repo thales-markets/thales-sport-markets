@@ -1,32 +1,26 @@
 import { GlobalFiltersEnum } from 'constants/markets';
-import { Position } from 'constants/options';
+import useInterval from 'hooks/useInterval';
 import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getParlay } from 'redux/modules/parlay';
+import { getParlay, getParlayError, resetParlayError } from 'redux/modules/parlay';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
-import { ParlaysMarket, ParlaysMarketPosition } from 'types/markets';
-
-import Game from './components/Game';
+import { ParlaysMarket, SportMarketInfo } from 'types/markets';
+import MatchInfo from './components/MatchInfo';
 import Single from './components/Single';
 import Ticket from './components/Ticket';
-
-export const getPositionOdds = (market: ParlaysMarket) => {
-    return market.position === Position.HOME
-        ? market.homeOdds
-        : market.position === Position.AWAY
-        ? market.awayOdds
-        : market.drawOdds;
-};
+import { CustomTooltip } from './styled-components';
 
 const Parlay: React.FC = () => {
+    const dispatch = useDispatch();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const parlay = useSelector(getParlay);
+    const hasParlayError = useSelector(getParlayError);
 
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
 
@@ -38,24 +32,30 @@ const Parlay: React.FC = () => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
             const sportOpenMarkets = sportMarketsQuery.data[GlobalFiltersEnum.OpenMarkets];
 
-            const filteredOpenMarkets = sportOpenMarkets.filter((sportOpenMarket) => {
-                return parlay.some((parlayMarket) => {
-                    return parlayMarket.sportMarketId === sportOpenMarket.id;
+            const parlayOpenMarkets: ParlaysMarket[] = parlay
+                .filter((parlayMarket) => {
+                    return sportOpenMarkets.some((marker) => {
+                        return marker.id === parlayMarket.sportMarketId;
+                    });
+                })
+                .map((parlayMarket) => {
+                    const openMarket: SportMarketInfo = sportOpenMarkets.filter(
+                        (market) => market.id === parlayMarket.sportMarketId
+                    )[0];
+                    return {
+                        ...openMarket,
+                        position: parlayMarket.position,
+                    };
                 });
-            });
-
-            const mappedMarkets: ParlaysMarket[] = filteredOpenMarkets.map((openMarket) => {
-                const parlaysMarket: ParlaysMarketPosition = parlay.filter(
-                    (parlaysMarket) => parlaysMarket.sportMarketId === openMarket.id
-                )[0];
-                return {
-                    ...openMarket,
-                    position: parlaysMarket.position,
-                };
-            });
-            setParlayMarkets(mappedMarkets);
+            setParlayMarkets(parlayOpenMarkets);
         }
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay]);
+
+    useInterval(async () => {
+        if (hasParlayError) {
+            dispatch(resetParlayError());
+        }
+    }, 5000);
 
     return (
         <Container>
@@ -65,12 +65,14 @@ const Parlay: React.FC = () => {
                         {parlayMarkets.map((market, index) => {
                             return (
                                 <RowMarket key={index}>
-                                    <Game market={market} />
+                                    <MatchInfo market={market} />
                                 </RowMarket>
                             );
                         })}
                     </ListContainer>
-                    <HorizontalLine />
+                    <CustomTooltip open={hasParlayError} title={'TODO: Maximum 4 markets in Parlay'}>
+                        <HorizontalLine />
+                    </CustomTooltip>
                     {parlayMarkets.length === 1 ? (
                         <Single market={parlayMarkets[0]} />
                     ) : (
@@ -78,7 +80,7 @@ const Parlay: React.FC = () => {
                     )}
                 </>
             ) : (
-                <>NO POSITIONS</>
+                <>NO POSITIONS</> // TODO: implement empty Parlay
             )}
         </Container>
     );

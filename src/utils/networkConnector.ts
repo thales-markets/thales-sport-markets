@@ -11,6 +11,7 @@ import theRundownConsumerContract from 'utils/contracts/theRundownConsumerContra
 import apexConsumerContract from 'utils/contracts/apexConsumerContract';
 import multipleCollateral from './contracts/multipleCollateralContract';
 import overtimeVoucherContract from './contracts/overtimeVoucherContract';
+import parlayMarketsAMMContract from './contracts/parlayMarketsAMMContract';
 
 type NetworkConnector = {
     initialized: boolean;
@@ -32,6 +33,7 @@ type NetworkConnector = {
     exoticUsdContract?: ethers.Contract;
     sUSDContract?: ethers.Contract;
     overtimeVoucherContract?: ethers.Contract;
+    parlayMarketsAMMContract?: ethers.Contract;
 };
 
 // @ts-ignore
@@ -49,6 +51,7 @@ const networkConnector: NetworkConnector = {
         this.sportsAMMContract = initializeContract(sportsAMMContract, networkSettings);
         this.sUSDContract = initializeContract(sUSDContract, networkSettings);
         this.overtimeVoucherContract = initializeContract(overtimeVoucherContract, networkSettings);
+        this.parlayMarketsAMMContract = initializeContract(parlayMarketsAMMContract, networkSettings);
 
         this.multipleCollateral = [
             initializeContract(multipleCollateral['sUSD'], networkSettings),

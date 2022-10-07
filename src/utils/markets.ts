@@ -1,7 +1,8 @@
 import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
-import { AccountPosition, MarketData, MarketInfo, SportMarketInfo } from 'types/markets';
+import { AccountPosition, MarketData, MarketInfo, ParlaysMarket, SportMarketInfo } from 'types/markets';
 import { formatCurrency } from './formatters/number';
 import ordinal from 'ordinal';
+import { Position } from 'constants/options';
 
 export const getRoi = (ticketPrice: number, potentialWinnings: number, showRoi: boolean) =>
     showRoi ? (potentialWinnings - ticketPrice) / ticketPrice : 0;
@@ -141,3 +142,11 @@ export const appplyLogicForApexGame = (market: SportMarketInfo) => {
 
 export const getIsApexTopGame = (isApex: boolean, betType: ApexBetType) =>
     isApex && (betType === ApexBetType.TOP3 || betType === ApexBetType.TOP5 || betType === ApexBetType.TOP10);
+
+export const getPositionOdds = (market: ParlaysMarket) => {
+    return market.position === Position.HOME
+        ? market.homeOdds
+        : market.position === Position.AWAY
+        ? market.awayOdds
+        : market.drawOdds;
+};
