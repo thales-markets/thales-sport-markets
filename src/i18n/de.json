@@ -227,7 +227,8 @@
             "amount-exceeded": "Der Betrag überstieg den auf der AMM verfügbaren Betrag",
             "minimal-amount": "Der Mindestbetrag ist 1",
             "no-funds": "Bitte stellen Sie sicher, dass Ihr Wallet ausreichend USD enthält"
-        }
+        },
+        "match-time": "Spielzeit"
     },
     "markets": {
         "market-card": {
@@ -258,7 +259,9 @@
             "wallet-info": {
                 "title": "Im Wallet"
             },
-            "skew": "Skew"
+            "skew": "Skew",
+            "available": "Verfügbar",
+            "amount-to-buy": "Betrag zu kaufen"
         },
         "zero-odds-tooltip": "Sports AMM bietet nur Liquidität in der Preisspanne von $0,05 bis $0,95. Dies bedeutet, dass wenn die Quoten für eine Position weniger als 5% oder mehr als 95% betragen, diese Position keine Liquidität hat."
     },

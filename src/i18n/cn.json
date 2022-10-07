@@ -227,7 +227,8 @@
             "amount-exceeded": "金额超过AMM的余额。",
             "minimal-amount": "最小数量为1",
             "no-funds": "请确认您的钱包有足够余额"
-        }
+        },
+        "match-time": "比赛时间"
     },
     "markets": {
         "market-card": {
@@ -258,7 +259,9 @@
             "wallet-info": {
                 "title": "钱包中"
             },
-            "skew": "偏斜"
+            "skew": "偏斜",
+            "available": "可用的",
+            "amount-to-buy": "购买金额"
         },
         "zero-odds-tooltip": "Sports AMM 仅提供0.05美元至0.95美元价格范围内的流动性，这意味着，如果一个投注选择的赔率低于5%或者高于95%，该选择就不会有流动性。"
     },
