@@ -115,6 +115,8 @@ const Positions: React.FC<PositionsProps> = ({
     const disableddHomeOption = !(market?.positions[Position.HOME]?.sides[selectedSide]?.odd > 0);
     const disabledAwayOption = !(market?.positions[Position.AWAY]?.sides[selectedSide]?.odd > 0);
 
+    console.log('Test upstream');
+
     const showDrawOdds = getVisibilityOfDrawOptionByTagId(market.tags);
     // const gameCanceled = market.cancelled || (!market.gameStarted && market.resolved);
     const gameResolved = market.gameStarted && market.resolved;
