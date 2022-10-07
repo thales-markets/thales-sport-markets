@@ -2,6 +2,7 @@ import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constant
 import { AccountPosition, MarketData, MarketInfo, SportMarketInfo } from 'types/markets';
 import { formatCurrency } from './formatters/number';
 import ordinal from 'ordinal';
+import { TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
 
 export const getRoi = (ticketPrice: number, potentialWinnings: number, showRoi: boolean) =>
     showRoi ? (potentialWinnings - ticketPrice) / ticketPrice : 0;
@@ -86,7 +87,7 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
 export const convertFinalResultToWinnerName = (result: number, market: MarketData) => {
     if (result == 1 && getIsApexTopGame(market.isApex, market.betType)) return 'YES';
     if (result == 1 && getIsApexTopGame(market.isApex, market.betType)) return 'NO';
-    if (result == 2) return market.homeTeam;
+    if (result == 1) return market.homeTeam;
     if (result == 2) return market.awayTeam;
     if (result == 3) return 'DRAW';
 };
@@ -141,3 +142,9 @@ export const appplyLogicForApexGame = (market: SportMarketInfo) => {
 
 export const getIsApexTopGame = (isApex: boolean, betType: ApexBetType) =>
     isApex && (betType === ApexBetType.TOP3 || betType === ApexBetType.TOP5 || betType === ApexBetType.TOP10);
+
+export const getVisibilityOfDrawOptionByTagId = (tags: Array<number>) => {
+    const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(element));
+    if (tag) return false;
+    return true;
+};

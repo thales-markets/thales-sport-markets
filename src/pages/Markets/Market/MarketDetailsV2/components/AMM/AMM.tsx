@@ -1,52 +1,41 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useMatomo } from '@datapunt/matomo-tracker-react';
-import { BigNumber, ethers } from 'ethers';
-import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import useDebouncedEffect from 'hooks/useDebouncedEffect';
+import { BigNumber, ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import networkConnector from 'utils/networkConnector';
 import {
     AMMContainer,
     AMMContent,
     AmountToBuyContainer,
     AmountToBuyInput,
-    Collateral,
-    CollateralInfo,
-    CollateralInfoContainer,
     CustomTooltip,
     DetailContainer,
     InputDetails,
-    MaxButton,
-    PotentialProfit,
-    PotentialProfitContainer,
     PrimaryLabel,
+    MaxButton,
     SecondaryLabel,
     SecondaryValue,
-    StableBalance,
     SubmitButton,
+    PotentialProfitContainer,
+    PotentialProfit,
+    CollateralInfoContainer,
+    CollateralInfo,
+    Collateral,
+    StableBalance,
     SubmitButtonContainer,
 } from './styled-components';
+import { toast } from 'react-toastify';
+import { useMatomo } from '@datapunt/matomo-tracker-react';
 
+import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useMarketBalancesQuery from 'queries/markets/useMarketBalancesQuery';
 import usePositionPriceDetailsQuery from 'queries/markets/usePositionPriceDetailsQuery';
-import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import { refetchBalances } from 'utils/queryConnector';
 
-import ApprovalModal from 'components/ApprovalModal';
-import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { USD_SIGN } from 'constants/currency';
-import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE } from 'constants/markets';
-import { MAX_GAS_LIMIT } from 'constants/network';
 import { MAX_L2_GAS_LIMIT, Position, Side } from 'constants/options';
-import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import { AMMPosition, AvailablePerSide, Balances, MarketData } from 'types/markets';
-import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
-import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
     countDecimals,
     floorNumberToDecimals,
@@ -54,10 +43,24 @@ import {
     formatCurrencyWithSign,
     formatPercentage,
 } from 'utils/formatters/number';
-import { checkAllowance } from 'utils/network';
-import { getReferralId } from 'utils/referral';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/rootReducer';
+import { getIsAppReady } from 'redux/modules/app';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { APPROVAL_BUFFER, COLLATERALS, MAX_TOKEN_SLIPPAGE, MAX_USD_SLIPPAGE } from 'constants/markets';
+import sportsMarketContract from 'utils/contracts/sportsMarketContract';
+import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
+import { MAX_GAS_LIMIT } from 'constants/network';
+import { getReferralId } from 'utils/referral';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { checkAllowance } from 'utils/network';
+import ApprovalModal from 'components/ApprovalModal';
 import CollateralSelector from '../CollateralSelector';
+import { USD_SIGN } from 'constants/currency';
+import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
+import { getDecimalsByStableCoinIndex } from 'utils/collaterals';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 type AMMProps = {
     market: MarketData;
@@ -69,6 +72,7 @@ type AMMProps = {
 const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, availablePerSide }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
+    const { openConnectModal } = useConnectModal();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -81,6 +85,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
     const [usdAmountValue, setUSDAmountValue] = useState<number | string>('');
     const [selectedStableIndex, setStableIndex] = useState<number>(0);
     const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState<string>('');
+    const [tooltipTextTokenAmount, setTooltipTextTokenAmount] = useState<string>('');
     const [isFetching, setIsFetching] = useState<boolean>(false);
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
@@ -118,8 +123,6 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
     const stableBalances = useMemo(() => {
         return multipleStableBalances.data;
     }, [multipleStableBalances.data]);
-
-    console.log('stableBalances ', stableBalances);
 
     const positionPriceDetailsQuery = usePositionPriceDetailsQuery(
         market.address,
@@ -177,43 +180,20 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         setStableIndex(0);
     }, [selectedSide]);
 
-    useEffect(() => {
-        const checkDisabled = async () => {
-            if (!hasAllowance) {
-                setSubmitDisabled(false);
-                return;
-            }
+    const setTooltipTextMessageTokenAmount = (value: string | number) => {
+        if (Number(value) > availablePerSide.positions[selectedPosition].available) {
+            setTooltipTextTokenAmount(t('market.tooltip.amount-exceeded'));
+        } else if (value && Number(value) < 1) {
+            setTooltipTextTokenAmount(t('market.tooltip.minimal-amount'));
+        } else {
+            setTooltipTextTokenAmount('');
+        }
+    };
 
-            if (selectedSide === Side.BUY) {
-                if (
-                    !Number(usdAmountValue) ||
-                    !Number(tokenAmount) ||
-                    Number(tokenAmount) < 1 ||
-                    isBuying ||
-                    isAllowing
-                ) {
-                    setSubmitDisabled(true);
-                    return;
-                }
-            } else {
-                if (!Number(tokenAmount) || Number(tokenAmount) < 1 || isBuying || isAllowing) {
-                    setSubmitDisabled(true);
-                    return;
-                }
-            }
-
-            if (selectedSide === Side.BUY) {
-                setSubmitDisabled(
-                    !paymentTokenBalance || tokenAmount > maxAmount || usdAmountValue > paymentTokenBalance
-                );
-                return;
-            } else {
-                setSubmitDisabled(tokenAmount > maxAmount);
-                return;
-            }
-        };
-        checkDisabled();
-    }, [tokenAmount, usdAmountValue, isBuying, isAllowing, hasAllowance, selectedSide, paymentTokenBalance, maxAmount]);
+    const setTokenAmount = (value: string | number) => {
+        setTokenAmountValue(value);
+        setTooltipTextMessageTokenAmount(value);
+    };
 
     const setTooltipTextMessageUsdAmount = (value: string | number) => {
         if (Number(value) > paymentTokenBalance) {
@@ -258,6 +238,11 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         setUsdAmount(maxUsdAmount);
     };
 
+    const onMaxClick = async () => {
+        setFieldChanging('positionsAmount');
+        setTokenAmount(maxAmount);
+    };
+
     useDebouncedEffect(() => {
         const fetchData = async () => {
             if (fieldChanging == 'positionsAmount') {
@@ -287,7 +272,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                     );
 
                     if (X > availablePerSide.positions[selectedPosition].available) {
-                        setTokenAmountValue(0);
+                        setTokenAmount(0);
                         return;
                     }
                     const roundedAmount = floorNumberToDecimals(X);
@@ -297,7 +282,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                     const parsedQuote = quote / divider;
 
                     const recalculatedTokenAmount = ((X * usdAmountValueAsNumber) / parsedQuote).toFixed(2);
-                    setTokenAmountValue(recalculatedTokenAmount);
+                    setTokenAmount(recalculatedTokenAmount);
                 }
             }
         };
@@ -347,6 +332,92 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         selectedStableIndex,
         selectedSide,
         isVoucherSelected,
+    ]);
+
+    useEffect(() => {
+        const checkDisabled = async () => {
+            if (!hasAllowance) {
+                setSubmitDisabled(false);
+                return;
+            }
+
+            if (selectedSide === Side.BUY) {
+                if (
+                    !Number(usdAmountValue) ||
+                    !Number(tokenAmount) ||
+                    Number(tokenAmount) < 1 ||
+                    isBuying ||
+                    isAllowing
+                ) {
+                    setSubmitDisabled(true);
+                    return;
+                }
+            } else {
+                if (!Number(tokenAmount) || Number(tokenAmount) < 1 || isBuying || isAllowing) {
+                    setSubmitDisabled(true);
+                    return;
+                }
+            }
+
+            if (selectedSide === Side.BUY) {
+                setSubmitDisabled(
+                    !paymentTokenBalance || tokenAmount > maxAmount || usdAmountValue > paymentTokenBalance
+                );
+                return;
+            } else {
+                setSubmitDisabled(tokenAmount > maxAmount);
+                return;
+            }
+        };
+        checkDisabled();
+    }, [tokenAmount, usdAmountValue, isBuying, isAllowing, hasAllowance, selectedSide, paymentTokenBalance, maxAmount]);
+
+    useEffect(() => {
+        const getMaxAmount = async () => {
+            setIsFetching(true);
+            if (selectedSide === Side.BUY) {
+                const { sportsAMMContract, signer } = networkConnector;
+                if (sportsAMMContract && signer) {
+                    const price = ammPosition.sides[selectedSide].quote / (+Number(tokenAmount).toFixed(2) || 1);
+                    if (price > 0 && paymentTokenBalance) {
+                        let tmpSuggestedAmount = Number(paymentTokenBalance) / Number(price);
+                        if (tmpSuggestedAmount > availablePerSide.positions[selectedPosition].available) {
+                            setMaxAmount(floorNumberToDecimals(availablePerSide.positions[selectedPosition].available));
+                            setIsFetching(false);
+                            return;
+                        }
+
+                        const ammQuote = await fetchAmmQuote(tmpSuggestedAmount);
+
+                        const ammPrice =
+                            bigNumberFormmaterWithDecimals(
+                                ammQuote,
+                                getDecimalsByStableCoinIndex(selectedStableIndex)
+                            ) / Number(tmpSuggestedAmount);
+                        // 2 === slippage
+                        tmpSuggestedAmount = (Number(paymentTokenBalance) / Number(ammPrice)) * MAX_TOKEN_SLIPPAGE;
+                        setMaxAmount(floorNumberToDecimals(tmpSuggestedAmount));
+                    }
+                }
+                setIsFetching(false);
+            } else {
+                //@ts-ignore
+                setMaxAmount(balances?.[Position[selectedPosition].toLowerCase()] || 0);
+            }
+            setIsFetching(false);
+            return;
+        };
+        getMaxAmount();
+    }, [
+        selectedSide,
+        tokenAmount,
+        balances,
+        paymentTokenBalance,
+        ammPosition,
+        selectedStableIndex,
+        availablePerSide.positions,
+        selectedPosition,
+        fetchAmmQuote,
     ]);
 
     useEffect(() => {
@@ -433,7 +504,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                             ? toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')))
                             : toast.update(id, getSuccessToastOptions(t('market.toast-messsage.sell-success')));
                         setIsBuying(false);
-                        setTokenAmountValue(0);
+                        setTokenAmount(0);
                         setUsdAmount(0);
 
                         if (selectedSide === Side.BUY) {
@@ -494,13 +565,13 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
     };
 
     const getSubmitButton = () => {
-        // if (!isWalletConnected) {
-        //     return (
-        //         <SubmitButton disabled={submitDisabled} onClick={() => onboardConnector.connectWallet()}>
-        //             {t('common.wallet.connect-your-wallet')}
-        //         </SubmitButton>
-        //     );
-        // }
+        if (!isWalletConnected) {
+            return (
+                <SubmitButton disabled={submitDisabled} onClick={() => openConnectModal?.()}>
+                    {t('common.wallet.connect-your-wallet')}
+                </SubmitButton>
+            );
+        }
         if (!hasAllowance) {
             return (
                 <SubmitButton
@@ -530,6 +601,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         );
     };
 
+    const isBuy = selectedSide == Side.BUY;
     const showPotentialProfit = !Number(tokenAmount) || positionPriceDetailsQuery.isLoading || !!tooltipTextUsdAmount;
     const liqudityInfo = floorNumberToDecimals(availablePerSide.positions[selectedPosition].available);
     const showCollateralSelector = selectedSide == Side.BUY && !market.gameStarted;
@@ -541,26 +613,60 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         <>
             <AMMContainer>
                 <AMMContent>
-                    <PrimaryLabel>{t('markets.market-details.amount-to-buy')}</PrimaryLabel>
-                    <CustomTooltip open={!!tooltipTextUsdAmount && !openApprovalModal} title={tooltipTextUsdAmount}>
-                        <AmountToBuyContainer>
-                            <AmountToBuyInput
-                                name="usdAmount"
-                                type="number"
-                                value={usdAmountValue}
-                                onChange={(e) => {
-                                    if (countDecimals(Number(e.target.value)) > 2) {
-                                        return;
-                                    }
-                                    setFieldChanging(e.target.name);
-                                    setUsdAmount(e.target.value);
-                                }}
-                            />
-                            <MaxButton disabled={isFetching} onClick={onMaxUsdClick}>
-                                {t('markets.market-details.max')}
-                            </MaxButton>
-                        </AmountToBuyContainer>
-                    </CustomTooltip>
+                    <PrimaryLabel>
+                        {isBuying
+                            ? t('markets.market-details.amount-to-buy')
+                            : t('markets.market-details.amount-to-sell')}
+                    </PrimaryLabel>
+                    {isBuy && (
+                        <CustomTooltip open={!!tooltipTextUsdAmount && !openApprovalModal} title={tooltipTextUsdAmount}>
+                            <AmountToBuyContainer>
+                                <AmountToBuyInput
+                                    name="usdAmount"
+                                    type="number"
+                                    value={usdAmountValue}
+                                    onChange={(e) => {
+                                        if (countDecimals(Number(e.target.value)) > 2) {
+                                            return;
+                                        }
+                                        setFieldChanging(e.target.name);
+                                        setUsdAmount(e.target.value);
+                                    }}
+                                />
+                                <MaxButton disabled={isFetching} onClick={onMaxUsdClick}>
+                                    {t('markets.market-details.max')}
+                                </MaxButton>
+                            </AmountToBuyContainer>
+                        </CustomTooltip>
+                    )}
+                    {!isBuy && (
+                        <CustomTooltip
+                            open={!!tooltipTextTokenAmount && !openApprovalModal}
+                            title={tooltipTextTokenAmount}
+                        >
+                            <AmountToBuyContainer>
+                                <AmountToBuyInput
+                                    name="positionsAmount"
+                                    type="number"
+                                    onChange={(e) => {
+                                        if (countDecimals(Number(e.target.value)) > 2) {
+                                            return;
+                                        }
+                                        if (Number(e.target.value) >= 0) {
+                                            setFieldChanging(e.target.name);
+                                            setTokenAmount(e.target.value);
+                                        } else {
+                                            setUsdAmount(0);
+                                        }
+                                    }}
+                                    value={tokenAmount}
+                                />
+                                <MaxButton disabled={isFetching} onClick={onMaxClick}>
+                                    {t('markets.market-details.max')}
+                                </MaxButton>
+                            </AmountToBuyContainer>
+                        </CustomTooltip>
+                    )}
                     <InputDetails>
                         <DetailContainer>
                             <SecondaryLabel>{t('markets.market-details.liquidity')}</SecondaryLabel>
@@ -571,31 +677,35 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                             <SecondaryValue>{skew}</SecondaryValue>
                         </DetailContainer>
                     </InputDetails>
-                    <PotentialProfitContainer>
-                        <PrimaryLabel>{t('markets.market-details.potential-profit')}</PrimaryLabel>
-                        <PotentialProfit>
-                            {showPotentialProfit
-                                ? '-'
-                                : `$${formatCurrency(
-                                      Number(tokenAmount) - ammPosition.sides[selectedSide].quote
-                                  )} (${formatPercentage(
-                                      1 / (ammPosition.sides[selectedSide].quote / Number(tokenAmount)) - 1
-                                  )})`}
-                        </PotentialProfit>
-                    </PotentialProfitContainer>
-                    <CollateralInfoContainer>
-                        <PrimaryLabel>{t('market.pay-with')}</PrimaryLabel>
-                        <CollateralInfo>
-                            <Collateral>{COLLATERALS[selectedStableIndex]}</Collateral>
-                            <StableBalance>
-                                {`${t('markets.market-details.available')} ${formatCurrencyWithSign(
-                                    USD_SIGN,
-                                    stableBalances ? stableBalances[COLLATERALS[selectedStableIndex]] : 0,
-                                    2
-                                )}`}
-                            </StableBalance>
-                        </CollateralInfo>
-                    </CollateralInfoContainer>
+                    {isBuy && (
+                        <PotentialProfitContainer>
+                            <PrimaryLabel>{t('markets.market-details.potential-profit')}</PrimaryLabel>
+                            <PotentialProfit>
+                                {showPotentialProfit
+                                    ? '-'
+                                    : `$${formatCurrency(
+                                          Number(tokenAmount) - ammPosition.sides[selectedSide].quote
+                                      )} (${formatPercentage(
+                                          1 / (ammPosition.sides[selectedSide].quote / Number(tokenAmount)) - 1
+                                      )})`}
+                            </PotentialProfit>
+                        </PotentialProfitContainer>
+                    )}
+                    {isBuy && (
+                        <CollateralInfoContainer>
+                            <PrimaryLabel>{t('market.pay-with')}</PrimaryLabel>
+                            <CollateralInfo>
+                                <Collateral>{COLLATERALS[selectedStableIndex]}</Collateral>
+                                <StableBalance>
+                                    {`${t('markets.market-details.available')} ${formatCurrencyWithSign(
+                                        USD_SIGN,
+                                        stableBalances ? stableBalances[COLLATERALS[selectedStableIndex]] : 0,
+                                        2
+                                    )}`}
+                                </StableBalance>
+                            </CollateralInfo>
+                        </CollateralInfoContainer>
+                    )}
                     {showCollateralSelector && (
                         <CollateralSelector
                             collateralArray={COLLATERALS}
