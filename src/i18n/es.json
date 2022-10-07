@@ -227,7 +227,8 @@
         "tooltip": {
             "amount-exceeded": "Cantidad excede la disponibilidad del AMM",
             "minimal-amount": "Cantidad minima es 1",
-            "no-funds": "Por favor asegurese que su billetera tenga fondos suficientes"
+            "no-funds": "Por favor asegurese que su billetera tenga fondos suficientes",
+            "min-amount": "La cantidad mínima es {{min}}"
         },
         "match-time": "tiempo de partido"
     },
@@ -264,7 +265,15 @@
             "available": "Disponible",
             "amount-to-buy": "cantidad a comprar"
         },
-        "zero-odds-tooltip": "El AMM de deportes sólo ofrece liquidez si el rango de precios ofrecido es entre 0.05 y 0.95 USD. Esto significa que si las probabilidades de una posición son menores a 5% o mayores a 95%, esa posición no tendrá liquidez."
+        "zero-odds-tooltip": "El AMM de deportes sólo ofrece liquidez si el rango de precios ofrecido es entre 0.05 y 0.95 USD. Esto significa que si las probabilidades de una posición son menores a 5% o mayores a 95%, esa posición no tendrá liquidez.",
+        "parlay": {
+            "pay-with": "Pagar con",
+            "total-quote": "Cotización total",
+            "buy-amount": "cantidad a comprar",
+            "available": "Disponible",
+            "skew": "Sesgar",
+            "potential-profit": "Beneficio potencial"
+        }
     },
     "rewards": {
         "header": "Recompensas",

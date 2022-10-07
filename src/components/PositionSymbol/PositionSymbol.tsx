@@ -44,7 +44,19 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                     if (addedToParlay && addedToParlay.position == type) {
                         dispatch(removeFromParlay(marketId));
                     } else {
-                        type !== undefined ? dispatch(updateParlay({ sportMarketId: marketId, position: type })) : '';
+                        if (type !== undefined) {
+                            switch (type) {
+                                case 3:
+                                    dispatch(updateParlay({ sportMarketId: marketId, position: 0 }));
+                                    break;
+                                case 4:
+                                    dispatch(updateParlay({ sportMarketId: marketId, position: 1 }));
+                                    break;
+                                default:
+                                    dispatch(updateParlay({ sportMarketId: marketId, position: type }));
+                                    break;
+                            }
+                        }
                     }
                 }
             }}
