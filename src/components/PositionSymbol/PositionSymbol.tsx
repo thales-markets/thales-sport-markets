@@ -36,6 +36,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     const dispatch = useDispatch();
     const parlay = useSelector(getParlay);
 
+    // TODO TO BE UPDATED WITH TYPE 3 AND 4
     const addedToParlay = parlay.filter((game: any) => game.sportMarketId == marketId)[0];
 
     return (
