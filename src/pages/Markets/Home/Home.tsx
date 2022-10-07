@@ -117,7 +117,7 @@ const Home: React.FC = () => {
 
             const tagsPerSport = SPORTS_TAGS_MAP[sportFilter];
             if (tagsPerSport) {
-                const filteredTags = TAGS_LIST.filter((tag: TagInfo) => tagsPerSport.includes(tag.id));
+                const filteredTags = tagsList.filter((tag: TagInfo) => tagsPerSport.includes(tag.id));
                 setAvailableTags(filteredTags);
             }
         },
@@ -362,12 +362,12 @@ const Home: React.FC = () => {
                                             setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
                                             if (filterItem === SportFilterEnum.All) {
                                                 setAvailableTags(
-                                                    TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label))
+                                                    tagsList.sort((a, b) => a.label.localeCompare(b.label))
                                                 );
                                             } else {
                                                 const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
                                                 if (tagsPerSport) {
-                                                    const filteredTags = TAGS_LIST.filter((tag: TagInfo) =>
+                                                    const filteredTags = tagsList.filter((tag: TagInfo) =>
                                                         tagsPerSport.includes(tag.id)
                                                     );
                                                     setAvailableTags(filteredTags);
@@ -380,7 +380,7 @@ const Home: React.FC = () => {
                                             setSportParam(SportFilterEnum.All);
                                             setTagFilter([]);
                                             setTagParam('');
-                                            setAvailableTags(TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label)));
+                                            setAvailableTags(tagsList.sort((a, b) => a.label.localeCompare(b.label)));
                                         }
                                     }}
                                     key={filterItem}
@@ -526,12 +526,12 @@ const Home: React.FC = () => {
                                                 setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
                                                 if (filterItem === SportFilterEnum.All) {
                                                     setAvailableTags(
-                                                        TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label))
+                                                        tagsList.sort((a, b) => a.label.localeCompare(b.label))
                                                     );
                                                 } else {
                                                     const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
                                                     if (tagsPerSport) {
-                                                        const filteredTags = TAGS_LIST.filter((tag: TagInfo) =>
+                                                        const filteredTags = tagsList.filter((tag: TagInfo) =>
                                                             tagsPerSport.includes(tag.id)
                                                         );
                                                         setAvailableTags(filteredTags);
@@ -545,7 +545,7 @@ const Home: React.FC = () => {
                                                 setTagFilter([]);
                                                 setTagParam('');
                                                 setAvailableTags(
-                                                    TAGS_LIST.sort((a, b) => a.label.localeCompare(b.label))
+                                                    tagsList.sort((a, b) => a.label.localeCompare(b.label))
                                                 );
                                             }
                                         }}
