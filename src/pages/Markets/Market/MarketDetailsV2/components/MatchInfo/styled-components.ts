@@ -90,3 +90,9 @@ export const Question = styled.span`
     text-align: center;
     max-width: 250px;
 `;
+
+export const MarketNotice = styled.span`
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 10px;
+`;
