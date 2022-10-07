@@ -2,6 +2,19 @@ import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 
+export const Wrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+export const InnerWrapper = styled.div`
+    width: 33%;
+    display: flex;
+    justify-content: center;
+`;
+
 export const Container = styled(FlexDiv)`
     flex-direction: row;
     justify-content: center;
@@ -50,7 +63,7 @@ export const LeagueLogo = styled.img`
     object-fit: contain;
 `;
 
-export const MatchTimeContrainer = styled.div`
+export const MatchTimeContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -69,4 +82,11 @@ export const MatchTime = styled.span`
     font-weight: bold;
     font-size: 1em;
     line-height: 110%;
+`;
+
+export const Question = styled.span`
+    font-size: 17px;
+    font-weight: 400;
+    text-align: center;
+    max-width: 250px;
 `;

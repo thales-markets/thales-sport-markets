@@ -29,7 +29,7 @@ export const StatusContainer = styled.div<{ isCancelled?: boolean; isPendingReso
     ${(_props) => (_props?.isPendingResolve ? `background-color: ${MAIN_COLORS.LIGHT_GRAY};` : '')};
     padding: 10px 50px;
     justify-content: center;
-    align-items: center
+    align-items: center;
     margin-bottom: 7px;
 `;
 

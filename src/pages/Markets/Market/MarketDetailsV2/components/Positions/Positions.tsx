@@ -122,7 +122,11 @@ const Positions: React.FC<PositionsProps> = ({
     const gameResolved = market.gameStarted && market.resolved;
     const pendingResolution = market.gameStarted && !market.resolved;
     const showPositions = !market.resolved && !market.cancelled && !market.gameStarted;
+
     const isApexTopGame = getIsApexTopGame(market.isApex, market.betType);
+
+    const homeTeam = isApexTopGame ? t('common.yes') : market.homeTeam;
+    const awayTeam = isApexTopGame ? t('common.no') : market.awayTeam;
 
     const claimReward = async () => {
         const { signer } = networkConnector;
@@ -211,9 +215,10 @@ const Positions: React.FC<PositionsProps> = ({
                         <PositionContainer>
                             <PositionSymbol
                                 type={0}
+                                hideSymbol={isApexTopGame}
                                 symbolColor={ODDS_COLOR.HOME}
                                 additionalText={{
-                                    firstText: market.homeTeam,
+                                    firstText: homeTeam,
                                     firstTextStyle: {
                                         fontSize: '19px',
                                         marginLeft: '15px',
@@ -289,9 +294,10 @@ const Positions: React.FC<PositionsProps> = ({
                         <PositionContainer>
                             <PositionSymbol
                                 type={1}
+                                hideSymbol={isApexTopGame}
                                 symbolColor={ODDS_COLOR.AWAY}
                                 additionalText={{
-                                    firstText: market.awayTeam,
+                                    firstText: awayTeam,
                                     firstTextStyle: {
                                         fontSize: '19px',
                                         marginLeft: '15px',

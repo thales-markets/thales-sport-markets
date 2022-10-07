@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 type SymbolProps = {
     type?: number;
+    hideSymbol?: boolean;
     symbolColor?: string;
     additionalText?: {
         firstText?: string;
@@ -21,6 +22,7 @@ type SymbolProps = {
 const PositionSymbol: React.FC<SymbolProps> = ({
     glow,
     type,
+    hideSymbol,
     symbolColor,
     additionalText,
     showTooltip,
@@ -30,16 +32,18 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     const { t } = useTranslation();
     return (
         <Wrapper>
-            <Container glow={glow} color={symbolColor} style={additionalStyle}>
-                <Symbol color={symbolColor}>
-                    {type == 0 && '1'}
-                    {type == 1 && '2'}
-                    {type == 2 && 'X'}
-                    {type == 3 && t('common.yes')}
-                    {type == 4 && t('common.no')}
-                    {type == undefined && children}
-                </Symbol>
-            </Container>
+            {!hideSymbol && (
+                <Container glow={glow} color={symbolColor} style={additionalStyle}>
+                    <Symbol color={symbolColor}>
+                        {type == 0 && '1'}
+                        {type == 1 && '2'}
+                        {type == 2 && 'X'}
+                        {type == 3 && t('common.yes')}
+                        {type == 4 && t('common.no')}
+                        {type == undefined && children}
+                    </Symbol>
+                </Container>
+            )}
             {additionalText?.firstText && (
                 <AdditionalText style={additionalText?.firstTextStyle}>
                     {additionalText?.firstText}

@@ -144,6 +144,7 @@
     },
     "market": {
         "match-time": "Match time",
+        "race-starts": "Race starts",
         "question-label": "Question",
         "time-remaining-label": "Time remaining",
         "sport": "Sport",
