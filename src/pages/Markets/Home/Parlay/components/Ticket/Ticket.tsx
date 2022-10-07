@@ -22,8 +22,10 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(COLLATERALS_INDEX.sUSD);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>('');
 
-    setSelectedStableIndex(COLLATERALS_INDEX.sUSD); // TODO: testing
-    setUsdAmountValue(10); // TODO: testing
+    useEffect(() => {
+        setSelectedStableIndex(COLLATERALS_INDEX.sUSD); // TODO: testing
+        setUsdAmountValue(10); // TODO: testing
+    }, []);
 
     const fetchParlayAmmQuote = useCallback(
         async (susdAmountForQuote: number) => {

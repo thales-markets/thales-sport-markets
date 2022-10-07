@@ -151,3 +151,9 @@ export const getPositionOdds = (market: ParlaysMarket) => {
         ? market.awayOdds
         : market.drawOdds;
 };
+
+export const getVisibilityOfDrawOptionByTagId = (tags: Array<number>) => {
+    const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(element));
+    if (tag) return false;
+    return true;
+};
