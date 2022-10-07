@@ -42,7 +42,9 @@ const App = () => {
                 networkConnector.setNetworkSettings({
                     networkId: providerNetworkId,
                     provider:
-                        !!signer && !!signer.provider ? new ethers.providers.Web3Provider(signer.provider) : provider,
+                        !!signer && !!signer.provider
+                            ? new ethers.providers.Web3Provider(signer.provider.provider, 'any')
+                            : provider,
                     signer,
                 });
                 dispatch(setAppReady());
