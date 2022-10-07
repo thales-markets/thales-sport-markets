@@ -85,3 +85,17 @@ export const MAX_USD_SLIPPAGE = 0.99;
 export const APPROVAL_BUFFER = 0.01;
 
 export const APEX_GAME_MIN_TAG = 9100;
+
+export enum ApexBetType {
+    H2H = 0,
+    TOP3 = 1,
+    TOP5 = 2,
+    TOP10 = 3,
+}
+
+export const ApexBetTypeKeyMapping = {
+    [ApexBetType.H2H]: 'h2h',
+    [ApexBetType.TOP3]: 'top3',
+    [ApexBetType.TOP5]: 'top5',
+    [ApexBetType.TOP10]: 'top10',
+};

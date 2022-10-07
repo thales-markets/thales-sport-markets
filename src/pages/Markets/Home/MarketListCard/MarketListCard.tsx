@@ -1,4 +1,3 @@
-import SPAAnchor from 'components/SPAAnchor';
 import Tooltip from 'components/Tooltip';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
@@ -6,24 +5,25 @@ import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isApexGame, isClaimAvailable } from 'utils/markets';
-import { buildMarketLink } from 'utils/routes';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
-import {
-    ClubContainer,
-    ClubLogo,
-    ClubNameLabel,
-    ClubVsClubContainer,
-    Container,
-    LinkIcon,
-    VSLabel,
-} from './styled-components';
+import { ClubContainer, ClubLogo, ClubNameLabel, ClubVsClubContainer, Container, VSLabel } from './styled-components';
 
 type MarketRowCardProps = {
     market: SportMarketInfo;
     accountPositions?: AccountPosition[];
-    language: string;
 };
+
+const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions }) => {
+    const claimAvailable = isClaimAvailable(accountPositions);
+
+    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
+    const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+
+    useEffect(() => {
+        setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
+        setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
+    }, [market.homeTeam, market.awayTeam, market.tags]);
 
 const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions, language }) => {
     const claimAvailable = isClaimAvailable(accountPositions);

@@ -23,12 +23,4 @@ export const getOnImageError = (setSrc: (src: string) => void, leagueTag: number
     setSrc(TAGS_LIST.find((t) => t.id === Number(leagueTag))?.logo || OVERTIME_LOGO);
 };
 
-export const getErrorImage = (leagueTag: number | string) => {
-    return TAGS_LIST.find((t) => t.id === Number(leagueTag))?.logo || OVERTIME_LOGO;
-};
-
-export const getLeagueImage = (leagueTag: number) => {
-    return TAGS_LIST.find((t) => t.id === Number(leagueTag))?.logo || OVERTIME_LOGO;
-};
-
 export const OVERTIME_LOGO = '/logos/overtime-logo.png';

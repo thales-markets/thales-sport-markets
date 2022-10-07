@@ -42,8 +42,10 @@ export const ValueContainer = styled.span`
     }
 `;
 
-export const Value = styled.span`
+export const Value = styled.span<{ color?: string; marginRight?: number }>`
     text-transform: uppercase;
+    color: ${(props) => (props.color ? props.color : props.theme.textColor.primary)};
+    margin-right: ${(props) => (props.marginRight ? props.marginRight : 0)}px;
 `;
 
 export const AlternateValue = styled.span`
