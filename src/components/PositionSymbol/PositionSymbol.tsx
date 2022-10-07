@@ -35,7 +35,6 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     const dispatch = useDispatch();
     const parlay = useSelector(getParlay);
 
-    // TODO TO BE UPDATED WITH TYPE 3 AND 4
     const addedToParlay = parlay.filter((game: any) => game.sportMarketId == marketId)[0];
 
     return (
@@ -45,7 +44,19 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                     if (addedToParlay && addedToParlay.position == type) {
                         dispatch(removeFromParlay(marketId));
                     } else {
-                        type ? dispatch(updateParlay({ sportMarketId: marketId, position: type })) : '';
+                        if (type !== undefined) {
+                            switch (type) {
+                                case 3:
+                                    dispatch(updateParlay({ sportMarketId: marketId, position: 0 }));
+                                    break;
+                                case 4:
+                                    dispatch(updateParlay({ sportMarketId: marketId, position: 1 }));
+                                    break;
+                                default:
+                                    dispatch(updateParlay({ sportMarketId: marketId, position: type }));
+                                    break;
+                            }
+                        }
                     }
                 }
             }}

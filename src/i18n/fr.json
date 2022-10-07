@@ -315,7 +315,8 @@
         "tooltip": {
             "minimal-amount": "Le montant minimal est de 1",
             "no-funds": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds",
-            "amount-exceeded": "Le montant saisi dépasse le montant disponible via l'AMM"
+            "amount-exceeded": "Le montant saisi dépasse le montant disponible via l'AMM",
+            "min-amount": "Le montant minimal est de {{min}}"
         },
         "match-time": "Temps de match"
     },
@@ -363,7 +364,15 @@
             "available": "Disponible",
             "amount-to-buy": "Montant à acheter"
         },
-        "zero-odds-tooltip": "Le Sport AMM ne propose des liquidités que dans la fourchette de prix de 0,05 $ à 0,95 $. Cela signifie que si les cotes d'une position sont inférieures à 5 % ou supérieures à 95 %, cette position n'aura pas de liquidité."
+        "zero-odds-tooltip": "Le Sport AMM ne propose des liquidités que dans la fourchette de prix de 0,05 $ à 0,95 $. Cela signifie que si les cotes d'une position sont inférieures à 5 % ou supérieures à 95 %, cette position n'aura pas de liquidité.",
+        "parlay": {
+            "skew": "Fausser",
+            "buy-amount": "Montant à acheter",
+            "available": "Disponible",
+            "potential-profit": "Gain potentiel",
+            "total-quote": "Devis total",
+            "pay-with": "Payer avec"
+        }
     },
     "rewards": {
         "table": {
