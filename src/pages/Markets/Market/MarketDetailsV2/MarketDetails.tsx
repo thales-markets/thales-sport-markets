@@ -45,6 +45,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
                   },
               };
 
+    const showAMM = !market.resolved && !market.cancelled && !market.gameStarted;
+
     console.log('Market ', market);
     return (
         <>
@@ -70,12 +72,14 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
                 selectedPosition={selectedPosition}
                 setSelectedPosition={setSelectedPosition}
             />
-            <AMM
-                market={market}
-                selectedSide={selectedSide}
-                selectedPosition={selectedPosition}
-                availablePerSide={availablePerSide}
-            />
+            {showAMM && (
+                <AMM
+                    market={market}
+                    selectedSide={selectedSide}
+                    selectedPosition={selectedPosition}
+                    availablePerSide={availablePerSide}
+                />
+            )}
         </>
     );
 };
