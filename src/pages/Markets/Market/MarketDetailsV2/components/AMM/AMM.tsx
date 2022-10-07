@@ -614,9 +614,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
             <AMMContainer>
                 <AMMContent>
                     <PrimaryLabel>
-                        {isBuying
-                            ? t('markets.market-details.amount-to-buy')
-                            : t('markets.market-details.amount-to-sell')}
+                        {isBuy ? t('markets.market-details.amount-to-buy') : t('markets.market-details.amount-to-sell')}
                     </PrimaryLabel>
                     {isBuy && (
                         <CustomTooltip open={!!tooltipTextUsdAmount && !openApprovalModal} title={tooltipTextUsdAmount}>
