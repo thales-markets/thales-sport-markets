@@ -16,6 +16,7 @@ export const TAGS_LIST: Tags = [
     { id: 9014, label: 'La Liga', logo: `/logos/leagueLogos/LaLiga.png`, favourite: false, hidden: false },
     { id: 9015, label: 'Serie A', logo: `/logos/leagueLogos/seriea.png`, favourite: false, hidden: false },
     { id: 9016, label: 'Champions League', logo: `/logos/leagueLogos/ucl-white.png`, favourite: false, hidden: false },
+    { id: 9018, label: 'FIFA World Cup', logo: ``, favourite: false, hidden: false },
     { id: 9100, label: 'Formula 1', logo: '/logos/leagueLogos/f1.png', favourite: false, hidden: false },
     { id: 9101, label: 'MotoGP', logo: `/logos/leagueLogos/motogp.png`, favourite: false, hidden: false },
 ];
@@ -36,6 +37,7 @@ export const SPORTS_MAP: SportsMap = {
     9014: 'Soccer',
     9015: 'Soccer',
     9016: 'Soccer',
+    9018: 'Soccer',
     9100: 'Motosport',
     9101: 'Motosport',
 };
@@ -47,7 +49,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Baseball: [9003],
     Basketball: [9004, 9005, 9008],
     Hockey: [9006],
-    Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016],
+    Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9018],
     UFC: [9007],
     Motosport: [9100, 9101],
 };
