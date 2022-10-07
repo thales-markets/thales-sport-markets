@@ -47,7 +47,6 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
 
     const showAMM = !market.resolved && !market.cancelled && !market.gameStarted;
 
-    console.log('Market ', market);
     return (
         <>
             <Toggle
