@@ -1,5 +1,4 @@
 import Tooltip from 'components/Tooltip';
-import { Position } from 'constants/options';
 import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,8 +45,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                     if (addedToParlay && addedToParlay.position == type) {
                         dispatch(removeFromParlay(marketId));
                     } else {
-                        const selectedPosition = type == 0 ? Position.HOME : type == 1 ? Position.AWAY : Position.DRAW;
-                        dispatch(updateParlay({ sportMarketId: marketId, position: selectedPosition }));
+                        type ? dispatch(updateParlay({ sportMarketId: marketId, position: type })) : '';
                     }
                 }
             }}
