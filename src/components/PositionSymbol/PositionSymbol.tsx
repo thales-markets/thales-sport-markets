@@ -76,7 +76,9 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                     )}
                 </AdditionalText>
             )}
-            <AdditionalText style={additionalText?.secondTextStyle}>{additionalText?.secondText}</AdditionalText>
+            {additionalText?.secondText && (
+                <AdditionalText style={additionalText?.secondTextStyle}>{additionalText?.secondText}</AdditionalText>
+            )}
         </Wrapper>
     );
 };

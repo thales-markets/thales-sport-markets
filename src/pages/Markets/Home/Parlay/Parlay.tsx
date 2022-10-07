@@ -1,4 +1,5 @@
 import { GlobalFiltersEnum } from 'constants/markets';
+import { Position } from 'constants/options';
 import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -9,7 +10,18 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { ParlaysMarket, ParlaysMarketPosition } from 'types/markets';
+
 import Game from './components/Game';
+import Single from './components/Single';
+import Ticket from './components/Ticket';
+
+export const getPositionOdds = (market: ParlaysMarket) => {
+    return market.position === Position.HOME
+        ? market.homeOdds
+        : market.position === Position.AWAY
+        ? market.awayOdds
+        : market.drawOdds;
+};
 
 const Parlay: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -47,23 +59,33 @@ const Parlay: React.FC = () => {
 
     return (
         <Container>
-            <ListContainer>
-                {parlayMarkets.map((market, index) => {
-                    return (
-                        <RowMarket key={index}>
-                            <Game market={market} />
-                        </RowMarket>
-                    );
-                })}
-            </ListContainer>
-            <HorizontalLine />
+            {parlayMarkets.length > 0 ? (
+                <>
+                    <ListContainer>
+                        {parlayMarkets.map((market, index) => {
+                            return (
+                                <RowMarket key={index}>
+                                    <Game market={market} />
+                                </RowMarket>
+                            );
+                        })}
+                    </ListContainer>
+                    <HorizontalLine />
+                    {parlayMarkets.length === 1 ? (
+                        <Single market={parlayMarkets[0]} />
+                    ) : (
+                        <Ticket markets={parlayMarkets} />
+                    )}
+                </>
+            ) : (
+                <>NO POSITIONS</>
+            )}
         </Container>
     );
 };
 
 const Container = styled(FlexDivColumn)`
-    padding: 10px;
-    max-width: 250px;
+    padding: 15px;
     flex-grow: 1;
     background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
     border-radius: 10px;
