@@ -54,13 +54,13 @@ import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
 import { MAX_GAS_LIMIT } from 'constants/network';
 import { getReferralId } from 'utils/referral';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import onboardConnector from 'utils/onboardConnector';
 import { checkAllowance } from 'utils/network';
 import ApprovalModal from 'components/ApprovalModal';
 import CollateralSelector from '../CollateralSelector';
 import { USD_SIGN } from 'constants/currency';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { getDecimalsByStableCoinIndex } from 'utils/collaterals';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 type AMMProps = {
     market: MarketData;
@@ -72,6 +72,7 @@ type AMMProps = {
 const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, availablePerSide }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
+    const { openConnectModal } = useConnectModal();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -566,7 +567,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
     const getSubmitButton = () => {
         if (!isWalletConnected) {
             return (
-                <SubmitButton disabled={submitDisabled} onClick={() => onboardConnector.connectWallet()}>
+                <SubmitButton disabled={submitDisabled} onClick={() => openConnectModal?.()}>
                     {t('common.wallet.connect-your-wallet')}
                 </SubmitButton>
             );
