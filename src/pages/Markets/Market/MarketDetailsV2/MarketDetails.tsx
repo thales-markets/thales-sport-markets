@@ -46,23 +46,24 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
               };
 
     const showAMM = !market.resolved && !market.cancelled && !market.gameStarted;
-
     return (
         <>
-            <Toggle
-                label={{
-                    firstLabel: t('common.buy-side'),
-                    secondLabel: t('common.sell-side'),
-                    fontSize: '18px',
-                }}
-                active={selectedSide === Side.SELL}
-                dotSize="18px"
-                dotBackground="#303656"
-                dotBorder="3px solid #3FD1FF"
-                handleClick={() => {
-                    setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
-                }}
-            />
+            {showAMM && (
+                <Toggle
+                    label={{
+                        firstLabel: t('common.buy-side'),
+                        secondLabel: t('common.sell-side'),
+                        fontSize: '18px',
+                    }}
+                    active={selectedSide === Side.SELL}
+                    dotSize="18px"
+                    dotBackground="#303656"
+                    dotBorder="3px solid #3FD1FF"
+                    handleClick={() => {
+                        setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
+                    }}
+                />
+            )}
             <MatchInfo market={market} />
             <Positions
                 market={market}
