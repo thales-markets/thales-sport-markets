@@ -7,6 +7,7 @@ import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { getIsApexTopGame, isApexGame, isClaimAvailable } from 'utils/markets';
+import { buildMarketLink } from 'utils/routes';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
 import {
@@ -23,6 +24,7 @@ import {
 type MarketRowCardProps = {
     market: SportMarketInfo;
     accountPositions?: AccountPosition[];
+    language: string;
 };
 
 const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions, language }) => {
