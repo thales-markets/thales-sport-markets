@@ -1,4 +1,3 @@
-// import Tooltip from 'components/Tooltip';
 import i18n from 'i18n';
 import { DEFAULT_LANGUAGE, LanguageNameMap, SupportedLanguages } from 'i18n/config';
 import React, { useEffect, useState } from 'react';
@@ -163,8 +162,8 @@ const LanguageFlag = (language: SupportedLanguages | any) => {
         //     return <Flag code="RU" />;
         case SupportedLanguages.SPANISH:
             return <Flag code="ES" />;
-        // case SupportedLanguages.THAI:
-        //     return <Flag code="TH" />;
+        case SupportedLanguages.THAI:
+            return <Flag code="TH" />;
         default:
             return <Flag code="GB-UKM" />;
     }

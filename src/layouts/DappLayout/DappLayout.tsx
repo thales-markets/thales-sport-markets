@@ -90,7 +90,7 @@ const Background = styled.section`
 
 const Wrapper = styled(FlexDivColumn)`
     align-items: center;
-    width: 100%;
+    width: 99%;
     margin-left: auto;
     margin-right: auto;
     padding: 40px 0px;
