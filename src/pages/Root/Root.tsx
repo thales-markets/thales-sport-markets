@@ -32,6 +32,7 @@ const connectors = connectorsForWallets([
             wallet.brave({ chains }),
             wallet.ledger({ chains }),
             wallet.trust({ chains }),
+            wallet.injected({ chains }),
             wallet.coinbase({ appName: 'Overtime', chains }),
             wallet.rainbow({ chains }),
             wallet.imToken({ chains }),
