@@ -148,6 +148,7 @@ const Single: React.FC<SingleProps> = ({ market }) => {
             if (sportsAMMContract && signer) {
                 const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
                 const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(amountForQuote).toString());
+                // TODO: Why this is not implemenetd as query?
                 const ammQuote = await getSportsAMMQuoteMethod(
                     true,
                     selectedStableIndex,
@@ -172,8 +173,8 @@ const Single: React.FC<SingleProps> = ({ market }) => {
             setIsFetching(true);
             const { sportsAMMContract, signer } = networkConnector;
             if (sportsAMMContract && signer) {
-                const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
-                contract.connect(signer);
+                const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer); // TODO: Why is this defined?
+                contract.connect(signer); // TODO: Not used?
                 const roundedMaxAmount = floorNumberToDecimals(availablePerSide.positions[market.position].available);
                 const divider =
                     selectedStableIndex === COLLATERALS_INDEX.sUSD || selectedStableIndex == COLLATERALS_INDEX.DAI

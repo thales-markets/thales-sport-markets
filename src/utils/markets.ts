@@ -59,10 +59,17 @@ export const isValidHttpsUrl = (text: string) => {
 export const convertFinalResultToResultType = (result: number, isApexTopGame?: boolean) => {
     if (result == 1 && isApexTopGame) return 3;
     if (result == 2 && isApexTopGame) return 4;
-    if (result == 2) return 1;
     if (result == 1) return 0;
     if (result == 2) return 1;
     if (result == 3) return 2;
+};
+
+export const convertPositionToSymbolType = (position: Position, isApexTopGame: boolean) => {
+    if (position == Position.HOME && isApexTopGame) return 3;
+    if (position == Position.AWAY && isApexTopGame) return 4;
+    if (position == Position.HOME) return 0;
+    if (position == Position.AWAY) return 1;
+    if (position == Position.DRAW) return 2;
 };
 
 export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) => {

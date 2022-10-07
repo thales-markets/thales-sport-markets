@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { ParlaysMarket } from 'types/markets';
+import { bigNumberFormatter } from 'utils/formatters/ethers';
 import { formatCurrency, roundNumberToDecimals } from 'utils/formatters/number';
 import networkConnector from 'utils/networkConnector';
 import { getParlayMarketsAMMQuoteMethod } from 'utils/parlayAmm';
@@ -82,8 +83,10 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
             setIsFetching(false);
             */
 
-            const parlayAmmQuote = await fetchParlayAmmQuote(Number(usdAmountValue));
-            console.log(parlayAmmQuote);
+            if (usdAmountValue) {
+                const parlayAmmQuote = await fetchParlayAmmQuote(Number(usdAmountValue));
+                console.log(bigNumberFormatter(parlayAmmQuote['totalQuote']));
+            }
             return;
         };
         getMaxUsdAmount();

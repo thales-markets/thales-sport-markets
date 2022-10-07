@@ -111,6 +111,7 @@ const HorizontalLine = styled.hr`
     width: 100%;
     border: 1px solid #5f6180;
     border-radius: 2px;
+    background: #5f6180;
 `;
 
 export default Parlay;

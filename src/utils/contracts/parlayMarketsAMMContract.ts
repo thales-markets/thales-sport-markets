@@ -1,9 +1,9 @@
 export const parlayMarketsAMMContract = {
     addresses: {
-        5: 'TBD',
+        5: '0xDA10FEd3bf26BDC131f408Ec224C38816C2B15cB',
         10: 'TBD',
         42: 'TBD',
-        420: '0xc9183e3306a06e64c2a83e655756f70a83152536',
+        420: '0x0ec9D8Dac2178b041f85f60E3cF13CfaA3d23e0e',
     },
     abi: [
         {

@@ -8,7 +8,7 @@ import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { ParlaysMarket } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { formatMarketOdds, getPositionOdds } from 'utils/markets';
+import { convertPositionToSymbolType, formatMarketOdds, getIsApexTopGame, getPositionOdds } from 'utils/markets';
 
 type MatchInfoProps = { market: ParlaysMarket };
 
@@ -52,7 +52,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market }) => {
                 <ClubName>{market.awayTeam}</ClubName>
             </MatchLabel>
             <PositionSymbol
-                type={market.position}
+                type={convertPositionToSymbolType(market.position, getIsApexTopGame(market.isApex, market.betType))}
                 symbolColor={getPositionColor(market.position)}
                 additionalText={{
                     firstText: formatMarketOdds(selectedOddsType, getPositionOdds(market)),

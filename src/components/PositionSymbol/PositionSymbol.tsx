@@ -1,4 +1,5 @@
 import Tooltip from 'components/Tooltip';
+import { Position } from 'constants/options';
 import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -47,10 +48,10 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                         if (type !== undefined) {
                             switch (type) {
                                 case 3:
-                                    dispatch(updateParlay({ sportMarketId: marketId, position: 0 }));
+                                    dispatch(updateParlay({ sportMarketId: marketId, position: Position.HOME }));
                                     break;
                                 case 4:
-                                    dispatch(updateParlay({ sportMarketId: marketId, position: 1 }));
+                                    dispatch(updateParlay({ sportMarketId: marketId, position: Position.AWAY }));
                                     break;
                                 default:
                                     dispatch(updateParlay({ sportMarketId: marketId, position: type }));
