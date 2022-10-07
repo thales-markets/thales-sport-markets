@@ -1,15 +1,16 @@
 import SPAAnchor from 'components/SPAAnchor';
 import Tooltip from 'components/Tooltip';
+import { ApexBetTypeKeyMapping } from 'constants/markets';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isApexGame, isClaimAvailable } from 'utils/markets';
-import { buildMarketLink } from 'utils/routes';
+import { getIsApexTopGame, isApexGame, isClaimAvailable } from 'utils/markets';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
 import {
+    BetTypeContainer,
     ClubContainer,
     ClubLogo,
     ClubNameLabel,
@@ -22,7 +23,6 @@ import {
 type MarketRowCardProps = {
     market: SportMarketInfo;
     accountPositions?: AccountPosition[];
-    language: string;
 };
 
 const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions, language }) => {
@@ -30,6 +30,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+
+    const isApexTopGame = getIsApexTopGame(market.isApex, market.betType);
 
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
@@ -44,7 +46,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 isLive={market.maturityDate < new Date()}
                 isCanceled={market.isCanceled}
                 isClaimable={claimAvailable}
-                result={`${market.homeScore}:${market.awayScore}`}
+                result={`${market.homeScore}${isApexTopGame ? '' : `:${market.awayScore}`}`}
                 startsAt={formatDateWithTime(market.maturityDate)}
                 isPaused={market.isPaused}
             />
@@ -57,20 +59,37 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                     />
                     <ClubNameLabel>{market.homeTeam}</ClubNameLabel>
                 </ClubContainer>
-                <VSLabel>
-                    {'VS'}
-                    {isApexGame(market.tags[0]) && (
-                        <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={17} marginLeft={2} />
-                    )}
-                </VSLabel>
-                <ClubContainer>
-                    <ClubLogo
-                        alt="Away team logo"
-                        src={awayLogoSrc}
-                        onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
-                    />
-                    <ClubNameLabel>{market.awayTeam}</ClubNameLabel>
-                </ClubContainer>
+                {isApexTopGame ? (
+                    <BetTypeContainer>
+                        {t(`common.${ApexBetTypeKeyMapping[market.betType]}`)}
+                        <Tooltip
+                            overlay={t(`common.top-bet-type-title`, {
+                                driver: market.homeTeam,
+                                betType: t(`common.${ApexBetTypeKeyMapping[market.betType]}`),
+                                race: market.leagueRaceName,
+                            })}
+                            iconFontSize={17}
+                            marginLeft={2}
+                        />
+                    </BetTypeContainer>
+                ) : (
+                    <>
+                        <VSLabel>
+                            {'VS'}
+                            {isApexGame(market.tags[0]) && (
+                                <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={17} marginLeft={2} />
+                            )}
+                        </VSLabel>
+                        <ClubContainer>
+                            <ClubLogo
+                                alt="Away team logo"
+                                src={awayLogoSrc}
+                                onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
+                            />
+                            <ClubNameLabel>{market.awayTeam}</ClubNameLabel>
+                        </ClubContainer>
+                    </>
+                )}
             </ClubVsClubContainer>
             <Odds
                 isResolved={market.isResolved}
@@ -85,6 +104,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 marketId={market.id}
                 accountPositions={accountPositions}
                 isPaused={market.isPaused}
+                isApexTopGame={isApexTopGame}
             />
             <SPAAnchor href={buildMarketLink(market.address, language)}>
                 <LinkIcon className={`icon-exotic icon-exotic--link`} />

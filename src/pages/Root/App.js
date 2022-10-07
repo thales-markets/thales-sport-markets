@@ -15,6 +15,8 @@ import Theme from 'layouts/Theme';
 import DappLayout from 'layouts/DappLayout';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useAccount, useProvider, useSigner } from 'wagmi';
+import BannerCarousel from 'components/BannerCarousel';
+import { ethers } from 'ethers';
 
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
@@ -39,7 +41,10 @@ const App = () => {
                 dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
                 networkConnector.setNetworkSettings({
                     networkId: providerNetworkId,
-                    provider,
+                    provider:
+                        !!signer && !!signer.provider
+                            ? new ethers.providers.Web3Provider(signer.provider.provider, 'any')
+                            : provider,
                     signer,
                 });
                 dispatch(setAppReady());
@@ -84,6 +89,7 @@ const App = () => {
                             />
                             <Route exact path={ROUTES.Markets.Home}>
                                 <DappLayout>
+                                    <BannerCarousel />
                                     <Markets />
                                 </DappLayout>
                             </Route>

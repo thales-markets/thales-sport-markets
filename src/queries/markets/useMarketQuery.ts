@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import networkConnector from 'utils/networkConnector';
 import marketContract from 'utils/contracts/sportsMarketContract';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
-import { fixDuplicatedTeamName, fixLongTeamNameString } from '../../utils/formatters/string';
+import { fixApexName, fixDuplicatedTeamName, fixLongTeamNameString } from '../../utils/formatters/string';
 import { Position, Side } from '../../constants/options';
 import { getScoreForApexGame, isApexGame } from 'utils/markets';
 
@@ -53,6 +53,7 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                 let awayScore = result ? result.awayScore : undefined;
                 let raceName;
                 let pausedByNonExistingOdds = false;
+                let betType = 0;
 
                 if (isApex) {
                     const [gameResults, gameCreated, isGamePausedByNonExistingPostQualifyingOdds] = await Promise.all([
@@ -67,6 +68,7 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                     const raceCreated = await apexConsumerContract?.raceCreated(gameCreated.raceId);
                     raceName = raceCreated.eventName;
                     pausedByNonExistingOdds = isGamePausedByNonExistingPostQualifyingOdds;
+                    betType = Number(gameCreated.betType);
                 }
 
                 const market: MarketData = {
@@ -105,8 +107,12 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                         },
                     },
                     tags: [Number(ethers.utils.formatUnits(tags, 0))],
-                    homeTeam: fixLongTeamNameString(fixDuplicatedTeamName(gameDetails.gameLabel.split('vs')[0].trim())),
-                    awayTeam: fixLongTeamNameString(fixDuplicatedTeamName(gameDetails.gameLabel.split('vs')[1].trim())),
+                    homeTeam: isApex
+                        ? fixApexName(gameDetails.gameLabel.split('vs')[0].trim())
+                        : fixLongTeamNameString(fixDuplicatedTeamName(gameDetails.gameLabel.split('vs')[0].trim())),
+                    awayTeam: isApex
+                        ? fixApexName(gameDetails.gameLabel.split('vs')[1].trim())
+                        : fixLongTeamNameString(fixDuplicatedTeamName(gameDetails.gameLabel.split('vs')[1].trim())),
                     maturityDate: Number(times.maturity) * 1000,
                     resolved,
                     cancelled,
@@ -116,6 +122,8 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                     awayScore,
                     leagueRaceName: raceName,
                     paused: paused || pausedByNonExistingOdds,
+                    betType,
+                    isApex,
                 };
                 return market;
             } catch (e) {

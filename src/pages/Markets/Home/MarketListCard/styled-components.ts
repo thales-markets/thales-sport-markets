@@ -36,6 +36,14 @@ export const ClubContainer = styled.div<{ away?: boolean }>`
     ${(_props) => (_props?.away ? `justify-content: end;` : '')};
 `;
 
+export const BetTypeContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+    font-weight: bold;
+`;
+
 export const ClubVsClubContainer = styled.div`
     display: flex;
     flex-direction: row;

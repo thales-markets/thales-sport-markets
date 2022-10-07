@@ -36,6 +36,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     const dispatch = useDispatch();
     const parlay = useSelector(getParlay);
 
+    // TODO TO BE UPDATED WITH TYPE 3 AND 4
     const addedToParlay = parlay.filter((game: any) => game.sportMarketId == marketId)[0];
 
     return (
@@ -61,6 +62,8 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                     {type == 0 && '1'}
                     {type == 1 && '2'}
                     {type == 2 && 'X'}
+                    {type == 3 && t('common.yes')}
+                    {type == 4 && t('common.no')}
                     {type == undefined && children}
                 </Symbol>
             </Container>

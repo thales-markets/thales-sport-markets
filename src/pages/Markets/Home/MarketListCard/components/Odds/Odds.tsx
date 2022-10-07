@@ -22,6 +22,7 @@ type OddsProps = {
     };
     accountPositions?: AccountPosition[];
     isPaused: boolean;
+    isApexTopGame: boolean;
 };
 
 const Odds: React.FC<OddsProps> = ({
@@ -33,6 +34,7 @@ const Odds: React.FC<OddsProps> = ({
     odds,
     accountPositions,
     isPaused,
+    isApexTopGame,
 }) => {
     const { t } = useTranslation();
 
@@ -55,7 +57,7 @@ const Odds: React.FC<OddsProps> = ({
             {noOddsFlag && <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>}
             {resolvedGameFlag && (
                 <>
-                    <PositionSymbol type={convertFinalResultToResultType(finalResult)} />
+                    <PositionSymbol type={convertFinalResultToResultType(finalResult, isApexTopGame)} />
                     <WinnerLabel>{t('common.winner')}</WinnerLabel>
                 </>
             )}
@@ -63,7 +65,7 @@ const Odds: React.FC<OddsProps> = ({
                 <OddsContainer>
                     <PositionSymbol
                         marketId={marketId}
-                        type={0}
+                        type={isApexTopGame ? 3 : 0}
                         symbolColor={ODDS_COLOR.HOME}
                         additionalText={{
                             firstText: formatMarketOdds(selectedOddsType, odds?.homeOdds),
@@ -92,7 +94,7 @@ const Odds: React.FC<OddsProps> = ({
                     )}
                     <PositionSymbol
                         marketId={marketId}
-                        type={1}
+                        type={isApexTopGame ? 4 : 1}
                         symbolColor={ODDS_COLOR.AWAY}
                         additionalText={{
                             firstText: formatMarketOdds(selectedOddsType, odds?.awayOdds),

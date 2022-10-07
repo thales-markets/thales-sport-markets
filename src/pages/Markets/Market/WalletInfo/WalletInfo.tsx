@@ -19,6 +19,7 @@ import { ODDS_COLOR } from '../../../../constants/ui';
 import { ReactComponent as WalletIcon } from 'assets/images/wallet-icon.svg';
 import { FlexDivCentered } from '../../../../styles/common';
 import useMarketCancellationOddsQuery from 'queries/markets/useMarketCancellationOddsQuery';
+import { getIsApexTopGame } from 'utils/markets';
 
 type WalletInfoProps = {
     market: MarketData | undefined;
@@ -49,6 +50,8 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
         }
     }, [marketCancellationOddsQuery.isSuccess, marketCancellationOddsQuery.data]);
 
+    const isApexTopGame = !!market && getIsApexTopGame(market.isApex, market.betType);
+
     return (
         <WalletInfoContainer hasBalances={!!balances?.home || !!balances?.away || !!balances?.draw}>
             <TokenInfo>
@@ -59,10 +62,11 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
                 <ValueContainer>
                     {!!balances?.home && (
                         <FlexDivCentered>
-                            <Token color={ODDS_COLOR.HOME}>1</Token>
-                            <Value>
-                                {market?.homeTeam}: {balances?.home}
+                            {!isApexTopGame && <Token color={ODDS_COLOR.HOME}>1</Token>}
+                            <Value color={isApexTopGame ? ODDS_COLOR.HOME : undefined} marginRight={4}>
+                                {isApexTopGame ? t('common.yes') : market?.homeTeam}:
                             </Value>
+                            <Value>{balances?.home}</Value>
                             <AlternateValue>
                                 (${' '}
                                 {(market?.resolved && !market?.cancelled && market.finalResult - 1 == Position.HOME
@@ -97,10 +101,11 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ market }) => {
                     )}
                     {!!balances?.away && (
                         <FlexDivCentered>
-                            <Token color={ODDS_COLOR.AWAY}>2</Token>
-                            <Value>
-                                {market?.awayTeam}: {balances?.away}
+                            {!isApexTopGame && <Token color={ODDS_COLOR.AWAY}>2</Token>}
+                            <Value color={isApexTopGame ? ODDS_COLOR.AWAY : undefined} marginRight={4}>
+                                {isApexTopGame ? t('common.no') : market?.awayTeam}:
                             </Value>
+                            <Value>{balances?.away}</Value>
                             <AlternateValue>
                                 (${' '}
                                 {(market?.resolved && !market?.cancelled && market.finalResult - 1 == Position.AWAY

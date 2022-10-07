@@ -77,6 +77,24 @@ export const MatchVSLabel = styled.label`
     margin-top: -20px;
 `;
 
+export const BetTypeInfo = styled.label`
+    font-style: normal;
+    font-weight: 200;
+    font-size: 20px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    width: 300px;
+    margin-left: 10px;
+    margin-top: 10px;
+    text-align: center;
+    color: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
+    @media (max-width: 575px) {
+        width: auto;
+    }
+`;
+
 export const RaceNameLabel = styled.label`
     font-style: normal;
     font-weight: 200;

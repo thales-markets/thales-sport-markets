@@ -1,4 +1,5 @@
 import {
+    BetTypeInfo,
     MarketInfoContainer,
     MatchDate,
     MatchInfo,
@@ -14,9 +15,10 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SportMarketInfo } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isApexGame } from '../../../../../utils/markets';
+import { getIsApexTopGame, isApexGame } from '../../../../../utils/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import Tooltip from 'components/Tooltip';
+import { ApexBetTypeKeyMapping } from 'constants/markets';
 
 type MarketCardCanceledProps = {
     market: SportMarketInfo;
@@ -32,6 +34,8 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
         setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
     }, [market.homeTeam, market.awayTeam, market.tags]);
 
+    const isApexTopGame = getIsApexTopGame(market.isApex, market.betType);
+
     return (
         <MatchInfo>
             <MatchInfoColumn>
@@ -45,30 +49,42 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                 <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
             </MatchInfoColumn>
             <MatchInfoColumn>
-                <MarketInfoContainer>
+                <MarketInfoContainer marginTop={isApexTopGame ? 20 : 0}>
                     <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
                     <MatchInfoLabel isCanceledMarket={true} isPaused={market.isPaused}>
                         {market.isPaused ? t('markets.market-card.paused') : t('markets.market-card.canceled')}
                     </MatchInfoLabel>
                 </MarketInfoContainer>
-                <MatchVSLabel>
-                    {t('markets.market-card.vs')}
-                    {isApexGame(market.tags[0]) && (
-                        <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
-                    )}
-                </MatchVSLabel>
+                {isApexTopGame ? (
+                    <BetTypeInfo>
+                        {t(`common.top-bet-type-title`, {
+                            driver: market.homeTeam,
+                            betType: t(`common.${ApexBetTypeKeyMapping[market.betType]}`),
+                            race: market.leagueRaceName,
+                        })}
+                    </BetTypeInfo>
+                ) : (
+                    <MatchVSLabel>
+                        {t('markets.market-card.vs')}
+                        {isApexGame(market.tags[0]) && (
+                            <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
+                        )}
+                    </MatchVSLabel>
+                )}
                 <Tags sport={market.sport} tags={market.tags} />
             </MatchInfoColumn>
-            <MatchInfoColumn>
-                <MatchParticipantImageContainer isCanceled={true}>
-                    <MatchParticipantImage
-                        alt="Away team logo"
-                        src={awayLogoSrc}
-                        onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
-                    />
-                </MatchParticipantImageContainer>
-                <MatchParticipantName>{market.awayTeam}</MatchParticipantName>
-            </MatchInfoColumn>
+            {!isApexTopGame && (
+                <MatchInfoColumn>
+                    <MatchParticipantImageContainer isCanceled={true}>
+                        <MatchParticipantImage
+                            alt="Away team logo"
+                            src={awayLogoSrc}
+                            onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
+                        />
+                    </MatchParticipantImageContainer>
+                    <MatchParticipantName>{market.awayTeam}</MatchParticipantName>
+                </MatchInfoColumn>
+            )}
         </MatchInfo>
     );
 };
