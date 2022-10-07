@@ -34,6 +34,9 @@ export const MAIN_COLORS = {
     DARK_GRAY: '#1A1C2B',
     DISABLED_GRAY: '#303656',
     LIGHT_BLUE: 'rgba(63,209,255,1)',
+    BACKGROUNDS: {
+        RED: '#BC515E',
+    },
     BORDERS: {
         GRAY: '#5f6180',
         WINNER: '#3FD1FF',

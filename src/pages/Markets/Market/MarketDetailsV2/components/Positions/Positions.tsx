@@ -29,6 +29,8 @@ import {
     LiquidityInfoContainer,
     PositionContainer,
     ResultContainer,
+    StatusContainer,
+    StatusLabel,
     TeamOptionContainer,
     Value,
     Wrapper,
@@ -116,9 +118,9 @@ const Positions: React.FC<PositionsProps> = ({
     const disabledAwayOption = !(market?.positions[Position.AWAY]?.sides[selectedSide]?.odd > 0);
 
     const showDrawOdds = getVisibilityOfDrawOptionByTagId(market.tags);
-    // const gameCanceled = market.cancelled || (!market.gameStarted && market.resolved);
+    const gameCancelled = market.cancelled || (!market.gameStarted && market.resolved);
     const gameResolved = market.gameStarted && market.resolved;
-    // const pendingResolve = market.gameStarted && !market.resolved;
+    const pendingResolution = market.gameStarted && !market.resolved;
     const showPositions = !market.resolved && !market.cancelled && !market.gameStarted;
     const isApexTopGame = getIsApexTopGame(market.isApex, market.betType);
 
@@ -144,6 +146,16 @@ const Positions: React.FC<PositionsProps> = ({
 
     return (
         <>
+            {gameCancelled && (
+                <StatusContainer isCancelled={gameCancelled}>
+                    <StatusLabel isCancelled={gameCancelled}>{t('markets.market-card.canceled')}</StatusLabel>
+                </StatusContainer>
+            )}
+            {pendingResolution && (
+                <StatusContainer isPendingResolve={pendingResolution}>
+                    <StatusLabel isPendingResolve={pendingResolution}>{t('markets.market-card.canceled')}</StatusLabel>
+                </StatusContainer>
+            )}
             {gameResolved && (
                 <Wrapper>
                     <TeamOptionContainer isResolved={gameResolved}>

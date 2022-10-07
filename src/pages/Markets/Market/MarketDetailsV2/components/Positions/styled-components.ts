@@ -21,6 +21,27 @@ export const TeamOptionContainer = styled.div<{ disabled?: boolean; selected?: b
     }
 `;
 
+export const StatusContainer = styled.div<{ isCancelled?: boolean; isPendingResolve?: boolean }>`
+    width: 100%;
+    display: flex;
+    border-radius: 15px;
+    ${(_props) => (_props?.isCancelled ? `background-color: ${MAIN_COLORS.BACKGROUNDS.RED};` : '')};
+    ${(_props) => (_props?.isPendingResolve ? `background-color: ${MAIN_COLORS.LIGHT_GRAY};` : '')};
+    padding: 10px 50px;
+    justify-content: center;
+    align-items: center
+    margin-bottom: 7px;
+`;
+
+export const StatusLabel = styled.span<{ isCancelled?: boolean; isPendingResolve?: boolean }>`
+    font-weight: 600;
+    font-size: 21px;
+    line-height: 110%;
+    text-transform: uppercase;
+    ${(_props) => (_props?.isCancelled ? `color: ${MAIN_COLORS.TEXT.WHITE};` : '')};
+    ${(_props) => (_props?.isPendingResolve ? `color: ${MAIN_COLORS.TEXT.WHITE};` : '')};
+`;
+
 export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
