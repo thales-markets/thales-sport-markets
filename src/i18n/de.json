@@ -291,7 +291,7 @@
     },
     "quiz": {
         "title": "Sport Trivia Wettbewerb",
-        "start-quiz-description": "<p>Hallo Sportfans! Bist du bereit, dein Wissen zu testen?</p><p>Overtime hat einen Sport-Trivia-Wettbewerb ins Leben gerufen, bei dem die wöchentlichen Gewinner NFT-Gutscheine erhalten, die anstelle von SUSD für die Teilnahme an einem beliebigen Sportmarkt verwendet werden können.</p><p>Lies alle Informationen zu diesem Quiz in unserem <blogPost>Blogpost</blogPost>.</p><p>Wie kann man teilnehmen? Das Quiz steht jedem zur Verfügung, um sein Wissen zu testen und sich zu wettkämpfen, aber um sich für die Preise zu qualifizieren, müssen Sie dieses <quizRetweetLink>Tweet</quizRetweetLink> retweeten und <twitter>Overtime's Twitter</twitter> folgen.</p><p>Verbinden Sie Ihr Wallet und geben Sie Ihren Twitter-Handle ein, um das Quiz zu starten! Wenn du Belohnungen gewinnst, werden wir dich bitten, deine Adresse per Twitter-DM zu bestätigen. Die Discord-ID ist optional, wenn du als potenzieller Gewinner eine Discord-Rolle erhalten möchtest.</p><p>Für Fragen kannst du unserem <discord>Discord</discord> beitreten.</p>",
+        "start-quiz-description": "<p>Hallo Sportfans! Bist du bereit, dein Wissen zu testen?</p><p>Overtime hat einen Sport-Trivia-Wettbewerb ins Leben gerufen. Das Quiz steht jedem zur Verfügung, um sein Wissen zu testen und sich zu wettkämpfen.</p><p>Verbinden Sie Ihr Wallet und geben Sie Ihren Twitter-Handle ein, um das Quiz zu starten! Für Fragen kannst du unserem <discord>Discord</discord> beitreten.</p>",
         "twitter-handle-label": "Twitter Handle",
         "twitter-handle-placeholder": "Geben Sie Ihr Twitter-Handle ein",
         "twitter-handle-validation": "Ungültiger Twitter-Handle. Versuchen Sie es erneut.",
@@ -314,7 +314,7 @@
         },
         "leaderboard": {
             "title": "Quiz Rangliste",
-            "description": "<p>Dies ist die Quiz-Rangliste, in der du sehen kannst, wie du im Vergleich zur Konkurrenz in jeder bestimmten Woche abschneidest</p><p>Alle Details zur Teilnahme und zum Gewinn von NFT sUSD-Gutscheinen, die für jeden Sportmarkt verwendet werden können, finden Sie <blogPost>hier</blogPost>.</p><p>Du kannst das Quiz <sportsTrivia>hier</sportsTrivia> so oft wiederholen, wie du willst.</p>",
+            "description": "<p>Dies ist die Quiz-Rangliste, in der du sehen kannst, wie du im Vergleich zur Konkurrenz.</p><p>Du kannst das Quiz <sportsTrivia>hier</sportsTrivia> so oft wiederholen, wie du willst.</p>",
             "back-to-quiz": "Zurück zum Quiz",
             "search-placeholder": "Suchen...",
             "table": {
@@ -329,16 +329,14 @@
             "period-end-label": "Die Frist endet in",
             "period-ended-label": "Zeitraum beendet",
             "week-label": "Woche",
-            "overtime-voucher": "Overtime Gutschein"
+            "overtime-voucher": "Overtime Gutschein",
+            "all-time-leaderboard-label": "All time leaderboard"
         },
         "help-us-improve-label": "Helfen sie uns, den Quiz zu verbessern",
         "help-us-improve-tooltip": "Helfen Sie uns, Sport-Quiz zu verbessern, indem Sie neue Fragen in die Fragen-Datenbank eintragen.",
         "finish-messages": {
             "your-best-result": "Ihr bestes Resultat: {{points}} {{pointsLabel}}",
-            "rank-info": "Mit {{points}} {{pointsLabel}} sind Sie auf der Rangliste {{rank}} von {{totalParticipants}} Teilnehmern.",
-            "not-quilfied-for-rewards": "Es fehlen Ihnen {{points}} {{pointsLabel}}, um in die TOP {{numberOfRewards}} zu kommen und sich für Preise zu qualifizieren. Versuchen Sie es erneut und verbessern Sie Ihre Punktzahl.",
-            "quilfied-for-rewards": "Du bist derzeit in der TOP {{numberOfRewards}} und für Preise qualifiziert. Versuchen Sie es erneut, um einen besseren Rang und höhere Belohnungen zu erhalten.",
-            "quilfied-for-rewards-first": "Sie führen derzeit die Rangliste an! Versuchen Sie es noch einmal, um eine bessere Punktzahl zu erreichen und Ihren Platz zu sichern."
+            "rank-info": "Mit {{points}} {{pointsLabel}} sind Sie auf der Rangliste {{rank}} von {{totalParticipants}} Teilnehmern."
         },
         "difficulty-label": "Schwierigkeitsgrad",
         "difficulty": {

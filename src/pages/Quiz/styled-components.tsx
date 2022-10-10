@@ -429,7 +429,7 @@ export const DifficultyInfo = styled(Description)<{ difficulty: number }>`
 
 export const SelectContainer = styled.div`
     margin-left: 1px;
-    width: 200px;
+    width: 230px;
 `;
 
 export const LeaderboardHeader = styled(FlexDivRow)`
@@ -450,21 +450,6 @@ export const PeriodContainer = styled(FlexDivStart)`
     align-items: center;
     @media screen and (max-width: 767px) {
         flex-direction: column;
+        margin-bottom: 10px;
     }
-`;
-
-export const PeriodEndContainer = styled(FlexDivStart)`
-    margin-left: 10px;
-    margin-right: 10px;
-    @media screen and (max-width: 767px) {
-        margin-left: 0px;
-        margin-right: 0px;
-        margin-top: 6px;
-        margin-bottom: 15px;
-    }
-`;
-
-export const PeriodEndLabel = styled.span`
-    font-size: 18px;
-    margin-right: 6px;
 `;

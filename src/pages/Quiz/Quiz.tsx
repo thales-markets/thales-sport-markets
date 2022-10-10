@@ -83,7 +83,6 @@ import useQuizLeaderboardQuery from 'queries/quiz/useQuizLeaderboardQuery';
 import { FinishInfo, LeaderboardItem } from 'types/quiz';
 import ordinal from 'ordinal';
 import { Info } from 'pages/Markets/Home/Home';
-import useQuizTweetQuery from 'queries/quiz/useQuizTweetQuery';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 const Quiz: React.FC = () => {
@@ -104,7 +103,6 @@ const Quiz: React.FC = () => {
     const [percentageTimeRemaining, setPercentageTimeRemaining] = useState<number>(0);
     const [isTwitterValid, setIsTwitterValid] = useState<boolean>(true);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-    const [numberOfRewards, setNumberOfRewards] = useState<number>(0);
 
     const { openConnectModal } = useConnectModal();
 
@@ -116,8 +114,6 @@ const Quiz: React.FC = () => {
     const finishInfo: FinishInfo = useMemo(() => {
         if (quizLeaderboardQuery.isSuccess && quizLeaderboardQuery.data) {
             const leaderboard = quizLeaderboardQuery.data[quizLeaderboardQuery.data.length - 1].leaderboard;
-            const numberOfRewards = leaderboard.filter((item: LeaderboardItem) => item.price > 0).length;
-            setNumberOfRewards(numberOfRewards);
 
             const leaderboardItem = leaderboard.find(
                 (item: LeaderboardItem) => item.name.trim().toLowerCase() === twitter.trim().toLowerCase()
@@ -127,11 +123,6 @@ const Quiz: React.FC = () => {
                     rank: leaderboardItem.ranking,
                     points: leaderboardItem.points,
                     totalParticipants: leaderboard.length,
-                    lastRankPointsWithRewards: (leaderboard.length > numberOfRewards
-                        ? leaderboard[numberOfRewards - 1]
-                        : leaderboard[leaderboard.length - 1]
-                    ).points,
-                    isQualifiedForRewards: leaderboardItem.ranking <= numberOfRewards,
                 };
             }
         }
@@ -144,16 +135,6 @@ const Quiz: React.FC = () => {
             isQualifiedForRewards: false,
         };
     }, [quizLeaderboardQuery.data, quizLeaderboardQuery.isSuccess, twitter]);
-
-    const quizTweetQuery = useQuizTweetQuery();
-
-    const quizTweet: string = useMemo(() => {
-        if (quizTweetQuery.isSuccess && quizTweetQuery.data) {
-            return quizTweetQuery.data;
-        }
-
-        return LINKS.QuizRetweetLink;
-    }, [quizTweetQuery.data, quizTweetQuery.isSuccess]);
 
     const handleStartQuiz = async () => {
         setIsSubmitting(true);
@@ -332,9 +313,6 @@ const Quiz: React.FC = () => {
                                             i18nKey="quiz.start-quiz-description"
                                             components={{
                                                 p: <p />,
-                                                blogPost: <QuizLink href={LINKS.QuizBlogPost} key="blogPost" />,
-                                                quizRetweetLink: <QuizLink href={quizTweet} key="quizRetweetLink" />,
-                                                twitter: <QuizLink href={LINKS.Twitter} key="twitter" />,
                                                 discord: <QuizLink href={LINKS.ThalesDiscord} key="discord" />,
                                             }}
                                         />
@@ -436,31 +414,6 @@ const Quiz: React.FC = () => {
                                                         : t('quiz.points-label'),
                                             })}
                                         </FinishedInfoMessage>
-                                        {!finishInfo.isQualifiedForRewards && (
-                                            <FinishedInfoMessage>
-                                                {t('quiz.finish-messages.not-quilfied-for-rewards', {
-                                                    points:
-                                                        finishInfo.lastRankPointsWithRewards + 1 - finishInfo.points,
-                                                    pointsLabel:
-                                                        Number(finishInfo.points) === 1
-                                                            ? t('quiz.point-label')
-                                                            : t('quiz.points-label'),
-                                                    numberOfRewards: numberOfRewards,
-                                                })}
-                                            </FinishedInfoMessage>
-                                        )}
-                                        {finishInfo.isQualifiedForRewards && finishInfo.rank > 1 && (
-                                            <FinishedInfoMessage>
-                                                {t('quiz.finish-messages.quilfied-for-rewards', {
-                                                    numberOfRewards: numberOfRewards,
-                                                })}
-                                            </FinishedInfoMessage>
-                                        )}
-                                        {finishInfo.isQualifiedForRewards && finishInfo.rank === 1 && (
-                                            <FinishedInfoMessage>
-                                                {t('quiz.finish-messages.quilfied-for-rewards-first')}
-                                            </FinishedInfoMessage>
-                                        )}
                                     </FinishedInfoMessagesContainer>
                                     <ButtonContainer>{getSubmitButton()}</ButtonContainer>
                                 </>
