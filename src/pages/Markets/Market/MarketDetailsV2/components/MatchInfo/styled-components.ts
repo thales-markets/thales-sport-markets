@@ -7,6 +7,13 @@ export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    @media (max-width: 500px) {
+        width: 100%;
+        background-color: ${MAIN_COLORS.LIGHT_GRAY};
+        border-radius: 15px;
+        margin-bottom: 9px;
+        margin-top: 9px;
+    }
 `;
 
 export const InnerWrapper = styled.div`
@@ -21,15 +28,22 @@ export const Container = styled(FlexDiv)`
     align-items: center;
     margin-top: 30px;
     margin-bottom: 20px;
+    @media (max-width: 500px) {
+        flex-direction: column;
+        justify-content: center;
+    }
 `;
 
 export const ParticipantsContainer = styled(FlexDiv)`
     flex-direction: row;
+    @media (max-width: 500px) {
+        margin-bottom: 13px;
+    }
 `;
 
 export const ParticipantLogoContainer = styled.div<{ awayTeam?: boolean; isWinner?: boolean; isDraw?: boolean }>`
     ${(_props) => (_props?.awayTeam ? 'margin-left: -1vw;' : '')}
-    background-color: #1A1C2B;
+    background-color: ${MAIN_COLORS.DARK_GRAY};
     border-color: ${(_props) =>
         _props?.isWinner ? `${MAIN_COLORS.BORDERS.WINNER} !important` : MAIN_COLORS.BORDERS.GRAY};
     ${(_props) => (_props?.isWinner || _props?.isDraw ? `box-shadow: ${MAIN_COLORS.SHADOWS.WINNER};` : '')}
@@ -41,6 +55,11 @@ export const ParticipantLogoContainer = styled.div<{ awayTeam?: boolean; isWinne
     align-items: center;
     justify-content: center;
     border: 2.5px solid #5f6180;
+    @media (max-width: 500px) {
+        margin-right: 0px;
+        margin-bottom: 13px;
+        background-color: ${MAIN_COLORS.LIGHT_GRAY};
+    }
 `;
 
 export const ParticipantLogo = styled.img`
@@ -55,6 +74,10 @@ export const LeagueLogoContainer = styled(FlexDiv)`
     padding: 5px;
     justify-content: center;
     align-items: center;
+    @media (max-width: 500px) {
+        margin-right: 0px;
+        margin-bottom: 13px;
+    }
 `;
 
 export const LeagueLogo = styled.img`
@@ -70,6 +93,10 @@ export const MatchTimeContainer = styled.div`
     text-align: center;
     justify-content: center;
     margin-left: 15px;
+    @media (max-width: 500px) {
+        margin-left: 0px;
+        margin-bottom: 13px;
+    }
 `;
 
 export const MatchTimeLabel = styled.span`
