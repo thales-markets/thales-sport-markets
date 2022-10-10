@@ -413,15 +413,13 @@
             "period-ended-label": "Période terminée",
             "search-placeholder": "Chercher...",
             "week-label": "Semaine",
-            "description": "<p>Voici le classement du quiz où vous pouvez voir comment vous vous en sortez par rapport à la concurrence sur une semaine donnée.</p><p>Tous les détails sur la façon d'utiliser les coupons Overtime sont disponibles <blogPost>ici</blogPost>.</p><p> Vous pouvez participer au quiz autant de fois que vous le souhaitez <sportsTrivia>ici</sportsTrivia>.</p>",
-            "period-end-label": "La période se termine dans"
+            "description": "<p>Voici le classement du quiz où vous pouvez voir comment vous vous en sortez par rapport à la concurrence.</p><p> Vous pouvez participer au quiz autant de fois que vous le souhaitez <sportsTrivia>ici</sportsTrivia>.</p>",
+            "period-end-label": "La période se termine dans",
+            "all-time-leaderboard-label": "All time leaderboard"
         },
         "finish-messages": {
-            "quilfied-for-rewards-first": "Vous êtes actuellement en tête du classement ! Réessayez pour obtenir un meilleur score et sécuriser votre place.",
             "your-best-result": "Votre meilleur résultat : {{points}} {{pointsLabel}}",
-            "quilfied-for-rewards": "Vous êtes actuellement dans le TOP {{numberOfRewards}} et qualifié pour les récompenses. Réessayez pour obtenir un meilleur classement et des récompenses plus élevées.",
-            "rank-info": "Avec {{points}} {{pointsLabel}} vous êtes classé {{rank}} sur {{totalParticipants}} participants.",
-            "not-quilfied-for-rewards": "Il vous manque {{points}} {{pointsLabel}} pour entrer dans le TOP {{numberOfRewards}} et vous qualifier pour des récompenses. Réessayez et améliorez votre score."
+            "rank-info": "Avec {{points}} {{pointsLabel}} vous êtes classé {{rank}} sur {{totalParticipants}} participants."
         },
         "difficulty": {
             "1": "Ultra facile",
@@ -444,7 +442,7 @@
         "help-us-improve-label": "Aidez nous à améliorer",
         "twitter-handle-placeholder": "Entrez votre identifiant Twitter",
         "point-label": "point",
-        "start-quiz-description": "<p>Salut les fans de sport ! Prêt à tester vos connaissances et à battre tout le monde ?</p><p> Overtime a lancé un concours de quiz sportifs où les gagnants recevront chaque semaine des NFT qui peuvent être utilisés à la place de sUSD pour participer à n'importe quel marché sportif sur Overtime.</p><p> Lisez toutes les informations sur ce quiz dans notre <blogPost>article de blog</blogPost>.</p><p>Comment participer ? Le quiz est accessible à tous pour tester ses connaissances et participer, mais pour être éligible aux récompenses, vous devez retweeter ceci <quizRetweetLink>tweeter</quizRetweetLink> et suivre le compte <twitter>Twitter d'Overtime</twitter>.</p><p>Connectez votre portefeuille et entrez votre identifiant Twitter pour commencer le quiz ! Si vous gagnez des récompenses, nous vous demanderons de confirmer votre adresse via Twitter DM. L'identifiant Discord est facultatif, il est utilisé afin de recevoir un rôle Discord en tant que gagnant potentiel du quiz.</p><p>Pour toute question, veuillez rejoindre notre <discord>Discord</discord>.</p>",
+        "start-quiz-description": "<p>Salut les fans de sport! Prêt à tester vos connaissances et à battre tout le monde?</p><p>Overtime a lancé un concours de quiz sportifs. Le quiz est accessible à tous pour tester ses connaissances et participer.</p><p>Connectez votre portefeuille et entrez votre identifiant Twitter pour commencer le quiz! Pour toute question, veuillez rejoindre notre <discord>Discord</discord>.</p>",
         "question-weight-label": "Poids de la question : {{points}}",
         "help-us-improve-tooltip": "Aidez-nous à améliorer les quiz sportifs en ajoutant de nouvelles questions à la base de données de questions."
     }
