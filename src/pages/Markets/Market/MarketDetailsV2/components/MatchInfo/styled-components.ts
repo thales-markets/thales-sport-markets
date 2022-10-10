@@ -20,6 +20,10 @@ export const InnerWrapper = styled.div`
     width: 33%;
     display: flex;
     justify-content: center;
+    @media (max-width: 500px) {
+        width: 100%;
+        margin-bottom: 10px;
+    }
 `;
 
 export const Container = styled(FlexDiv)`
