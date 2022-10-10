@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 
-const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
-
 const BannerCarousel: React.FC = () => {
     const [urlMap, setUrlMap] = useState<Record<number, string>>({});
     useEffect(() => {
@@ -13,9 +11,7 @@ const BannerCarousel: React.FC = () => {
             for (let i = 1; i <= 3; i++) {
                 try {
                     const response = await fetch(
-                        `https://raw.githubusercontent.com/thales-markets/thales-sport-markets/${
-                            isDev ? 'dev' : 'main'
-                        }/src/assets/images/banner/${i}/json.json`
+                        `https://raw.githubusercontent.com/thales-markets/thales-sport-markets/dev/src/assets/images/banner/${i}/json.json`
                     );
                     if (response) {
                         const json = await response.json();
@@ -71,7 +67,7 @@ const StyledDiv = styled.div<{ index: number; hasHref?: boolean }>`
     height: 165px;
     margin: -1px;
     background-image: ${(props) =>
-        `url(https://raw.githubusercontent.com/thales-markets/thales-sport-markets/banner_carousel/src/assets/images/banner/${props.index}/image.jpg)`};
+        `url(https://raw.githubusercontent.com/thales-markets/thales-sport-markets/dev/src/assets/images/banner/${props.index}/image.jpg)`};
     cursor: ${(props) => (props.hasHref ? 'pointer' : 'default')};
     background-position: center;
 `;
