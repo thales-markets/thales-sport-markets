@@ -94,5 +94,6 @@ export const Question = styled.span`
 export const MarketNotice = styled.span`
     font-weight: 500;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    margin-top: -5px;
 `;
