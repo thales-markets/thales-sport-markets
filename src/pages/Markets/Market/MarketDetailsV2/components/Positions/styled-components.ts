@@ -19,6 +19,9 @@ export const TeamOptionContainer = styled.div<{ disabled?: boolean; selected?: b
         border: ${(_props) =>
             !_props?.disabled && !_props.isResolved ? `0.5px solid ${MAIN_COLORS.LIGHT_BLUE}` : undefined};
     }
+    @media (max-width: 500px) {
+        padding: 13px 23px;
+    }
 `;
 
 export const StatusContainer = styled.div<{ isCancelled?: boolean; isPendingResolve?: boolean }>`
@@ -57,8 +60,10 @@ export const InnerContainer = styled.div`
 `;
 
 export const PositionContainer = styled(InnerContainer)`
+    width: 30px;
+    height: 30px;
     @media (max-width: 768px) {
-        width: 50%;
+        width: 65%;
     }
 `;
 
