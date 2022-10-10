@@ -84,7 +84,6 @@ export const AmountToBuyInput = styled.input`
     font-weight: bold;
     font-size: 18px;
     @media (max-width: 768px) {
-        width: 130px;
         font-size: 15px;
     }
 `;
