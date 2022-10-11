@@ -1,19 +1,24 @@
 import React from 'react';
-// import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import OvertimeLogo from 'assets/images/overtime-logo.svg';
-import ZebraLogo from 'assets/images/landing-page/zebra-logo.svg';
+import ZebraLogoImg from 'assets/images/landing-page/zebra-logo.svg';
 import ZebraBaseball from 'assets/images/landing-page/zebra-baseball.svg';
 import ZebraBasketball from 'assets/images/landing-page/zebra-basketball.svg';
+import ZebraNfl from 'assets/images/landing-page/zebra-nfl.svg';
+import ZebraHockey from 'assets/images/landing-page/zebra-hockey.svg';
+import ZebraBoxing from 'assets/images/landing-page/zebra-boxing.svg';
+import ZebraRacing from 'assets/images/landing-page/zebra-racing.svg';
 import ChainlinkLogo from 'assets/images/landing-page/chainlink.svg';
 import OptimismLogo from 'assets/images/landing-page/optimism.svg';
 import ThalesLogo from 'assets/images/landing-page/thales.svg';
+import DiscordLogo from 'assets/images/landing-page/discord.svg';
 import {
     Container,
     Header,
     Logo,
-    Zebra,
+    ZebraLogo,
     Section,
-    ZebraBaseballImg,
+    Zebro,
     LargeText,
     CallToAction,
     ArrowIcon,
@@ -21,25 +26,38 @@ import {
     Initiative,
     Initiatives,
     Link,
-    ZebraBasketballImg,
+    InfoBoxTitle,
+    InfoBox,
+    InfoBoxText,
+    SectionRow,
+    DiscordLink,
+    DiscordInfo,
+    DiscordIcon,
 } from './styled-components';
+import SPAAnchor from 'components/SPAAnchor';
+import { buildHref } from 'utils/routes';
+import ROUTES from 'constants/routes';
+import { LINKS } from 'constants/links';
 
 const LandingPage: React.FC = () => {
-    // const { t } = useTranslation();
+    const { t } = useTranslation();
 
     return (
         <Container>
             <Header>
                 <Logo src={OvertimeLogo} alt="overtime logo" />
-                <Zebra src={ZebraLogo} alt="zebra logo" />
+                <ZebraLogo src={ZebraLogoImg} alt="zebra logo" />
             </Header>
             <Section className="first">
-                <ZebraBaseballImg src={ZebraBaseball} alt="zebra baseball" />
-                <LargeText className="first">BEST ODDS IN THE INDUSTRY</LargeText>
+                <Zebro className="baseball" src={ZebraBaseball} alt="Zebro Baseball" />
+                <LargeText className="first">{t('landing-page.best-odds')}</LargeText>
                 <CallToAction className="first">
-                    {'TRY NOW'} <ArrowIcon className={`icon-exotic icon-exotic--right`} />
+                    <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
+                        {t('landing-page.try-now')} <ArrowIcon className={`icon-exotic icon-exotic--right`} />
+                    </SPAAnchor>
                 </CallToAction>
-                <SubSection className="first">POWERED BY</SubSection>
+
+                <SubSection className="first">{t('landing-page.powered-by')}</SubSection>
                 <Initiatives>
                     <Link target="_blank" rel="noreferrer" height={'70px'} href="https://chain.link/">
                         <Initiative src={ChainlinkLogo} alt="Chainlink logo" />
@@ -53,19 +71,82 @@ const LandingPage: React.FC = () => {
                 </Initiatives>
             </Section>
             <Section className="second">
-                <ZebraBasketballImg src={ZebraBasketball} alt="zebra basketball" />
-                <LargeText className="second">SPORTS POSITIONING</LargeText>
-                <LargeText className="second in-front">WITH NO KYC</LargeText>
+                <Zebro className="basketball" src={ZebraBasketball} alt="Zebro Basketball" />
+                <LargeText className="second in-front">{t('landing-page.no-kyc')}</LargeText>
                 <CallToAction className="second">
-                    {'LAUNCH DAPP'} <ArrowIcon className={`icon-exotic icon-exotic--right`} />
+                    <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
+                        {t('landing-page.launch-dapp')} <ArrowIcon className={`icon-exotic icon-exotic--right`} />
+                    </SPAAnchor>
                 </CallToAction>
-                <SubSection className="first">LEAGUES</SubSection>
+                <SubSection className="first">{t('landing-page.leagues')}</SubSection>
+                {/*TODO CAROUSEL */}
             </Section>
-            <Section></Section>
-            <Section></Section>
-            <Section></Section>
-            <Section></Section>
-            <Section></Section>
+            <SectionRow>
+                <InfoBox>
+                    <InfoBoxTitle>{t('landing-page.info-text-title-1')}</InfoBoxTitle>
+                    <InfoBoxText>{t('landing-page.info-text-1')}</InfoBoxText>
+                </InfoBox>
+                <InfoBox>
+                    <InfoBoxTitle>{t('landing-page.info-text-title-2')}</InfoBoxTitle>
+                    <InfoBoxText>{t('landing-page.info-text-2')}</InfoBoxText>
+                </InfoBox>
+                <InfoBox>
+                    <InfoBoxTitle>{t('landing-page.info-text-title-3')}</InfoBoxTitle>
+                    <InfoBoxText>{t('landing-page.info-text-3')}</InfoBoxText>
+                </InfoBox>
+                <InfoBox>
+                    <InfoBoxTitle>{t('landing-page.info-text-title-4')}</InfoBoxTitle>
+                    <InfoBoxText>{t('landing-page.info-text-4')}</InfoBoxText>
+                </InfoBox>
+                <InfoBox>
+                    <InfoBoxTitle>{t('landing-page.info-text-title-5')}</InfoBoxTitle>
+                    <InfoBoxText>{t('landing-page.info-text-5')}</InfoBoxText>
+                </InfoBox>
+                <InfoBox className="last">
+                    <CallToAction className="info-box">
+                        <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>{t('landing-page.browse-markets')}</SPAAnchor>
+                    </CallToAction>
+                </InfoBox>
+            </SectionRow>
+            <Section className="third">
+                <Zebro className="nfl" src={ZebraNfl} alt="Zebro American Football" />
+                <LargeText className="third in-front">{t('landing-page.web3-positioning')}</LargeText>
+                <CallToAction className="third">
+                    <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
+                        {t('landing-page.try-now')} <ArrowIcon className={`icon-exotic icon-exotic--right`} />
+                    </SPAAnchor>
+                </CallToAction>
+            </Section>
+            <Section className="fourth">
+                <Zebro className="hockey" src={ZebraHockey} alt="Zebro Hockey" />
+                <LargeText className="fourth in-front">{t('landing-page.learn-more')}</LargeText>
+                <SPAAnchor
+                    style={{ width: '100%', zIndex: 1001, cursor: 'pointer' }}
+                    href={buildHref(ROUTES.Markets.Home)}
+                >
+                    <SubSection className="first">{t('landing-page.documentation')}</SubSection>
+                </SPAAnchor>
+            </Section>
+            <Section className="fifth">
+                <Zebro className="boxing" src={ZebraBoxing} alt="Zebro Boxing" />
+                <LargeText className="fifth in-front">{t('landing-page.jump-in')}</LargeText>
+
+                <SubSection className="fifth">{t('landing-page.open-overtime')}</SubSection>
+                <CallToAction className="fifth">
+                    <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
+                        {t('landing-page.try-now')} <ArrowIcon className={`icon-exotic icon-exotic--right`} />
+                    </SPAAnchor>
+                </CallToAction>
+            </Section>
+            <Section className="sixth">
+                <Zebro className="racing" src={ZebraRacing} alt="Zebro Racing " />
+                <DiscordInfo>
+                    <DiscordLink target="_blank" rel="noreferrer" href={LINKS.Footer.Discord}>
+                        <DiscordIcon src={DiscordLogo} />
+                        {t('landing-page.join-discord')}
+                    </DiscordLink>
+                </DiscordInfo>
+            </Section>
         </Container>
     );
 };

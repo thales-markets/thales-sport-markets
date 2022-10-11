@@ -348,5 +348,30 @@
             "4": "Herausfordernd",
             "5": "Schwer"
         }
+    },
+    "landing-page": {
+        "join-discord": "Brauchen Sie Hilfe? Tritt unserem Discord bei",
+        "documentation": "Überprüfen Sie unsere Dokumentation",
+        "info-text-title-5": "Schnelle und kostengünstige Transaktionen",
+        "learn-more": "Möchten Sie mehr erfahren?",
+        "browse-markets": "Durchsuchen Sie Sportmärkte",
+        "jump-in": "Bereit einzusteigen?",
+        "open-overtime": "Offene Märkte für Überstunden",
+        "info-text-4": "Der Branchenführer bietet manipulationssichere Quoten und Ergebnisse von Sportspielen auf dezentrale Weise.",
+        "info-text-1": "Sie müssen keinen Benutzer erstellen. Wir sammeln auch keinerlei persönliche Informationen.",
+        "web3-positioning": "Web 3 Sportpositionierung",
+        "info-text-title-4": "Daten bereitgestellt von Chainlink",
+        "info-text-3": "Es gibt niemanden, der Ihre Sicherheiten hält. Ihre Schlüssel, Ihre Token.",
+        "info-text-2": "Wenn zentralisierte Einheiten fallen, ist Transparenz entscheidend. Alle unsere Smart Contracts sind öffentlich.",
+        "info-text-5": "Jede Interaktion mit Overtime Sports AMM erfolgt über das Optimism-Netzwerk, führend in Skalierbarkeit.",
+        "info-text-title-3": "Märkte ohne Verwahrung",
+        "powered-by": "Unterstützt von",
+        "info-text-title-1": "Keine Anmeldung erforderlich",
+        "launch-dapp": "Starten Sie dapp",
+        "info-text-title-2": "Alles ist on-chain",
+        "leagues": "Ligen",
+        "try-now": "Versuch's jetzt",
+        "no-kyc": "Sportpositionierung ohne kyc",
+        "best-odds": "Die besten Quoten der Branche"
     }
 }

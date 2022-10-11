@@ -348,5 +348,30 @@
             "4": "Challenging",
             "5": "Hard"
         }
+    },
+    "landing-page": {
+        "try-now": "Probar ahora",
+        "browse-markets": "Explorar mercados deportivos",
+        "info-text-title-2": "Todo está en cadena",
+        "info-text-title-5": "Transacciones rápidas y de bajo costo",
+        "powered-by": "Energizado por",
+        "info-text-title-4": "Datos proporcionados por Chainlink",
+        "open-overtime": "Abrir mercados de horas extra",
+        "no-kyc": "Posicionamiento deportivo sin kyc",
+        "web3-positioning": "Web 3 posicionamiento deportivo",
+        "leagues": "ligas",
+        "info-text-title-3": "Mercados sin custodia",
+        "join-discord": "¿Necesita ayuda? Únase a nuestra discordia",
+        "launch-dapp": "Lanzar dapp",
+        "info-text-5": "Cada interacción con Overtime sports AMM se realiza en la red Optimism, líder en escalabilidad.",
+        "best-odds": "Las mejores cuotas de la industria",
+        "info-text-4": "El líder de la industria ofrece probabilidades a prueba de manipulaciones y resultados de partidos deportivos de forma descentralizada.",
+        "learn-more": "¿Quieres aprender más?",
+        "info-text-title-1": "No es necesario registrarse",
+        "info-text-3": "No hay nadie que tenga su garantía. Tus llaves, tus fichas.",
+        "jump-in": "¿Listo para saltar?",
+        "info-text-2": "Cuando las entidades centralizadas están cayendo, la transparencia es clave. Todos nuestros contratos inteligentes son públicos.",
+        "info-text-1": "No es necesario crear un usuario. Tampoco recopilamos ningún tipo de información personal.",
+        "documentation": "Consulta nuestra documentación"
     }
 }

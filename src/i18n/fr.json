@@ -447,5 +447,30 @@
         "start-quiz-description": "<p>Salut les fans de sport ! Prêt à tester vos connaissances et à battre tout le monde ?</p><p> Overtime a lancé un concours de quiz sportifs où les gagnants recevront chaque semaine des NFT qui peuvent être utilisés à la place de sUSD pour participer à n'importe quel marché sportif sur Overtime.</p><p> Lisez toutes les informations sur ce quiz dans notre <blogPost>article de blog</blogPost>.</p><p>Comment participer ? Le quiz est accessible à tous pour tester ses connaissances et participer, mais pour être éligible aux récompenses, vous devez retweeter ceci <quizRetweetLink>tweeter</quizRetweetLink> et suivre le compte <twitter>Twitter d'Overtime</twitter>.</p><p>Connectez votre portefeuille et entrez votre identifiant Twitter pour commencer le quiz ! Si vous gagnez des récompenses, nous vous demanderons de confirmer votre adresse via Twitter DM. L'identifiant Discord est facultatif, il est utilisé afin de recevoir un rôle Discord en tant que gagnant potentiel du quiz.</p><p>Pour toute question, veuillez rejoindre notre <discord>Discord</discord>.</p>",
         "question-weight-label": "Poids de la question : {{points}}",
         "help-us-improve-tooltip": "Aidez-nous à améliorer les quiz sportifs en ajoutant de nouvelles questions à la base de données de questions."
+    },
+    "landing-page": {
+        "info-text-5": "Chaque interaction avec Overtime sports AMM se fait sur le réseau Optimism, leader en matière d'évolutivité.",
+        "open-overtime": "Ouvrir les marchés des heures supplémentaires",
+        "no-kyc": "Positionnement sportif sans kyc",
+        "info-text-title-2": "Tout est en chaîne",
+        "info-text-title-1": "Aucune inscription requise",
+        "jump-in": "Prêt à vous lancer ?",
+        "launch-dapp": "Lancer l'application",
+        "web3-positioning": "Positionnement sportif Web 3",
+        "info-text-2": "Lorsque les entités centralisées tombent, la transparence est essentielle. Tous nos contrats intelligents sont publics.",
+        "documentation": "Consultez notre documentation",
+        "powered-by": "Alimenté par",
+        "info-text-title-5": "Transactions rapides et peu coûteuses",
+        "best-odds": "Les meilleures cotes de l'industrie",
+        "info-text-1": "Vous n'avez pas besoin de créer un utilisateur. Nous ne recueillons pas non plus d'informations personnelles.",
+        "info-text-3": "Personne ne détient votre garantie. Vos clés, vos jetons.",
+        "info-text-title-4": "Données fournies par Chainlink",
+        "learn-more": "Vous voulez en savoir plus ?",
+        "info-text-title-3": "Marchés non dépositaires",
+        "join-discord": "Besoin d'aide? Rejoignez notre discorde",
+        "leagues": "Ligues",
+        "browse-markets": "Parcourir les marchés du sport",
+        "try-now": "Essayez maintenant",
+        "info-text-4": "Le leader de l'industrie fournit des cotes inviolables et les résultats des matchs sportifs sont décentralisés."
     }
 }

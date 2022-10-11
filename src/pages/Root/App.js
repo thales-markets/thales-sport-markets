@@ -16,6 +16,7 @@ import DappLayout from 'layouts/DappLayout';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import LandingPageLayout from 'layouts/LandingPageLayout';
+import { ethers } from 'ethers';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));

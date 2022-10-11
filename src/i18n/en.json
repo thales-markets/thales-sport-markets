@@ -347,5 +347,30 @@
             "4": "Challenging",
             "5": "Hard"
         }
+    },
+    "landing-page": {
+        "best-odds": "Best odds in the industry",
+        "try-now": "Try now",
+        "powered-by": "Powered by",
+        "no-kyc": "Sports positioning with no kyc",
+        "launch-dapp": "Launch dapp",
+        "leagues": "Leagues",
+        "info-text-title-1": "No sign-up required",
+        "info-text-title-2": "Everything is on-chain",
+        "info-text-title-3": "Non-custodial markets",
+        "info-text-title-4": "Data provided by Chainlink",
+        "info-text-title-5": "Fast & low-cost transactions",
+        "info-text-1": "You don’t need to create an user. We don't gather any kind of personal information either.",
+        "info-text-2": "When centralized entities are falling, transparency is key. All our smart contracts are public.",
+        "info-text-3": "There’s no one holding your collateral. Your keys, your tokens.",
+        "info-text-4": "Industry-leader provides tamper-proof odds and sport matches result in a decentralized way.",
+        "info-text-5": "Every interaction with Overtime sports AMM is done on Optimism network, leader in scalability.",
+        "browse-markets": "Browse sport markets",
+        "web3-positioning": "Web 3 sport positioning",
+        "learn-more": "Wanna learn more?",
+        "documentation": "Check our documentation",
+        "jump-in": "Ready to jump in?",
+        "open-overtime": "Open Overtime markets",
+        "join-discord": "Need any help? Join our discord"
     }
 }

@@ -348,5 +348,30 @@
             "4": "Challenging",
             "5": "Hard"
         }
+    },
+    "landing-page": {
+        "browse-markets": "Sfoglia i mercati sportivi",
+        "info-text-title-1": "Nessuna registrazione richiesta",
+        "launch-dapp": "Avvia dapp",
+        "best-odds": "Le migliori quote del settore",
+        "learn-more": "Vuoi saperne di più?",
+        "open-overtime": "Mercati straordinari aperti",
+        "join-discord": "Bisogno di qualche aiuto? Unisciti alla nostra discordia",
+        "info-text-2": "Quando le entità centralizzate cadono, la trasparenza è fondamentale. Tutti i nostri contratti intelligenti sono pubblici.",
+        "web3-positioning": "Posizionamento sportivo Web 3",
+        "info-text-5": "Ogni interazione con gli sport straordinari AMM avviene sulla rete Optimism, leader nella scalabilità.",
+        "info-text-title-4": "Dati forniti da Chainlink",
+        "info-text-3": "Non c'è nessuno in possesso della tua garanzia. Le tue chiavi, i tuoi gettoni.",
+        "info-text-4": "Il leader del settore fornisce quote a prova di manomissione e le partite sportive risultano in modo decentralizzato.",
+        "info-text-title-3": "Mercati non detentivi",
+        "documentation": "Consulta la nostra documentazione",
+        "powered-by": "Offerto da",
+        "try-now": "Prova ora",
+        "info-text-title-5": "Transazioni veloci e a basso costo",
+        "jump-in": "Pronto a saltare?",
+        "no-kyc": "Posizionamento sportivo senza kyc",
+        "info-text-title-2": "Tutto è in catena",
+        "leagues": "leghe",
+        "info-text-1": "Non è necessario creare un utente. Non raccogliamo nemmeno alcun tipo di informazione personale."
     }
 }

@@ -348,5 +348,30 @@
             "4": "困难",
             "5": "极困难"
         }
+    },
+    "landing-page": {
+        "leagues": "联赛",
+        "try-now": "现在试试",
+        "learn-more": "想了解更多？",
+        "jump-in": "准备好跳入了吗？",
+        "best-odds": "业内最佳赔率",
+        "no-kyc": "没有kyc的运动定位",
+        "open-overtime": "开放加班市场",
+        "powered-by": "供电",
+        "browse-markets": "浏览体育市场",
+        "info-text-title-1": "无需注册",
+        "join-discord": "需要帮助吗？加入我们的不和谐",
+        "launch-dapp": "启动 dapp",
+        "info-text-title-5": "快速低成本的交易",
+        "info-text-title-2": "一切都在链上",
+        "info-text-5": "与 Overtime sports AMM 的每次互动都是在可扩展性领先的 Optimism 网络上完成的。",
+        "info-text-title-3": "非托管市场",
+        "documentation": "查看我们的文档",
+        "web3-positioning": "Web 3 运动定位",
+        "info-text-3": "没有人持有你的抵押品。你的钥匙，你的代币。",
+        "info-text-title-4": "数据由 Chainlink 提供",
+        "info-text-4": "行业领先者以分散的方式提供防篡改赔率和体育比赛结果。",
+        "info-text-1": "您无需创建用户。我们也不收集任何类型的个人信息。",
+        "info-text-2": "当中心化实体衰落时，透明度是关键。我们所有的智能合约都是公开的。"
     }
 }
