@@ -1,5 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { Carousel } from 'react-responsive-carousel';
 import OvertimeLogo from 'assets/images/overtime-logo.svg';
 import ZebraLogoImg from 'assets/images/landing-page/zebra-logo.svg';
 import ZebraBaseball from 'assets/images/landing-page/zebra-baseball.svg';
@@ -33,6 +35,9 @@ import {
     DiscordLink,
     DiscordInfo,
     DiscordIcon,
+    LeagueIcon,
+    CarouselContainer,
+    CarouselIconContainer,
 } from './styled-components';
 import SPAAnchor from 'components/SPAAnchor';
 import { buildHref } from 'utils/routes';
@@ -79,7 +84,44 @@ const LandingPage: React.FC = () => {
                     </SPAAnchor>
                 </CallToAction>
                 <SubSection className="first">{t('landing-page.leagues')}</SubSection>
-                {/*TODO CAROUSEL */}
+                <CarouselContainer>
+                    <Carousel
+                        transitionTime={1000}
+                        showStatus={false}
+                        showArrows={false}
+                        showThumbs={false}
+                        swipeable={true}
+                        infiniteLoop={true}
+                        dynamicHeight={true}
+                        autoPlay={true}
+                        centerSlidePercentage={25}
+                    >
+                        <CarouselIconContainer>
+                            <LeagueIcon className="icon-league icon-league--fifa-world-cup" />
+                            <LeagueIcon className="icon-league icon-league--uefa-cl" />
+                            <LeagueIcon className="icon-league icon-league--epl" />
+                            <LeagueIcon className="icon-league icon-league--la-liga" />
+                        </CarouselIconContainer>
+                        <CarouselIconContainer>
+                            <LeagueIcon className="icon-league icon-league--nba" />
+                            <LeagueIcon className="icon-league icon-league--nhl" />
+                            <LeagueIcon className="icon-league icon-league--nfl" />
+                            <LeagueIcon className="icon-league icon-league--mlb" />
+                        </CarouselIconContainer>
+                        <CarouselIconContainer>
+                            <LeagueIcon className="icon-league icon-league--ncaa" />
+                            <LeagueIcon className="icon-league icon-league--ufc" />
+                            <LeagueIcon className="icon-league icon-league--f1" />
+                            <LeagueIcon className="icon-league icon-league--motogp" />
+                        </CarouselIconContainer>
+                        <CarouselIconContainer>
+                            <LeagueIcon className="icon-league icon-league--ligue1" />
+                            <LeagueIcon className="icon-league icon-league--serie-a" />
+                            <LeagueIcon className="icon-league icon-league--bundesliga" />
+                            <LeagueIcon className="icon-league icon-league--mls" />
+                        </CarouselIconContainer>
+                    </Carousel>
+                </CarouselContainer>
             </Section>
             <SectionRow>
                 <InfoBox>

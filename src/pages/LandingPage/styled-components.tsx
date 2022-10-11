@@ -283,3 +283,33 @@ export const DiscordLink = styled.a`
     color: ${(props) => props.theme.textColor.primary};
     z-index: 1001;
 `;
+
+export const CarouselContainer = styled.div`
+    width: 100%;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    height: 180px;
+    color: ${(props) => props.theme.textColor.primary};
+    & ul {
+        &.control-dots {
+            bottom: -10px;
+        }
+        & > li {
+            &.dot {
+                height: 32px !important;
+                margin: 0px 15px !important;
+                width: 32px !important;
+            }
+        }
+    }
+`;
+
+export const CarouselIconContainer = styled(FlexDivRow)`
+    width: 100%;
+    justify-content: space-evenly;
+`;
+
+export const LeagueIcon = styled.i`
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 150px;
+`;

@@ -42,3 +42,8 @@
     font-family: 'HomepageIcons';
     src: local('HomepageIcons'), url(../assets/fonts/HomepageIcons/homepage.ttf) format('truetype');
 }
+
+@font-face {
+    font-family: 'LeagueIcons';
+    src: local('LeagueIcons'), url(../assets/fonts/LeagueIcons/LeagueIcons.ttf) format('truetype');
+}
