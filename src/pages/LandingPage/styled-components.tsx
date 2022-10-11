@@ -288,11 +288,17 @@ export const CarouselContainer = styled.div`
     width: 100%;
     margin-top: 100px;
     margin-bottom: 100px;
-    height: 180px;
+    height: 220px;
     color: ${(props) => props.theme.textColor.primary};
+    & > div {
+        height: 100%;
+        & > div {
+            height: 100%;
+        }
+    }
     & ul {
         &.control-dots {
-            bottom: -10px;
+            bottom: -13px;
         }
         & > li {
             &.dot {
