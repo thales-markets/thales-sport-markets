@@ -706,10 +706,10 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                         onClose={() => setOpenApprovalModal(false)}
                     />
                 )}
+                <SubmitButtonContainer>
+                    <>{getSubmitButton()}</>
+                </SubmitButtonContainer>
             </AMMContainer>
-            <SubmitButtonContainer>
-                <>{getSubmitButton()}</>
-            </SubmitButtonContainer>
         </>
     );
 };
