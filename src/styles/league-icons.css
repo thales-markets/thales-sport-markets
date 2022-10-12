@@ -68,3 +68,7 @@
 .league--ucl:before {
     content: '\0051';
 }
+
+.league--overtime:before {
+    content: '\0052';
+}

@@ -32,7 +32,7 @@ export const getLeagueImage = (leagueTag: number) => {
 };
 
 export const getLeagueLogoClass = (leagueTag: number) => {
-    return TAGS_LIST.find((t) => t.id === Number(leagueTag))?.logoClass || OVERTIME_LOGO;
+    return TAGS_LIST.find((t) => t.id === Number(leagueTag))?.logoClass || 'league league--overtime';
 };
 
 export const OVERTIME_LOGO = '/logos/overtime-logo.png';
