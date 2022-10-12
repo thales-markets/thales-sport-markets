@@ -20,9 +20,6 @@ import {
     PotentialProfitContainer,
     PotentialProfit,
     CollateralInfoContainer,
-    CollateralInfo,
-    Collateral,
-    StableBalance,
     SubmitButtonContainer,
 } from './styled-components';
 import { toast } from 'react-toastify';
@@ -36,13 +33,7 @@ import { refetchBalances } from 'utils/queryConnector';
 
 import { MAX_L2_GAS_LIMIT, Position, Side } from 'constants/options';
 import { AMMPosition, AvailablePerSide, Balances, MarketData } from 'types/markets';
-import {
-    countDecimals,
-    floorNumberToDecimals,
-    formatCurrency,
-    formatCurrencyWithSign,
-    formatPercentage,
-} from 'utils/formatters/number';
+import { countDecimals, floorNumberToDecimals, formatCurrency, formatPercentage } from 'utils/formatters/number';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsAppReady } from 'redux/modules/app';
@@ -57,7 +48,6 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { checkAllowance } from 'utils/network';
 import ApprovalModal from 'components/ApprovalModal';
 import CollateralSelector from '../CollateralSelector';
-import { USD_SIGN } from 'constants/currency';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { getDecimalsByStableCoinIndex } from 'utils/collaterals';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
@@ -119,10 +109,6 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
     const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
-
-    const stableBalances = useMemo(() => {
-        return multipleStableBalances.data;
-    }, [multipleStableBalances.data]);
 
     const positionPriceDetailsQuery = usePositionPriceDetailsQuery(
         market.address,
@@ -613,6 +599,21 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         <>
             <AMMContainer>
                 <AMMContent>
+                    {isBuy && (
+                        <CollateralInfoContainer>
+                            <PrimaryLabel>{t('market.pay-with')}</PrimaryLabel>
+                        </CollateralInfoContainer>
+                    )}
+                    {showCollateralSelector && (
+                        <CollateralSelector
+                            collateralArray={COLLATERALS}
+                            selectedItem={selectedStableIndex}
+                            onChangeCollateral={(index) => setStableIndex(index)}
+                            overtimeVoucher={overtimeVoucher}
+                            isVoucherSelected={isVoucherSelected}
+                            setIsVoucherSelected={setIsVoucherSelected}
+                        />
+                    )}
                     <PrimaryLabel>
                         {isBuy ? t('markets.market-details.amount-to-buy') : t('markets.market-details.amount-to-sell')}
                     </PrimaryLabel>
@@ -688,31 +689,6 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                                       )})`}
                             </PotentialProfit>
                         </PotentialProfitContainer>
-                    )}
-                    {isBuy && (
-                        <CollateralInfoContainer>
-                            <PrimaryLabel>{t('market.pay-with')}</PrimaryLabel>
-                            <CollateralInfo>
-                                <Collateral>{COLLATERALS[selectedStableIndex]}</Collateral>
-                                <StableBalance>
-                                    {`${t('markets.market-details.available')} ${formatCurrencyWithSign(
-                                        USD_SIGN,
-                                        stableBalances ? stableBalances[COLLATERALS[selectedStableIndex]] : 0,
-                                        2
-                                    )}`}
-                                </StableBalance>
-                            </CollateralInfo>
-                        </CollateralInfoContainer>
-                    )}
-                    {showCollateralSelector && (
-                        <CollateralSelector
-                            collateralArray={COLLATERALS}
-                            selectedItem={selectedStableIndex}
-                            onChangeCollateral={(index) => setStableIndex(index)}
-                            overtimeVoucher={overtimeVoucher}
-                            isVoucherSelected={isVoucherSelected}
-                            setIsVoucherSelected={setIsVoucherSelected}
-                        />
                     )}
                 </AMMContent>
                 {openApprovalModal && (

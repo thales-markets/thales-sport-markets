@@ -29,10 +29,11 @@ export const Label = styled.span`
 `;
 
 export const CollateralName = styled.span`
-    font-weight: 600;
-    font-size: 21px;
-    line-height: 25px;
-    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 10px;
+    line-height: 150%;
+    margin-bottom: 7px;
+    color: white;
     text-transform: uppercase;
 `;
 
@@ -47,16 +48,16 @@ export const CollateralIcon = styled.div<{ active?: boolean }>`
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    margin-left: 10px;
+    margin-bottom: 7px;
     box-shadow: ${(_props) => (_props?.active ? 'var(--shadow)' : '')};
     cursor: pointer;
 `;
 
 export const CollateralContainer = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
 `;
 
 export const TokenBalance = styled.span`
@@ -65,4 +66,11 @@ export const TokenBalance = styled.span`
     color: #ffffff;
     margin-left: 6px;
     align-items: center;
+`;
+
+export const StableBalance = styled.span`
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 150%;
+    color: #ffffff;
 `;
