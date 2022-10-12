@@ -84,9 +84,10 @@ export const LeagueLogoContainer = styled(FlexDiv)`
     }
 `;
 
-export const LeagueLogo = styled.img`
+export const LeagueLogo = styled.i`
     width: 100%;
     height: 100%;
+    font-size: 60px;
     object-fit: contain;
 `;
 

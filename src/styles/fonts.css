@@ -22,3 +22,8 @@
     font-family: 'HomepageIcons';
     src: local('HomepageIcons'), url(../assets/fonts/HomepageIcons/homepage.ttf) format('truetype');
 }
+
+@font-face {
+    font-family: 'LeaguesIcons';
+    src: local('LeaguesIcons'), url(../assets/fonts/OvertimeIcons/LeaguesIcons.ttf) format('truetype');
+}

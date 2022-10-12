@@ -1,0 +1,70 @@
+.league {
+    display: inline-block;
+    font-family: LeaguesIcons !important;
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.league--nba:before {
+    content: '\0041';
+}
+
+.league--ncaa:before {
+    content: '\0042';
+}
+
+.league--wnba:before {
+    content: '\0043';
+}
+
+.league--nhl:before {
+    content: '\0044';
+}
+
+.league--motogp:before {
+    content: '\0045';
+}
+
+.league--f1:before {
+    content: '\0046';
+}
+
+.league--mlb:before {
+    content: '\0047';
+}
+
+.league--ufc:before {
+    content: '\0048';
+}
+
+.league--nfl:before {
+    content: '\0049';
+}
+
+.league--bundesliga:before {
+    content: '\004A';
+}
+
+.league--epl:before {
+    content: '\004B';
+}
+
+.league--laliga:before {
+    content: '\004D';
+}
+
+.league--ligue1:before {
+    content: '\004E';
+}
+
+.league--mls:before {
+    content: '\004F';
+}
+
+.league--seriea:before {
+    content: '\0050';
+}
+
+.league--ucl:before {
+    content: '\0051';
+}

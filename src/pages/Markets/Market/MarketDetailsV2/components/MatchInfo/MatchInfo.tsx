@@ -20,7 +20,7 @@ import Tooltip from 'components/Tooltip';
 
 import { MarketData } from 'types/markets';
 
-import { getErrorImage, getLeagueImage, getTeamImageSource } from 'utils/images';
+import { getErrorImage, getLeagueLogoClass, getTeamImageSource } from 'utils/images';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { convertFinalResultToResultType, getIsApexTopGame, isApexGame } from 'utils/markets';
 import { ApexBetTypeKeyMapping } from 'constants/markets';
@@ -34,7 +34,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
 
     const homeLogoSrc = getTeamImageSource(market.homeTeam, market.tags[0]);
     const awayLogoSrc = getTeamImageSource(market.awayTeam, market.tags[0]);
-    const leagueLogo = getLeagueImage(market.tags[0]);
+    const leagueLogo = getLeagueLogoClass(market.tags[0]);
     const isApexTopGame = getIsApexTopGame(market.isApex, market.betType);
 
     const isResolved = market?.resolved;
@@ -72,7 +72,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                 <Wrapper>
                     <Container>
                         <LeagueLogoContainer>
-                            <LeagueLogo src={leagueLogo} />
+                            <LeagueLogo className={leagueLogo} />
                         </LeagueLogoContainer>
                         <ParticipantsContainer>
                             <ParticipantLogoContainer

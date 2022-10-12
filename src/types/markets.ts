@@ -157,6 +157,7 @@ export type TagInfo = {
     id: number;
     label: string;
     logo?: string;
+    logoClass?: string;
 };
 
 export type Tags = TagInfo[];

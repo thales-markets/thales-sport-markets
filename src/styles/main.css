@@ -140,6 +140,7 @@ table {
 @import './icons.css';
 @import './exotic-icons.css';
 @import './homepage-icons.css';
+@import './league-icons.css';
 
 * {
     box-sizing: border-box;
