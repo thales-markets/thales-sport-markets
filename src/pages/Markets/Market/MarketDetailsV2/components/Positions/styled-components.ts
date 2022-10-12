@@ -62,6 +62,7 @@ export const InnerContainer = styled.div`
 export const PositionContainer = styled(InnerContainer)`
     width: 30px;
     height: 30px;
+    width: 60%;
     @media (max-width: 768px) {
         width: 65%;
     }
