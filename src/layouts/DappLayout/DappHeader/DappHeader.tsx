@@ -1,4 +1,3 @@
-import GetUsd from 'components/GetUsd';
 import Logo from 'components/Logo';
 import WalletInfo from 'components/WalletInfo';
 import React, { useState } from 'react';
@@ -6,8 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
-import { NetworkIdByName } from 'utils/network';
-import { getNetworkId } from 'redux/modules/wallet';
 import Referral from 'components/Referral';
 import { buildHref } from 'utils/routes';
 import SPAAnchor from 'components/SPAAnchor';
@@ -22,7 +19,6 @@ const PULSING_COUNT = 10;
 
 const DappHeader: React.FC = () => {
     const dispatch = useDispatch();
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
     const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
 
@@ -43,7 +39,6 @@ const DappHeader: React.FC = () => {
                     <StyledSportTriviaIcon stopPulsing={stopPulsing} src={sportTriviaIcon} />
                 </SPAAnchor>
                 <Referral />
-                {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
                 <MintVoucher />
                 <LanguageSelector />
                 <WalletInfo />

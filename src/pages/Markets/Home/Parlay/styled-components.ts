@@ -90,6 +90,7 @@ export const MaxButton = styled.button`
 `;
 
 export const SubmitButton = styled.button`
+    margin-top: 10px;
     background: #5fc694;
     border-radius: 5px;
     font-weight: 700;

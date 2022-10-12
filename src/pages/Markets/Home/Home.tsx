@@ -1,6 +1,7 @@
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import burger from 'assets/images/burger.svg';
 import Button from 'components/Button';
+import GetUsd from 'components/GetUsd';
 import Logo from 'components/Logo';
 import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
@@ -37,6 +38,7 @@ import {
     Tags,
 } from 'types/markets';
 import { isClaimAvailable } from 'utils/markets';
+import { NetworkIdByName } from 'utils/network';
 import { buildHref, history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
 import GlobalFilter from '../components/GlobalFilter';
@@ -599,6 +601,7 @@ const Home: React.FC = () => {
                 )}
                 {/* RIGHT PART */}
                 <SidebarContainer>
+                    {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
                     <Parlay />
                 </SidebarContainer>
             </RowContainer>

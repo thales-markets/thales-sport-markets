@@ -6,6 +6,7 @@ export const QUERY_KEYS = {
     Rewards: (networkId: NetworkId, period: number) => ['rewards', networkId, period],
     Markets: (networkId: NetworkId) => ['markets', networkId],
     SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
+    ParlayAmmData: (networkId: NetworkId) => ['parlayAmmData', networkId],
     OpenSportMarkets: (networkId: NetworkId) => ['openSportMarkets', networkId],
     CanceledSportMarkets: (networkId: NetworkId) => ['canceledSportMarkets', networkId],
     ResolvedSportMarkets: (networkId: NetworkId) => ['resolvedSportMarkets', networkId],

@@ -1,26 +1,26 @@
+import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
 import { GlobalFiltersEnum } from 'constants/markets';
-import useInterval from 'hooks/useInterval';
+import { t } from 'i18next';
 import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getParlay, getParlayError, resetParlayError } from 'redux/modules/parlay';
+import { getParlay, removeFromParlay } from 'redux/modules/parlay';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { ParlaysMarket, SportMarketInfo } from 'types/markets';
 import MatchInfo from './components/MatchInfo';
+import Payment from './components/Payment';
 import Single from './components/Single';
 import Ticket from './components/Ticket';
-import { CustomTooltip } from './styled-components';
 
 const Parlay: React.FC = () => {
     const dispatch = useDispatch();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const parlay = useSelector(getParlay);
-    const hasParlayError = useSelector(getParlayError);
 
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
 
@@ -31,11 +31,10 @@ const Parlay: React.FC = () => {
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
             const sportOpenMarkets = sportMarketsQuery.data[GlobalFiltersEnum.OpenMarkets];
-
             const parlayOpenMarkets: ParlaysMarket[] = parlay
                 .filter((parlayMarket) => {
-                    return sportOpenMarkets.some((marker) => {
-                        return marker.id === parlayMarket.sportMarketId;
+                    return sportOpenMarkets.some((market) => {
+                        return market.id === parlayMarket.sportMarketId;
                     });
                 })
                 .map((parlayMarket) => {
@@ -47,15 +46,18 @@ const Parlay: React.FC = () => {
                         position: parlayMarket.position,
                     };
                 });
+            // If market is not opened any more remove it
+            if (parlay.length > parlayOpenMarkets.length) {
+                const notOpenedMarkets = parlay.filter((parlayMarket) => {
+                    return sportOpenMarkets.some((market) => {
+                        return market.id !== parlayMarket.sportMarketId;
+                    });
+                });
+                notOpenedMarkets.forEach((market) => dispatch(removeFromParlay(market.sportMarketId)));
+            }
             setParlayMarkets(parlayOpenMarkets);
         }
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay]);
-
-    useInterval(async () => {
-        if (hasParlayError) {
-            dispatch(resetParlayError());
-        }
-    }, 5000);
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay, dispatch]);
 
     return (
         <Container>
@@ -70,9 +72,7 @@ const Parlay: React.FC = () => {
                             );
                         })}
                     </ListContainer>
-                    <CustomTooltip open={hasParlayError} title={'TODO: Maximum 4 markets in Parlay'}>
-                        <HorizontalLine />
-                    </CustomTooltip>
+                    <HorizontalLine />
                     {parlayMarkets.length === 1 ? (
                         <Single market={parlayMarkets[0]} />
                     ) : (
@@ -80,15 +80,30 @@ const Parlay: React.FC = () => {
                     )}
                 </>
             ) : (
-                <>NO POSITIONS</> // TODO: implement empty Parlay
+                <>
+                    <Empty>
+                        <EmptyLabel>{t('markets.parlay.empty-title')}</EmptyLabel>
+                        <ParlayEmptyIcon
+                            style={{
+                                marginTop: 10,
+                                marginBottom: 20,
+                                width: '100px',
+                                height: '100px',
+                            }}
+                        />
+                        <EmptyDesc>{t('markets.parlay.empty-description')}</EmptyDesc>
+                    </Empty>
+                    <Payment />
+                </>
             )}
         </Container>
     );
 };
 
 const Container = styled(FlexDivColumn)`
+    margin-top: 20px;
     padding: 15px;
-    flex-grow: 1;
+    flex: none;
     background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
     border-radius: 10px;
 `;
@@ -112,6 +127,32 @@ const HorizontalLine = styled.hr`
     border: 1px solid #5f6180;
     border-radius: 2px;
     background: #5f6180;
+`;
+
+const Empty = styled(FlexDivColumn)`
+    align-items: center;
+    margin-bottom: 40px;
+`;
+
+const EmptyLabel = styled.span`
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 38px;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: #64d9fe;
+`;
+
+const EmptyDesc = styled.span`
+    width: 80%;
+    text-align: center;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 14px;
+    letter-spacing: 0.025em;
+    color: #64d9fe;
 `;
 
 export default Parlay;

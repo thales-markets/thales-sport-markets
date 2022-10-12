@@ -2,7 +2,7 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { COLLATERALS_INDEX, COLLATERAL_INDEX_TO_COLLATERAL, USD_SIGN } from 'constants/currency';
+import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE } from 'constants/markets';
 import { MAX_GAS_LIMIT } from 'constants/network';
 import { MAX_L2_GAS_LIMIT, Position, Side } from 'constants/options';
@@ -40,9 +40,6 @@ import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
 import {
     AmountToBuyContainer,
     AmountToBuyInput,
-    BalanceLabel,
-    BalanceValue,
-    BalanceWrapper,
     CustomTooltip,
     InfoLabel,
     InfoValue,
@@ -54,7 +51,7 @@ import {
     SummaryLabel,
     SummaryValue,
 } from '../../styled-components';
-import CollateralSelector from '../CollateralSelector';
+import Payment from '../Payment';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -148,7 +145,6 @@ const Single: React.FC<SingleProps> = ({ market }) => {
             if (sportsAMMContract && signer) {
                 const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
                 const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(amountForQuote).toString());
-                // TODO: Why this is not implemenetd as query?
                 const ammQuote = await getSportsAMMQuoteMethod(
                     true,
                     selectedStableIndex,
@@ -173,8 +169,6 @@ const Single: React.FC<SingleProps> = ({ market }) => {
             setIsFetching(true);
             const { sportsAMMContract, signer } = networkConnector;
             if (sportsAMMContract && signer) {
-                const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer); // TODO: Why is this defined?
-                contract.connect(signer); // TODO: Not used?
                 const roundedMaxAmount = floorNumberToDecimals(availablePerSide.positions[market.position].available);
                 const divider =
                     selectedStableIndex === COLLATERALS_INDEX.sUSD || selectedStableIndex == COLLATERALS_INDEX.DAI
@@ -227,13 +221,14 @@ const Single: React.FC<SingleProps> = ({ market }) => {
                     ]);
                     const ammBalanceForSelectedPosition = ammBalances[market.position];
 
-                    const amountOfTokens = fetchAmountOfTokensForXsUSDAmount(
-                        Number(usdAmountValue),
-                        getPositionOdds(market),
-                        sUSDToSpendForMaxAmount / divider,
-                        availablePerSide.positions[market.position].available,
-                        ammBalanceForSelectedPosition / divider
-                    );
+                    const amountOfTokens =
+                        fetchAmountOfTokensForXsUSDAmount(
+                            Number(usdAmountValue),
+                            getPositionOdds(market),
+                            sUSDToSpendForMaxAmount / divider,
+                            availablePerSide.positions[market.position].available,
+                            ammBalanceForSelectedPosition / divider
+                        ) || 0;
 
                     if (amountOfTokens > availablePerSide.positions[market.position].available) {
                         setTokenAmount(0);
@@ -483,6 +478,7 @@ const Single: React.FC<SingleProps> = ({ market }) => {
                 <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
                 <SummaryValue>{formatCurrency(getPositionOdds(market))}</SummaryValue>
             </RowSummary>
+            <Payment onChangeCollateral={(index) => setSelectedStableIndex(index)} />
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.buy-amount')}:</SummaryLabel>
                 <InfoWrapper>
@@ -530,28 +526,6 @@ const Single: React.FC<SingleProps> = ({ market }) => {
                           )})`}
                 </SummaryValue>
             </RowSummary>
-            <RowSummary>
-                <SummaryLabel>{t('markets.parlay.pay-with')}:</SummaryLabel>
-                <BalanceWrapper>
-                    <BalanceLabel bold={true} originalText={true}>
-                        {(COLLATERAL_INDEX_TO_COLLATERAL as any)[selectedStableIndex]}
-                    </BalanceLabel>
-                    <BalanceLabel marginLeft={'5px'}>{t('markets.parlay.available')}:</BalanceLabel>
-                    <BalanceValue>
-                        {overtimeVoucher && isVoucherSelected
-                            ? formatCurrency(overtimeVoucher.remainingAmount, 2)
-                            : formatCurrency(paymentTokenBalance, 2)}
-                    </BalanceValue>
-                </BalanceWrapper>
-            </RowSummary>
-            <CollateralSelector
-                collateralArray={COLLATERALS}
-                selectedItem={selectedStableIndex}
-                onChangeCollateral={(index) => setSelectedStableIndex(index)}
-                overtimeVoucher={overtimeVoucher}
-                isVoucherSelected={isVoucherSelected}
-                setIsVoucherSelected={setIsVoucherSelected}
-            />
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
             {openApprovalModal && (
                 <ApprovalModal

@@ -228,6 +228,7 @@
             "amount-exceeded": "Amount exceeded the amount available on AMM",
             "minimal-amount": "Minimal amount is 1",
             "min-amount": "Minimal amount is {{min}}",
+            "min-quote": "Minimal quote is {{min}}",
             "no-funds": "Please ensure your wallet has enough funds"
         }
     },
@@ -270,7 +271,9 @@
             "potential-profit": "Potential profit",
             "pay-with": "Pay with",
             "available": "Available",
-            "skew": "Skew"
+            "skew": "Skew",
+            "empty-title": "No positions",
+            "empty-description": "Add position, choose a market and make your selection."
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity."
     },

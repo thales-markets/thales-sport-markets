@@ -265,3 +265,8 @@ export type ParlaysMarketPosition = {
 export type ParlaysMarket = SportMarketInfo & {
     position: Position;
 };
+
+export type ParlayAmmData = {
+    maxSupportedAmount: number;
+    maxSupportedOdds: number;
+};
