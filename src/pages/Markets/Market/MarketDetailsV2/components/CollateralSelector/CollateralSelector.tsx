@@ -104,7 +104,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                         const AssetIcon = getStableIcon(item as StablecoinKey);
                         return (
                             <CollateralContainer key={index + 'container'}>
-                                <CollateralName>{item}</CollateralName>
+                                <CollateralName selected={selectedItem == index}>{item}</CollateralName>
                                 <CollateralIcon active={selectedItem == index} key={index}>
                                     <AssetIcon
                                         key={index}
@@ -125,7 +125,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                         }}
                                     />
                                 </CollateralIcon>
-                                <StableBalance>
+                                <StableBalance selected={selectedItem == index}>
                                     {formatCurrency(stableBalances ? stableBalances[item as StablecoinKey] : 0, 1)}
                                 </StableBalance>
                             </CollateralContainer>

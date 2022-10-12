@@ -28,12 +28,13 @@ export const Label = styled.span`
     text-transform: uppercase;
 `;
 
-export const CollateralName = styled.span`
+export const CollateralName = styled.span<{ selected?: boolean }>`
     font-weight: 700;
     font-size: 10px;
     line-height: 150%;
     margin-bottom: 7px;
     color: white;
+    ${(_props) => (_props?.selected ? `opacity: 1;` : `opacity: 0.5`)};
     text-transform: uppercase;
 `;
 
@@ -68,9 +69,10 @@ export const TokenBalance = styled.span`
     align-items: center;
 `;
 
-export const StableBalance = styled.span`
+export const StableBalance = styled.span<{ selected?: boolean }>`
     font-weight: 400;
     font-size: 10px;
     line-height: 150%;
     color: #ffffff;
+    ${(_props) => (_props?.selected ? `opacity: 1;` : `opacity: 0.5`)};
 `;
