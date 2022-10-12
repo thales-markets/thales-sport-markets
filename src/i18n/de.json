@@ -258,7 +258,8 @@
             "wallet-info": {
                 "title": "Im Wallet"
             },
-            "skew": "Skew"
+            "skew": "Skew",
+            "discount": "Rabatt"
         },
         "zero-odds-tooltip": "Sports AMM bietet nur Liquidität in der Preisspanne von $0,05 bis $0,95. Dies bedeutet, dass wenn die Quoten für eine Position weniger als 5% oder mehr als 95% betragen, diese Position keine Liquidität hat."
     },

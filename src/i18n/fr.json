@@ -357,7 +357,8 @@
             "potential-profit": "Gain potentiel",
             "claim-back": "Réclamer",
             "max": "Max",
-            "skew": "Skew"
+            "skew": "Skew",
+            "discount": "Remise"
         },
         "zero-odds-tooltip": "Le Sport AMM ne propose des liquidités que dans la fourchette de prix de 0,05 $ à 0,95 $. Cela signifie que si les cotes d'une position sont inférieures à 5 % ou supérieures à 95 %, cette position n'aura pas de liquidité."
     },

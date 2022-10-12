@@ -30,7 +30,7 @@ import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { getIsApexTopGame, isApexGame } from 'utils/markets';
+import { getIsApexTopGame, isApexGame, isDiscounted } from 'utils/markets';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
@@ -930,6 +930,19 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                         : floorNumberToDecimals(availablePerSide.positions[Position.HOME].available)}
                                 </InfoValue>
                             </InfoRow>
+                            {selectedSide === Side.BUY &&
+                                isDiscounted(availablePerSide.positions[Position.HOME].buyImpactPrice) && (
+                                    <InfoRow>
+                                        <InfoTitle>{t('markets.market-details.discount')}:</InfoTitle>
+                                        <InfoValue>
+                                            {availablePerSideQuery.isLoading
+                                                ? '-'
+                                                : formatPercentage(
+                                                      availablePerSide.positions[Position.HOME].buyImpactPrice || 0
+                                                  )}
+                                        </InfoValue>
+                                    </InfoRow>
+                                )}
                         </Pick>
                         {!!market.positions[Position.DRAW].sides[selectedSide].odd && (
                             <Pick
@@ -958,6 +971,19 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                               )}
                                     </InfoValue>
                                 </InfoRow>
+                                {selectedSide === Side.BUY &&
+                                    isDiscounted(availablePerSide.positions[Position.DRAW].buyImpactPrice) && (
+                                        <InfoRow>
+                                            <InfoTitle>{t('markets.market-details.discount')}:</InfoTitle>
+                                            <InfoValue>
+                                                {availablePerSideQuery.isLoading
+                                                    ? '-'
+                                                    : formatPercentage(
+                                                          availablePerSide.positions[Position.DRAW].buyImpactPrice || 0
+                                                      )}
+                                            </InfoValue>
+                                        </InfoRow>
+                                    )}
                             </Pick>
                         )}
                         <Pick
@@ -995,6 +1021,19 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                         : floorNumberToDecimals(availablePerSide.positions[Position.AWAY].available)}
                                 </InfoValue>
                             </InfoRow>
+                            {selectedSide === Side.BUY &&
+                                isDiscounted(availablePerSide.positions[Position.AWAY].buyImpactPrice) && (
+                                    <InfoRow>
+                                        <InfoTitle>{t('markets.market-details.discount')}:</InfoTitle>
+                                        <InfoValue>
+                                            {availablePerSideQuery.isLoading
+                                                ? '-'
+                                                : formatPercentage(
+                                                      availablePerSide.positions[Position.AWAY].buyImpactPrice || 0
+                                                  )}
+                                        </InfoValue>
+                                    </InfoRow>
+                                )}
                         </Pick>
                     </OddsContainer>
                     {selectedSide === Side.BUY && (
@@ -1115,7 +1154,11 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             <SliderInfoValue>
                                 {positionPriceDetailsQuery.isLoading
                                     ? '-'
-                                    : formatPercentage(ammPosition.sides[selectedSide].priceImpact)}
+                                    : formatPercentage(
+                                          isDiscounted(ammPosition.sides[selectedSide].priceImpact)
+                                              ? 0
+                                              : ammPosition.sides[selectedSide].priceImpact
+                                      )}
                             </SliderInfoValue>
                             <Tooltip
                                 overlay={t(`market.skew-tooltip`)}

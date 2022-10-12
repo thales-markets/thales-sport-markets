@@ -246,6 +246,7 @@
         "market-details": {
             "price": "Price",
             "liquidity": "Liquidity",
+            "discount": "Discount",
             "usd-amount": "USD amount",
             "positions-amount": "Positions amount",
             "amount-to-sell": "Amount to sell",
