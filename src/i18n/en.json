@@ -250,6 +250,7 @@
             "liquidity": "Liquidity",
             "usd-amount": "USD amount",
             "positions-amount": "Positions amount",
+            "positions": "Positions",
             "amount-to-sell": "Amount to sell",
             "amount-to-buy": "Amount to buy",
             "total-to-receive": "Total to receive",

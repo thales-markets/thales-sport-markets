@@ -672,6 +672,10 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                             <SecondaryValue>{liqudityInfo}</SecondaryValue>
                         </DetailContainer>
                         <DetailContainer>
+                            <SecondaryLabel>{t('markets.market-details.positions')}</SecondaryLabel>
+                            <SecondaryValue>{tokenAmount ? tokenAmount : 0}</SecondaryValue>
+                        </DetailContainer>
+                        <DetailContainer>
                             <SecondaryLabel>{t('markets.market-details.skew')}</SecondaryLabel>
                             <SecondaryValue>{skew}</SecondaryValue>
                         </DetailContainer>
