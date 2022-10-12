@@ -33,7 +33,13 @@ import { refetchBalances } from 'utils/queryConnector';
 
 import { MAX_L2_GAS_LIMIT, Position, Side } from 'constants/options';
 import { AMMPosition, AvailablePerSide, Balances, MarketData } from 'types/markets';
-import { countDecimals, floorNumberToDecimals, formatCurrency, formatPercentage } from 'utils/formatters/number';
+import {
+    countDecimals,
+    floorNumberToDecimals,
+    formatCurrency,
+    formatCurrencyWithSign,
+    formatPercentage,
+} from 'utils/formatters/number';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsAppReady } from 'redux/modules/app';
@@ -51,6 +57,7 @@ import CollateralSelector from '../CollateralSelector';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { getDecimalsByStableCoinIndex } from 'utils/collaterals';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { USD_SIGN } from 'constants/currency';
 
 type AMMProps = {
     market: MarketData;
@@ -595,6 +602,8 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         ? '-'
         : formatPercentage(ammPosition.sides[selectedSide].priceImpact);
 
+    const totalToReceive = showPotentialProfit ? '-' : formatCurrencyWithSign(USD_SIGN, tokenAmount);
+
     return (
         <>
             <AMMContainer>
@@ -681,18 +690,24 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                         </DetailContainer>
                     </InputDetails>
                     {isBuy && (
-                        <PotentialProfitContainer>
-                            <PrimaryLabel>{t('markets.market-details.potential-profit')}</PrimaryLabel>
-                            <PotentialProfit>
-                                {showPotentialProfit
-                                    ? '-'
-                                    : `$${formatCurrency(
-                                          Number(tokenAmount) - ammPosition.sides[selectedSide].quote
-                                      )} (${formatPercentage(
-                                          1 / (ammPosition.sides[selectedSide].quote / Number(tokenAmount)) - 1
-                                      )})`}
-                            </PotentialProfit>
-                        </PotentialProfitContainer>
+                        <>
+                            <PotentialProfitContainer>
+                                <PrimaryLabel>{t('markets.market-details.total-to-receive')}</PrimaryLabel>
+                                <PotentialProfit>{totalToReceive}</PotentialProfit>
+                            </PotentialProfitContainer>
+                            <PotentialProfitContainer>
+                                <PrimaryLabel>{t('markets.market-details.potential-profit')}</PrimaryLabel>
+                                <PotentialProfit>
+                                    {showPotentialProfit
+                                        ? '-'
+                                        : `$ ${formatCurrency(
+                                              Number(tokenAmount) - ammPosition.sides[selectedSide].quote
+                                          )} (${formatPercentage(
+                                              1 / (ammPosition.sides[selectedSide].quote / Number(tokenAmount)) - 1
+                                          )})`}
+                                </PotentialProfit>
+                            </PotentialProfitContainer>
+                        </>
                     )}
                 </AMMContent>
                 {openApprovalModal && (
