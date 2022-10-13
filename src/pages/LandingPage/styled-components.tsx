@@ -36,8 +36,11 @@ export const Section = styled(FlexDivColumn)`
         text-align: end;
     }
     &.fourth {
-        margin-top: 200px;
+        margin-top: 300px;
         text-align: end;
+        @media (max-width: 960px) {
+            margin-top: 200px;
+        }
     }
     &.fifth {
         margin-top: 400px;
@@ -47,7 +50,7 @@ export const Section = styled(FlexDivColumn)`
         @media (max-width: 500px) {
             margin-top: 200px;
         }
-        @media (max-width: 500px) {
+        @media (max-width: 450px) {
             margin-top: 150px;
         }
     }
@@ -83,7 +86,7 @@ export const Zebro = styled.img`
             top: -163px;
             left: -105px;
         }
-        @media (max-width: 750px) {
+        @media (max-width: 600px) {
             height: 33em;
             width: 33em;
             top: -145px;
@@ -121,7 +124,7 @@ export const Zebro = styled.img`
             width: 35em;
             left: 30px;
         }
-        @media (max-width: 600px) {
+        @media (max-width: 500px) {
             height: 30em;
             width: 30em;
             left: 0px;
@@ -165,7 +168,7 @@ export const Zebro = styled.img`
             height: 35em;
             width: 35em;
         }
-        @media (max-width: 600px) {
+        @media (max-width: 500px) {
             height: 30em;
             width: 30em;
         }
