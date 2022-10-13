@@ -85,8 +85,8 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
 
 export const convertFinalResultToWinnerName = (result: number, market: MarketData) => {
     if (result == 1 && getIsApexTopGame(market.isApex, market.betType)) return 'YES';
-    if (result == 1 && getIsApexTopGame(market.isApex, market.betType)) return 'NO';
-    if (result == 2) return market.homeTeam;
+    if (result == 2 && getIsApexTopGame(market.isApex, market.betType)) return 'NO';
+    if (result == 1) return market.homeTeam;
     if (result == 2) return market.awayTeam;
     if (result == 3) return 'DRAW';
 };
