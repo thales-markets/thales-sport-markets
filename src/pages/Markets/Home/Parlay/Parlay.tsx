@@ -1,11 +1,12 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
 import { GlobalFiltersEnum } from 'constants/markets';
+import useInterval from 'hooks/useInterval';
 import { t } from 'i18next';
 import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getParlay, removeFromParlay } from 'redux/modules/parlay';
+import { getParlay, getParlayError, removeFromParlay, resetParlayError } from 'redux/modules/parlay';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -15,18 +16,26 @@ import MatchInfo from './components/MatchInfo';
 import Payment from './components/Payment';
 import Single from './components/Single';
 import Ticket from './components/Ticket';
+import ValidationModal from './components/ValidationModal';
 
 const Parlay: React.FC = () => {
     const dispatch = useDispatch();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const parlay = useSelector(getParlay);
+    const hasParlayError = useSelector(getParlayError);
 
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
 
     const sportMarketsQuery = useSportMarketsQuery(networkId, GlobalFiltersEnum.OpenMarkets, null, {
         enabled: isAppReady,
     });
+
+    useInterval(async () => {
+        if (hasParlayError) {
+            dispatch(resetParlayError());
+        }
+    }, 7000);
 
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
@@ -96,6 +105,7 @@ const Parlay: React.FC = () => {
                     <Payment />
                 </>
             )}
+            {hasParlayError && <ValidationModal onClose={() => dispatch(resetParlayError())} />}
         </Container>
     );
 };

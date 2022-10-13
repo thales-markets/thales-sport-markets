@@ -263,6 +263,7 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
                 const marketsAddresses = markets.map((market) => market.address);
                 const selectedPositions = markets.map((market) => market.position);
                 const susdPaid = ethers.utils.parseEther(roundNumberToDecimals(Number(usdAmountValue)).toString());
+                const expectedPayout = ethers.utils.parseEther(roundNumberToDecimals(totalBuyAmount).toString());
 
                 const tx = await getParlayAMMTransaction(
                     true,
@@ -274,7 +275,7 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
                     marketsAddresses,
                     selectedPositions,
                     susdPaid,
-                    totalBuyAmount,
+                    expectedPayout,
                     referralId,
                     ethers.utils.parseEther('0.02')
                 );
