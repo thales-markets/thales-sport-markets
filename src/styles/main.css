@@ -184,3 +184,43 @@ input[type='number'] {
 a {
     text-decoration: none;
 }
+
+.discount-label {
+    padding: 4px 0; 
+    position: relative;
+    float: left;
+    width: 37px;
+    text-align: center;
+    -webkit-border-radius: 0 4px 0 4px;
+    -moz-border-radius: 0 4px 0 4px;
+    border-radius: 0 4px 4px 0;
+}
+
+.discount-label:after { 
+    right: 100%; 
+    border: solid transparent; content: " "; 
+    height: 0; 
+    width: 0; 
+    position: absolute;
+    border-color: rgba(136, 183, 213, 0);
+    border-width: 11px; 
+    top: 50%; 
+    margin-top: -11px;
+} 
+
+.discount-label span {
+    color: #222537;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    font-family: "Raleway",Helvetica;
+}
+
+.green{ 
+    background-color: #5FC694; 
+}
+
+.green:after{ 
+    border-right-color: #5FC694;
+}
+

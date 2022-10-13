@@ -36,7 +36,7 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
 
                 const homeOdds = bigNumberFormatter(marketDefaultOdds[0]);
                 const awayOdds = bigNumberFormatter(marketDefaultOdds[1]);
-                const drawOdds = bigNumberFormatter(marketDefaultOdds[2] || 0);
+                const drawOdds = marketDefaultOdds[2] ? bigNumberFormatter(marketDefaultOdds[2] || 0) : undefined;
 
                 const gameStarted = cancelled ? false : Date.now() > Number(times.maturity) * 1000;
                 let result;

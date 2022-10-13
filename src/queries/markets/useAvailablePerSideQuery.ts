@@ -26,19 +26,24 @@ const useAvailablePerSideQuery = (marketAddress: string, side: Side) => {
                 await sportsAMMContract?.buyPriceImpact(marketAddress, Position.AWAY, ethers.utils.parseEther('1')),
                 await sportsAMMContract?.buyPriceImpact(marketAddress, Position.DRAW, ethers.utils.parseEther('1')),
             ]);
+            console.log(
+                bigNumberFormatter(buyImpactHome),
+                bigNumberFormatter(buyImpactAway),
+                bigNumberFormatter(buyImpactDraw)
+            );
             return {
                 positions: {
                     [Position.HOME]: {
                         available: bigNumberFormatter(availableToBuyHome),
-                        buyImpactPrice: bigNumberFormatter(buyImpactHome),
+                        buyImpactPrice: bigNumberFormatter(buyImpactHome) * 100,
                     },
                     [Position.AWAY]: {
                         available: bigNumberFormatter(availableToBuyAway),
-                        buyImpactPrice: bigNumberFormatter(buyImpactAway),
+                        buyImpactPrice: bigNumberFormatter(buyImpactAway) * 100,
                     },
                     [Position.DRAW]: {
                         available: bigNumberFormatter(availableToBuyDraw),
-                        buyImpactPrice: bigNumberFormatter(buyImpactDraw),
+                        buyImpactPrice: bigNumberFormatter(buyImpactDraw) * 100,
                     },
                 },
             };
