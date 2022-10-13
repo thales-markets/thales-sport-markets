@@ -68,3 +68,11 @@
 .icon--motogp:before {
     content: '\0055';
 }
+
+.icon--arrow:before {
+    content: '\0057';
+}
+
+.icon--triple-arrow:before {
+    content: '\0058';
+}

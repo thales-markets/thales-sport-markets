@@ -58,7 +58,7 @@ const LandingPage: React.FC = () => {
                 <LargeText className="first">{t('landing-page.best-odds')}</LargeText>
                 <CallToAction className="first">
                     <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
-                        {t('landing-page.try-now')} <ArrowIcon className={`icon-exotic icon-exotic--right`} />
+                        {t('landing-page.try-now')} <ArrowIcon className={`icon icon--arrow`} />
                     </SPAAnchor>
                 </CallToAction>
 
@@ -80,7 +80,7 @@ const LandingPage: React.FC = () => {
                 <LargeText className="second in-front">{t('landing-page.no-kyc')}</LargeText>
                 <CallToAction className="second">
                     <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
-                        {t('landing-page.launch-dapp')} <ArrowIcon className={`icon-exotic icon-exotic--right`} />
+                        {t('landing-page.launch-dapp')} <ArrowIcon className={`icon icon--arrow`} />
                     </SPAAnchor>
                 </CallToAction>
                 <SubSection className="first">{t('landing-page.leagues')}</SubSection>
@@ -146,7 +146,10 @@ const LandingPage: React.FC = () => {
                 </InfoBox>
                 <InfoBox className="last">
                     <CallToAction className="info-box">
-                        <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>{t('landing-page.browse-markets')}</SPAAnchor>
+                        <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
+                            {t('landing-page.browse-markets')}
+                            <ArrowIcon className={`icon icon--triple-arrow triple`} />
+                        </SPAAnchor>
                     </CallToAction>
                 </InfoBox>
             </SectionRow>
@@ -155,7 +158,7 @@ const LandingPage: React.FC = () => {
                 <LargeText className="third in-front">{t('landing-page.web3-positioning')}</LargeText>
                 <CallToAction className="third">
                     <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
-                        {t('landing-page.try-now')} <ArrowIcon className={`icon-exotic icon-exotic--right`} />
+                        {t('landing-page.try-now')} <ArrowIcon className={`icon icon--arrow`} />
                     </SPAAnchor>
                 </CallToAction>
             </Section>
@@ -176,7 +179,7 @@ const LandingPage: React.FC = () => {
                 <SubSection className="fifth">{t('landing-page.open-overtime')}</SubSection>
                 <CallToAction className="fifth">
                     <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
-                        {t('landing-page.try-now')} <ArrowIcon className={`icon-exotic icon-exotic--right`} />
+                        {t('landing-page.try-now')} <ArrowIcon className={`icon icon--arrow`} />
                     </SPAAnchor>
                 </CallToAction>
             </Section>
