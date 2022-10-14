@@ -167,7 +167,7 @@ const LandingPage: React.FC = () => {
                 <LargeText className="fourth in-front">{t('landing-page.learn-more')}</LargeText>
                 <SPAAnchor
                     style={{ width: '100%', zIndex: 1001, cursor: 'pointer' }}
-                    href={buildHref(ROUTES.Markets.Home)}
+                    href={buildHref(LINKS.Footer.Docs)}
                 >
                     <SubSection className="first">{t('landing-page.documentation')}</SubSection>
                 </SPAAnchor>
