@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
+import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
@@ -31,7 +32,7 @@ import {
     formatPercentage,
     roundNumberToDecimals,
 } from 'utils/formatters/number';
-import { getPositionOdds } from 'utils/markets';
+import { formatMarketOdds, getPositionOdds } from 'utils/markets';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
@@ -66,6 +67,7 @@ const Single: React.FC<SingleProps> = ({ market }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const selectedOddsType = useSelector(getOddsType);
 
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     const [hasAllowance, setAllowance] = useState<boolean>(false);
@@ -454,18 +456,25 @@ const Single: React.FC<SingleProps> = ({ market }) => {
         );
     };
 
-    const setTooltipTextMessageUsdAmount = (value: string | number) => {
-        const positionOdds = roundNumberToDecimals(getPositionOdds(market));
-        if (value && Number(value) < positionOdds) {
-            setTooltipTextUsdAmount(t('market.tooltip.min-amount', { min: positionOdds }));
-        } else if (Number(value) > availableUsdAmount) {
-            setTooltipTextUsdAmount(t('market.tooltip.amount-exceeded'));
-        } else if (Number(value) > paymentTokenBalance) {
-            setTooltipTextUsdAmount(t('market.tooltip.no-funds'));
-        } else {
-            setTooltipTextUsdAmount('');
-        }
-    };
+    const setTooltipTextMessageUsdAmount = useCallback(
+        (value: string | number) => {
+            const positionOdds = roundNumberToDecimals(getPositionOdds(market));
+            if (value && Number(value) < positionOdds) {
+                setTooltipTextUsdAmount(t('market.tooltip.min-amount', { min: positionOdds }));
+            } else if (Number(value) > availableUsdAmount) {
+                setTooltipTextUsdAmount(t('market.tooltip.amount-exceeded'));
+            } else if (Number(value) > paymentTokenBalance) {
+                setTooltipTextUsdAmount(t('market.tooltip.no-funds'));
+            } else {
+                setTooltipTextUsdAmount('');
+            }
+        },
+        [market, availableUsdAmount, t, paymentTokenBalance]
+    );
+
+    useEffect(() => {
+        setTooltipTextMessageUsdAmount(usdAmountValue);
+    }, [isVoucherSelected, setTooltipTextMessageUsdAmount, usdAmountValue]);
 
     const setUsdAmount = (value: string | number) => {
         setUsdAmountValue(value);
@@ -476,21 +485,14 @@ const Single: React.FC<SingleProps> = ({ market }) => {
         <>
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
-                <SummaryValue>{formatCurrency(getPositionOdds(market))}</SummaryValue>
+                <SummaryValue>{formatMarketOdds(selectedOddsType, getPositionOdds(market))}</SummaryValue>
             </RowSummary>
-            <Payment onChangeCollateral={(index) => setSelectedStableIndex(index)} />
+            <Payment
+                onChangeCollateral={(index) => setSelectedStableIndex(index)}
+                setIsVoucherSelectedProp={setIsVoucherSelected}
+            />
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.buy-amount')}:</SummaryLabel>
-                <InfoWrapper>
-                    <InfoLabel>{t('markets.parlay.available')}:</InfoLabel>
-                    <InfoValue>{formatCurrencyWithSign(USD_SIGN, availableUsdAmount)}</InfoValue>
-                    <InfoLabel>{t('markets.parlay.skew')}:</InfoLabel>
-                    <InfoValue>
-                        {positionPriceDetailsQuery.isLoading
-                            ? '-'
-                            : formatPercentage(ammPosition.sides[Side.BUY].priceImpact)}
-                    </InfoValue>
-                </InfoWrapper>
             </RowSummary>
             <InputContainer>
                 <CustomTooltip open={!!tooltipTextUsdAmount && !openApprovalModal} title={tooltipTextUsdAmount}>
@@ -512,6 +514,16 @@ const Single: React.FC<SingleProps> = ({ market }) => {
                     </AmountToBuyContainer>
                 </CustomTooltip>
             </InputContainer>
+            <InfoWrapper>
+                <InfoLabel>{t('markets.parlay.available')}:</InfoLabel>
+                <InfoValue>{formatCurrencyWithSign(USD_SIGN, availableUsdAmount)}</InfoValue>
+                <InfoLabel>{t('markets.parlay.skew')}:</InfoLabel>
+                <InfoValue>
+                    {positionPriceDetailsQuery.isLoading
+                        ? '-'
+                        : formatPercentage(ammPosition.sides[Side.BUY].priceImpact)}
+                </InfoValue>
+            </InfoWrapper>
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.potential-profit')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>

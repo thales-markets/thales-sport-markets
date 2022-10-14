@@ -29,6 +29,7 @@ export const InfoWrapper = styled.div`
     display: flex;
     align-items: center;
     margin-left: auto;
+    margin-bottom: 5px;
 `;
 
 export const InfoLabel = styled.span`
@@ -41,7 +42,7 @@ export const InfoLabel = styled.span`
 
 export const InfoValue = styled.span`
     font-weight: 700;
-    font-size: 9px;
+    font-size: 10px;
     color: #ffffff;
     margin-left: 5px;
 `;
@@ -65,7 +66,7 @@ export const AmountToBuyContainer = styled.div`
 
 export const AmountToBuyInput = styled.input`
     width: 270px;
-    margin: 10px 0;
+    margin-bottom: 5px;
     border: 3px solid #3accfa;
     border-radius: 5px;
     text-align: center;
@@ -83,7 +84,7 @@ export const MaxButton = styled.button`
     font-size: 10px;
     line-height: 12px;
     position: absolute;
-    top: 16px;
+    top: 6px;
     right: 5px;
     border: none;
     cursor: pointer;

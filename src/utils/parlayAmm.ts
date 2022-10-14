@@ -23,15 +23,27 @@ export const getParlayAMMTransaction: any = (
     const collateralAddress = getCollateralAddress(isBuy, isNonSusdCollateral, networkId, stableIndex);
 
     if (isBuy) {
-        return (isNonSusdCollateral && collateralAddress) || referral
-            ? parlayMarketsAMMContract?.buyFromParlayWithDifferentCollateralAndReferrer(
+        if (isNonSusdCollateral && collateralAddress) {
+            return parlayMarketsAMMContract?.buyFromParlayWithDifferentCollateralAndReferrer(
+                marketsAddresses,
+                selectedPositions,
+                sUSDPaid,
+                additionalSlippage,
+                expectedPayout,
+                collateralAddress,
+                referral || ZERO_ADDRESS
+            );
+        }
+
+        return referral
+            ? parlayMarketsAMMContract?.buyFromParlayWithReferrer(
                   marketsAddresses,
                   selectedPositions,
                   sUSDPaid,
                   additionalSlippage,
                   expectedPayout,
-                  collateralAddress,
-                  referral || ZERO_ADDRESS
+                  isVoucherSelected ? voucherId : ZERO_ADDRESS,
+                  referral
               )
             : parlayMarketsAMMContract?.buyFromParlay(
                   marketsAddresses,

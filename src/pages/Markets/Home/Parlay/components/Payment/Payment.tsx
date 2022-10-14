@@ -14,9 +14,10 @@ import CollateralSelector from '../CollateralSelector';
 
 type PaymentProps = {
     onChangeCollateral?: (index: number) => void;
+    setIsVoucherSelectedProp?: (selected: boolean) => void;
 };
 
-const Payment: React.FC<PaymentProps> = ({ onChangeCollateral }) => {
+const Payment: React.FC<PaymentProps> = ({ onChangeCollateral, setIsVoucherSelectedProp }) => {
     const { t } = useTranslation();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -59,6 +60,11 @@ const Payment: React.FC<PaymentProps> = ({ onChangeCollateral }) => {
         isVoucherSelected,
     ]);
 
+    const handleSetIsVoucherSelected = (isSelected: boolean) => {
+        setIsVoucherSelectedProp && setIsVoucherSelectedProp(isSelected);
+        setIsVoucherSelected(isSelected);
+    };
+
     return (
         <>
             <RowSummary>
@@ -80,7 +86,7 @@ const Payment: React.FC<PaymentProps> = ({ onChangeCollateral }) => {
                 }}
                 overtimeVoucher={overtimeVoucher}
                 isVoucherSelected={isVoucherSelected}
-                setIsVoucherSelected={setIsVoucherSelected}
+                setIsVoucherSelected={handleSetIsVoucherSelected}
             />
         </>
     );

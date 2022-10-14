@@ -228,7 +228,8 @@
             "amount-exceeded": "Amount exceeded the amount available on AMM",
             "minimal-amount": "Minimal amount is 1",
             "min-amount": "Minimal amount is {{min}}",
-            "min-quote": "Minimal quote is {{min}}",
+            "min-quote": "Minimal quote is {{value}}",
+            "max-quote": "Maximum quote is {{value}}",
             "no-funds": "Please ensure your wallet has enough funds"
         }
     },
@@ -268,6 +269,8 @@
         "parlay": {
             "total-quote": "Total quote",
             "buy-amount": "Amount to buy",
+            "fee": "Total fee",
+            "total-received": "Total received",
             "potential-profit": "Potential profit",
             "pay-with": "Pay with",
             "available": "Available",

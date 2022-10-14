@@ -1,6 +1,5 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
 import { GlobalFiltersEnum } from 'constants/markets';
-import useInterval from 'hooks/useInterval';
 import { t } from 'i18next';
 import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
 import React, { useEffect, useState } from 'react';
@@ -30,12 +29,6 @@ const Parlay: React.FC = () => {
     const sportMarketsQuery = useSportMarketsQuery(networkId, GlobalFiltersEnum.OpenMarkets, null, {
         enabled: isAppReady,
     });
-
-    useInterval(async () => {
-        if (hasParlayError) {
-            dispatch(resetParlayError());
-        }
-    }, 7000);
 
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {

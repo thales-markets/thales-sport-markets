@@ -1,10 +1,13 @@
+import validationFiveMarketsAnimation from 'assets/lotties/validation-five-markets.json';
 import Modal from 'components/Modal';
+import useInterval from 'hooks/useInterval';
 import Lottie from 'lottie-react';
 import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { getParlayError, resetParlayError } from 'redux/modules/parlay';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
-import validationFiveMarketsAnimation from 'assets/lotties/validation-five-markets.json';
 
 type ValidationModalProps = {
     onClose: () => void;
@@ -12,6 +15,15 @@ type ValidationModalProps = {
 
 export const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+
+    const hasParlayError = useSelector(getParlayError);
+
+    useInterval(async () => {
+        if (hasParlayError) {
+            dispatch(resetParlayError());
+        }
+    }, 5800);
 
     return (
         <Modal title={t('markets.parlay.validation.title')} onClose={() => onClose()} shouldCloseOnOverlayClick={true}>
@@ -32,7 +44,6 @@ const Container = styled(FlexDivColumnCentered)`
 `;
 
 const fiveMarketsStyle: CSSProperties = {
-    // height: 200,
     width: 350,
 };
 
