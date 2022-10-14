@@ -67,7 +67,7 @@ export const NAV_MENU: NavMenuItem[] = [
     },
     {
         i18label: 'markets.nav-menu.items.onboarding-wizard',
-        iconClass: 'icon icon--logo',
+        iconClass: 'icon icon--wizard',
         name: 'onboarding-wizard',
     },
     {
@@ -77,17 +77,17 @@ export const NAV_MENU: NavMenuItem[] = [
     },
     {
         i18label: 'markets.nav-menu.items.sports-trivia',
-        iconClass: 'icon icon--logo',
+        iconClass: 'icon icon--trivia',
         name: 'sports-trivia',
     },
     {
         i18label: 'markets.nav-menu.items.leaderboard',
-        iconClass: 'icon icon--logo',
+        iconClass: 'icon icon--leaderboard',
         name: 'leaderboard',
     },
     {
         i18label: 'markets.nav-menu.items.become-affiliate',
-        iconClass: 'icon icon--logo',
+        iconClass: 'icon icon--affiliate',
         name: 'become-affiliate',
     },
 ];
