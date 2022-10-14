@@ -68,3 +68,7 @@
 .icon--motogp:before {
     content: '\0055';
 }
+
+.icon--profile:before {
+    content: '\0050';
+}
