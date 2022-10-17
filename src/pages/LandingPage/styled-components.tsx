@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
-    width: 100%;
+    width: 75%;
     align-items: center;
 `;
 
@@ -23,27 +23,27 @@ export const Section = styled(FlexDivColumn)`
     width: 100%;
     align-items: center;
     &.first {
-        margin-top: 100px;
+        margin-top: 60px;
         @media (max-width: 500px) {
-            margin-top: 75px;
+            margin-top: 50px;
         }
     }
     &.second {
-        margin-top: 150px;
+        margin-top: 100px;
     }
     &.third {
         margin-top: 200px;
         text-align: end;
     }
     &.fourth {
-        margin-top: 300px;
+        margin-top: 150px;
         text-align: end;
         @media (max-width: 960px) {
             margin-top: 200px;
         }
     }
     &.fifth {
-        margin-top: 400px;
+        margin-top: 250px;
         @media (max-width: 750px) {
             margin-top: 300px;
         }
@@ -55,7 +55,6 @@ export const Section = styled(FlexDivColumn)`
         }
     }
     &.sixth {
-        margin-top: 200px;
         margin-bottom: 200px;
         @media (max-width: 500px) {
             margin-top: 100px;
@@ -72,17 +71,15 @@ export const ZebraLogo = styled.img`
 export const Zebro = styled.img`
     position: absolute;
     &.baseball {
-        top: -300px;
-        left: -280px;
+        top: -160px;
+        left: -100px;
+        height: 40em;
+        width: 40em;
         @media (max-width: 960px) {
-            height: 45em;
-            width: 45em;
             top: -200px;
             left: -70px;
         }
         @media (max-width: 750px) {
-            height: 42em;
-            width: 42em;
             top: -163px;
             left: -105px;
         }
@@ -106,11 +103,11 @@ export const Zebro = styled.img`
         }
     }
     &.basketball {
-        top: -255px;
-        left: 245px;
+        top: -185px;
+        left: 230px;
+        height: 40em;
+        width: 40em;
         @media (max-width: 960px) {
-            height: 50em;
-            width: 50em;
             top: -250px;
             left: 100px;
         }
@@ -136,8 +133,10 @@ export const Zebro = styled.img`
         }
     }
     &.nfl {
-        top: -320px;
-        left: -50px;
+        top: -280px;
+        left: 0px;
+        height: 40em;
+        width: 40em;
         @media (max-width: 960px) {
             height: 40em;
             width: 40em;
@@ -158,7 +157,9 @@ export const Zebro = styled.img`
     }
     &.hockey {
         top: -190px;
-        right: -75px;
+        right: 95px;
+        height: 40em;
+        width: 40em;
         @media (max-width: 960px) {
             height: 40em;
             width: 40em;
@@ -178,8 +179,10 @@ export const Zebro = styled.img`
         }
     }
     &.boxing {
-        top: -330px;
-        left: -100px;
+        top: -200px;
+        left: 15px;
+        height: 40em;
+        width: 40em;
         @media (max-width: 960px) {
             height: 42em;
             width: 42em;
@@ -207,8 +210,10 @@ export const Zebro = styled.img`
         }
     }
     &.racing {
-        top: -180px;
-        right: -200px;
+        top: -130px;
+        right: -60px;
+        height: 40em;
+        width: 40em;
         @media (max-width: 960px) {
             height: 48em;
             width: 48em;
@@ -240,7 +245,7 @@ export const LargeText = styled.label`
     font-family: JostExtraBold !important;
     font-style: normal;
     font-weight: 900;
-    font-size: 150px;
+    font-size: 90px;
     line-height: 90%;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
@@ -271,6 +276,9 @@ export const LargeText = styled.label`
     }
     &.fifth {
         text-align: right;
+        width: 80%;
+        display: flex;
+        align-self: self-end;
         @media (max-width: 960px) {
             width: 80%;
             margin-left: 20%;
@@ -280,12 +288,6 @@ export const LargeText = styled.label`
         z-index: 1001;
     }
     @media (max-width: 960px) {
-        font-size: 100px;
-    }
-    @media (max-width: 750px) {
-        font-size: 90px;
-    }
-    @media (max-width: 600px) {
         font-size: 60px;
     }
     @media (max-width: 500px) {
@@ -301,7 +303,7 @@ export const CallToAction = styled.label`
     font-family: NunitoExtraBold !important;
     font-style: normal;
     font-weight: 900;
-    font-size: 45px;
+    font-size: 30px;
     line-height: 61px;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.quaternary};
@@ -312,15 +314,14 @@ export const CallToAction = styled.label`
         font-family: NunitoExtraBold !important;
         font-style: normal;
         font-weight: 900;
-        font-size: 45px;
+        font-size: 30px;
         line-height: 61px;
         cursor: pointer;
         @media (max-width: 600px) {
-            font-size: 35px;
+            font-size: 25px;
             line-height: 90%;
         }
         @media (max-width: 500px) {
-            font-size: 30px;
             line-height: 120%;
         }
         @media (max-width: 450px) {
@@ -329,8 +330,8 @@ export const CallToAction = styled.label`
         }
     }
     &.first {
-        align-self: flex-end;
-        margin-right: 15%;
+        align-self: center;
+        margin-left: 32%;
         @media (max-width: 750px) {
             margin-right: 0px;
         }
@@ -347,18 +348,12 @@ export const CallToAction = styled.label`
     }
     &.info-box {
         justify-content: center;
-        margin-top: 7px;
+        margin-top: 6px;
         & > a {
-            font-size: 35px;
+            font-size: 25px;
             line-height: 80%;
             align-self: center;
             width: 50%;
-            @media (max-width: 750px) {
-                font-size: 30px;
-            }
-            @media (max-width: 600px) {
-                font-size: 25px;
-            }
             @media (max-width: 500px) {
                 font-size: 20px;
             }
@@ -371,7 +366,7 @@ export const CallToAction = styled.label`
 `;
 
 export const ArrowIcon = styled.i`
-    font-size: 55px;
+    font-size: 30px;
     color: ${(props) => props.theme.textColor.quaternary};
     vertical-align: baseline;
 
@@ -381,15 +376,12 @@ export const ArrowIcon = styled.i`
     }
 
     @media (max-width: 600px) {
-        font-size: 40px;
+        font-size: 25px;
         &.triple {
-            font-size: 55px;
+            font-size: 25px;
         }
     }
     @media (max-width: 500px) {
-        font-size: 30px;
-    }
-    @media (max-width: 450px) {
         font-size: 20px;
     }
 `;
@@ -398,17 +390,17 @@ export const SubSection = styled(FlexDivColumn)`
     display: flex;
     flex: initial;
     width: 100%;
-    height: 56px;
+    height: 36px;
     background-color: ${(props) => props.theme.textColor.quaternary};
     color: ${(props) => props.theme.textColor.tertiary};
     font-family: NunitoExtraBold !important;
     font-style: normal;
     font-weight: 800;
-    font-size: 45px;
-    line-height: 61px;
+    font-size: 30px;
+    line-height: 37px;
     text-transform: uppercase;
     &.first {
-        margin-top: 80px;
+        margin-top: 50px;
         align-items: center;
     }
     &.fifth {
@@ -421,7 +413,7 @@ export const SubSection = styled(FlexDivColumn)`
         }
     }
     @media (max-width: 600px) {
-        font-size: 30px;
+        font-size: 25px;
         line-height: 45px;
         height: 45px;
     }
@@ -471,7 +463,7 @@ export const Link = styled.a<{ height: string }>`
         }
     }
     &:nth-child(2) {
-        margin-top: -4px;
+        margin-top: -10px;
         @media (max-width: 960px) {
             height: 55px;
         }
@@ -491,6 +483,7 @@ export const Link = styled.a<{ height: string }>`
         }
     }
     &:nth-child(3) {
+        margin-top: -9px;
         @media (max-width: 960px) {
             height: 35px;
         }
@@ -531,9 +524,9 @@ export const SectionRow = styled(FlexDivRow)`
 export const InfoBox = styled.div`
     border: 5px solid ${(props) => props.theme.borderColor.secondary};
     border-radius: 6.41853px;
-    width: 366px;
+    width: 30%;
     color: ${(props) => props.theme.textColor.primary};
-    height: 260px;
+    height: 235px;
     text-align: center;
     margin: 11px;
     padding: 40px 0px;
@@ -562,7 +555,7 @@ export const InfoBoxTitle = styled.label`
     font-family: NunitoExtraBold !important;
     font-style: normal;
     font-weight: 800;
-    font-size: 35px;
+    font-size: 25px;
     line-height: 90%;
     text-align: center;
     text-transform: uppercase;
@@ -598,7 +591,7 @@ export const DiscordInfo = styled(FlexDivRow)`
     align-self: start;
     width: 45%;
     margin-top: 200px;
-    margin-left: 150px;
+    margin-left: 50px;
     @media (max-width: 960px) {
         width: 60%;
         margin-top: 65px;
@@ -612,9 +605,7 @@ export const DiscordInfo = styled(FlexDivRow)`
 
 export const DiscordIcon = styled.img`
     margin-right: 10px;
-    @media (max-width: 600px) {
-        height: 2em;
-    }
+    height: 2em;
 `;
 
 export const DiscordLink = styled.a`
@@ -622,7 +613,7 @@ export const DiscordLink = styled.a`
     font-family: Nunito !important;
     font-style: normal;
     font-weight: 700;
-    font-size: 45px;
+    font-size: 30px;
     line-height: 90%;
     text-align: left;
     text-transform: uppercase;
@@ -641,9 +632,9 @@ export const DiscordLink = styled.a`
 
 export const CarouselContainer = styled.div`
     width: 100%;
-    margin-top: 100px;
-    margin-bottom: 100px;
-    height: 220px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    height: 180px;
     color: ${(props) => props.theme.textColor.primary};
     @media (max-width: 500px) {
         margin-top: 50px;
@@ -670,9 +661,9 @@ export const CarouselContainer = styled.div`
         }
         & > li {
             &.dot {
-                height: 32px !important;
-                margin: 0px 15px !important;
-                width: 32px !important;
+                height: 20px !important;
+                margin: 0px 10px !important;
+                width: 20px !important;
                 @media (max-width: 600px) {
                     height: 16px !important;
                     width: 16px !important;
@@ -689,7 +680,7 @@ export const CarouselIconContainer = styled(FlexDivRow)`
 
 export const LeagueIcon = styled.i`
     color: ${(props) => props.theme.textColor.primary};
-    font-size: 150px;
+    font-size: 120px;
 
     @media (max-width: 600px) {
         font-size: 115px;

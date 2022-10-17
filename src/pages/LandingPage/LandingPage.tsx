@@ -64,13 +64,13 @@ const LandingPage: React.FC = () => {
 
                 <SubSection className="first">{t('landing-page.powered-by')}</SubSection>
                 <Initiatives>
-                    <Link target="_blank" rel="noreferrer" height={'70px'} href="https://chain.link/">
+                    <Link target="_blank" rel="noreferrer" height={'42px'} href="https://chain.link/">
                         <Initiative src={ChainlinkLogo} alt="Chainlink logo" />
                     </Link>
-                    <Link target="_blank" rel="noreferrer" height={'65px'} href="https://thalesmarket.io/">
+                    <Link target="_blank" rel="noreferrer" height={'39px'} href="https://thalesmarket.io/">
                         <Initiative src={ThalesLogo} alt="Thales logo" />
                     </Link>
-                    <Link target="_blank" rel="noreferrer" height={'45px'} href="https://www.optimism.io/">
+                    <Link target="_blank" rel="noreferrer" height={'27px'} href="https://www.optimism.io/">
                         <Initiative src={OptimismLogo} alt="Optimism logo" />
                     </Link>
                 </Initiatives>
