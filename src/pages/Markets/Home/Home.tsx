@@ -37,6 +37,7 @@ import {
     TagInfo,
     Tags,
 } from 'types/markets';
+import { isMobile } from 'utils/device';
 import { isClaimAvailable } from 'utils/markets';
 import { NetworkIdByName } from 'utils/network';
 import { buildHref, history } from 'utils/routes';
@@ -508,6 +509,7 @@ const Home: React.FC = () => {
                             dispatch(setMarketSearch(value));
                             setSearchParam(value);
                         }}
+                        width={300}
                     />
                     <SportFiltersContainer>
                         {Object.values(SportFilterEnum).map((filterItem: any, index) => {
@@ -601,7 +603,7 @@ const Home: React.FC = () => {
                 )}
                 {/* RIGHT PART */}
                 <SidebarContainer rightSide={true}>
-                    {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
+                    {!isMobile() && networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
                     <Parlay />
                 </SidebarContainer>
             </RowContainer>

@@ -1,4 +1,5 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
+import { LINKS } from 'constants/links';
 import { GlobalFiltersEnum } from 'constants/markets';
 import { t } from 'i18next';
 import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
@@ -9,7 +10,7 @@ import { getParlay, getParlayError, removeFromParlay, resetParlayError } from 'r
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivColumn } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { ParlaysMarket, SportMarketInfo } from 'types/markets';
 import MatchInfo from './components/MatchInfo';
 import Payment from './components/Payment';
@@ -80,6 +81,14 @@ const Parlay: React.FC = () => {
                     ) : (
                         <Ticket markets={parlayMarkets} />
                     )}
+                    <Footer>
+                        <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Twitter}>
+                            <TwitterIcon />
+                        </Link>
+                        <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Twitter}>
+                            <ShareIcon />
+                        </Link>
+                    </Footer>
                 </>
             ) : (
                 <>
@@ -156,6 +165,33 @@ const EmptyDesc = styled.span`
     line-height: 14px;
     letter-spacing: 0.025em;
     color: #64d9fe;
+`;
+
+const Footer = styled(FlexDivCentered)`
+    margin-top: 20px;
+`;
+
+const Link = styled.a`
+    font-size: 20px;
+    :not(:last-child) {
+        margin-right: 20px;
+    }
+`;
+
+const TwitterIcon = styled.i`
+    color: #ffffff;
+    &:before {
+        font-family: ExoticIcons !important;
+        content: '\\005C';
+    }
+`;
+
+const ShareIcon = styled.i`
+    color: #ffffff;
+    &:before {
+        font-family: ExoticIcons !important;
+        content: '\\0052';
+    }
 `;
 
 export default Parlay;

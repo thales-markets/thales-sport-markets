@@ -17,6 +17,7 @@ import { ethers } from 'ethers';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import { NetworkIdByName } from 'utils/network';
 import SwapModal from 'components/SwapModal';
+import { isMobile } from 'utils/device';
 
 const FAUCET_ETH_AMOUNT_TO_SEND = 0.000001;
 
@@ -95,7 +96,7 @@ const GetUsd: React.FC = () => {
                         }}
                         disabled={isSubmitting}
                         fontSize={12.5}
-                        style={{ minHeight: '24px' }}
+                        style={!isMobile() ? { minHeight: '24px' } : {}}
                     >
                         {isSubmitting
                             ? t('common.wallet.get-usd-progress', {
@@ -116,7 +117,7 @@ const GetUsd: React.FC = () => {
 
 const Container = styled(FlexDivCentered)`
     position: relative;
-    height: 24px;
+    height: ${isMobile() ? '28px' : '24px'};
     button {
         padding: 0 20px;
         width: 100%;
