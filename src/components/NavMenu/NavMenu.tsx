@@ -1,8 +1,13 @@
 import { NAV_MENU } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getNetworkId } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import {
     Button,
+    CloseIcon,
     FooterContainer,
     HeaderContainer,
     ItemContainer,
@@ -15,16 +20,22 @@ import {
     Wrapper,
 } from './styled-components';
 
-const NavMenu: React.FC = () => {
-    const { t } = useTranslation();
+type NavMenuProps = {
+    visibility?: boolean | null;
+    hideVisibilityFunction: () => void;
+};
 
+const NavMenu: React.FC<NavMenuProps> = ({ visibility, hideVisibilityFunction }) => {
+    const { t } = useTranslation();
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
     return (
-        <Wrapper>
+        <Wrapper show={visibility}>
             <HeaderContainer>
                 <Network>
-                    <NetworkIcon className="icon icon--logo" />
-                    <NetworkName>{'Mainnet'}</NetworkName>
+                    <NetworkIcon className={getNetworkIconClassNameByNetworkId(networkId)} />
+                    <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
                 </Network>
+                <CloseIcon onClick={() => hideVisibilityFunction()} />
             </HeaderContainer>
             <ItemsContainer>
                 {NAV_MENU.map((item, index) => {
