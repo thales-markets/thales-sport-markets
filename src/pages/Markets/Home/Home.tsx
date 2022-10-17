@@ -116,11 +116,15 @@ const Home: React.FC = () => {
             }
             searchParam != '' ? dispatch(setMarketSearch(searchParam)) : '';
             selectedLanguage == '' ? setSelectedLanguage(i18n.language) : '';
-
-            const tagsPerSport = SPORTS_TAGS_MAP[sportFilter];
-            if (tagsPerSport) {
-                const filteredTags = tagsList.filter((tag: TagInfo) => tagsPerSport.includes(tag.id));
+            if (sportFilter == SportFilterEnum.Favourites) {
+                const filteredTags = tagsList.filter((tag: TagInfo) => tag.favourite);
                 setAvailableTags(filteredTags);
+            } else {
+                const tagsPerSport = SPORTS_TAGS_MAP[sportFilter];
+                if (tagsPerSport) {
+                    const filteredTags = tagsList.filter((tag: TagInfo) => tagsPerSport.includes(tag.id));
+                    setAvailableTags(filteredTags);
+                }
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -164,6 +168,13 @@ const Home: React.FC = () => {
         DEFAULT_SEARCH_DEBOUNCE_MS
     );
 
+    useEffect(() => {
+        if (sportFilter == SportFilterEnum.Favourites) {
+            const filteredTags = favouriteLeagues.filter((tag: any) => tag.favourite);
+            setAvailableTags(filteredTags);
+        }
+    }, [favouriteLeagues, sportFilter]);
+
     const datesFilteredMarkets = useMemo(() => {
         let filteredMarkets = marketSearch ? searchFilteredMarkets : markets;
 
@@ -179,45 +190,31 @@ const Home: React.FC = () => {
         let filteredMarkets = datesFilteredMarkets;
 
         if (sportFilter !== SportFilterEnum.All) {
-            filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => market.sport === sportFilter);
+            if (sportFilter == SportFilterEnum.Favourites) {
+                filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) =>
+                    favouriteLeagues
+                        .filter((league) => league.favourite)
+                        .map((league) => league.id)
+                        .includes(market.tags.map((tag) => Number(tag))[0])
+                );
+            } else {
+                filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => market.sport === sportFilter);
+            }
         }
 
-        let favouriteMarkets = datesFilteredMarkets;
-        if (favouriteLeagues.length > 0) {
-            favouriteMarkets = favouriteMarkets.filter((market: SportMarketInfo) =>
-                favouriteLeagues
-                    .filter((league) => league.favourite)
-                    .map((league) => league.id)
-                    .includes(market.tags.map((tag) => Number(tag))[0])
-            );
-        }
-        const marketUnion = new Set<SportMarketInfo>([...filteredMarkets, ...favouriteMarkets]);
-
-        return Array.from(marketUnion);
+        return filteredMarkets;
     }, [datesFilteredMarkets, sportFilter, favouriteLeagues]);
 
     const tagsFilteredMarkets = useMemo(() => {
         let filteredMarkets = sportFilteredMarkets;
-
         if (tagFilter.length > 0) {
             filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) =>
                 tagFilter.map((tag) => tag.id).includes(market.tags.map((tag) => Number(tag))[0])
             );
         }
 
-        let favouriteMarkets = sportFilteredMarkets;
-        if (favouriteLeagues.length > 0) {
-            favouriteMarkets = favouriteMarkets.filter((market: SportMarketInfo) =>
-                favouriteLeagues
-                    .filter((league) => league.favourite)
-                    .map((league) => league.id)
-                    .includes(market.tags.map((tag) => Number(tag))[0])
-            );
-        }
-        const marketUnion = new Set<SportMarketInfo>([...filteredMarkets, ...favouriteMarkets]);
-
-        return Array.from(marketUnion);
-    }, [sportFilteredMarkets, tagFilter, favouriteLeagues]);
+        return filteredMarkets;
+    }, [sportFilteredMarkets, tagFilter]);
 
     const marketsList = useMemo(() => {
         let filteredMarkets = tagsFilteredMarkets;
@@ -394,6 +391,7 @@ const Home: React.FC = () => {
                                     key={filterItem + '1'}
                                     tags={availableTags}
                                     tagFilter={tagFilter}
+                                    sportFilter={sportFilter}
                                     setTagFilter={setTagFilter}
                                     setTagParam={setTagParam}
                                 ></TagsDropdown>
@@ -560,6 +558,7 @@ const Home: React.FC = () => {
                                         key={filterItem + '1'}
                                         tags={availableTags}
                                         tagFilter={tagFilter}
+                                        sportFilter={sportFilter}
                                         setTagFilter={setTagFilter}
                                         setTagParam={setTagParam}
                                     ></TagsDropdown>

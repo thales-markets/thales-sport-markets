@@ -191,7 +191,8 @@
                 "formula1": "Formel 1",
                 "motogp": "MotoGP",
                 "soon": "Bald mehr Sportarten!",
-                "motosport": "Motorsport"
+                "motosport": "Motorsport",
+                "favourites": "Favoriten"
             },
             "all": "Alles",
             "datepicker": {

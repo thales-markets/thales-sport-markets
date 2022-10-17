@@ -191,7 +191,8 @@
                 "formula1": "一级方程式赛车",
                 "motogp": "世界摩托车锦标赛",
                 "soon": "即将开放!",
-                "motosport": "摩托车运动"
+                "motosport": "摩托车运动",
+                "favourites": "收藏夹"
             },
             "all": "所有",
             "datepicker": {

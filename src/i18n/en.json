@@ -181,6 +181,7 @@
             },
             "sport": {
                 "all": "All sports",
+                "favourites": "Favourites",
                 "basketball": "Basketball",
                 "soccer": "Soccer",
                 "hockey": "Hockey",

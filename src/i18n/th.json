@@ -191,7 +191,8 @@
                 "formula1": "Formula 1",
                 "motogp": "MotoGP",
                 "soon": "กีฬาอื่น ๆ เร็ว ๆ นี้!",
-                "motosport": "มอเตอร์สปอร์ต"
+                "motosport": "มอเตอร์สปอร์ต",
+                "favourites": "รายการโปรด"
             },
             "datepicker": {
                 "games": "{{numberOfGames}} เกม"

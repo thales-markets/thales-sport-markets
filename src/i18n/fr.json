@@ -272,7 +272,8 @@
                 "motogp": "MotoGP",
                 "soon": "Plus de sports à venir!",
                 "ufc": "MMA",
-                "motosport": "Sport automobile"
+                "motosport": "Sport automobile",
+                "favourites": "Favoris"
             },
             "all": "Tous",
             "datepicker": {
