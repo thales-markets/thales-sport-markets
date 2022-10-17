@@ -1,12 +1,14 @@
+import SPAAnchor from 'components/SPAAnchor';
 import { NAV_MENU } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
-import { getNetworkId } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
+import { truncateAddress } from 'utils/formatters/string';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import {
-    Button,
     CloseIcon,
     FooterContainer,
     HeaderContainer,
@@ -17,8 +19,12 @@ import {
     Network,
     NetworkIcon,
     NetworkName,
+    WalletAddress,
+    WalletAddressContainer,
+    WalletIcon,
     Wrapper,
 } from './styled-components';
+import { useAccountModal } from '@rainbow-me/rainbowkit';
 
 type NavMenuProps = {
     visibility?: boolean | null;
@@ -28,50 +34,44 @@ type NavMenuProps = {
 const NavMenu: React.FC<NavMenuProps> = ({ visibility, hideVisibilityFunction }) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+
+    const { openAccountModal } = useAccountModal();
+    // const { openConnectModal } = useConnectModal();
+
     return (
-        <Wrapper show={visibility}>
-            <HeaderContainer>
-                <Network>
-                    <NetworkIcon className={getNetworkIconClassNameByNetworkId(networkId)} />
-                    <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
-                </Network>
-                <CloseIcon onClick={() => hideVisibilityFunction()} />
-            </HeaderContainer>
-            <ItemsContainer>
-                {NAV_MENU.map((item, index) => {
-                    return (
-                        <ItemContainer key={index}>
-                            <NavIcon className={item.iconClass} />
-                            <NavLabel>{t(item.i18label)}</NavLabel>
-                        </ItemContainer>
-                    );
-                })}
-                {/* <ItemContainer>
-                    <NavIcon className="icon icon--logo" />
-                    <NavLabel>{t('markets.nav-menu.markets')}</NavLabel>
-                </ItemContainer>
-                <ItemContainer>
-                    <NavIcon className="icon icon--logo" />
-                    <NavLabel>{t('markets.nav-menu.markets')}</NavLabel>
-                </ItemContainer>
-                <ItemContainer>
-                    <NavIcon className="icon icon--logo" />
-                    <NavLabel>{t('markets.nav-menu.markets')}</NavLabel>
-                </ItemContainer>
-                <ItemContainer>
-                    <NavIcon className="icon icon--logo" />
-                    <NavLabel>{t('markets.nav-menu.markets')}</NavLabel>
-                </ItemContainer>
-                <ItemContainer>
-                    <NavIcon className="icon icon--logo" />
-                    <NavLabel>{t('markets.nav-menu.markets')}</NavLabel>
-                </ItemContainer> */}
-            </ItemsContainer>
-            <FooterContainer>
-                <Button>{t('markets.nav-menu.buttons.switch')}</Button>
-                <Button>{t('markets.nav-menu.buttons.disconnect')}</Button>
-            </FooterContainer>
-        </Wrapper>
+        <OutsideClickHandler onOutsideClick={() => visibility == true && hideVisibilityFunction()}>
+            <Wrapper show={visibility}>
+                <HeaderContainer>
+                    <Network>
+                        <NetworkIcon className={getNetworkIconClassNameByNetworkId(networkId)} />
+                        <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
+                    </Network>
+                    <CloseIcon onClick={() => hideVisibilityFunction()} />
+                </HeaderContainer>
+                <ItemsContainer>
+                    {NAV_MENU.map((item, index) => {
+                        return (
+                            <SPAAnchor key={index} href={'#'}>
+                                <ItemContainer key={index}>
+                                    <NavIcon className={item.iconClass} />
+                                    <NavLabel>{t(item.i18label)}</NavLabel>
+                                </ItemContainer>
+                            </SPAAnchor>
+                        );
+                    })}
+                </ItemsContainer>
+                <FooterContainer>
+                    {isWalletConnected && (
+                        <WalletAddressContainer onClick={() => openAccountModal?.()}>
+                            <WalletIcon />
+                            <WalletAddress>{truncateAddress(walletAddress)}</WalletAddress>
+                        </WalletAddressContainer>
+                    )}
+                </FooterContainer>
+            </Wrapper>
+        </OutsideClickHandler>
     );
 };
 

@@ -120,7 +120,10 @@ export const Button = styled.button`
     cursor: pointer;
 `;
 
-export const FooterContainer = styled(FlexDivRow)``;
+export const FooterContainer = styled(FlexDivRow)`
+    align-items: center;
+    justify-content: center;
+`;
 
 export const Network = styled(FlexDivRow)`
     align-items: center;
@@ -149,4 +152,28 @@ export const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
     top: 15px;
     right: 15px;
     cursor: pointer;
+`;
+
+export const WalletAddress = styled.span`
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 120%;
+`;
+
+export const WalletIcon = styled.i.attrs({ className: 'icon icon--wallet' })`
+    color: white;
+    font-size: 15px;
+    margin-right: 6px;
+`;
+
+export const WalletAddressContainer = styled(FlexDivRow)`
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    :hover {
+        i {
+            color: ${MAIN_COLORS.TEXT.BLUE} !important;
+        }
+        color: ${MAIN_COLORS.TEXT.BLUE} !important;
+    }
 `;

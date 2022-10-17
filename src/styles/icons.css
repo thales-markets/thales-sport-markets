@@ -69,6 +69,11 @@
     content: '\0055';
 }
 
+.icon--wallet:before {
+    content: '\0054';
+}
+
+
 .icon--profile:before {
     content: '\0050';
 }
