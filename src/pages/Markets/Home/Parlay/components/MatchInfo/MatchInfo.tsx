@@ -101,8 +101,8 @@ const ClubName = styled.span`
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 300;
-    font-size: 8px;
-    line-height: 9px;
+    font-size: 10px;
+    line-height: 11px;
     text-transform: uppercase;
     color: #ffffff;
 `;

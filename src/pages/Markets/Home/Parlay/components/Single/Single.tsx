@@ -51,7 +51,7 @@ import {
     SubmitButton,
     SummaryLabel,
     SummaryValue,
-} from '../../styled-components';
+} from '../styled-components';
 import Payment from '../Payment';
 
 type SingleProps = {
@@ -525,9 +525,20 @@ const Single: React.FC<SingleProps> = ({ market }) => {
                 </InfoValue>
             </InfoWrapper>
             <RowSummary>
-                <SummaryLabel>{t('markets.parlay.potential-profit')}:</SummaryLabel>
+                <SummaryLabel>{t('markets.parlay.total-received')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>
                     {!tokenAmount || positionPriceDetailsQuery.isLoading || !!tooltipTextUsdAmount
+                        ? '-'
+                        : formatCurrencyWithSign(USD_SIGN, tokenAmount, 2)}
+                </SummaryValue>
+            </RowSummary>
+            <RowSummary>
+                <SummaryLabel>{t('markets.parlay.potential-profit')}:</SummaryLabel>
+                <SummaryValue isInfo={true}>
+                    {ammPosition.sides[Side.BUY].quote <= 0 ||
+                    !tokenAmount ||
+                    positionPriceDetailsQuery.isLoading ||
+                    !!tooltipTextUsdAmount
                         ? '-'
                         : `${formatCurrencyWithSign(
                               USD_SIGN,

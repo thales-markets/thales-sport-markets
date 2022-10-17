@@ -9,7 +9,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { formatCurrency } from 'utils/formatters/number';
-import { BalanceLabel, BalanceValue, BalanceWrapper, RowSummary, SummaryLabel } from '../../styled-components';
+import { BalanceLabel, BalanceValue, BalanceWrapper, RowSummary, SummaryLabel } from '../styled-components';
 import CollateralSelector from '../CollateralSelector';
 
 type PaymentProps = {

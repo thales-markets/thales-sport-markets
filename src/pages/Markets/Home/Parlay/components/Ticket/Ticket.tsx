@@ -46,7 +46,7 @@ import {
     SubmitButton,
     SummaryLabel,
     SummaryValue,
-} from '../../styled-components';
+} from '../styled-components';
 import Payment from '../Payment';
 
 type TicketProps = {
