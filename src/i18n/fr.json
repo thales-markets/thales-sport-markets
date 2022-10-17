@@ -316,7 +316,9 @@
             "minimal-amount": "Le montant minimal est de 1",
             "no-funds": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds",
             "amount-exceeded": "Le montant saisi dépasse le montant disponible via l'AMM",
-            "min-amount": "Le montant minimal est de {{min}}"
+            "min-amount": "Le montant minimal est de {{min}}",
+            "min-quote": "Le devis minimal est {{value}}",
+            "max-quote": "Le devis maximum est de {{value}}"
         },
         "match-time": "Temps de match"
     },
@@ -371,7 +373,15 @@
             "available": "Disponible",
             "potential-profit": "Gain potentiel",
             "total-quote": "Devis total",
-            "pay-with": "Payer avec"
+            "pay-with": "Payer avec",
+            "validation": {
+                "title": "Validation Parlay",
+                "max-markets": "Maximum 4 marchés à Parlay"
+            },
+            "total-received": "Total reçu",
+            "empty-title": "Aucun poste",
+            "empty-description": "Ajoutez une position, choisissez un marché et faites votre sélection.",
+            "fee": "Montant total"
         }
     },
     "rewards": {

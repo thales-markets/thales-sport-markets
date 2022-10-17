@@ -228,7 +228,9 @@
             "amount-exceeded": "Cantidad excede la disponibilidad del AMM",
             "minimal-amount": "Cantidad minima es 1",
             "no-funds": "Por favor asegurese que su billetera tenga fondos suficientes",
-            "min-amount": "La cantidad mínima es {{min}}"
+            "min-amount": "La cantidad mínima es {{min}}",
+            "max-quote": "La cotización máxima es {{value}}",
+            "min-quote": "La cotización mínima es {{value}}"
         },
         "match-time": "tiempo de partido"
     },
@@ -272,7 +274,15 @@
             "buy-amount": "cantidad a comprar",
             "available": "Disponible",
             "skew": "Sesgar",
-            "potential-profit": "Beneficio potencial"
+            "potential-profit": "Beneficio potencial",
+            "validation": {
+                "title": "Validación combinada",
+                "max-markets": "Máximo 4 mercados en Parlay"
+            },
+            "fee": "Costo total",
+            "total-received": "Total recibido",
+            "empty-title": "Sin posiciones",
+            "empty-description": "Agregue una posición, elija un mercado y haga su selección."
         }
     },
     "rewards": {

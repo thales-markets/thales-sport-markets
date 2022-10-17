@@ -228,7 +228,9 @@
             "amount-exceeded": "金额超过AMM的余额。",
             "minimal-amount": "最小数量为1",
             "no-funds": "请确认您的钱包有足够余额",
-            "min-amount": "最低金额为 {{min}}"
+            "min-amount": "最低金额为 {{min}}",
+            "max-quote": "最大报价为 {{value}}",
+            "min-quote": "最小报价是 {{value}}"
         },
         "match-time": "比赛时间"
     },
@@ -272,7 +274,15 @@
             "pay-with": "使用。。。支付",
             "buy-amount": "购买金额",
             "potential-profit": "潜在利润",
-            "available": "可用的"
+            "available": "可用的",
+            "validation": {
+                "title": "过关投注验证",
+                "max-markets": "Parlay 中最多 4 个盘口"
+            },
+            "empty-description": "添加头寸，选择市场并做出选择。",
+            "total-received": "收到的总数",
+            "fee": "总费用",
+            "empty-title": "没有职位"
         }
     },
     "rewards": {
