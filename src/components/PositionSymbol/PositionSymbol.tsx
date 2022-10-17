@@ -101,6 +101,7 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: row;
+    cursor: pointer;
 `;
 
 const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: boolean }>`

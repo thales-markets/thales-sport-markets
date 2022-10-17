@@ -13,7 +13,6 @@ export const Container = styled.div<{
     padding: 10px 12px;
     border-radius: 5px;
     margin-bottom: 15px;
-    cursor: pointer;
     /* background-color: ${(_props) => (_props?.backgroundColor ? _props.backgroundColor : '')}; */
     background-color: ${(_props) =>
         _props.isResolved && !_props.claimBorder ? 'rgb(36,41,64, 0.5)' : 'rgba(48, 54, 86, 0.5)'};
