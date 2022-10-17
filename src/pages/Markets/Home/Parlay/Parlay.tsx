@@ -114,7 +114,7 @@ const Parlay: React.FC = () => {
 };
 
 const Container = styled(FlexDivColumn)<{ isWalletConnected?: boolean }>`
-    margin-top: ${(props) => (props.isWalletConnected ? '44px' : '20px')};
+    margin-top: ${(props) => (props.isWalletConnected ? '20px' : '44px')};
     padding: 15px;
     flex: none;
     background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
