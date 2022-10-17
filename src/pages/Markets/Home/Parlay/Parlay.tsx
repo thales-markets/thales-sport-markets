@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { getParlay, getParlayError, removeFromParlay, resetParlayError } from 'redux/modules/parlay';
-import { getNetworkId } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
@@ -22,6 +22,7 @@ const Parlay: React.FC = () => {
     const dispatch = useDispatch();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const parlay = useSelector(getParlay);
     const hasParlayError = useSelector(getParlayError);
 
@@ -104,7 +105,7 @@ const Parlay: React.FC = () => {
                         />
                         <EmptyDesc>{t('markets.parlay.empty-description')}</EmptyDesc>
                     </Empty>
-                    <Payment />
+                    {isWalletConnected && <Payment />}
                 </>
             )}
             {hasParlayError && <ValidationModal onClose={() => dispatch(resetParlayError())} />}
