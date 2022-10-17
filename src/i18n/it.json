@@ -228,7 +228,9 @@
             "amount-exceeded": "Amount exceeded the amount available on AMM",
             "minimal-amount": "Minimal amount is 1",
             "no-funds": "Please ensure your wallet has enough funds",
-            "min-amount": "L'importo minimo è {{min}}"
+            "min-amount": "L'importo minimo è {{min}}",
+            "max-quote": "La quotazione massima è {{value}}",
+            "min-quote": "La citazione minima è {{value}}"
         },
         "match-time": "Tempo di partita"
     },
@@ -272,7 +274,15 @@
             "buy-amount": "Importo da acquistare",
             "pay-with": "Paga con",
             "total-quote": "Citazione totale",
-            "available": "A disposizione"
+            "available": "A disposizione",
+            "validation": {
+                "title": "Convalida Parlay",
+                "max-markets": "Massimo 4 mercati a Parlay"
+            },
+            "empty-title": "Nessuna posizione",
+            "fee": "Tariffa totale",
+            "total-received": "Totale ricevuto",
+            "empty-description": "Aggiungi posizione, scegli un mercato e fai la tua selezione."
         }
     },
     "rewards": {

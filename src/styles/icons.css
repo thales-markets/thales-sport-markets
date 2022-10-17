@@ -84,3 +84,11 @@
 .icon--revert:before {
     content: '\005A';
 }
+
+.icon--arrow:before {
+    content: '\0061';
+}
+
+.icon--triple-arrow:before {
+    content: '\0062';
+}

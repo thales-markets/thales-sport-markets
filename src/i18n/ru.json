@@ -228,7 +228,9 @@
             "amount-exceeded": "Amount exceeded the amount available on AMM",
             "minimal-amount": "Minimal amount is 1",
             "no-funds": "Please ensure your wallet has enough funds",
-            "min-amount": "Минимальная сумма: {{min}}"
+            "min-amount": "Минимальная сумма: {{min}}",
+            "max-quote": "Максимальная котировка: {{value}}",
+            "min-quote": "Минимальная котировка: {{value}}"
         },
         "match-time": "Время матча"
     },
@@ -272,7 +274,15 @@
             "pay-with": "Платить с помощью",
             "potential-profit": "Потенциальная прибыль",
             "buy-amount": "Сумма покупки",
-            "available": "Доступный"
+            "available": "Доступный",
+            "validation": {
+                "title": "Экспресс-проверка",
+                "max-markets": "Максимум 4 рынка в Parlay"
+            },
+            "fee": "Общая плата",
+            "empty-title": "Нет позиций",
+            "empty-description": "Добавьте позицию, выберите рынок и сделайте свой выбор.",
+            "total-received": "Всего получено"
         }
     },
     "rewards": {
