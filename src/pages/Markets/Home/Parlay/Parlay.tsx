@@ -64,7 +64,7 @@ const Parlay: React.FC = () => {
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay, dispatch]);
 
     return (
-        <Container>
+        <Container isWalletConnected={isWalletConnected}>
             {parlayMarkets.length > 0 ? (
                 <>
                     <ListContainer>
@@ -113,8 +113,8 @@ const Parlay: React.FC = () => {
     );
 };
 
-const Container = styled(FlexDivColumn)`
-    margin-top: 20px;
+const Container = styled(FlexDivColumn)<{ isWalletConnected?: boolean }>`
+    margin-top: ${(props) => (props.isWalletConnected ? '44px' : '20px')};
     padding: 15px;
     flex: none;
     background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
