@@ -43,6 +43,7 @@ import SPAAnchor from 'components/SPAAnchor';
 import { buildHref } from 'utils/routes';
 import ROUTES from 'constants/routes';
 import { LINKS } from 'constants/links';
+import LanguageSelector from 'components/LanguageSelector';
 
 const LandingPage: React.FC = () => {
     const { t } = useTranslation();
@@ -52,6 +53,7 @@ const LandingPage: React.FC = () => {
             <Header>
                 <Logo src={OvertimeLogo} alt="overtime logo" />
                 <ZebraLogo src={ZebraLogoImg} alt="zebra logo" />
+                <LanguageSelector />
             </Header>
             <Section className="first">
                 <Zebro className="baseball" src={ZebraBaseball} alt="Zebro Baseball" />

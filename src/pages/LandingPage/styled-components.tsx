@@ -15,7 +15,7 @@ export const Header = styled(FlexDivRowCentered)`
 export const Logo = styled.img`
     color: ${(props) => props.theme.textColor.primary};
     height: 50px;
-    @media (max-width: 500px) {
+    @media (max-width: 750px) {
         height: 35px;
     }
 `;
@@ -82,7 +82,7 @@ export const Section = styled(FlexDivColumn)`
 `;
 
 export const ZebraLogo = styled.img`
-    @media (max-width: 500px) {
+    @media (max-width: 750px) {
         height: 100px;
     }
 `;
@@ -348,7 +348,7 @@ export const CallToAction = styled.label`
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.quaternary};
     cursor: pointer;
-    z-index: 1001;
+    z-index: 999;
     margin-top: 10px;
     & > a {
         font-family: NunitoExtraBold !important;
