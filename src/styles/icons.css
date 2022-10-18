@@ -77,6 +77,10 @@
     content: '\0058';
 }
 
+.icon--favourites:before {
+    content: '\0058';
+}
+
 .icon--cross-button:before {
     content: '\0059';
 }

@@ -1,11 +1,12 @@
+import { SportFilterEnum } from 'constants/markets';
 import { TAGS_FLAGS } from 'constants/tags';
 import React from 'react';
 import Flag from 'react-flagpack';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
-import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
-import { useDispatch, useSelector } from 'react-redux';
 
 type TagsDropdownProps = {
     open: boolean;
@@ -13,9 +14,17 @@ type TagsDropdownProps = {
     tagFilter: Tags;
     setTagFilter: any;
     setTagParam: any;
+    sportFilter: SportFilterEnum;
 };
 
-const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, setTagFilter, setTagParam }) => {
+const TagsDropdown: React.FC<TagsDropdownProps> = ({
+    open,
+    tags,
+    tagFilter,
+    setTagFilter,
+    setTagParam,
+    sportFilter,
+}) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const tagFilterIds = tagFilter.map((tag) => tag.id);
@@ -98,7 +107,9 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, setT
                                     });
                                     dispatch(setFavouriteLeagues(newFavourites));
                                 }}
-                                className={`icon icon--cross-button`}
+                                className={`icon icon--cross-button ${
+                                    sportFilter == SportFilterEnum.Favourites ? 'disabled' : 'none'
+                                }`}
                             />
                         </TagContainer>
                     );
@@ -199,6 +210,9 @@ const XButton = styled.i`
     color: #ca4c53;
     &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
+    }
+    &.disabled {
+        display: none;
     }
 `;
 
