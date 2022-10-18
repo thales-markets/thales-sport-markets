@@ -52,3 +52,5 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Formula1: [9100],
     MotoGP: [9101],
 };
+
+export const MLS_TAG = 9010;

@@ -22,7 +22,7 @@ import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { ODDS_COLOR } from '../../../../../constants/ui';
 import { useSelector } from 'react-redux';
 import { getOddsType } from '../../../../../redux/modules/ui';
-import { formatMarketOdds, getIsApexTopGame, isApexGame } from '../../../../../utils/markets';
+import { formatMarketOdds, getIsApexTopGame, isApexGame, isMlsGame } from '../../../../../utils/markets';
 import Tooltip from 'components/Tooltip';
 import { ApexBetTypeKeyMapping } from 'constants/markets';
 
@@ -102,6 +102,9 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                                 {t('markets.market-card.vs')}
                                 {isApexGame(market.tags[0]) && (
                                     <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
+                                )}
+                                {isMlsGame(market.tags[0]) && (
+                                    <Tooltip overlay={t(`common.mls-tooltip`)} iconFontSize={22} marginLeft={2} />
                                 )}
                             </MatchVSLabel>
                             {!market.isPaused && (

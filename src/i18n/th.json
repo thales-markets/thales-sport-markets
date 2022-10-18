@@ -127,6 +127,7 @@
         },
         "coming-soon": "เร็วๆ นี้!",
         "h2h-tooltip": "นี่คือตลาดแบบ head-to-head ผู้ชนะจะเป็นผู้ที่จบในอันดับที่ดีกว่าในการแข่งขันหลัก",
+        "mls-tooltip": "MLS markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
         "top3": "TOP 3",
         "top5": "TOP 5",
