@@ -384,6 +384,9 @@ export const CallToAction = styled.label`
     &.third {
         align-self: flex-end;
     }
+    &.fourth {
+        align-self: flex-start;
+    }
     &.fifth {
         align-self: flex-end;
         margin-top: 10px;
@@ -659,6 +662,29 @@ export const DiscordLink = styled.a`
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
     z-index: 1001;
+    @media (max-width: 600px) {
+        font-size: 25px;
+    }
+    @media (max-width: 500px) {
+        font-size: 25px;
+    }
+    @media (max-width: 450px) {
+        font-size: 20px;
+    }
+`;
+
+export const DocsLink = styled.a`
+    display: flex;
+    font-family: NunitoExtraBold !important;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 30px;
+    line-height: 61px;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.textColor.quaternary};
+    cursor: pointer;
+    z-index: 999;
+    margin-top: 10px;
     @media (max-width: 600px) {
         font-size: 25px;
     }

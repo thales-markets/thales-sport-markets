@@ -38,6 +38,7 @@ import {
     LeagueIcon,
     CarouselContainer,
     CarouselIconContainer,
+    DocsLink,
 } from './styled-components';
 import SPAAnchor from 'components/SPAAnchor';
 import { buildHref } from 'utils/routes';
@@ -167,12 +168,12 @@ const LandingPage: React.FC = () => {
             <Section className="fourth">
                 <Zebro className="hockey" src={ZebraHockey} alt="Zebro Hockey" />
                 <LargeText className="fourth in-front">{t('landing-page.learn-more')}</LargeText>
-                <SPAAnchor
-                    style={{ width: '100%', zIndex: 1001, cursor: 'pointer' }}
-                    href={buildHref(LINKS.Footer.Docs)}
-                >
-                    <SubSection className="first">{t('landing-page.documentation')}</SubSection>
-                </SPAAnchor>
+                <CallToAction className="fourth">
+                    <DocsLink href={buildHref(LINKS.Footer.Docs)}>
+                        {t('landing-page.read-now')} <ArrowIcon className={`icon icon--arrow`} />
+                    </DocsLink>
+                </CallToAction>
+                <SubSection className="first">{t('landing-page.documentation')}</SubSection>
             </Section>
             <Section className="fifth">
                 <Zebro className="boxing" src={ZebraBoxing} alt="Zebro Boxing" />
