@@ -4,6 +4,9 @@ import { FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 export const Container = styled(FlexDivColumn)`
     width: 75%;
     align-items: center;
+    @media (max-width: 600px) {
+        width: 100%;
+    }
 `;
 
 export const Header = styled(FlexDivRowCentered)`
@@ -30,6 +33,15 @@ export const Section = styled(FlexDivColumn)`
     }
     &.second {
         margin-top: 100px;
+        @media (max-width: 960px) {
+            margin-top: 200px;
+        }
+        @media (max-width: 750px) {
+            margin-top: 150px;
+        }
+        @media (max-width: 450px) {
+            margin-top: 105px;
+        }
     }
     &.third {
         margin-top: 200px;
@@ -45,7 +57,7 @@ export const Section = styled(FlexDivColumn)`
     &.fifth {
         margin-top: 250px;
         @media (max-width: 750px) {
-            margin-top: 300px;
+            margin-top: 200px;
         }
         @media (max-width: 500px) {
             margin-top: 200px;
@@ -56,8 +68,15 @@ export const Section = styled(FlexDivColumn)`
     }
     &.sixth {
         margin-bottom: 200px;
+        @media (max-width: 960px) {
+            margin-top: 100px;
+        }
         @media (max-width: 500px) {
             margin-top: 100px;
+        }
+        @media (max-width: 450px) {
+            margin-top: 50px;
+            margin-bottom: 150px;
         }
     }
 `;
@@ -77,11 +96,15 @@ export const Zebro = styled.img`
         width: 40em;
         @media (max-width: 960px) {
             top: -200px;
-            left: -70px;
+            left: -100px;
+            width: 38em;
+            height: 38em;
         }
         @media (max-width: 750px) {
-            top: -163px;
-            left: -105px;
+            top: -160px;
+            left: -90px;
+            height: 35em;
+            width: 35em;
         }
         @media (max-width: 600px) {
             height: 33em;
@@ -108,13 +131,16 @@ export const Zebro = styled.img`
         height: 40em;
         width: 40em;
         @media (max-width: 960px) {
-            top: -250px;
-            left: 100px;
+            top: -280px;
+            left: 140px;
+            height: 38em;
+            width: 38em;
         }
         @media (max-width: 750px) {
-            height: 40em;
-            width: 40em;
-            top: -200px;
+            height: 35em;
+            width: 35em;
+            top: -220px;
+            left: 85px;
         }
         @media (max-width: 600px) {
             height: 35em;
@@ -138,10 +164,11 @@ export const Zebro = styled.img`
         height: 40em;
         width: 40em;
         @media (max-width: 960px) {
-            height: 40em;
-            width: 40em;
+            left: -80px;
+            height: 38em;
+            width: 38em;
         }
-        @media (max-width: 600px) {
+        @media (max-width: 750px) {
             height: 35em;
             width: 35em;
         }
@@ -161,9 +188,14 @@ export const Zebro = styled.img`
         height: 40em;
         width: 40em;
         @media (max-width: 960px) {
-            height: 40em;
-            width: 40em;
+            height: 38em;
+            width: 38em;
             right: 0px;
+            top: -225px;
+        }
+        @media (max-width: 750px) {
+            height: 35em;
+            width: 35em;
         }
         @media (max-width: 600px) {
             height: 35em;
@@ -184,14 +216,14 @@ export const Zebro = styled.img`
         height: 40em;
         width: 40em;
         @media (max-width: 960px) {
-            height: 42em;
-            width: 42em;
-            top: -260px;
+            height: 35em;
+            width: 35em;
+            top: -180px;
+            left: -90px;
         }
-
         @media (max-width: 750px) {
-            height: 40em;
-            width: 40em;
+            height: 35em;
+            width: 35em;
         }
         @media (max-width: 600px) {
             height: 35em;
@@ -206,7 +238,7 @@ export const Zebro = styled.img`
         @media (max-width: 450px) {
             height: 25em;
             width: 25em;
-            top: -140px;
+            top: -130px;
         }
     }
     &.racing {
@@ -215,20 +247,20 @@ export const Zebro = styled.img`
         height: 40em;
         width: 40em;
         @media (max-width: 960px) {
-            height: 48em;
-            width: 48em;
-            top: -250px;
+            height: 38em;
+            width: 38em;
+            top: -220px;
         }
 
         @media (max-width: 750px) {
-            right: -260px;
+            right: -125px;
+            height: 35em;
+            width: 35em;
         }
 
         @media (max-width: 600px) {
-            height: 35em;
-            width: 35em;
-            right: -210px;
-            top: -135px;
+            right: -100px;
+            top: -190px;
         }
 
         @media (max-width: 500px) {
@@ -236,6 +268,11 @@ export const Zebro = styled.img`
             width: 30em;
             right: -195px;
             top: -135px;
+        }
+        @media (max-width: 500px) {
+            right: -135px;
+            height: 25em;
+            width: 25em;
         }
     }
 `;
@@ -282,6 +319,9 @@ export const LargeText = styled.label`
         @media (max-width: 960px) {
             width: 80%;
             margin-left: 20%;
+        }
+        @media (max-width: 450px) {
+            width: 75%;
         }
     }
     &.in-front {
@@ -333,7 +373,9 @@ export const CallToAction = styled.label`
         align-self: center;
         margin-left: 32%;
         @media (max-width: 750px) {
-            margin-right: 0px;
+            align-self: end;
+            margin-left: 0;
+            margin-right: 7%;
         }
     }
     &.second {
@@ -356,6 +398,9 @@ export const CallToAction = styled.label`
             width: 50%;
             @media (max-width: 500px) {
                 font-size: 20px;
+            }
+            @media (max-width: 450px) {
+                font-size: 18px;
             }
         }
     }
@@ -414,8 +459,8 @@ export const SubSection = styled(FlexDivColumn)`
     }
     @media (max-width: 600px) {
         font-size: 25px;
-        line-height: 45px;
-        height: 45px;
+        line-height: 37px;
+        height: 36px;
     }
     @media (max-width: 500px) {
         font-size: 20px;
@@ -428,7 +473,7 @@ export const Initiatives = styled(FlexDivRow)`
     display: flex;
     width: 100%;
     margin-top: 50px;
-    @media (max-width: 500px) {
+    @media (max-width: 750px) {
         margin-top: 35px;
     }
 `;
@@ -448,36 +493,27 @@ export const Link = styled.a<{ height: string }>`
     &:first-child {
         margin-top: -13px;
         @media (max-width: 960px) {
-            height: 60px;
+            height: 42px;
         }
 
         @media (max-width: 750px) {
-            height: 50px;
-        }
-
-        @media (max-width: 600px) {
-            height: 45px;
-        }
-        @media (max-width: 500px) {
             height: 35px;
+        }
+        @media (max-width: 450px) {
+            height: 30px;
         }
     }
     &:nth-child(2) {
         margin-top: -10px;
         @media (max-width: 960px) {
-            height: 55px;
+            height: 39px;
         }
 
         @media (max-width: 750px) {
-            height: 45px;
-        }
-        @media (max-width: 600px) {
-            height: 35px;
-        }
-        @media (max-width: 500px) {
             height: 30px;
-            margin-top: -7px;
+            margin-top: -8px;
         }
+
         @media (max-width: 450px) {
             height: 25px;
         }
@@ -485,21 +521,21 @@ export const Link = styled.a<{ height: string }>`
     &:nth-child(3) {
         margin-top: -9px;
         @media (max-width: 960px) {
-            height: 35px;
+            height: 27px;
+            margin-top: -7px;
         }
         @media (max-width: 750px) {
-            height: 30px;
+            height: 20px;
+            margin-top: -5px;
         }
-        @media (max-width: 600px) {
-            height: 25px;
-            margin-top: -2px;
-        }
+
         @media (max-width: 500px) {
             height: 20px;
             margin-top: -5px;
         }
         @media (max-width: 450px) {
             height: 17px;
+            margin-top: -6px;
         }
     }
 `;
@@ -541,7 +577,7 @@ export const InfoBox = styled.div`
 
     @media (max-width: 500px) {
         width: 44%;
-        height: 290px;
+        height: 260px;
     }
 
     @media (max-width: 450px) {
@@ -560,16 +596,14 @@ export const InfoBoxTitle = styled.label`
     text-align: center;
     text-transform: uppercase;
     @media (max-width: 750px) {
-        font-size: 30px;
-    }
-    @media (max-width: 600px) {
         font-size: 25px;
     }
+
     @media (max-width: 500px) {
         font-size: 20px;
     }
     @media (max-width: 450px) {
-        word-break: break-all;
+        font-size: 18px;
     }
 `;
 
@@ -593,13 +627,19 @@ export const DiscordInfo = styled(FlexDivRow)`
     margin-top: 200px;
     margin-left: 50px;
     @media (max-width: 960px) {
-        width: 60%;
+        width: 55%;
         margin-top: 65px;
-        margin-left: 100px;
+        margin-left: 25px;
     }
     @media (max-width: 750px) {
         width: 80%;
         margin-left: 25px;
+    }
+    @media (max-width: 600px) {
+        width: 70%;
+    }
+    @media (max-width: 450px) {
+        width: 65%;
     }
 `;
 
@@ -620,10 +660,10 @@ export const DiscordLink = styled.a`
     color: ${(props) => props.theme.textColor.primary};
     z-index: 1001;
     @media (max-width: 600px) {
-        font-size: 35px;
+        font-size: 25px;
     }
     @media (max-width: 500px) {
-        font-size: 30px;
+        font-size: 25px;
     }
     @media (max-width: 450px) {
         font-size: 20px;
@@ -681,6 +721,10 @@ export const CarouselIconContainer = styled(FlexDivRow)`
 export const LeagueIcon = styled.i`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 120px;
+
+    @media (max-width: 750px) {
+        font-size: 100px;
+    }
 
     @media (max-width: 600px) {
         font-size: 115px;
