@@ -378,7 +378,7 @@
                 "title": "Validation Parlay",
                 "max-markets": "Maximum 4 marchés à Parlay"
             },
-            "total-received": "Total reçu",
+            "payout": "Total reçu",
             "empty-title": "Aucun poste",
             "empty-description": "Ajoutez une position, choisissez un marché et faites votre sélection.",
             "fee": "Montant total"

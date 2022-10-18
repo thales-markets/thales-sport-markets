@@ -25,19 +25,20 @@ export const SummaryValue = styled.span<{ isInfo?: boolean }>`
     margin-left: ${(props) => (props.isInfo ? 'auto' : '5px')};
 `;
 
-export const InfoWrapper = styled.div`
+export const InfoContainer = styled.div`
     display: flex;
-    align-items: center;
-    margin-left: auto;
+    justify-content: space-between;
     margin-bottom: 5px;
 `;
 
-export const InfoLabel = styled.span`
+export const InfoWrapper = styled.div``;
+
+export const InfoLabel = styled.span<{ marginLeft?: number }>`
     font-weight: 300;
     font-size: 10px;
     text-transform: uppercase;
     color: #ffffff;
-    margin-left: 5px;
+    ${(props) => (props.marginLeft ? `margin-left: ${props.marginLeft}px` : '')};
 `;
 
 export const InfoValue = styled.span`

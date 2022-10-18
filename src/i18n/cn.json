@@ -280,7 +280,7 @@
                 "max-markets": "Parlay 中最多 4 个盘口"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
-            "total-received": "收到的总数",
+            "payout": "收到的总数",
             "fee": "总费用",
             "empty-title": "没有职位"
         }

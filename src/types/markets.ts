@@ -269,4 +269,6 @@ export type ParlaysMarket = SportMarketInfo & {
 export type ParlayAmmData = {
     maxSupportedAmount: number;
     maxSupportedOdds: number;
+    parlayAmmFee: number;
+    safeBoxImpact: number;
 };

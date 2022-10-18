@@ -13,18 +13,24 @@ const useParlayAmmDataQuery = (networkId: NetworkId, options?: UseQueryOptions<P
                 const parlayData: ParlayAmmData = {
                     maxSupportedAmount: 0,
                     maxSupportedOdds: 0,
+                    parlayAmmFee: 0,
+                    safeBoxImpact: 0,
                 };
 
                 const { parlayMarketsAMMContract, signer } = networkConnector;
                 if (parlayMarketsAMMContract && signer) {
                     const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
 
-                    const [maxSupportedAmount, maxSupportedOdds] = await Promise.all([
+                    const [maxSupportedAmount, maxSupportedOdds, parlayAmmFee, safeBoxImpact] = await Promise.all([
                         parlayMarketsAMMContractWithSigner.maxSupportedAmount(),
                         parlayMarketsAMMContractWithSigner.maxSupportedOdds(),
+                        parlayMarketsAMMContractWithSigner.parlayAmmFee(),
+                        parlayMarketsAMMContractWithSigner.safeBoxImpact(),
                     ]);
                     parlayData.maxSupportedAmount = bigNumberFormatter(maxSupportedAmount);
                     parlayData.maxSupportedOdds = bigNumberFormatter(maxSupportedOdds);
+                    parlayData.parlayAmmFee = bigNumberFormatter(parlayAmmFee);
+                    parlayData.safeBoxImpact = bigNumberFormatter(safeBoxImpact);
                 }
 
                 return parlayData;

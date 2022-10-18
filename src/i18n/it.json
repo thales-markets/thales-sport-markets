@@ -281,7 +281,7 @@
             },
             "empty-title": "Nessuna posizione",
             "fee": "Tariffa totale",
-            "total-received": "Totale ricevuto",
+            "payout": "Totale ricevuto",
             "empty-description": "Aggiungi posizione, scegli un mercato e fai la tua selezione."
         }
     },

@@ -42,6 +42,7 @@ import {
     AmountToBuyContainer,
     AmountToBuyInput,
     CustomTooltip,
+    InfoContainer,
     InfoLabel,
     InfoValue,
     InfoWrapper,
@@ -460,11 +461,11 @@ const Single: React.FC<SingleProps> = ({ market }) => {
         (value: string | number) => {
             const positionOdds = roundNumberToDecimals(getPositionOdds(market));
             if (value && Number(value) < positionOdds) {
-                setTooltipTextUsdAmount(t('market.tooltip.min-amount', { min: positionOdds }));
+                setTooltipTextUsdAmount(t('markets.parlay.validation.min-amount', { min: positionOdds }));
             } else if (Number(value) > availableUsdAmount) {
-                setTooltipTextUsdAmount(t('market.tooltip.amount-exceeded'));
+                setTooltipTextUsdAmount(t('markets.parlay.validation.amount-exceeded'));
             } else if (Number(value) > paymentTokenBalance) {
-                setTooltipTextUsdAmount(t('market.tooltip.no-funds'));
+                setTooltipTextUsdAmount(t('markets.parlay.validation.no-funds'));
             } else {
                 setTooltipTextUsdAmount('');
             }
@@ -514,18 +515,22 @@ const Single: React.FC<SingleProps> = ({ market }) => {
                     </AmountToBuyContainer>
                 </CustomTooltip>
             </InputContainer>
-            <InfoWrapper>
-                <InfoLabel>{t('markets.parlay.available')}:</InfoLabel>
-                <InfoValue>{formatCurrencyWithSign(USD_SIGN, availableUsdAmount)}</InfoValue>
-                <InfoLabel>{t('markets.parlay.skew')}:</InfoLabel>
-                <InfoValue>
-                    {positionPriceDetailsQuery.isLoading
-                        ? '-'
-                        : formatPercentage(ammPosition.sides[Side.BUY].priceImpact)}
-                </InfoValue>
-            </InfoWrapper>
+            <InfoContainer>
+                <InfoWrapper>
+                    <InfoLabel>{t('markets.parlay.available')}:</InfoLabel>
+                    <InfoValue>{formatCurrencyWithSign(USD_SIGN, availableUsdAmount)}</InfoValue>
+                </InfoWrapper>
+                <InfoWrapper>
+                    <InfoLabel>{t('markets.parlay.skew')}:</InfoLabel>
+                    <InfoValue>
+                        {positionPriceDetailsQuery.isLoading
+                            ? '-'
+                            : formatPercentage(ammPosition.sides[Side.BUY].priceImpact)}
+                    </InfoValue>
+                </InfoWrapper>
+            </InfoContainer>
             <RowSummary>
-                <SummaryLabel>{t('markets.parlay.total-received')}:</SummaryLabel>
+                <SummaryLabel>{t('markets.parlay.payout')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>
                     {!tokenAmount || positionPriceDetailsQuery.isLoading || !!tooltipTextUsdAmount
                         ? '-'

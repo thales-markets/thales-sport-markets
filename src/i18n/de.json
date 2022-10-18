@@ -280,7 +280,7 @@
                 "max-markets": "Maximal 4 Märkte in Parlay"
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
-            "total-received": "Insgesamt erhalten",
+            "payout": "Insgesamt erhalten",
             "empty-title": "Keine Positionen",
             "fee": "Gesamtgebühr"
         }

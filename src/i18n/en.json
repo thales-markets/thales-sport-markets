@@ -226,11 +226,7 @@
         },
         "tooltip": {
             "amount-exceeded": "Amount exceeded the amount available on AMM",
-            "minimal-amount": "Minimal amount is 1",
-            "min-amount": "Minimal amount is {{min}}",
-            "min-quote": "Minimal quote is {{value}}",
-            "max-quote": "Maximum quote is {{value}}",
-            "no-funds": "Please ensure your wallet has enough funds"
+            "minimal-amount": "Minimal amount is 1"
         }
     },
     "markets": {
@@ -269,9 +265,10 @@
         "parlay": {
             "total-quote": "Total quote",
             "buy-amount": "Amount to buy",
-            "fee": "Total fee",
+            "parlay-fee": "Parlay fee",
+            "safebox-fee": "SafeBox fee",
             "positions": "Positions",
-            "total-received": "Total to receive",
+            "payout": "Payout",
             "potential-profit": "Potential profit",
             "pay-with": "Pay with",
             "available": "Available",
@@ -280,7 +277,13 @@
             "empty-description": "Add position, choose a market and make your selection.",
             "validation": {
                 "title": "Parlay validation",
-                "max-markets": "Maximum 4 markets in Parlay"
+                "max-markets": "Maximum 4 markets in Parlay",
+                "amount-exceeded": "Amount exceeded the amount available on AMM",
+                "min-amount": "Minimal amount is {{min}}",
+                "min-quote": "Minimal quote is {{value}}",
+                "max-quote": "Maximum quote is {{value}}",
+                "availability": "Low availability for markets position",
+                "no-funds": "Please ensure your wallet has enough funds"
             }
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity."

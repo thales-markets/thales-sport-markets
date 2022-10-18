@@ -8,7 +8,7 @@ import { getCollateralAddress } from './collaterals';
 export const getParlayAMMTransaction: any = (
     isBuy: boolean,
     isVoucherSelected: boolean,
-    voucherId: number,
+    voucherAddress: number,
     stableIndex: COLLATERALS_INDEX,
     networkId: NetworkId,
     parlayMarketsAMMContract: ethers.Contract,
@@ -42,7 +42,7 @@ export const getParlayAMMTransaction: any = (
                   sUSDPaid,
                   additionalSlippage,
                   expectedPayout,
-                  isVoucherSelected ? voucherId : ZERO_ADDRESS,
+                  isVoucherSelected ? voucherAddress : ZERO_ADDRESS,
                   referral
               )
             : parlayMarketsAMMContract?.buyFromParlay(
@@ -51,7 +51,7 @@ export const getParlayAMMTransaction: any = (
                   sUSDPaid,
                   additionalSlippage,
                   expectedPayout,
-                  isVoucherSelected ? voucherId : ZERO_ADDRESS
+                  isVoucherSelected ? voucherAddress : ZERO_ADDRESS
               );
     } else {
         // Sell not supported yet, this is just placeholder
