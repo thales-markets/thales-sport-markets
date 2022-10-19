@@ -41,7 +41,7 @@ export const MatchInfo = styled(FlexDivRow)`
     justify-content: space-around;
     @media (max-width: 768px) {
         width: 90%;
-        margin-top: 55px;
+        margin-top: 70px;
     }
 `;
 
