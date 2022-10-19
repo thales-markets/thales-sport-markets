@@ -113,3 +113,13 @@ export const checkAllowance = async (amount: BigNumber, token: any, walletAddres
         return false;
     }
 };
+
+export const getNetworkIconClassNameByNetworkId = (networkId: NetworkId): string => {
+    if (networkId == 10) return 'icon icon--op';
+    return 'icon icon--op';
+};
+
+export const getNetworkNameByNetworkId = (networkId: NetworkId): string => {
+    if (networkId == 10) return 'Optimism Mainnet';
+    return 'Optimism Mainnet';
+};

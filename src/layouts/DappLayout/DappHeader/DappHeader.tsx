@@ -17,6 +17,8 @@ import LanguageSelector from 'components/LanguageSelector';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import useInterval from 'hooks/useInterval';
 import MintVoucher from 'components/MintVoucher';
+import burger from 'assets/images/burger.svg';
+import NavMenu from 'components/NavMenu';
 
 const PULSING_COUNT = 10;
 
@@ -25,6 +27,7 @@ const DappHeader: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
+    const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
 
     useInterval(async () => {
         if (!stopPulsing) {
@@ -47,6 +50,10 @@ const DappHeader: React.FC = () => {
                 <MintVoucher />
                 <LanguageSelector />
                 <WalletInfo />
+                <MenuIcon onClick={() => setNavMenuVisibility(true)} />
+                {/* {navMenuVisibility && ( */}
+                <NavMenu visibility={navMenuVisibility} hideVisibilityFunction={() => setNavMenuVisibility(false)} />
+                {/* )} */}
             </RightContainer>
         </Container>
     );
@@ -100,6 +107,10 @@ const StyledSportTriviaIcon = styled.img<{ stopPulsing: boolean }>`
     }
     animation: ${(props) => (props.stopPulsing ? 'none' : 'pulsing 1s ease-in')};
     animation-iteration-count: 10;
+`;
+
+const MenuIcon = styled.img.attrs({ src: burger })`
+    cursor: pointer;
 `;
 
 export default DappHeader;

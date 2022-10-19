@@ -1,4 +1,4 @@
-import { ThemeInterface } from 'types/ui';
+import { NavMenuItem, ThemeInterface } from 'types/ui';
 import lightTheme from 'styles/themes/light';
 import darkTheme from 'styles/themes/dark';
 
@@ -45,6 +45,7 @@ export const MAIN_COLORS = {
         WINNER: '0px 0px 33px -7px rgba(63,209,255,1)',
         DRAW: '0px 0px 33px -7px rgba(63,209,255,1)',
         POSITION_HOVER: '0px 0px 39px -16px rgba(64,210,255,1)',
+        NAV_BAR: '-64px 0px 38px 3px rgba(0,0,0,0.41)',
     },
     TEXT: {
         BLUE: '#64D9FE',
@@ -52,3 +53,41 @@ export const MAIN_COLORS = {
         POTENTIAL_PROFIT: '#5FC694',
     },
 };
+
+export const NAV_MENU: NavMenuItem[] = [
+    {
+        i18label: 'markets.nav-menu.items.markets',
+        iconClass: 'icon icon--logo',
+        name: 'markets',
+    },
+    {
+        i18label: 'markets.nav-menu.items.profile',
+        iconClass: 'icon icon--profile',
+        name: 'profile',
+    },
+    {
+        i18label: 'markets.nav-menu.items.onboarding-wizard',
+        iconClass: 'icon icon--wizard',
+        name: 'onboarding-wizard',
+    },
+    {
+        i18label: 'markets.nav-menu.items.history',
+        iconClass: 'icon icon--history',
+        name: 'history',
+    },
+    {
+        i18label: 'markets.nav-menu.items.sports-trivia',
+        iconClass: 'icon icon--trivia',
+        name: 'sports-trivia',
+    },
+    {
+        i18label: 'markets.nav-menu.items.leaderboard',
+        iconClass: 'icon icon--leaderboard',
+        name: 'leaderboard',
+    },
+    {
+        i18label: 'markets.nav-menu.items.become-affiliate',
+        iconClass: 'icon icon--affiliate',
+        name: 'become-affiliate',
+    },
+];
