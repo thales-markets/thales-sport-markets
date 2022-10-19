@@ -95,6 +95,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 accountPositions={accountPositions}
                 isPaused={market.isPaused}
                 isApexTopGame={isApexTopGame}
+                awayPriceImpact={market.awayPriceImpact}
+                homePriceImpact={market.homePriceImpact}
+                drawPriceImpact={market.drawPriceImpact}
             />
             <MatchStatus
                 address={market.address}

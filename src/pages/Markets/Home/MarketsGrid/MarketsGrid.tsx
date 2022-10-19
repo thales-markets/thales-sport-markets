@@ -24,6 +24,7 @@ export const breakpointColumnsObj = {
 const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions, layoutType = 0 }) => {
     const mobileGridView = window.innerWidth < 950;
     const language = i18n.language;
+
     return (
         <Container>
             {mobileGridView || layoutType == 0 ? (

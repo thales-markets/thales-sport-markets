@@ -41,6 +41,8 @@ const Container = styled(FlexDivStart)<{ isFinished?: boolean }>`
     align-items: center;
     color: ${(props) => props.theme.textColor.secondary};
     margin-top: ${(props) => (props.isFinished ? '0px' : '11px')};
+    position: absolute;
+    bottom: 0;
 `;
 
 export const TagLabel = styled.span<{ labelFontSize?: number }>`

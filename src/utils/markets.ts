@@ -143,4 +143,11 @@ export const appplyLogicForApexGame = (market: SportMarketInfo) => {
 export const getIsApexTopGame = (isApex: boolean, betType: ApexBetType) =>
     isApex && (betType === ApexBetType.TOP3 || betType === ApexBetType.TOP5 || betType === ApexBetType.TOP10);
 
+export const isDiscounted = (priceImpact: number | undefined) => {
+    if (priceImpact) {
+        return Number(priceImpact) < 0;
+    }
+    return false;
+};
+
 export const isMlsGame = (tag: number) => Number(tag) === MLS_TAG;

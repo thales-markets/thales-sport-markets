@@ -30,7 +30,7 @@ import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { getIsApexTopGame, isApexGame, isMlsGame } from 'utils/markets';
+import { getIsApexTopGame, isApexGame, isDiscounted, isMlsGame } from 'utils/markets';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
@@ -96,6 +96,7 @@ import {
     StatusSourceContainer,
     StatusSourceInfo,
     SubmitButton,
+    Discount,
 } from './styled-components/MarketDetails';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 
@@ -911,7 +912,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             <InfoRow>
                                 <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
                                 <InfoValue>
-                                    $ {market.positions[Position.HOME].sides[selectedSide].odd.toFixed(2)}
+                                    $ {(market.positions[Position.HOME].sides[selectedSide].odd || 0).toFixed(2)}
                                     {market.positions[Position.HOME].sides[selectedSide].odd == 0 && (
                                         <Tooltip
                                             overlay={<>{t('markets.zero-odds-tooltip')}</>}
@@ -933,8 +934,18 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                         : floorNumberToDecimals(availablePerSide.positions[Position.HOME].available)}
                                 </InfoValue>
                             </InfoRow>
+                            {selectedSide === Side.BUY &&
+                                isDiscounted(availablePerSide.positions[Position.HOME].buyImpactPrice) && (
+                                    <Discount>
+                                        -
+                                        {Math.ceil(
+                                            Math.abs(availablePerSide.positions[Position.HOME].buyImpactPrice || 0)
+                                        )}
+                                        %
+                                    </Discount>
+                                )}
                         </Pick>
-                        {!!market.positions[Position.DRAW].sides[selectedSide].odd && (
+                        {typeof market.positions[Position.DRAW].sides[selectedSide].odd !== 'undefined' && (
                             <Pick
                                 selected={selectedPosition === Position.DRAW}
                                 onClick={() => {
@@ -948,7 +959,18 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                 <InfoRow>
                                     <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
                                     <InfoValue>
-                                        $ {market.positions[Position.DRAW].sides[selectedSide].odd.toFixed(2)}
+                                        $ {(market.positions[Position.DRAW].sides[selectedSide].odd || 0).toFixed(2)}
+                                        {market.positions[Position.DRAW].sides[selectedSide].odd == 0 && (
+                                            <Tooltip
+                                                overlay={<>{t('markets.zero-odds-tooltip')}</>}
+                                                iconFontSize={10}
+                                                customIconStyling={{
+                                                    marginTop: '-10px',
+                                                    display: 'flex',
+                                                    marginLeft: '3px',
+                                                }}
+                                            />
+                                        )}
                                     </InfoValue>
                                 </InfoRow>
                                 <InfoRow>
@@ -961,6 +983,16 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                               )}
                                     </InfoValue>
                                 </InfoRow>
+                                {selectedSide === Side.BUY &&
+                                    isDiscounted(availablePerSide.positions[Position.DRAW].buyImpactPrice) && (
+                                        <Discount>
+                                            -
+                                            {Math.ceil(
+                                                Math.abs(availablePerSide.positions[Position.DRAW].buyImpactPrice || 0)
+                                            )}
+                                            %
+                                        </Discount>
+                                    )}
                             </Pick>
                         )}
                         <Pick
@@ -976,7 +1008,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                             <InfoRow>
                                 <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
                                 <InfoValue>
-                                    $ {market.positions[Position.AWAY].sides[selectedSide].odd.toFixed(2)}
+                                    $ {(market.positions[Position.AWAY].sides[selectedSide].odd || 0).toFixed(2)}
                                     {market.positions[Position.AWAY].sides[selectedSide].odd == 0 && (
                                         <Tooltip
                                             overlay={<>{t('markets.zero-odds-tooltip')}</>}
@@ -998,6 +1030,16 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                         : floorNumberToDecimals(availablePerSide.positions[Position.AWAY].available)}
                                 </InfoValue>
                             </InfoRow>
+                            {selectedSide === Side.BUY &&
+                                isDiscounted(availablePerSide.positions[Position.AWAY].buyImpactPrice) && (
+                                    <Discount>
+                                        -
+                                        {Math.ceil(
+                                            Math.abs(availablePerSide.positions[Position.AWAY].buyImpactPrice || 0)
+                                        )}
+                                        %
+                                    </Discount>
+                                )}
                         </Pick>
                     </OddsContainer>
                     {selectedSide === Side.BUY && (
