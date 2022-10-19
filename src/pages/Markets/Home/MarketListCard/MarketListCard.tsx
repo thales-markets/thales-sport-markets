@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { getIsApexTopGame, isApexGame, isClaimAvailable } from 'utils/markets';
+import { getIsApexTopGame, isApexGame, isClaimAvailable, isMlsGame } from 'utils/markets';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
 import {
@@ -67,6 +67,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                             {isApexGame(market.tags[0]) && (
                                 <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={17} marginLeft={2} />
                             )}
+                            {isMlsGame(market.tags[0]) && (
+                                <Tooltip overlay={t(`common.mls-tooltip`)} iconFontSize={17} marginLeft={2} />
+                            )}
                         </VSLabel>
                         <ClubContainer>
                             <ClubLogo
@@ -92,6 +95,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 accountPositions={accountPositions}
                 isPaused={market.isPaused}
                 isApexTopGame={isApexTopGame}
+                awayPriceImpact={market.awayPriceImpact}
+                homePriceImpact={market.homePriceImpact}
+                drawPriceImpact={market.drawPriceImpact}
             />
             <MatchStatus
                 address={market.address}

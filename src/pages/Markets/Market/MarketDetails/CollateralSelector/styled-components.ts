@@ -40,6 +40,10 @@ export const AssetContainer = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    @media (max-width: 575px) {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 `;
 
 export const CollateralIcon = styled.div<{ active?: boolean }>`
@@ -55,6 +59,9 @@ export const CollateralContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    @media (max-width: 575px) {
+        margin-bottom: 4px;
+    }
 `;
 
 export const TokenBalance = styled.span`

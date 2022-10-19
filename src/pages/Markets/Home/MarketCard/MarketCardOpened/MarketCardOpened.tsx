@@ -13,18 +13,21 @@ import {
     OddsLabel,
     OddsLabelSceleton,
 } from 'components/common';
+import { ODDS_COLOR } from 'constants/ui';
 import Tags from 'pages/Markets/components/Tags';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AccountPosition, PositionType, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { ODDS_COLOR } from '../../../../../constants/ui';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { getOddsType } from '../../../../../redux/modules/ui';
-import { formatMarketOdds, getIsApexTopGame, isApexGame } from '../../../../../utils/markets';
+import { formatMarketOdds, getIsApexTopGame, isApexGame, isMlsGame } from '../../../../../utils/markets';
 import Tooltip from 'components/Tooltip';
 import { ApexBetTypeKeyMapping } from 'constants/markets';
+import { isDiscounted } from 'utils/markets';
+import { FlexDivCentered } from 'styles/common';
 
 type MarketCardOpenedProps = {
     market: SportMarketInfo;
@@ -57,16 +60,45 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                         />
                     </MatchParticipantImageContainer>
                     {!isApexTopGame && (
-                        <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
-                            {formatMarketOdds(selectedOddsType, market.homeOdds)}
-                            {market.homeOdds == 0 && market.awayOdds !== 0 && (
-                                <Tooltip
-                                    overlay={<>{t('markets.zero-odds-tooltip')}</>}
-                                    iconFontSize={10}
-                                    customIconStyling={{ marginTop: '-5px', display: 'flex', marginLeft: '3px' }}
-                                />
-                            )}
-                        </OddsLabel>
+                        <>
+                            <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={true}>
+                                {formatMarketOdds(selectedOddsType, market.homeOdds)}
+                                {market.homeOdds == 0 && market.awayOdds !== 0 && (
+                                    <Tooltip
+                                        overlay={<>{t('markets.zero-odds-tooltip')}</>}
+                                        iconFontSize={10}
+                                        customIconStyling={{ marginTop: '-5px', display: 'flex', marginLeft: '3px' }}
+                                    />
+                                )}
+                            </OddsLabel>
+                            {
+                                <Discount visible={!!market.homePriceImpact && isDiscounted(market.homePriceImpact)}>
+                                    <Tooltip
+                                        overlay={
+                                            <span>
+                                                {t(`markets.discounted-per`)}{' '}
+                                                <a
+                                                    href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
+                                                    TIP-95
+                                                </a>
+                                            </span>
+                                        }
+                                        component={
+                                            <div className="discount-label green">
+                                                <span>-{Math.ceil(Math.abs(market.homePriceImpact))}%</span>
+                                            </div>
+                                        }
+                                        iconFontSize={23}
+                                        marginLeft={2}
+                                        top={0}
+                                    />
+                                </Discount>
+                            }
+                        </>
                     )}
                     <MatchParticipantName
                         glowColor={ODDS_COLOR.HOME}
@@ -103,21 +135,54 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                                 {isApexGame(market.tags[0]) && (
                                     <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
                                 )}
+                                {isMlsGame(market.tags[0]) && (
+                                    <Tooltip overlay={t(`common.mls-tooltip`)} iconFontSize={22} marginLeft={2} />
+                                )}
                             </MatchVSLabel>
                             {!market.isPaused && (
-                                <OddsLabel
-                                    isTwoPositioned={
-                                        market.drawOdds === 0 && !(market.awayOdds == 0 && market.homeOdds == 0)
-                                    }
-                                    isDraw={true}
-                                >
-                                    {market.awayOdds == 0 && market.homeOdds == 0
-                                        ? t('markets.market-card.coming-soon')
-                                        : formatMarketOdds(selectedOddsType, market.drawOdds)}
-                                </OddsLabel>
+                                <>
+                                    <OddsLabel
+                                        isTwoPositioned={
+                                            typeof market.drawOdds === 'undefined' &&
+                                            !(market.awayOdds == 0 && market.homeOdds == 0)
+                                        }
+                                        isDraw={true}
+                                    >
+                                        {market.awayOdds == 0 && market.homeOdds == 0
+                                            ? t('markets.market-card.coming-soon')
+                                            : formatMarketOdds(selectedOddsType, market.drawOdds)}
+                                    </OddsLabel>
+                                    <Discount
+                                        visible={!!market.drawPriceImpact && isDiscounted(market.drawPriceImpact)}
+                                    >
+                                        <Tooltip
+                                            overlay={
+                                                <span>
+                                                    {t(`markets.discounted-per`)}{' '}
+                                                    <a
+                                                        href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        TIP-95
+                                                    </a>
+                                                </span>
+                                            }
+                                            component={
+                                                <div className="discount-label green">
+                                                    <span>-{Math.ceil(Math.abs(market.drawPriceImpact || 0))}%</span>
+                                                </div>
+                                            }
+                                            iconFontSize={23}
+                                            marginLeft={2}
+                                            top={0}
+                                        />
+                                    </Discount>
+                                </>
                             )}
                             <MatchParticipantName
-                                isTwoPositioned={market.drawOdds === 0}
+                                isTwoPositioned={typeof market.drawOdds === 'undefined'}
                                 glowColor={ODDS_COLOR.DRAW}
                                 glow={
                                     accountPositions &&
@@ -140,16 +205,51 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                             />
                         </MatchParticipantImageContainer>
                         {market ? (
-                            <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={false}>
-                                {formatMarketOdds(selectedOddsType, market.awayOdds)}
-                                {market.homeOdds !== 0 && market.awayOdds == 0 && (
-                                    <Tooltip
-                                        overlay={<>{t('markets.zero-odds-tooltip')}</>}
-                                        iconFontSize={10}
-                                        customIconStyling={{ marginTop: '-5px', display: 'flex', marginLeft: '3px' }}
-                                    />
-                                )}
-                            </OddsLabel>
+                            <>
+                                <OddsLabel noOdds={market.awayOdds == 0 && market.homeOdds == 0} homeOdds={false}>
+                                    {formatMarketOdds(selectedOddsType, market.awayOdds)}
+                                    {market.homeOdds !== 0 && market.awayOdds == 0 && (
+                                        <Tooltip
+                                            overlay={<>{t('markets.zero-odds-tooltip')}</>}
+                                            iconFontSize={10}
+                                            customIconStyling={{
+                                                marginTop: '-5px',
+                                                display: 'flex',
+                                                marginLeft: '3px',
+                                            }}
+                                        />
+                                    )}
+                                </OddsLabel>
+                                {
+                                    <Discount
+                                        visible={!!market.awayPriceImpact && isDiscounted(market.awayPriceImpact)}
+                                    >
+                                        <Tooltip
+                                            overlay={
+                                                <span>
+                                                    {t(`markets.discounted-per`)}{' '}
+                                                    <a
+                                                        href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        TIP-95
+                                                    </a>
+                                                </span>
+                                            }
+                                            component={
+                                                <div className="discount-label green">
+                                                    <span>-{Math.ceil(Math.abs(market.awayPriceImpact))}%</span>
+                                                </div>
+                                            }
+                                            iconFontSize={23}
+                                            marginLeft={2}
+                                            top={0}
+                                        />
+                                    </Discount>
+                                }
+                            </>
                         ) : (
                             <OddsLabelSceleton />
                         )}
@@ -214,5 +314,12 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
         </>
     );
 };
+
+const Discount = styled(FlexDivCentered)<{ visible?: boolean; color?: string }>`
+    color: ${(_props) => (_props?.color ? _props.color : '')};
+    font-size: 14px;
+    margin-left: 7px;
+    visibility: ${(_props) => (_props?.visible ? 'visible' : 'hidden')};
+`;
 
 export default MarketCardOpened;

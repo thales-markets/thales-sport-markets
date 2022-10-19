@@ -127,6 +127,7 @@
         },
         "coming-soon": "快来了！",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
+        "mls-tooltip": "MLS markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
         "top3": "TOP 3",
         "top5": "TOP 5",
@@ -258,9 +259,11 @@
             "wallet-info": {
                 "title": "钱包中"
             },
-            "skew": "偏斜"
+            "skew": "偏斜",
+            "discount": "折扣"
         },
-        "zero-odds-tooltip": "Sports AMM 仅提供0.05美元至0.95美元价格范围内的流动性，这意味着，如果一个投注选择的赔率低于5%或者高于95%，该选择就不会有流动性。"
+        "zero-odds-tooltip": "Sports AMM 仅提供0.05美元至0.95美元价格范围内的流动性，这意味着，如果一个投注选择的赔率低于5%或者高于95%，该选择就不会有流动性。",
+        "discounted-per": "折扣按"
     },
     "rewards": {
         "header": "奖励",
