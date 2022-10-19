@@ -47,7 +47,7 @@ export const Section = styled(FlexDivColumn)`
         margin-top: 200px;
         text-align: end;
         @media (max-width: 400px) {
-            margin-top: 50px;
+            margin-top: 100px;
         }
     }
     &.fourth {
@@ -246,6 +246,9 @@ export const Zebro = styled.img`
             height: 25em;
             width: 25em;
             top: -130px;
+        }
+        @media (max-width: 450px) {
+            top: -150px;
         }
     }
     &.racing {
