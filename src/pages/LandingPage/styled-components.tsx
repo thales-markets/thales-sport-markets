@@ -46,6 +46,9 @@ export const Section = styled(FlexDivColumn)`
     &.third {
         margin-top: 200px;
         text-align: end;
+        @media (max-width: 400px) {
+            margin-top: 50px;
+        }
     }
     &.fourth {
         margin-top: 150px;
@@ -123,6 +126,10 @@ export const Zebro = styled.img`
             width: 25em;
             left: -60px;
             top: -115px;
+        }
+        @media (max-width: 400px) {
+            height: 22em;
+            width: 22em;
         }
     }
     &.basketball {
@@ -336,6 +343,9 @@ export const LargeText = styled.label`
     @media (max-width: 450px) {
         font-size: 40px;
     }
+    @media (max-width: 400px) {
+        font-size: 35px;
+    }
 `;
 
 export const CallToAction = styled.label`
@@ -405,6 +415,10 @@ export const CallToAction = styled.label`
             @media (max-width: 450px) {
                 font-size: 18px;
             }
+
+            @media (max-width: 400px) {
+                font-size: 15px;
+            }
         }
     }
     @media (max-width: 600px) {
@@ -467,6 +481,12 @@ export const SubSection = styled(FlexDivColumn)`
     }
     @media (max-width: 500px) {
         font-size: 20px;
+        line-height: 30px;
+        height: 30px;
+    }
+
+    @media (max-width: 400px) {
+        font-size: 18px;
         line-height: 30px;
         height: 30px;
     }
@@ -603,6 +623,10 @@ export const InfoBoxTitle = styled.label`
     @media (max-width: 450px) {
         font-size: 18px;
     }
+
+    @media (max-width: 400px) {
+        font-size: 15px;
+    }
 `;
 
 export const InfoBoxText = styled.label`
@@ -616,6 +640,10 @@ export const InfoBoxText = styled.label`
     text-align: center;
     @media (max-width: 750px) {
         font-size: 15px;
+    }
+    @media (max-width: 400px) {
+        font-size: 13px;
+        line-height: 20px;
     }
 `;
 
