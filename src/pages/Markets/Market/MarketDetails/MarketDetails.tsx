@@ -30,7 +30,7 @@ import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { getIsApexTopGame, isApexGame, isDiscounted } from 'utils/markets';
+import { getIsApexTopGame, isApexGame, isDiscounted, isMlsGame } from 'utils/markets';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
@@ -837,6 +837,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                 VS{' '}
                                 {isApexGame(market.tags[0]) && (
                                     <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
+                                )}
+                                {isMlsGame(market.tags[0]) && (
+                                    <Tooltip overlay={t(`common.mls-tooltip`)} iconFontSize={22} marginLeft={2} />
                                 )}
                             </MatchVSLabel>
                             {market.leagueRaceName && <RaceNameLabel>{market.leagueRaceName}</RaceNameLabel>}

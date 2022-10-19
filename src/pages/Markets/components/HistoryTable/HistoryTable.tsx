@@ -84,7 +84,7 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                                         {POSITION_MAP[cellProps.row.original.position]}
                                     </PositionCircle>
                                 )}
-                                <p>{cellProps.cell.value}</p>
+                                <p>{formatCurrency(cellProps.cell.value)}</p>
                             </>
                         ),
                         width: 150,

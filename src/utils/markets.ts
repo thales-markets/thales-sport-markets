@@ -2,6 +2,7 @@ import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constant
 import { AccountPosition, MarketData, MarketInfo, SportMarketInfo } from 'types/markets';
 import { formatCurrency } from './formatters/number';
 import ordinal from 'ordinal';
+import { MLS_TAG } from 'constants/tags';
 
 export const getRoi = (ticketPrice: number, potentialWinnings: number, showRoi: boolean) =>
     showRoi ? (potentialWinnings - ticketPrice) / ticketPrice : 0;
@@ -85,8 +86,8 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
 
 export const convertFinalResultToWinnerName = (result: number, market: MarketData) => {
     if (result == 1 && getIsApexTopGame(market.isApex, market.betType)) return 'YES';
-    if (result == 1 && getIsApexTopGame(market.isApex, market.betType)) return 'NO';
-    if (result == 2) return market.homeTeam;
+    if (result == 2 && getIsApexTopGame(market.isApex, market.betType)) return 'NO';
+    if (result == 1) return market.homeTeam;
     if (result == 2) return market.awayTeam;
     if (result == 3) return 'DRAW';
 };
@@ -148,3 +149,5 @@ export const isDiscounted = (priceImpact: number | undefined) => {
     }
     return false;
 };
+
+export const isMlsGame = (tag: number) => Number(tag) === MLS_TAG;
