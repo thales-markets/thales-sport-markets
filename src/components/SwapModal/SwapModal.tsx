@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import onboardConnector from 'utils/onboardConnector';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import SwapNumericInput from 'components/fields/SwapNumericInput';
@@ -28,6 +27,7 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
 import useInterval from 'hooks/useInterval';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 type SwapModalProps = {
     onClose: () => void;
@@ -49,6 +49,8 @@ export const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [isGettingQuote, setIsGettingQuote] = useState<boolean>(false);
     const [paymentTokenBalance, setPaymentTokenBalance] = useState<number | string>('');
+
+    const { openConnectModal } = useConnectModal();
 
     const isAmountEntered = Number(amount) > 0;
     const insufficientBalance = Number(tokenBalance) < Number(amount) || Number(tokenBalance) === 0;
@@ -211,9 +213,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
     const getSubmitButton = () => {
         if (!isWalletConnected) {
             return (
-                <ModalButton onClick={() => onboardConnector.connectWallet()}>
-                    {t('common.wallet.connect-your-wallet')}
-                </ModalButton>
+                <ModalButton onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</ModalButton>
             );
         }
         if (insufficientBalance) {

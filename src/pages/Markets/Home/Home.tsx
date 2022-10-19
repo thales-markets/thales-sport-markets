@@ -57,6 +57,7 @@ import ROUTES, { RESET_STATE } from 'constants/routes';
 import SidebarLeaderboard from 'pages/Quiz/SidebarLeaderboard';
 import useQueryParam from 'utils/useQueryParams';
 import i18n from 'i18n';
+import useDiscountMarkets from 'queries/markets/useDiscountMarkets';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -117,6 +118,11 @@ const Home: React.FC = () => {
     const [tagParam, setTagParam] = useQueryParam('tag', '');
     const [selectedLanguage, setSelectedLanguage] = useQueryParam('lang', '');
 
+    const discountQuery = useDiscountMarkets(networkId, { enabled: true });
+    const discountsMap = useMemo(() => {
+        return discountQuery.isSuccess ? discountQuery.data : new Map();
+    }, [discountQuery.isSuccess, discountQuery.data]);
+
     useEffect(
         () => {
             sportParam != '' ? setSportFilter(sportParam as SportFilterEnum) : setSportParam(sportFilter);
@@ -143,11 +149,25 @@ const Home: React.FC = () => {
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, globalFilter, marketsCached]);
 
     const markets: SportMarkets = useMemo(() => {
+        let sportMarkets = [];
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            return marketsCached[globalFilter];
+            sportMarkets = marketsCached[globalFilter];
+        } else {
+            sportMarkets = lastValidMarkets;
         }
-        return lastValidMarkets;
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, lastValidMarkets, marketsCached, globalFilter]);
+
+        return sportMarkets.map((sportMarket) => {
+            const marketDiscount = discountsMap?.get(sportMarket.address);
+            return { ...sportMarket, ...marketDiscount };
+        });
+    }, [
+        sportMarketsQuery.isSuccess,
+        sportMarketsQuery.data,
+        marketsCached,
+        globalFilter,
+        lastValidMarkets,
+        discountsMap,
+    ]);
 
     useEffect(() => {
         const marketDates = markets
@@ -489,15 +509,6 @@ const Home: React.FC = () => {
                     {Object.values(SportFilterEnum).map((filterItem: any) => {
                         return (
                             <SportFilter
-                                disabled={
-                                    filterItem !== SportFilterEnum.All &&
-                                    filterItem !== SportFilterEnum.Baseball &&
-                                    filterItem !== SportFilterEnum.Soccer &&
-                                    filterItem !== SportFilterEnum.Football &&
-                                    filterItem !== SportFilterEnum.UFC &&
-                                    filterItem !== SportFilterEnum.Formula1 &&
-                                    filterItem !== SportFilterEnum.MotoGP
-                                }
                                 selected={sportFilter === filterItem}
                                 sport={filterItem}
                                 onClick={() => {
@@ -676,15 +687,6 @@ const Home: React.FC = () => {
                         {Object.values(SportFilterEnum).map((filterItem: any) => {
                             return (
                                 <SportFilter
-                                    disabled={
-                                        filterItem !== SportFilterEnum.All &&
-                                        filterItem !== SportFilterEnum.Baseball &&
-                                        filterItem !== SportFilterEnum.Soccer &&
-                                        filterItem !== SportFilterEnum.Football &&
-                                        filterItem !== SportFilterEnum.UFC &&
-                                        filterItem !== SportFilterEnum.Formula1 &&
-                                        filterItem !== SportFilterEnum.MotoGP
-                                    }
                                     selected={sportFilter === filterItem}
                                     sport={filterItem}
                                     onClick={() => {

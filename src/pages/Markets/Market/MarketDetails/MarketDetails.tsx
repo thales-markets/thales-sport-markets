@@ -1,5 +1,6 @@
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import {
+    ApexMatchInfoColumn,
     MatchParticipantImage,
     MatchParticipantImageContainer,
     MatchParticipantName,
@@ -8,7 +9,13 @@ import {
 } from 'components/common';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { APPROVAL_BUFFER, COLLATERALS, MAX_TOKEN_SLIPPAGE, MAX_USD_SLIPPAGE } from 'constants/markets';
+import {
+    ApexBetTypeKeyMapping,
+    APPROVAL_BUFFER,
+    COLLATERALS,
+    MAX_TOKEN_SLIPPAGE,
+    MAX_USD_SLIPPAGE,
+} from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useMarketCancellationOddsQuery from 'queries/markets/useMarketCancellationOddsQuery';
@@ -23,8 +30,7 @@ import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isApexGame } from 'utils/markets';
-import onboardConnector from 'utils/onboardConnector';
+import { getIsApexTopGame, isApexGame, isDiscounted, isMlsGame } from 'utils/markets';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
@@ -41,7 +47,7 @@ import useMultipleCollateralBalanceQuery from '../../../../queries/wallet/useMul
 import { getIsAppReady } from '../../../../redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from '../../../../redux/modules/wallet';
 import { RootState } from '../../../../redux/rootReducer';
-import { FlexDivCentered } from '../../../../styles/common';
+import { Colors, FlexDivCentered } from '../../../../styles/common';
 import {
     countDecimals,
     floorNumberToDecimals,
@@ -54,6 +60,7 @@ import networkConnector from '../../../../utils/networkConnector';
 import WalletInfo from '../WalletInfo';
 import CollateralSelector from './CollateralSelector';
 import {
+    BetTypeInfo,
     AmountInfo,
     AmountToBuyContainer,
     AmountToBuyInput,
@@ -89,7 +96,9 @@ import {
     StatusSourceContainer,
     StatusSourceInfo,
     SubmitButton,
+    Discount,
 } from './styled-components/MarketDetails';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 type MarketDetailsProps = {
     market: MarketData;
@@ -149,7 +158,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const [maxAmount, setMaxAmount] = useState<number>(0);
     const [maxUsdAmount, setMaxUsdAmount] = useState<number>(0);
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(false);
-
+    const { openConnectModal } = useConnectModal();
     const { trackEvent } = useMatomo();
 
     const referralId =
@@ -321,6 +330,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
     useEffect(() => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
+
         if (sportsAMMContract && signer) {
             let collateralContractWithSigner: ethers.Contract | undefined;
 
@@ -691,7 +701,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
     const getSubmitButton = () => {
         if (!isWalletConnected) {
             return (
-                <SubmitButton disabled={submitDisabled} onClick={() => onboardConnector.connectWallet()}>
+                <SubmitButton onClick={() => openConnectModal?.()}>
                     {t('common.wallet.connect-your-wallet')}
                 </SubmitButton>
             );
@@ -732,6 +742,8 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
         setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
     }, [market.homeTeam, market.awayTeam, market.tags]);
+
+    const isApexTopGame = getIsApexTopGame(market.isApex, market.betType);
 
     return (
         <MarketContainer>
@@ -788,49 +800,102 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             )}
             <MatchInfo>
                 <MatchInfoColumn>
-                    <MatchParticipantImageContainer isWinner={market.finalResult == 1} finalResult={market.finalResult}>
+                    <MatchParticipantImageContainer
+                        isWinner={market.finalResult == 1 && !isApexTopGame}
+                        finalResult={market.finalResult}
+                        isApexTopGame={isApexTopGame}
+                    >
                         <MatchParticipantImage
                             alt="Home team logo"
                             src={homeLogoSrc}
                             onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                         />
                     </MatchParticipantImageContainer>
-                    {market.resolved && market.gameStarted && (
+                    {market.resolved && market.gameStarted && !isApexTopGame && (
                         <WinnerLabel isWinning={market.finalResult == 1} finalResult={market.finalResult}>
                             {t('common.winner')}
                         </WinnerLabel>
                     )}
                     <MatchParticipantName>{market.homeTeam}</MatchParticipantName>
-                    {market.resolved && market.gameStarted && <ScoreLabel>{market.homeScore}</ScoreLabel>}
+                    {market.resolved && market.gameStarted && !isApexTopGame && (
+                        <ScoreLabel>{market.homeScore}</ScoreLabel>
+                    )}
                 </MatchInfoColumn>
                 <MatchInfoColumn>
                     <MatchDate>{formatDateWithTime(market.maturityDate)}</MatchDate>
-                    <MatchVSLabel>
-                        VS{' '}
-                        {isApexGame(market.tags[0]) && (
-                            <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
-                        )}
-                    </MatchVSLabel>
-                    {market.leagueRaceName && <RaceNameLabel>{market.leagueRaceName}</RaceNameLabel>}
-                </MatchInfoColumn>
-                <MatchInfoColumn>
-                    <MatchParticipantImageContainer isWinner={market.finalResult == 2} finalResult={market.finalResult}>
-                        <MatchParticipantImage
-                            alt="Away team logo"
-                            src={awayLogoSrc}
-                            onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
-                        />
-                    </MatchParticipantImageContainer>
-                    {market.resolved && market.gameStarted && (
-                        <WinnerLabel isWinning={market.finalResult == 2} finalResult={market.finalResult}>
-                            {t('common.winner')}
-                        </WinnerLabel>
+                    {isApexTopGame ? (
+                        <BetTypeInfo>
+                            {t(`common.top-bet-type-title`, {
+                                driver: market.homeTeam,
+                                betType: t(`common.${ApexBetTypeKeyMapping[market.betType]}`),
+                                race: market.leagueRaceName,
+                            })}
+                        </BetTypeInfo>
+                    ) : (
+                        <>
+                            <MatchVSLabel>
+                                VS{' '}
+                                {isApexGame(market.tags[0]) && (
+                                    <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
+                                )}
+                                {isMlsGame(market.tags[0]) && (
+                                    <Tooltip overlay={t(`common.mls-tooltip`)} iconFontSize={22} marginLeft={2} />
+                                )}
+                            </MatchVSLabel>
+                            {market.leagueRaceName && <RaceNameLabel>{market.leagueRaceName}</RaceNameLabel>}
+                        </>
                     )}
-
-                    <MatchParticipantName>{market.awayTeam}</MatchParticipantName>
-                    {market.resolved && market.gameStarted && <ScoreLabel>{market.awayScore}</ScoreLabel>}
                 </MatchInfoColumn>
+                {!isApexTopGame && (
+                    <MatchInfoColumn>
+                        <MatchParticipantImageContainer
+                            isWinner={market.finalResult == 2}
+                            finalResult={market.finalResult}
+                        >
+                            <MatchParticipantImage
+                                alt="Away team logo"
+                                src={awayLogoSrc}
+                                onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
+                            />
+                        </MatchParticipantImageContainer>
+                        {market.resolved && market.gameStarted && (
+                            <WinnerLabel isWinning={market.finalResult == 2} finalResult={market.finalResult}>
+                                {t('common.winner')}
+                            </WinnerLabel>
+                        )}
+
+                        <MatchParticipantName>{market.awayTeam}</MatchParticipantName>
+                        {market.resolved && market.gameStarted && <ScoreLabel>{market.awayScore}</ScoreLabel>}
+                    </MatchInfoColumn>
+                )}
             </MatchInfo>
+            {isApexTopGame && market.resolved && market.gameStarted && (
+                <>
+                    <MatchInfo>
+                        <ApexMatchInfoColumn>
+                            <ScoreLabel winningColor={market.finalResult == 1 ? Colors.GREEN : undefined}>
+                                {t('common.yes')}
+                            </ScoreLabel>
+                            <WinnerLabel isWinning={market.finalResult == 1} finalResult={market.finalResult}>
+                                {t('common.winner')}
+                            </WinnerLabel>
+                        </ApexMatchInfoColumn>
+                        <ApexMatchInfoColumn>
+                            <ScoreLabel winningColor={market.finalResult == 2 ? Colors.GREEN : undefined}>
+                                {t('common.no')}
+                            </ScoreLabel>
+                            <WinnerLabel isWinning={market.finalResult == 2} finalResult={market.finalResult}>
+                                {t('common.winner')}
+                            </WinnerLabel>
+                        </ApexMatchInfoColumn>
+                    </MatchInfo>
+                    <MatchInfo>
+                        <ScoreLabel>
+                            {t('markets.market-card.result')}: {market.homeScore}
+                        </ScoreLabel>
+                    </MatchInfo>
+                </>
+            )}
             {!market.paused && !market.gameStarted && !market.resolved && (
                 <>
                     <OddsContainer>
@@ -842,12 +907,12 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                 setUsdAmount('');
                             }}
                         >
-                            <Option color={ODDS_COLOR.HOME}>1</Option>
-                            <OptionTeamName>{market.homeTeam.toUpperCase()}</OptionTeamName>
+                            <Option color={ODDS_COLOR.HOME}>{isApexTopGame ? t('common.yes') : '1'}</Option>
+                            {!isApexTopGame && <OptionTeamName>{market.homeTeam.toUpperCase()}</OptionTeamName>}
                             <InfoRow>
                                 <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
                                 <InfoValue>
-                                    $ {market.positions[Position.HOME].sides[selectedSide].odd.toFixed(2)}
+                                    $ {(market.positions[Position.HOME].sides[selectedSide].odd || 0).toFixed(2)}
                                     {market.positions[Position.HOME].sides[selectedSide].odd == 0 && (
                                         <Tooltip
                                             overlay={<>{t('markets.zero-odds-tooltip')}</>}
@@ -869,8 +934,18 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                         : floorNumberToDecimals(availablePerSide.positions[Position.HOME].available)}
                                 </InfoValue>
                             </InfoRow>
+                            {selectedSide === Side.BUY &&
+                                isDiscounted(availablePerSide.positions[Position.HOME].buyImpactPrice) && (
+                                    <Discount>
+                                        -
+                                        {Math.ceil(
+                                            Math.abs(availablePerSide.positions[Position.HOME].buyImpactPrice || 0)
+                                        )}
+                                        %
+                                    </Discount>
+                                )}
                         </Pick>
-                        {!!market.positions[Position.DRAW].sides[selectedSide].odd && (
+                        {typeof market.positions[Position.DRAW].sides[selectedSide].odd !== 'undefined' && (
                             <Pick
                                 selected={selectedPosition === Position.DRAW}
                                 onClick={() => {
@@ -884,7 +959,18 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                 <InfoRow>
                                     <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
                                     <InfoValue>
-                                        $ {market.positions[Position.DRAW].sides[selectedSide].odd.toFixed(2)}
+                                        $ {(market.positions[Position.DRAW].sides[selectedSide].odd || 0).toFixed(2)}
+                                        {market.positions[Position.DRAW].sides[selectedSide].odd == 0 && (
+                                            <Tooltip
+                                                overlay={<>{t('markets.zero-odds-tooltip')}</>}
+                                                iconFontSize={10}
+                                                customIconStyling={{
+                                                    marginTop: '-10px',
+                                                    display: 'flex',
+                                                    marginLeft: '3px',
+                                                }}
+                                            />
+                                        )}
                                     </InfoValue>
                                 </InfoRow>
                                 <InfoRow>
@@ -897,6 +983,16 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                               )}
                                     </InfoValue>
                                 </InfoRow>
+                                {selectedSide === Side.BUY &&
+                                    isDiscounted(availablePerSide.positions[Position.DRAW].buyImpactPrice) && (
+                                        <Discount>
+                                            -
+                                            {Math.ceil(
+                                                Math.abs(availablePerSide.positions[Position.DRAW].buyImpactPrice || 0)
+                                            )}
+                                            %
+                                        </Discount>
+                                    )}
                             </Pick>
                         )}
                         <Pick
@@ -907,12 +1003,12 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                 setUsdAmount('');
                             }}
                         >
-                            <Option color={ODDS_COLOR.AWAY}>2</Option>
-                            <OptionTeamName>{market.awayTeam.toUpperCase()}</OptionTeamName>
+                            <Option color={ODDS_COLOR.AWAY}>{isApexTopGame ? t('common.no') : '2'}</Option>
+                            {!isApexTopGame && <OptionTeamName>{market.awayTeam.toUpperCase()}</OptionTeamName>}
                             <InfoRow>
                                 <InfoTitle>{t('markets.market-details.price')}:</InfoTitle>
                                 <InfoValue>
-                                    $ {market.positions[Position.AWAY].sides[selectedSide].odd.toFixed(2)}
+                                    $ {(market.positions[Position.AWAY].sides[selectedSide].odd || 0).toFixed(2)}
                                     {market.positions[Position.AWAY].sides[selectedSide].odd == 0 && (
                                         <Tooltip
                                             overlay={<>{t('markets.zero-odds-tooltip')}</>}
@@ -934,6 +1030,16 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                                         : floorNumberToDecimals(availablePerSide.positions[Position.AWAY].available)}
                                 </InfoValue>
                             </InfoRow>
+                            {selectedSide === Side.BUY &&
+                                isDiscounted(availablePerSide.positions[Position.AWAY].buyImpactPrice) && (
+                                    <Discount>
+                                        -
+                                        {Math.ceil(
+                                            Math.abs(availablePerSide.positions[Position.AWAY].buyImpactPrice || 0)
+                                        )}
+                                        %
+                                    </Discount>
+                                )}
                         </Pick>
                     </OddsContainer>
                     {selectedSide === Side.BUY && (

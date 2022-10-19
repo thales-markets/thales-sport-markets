@@ -1,4 +1,4 @@
-import { MarketStatus } from 'constants/markets';
+import { ApexBetType, MarketStatus } from 'constants/markets';
 import { Position, PositionName, Side } from '../constants/options';
 
 export type MarketInfo = {
@@ -52,7 +52,7 @@ export type SportMarketInfo = {
     awayTeam: string;
     homeOdds: number;
     awayOdds: number;
-    drawOdds: number;
+    drawOdds: number | undefined;
     homeScore: number | string;
     awayScore: number | string;
     sport: string;
@@ -62,6 +62,10 @@ export type SportMarketInfo = {
     leagueRaceName?: string;
     qualifyingStartTime?: number;
     arePostQualifyingOddsFetched: boolean;
+    betType: ApexBetType;
+    homePriceImpact: number;
+    awayPriceImpact: number;
+    drawPriceImpact?: number;
 };
 
 export type FixedMarketData = {
@@ -85,13 +89,13 @@ export type AMMPosition = {
 };
 
 export type AvailablePerSide = {
-    positions: Record<Position, { available: number }>;
+    positions: Record<Position, { available: number; buyImpactPrice?: number }>;
 };
 
 export type MarketData = {
     address: string;
     gameDetails: GameDetails;
-    positions: Record<Position, { sides: Record<Side, { odd: number }> }>;
+    positions: Record<Position, { sides: Record<Side, { odd: number | undefined }> }>;
     tags: number[];
     homeTeam: string;
     awayTeam: string;
@@ -104,6 +108,8 @@ export type MarketData = {
     awayScore?: number;
     leagueRaceName?: string;
     paused: boolean;
+    betType: ApexBetType;
+    isApex: boolean;
 };
 
 export type Markets = MarketInfo[];
@@ -230,6 +236,7 @@ export type UserTransaction = {
     game: string;
     result: PositionName;
     usdValue: number;
+    isApexTopGame: boolean;
 };
 
 export type UserTransactions = UserTransaction[];

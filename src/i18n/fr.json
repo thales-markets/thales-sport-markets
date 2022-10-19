@@ -18,7 +18,10 @@
             "get-usd": "Obtenir {{amount}}",
             "approve": "Autoriser",
             "get-usd-progress": "Création de {{amount}}...",
-            "disclaimer": "En connectant votre portefeuille vous reconnaissez que vous avez lu et compris la <a target=\"_blank\" href={{link}}>décharge de responsabilité</a> d’Overtime et accepté les conditions d’utilisation."
+            "disclaimer": "En connectant votre portefeuille vous reconnaissez que vous avez lu et compris la <a target=\"_blank\" href={{link}}>décharge de responsabilité</a> d’Overtime et accepté les conditions d’utilisation.",
+            "disclaimer-lowercase": "clause de non-responsabilité",
+            "disclaimer2": "et acceptez ses conditions d'utilisation.",
+            "disclaimer1": "En connectant un portefeuille, vous reconnaissez avoir lu et compris les marchés des heures supplémentaires"
         },
         "referral": {
             "link-copied": "Lien de parrainage copié !",
@@ -103,7 +106,7 @@
         },
         "or": "ou",
         "dapp": "dapp",
-        "launch-dapp": "lancer dapp",
+        "launch-dapp": "lancer la dapp",
         "cancel": "Annuler",
         "select-date": "Sélectionner la date...",
         "tags-placeholder": "Chercher les mots clés...",
@@ -111,7 +114,7 @@
         "input-characters-note": "{{entered }} / {{max}}",
         "view": "Voir",
         "guidelines": "Consignes",
-        "built-on": "Réalisé par",
+        "built-on": "Propulsé par",
         "sell-side": "VENDRE",
         "buy-side": "ACHETER",
         "voucher": {
@@ -143,7 +146,14 @@
             "page": "Page"
         },
         "coming-soon": "Bientôt disponible !",
-        "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race."
+        "h2h-tooltip": "Il s'agit d'un marché face à face. Le vainqueur sera le conducteur qui terminera à la meilleure place lors de la course principale.",
+        "mls-tooltip": "Les résultats des marchés MLS sont basés sur les résultats dans le temps réglementaires. S'il y a prolongation, le marché sera résolu en fonction du résultat lors de la fin du temps réglementaire.",
+        "top-bet-type-title": "Est-ce que {{driver}} terminera la course du {{race}} dans le {{betType}} des conducteurs?",
+        "top3": "TOP 3",
+        "top5": "TOP 5",
+        "top10": "TOP 10",
+        "yes": "OUI",
+        "no": "NON"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime - TOUS DROITS RÉSERVÉS.",
@@ -161,7 +171,7 @@
         "pay-with": "Payer avec",
         "status-label": "Statut",
         "tags-label": "Mots clés",
-        "search-placeholder": "Chercher matchs",
+        "search-placeholder": "Chercher un match",
         "open-markets-label": "Ouvert",
         "resolved-markets-label": "Résolu",
         "grid-view": "Grille",
@@ -344,13 +354,15 @@
             "total-to-receive": "Total à recevoir",
             "amount-to-sell": "Montant à vendre",
             "liquidity": "Liquidité",
-            "positions-amount": "Montant des positions",
+            "positions-amount": "Nombre de positions",
             "potential-profit": "Gain potentiel",
             "claim-back": "Réclamer",
             "max": "Max",
-            "skew": "Skew"
+            "skew": "Skew",
+            "discount": "Remise"
         },
-        "zero-odds-tooltip": "Le Sport AMM ne propose des liquidités que dans la fourchette de prix de 0,05 $ à 0,95 $. Cela signifie que si les cotes d'une position sont inférieures à 5 % ou supérieures à 95 %, cette position n'aura pas de liquidité."
+        "zero-odds-tooltip": "Le Sport AMM ne propose des liquidités que dans la fourchette de prix de 0,05 $ à 0,95 $. Cela signifie que si les cotes d'une position sont inférieures à 5 % ou supérieures à 95 %, cette position n'aura pas de liquidité.",
+        "discounted-per": "Remise selon"
     },
     "rewards": {
         "table": {
@@ -360,8 +372,8 @@
             "no-data-available": "Pas de données disponibles",
             "wallet-address": "Adresse du portefeuille",
             "safebox": "Frais SafeBox",
-            "rebates": "Rabais",
-            "volume": "Le volume"
+            "rebates": "Réduction",
+            "volume": "Volume"
         },
         "header": "Récompenses",
         "op-rewards-banner-message": "Les récompenses OP ont commencé, vérifiez comment vous pouvez les obtenir via <bold>la page des récompenses OP</bold>",
@@ -404,15 +416,13 @@
             "period-ended-label": "Période terminée",
             "search-placeholder": "Chercher...",
             "week-label": "Semaine",
-            "description": "<p>Voici le classement du quiz où vous pouvez voir comment vous vous en sortez par rapport à la concurrence sur une semaine donnée.</p><p>Tous les détails sur la façon d'utiliser les coupons Overtime sont disponibles <blogPost>ici</blogPost>.</p><p> Vous pouvez participer au quiz autant de fois que vous le souhaitez <sportsTrivia>ici</sportsTrivia>.</p>",
-            "period-end-label": "La période se termine dans"
+            "description": "<p>Voici le classement du quiz où vous pouvez voir comment vous vous en sortez par rapport à la concurrence.</p><p> Vous pouvez participer au quiz autant de fois que vous le souhaitez <sportsTrivia>ici</sportsTrivia>.</p>",
+            "period-end-label": "La période se termine dans",
+            "all-time-leaderboard-label": "All time leaderboard"
         },
         "finish-messages": {
-            "quilfied-for-rewards-first": "Vous êtes actuellement en tête du classement ! Réessayez pour obtenir un meilleur score et sécuriser votre place.",
             "your-best-result": "Votre meilleur résultat : {{points}} {{pointsLabel}}",
-            "quilfied-for-rewards": "Vous êtes actuellement dans le TOP {{numberOfRewards}} et qualifié pour les récompenses. Réessayez pour obtenir un meilleur classement et des récompenses plus élevées.",
-            "rank-info": "Avec {{points}} {{pointsLabel}} vous êtes classé {{rank}} sur {{totalParticipants}} participants.",
-            "not-quilfied-for-rewards": "Il vous manque {{points}} {{pointsLabel}} pour entrer dans le TOP {{numberOfRewards}} et vous qualifier pour des récompenses. Réessayez et améliorez votre score."
+            "rank-info": "Avec {{points}} {{pointsLabel}} vous êtes classé {{rank}} sur {{totalParticipants}} participants."
         },
         "difficulty": {
             "1": "Ultra facile",
@@ -435,7 +445,7 @@
         "help-us-improve-label": "Aidez nous à améliorer",
         "twitter-handle-placeholder": "Entrez votre identifiant Twitter",
         "point-label": "point",
-        "start-quiz-description": "<p>Salut les fans de sport ! Prêt à tester vos connaissances et à battre tout le monde ?</p><p> Overtime a lancé un concours de quiz sportifs où les gagnants recevront chaque semaine des NFT qui peuvent être utilisés à la place de sUSD pour participer à n'importe quel marché sportif sur Overtime.</p><p> Lisez toutes les informations sur ce quiz dans notre <blogPost>article de blog</blogPost>.</p><p>Comment participer ? Le quiz est accessible à tous pour tester ses connaissances et participer, mais pour être éligible aux récompenses, vous devez retweeter ceci <quizRetweetLink>tweeter</quizRetweetLink> et suivre le compte <twitter>Twitter d'Overtime</twitter>.</p><p>Connectez votre portefeuille et entrez votre identifiant Twitter pour commencer le quiz ! Si vous gagnez des récompenses, nous vous demanderons de confirmer votre adresse via Twitter DM. L'identifiant Discord est facultatif, il est utilisé afin de recevoir un rôle Discord en tant que gagnant potentiel du quiz.</p><p>Pour toute question, veuillez rejoindre notre <discord>Discord</discord>.</p>",
+        "start-quiz-description": "<p>Salut les fans de sport! Prêt à tester vos connaissances et à battre tout le monde?</p><p>Overtime a lancé un concours de quiz sportifs. Le quiz est accessible à tous pour tester ses connaissances et participer.</p><p>Connectez votre portefeuille et entrez votre identifiant Twitter pour commencer le quiz! Pour toute question, veuillez rejoindre notre <discord>Discord</discord>.</p>",
         "question-weight-label": "Poids de la question : {{points}}",
         "help-us-improve-tooltip": "Aidez-nous à améliorer les quiz sportifs en ajoutant de nouvelles questions à la base de données de questions."
     }

@@ -7,7 +7,7 @@ import { MarketTransaction, UserTransaction, UserTransactions } from 'types/mark
 import { formatCurrency } from '../../../../utils/formatters/number';
 import styled from 'styled-components';
 import { ODDS_COLOR } from '../../../../constants/ui';
-import { Position, POSITION_MAP, PositionName } from 'constants/options';
+import { Position, POSITION_MAP, PositionName, APEX_TOP_GAME_POSITION_MAP } from 'constants/options';
 import { buildMarketLink } from '../../../../utils/routes';
 import SPAAnchor from '../../../../components/SPAAnchor';
 import ViewEtherscanLink from '../../../../components/ViewEtherscanLink';
@@ -79,10 +79,12 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                         accessor: 'amount',
                         Cell: (cellProps: CellProps<UserTransaction, UserTransaction['amount']>) => (
                             <>
-                                <PositionCircle color={ODDS_COLOR[cellProps.row.original.position]}>
-                                    {POSITION_MAP[cellProps.row.original.position]}
-                                </PositionCircle>
-                                <p>{cellProps.cell.value}</p>
+                                {!cellProps.row.original.isApexTopGame && (
+                                    <PositionCircle color={ODDS_COLOR[cellProps.row.original.position]}>
+                                        {POSITION_MAP[cellProps.row.original.position]}
+                                    </PositionCircle>
+                                )}
+                                <p>{formatCurrency(cellProps.cell.value)}</p>
                             </>
                         ),
                         width: 150,
@@ -104,9 +106,15 @@ export const HistoryTable: FC<HistoryPropsTable> = memo(({ transactions, noResul
                         Cell: (cellProps: CellProps<UserTransaction, UserTransaction['result']>) => (
                             <>
                                 {cellProps.cell.value && (
-                                    <PositionCircle color="#3FD1FF">
-                                        {POSITION_MAP[cellProps.cell.value]}
-                                    </PositionCircle>
+                                    <>
+                                        {cellProps.row.original.isApexTopGame ? (
+                                            <p>{t(`common.${APEX_TOP_GAME_POSITION_MAP[cellProps.cell.value]}`)}</p>
+                                        ) : (
+                                            <PositionCircle color="#3FD1FF">
+                                                {POSITION_MAP[cellProps.cell.value]}
+                                            </PositionCircle>
+                                        )}
+                                    </>
                                 )}
                             </>
                         ),

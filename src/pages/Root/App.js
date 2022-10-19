@@ -1,25 +1,22 @@
-import { loadProvider } from '@synthetixio/providers';
 import Loader from 'components/Loader';
-import { initOnboard } from 'config/onboard';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import useLocalStorage from 'hooks/useLocalStorage';
 import React, { lazy, Suspense, useEffect } from 'react';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
-import { getIsAppReady, setAppReady } from 'redux/modules/app';
+import { setAppReady } from 'redux/modules/app';
 import { getNetworkId, updateNetworkSettings, updateWallet } from 'redux/modules/wallet';
-import { getDefaultNetworkId, isNetworkSupported } from 'utils/network';
-import onboardConnector from 'utils/onboardConnector';
+import { getDefaultNetworkId } from 'utils/network';
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import networkConnector from 'utils/networkConnector';
 import ROUTES from 'constants/routes';
 import Theme from 'layouts/Theme';
 import DappLayout from 'layouts/DappLayout';
-// import HomeLayout from 'layouts/HomeLayout';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
+import { useAccount, useProvider, useSigner } from 'wagmi';
+import BannerCarousel from 'components/BannerCarousel';
+import { ethers } from 'ethers';
 
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
@@ -30,9 +27,10 @@ const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
 const App = () => {
     const dispatch = useDispatch();
     const { trackPageView } = useMatomo();
-    const isAppReady = useSelector((state) => getIsAppReady(state));
-    const [selectedWallet, setSelectedWallet] = useLocalStorage(LOCAL_STORAGE_KEYS.SELECTED_WALLET, '');
     const networkId = useSelector((state) => getNetworkId(state));
+    const provider = useProvider();
+    const { address } = useAccount();
+    const { data: signer } = useSigner();
 
     queryConnector.setQueryClient();
 
@@ -41,24 +39,26 @@ const App = () => {
             const providerNetworkId = await getDefaultNetworkId();
             try {
                 dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
-                if (!networkConnector.initialized) {
-                    const provider = loadProvider({
-                        networkId: providerNetworkId,
-                        infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
-                        provider: window.ethereum,
-                    });
-
-                    networkConnector.setNetworkSettings({ networkId: providerNetworkId, provider });
-                }
+                networkConnector.setNetworkSettings({
+                    networkId: providerNetworkId,
+                    provider:
+                        !!signer && !!signer.provider
+                            ? new ethers.providers.Web3Provider(signer.provider.provider, 'any')
+                            : provider,
+                    signer,
+                });
                 dispatch(setAppReady());
             } catch (e) {
                 dispatch(setAppReady());
                 console.log(e);
             }
         };
-
         init();
-    }, [dispatch, networkId]);
+    }, [dispatch, networkId, provider, signer]);
+
+    useEffect(() => {
+        dispatch(updateWallet({ walletAddress: address }));
+    }, [address, dispatch]);
 
     useEffect(() => {
         if (window.ethereum) {
@@ -67,70 +67,6 @@ const App = () => {
             });
         }
     }, [dispatch]);
-
-    useEffect(() => {
-        if (networkId && isNetworkSupported(networkId) && setSelectedWallet) {
-            const onboard = initOnboard(networkId, {
-                address: (walletAddress) => {
-                    if (walletAddress) {
-                        dispatch(updateWallet({ walletAddress }));
-                    }
-                },
-                network: (networkId) => {
-                    if (networkId) {
-                        if (isNetworkSupported(networkId)) {
-                            if (onboardConnector.onboard.getState().wallet.provider) {
-                                const provider = loadProvider({
-                                    provider: onboardConnector.onboard.getState().wallet.provider,
-                                });
-                                const signer = provider.getSigner();
-
-                                networkConnector.setNetworkSettings({
-                                    networkId,
-                                    provider,
-                                    signer,
-                                });
-                            } else {
-                                networkConnector.setNetworkSettings({ networkId });
-                            }
-
-                            onboardConnector.onboard.config({ networkId });
-                        }
-                        dispatch(updateNetworkSettings({ networkId }));
-                    }
-                },
-                wallet: async (wallet) => {
-                    if (wallet.provider) {
-                        const provider = loadProvider({
-                            provider: wallet.provider,
-                        });
-                        const signer = provider.getSigner();
-                        const network = await provider.getNetwork();
-                        const networkId = network.chainId;
-                        networkConnector.setNetworkSettings({
-                            networkId,
-                            provider,
-                            signer,
-                        });
-                        setSelectedWallet(wallet.name);
-                        dispatch(updateNetworkSettings({ networkId }));
-                    } else {
-                        dispatch(updateWallet({ walletAddress: null }));
-                        setSelectedWallet(null);
-                    }
-                },
-            });
-            onboardConnector.setOnBoard(onboard);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, isAppReady, setSelectedWallet]);
-
-    // load previously saved wallet
-    useEffect(() => {
-        if (onboardConnector.onboard && selectedWallet) {
-            onboardConnector.onboard.walletSelect(selectedWallet);
-        }
-    }, [isAppReady, selectedWallet]);
 
     useEffect(() => {
         trackPageView();
@@ -153,6 +89,7 @@ const App = () => {
                             />
                             <Route exact path={ROUTES.Markets.Home}>
                                 <DappLayout>
+                                    <BannerCarousel />
                                     <Markets />
                                 </DappLayout>
                             </Route>

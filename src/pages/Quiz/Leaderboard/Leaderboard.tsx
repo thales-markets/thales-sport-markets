@@ -22,36 +22,28 @@ import {
     LeaderboardHeader,
     OvertimeVoucherIcon,
     PeriodContainer,
-    PeriodEndContainer,
-    PeriodEndLabel,
     Wrapper,
-    QuizLink,
 } from '../styled-components';
 import { getTwitterProfileLink } from 'utils/quiz';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
 import { CURRENCY_MAP } from 'constants/currency';
 import { truncateAddress } from 'utils/formatters/string';
 import HelpUsImprove from '../HelpUsImprove';
-import { DEFAULT_TWITTER_PROFILE_IMAGE } from 'constants/quiz';
+import { DEFAULT_TWITTER_PROFILE_IMAGE, MAX_TRIVA_WEEKS } from 'constants/quiz';
 import SelectInput from 'components/SelectInput';
 import overtimeVoucherIcon from 'assets/images/overtime-voucher.svg';
-import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
 import { Info } from 'pages/Markets/Home/Home';
 import SPAAnchor from 'components/SPAAnchor';
-import { LINKS } from 'constants/links';
 
 const Leaderboard: React.FC = () => {
     const { t } = useTranslation();
     const [searchText, setSearchText] = useState<string>('');
     const [isInitialQueryLoad, setIsInitialQueryLoad] = useState<boolean>(true);
     const [leaderboard, setLeaderboard] = useState<LeaderboardList>([]);
-    const [weekEnd, setWeekEnd] = useState<number>(0);
     const [weekOptions, setWeekOptions] = useState<Array<{ value: number; label: string }>>([]);
     const [week, setWeek] = useState<number>(0);
-
-    const NOW = new Date();
 
     const quizLeaderboardQuery = useQuizLeaderboardQuery();
 
@@ -67,7 +59,10 @@ const Leaderboard: React.FC = () => {
                 for (let index = 0; index < leaderboardByWeeks.length; index++) {
                     options.push({
                         value: index,
-                        label: `${t('quiz.leaderboard.week-label')} ${index + 1}`,
+                        label:
+                            index === MAX_TRIVA_WEEKS
+                                ? t('quiz.leaderboard.all-time-leaderboard-label')
+                                : `${t('quiz.leaderboard.week-label')} ${index + 1}`,
                     });
                     setWeekOptions(options);
                 }
@@ -86,7 +81,6 @@ const Leaderboard: React.FC = () => {
                 );
             }
             setLeaderboard(currentLeaderboard);
-            setWeekEnd(new Date(weeklyLeaderboard.weekEnd).getTime());
         }
     }, [quizLeaderboardQuery.data, quizLeaderboardQuery.isSuccess, searchText, week, isInitialQueryLoad, t]);
 
@@ -128,7 +122,6 @@ const Leaderboard: React.FC = () => {
                             i18nKey="quiz.leaderboard.description"
                             components={{
                                 p: <p />,
-                                blogPost: <QuizLink href={LINKS.QuizBlogPost} key="blogPost" />,
                                 sportsTrivia: <SPAAnchor href={buildHref(ROUTES.Quiz)} key="sportsTrivia" />,
                             }}
                         />
@@ -142,19 +135,9 @@ const Leaderboard: React.FC = () => {
                                             options={weekOptions}
                                             handleChange={(value) => setWeek(Number(value))}
                                             defaultValue={week}
-                                            width={200}
+                                            width={230}
                                         />
                                     </SelectContainer>
-                                    {NOW.getTime() < weekEnd ? (
-                                        <PeriodEndContainer>
-                                            <PeriodEndLabel>{t('quiz.leaderboard.period-end-label')}:</PeriodEndLabel>
-                                            <TimeRemaining end={weekEnd} fontSize={18} showFullCounter />
-                                        </PeriodEndContainer>
-                                    ) : (
-                                        <PeriodEndContainer>
-                                            <PeriodEndLabel>{t('quiz.leaderboard.period-ended-label')}</PeriodEndLabel>
-                                        </PeriodEndContainer>
-                                    )}
                                 </>
                             )}
                         </PeriodContainer>
@@ -163,7 +146,7 @@ const Leaderboard: React.FC = () => {
                             customPlaceholder={t('quiz.leaderboard.search-placeholder')}
                             handleChange={(e) => setSearchText(e)}
                             customStyle={{ border: '1px solid #1A1C2B' }}
-                            width={200}
+                            width={230}
                         />
                     </LeaderboardHeader>
                     <Table
