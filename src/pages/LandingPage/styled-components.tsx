@@ -565,7 +565,7 @@ export const InfoBox = styled.div`
     border-radius: 6.41853px;
     width: 30%;
     color: ${(props) => props.theme.textColor.primary};
-    height: 235px;
+    height: 290px;
     text-align: center;
     margin: 11px;
     padding: 40px 0px;
@@ -580,11 +580,6 @@ export const InfoBox = styled.div`
 
     @media (max-width: 500px) {
         width: 44%;
-        height: 260px;
-    }
-
-    @media (max-width: 450px) {
-        height: 290px;
     }
 `;
 
