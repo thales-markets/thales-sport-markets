@@ -54,8 +54,6 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
         return multipleStableBalances.data;
     }, [multipleStableBalances.data]);
 
-    console.log('stableBalances ', stableBalances);
-
     return (
         <Container>
             <AssetContainer>
