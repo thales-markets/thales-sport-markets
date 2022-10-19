@@ -3,7 +3,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import onboardConnector from 'utils/onboardConnector';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import Button from 'components/Button';
@@ -23,6 +22,7 @@ import Checkbox from 'components/fields/Checkbox';
 import { getAddress, isAddress } from 'ethers/lib/utils';
 import { ValidationTooltip } from 'pages/Quiz/styled-components';
 import { LINKS } from 'constants/links';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 type MintVoucherModalProps = {
     onClose: () => void;
@@ -32,6 +32,7 @@ const VOUCHER_OPTIONS: Array<{ value: number; label: string }> = [
     { value: 20, label: '20 sUSD' },
     { value: 50, label: '50 sUSD' },
     { value: 100, label: '100 sUSD' },
+    { value: 200, label: '200 sUSD' },
     { value: 500, label: '500 sUSD' },
     { value: 1000, label: '1000 sUSD' },
 ];
@@ -47,6 +48,8 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [paymentTokenBalance, setPaymentTokenBalance] = useState<number | string>('');
+
+    const { openConnectModal } = useConnectModal();
 
     const [amount, setAmount] = useState<number>(-1);
     const [isAnotherWallet, setIsAnotherWallet] = useState<boolean>(false);
@@ -172,9 +175,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
     const getSubmitButton = () => {
         if (!isWalletConnected) {
             return (
-                <ModalButton onClick={() => onboardConnector.connectWallet()}>
-                    {t('common.wallet.connect-your-wallet')}
-                </ModalButton>
+                <ModalButton onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</ModalButton>
             );
         }
         if (insufficientBalance) {
@@ -332,7 +333,7 @@ const InputContainer = styled(FlexDivColumnCentered)`
 `;
 
 const CheckboxContainer = styled(InputContainer)<{ isAnotherWallet: boolean }>`
-    margin-top: 15px;
+    margin-top: 25px;
     margin-bottom: ${(props) => (props.isAnotherWallet ? '10px' : '30px')};
     margin-left: 2px;
 `;
@@ -370,7 +371,7 @@ const Input = styled.input`
 `;
 
 const ButtonContainer = styled(FlexDivCentered)`
-    margin: 20px 0 10px 0;
+    margin: 30px 0 20px 0;
 `;
 
 const ModalButton = styled(Button)``;

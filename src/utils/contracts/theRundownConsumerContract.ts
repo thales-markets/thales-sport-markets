@@ -4,6 +4,7 @@ export const theRundownConsumerContract = {
         10: '0x2B91c14Ce9aa828eD124D12541452a017d8a2148',
         42: '0x594FD9E527418Bde7F265aE7D422607C64ad1A8a',
         69: 'TBD',
+        420: '0xdB6EB989127D0c33bC630d7b5B53f87ceCED3ce1',
     },
     abi: [
         {

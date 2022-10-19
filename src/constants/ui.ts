@@ -16,6 +16,8 @@ export const ODDS_COLOR = {
     HOME: '#5FC694',
     AWAY: '#E26A78',
     DRAW: '#FAC438',
+    YES: '#5FC694',
+    NO: '#E26A78',
 };
 
 export const STATUS_COLOR = {
@@ -24,4 +26,5 @@ export const STATUS_COLOR = {
     FINISHED: '#FFFFFF',
     CANCELED: '#E26A78',
     COMING_SOON: '#FAC439',
+    PAUSED: '#E26A78',
 };

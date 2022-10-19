@@ -3,6 +3,7 @@ export const sportPositionalMarketManagerContract = {
         5: '0x7465c5d60d3d095443CF9991Da03304A30D42Eae',
         10: '0xFBffEbfA2bF2cF84fdCf77917b358fC59Ff5771e',
         42: '0x95a38B4cA5C9187eCfbDFB501Ef61D46755BC075',
+        420: '0xae56177e405929c95E5d4b04C0C87E428cB6432B',
     },
     abi: [
         {

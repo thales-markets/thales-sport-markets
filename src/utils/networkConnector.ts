@@ -8,6 +8,7 @@ import sportsAMMContract from 'utils/contracts/sportsAMMContract';
 import sUSDContract from 'utils/contracts/sUSDContract';
 import { NetworkIdByName } from './network';
 import theRundownConsumerContract from 'utils/contracts/theRundownConsumerContract';
+import apexConsumerContract from 'utils/contracts/apexConsumerContract';
 import multipleCollateral from './contracts/multipleCollateralContract';
 import overtimeVoucherContract from './contracts/overtimeVoucherContract';
 
@@ -25,6 +26,7 @@ type NetworkConnector = {
     sportMarketDataContract?: ethers.Contract;
     sportsAMMContract?: ethers.Contract;
     theRundownConsumerContract?: ethers.Contract;
+    apexConsumerContract?: ethers.Contract;
     thalesBondsContract?: ethers.Contract;
     tagsContract?: ethers.Contract;
     exoticUsdContract?: ethers.Contract;
@@ -43,6 +45,7 @@ const networkConnector: NetworkConnector = {
         this.sportMarketManagerContract = initializeContract(sportMarketManagerContract, networkSettings);
         this.sportMarketDataContract = initializeContract(sportMarketDataContract, networkSettings);
         this.theRundownConsumerContract = initializeContract(theRundownConsumerContract, networkSettings);
+        this.apexConsumerContract = initializeContract(apexConsumerContract, networkSettings);
         this.sportsAMMContract = initializeContract(sportsAMMContract, networkSettings);
         this.sUSDContract = initializeContract(sUSDContract, networkSettings);
         this.overtimeVoucherContract = initializeContract(overtimeVoucherContract, networkSettings);

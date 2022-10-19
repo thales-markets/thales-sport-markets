@@ -6,7 +6,7 @@ type FieldValidationMessageProps = {
     className?: string;
     onClick?: MouseEventHandler<HTMLAnchorElement> | undefined;
     style?: CSSProperties;
-    href: string;
+    href?: string;
     state?: string;
 };
 
@@ -21,13 +21,16 @@ const SPAAnchor: React.FC<FieldValidationMessageProps> = ({ onClick, children, h
                 </Anchor>
             ) : (
                 <Anchor
+                    hasHref={!!href}
                     className={className}
                     style={style}
                     href={href}
                     onClick={(event) => {
                         event.preventDefault();
                         onClick && onClick(event);
-                        navigateTo(href, false, false, state);
+                        if (href) {
+                            navigateTo(href, false, false, state);
+                        }
                     }}
                 >
                     {children}
@@ -37,7 +40,8 @@ const SPAAnchor: React.FC<FieldValidationMessageProps> = ({ onClick, children, h
     );
 };
 
-const Anchor = styled.a`
+const Anchor = styled.a<{ hasHref?: boolean }>`
+    cursor: ${(props) => (props.hasHref ? 'pointer' : 'default')};
     all: unset;
 `;
 

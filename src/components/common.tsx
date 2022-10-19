@@ -124,13 +124,20 @@ export const MatchInfo = styled(FlexDivRow)`
     cursor: pointer;
 `;
 
-export const MatchInfoColumn = styled(FlexDivColumnCentered)`
+export const MatchInfoColumn = styled(FlexDivColumnCentered)<{ isApexTopGame?: boolean }>`
     align-items: center;
-    height: 249px;
+    height: ${(props) => (props.isApexTopGame ? 'auto' : '249px')};
     justify-content: flex-start;
     &:nth-child(odd) {
-        margin-top: 40px;
+        margin-top: ${(props) => (props.isApexTopGame ? 0 : 40)}px;
     }
+    cursor: pointer;
+    position: relative;
+`;
+
+export const ApexMatchInfoColumn = styled(FlexDivColumnCentered)`
+    align-items: center;
+    justify-content: flex-start;
     cursor: pointer;
     position: relative;
 `;
@@ -148,10 +155,11 @@ export const MatchDate = styled.label`
     cursor: pointer;
 `;
 
-export const MarketInfoContainer = styled.div`
+export const MarketInfoContainer = styled.div<{ marginTop?: number }>`
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: ${(props) => props.marginTop || 0}px;
 `;
 
 export const MatchInfoLabel = styled.label<{
@@ -159,6 +167,9 @@ export const MatchInfoLabel = styled.label<{
     claimable?: boolean;
     isCanceledMarket?: boolean;
     pendingResolution?: boolean;
+    isPaused?: boolean;
+    isApexTopGame?: boolean;
+    marginTop?: number;
 }>`
     font-style: normal;
     font-weight: 400;
@@ -169,14 +180,15 @@ export const MatchInfoLabel = styled.label<{
     width: ${(props) => (props.pendingResolution ? 'fit-content' : '100px')};
     white-space: nowrap;
     color: ${(props) =>
-        props.isMaturedMarket || props.isCanceledMarket
+        props.isMaturedMarket || props.isCanceledMarket || props.isPaused
             ? props.theme.oddsColor.secondary
             : props.claimable
             ? props.theme.textColor.quaternary
             : props.theme.textColor.primary};
     cursor: pointer;
-    position: ${(props) => (props.pendingResolution ? 'absolute' : '')};
+    position: ${(props) => (props.pendingResolution && !props.isApexTopGame ? 'absolute' : '')};
     text-transform: uppercase;
+    margin-top: ${(props) => props.marginTop || 0}px;
 `;
 
 export const MatchVSLabel = styled.label<{
@@ -197,10 +209,31 @@ export const MatchVSLabel = styled.label<{
     margin-top: ${(props) => (props.pendingResolution ? '22px' : '')};
 `;
 
+export const BetTypeInfo = styled.label`
+    font-style: normal;
+    font-weight: 200;
+    font-size: 18px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    width: 200px;
+    margin-left: 10px;
+    margin-top: 10px;
+    text-align: center;
+    color: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
+    @media (max-width: 575px) {
+        width: auto;
+        font-size: 15px;
+        line-height: 18px;
+    }
+`;
+
 export const MatchParticipantImageContainer = styled(FlexDiv)<{
     isWinner?: boolean;
     finalResult?: number;
     isCanceled?: boolean;
+    isApexTopGame?: boolean;
 }>`
     border-radius: 50%;
     border: 3px solid
@@ -213,7 +246,8 @@ export const MatchParticipantImageContainer = styled(FlexDiv)<{
                 ? props.theme.oddsColor.secondary
                 : props.theme.borderColor.primary};
     background: transparent;
-    opacity: ${(props) => (props.finalResult && props.finalResult !== 3 && !props.isWinner ? '0.5' : '')};
+    opacity: ${(props) =>
+        props.finalResult && props.finalResult !== 3 && !props.isWinner && !props.isApexTopGame ? '0.5' : ''};
     height: 126px;
     width: 126px;
     line-height: 100%;
@@ -238,7 +272,12 @@ export const MatchParticipantImage = styled.img`
     color: ${(props) => props.theme.textColor.primary};
 `;
 
-export const MatchParticipantName = styled.label<{ isTwoPositioned?: boolean; glow?: boolean; glowColor?: string }>`
+export const MatchParticipantName = styled.label<{
+    isTwoPositioned?: boolean;
+    glow?: boolean;
+    glowColor?: string;
+    winningColor?: string;
+}>`
     display: flex;
     visibility: ${(props) => (props.isTwoPositioned ? 'hidden' : '')};
     font-style: normal;
@@ -251,7 +290,8 @@ export const MatchParticipantName = styled.label<{ isTwoPositioned?: boolean; gl
     text-align: center;
     margin-top: 5px;
     cursor: pointer;
-    color: ${(_props) => (_props?.glow ? _props.glowColor : _props.theme.textColor.primary)};
+    color: ${(_props) =>
+        _props?.winningColor ? _props?.winningColor : _props?.glow ? _props.glowColor : _props.theme.textColor.primary};
     text-shadow: ${(_props) => (_props?.glow ? '0 0 15px ' + _props.glowColor : '')};
 `;
 
@@ -314,18 +354,18 @@ export const WinnerLabel = styled.label<{ isWinning: boolean; finalResult?: numb
     cursor: pointer;
 `;
 
-export const ScoreLabel = styled.label`
+export const ScoreLabel = styled.label<{ winningColor?: string }>`
     display: flex;
     font-style: normal;
     font-weight: 700;
     font-size: 30px;
     line-height: 35px;
     align-items: center;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => (props.winningColor ? props.winningColor : props.theme.textColor.primary)};
     cursor: pointer;
 `;
 
-export const ProfitLabel = styled.label<{ claimable: boolean; profit: number }>`
+export const ProfitLabel = styled.label<{ claimable: boolean }>`
     display: flex;
     visibility: ${(props) => (!props.claimable ? 'hidden' : '')};
     font-style: normal;
@@ -334,12 +374,6 @@ export const ProfitLabel = styled.label<{ claimable: boolean; profit: number }>`
     line-height: 20px;
     text-transform: uppercase;
     text-align: center;
-    color: ${(props) =>
-        props.profit === 0
-            ? props.theme.oddsColor.tertiary
-            : props.profit > 0
-            ? props.theme.oddsColor.primary
-            : props.theme.oddsColor.secondary};
     cursor: pointer;
     margin-top: 37px;
 `;

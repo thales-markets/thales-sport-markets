@@ -41,7 +41,7 @@ export const MatchInfo = styled(FlexDivRow)`
     justify-content: space-around;
     @media (max-width: 768px) {
         width: 90%;
-        margin-top: 55px;
+        margin-top: 70px;
     }
 `;
 
@@ -77,6 +77,40 @@ export const MatchVSLabel = styled.label`
     margin-top: -20px;
 `;
 
+export const BetTypeInfo = styled.label`
+    font-style: normal;
+    font-weight: 200;
+    font-size: 20px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    width: 300px;
+    margin-left: 10px;
+    margin-top: 10px;
+    text-align: center;
+    color: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
+    @media (max-width: 575px) {
+        width: auto;
+    }
+`;
+
+export const RaceNameLabel = styled.label`
+    font-style: normal;
+    font-weight: 200;
+    font-size: 14px;
+    line-height: 18px;
+    display: flex;
+    align-items: center;
+    color: ${(props) => props.theme.textColor.primary};
+    margin-top: -40px;
+    text-align: center;
+    @media (max-width: 400px) {
+        font-size: 12px;
+        margin-top: -35px;
+    }
+`;
+
 export const OddsContainer = styled(FlexDivRow)`
     margin: 50px 72px 0 72px;
     @media (max-width: 1440px) {
@@ -88,12 +122,14 @@ export const OddsContainer = styled(FlexDivRow)`
 `;
 
 export const Pick = styled(FlexDivColumn)<{ selected?: boolean }>`
+    overflow: hidden;
+    position: relative;
     cursor: pointer;
     padding: 20px 5px;
     margin: 0 30px;
     text-align: center;
     border-radius: 10px;
-    border: ${(props) => (props.selected ? '2px solid #5f6180' : '2px solid transparent')};
+    border: ${(props) => (props.selected ? '2px solid #5f6180' : '2px solid #484a6a')};
     box-shadow: ${(props) => (props.selected ? '0px 4px 24px 9px rgba(0, 0, 0, 0.25)' : '')};
     justify-content: space-between;
     &:hover {
@@ -106,6 +142,7 @@ export const Pick = styled(FlexDivColumn)<{ selected?: boolean }>`
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    margin-bottom: 10px;
 `;
 
 export const Option = styled.div<{ color: string }>`
@@ -256,7 +293,7 @@ export const MaxButton = styled.button`
     cursor: pointer;
 `;
 
-export const Status = styled.p<{ resolved: boolean; claimable: boolean }>`
+export const Status = styled.p<{ claimable: boolean }>`
     font-weight: 700;
     font-size: 17.2944px;
     line-height: 24px;
@@ -264,15 +301,9 @@ export const Status = styled.p<{ resolved: boolean; claimable: boolean }>`
     align-items: center;
     justify-content: center;
     color: ${(props) => (!props.claimable ? '#E26A78' : '#3fd1ff')};
-    &:after {
-        font-family: ExoticIcons !important;
-        content: '\\0044';
-        font-size: 16px;
-        line-height: 16px;
-        margin-left: 2px;
-        color: ${(props) => (!props.claimable ? '#E26A78' : '#3fd1ff')};
-    }
     margin-top: 10px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
 `;
 
 export const ClaimButton = styled.button<{ cancelled?: boolean }>`
@@ -376,4 +407,20 @@ export const Icon = styled.i`
     font-size: 20px;
     margin-left: 4px;
     margin-right: 7px;
+`;
+
+export const Discount = styled.div`
+    background: #5fc694;
+    color: #303656;
+    position: absolute;
+    width: 120px;
+    height: 30px;
+    top: 17px;
+    right: -30px;
+    transform: rotate(45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
 `;

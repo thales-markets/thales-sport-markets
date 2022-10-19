@@ -37,3 +37,12 @@ export const fixLongTeamNameString = (team: string) => {
     team.toLowerCase() == 'borussia monchengladbach' ? (team = "Borussia M'gladbach") : '';
     return team;
 };
+
+export const fixApexName = (team: string) =>
+    team !== null
+        ? team
+              .toLowerCase()
+              .split(' ')
+              .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
+              .join(' ')
+        : '';

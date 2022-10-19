@@ -28,8 +28,10 @@ export enum SportFilterEnum {
     Football = 'Football',
     UFC = 'UFC',
     Baseball = 'Baseball',
-    Basketball = 'Basketball',
+    Formula1 = 'Formula1',
+    MotoGP = 'MotoGP',
     Hockey = 'Hockey',
+    Basketball = 'Basketball',
     // Tennis = 'Tennis',
 }
 
@@ -74,9 +76,29 @@ export enum MarketStatus {
 }
 
 export enum OddsType {
-    American = 'American Odds',
-    Decimal = 'Decimal Odds',
-    AMM = 'Normalized Implied Odds',
+    American = 'american-odds',
+    Decimal = 'decimal-odds',
+    AMM = 'normalized-implied-odds',
 }
 
 export const ODDS_TYPES = [OddsType.AMM, OddsType.Decimal, OddsType.American];
+
+export const MAX_TOKEN_SLIPPAGE = 0.995;
+export const MAX_USD_SLIPPAGE = 0.99;
+export const APPROVAL_BUFFER = 0.01;
+
+export const APEX_GAME_MIN_TAG = 9100;
+
+export enum ApexBetType {
+    H2H = 0,
+    TOP3 = 1,
+    TOP5 = 2,
+    TOP10 = 3,
+}
+
+export const ApexBetTypeKeyMapping = {
+    [ApexBetType.H2H]: 'h2h',
+    [ApexBetType.TOP3]: 'top3',
+    [ApexBetType.TOP5]: 'top5',
+    [ApexBetType.TOP10]: 'top10',
+};

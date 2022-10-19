@@ -13,11 +13,25 @@ export const navigateTo = (path: string, replacePath = false, scrollToTop = fals
 
 export const buildHref = (route: string) => `${ifIpfsDeployment ? '#' : ''}${route}`;
 
-export const buildMarketLink = (marketAddress: string, excludeSlash = false) =>
-    `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${ROUTES.Markets.Home}/${marketAddress}`;
+export const buildMarketLink = (marketAddress: string, language: string, excludeSlash = false) =>
+    `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${ROUTES.Markets.Home}/${marketAddress}?lang=${language}`;
 
-export const buildReferralLink = (route: string, search: string, referralId: string) => {
-    return `${ifIpfsDeployment ? '/#' : ''}${route}${search}&referralId=${referralId.toLowerCase()}`;
+export const buildReferralLink = (route: string, hash: string, search: string, referralId: string) => {
+    if (ifIpfsDeployment) {
+        if (hash.includes('referralId')) {
+            const reg = /referralId=\w{1,42}/;
+            const replacedReferral = hash.replace(reg, `referralId=${referralId.toLowerCase()}`);
+            return `/${replacedReferral}`;
+        }
+        return `/${hash}&referralId=${referralId.toLowerCase()}`;
+    } else {
+        if (search.includes('referralId')) {
+            const reg = /referralId=\w{1,42}/;
+            const replacedReferral = search.replace(reg, `referralId=${referralId.toLowerCase()}`);
+            return `${route}${replacedReferral}`;
+        }
+        return `${route}${search}&referralId=${referralId.toLowerCase()}`;
+    }
 };
 
-export { history };
+export { history, ifIpfsDeployment };

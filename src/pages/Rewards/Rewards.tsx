@@ -33,8 +33,9 @@ import { getEtherscanAddressLink } from 'utils/etherscan';
 
 type RewardsType = {
     address: string;
-    pnl: number;
+    rebates: number;
     percentage: number;
+    volume: number;
     rewards: {
         op: number;
         thales: number;
@@ -48,7 +49,7 @@ const Rewards: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const [searchText, setSearchText] = useState<string>('');
     const PERIOD_DURATION_IN_DAYS = 14;
-    const START_DATE = new Date(Date.UTC(2022, 7, 29, 0, 0, 0));
+    const START_DATE = new Date(Date.UTC(2022, 8, 26, 0, 0, 0));
     const NOW = new Date();
 
     let CALCULATED_START = new Date(START_DATE.getTime());
@@ -57,20 +58,21 @@ const Rewards: React.FC = () => {
     const options: Array<{ value: number; label: string }> = [];
 
     while (true) {
-        if (CALCULATED_START.getTime() < NOW.getTime() && PERIOD_COUNTER < 2) {
+        if (CALCULATED_START.getTime() < NOW.getTime()) {
             CALCULATED_START = new Date(CALCULATED_START.getTime() + PERIOD_DURATION_IN_DAYS * 24 * 60 * 60 * 1000);
             options.push({
                 value: PERIOD_COUNTER,
-                label: `${mapPeriod(PERIOD_COUNTER)} period`,
+                label: t(`rewards.periods.period-${PERIOD_COUNTER}`),
             });
             PERIOD_COUNTER++;
         } else {
             break;
         }
     }
+
     const [period, setPeriod] = useState<number>(options.length > 0 ? options[options.length - 1].value : 0);
 
-    const rewardsDataQuery = useRewardsDataQuery(networkId, period + 2, {
+    const rewardsDataQuery = useRewardsDataQuery(networkId, period, {
         enabled: isAppReady,
     });
 
@@ -131,14 +133,18 @@ const Rewards: React.FC = () => {
                                     width={300}
                                 />
                             </SelectContainer>
-                            <TotalPnl>{`${t('rewards.total-negative-pnl')} is ${Math.abs(
-                                Number(rewardsDataQuery?.data?.negativePnlTotal)
+                            <TotalPnl>{`${t('rewards.twap')} is ${Math.abs(
+                                Number(rewardsDataQuery?.data?.twapForPeriod)
+                            ).toFixed(2)} $`}</TotalPnl>
+                            <TotalPnl>{`${t('rewards.total-global-rebates')} is ${Math.abs(
+                                Number(rewardsDataQuery?.data?.rebatesToPay)
                             ).toFixed(2)} $`}</TotalPnl>
                         </Row>
                         {userRewardData && (
                             <HighlightRow>
-                                <HighlightColumn>{'Your score'}</HighlightColumn>
-                                <HighlightColumn>{`${Number(userRewardData?.pnl).toFixed(2)} $`}</HighlightColumn>
+                                <HighlightColumn>{t('rewards.your-score')}</HighlightColumn>
+                                <HighlightColumn>{`${Number(userRewardData?.volume).toFixed(2)} $`}</HighlightColumn>
+                                <HighlightColumn>{`${Number(userRewardData?.rebates).toFixed(2)} $`}</HighlightColumn>
                                 <HighlightColumn>{`${Number(userRewardData?.percentage).toFixed(
                                     2
                                 )} %`}</HighlightColumn>
@@ -164,12 +170,21 @@ const Rewards: React.FC = () => {
                                     sortable: false,
                                 },
                                 {
-                                    Header: <>{t('rewards.table.pnl')}</>,
-                                    accessor: 'pnl',
-                                    Cell: (cellProps: CellProps<RewardsType, RewardsType['pnl']>) => (
+                                    Header: <>{t('rewards.table.volume')}</>,
+                                    accessor: 'volume',
+                                    Cell: (cellProps: CellProps<RewardsType, RewardsType['volume']>) => (
                                         <p>{`${Number(cellProps.cell.value).toFixed(2)} $`}</p>
                                     ),
-                                    sortType: pnlSort(),
+                                    sortType: volumeSort(),
+                                    sortable: true,
+                                },
+                                {
+                                    Header: <>{t('rewards.table.rebates')}</>,
+                                    accessor: 'rebates',
+                                    Cell: (cellProps: CellProps<RewardsType, RewardsType['rebates']>) => (
+                                        <p>{`${Number(cellProps.cell.value).toFixed(2)} $`}</p>
+                                    ),
+                                    sortType: volumeSort(),
                                     sortable: true,
                                 },
                                 {
@@ -220,25 +235,8 @@ const percentageSort = () => (rowA: any, rowB: any) => {
     return rowA.original.percentage - rowB.original.percentage;
 };
 
-const pnlSort = () => (rowA: any, rowB: any) => {
-    return rowA.original.pnl - rowB.original.pnl;
-};
-
-const mapPeriod = (period: number) => {
-    switch (period) {
-        case 0:
-            return 'First';
-        case 1:
-            return 'Second';
-        case 2:
-            return 'Third';
-        case 3:
-            return 'Fourth';
-        case 4:
-            return 'Fifth';
-        default:
-            return '';
-    }
+const volumeSort = () => (rowA: any, rowB: any) => {
+    return rowA.original.volume - rowB.original.volume;
 };
 
 export default Rewards;
