@@ -100,6 +100,12 @@ export const convertPositionToTeamName = (result: number, market: MarketData) =>
     if (result == 2) return 'DRAW';
 };
 
+export const convertPositionNameToPosition = (positionName: string) => {
+    if (positionName?.toUpperCase() == 'HOME') return 0;
+    if (positionName?.toUpperCase() == 'AWAY') return 1;
+    if (positionName?.toUpperCase() == 'DRAW') return 2;
+};
+
 export const isApexGame = (tag: number) => tag >= APEX_GAME_MIN_TAG;
 
 export const getScoreForApexGame = (resultDetails: string, defaultHomeScore: string, defaultAwayScore: string) => {

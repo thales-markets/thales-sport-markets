@@ -20,6 +20,7 @@
             "connect-your-wallet": "Connect wallet",
             "switch-wallet": "Switch wallet",
             "disconnect-wallet": "Disconnect wallet",
+            "wallet-info": "Wallet info",
             "wallet-options": "Wallet options",
             "get-usd": "Get {{amount}}",
             "approve": "Approve",
