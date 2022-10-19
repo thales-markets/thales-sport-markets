@@ -295,7 +295,7 @@ export const LargeText = styled.label`
     color: ${(props) => props.theme.textColor.primary};
     &.first {
         align-self: center;
-        width: min-content;
+        width: 53%;
         text-align: center;
         @media (max-width: 960px) {
             margin-left: 10%;
@@ -316,7 +316,7 @@ export const LargeText = styled.label`
     &.fourth {
         text-align: left;
         align-self: flex-start;
-        width: min-content;
+        width: 50%;
     }
     &.fifth {
         text-align: right;
