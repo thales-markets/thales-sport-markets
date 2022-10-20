@@ -28,6 +28,7 @@ const BannerCarousel: React.FC = () => {
         <Container>
             <Carousel
                 transitionTime={1000}
+                interval={5000}
                 showStatus={false}
                 showArrows={false}
                 showThumbs={false}
