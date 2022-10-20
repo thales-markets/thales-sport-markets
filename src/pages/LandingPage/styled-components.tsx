@@ -247,7 +247,7 @@ export const Zebro = styled.img`
             width: 25em;
             top: -130px;
         }
-        @media (max-width: 450px) {
+        @media (max-width: 400px) {
             top: -150px;
         }
     }
