@@ -11,12 +11,20 @@ export const Container = styled(FlexDivColumn)`
 
 export const Header = styled(FlexDivRowCentered)`
     align-items: center;
+    width: 100%;
+    padding: 0px 20px;
+    @media (max-width: 450px) {
+        padding: 0px 10px;
+    }
+    @media (max-width: 400px) {
+        padding: 0px;
+    }
 `;
 export const Logo = styled.img`
     color: ${(props) => props.theme.textColor.primary};
-    height: 50px;
-    @media (max-width: 750px) {
-        height: 35px;
+    height: 35px;
+    @media (max-width: 400px) {
+        height: 30px;
     }
 `;
 
@@ -85,8 +93,9 @@ export const Section = styled(FlexDivColumn)`
 `;
 
 export const ZebraLogo = styled.img`
+    height: 110px;
     @media (max-width: 750px) {
-        height: 100px;
+        height: 80px;
     }
 `;
 
@@ -292,14 +301,15 @@ export const LargeText = styled.label`
     font-family: JostExtraBold !important;
     font-style: normal;
     font-weight: 900;
-    font-size: 90px;
+    font-size: 80px;
     line-height: 90%;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
     &.first {
         align-self: center;
-        width: 53%;
+        width: 51%;
         text-align: center;
+        z-index: 100;
         @media (max-width: 960px) {
             margin-left: 10%;
         }
@@ -323,7 +333,7 @@ export const LargeText = styled.label`
     }
     &.fifth {
         text-align: right;
-        width: 80%;
+        width: 70%;
         display: flex;
         align-self: self-end;
         @media (max-width: 960px) {
@@ -543,6 +553,9 @@ export const Link = styled.a<{ height: string }>`
         @media (max-width: 450px) {
             height: 25px;
         }
+        @media (max-width: 400px) {
+            height: 23px;
+        }
     }
     &:nth-child(3) {
         margin-top: -9px;
@@ -561,6 +574,10 @@ export const Link = styled.a<{ height: string }>`
         }
         @media (max-width: 450px) {
             height: 17px;
+            margin-top: -6px;
+        }
+        @media (max-width: 400px) {
+            height: 15px;
             margin-top: -6px;
         }
     }
@@ -628,7 +645,7 @@ export const InfoBoxTitle = styled.label`
     }
 
     @media (max-width: 400px) {
-        font-size: 15px;
+        font-size: 14px;
     }
 `;
 
@@ -787,4 +804,11 @@ export const LeagueIcon = styled.i`
     @media (max-width: 450px) {
         font-size: 80px;
     }
+    @media (max-width: 400px) {
+        font-size: 70px;
+    }
+`;
+
+export const LogoContainer = styled(FlexDivRow)`
+    align-items: center;
 `;

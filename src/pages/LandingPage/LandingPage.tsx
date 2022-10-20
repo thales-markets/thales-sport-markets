@@ -39,6 +39,7 @@ import {
     CarouselContainer,
     CarouselIconContainer,
     DocsLink,
+    LogoContainer,
 } from './styled-components';
 import SPAAnchor from 'components/SPAAnchor';
 import { buildHref } from 'utils/routes';
@@ -52,8 +53,10 @@ const LandingPage: React.FC = () => {
     return (
         <Container>
             <Header>
-                <Logo src={OvertimeLogo} alt="overtime logo" />
-                <ZebraLogo src={ZebraLogoImg} alt="zebra logo" />
+                <LogoContainer>
+                    <Logo src={OvertimeLogo} alt="overtime logo" />
+                    <ZebraLogo src={ZebraLogoImg} alt="zebra logo" />
+                </LogoContainer>
                 <LanguageSelector />
             </Header>
             <Section className="first">
