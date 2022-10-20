@@ -177,7 +177,8 @@
                 "history": "Tus transacciones",
                 "canceled": "Cancelados",
                 "archivedmarkets": "Mercados archivados",
-                "tooltip": "Mercados resueltos hace más de 7 días"
+                "tooltip": "Mercados resueltos hace más de 7 días",
+                "pendingmarkets": "Pendiente"
             },
             "sport": {
                 "all": "Todos los deportes",

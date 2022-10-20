@@ -14,6 +14,7 @@ const marketsParams = {
     [GlobalFiltersEnum.OpenMarkets]: { isOpen: true },
     [GlobalFiltersEnum.Canceled]: { isCanceled: true },
     [GlobalFiltersEnum.ResolvedMarkets]: { isResolved: true },
+    [GlobalFiltersEnum.PendingMarkets]: { isResolved: false },
     [GlobalFiltersEnum.All]: {},
     [GlobalFiltersEnum.YourPositions]: {},
     [GlobalFiltersEnum.Claim]: { isOpen: false },
@@ -24,6 +25,7 @@ export const marketsCache = {
     [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,
     [GlobalFiltersEnum.Canceled]: [] as SportMarkets,
     [GlobalFiltersEnum.ResolvedMarkets]: [] as SportMarkets,
+    [GlobalFiltersEnum.PendingMarkets]: [] as SportMarkets,
     [GlobalFiltersEnum.All]: [] as SportMarkets,
     [GlobalFiltersEnum.YourPositions]: [] as SportMarkets,
     [GlobalFiltersEnum.Claim]: [] as SportMarkets,
@@ -124,6 +126,7 @@ const mapMarkets = (allMarkets: SportMarkets) => {
     const openMarkets = [] as SportMarkets;
     const canceledMarkets = [] as SportMarkets;
     const resolvedMarkets = [] as SportMarkets;
+    const pendingMarkets = [] as SportMarkets;
 
     allMarkets.forEach((market) => {
         if (
@@ -143,11 +146,15 @@ const mapMarkets = (allMarkets: SportMarkets) => {
         if (market.isCanceled) {
             canceledMarkets.push(market);
         }
+        if (market.maturityDate < new Date() && !market.isResolved && !market.isCanceled) {
+            pendingMarkets.push(market);
+        }
     });
 
     marketsCache[GlobalFiltersEnum.OpenMarkets] = openMarkets;
     marketsCache[GlobalFiltersEnum.ResolvedMarkets] = resolvedMarkets;
     marketsCache[GlobalFiltersEnum.Canceled] = canceledMarkets;
+    marketsCache[GlobalFiltersEnum.PendingMarkets] = pendingMarkets;
     marketsCache[GlobalFiltersEnum.All] = allMarkets;
     marketsCache[GlobalFiltersEnum.Claim] = allMarkets;
     marketsCache[GlobalFiltersEnum.YourPositions] = allMarkets;

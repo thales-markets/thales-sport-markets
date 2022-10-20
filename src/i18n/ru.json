@@ -177,7 +177,8 @@
                 "history": "Your transactions",
                 "canceled": "Cancelled",
                 "archivedmarkets": "Archived markets",
-                "tooltip": "Markets resolved more than 7 days ago"
+                "tooltip": "Markets resolved more than 7 days ago",
+                "pendingmarkets": "В ожидании"
             },
             "sport": {
                 "all": "All sports",

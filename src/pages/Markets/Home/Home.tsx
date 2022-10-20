@@ -90,7 +90,7 @@ const Home: React.FC = () => {
     const [tagFilter, setTagFilter] = useLocalStorage<Tags>(LOCAL_STORAGE_KEYS.FILTER_TAGS, []);
     const [availableTags, setAvailableTags] = useState<Tags>(tagsList.sort((a, b) => a.label.localeCompare(b.label)));
 
-    const [dateFilter, setDateFilter] = useLocalStorage<number>(LOCAL_STORAGE_KEYS.FILTER_DATES, 0);
+    const [dateFilter, setDateFilter] = useLocalStorage<Date | number>(LOCAL_STORAGE_KEYS.FILTER_DATES, new Date());
 
     const [sportParam, setSportParam] = useQueryParam('sport', '');
     const [globalFilterParam, setGlobalFilterParam] = useQueryParam('globalFilter', '');
@@ -105,9 +105,15 @@ const Home: React.FC = () => {
             globalFilterParam != ''
                 ? setGlobalFilter(globalFilterParam as GlobalFiltersEnum)
                 : setGlobalFilterParam(globalFilter);
-            dateParam != ''
-                ? setDateFilter(new Date(dateParam).getTime())
-                : setDateParam(dateFilter !== 0 ? new Date(dateFilter).toDateString() : '');
+            if (dateParam != '') {
+                setDateFilter(new Date(dateParam).setHours(23, 59, 59, 999));
+            } else {
+                const today = new Date();
+                today.setHours(23, 59, 59, 999);
+                setDateFilter(today);
+                setDateParam(today.toDateString());
+            }
+
             if (tagParam != '') {
                 const tagParamsSplitted = tagParam.split(',');
                 const filteredTags = availableTags.filter((tag) => tagParamsSplitted.includes(tag.label));
@@ -236,6 +242,12 @@ const Home: React.FC = () => {
                         market.maturityDate.getTime() + 7 * 24 * 60 * 60 * 1000 > new Date().getTime()
                 );
                 break;
+            case GlobalFiltersEnum.PendingMarkets:
+                filteredMarkets = filteredMarkets.filter(
+                    (market: SportMarketInfo) =>
+                        market.maturityDate < new Date() && !market.isResolved && !market.isCanceled
+                );
+                break;
             case GlobalFiltersEnum.YourPositions:
                 filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => {
                     const accountPositionsPerMarket: AccountPosition[] = accountPositions[market.address];
@@ -338,6 +350,7 @@ const Home: React.FC = () => {
                     }}
                 />
             </Info>
+
             <BurgerFiltersContainer show={showBurger} onClick={() => setShowBurger(false)}>
                 <LogoContainer>
                     <Logo />
@@ -404,6 +417,7 @@ const Home: React.FC = () => {
                     {Object.values(GlobalFiltersEnum)
                         .filter(
                             (filterItem) =>
+                                filterItem != GlobalFiltersEnum.All &&
                                 filterItem != GlobalFiltersEnum.Claim &&
                                 filterItem != GlobalFiltersEnum.History &&
                                 filterItem != GlobalFiltersEnum.YourPositions
@@ -589,6 +603,7 @@ const Home: React.FC = () => {
                             setSportFilter={setSportFilter}
                             setSportParam={setSportParam}
                             globalFilter={globalFilter}
+                            dateFilter={dateFilter}
                         />
                         {marketsList.length === 0 ? (
                             <NoMarketsContainer>

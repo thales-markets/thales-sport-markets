@@ -177,7 +177,8 @@
                 "history": "竞猜记录",
                 "canceled": "已取消",
                 "archivedmarkets": "已存档的比赛",
-                "tooltip": "已结束超过7天的比赛"
+                "tooltip": "已结束超过7天的比赛",
+                "pendingmarkets": "待办的"
             },
             "sport": {
                 "all": "所有运动",

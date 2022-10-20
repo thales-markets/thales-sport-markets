@@ -152,7 +152,7 @@
         "tags-label": "Tags",
         "search-placeholder": "Search games",
         "open-markets-label": "Opened",
-        "resolved-markets-label": "Resolved",
+        "resolved-markets-label": "Finished",
         "grid-view": "Grid",
         "list-view": "List",
         "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
@@ -170,8 +170,9 @@
         "filter-label": {
             "global": {
                 "allmarkets": "All",
-                "openmarkets": "Open",
-                "resolvedmarkets": "Resolved",
+                "openmarkets": "All",
+                "resolvedmarkets": "Finished",
+                "pendingmarkets": "Pending",
                 "yourpositions": "Your positions",
                 "claim": "Claimable",
                 "history": "Your transactions",

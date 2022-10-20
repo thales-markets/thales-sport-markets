@@ -177,7 +177,8 @@
                 "history": "Deine Transactions",
                 "canceled": "Abgesagt",
                 "archivedmarkets": "Archivierte Märkte",
-                "tooltip": "Märkte aufgelöst vor mehr als 7 Tagen"
+                "tooltip": "Märkte aufgelöst vor mehr als 7 Tagen",
+                "pendingmarkets": "Ausstehend"
             },
             "sport": {
                 "all": "alle Sportarten",

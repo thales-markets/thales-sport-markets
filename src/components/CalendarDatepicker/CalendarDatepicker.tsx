@@ -1,45 +1,69 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
+import { formatShortDate } from 'utils/formatters/date';
 
-type DatetimePickerProps = {
-    startDate: Date | null;
-    endDate: Date | null;
-    onDateRangeChange: (dates: [Date | null, Date | null]) => void;
+type CalendarDatepickerProps = {
+    date: Date | number;
+    setDate: (date: Date | number) => void;
+    setDateParam: (value: any) => void;
 };
 
-export const RangedDatepicker: React.FC<DatetimePickerProps> = ({ startDate, endDate, onDateRangeChange }) => {
+const CalendarDatepicker: React.FC<CalendarDatepickerProps> = ({ date, setDate, setDateParam }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    console.log(date);
     return (
         <DatePickerContainer>
-            <ReactDatePicker
-                selected={checkTypeOf(startDate)}
-                onChange={onDateRangeChange}
-                startDate={checkTypeOf(startDate)}
-                endDate={checkTypeOf(endDate)}
-                selectsRange
-                inline
-            />
+            <DatepickerButton onClick={() => setIsOpen(!isOpen)}>
+                {typeof date != 'number' ? formatShortDate(date) : 'Choose date'}
+            </DatepickerButton>
+            {isOpen && (
+                <ReactDatePicker
+                    selected={checkTypeOf(date)}
+                    onSelect={(e) => {
+                        if (e != null && typeof date != 'number') {
+                            e.setHours(23, 59, 59, 999);
+                            if (e.getTime() == date.getTime()) {
+                                setDate(0);
+                                setDateParam('');
+                            }
+                        }
+                    }}
+                    onChange={(e) => {
+                        if (e != null) {
+                            e.setHours(23, 59, 59, 999);
+                            setDate(e);
+                            setDateParam(e.toDateString());
+                        }
+                    }}
+                    onClickOutside={() => setIsOpen(false)}
+                    inline
+                />
+            )}
         </DatePickerContainer>
     );
 };
 
 const checkTypeOf = (date: any) => {
-    if (typeof date === 'string') {
+    if (typeof date != 'number') {
         return new Date(date);
     }
 
-    return date;
+    return null;
 };
 
 const DatePickerContainer = styled.div`
+    z-index: 1001;
+    position: relative;
     .react-datepicker {
-        display: flex !important;
+        position: absolute;
         box-sizing: border-box;
         border: none !important;
         background: ${(props) => props.theme.background.secondary} !important;
         border-radius: 6px;
-        margin-top: 20px;
+        margin-top: 4px;
+        right: -29px;
     }
 
     .react-datepicker__header {
@@ -106,4 +130,19 @@ const DatePickerContainer = styled.div`
     }
 `;
 
-export default RangedDatepicker;
+const DatepickerButton = styled.button`
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 14px;
+    background: transparent;
+    border: none;
+    text-transform: uppercase;
+    padding: 0;
+    color: ${(props) => props.theme.textColor.secondary};
+    &:hover {
+        cursor: pointer;
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
+`;
+
+export default CalendarDatepicker;

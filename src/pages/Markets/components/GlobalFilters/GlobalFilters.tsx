@@ -1,11 +1,12 @@
 import Dropdown from 'components/Dropdown';
 import { GlobalFiltersEnum, OddsType, ODDS_TYPES, SportFilterEnum } from 'constants/markets';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOddsType, setOddsType } from 'redux/modules/ui';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import CalendarDatepicker from 'components/CalendarDatepicker';
 
 type GlobalFiltersProps = {
     setDateFilter: (value: any) => void;
@@ -17,6 +18,7 @@ type GlobalFiltersProps = {
     setSportFilter: (value: any) => void;
     setSportParam: (value: any) => void;
     globalFilter: GlobalFiltersEnum;
+    dateFilter: Date | number;
 };
 
 const GlobalFilters: React.FC<GlobalFiltersProps> = ({
@@ -29,6 +31,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
     setSportFilter,
     setSportParam,
     globalFilter,
+    dateFilter,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -42,6 +45,13 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
         },
         [dispatch]
     );
+
+    useEffect(() => {
+        if (typeof dateFilter != 'number') {
+            setSelectedPeriod(0);
+        }
+    }, [dateFilter]);
+
     return (
         <Container>
             <Filters>
@@ -49,6 +59,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                     {Object.values(GlobalFiltersEnum)
                         .filter(
                             (filterItem) =>
+                                filterItem != GlobalFiltersEnum.All &&
                                 filterItem != GlobalFiltersEnum.Claim &&
                                 filterItem != GlobalFiltersEnum.History &&
                                 filterItem != GlobalFiltersEnum.YourPositions
@@ -82,7 +93,6 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                         list={ODDS_TYPES}
                         selectedItem={selectedOddsType}
                         onSelect={setSelectedOddsType}
-                        style={{ marginRight: '10px' }}
                     />
                 </FilterTypeContainer>
                 <FilterTypeContainer timeFilters={true}>
@@ -141,41 +151,24 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                         <Label>12h</Label>
                     </TimeFilterContainer>
                     <TimeFilterContainer
-                        selected={selectedPeriod == 24}
+                        selected={selectedPeriod == 72}
                         onClick={() => {
-                            if (selectedPeriod == 24) {
+                            if (selectedPeriod == 72) {
                                 setDateFilter(0);
                                 setDateParam('');
                                 setSelectedPeriod(0);
                             } else {
-                                const calculatedDate = addHoursToCurrentDate(24, true);
+                                const calculatedDate = addHoursToCurrentDate(72, true);
                                 setDateFilter(calculatedDate.getTime());
                                 setDateParam(calculatedDate.toDateString());
-                                setSelectedPeriod(24);
+                                setSelectedPeriod(72);
                             }
                         }}
                     >
                         <Circle />
-                        <Label>1d</Label>
+                        <Label>3d</Label>
                     </TimeFilterContainer>
-                    <TimeFilterContainer
-                        selected={selectedPeriod == 168}
-                        onClick={() => {
-                            if (selectedPeriod == 168) {
-                                setDateFilter(0);
-                                setDateParam('');
-                                setSelectedPeriod(0);
-                            } else {
-                                const calculatedDate = addHoursToCurrentDate(168, true);
-                                setDateFilter(calculatedDate.getTime());
-                                setDateParam(calculatedDate.toDateString());
-                                setSelectedPeriod(168);
-                            }
-                        }}
-                    >
-                        <Circle />
-                        <Label>7d</Label>
-                    </TimeFilterContainer>
+                    <CalendarDatepicker date={dateFilter} setDate={setDateFilter} setDateParam={setDateParam} />
                 </FilterTypeContainer>
             </Filters>
         </Container>
@@ -215,8 +208,8 @@ export const Filters = styled(FlexDivRow)`
 `;
 
 export const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: boolean }>`
-    width: ${(props) => (props.timeFilters ? '30%' : '70%')};
-    justify-content: ${(props) => (props.timeFilters ? 'flex-end' : 'space-around')};
+    width: ${(props) => (props.timeFilters ? '35%' : '65%')};
+    justify-content: ${(props) => (props.timeFilters ? 'space-evenly' : 'space-around')};
 `;
 
 export const GlobalFilter = styled.span<{ selected?: boolean }>`
