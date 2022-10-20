@@ -193,7 +193,7 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                             </MatchParticipantName>
                         </>
                     )}
-                    <Tags sport={market.sport} tags={market.tags} />
+                    <Tags isApexTopGame={isApexTopGame} sport={market.sport} tags={market.tags} />
                 </MatchInfoColumn>
                 {!isApexTopGame && (
                     <MatchInfoColumn isApexTopGame={isApexTopGame}>
@@ -287,6 +287,31 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                                 />
                             )}
                         </OddsLabel>
+                        <Discount visible={!!market.homePriceImpact && isDiscounted(market.homePriceImpact)}>
+                            <Tooltip
+                                overlay={
+                                    <span>
+                                        {t(`markets.discounted-per`)}{' '}
+                                        <a
+                                            href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            TIP-95
+                                        </a>
+                                    </span>
+                                }
+                                component={
+                                    <div className="discount-label green">
+                                        <span>-{Math.ceil(Math.abs(market.homePriceImpact || 0))}%</span>
+                                    </div>
+                                }
+                                iconFontSize={23}
+                                marginLeft={2}
+                                top={0}
+                            />
+                        </Discount>
                     </ApexMatchInfoColumn>
                     <ApexMatchInfoColumn>
                         <MatchParticipantName
@@ -308,6 +333,31 @@ const MarketCardOpened: React.FC<MarketCardOpenedProps> = ({ market, accountPosi
                                 />
                             )}
                         </OddsLabel>
+                        <Discount visible={!!market.awayPriceImpact && isDiscounted(market.awayPriceImpact)}>
+                            <Tooltip
+                                overlay={
+                                    <span>
+                                        {t(`markets.discounted-per`)}{' '}
+                                        <a
+                                            href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            TIP-95
+                                        </a>
+                                    </span>
+                                }
+                                component={
+                                    <div className="discount-label green">
+                                        <span>-{Math.ceil(Math.abs(market.awayPriceImpact || 0))}%</span>
+                                    </div>
+                                }
+                                iconFontSize={23}
+                                marginLeft={2}
+                                top={0}
+                            />
+                        </Discount>
                     </ApexMatchInfoColumn>
                 </MatchInfo>
             )}
