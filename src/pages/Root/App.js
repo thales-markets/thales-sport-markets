@@ -17,6 +17,7 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import LandingPageLayout from 'layouts/LandingPageLayout';
 import { ethers } from 'ethers';
+import BannerCarousel from 'components/BannerCarousel';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -90,6 +91,7 @@ const App = () => {
                             />
                             <Route exact path={ROUTES.Markets.Home}>
                                 <DappLayout>
+                                    <BannerCarousel />
                                     <Markets />
                                 </DappLayout>
                             </Route>
