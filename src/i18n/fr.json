@@ -377,12 +377,21 @@
             "pay-with": "Payer avec",
             "validation": {
                 "title": "Validation Parlay",
-                "max-markets": "Maximum 4 marchés à Parlay"
+                "max-markets": "Maximum 4 marchés à Parlay",
+                "availability": "Faible disponibilité pour la position des marchés",
+                "amount-exceeded": "Le montant a dépassé le montant disponible sur AMM",
+                "no-funds": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds",
+                "min-amount": "Le montant minimal est de {{min}}",
+                "min-quote": "Le devis minimal est {{value}}",
+                "max-quote": "Le devis maximum est de {{value}}"
             },
             "payout": "Total reçu",
             "empty-title": "Aucun poste",
             "empty-description": "Ajoutez une position, choisissez un marché et faites votre sélection.",
-            "fee": "Montant total"
+            "fee": "Montant total",
+            "safebox-fee": "Frais SafeBox",
+            "positions": "Postes",
+            "parlay-fee": "Frais de parlay"
         }
     },
     "rewards": {

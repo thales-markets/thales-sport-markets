@@ -46,7 +46,7 @@ const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, on
                     });
                     dispatch(setFavouriteLeagues(showAllLeagues));
                 }}
-                className={`icon icon--revert`}
+                className={`icon icon--revert ${sport.toLowerCase() == 'favourites' ? 'disabled' : ''}`}
             ></RevertIcon>
         </Container>
     );
@@ -99,6 +99,9 @@ const RevertIcon = styled.i`
     right: 0px;
     &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
+    }
+    &.disabled {
+        display: none;
     }
 `;
 

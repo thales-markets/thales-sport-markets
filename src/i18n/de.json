@@ -278,12 +278,21 @@
             "skew": "Schräg",
             "validation": {
                 "title": "Parlay-Validierung",
-                "max-markets": "Maximal 4 Märkte in Parlay"
+                "max-markets": "Maximal 4 Märkte in Parlay",
+                "min-amount": "Minimale Menge ist {{min}}",
+                "max-quote": "Das maximale Zitat ist {{value}}",
+                "amount-exceeded": "Der Betrag hat den auf AMM verfügbaren Betrag überschritten",
+                "min-quote": "Minimales Zitat ist {{value}}",
+                "availability": "Geringe Verfügbarkeit für Marktposition",
+                "no-funds": "Bitte stellen Sie sicher, dass Ihr Portemonnaie über genügend Guthaben verfügt"
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",
             "empty-title": "Keine Positionen",
-            "fee": "Gesamtgebühr"
+            "fee": "Gesamtgebühr",
+            "parlay-fee": "Parlay-Gebühr",
+            "safebox-fee": "SafeBox-Gebühr",
+            "positions": "Positionen"
         }
     },
     "rewards": {

@@ -278,12 +278,21 @@
             "potential-profit": "Beneficio potencial",
             "validation": {
                 "title": "Validación combinada",
-                "max-markets": "Máximo 4 mercados en Parlay"
+                "max-markets": "Máximo 4 mercados en Parlay",
+                "min-amount": "La cantidad mínima es {{min}}",
+                "no-funds": "Asegúrese de que su billetera tenga fondos suficientes",
+                "amount-exceeded": "La cantidad excedió la cantidad disponible en AMM",
+                "max-quote": "La cotización máxima es {{value}}",
+                "min-quote": "La cotización mínima es {{value}}",
+                "availability": "Baja disponibilidad para la posición de los mercados"
             },
             "fee": "Costo total",
             "payout": "Total recibido",
             "empty-title": "Sin posiciones",
-            "empty-description": "Agregue una posición, elija un mercado y haga su selección."
+            "empty-description": "Agregue una posición, elija un mercado y haga su selección.",
+            "safebox-fee": "Tarifa de SafeBox",
+            "parlay-fee": "Tarifa combinada",
+            "positions": "Posiciones"
         }
     },
     "rewards": {

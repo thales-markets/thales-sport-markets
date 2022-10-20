@@ -22,8 +22,8 @@ export enum MarketType {
 }
 
 export enum SportFilterEnum {
-    All = 'All',
     Favourites = 'Favourites',
+    All = 'All',
     Soccer = 'Soccer',
     Football = 'Football',
     UFC = 'UFC',

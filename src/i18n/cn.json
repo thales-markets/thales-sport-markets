@@ -278,12 +278,21 @@
             "available": "可用的",
             "validation": {
                 "title": "过关投注验证",
-                "max-markets": "Parlay 中最多 4 个盘口"
+                "max-markets": "Parlay 中最多 4 个盘口",
+                "amount-exceeded": "金额超过 AMM 上可用的金额",
+                "min-amount": "最低金额为 {{min}}",
+                "no-funds": "请确保您的钱包有足够的资金",
+                "availability": "市场地位的低可用性",
+                "min-quote": "最小报价是 {{value}}",
+                "max-quote": "最大报价为 {{value}}"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",
             "fee": "总费用",
-            "empty-title": "没有职位"
+            "empty-title": "没有职位",
+            "positions": "职位",
+            "safebox-fee": "保险箱费用",
+            "parlay-fee": "过关费"
         }
     },
     "rewards": {

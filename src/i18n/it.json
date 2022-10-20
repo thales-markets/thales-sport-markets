@@ -278,12 +278,21 @@
             "available": "A disposizione",
             "validation": {
                 "title": "Convalida Parlay",
-                "max-markets": "Massimo 4 mercati a Parlay"
+                "max-markets": "Massimo 4 mercati a Parlay",
+                "min-amount": "L'importo minimo è {{min}}",
+                "amount-exceeded": "L'importo ha superato l'importo disponibile su AMM",
+                "max-quote": "La quotazione massima è {{value}}",
+                "availability": "Bassa disponibilità per posizione sui mercati",
+                "no-funds": "Assicurati che il tuo portafoglio abbia fondi sufficienti",
+                "min-quote": "La citazione minima è {{value}}"
             },
             "empty-title": "Nessuna posizione",
             "fee": "Tariffa totale",
             "payout": "Totale ricevuto",
-            "empty-description": "Aggiungi posizione, scegli un mercato e fai la tua selezione."
+            "empty-description": "Aggiungi posizione, scegli un mercato e fai la tua selezione.",
+            "parlay-fee": "Tariffa Parlay",
+            "safebox-fee": "Tariffa SafeBox",
+            "positions": "Posizioni"
         }
     },
     "rewards": {
