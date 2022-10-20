@@ -86,7 +86,7 @@ const Parlay: React.FC = () => {
                         <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Twitter}>
                             <TwitterIcon />
                         </Link>
-                        <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Twitter}>
+                        <Link target="_blank" rel="noreferrer" href={'TODO: Share Parlay'}>
                             <ShareIcon />
                         </Link>
                     </Footer>

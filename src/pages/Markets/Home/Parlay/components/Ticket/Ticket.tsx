@@ -9,7 +9,7 @@ import { BigNumber, ethers } from 'ethers';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -275,6 +275,7 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
         if (parlayMarketsAMMContract && overtimeVoucherContract && signer) {
             setIsBuying(true);
             const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
+            const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
 
             const id = toast.loading(t('market.toast-messsage.transaction-pending'));
 
@@ -292,10 +293,11 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
                 const tx = await getParlayAMMTransaction(
                     true,
                     isVoucherSelected,
-                    overtimeVoucher ? overtimeVoucher.address : '',
+                    overtimeVoucher ? overtimeVoucher.id : 0,
                     selectedStableIndex,
                     networkId,
                     parlayMarketsAMMContractWithSigner,
+                    overtimeVoucherContractWithSigner,
                     marketsAddresses,
                     selectedPositions,
                     susdPaid,
@@ -408,9 +410,15 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
         setTooltipTextMessageTotalQuote(totalQuote, finalQuotes);
     };
 
+    const inputRef = useRef<HTMLDivElement>(null);
+    const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
+
     return (
         <>
-            <CustomTooltip open={!!tooltipTextTotalQuote && !openApprovalModal} title={tooltipTextTotalQuote}>
+            <CustomTooltip
+                open={inputRefVisible && !!tooltipTextTotalQuote && !openApprovalModal}
+                title={tooltipTextTotalQuote}
+            >
                 <RowSummary>
                     <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
                     <SummaryValue>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
@@ -423,8 +431,11 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.buy-amount')}:</SummaryLabel>
             </RowSummary>
-            <InputContainer>
-                <CustomTooltip open={!!tooltipTextUsdAmount && !openApprovalModal} title={tooltipTextUsdAmount}>
+            <InputContainer ref={inputRef}>
+                <CustomTooltip
+                    open={inputRefVisible && !!tooltipTextUsdAmount && !openApprovalModal}
+                    title={tooltipTextUsdAmount}
+                >
                     <AmountToBuyContainer>
                         <AmountToBuyInput
                             name="usdAmount"

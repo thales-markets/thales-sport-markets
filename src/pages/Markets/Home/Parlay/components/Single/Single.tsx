@@ -12,7 +12,7 @@ import useMarketBalancesQuery from 'queries/markets/useMarketBalancesQuery';
 import usePositionPriceDetailsQuery from 'queries/markets/usePositionPriceDetailsQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -482,6 +482,9 @@ const Single: React.FC<SingleProps> = ({ market }) => {
         setTooltipTextMessageUsdAmount(value);
     };
 
+    const inputRef = useRef<HTMLDivElement>(null);
+    const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
+
     return (
         <>
             <RowSummary>
@@ -495,8 +498,11 @@ const Single: React.FC<SingleProps> = ({ market }) => {
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.buy-amount')}:</SummaryLabel>
             </RowSummary>
-            <InputContainer>
-                <CustomTooltip open={!!tooltipTextUsdAmount && !openApprovalModal} title={tooltipTextUsdAmount}>
+            <InputContainer ref={inputRef}>
+                <CustomTooltip
+                    open={inputRefVisible && !!tooltipTextUsdAmount && !openApprovalModal}
+                    title={tooltipTextUsdAmount}
+                >
                     <AmountToBuyContainer>
                         <AmountToBuyInput
                             name="usdAmount"

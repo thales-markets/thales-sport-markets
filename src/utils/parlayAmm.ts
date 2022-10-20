@@ -8,10 +8,11 @@ import { getCollateralAddress } from './collaterals';
 export const getParlayAMMTransaction: any = (
     isBuy: boolean,
     isVoucherSelected: boolean,
-    voucherAddress: number,
+    voucherId: number,
     stableIndex: COLLATERALS_INDEX,
     networkId: NetworkId,
     parlayMarketsAMMContract: ethers.Contract,
+    overtimeVoucherContract: ethers.Contract,
     marketsAddresses: string[],
     selectedPositions: Position[],
     sUSDPaid: BigNumber,
@@ -23,6 +24,17 @@ export const getParlayAMMTransaction: any = (
     const collateralAddress = getCollateralAddress(isBuy, isNonSusdCollateral, networkId, stableIndex);
 
     if (isBuy) {
+        if (isVoucherSelected) {
+            return overtimeVoucherContract?.buyFromParlayAMMWithVoucher(
+                marketsAddresses,
+                selectedPositions,
+                sUSDPaid,
+                additionalSlippage,
+                expectedPayout,
+                voucherId
+            );
+        }
+
         if (isNonSusdCollateral && collateralAddress) {
             return parlayMarketsAMMContract?.buyFromParlayWithDifferentCollateralAndReferrer(
                 marketsAddresses,
@@ -42,7 +54,7 @@ export const getParlayAMMTransaction: any = (
                   sUSDPaid,
                   additionalSlippage,
                   expectedPayout,
-                  isVoucherSelected ? voucherAddress : ZERO_ADDRESS,
+                  ZERO_ADDRESS,
                   referral
               )
             : parlayMarketsAMMContract?.buyFromParlay(
@@ -51,7 +63,7 @@ export const getParlayAMMTransaction: any = (
                   sUSDPaid,
                   additionalSlippage,
                   expectedPayout,
-                  isVoucherSelected ? voucherAddress : ZERO_ADDRESS
+                  ZERO_ADDRESS
               );
     } else {
         // Sell not supported yet, this is just placeholder
