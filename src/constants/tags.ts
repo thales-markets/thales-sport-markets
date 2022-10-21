@@ -73,3 +73,5 @@ export enum TAGS_FLAGS {
     FORMULA1 = 9100,
     MOTOGP = 9101,
 }
+
+export const MLS_TAG = 9010;

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import styled from 'styled-components';
+import { FlexDivCentered } from 'styles/common';
 
 type SymbolProps = {
     type?: number;
@@ -20,6 +21,7 @@ type SymbolProps = {
     showTooltip?: boolean;
     glow?: boolean;
     marketId?: string;
+    discount?: number;
 };
 
 const PositionSymbol: React.FC<SymbolProps> = ({
@@ -31,6 +33,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     additionalStyle,
     marketId,
     children,
+    discount,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -89,6 +92,33 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                     )}
                 </AdditionalText>
             )}
+            {discount && (
+                <Discount>
+                    <Tooltip
+                        overlay={
+                            <span>
+                                {t(`markets.discounted-per`)}{' '}
+                                <a
+                                    href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    TIP-95
+                                </a>
+                            </span>
+                        }
+                        component={
+                            <div className="discount-label green">
+                                <span>-{Math.ceil(Math.abs(discount))}%</span>
+                            </div>
+                        }
+                        iconFontSize={23}
+                        marginLeft={2}
+                        top={0}
+                    />
+                </Discount>
+            )}
             {additionalText?.secondText && (
                 <AdditionalText style={additionalText?.secondTextStyle}>{additionalText?.secondText}</AdditionalText>
             )}
@@ -130,6 +160,12 @@ const AdditionalText = styled.span`
 const Symbol = styled.span<{ color?: string; addedToParlay?: boolean }>`
     color: ${(_props) => (_props.addedToParlay ? '#64D9FE' : _props?.color ? _props.color : '')};
     font-size: 12px;
+`;
+
+const Discount = styled(FlexDivCentered)<{ color?: string }>`
+    color: ${(_props) => (_props?.color ? _props.color : '')};
+    font-size: 14px;
+    margin-left: 11px;
 `;
 
 export default PositionSymbol;

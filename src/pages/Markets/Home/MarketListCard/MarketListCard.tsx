@@ -107,6 +107,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 accountPositions={accountPositions}
                 isPaused={market.isPaused}
                 isApexTopGame={isApexTopGame}
+                awayPriceImpact={market.awayPriceImpact}
+                homePriceImpact={market.homePriceImpact}
+                drawPriceImpact={market.drawPriceImpact}
             />
             <SPAAnchor href={buildMarketLink(market.address, language)}>
                 <LinkIcon className={`icon-exotic icon-exotic--link`} />
