@@ -12,20 +12,23 @@ export const Container = styled(FlexDivColumn)`
 export const Header = styled(FlexDivRowCentered)`
     align-items: center;
     width: 100%;
-    padding: 0px 20px;
+    font-size: 80px;
+    @media (max-width: 960px) {
+        font-size: 60px;
+    }
+    @media (max-width: 500px) {
+        font-size: 50px;
+    }
     @media (max-width: 450px) {
-        padding: 0px 10px;
+        font-size: 40px;
     }
     @media (max-width: 400px) {
-        padding: 0px;
+        font-size: 35px;
     }
 `;
 export const Logo = styled.img`
     color: ${(props) => props.theme.textColor.primary};
-    height: 35px;
-    @media (max-width: 400px) {
-        height: 30px;
-    }
+    height: 0.7em;
 `;
 
 export const Section = styled(FlexDivColumn)`
@@ -34,9 +37,9 @@ export const Section = styled(FlexDivColumn)`
     width: 100%;
     align-items: center;
     &.first {
-        margin-top: 60px;
+        margin-top: 80px;
         @media (max-width: 500px) {
-            margin-top: 50px;
+            margin-top: 70px;
         }
     }
     &.second {

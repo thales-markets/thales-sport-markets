@@ -6,7 +6,6 @@ import ZebraBaseball from 'assets/images/landing-page/zebra-baseball.svg';
 import ZebraBasketball from 'assets/images/landing-page/zebra-basketball.svg';
 import ZebraBoxing from 'assets/images/landing-page/zebra-boxing.svg';
 import ZebraHockey from 'assets/images/landing-page/zebra-hockey.svg';
-import ZebraLogoImg from 'assets/images/landing-page/zebra-logo.svg';
 import ZebraRacing from 'assets/images/landing-page/zebra-racing.svg';
 import OvertimeLogo from 'assets/images/overtime-logo.svg';
 import LanguageSelector from 'components/LanguageSelector';
@@ -33,18 +32,17 @@ import {
     InfoBoxText,
     InfoBoxTitle,
     Initiative,
+    InitiativeLink,
     Initiatives,
     LargeText,
     LeagueIcon,
-    InitiativeLink,
     Logo,
     LogoContainer,
+    LogoLink,
     Section,
     SectionRow,
     SubSection,
-    ZebraLogo,
     Zebro,
-    LogoLink,
 } from './styled-components';
 
 const LandingPage: React.FC = () => {
@@ -54,8 +52,8 @@ const LandingPage: React.FC = () => {
         <Container>
             <Header>
                 <LogoContainer>
+                    {/* <ZebraLogo src={ZebraLogoImg} alt="zebra logo" /> */}
                     <Logo src={OvertimeLogo} alt="overtime logo" />
-                    <ZebraLogo src={ZebraLogoImg} alt="zebra logo" />
                 </LogoContainer>
                 <LanguageSelector />
             </Header>
