@@ -96,3 +96,7 @@
 .icon--arrow:before {
     content: '\005D';
 }
+
+.icon--cross-button-arrow:before {
+    content: '\006B';
+}
