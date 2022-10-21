@@ -378,7 +378,7 @@ export const CallToAction = styled.label`
     }
     &.first {
         align-self: center;
-        margin-left: 32%;
+        margin-left: 45%;
         @media (max-width: 750px) {
             align-self: end;
             margin-left: 0;
