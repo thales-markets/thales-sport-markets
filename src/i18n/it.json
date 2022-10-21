@@ -295,7 +295,8 @@
             "empty-description": "Aggiungi posizione, scegli un mercato e fai la tua selezione.",
             "parlay-fee": "Tariffa Parlay",
             "safebox-fee": "Tariffa SafeBox",
-            "positions": "Posizioni"
+            "positions": "Posizioni",
+            "clear": "Cancella tutto"
         },
         "discounted-per": "Scontato come da"
     },

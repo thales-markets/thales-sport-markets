@@ -394,7 +394,8 @@
             "fee": "Montant total",
             "safebox-fee": "Frais SafeBox",
             "positions": "Postes",
-            "parlay-fee": "Frais de parlay"
+            "parlay-fee": "Frais de parlay",
+            "clear": "Tout effacer"
         },
         "discounted-per": "Remise selon"
     },

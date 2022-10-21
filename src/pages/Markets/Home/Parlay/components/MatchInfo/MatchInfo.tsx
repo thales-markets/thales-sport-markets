@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { ParlaysMarket } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { convertPositionToSymbolType, formatMarketOdds, getIsApexTopGame, getPositionOdds } from 'utils/markets';
+import { XButton } from '../styled-components';
 
 type MatchInfoProps = { market: ParlaysMarket };
 
@@ -105,16 +106,6 @@ const ClubName = styled.span`
     line-height: 11px;
     text-transform: uppercase;
     color: #ffffff;
-`;
-
-const XButton = styled.i`
-    font-size: 15px;
-    font-weight: 700;
-    color: #ca4c53;
-    cursor: pointer;
-    &:hover {
-        color: ${(props) => props.theme.textColor.quaternary};
-    }
 `;
 
 export default MatchInfo;

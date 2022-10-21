@@ -636,7 +636,7 @@ const Home: React.FC = () => {
                     </MainContainer>
                 )}
                 {/* RIGHT PART */}
-                <SidebarContainer rightSide={true}>
+                <SidebarContainer>
                     {!isMobile() && networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
                     <Parlay />
                 </SidebarContainer>
@@ -710,8 +710,7 @@ const MainContainer = styled(FlexDivColumn)`
     flex-grow: 1;
 `;
 
-const SidebarContainer = styled(FlexDivColumn)<{ rightSide?: boolean }>`
-    ${(props) => (props.rightSide ? 'margin-left: 20px;' : '')}
+const SidebarContainer = styled(FlexDivColumn)`
     padding-top: 25px;
     max-width: 300px;
     flex-grow: 1;

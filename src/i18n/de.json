@@ -292,7 +292,8 @@
             "fee": "Gesamtgebühr",
             "parlay-fee": "Parlay-Gebühr",
             "safebox-fee": "SafeBox-Gebühr",
-            "positions": "Positionen"
+            "positions": "Positionen",
+            "clear": "Alles löschen"
         },
         "discounted-per": "Ermäßigt gem"
     },

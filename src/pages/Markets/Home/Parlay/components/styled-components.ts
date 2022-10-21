@@ -7,13 +7,14 @@ export const RowSummary = styled.div`
     align-items: center;
 `;
 
-export const SummaryLabel = styled.span`
+export const SummaryLabel = styled.span<{ alignRight?: boolean }>`
     font-weight: 400;
     font-size: 11px;
     line-height: 27px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
     color: #64d9fe;
+    ${(props) => (props.alignRight ? `margin-left: auto;` : '')}
 `;
 
 export const SummaryValue = styled.span<{ isInfo?: boolean }>`
@@ -38,7 +39,7 @@ export const InfoLabel = styled.span<{ marginLeft?: number }>`
     font-size: 10px;
     text-transform: uppercase;
     color: #ffffff;
-    ${(props) => (props.marginLeft ? `margin-left: ${props.marginLeft}px` : '')};
+    ${(props) => (props.marginLeft ? `margin-left: ${props.marginLeft}px;` : '')}
 `;
 
 export const InfoValue = styled.span`
@@ -134,4 +135,15 @@ export const BalanceValue = styled.span`
     letter-spacing: 0.025em;
     color: #ffffff;
     margin-left: 5px;
+`;
+
+export const XButton = styled.i<{ margin?: string }>`
+    font-size: 15px;
+    font-weight: 700;
+    color: #ca4c53;
+    cursor: pointer;
+    ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
+    &:hover {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
 `;

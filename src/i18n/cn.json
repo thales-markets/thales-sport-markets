@@ -295,7 +295,8 @@
             "empty-title": "没有职位",
             "positions": "职位",
             "safebox-fee": "保险箱费用",
-            "parlay-fee": "过关费"
+            "parlay-fee": "过关费",
+            "clear": "全部清除"
         },
         "discounted-per": "折扣按"
     },

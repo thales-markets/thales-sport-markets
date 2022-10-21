@@ -292,7 +292,8 @@
             "total-quote": "ใบเสนอราคาทั้งหมด",
             "potential-profit": "กำไรที่อาจเกิดขึ้น",
             "available": "มีอยู่",
-            "empty-title": "ไม่มีตำแหน่ง"
+            "empty-title": "ไม่มีตำแหน่ง",
+            "clear": "ลบทั้งหมด"
         }
     },
     "rewards": {
