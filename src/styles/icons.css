@@ -69,11 +69,11 @@
     content: '\0056';
 }
 
-.icon--star-full:before {
+.icon--arrow:before {
     content: '\0057';
 }
 
-.icon--star-empty:before {
+.icon--triple-arrow:before {
     content: '\0058';
 }
 
