@@ -16,6 +16,7 @@ import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import SidebarLeaderboard from 'pages/Quiz/SidebarLeaderboard';
 import useAccountPositionsQuery from 'queries/markets/useAccountPositionsQuery';
+import useDiscountMarkets from 'queries/markets/useDiscountMarkets';
 import useSportMarketsQuery, { marketsCache } from 'queries/markets/useSportMarketsQuery';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -99,6 +100,11 @@ const Home: React.FC = () => {
     const [tagParam, setTagParam] = useQueryParam('tag', '');
     const [selectedLanguage, setSelectedLanguage] = useQueryParam('lang', '');
 
+    const discountQuery = useDiscountMarkets(networkId, { enabled: true });
+    const discountsMap = useMemo(() => {
+        return discountQuery.isSuccess ? discountQuery.data : new Map();
+    }, [discountQuery.isSuccess, discountQuery.data]);
+
     useEffect(
         () => {
             sportParam != '' ? setSportFilter(sportParam as SportFilterEnum) : setSportParam(sportFilter);
@@ -147,11 +153,25 @@ const Home: React.FC = () => {
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, globalFilter, marketsCached]);
 
     const markets: SportMarkets = useMemo(() => {
+        let sportMarkets = [];
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            return marketsCached[globalFilter];
+            sportMarkets = marketsCached[globalFilter];
+        } else {
+            sportMarkets = lastValidMarkets;
         }
-        return lastValidMarkets;
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, lastValidMarkets, marketsCached, globalFilter]);
+
+        return sportMarkets.map((sportMarket) => {
+            const marketDiscount = discountsMap?.get(sportMarket.address);
+            return { ...sportMarket, ...marketDiscount };
+        });
+    }, [
+        sportMarketsQuery.isSuccess,
+        sportMarketsQuery.data,
+        marketsCached,
+        globalFilter,
+        lastValidMarkets,
+        discountsMap,
+    ]);
 
     const accountPositionsQuery = useAccountPositionsQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
