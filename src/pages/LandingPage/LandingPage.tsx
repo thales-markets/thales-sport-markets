@@ -1,51 +1,51 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Carousel } from 'react-responsive-carousel';
-import OvertimeLogo from 'assets/images/overtime-logo.svg';
-import ZebraLogoImg from 'assets/images/landing-page/zebra-logo.svg';
-import ZebraBaseball from 'assets/images/landing-page/zebra-baseball.svg';
-import ZebraBasketball from 'assets/images/landing-page/zebra-basketball.svg';
-import ZebraNfl from 'assets/images/landing-page/zebra-nfl.svg';
-import ZebraHockey from 'assets/images/landing-page/zebra-hockey.svg';
-import ZebraBoxing from 'assets/images/landing-page/zebra-boxing.svg';
-import ZebraRacing from 'assets/images/landing-page/zebra-racing.svg';
 import ChainlinkLogo from 'assets/images/landing-page/chainlink.svg';
+import DiscordLogo from 'assets/images/landing-page/discord.svg';
 import OptimismLogo from 'assets/images/landing-page/optimism.svg';
 import ThalesLogo from 'assets/images/landing-page/thales.svg';
-import DiscordLogo from 'assets/images/landing-page/discord.svg';
+import ZebraBaseball from 'assets/images/landing-page/zebra-baseball.svg';
+import ZebraBasketball from 'assets/images/landing-page/zebra-basketball.svg';
+import ZebraBoxing from 'assets/images/landing-page/zebra-boxing.svg';
+import ZebraHockey from 'assets/images/landing-page/zebra-hockey.svg';
+import ZebraLogoImg from 'assets/images/landing-page/zebra-logo.svg';
+import ZebraRacing from 'assets/images/landing-page/zebra-racing.svg';
+import OvertimeLogo from 'assets/images/overtime-logo.svg';
+import LanguageSelector from 'components/LanguageSelector';
+import SPAAnchor from 'components/SPAAnchor';
+import { LINKS } from 'constants/links';
+import ROUTES from 'constants/routes';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { buildHref } from 'utils/routes';
 import {
-    Container,
-    Header,
-    Logo,
-    ZebraLogo,
-    Section,
-    Zebro,
-    LargeText,
-    CallToAction,
     ArrowIcon,
-    SubSection,
-    Initiative,
-    Initiatives,
-    Link,
-    InfoBoxTitle,
-    InfoBox,
-    InfoBoxText,
-    SectionRow,
-    DiscordLink,
-    DiscordInfo,
-    DiscordIcon,
-    LeagueIcon,
+    CallToAction,
     CarouselContainer,
     CarouselIconContainer,
+    Container,
+    DiscordIcon,
+    DiscordInfo,
+    DiscordLink,
     DocsLink,
+    Header,
+    InfoBox,
+    InfoBoxText,
+    InfoBoxTitle,
+    Initiative,
+    Initiatives,
+    LargeText,
+    LeagueIcon,
+    InitiativeLink,
+    Logo,
     LogoContainer,
+    Section,
+    SectionRow,
+    SubSection,
+    ZebraLogo,
+    Zebro,
+    LogoLink,
 } from './styled-components';
-import SPAAnchor from 'components/SPAAnchor';
-import { buildHref } from 'utils/routes';
-import ROUTES from 'constants/routes';
-import { LINKS } from 'constants/links';
-import LanguageSelector from 'components/LanguageSelector';
 
 const LandingPage: React.FC = () => {
     const { t } = useTranslation();
@@ -70,15 +70,15 @@ const LandingPage: React.FC = () => {
 
                 <SubSection className="first">{t('landing-page.powered-by')}</SubSection>
                 <Initiatives>
-                    <Link target="_blank" rel="noreferrer" height={'42px'} href="https://chain.link/">
+                    <InitiativeLink target="_blank" rel="noreferrer" height={'42px'} href="https://chain.link/">
                         <Initiative src={ChainlinkLogo} alt="Chainlink logo" />
-                    </Link>
-                    <Link target="_blank" rel="noreferrer" height={'39px'} href="https://thalesmarket.io/">
+                    </InitiativeLink>
+                    <InitiativeLink target="_blank" rel="noreferrer" height={'39px'} href="https://thalesmarket.io/">
                         <Initiative src={ThalesLogo} alt="Thales logo" />
-                    </Link>
-                    <Link target="_blank" rel="noreferrer" height={'27px'} href="https://www.optimism.io/">
+                    </InitiativeLink>
+                    <InitiativeLink target="_blank" rel="noreferrer" height={'27px'} href="https://www.optimism.io/">
                         <Initiative src={OptimismLogo} alt="Optimism logo" />
-                    </Link>
+                    </InitiativeLink>
                 </Initiatives>
             </Section>
             <Section className="second">
@@ -103,28 +103,64 @@ const LandingPage: React.FC = () => {
                         centerSlidePercentage={25}
                     >
                         <CarouselIconContainer>
-                            <LeagueIcon className="icon-league icon-league--fifa-world-cup" />
-                            <LeagueIcon className="icon-league icon-league--uefa-cl" />
-                            <LeagueIcon className="icon-league icon-league--epl" />
-                            <LeagueIcon className="icon-league icon-league--la-liga" />
+                            <LogoLink
+                                target="_blank"
+                                rel="noreferrer"
+                                href="https://www.fifa.com/fifaplus/en/tournaments/mens/worldcup/qatar2022"
+                            >
+                                <LeagueIcon className="icon-league icon-league--fifa-world-cup" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.uefa.com/uefachampionsleague/">
+                                <LeagueIcon className="icon-league icon-league--uefa-cl" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.premierleague.com/">
+                                <LeagueIcon className="icon-league icon-league--epl" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.laliga.com/en-GB">
+                                <LeagueIcon className="icon-league icon-league--la-liga" />
+                            </LogoLink>
                         </CarouselIconContainer>
                         <CarouselIconContainer>
-                            <LeagueIcon className="icon-league icon-league--nba" />
-                            <LeagueIcon className="icon-league icon-league--nhl" />
-                            <LeagueIcon className="icon-league icon-league--nfl" />
-                            <LeagueIcon className="icon-league icon-league--mlb" />
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.nba.com/">
+                                <LeagueIcon className="icon-league icon-league--nba" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.nhl.com/">
+                                <LeagueIcon className="icon-league icon-league--nhl" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.nfl.com/">
+                                <LeagueIcon className="icon-league icon-league--nfl" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.mlb.com/">
+                                <LeagueIcon className="icon-league icon-league--mlb" />
+                            </LogoLink>
                         </CarouselIconContainer>
                         <CarouselIconContainer>
-                            <LeagueIcon className="icon-league icon-league--ncaa" />
-                            <LeagueIcon className="icon-league icon-league--ufc" />
-                            <LeagueIcon className="icon-league icon-league--f1" />
-                            <LeagueIcon className="icon-league icon-league--motogp" />
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.ncaa.com/">
+                                <LeagueIcon className="icon-league icon-league--ncaa" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.ufc.com/">
+                                <LeagueIcon className="icon-league icon-league--ufc" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.formula1.com/">
+                                <LeagueIcon className="icon-league icon-league--f1" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.motogp.com/">
+                                <LeagueIcon className="icon-league icon-league--motogp" />
+                            </LogoLink>
                         </CarouselIconContainer>
                         <CarouselIconContainer>
-                            <LeagueIcon className="icon-league icon-league--ligue1" />
-                            <LeagueIcon className="icon-league icon-league--serie-a" />
-                            <LeagueIcon className="icon-league icon-league--bundesliga" />
-                            <LeagueIcon className="icon-league icon-league--mls" />
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.ligue1.com/">
+                                <LeagueIcon className="icon-league icon-league--ligue1" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.legaseriea.it/">
+                                <LeagueIcon className="icon-league icon-league--serie-a" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.bundesliga.com/en/bundesliga">
+                                <LeagueIcon className="icon-league icon-league--bundesliga" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.mlssoccer.com/">
+                                <LeagueIcon className="icon-league icon-league--mls" />
+                            </LogoLink>
                         </CarouselIconContainer>
                     </Carousel>
                 </CarouselContainer>
@@ -159,15 +195,6 @@ const LandingPage: React.FC = () => {
                     </CallToAction>
                 </InfoBox>
             </SectionRow>
-            <Section className="third">
-                <Zebro className="nfl" src={ZebraNfl} alt="Zebro American Football" />
-                <LargeText className="third in-front">{t('landing-page.web3-positioning')}</LargeText>
-                <CallToAction className="third">
-                    <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
-                        {t('landing-page.try-now')} <ArrowIcon className={`icon icon--arrow`} />
-                    </SPAAnchor>
-                </CallToAction>
-            </Section>
             <Section className="fourth">
                 <Zebro className="hockey" src={ZebraHockey} alt="Zebro Hockey" />
                 <LargeText className="fourth in-front">{t('landing-page.learn-more')}</LargeText>

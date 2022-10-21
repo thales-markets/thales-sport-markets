@@ -310,12 +310,6 @@ export const LargeText = styled.label`
         width: 51%;
         text-align: center;
         z-index: 100;
-        @media (max-width: 960px) {
-            margin-left: 10%;
-        }
-        @media (max-width: 750px) {
-            margin-left: 25%;
-        }
     }
     &.second {
         text-align: left;
@@ -514,7 +508,7 @@ export const Initiatives = styled(FlexDivRow)`
     }
 `;
 
-export const Link = styled.a<{ height: string }>`
+export const InitiativeLink = styled.a<{ height: string }>`
     display: flex;
     height: 50px;
     width: 33%;
@@ -812,3 +806,5 @@ export const LeagueIcon = styled.i`
 export const LogoContainer = styled(FlexDivRow)`
     align-items: center;
 `;
+
+export const LogoLink = styled.a``;
