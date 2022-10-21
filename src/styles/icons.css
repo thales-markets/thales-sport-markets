@@ -88,3 +88,7 @@
 .icon--revert:before {
     content: '\005A';
 }
+
+.icon--cross-button-arrow:before {
+    content: '\006B';
+}

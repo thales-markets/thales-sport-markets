@@ -50,13 +50,18 @@ export const parlaySlice = createSlice({
             state.error = false;
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
         },
+        removeAll: (state) => {
+            state.parlay = [];
+            state.error = false;
+            localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
+        },
         resetParlayError: (state) => {
             state.error = false;
         },
     },
 });
 
-export const { updateParlay, removeFromParlay, resetParlayError } = parlaySlice.actions;
+export const { updateParlay, removeFromParlay, removeAll, resetParlayError } = parlaySlice.actions;
 
 export const getParlayState = (state: RootState) => state[sliceName];
 export const getParlay = (state: RootState) => getParlayState(state).parlay;

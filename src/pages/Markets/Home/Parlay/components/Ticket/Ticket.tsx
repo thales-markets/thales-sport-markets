@@ -11,7 +11,7 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
@@ -47,8 +47,10 @@ import {
     SubmitButton,
     SummaryLabel,
     SummaryValue,
+    XButton,
 } from '../styled-components';
 import Payment from '../Payment';
+import { removeAll } from 'redux/modules/parlay';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -58,6 +60,8 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
+
+    const dispatch = useDispatch();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -422,6 +426,12 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
                 <RowSummary>
                     <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
                     <SummaryValue>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
+                    <SummaryLabel alignRight={true}>{t('markets.parlay.clear')}:</SummaryLabel>
+                    <XButton
+                        margin={'0 0 4px 5px'}
+                        onClick={() => dispatch(removeAll())}
+                        className={`icon icon--cross-button-arrow`}
+                    />
                 </RowSummary>
             </CustomTooltip>
             <Payment
