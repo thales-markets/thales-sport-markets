@@ -14,7 +14,7 @@
             "disclaimer": "การเชื่อมต่อกระเป๋าเงินหมายความว่าคุณรับทราบว่าคุณได้อ่านและเข้าใจ<a target=\"_blank\" href={{link}}>ข้อจำกัดความรับผิดชอบ</a>ของ Overtime Markets และยอมรับเงื่อนไขการใช้งาน",
             "disclaimer-lowercase": "ข้อจำกัดความรับผิดชอบ",
             "disclaimer2": "และยอมรับเงื่อนไขการใช้งาน",
-            "disclaimer1": "โดยการเชื่อมต่อกระเป๋าเงิน คุณรับทราบว่าคุณได้อ่านและเข้าใจตลาดการทำงานล่วงเวลาแล้ว"
+            "disclaimer1": "โดยการเชื่อมต่อกระเป๋าเงิน คุณรับทราบว่าคุณได้อ่านและเข้าใจการทำงานของ Overtime Market แล้ว"
         },
         "voucher": {
             "remaining-amount": "จำนวนเงินคงเหลือ",
@@ -104,7 +104,7 @@
         "tags-placeholder": "ค้นหาแท็ก...",
         "remove-tag-tooltip": "คลิ๊กเพื่อลบแท็ก",
         "input-characters-note": "{{entered }} / {{max}}",
-        "view": "ดูุุุุ",
+        "view": "ดู",
         "guidelines": "ไกด์",
         "built-on": "สร้างขึ้นบน",
         "odds": {
@@ -114,29 +114,30 @@
         },
         "days-of-week": {
             "tue": "อ.",
-            "sun": "ดวงอาทิตย์",
-            "mon": "ของฉัน ",
-            "fri": "วันศุกร์",
-            "sat": "นั่ง",
-            "wed": "พุธ",
-            "thu": "เก็บรวบรวม"
+            "sun": "อา.",
+            "mon": "จ. ",
+            "fri": "ศ.",
+            "sat": "ส.",
+            "wed": "พ.",
+            "thu": "พฤ."
         },
         "pagination": {
-            "page": "หน้าหนังสือ",
+            "page": "หน้า",
             "rows-per-page": "แถวต่อหน้า:"
         },
         "coming-soon": "เร็วๆ นี้!",
-        "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
-        "top-bet-type-title": "{{driver}} จะจบการแข่งขัน {{race}} ในไดรเวอร์ {{betType}} หรือไม่",
-        "no": "ไม่",
+        "h2h-tooltip": "นี่คือตลาดแบบ head-to-head ผู้ชนะจะเป็นผู้ที่จบในอันดับที่ดีกว่าในการแข่งขันหลัก",
+        "mls-tooltip": "MLS markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
+        "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
+        "top3": "TOP 3",
         "top5": "TOP 5",
-        "yes": "ใช่",
-        "top3": "อันดับ3",
-        "top10": "TOP 10"
+        "top10": "TOP 10",
+        "yes": "YES",
+        "no": "NO"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
-        "tutorial": "กวดวิชา",
+        "tutorial": "Tutorial",
         "github": "GitHub",
         "docs": "เอกสาร",
         "medium": "Medium",
@@ -186,7 +187,7 @@
                 "soccer": "ฟุตบอล",
                 "hockey": "ฮอกกี้",
                 "tennis": "เทนนิส",
-                "football": "อเมริกันฟุตบอลl",
+                "football": "อเมริกันฟุตบอล",
                 "ufc": "MMA",
                 "baseball": "เบสบอล",
                 "formula1": "Formula 1",
@@ -229,10 +230,7 @@
         "tooltip": {
             "amount-exceeded": "จำนวนเงินเกินจำนวนที่มีอยู่ใน AMM",
             "minimal-amount": "จำนวนขั้นต่ำคือ1",
-            "no-funds": "จำนวนเงินขั้นต่ำคือ1",
-            "min-amount": "จำนวนเงินขั้นต่ำคือ {{min}}",
-            "min-quote": "ราคาต่ำสุดคือ {{value}}",
-            "max-quote": "ราคาสูงสุดคือ {{value}}"
+            "no-funds": "จำนวนเงินขั้นต่ำคือ1"
         },
         "match-time": "เวลาการแข่งขัน"
     },
@@ -264,36 +262,37 @@
             "wallet-info": {
                 "title": "ในกระเป๋าเงิน"
             },
-            "skew": "ลาด",
-            "max": "แม็กซ์",
-            "available": "มีอยู่",
-            "amount-to-buy": "จำนวนเงินที่จะซื้อ"
+            "skew": "Skew",
+            "max": "Max",
+            "discount": "การลดราคา",
+            "amount-to-buy": "จำนวนเงินที่จะซื้อ",
+            "available": "มีอยู่"
         },
         "zero-odds-tooltip": "Sports AMM จะเสนอสภาพคล่องในช่วงราคา $0.05 ถึง $0.95 เท่านั้น หมายความว่าหากอัตราต่อรองสำหรับโพสิชั่นนั้นน้อยกว่า 5% หรือมากกว่า 95% โพสิชั่นนั้นจะไม่มีสภาพคล่อง",
+        "discounted-per": "ลดราคาตาม",
         "parlay": {
-            "total-quote": "ใบเสนอราคาทั้งหมด",
-            "pay-with": "ชำระเงินด้วย",
-            "potential-profit": "กำไรที่อาจเกิดขึ้น",
-            "available": "มีอยู่",
-            "buy-amount": "จำนวนเงินที่จะซื้อ",
-            "skew": "ลาด",
             "validation": {
-                "title": "การตรวจสอบความถูกต้องของพาร์เลย์",
                 "max-markets": "สูงสุด 4 ตลาดใน Parlay",
-                "availability": "ความพร้อมใช้งานต่ำสำหรับตำแหน่งทางการตลาด",
-                "amount-exceeded": "จำนวนเงินเกินจำนวนที่มีอยู่ใน AMM",
-                "no-funds": "โปรดตรวจสอบให้แน่ใจว่ากระเป๋าเงินของคุณมีเงินเพียงพอ",
-                "max-quote": "ราคาสูงสุดคือ {{value}}",
+                "title": "การตรวจสอบความถูกต้องของพาร์เลย์",
                 "min-quote": "ราคาต่ำสุดคือ {{value}}",
-                "min-amount": "จำนวนเงินขั้นต่ำคือ {{min}}"
+                "amount-exceeded": "จำนวนเงินเกินจำนวนที่มีอยู่ใน AMM",
+                "max-quote": "ราคาสูงสุดคือ {{value}}",
+                "min-amount": "จำนวนเงินขั้นต่ำคือ {{min}}",
+                "availability": "ความพร้อมใช้งานต่ำสำหรับตำแหน่งทางการตลาด",
+                "no-funds": "โปรดตรวจสอบให้แน่ใจว่ากระเป๋าเงินของคุณมีเงินเพียงพอ"
             },
-            "payout": "รับทั้งหมด",
-            "empty-title": "ไม่มีตำแหน่ง",
-            "fee": "ค่าธรรมเนียมทั้งหมด",
+            "skew": "ลาด",
+            "payout": "การจ่ายเงิน",
+            "parlay-fee": "ค่าพาร์เลย์",
             "empty-description": "เพิ่มตำแหน่ง เลือกตลาด และทำการเลือกของคุณ",
+            "buy-amount": "จำนวนเงินที่จะซื้อ",
             "safebox-fee": "ค่าธรรมเนียมตู้เซฟ",
             "positions": "ตำแหน่ง",
-            "parlay-fee": "ค่าพาร์เลย์"
+            "pay-with": "ชำระเงินด้วย",
+            "total-quote": "ใบเสนอราคาทั้งหมด",
+            "potential-profit": "กำไรที่อาจเกิดขึ้น",
+            "available": "มีอยู่",
+            "empty-title": "ไม่มีตำแหน่ง"
         }
     },
     "rewards": {
@@ -330,7 +329,7 @@
     },
     "quiz": {
         "title": "การแข่งขันเกร็ดความรู้ด้านกีฬา",
-        "start-quiz-description": "<p>สวัสดีแฟนกีฬา! พร้อมที่จะทดสอบความรู้ของคุณหรือยัง?</p><p>Overtime ได้เปิดตัวการแข่งขันเรื่องเกร็ดความรู้กีฬาด้านกีฬาซึ่งผู้ชนะรายสัปดาห์จะได้รับบัตรกำนัล NFT ที่สามารถใช้แทน sUSD เพื่อเข้าร่วมในตลาดกีฬาใด ๆ ที่คุณต้องการ</p><p>อ่านข้อมูลทั้งหมดเกี่ยวกับเรื่องนี้ใน<blogPost>บล็อก</blogPost>ของเรา</p><p>จะเข้าร่วมได้อย่างไร? ทุกคนสามารถเข้าทดสอบความรู้และแข่งขันได้ แต่เพื่อให้มีสิทธิ์ได้รับรางวัล คุณต้องรีทวีต <quizRetweetLink>tweet</quizRetweetLink> และติดตาม <twitter>Overtime's Twitter</twitter></p><p>เชื่อมต่อกระเป๋าเงินและป้อนชื่อบัญชี Twitter ของคุณเพื่อเริ่มการแข่งขัน! ถ้าหากคุณชนะรางวัล เราจะขอให้คุณยืนยันที่อยู่ของคุณทาง Twitter DM. Discord ID เป็นตัวเลือก optional ถ้าคุณต้องการ Discord Role ในอนาคตจากการแข่งขันครั้งนี้</p><p>ถ้าหากมีคำถามใดๆ สามารถที่จะเข้าร่วม <discord>Discord</discord> ของเราได้</p>",
+        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition. The trivia is available to everyone to test their knowledge and compete.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! For any questions please join our <discord>Discord</discord>.</p>",
         "twitter-handle-label": "ชื่อบัญชี Twitter",
         "twitter-handle-placeholder": "ระบุชื่อบัญชี Twitter",
         "twitter-handle-validation": "ชื่อบัญชี Twitter ไม่ถูกต้อง โปรดลองใหม่อีกครั้ง",
@@ -353,7 +352,7 @@
         },
         "leaderboard": {
             "title": "Trivia Leaderboard",
-            "description": "<p>นี่คือ Trivia Leaderboard ที่ที่คุณสามารถดูสถานะของคุณได้ว่าคุณกำลังเผชิญกับคู่แข่งในแต่ละสัปดาห์นั้นเป็นอย่างไร</p><p>คุณสามารถดูรายละเอียดทั้งหมดเกี่ยวกับวิธีการเข้าร่วมเพื่อรับบัตรกำนัล NFT sUSD ที่สามารถใช้กับตลาดกีฬาใด ๆ ที่มีอยู่ได้ที่<blogPost>นี่</blogPost></p><p>คุณสามารถที่จะเข้าร่วมการแข่งขันตอบคำถามเป็นจำนวนกี่รอบก็ได้ตามที่คุณต้องการได้ที่ <sportsTrivia>นี่</sportsTrivia></p>",
+            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
             "back-to-quiz": "กลับไปที่การทดสอบ",
             "search-placeholder": "ค้นหา...",
             "table": {
@@ -368,16 +367,14 @@
             "period-end-label": "การแข่งขันรอบนี้จะสิ้นสุดใน",
             "period-ended-label": "การแข่งขันสิ้นสุด",
             "week-label": "สัปดาห์ที่",
-            "overtime-voucher": "บัตรกำนัล Overtime"
+            "overtime-voucher": "บัตรกำนัล Overtime",
+            "all-time-leaderboard-label": "All time leaderboard"
         },
         "help-us-improve-label": "ช่วยเราพัฒนา",
         "help-us-improve-tooltip": "ช่วยเราพัฒนาการแข่งขันการตอบคำถามด้านกีฬาโดยการช่วยเราเพิ่มคำถามลงใน database",
         "finish-messages": {
             "your-best-result": "คะแนนที่ดีที่สุดของคุณ: {{points}} {{pointsLabel}}",
-            "rank-info": "ด้วย {{points}} {{pointsLabel}} คุณอยู่อันดับที่ {{rank}} จากผู้เข้าแข่งขันทั้งหมด {{totalParticipants}} คน",
-            "not-quilfied-for-rewards": "คุณขาดอีก {{points}} {{pointsLabel}} เพื่อที่จะเข้าสู่ TOP {{numberOfRewards}} และจะมีสิทธิ์รับรางวัล ลองอีกครั้งและเพิ่มคะแนนของคุณ",
-            "quilfied-for-rewards": "ขณะนี้คุณอยู่ใน TOP {{numberOfRewards}} และมีสิทธิ์รับรางวัล ลองอีกครั้งเพื่อที่จะเพิ่มคะแนนและรางวัลของคุณ",
-            "quilfied-for-rewards-first": "คุณกำลังเป็นผู้นำในการแข่งขัน! ลองอีกครั้งเพื่อให้ได้คะแนนที่ดีขึ้นและรักษาตำแหน่งของคุณ"
+            "rank-info": "ด้วย {{points}} {{pointsLabel}} คุณอยู่อันดับที่ {{rank}} จากผู้เข้าแข่งขันทั้งหมด {{totalParticipants}} คน"
         },
         "difficulty-label": "ระดับความยาก",
         "difficulty": {
@@ -387,5 +384,31 @@
             "4": "Challenging",
             "5": "Hard"
         }
+    },
+    "landing-page": {
+        "best-odds": "อัตราต่อรองที่ดีที่สุดในอุตสาหกรรม",
+        "try-now": "ลองเลย",
+        "powered-by": "Powered by",
+        "no-kyc": "ตลาดกีฬาที่ไม่มี KYC",
+        "launch-dapp": "Launch dapp",
+        "leagues": "ลีก",
+        "info-text-title-1": "ไม่จำเป็นต้อง sign-up",
+        "info-text-title-2": "ทุกอย่างอยู่บน on-chain",
+        "info-text-title-3": "ตลาดแบบ Non-custodial",
+        "info-text-title-4": "ให้บริการข้อมูลโดย Chainlink",
+        "info-text-title-5": "การทำธุรกรรมที่รวดเร็วและค่าธรรมเนียมที่ถูก",
+        "info-text-1": "ไม่จำเป็นต้องสร้างรหัสผู้ใช้และเราไม่เก็บข้อมูลส่วนตัวใดๆ",
+        "info-text-2": "เมื่อเอกลักษณ์แบบรวมศูนย์นั้นล้มเหลว ความโปร่งใสจึงเป็นสิ่งสำคัญ Smart Contracts ทั้งหมดของเราเป็นแบบสาธารณะ",
+        "info-text-3": "ไม่มีใครถือหลักประกันของคุณ คุณเป็นเจ้าของกุญแจและโทเค็นของคุณ",
+        "info-text-4": "ผู้นำในอุตสาหกรรมที่สามารถให้อัตราต่อรองที่ปราศจากการควบคุมและผลการแข่งขันกีฬาในรูปแบบการกระจายอำนาจ",
+        "info-text-5": "ทุกการโต้ตอบกับ Overtime Sport AMM จะถูกกระทำบน Optimism Network ผู้นำตลาด scalability",
+        "browse-markets": "ดูตลาดกีฬา",
+        "web3-positioning": "การทายผลกีฬา Web3 ",
+        "learn-more": "อยากเรียนรู้เพิ่มเติมหรือไม่?",
+        "documentation": "ดูเอกสารของเรา",
+        "jump-in": "พร้อมที่จะเข้ามาหรือยัง?",
+        "open-overtime": "เปิด Overtime markets",
+        "join-discord": "ถ้าหากต้องการความช่วยเหลือ โปรดเข้าร่วม Discord ของเรา",
+        "read-now": "อ่าน"
     }
 }

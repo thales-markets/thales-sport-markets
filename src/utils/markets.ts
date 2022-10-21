@@ -156,7 +156,9 @@ export const getPositionOdds = (market: ParlaysMarket) => {
         ? market.homeOdds
         : market.position === Position.AWAY
         ? market.awayOdds
-        : market.drawOdds;
+        : market.drawOdds
+        ? market.drawOdds
+        : 0;
 };
 
 export const getVisibilityOfDrawOptionByTagId = (tags: Array<number>) => {

@@ -127,6 +127,7 @@
         },
         "coming-soon": "Pronto!",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
+        "mls-tooltip": "MLS markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
         "top3": "TOP 3",
         "top5": "TOP 5",
@@ -267,7 +268,8 @@
             },
             "skew": "Sesgar",
             "available": "Disponible",
-            "amount-to-buy": "cantidad a comprar"
+            "amount-to-buy": "cantidad a comprar",
+            "discount": "Descuento"
         },
         "zero-odds-tooltip": "El AMM de deportes sólo ofrece liquidez si el rango de precios ofrecido es entre 0.05 y 0.95 USD. Esto significa que si las probabilidades de una posición son menores a 5% o mayores a 95%, esa posición no tendrá liquidez.",
         "parlay": {
@@ -294,7 +296,8 @@
             "safebox-fee": "Tarifa de SafeBox",
             "parlay-fee": "Tarifa combinada",
             "positions": "Posiciones"
-        }
+        },
+        "discounted-per": "Con descuento según"
     },
     "rewards": {
         "header": "Recompensas",
@@ -325,7 +328,7 @@
     },
     "quiz": {
         "title": "Competencia de trivia sobre deportes (en ingles)",
-        "start-quiz-description": "<p>Hey fanaticos de los deportes! Listos para probar sus conocimientos?</p><p>Overtime ha inaugurado esta competencia de trivia sobre deportes en donde los ganadores semanales recibiran NFT Vouchers que podran ser utilizados en vez de sUSD para participar en cualquier mercado deportivo.</p><p>Puede leer toda la informacion sobre esta iniciative en nuestro <blogPost>blog post (ingles)</blogPost>.</p><p>Como participar? Esta trivia es abierta para que cualquiera pueda participar y probar su conocimiento, pero para calificar y obtener las recompensas se necesita retwittear este  <quizRetweetLink>tweet</quizRetweetLink> y seguir <twitter>la cuenta de Twitter de Overtime</twitter>.</p><p>Conecta tu billetera e ingresa tu nombre de Twitter para comenzar la trivia! Si ganas recompensas, te pediremos confirmes tu cuenta mediante mensaje privado en Twitter. La identificacion de Discord es opcional si quieres recibir ademas un rol en Discord como potencial ganador de la trivia.</p><p>Si tienes preguntas por favor ingresa a nuestro <discord>Discord</discord>.</p>",
+        "start-quiz-description": "<p>Hey fanaticos de los deportes! Listos para probar sus conocimientos?</p><p>Overtime ha inaugurado esta competencia de trivia sobre deportes. Esta trivia es abierta para que cualquiera pueda participar y probar su conocimiento.</p><p>Conecta tu billetera e ingresa tu nombre de Twitter para comenzar la trivia! Si tienes preguntas por favor ingresa a nuestro <discord>Discord</discord>.</p>",
         "twitter-handle-label": "Nombre en Twitter",
         "twitter-handle-placeholder": "Ingresa tu nombre en Twitter",
         "twitter-handle-validation": "Nombre en Twitter invalido. Por favor intenta nuevamente.",
@@ -348,7 +351,7 @@
         },
         "leaderboard": {
             "title": "Trivia Leaderboard",
-            "description": "<p>Este es el leaderboard de la trivia en donde podras ver tu posicion con respecto a la competencia por cada semana.</p><p>Todos los detalles sobre como participar por NFT Vouchers que representan sUSD y pueden ser utilizados en cualquier mercado deportivo <blogPost>aqui</blogPost>.</p><p>Puedes participar en la trivia tantas veces como desees <sportsTrivia>aqui</sportsTrivia>.</p>",
+            "description": "<p>Este es el leaderboard de la trivia en donde podras ver tu posicion con respecto a la competencia.</p><p>Puedes participar en la trivia tantas veces como desees <sportsTrivia>aqui</sportsTrivia>.</p>",
             "back-to-quiz": "Volver a trivia",
             "search-placeholder": "Buscar...",
             "table": {
@@ -363,16 +366,14 @@
             "overtime-voucher": "Vale de horas extras",
             "week-label": "Semana",
             "period-end-label": "El período termina en",
-            "period-ended-label": "Período terminado"
+            "period-ended-label": "Período terminado",
+            "all-time-leaderboard-label": "All time leaderboard"
         },
         "help-us-improve-label": "Help us improve",
         "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
         "finish-messages": {
             "your-best-result": "Your best result: {{points}} {{pointsLabel}}",
-            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants.",
-            "not-quilfied-for-rewards": "You are missing {{points}} {{pointsLabel}} to get into the TOP {{numberOfRewards}} and qualify for rewards. Try again and improve your score.",
-            "quilfied-for-rewards": "You are currently in the TOP {{numberOfRewards}} and qualified for rewards. Try again to get a better rank and higher rewards.",
-            "quilfied-for-rewards-first": "You are currently leading the leaderboard! Try again to get a better score and secure your spot."
+            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants."
         },
         "difficulty-label": "Difficulty",
         "difficulty": {
@@ -382,5 +383,31 @@
             "4": "Challenging",
             "5": "Hard"
         }
+    },
+    "landing-page": {
+        "best-odds": "Las mejores odds en la industria",
+        "try-now": "Pruebalo ahora",
+        "powered-by": "Potenciado por",
+        "no-kyc": "Mercados deportivos sin necesidad de registrarse",
+        "launch-dapp": "Iniciar dapp",
+        "leagues": "Leagues",
+        "info-text-title-1": "No se requiere registro",
+        "info-text-title-2": "Todo esta on-chain",
+        "info-text-title-3": "Mercados sin custodia centralizada",
+        "info-text-title-4": "Chainlink como oraculo",
+        "info-text-title-5": "Transacciones rapidas y de bajo costo",
+        "info-text-1": "No necesitas crear un usuario. No recolectamos ninguna clase de información personal.",
+        "info-text-2": "Cuando las entidades centralizadas fallan la transparencia es clave. Los contratos inteligentes son de acceso publico.",
+        "info-text-3": "No hay una entidad centralizada custodiando tu colateral. Tus llaves, tus tokens.",
+        "info-text-4": "El lider en la industria provee odds y resultados de diferentes ligas y deportes de una forma decentralizada.",
+        "info-text-5": "Cada interaccion con el AMM de Overtime es realizada en la red Optimism, lider en escalabilidad.",
+        "browse-markets": "Ver mercados deportivos",
+        "web3-positioning": "Posicionamiento deportivo en Web3",
+        "learn-more": "Quieres aprender mas?",
+        "documentation": "Revisa nuestra documentacion",
+        "jump-in": "Listo para comenzar?",
+        "open-overtime": "Abrir los mercados de Overtime",
+        "join-discord": "Necesitas ayuda? Unete a nuestro Discord",
+        "read-now": "Leer ahora"
     }
 }

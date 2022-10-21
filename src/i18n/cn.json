@@ -127,6 +127,7 @@
         },
         "coming-soon": "快来了！",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
+        "mls-tooltip": "MLS markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
         "top3": "TOP 3",
         "top5": "TOP 5",
@@ -267,7 +268,8 @@
             },
             "skew": "偏斜",
             "available": "可用的",
-            "amount-to-buy": "购买金额"
+            "amount-to-buy": "购买金额",
+            "discount": "折扣"
         },
         "zero-odds-tooltip": "Sports AMM 仅提供0.05美元至0.95美元价格范围内的流动性，这意味着，如果一个投注选择的赔率低于5%或者高于95%，该选择就不会有流动性。",
         "parlay": {
@@ -294,7 +296,8 @@
             "positions": "职位",
             "safebox-fee": "保险箱费用",
             "parlay-fee": "过关费"
-        }
+        },
+        "discounted-per": "折扣按"
     },
     "rewards": {
         "header": "奖励",
@@ -325,7 +328,7 @@
     },
     "quiz": {
         "title": "体育百科竞赛",
-        "start-quiz-description": "<p>学富五车的体育迷们，准备用你的知识赢得奖金了吗？</p><p>Overtime启动了体育百科问答竞赛，每周排行榜上的赢家都将获得可在平台使用的sUSD代金券（NFT）。</p><p>阅读这篇<blogPost>攻略</blogPost>可以获得关于体育百科问答的所有信息。</p><p>如何参与呢? 体育百科问答竞赛是一个开放的竞技平台，参与者只需要转发这篇<quizRetweetLink>推文</quizRetweetLink> 并赶住 <twitter>Overtime的推特账号</twitter>即可获得参与资格。</p><p>现在就连上你的钱包，输入推特账号，参与知识问答吧！注意当你获得奖励资格时，我们会私信你的推特账户以确认钱包地址。另外，如果你想让自己在Discord上获得一个额外的“体育百科知识胜者”的身份，那么也可以输入Discord账号。</p><p>如果有其他任何问题，请加入我们的<discord>Discord</discord>.</p>",
+        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition. The trivia is available to everyone to test their knowledge and compete.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! For any questions please join our <discord>Discord</discord>.</p>",
         "twitter-handle-label": "推特账号",
         "twitter-handle-placeholder": "请输入您的推特账号",
         "twitter-handle-validation": "无效的推特账号，请重新输入",
@@ -348,7 +351,7 @@
         },
         "leaderboard": {
             "title": "体育百科竞赛排行榜",
-            "description": "<p>这是体育百科知识竞赛的排行榜，您可以在这里看到自己参赛的表现。</p><p>阅读这篇<blogPost>攻略</blogPost>，获得所有关于赢得Overtime代金券的信息。</p><p>您可以不限次数地参加<sportsTrivia>体育百科知识竞赛</sportsTrivia>以获得最满意的成绩。</p>",
+            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
             "back-to-quiz": "返回测试",
             "search-placeholder": "搜索...",
             "table": {
@@ -363,16 +366,14 @@
             "period-end-label": "期间结束于",
             "period-ended-label": "期间结束",
             "week-label": "星期",
-            "overtime-voucher": "Overtime 代金券"
+            "overtime-voucher": "Overtime 代金券",
+            "all-time-leaderboard-label": "All time leaderboard"
         },
         "help-us-improve-label": "帮助我们提高",
         "help-us-improve-tooltip": "帮助我们的体育百科添加新的问题",
         "finish-messages": {
             "your-best-result": "你的最好成绩: {{points}} {{pointsLabel}}",
-            "rank-info": "你目前的成绩 {{points}} {{pointsLabel}} 在所有 {{totalParticipants}} 名参赛者中排名第 {{rank}} 。",
-            "not-quilfied-for-rewards": "你只差 {{points}} {{pointsLabel}} 就可以进入前 {{numberOfRewards}} 领取奖励。请继续尝试提高成绩。",
-            "quilfied-for-rewards": "你当前排名第 {{numberOfRewards}} ，已进入奖池。 请继续尝试以获得更好的排名和奖励。",
-            "quilfied-for-rewards-first": "你出于排行榜的第一名! 继续尝试获得更好的分数，让其他人难以超越。"
+            "rank-info": "你目前的成绩 {{points}} {{pointsLabel}} 在所有 {{totalParticipants}} 名参赛者中排名第 {{rank}} 。"
         },
         "difficulty-label": "难度",
         "difficulty": {
@@ -382,5 +383,31 @@
             "4": "困难",
             "5": "极困难"
         }
+    },
+    "landing-page": {
+        "best-odds": "市场最佳赔率",
+        "try-now": "立刻尝试",
+        "powered-by": "技术支持",
+        "no-kyc": "无需KYC的体育比赛竞猜",
+        "launch-dapp": "启动应用程序",
+        "leagues": "联赛",
+        "info-text-title-1": "无需注册",
+        "info-text-title-2": "100%运行于区块链上",
+        "info-text-title-3": "无需托管资产",
+        "info-text-title-4": "Chainlink提供数据",
+        "info-text-title-5": "极速且低成本的交易",
+        "info-text-1": "无需创建用户, 我们也不收集任何种类的个人信息",
+        "info-text-2": "通过智能合约彻底去中心化, 所有交易都公开透明",
+        "info-text-3": "除了您自己的私钥之外, 无人可以动用您的资金",
+        "info-text-4": "行业领先的预言机, 以去中心化的方式防止比赛结果和赔率的篡改",
+        "info-text-5": "在以太坊扩容方案领导者Optimism网络上, 您可以完成所有与Overtim体育做市机制的互动",
+        "browse-markets": "浏览所有比赛",
+        "web3-positioning": "Web3体育赛事竞猜",
+        "learn-more": "想要了解更多信息?",
+        "documentation": "查阅我们的文档",
+        "jump-in": "准备开始了?",
+        "open-overtime": "启动Overtime市场",
+        "join-discord": "需要帮助?请加入我们的discord",
+        "read-now": "开始阅读"
     }
 }

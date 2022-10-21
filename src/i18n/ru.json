@@ -132,7 +132,8 @@
         "top5": "TOP 5",
         "top10": "TOP 10",
         "yes": "YES",
-        "no": "NO"
+        "no": "NO",
+        "mls-tooltip": "Результаты рынков MLS основаны на результатах регулирования, и если они перейдут к овертайму, результатом регулирования будет тот, на котором будет решать рынок."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -267,7 +268,8 @@
             "max": "Max",
             "skew": "перекос",
             "available": "Доступный",
-            "amount-to-buy": "Сумма покупки"
+            "amount-to-buy": "Сумма покупки",
+            "discount": "Скидка"
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
         "parlay": {
@@ -294,7 +296,8 @@
             "safebox-fee": "Плата за сейф",
             "parlay-fee": "Экспресс-плата",
             "positions": "Позиции"
-        }
+        },
+        "discounted-per": "Со скидкой согласно"
     },
     "rewards": {
         "header": "Rewards",
@@ -363,7 +366,8 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "week-label": "Week",
-            "overtime-voucher": "Overtime voucher"
+            "overtime-voucher": "Overtime voucher",
+            "all-time-leaderboard-label": "Таблица лидеров всех времен"
         },
         "help-us-improve-label": "Help us improve",
         "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
@@ -382,5 +386,31 @@
             "4": "Challenging",
             "5": "Hard"
         }
+    },
+    "landing-page": {
+        "open-overtime": "Открытые рынки сверхурочной работы",
+        "info-text-2": "Когда централизованные организации рушатся, прозрачность является ключевым моментом. Весь наш код является общедоступным, а смарт-контракты могут быть просмотрены кем угодно.",
+        "jump-in": "Готовы прыгнуть?",
+        "powered-by": "Питаться от",
+        "try-now": "Попробуй это сейчас",
+        "info-text-title-1": "Регистрация не требуется",
+        "web3-positioning": "Спортивное позиционирование Web3",
+        "read-now": "Прочитай сейчас",
+        "best-odds": "Присоединяйтесь к революции спортивных рынков Web3",
+        "info-text-1": "Вам не нужно создавать пользователя. Мы также не собираем никакой личной информации.",
+        "info-text-title-2": "Все по цепочке",
+        "info-text-title-4": "Данные предоставлены Chainlink",
+        "info-text-5": "Каждое взаимодействие с Overtime sports AMM осуществляется в сети Optimism, лидере по масштабируемости.",
+        "documentation": "Ознакомьтесь с нашей документацией",
+        "launch-dapp": "Запустить децентрализованное приложение",
+        "no-kyc": "Для участия не требуется регистрация",
+        "info-text-title-5": "Быстрые и недорогие транзакции",
+        "leagues": "Лиги",
+        "info-text-3": "Никто не держит ваш залог. Ваши ключи, ваши жетоны.",
+        "browse-markets": "Обзор спортивных рынков",
+        "info-text-4": "Лидер отрасли предоставляет защищенные от несанкционированного доступа коэффициенты и результаты спортивных матчей децентрализованным способом.",
+        "join-discord": "Нужна помощь? Присоединяйтесь к нашему раздору",
+        "info-text-title-3": "Рынки, не связанные с тюремным заключением",
+        "learn-more": "Хотите узнать больше?"
     }
 }

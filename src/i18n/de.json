@@ -1,6 +1,6 @@
 {
     "common": {
-        "winner": "Sieger",
+        "winner": "Ergebnis",
         "buy-side": "KAUFEN",
         "sell-side": "VERKAUFEN",
         "days-of-week": {
@@ -14,14 +14,14 @@
         },
         "wallet": {
             "connect-your-wallet": "Wallet verbinden",
-            "switch-wallet": "Wallet ändern",
+            "switch-wallet": "Wallet wechseln",
             "disconnect-wallet": "Wallet Verbindung trennen",
             "wallet-options": "Wallet Einstellungen",
             "get-usd": "{{amount}} erhalten",
             "approve": "Genehmigen",
             "get-usd-progress": "{{amount}} wird gemintet...",
-            "disclaimer": "Indem Sie ein Wallet verbinden, bestätigen Sie, dass Sie den Overtime Markets <a target=\"_blank\" href={{link}}>Haftungsausschluss</a> gelesen und verstanden haben und mit den Nutzungsbedingungen einverstanden sind.",
-            "disclaimer1": "Indem Sie eine Brieftasche verbinden, bestätigen Sie, dass Sie die Overtime Markets gelesen und verstanden haben",
+            "disclaimer": "Indem du ein Wallet verbindest, bestätigst du, dass du den Overtime Markets <a target=\"_blank\" href={{link}}>Haftungsausschluss</a> gelesen und verstanden hast und mit den Nutzungsbedingungen einverstanden bist.",
+            "disclaimer1": "Indem du eine Wallet verbindest, bestätigst du, dass Sie die Overtime Markets gelesen und verstanden hast",
             "disclaimer2": "und stimme den Nutzungsbedingungen zu.",
             "disclaimer-lowercase": "Haftungsausschluss"
         },
@@ -35,21 +35,21 @@
                 "description": "<p>Die Funktionalität des Overtime Gutscheins wurde implementiert per <tip>TIP-76.</tip><p/>",
                 "voucher-amount-label": "Gutschein Betrag",
                 "another-wallet-label": "Gutschein an einen anderen Wallet senden",
-                "recipient-wallet-label": "Empfänge Wallet",
+                "recipient-wallet-label": "Wallet des Empfängers",
                 "recipient-wallet-placeholder": "Die Addresse des Empfängers eingeben",
                 "button": {
                     "mint-label": "Minten",
-                    "mint-progress-label": "Gutschein wird gemintet...",
-                    "confirmation-message": "Gutschein erfolgreich gemintet"
+                    "mint-progress-label": "Gutschein wird generiert...",
+                    "confirmation-message": "Gutschein erfolgreich generiert"
                 }
             }
         },
         "referral": {
             "link-copied": "Empfehlungs-Link kopiert!",
             "button": {
-                "label": "Empfehlen und verdienen",
-                "disbled-tooltip": "Verbinden Sie den Wallet, um einen Empfehlungs-Link zu generieren.",
-                "enabled-tooltip": "Laden Sie Menschen ein, mit Overtime zu traden, um für jeden Trade, den sie machen, Gebühren zu verdienen."
+                "label": "Empfehlen und Prämie sichern",
+                "disbled-tooltip": "Verbinden dein Wallet, um einen Empfehlungs-Link zu generieren.",
+                "enabled-tooltip": "Laden Freunde ein, mit Overtime zu traden, um mit jedem ihrerer Trades Gebühren zu verdienen."
             }
         },
         "swap": {
@@ -58,7 +58,7 @@
             "to-label": "Zu",
             "balance-label": "Guthaben: {{amount}}",
             "swap-label": "Tauschen",
-            "swap-progress-label": "Tausch im Gange..."
+            "swap-progress-label": "Tausch wird fertig gestellt..."
         },
         "enable-wallet-access": {
             "approve-label": "{{currencyKey}} genehmigen",
@@ -67,19 +67,19 @@
             "custom-amount-label": "Betrag genehmigen"
         },
         "unsupported-network": {
-            "title": "Oops! Sie sind im falschen Netzwerk!",
-            "description": "Sie haben das falsche Netzwerk in Ihrem Wallet ausgewählt. Um fortzufahren, wechseln Sie bitte zum Optimism Mainnet Netzwerk.",
+            "title": "Oops! Du bist im falschen Netzwerk!",
+            "description": "Du hast das falsche Netzwerk in deinem Wallet ausgewählt. Um fortzufahren, wechsel bitte zum Optimism Mainnet Netzwerk.",
             "button": {
-                "optimism": "Zum Optimism wechseln."
+                "optimism": "Zu Optimism wechseln."
             }
         },
         "errors": {
-            "unknown-error-try-again": "Nach dem Absenden ist ein unbekannter Fehler aufgetreten. Bitte versuchen Sie es erneut.",
-            "unknown-error-try-again-general": "Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+            "unknown-error-try-again": "Nach dem Absenden ist ein unbekannter Fehler aufgetreten. Bitte versuchen es erneut.",
+            "unknown-error-try-again-general": "Ein unbekannter Fehler ist aufgetreten. Bitte versuche es erneut.",
             "insufficient-balance": "Unzureichendes Guthaben",
             "enter-amount": "Betrag eingeben",
             "enter-price": "Preis eigeben",
-            "insufficient-balance-wallet": "Bitte stellen Sie sicher, dass Ihr Wallet genügend {{currencyKey}} enthält",
+            "insufficient-balance-wallet": "Bitte stell sicher, dass dein Wallet genügend {{currencyKey}} enthält",
             "user-rejected-tx": "Benutzer hat die Transaktion abgelehnt",
             "enter-address": "Adresse eingeben",
             "invalid-address": "Ungültige Adresse"
@@ -115,7 +115,7 @@
         "input-characters-note": "{{entered }} / {{max}}",
         "view": "Ansehen",
         "guidelines": "Richtlinien",
-        "built-on": "Aufgebaut auf",
+        "built-on": "Ein Angebot von",
         "odds": {
             "american-odds": "Amerikanische Quoten",
             "normalized-implied-odds": "Normalisierte implizite Quoten",
@@ -123,10 +123,11 @@
         },
         "pagination": {
             "rows-per-page": "Zeilen pro Seite:",
-            "page": "Buchseite"
+            "page": "Seite"
         },
         "coming-soon": "Demnächst!",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
+        "mls-tooltip": "MLS markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
         "top3": "TOP 3",
         "top5": "TOP 5",
@@ -137,23 +138,23 @@
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",
         "github": "GitHub",
-        "docs": "Dokumente",
+        "docs": "Dokumentation",
         "twitter": "Twitter",
-        "medium": "Mittel",
-        "discord": "Zwietracht",
-        "tutorial": "Lernprogramm"
+        "medium": "Medium",
+        "discord": "Discord",
+        "tutorial": "Anleitung"
     },
     "market": {
         "question-label": "Frage",
-        "time-remaining-label": "Übrige Zeit",
+        "time-remaining-label": "Verbleibende Zeit",
         "sport": "Sport",
         "pay-with": "Zahlen mit",
         "status-label": "Status",
         "tags-label": "Tags",
         "search-placeholder": "Spiele suchen",
         "open-markets-label": "Offen",
-        "resolved-markets-label": "Aufgelöst",
-        "grid-view": "Gitter",
+        "resolved-markets-label": "Beendet",
+        "grid-view": "Raster",
         "list-view": "Liste",
         "skew-tooltip": "Skew Impact ist die Höhe der Prämie, die auf der Grundlage des aktuellen Risikos, das AMM auf diesem spezifischen Markt eingeht, zum Preis einer Position hinzugefügt wird.",
         "toast-messsage": {
@@ -171,7 +172,7 @@
             "global": {
                 "allmarkets": "Alle Märkte",
                 "openmarkets": "Offene Märkte",
-                "resolvedmarkets": "Aufgelöste Märkte",
+                "resolvedmarkets": "Beendete Märkte",
                 "yourpositions": "Deine Positionen",
                 "claim": "Einforderbar",
                 "history": "Deine Transactions",
@@ -191,19 +192,19 @@
                 "baseball": "Baseball",
                 "formula1": "Formel 1",
                 "motogp": "MotoGP",
-                "soon": "Bald mehr Sportarten!",
+                "soon": "Bald noch mehr Sportarten!",
                 "motosport": "Motorsport",
                 "favourites": "Favoriten"
             },
-            "all": "Alles",
+            "all": "Alle",
             "datepicker": {
                 "games": "{{numberOfGames}} Spiele"
             }
         },
         "back-to-markets": "Zurück zu den Märkten",
-        "back-to-market": "Zurück zum Märkt",
+        "back-to-market": "Zurück zum Markt",
         "no-markets-found": "Keine Märkte gefunden",
-        "view-all-markets": "Alle Märkte ansehen",
+        "view-all-markets": "Alle Märkte anzeigen",
         "table": {
             "title": "Neueste Aktivität",
             "date-time-col": "Datum | Zeit",
@@ -229,10 +230,7 @@
         "tooltip": {
             "amount-exceeded": "Der Betrag überstieg den auf der AMM verfügbaren Betrag",
             "minimal-amount": "Der Mindestbetrag ist 1",
-            "no-funds": "Bitte stellen Sie sicher, dass Ihr Wallet ausreichend USD enthält",
-            "min-amount": "Minimale Menge ist {{min}}",
-            "min-quote": "Minimales Zitat ist {{value}}",
-            "max-quote": "Das maximale Zitat ist {{value}}"
+            "no-funds": "Bitte stell sicher, dass dein Wallet ausreichend USD enthält"
         },
         "match-time": "Spielzeit"
     },
@@ -242,7 +240,7 @@
             "claimable": "Einforderbar",
             "finished": "Beendet",
             "result": "Resultat",
-            "started": "Gestarted",
+            "started": "Begonnen",
             "canceled": "Abgesagt",
             "pending-resolution": "Ausstehende Auflösung",
             "claim": "Einfordern",
@@ -258,7 +256,7 @@
             "positions-amount": "Positionen Betrag",
             "amount-to-sell": "Zu verkaufender Betrag",
             "total-to-receive": "Zu erhaltender Betrag",
-            "potential-profit": "Potenzieller Profit",
+            "potential-profit": "Möglicher Gewinn",
             "amount-claimable": "Einforderbarer Gewinn",
             "claim-back": "Rückerstattung verlangen",
             "max": "Max",
@@ -267,7 +265,8 @@
             },
             "skew": "Skew",
             "available": "Verfügbar",
-            "amount-to-buy": "Betrag zu kaufen"
+            "amount-to-buy": "Betrag zu kaufen",
+            "discount": "Rabatt"
         },
         "zero-odds-tooltip": "Sports AMM bietet nur Liquidität in der Preisspanne von $0,05 bis $0,95. Dies bedeutet, dass wenn die Quoten für eine Position weniger als 5% oder mehr als 95% betragen, diese Position keine Liquidität hat.",
         "parlay": {
@@ -294,18 +293,19 @@
             "parlay-fee": "Parlay-Gebühr",
             "safebox-fee": "SafeBox-Gebühr",
             "positions": "Positionen"
-        }
+        },
+        "discounted-per": "Ermäßigt gem"
     },
     "rewards": {
         "header": "Preise",
         "search-placeholder": "Wallet Addresse suchen",
         "description": "<0> Insgesamt 8.000 OP und 8.000 Thales werden vom 26. September bis zum 10. Oktober 00:00 UTC verteilt, um die an die SafeBox-Verträge gezahlten Gebühren auszugleichen. </0> <0> Die Rangliste berechnet die Belohnungen als 90% Rabatt auf die SafeBox-Gebühr, die 2% des Gesamtbetrags in sUSD beträgt. </0> <0> Der $-Wert von OP und THALES wird mit einem 7-Tage-Twap zu Beginn des Zeitraums berechnet. </0> <0>Wenn am Ende des zweiwöchigen Zeitraums die Gesamtrebatte mehr als der anfängliche Twap-Wert der OP- und THALES-Tokens beträgt, wird der Rabatt für jeden Trader proportional reduziert.</0>",
-        "op-rewards-banner-message": "Die OP-Preise haben begonnen. Wie ihr sie verdienen könnt, erfahrt ihr auf <bold>der OP-Preisseite</bold>.",
+        "op-rewards-banner-message": "Die OP-Prämien haben begonnen. Wie ihr sie verdienen könnt, erfahrt ihr auf <bold>der OP-Prämienseite</bold>.",
         "table": {
             "wallet-address": "Wallet Addresse",
-            "pnl": "Losses",
+            "pnl": "Profite",
             "percentage": "Prozent",
-            "reward-amount": "Preis",
+            "reward-amount": "Prämie",
             "no-data-available": "Keine Daten verfügbar",
             "volume": "Volumen",
             "safebox": "SafeBox-Gebühren",
@@ -325,14 +325,14 @@
     },
     "quiz": {
         "title": "Sport Trivia Wettbewerb",
-        "start-quiz-description": "<p>Hallo Sportfans! Bist du bereit, dein Wissen zu testen?</p><p>Overtime hat einen Sport-Trivia-Wettbewerb ins Leben gerufen, bei dem die wöchentlichen Gewinner NFT-Gutscheine erhalten, die anstelle von SUSD für die Teilnahme an einem beliebigen Sportmarkt verwendet werden können.</p><p>Lies alle Informationen zu diesem Quiz in unserem <blogPost>Blogpost</blogPost>.</p><p>Wie kann man teilnehmen? Das Quiz steht jedem zur Verfügung, um sein Wissen zu testen und sich zu wettkämpfen, aber um sich für die Preise zu qualifizieren, müssen Sie dieses <quizRetweetLink>Tweet</quizRetweetLink> retweeten und <twitter>Overtime's Twitter</twitter> folgen.</p><p>Verbinden Sie Ihr Wallet und geben Sie Ihren Twitter-Handle ein, um das Quiz zu starten! Wenn du Belohnungen gewinnst, werden wir dich bitten, deine Adresse per Twitter-DM zu bestätigen. Die Discord-ID ist optional, wenn du als potenzieller Gewinner eine Discord-Rolle erhalten möchtest.</p><p>Für Fragen kannst du unserem <discord>Discord</discord> beitreten.</p>",
+        "start-quiz-description": "<p>Hallo Sportfans! Bist du bereit, dein Wissen zu testen?</p><p>Overtime hat einen Sport-Trivia-Quiz-Wettbewerb ins Leben gerufen. Das Quiz steht jedem zur Verfügung, um sein Wissen zu testen und sich mit anderen zu messen.</p><p>Verbinden dein Wallet und gib deinen Twitter-Handle ein, um das Quiz zu starten! Für Fragen kannst du unserem <discord>Discord</discord> beitreten.</p>",
         "twitter-handle-label": "Twitter Handle",
-        "twitter-handle-placeholder": "Geben Sie Ihr Twitter-Handle ein",
-        "twitter-handle-validation": "Ungültiger Twitter-Handle. Versuchen Sie es erneut.",
+        "twitter-handle-placeholder": "Geben dein Twitter-Handle ein",
+        "twitter-handle-validation": "Ungültiger Twitter-Handle. Versuche es erneut.",
         "discord-label": "Discord ID (optional)",
         "discord-placeholder": "Gib deine Discord ID ein",
         "current-question-label": "Aktuelle Frage: {{currentQuestion}}/{{numberOfQuestions}}",
-        "time-reamining-label": "Zeit übrig <0/>",
+        "time-reamining-label": "Verbleibende Zeit <0/>",
         "question-weight-label": "Schwierigkeit der Frage: {{points}}",
         "point-label": "Punkt",
         "points-label": "Punkte",
@@ -348,7 +348,7 @@
         },
         "leaderboard": {
             "title": "Quiz Rangliste",
-            "description": "<p>Dies ist die Quiz-Rangliste, in der du sehen kannst, wie du im Vergleich zur Konkurrenz in jeder bestimmten Woche abschneidest</p><p>Alle Details zur Teilnahme und zum Gewinn von NFT sUSD-Gutscheinen, die für jeden Sportmarkt verwendet werden können, finden Sie <blogPost>hier</blogPost>.</p><p>Du kannst das Quiz <sportsTrivia>hier</sportsTrivia> so oft wiederholen, wie du willst.</p>",
+            "description": "<p>Dies ist die Quiz-Rangliste, in der du sehen kannst, wie du im Vergleich zur Konkurrenz stehst.</p><p>Du kannst das Quiz <sportsTrivia>hier</sportsTrivia> so oft wiederholen, wie du willst.</p>",
             "back-to-quiz": "Zurück zum Quiz",
             "search-placeholder": "Suchen...",
             "table": {
@@ -363,16 +363,14 @@
             "period-end-label": "Die Frist endet in",
             "period-ended-label": "Zeitraum beendet",
             "week-label": "Woche",
-            "overtime-voucher": "Overtime Gutschein"
+            "overtime-voucher": "Overtime Gutschein",
+            "all-time-leaderboard-label": "All time leaderboard"
         },
-        "help-us-improve-label": "Helfen sie uns, den Quiz zu verbessern",
-        "help-us-improve-tooltip": "Helfen Sie uns, Sport-Quiz zu verbessern, indem Sie neue Fragen in die Fragen-Datenbank eintragen.",
+        "help-us-improve-label": "Hilf uns das Quiz zu verbessern",
+        "help-us-improve-tooltip": "Hilf uns das Sport-Quiz zu verbessern, indem du neue Fragen in die Fragen-Datenbank einträgst.",
         "finish-messages": {
-            "your-best-result": "Ihr bestes Resultat: {{points}} {{pointsLabel}}",
-            "rank-info": "Mit {{points}} {{pointsLabel}} sind Sie auf der Rangliste {{rank}} von {{totalParticipants}} Teilnehmern.",
-            "not-quilfied-for-rewards": "Es fehlen Ihnen {{points}} {{pointsLabel}}, um in die TOP {{numberOfRewards}} zu kommen und sich für Preise zu qualifizieren. Versuchen Sie es erneut und verbessern Sie Ihre Punktzahl.",
-            "quilfied-for-rewards": "Du bist derzeit in der TOP {{numberOfRewards}} und für Preise qualifiziert. Versuchen Sie es erneut, um einen besseren Rang und höhere Belohnungen zu erhalten.",
-            "quilfied-for-rewards-first": "Sie führen derzeit die Rangliste an! Versuchen Sie es noch einmal, um eine bessere Punktzahl zu erreichen und Ihren Platz zu sichern."
+            "your-best-result": "Dein bestes Resultat: {{points}} {{pointsLabel}}",
+            "rank-info": "Mit {{points}} {{pointsLabel}} bist du auf der Rangliste {{rank}} von {{totalParticipants}} Teilnehmern."
         },
         "difficulty-label": "Schwierigkeitsgrad",
         "difficulty": {
@@ -382,5 +380,31 @@
             "4": "Herausfordernd",
             "5": "Schwer"
         }
+    },
+    "landing-page": {
+        "best-odds": "Beste Quoten in der Branche",
+        "try-now": "Jetzt probieren",
+        "powered-by": "Ein Angebot von",
+        "no-kyc": "Positionierung im Sport ohne KYC",
+        "launch-dapp": "dapp starten",
+        "leagues": "Ligen",
+        "info-text-title-1": "Keine Registrierung erforderlich",
+        "info-text-title-2": "Alles ist on-chain",
+        "info-text-title-3": "Non-custodial Märkte",
+        "info-text-title-4": "Daten bereitgestellt von Chainlink",
+        "info-text-title-5": "Schnelle und günstige Transaktionen",
+        "info-text-1": "Du brauchst keinen Benutzer anzulegen. Wir sammeln auch keine persönlichen Informationen.",
+        "info-text-2": "Wenn zentralisierte Einheiten fallen, ist Transparenz der entscheidende Faktor. Alle unsere Smart Contracts sind öffentlich.",
+        "info-text-3": "Es gibt niemanden, der dein Collateral hält. Deine Schlüssel, deine Tokene.",
+        "info-text-4": "Der Branchenführer bietet manipulationssichere Quoten und Sportergebnisse auf dezentralisierte Weise.",
+        "info-text-5": "Jede Interaktion mit Overtime sports AMM erfolgt über das Optimism-Netzwerk, dem Marktführer in Skalierbarkeit.",
+        "browse-markets": "Sportmärkte durchsuchen",
+        "web3-positioning": "Web3 Sport Positionierung",
+        "learn-more": "Möchtest du mehr erfahren?",
+        "documentation": "Siehe unsere Dokumentation",
+        "jump-in": "Bereit zum Einsteigen??",
+        "open-overtime": "Overtime Markets öffnen",
+        "join-discord": "Brauchst du Hilfe? Tritt unserem Discord bei",
+        "read-now": "Jetzt lesen"
     }
 }
