@@ -12,19 +12,6 @@ export const Container = styled(FlexDivColumn)`
 export const Header = styled(FlexDivRowCentered)`
     align-items: center;
     width: 100%;
-    font-size: 80px;
-    @media (max-width: 960px) {
-        font-size: 60px;
-    }
-    @media (max-width: 500px) {
-        font-size: 50px;
-    }
-    @media (max-width: 450px) {
-        font-size: 40px;
-    }
-    @media (max-width: 400px) {
-        font-size: 35px;
-    }
 `;
 export const Logo = styled.img`
     color: ${(props) => props.theme.textColor.primary};
@@ -808,6 +795,19 @@ export const LeagueIcon = styled.i`
 
 export const LogoContainer = styled(FlexDivRow)`
     align-items: center;
+    font-size: 80px;
+    @media (max-width: 960px) {
+        font-size: 60px;
+    }
+    @media (max-width: 500px) {
+        font-size: 50px;
+    }
+    @media (max-width: 450px) {
+        font-size: 40px;
+    }
+    @media (max-width: 400px) {
+        font-size: 35px;
+    }
 `;
 
 export const LogoLink = styled.a``;

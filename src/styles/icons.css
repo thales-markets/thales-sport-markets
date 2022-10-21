@@ -61,18 +61,18 @@
     content: '\004E';
 }
 
-.icon--formula1:before {
-    content: '\0056';
-}
-
 .icon--motogp:before {
     content: '\0055';
 }
 
-.icon--arrow:before {
-    content: '\0057';
+.icon--formula1:before {
+    content: '\0056';
 }
 
 .icon--triple-arrow:before {
-    content: '\0058';
+    content: '\005B';
+}
+
+.icon--arrow:before {
+    content: '\005D';
 }
