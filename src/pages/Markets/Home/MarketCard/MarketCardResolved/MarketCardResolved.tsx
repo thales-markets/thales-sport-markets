@@ -29,7 +29,7 @@ import { AccountPosition, SportMarketInfo } from 'types/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { getIsApexTopGame, isApexGame, isClaimAvailable } from 'utils/markets';
+import { getIsApexTopGame, isApexGame, isClaimAvailable, isMlsGame } from 'utils/markets';
 import networkConnector from 'utils/networkConnector';
 
 type MarketCardResolvedProps = {
@@ -133,6 +133,9 @@ const MarketCardResolved: React.FC<MarketCardResolvedProps> = ({ market, account
                                 {t('markets.market-card.vs')}
                                 {isApexGame(market.tags[0]) && (
                                     <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
+                                )}
+                                {isMlsGame(market.tags[0]) && (
+                                    <Tooltip overlay={t(`common.mls-tooltip`)} iconFontSize={22} marginLeft={2} />
                                 )}
                             </MatchVSLabel>
                             <WinnerLabel isWinning={market.finalResult == 3} finalResult={market.finalResult}>

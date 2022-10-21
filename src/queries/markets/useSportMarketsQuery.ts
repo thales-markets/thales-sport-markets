@@ -79,7 +79,7 @@ const mapResult = async (markets: any, globalFilter: GlobalFiltersEnum) => {
                             .map((obj: any) => {
                                 market.homeOdds = bigNumberFormatter(obj.odds[0]);
                                 market.awayOdds = bigNumberFormatter(obj.odds[1]);
-                                market.drawOdds = obj.odds[2] ? bigNumberFormatter(obj.odds[2]) : 0;
+                                market.drawOdds = obj.odds[2] ? bigNumberFormatter(obj.odds[2]) : undefined;
                             });
                     }
 

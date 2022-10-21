@@ -78,6 +78,7 @@ export const LanguageSelectorV2: React.FC<LanguageSelectorProps> = ({ isBurger }
 const Container = styled(FlexDivColumnCentered)`
     position: relative;
     align-items: flex-end;
+    z-index: 1001;
     &.burger {
         top: -27px;
     }
@@ -97,7 +98,7 @@ const LanguageButton = styled.button`
 
 const DropDown = styled(FlexDivColumn)`
     background: ${(props) => props.theme.background.secondary};
-    box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 20px 30px rgba(0 0 0 / 0.4);
     border-radius: 7px;
     position: absolute;
     margin-top: 2px;
@@ -114,6 +115,9 @@ const DropDown = styled(FlexDivColumn)`
         margin-top: 20px;
         width: 100%;
         background: transparent;
+    }
+    @media (max-width: 600px) {
+        left: initial;
     }
 `;
 

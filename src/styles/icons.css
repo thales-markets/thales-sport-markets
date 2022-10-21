@@ -88,3 +88,11 @@
 .icon--revert:before {
     content: '\005A';
 }
+
+.icon--arrow:before {
+    content: '\0057';
+}
+
+.icon--triple-arrow:before {
+    content: '\0058';
+}

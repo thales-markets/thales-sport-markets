@@ -15,7 +15,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SportMarketInfo } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { getIsApexTopGame, isApexGame } from '../../../../../utils/markets';
+import { getIsApexTopGame, isApexGame, isMlsGame } from '../../../../../utils/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import Tooltip from 'components/Tooltip';
 import { ApexBetTypeKeyMapping } from 'constants/markets';
@@ -68,6 +68,9 @@ const MarketCardCanceled: React.FC<MarketCardCanceledProps> = ({ market }) => {
                         {t('markets.market-card.vs')}
                         {isApexGame(market.tags[0]) && (
                             <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
+                        )}
+                        {isMlsGame(market.tags[0]) && (
+                            <Tooltip overlay={t(`common.mls-tooltip`)} iconFontSize={22} marginLeft={2} />
                         )}
                     </MatchVSLabel>
                 )}

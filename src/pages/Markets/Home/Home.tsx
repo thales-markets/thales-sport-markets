@@ -866,3 +866,249 @@ export const Info = styled.div`
 `;
 
 export default Home;
+
+    markets.forEach((market: SportMarketInfo) => {
+        if (
+            market.isOpen &&
+            market.maturityDate > new Date() &&
+            (market.homeOdds !== 0 || market.awayOdds !== 0 || market.drawOdds !== 0)
+        )
+            openMarkets.push(market);
+        if (
+            market.isOpen &&
+            market.maturityDate > new Date() &&
+            market.homeOdds === 0 &&
+            market.awayOdds === 0 &&
+            market.drawOdds === 0
+        )
+            comingSoonMarkets.push(market);
+        if (market.maturityDate < new Date() && !market.isResolved && !market.isCanceled)
+            pendingResolutionMarkets.push(market);
+        if (market.isResolved) finishedMarkets.push(market);
+        if (market.isCanceled) canceledMarkets.push(market);
+    });
+
+    return [...openMarkets, ...comingSoonMarkets, ...pendingResolutionMarkets, ...finishedMarkets, ...canceledMarkets];
+};
+
+const filterMarketsForCount = (
+    markets: SportMarkets,
+    marketSearch: string,
+    dateFilter: any,
+    sportFilter: any,
+    tagFilter: any,
+    allTagsFilterItem: TagInfo
+) => {
+    return markets.filter((market) => {
+        if (
+            marketSearch &&
+            !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
+            !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
+        ) {
+            return false;
+        }
+        if (dateFilter !== '' && market.maturityDate.toDateString() !== dateFilter) {
+            return false;
+        }
+        if (sportFilter !== SportFilterEnum.All && market.sport !== sportFilter) {
+            return false;
+        }
+        if (tagFilter.id !== allTagsFilterItem.id && !market.tags.map((tag) => Number(tag)).includes(tagFilter.id)) {
+            return false;
+        }
+        return true;
+    });
+};
+
+const Container = styled(FlexDivColumn)`
+    width: 100%;
+`;
+
+const RowContainer = styled(FlexDivRow)`
+    width: 100%;
+    flex: 1 1 0%;
+    flex-direction: row;
+    justify-content: stretch;
+`;
+
+const SidebarContainer = styled(FlexDivColumn)`
+    padding-top: 25px;
+    max-width: 240px;
+    flex-grow: 1;
+    @media (max-width: 950px) {
+        display: none;
+    }
+`;
+
+const BurgerMenu = styled.img`
+    position: relative;
+    top: 10px;
+    left: 10px;
+    display: none;
+    @media (max-width: 950px) {
+        display: block;
+    }
+`;
+
+const SwitchContainer = styled(FlexDivRow)`
+    width: 25%;
+    min-width: 150px;
+    position: relative;
+    top: 20px;
+    align-self: end;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+    @media (max-width: 950px) {
+        top: 15px;
+    }
+`;
+
+const FiltersContainer = styled(FlexDivRow)<{ hidden: boolean }>`
+    align-self: center;
+    margin-bottom: 4px;
+    visibility: ${(props) => (props.hidden ? 'hidden' : '')};
+`;
+
+const GlobalFiltersContainer = styled(FlexDivColumn)`
+    height: fit-content;
+    flex: 0;
+    padding-top: 20px;
+    &:before {
+        content: '';
+        height: 3px;
+        background: ${(props) => props.theme.borderColor.primary};
+        border-radius: 10px 10px 10px 10px;
+        margin-bottom: 20px;
+        margin-left: 10px;
+    }
+`;
+
+const UserRelatedFiltersContainer = styled(FlexDivColumn)`
+    height: fit-content;
+    flex: 0;
+    &:before {
+        content: '';
+        height: 3px;
+        background: ${(props) => props.theme.borderColor.primary};
+        border-radius: 10px 10px 10px 10px;
+        margin-bottom: 20px;
+        margin-left: 10px;
+    }
+    &:after {
+        content: '';
+        height: 3px;
+        background: ${(props) => props.theme.borderColor.primary};
+        border-radius: 10px 10px 10px 10px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+`;
+
+const SortingContainer = styled(FlexDivColumn)`
+    height: fit-content;
+    flex: 0;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    &:after {
+        content: '';
+        height: 3px;
+        background: ${(props) => props.theme.borderColor.primary};
+        border-radius: 10px 10px 10px 10px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+`;
+
+const SportFiltersContainer = styled(FlexDivColumn)`
+    height: fit-content;
+    flex: 0;
+    margin-bottom: 10px;
+    padding-top: 20px;
+`;
+
+const TagsContainer = styled(FlexDivStart)`
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-left: 20px;
+`;
+
+const NoMarketsContainer = styled(FlexDivColumnCentered)`
+    min-height: 200px;
+    align-items: center;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 100%;
+    button {
+        padding-top: 1px;
+    }
+`;
+
+const NoMarketsLabel = styled.span`
+    margin-bottom: 30px;
+`;
+
+const LoaderContainer = styled(FlexDivColumn)`
+    position: relative;
+    min-height: 300px;
+`;
+
+const BurgerFiltersContainer = styled(FlexDivColumn)<{ show: boolean }>`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    background: #303656;
+    display: ${(props) => (props.show ? 'flex' : 'none')};
+    z-index: 1000;
+`;
+
+const LogoContainer = styled.div`
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+`;
+
+const BurgerAndSwitchSwitchContainer = styled(FlexDivRow)`
+    justify-content: flex-end;
+    width: calc(100% - 240px);
+    @media (max-width: 950px) {
+        width: 100%;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+`;
+
+export const Info = styled.div`
+    width: 100%;
+    color: #ffffff;
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    background-color: #303656;
+    box-shadow: 0px 0px 20px rgb(0 0 0 / 40%);
+    z-index: 2;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    strong {
+        font-weight: bold;
+        cursor: pointer;
+        margin-left: 0.2em;
+        color: #91bced;
+    }
+    a {
+        display: contents;
+        font-weight: bold;
+        cursor: pointer;
+        color: #91bced;
+    }
+`;
+
+export default Home;
