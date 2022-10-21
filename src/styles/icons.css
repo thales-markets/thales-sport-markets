@@ -69,11 +69,11 @@
     content: '\0056';
 }
 
-.icon--arrow:before {
+.icon--star-full:before {
     content: '\0057';
 }
 
-.icon--triple-arrow:before {
+.icon--star-empty:before {
     content: '\0058';
 }
 
@@ -81,7 +81,7 @@
     content: '\0058';
 }
 
-.icon--cross-button:before {
+.icon--icon--cross-button:before {
     content: '\0059';
 }
 
@@ -89,10 +89,10 @@
     content: '\005A';
 }
 
-.icon--arrow:before {
-    content: '\0057';
+.icon--triple-arrow:before {
+    content: '\005B';
 }
 
-.icon--triple-arrow:before {
-    content: '\0058';
+.icon--arrow:before {
+    content: '\005D';
 }
