@@ -7,11 +7,12 @@ type TagsProps = {
     sport: string;
     tags: number[];
     isFinished?: boolean;
+    isApexTopGame?: boolean;
 };
 
-const Tags: React.FC<TagsProps> = ({ sport, tags, isFinished }) => {
+const Tags: React.FC<TagsProps> = ({ sport, tags, isFinished, isApexTopGame }) => {
     return (
-        <Container isFinished={isFinished}>
+        <Container isApexTopGame={isApexTopGame} isFinished={isFinished}>
             {tags.map((tag: number) => {
                 const findTagItem = TAGS_LIST.find((t) => t.id == tag);
                 return findTagItem ? (
@@ -36,12 +37,12 @@ const formatTagLabel = (label: string) => {
     }
 };
 
-const Container = styled(FlexDivStart)<{ isFinished?: boolean }>`
+const Container = styled(FlexDivStart)<{ isFinished?: boolean; isApexTopGame?: boolean }>`
     flex-wrap: wrap;
     align-items: center;
     color: ${(props) => props.theme.textColor.secondary};
     margin-top: ${(props) => (props.isFinished ? '0px' : '11px')};
-    position: absolute;
+    position: ${(props) => (props.isApexTopGame ? 'relative' : 'absolute')};
     bottom: 0;
 `;
 
