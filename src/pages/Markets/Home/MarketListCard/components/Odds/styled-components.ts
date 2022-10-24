@@ -6,7 +6,7 @@ export const Container = styled.div<{ resolved?: boolean }>`
     align-items: center;
     justify-content: ${(_props) => (_props?.resolved ? 'center' : '')};
     margin-left: ${(_props) => (_props?.resolved ? '30px' : 'auto')};
-    width: ${(_props) => (_props?.resolved ? '33%' : '40%')};
+    // width: ${(_props) => (_props?.resolved ? '33%' : '40%')};
 `;
 
 export const WinnerLabel = styled.span`
@@ -15,6 +15,7 @@ export const WinnerLabel = styled.span`
     font-size: 14px;
     line-height: 120%;
     color: #3fd1ff;
+    margin-left: 5px;
 `;
 
 export const OddsContainer = styled.div`

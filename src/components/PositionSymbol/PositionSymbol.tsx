@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import styled from 'styled-components';
-import { FlexDivCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 
 type SymbolProps = {
     type?: number;
@@ -81,48 +81,52 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                     {type == undefined && children}
                 </Symbol>
             </Container>
-            {additionalText?.firstText && (
-                <AdditionalText style={additionalText?.firstTextStyle}>
-                    {additionalText?.firstText}
-                    {showTooltip && (
+            <FlexDivColumn>
+                {additionalText?.firstText && (
+                    <AdditionalText style={additionalText?.firstTextStyle}>
+                        {additionalText?.firstText}
+                        {showTooltip && (
+                            <Tooltip
+                                overlay={<>{t('markets.zero-odds-tooltip')}</>}
+                                iconFontSize={10}
+                                customIconStyling={{ marginTop: '-10px', display: 'flex', marginLeft: '3px' }}
+                            />
+                        )}
+                    </AdditionalText>
+                )}
+                {discount && (
+                    <Discount>
                         <Tooltip
-                            overlay={<>{t('markets.zero-odds-tooltip')}</>}
-                            iconFontSize={10}
-                            customIconStyling={{ marginTop: '-10px', display: 'flex', marginLeft: '3px' }}
+                            overlay={
+                                <span>
+                                    {t(`markets.discounted-per`)}{' '}
+                                    <a
+                                        href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        TIP-95
+                                    </a>
+                                </span>
+                            }
+                            component={
+                                <div className="discount-label green">
+                                    <span>-{Math.ceil(Math.abs(discount))}%</span>
+                                </div>
+                            }
+                            iconFontSize={23}
+                            marginLeft={2}
+                            top={0}
                         />
-                    )}
-                </AdditionalText>
-            )}
-            {discount && (
-                <Discount>
-                    <Tooltip
-                        overlay={
-                            <span>
-                                {t(`markets.discounted-per`)}{' '}
-                                <a
-                                    href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    onClick={(e) => e.stopPropagation()}
-                                >
-                                    TIP-95
-                                </a>
-                            </span>
-                        }
-                        component={
-                            <div className="discount-label green">
-                                <span>-{Math.ceil(Math.abs(discount))}%</span>
-                            </div>
-                        }
-                        iconFontSize={23}
-                        marginLeft={2}
-                        top={0}
-                    />
-                </Discount>
-            )}
-            {additionalText?.secondText && (
-                <AdditionalText style={additionalText?.secondTextStyle}>{additionalText?.secondText}</AdditionalText>
-            )}
+                    </Discount>
+                )}
+                {additionalText?.secondText && (
+                    <AdditionalText style={additionalText?.secondTextStyle}>
+                        {additionalText?.secondText}
+                    </AdditionalText>
+                )}
+            </FlexDivColumn>
         </Wrapper>
     );
 };
@@ -166,7 +170,7 @@ const Symbol = styled.span<{ color?: string; addedToParlay?: boolean }>`
 const Discount = styled(FlexDivCentered)<{ color?: string }>`
     color: ${(_props) => (_props?.color ? _props.color : '')};
     font-size: 14px;
-    margin-left: 11px;
+    margin-left: 2px;
 `;
 
 export default PositionSymbol;

@@ -48,7 +48,6 @@ export const ClubVsClubContainer = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    width: 33%;
 `;
 
 export const VSLabel = styled.span`
