@@ -288,7 +288,7 @@
                 "min-amount": "Minimal amount is {{min}}",
                 "min-quote": "Minimal quote is {{value}}",
                 "max-quote": "Maximum quote is {{value}}",
-                "availability": "Low availability for markets position",
+                "availability": "Not enough liquidity for this amount",
                 "no-funds": "Please ensure your wallet has enough funds"
             }
         },

@@ -144,15 +144,14 @@ const Single: React.FC<SingleProps> = ({ market }) => {
 
     const fetchAmmQuote = useCallback(
         async (amountForQuote: number) => {
-            const { sportsAMMContract, signer } = networkConnector;
-            if (sportsAMMContract && signer) {
-                const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
+            const { sportsAMMContract } = networkConnector;
+            if (sportsAMMContract && amountForQuote) {
                 const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(amountForQuote).toString());
                 const ammQuote = await getSportsAMMQuoteMethod(
                     true,
                     selectedStableIndex,
                     networkId,
-                    sportsAMMContractWithSigner,
+                    sportsAMMContract,
                     market.address,
                     market.position,
                     parsedAmount
@@ -170,8 +169,8 @@ const Single: React.FC<SingleProps> = ({ market }) => {
     useEffect(() => {
         const getMaxUsdAmount = async () => {
             setIsFetching(true);
-            const { sportsAMMContract, signer } = networkConnector;
-            if (sportsAMMContract && signer) {
+            const { sportsAMMContract } = networkConnector;
+            if (sportsAMMContract) {
                 const roundedMaxAmount = floorNumberToDecimals(availablePerSide.positions[market.position].available);
                 const divider =
                     selectedStableIndex === COLLATERALS_INDEX.sUSD || selectedStableIndex == COLLATERALS_INDEX.DAI
@@ -265,7 +264,10 @@ const Single: React.FC<SingleProps> = ({ market }) => {
         market.position,
         tokenAmount || 1,
         selectedStableIndex,
-        networkId
+        networkId,
+        {
+            enabled: isAppReady,
+        }
     );
 
     useEffect(() => {
@@ -274,7 +276,9 @@ const Single: React.FC<SingleProps> = ({ market }) => {
         }
     }, [positionPriceDetailsQuery.isSuccess, positionPriceDetailsQuery.data]);
 
-    const availablePerSideQuery = useAvailablePerSideQuery(market.address, Side.BUY);
+    const availablePerSideQuery = useAvailablePerSideQuery(market.address, Side.BUY, {
+        enabled: isAppReady,
+    });
 
     useEffect(() => {
         if (availablePerSideQuery.isSuccess && availablePerSideQuery.data) {
