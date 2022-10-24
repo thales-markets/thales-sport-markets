@@ -86,7 +86,7 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
 
     const parlayAmmDataQuery = useParlayAmmDataQuery(networkId, {
-        enabled: isAppReady && isWalletConnected,
+        enabled: isAppReady,
     });
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
