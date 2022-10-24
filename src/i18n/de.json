@@ -296,7 +296,11 @@
             "parlay-fee": "Parlay-Gebühr",
             "safebox-fee": "SafeBox-Gebühr",
             "positions": "Positionen",
-            "clear": "Alles löschen"
+            "clear": "Alles löschen",
+            "info": {
+                "max-quote": "Das maximal unterstützte TOTAL QUOTE beträgt {{value}}",
+                "min-quote": "Das minimal unterstützte TOTAL QUOTE beträgt {{value}}"
+            }
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {

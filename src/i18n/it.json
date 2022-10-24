@@ -299,7 +299,11 @@
             "parlay-fee": "Tariffa Parlay",
             "safebox-fee": "Tariffa SafeBox",
             "positions": "Posizioni",
-            "clear": "Cancella tutto"
+            "clear": "Cancella tutto",
+            "info": {
+                "min-quote": "Il PREVENTIVO TOTALE minimo supportato è {{value}}",
+                "max-quote": "Il PREVENTIVO TOTALE massimo supportato è {{value}}"
+            }
         },
         "discounted-per": "Scontato come da",
         "nav-menu": {

@@ -398,7 +398,11 @@
             "safebox-fee": "Frais SafeBox",
             "positions": "Postes",
             "parlay-fee": "Frais de parlay",
-            "clear": "Tout effacer"
+            "clear": "Tout effacer",
+            "info": {
+                "max-quote": "Le DEVIS TOTAL maximal pris en charge est de {{value}}",
+                "min-quote": "Le DEVIS TOTAL minimal pris en charge est de {{value}}"
+            }
         },
         "discounted-per": "Remise selon",
         "nav-menu": {

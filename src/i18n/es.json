@@ -299,7 +299,11 @@
             "safebox-fee": "Tarifa de SafeBox",
             "parlay-fee": "Tarifa combinada",
             "positions": "Posiciones",
-            "clear": "Limpiar todo"
+            "clear": "Limpiar todo",
+            "info": {
+                "min-quote": "La COTIZACIÓN TOTAL mínima admitida es {{value}}",
+                "max-quote": "La COTIZACIÓN TOTAL máxima admitida es {{value}}"
+            }
         },
         "discounted-per": "Con descuento según",
         "nav-menu": {

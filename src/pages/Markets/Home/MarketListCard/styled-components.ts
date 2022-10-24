@@ -18,6 +18,7 @@ export const Container = styled.div<{
         _props.isResolved && !_props.claimBorder ? 'rgb(36,41,64, 0.5)' : 'rgba(48, 54, 86, 0.5)'};
     border: ${(_props) => (_props?.claimBorder ? '3px solid #3FD1FF' : '')};
     ${(_props) => (_props.isCanceled ? `border: 3px solid ${STATUS_COLOR.CANCELED};` : '')}
+    height: 60px;
 `;
 
 export const ClubNameLabel = styled.span`
@@ -64,7 +65,7 @@ export const ClubLogo = styled.img<{ width?: string; height?: string }>`
 export const LinkIcon = styled.i`
     font-size: 16px;
     margin-left: 10px;
-    margin-top: 7px;
+    margin-top: 12px;
     color: ${(props) => props.theme.textColor.secondary};
     &:hover {
         cursor: pointer;

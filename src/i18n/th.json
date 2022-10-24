@@ -296,7 +296,11 @@
             "potential-profit": "กำไรที่อาจเกิดขึ้น",
             "available": "มีอยู่",
             "empty-title": "ไม่มีตำแหน่ง",
-            "clear": "ลบทั้งหมด"
+            "clear": "ลบทั้งหมด",
+            "info": {
+                "min-quote": "รองรับ TOTAL QUOTE ที่น้อยที่สุดคือ {{value}}",
+                "max-quote": "รองรับ TOTAL QUOTE สูงสุดคือ {{value}}"
+            }
         },
         "nav-menu": {
             "items": {
