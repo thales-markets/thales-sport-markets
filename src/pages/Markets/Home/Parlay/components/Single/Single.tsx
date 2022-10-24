@@ -41,7 +41,7 @@ import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
 import {
     AmountToBuyContainer,
     AmountToBuyInput,
-    CustomTooltip,
+    ValidationTooltip,
     InfoContainer,
     InfoLabel,
     InfoValue,
@@ -503,7 +503,7 @@ const Single: React.FC<SingleProps> = ({ market }) => {
                 <SummaryLabel>{t('markets.parlay.buy-amount')}:</SummaryLabel>
             </RowSummary>
             <InputContainer ref={inputRef}>
-                <CustomTooltip
+                <ValidationTooltip
                     open={inputRefVisible && !!tooltipTextUsdAmount && !openApprovalModal}
                     title={tooltipTextUsdAmount}
                 >
@@ -523,7 +523,7 @@ const Single: React.FC<SingleProps> = ({ market }) => {
                             {t('markets.market-details.max')}
                         </MaxButton>
                     </AmountToBuyContainer>
-                </CustomTooltip>
+                </ValidationTooltip>
             </InputContainer>
             <InfoContainer>
                 <InfoWrapper>

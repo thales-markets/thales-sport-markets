@@ -37,7 +37,7 @@ import { getReferralId } from 'utils/referral';
 import {
     AmountToBuyContainer,
     AmountToBuyInput,
-    CustomTooltip,
+    ValidationTooltip,
     InfoContainer,
     InfoLabel,
     InfoValue,
@@ -51,6 +51,7 @@ import {
 } from '../styled-components';
 import Payment from '../Payment';
 import { removeAll } from 'redux/modules/parlay';
+import Tooltip from 'components/Tooltip';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -81,7 +82,6 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
     const [isBuying, setIsBuying] = useState<boolean>(false);
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState<string>('');
-    const [tooltipTextTotalQuote, setTooltipTextTotalQuote] = useState<string>('');
     const [hasAllowance, setAllowance] = useState<boolean>(false);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
 
@@ -298,25 +298,12 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
                 setSubmitDisabled(true);
                 return;
             }
-            // Quote is below minimum (currently 0.05)
-            if (parlayAmmData?.maxSupportedOdds && totalQuote < parlayAmmData?.maxSupportedOdds) {
-                setSubmitDisabled(true);
-                return;
-            }
             // Not enough funds
             setSubmitDisabled(!paymentTokenBalance || usdAmountValue > paymentTokenBalance);
             return;
         };
         checkDisabled();
-    }, [
-        usdAmountValue,
-        isBuying,
-        isAllowing,
-        hasAllowance,
-        paymentTokenBalance,
-        totalQuote,
-        parlayAmmData?.maxSupportedOdds,
-    ]);
+    }, [usdAmountValue, isBuying, isAllowing, hasAllowance, paymentTokenBalance, totalQuote]);
 
     const getSubmitButton = () => {
         if (!isWalletConnected) {
@@ -357,24 +344,6 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
         },
         [parlayAmmData?.maxSupportedAmount, t, paymentTokenBalance]
     );
-    const setTooltipTextMessageTotalQuote = useCallback(
-        (value: number) => {
-            if (parlayAmmData?.maxSupportedOdds && value && value < parlayAmmData?.maxSupportedOdds) {
-                setTooltipTextTotalQuote(
-                    selectedOddsType === OddsType.AMM
-                        ? t('markets.parlay.validation.min-quote', {
-                              value: formatMarketOdds(selectedOddsType, parlayAmmData?.maxSupportedOdds),
-                          })
-                        : t('markets.parlay.validation.max-quote', {
-                              value: formatMarketOdds(selectedOddsType, parlayAmmData?.maxSupportedOdds),
-                          })
-                );
-            } else {
-                setTooltipTextTotalQuote('');
-            }
-        },
-        [parlayAmmData?.maxSupportedOdds, t, selectedOddsType]
-    );
 
     useEffect(() => {
         const fetchData = async () => {
@@ -398,19 +367,12 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
                     setFinalQuotes(fetchedFinalQuotes);
 
                     setTooltipTextMessageUsdAmount(usdAmountValue, fetchedFinalQuotes);
-                    setTooltipTextMessageTotalQuote(fetchedTotalQuote);
                 }
             }
             setIsFetching(false);
         };
         fetchData();
-    }, [
-        usdAmountValue,
-        fetchParlayAmmQuote,
-        parlayAmmData?.maxSupportedAmount,
-        setTooltipTextMessageTotalQuote,
-        setTooltipTextMessageUsdAmount,
-    ]);
+    }, [usdAmountValue, fetchParlayAmmQuote, parlayAmmData?.maxSupportedAmount, setTooltipTextMessageUsdAmount]);
 
     useEffect(() => {
         setTooltipTextMessageUsdAmount(usdAmountValue, finalQuotes);
@@ -419,29 +381,38 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
     const setUsdAmount = (value: string | number) => {
         setUsdAmountValue(value);
         setTooltipTextMessageUsdAmount(value, finalQuotes);
-        setTooltipTextMessageTotalQuote(totalQuote);
     };
 
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
 
+    const getQuoteTooltipText = () => {
+        return selectedOddsType === OddsType.AMM
+            ? t('markets.parlay.info.min-quote', {
+                  value: formatMarketOdds(selectedOddsType, parlayAmmData?.maxSupportedOdds),
+              })
+            : t('markets.parlay.info.max-quote', {
+                  value: formatMarketOdds(selectedOddsType, parlayAmmData?.maxSupportedOdds),
+              });
+    };
+
     return (
         <>
-            <CustomTooltip
-                open={inputRefVisible && !!tooltipTextTotalQuote && !openApprovalModal}
-                title={tooltipTextTotalQuote}
-            >
-                <RowSummary>
-                    <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
-                    <SummaryValue>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
-                    <SummaryLabel alignRight={true}>{t('markets.parlay.clear')}:</SummaryLabel>
-                    <XButton
-                        margin={'0 0 4px 5px'}
-                        onClick={() => dispatch(removeAll())}
-                        className={`icon icon--cross-button-arrow`}
-                    />
-                </RowSummary>
-            </CustomTooltip>
+            <RowSummary>
+                <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
+                <SummaryValue>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
+                <Tooltip
+                    overlay={getQuoteTooltipText()}
+                    iconFontSize={10}
+                    customIconStyling={{ marginTop: '-10px', display: 'flex', marginLeft: '3px' }}
+                />
+                <SummaryLabel alignRight={true}>{t('markets.parlay.clear')}:</SummaryLabel>
+                <XButton
+                    margin={'0 0 4px 5px'}
+                    onClick={() => dispatch(removeAll())}
+                    className={`icon icon--cross-button-arrow`}
+                />
+            </RowSummary>
             <Payment
                 onChangeCollateral={(index) => setSelectedStableIndex(index)}
                 setIsVoucherSelectedProp={setIsVoucherSelected}
@@ -450,7 +421,7 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
                 <SummaryLabel>{t('markets.parlay.buy-amount')}:</SummaryLabel>
             </RowSummary>
             <InputContainer ref={inputRef}>
-                <CustomTooltip
+                <ValidationTooltip
                     open={inputRefVisible && !!tooltipTextUsdAmount && !openApprovalModal}
                     title={tooltipTextUsdAmount}
                 >
@@ -467,7 +438,7 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
                             }}
                         />
                     </AmountToBuyContainer>
-                </CustomTooltip>
+                </ValidationTooltip>
             </InputContainer>
             <InfoContainer>
                 <InfoWrapper>
