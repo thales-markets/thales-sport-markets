@@ -155,7 +155,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         if (balanceValueQuery.isSuccess && balanceValueQuery.data) {
             setBalanceValue(balanceValueQuery.data);
         }
-    }, [balanceValueQuery.data, balanceValueQuery.isSuccess]);
+    }, [balances, balanceValueQuery.data, balanceValueQuery.isSuccess]);
 
     const referralId =
         walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase() ? getReferralId() : null;
@@ -624,7 +624,8 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
 
     const totalToReceive = showPotentialProfit ? '-' : formatCurrencyWithSign(USD_SIGN, tokenAmount);
     const balancesObjectKeys = Object.keys(balances ? balances : {});
-    const showPositionInfo = balances && (balances.home > 0 || balances.draw > 0 || balances.away > 0);
+    const showPositionInfo =
+        !balanceValueQuery.isLoading && balances && (balances.home > 0 || balances.draw > 0 || balances.away > 0);
 
     return (
         <>
