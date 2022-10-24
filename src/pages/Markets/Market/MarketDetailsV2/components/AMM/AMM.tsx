@@ -21,6 +21,11 @@ import {
     PotentialProfit,
     CollateralInfoContainer,
     SubmitButtonContainer,
+    InWalletContainer,
+    PositionValueContainer,
+    PositionValue,
+    PositionsContainer,
+    PositionsWrapper,
 } from './styled-components';
 import { toast } from 'react-toastify';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
@@ -32,7 +37,7 @@ import usePositionPriceDetailsQuery from 'queries/markets/usePositionPriceDetail
 import { refetchBalances } from 'utils/queryConnector';
 
 import { MAX_L2_GAS_LIMIT, Position, Side } from 'constants/options';
-import { AMMPosition, AvailablePerSide, Balances, MarketData } from 'types/markets';
+import { AMMPosition, AvailablePerSide, Balances, MarketData, PositionType } from 'types/markets';
 import {
     countDecimals,
     floorNumberToDecimals,
@@ -58,6 +63,10 @@ import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { getDecimalsByStableCoinIndex } from 'utils/collaterals';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { USD_SIGN } from 'constants/currency';
+import usePositionSellPriceQuery from 'queries/markets/usePositionSellPriceQuery';
+import PositionSymbol from 'components/PositionSymbol';
+import { convertPositionNameToPosition } from 'utils/markets';
+import { ODDS_COLOR } from 'constants/ui';
 
 type AMMProps = {
     market: MarketData;
@@ -105,9 +114,14 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(false);
 
     const [balances, setBalances] = useState<Balances | undefined>(undefined);
+    const [balanceValue, setBalanceValue] = useState<Balances | undefined>(undefined);
 
     const marketBalancesQuery = useMarketBalancesQuery(market.address, walletAddress, {
         enabled: !!market.address && isWalletConnected,
+    });
+
+    const balanceValueQuery = usePositionSellPriceQuery(market, balances, networkId, {
+        enabled: isWalletConnected && !!market.address,
     });
 
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
@@ -136,6 +150,12 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
             setBalances(marketBalancesQuery.data);
         }
     }, [marketBalancesQuery.isSuccess, marketBalancesQuery.data]);
+
+    useEffect(() => {
+        if (balanceValueQuery.isSuccess && balanceValueQuery.data) {
+            setBalanceValue(balanceValueQuery.data);
+        }
+    }, [balanceValueQuery.data, balanceValueQuery.isSuccess]);
 
     const referralId =
         walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase() ? getReferralId() : null;
@@ -603,6 +623,8 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         : formatPercentage(ammPosition.sides[selectedSide].priceImpact);
 
     const totalToReceive = showPotentialProfit ? '-' : formatCurrencyWithSign(USD_SIGN, tokenAmount);
+    const balancesObjectKeys = Object.keys(balances ? balances : {});
+    const showPositionInfo = balances && (balances.home > 0 || balances.draw > 0 || balances.away > 0);
 
     return (
         <>
@@ -708,6 +730,42 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                                 </PotentialProfit>
                             </PotentialProfitContainer>
                         </>
+                    )}
+                    {showPositionInfo && (
+                        <PositionsWrapper>
+                            <InWalletContainer>
+                                <PrimaryLabel>{t('markets.market-details.wallet-info.title')}</PrimaryLabel>
+                            </InWalletContainer>
+                            <PositionsContainer>
+                                {balancesObjectKeys &&
+                                    balancesObjectKeys.map((item, index) => {
+                                        if (
+                                            balances &&
+                                            balances[item as PositionType] &&
+                                            balances[item as PositionType] > 0
+                                        ) {
+                                            return (
+                                                <PositionValueContainer key={index}>
+                                                    <PositionSymbol
+                                                        additionalStyle={{ width: '30px', height: '30px' }}
+                                                        type={convertPositionNameToPosition(item)}
+                                                        symbolColor={(ODDS_COLOR as any)[item.toUpperCase()]}
+                                                    />
+                                                    <PositionValue>
+                                                        {balanceValue
+                                                            ? formatCurrencyWithSign(
+                                                                  USD_SIGN,
+                                                                  balanceValue[item as PositionType],
+                                                                  2
+                                                              )
+                                                            : 0}
+                                                    </PositionValue>
+                                                </PositionValueContainer>
+                                            );
+                                        }
+                                    })}
+                            </PositionsContainer>
+                        </PositionsWrapper>
                     )}
                 </AMMContent>
                 {openApprovalModal && (
