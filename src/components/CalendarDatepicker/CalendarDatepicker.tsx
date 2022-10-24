@@ -12,10 +12,10 @@ type CalendarDatepickerProps = {
 
 const CalendarDatepicker: React.FC<CalendarDatepickerProps> = ({ date, setDate, setDateParam }) => {
     const [isOpen, setIsOpen] = useState(false);
-    console.log(date);
+
     return (
         <DatePickerContainer>
-            <DatepickerButton onClick={() => setIsOpen(!isOpen)}>
+            <DatepickerButton className={`${typeof date != 'number' ? 'blue' : ''}`} onClick={() => setIsOpen(!isOpen)}>
                 {typeof date != 'number' ? formatShortDate(date) : 'Choose date'}
             </DatepickerButton>
             {isOpen && (
@@ -139,6 +139,9 @@ const DatepickerButton = styled.button`
     text-transform: uppercase;
     padding: 0;
     color: ${(props) => props.theme.textColor.secondary};
+    &.blue {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
     &:hover {
         cursor: pointer;
         color: ${(props) => props.theme.textColor.quaternary};
