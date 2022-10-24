@@ -98,7 +98,6 @@ const MatchLabel = styled.div`
 
 const ClubName = styled.span`
     display: block;
-    white-space: nowrap;
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 300;

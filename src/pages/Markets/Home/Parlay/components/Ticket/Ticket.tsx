@@ -37,7 +37,7 @@ import { getReferralId } from 'utils/referral';
 import {
     AmountToBuyContainer,
     AmountToBuyInput,
-    CustomTooltip,
+    ValidationTooltip,
     InfoContainer,
     InfoLabel,
     InfoValue,
@@ -51,6 +51,7 @@ import {
 } from '../styled-components';
 import Payment from '../Payment';
 import { removeAll } from 'redux/modules/parlay';
+import Tooltip from 'components/Tooltip';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -81,7 +82,6 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
     const [isBuying, setIsBuying] = useState<boolean>(false);
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState<string>('');
-    const [tooltipTextTotalQuote, setTooltipTextTotalQuote] = useState<string>('');
     const [hasAllowance, setAllowance] = useState<boolean>(false);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
 
@@ -129,9 +129,8 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
 
     const fetchParlayAmmQuote = useCallback(
         async (susdAmountForQuote: number) => {
-            const { parlayMarketsAMMContract, signer } = networkConnector;
-            if (parlayMarketsAMMContract && signer) {
-                const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
+            const { parlayMarketsAMMContract } = networkConnector;
+            if (parlayMarketsAMMContract) {
                 const marketsAddresses = markets.map((market) => market.address);
                 const selectedPositions = markets.map((market) => market.position);
                 const susdPaid = ethers.utils.parseEther(roundNumberToDecimals(susdAmountForQuote).toString());
@@ -139,7 +138,7 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
                     true,
                     selectedStableIndex,
                     networkId,
-                    parlayMarketsAMMContractWithSigner,
+                    parlayMarketsAMMContract,
                     marketsAddresses,
                     selectedPositions,
                     susdPaid
@@ -150,53 +149,6 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
         },
         [networkId, selectedStableIndex, markets]
     );
-
-    const setTooltipTextMessageTotalQuote = useCallback(
-        (value: number, quotes: number[]) => {
-            if (quotes.some((quote) => quote === 0)) {
-                setTooltipTextTotalQuote(t('markets.parlay.validation.availability'));
-            } else if (parlayAmmData?.maxSupportedOdds && value < parlayAmmData?.maxSupportedOdds) {
-                setTooltipTextTotalQuote(
-                    selectedOddsType === OddsType.AMM
-                        ? t('markets.parlay.validation.min-quote', {
-                              value: formatMarketOdds(selectedOddsType, parlayAmmData?.maxSupportedOdds),
-                          })
-                        : t('markets.parlay.validation.max-quote', {
-                              value: formatMarketOdds(selectedOddsType, parlayAmmData?.maxSupportedOdds),
-                          })
-                );
-            } else {
-                setTooltipTextTotalQuote('');
-            }
-        },
-        [parlayAmmData?.maxSupportedOdds, t, selectedOddsType]
-    );
-
-    useEffect(() => {
-        const fetchData = async () => {
-            setIsFetching(true);
-            if (
-                Number(usdAmountValue) >= 0 ||
-                (parlayAmmData?.maxSupportedAmount && Number(usdAmountValue) > parlayAmmData?.maxSupportedAmount)
-            ) {
-                const parlayAmmQuote = await fetchParlayAmmQuote(Number(usdAmountValue) || 1);
-                const fetchedTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
-
-                setTotalQuote(fetchedTotalQuote);
-                setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
-                setTotalBuyAmount(bigNumberFormatter(parlayAmmQuote['totalBuyAmount']));
-
-                const fetchedFinalQuotes: number[] = (parlayAmmQuote['finalQuotes'] || []).map((quote: BigNumber) =>
-                    bigNumberFormatter(quote)
-                );
-                setFinalQuotes(fetchedFinalQuotes);
-
-                setTooltipTextMessageTotalQuote(fetchedTotalQuote, fetchedFinalQuotes);
-            }
-            setIsFetching(false);
-        };
-        fetchData();
-    }, [usdAmountValue, fetchParlayAmmQuote, parlayAmmData?.maxSupportedAmount, setTooltipTextMessageTotalQuote]);
 
     useEffect(() => {
         const { parlayMarketsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
@@ -341,13 +293,8 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
                 setSubmitDisabled(false);
                 return;
             }
-            //
+            // Minimum of sUSD
             if (!Number(usdAmountValue) || Number(usdAmountValue) < MIN_SUSD_AMOUNT || isBuying || isAllowing) {
-                setSubmitDisabled(true);
-                return;
-            }
-            // Quote is below minimum (currently 0.05)
-            if (parlayAmmData?.maxSupportedOdds && totalQuote < parlayAmmData?.maxSupportedOdds) {
                 setSubmitDisabled(true);
                 return;
             }
@@ -356,15 +303,7 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
             return;
         };
         checkDisabled();
-    }, [
-        usdAmountValue,
-        isBuying,
-        isAllowing,
-        hasAllowance,
-        paymentTokenBalance,
-        totalQuote,
-        parlayAmmData?.maxSupportedOdds,
-    ]);
+    }, [usdAmountValue, isBuying, isAllowing, hasAllowance, paymentTokenBalance, totalQuote]);
 
     const getSubmitButton = () => {
         if (!isWalletConnected) {
@@ -390,8 +329,10 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
     };
 
     const setTooltipTextMessageUsdAmount = useCallback(
-        (value: string | number) => {
-            if (value && Number(value) < MIN_SUSD_AMOUNT) {
+        (value: string | number, quotes: number[]) => {
+            if (quotes.some((quote) => quote === 0)) {
+                setTooltipTextUsdAmount(t('markets.parlay.validation.availability'));
+            } else if (value && Number(value) < MIN_SUSD_AMOUNT) {
                 setTooltipTextUsdAmount(t('markets.parlay.validation.min-amount', { min: MIN_SUSD_AMOUNT }));
             } else if (parlayAmmData?.maxSupportedAmount && Number(value) > parlayAmmData?.maxSupportedAmount) {
                 setTooltipTextUsdAmount(t('markets.parlay.validation.amount-exceeded'));
@@ -405,35 +346,73 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
     );
 
     useEffect(() => {
-        setTooltipTextMessageUsdAmount(usdAmountValue);
-    }, [isVoucherSelected, setTooltipTextMessageUsdAmount, usdAmountValue]);
+        const fetchData = async () => {
+            setIsFetching(true);
+            const { parlayMarketsAMMContract } = networkConnector;
+            if (parlayMarketsAMMContract) {
+                if (
+                    Number(usdAmountValue) >= 0 ||
+                    (parlayAmmData?.maxSupportedAmount && Number(usdAmountValue) > parlayAmmData?.maxSupportedAmount)
+                ) {
+                    const parlayAmmQuote = await fetchParlayAmmQuote(Number(usdAmountValue) || 1);
+                    const fetchedTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
+
+                    setTotalQuote(fetchedTotalQuote);
+                    setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
+                    setTotalBuyAmount(bigNumberFormatter(parlayAmmQuote['totalBuyAmount']));
+
+                    const fetchedFinalQuotes: number[] = (parlayAmmQuote['finalQuotes'] || []).map((quote: BigNumber) =>
+                        bigNumberFormatter(quote)
+                    );
+                    setFinalQuotes(fetchedFinalQuotes);
+
+                    setTooltipTextMessageUsdAmount(usdAmountValue, fetchedFinalQuotes);
+                }
+            }
+            setIsFetching(false);
+        };
+        fetchData();
+    }, [usdAmountValue, fetchParlayAmmQuote, parlayAmmData?.maxSupportedAmount, setTooltipTextMessageUsdAmount]);
+
+    useEffect(() => {
+        setTooltipTextMessageUsdAmount(usdAmountValue, finalQuotes);
+    }, [isVoucherSelected, setTooltipTextMessageUsdAmount, usdAmountValue, finalQuotes]);
 
     const setUsdAmount = (value: string | number) => {
         setUsdAmountValue(value);
-        setTooltipTextMessageUsdAmount(value);
-        setTooltipTextMessageTotalQuote(totalQuote, finalQuotes);
+        setTooltipTextMessageUsdAmount(value, finalQuotes);
     };
 
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
 
+    const getQuoteTooltipText = () => {
+        return selectedOddsType === OddsType.AMM
+            ? t('markets.parlay.info.min-quote', {
+                  value: formatMarketOdds(selectedOddsType, parlayAmmData?.maxSupportedOdds),
+              })
+            : t('markets.parlay.info.max-quote', {
+                  value: formatMarketOdds(selectedOddsType, parlayAmmData?.maxSupportedOdds),
+              });
+    };
+
     return (
         <>
-            <CustomTooltip
-                open={inputRefVisible && !!tooltipTextTotalQuote && !openApprovalModal}
-                title={tooltipTextTotalQuote}
-            >
-                <RowSummary>
-                    <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
-                    <SummaryValue>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
-                    <SummaryLabel alignRight={true}>{t('markets.parlay.clear')}:</SummaryLabel>
-                    <XButton
-                        margin={'0 0 4px 5px'}
-                        onClick={() => dispatch(removeAll())}
-                        className={`icon icon--cross-button-arrow`}
-                    />
-                </RowSummary>
-            </CustomTooltip>
+            <RowSummary>
+                <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
+                <SummaryValue>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
+                <Tooltip
+                    overlay={getQuoteTooltipText()}
+                    iconFontSize={10}
+                    customIconStyling={{ marginTop: '-10px', display: 'flex', marginLeft: '3px' }}
+                />
+                <SummaryLabel alignRight={true}>{t('markets.parlay.clear')}:</SummaryLabel>
+                <XButton
+                    margin={'0 0 4px 5px'}
+                    onClick={() => dispatch(removeAll())}
+                    className={`icon icon--cross-button-arrow`}
+                />
+            </RowSummary>
             <Payment
                 onChangeCollateral={(index) => setSelectedStableIndex(index)}
                 setIsVoucherSelectedProp={setIsVoucherSelected}
@@ -442,7 +421,7 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
                 <SummaryLabel>{t('markets.parlay.buy-amount')}:</SummaryLabel>
             </RowSummary>
             <InputContainer ref={inputRef}>
-                <CustomTooltip
+                <ValidationTooltip
                     open={inputRefVisible && !!tooltipTextUsdAmount && !openApprovalModal}
                     title={tooltipTextUsdAmount}
                 >
@@ -459,7 +438,7 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
                             }}
                         />
                     </AmountToBuyContainer>
-                </CustomTooltip>
+                </ValidationTooltip>
             </InputContainer>
             <InfoContainer>
                 <InfoWrapper>

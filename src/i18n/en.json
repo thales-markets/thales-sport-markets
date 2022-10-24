@@ -300,14 +300,16 @@
             "skew": "Skew",
             "empty-title": "No positions",
             "empty-description": "Add position, choose a market and make your selection.",
+            "info": {
+                "min-quote": "Minimal TOTAL QUOTE supported is {{value}}",
+                "max-quote": "Maximal TOTAL QUOTE supported is {{value}}"
+            },
             "validation": {
                 "title": "Parlay validation",
                 "max-markets": "Maximum 4 markets in Parlay",
                 "amount-exceeded": "Amount exceeded the amount available on AMM",
                 "min-amount": "Minimal amount is {{min}}",
-                "min-quote": "Minimal quote is {{value}}",
-                "max-quote": "Maximum quote is {{value}}",
-                "availability": "Low availability for markets position",
+                "availability": "Not enough liquidity for this amount",
                 "no-funds": "Please ensure your wallet has enough funds"
             }
         },

@@ -51,7 +51,7 @@ export const InfoValue = styled.span`
 
 export const InputContainer = styled(FlexDiv)``;
 
-export const CustomTooltip = withStyles(() => ({
+export const ValidationTooltip = withStyles(() => ({
     tooltip: {
         minWidth: '100%',
         width: '270px',
