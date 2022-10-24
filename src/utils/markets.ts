@@ -1,8 +1,9 @@
 import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
-import { AccountPosition, MarketData, MarketInfo, SportMarketInfo } from 'types/markets';
+import { AccountPosition, MarketData, MarketInfo, ParlaysMarket, SportMarketInfo } from 'types/markets';
 import { formatCurrency } from './formatters/number';
 import ordinal from 'ordinal';
-import { TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
+import { Position } from 'constants/options';
+import { MLS_TAG, TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
 
 export const getRoi = (ticketPrice: number, potentialWinnings: number, showRoi: boolean) =>
     showRoi ? (potentialWinnings - ticketPrice) / ticketPrice : 0;
@@ -58,10 +59,17 @@ export const isValidHttpsUrl = (text: string) => {
 export const convertFinalResultToResultType = (result: number, isApexTopGame?: boolean) => {
     if (result == 1 && isApexTopGame) return 3;
     if (result == 2 && isApexTopGame) return 4;
-    if (result == 2) return 1;
     if (result == 1) return 0;
     if (result == 2) return 1;
     if (result == 3) return 2;
+};
+
+export const convertPositionToSymbolType = (position: Position, isApexTopGame: boolean) => {
+    if (position == Position.HOME && isApexTopGame) return 3;
+    if (position == Position.AWAY && isApexTopGame) return 4;
+    if (position == Position.HOME) return 0;
+    if (position == Position.AWAY) return 1;
+    if (position == Position.DRAW) return 2;
 };
 
 export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) => {
@@ -149,8 +157,27 @@ export const appplyLogicForApexGame = (market: SportMarketInfo) => {
 export const getIsApexTopGame = (isApex: boolean, betType: ApexBetType) =>
     isApex && (betType === ApexBetType.TOP3 || betType === ApexBetType.TOP5 || betType === ApexBetType.TOP10);
 
+export const getPositionOdds = (market: ParlaysMarket) => {
+    return market.position === Position.HOME
+        ? market.homeOdds
+        : market.position === Position.AWAY
+        ? market.awayOdds
+        : market.drawOdds
+        ? market.drawOdds
+        : 0;
+};
+
 export const getVisibilityOfDrawOptionByTagId = (tags: Array<number>) => {
     const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(element));
     if (tag) return false;
     return true;
 };
+
+export const isDiscounted = (priceImpact: number | undefined) => {
+    if (priceImpact) {
+        return Number(priceImpact) < 0;
+    }
+    return false;
+};
+
+export const isMlsGame = (tag: number) => Number(tag) === MLS_TAG;

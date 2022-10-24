@@ -127,6 +127,7 @@
         },
         "coming-soon": "Coming soon!",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
+        "mls-tooltip": "MLS markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
         "top3": "TOP 3",
         "top5": "TOP 5",
@@ -154,7 +155,7 @@
         "tags-label": "Tags",
         "search-placeholder": "Search games",
         "open-markets-label": "Opened",
-        "resolved-markets-label": "Resolved",
+        "resolved-markets-label": "Finished",
         "grid-view": "Grid",
         "list-view": "List",
         "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
@@ -171,9 +172,10 @@
         },
         "filter-label": {
             "global": {
-                "allmarkets": "All markets",
-                "openmarkets": "Open markets",
-                "resolvedmarkets": "Resolved markets",
+                "allmarkets": "All",
+                "openmarkets": "All",
+                "resolvedmarkets": "Finished",
+                "pendingmarkets": "Pending",
                 "yourpositions": "Your positions",
                 "claim": "Claimable",
                 "history": "Your transactions",
@@ -183,6 +185,7 @@
             },
             "sport": {
                 "all": "All sports",
+                "favourites": "Favourites",
                 "basketball": "Basketball",
                 "soccer": "Soccer",
                 "hockey": "Hockey",
@@ -192,6 +195,7 @@
                 "baseball": "Baseball",
                 "formula1": "Formula 1",
                 "motogp": "MotoGP",
+                "motosport": "Motosport",
                 "soon": "More sports coming soon!"
             },
             "all": "All",
@@ -236,7 +240,7 @@
             "starts": "starts",
             "claimable": "Claimable",
             "finished": "Finished",
-            "result": "Result",
+            "result": "Final result",
             "started": "Started",
             "canceled": "Cancelled",
             "pending-resolution": "Pending resolution",
@@ -249,6 +253,7 @@
         "market-details": {
             "price": "Price",
             "liquidity": "Liquidity",
+            "discount": "Discount",
             "usd-amount": "USD amount",
             "positions-amount": "Positions amount",
             "positions": "Positions",
@@ -280,7 +285,34 @@
                 "switch": "Switch",
                 "disconnect": "Disconnect"
             }
-        }
+        },
+        "parlay": {
+            "total-quote": "Total quote",
+            "clear": "Clear all",
+            "buy-amount": "Amount to buy",
+            "parlay-fee": "Parlay fee",
+            "safebox-fee": "SafeBox fee",
+            "positions": "Positions",
+            "payout": "Payout",
+            "potential-profit": "Potential profit",
+            "pay-with": "Pay with",
+            "available": "Available",
+            "skew": "Skew",
+            "empty-title": "No positions",
+            "empty-description": "Add position, choose a market and make your selection.",
+            "validation": {
+                "title": "Parlay validation",
+                "max-markets": "Maximum 4 markets in Parlay",
+                "amount-exceeded": "Amount exceeded the amount available on AMM",
+                "min-amount": "Minimal amount is {{min}}",
+                "min-quote": "Minimal quote is {{value}}",
+                "max-quote": "Maximum quote is {{value}}",
+                "availability": "Low availability for markets position",
+                "no-funds": "Please ensure your wallet has enough funds"
+            }
+        },
+        "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
+        "discounted-per": "Discounted as per"
     },
     "rewards": {
         "header": "Rewards",
@@ -311,7 +343,7 @@
     },
     "quiz": {
         "title": "Sports Trivia competition",
-        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition where weekly winners will receive NFT Vouchers that can be used instead of sUSD to participate in any sports market you like.</p><p>Read all the information about this trivia in our <blogPost>blog post</blogPost>.</p><p>How to participate? The trivia is available to everyone to test their knowledge and compete, but to be eligible for rewards you need to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime's Twitter</twitter>.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
+        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition. The trivia is available to everyone to test their knowledge and compete.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! For any questions please join our <discord>Discord</discord>.</p>",
         "twitter-handle-label": "Twitter handle",
         "twitter-handle-placeholder": "Enter your Twitter handle",
         "twitter-handle-validation": "Invalid Twitter handle. Try again.",
@@ -334,7 +366,7 @@
         },
         "leaderboard": {
             "title": "Trivia Leaderboard",
-            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition for any given week.</p><p>All the details about how to participate for NFT sUSD vouchers that can be used on any sports market available <blogPost>here</blogPost>.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
+            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
             "back-to-quiz": "Back to trivia",
             "search-placeholder": "Search...",
             "table": {
@@ -349,16 +381,14 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "week-label": "Week",
-            "overtime-voucher": "Overtime voucher"
+            "overtime-voucher": "Overtime voucher",
+            "all-time-leaderboard-label": "All time leaderboard"
         },
         "help-us-improve-label": "Help us improve",
         "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
         "finish-messages": {
             "your-best-result": "Your best result: {{points}} {{pointsLabel}}",
-            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants.",
-            "not-quilfied-for-rewards": "You are missing {{points}} {{pointsLabel}} to get into the TOP {{numberOfRewards}} and qualify for rewards. Try again and improve your score.",
-            "quilfied-for-rewards": "You are currently in the TOP {{numberOfRewards}} and qualified for rewards. Try again to get a better rank and higher rewards.",
-            "quilfied-for-rewards-first": "You are currently leading the leaderboard! Try again to get a better score and secure your spot."
+            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants."
         },
         "difficulty-label": "Difficulty",
         "difficulty": {
@@ -368,5 +398,31 @@
             "4": "Challenging",
             "5": "Hard"
         }
+    },
+    "landing-page": {
+        "best-odds": "Join the Web3 sports markets revolution",
+        "try-now": "Try it now",
+        "powered-by": "Powered by",
+        "no-kyc": "No registration needed to participate",
+        "launch-dapp": "Launch dapp",
+        "leagues": "Leagues",
+        "info-text-title-1": "No sign-up required",
+        "info-text-title-2": "Everything is on-chain",
+        "info-text-title-3": "Non-custodial markets",
+        "info-text-title-4": "Data provided by Chainlink",
+        "info-text-title-5": "Fast & low-cost transactions",
+        "info-text-1": "You don’t need to create an user. We don't gather any kind of personal information either.",
+        "info-text-2": "When centralized entities are falling, transparency is key. All our code is public and the smart contracts can be reviewed by anyone",
+        "info-text-3": "There’s no one holding your collateral. Your keys, your tokens.",
+        "info-text-4": "Industry-leader provides tamper-proof odds and sport matches result in a decentralized way.",
+        "info-text-5": "Every interaction with Overtime sports AMM is done on Optimism network, leader in scalability.",
+        "browse-markets": "Browse sport markets",
+        "web3-positioning": "Web3 sport positioning",
+        "learn-more": "Wanna learn more?",
+        "documentation": "Check our documentation",
+        "jump-in": "Ready to jump in?",
+        "open-overtime": "Open Overtime markets",
+        "join-discord": "Need any help? Join our discord",
+        "read-now": "Read now"
     }
 }

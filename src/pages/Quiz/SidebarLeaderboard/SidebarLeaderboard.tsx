@@ -14,17 +14,14 @@ import {
     Rank,
     MainInfo,
     Twitter,
-    Rewards,
     PointsLabel,
     PointsInfo,
     Points,
     LeaderboardWrapper,
     Link,
 } from './styled-components';
-import { formatCurrencyWithKey } from 'utils/formatters/number';
-import { CURRENCY_MAP } from 'constants/currency';
 import SPAAnchor from 'components/SPAAnchor';
-import { DEFAULT_TWITTER_PROFILE_IMAGE } from 'constants/quiz';
+import { DEFAULT_TWITTER_PROFILE_IMAGE, SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
 import { getTwitterProfileLink } from 'utils/quiz';
 
 const SidebarLeaderboard: React.FC = () => {
@@ -35,9 +32,7 @@ const SidebarLeaderboard: React.FC = () => {
     const leaderboard: LeaderboardList = useMemo(() => {
         if (quizLeaderboardQuery.isSuccess && quizLeaderboardQuery.data) {
             const leaderboard = quizLeaderboardQuery.data[quizLeaderboardQuery.data.length - 1].leaderboard;
-            const numberOfRewards = leaderboard.filter((item: LeaderboardItem) => item.price > 0).length;
-
-            return leaderboard.slice(0, numberOfRewards);
+            return leaderboard.slice(0, SIDEBAR_NUMBER_OF_TOP_USERS);
         }
 
         return [];
@@ -68,7 +63,6 @@ const SidebarLeaderboard: React.FC = () => {
                                 />
                                 <MainInfo>
                                     <Twitter className="twitter">{item.name}</Twitter>
-                                    <Rewards>{formatCurrencyWithKey(CURRENCY_MAP.sUSD, item.price, 0, true)}</Rewards>
                                 </MainInfo>
                                 <PointsInfo>
                                     <Points>{item.points}</Points>

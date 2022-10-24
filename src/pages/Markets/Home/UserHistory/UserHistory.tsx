@@ -13,7 +13,7 @@ import { getIsAppReady } from '../../../../redux/modules/app';
 import HistoryTable from '../../components/HistoryTable';
 import { Position, PositionName } from '../../../../constants/options';
 import { getEtherscanTxLink } from '../../../../utils/etherscan';
-import { ApexBetTypeKeyMapping, GlobalFilterEnum } from 'constants/markets';
+import { ApexBetTypeKeyMapping, GlobalFiltersEnum } from 'constants/markets';
 import { getIsApexTopGame } from 'utils/markets';
 
 const UserHistory: React.FC = () => {
@@ -25,7 +25,7 @@ const UserHistory: React.FC = () => {
     const userTransactionsQuery = useUserTransactionsQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
-    const sportMarketsQuery = useSportMarketsQuery(networkId, GlobalFilterEnum.All, null, {
+    const sportMarketsQuery = useSportMarketsQuery(networkId, GlobalFiltersEnum.All, null, {
         enabled: isAppReady && isWalletConnected,
     });
 
@@ -105,7 +105,7 @@ const Container = styled(FlexDivColumn)`
     @media (max-width: 575px) {
         padding: 20px 10px;
     }
-    max-height: 357px;
+    max-height: 1035px;
     min-height: 357px;
     overflow-y: auto;
 `;

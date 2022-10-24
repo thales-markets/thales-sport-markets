@@ -27,7 +27,6 @@ const usePositionPriceDetailsQuery = (
                     networkId,
                     stableIndex
                 );
-
                 const [
                     availableToBuy,
                     availableToSell,

@@ -24,6 +24,4 @@ export type FinishInfo = {
     rank: number;
     points: number;
     totalParticipants: number;
-    lastRankPointsWithRewards: number;
-    isQualifiedForRewards: boolean;
 };

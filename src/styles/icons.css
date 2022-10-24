@@ -61,10 +61,6 @@
     content: '\004E';
 }
 
-.icon--formula1:before {
-    content: '\0056';
-}
-
 .icon--motogp:before {
     content: '\0055';
 }
@@ -72,7 +68,6 @@
 .icon--wallet:before {
     content: '\0054';
 }
-
 
 .icon--profile:before {
     content: '\0050';
@@ -118,3 +113,34 @@
     content: '\0066';
 }
 
+.icon--motosport:before {
+    content: '\0056';
+}
+
+.icon--star-full:before {
+    content: '\0057';
+}
+
+.icon--star-empty:before {
+    content: '\0058';
+}
+
+.icon--favourites:before {
+    content: '\0058';
+}
+
+.icon--cross-button:before {
+    content: '\0059';
+}
+
+.icon--revert:before {
+    content: '\005A';
+}
+
+.icon--triple-arrow:before {
+    content: '\005B';
+}
+
+.icon--arrow:before {
+    content: '\005D';
+}

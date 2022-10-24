@@ -16,7 +16,7 @@ import { SportMarketInfo } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { useSelector } from 'react-redux';
 import { getOddsType } from '../../../../../redux/modules/ui';
-import { formatMarketOdds, getIsApexTopGame, isApexGame } from '../../../../../utils/markets';
+import { formatMarketOdds, getIsApexTopGame, isApexGame, isMlsGame } from '../../../../../utils/markets';
 import Tooltip from 'components/Tooltip';
 import { ApexBetTypeKeyMapping } from 'constants/markets';
 
@@ -79,6 +79,9 @@ const MarketCardMatured: React.FC<MarketCardMaturedProps> = ({ market }) => {
                         {t('markets.market-card.vs')}
                         {isApexGame(market.tags[0]) && (
                             <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={22} marginLeft={2} />
+                        )}
+                        {isMlsGame(market.tags[0]) && (
+                            <Tooltip overlay={t(`common.mls-tooltip`)} iconFontSize={22} marginLeft={2} />
                         )}
                     </MatchVSLabel>
                 )}

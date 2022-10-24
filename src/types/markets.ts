@@ -52,7 +52,7 @@ export type SportMarketInfo = {
     awayTeam: string;
     homeOdds: number;
     awayOdds: number;
-    drawOdds: number;
+    drawOdds: number | undefined;
     homeScore: number | string;
     awayScore: number | string;
     sport: string;
@@ -63,6 +63,9 @@ export type SportMarketInfo = {
     qualifyingStartTime?: number;
     arePostQualifyingOddsFetched: boolean;
     betType: ApexBetType;
+    homePriceImpact: number;
+    awayPriceImpact: number;
+    drawPriceImpact?: number;
 };
 
 export type FixedMarketData = {
@@ -86,13 +89,13 @@ export type AMMPosition = {
 };
 
 export type AvailablePerSide = {
-    positions: Record<Position, { available: number }>;
+    positions: Record<Position, { available: number; buyImpactPrice?: number }>;
 };
 
 export type MarketData = {
     address: string;
     gameDetails: GameDetails;
-    positions: Record<Position, { sides: Record<Side, { odd: number }> }>;
+    positions: Record<Position, { sides: Record<Side, { odd: number | undefined }> }>;
     tags: number[];
     homeTeam: string;
     awayTeam: string;
@@ -158,6 +161,8 @@ export type TagInfo = {
     label: string;
     logo?: string;
     logoClass?: string;
+    favourite?: boolean;
+    hidden?: boolean;
 };
 
 export type Tags = TagInfo[];
@@ -254,4 +259,20 @@ export type Odds = {
     home: number;
     away: number;
     draw: number;
+};
+
+export type ParlaysMarketPosition = {
+    sportMarketId: string;
+    position: Position;
+};
+
+export type ParlaysMarket = SportMarketInfo & {
+    position: Position;
+};
+
+export type ParlayAmmData = {
+    maxSupportedAmount: number;
+    maxSupportedOdds: number;
+    parlayAmmFee: number;
+    safeBoxImpact: number;
 };

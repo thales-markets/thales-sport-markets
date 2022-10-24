@@ -132,7 +132,8 @@
         "top5": "TOP 5",
         "top10": "TOP 10",
         "yes": "YES",
-        "no": "NO"
+        "no": "NO",
+        "mls-tooltip": "I risultati dei mercati MLS si basano sui risultati della regolamentazione, se dovessero andare agli straordinari il risultato della regolamentazione è quello in cui il mercato deciderà."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -177,7 +178,8 @@
                 "history": "Your transactions",
                 "canceled": "Cancelled",
                 "archivedmarkets": "Archived markets",
-                "tooltip": "Markets resolved more than 7 days ago"
+                "tooltip": "Markets resolved more than 7 days ago",
+                "pendingmarkets": "In attesa di"
             },
             "sport": {
                 "all": "All sports",
@@ -190,7 +192,9 @@
                 "baseball": "Baseball",
                 "formula1": "Formula 1",
                 "motogp": "MotoGP",
-                "soon": "More sports coming soon!"
+                "soon": "More sports coming soon!",
+                "motosport": "Motosport",
+                "favourites": "Preferiti"
             },
             "all": "All",
             "datepicker": {
@@ -226,7 +230,10 @@
         "tooltip": {
             "amount-exceeded": "Amount exceeded the amount available on AMM",
             "minimal-amount": "Minimal amount is 1",
-            "no-funds": "Please ensure your wallet has enough funds"
+            "no-funds": "Please ensure your wallet has enough funds",
+            "min-amount": "L'importo minimo è {{min}}",
+            "max-quote": "La quotazione massima è {{value}}",
+            "min-quote": "La citazione minima è {{value}}"
         },
         "match-time": "Tempo di partita"
     },
@@ -260,10 +267,38 @@
             },
             "max": "Max",
             "skew": "Storto",
+            "available": "A disposizione",
             "amount-to-buy": "Importo da acquistare",
-            "available": "A disposizione"
+            "discount": "Sconto"
         },
-        "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity."
+        "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
+        "parlay": {
+            "potential-profit": "Potenziale profitto",
+            "skew": "Storto",
+            "buy-amount": "Importo da acquistare",
+            "pay-with": "Paga con",
+            "total-quote": "Citazione totale",
+            "available": "A disposizione",
+            "validation": {
+                "title": "Convalida Parlay",
+                "max-markets": "Massimo 4 mercati a Parlay",
+                "min-amount": "L'importo minimo è {{min}}",
+                "amount-exceeded": "L'importo ha superato l'importo disponibile su AMM",
+                "max-quote": "La quotazione massima è {{value}}",
+                "availability": "Bassa disponibilità per posizione sui mercati",
+                "no-funds": "Assicurati che il tuo portafoglio abbia fondi sufficienti",
+                "min-quote": "La citazione minima è {{value}}"
+            },
+            "empty-title": "Nessuna posizione",
+            "fee": "Tariffa totale",
+            "payout": "Totale ricevuto",
+            "empty-description": "Aggiungi posizione, scegli un mercato e fai la tua selezione.",
+            "parlay-fee": "Tariffa Parlay",
+            "safebox-fee": "Tariffa SafeBox",
+            "positions": "Posizioni",
+            "clear": "Cancella tutto"
+        },
+        "discounted-per": "Scontato come da"
     },
     "rewards": {
         "header": "Rewards",
@@ -332,7 +367,8 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "week-label": "Week",
-            "overtime-voucher": "Overtime voucher"
+            "overtime-voucher": "Overtime voucher",
+            "all-time-leaderboard-label": "Classifica di tutti i tempi"
         },
         "help-us-improve-label": "Help us improve",
         "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
@@ -351,5 +387,31 @@
             "4": "Challenging",
             "5": "Hard"
         }
+    },
+    "landing-page": {
+        "web3-positioning": "Posizionamento sportivo Web3",
+        "launch-dapp": "Avvia dapp",
+        "read-now": "Leggi ora",
+        "info-text-title-5": "Transazioni veloci e a basso costo",
+        "no-kyc": "Non è necessaria la registrazione per partecipare",
+        "open-overtime": "Mercati straordinari aperti",
+        "browse-markets": "Sfoglia i mercati sportivi",
+        "info-text-5": "Ogni interazione con gli sport straordinari AMM avviene sulla rete Optimism, leader nella scalabilità.",
+        "leagues": "leghe",
+        "try-now": "Provalo ora",
+        "info-text-title-2": "Tutto è in catena",
+        "jump-in": "Pronto a saltare?",
+        "info-text-title-3": "Mercati non detentivi",
+        "documentation": "Consulta la nostra documentazione",
+        "info-text-1": "Non è necessario creare un utente. Non raccogliamo nemmeno alcun tipo di informazione personale.",
+        "learn-more": "Vuoi saperne di più?",
+        "info-text-title-4": "Dati forniti da Chainlink",
+        "info-text-4": "Il leader del settore fornisce quote a prova di manomissione e le partite sportive risultano in modo decentralizzato.",
+        "powered-by": "Offerto da",
+        "info-text-3": "Non c'è nessuno in possesso della tua garanzia. Le tue chiavi, i tuoi gettoni.",
+        "info-text-title-1": "Nessuna registrazione richiesta",
+        "best-odds": "Unisciti alla rivoluzione dei mercati sportivi di Web3",
+        "join-discord": "Bisogno di qualche aiuto? Unisciti alla nostra discordia",
+        "info-text-2": "Quando le entità centralizzate cadono, la trasparenza è fondamentale. Tutto il nostro codice è pubblico e gli smart contract possono essere rivisti da chiunque"
     }
 }

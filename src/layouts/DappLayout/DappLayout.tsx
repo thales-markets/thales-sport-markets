@@ -94,7 +94,7 @@ const Wrapper = styled(FlexDivColumn)`
     margin-left: auto;
     margin-right: auto;
     padding: 40px 0px;
-    max-width: 1700px;
+    max-width: 1350px;
     min-height: 100vh;
     @media (max-width: 1260px) {
         padding: 40px 20px;

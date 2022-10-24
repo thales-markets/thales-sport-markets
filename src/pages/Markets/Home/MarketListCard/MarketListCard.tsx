@@ -1,3 +1,4 @@
+import SPAAnchor from 'components/SPAAnchor';
 import Tooltip from 'components/Tooltip';
 import { ApexBetTypeKeyMapping } from 'constants/markets';
 import { t } from 'i18next';
@@ -6,6 +7,7 @@ import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { getIsApexTopGame, isApexGame, isClaimAvailable } from 'utils/markets';
+import { buildMarketLink } from 'utils/routes';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
 import {
@@ -15,29 +17,41 @@ import {
     ClubNameLabel,
     ClubVsClubContainer,
     Container,
+    LinkIcon,
     VSLabel,
 } from './styled-components';
 
 type MarketRowCardProps = {
     market: SportMarketInfo;
     accountPositions?: AccountPosition[];
+    language: string;
 };
 
-const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions }) => {
+const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions, language }) => {
     const claimAvailable = isClaimAvailable(accountPositions);
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+
+    const isApexTopGame = getIsApexTopGame(market.isApex, market.betType);
 
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
         setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
     }, [market.homeTeam, market.awayTeam, market.tags]);
 
-    const isApexTopGame = getIsApexTopGame(market.isApex, market.betType);
-
     return (
         <Container claimBorder={claimAvailable} isCanceled={market.isCanceled} isResolved={market.isResolved}>
+            <MatchStatus
+                address={market.address}
+                isResolved={market.isResolved}
+                isLive={market.maturityDate < new Date()}
+                isCanceled={market.isCanceled}
+                isClaimable={claimAvailable}
+                result={`${market.homeScore}${isApexTopGame ? '' : `:${market.awayScore}`}`}
+                startsAt={formatDateWithTime(market.maturityDate)}
+                isPaused={market.isPaused}
+            />
             <ClubVsClubContainer>
                 <ClubContainer>
                     <ClubLogo
@@ -89,20 +103,17 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                     awayOdds: market.awayOdds,
                     drawOdds: market.drawOdds,
                 }}
+                marketId={market.id}
                 accountPositions={accountPositions}
                 isPaused={market.isPaused}
                 isApexTopGame={isApexTopGame}
+                awayPriceImpact={market.awayPriceImpact}
+                homePriceImpact={market.homePriceImpact}
+                drawPriceImpact={market.drawPriceImpact}
             />
-            <MatchStatus
-                address={market.address}
-                isResolved={market.isResolved}
-                isLive={market.maturityDate < new Date()}
-                isCanceled={market.isCanceled}
-                isClaimable={claimAvailable}
-                result={`${market.homeScore}${isApexTopGame ? '' : `:${market.awayScore}`}`}
-                startsAt={formatDateWithTime(market.maturityDate)}
-                isPaused={market.isPaused}
-            />
+            <SPAAnchor href={buildMarketLink(market.address, language)}>
+                <LinkIcon className={`icon-exotic icon-exotic--link`} />
+            </SPAAnchor>
         </Container>
     );
 };

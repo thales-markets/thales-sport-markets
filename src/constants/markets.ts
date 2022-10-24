@@ -1,10 +1,10 @@
 import { CRYPTO_CURRENCY_MAP } from './currency';
 
-export enum GlobalFilterEnum {
+export enum GlobalFiltersEnum {
     OpenMarkets = 'OpenMarkets',
+    PendingMarkets = 'PendingMarkets',
     ResolvedMarkets = 'ResolvedMarkets',
     Canceled = 'Canceled',
-    Archived = 'ArchivedMarkets',
     All = 'AllMarkets',
     YourPositions = 'YourPositions',
     Claim = 'Claim',
@@ -23,16 +23,15 @@ export enum MarketType {
 }
 
 export enum SportFilterEnum {
+    Favourites = 'Favourites',
     All = 'All',
     Soccer = 'Soccer',
     Football = 'Football',
     UFC = 'UFC',
     Baseball = 'Baseball',
-    Formula1 = 'Formula1',
-    MotoGP = 'MotoGP',
-    Hockey = 'Hockey',
+    Motosport = 'Motosport',
     Basketball = 'Basketball',
-    // Tennis = 'Tennis',
+    Hockey = 'Hockey',
 }
 
 export const COLLATERALS = [
