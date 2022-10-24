@@ -14,7 +14,8 @@
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use.",
             "disclaimer-lowercase": "disclaimer",
             "disclaimer1": "Collegando un portafoglio dichiari di aver letto e compreso i Mercati Straordinari",
-            "disclaimer2": "e accetta le sue condizioni d'uso."
+            "disclaimer2": "e accetta le sue condizioni d'uso.",
+            "wallet-info": "Informazioni sul portafoglio"
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -235,7 +236,8 @@
             "max-quote": "La quotazione massima è {{value}}",
             "min-quote": "La citazione minima è {{value}}"
         },
-        "match-time": "Tempo di partita"
+        "match-time": "Tempo di partita",
+        "race-starts": "La corsa inizia"
     },
     "markets": {
         "market-card": {
@@ -269,7 +271,8 @@
             "skew": "Storto",
             "available": "A disposizione",
             "amount-to-buy": "Importo da acquistare",
-            "discount": "Sconto"
+            "discount": "Sconto",
+            "positions": "Posizioni"
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
         "parlay": {
@@ -298,7 +301,22 @@
             "positions": "Posizioni",
             "clear": "Cancella tutto"
         },
-        "discounted-per": "Scontato come da"
+        "discounted-per": "Scontato come da",
+        "nav-menu": {
+            "items": {
+                "history": "Storia",
+                "profile": "Profilo",
+                "leaderboard": "Classifica",
+                "onboarding-wizard": "Procedura guidata di inserimento",
+                "sports-trivia": "Curiosità sullo sport",
+                "markets": "Mercati",
+                "become-affiliate": "Diventa affiliato"
+            },
+            "buttons": {
+                "switch": "Interruttore",
+                "disconnect": "Disconnetti"
+            }
+        }
     },
     "rewards": {
         "header": "Rewards",

@@ -23,7 +23,8 @@
             "disclaimer": "Indem du ein Wallet verbindest, bestätigst du, dass du den Overtime Markets <a target=\"_blank\" href={{link}}>Haftungsausschluss</a> gelesen und verstanden hast und mit den Nutzungsbedingungen einverstanden bist.",
             "disclaimer1": "Indem du eine Wallet verbindest, bestätigst du, dass Sie die Overtime Markets gelesen und verstanden hast",
             "disclaimer2": "und stimme den Nutzungsbedingungen zu.",
-            "disclaimer-lowercase": "Haftungsausschluss"
+            "disclaimer-lowercase": "Haftungsausschluss",
+            "wallet-info": "Wallet-Info"
         },
         "voucher": {
             "remaining-amount": "Verbleibender Betrag",
@@ -232,7 +233,8 @@
             "minimal-amount": "Der Mindestbetrag ist 1",
             "no-funds": "Bitte stell sicher, dass dein Wallet ausreichend USD enthält"
         },
-        "match-time": "Spielzeit"
+        "match-time": "Spielzeit",
+        "race-starts": "Rennen beginnt"
     },
     "markets": {
         "market-card": {
@@ -266,7 +268,8 @@
             "skew": "Skew",
             "available": "Verfügbar",
             "amount-to-buy": "Betrag zu kaufen",
-            "discount": "Rabatt"
+            "discount": "Rabatt",
+            "positions": "Positionen"
         },
         "zero-odds-tooltip": "Sports AMM bietet nur Liquidität in der Preisspanne von $0,05 bis $0,95. Dies bedeutet, dass wenn die Quoten für eine Position weniger als 5% oder mehr als 95% betragen, diese Position keine Liquidität hat.",
         "parlay": {
@@ -295,7 +298,22 @@
             "positions": "Positionen",
             "clear": "Alles löschen"
         },
-        "discounted-per": "Ermäßigt gem"
+        "discounted-per": "Ermäßigt gem",
+        "nav-menu": {
+            "items": {
+                "onboarding-wizard": "Onboarding-Assistent",
+                "profile": "Profil",
+                "markets": "Märkte",
+                "sports-trivia": "Sport Trivia",
+                "become-affiliate": "Partner werden",
+                "history": "Geschichte",
+                "leaderboard": "Bestenliste"
+            },
+            "buttons": {
+                "switch": "Schalter",
+                "disconnect": "Trennen"
+            }
+        }
     },
     "rewards": {
         "header": "Preise",

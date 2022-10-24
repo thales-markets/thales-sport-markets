@@ -21,7 +21,8 @@
             "disclaimer": "En connectant votre portefeuille vous reconnaissez que vous avez lu et compris la <a target=\"_blank\" href={{link}}>décharge de responsabilité</a> d’Overtime et accepté les conditions d’utilisation.",
             "disclaimer-lowercase": "clause de non-responsabilité",
             "disclaimer2": "et acceptez ses conditions d'utilisation.",
-            "disclaimer1": "En connectant un portefeuille, vous reconnaissez avoir lu et compris les marchés des heures supplémentaires"
+            "disclaimer1": "En connectant un portefeuille, vous reconnaissez avoir lu et compris les marchés des heures supplémentaires",
+            "wallet-info": "Informations sur le portefeuille"
         },
         "referral": {
             "link-copied": "Lien de parrainage copié !",
@@ -323,7 +324,8 @@
             "min-quote": "Le devis minimal est {{value}}",
             "max-quote": "Le devis maximum est de {{value}}"
         },
-        "match-time": "Temps de match"
+        "match-time": "Temps de match",
+        "race-starts": "La course commence"
     },
     "markets": {
         "market-card-list": {
@@ -368,7 +370,8 @@
             "skew": "Skew",
             "discount": "Remise",
             "available": "Disponible",
-            "amount-to-buy": "Montant à acheter"
+            "amount-to-buy": "Montant à acheter",
+            "positions": "Postes"
         },
         "zero-odds-tooltip": "Le Sport AMM ne propose des liquidités que dans la fourchette de prix de 0,05 $ à 0,95 $. Cela signifie que si les cotes d'une position sont inférieures à 5 % ou supérieures à 95 %, cette position n'aura pas de liquidité.",
         "parlay": {
@@ -397,7 +400,22 @@
             "parlay-fee": "Frais de parlay",
             "clear": "Tout effacer"
         },
-        "discounted-per": "Remise selon"
+        "discounted-per": "Remise selon",
+        "nav-menu": {
+            "items": {
+                "markets": "Marchés",
+                "leaderboard": "Classement",
+                "profile": "Profil",
+                "sports-trivia": "Anecdotes sportives",
+                "become-affiliate": "Devenir affilié",
+                "onboarding-wizard": "Assistant d'intégration",
+                "history": "Histoire"
+            },
+            "buttons": {
+                "disconnect": "Déconnecter",
+                "switch": "Changer"
+            }
+        }
     },
     "rewards": {
         "table": {

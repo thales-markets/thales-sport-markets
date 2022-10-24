@@ -110,7 +110,7 @@ export const TAGS_LIST: Tags = [
     { id: 9018, label: 'FIFA World Cup', logo: ``, logoClass: '', favourite: false, hidden: false },
     {
         id: 9100,
-        label: 'Formula1',
+        label: 'Formula 1',
         logo: '/logos/leagueLogos/f1.png',
         logoClass: 'league league--f1',
         favourite: false,

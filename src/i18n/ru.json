@@ -14,7 +14,8 @@
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use.",
             "disclaimer-lowercase": "отказ от ответственности",
             "disclaimer2": "и соглашаетесь с его условиями использования.",
-            "disclaimer1": "Подключая кошелек, вы подтверждаете, что прочитали и поняли Overtime Markets."
+            "disclaimer1": "Подключая кошелек, вы подтверждаете, что прочитали и поняли Overtime Markets.",
+            "wallet-info": "Информация о кошельке"
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -235,7 +236,8 @@
             "max-quote": "Максимальная котировка: {{value}}",
             "min-quote": "Минимальная котировка: {{value}}"
         },
-        "match-time": "Время матча"
+        "match-time": "Время матча",
+        "race-starts": "Старт гонки"
     },
     "markets": {
         "market-card": {
@@ -269,7 +271,8 @@
             "skew": "перекос",
             "available": "Доступный",
             "amount-to-buy": "Сумма покупки",
-            "discount": "Скидка"
+            "discount": "Скидка",
+            "positions": "Позиции"
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
         "parlay": {
@@ -298,7 +301,22 @@
             "positions": "Позиции",
             "clear": "Очистить все"
         },
-        "discounted-per": "Со скидкой согласно"
+        "discounted-per": "Со скидкой согласно",
+        "nav-menu": {
+            "items": {
+                "become-affiliate": "Стать партнером",
+                "onboarding-wizard": "Мастер адаптации",
+                "leaderboard": "Таблица лидеров",
+                "profile": "Профиль",
+                "sports-trivia": "Спортивные мелочи",
+                "history": "История",
+                "markets": "Рынки"
+            },
+            "buttons": {
+                "disconnect": "Отключить",
+                "switch": "Выключатель"
+            }
+        }
     },
     "rewards": {
         "header": "Rewards",

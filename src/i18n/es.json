@@ -23,7 +23,8 @@
             "disclaimer": "Al conectar tu billetera reconoce el haber leido y entendido el <a target=\"_blank\" href={{link}}>disclaimer</a> de Overtime Markets, aceptando sus condiciones de uso.",
             "disclaimer1": "Al conectar una billetera, reconoce que ha leído y comprende los Mercados de tiempo extra",
             "disclaimer2": "y aceptar sus condiciones de uso.",
-            "disclaimer-lowercase": "Descargo de responsabilidad"
+            "disclaimer-lowercase": "Descargo de responsabilidad",
+            "wallet-info": "Información de la billetera"
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -235,7 +236,8 @@
             "max-quote": "La cotización máxima es {{value}}",
             "min-quote": "La cotización mínima es {{value}}"
         },
-        "match-time": "tiempo de partido"
+        "match-time": "tiempo de partido",
+        "race-starts": "Comienza la carrera"
     },
     "markets": {
         "market-card": {
@@ -269,7 +271,8 @@
             "skew": "Sesgar",
             "available": "Disponible",
             "amount-to-buy": "cantidad a comprar",
-            "discount": "Descuento"
+            "discount": "Descuento",
+            "positions": "Posiciones"
         },
         "zero-odds-tooltip": "El AMM de deportes sólo ofrece liquidez si el rango de precios ofrecido es entre 0.05 y 0.95 USD. Esto significa que si las probabilidades de una posición son menores a 5% o mayores a 95%, esa posición no tendrá liquidez.",
         "parlay": {
@@ -298,7 +301,22 @@
             "positions": "Posiciones",
             "clear": "Limpiar todo"
         },
-        "discounted-per": "Con descuento según"
+        "discounted-per": "Con descuento según",
+        "nav-menu": {
+            "items": {
+                "profile": "Perfil",
+                "history": "Historia",
+                "leaderboard": "Tabla de clasificación",
+                "markets": "Mercados",
+                "onboarding-wizard": "asistente de incorporación",
+                "become-affiliate": "Conviértete en afiliado",
+                "sports-trivia": "curiosidades deportivas"
+            },
+            "buttons": {
+                "disconnect": "Desconectar",
+                "switch": "Cambiar"
+            }
+        }
     },
     "rewards": {
         "header": "Recompensas",

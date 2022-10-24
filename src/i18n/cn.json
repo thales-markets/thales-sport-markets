@@ -23,7 +23,8 @@
             "disclaimer": "将你的钱包连接到Overtime意味着您已经阅读并理解了参与Overtime活动的风险 <a target=\"_blank\" href={{link}}>免责声明</a> 并决定继续使用.",
             "disclaimer-lowercase": "免责声明",
             "disclaimer2": "并同意其使用条件。",
-            "disclaimer1": "通过连接钱包，您承认您已阅读并理解加班市场"
+            "disclaimer1": "通过连接钱包，您承认您已阅读并理解加班市场",
+            "wallet-info": "钱包信息"
         },
         "voucher": {
             "remaining-amount": "余额",
@@ -235,7 +236,8 @@
             "max-quote": "最大报价为 {{value}}",
             "min-quote": "最小报价是 {{value}}"
         },
-        "match-time": "比赛时间"
+        "match-time": "比赛时间",
+        "race-starts": "比赛开始"
     },
     "markets": {
         "market-card": {
@@ -269,7 +271,8 @@
             "skew": "偏斜",
             "available": "可用的",
             "amount-to-buy": "购买金额",
-            "discount": "折扣"
+            "discount": "折扣",
+            "positions": "职位"
         },
         "zero-odds-tooltip": "Sports AMM 仅提供0.05美元至0.95美元价格范围内的流动性，这意味着，如果一个投注选择的赔率低于5%或者高于95%，该选择就不会有流动性。",
         "parlay": {
@@ -298,7 +301,22 @@
             "parlay-fee": "过关费",
             "clear": "全部清除"
         },
-        "discounted-per": "折扣按"
+        "discounted-per": "折扣按",
+        "nav-menu": {
+            "items": {
+                "onboarding-wizard": "入职向导",
+                "markets": "市场",
+                "leaderboard": "排行榜",
+                "become-affiliate": "成为会员",
+                "sports-trivia": "体育琐事",
+                "profile": "轮廓",
+                "history": "历史"
+            },
+            "buttons": {
+                "disconnect": "断开",
+                "switch": "转变"
+            }
+        }
     },
     "rewards": {
         "header": "奖励",
