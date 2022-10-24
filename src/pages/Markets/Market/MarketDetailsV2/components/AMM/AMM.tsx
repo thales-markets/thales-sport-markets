@@ -747,7 +747,10 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                                             return (
                                                 <PositionValueContainer key={index}>
                                                     <PositionSymbol
-                                                        additionalStyle={{ width: '30px', height: '30px' }}
+                                                        additionalStyle={{
+                                                            width: '30px',
+                                                            height: '30px',
+                                                        }}
                                                         type={convertPositionNameToPosition(item)}
                                                         symbolColor={(ODDS_COLOR as any)[item.toUpperCase()]}
                                                     />

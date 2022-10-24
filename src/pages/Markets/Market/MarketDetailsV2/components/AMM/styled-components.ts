@@ -1,7 +1,7 @@
 import { Tooltip, withStyles } from '@material-ui/core';
 import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Wrapper = styled.div`
     display: flex;
@@ -173,10 +173,11 @@ export const InWalletContainer = styled(PotentialProfitContainer)``;
 
 export const PositionValueContainer = styled(FlexDivRowCentered)`
     justify-content: flex-end;
-    margin-bottom: 3px;
 `;
 
-export const PositionsContainer = styled(FlexDivColumn)``;
+export const PositionsContainer = styled(FlexDivRow)`
+    justify-content: space-between;
+`;
 
 export const PositionsWrapper = styled(FlexDivRow)``;
 
@@ -184,4 +185,5 @@ export const PositionValue = styled.span`
     font-weight: 700;
     font-size: 15px;
     line-height: 120%;
+    margin-right: 5px;
 `;
