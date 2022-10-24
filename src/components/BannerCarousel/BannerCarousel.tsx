@@ -10,9 +10,7 @@ const BannerCarousel: React.FC = () => {
         const fetchData = async () => {
             for (let i = 1; i <= 3; i++) {
                 try {
-                    const response = await fetch(
-                        `https://raw.githubusercontent.com/thales-markets/thales-sport-markets/dev/src/assets/images/banner/${i}/json.json`
-                    );
+                    const response = await fetch(`https://api.thalesmarket.io/banner-json/${i}`);
                     if (response) {
                         const json = await response.json();
                         map[i] = json.url;
@@ -67,8 +65,7 @@ const StyledDiv = styled.div<{ index: number; hasHref?: boolean }>`
     width: 1700px;
     height: 165px;
     margin: -1px;
-    background-image: ${(props) =>
-        `url(https://raw.githubusercontent.com/thales-markets/thales-sport-markets/dev/src/assets/images/banner/${props.index}/image.jpg)`};
+    background-image: ${(props) => `url(https://api.thalesmarket.io/banner-image/${props.index})`};
     cursor: ${(props) => (props.hasHref ? 'pointer' : 'default')};
     background-position: center;
 `;
