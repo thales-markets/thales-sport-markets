@@ -1,8 +1,8 @@
 export const overtimeVoucherContract = {
     addresses: {
         5: '0xef4e90b909C0a5919AE049Ea18C997FdA09Ab66c',
-        10: '0xC9183E3306A06E64c2A83E655756F70A83152536',
-        420: '0x9B91d27568c51cEf3C4E04D504EF3CE11D5f2427',
+        10: '0xC9183E3306A06E64c2A83E655756F70A83152536', // TODO: Update when new voucher contract is deployed
+        420: '0x9483eFf448042c366a4297dB465FaE108d2e6ea6',
     },
     abi: [
         {

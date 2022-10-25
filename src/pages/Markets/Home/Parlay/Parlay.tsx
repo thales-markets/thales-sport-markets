@@ -169,6 +169,7 @@ const EmptyDesc = styled.span`
 `;
 
 const Footer = styled(FlexDivCentered)`
+    display: none; // TODO: Twitter is not supported yet
     margin-top: 20px;
 `;
 

@@ -57,6 +57,10 @@ type TicketProps = {
     markets: ParlaysMarket[];
 };
 
+const TicketErrorMessage = {
+    RISK_PER_COMB: 'RiskPerComb exceeded',
+};
+
 const Ticket: React.FC<TicketProps> = ({ markets }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
@@ -134,17 +138,25 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
                 const marketsAddresses = markets.map((market) => market.address);
                 const selectedPositions = markets.map((market) => market.position);
                 const susdPaid = ethers.utils.parseEther(roundNumberToDecimals(susdAmountForQuote).toString());
-                const parlayAmmQuote = await getParlayMarketsAMMQuoteMethod(
-                    true,
-                    selectedStableIndex,
-                    networkId,
-                    parlayMarketsAMMContract,
-                    marketsAddresses,
-                    selectedPositions,
-                    susdPaid
-                );
+                try {
+                    const parlayAmmQuote = await getParlayMarketsAMMQuoteMethod(
+                        true,
+                        selectedStableIndex,
+                        networkId,
+                        parlayMarketsAMMContract,
+                        marketsAddresses,
+                        selectedPositions,
+                        susdPaid
+                    );
 
-                return parlayAmmQuote;
+                    return parlayAmmQuote;
+                } catch (e: any) {
+                    if (e.error.data.message.includes(TicketErrorMessage.RISK_PER_COMB)) {
+                        return { error: TicketErrorMessage.RISK_PER_COMB };
+                    }
+                    console.log(e);
+                    return { error: e };
+                }
             }
         },
         [networkId, selectedStableIndex, markets]
@@ -285,12 +297,17 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
         }
     };
 
-    const MIN_SUSD_AMOUNT = 1;
+    const MIN_SUSD_AMOUNT = 10;
 
     useEffect(() => {
         const checkDisabled = async () => {
             if (!hasAllowance) {
                 setSubmitDisabled(false);
+                return;
+            }
+            // Validation message is present
+            if (tooltipTextUsdAmount) {
+                setSubmitDisabled(true);
                 return;
             }
             // Minimum of sUSD
@@ -303,7 +320,7 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
             return;
         };
         checkDisabled();
-    }, [usdAmountValue, isBuying, isAllowing, hasAllowance, paymentTokenBalance, totalQuote]);
+    }, [usdAmountValue, isBuying, isAllowing, hasAllowance, paymentTokenBalance, totalQuote, tooltipTextUsdAmount]);
 
     const getSubmitButton = () => {
         if (!isWalletConnected) {
@@ -329,8 +346,16 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
     };
 
     const setTooltipTextMessageUsdAmount = useCallback(
-        (value: string | number, quotes: number[]) => {
-            if (quotes.some((quote) => quote === 0)) {
+        (value: string | number, quotes: number[], error?: string) => {
+            if (error) {
+                switch (error) {
+                    case TicketErrorMessage.RISK_PER_COMB:
+                        setTooltipTextUsdAmount(t('markets.parlay.validation.risk-per-comb'));
+                        return;
+                    default:
+                        setTooltipTextUsdAmount(t('markets.parlay.validation.not-supported', { error }));
+                }
+            } else if (quotes.some((quote) => quote === 0)) {
                 setTooltipTextUsdAmount(t('markets.parlay.validation.availability'));
             } else if (value && Number(value) < MIN_SUSD_AMOUNT) {
                 setTooltipTextUsdAmount(t('markets.parlay.validation.min-amount', { min: MIN_SUSD_AMOUNT }));
@@ -350,29 +375,31 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
             setIsFetching(true);
             const { parlayMarketsAMMContract } = networkConnector;
             if (parlayMarketsAMMContract) {
-                if (
-                    Number(usdAmountValue) >= 0 ||
-                    (parlayAmmData?.maxSupportedAmount && Number(usdAmountValue) > parlayAmmData?.maxSupportedAmount)
-                ) {
+                if (Number(usdAmountValue) >= 0) {
                     const parlayAmmQuote = await fetchParlayAmmQuote(Number(usdAmountValue) || 1);
-                    const fetchedTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
+                    if (!parlayAmmQuote.error) {
+                        setTotalQuote(bigNumberFormatter(parlayAmmQuote['totalQuote']));
+                        setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
+                        setTotalBuyAmount(bigNumberFormatter(parlayAmmQuote['totalBuyAmount']));
 
-                    setTotalQuote(fetchedTotalQuote);
-                    setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
-                    setTotalBuyAmount(bigNumberFormatter(parlayAmmQuote['totalBuyAmount']));
+                        const fetchedFinalQuotes: number[] = (
+                            parlayAmmQuote['finalQuotes'] || []
+                        ).map((quote: BigNumber) => bigNumberFormatter(quote));
 
-                    const fetchedFinalQuotes: number[] = (parlayAmmQuote['finalQuotes'] || []).map((quote: BigNumber) =>
-                        bigNumberFormatter(quote)
-                    );
-                    setFinalQuotes(fetchedFinalQuotes);
-
-                    setTooltipTextMessageUsdAmount(usdAmountValue, fetchedFinalQuotes);
+                        setFinalQuotes(fetchedFinalQuotes);
+                        setTooltipTextMessageUsdAmount(usdAmountValue, fetchedFinalQuotes);
+                    } else {
+                        setTotalQuote(0);
+                        setSkew(0);
+                        setTotalBuyAmount(0);
+                        setTooltipTextMessageUsdAmount(0, [], parlayAmmQuote.error);
+                    }
                 }
             }
             setIsFetching(false);
         };
         fetchData();
-    }, [usdAmountValue, fetchParlayAmmQuote, parlayAmmData?.maxSupportedAmount, setTooltipTextMessageUsdAmount]);
+    }, [usdAmountValue, fetchParlayAmmQuote, setTooltipTextMessageUsdAmount]);
 
     useEffect(() => {
         setTooltipTextMessageUsdAmount(usdAmountValue, finalQuotes);

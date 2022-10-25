@@ -643,6 +643,7 @@ const Home: React.FC = () => {
                             setSportParam={setSportParam}
                             globalFilter={globalFilter}
                             dateFilter={dateFilter}
+                            sportFilter={sportFilter}
                         />
                         {marketsList.length === 0 ? (
                             <NoMarketsContainer>

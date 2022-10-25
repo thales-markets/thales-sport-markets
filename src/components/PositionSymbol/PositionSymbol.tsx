@@ -44,22 +44,25 @@ const PositionSymbol: React.FC<SymbolProps> = ({
 
     return (
         <Wrapper
+            disabled={showTooltip}
             onClick={() => {
-                if (marketId) {
-                    if (addedToParlay && addedToParlay.position == type) {
-                        dispatch(removeFromParlay(marketId));
-                    } else {
-                        if (type !== undefined) {
-                            switch (type) {
-                                case 3:
-                                    dispatch(updateParlay({ sportMarketId: marketId, position: Position.HOME }));
-                                    break;
-                                case 4:
-                                    dispatch(updateParlay({ sportMarketId: marketId, position: Position.AWAY }));
-                                    break;
-                                default:
-                                    dispatch(updateParlay({ sportMarketId: marketId, position: type }));
-                                    break;
+                if (!showTooltip) {
+                    if (marketId) {
+                        if (addedToParlay && addedToParlay.position == type) {
+                            dispatch(removeFromParlay(marketId));
+                        } else {
+                            if (type !== undefined) {
+                                switch (type) {
+                                    case 3:
+                                        dispatch(updateParlay({ sportMarketId: marketId, position: Position.HOME }));
+                                        break;
+                                    case 4:
+                                        dispatch(updateParlay({ sportMarketId: marketId, position: Position.AWAY }));
+                                        break;
+                                    default:
+                                        dispatch(updateParlay({ sportMarketId: marketId, position: type }));
+                                        break;
+                                }
                             }
                         }
                     }
@@ -131,12 +134,12 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ disabled?: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: row;
-    cursor: pointer;
+    cursor: ${(_props) => (_props?.disabled ? 'not-allowed' : 'pointer')};
 `;
 
 const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: boolean }>`

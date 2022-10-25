@@ -21,6 +21,7 @@ type GlobalFiltersProps = {
     setSportParam: (value: any) => void;
     globalFilter: GlobalFiltersEnum;
     dateFilter: Date | number;
+    sportFilter: SportFilterEnum;
 };
 
 const GlobalFilters: React.FC<GlobalFiltersProps> = ({
@@ -34,6 +35,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
     setSportParam,
     globalFilter,
     dateFilter,
+    sportFilter,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -75,6 +77,16 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
             setSelectedPeriod(0);
         }
     }, [dateFilter]);
+
+    useEffect(() => {
+        setSelectedPeriod(0);
+    }, [globalFilter]);
+
+    useEffect(() => {
+        if (sportFilter == SportFilterEnum.All) {
+            setSelectedPeriod(0);
+        }
+    }, [sportFilter]);
 
     return (
         <Container>
