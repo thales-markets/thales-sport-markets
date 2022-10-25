@@ -55,6 +55,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
             <ClubVsClubContainer>
                 <ClubContainer>
                     <ClubLogo
+                        height={market.tags[0] == 9018 ? '20px' : ''}
+                        width={market.tags[0] == 9018 ? '33px' : ''}
                         alt="Home team logo"
                         src={homeLogoSrc}
                         onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
@@ -84,6 +86,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                         </VSLabel>
                         <ClubContainer>
                             <ClubLogo
+                                height={market.tags[0] == 9018 ? '20px' : ''}
+                                width={market.tags[0] == 9018 ? '33px' : ''}
                                 alt="Away team logo"
                                 src={awayLogoSrc}
                                 onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
