@@ -55,6 +55,10 @@ export const OPTIMISM_NETWORKS: Record<number, OptimismNetwork> = {
         rpcUrls: ['https://goerli.optimism.io/'],
         blockExplorerUrls: ['https://goerli-optimism.etherscan.io/'],
         iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
+        nativeCurrency: {
+            symbol: 'ETH',
+            decimals: 18,
+        },
     },
 };
 
