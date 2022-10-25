@@ -189,7 +189,7 @@ const Vault: React.FC = () => {
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.events) {
-                    toast.update(id, getSuccessToastOptions(t('common.voucher.modal.button.confirmation-message')));
+                    toast.update(id, getSuccessToastOptions(t('vault.button.confirmation-message')));
                     setAmount('');
                     setIsSubmitting(false);
                 }
@@ -214,6 +214,17 @@ const Vault: React.FC = () => {
         }
         if (!isAmountEntered) {
             return <SubmitButton disabled={true}>{t(`common.errors.enter-amount`)}</SubmitButton>;
+        }
+        if (!hasAllowance) {
+            return (
+                <SubmitButton disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
+                    {!isAllowing
+                        ? t('common.enable-wallet-access.approve-label', { currencyKey: PAYMENT_CURRENCY })
+                        : t('common.enable-wallet-access.approve-progress-label', {
+                              currencyKey: PAYMENT_CURRENCY,
+                          })}
+                </SubmitButton>
+            );
         }
         return (
             <SubmitButton disabled={isDepositButtonDisabled} onClick={handleDeposit}>
