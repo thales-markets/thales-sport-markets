@@ -256,17 +256,13 @@ const Vault: React.FC = () => {
                         <>
                             {userVaultData && (
                                 <Copy>
-                                    <Description>{`Deposit current round: ${formatCurrencyWithSign(
+                                    <Description>{`Your deposit current round: ${formatCurrencyWithSign(
                                         USD_SIGN,
                                         userVaultData.balanceCurrentRound
                                     )}`}</Description>
-                                    <Description>{`Deposit next round: ${formatCurrencyWithSign(
+                                    <Description>{`Your deposit next round: ${formatCurrencyWithSign(
                                         USD_SIGN,
                                         userVaultData.balanceNextRound
-                                    )}`}</Description>
-                                    <Description>{`Deposit total: ${formatCurrencyWithSign(
-                                        USD_SIGN,
-                                        userVaultData.balanceTotal
                                     )}`}</Description>
                                 </Copy>
                             )}
