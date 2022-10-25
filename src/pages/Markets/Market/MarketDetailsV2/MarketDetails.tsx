@@ -12,6 +12,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected } from 'redux/modules/wallet';
 import AMM from './components/AMM';
+import { FlexDivColumn } from 'styles/common';
+import styled from 'styled-components';
 
 type MarketDetailsPropType = {
     market: MarketData;
@@ -47,7 +49,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
 
     const showAMM = !market.resolved && !market.cancelled && !market.gameStarted;
     return (
-        <>
+        <Wrapper>
             {showAMM && (
                 <Toggle
                     label={{
@@ -80,8 +82,12 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
                     availablePerSide={availablePerSide}
                 />
             )}
-        </>
+        </Wrapper>
     );
 };
+
+const Wrapper = styled(FlexDivColumn)`
+    margin-top: 30px;
+`;
 
 export default MarketDetails;
