@@ -39,6 +39,7 @@ import {
     Tags,
 } from 'types/markets';
 import { isMobile } from 'utils/device';
+import { addHoursToCurrentDate } from 'utils/formatters/date';
 import { isClaimAvailable } from 'utils/markets';
 import { NetworkIdByName } from 'utils/network';
 import { buildHref, history } from 'utils/routes';
@@ -105,6 +106,11 @@ const Home: React.FC = () => {
         return discountQuery.isSuccess ? discountQuery.data : new Map();
     }, [discountQuery.isSuccess, discountQuery.data]);
 
+    const calculateDate = (hours: number) => {
+        const calculatedDate = addHoursToCurrentDate(hours);
+        setDateFilter(calculatedDate.getTime());
+    };
+
     useEffect(
         () => {
             sportParam != '' ? setSportFilter(sportParam as SportFilterEnum) : setSportParam(sportFilter);
@@ -112,12 +118,28 @@ const Home: React.FC = () => {
                 ? setGlobalFilter(globalFilterParam as GlobalFiltersEnum)
                 : setGlobalFilterParam(globalFilter);
             if (dateParam != '') {
-                setDateFilter(new Date(dateParam).setHours(23, 59, 59, 999));
-            } else {
-                const today = new Date();
-                today.setHours(23, 59, 59, 999);
-                setDateFilter(today);
-                setDateParam(today.toDateString());
+                if (dateParam.includes('hour')) {
+                    const timeFilter = dateParam.split('h')[0];
+                    console.log(timeFilter);
+                    switch (timeFilter) {
+                        case '1':
+                            calculateDate(1);
+                            break;
+                        case '3':
+                            calculateDate(3);
+                            break;
+                        case '12':
+                            calculateDate(12);
+                            break;
+                        case '72':
+                            calculateDate(72);
+                            break;
+                    }
+                } else {
+                    const formattedDate = new Date(dateParam);
+                    formattedDate.setHours(23, 59, 59, 999);
+                    setDateFilter(formattedDate);
+                }
             }
 
             if (tagParam != '') {
@@ -206,9 +228,14 @@ const Home: React.FC = () => {
         let filteredMarkets = marketSearch ? searchFilteredMarkets : markets;
 
         if (dateFilter !== 0) {
-            filteredMarkets = filteredMarkets.filter(
-                (market: SportMarketInfo) => market.maturityDate.getTime() <= dateFilter
-            );
+            filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => {
+                if (typeof dateFilter === 'number') {
+                    return market.maturityDate.getTime() <= dateFilter;
+                } else {
+                    const dateToCompare = new Date(dateFilter);
+                    return market.maturityDate.toDateString() == dateToCompare.toDateString();
+                }
+            });
         }
         return filteredMarkets;
     }, [markets, searchFilteredMarkets, dateFilter, marketSearch]);
@@ -387,13 +414,13 @@ const Home: React.FC = () => {
                                         if (filterItem !== sportFilter) {
                                             setSportFilter(filterItem);
                                             setSportParam(filterItem);
-                                            setDateFilter(0);
-                                            setDateParam('');
                                             setTagFilter([]);
                                             setTagParam('');
                                             setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
                                             setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
                                             if (filterItem === SportFilterEnum.All) {
+                                                setDateFilter(0);
+                                                setDateParam('');
                                                 setAvailableTags(
                                                     tagsList.sort((a, b) => a.label.localeCompare(b.label))
                                                 );
@@ -448,17 +475,13 @@ const Home: React.FC = () => {
                                     disabled={false}
                                     selected={globalFilter === filterItem}
                                     onClick={() => {
-                                        if (
-                                            filterItem === GlobalFiltersEnum.OpenMarkets ||
-                                            filterItem === GlobalFiltersEnum.YourPositions
-                                        ) {
-                                            setDateFilter(0);
-                                            setDateParam('');
-                                            setTagFilter([]);
-                                            setTagParam('');
-                                            setSportFilter(SportFilterEnum.All);
-                                            setSportParam(SportFilterEnum.All);
-                                        }
+                                        setDateFilter(0);
+                                        setDateParam('');
+                                        setTagFilter([]);
+                                        setTagParam('');
+                                        setSportFilter(SportFilterEnum.All);
+                                        setSportParam(SportFilterEnum.All);
+
                                         setGlobalFilter(filterItem);
                                         setGlobalFilterParam(filterItem);
                                     }}
@@ -483,16 +506,12 @@ const Home: React.FC = () => {
                                     disabled={false}
                                     selected={globalFilter === filterItem}
                                     onClick={() => {
-                                        if (
-                                            filterItem === GlobalFiltersEnum.OpenMarkets ||
-                                            filterItem === GlobalFiltersEnum.YourPositions
-                                        ) {
-                                            setDateParam('');
-                                            setTagFilter([]);
-                                            setTagParam('');
-                                            setSportFilter(SportFilterEnum.All);
-                                            setSportParam(SportFilterEnum.All);
-                                        }
+                                        setDateParam('');
+                                        setTagFilter([]);
+                                        setTagParam('');
+                                        setSportFilter(SportFilterEnum.All);
+                                        setSportParam(SportFilterEnum.All);
+
                                         setGlobalFilter(filterItem);
                                         setGlobalFilterParam(filterItem);
                                     }}
@@ -554,13 +573,13 @@ const Home: React.FC = () => {
                                             if (filterItem !== sportFilter) {
                                                 setSportFilter(filterItem);
                                                 setSportParam(filterItem);
-                                                setDateFilter(0);
-                                                setDateParam('');
                                                 setTagFilter([]);
                                                 setTagParam('');
                                                 setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
                                                 setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
                                                 if (filterItem === SportFilterEnum.All) {
+                                                    setDateFilter(0);
+                                                    setDateParam('');
                                                     setAvailableTags(
                                                         tagsList.sort((a, b) => a.label.localeCompare(b.label))
                                                     );

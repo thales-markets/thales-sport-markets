@@ -12,11 +12,10 @@ type CalendarDatepickerProps = {
 
 const CalendarDatepicker: React.FC<CalendarDatepickerProps> = ({ date, setDate, setDateParam }) => {
     const [isOpen, setIsOpen] = useState(false);
-
     return (
         <DatePickerContainer>
             <DatepickerButton className={`${typeof date != 'number' ? 'blue' : ''}`} onClick={() => setIsOpen(!isOpen)}>
-                {typeof date != 'number' ? formatShortDate(date) : 'Choose date'}
+                {typeof date != 'number' ? convertAndFormat(date) : 'Choose date'}
             </DatepickerButton>
             {isOpen && (
                 <ReactDatePicker
@@ -51,6 +50,10 @@ const checkTypeOf = (date: any) => {
     }
 
     return null;
+};
+
+const convertAndFormat = (date: any) => {
+    return formatShortDate(new Date(date));
 };
 
 const DatePickerContainer = styled.div`
