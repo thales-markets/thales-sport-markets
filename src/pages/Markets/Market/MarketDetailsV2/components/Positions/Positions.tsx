@@ -54,7 +54,7 @@ const Positions: React.FC<PositionsProps> = ({
     const { t } = useTranslation();
     const [claimable, setClaimable] = useState<boolean>(false);
     const [claimableAmount, setClaimableAmount] = useState<number>(0);
-    console.log(selectedSide);
+
     // Redux states
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -113,14 +113,12 @@ const Positions: React.FC<PositionsProps> = ({
         oddsOnCancellation?.home,
     ]);
 
-    // TODO - FIX AFTER MARKET DETAILS COMPLETION
-    // const disabledDrawOption = !(market?.positions[Position.DRAW]?.sides[selectedSide]?.odd > 0);
-    // const disableddHomeOption = !(market?.positions[Position.HOME]?.sides[selectedSide]?.odd > 0);
-    // const disabledAwayOption = !(market?.positions[Position.AWAY]?.sides[selectedSide]?.odd > 0);
-
-    const disabledDrawOption = false;
-    const disableddHomeOption = false;
-    const disabledAwayOption = false;
+    // @ts-ignore
+    const disabledDrawOption = !(market?.positions[Position.DRAW]?.sides[selectedSide]?.odd > 0);
+    // @ts-ignore
+    const disableddHomeOption = !(market?.positions[Position.HOME]?.sides[selectedSide]?.odd > 0);
+    // @ts-ignore
+    const disabledAwayOption = !(market?.positions[Position.AWAY]?.sides[selectedSide]?.odd > 0);
 
     const showDrawOdds = getVisibilityOfDrawOptionByTagId(market.tags);
     const gameCancelled = market.cancelled || (!market.gameStarted && market.resolved);
@@ -234,7 +232,14 @@ const Positions: React.FC<PositionsProps> = ({
                         </PositionContainer>
                         <InnerContainer>
                             <Label>{t('markets.market-details.price')}</Label>
-                            <Value>{formatCurrencyWithKey(USD_SIGN, 0.5, 2)}</Value>
+                            <Value>
+                                {formatCurrencyWithKey(
+                                    USD_SIGN,
+                                    // @ts-ignore
+                                    market.positions[Position.HOME]?.sides[selectedSide]?.odd,
+                                    2
+                                )}
+                            </Value>
                         </InnerContainer>
                         <LiquidityInfoContainer>
                             <Label>{t('markets.market-details.liquidity')}</Label>
@@ -267,7 +272,14 @@ const Positions: React.FC<PositionsProps> = ({
                             </PositionContainer>
                             <InnerContainer>
                                 <Label>{t('markets.market-details.price')}</Label>
-                                <Value>{formatCurrencyWithKey(USD_SIGN, 0.5, 2)}</Value>
+                                <Value>
+                                    {formatCurrencyWithKey(
+                                        USD_SIGN,
+                                        // @ts-ignore
+                                        market.positions[Position.DRAW]?.sides[selectedSide]?.odd,
+                                        2
+                                    )}
+                                </Value>
                             </InnerContainer>
                             <LiquidityInfoContainer>
                                 <Label>{t('markets.market-details.liquidity')}</Label>
@@ -301,7 +313,14 @@ const Positions: React.FC<PositionsProps> = ({
                         </PositionContainer>
                         <InnerContainer>
                             <Label>{t('markets.market-details.price')}</Label>
-                            <Value>{formatCurrencyWithKey(USD_SIGN, 0.5, 2)}</Value>
+                            <Value>
+                                {formatCurrencyWithKey(
+                                    USD_SIGN,
+                                    // @ts-ignore
+                                    market.positions[Position.AWAY]?.sides[selectedSide]?.odd,
+                                    2
+                                )}
+                            </Value>
                         </InnerContainer>
                         <LiquidityInfoContainer>
                             <Label>{t('markets.market-details.liquidity')}</Label>
