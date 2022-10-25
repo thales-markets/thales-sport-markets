@@ -360,7 +360,7 @@
         "button": {
             "deposit-label": "Deposit",
             "deposit-progress-label": "Placing deposit in progress...",
-            "confirmation-message": "Deposit successfully placed"
+            "deposit-confirmation-message": "Deposit successfully placed"
         }
     }
 }
