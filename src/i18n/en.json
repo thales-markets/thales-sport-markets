@@ -348,5 +348,14 @@
             "4": "Challenging",
             "5": "Hard"
         }
+    },
+    "vault": {
+        "title": "Discount Vault",
+        "deposit-amount-label": "Deposit amount",
+        "tabs": {
+            "deposit": "Deposit",
+            "claim": "Claim",
+            "withdraw": "Withdraw"
+        }
     }
 }

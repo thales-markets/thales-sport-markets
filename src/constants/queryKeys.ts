@@ -97,6 +97,10 @@ export const QUERY_KEYS = {
         Leaderboard: () => ['quiz', 'leaderboard'],
         Tweet: () => ['quiz', 'tweet'],
     },
+    Vault: {
+        Data: (networkId: NetworkId) => ['vault', 'data', networkId],
+        UserData: (walletAddress: string, networkId: NetworkId) => ['vault', 'data', walletAddress, networkId],
+    },
 };
 
 export default QUERY_KEYS;

@@ -7,6 +7,7 @@ export const ROUTES = {
     Rewards: '/rewards',
     Quiz: '/trivia',
     QuizLeaderboard: '/trivia/leaderboard',
+    Vault: '/vault',
 };
 export default ROUTES;
 
