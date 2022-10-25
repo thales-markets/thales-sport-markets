@@ -199,7 +199,9 @@ const Vault: React.FC = () => {
         }
     };
 
-    const getSubmitButton = () => {
+    const handleWithdraw = () => {};
+
+    const getDepositSubmitButton = () => {
         if (!isWalletConnected) {
             return (
                 <SubmitButton onClick={() => openConnectModal?.()}>
@@ -227,6 +229,14 @@ const Vault: React.FC = () => {
         return (
             <SubmitButton disabled={isDepositButtonDisabled} onClick={handleDeposit}>
                 {!isSubmitting ? t('vault.button.deposit-label') : t('vault.button.deposit-progress-label')}
+            </SubmitButton>
+        );
+    };
+
+    const getWithdrawSubmitButton = () => {
+        return (
+            <SubmitButton disabled={true} onClick={handleWithdraw}>
+                {t('vault.button.withdraw-label')}
             </SubmitButton>
         );
     };
@@ -331,7 +341,7 @@ const Vault: React.FC = () => {
                                         </TimeRemainingGraphicContainer>
                                     </>
                                 )}
-                                <ButtonContainer>{getSubmitButton()}</ButtonContainer>
+                                <ButtonContainer>{getDepositSubmitButton()}</ButtonContainer>
                             </>
                         )}
                         {selectedTab === VaultTab.WITHDRAW && (
@@ -362,7 +372,7 @@ const Vault: React.FC = () => {
                                         />
                                     </Description>
                                 )}
-                                <ButtonContainer>{getSubmitButton()}</ButtonContainer>
+                                <ButtonContainer>{getWithdrawSubmitButton()}</ButtonContainer>
                             </>
                         )}
                     </>
