@@ -181,17 +181,17 @@ const Positions: React.FC<PositionsProps> = ({
                                 glow={true}
                             />
                         </PositionContainer>
-                        <ResultContainer style={{ width: '25%' }}>
+                        <ResultContainer style={{ width: '35%' }}>
                             <Label style={{ textTransform: 'uppercase' }}>{t('markets.market-card.result')}</Label>
                             <Value>{`${market.homeScore}${isApexTopGame ? '' : ` - ${market.awayScore}`}`}</Value>
                         </ResultContainer>
                         {claimable && (
                             <>
-                                <InnerContainer style={{ width: '25%' }}>
+                                <InnerContainer style={{ width: '35%' }}>
                                     <Label>{t('markets.market-card.claimable')}</Label>
                                     <Value>{formatCurrencyWithSign(USD_SIGN, claimableAmount, 2)}</Value>
                                 </InnerContainer>
-                                <InnerContainer style={{ width: '25%' }}>
+                                <InnerContainer style={{ width: '15%' }}>
                                     <ClaimButton
                                         onClick={(e: any) => {
                                             e.preventDefault();
