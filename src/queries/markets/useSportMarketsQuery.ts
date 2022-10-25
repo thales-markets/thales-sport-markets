@@ -132,7 +132,8 @@ const mapMarkets = (allMarkets: SportMarkets) => {
         if (
             market.isOpen &&
             !market.isCanceled &&
-            (market.homeOdds !== 0 || market.awayOdds !== 0 || market.drawOdds !== 0)
+            (market.homeOdds !== 0 || market.awayOdds !== 0 || market.drawOdds !== 0) &&
+            market.maturityDate.getTime() > new Date().getTime()
         ) {
             openMarkets.push(market);
         }
@@ -146,7 +147,7 @@ const mapMarkets = (allMarkets: SportMarkets) => {
         if (market.isCanceled) {
             canceledMarkets.push(market);
         }
-        if (market.maturityDate < new Date() && !market.isResolved && !market.isCanceled) {
+        if (market.maturityDate.getTime() < new Date().getTime() && !market.isResolved && !market.isCanceled) {
             pendingMarkets.push(market);
         }
     });

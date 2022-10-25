@@ -155,7 +155,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         if (balanceValueQuery.isSuccess && balanceValueQuery.data) {
             setBalanceValue(balanceValueQuery.data);
         }
-    }, [balances, balanceValueQuery.data, balanceValueQuery.isSuccess]);
+    }, [balances?.away, balances?.home, balances?.draw, balanceValueQuery.data, balanceValueQuery.isSuccess]);
 
     const referralId =
         walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase() ? getReferralId() : null;

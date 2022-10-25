@@ -20,7 +20,12 @@ export const QUERY_KEYS = {
         stableIndex: number,
         networkId: NetworkId
     ) => ['positionDetails', marketAddress, position, amount, stableIndex, networkId],
-    PositionSellPrice: (marketAddress: string, networkId: NetworkId) => ['positionSellPrice', marketAddress, networkId],
+    PositionSellPrice: (marketAddress: string, networkId: NetworkId, balances: any) => [
+        'positionSellPrice',
+        marketAddress,
+        networkId,
+        balances,
+    ],
     AvailablePerSide: (marketAddress: string, side: Side) => ['availablePerSide', marketAddress, side],
     MarketTransactions: (marketAddress: string, networkId: NetworkId) => [
         'market',

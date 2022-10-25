@@ -13,7 +13,7 @@ const usePositionSellPriceQuery = (
     options?: UseQueryOptions<Balances>
 ) => {
     return useQuery<Balances>(
-        QUERY_KEYS.PositionSellPrice(market.address, networkId),
+        QUERY_KEYS.PositionSellPrice(market.address, networkId, balances),
         async () => {
             try {
                 if (!balances) {

@@ -1,12 +1,14 @@
+import CalendarDatepicker from 'components/CalendarDatepicker';
 import Dropdown from 'components/Dropdown';
 import { GlobalFiltersEnum, OddsType, ODDS_TYPES, SportFilterEnum } from 'constants/markets';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOddsType, setOddsType } from 'redux/modules/ui';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import CalendarDatepicker from 'components/CalendarDatepicker';
+import { addHoursToCurrentDate } from 'utils/formatters/date';
+import { getQueryStringVal } from 'utils/useQueryParams';
 
 type GlobalFiltersProps = {
     setDateFilter: (value: any) => void;
@@ -19,6 +21,7 @@ type GlobalFiltersProps = {
     setSportParam: (value: any) => void;
     globalFilter: GlobalFiltersEnum;
     dateFilter: Date | number;
+    sportFilter: SportFilterEnum;
 };
 
 const GlobalFilters: React.FC<GlobalFiltersProps> = ({
@@ -32,6 +35,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
     setSportParam,
     globalFilter,
     dateFilter,
+    sportFilter,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -47,10 +51,42 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
     );
 
     useEffect(() => {
+        if (typeof dateFilter == 'number') {
+            const dateParam = getQueryStringVal('date');
+            const timeFilter = dateParam?.split('h')[0];
+            switch (timeFilter) {
+                case '1':
+                    setSelectedPeriod(1);
+                    break;
+                case '3':
+                    setSelectedPeriod(3);
+                    break;
+                case '12':
+                    setSelectedPeriod(12);
+                    break;
+                case '72':
+                    setSelectedPeriod(72);
+                    break;
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
         if (typeof dateFilter != 'number') {
             setSelectedPeriod(0);
         }
     }, [dateFilter]);
+
+    useEffect(() => {
+        setSelectedPeriod(0);
+    }, [globalFilter]);
+
+    useEffect(() => {
+        if (sportFilter == SportFilterEnum.All) {
+            setSelectedPeriod(0);
+        }
+    }, [sportFilter]);
 
     return (
         <Container>
@@ -106,7 +142,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                             } else {
                                 const calculatedDate = addHoursToCurrentDate(1);
                                 setDateFilter(calculatedDate.getTime());
-                                setDateParam(calculatedDate.toDateString());
+                                setDateParam('1hour');
                                 setSelectedPeriod(1);
                             }
                         }}
@@ -124,7 +160,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                             } else {
                                 const calculatedDate = addHoursToCurrentDate(3);
                                 setDateFilter(calculatedDate.getTime());
-                                setDateParam(calculatedDate.toDateString());
+                                setDateParam('3hours');
                                 setSelectedPeriod(3);
                             }
                         }}
@@ -142,7 +178,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                             } else {
                                 const calculatedDate = addHoursToCurrentDate(12);
                                 setDateFilter(calculatedDate.getTime());
-                                setDateParam(calculatedDate.toDateString());
+                                setDateParam('12hours');
                                 setSelectedPeriod(12);
                             }
                         }}
@@ -160,7 +196,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                             } else {
                                 const calculatedDate = addHoursToCurrentDate(72, true);
                                 setDateFilter(calculatedDate.getTime());
-                                setDateParam(calculatedDate.toDateString());
+                                setDateParam('72hours');
                                 setSelectedPeriod(72);
                             }
                         }}
@@ -173,17 +209,6 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
             </Filters>
         </Container>
     );
-};
-
-const addHoursToCurrentDate = (numberOfHours: number, setToEOD?: boolean) => {
-    const newDateFilter = new Date();
-    if (setToEOD) {
-        newDateFilter.setHours(23, 59, 59, 999);
-        newDateFilter.setTime(newDateFilter.getTime() + numberOfHours * 60 * 60 * 1000);
-    } else {
-        newDateFilter.setTime(newDateFilter.getTime() + numberOfHours * 60 * 60 * 1000);
-    }
-    return newDateFilter;
 };
 
 export const Container = styled(FlexDiv)`
