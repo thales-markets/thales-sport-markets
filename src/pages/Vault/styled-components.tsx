@@ -87,7 +87,10 @@ export const RoundInfo = styled.p`
     font-weight: 600;
 `;
 
-export const Description = styled.p``;
+export const Description = styled.div`
+    font-size: 16px;
+    text-align: justify;
+`;
 
 export const ContentInfoContainer = styled.div`
     margin-bottom: 15px;
@@ -238,7 +241,7 @@ export const ValidationTooltip = withStyles(() => ({
 
 export const LoaderContainer = styled(FlexDivCentered)`
     position: relative;
-    min-height: 298px;
+    min-height: 350px;
     width: 100%;
 `;
 

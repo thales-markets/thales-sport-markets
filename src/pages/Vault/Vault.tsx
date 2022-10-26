@@ -120,7 +120,8 @@ const Vault: React.FC = () => {
     }, [userVaultDataQuery.isSuccess, userVaultDataQuery.data]);
 
     const isAmountEntered = Number(amount) > 0;
-    const insufficientBalance = Number(paymentTokenBalance) < Number(amount) || Number(paymentTokenBalance) === 0;
+    const insufficientBalance =
+        (Number(paymentTokenBalance) < Number(amount) || Number(paymentTokenBalance) === 0) && isWalletConnected;
     const exceededVaultCap = vaultData && vaultData.availableAllocationNextRound < Number(amount);
     const isWithdrawalRequested = userVaultData && userVaultData.isWithdrawalRequested;
     const nothingToWithdraw = userVaultData && userVaultData.balanceCurrentRound === 0;
@@ -393,10 +394,17 @@ const Vault: React.FC = () => {
                             </RoundInfoWrapper>
                         </>
                     )}
-                    <Description>{t('vault.description')}</Description>
+                    <Description>
+                        <Trans
+                            i18nKey="vault.description"
+                            components={{
+                                p: <p />,
+                            }}
+                        />
+                    </Description>
                 </LeftContainer>
                 <RightContainer>
-                    {!vaultData || !userVaultData ? (
+                    {!vaultData ? (
                         <LoaderContainer>
                             <SimpleLoader />
                         </LoaderContainer>
