@@ -8,9 +8,9 @@ import { UserVaultData } from 'types/vault';
 const useUserVaultDataQuery = (
     walletAddress: string,
     networkId: NetworkId,
-    options?: UseQueryOptions<UserVaultData>
+    options?: UseQueryOptions<UserVaultData | undefined>
 ) => {
-    return useQuery<UserVaultData>(
+    return useQuery<UserVaultData | undefined>(
         QUERY_KEYS.Vault.UserData(walletAddress, networkId),
         async () => {
             const userVaultData: UserVaultData = {
@@ -22,30 +22,31 @@ const useUserVaultDataQuery = (
                 isWithdrawRoundEnded: false,
             };
 
+            const { sportVaultContract } = networkConnector;
             try {
-                const { sportVaultContract } = networkConnector;
+                if (sportVaultContract) {
+                    const [round] = await Promise.all([sportVaultContract?.round()]);
 
-                const [round] = await Promise.all([sportVaultContract?.round()]);
+                    const [balanceCurrentRound, balanceNextRound, withdrawalRequest] = await Promise.all([
+                        sportVaultContract?.balancesPerRound(Number(round), walletAddress),
+                        sportVaultContract?.balancesPerRound(Number(round) + 1, walletAddress),
+                        sportVaultContract?.withdrawalQueue(walletAddress),
+                    ]);
 
-                const [balanceCurrentRound, balanceNextRound, withdrawalRequest] = await Promise.all([
-                    sportVaultContract?.balancesPerRound(Number(round), walletAddress),
-                    sportVaultContract?.balancesPerRound(Number(round) + 1, walletAddress),
-                    sportVaultContract?.withdrawalQueue(walletAddress),
-                ]);
+                    userVaultData.balanceCurrentRound = bigNumberFormatter(balanceCurrentRound);
+                    userVaultData.balanceNextRound = bigNumberFormatter(balanceNextRound);
+                    userVaultData.balanceTotal = userVaultData.balanceCurrentRound + userVaultData.balanceNextRound;
+                    userVaultData.isWithdrawalRequested = withdrawalRequest.requested;
+                    userVaultData.withdrawalAmount = bigNumberFormatter(withdrawalRequest.amount);
+                    userVaultData.isWithdrawRoundEnded =
+                        userVaultData.isWithdrawalRequested && Number(withdrawalRequest.round) < Number(round);
 
-                userVaultData.balanceCurrentRound = bigNumberFormatter(balanceCurrentRound);
-                userVaultData.balanceNextRound = bigNumberFormatter(balanceNextRound);
-                userVaultData.balanceTotal = userVaultData.balanceCurrentRound + userVaultData.balanceNextRound;
-                userVaultData.isWithdrawalRequested = withdrawalRequest.requested;
-                userVaultData.withdrawalAmount = bigNumberFormatter(withdrawalRequest.amount);
-                userVaultData.isWithdrawRoundEnded =
-                    userVaultData.isWithdrawalRequested && Number(withdrawalRequest.round) < Number(round);
-
-                return userVaultData;
+                    return userVaultData;
+                }
             } catch (e) {
                 console.log(e);
             }
-            return userVaultData;
+            return undefined;
         },
         {
             refetchInterval: 5000,
