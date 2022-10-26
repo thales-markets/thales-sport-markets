@@ -17,6 +17,7 @@ const useVaultDataQuery = (networkId: NetworkId, options?: UseQueryOptions<Vault
                 roundEndTime: 0,
                 allocationNextRound: 0,
                 allocationNextRoundPercentage: 0,
+                allocationCurrentRound: 0,
             };
 
             try {
@@ -32,14 +33,16 @@ const useVaultDataQuery = (networkId: NetworkId, options?: UseQueryOptions<Vault
                 vaultData.maxAllowedDeposit = bigNumberFormatter(maxAllowedDeposit);
                 vaultData.round = Number(round);
 
-                const [roundStartTime, roundEndTime, allocationNextRound] = await Promise.all([
+                const [roundStartTime, roundEndTime, allocationCurrentRound, allocationNextRound] = await Promise.all([
                     sportVaultContract?.roundStartTime(vaultData.round),
                     sportVaultContract?.roundEndTime(vaultData.round),
+                    sportVaultContract?.allocationPerRound(vaultData.round),
                     sportVaultContract?.allocationPerRound(vaultData.round + 1),
                 ]);
 
                 vaultData.roundStartTime = Number(roundStartTime);
                 vaultData.roundEndTime = Number(roundEndTime);
+                vaultData.allocationCurrentRound = bigNumberFormatter(allocationCurrentRound);
                 vaultData.allocationNextRound = bigNumberFormatter(allocationNextRound);
                 vaultData.allocationNextRoundPercentage =
                     (vaultData.allocationNextRound / vaultData.maxAllowedDeposit) * 100;

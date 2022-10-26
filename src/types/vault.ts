@@ -4,6 +4,7 @@ export type VaultData = {
     roundEndTime: number;
     vaultStarted: boolean;
     maxAllowedDeposit: number;
+    allocationCurrentRound: number;
     allocationNextRound: number;
     allocationNextRoundPercentage: number;
 };
