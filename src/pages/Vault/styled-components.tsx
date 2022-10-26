@@ -29,9 +29,6 @@ export const Container = styled(FlexDivRow)`
 export const ContentContainer = styled(FlexDivColumn)`
     width: 100%;
     flex: initial;
-    @media (max-width: 768px) {
-        padding: 0px 20px 0px 20px;
-    }
     align-items: center;
     position: relative;
     font-weight: 400;
@@ -56,11 +53,17 @@ export const RightContainer = styled(ContentContainer)`
     background: ${(props) => props.theme.background.secondary};
     padding: 30px 40px 20px 40px;
     border-radius: 20px;
+    @media (max-width: 767px) {
+        padding: 20px 20px 10px 20px;
+    }
 `;
 
 export const RoundInfoWrapper = styled(FlexDivRow)`
     width: 100%;
     margin-bottom: 20px;
+    @media (max-width: 575px) {
+        flex-direction: column;
+    }
 `;
 
 export const RoundInfoContainer = styled(FlexDivColumn)`
@@ -69,6 +72,11 @@ export const RoundInfoContainer = styled(FlexDivColumn)`
     span {
         color: #3fd1ff;
         font-weight: 600;
+    }
+    @media (max-width: 575px) {
+        :first-child {
+            margin-bottom: 10px;
+        }
     }
 `;
 
