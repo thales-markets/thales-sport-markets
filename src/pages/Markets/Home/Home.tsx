@@ -711,7 +711,6 @@ const groupBySortedMarkets = (markets: SportMarkets) => {
         if (market.isCanceled || market.isPaused) canceledMarkets.push(market);
     });
 
-
     return [...openMarkets, ...comingSoonMarkets, ...pendingResolutionMarkets, ...finishedMarkets, ...canceledMarkets];
 };
 
