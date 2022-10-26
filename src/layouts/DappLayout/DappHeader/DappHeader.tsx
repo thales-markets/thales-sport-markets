@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivRowCentered } from 'styles/common';
+import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { NetworkIdByName } from 'utils/network';
 import { getNetworkId } from 'redux/modules/wallet';
 import Referral from 'components/Referral';
@@ -53,23 +53,44 @@ const DappHeader: React.FC = () => {
     }, []);
 
     return (
-        <Container>
-            <Logo />
-            <RightContainer>
-                <SPAAnchor href={buildHref(ROUTES.Quiz)}>
-                    <StyledSportTriviaIcon stopPulsing={stopPulsing} src={sportTriviaIcon} />
-                </SPAAnchor>
-                <Referral />
-                {isMobileState && networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
-                <MintVoucher />
-                <LanguageSelector />
-                <WalletInfo />
-                <MenuIcon onClick={() => setNavMenuVisibility(true)} />
-                {/* {navMenuVisibility && ( */}
-                <NavMenu visibility={navMenuVisibility} hideVisibilityFunction={() => setNavMenuVisibility(false)} />
-                {/* )} */}
-            </RightContainer>
-        </Container>
+        <>
+            {!isMobileState && (
+                <Container>
+                    <Logo />
+                    <RightContainer>
+                        <SPAAnchor href={buildHref(ROUTES.Quiz)}>
+                            <StyledSportTriviaIcon stopPulsing={stopPulsing} src={sportTriviaIcon} />
+                        </SPAAnchor>
+                        <Referral />
+                        {isMobileState && networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
+                        <MintVoucher />
+                        <LanguageSelector />
+                        <WalletInfo />
+                        <MenuIcon onClick={() => setNavMenuVisibility(true)} />
+                        {/* {navMenuVisibility && ( */}
+                        <NavMenu
+                            visibility={navMenuVisibility}
+                            hideVisibilityFunction={() => setNavMenuVisibility(false)}
+                        />
+                        {/* )} */}
+                    </RightContainer>
+                </Container>
+            )}
+            {isMobileState && (
+                <WrapperMobile>
+                    <LogoContainer>
+                        <Logo />
+                    </LogoContainer>
+                    <MenuIconContainer>
+                        <MenuIcon onClick={() => setNavMenuVisibility(true)} />
+                        <NavMenu
+                            visibility={navMenuVisibility}
+                            hideVisibilityFunction={() => setNavMenuVisibility(false)}
+                        />
+                    </MenuIconContainer>
+                </WrapperMobile>
+            )}
+        </>
     );
 };
 
@@ -125,6 +146,26 @@ const StyledSportTriviaIcon = styled.img<{ stopPulsing: boolean }>`
 
 const MenuIcon = styled.img.attrs({ src: burger })`
     cursor: pointer;
+`;
+
+const WrapperMobile = styled(FlexDivRow)`
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+`;
+
+const MenuIconContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    position: absolute;
+    right: 12px;
+`;
+
+const LogoContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
 `;
 
 export default DappHeader;

@@ -32,10 +32,10 @@ export const Container = styled(FlexDiv)`
     align-items: center;
     margin-top: 30px;
     margin-bottom: 20px;
-    @media (max-width: 500px) {
+    /* @media (max-width: 500px) {
         flex-direction: column;
         justify-content: center;
-    }
+    } */
 `;
 
 export const ParticipantsContainer = styled(FlexDiv)`
@@ -87,7 +87,7 @@ export const LeagueLogoContainer = styled(FlexDiv)`
 export const LeagueLogo = styled.i`
     width: 100%;
     height: 100%;
-    font-size: 60px;
+    font-size: 70px;
     object-fit: contain;
 `;
 
