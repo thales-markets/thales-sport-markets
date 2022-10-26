@@ -27,6 +27,8 @@ import {
     ContentInfoContainer,
     ContentInfo,
     BoldContent,
+    WarningContentInfo,
+    CloseRoundButton,
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -117,11 +119,22 @@ const Vault: React.FC = () => {
 
     const isAmountEntered = Number(amount) > 0;
     const insufficientBalance = Number(paymentTokenBalance) < Number(amount) || Number(paymentTokenBalance) === 0;
-    // const isRequestWithdrawalButtonDisabled = !isWalletConnected || isSubmitting;
+    const exceededVaultCap = vaultData && vaultData.availableAllocationNextRound < Number(amount);
+    const isWithdrawalRequested = userVaultData && userVaultData.isWithdrawalRequested;
+    const nothingToWithdraw = userVaultData && userVaultData.balanceCurrentRound === 0;
+    const isRequestWithdrawalButtonDisabled = !isWalletConnected || isSubmitting || nothingToWithdraw;
+    const isWithdrawButtonDisabled =
+        (isWithdrawalRequested && userVaultData && !userVaultData.isWithdrawRoundEnded) ||
+        !isWalletConnected ||
+        isSubmitting;
 
     const isDepositButtonDisabled =
-        selectedTab === VaultTab.DEPOSIT &&
-        (!isWalletConnected || !isAmountEntered || insufficientBalance || isSubmitting);
+        !isWalletConnected ||
+        !isAmountEntered ||
+        insufficientBalance ||
+        isSubmitting ||
+        isWithdrawalRequested ||
+        exceededVaultCap;
 
     useEffect(() => {
         const { signer, sUSDContract, sportVaultContract } = networkConnector;
@@ -206,7 +219,82 @@ const Vault: React.FC = () => {
         }
     };
 
-    const handleWithdraw = () => {};
+    const handleWithdrawalRequest = async () => {
+        const { sportVaultContract, signer } = networkConnector;
+        if (sportVaultContract && signer) {
+            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            setIsSubmitting(true);
+            try {
+                const sportVaultContractWithSigner = sportVaultContract.connect(signer);
+
+                const tx = await sportVaultContractWithSigner.withdrawalRequest({
+                    gasLimit: MAX_GAS_LIMIT,
+                });
+                const txResult = await tx.wait();
+
+                if (txResult && txResult.events) {
+                    toast.update(id, getSuccessToastOptions(t('vault.button.request-withdrawal-confirmation-message')));
+                    setAmount('');
+                    setIsSubmitting(false);
+                }
+            } catch (e) {
+                console.log(e);
+                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                setIsSubmitting(false);
+            }
+        }
+    };
+
+    const handleWithdraw = async () => {
+        const { sportVaultContract, signer } = networkConnector;
+        if (sportVaultContract && signer) {
+            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            setIsSubmitting(true);
+            try {
+                const sportVaultContractWithSigner = sportVaultContract.connect(signer);
+
+                const tx = await sportVaultContractWithSigner.claim({
+                    gasLimit: MAX_GAS_LIMIT,
+                });
+                const txResult = await tx.wait();
+
+                if (txResult && txResult.events) {
+                    toast.update(id, getSuccessToastOptions(t('vault.button.withdraw-confirmation-message')));
+                    setAmount('');
+                    setIsSubmitting(false);
+                }
+            } catch (e) {
+                console.log(e);
+                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                setIsSubmitting(false);
+            }
+        }
+    };
+
+    const closeRound = async () => {
+        const { sportVaultContract, signer } = networkConnector;
+        if (sportVaultContract && signer) {
+            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            setIsSubmitting(true);
+            try {
+                const sportVaultContractWithSigner = sportVaultContract.connect(signer);
+
+                const tx = await sportVaultContractWithSigner.closeRound({
+                    gasLimit: MAX_GAS_LIMIT,
+                });
+                const txResult = await tx.wait();
+
+                if (txResult && txResult.events) {
+                    toast.update(id, getSuccessToastOptions(t('vault.button.close-round-confirmation-message')));
+                    setIsSubmitting(false);
+                }
+            } catch (e) {
+                console.log(e);
+                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                setIsSubmitting(false);
+            }
+        }
+    };
 
     const getDepositSubmitButton = () => {
         if (!isWalletConnected) {
@@ -241,8 +329,22 @@ const Vault: React.FC = () => {
     };
 
     const getWithdrawSubmitButton = () => {
+        if (!isWalletConnected) {
+            return (
+                <SubmitButton onClick={() => openConnectModal?.()}>
+                    {t('common.wallet.connect-your-wallet')}
+                </SubmitButton>
+            );
+        }
+        if (isWithdrawalRequested) {
+            return (
+                <SubmitButton disabled={isWithdrawButtonDisabled} onClick={handleWithdraw}>
+                    {t('vault.button.withdraw-label')}
+                </SubmitButton>
+            );
+        }
         return (
-            <SubmitButton disabled={true} onClick={handleWithdraw}>
+            <SubmitButton disabled={isRequestWithdrawalButtonDisabled} onClick={handleWithdrawalRequest}>
                 {t('vault.button.request-withdrawal-label')}
             </SubmitButton>
         );
@@ -274,11 +376,16 @@ const Vault: React.FC = () => {
                                 <RoundInfoContainer>
                                     <RoundInfoLabel>{t('vault.round-end-label')}:</RoundInfoLabel>
                                     <RoundInfo>
-                                        <TimeRemaining
-                                            end={vaultData.roundEndTime * 1000}
-                                            fontSize={20}
-                                            showFullCounter
-                                        />
+                                        {vaultData.isRoundEnded ? (
+                                            t('vault.round-ended-label')
+                                        ) : (
+                                            <TimeRemaining end={vaultData.roundEndTime} fontSize={20} showFullCounter />
+                                        )}{' '}
+                                        {vaultData.isRoundEnded && (
+                                            <CloseRoundButton disabled={isSubmitting} onClick={closeRound}>
+                                                {t('vault.button.close-round-label')}
+                                            </CloseRoundButton>
+                                        )}
                                     </RoundInfo>
                                 </RoundInfoContainer>
                             </RoundInfoWrapper>
@@ -313,6 +420,22 @@ const Vault: React.FC = () => {
                                         }}
                                     />
                                 </ContentInfo>
+                                {isWithdrawalRequested && (
+                                    <WarningContentInfo>
+                                        <Trans
+                                            i18nKey="vault.withdrawal-request-label"
+                                            components={{
+                                                bold: <BoldContent />,
+                                            }}
+                                            values={{
+                                                amount: formatCurrencyWithSign(
+                                                    USD_SIGN,
+                                                    userVaultData.withdrawalAmount
+                                                ),
+                                            }}
+                                        />
+                                    </WarningContentInfo>
+                                )}
                             </ContentInfoContainer>
                         )}
                         <TabContainer>
@@ -333,36 +456,52 @@ const Vault: React.FC = () => {
                         {selectedTab === VaultTab.DEPOSIT && (
                             <>
                                 <ContentInfo>{t('vault.deposit-message')}</ContentInfo>
+                                {isWithdrawalRequested && (
+                                    <WarningContentInfo>
+                                        <Trans i18nKey="vault.deposit-warning" />
+                                    </WarningContentInfo>
+                                )}
                                 <InputContainer>
                                     <InputLabel>{t('vault.deposit-amount-label')}:</InputLabel>
                                     <ValidationTooltip
-                                        open={insufficientBalance}
-                                        title={t(`common.errors.insufficient-balance`) as string}
+                                        open={insufficientBalance || exceededVaultCap}
+                                        title={
+                                            t(
+                                                `${
+                                                    insufficientBalance
+                                                        ? 'common.errors.insufficient-balance'
+                                                        : 'vault.deposit-vault-cap-error'
+                                                }`
+                                            ) as string
+                                        }
                                     >
                                         <NumericInput
                                             value={amount}
-                                            disabled={isSubmitting}
+                                            disabled={isSubmitting || isWithdrawalRequested}
                                             onChange={(_, value) => setAmount(value)}
                                             placeholder={t('vault.deposit-amount-placeholder')}
+                                            currencyLabel={PAYMENT_CURRENCY}
                                         />
                                     </ValidationTooltip>
                                 </InputContainer>
                                 {vaultData && (
                                     <>
-                                        <ContentInfo>
-                                            <Trans
-                                                i18nKey="vault.next-round-start-label"
-                                                components={{
-                                                    counter: (
-                                                        <TimeRemaining
-                                                            end={vaultData.roundEndTime * 1000}
-                                                            fontSize={18}
-                                                            showFullCounter
-                                                        />
-                                                    ),
-                                                }}
-                                            />
-                                        </ContentInfo>
+                                        {!vaultData.isRoundEnded && (
+                                            <ContentInfo>
+                                                <Trans
+                                                    i18nKey="vault.next-round-start-label"
+                                                    components={{
+                                                        counter: (
+                                                            <TimeRemaining
+                                                                end={vaultData.roundEndTime}
+                                                                fontSize={18}
+                                                                showFullCounter
+                                                            />
+                                                        ),
+                                                    }}
+                                                />
+                                            </ContentInfo>
+                                        )}
                                         <VaultFilledText>
                                             <Trans
                                                 i18nKey="vault.vault-filled-label"
@@ -389,7 +528,11 @@ const Vault: React.FC = () => {
                             <>
                                 {vaultData && userVaultData && !userVaultData.isWithdrawalRequested && (
                                     <>
-                                        {userVaultData.balanceCurrentRound > 0 ? (
+                                        {nothingToWithdraw ? (
+                                            <ContentInfo>
+                                                <Trans i18nKey="vault.nothing-to-withdraw-label" />
+                                            </ContentInfo>
+                                        ) : (
                                             <>
                                                 <ContentInfo>
                                                     <Trans
@@ -408,25 +551,23 @@ const Vault: React.FC = () => {
                                                 <ContentInfo>
                                                     <Trans i18nKey="vault.withdrawal-message" />
                                                 </ContentInfo>
-                                                <ContentInfo>
-                                                    <Trans
-                                                        i18nKey="vault.withdraw-round-end-label"
-                                                        components={{
-                                                            counter: (
-                                                                <TimeRemaining
-                                                                    end={vaultData.roundEndTime * 1000}
-                                                                    fontSize={18}
-                                                                    showFullCounter
-                                                                />
-                                                            ),
-                                                        }}
-                                                    />
-                                                </ContentInfo>
+                                                {!vaultData.isRoundEnded && (
+                                                    <ContentInfo>
+                                                        <Trans
+                                                            i18nKey="vault.withdraw-round-end-label"
+                                                            components={{
+                                                                counter: (
+                                                                    <TimeRemaining
+                                                                        end={vaultData.roundEndTime}
+                                                                        fontSize={18}
+                                                                        showFullCounter
+                                                                    />
+                                                                ),
+                                                            }}
+                                                        />
+                                                    </ContentInfo>
+                                                )}
                                             </>
-                                        ) : (
-                                            <ContentInfo>
-                                                <Trans i18nKey="vault.nothing-to-withdraw-label" />
-                                            </ContentInfo>
                                         )}
                                     </>
                                 )}
@@ -434,32 +575,38 @@ const Vault: React.FC = () => {
                                     <>
                                         <ContentInfo>
                                             <Trans
-                                                i18nKey="vault.withdrawal-requested-message"
+                                                i18nKey={`${
+                                                    userVaultData.isWithdrawRoundEnded
+                                                        ? 'vault.withdrawal-available-message'
+                                                        : 'vault.withdrawal-requested-message'
+                                                }`}
                                                 components={{
                                                     bold: <BoldContent />,
                                                 }}
                                                 values={{
                                                     amount: formatCurrencyWithSign(
                                                         USD_SIGN,
-                                                        userVaultData.balanceCurrentRound
+                                                        userVaultData.withdrawalAmount
                                                     ),
                                                 }}
                                             />
                                         </ContentInfo>
-                                        <ContentInfo>
-                                            <Trans
-                                                i18nKey="vault.withdraw-round-end-label"
-                                                components={{
-                                                    counter: (
-                                                        <TimeRemaining
-                                                            end={vaultData.roundEndTime * 1000}
-                                                            fontSize={18}
-                                                            showFullCounter
-                                                        />
-                                                    ),
-                                                }}
-                                            />
-                                        </ContentInfo>
+                                        {!userVaultData.isWithdrawRoundEnded && !vaultData.isRoundEnded && (
+                                            <ContentInfo>
+                                                <Trans
+                                                    i18nKey="vault.withdraw-round-end-label"
+                                                    components={{
+                                                        counter: (
+                                                            <TimeRemaining
+                                                                end={vaultData.roundEndTime}
+                                                                fontSize={18}
+                                                                showFullCounter
+                                                            />
+                                                        ),
+                                                    }}
+                                                />
+                                            </ContentInfo>
+                                        )}
                                     </>
                                 )}
                                 <ButtonContainer>{getWithdrawSubmitButton()}</ButtonContainer>

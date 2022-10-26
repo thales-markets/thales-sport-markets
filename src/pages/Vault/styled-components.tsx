@@ -1,5 +1,4 @@
 import { Tooltip, withStyles } from '@material-ui/core';
-import React from 'react';
 import styled from 'styled-components';
 import {
     FlexDivCentered,
@@ -21,6 +20,9 @@ export const Container = styled(FlexDivRow)`
     align-items: start;
     @media (max-width: 1440px) {
         width: 95%;
+    }
+    @media (max-width: 767px) {
+        flex-direction: column;
     }
 `;
 
@@ -44,6 +46,10 @@ export const ContentContainer = styled(FlexDivColumn)`
 export const LeftContainer = styled(ContentContainer)`
     margin-right: 20px;
     padding-top: 30px;
+    @media (max-width: 767px) {
+        margin-right: 0px;
+        padding-top: 0px;
+    }
 `;
 
 export const RightContainer = styled(ContentContainer)`
@@ -83,6 +89,10 @@ export const ContentInfo = styled.p`
     text-align: center;
 `;
 
+export const WarningContentInfo = styled(ContentInfo)`
+    color: #ffcc00;
+`;
+
 export const BoldContent = styled.span`
     font-weight: 600;
 `;
@@ -97,25 +107,6 @@ export const Title = styled.span`
     margin-bottom: 40px;
 `;
 
-export const Copy = styled.div`
-    font-style: normal;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 20px;
-    margin-bottom: 15px;
-    color: ${(props) => props.theme.textColor.primary};
-    p {
-        margin-bottom: 10px;
-    }
-    a {
-        cursor: pointer;
-        color: #91bced;
-        &:hover {
-            color: #00f9ff;
-        }
-    }
-`;
-
 export const VaultFilledText = styled(ContentInfo)`
     margin-top: 20px;
     margin-bottom: 10px;
@@ -128,11 +119,8 @@ export const VaultFilledGraphicContainer = styled(FlexDivStart)`
     background: rgba(100, 217, 254, 0.2);
     border-radius: 15px;
     margin-bottom: 10px;
-    @media (max-width: 767px) {
-        width: 300px;
-    }
     @media (max-width: 575px) {
-        width: 200px;
+        width: 250px;
     }
 `;
 
@@ -146,19 +134,13 @@ export const VaultFilledGraphicPercentage = styled(FlexDivStart)<{ width: number
     top: 2px;
     background: linear-gradient(270deg, #3fd1ff 16.01%, #15bba7 89.24%);
     border-radius: 15px;
-    @media (max-width: 767px) {
-        max-width: 300px;
-    }
     @media (max-width: 575px) {
-        max-width: 200px;
+        max-width: 250px;
     }
 `;
 
-export const SubmitButton = styled.button<{ isNavigation?: boolean }>`
-    background: ${(props) =>
-        props.isNavigation
-            ? 'linear-gradient(88.84deg, #5fc694 19.98%, #1ca6b9 117.56%)'
-            : 'linear-gradient(88.84deg, #2FC9DD 19.98%, #1CA6B9 117.56%);'};
+export const SubmitButton = styled.button`
+    background: linear-gradient(88.84deg, #2fc9dd 19.98%, #1ca6b9 117.56%);
     border-radius: 8px;
     margin: 20px 20px;
     font-size: 20px;
@@ -174,6 +156,16 @@ export const SubmitButton = styled.button<{ isNavigation?: boolean }>`
         opacity: 0.4;
         cursor: default;
     }
+`;
+
+export const CloseRoundButton = styled(SubmitButton)`
+    margin: 0;
+    width: auto;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 12px;
+    top: -2px;
+    position: relative;
 `;
 
 export const ButtonContainer = styled(FlexDivCentered)<{ mobileDirection?: string }>`
@@ -202,7 +194,7 @@ export const InputContainer = styled(FlexDivColumnCentered)`
         width: 300px;
         height: 34px;
         padding-left: 10px;
-        padding-right: 10px;
+        padding-right: 60px;
         font-size: 18px;
         outline: none;
         &::placeholder {
@@ -212,6 +204,9 @@ export const InputContainer = styled(FlexDivColumnCentered)`
             border: 2px solid ${(props) => props.theme.borderColor.quaternary};
         }
     }
+    .currency-label {
+        padding: 9px 10px 10px 0;
+    }
 `;
 
 export const InputLabel = styled.p`
@@ -220,17 +215,6 @@ export const InputLabel = styled.p`
     font-size: 16px;
     margin-bottom: 6px;
     color: ${(props) => props.theme.textColor.primary};
-`;
-
-export const Link = styled.a`
-    color: ${(props) => props.theme.textColor.primary};
-    &:hover {
-        color: ${(props) => props.theme.textColor.quaternary};
-    }
-`;
-
-export const OptionsContainer = styled(FlexDivColumnCentered)`
-    align-items: center;
 `;
 
 export const ValidationTooltip = withStyles(() => ({
@@ -248,34 +232,6 @@ export const LoaderContainer = styled(FlexDivCentered)`
     position: relative;
     min-height: 298px;
     width: 100%;
-`;
-
-export const TextLink = styled.a`
-    color: #91bced;
-    &:hover {
-        color: #00f9ff;
-    }
-`;
-
-export const QuizLink: React.FC<{ href: string }> = ({ children, href }) => {
-    return (
-        <TextLink target="_blank" rel="noreferrer" href={href}>
-            {children}
-        </TextLink>
-    );
-};
-
-export const SelectContainer = styled.div`
-    margin-left: 1px;
-    width: 230px;
-`;
-
-export const PeriodContainer = styled(FlexDivStart)`
-    align-items: center;
-    @media screen and (max-width: 767px) {
-        flex-direction: column;
-        margin-bottom: 10px;
-    }
 `;
 
 export const TabContainer = styled(FlexDiv)`

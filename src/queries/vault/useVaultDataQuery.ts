@@ -18,6 +18,8 @@ const useVaultDataQuery = (networkId: NetworkId, options?: UseQueryOptions<Vault
                 allocationNextRound: 0,
                 allocationNextRoundPercentage: 0,
                 allocationCurrentRound: 0,
+                isRoundEnded: false,
+                availableAllocationNextRound: 0,
             };
 
             try {
@@ -37,15 +39,17 @@ const useVaultDataQuery = (networkId: NetworkId, options?: UseQueryOptions<Vault
                     sportVaultContract?.roundStartTime(vaultData.round),
                     sportVaultContract?.roundEndTime(vaultData.round),
                     sportVaultContract?.allocationPerRound(vaultData.round),
-                    sportVaultContract?.allocationPerRound(vaultData.round + 1),
+                    sportVaultContract?.capPerRound(vaultData.round + 1),
                 ]);
 
-                vaultData.roundStartTime = Number(roundStartTime);
-                vaultData.roundEndTime = Number(roundEndTime);
+                vaultData.roundStartTime = Number(roundStartTime) * 1000;
+                vaultData.roundEndTime = Number(roundEndTime) * 1000;
                 vaultData.allocationCurrentRound = bigNumberFormatter(allocationCurrentRound);
                 vaultData.allocationNextRound = bigNumberFormatter(allocationNextRound);
                 vaultData.allocationNextRoundPercentage =
                     (vaultData.allocationNextRound / vaultData.maxAllowedDeposit) * 100;
+                vaultData.isRoundEnded = new Date().getTime() > vaultData.roundEndTime;
+                vaultData.availableAllocationNextRound = vaultData.maxAllowedDeposit - vaultData.allocationNextRound;
 
                 return vaultData;
             } catch (e) {
