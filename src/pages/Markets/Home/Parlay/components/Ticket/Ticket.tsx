@@ -48,10 +48,10 @@ import {
     SummaryLabel,
     SummaryValue,
     XButton,
+    InfoTooltip,
 } from '../styled-components';
 import Payment from '../Payment';
 import { removeAll } from 'redux/modules/parlay';
-import Tooltip from 'components/Tooltip';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -427,12 +427,14 @@ const Ticket: React.FC<TicketProps> = ({ markets }) => {
         <>
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
-                <SummaryValue>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
-                <Tooltip
-                    overlay={getQuoteTooltipText()}
-                    iconFontSize={10}
-                    customIconStyling={{ marginTop: '-10px', display: 'flex', marginLeft: '3px' }}
-                />
+                <InfoTooltip
+                    open={inputRefVisible && totalQuote === parlayAmmData?.maxSupportedOdds}
+                    title={getQuoteTooltipText()}
+                    placement={'top'}
+                    arrow={true}
+                >
+                    <SummaryValue>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
+                </InfoTooltip>
                 <SummaryLabel alignRight={true}>{t('markets.parlay.clear')}:</SummaryLabel>
                 <XButton
                     margin={'0 0 4px 5px'}
