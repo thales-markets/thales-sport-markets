@@ -171,16 +171,16 @@
         },
         "filter-label": {
             "global": {
-                "allmarkets": "Todos los mercados",
-                "openmarkets": "Mercados abiertos",
-                "resolvedmarkets": "Mercados resueltos",
                 "yourpositions": "Tus posiciones",
                 "claim": "Reclamable",
                 "history": "Tus transacciones",
-                "canceled": "Cancelados",
                 "archivedmarkets": "Mercados archivados",
                 "tooltip": "Mercados resueltos hace más de 7 días",
-                "pendingmarkets": "Pendiente"
+                "pendingmarkets": "Pendiente",
+                "openmarkets": "Todos",
+                "resolvedmarkets": "Acabado",
+                "allmarkets": "Todos",
+                "canceled": "En pausa / Cancelado"
             },
             "sport": {
                 "all": "Todos los deportes",
