@@ -311,7 +311,7 @@
                 "availability": "Not enough liquidity for this amount",
                 "no-funds": "Please ensure your wallet has enough funds",
                 "risk-per-comb": "Risk per combination exceeded",
-                "not-supported": "Not supported validation error {{error}}"
+                "not-supported": "Not supported validation error: {{error}}"
             }
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",

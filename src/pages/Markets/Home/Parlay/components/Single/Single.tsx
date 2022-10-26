@@ -14,14 +14,14 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
-import { AMMPosition, AvailablePerSide, Balances, ParlaysMarket } from 'types/markets';
+import { AMMPosition, AvailablePerSide, Balances, ParlayPayment, ParlaysMarket } from 'types/markets';
 import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
@@ -54,15 +54,19 @@ import {
     SummaryValue,
 } from '../styled-components';
 import Payment from '../Payment';
+import { setPayment } from 'redux/modules/parlay';
 
 type SingleProps = {
     market: ParlaysMarket;
+    parlayPayment: ParlayPayment;
 };
 
-const Single: React.FC<SingleProps> = ({ market }) => {
+const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
+
+    const dispatch = useDispatch();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -73,10 +77,12 @@ const Single: React.FC<SingleProps> = ({ market }) => {
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     const [hasAllowance, setAllowance] = useState<boolean>(false);
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
-    const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(COLLATERALS_INDEX.sUSD);
-    const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(false);
+    const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
+        parlayPayment.selectedStableIndex
+    );
+    const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(parlayPayment.isVoucherSelected);
     const [tokenAmount, setTokenAmount] = useState<number>(0);
-    const [usdAmountValue, setUsdAmountValue] = useState<number | string>('');
+    const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [maxUsdAmount, setMaxUsdAmount] = useState<number>(0);
     const [availableUsdAmount, setAvailableUsdAmount] = useState<number>(0);
     const [isFetching, setIsFetching] = useState<boolean>(false);
@@ -119,7 +125,6 @@ const Single: React.FC<SingleProps> = ({ market }) => {
 
     const overtimeVoucher = useMemo(() => {
         if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
-            setIsVoucherSelected(true);
             return overtimeVoucherQuery.data;
         }
         setIsVoucherSelected(false);
@@ -141,6 +146,11 @@ const Single: React.FC<SingleProps> = ({ market }) => {
         overtimeVoucher,
         isVoucherSelected,
     ]);
+
+    useEffect(() => {
+        // Used for transition between Single and Ticket
+        dispatch(setPayment({ selectedStableIndex, isVoucherSelected, amountToBuy: usdAmountValue }));
+    }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
 
     const fetchAmmQuote = useCallback(
         async (amountForQuote: number) => {
@@ -496,6 +506,8 @@ const Single: React.FC<SingleProps> = ({ market }) => {
                 <SummaryValue>{formatMarketOdds(selectedOddsType, getPositionOdds(market))}</SummaryValue>
             </RowSummary>
             <Payment
+                defaultSelectedStableIndex={selectedStableIndex}
+                defaultIsVoucherSelected={isVoucherSelected}
                 onChangeCollateral={(index) => setSelectedStableIndex(index)}
                 setIsVoucherSelectedProp={setIsVoucherSelected}
             />
