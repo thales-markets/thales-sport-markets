@@ -88,6 +88,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
 
 const Wrapper = styled(FlexDivColumn)`
     margin-top: 30px;
+    width: 100%;
 `;
 
 export default MarketDetails;
