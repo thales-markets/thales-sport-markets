@@ -370,27 +370,39 @@ const Vault: React.FC = () => {
                     {vaultData && (
                         <>
                             <RoundInfoWrapper>
-                                <RoundInfoContainer>
-                                    <RoundInfoLabel>{t('vault.round-allocation-label')}:</RoundInfoLabel>
-                                    <RoundInfo>
-                                        {formatCurrencyWithSign(USD_SIGN, vaultData.allocationCurrentRound)}
-                                    </RoundInfo>
-                                </RoundInfoContainer>
-                                <RoundInfoContainer>
-                                    <RoundInfoLabel>{t('vault.round-end-label')}:</RoundInfoLabel>
-                                    <RoundInfo>
-                                        {vaultData.isRoundEnded ? (
-                                            t('vault.round-ended-label')
-                                        ) : (
-                                            <TimeRemaining end={vaultData.roundEndTime} fontSize={20} showFullCounter />
-                                        )}{' '}
-                                        {vaultData.isRoundEnded && (
-                                            <CloseRoundButton disabled={isSubmitting} onClick={closeRound}>
-                                                {t('vault.button.close-round-label')}
-                                            </CloseRoundButton>
-                                        )}
-                                    </RoundInfo>
-                                </RoundInfoContainer>
+                                {vaultData.vaultStarted ? (
+                                    <>
+                                        <RoundInfoContainer>
+                                            <RoundInfoLabel>{t('vault.round-allocation-label')}:</RoundInfoLabel>
+                                            <RoundInfo>
+                                                {formatCurrencyWithSign(USD_SIGN, vaultData.allocationCurrentRound)}
+                                            </RoundInfo>
+                                        </RoundInfoContainer>
+                                        <RoundInfoContainer>
+                                            <RoundInfoLabel>{t('vault.round-end-label')}:</RoundInfoLabel>
+                                            <RoundInfo>
+                                                {vaultData.isRoundEnded ? (
+                                                    t('vault.round-ended-label')
+                                                ) : (
+                                                    <TimeRemaining
+                                                        end={vaultData.roundEndTime}
+                                                        fontSize={20}
+                                                        showFullCounter
+                                                    />
+                                                )}{' '}
+                                                {vaultData.isRoundEnded && (
+                                                    <CloseRoundButton disabled={isSubmitting} onClick={closeRound}>
+                                                        {t('vault.button.close-round-label')}
+                                                    </CloseRoundButton>
+                                                )}
+                                            </RoundInfo>
+                                        </RoundInfoContainer>
+                                    </>
+                                ) : (
+                                    <RoundInfoContainer>
+                                        <RoundInfo>{t('vault.vault-not-started-message')}</RoundInfo>
+                                    </RoundInfoContainer>
+                                )}
                             </RoundInfoWrapper>
                         </>
                     )}
@@ -412,20 +424,22 @@ const Vault: React.FC = () => {
                         <>
                             {userVaultData && (
                                 <ContentInfoContainer>
-                                    <ContentInfo>
-                                        <Trans
-                                            i18nKey="vault.your-round-allocation-label"
-                                            components={{
-                                                bold: <BoldContent />,
-                                            }}
-                                            values={{
-                                                amount: formatCurrencyWithSign(
-                                                    USD_SIGN,
-                                                    userVaultData.balanceCurrentRound
-                                                ),
-                                            }}
-                                        />
-                                    </ContentInfo>
+                                    {vaultData.vaultStarted && (
+                                        <ContentInfo>
+                                            <Trans
+                                                i18nKey="vault.your-round-allocation-label"
+                                                components={{
+                                                    bold: <BoldContent />,
+                                                }}
+                                                values={{
+                                                    amount: formatCurrencyWithSign(
+                                                        USD_SIGN,
+                                                        userVaultData.balanceCurrentRound
+                                                    ),
+                                                }}
+                                            />
+                                        </ContentInfo>
+                                    )}
                                     <ContentInfo>
                                         <Trans
                                             i18nKey="vault.your-next-round-allocation-label"
