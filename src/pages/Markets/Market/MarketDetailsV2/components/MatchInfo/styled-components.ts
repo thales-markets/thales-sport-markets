@@ -32,16 +32,17 @@ export const Container = styled(FlexDiv)`
     align-items: center;
     margin-top: 30px;
     margin-bottom: 20px;
-    /* @media (max-width: 500px) {
+    @media (max-width: 500px) {
         flex-direction: column;
         justify-content: center;
-    } */
+    }
 `;
 
 export const ParticipantsContainer = styled(FlexDiv)`
     flex-direction: row;
     @media (max-width: 500px) {
         margin-bottom: 13px;
+        margin-left: 20px;
     }
 `;
 
@@ -60,8 +61,8 @@ export const ParticipantLogoContainer = styled.div<{ awayTeam?: boolean; isWinne
     justify-content: center;
     border: 2.5px solid #5f6180;
     @media (max-width: 500px) {
+        ${(_props) => (_props?.awayTeam ? 'margin-left: -3vw;' : '')}
         margin-right: 0px;
-        margin-bottom: 13px;
         background-color: ${MAIN_COLORS.LIGHT_GRAY};
     }
 `;
@@ -79,7 +80,7 @@ export const LeagueLogoContainer = styled(FlexDiv)`
     justify-content: center;
     align-items: center;
     @media (max-width: 500px) {
-        margin-right: 0px;
+        margin-right: 20px;
         margin-bottom: 13px;
     }
 `;
@@ -89,6 +90,9 @@ export const LeagueLogo = styled.i`
     height: 100%;
     font-size: 70px;
     object-fit: contain;
+    @media (max-width: 500px) {
+        font-size: 80px;
+    }
 `;
 
 export const MatchTimeContainer = styled.div`
@@ -128,4 +132,24 @@ export const MarketNotice = styled.span`
     text-align: center;
     margin-bottom: 15px;
     margin-top: -5px;
+`;
+
+export const MobileContainer = styled(FlexDiv)`
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+`;
+
+export const MatchTimeContainerMobile = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    margin-left: 15px;
+    @media (max-width: 500px) {
+        margin-left: 0px;
+        margin-top: 10px;
+        margin-bottom: 13px;
+    }
 `;
