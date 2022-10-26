@@ -133,24 +133,6 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                 </FilterTypeContainer>
                 <FilterTypeContainer timeFilters={true}>
                     <TimeFilterContainer
-                        selected={selectedPeriod == 1}
-                        onClick={() => {
-                            if (selectedPeriod == 1) {
-                                setDateFilter(0);
-                                setDateParam('');
-                                setSelectedPeriod(0);
-                            } else {
-                                const calculatedDate = addHoursToCurrentDate(1);
-                                setDateFilter(calculatedDate.getTime());
-                                setDateParam('1hour');
-                                setSelectedPeriod(1);
-                            }
-                        }}
-                    >
-                        <Circle />
-                        <Label>1h</Label>
-                    </TimeFilterContainer>
-                    <TimeFilterContainer
                         selected={selectedPeriod == 3}
                         onClick={() => {
                             if (selectedPeriod == 3) {
@@ -233,12 +215,12 @@ export const Filters = styled(FlexDivRow)`
 `;
 
 export const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: boolean }>`
-    width: ${(props) => (props.timeFilters ? '35%' : '65%')};
+    width: ${(props) => (props.timeFilters ? '30%' : '70%')};
     justify-content: ${(props) => (props.timeFilters ? 'space-evenly' : 'space-around')};
 `;
 
 export const GlobalFilter = styled.span<{ selected?: boolean }>`
-    margin: 0px 5px;
+    margin: 0px 2px;
     text-transform: uppercase;
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
     &:hover {
@@ -248,7 +230,7 @@ export const GlobalFilter = styled.span<{ selected?: boolean }>`
 `;
 
 export const TimeFilterContainer = styled(FlexDivRow)<{ selected: boolean }>`
-    margin: 0px 5px;
+    margin: 0px 2px;
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
     & > div {
         background-color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};

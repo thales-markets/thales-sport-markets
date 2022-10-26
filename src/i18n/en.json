@@ -179,7 +179,7 @@
                 "yourpositions": "Your positions",
                 "claim": "Claimable",
                 "history": "Your transactions",
-                "canceled": "Cancelled",
+                "canceled": "Paused / Cancelled",
                 "archivedmarkets": "Archived markets",
                 "tooltip": "Markets resolved more than 7 days ago"
             },

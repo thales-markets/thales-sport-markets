@@ -29,7 +29,6 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) 
     const language = i18n.language;
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const marketsMap = new Map();
-
     const marketsPartintionedByTag = _(markets).groupBy('tags[0]').values().value();
 
     marketsPartintionedByTag.forEach((marketArrayByTag) =>

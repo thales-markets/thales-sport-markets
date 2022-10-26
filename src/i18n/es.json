@@ -290,7 +290,9 @@
                 "amount-exceeded": "La cantidad excedió la cantidad disponible en AMM",
                 "max-quote": "La cotización máxima es {{value}}",
                 "min-quote": "La cotización mínima es {{value}}",
-                "availability": "Baja disponibilidad para la posición de los mercados"
+                "availability": "Baja disponibilidad para la posición de los mercados",
+                "not-supported": "Error de validación no compatible {{error}}",
+                "risk-per-comb": "Riesgo por combinación excedido"
             },
             "fee": "Costo total",
             "payout": "Total recibido",
