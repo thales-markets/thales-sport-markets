@@ -435,5 +435,22 @@
         "best-odds": "Unisciti alla rivoluzione dei mercati sportivi di Web3",
         "join-discord": "Bisogno di qualche aiuto? Unisciti alla nostra discordia",
         "info-text-2": "Quando le entità centralizzate cadono, la trasparenza è fondamentale. Tutto il nostro codice è pubblico e gli smart contract possono essere rivisti da chiunque"
+    },
+    "mint-world-cup-nft": {
+        "free-entry": "1 ingresso gratuito in FIFA Royale",
+        "incentives": "INCENTIVI",
+        "stake-thales": "Palo THALES",
+        "choose-nft": "Scegli NFT",
+        "retweet": "Ritwittare",
+        "get-thales": "Prendi THALES",
+        "follow": "Seguire",
+        "stake-10-thales": "Per coniare un NFT, devi puntare almeno 10 THALES.",
+        "eligible-text": "Ehi, ora puoi coniare la tua squadra preferita NFT.",
+        "minting-is-free": "Il conio è gratuito, puoi coniare solo un NFT per portafoglio. Questo NFT non è trasferibile.",
+        "go-to-twitter": "Vai su Twitter",
+        "second-option": "La seconda opzione per metterti nella lista consentita è completare i seguenti passaggi:",
+        "tag-3-friends": "Tagga 3 amici, condividi il tuo indirizzo ETH e dicci per quale paese fai il tifo!",
+        "not-eligible-text": "Sfortunatamente non sei idoneo per il conio NFT.",
+        "mint-nft-button": "Come NFT"
     }
 }

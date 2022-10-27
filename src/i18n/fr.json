@@ -531,5 +531,22 @@
         "open-overtime": "Lancer Overtime",
         "join-discord": "Besoin d'aide ? Rejoignez notre Discord",
         "read-now": "Consulter"
+    },
+    "mint-world-cup-nft": {
+        "follow": "Suivre",
+        "incentives": "DES INCITATIONS",
+        "not-eligible-text": "Malheureusement, vous n'êtes pas éligible à la frappe NFT.",
+        "go-to-twitter": "Aller sur Twitter",
+        "retweet": "Retweet",
+        "free-entry": "1 entrée gratuite à FIFA Royale",
+        "minting-is-free": "La frappe est gratuite, vous ne pouvez frapper qu'un seul NFT par portefeuille. Ce NFT est incessible.",
+        "stake-10-thales": "Pour frapper un NFT, vous devez miser au moins 10 THALES.",
+        "get-thales": "Obtenez THALES",
+        "tag-3-friends": "Identifiez 3 amis, partagez votre adresse ETH et dites-nous pour quel pays vous encouragez !",
+        "second-option": "La deuxième option pour vous inscrire sur la liste d'autorisation consiste à suivre les étapes suivantes :",
+        "eligible-text": "Hé, vous pouvez maintenant frapper votre équipe préférée NFT.",
+        "mint-nft-button": "Comme NFT",
+        "stake-thales": "Pieu THALES",
+        "choose-nft": "Choisissez NFT"
     }
 }

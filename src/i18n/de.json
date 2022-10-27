@@ -429,5 +429,22 @@
         "open-overtime": "Overtime Markets öffnen",
         "join-discord": "Brauchst du Hilfe? Tritt unserem Discord bei",
         "read-now": "Jetzt lesen"
+    },
+    "mint-world-cup-nft": {
+        "follow": "Folgen",
+        "retweet": "Retweeten",
+        "tag-3-friends": "Markiere 3 Freunde, teile deine ETH-Adresse und sag uns, welches Land du anfeuerst!",
+        "get-thales": "Holen Sie sich THALES",
+        "minting-is-free": "Minting ist kostenlos, Sie können nur eine NFT pro Wallet prägen. Diese NFT ist nicht übertragbar.",
+        "stake-thales": "Pfahl THALES",
+        "stake-10-thales": "Um einen NFT zu prägen, müssen Sie mindestens 10 THALES einsetzen.",
+        "choose-nft": "Wählen Sie NFT",
+        "go-to-twitter": "Gehen Sie zu Twitter",
+        "free-entry": "1 kostenloser Eintritt in FIFA Royale",
+        "incentives": "ANREIZE",
+        "second-option": "Die zweite Option, um Sie auf die Positivliste zu setzen, besteht darin, die folgenden Schritte auszuführen:",
+        "not-eligible-text": "Leider sind Sie nicht berechtigt, NFT zu prägen.",
+        "mint-nft-button": "Wie NFT",
+        "eligible-text": "Hey, Sie können jetzt Ihr Lieblingsteam NFT prägen."
     }
 }

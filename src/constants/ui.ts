@@ -1,15 +1,18 @@
 import { NavMenuItem, ThemeInterface } from 'types/ui';
 import lightTheme from 'styles/themes/light';
 import darkTheme from 'styles/themes/dark';
+import worldCupTheme from 'styles/themes/worldcup';
 
 export enum Theme {
     LIGHT,
     DARK,
+    WORLDCUP,
 }
 
 export const ThemeMap: Record<Theme, ThemeInterface> = {
     [Theme.LIGHT]: lightTheme,
     [Theme.DARK]: darkTheme,
+    [Theme.WORLDCUP]: worldCupTheme,
 };
 
 export const ODDS_COLOR = {

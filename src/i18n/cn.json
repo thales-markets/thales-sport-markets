@@ -432,5 +432,22 @@
         "open-overtime": "启动Overtime市场",
         "join-discord": "需要帮助?请加入我们的discord",
         "read-now": "开始阅读"
+    },
+    "mint-world-cup-nft": {
+        "minting-is-free": "铸造是免费的，每个钱包只能铸造一个 NFT。此 NFT 不可转让。",
+        "stake-10-thales": "为了铸造 NFT，您需要至少质押 10 THALES。",
+        "incentives": "激励措施",
+        "get-thales": "获得泰雷兹",
+        "second-option": "让您加入许可名单的第二个选项是完成以下步骤：",
+        "retweet": "转推",
+        "follow": "跟随",
+        "go-to-twitter": "去推特",
+        "free-entry": "1 次免费进入 FIFA Royale",
+        "choose-nft": "选择 NFT",
+        "mint-nft-button": "像 NFT",
+        "eligible-text": "嘿，你现在可以铸造你最喜欢的团队 NFT。",
+        "stake-thales": "股份 THALES",
+        "not-eligible-text": "不幸的是，您没有资格进行 NFT 铸造。",
+        "tag-3-friends": "标记 3 位好友，分享您的 ETH 地址，并告诉我们您为哪个国家而欢呼！"
     }
 }

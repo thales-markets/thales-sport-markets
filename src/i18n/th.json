@@ -433,5 +433,22 @@
         "open-overtime": "เปิด Overtime markets",
         "join-discord": "ถ้าหากต้องการความช่วยเหลือ โปรดเข้าร่วม Discord ของเรา",
         "read-now": "อ่าน"
+    },
+    "mint-world-cup-nft": {
+        "not-eligible-text": "ขออภัย คุณไม่มีสิทธิ์ใช้ NFT minting",
+        "eligible-text": "เฮ้ ตอนนี้คุณสามารถสร้าง NFT ทีมโปรดของคุณได้แล้ว",
+        "mint-nft-button": "ชอบ NFT",
+        "stake-10-thales": "ในการสร้าง NFT คุณต้องเดิมพันอย่างน้อย 10 THALES",
+        "follow": "ติดตาม",
+        "free-entry": "ฟรี 1 รายการใน FIFA Royale",
+        "retweet": "รีทวีต",
+        "go-to-twitter": "ไปที่ Twitter",
+        "choose-nft": "เลือก NFT",
+        "stake-thales": "เดิมพัน THALES",
+        "get-thales": "รับ THALES",
+        "incentives": "สิ่งจูงใจ",
+        "tag-3-friends": "แท็กเพื่อน 3 คน แชร์ที่อยู่ ETH ของคุณ และบอกเราว่าคุณเชียร์ประเทศใด!",
+        "second-option": "ตัวเลือกที่สองเพื่อให้คุณอยู่ในรายการที่อนุญาตคือทำตามขั้นตอนต่อไปนี้:",
+        "minting-is-free": "การทำเหรียญฟรี คุณสามารถสร้าง NFT ได้เพียงหนึ่ง NFT ต่อกระเป๋าเงิน NFT นี้ไม่สามารถโอนได้"
     }
 }

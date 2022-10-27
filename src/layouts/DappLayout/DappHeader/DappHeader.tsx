@@ -1,12 +1,14 @@
+import { useLocation } from 'react-router-dom';
 import Logo from 'components/Logo';
 import WalletInfo from 'components/WalletInfo';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 import { FlexDivRowCentered } from 'styles/common';
 import { NetworkIdByName } from 'utils/network';
-import { getNetworkId } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import Referral from 'components/Referral';
 import { buildHref } from 'utils/routes';
 import SPAAnchor from 'components/SPAAnchor';
@@ -24,8 +26,11 @@ import { isMobile } from 'utils/device';
 const PULSING_COUNT = 10;
 
 const DappHeader: React.FC = () => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
+    const location = useLocation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
@@ -56,12 +61,15 @@ const DappHeader: React.FC = () => {
         <Container>
             <Logo />
             <RightContainer>
+                <Referral />
+                {isMobileState && networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
+                {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />}
+                <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>
+                    <StyledButton disabled={!isWalletConnected}>{t('mint-world-cup-nft.mint-nft-button')}</StyledButton>
+                </SPAAnchor>
                 <SPAAnchor href={buildHref(ROUTES.Quiz)}>
                     <StyledSportTriviaIcon stopPulsing={stopPulsing} src={sportTriviaIcon} />
                 </SPAAnchor>
-                <Referral />
-                {isMobileState && networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
-                <MintVoucher />
                 <LanguageSelector />
                 <WalletInfo />
                 <MenuIcon onClick={() => setNavMenuVisibility(true)} />
@@ -111,7 +119,7 @@ const RightContainer = styled(FlexDivRowCentered)`
 `;
 
 const StyledSportTriviaIcon = styled.img<{ stopPulsing: boolean }>`
-    margin-right: 20px;
+    margin: 0 20px;
     cursor: pointer;
     height: 36px;
     margin-bottom: -4px;
@@ -125,6 +133,29 @@ const StyledSportTriviaIcon = styled.img<{ stopPulsing: boolean }>`
 
 const MenuIcon = styled.img.attrs({ src: burger })`
     cursor: pointer;
+`;
+
+const StyledButton = styled.button<{ disabled?: boolean }>`
+    background: ${(props) => props.theme.button.background.secondary};
+    border: 2px solid ${(props) => props.theme.button.borderColor.secondary};
+    color: ${(props) => props.theme.button.textColor.quaternary};
+    border-radius: 5px;
+    padding: 1px 20px 0px 20px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12.5px;
+    text-align: center;
+    outline: none;
+    text-transform: none;
+    cursor: pointer;
+    min-height: 28px;
+    width: fit-content;
+    white-space: nowrap;
+    opacity: ${(props) => (props.disabled ? '0.4' : '1')};
+    &:hover {
+        cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+        opacity: ${(props) => (props.disabled ? '0.4' : '0.8')};
+    }
 `;
 
 export default DappHeader;
