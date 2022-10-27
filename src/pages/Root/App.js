@@ -28,7 +28,7 @@ const App = () => {
     const dispatch = useDispatch();
     const { trackPageView } = useMatomo();
     const networkId = useSelector((state) => getNetworkId(state));
-    const provider = useProvider();
+    const provider = useProvider({ chainId: networkId });
     const { address } = useAccount();
     const { data: signer } = useSigner();
 
