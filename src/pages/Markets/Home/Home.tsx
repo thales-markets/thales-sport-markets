@@ -172,7 +172,7 @@ const Home: React.FC = () => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
             setLastValidMarkets(marketsCached[globalFilter]);
         }
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, globalFilter, marketsCached]);
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, globalFilter, marketsCached, networkId]);
 
     const markets: SportMarkets = useMemo(() => {
         let sportMarkets = [];

@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setAppReady, setMobileState } from 'redux/modules/app';
 import { getNetworkId, updateNetworkSettings, updateWallet } from 'redux/modules/wallet';
-import { getDefaultNetworkId } from 'utils/network';
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import networkConnector from 'utils/networkConnector';
@@ -39,7 +38,7 @@ const App = () => {
 
     useEffect(() => {
         const init = async () => {
-            const providerNetworkId = await getDefaultNetworkId();
+            const providerNetworkId = (await provider.getNetwork()).chainId;
             try {
                 dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
                 networkConnector.setNetworkSettings({

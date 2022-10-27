@@ -43,6 +43,8 @@ export const InfuraNetworkNameById: Record<NetworkId, string> = {
 
 export const hasEthereumInjected = () => !!window.ethereum;
 
+// Not in use anymore as detectEthereumProvider() doesn't always return value.
+// On page reload returns undefined and on hard reload returns good value from Metamask (e.g. 69)
 export async function getDefaultNetworkId(): Promise<NetworkId> {
     try {
         if (hasEthereumInjected()) {
