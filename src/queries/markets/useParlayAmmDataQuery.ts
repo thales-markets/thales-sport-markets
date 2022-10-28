@@ -11,6 +11,7 @@ const useParlayAmmDataQuery = (networkId: NetworkId, options?: UseQueryOptions<P
         async () => {
             try {
                 const parlayData: ParlayAmmData = {
+                    minUsdAmount: 0,
                     maxSupportedAmount: 0,
                     maxSupportedOdds: 0,
                     parlayAmmFee: 0,
@@ -19,12 +20,20 @@ const useParlayAmmDataQuery = (networkId: NetworkId, options?: UseQueryOptions<P
 
                 const { parlayMarketsAMMContract } = networkConnector;
                 if (parlayMarketsAMMContract) {
-                    const [maxSupportedAmount, maxSupportedOdds, parlayAmmFee, safeBoxImpact] = await Promise.all([
+                    const [
+                        minUsdAmount,
+                        maxSupportedAmount,
+                        maxSupportedOdds,
+                        parlayAmmFee,
+                        safeBoxImpact,
+                    ] = await Promise.all([
+                        parlayMarketsAMMContract.minUSDAmount(),
                         parlayMarketsAMMContract.maxSupportedAmount(),
                         parlayMarketsAMMContract.maxSupportedOdds(),
                         parlayMarketsAMMContract.parlayAmmFee(),
                         parlayMarketsAMMContract.safeBoxImpact(),
                     ]);
+                    parlayData.minUsdAmount = bigNumberFormatter(minUsdAmount);
                     parlayData.maxSupportedAmount = bigNumberFormatter(maxSupportedAmount);
                     parlayData.maxSupportedOdds = bigNumberFormatter(maxSupportedOdds);
                     parlayData.parlayAmmFee = bigNumberFormatter(parlayAmmFee);

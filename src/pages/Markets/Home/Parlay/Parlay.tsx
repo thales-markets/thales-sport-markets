@@ -6,7 +6,7 @@ import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getParlay, getParlayError, removeFromParlay, resetParlayError } from 'redux/modules/parlay';
+import { getParlay, getParlayPayment, getParlayError, removeFromParlay, resetParlayError } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -24,6 +24,7 @@ const Parlay: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const parlay = useSelector(getParlay);
+    const parlayPayment = useSelector(getParlayPayment);
     const hasParlayError = useSelector(getParlayError);
 
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
@@ -78,9 +79,9 @@ const Parlay: React.FC = () => {
                     </ListContainer>
                     <HorizontalLine />
                     {parlayMarkets.length === 1 ? (
-                        <Single market={parlayMarkets[0]} />
+                        <Single market={parlayMarkets[0]} parlayPayment={parlayPayment} />
                     ) : (
-                        <Ticket markets={parlayMarkets} />
+                        <Ticket markets={parlayMarkets} parlayPayment={parlayPayment} />
                     )}
                     <Footer>
                         <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Twitter}>
@@ -169,6 +170,7 @@ const EmptyDesc = styled.span`
 `;
 
 const Footer = styled(FlexDivCentered)`
+    display: none; // TODO: Twitter is not supported yet
     margin-top: 20px;
 `;
 

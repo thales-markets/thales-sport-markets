@@ -5,17 +5,22 @@ import networkConnector from 'utils/networkConnector';
 
 type FavoriteTeamData = {
     isEligible: boolean;
+    favoriteTeam: number;
 };
 
 const useFavoriteTeamDataQuery = (walletAddress: string, networkId: NetworkId) => {
     return useQuery<FavoriteTeamData>(QUERY_KEYS.FavoriteTeam(walletAddress, networkId), async () => {
-        const favoriteTeamData = { isEligible: false };
+        const favoriteTeamData = { isEligible: false, favoriteTeam: 0 };
 
         const favoriteTeamDataContract = networkConnector.favoriteTeamContract;
 
         if (favoriteTeamDataContract && walletAddress !== '') {
-            const isEligible = await favoriteTeamDataContract.isMinterEligibleToMint(walletAddress);
+            const [isEligible, favoriteTeam] = await Promise.all([
+                await favoriteTeamDataContract.isMinterEligibleToMint(walletAddress),
+                await favoriteTeamDataContract.getFavoriteTeamForUser(walletAddress),
+            ]);
             favoriteTeamData.isEligible = isEligible;
+            favoriteTeamData.favoriteTeam = favoriteTeam;
         }
 
         return favoriteTeamData;

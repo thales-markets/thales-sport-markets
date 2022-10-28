@@ -62,6 +62,29 @@ export const ValidationTooltip = withStyles(() => ({
     },
 }))(Tooltip);
 
+export const InfoTooltip = withStyles(() => ({
+    tooltip: {
+        minWidth: '100%',
+        marginBottom: '7px',
+        backgroundColor: '#303656',
+        color: '#FAC439',
+        border: '1.5px solid #FAC439',
+        fontSize: '9px',
+        lineHeight: '12px',
+        textTransform: 'uppercase',
+    },
+    arrow: {
+        '&:before': {
+            border: '1.5px solid #FAC439',
+            backgroundColor: '#303656',
+            boxSizing: 'border-box',
+        },
+        width: '11px',
+        height: '8px',
+        top: '20px',
+    },
+}))(Tooltip);
+
 export const AmountToBuyContainer = styled.div`
     position: relative;
 `;

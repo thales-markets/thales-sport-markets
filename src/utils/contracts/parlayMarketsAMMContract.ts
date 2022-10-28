@@ -10,7 +10,6 @@ export const parlayMarketsAMMContract = {
             anonymous: false,
             inputs: [
                 { indexed: false, internalType: 'address', name: '_thalesAMM', type: 'address' },
-                { indexed: false, internalType: 'address', name: '_stakingThales', type: 'address' },
                 { indexed: false, internalType: 'address', name: '_safeBox', type: 'address' },
                 { indexed: false, internalType: 'address', name: '_referrals', type: 'address' },
                 { indexed: false, internalType: 'address', name: '_parlayMarketData', type: 'address' },
@@ -98,6 +97,7 @@ export const parlayMarketsAMMContract = {
         {
             anonymous: false,
             inputs: [
+                { indexed: false, internalType: 'uint256', name: 'minUSDamount', type: 'uint256' },
                 { indexed: false, internalType: 'uint256', name: 'max_amount', type: 'uint256' },
                 { indexed: false, internalType: 'uint256', name: 'max_odds', type: 'uint256' },
                 { indexed: false, internalType: 'uint256', name: '_parlayAMMFee', type: 'uint256' },
@@ -297,6 +297,13 @@ export const parlayMarketsAMMContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'address', name: '_parlayMarket', type: 'address' }],
+            name: 'isParlayOwnerTheWinner',
+            outputs: [{ internalType: 'bool', name: 'isUserTheWinner', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [],
             name: 'lastPauseTime',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
@@ -313,6 +320,13 @@ export const parlayMarketsAMMContract = {
         {
             inputs: [],
             name: 'maxSupportedOdds',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'minUSDAmount',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
@@ -460,7 +474,6 @@ export const parlayMarketsAMMContract = {
         {
             inputs: [
                 { internalType: 'address', name: '_sportsAMM', type: 'address' },
-                { internalType: 'contract IStakingThales', name: '_stakingThales', type: 'address' },
                 { internalType: 'address', name: '_safeBox', type: 'address' },
                 { internalType: 'address', name: '_referrals', type: 'address' },
                 { internalType: 'address', name: '_parlayMarketData', type: 'address' },
@@ -473,6 +486,7 @@ export const parlayMarketsAMMContract = {
         },
         {
             inputs: [
+                { internalType: 'uint256', name: '_minUSDAmount', type: 'uint256' },
                 { internalType: 'uint256', name: '_maxSupportedAmount', type: 'uint256' },
                 { internalType: 'uint256', name: '_maxSupportedOdds', type: 'uint256' },
                 { internalType: 'uint256', name: '_parlayAMMFee', type: 'uint256' },

@@ -171,16 +171,16 @@
         },
         "filter-label": {
             "global": {
-                "allmarkets": "Alle Märkte",
-                "openmarkets": "Offene Märkte",
-                "resolvedmarkets": "Beendete Märkte",
                 "yourpositions": "Deine Positionen",
                 "claim": "Einforderbar",
                 "history": "Deine Transactions",
-                "canceled": "Abgesagt",
                 "archivedmarkets": "Archivierte Märkte",
                 "tooltip": "Märkte aufgelöst vor mehr als 7 Tagen",
-                "pendingmarkets": "Ausstehend"
+                "pendingmarkets": "Ausstehend",
+                "resolvedmarkets": "Fertig",
+                "allmarkets": "Alle",
+                "openmarkets": "Alle",
+                "canceled": "Angehalten / Abgebrochen"
             },
             "sport": {
                 "all": "alle Sportarten",
@@ -287,7 +287,9 @@
                 "amount-exceeded": "Der Betrag hat den auf AMM verfügbaren Betrag überschritten",
                 "min-quote": "Minimales Zitat ist {{value}}",
                 "availability": "Geringe Verfügbarkeit für Marktposition",
-                "no-funds": "Bitte stellen Sie sicher, dass Ihr Portemonnaie über genügend Guthaben verfügt"
+                "no-funds": "Bitte stellen Sie sicher, dass Ihr Portemonnaie über genügend Guthaben verfügt",
+                "risk-per-comb": "Risiko pro Kombination überschritten",
+                "not-supported": "Nicht unterstützter Validierungsfehler {{error}}"
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",

@@ -290,7 +290,9 @@
                 "no-funds": "请确保您的钱包有足够的资金",
                 "availability": "市场地位的低可用性",
                 "min-quote": "最小报价是 {{value}}",
-                "max-quote": "最大报价为 {{value}}"
+                "max-quote": "最大报价为 {{value}}",
+                "not-supported": "不支持验证错误 {{error}}",
+                "risk-per-comb": "超出每个组合的风险"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",

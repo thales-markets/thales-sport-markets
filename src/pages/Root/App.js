@@ -4,7 +4,7 @@ import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
-import { setAppReady } from 'redux/modules/app';
+import { setAppReady, setMobileState } from 'redux/modules/app';
 import { getNetworkId, updateNetworkSettings, updateWallet } from 'redux/modules/wallet';
 import { getDefaultNetworkId } from 'utils/network';
 import queryConnector from 'utils/queryConnector';
@@ -18,6 +18,7 @@ import { useAccount, useProvider, useSigner } from 'wagmi';
 import LandingPageLayout from 'layouts/LandingPageLayout';
 import { ethers } from 'ethers';
 import BannerCarousel from 'components/BannerCarousel';
+import { isMobile } from 'utils/device';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -62,6 +63,28 @@ const App = () => {
     useEffect(() => {
         dispatch(updateWallet({ walletAddress: address }));
     }, [address, dispatch]);
+
+    useEffect(() => {
+        const handlePageResized = () => {
+            dispatch(setMobileState(isMobile()));
+        };
+
+        if (typeof window !== 'undefined') {
+            window.addEventListener('resize', handlePageResized);
+            window.addEventListener('orientationchange', handlePageResized);
+            window.addEventListener('load', handlePageResized);
+            window.addEventListener('reload', handlePageResized);
+        }
+
+        return () => {
+            if (typeof window !== 'undefined') {
+                window.removeEventListener('resize', handlePageResized);
+                window.removeEventListener('orientationchange', handlePageResized);
+                window.removeEventListener('load', handlePageResized);
+                window.removeEventListener('reload', handlePageResized);
+            }
+        };
+    }, [dispatch]);
 
     useEffect(() => {
         if (window.ethereum) {

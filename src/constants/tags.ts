@@ -103,7 +103,7 @@ export const TAGS_LIST: Tags = [
         id: 9016,
         label: 'UEFA Champions League',
         logo: `/logos/leagueLogos/ucl-white.png`,
-        logoClass: 'icon-icon-league league--ucl',
+        logoClass: 'icon-league league--ucl',
         favourite: false,
         hidden: false,
     },

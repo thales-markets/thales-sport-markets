@@ -78,7 +78,6 @@ const DropdownButton = styled.button`
     border: none;
     background: transparent;
     color: ${(props) => props.theme.textColor.secondary};
-    padding-right: 45px;
     text-transform: uppercase;
     font-weight: 600;
     font-size: 12px;
@@ -134,7 +133,7 @@ const ArrowDownIcon = styled.i`
     font-size: 14px;
     position: absolute;
     top: 8px;
-    right: 25px;
+    right: 5px;
     &:hover {
         cursor: pointer;
         color: ${(props) => props.theme.textColor.quaternary};

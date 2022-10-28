@@ -1,4 +1,6 @@
+import { Discount } from 'components/common';
 import PositionSymbol from 'components/PositionSymbol';
+import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
 import { Position, Side } from 'constants/options';
@@ -20,6 +22,7 @@ import {
     convertFinalResultToWinnerName,
     getIsApexTopGame,
     getVisibilityOfDrawOptionByTagId,
+    isDiscounted,
 } from 'utils/markets';
 import networkConnector from 'utils/networkConnector';
 import {
@@ -131,6 +134,31 @@ const Positions: React.FC<PositionsProps> = ({
     const homeTeam = isApexTopGame ? t('common.yes') : market.homeTeam;
     const awayTeam = isApexTopGame ? t('common.no') : market.awayTeam;
 
+    console.log('Available ', availablePerSide);
+
+    const showHomeTeamDiscount =
+        !!availablePerSide?.positions[Position.HOME]?.buyImpactPrice &&
+        isDiscounted(availablePerSide?.positions[Position.HOME]?.buyImpactPrice);
+    const showDrawTeamDiscount =
+        !!availablePerSide?.positions[Position.DRAW]?.buyImpactPrice &&
+        isDiscounted(availablePerSide?.positions[Position.DRAW]?.buyImpactPrice);
+    const showAwayTeamDiscount =
+        !!availablePerSide?.positions[Position.AWAY]?.buyImpactPrice &&
+        isDiscounted(availablePerSide?.positions[Position.AWAY]?.buyImpactPrice);
+
+    const homePositionDiscount = showHomeTeamDiscount
+        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.HOME]?.buyImpactPrice)))
+        : 0;
+    const drawPositionDiscount = showDrawTeamDiscount
+        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.DRAW]?.buyImpactPrice)))
+        : 0;
+    const awayPositionDiscount = showAwayTeamDiscount
+        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.AWAY]?.buyImpactPrice)))
+        : 0;
+
+    console.log('drawPositionDiscount ', drawPositionDiscount);
+    console.log('awayPositionDiscount ', awayPositionDiscount);
+
     const claimReward = async () => {
         const { signer } = networkConnector;
         if (signer) {
@@ -240,6 +268,31 @@ const Positions: React.FC<PositionsProps> = ({
                                     2
                                 )}
                             </Value>
+                            <Discount visible={showHomeTeamDiscount}>
+                                <Tooltip
+                                    overlay={
+                                        <span>
+                                            {t(`markets.discounted-per`)}{' '}
+                                            <a
+                                                href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                TIP-95
+                                            </a>
+                                        </span>
+                                    }
+                                    component={
+                                        <div className="discount-label green">
+                                            <span>-{homePositionDiscount}%</span>
+                                        </div>
+                                    }
+                                    iconFontSize={23}
+                                    marginLeft={2}
+                                    top={0}
+                                />
+                            </Discount>
                         </InnerContainer>
                         <LiquidityInfoContainer>
                             <Label>{t('markets.market-details.liquidity')}</Label>
@@ -280,6 +333,31 @@ const Positions: React.FC<PositionsProps> = ({
                                         2
                                     )}
                                 </Value>
+                                <Discount visible={showDrawTeamDiscount}>
+                                    <Tooltip
+                                        overlay={
+                                            <span>
+                                                {t(`markets.discounted-per`)}{' '}
+                                                <a
+                                                    href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
+                                                    TIP-95
+                                                </a>
+                                            </span>
+                                        }
+                                        component={
+                                            <div className="discount-label green">
+                                                <span>-{drawPositionDiscount}%</span>
+                                            </div>
+                                        }
+                                        iconFontSize={23}
+                                        marginLeft={2}
+                                        top={0}
+                                    />
+                                </Discount>
                             </InnerContainer>
                             <LiquidityInfoContainer>
                                 <Label>{t('markets.market-details.liquidity')}</Label>
@@ -321,6 +399,31 @@ const Positions: React.FC<PositionsProps> = ({
                                     2
                                 )}
                             </Value>
+                            <Discount visible={showAwayTeamDiscount}>
+                                <Tooltip
+                                    overlay={
+                                        <span>
+                                            {t(`markets.discounted-per`)}{' '}
+                                            <a
+                                                href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                TIP-95
+                                            </a>
+                                        </span>
+                                    }
+                                    component={
+                                        <div className="discount-label green">
+                                            <span>-{awayPositionDiscount}%</span>
+                                        </div>
+                                    }
+                                    iconFontSize={23}
+                                    marginLeft={2}
+                                    top={0}
+                                />
+                            </Discount>
                         </InnerContainer>
                         <LiquidityInfoContainer>
                             <Label>{t('markets.market-details.liquidity')}</Label>

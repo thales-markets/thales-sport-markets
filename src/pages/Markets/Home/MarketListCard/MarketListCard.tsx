@@ -41,7 +41,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
     }, [market.homeTeam, market.awayTeam, market.tags]);
 
     return (
-        <Container claimBorder={claimAvailable} isCanceled={market.isCanceled} isResolved={market.isResolved}>
+        <Container
+            claimBorder={claimAvailable}
+            isCanceled={market.isCanceled}
+            isResolved={market.isResolved && !market.isCanceled}
+        >
             <MatchStatus
                 address={market.address}
                 isResolved={market.isResolved}
@@ -55,6 +59,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
             <ClubVsClubContainer>
                 <ClubContainer>
                     <ClubLogo
+                        height={market.tags[0] == 9018 ? '20px' : ''}
+                        width={market.tags[0] == 9018 ? '33px' : ''}
                         alt="Home team logo"
                         src={homeLogoSrc}
                         onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
@@ -84,6 +90,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                         </VSLabel>
                         <ClubContainer>
                             <ClubLogo
+                                height={market.tags[0] == 9018 ? '20px' : ''}
+                                width={market.tags[0] == 9018 ? '33px' : ''}
                                 alt="Away team logo"
                                 src={awayLogoSrc}
                                 onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
@@ -94,7 +102,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 )}
             </ClubVsClubContainer>
             <Odds
-                isResolved={market.isResolved}
+                isResolved={market.isResolved && !market.isCanceled}
                 finalResult={market.finalResult}
                 isLive={market.maturityDate < new Date()}
                 isCancelled={market.isCanceled}
