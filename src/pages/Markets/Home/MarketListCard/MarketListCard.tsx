@@ -41,7 +41,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
     }, [market.homeTeam, market.awayTeam, market.tags]);
 
     return (
-        <Container claimBorder={claimAvailable} isCanceled={market.isCanceled} isResolved={market.isResolved}>
+        <Container
+            claimBorder={claimAvailable}
+            isCanceled={market.isCanceled}
+            isResolved={market.isResolved && !market.isCanceled}
+        >
             <MatchStatus
                 address={market.address}
                 isResolved={market.isResolved}
@@ -98,7 +102,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 )}
             </ClubVsClubContainer>
             <Odds
-                isResolved={market.isResolved}
+                isResolved={market.isResolved && !market.isCanceled}
                 finalResult={market.finalResult}
                 isLive={market.maturityDate < new Date()}
                 isCancelled={market.isCanceled}

@@ -171,16 +171,16 @@
         },
         "filter-label": {
             "global": {
-                "allmarkets": "Todos los mercados",
-                "openmarkets": "Mercados abiertos",
-                "resolvedmarkets": "Mercados resueltos",
                 "yourpositions": "Tus posiciones",
                 "claim": "Reclamable",
                 "history": "Tus transacciones",
-                "canceled": "Cancelados",
                 "archivedmarkets": "Mercados archivados",
                 "tooltip": "Mercados resueltos hace más de 7 días",
-                "pendingmarkets": "Pendiente"
+                "pendingmarkets": "Pendiente",
+                "openmarkets": "Todos",
+                "resolvedmarkets": "Acabado",
+                "allmarkets": "Todos",
+                "canceled": "En pausa / Cancelado"
             },
             "sport": {
                 "all": "Todos los deportes",
@@ -290,7 +290,9 @@
                 "amount-exceeded": "La cantidad excedió la cantidad disponible en AMM",
                 "max-quote": "La cotización máxima es {{value}}",
                 "min-quote": "La cotización mínima es {{value}}",
-                "availability": "Baja disponibilidad para la posición de los mercados"
+                "availability": "Baja disponibilidad para la posición de los mercados",
+                "not-supported": "Error de validación no compatible {{error}}",
+                "risk-per-comb": "Riesgo por combinación excedido"
             },
             "fee": "Costo total",
             "payout": "Total recibido",

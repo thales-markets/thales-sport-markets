@@ -1,3 +1,4 @@
+import { COLLATERALS_INDEX } from 'constants/currency';
 import { ApexBetType, MarketStatus } from 'constants/markets';
 import { Position, PositionName, Side } from '../constants/options';
 
@@ -295,8 +296,15 @@ export type ParlaysMarket = SportMarketInfo & {
 };
 
 export type ParlayAmmData = {
+    minUsdAmount: number;
     maxSupportedAmount: number;
     maxSupportedOdds: number;
     parlayAmmFee: number;
     safeBoxImpact: number;
+};
+
+export type ParlayPayment = {
+    selectedStableIndex: COLLATERALS_INDEX;
+    isVoucherSelected: boolean;
+    amountToBuy: number | string;
 };

@@ -290,7 +290,9 @@
                 "max-quote": "La quotazione massima è {{value}}",
                 "availability": "Bassa disponibilità per posizione sui mercati",
                 "no-funds": "Assicurati che il tuo portafoglio abbia fondi sufficienti",
-                "min-quote": "La citazione minima è {{value}}"
+                "min-quote": "La citazione minima è {{value}}",
+                "risk-per-comb": "Rischio per combinazione superato",
+                "not-supported": "Errore di convalida non supportato {{error}}"
             },
             "empty-title": "Nessuna posizione",
             "fee": "Tariffa totale",

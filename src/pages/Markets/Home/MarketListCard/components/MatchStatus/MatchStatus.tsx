@@ -32,7 +32,6 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
 }) => {
     const { t } = useTranslation();
 
-    const canceledFlag = isCanceled && !isResolved;
     const regularFlag = !isResolved && !isCanceled && !isLive && !isClaimable;
     const isPending = isLive && !isResolved && !isCanceled && !isClaimable;
 
@@ -57,7 +56,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
     };
 
     return (
-        <Container resolved={isResolved}>
+        <Container resolved={isResolved && !isCanceled}>
             {isPaused ? (
                 <>
                     <Status color={STATUS_COLOR.PAUSED}>{t('markets.market-card.paused')}</Status>
@@ -65,15 +64,15 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
                 </>
             ) : (
                 <>
-                    {canceledFlag && <Status color={STATUS_COLOR.CANCELED}>{t('markets.market-card.canceled')}</Status>}
+                    {isCanceled && <Status color={STATUS_COLOR.CANCELED}>{t('markets.market-card.canceled')}</Status>}
                     {regularFlag && <MatchStarts>{`${startsAt}`}</MatchStarts>}
-                    {isResolved && !isClaimable && (
+                    {isResolved && !isClaimable && !isCanceled && (
                         <>
                             <ResultLabel>{t('markets.market-card.result')}:</ResultLabel>
                             <Result isLive={isLive}>{result}</Result>
                         </>
                     )}
-                    {isResolved && isClaimable && (
+                    {isResolved && isClaimable && !isCanceled && (
                         <>
                             <ClaimButton
                                 onClick={(e: any) => {

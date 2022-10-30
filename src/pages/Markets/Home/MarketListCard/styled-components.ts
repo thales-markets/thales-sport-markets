@@ -1,4 +1,3 @@
-import { STATUS_COLOR } from 'constants/ui';
 import styled from 'styled-components';
 
 export const Container = styled.div<{
@@ -17,7 +16,6 @@ export const Container = styled.div<{
     background-color: ${(_props) =>
         _props.isResolved && !_props.claimBorder ? 'rgb(36,41,64, 0.5)' : 'rgba(48, 54, 86, 0.5)'};
     border: ${(_props) => (_props?.claimBorder ? '3px solid #3FD1FF' : '')};
-    ${(_props) => (_props.isCanceled ? `border: 3px solid ${STATUS_COLOR.CANCELED};` : '')}
     height: 60px;
 `;
 

@@ -13,11 +13,18 @@ import { BalanceLabel, BalanceValue, BalanceWrapper, RowSummary, SummaryLabel } 
 import CollateralSelector from '../CollateralSelector';
 
 type PaymentProps = {
+    defaultSelectedStableIndex?: COLLATERALS_INDEX;
+    defaultIsVoucherSelected?: boolean;
     onChangeCollateral?: (index: number) => void;
     setIsVoucherSelectedProp?: (selected: boolean) => void;
 };
 
-const Payment: React.FC<PaymentProps> = ({ onChangeCollateral, setIsVoucherSelectedProp }) => {
+const Payment: React.FC<PaymentProps> = ({
+    defaultSelectedStableIndex,
+    defaultIsVoucherSelected,
+    onChangeCollateral,
+    setIsVoucherSelectedProp,
+}) => {
     const { t } = useTranslation();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -25,8 +32,10 @@ const Payment: React.FC<PaymentProps> = ({ onChangeCollateral, setIsVoucherSelec
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
-    const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(COLLATERALS_INDEX.sUSD);
-    const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(false);
+    const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
+        defaultSelectedStableIndex !== undefined ? defaultSelectedStableIndex : COLLATERALS_INDEX.sUSD
+    );
+    const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(!!defaultIsVoucherSelected);
 
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -37,12 +46,14 @@ const Payment: React.FC<PaymentProps> = ({ onChangeCollateral, setIsVoucherSelec
 
     const overtimeVoucher = useMemo(() => {
         if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
-            setIsVoucherSelected(true);
+            if (defaultIsVoucherSelected === undefined) {
+                setIsVoucherSelected(true);
+            }
             return overtimeVoucherQuery.data;
         }
         setIsVoucherSelected(false);
         return undefined;
-    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
+    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data, defaultIsVoucherSelected]);
 
     const paymentTokenBalance: number = useMemo(() => {
         if (overtimeVoucher && isVoucherSelected) {

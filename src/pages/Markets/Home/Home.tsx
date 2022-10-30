@@ -172,7 +172,7 @@ const Home: React.FC = () => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
             setLastValidMarkets(marketsCached[globalFilter]);
         }
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, globalFilter, marketsCached]);
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, globalFilter, marketsCached, networkId]);
 
     const markets: SportMarkets = useMemo(() => {
         let sportMarkets = [];
@@ -242,7 +242,6 @@ const Home: React.FC = () => {
 
     const sportFilteredMarkets = useMemo(() => {
         let filteredMarkets = datesFilteredMarkets;
-
         if (sportFilter !== SportFilterEnum.All) {
             if (sportFilter == SportFilterEnum.Favourites) {
                 filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) =>
@@ -266,7 +265,6 @@ const Home: React.FC = () => {
                 tagFilter.map((tag) => tag.id).includes(market.tags.map((tag) => Number(tag))[0])
             );
         }
-
         return filteredMarkets;
     }, [sportFilteredMarkets, tagFilter]);
 
@@ -312,7 +310,9 @@ const Home: React.FC = () => {
                 });
                 break;
             case GlobalFiltersEnum.Canceled:
-                filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => market.isCanceled);
+                filteredMarkets = filteredMarkets.filter(
+                    (market: SportMarketInfo) => market.isCanceled || market.isPaused
+                );
                 break;
             default:
                 break;
@@ -691,6 +691,8 @@ const groupBySortedMarkets = (markets: SportMarkets) => {
     markets.forEach((market: SportMarketInfo) => {
         if (
             market.isOpen &&
+            !market.isCanceled &&
+            !market.isPaused &&
             market.maturityDate > new Date() &&
             (market.homeOdds !== 0 || market.awayOdds !== 0 || market.drawOdds !== 0)
         )
@@ -705,8 +707,8 @@ const groupBySortedMarkets = (markets: SportMarkets) => {
             comingSoonMarkets.push(market);
         if (market.maturityDate < new Date() && !market.isResolved && !market.isCanceled)
             pendingResolutionMarkets.push(market);
-        if (market.isResolved) finishedMarkets.push(market);
-        if (market.isCanceled) canceledMarkets.push(market);
+        if (market.isResolved && !market.isCanceled) finishedMarkets.push(market);
+        if (market.isCanceled || market.isPaused) canceledMarkets.push(market);
     });
 
     return [...openMarkets, ...comingSoonMarkets, ...pendingResolutionMarkets, ...finishedMarkets, ...canceledMarkets];

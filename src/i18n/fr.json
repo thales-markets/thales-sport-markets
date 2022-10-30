@@ -251,17 +251,16 @@
         },
         "filter-label": {
             "global": {
-                "all": "Tous les marchés",
-                "openmarkets": "Marchés ouverts",
-                "resolvedmarkets": "Marchés résolus",
                 "yourpositions": "Vos positions",
                 "claim": "Réclamable",
                 "history": "Vos transactions",
-                "canceled": "Annulés",
                 "allmarkets": "Tous les marchés",
                 "tooltip": "Les marchés ont été résolus il y a plus de 7 jours",
                 "archivedmarkets": "Marchés archivés",
-                "pendingmarkets": "En attente"
+                "pendingmarkets": "En attente",
+                "resolvedmarkets": "Achevé",
+                "openmarkets": "Tout",
+                "canceled": "En pause / Annulé"
             },
             "sport": {
                 "all": "Tous les sports",
@@ -389,7 +388,9 @@
                 "no-funds": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds",
                 "min-amount": "Le montant minimal est de {{min}}",
                 "min-quote": "Le devis minimal est {{value}}",
-                "max-quote": "Le devis maximum est de {{value}}"
+                "max-quote": "Le devis maximum est de {{value}}",
+                "not-supported": "Erreur de validation non prise en charge {{error}}",
+                "risk-per-comb": "Risque par combinaison dépassé"
             },
             "payout": "Total reçu",
             "empty-title": "Aucun poste",
