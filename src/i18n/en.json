@@ -235,6 +235,10 @@
             "no-funds": "Please ensure your wallet has enough funds"
         }
     },
+    "profile": {
+        "open-claimable": "Open/Claimable",
+        "transaction-history": "Transaction history"
+    },
     "markets": {
         "market-card": {
             "starts": "starts",
