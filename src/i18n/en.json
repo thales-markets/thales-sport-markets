@@ -444,6 +444,10 @@
         "minting-is-free": "Minting is free, you can mint only one NFT per wallet. This NFT is non-transferable.",
         "incentives": "INCENTIVES",
         "free-entry": "1 free entry in FIFA Royale",
-        "choose-nft": "Choose NFT"
+        "choose-nft": "Choose NFT",
+        "are-you-sure": "Are you sure you want to mint this NFT? You can mint ONLY ONE NFT per wallet.",
+        "no": "No",
+        "yes-mint": "Yes, mint NFT",
+        "success-mint": "Successfully minted"
     }
 }

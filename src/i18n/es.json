@@ -292,7 +292,8 @@
                 "min-quote": "La cotización mínima es {{value}}",
                 "availability": "Baja disponibilidad para la posición de los mercados",
                 "not-supported": "Error de validación no compatible {{error}}",
-                "risk-per-comb": "Riesgo por combinación excedido"
+                "risk-per-comb": "Riesgo por combinación excedido",
+                "single-min-amount": "La cantidad mínima es {{min}}"
             },
             "fee": "Costo total",
             "payout": "Total recibido",
@@ -450,6 +451,10 @@
         "go-to-twitter": "Ir a Twitter",
         "tag-3-friends": "¡Etiqueta a 3 amigos, comparte tu dirección ETH y dinos a qué país estás animando!",
         "minting-is-free": "Minting es gratis, solo puede acuñar un NFT por billetera. Este NFT es intransferible.",
-        "stake-10-thales": "Para acuñar un NFT, debe apostar al menos 10 THALES."
+        "stake-10-thales": "Para acuñar un NFT, debe apostar al menos 10 THALES.",
+        "no": "No",
+        "yes-mint": "Sí, menta NFT",
+        "are-you-sure": "¿Estás seguro de que quieres acuñar este NFT? Puede acuñar SOLO UN NFT por monedero.",
+        "success-mint": "acuñado con éxito"
     }
 }

@@ -289,7 +289,8 @@
                 "availability": "Geringe Verfügbarkeit für Marktposition",
                 "no-funds": "Bitte stellen Sie sicher, dass Ihr Portemonnaie über genügend Guthaben verfügt",
                 "risk-per-comb": "Risiko pro Kombination überschritten",
-                "not-supported": "Nicht unterstützter Validierungsfehler {{error}}"
+                "not-supported": "Nicht unterstützter Validierungsfehler {{error}}",
+                "single-min-amount": "Minimale Menge ist {{min}}"
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",
@@ -447,6 +448,10 @@
         "second-option": "Die zweite Option, um Sie auf die Positivliste zu setzen, besteht darin, die folgenden Schritte auszuführen:",
         "not-eligible-text": "Leider sind Sie nicht berechtigt, NFT zu prägen.",
         "mint-nft-button": "Wie NFT",
-        "eligible-text": "Hey, Sie können jetzt Ihr Lieblingsteam NFT prägen."
+        "eligible-text": "Hey, Sie können jetzt Ihr Lieblingsteam NFT prägen.",
+        "no": "Nein",
+        "yes-mint": "Ja, neuwertiges NFT",
+        "success-mint": "Erfolgreich geprägt",
+        "are-you-sure": "Sind Sie sicher, dass Sie diese NFT prägen möchten? Sie können NUR EINE NFT pro Wallet prägen."
     }
 }

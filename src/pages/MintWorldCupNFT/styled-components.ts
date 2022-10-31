@@ -92,6 +92,7 @@ export const StyledButton = styled.button`
     color: #8e2443;
     border: transparent;
     cursor: pointer;
+    z-index: 1;
     &:disabled {
         opacity: 0.4;
         cursor: not-allowed;
@@ -148,6 +149,7 @@ export const GroupInfoContainer = styled.div`
     justify-content: space-between;
     margin-bottom: 5px;
     align-items: center;
+    z-index: 1;
 `;
 
 export const GroupLetter = styled.span<{ color: string }>`

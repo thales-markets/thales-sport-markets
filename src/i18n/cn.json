@@ -292,7 +292,8 @@
                 "min-quote": "最小报价是 {{value}}",
                 "max-quote": "最大报价为 {{value}}",
                 "not-supported": "不支持验证错误 {{error}}",
-                "risk-per-comb": "超出每个组合的风险"
+                "risk-per-comb": "超出每个组合的风险",
+                "single-min-amount": "最低金额为 {{min}}"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",
@@ -450,6 +451,10 @@
         "eligible-text": "嘿，你现在可以铸造你最喜欢的团队 NFT。",
         "stake-thales": "股份 THALES",
         "not-eligible-text": "不幸的是，您没有资格进行 NFT 铸造。",
-        "tag-3-friends": "标记 3 位好友，分享您的 ETH 地址，并告诉我们您为哪个国家而欢呼！"
+        "tag-3-friends": "标记 3 位好友，分享您的 ETH 地址，并告诉我们您为哪个国家而欢呼！",
+        "no": "不",
+        "yes-mint": "是的，薄荷 NFT",
+        "are-you-sure": "你确定要铸造这个 NFT 吗？每个钱包只能铸造一个 NFT。",
+        "success-mint": "成功铸造"
     }
 }

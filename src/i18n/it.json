@@ -292,7 +292,8 @@
                 "no-funds": "Assicurati che il tuo portafoglio abbia fondi sufficienti",
                 "min-quote": "La citazione minima è {{value}}",
                 "risk-per-comb": "Rischio per combinazione superato",
-                "not-supported": "Errore di convalida non supportato {{error}}"
+                "not-supported": "Errore di convalida non supportato {{error}}",
+                "single-min-amount": "L'importo minimo è {{min}}"
             },
             "empty-title": "Nessuna posizione",
             "fee": "Tariffa totale",
@@ -453,6 +454,10 @@
         "second-option": "La seconda opzione per metterti nella lista consentita è completare i seguenti passaggi:",
         "tag-3-friends": "Tagga 3 amici, condividi il tuo indirizzo ETH e dicci per quale paese fai il tifo!",
         "not-eligible-text": "Sfortunatamente non sei idoneo per il conio NFT.",
-        "mint-nft-button": "Come NFT"
+        "mint-nft-button": "Come NFT",
+        "no": "No",
+        "yes-mint": "Sì, NFT nuovo",
+        "are-you-sure": "Sei sicuro di voler coniare questo NFT? Puoi coniare SOLO UN NFT per portafoglio.",
+        "success-mint": "Coniato con successo"
     }
 }

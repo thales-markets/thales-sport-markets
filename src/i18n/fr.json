@@ -390,7 +390,8 @@
                 "min-quote": "Le devis minimal est {{value}}",
                 "max-quote": "Le devis maximum est de {{value}}",
                 "not-supported": "Erreur de validation non prise en charge {{error}}",
-                "risk-per-comb": "Risque par combinaison dépassé"
+                "risk-per-comb": "Risque par combinaison dépassé",
+                "single-min-amount": "Le montant minimal est de {{min}}"
             },
             "payout": "Total reçu",
             "empty-title": "Aucun poste",
@@ -548,6 +549,10 @@
         "eligible-text": "Hé, vous pouvez maintenant frapper votre équipe préférée NFT.",
         "mint-nft-button": "Comme NFT",
         "stake-thales": "Pieu THALES",
-        "choose-nft": "Choisissez NFT"
+        "choose-nft": "Choisissez NFT",
+        "no": "Non",
+        "success-mint": "Frappé avec succès",
+        "are-you-sure": "Êtes-vous sûr de vouloir frapper ce NFT ? Vous pouvez frapper UN SEUL NFT par portefeuille.",
+        "yes-mint": "Oui, menthe NFT"
     }
 }
