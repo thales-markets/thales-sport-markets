@@ -1,83 +1,84 @@
 import React from 'react';
-import styled from 'styled-components';
-import { InfoContainer } from 'pages/Markets/Home/Parlay/components/styled-components';
 import { ReactComponent as GroupRectangle } from 'assets/images/favorite-team/group-rectangle.svg';
-import { Team } from '../ChooseNFT/ChooseNFT';
+import { ReactComponent as GroupCollapsedRectangle } from 'assets/images/favorite-team/group-collapsed-rectangle.svg';
+import { ReactComponent as ArrowDown } from 'assets/images/favorite-team/arrow-down.svg';
+import { countriesFlagsNames } from 'pages/MintWorldCupNFT/countries';
+import { Team } from 'pages/MintWorldCupNFT/groups';
+import {
+    GroupLetter,
+    TeamContainer,
+    TeamImage,
+    TeamNameWrapper,
+    TeamName,
+    TeamFlagContainer,
+    TeamFlagImage,
+    ArrowContainer,
+    GroupInfoContainer,
+} from 'pages/MintWorldCupNFT/styled-components';
 
 type GroupProps = {
+    openedGroup: string;
+    setOpenedGroup: (groupLetter: string) => void;
+    selectedTeam: Team | null;
+    setSelectedTeam: (team: Team) => void;
     groupLetter: string;
     groupTeams: Team[];
 };
 
-const Group: React.FC<GroupProps> = ({ groupLetter, groupTeams }) => {
+const Group: React.FC<GroupProps> = ({
+    groupLetter,
+    groupTeams,
+    selectedTeam,
+    setSelectedTeam,
+    openedGroup,
+    setOpenedGroup,
+}) => {
     return (
         <>
-            <InfoContainer>
-                <GroupRectangle />
-                <GroupLetter>{groupLetter}</GroupLetter>
-                {groupTeams.map((team, index) => (
-                    <TeamContainer index={index} key={index}>
-                        <TeamImage
-                            src={`https://thales-protocol.s3.eu-north-1.amazonaws.com/zebro_${team.name
-                                .toLocaleLowerCase()
-                                .split(' ')
-                                .join('_')}.png`}
-                        />
-                        <TeamNameWrapper>
-                            <TeamName index={index}>{team.name}</TeamName>
-                        </TeamNameWrapper>
-                    </TeamContainer>
-                ))}
-            </InfoContainer>
+            <GroupInfoContainer>
+                {openedGroup === groupLetter ? (
+                    <>
+                        <GroupRectangle />
+                        <GroupLetter color="#04cfb6">{groupLetter}</GroupLetter>
+                        {groupTeams.map((team, index) => (
+                            <TeamContainer
+                                index={index}
+                                key={index}
+                                selected={team.number === selectedTeam?.number}
+                                onClick={() => setSelectedTeam(team)}
+                            >
+                                <TeamImage
+                                    src={`https://thales-protocol.s3.eu-north-1.amazonaws.com/zebro_${team.name
+                                        .toLocaleLowerCase()
+                                        .split(' ')
+                                        .join('_')}.png`}
+                                />
+                                <TeamNameWrapper>
+                                    <TeamName index={index}>{team.name}</TeamName>
+                                </TeamNameWrapper>
+                            </TeamContainer>
+                        ))}
+                    </>
+                ) : (
+                    <>
+                        <GroupCollapsedRectangle />
+                        <GroupLetter color="white">{groupLetter}</GroupLetter>
+                        {groupTeams.map((team, index) => (
+                            <TeamFlagContainer index={index} key={index}>
+                                <TeamFlagImage
+                                    selected={team.number === selectedTeam?.number}
+                                    src={`logos/FIFA World Cup/${countriesFlagsNames[team.number - 1]}.png`}
+                                />
+                            </TeamFlagContainer>
+                        ))}
+                        <ArrowContainer onClick={() => setOpenedGroup(groupLetter)}>
+                            <ArrowDown />
+                        </ArrowContainer>
+                    </>
+                )}
+            </GroupInfoContainer>
         </>
     );
 };
-
-const GroupLetter = styled.span`
-    position: absolute;
-    font-weight: 700;
-    font-size: 25px;
-    line-height: 150%;
-    text-align: center;
-    letter-spacing: 0.025em;
-    text-transform: uppercase;
-    color: #04cfb6;
-    left: 4%;
-    top: 50%;
-    transform: translateY(-50%);
-`;
-
-const TeamContainer = styled.div<{ index: number }>`
-    position: absolute;
-    left: ${(props) => (props.index + 1) * 21 - 10}%;
-    width: 18%;
-    border: 4px solid #6d152e;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    :hover {
-        cursor: pointer;
-        border: 4px solid #ff004b;
-        box-shadow: 0px 0px 7px 5px #ac0033;
-    }
-`;
-
-const TeamImage = styled.img`
-    width: 100%;
-    border-radius: 50%;
-`;
-
-const TeamNameWrapper = styled.div`
-    position: relative;
-`;
-
-const TeamName = styled.span<{ index: number }>`
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: -22px;
-    text-align: center;
-    width: 100%;
-`;
 
 export default Group;

@@ -30,5 +30,40 @@ export const countries = [
     'Portugal',
     'Ghana',
     'Uruguay',
-    'Korea', // 32
+    'South Korea', // 32
+];
+
+export const countriesFlagsNames = [
+    'qatar', // 1
+    'ecuador',
+    'senegal',
+    'netherlands',
+    'england',
+    'ir-iran',
+    'united-states',
+    'wales',
+    'argentina',
+    'saudi-arabia',
+    'mexico',
+    'poland',
+    'france',
+    'australia',
+    'denmark',
+    'tunisia',
+    'spain',
+    'costa-rica',
+    'germany',
+    'japan',
+    'belgium',
+    'canada',
+    'morocco',
+    'croatia',
+    'brazil',
+    'serbia',
+    'switzerland',
+    'cameroon',
+    'portugal',
+    'ghana',
+    'uruguay',
+    'south-korea', // 32
 ];

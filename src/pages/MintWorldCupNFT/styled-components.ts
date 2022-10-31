@@ -92,6 +92,10 @@ export const StyledButton = styled.button`
     color: #8e2443;
     border: transparent;
     cursor: pointer;
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
 `;
 
 export const SymbolsContainer = styled.div`
@@ -121,4 +125,97 @@ export const IncentivesTitle = styled.span`
 
 export const GroupsContainer = styled.div`
     margin-top: 80px;
+`;
+
+export const MintButtonContainer = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 30px;
+`;
+
+export const MintButton = styled.button`
+    background: #04cfb6;
+    border-radius: 3.6;
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 16px;
+`;
+
+export const GroupInfoContainer = styled.div`
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    align-items: center;
+`;
+
+export const GroupLetter = styled.span<{ color: string }>`
+    position: absolute;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 150%;
+    text-align: center;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: ${(props) => props.color};
+    left: 4%;
+    top: 50%;
+    transform: translateY(-50%);
+`;
+
+export const TeamContainer = styled.div<{ index: number; selected: boolean }>`
+    position: absolute;
+    left: ${(props) => (props.index + 1) * 21 - 10}%;
+    width: 18%;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    border: ${(props) => (props.selected ? '4px solid #ff004b' : '4px solid #6d152e')};
+    box-shadow: ${(props) => (props.selected ? '0px 0px 7px 5px #ac0033' : 'none')};
+    :hover {
+        cursor: pointer;
+        border: 4px solid #ff004b;
+        box-shadow: 0px 0px 7px 5px #ac0033;
+    }
+`;
+
+export const TeamImage = styled.img`
+    width: 100%;
+    border-radius: 50%;
+`;
+
+export const TeamNameWrapper = styled.div`
+    position: relative;
+`;
+
+export const TeamName = styled.span<{ index: number }>`
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -22px;
+    text-align: center;
+    width: 100%;
+`;
+
+export const ArrowContainer = styled.div`
+    position: absolute;
+    right: 4%;
+    top: 50%;
+    transform: translateY(-35%);
+    cursor: pointer;
+`;
+
+export const TeamFlagContainer = styled.div<{ index: number }>`
+    position: absolute;
+    left: ${(props) => (props.index + 1) * 21 - 10}%;
+    width: 18%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+export const TeamFlagImage = styled.img<{ selected: boolean }>`
+    width: 40%;
+    box-shadow: ${(props) => (props.selected ? '0px 0px 7px 4px #ac0033' : 'none')};
 `;
