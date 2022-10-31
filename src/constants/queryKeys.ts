@@ -5,6 +5,7 @@ import { Position, Side } from './options';
 export const QUERY_KEYS = {
     Rewards: (networkId: NetworkId, period: number) => ['rewards', networkId, period],
     Markets: (networkId: NetworkId) => ['markets', networkId],
+    ParlayMarkets: (networkId: NetworkId, account: string) => ['parlayMarkets', networkId, account],
     SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
     ParlayAmmData: (networkId: NetworkId) => ['parlayAmmData', networkId],
     OpenSportMarkets: (networkId: NetworkId) => ['openSportMarkets', networkId],

@@ -113,6 +113,30 @@ export type MarketData = {
     isApex: boolean;
 };
 
+export type ParlayMarket = {
+    id: string;
+    sportMarkets: SportMarketInfo[];
+    positions: PositionData[];
+    marketQuotes: number[];
+    account: string;
+    totalAmount: number;
+    sUSDAfterFees: number;
+    totalQuote: number;
+    skewImpact: number;
+    timestamp: number;
+    lastGameStarts: number;
+    blockNumber: number;
+    claimed: boolean;
+    won: boolean;
+};
+
+export type PositionData = {
+    id: string;
+    market: SportMarketInfo;
+    side: PositionName;
+    claimable: boolean;
+};
+
 export type Markets = MarketInfo[];
 
 export type SportMarkets = SportMarketInfo[];

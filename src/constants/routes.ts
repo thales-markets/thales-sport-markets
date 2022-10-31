@@ -4,6 +4,7 @@ export const ROUTES = {
         Home: '/markets',
         Market: '/markets/:marketAddress',
     },
+    Profile: '/profile',
     Rewards: '/rewards',
     Quiz: '/trivia',
     QuizLeaderboard: '/trivia/leaderboard',

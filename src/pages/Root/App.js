@@ -19,6 +19,7 @@ import LandingPageLayout from 'layouts/LandingPageLayout';
 import { ethers } from 'ethers';
 import BannerCarousel from 'components/BannerCarousel';
 import { isMobile } from 'utils/device';
+import Profile from 'pages/Profile';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -122,6 +123,11 @@ const App = () => {
                             <Route exact path={ROUTES.Rewards}>
                                 <DappLayout>
                                     <Rewards />
+                                </DappLayout>
+                            </Route>
+                            <Route exact path={ROUTES.Profile}>
+                                <DappLayout>
+                                    <Profile />
                                 </DappLayout>
                             </Route>
                             <Route exact path={ROUTES.Quiz}>
