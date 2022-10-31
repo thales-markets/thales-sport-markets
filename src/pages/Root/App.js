@@ -48,6 +48,8 @@ const App = () => {
                     provider:
                         !!signer && !!signer.provider
                             ? new ethers.providers.Web3Provider(signer.provider.provider, 'any')
+                            : window.ethereum
+                            ? new ethers.providers.Web3Provider(window.ethereum, 'any')
                             : provider,
                     signer,
                 });
