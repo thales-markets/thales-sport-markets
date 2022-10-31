@@ -1,14 +1,18 @@
 import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
 import useAccountMarketsQuery from 'queries/markets/useAccountMarketsQuery';
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { ParlayMarket } from 'types/markets';
 import useUsersStatsQuery from 'queries/wallet/useUsersStatsQuery';
+import NavigationBar from './components/NavigationBar';
+import { Container } from './styled-components';
 
 const Profile: React.FC = () => {
+    const [navItem, setNavItem] = useState<number>(1);
+
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state))
         ? '0xf12c220b631125425f4c69823d6187FE3C8d0999'
         : '0xf12c220b631125425f4c69823d6187FE3C8d0999';
@@ -82,7 +86,11 @@ const Profile: React.FC = () => {
     const userStat = useUsersStatsQuery(walletAddress.toLowerCase(), networkId, { enabled: isWalletConnected });
     console.log('userStat ', userStat);
 
-    return <></>;
+    return (
+        <Container>
+            <NavigationBar itemSelected={navItem} onSelectItem={(index) => setNavItem(index)} />
+        </Container>
+    );
 };
 
 export default Profile;
