@@ -11,6 +11,7 @@ export const formatShortDateWithTime = (date: Date | number) => format(date, 'MM
 export const formatDateWithTime = (date: Date | number) => format(date, 'dd MMM HH:mm');
 export const formatShortDateNoYear = (date: Date | number) => format(date, 'MMM d');
 export const formatDayOfWeek = (date: Date | number) => format(date, 'EEE');
+export const formatTimeOfDate = (date: Date | number) => format(date, 'HH:mm');
 
 export const formattedDuration = (
     duration: Duration,

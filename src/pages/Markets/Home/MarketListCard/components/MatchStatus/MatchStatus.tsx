@@ -1,89 +1,45 @@
-import Button from 'components/Button';
-import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
 import { STATUS_COLOR } from 'constants/ui';
-import { ethers } from 'ethers';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import styled from 'styled-components';
-import sportsMarketContract from 'utils/contracts/sportsMarketContract';
-import networkConnector from 'utils/networkConnector';
 
 type MatchStatusProps = {
-    address: string;
     isResolved: boolean;
     isLive?: boolean;
     isCanceled?: boolean;
-    isClaimable?: boolean;
     result?: string;
     startsAt?: string;
     isPaused: boolean;
+    isMobile?: boolean;
 };
 
 const MatchStatus: React.FC<MatchStatusProps> = ({
-    address,
     isResolved,
     isLive,
     isCanceled,
-    isClaimable,
     result,
     startsAt,
     isPaused,
+    isMobile,
 }) => {
     const { t } = useTranslation();
 
-    const regularFlag = !isResolved && !isCanceled && !isLive && !isClaimable;
-    const isPending = isLive && !isResolved && !isCanceled && !isClaimable;
-
-    const claimReward = async () => {
-        const { signer } = networkConnector;
-        if (signer) {
-            const contract = new ethers.Contract(address, sportsMarketContract.abi, signer);
-            contract.connect(signer);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
-            try {
-                const tx = await contract.exerciseOptions();
-                const txResult = await tx.wait();
-
-                if (txResult && txResult.transactionHash) {
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
-                }
-            } catch (e) {
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                console.log(e);
-            }
-        }
-    };
+    const regularFlag = !isResolved && !isCanceled && !isLive;
+    const isPending = isLive && !isResolved && !isCanceled;
 
     return (
-        <Container resolved={isResolved && !isCanceled}>
+        <Container resolved={isResolved && !isCanceled} paused={isPaused} mobile={isMobile}>
             {isPaused ? (
                 <>
                     <Status color={STATUS_COLOR.PAUSED}>{t('markets.market-card.paused')}</Status>
-                    <MatchStarts>{`${startsAt}`}</MatchStarts>
+                    {!isMobile && <MatchStarts>{`${startsAt}`}</MatchStarts>}
                 </>
             ) : (
                 <>
                     {isCanceled && <Status color={STATUS_COLOR.CANCELED}>{t('markets.market-card.canceled')}</Status>}
-                    {regularFlag && <MatchStarts>{`${startsAt}`}</MatchStarts>}
-                    {isResolved && !isClaimable && !isCanceled && (
+                    {regularFlag && !isMobile && <MatchStarts>{`${startsAt}`}</MatchStarts>}
+                    {isResolved && !isCanceled && (
                         <>
-                            <ResultLabel>{t('markets.market-card.result')}:</ResultLabel>
-                            <Result isLive={isLive}>{result}</Result>
-                        </>
-                    )}
-                    {isResolved && isClaimable && !isCanceled && (
-                        <>
-                            <ClaimButton
-                                onClick={(e: any) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    claimReward();
-                                }}
-                                claimable={isClaimable}
-                            >
-                                {t('markets.market-card.claim')}
-                            </ClaimButton>
                             <ResultLabel>{t('markets.market-card.result')}:</ResultLabel>
                             <Result isLive={isLive}>{result}</Result>
                         </>
@@ -95,20 +51,21 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
                             </Status>
                         </>
                     )}
-                    {!regularFlag && <MatchStarts>{`${startsAt}`}</MatchStarts>}
+                    {!regularFlag && !isMobile && <MatchStarts>{`${startsAt}`}</MatchStarts>}
                 </>
             )}
         </Container>
     );
 };
 
-const Container = styled.div<{ resolved?: boolean }>`
+const Container = styled.div<{ resolved?: boolean; paused?: boolean; mobile?: boolean }>`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: start;
+    justify-content: ${(_props) => (_props?.mobile && _props?.paused ? 'center' : 'start')};
     margin-right: 15px;
     width: ${(_props) => (_props?.resolved ? '33%' : '')};
+    height: ${(_props) => (_props?.mobile ? '40px' : '')};
 `;
 
 export const Status = styled.span<{ color?: string }>`
@@ -136,19 +93,6 @@ const MatchStarts = styled.span`
     text-transform: uppercase;
     margin-left: 5px;
     font-size: 12px;
-`;
-
-const ClaimButton = styled(Button)<{ claimable?: boolean }>`
-    background: ${(props) => props.theme.background.quaternary};
-    color: ${(props) => props.theme.textColor.tertiary};
-    margin-right: 20px;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: 700;
-    font-size: 12px;
-    letter-spacing: 0.025em;
-    visibility: ${(props) => (!props.claimable ? 'hidden' : '')};
 `;
 
 export default MatchStatus;
