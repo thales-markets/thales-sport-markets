@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { ParlayMarket } from 'types/markets';
+import useUsersStatsQuery from 'queries/wallet/useUsersStatsQuery';
 
 const Profile: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state))
@@ -78,6 +79,8 @@ const Profile: React.FC = () => {
 
     console.log('accountPositionsByStatus ', accountPositionsByStatus);
     console.log('parlayMarketsByStatus ', parlayMarketsByStatus);
+    const userStat = useUsersStatsQuery(walletAddress.toLowerCase(), networkId, { enabled: isWalletConnected });
+    console.log('userStat ', userStat);
 
     return <></>;
 };
