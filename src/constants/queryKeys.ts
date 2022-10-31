@@ -66,6 +66,11 @@ export const QUERY_KEYS = {
     Tags: (networkId: NetworkId) => ['tags', networkId],
     NormalizedOdds: (sportMarket: SportMarketInfo, networkId: NetworkId) => ['normalizedOdds', sportMarket, networkId],
     AccountPositions: (walletAddress: string, networkId: NetworkId) => ['positions', walletAddress, networkId],
+    AccountPositionsProfile: (walletAddress: string, networkId: NetworkId) => [
+        'accountPosition',
+        walletAddress,
+        networkId,
+    ],
     DiscountMarkets: (networkId: NetworkId) => ['discountMarkets', networkId],
     Wallet: {
         PaymentTokenBalance: (walletAddress: string, networkId: NetworkId) => [
@@ -100,6 +105,7 @@ export const QUERY_KEYS = {
             walletAddress,
             networkId,
         ],
+        Stats: (networkId: NetworkId, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
     },
     Quiz: {
         Leaderboard: () => ['quiz', 'leaderboard'],
