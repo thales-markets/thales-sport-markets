@@ -27,9 +27,11 @@ export const SummaryValue = styled.span<{ isInfo?: boolean }>`
 `;
 
 export const InfoContainer = styled.div`
+    position: relative;
     display: flex;
     justify-content: space-between;
     margin-bottom: 5px;
+    align-items: center;
 `;
 
 export const InfoWrapper = styled.div``;

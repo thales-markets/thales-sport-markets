@@ -1,6 +1,7 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery } from 'react-query';
 import { NetworkId } from 'types/network';
+import { bigNumberFormatter } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 
 type FavoriteTeamData = {
@@ -19,8 +20,9 @@ const useFavoriteTeamDataQuery = (walletAddress: string, networkId: NetworkId) =
                 await favoriteTeamDataContract.isMinterEligibleToMint(walletAddress),
                 await favoriteTeamDataContract.getFavoriteTeamForUser(walletAddress),
             ]);
+
             favoriteTeamData.isEligible = isEligible;
-            favoriteTeamData.favoriteTeam = favoriteTeam;
+            favoriteTeamData.favoriteTeam = bigNumberFormatter(favoriteTeam[0]);
         }
 
         return favoriteTeamData;

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
 
 export const Container = styled.div`
-    margin: 80px 0;
+    margin-bottom: 80px;
     width: 700px;
     @media (max-width: 768px) {
         width: 100%;
@@ -10,6 +10,7 @@ export const Container = styled.div`
 `;
 
 export const EligibilityContainer = styled(FlexDivColumnCentered)`
+    margin-top: 80px;
     align-items: center;
     max-width: 100%;
     position: relative;
@@ -116,4 +117,8 @@ export const IncentivesTitle = styled.span`
     line-height: 150%;
     letter-spacing: 0.025em;
     color: #04cfb6;
+`;
+
+export const GroupsContainer = styled.div`
+    margin-top: 80px;
 `;
