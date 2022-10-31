@@ -100,6 +100,7 @@ export const QUERY_KEYS = {
             walletAddress,
             networkId,
         ],
+        Stats: (networkId: NetworkId, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
     },
     Quiz: {
         Leaderboard: () => ['quiz', 'leaderboard'],
