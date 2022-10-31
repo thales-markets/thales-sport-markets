@@ -246,12 +246,18 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                         setTokenAmount(0);
                         return;
                     }
-                    const roundedAmount = floorNumberToDecimals(amountOfTokens);
-                    const quote = await fetchAmmQuote(roundedAmount);
+                    const flooredAmountOfTokens = floorNumberToDecimals(amountOfTokens);
+                    const quote = await fetchAmmQuote(flooredAmountOfTokens);
                     const parsedQuote = quote / divider;
 
-                    const recalculatedTokenAmount = (amountOfTokens * Number(usdAmountValue)) / parsedQuote;
-                    setTokenAmount(roundNumberToDecimals(recalculatedTokenAmount));
+                    const recalculatedTokenAmount = roundNumberToDecimals(
+                        (amountOfTokens * Number(usdAmountValue)) / parsedQuote
+                    );
+                    const maxAvailableTokenAmount =
+                        recalculatedTokenAmount > flooredAmountOfTokens
+                            ? flooredAmountOfTokens
+                            : recalculatedTokenAmount;
+                    setTokenAmount(maxAvailableTokenAmount);
                 }
             }
         };
@@ -475,7 +481,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         (value: string | number) => {
             const positionOdds = roundNumberToDecimals(getPositionOdds(market));
             if (value && Number(value) < positionOdds) {
-                setTooltipTextUsdAmount(t('markets.parlay.validation.min-amount', { min: positionOdds }));
+                setTooltipTextUsdAmount(t('markets.parlay.validation.single-min-amount', { min: positionOdds }));
             } else if (Number(value) > availableUsdAmount) {
                 setTooltipTextUsdAmount(t('markets.parlay.validation.amount-exceeded'));
             } else if (Number(value) > paymentTokenBalance) {

@@ -44,6 +44,7 @@ import {
     formatCurrency,
     formatCurrencyWithSign,
     formatPercentage,
+    roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -294,8 +295,10 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                     const usdAmountValueAsNumber = Number(usdAmountValue);
                     const parsedQuote = quote / divider;
 
-                    const recalculatedTokenAmount = ((X * usdAmountValueAsNumber) / parsedQuote).toFixed(2);
-                    setTokenAmount(recalculatedTokenAmount);
+                    const recalculatedTokenAmount = roundNumberToDecimals((X * usdAmountValueAsNumber) / parsedQuote);
+                    const maxAvailableTokenAmount =
+                        recalculatedTokenAmount > roundedAmount ? roundedAmount : recalculatedTokenAmount;
+                    setTokenAmount(maxAvailableTokenAmount);
                 }
             }
         };
