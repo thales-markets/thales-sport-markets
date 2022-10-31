@@ -1,13 +1,15 @@
 import styled from 'styled-components';
+import { FlexDivRow } from 'styles/common';
 
 export const Container = styled.div<{
     backgroundColor?: string;
     claimBorder?: boolean;
     isCanceled?: boolean;
     isResolved?: boolean;
+    isMobile?: boolean;
 }>`
     display: flex;
-    flex-direction: row;
+    flex-direction: ${(_props) => (_props?.isMobile ? 'column' : 'row')};
     width: 100%;
     padding: 10px 12px;
     border-radius: 5px;
@@ -16,7 +18,8 @@ export const Container = styled.div<{
     background-color: ${(_props) =>
         _props.isResolved && !_props.claimBorder ? 'rgb(36,41,64, 0.5)' : 'rgba(48, 54, 86, 0.5)'};
     border: ${(_props) => (_props?.claimBorder ? '3px solid #3FD1FF' : '')};
-    height: 60px;
+    height: ${(_props) => (_props?.isMobile ? '70px' : '60px')};
+    flex-grow: ${(_props) => (_props?.isMobile ? '1' : '')};
 `;
 
 export const ClubNameLabel = styled.span`
@@ -42,11 +45,12 @@ export const BetTypeContainer = styled.div`
     font-weight: bold;
 `;
 
-export const ClubVsClubContainer = styled.div`
+export const ClubVsClubContainer = styled.div<{ isMobile?: boolean }>`
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: ${(_props) => (_props?.isMobile ? 'flex-start' : 'space-between')};
     align-items: center;
+    flex-grow: ${(_props) => (_props?.isMobile ? '1' : '')};
 `;
 
 export const VSLabel = styled.span`
@@ -60,13 +64,47 @@ export const ClubLogo = styled.img<{ width?: string; height?: string }>`
     width: ${(_props) => (_props?.width ? _props.width : '30px')};
 `;
 
-export const LinkIcon = styled.i`
+export const LinkIcon = styled.i<{ isMobile?: boolean }>`
     font-size: 16px;
-    margin-left: 10px;
-    margin-top: 12px;
+    margin-left: ${(_props) => (_props?.isMobile ? '' : '10px')};
+    margin-top: ${(_props) => (_props?.isMobile ? '' : '12px')};
     color: ${(props) => props.theme.textColor.secondary};
     &:hover {
         cursor: pointer;
         color: ${(props) => props.theme.textColor.quaternary};
+    }
+`;
+
+export const MatchInfoMobile = styled(FlexDivRow)`
+    width: 100%;
+    margin-bottom: 5px;
+`;
+
+export const MatchInfoLabelMobile = styled.label`
+    font-size: 11px;
+    color: ${(props) => props.theme.textColor.primary};
+    text-transform: uppercase;
+`;
+
+export const VSLabelMobile = styled.span`
+    margin: 0 5px;
+    font-size: 11px;
+`;
+
+export const LinkWrapper = styled(FlexDivRow)`
+    flex-grow: 1;
+    justify-content: end;
+    align-items: center;
+`;
+
+export const MatchNamesContainerMobile = styled(FlexDivRow)`
+    width: 77%;
+    justify-content: space-between;
+    > :first-child {
+        width: 45%;
+        text-align: end;
+    }
+    > :last-child {
+        width: 45%;
     }
 `;

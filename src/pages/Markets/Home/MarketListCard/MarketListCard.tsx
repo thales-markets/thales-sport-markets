@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { getIsApexTopGame, isApexGame, isClaimAvailable } from 'utils/markets';
+import { getIsApexTopGame, isApexGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
@@ -28,8 +28,6 @@ type MarketRowCardProps = {
 };
 
 const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions, language }) => {
-    const claimAvailable = isClaimAvailable(accountPositions);
-
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
 
@@ -41,17 +39,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
     }, [market.homeTeam, market.awayTeam, market.tags]);
 
     return (
-        <Container
-            claimBorder={claimAvailable}
-            isCanceled={market.isCanceled}
-            isResolved={market.isResolved && !market.isCanceled}
-        >
+        <Container isCanceled={market.isCanceled} isResolved={market.isResolved && !market.isCanceled}>
             <MatchStatus
-                address={market.address}
                 isResolved={market.isResolved}
                 isLive={market.maturityDate < new Date()}
                 isCanceled={market.isCanceled}
-                isClaimable={claimAvailable}
                 result={`${market.homeScore}${isApexTopGame ? '' : `:${market.awayScore}`}`}
                 startsAt={formatDateWithTime(market.maturityDate)}
                 isPaused={market.isPaused}

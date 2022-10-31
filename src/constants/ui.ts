@@ -54,6 +54,7 @@ export const MAIN_COLORS = {
         BLUE: '#64D9FE',
         WHITE: '#FFFFFF',
         POTENTIAL_PROFIT: '#5FC694',
+        DARK_GRAY: '#5F6180',
     },
 };
 

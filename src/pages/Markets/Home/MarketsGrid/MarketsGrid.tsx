@@ -1,16 +1,18 @@
-import SPAAnchor from 'components/SPAAnchor';
+// import SPAAnchor from 'components/SPAAnchor';
 import { TAGS_LIST } from 'constants/tags';
 import i18n from 'i18n';
 import _ from 'lodash';
 import React from 'react';
-import Masonry from 'react-masonry-css';
+// import Masonry from 'react-masonry-css';
 import { useSelector } from 'react-redux';
+// import { getIsMobile } from 'redux/modules/app';
 import { getFavouriteLeagues } from 'redux/modules/ui';
+// import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { AccountPositionsMap, SportMarkets, TagInfo } from 'types/markets';
-import { buildMarketLink } from 'utils/routes';
-import MarketCard from '../MarketCard';
+// import { buildMarketLink } from 'utils/routes';
+// import MarketCard from '../MarketCard';
 import MarketsList from '../MarketsList';
 
 type MarketsGridProps = {
@@ -25,7 +27,7 @@ export const breakpointColumnsObj = {
 };
 
 const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) => {
-    const mobileGridView = window.innerWidth < 950;
+    // const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const language = i18n.language;
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const marketsMap = new Map();
@@ -39,7 +41,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) 
 
     return (
         <Container>
-            {mobileGridView ? (
+            {/* {isMobile ? (
                 <Masonry breakpointCols={breakpointColumnsObj} className="">
                     {markets.map((market, index) => {
                         return (
@@ -49,37 +51,37 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) 
                         );
                     })}
                 </Masonry>
-            ) : (
-                <ListContainer>
-                    {marketsKeys
-                        .sort((a, b) => {
-                            const isFavouriteA = Number(
-                                favouriteLeagues.filter((league: TagInfo) => league.id == a)[0].favourite
-                            );
-                            const isFavouriteB = Number(
-                                favouriteLeagues.filter((league: TagInfo) => league.id == b)[0].favourite
-                            );
-                            const leagueNameA = TAGS_LIST.find((t: TagInfo) => t.id == a)?.label;
-                            const leagueNameB = TAGS_LIST.find((t: TagInfo) => t.id == b)?.label;
-                            if (isFavouriteA == isFavouriteB) {
-                                return (leagueNameA || '') > (leagueNameB || '') ? 1 : -1;
-                            } else {
-                                return isFavouriteB - isFavouriteA;
-                            }
-                        })
-                        .map((leagueId: number, index: number) => {
-                            return (
-                                <MarketsList
-                                    key={index}
-                                    league={leagueId}
-                                    markets={marketsMap.get(leagueId)}
-                                    language={language}
-                                    accountPositions={accountPositions}
-                                />
-                            );
-                        })}
-                </ListContainer>
-            )}
+            ) : ( */}
+            <ListContainer>
+                {marketsKeys
+                    .sort((a, b) => {
+                        const isFavouriteA = Number(
+                            favouriteLeagues.filter((league: TagInfo) => league.id == a)[0].favourite
+                        );
+                        const isFavouriteB = Number(
+                            favouriteLeagues.filter((league: TagInfo) => league.id == b)[0].favourite
+                        );
+                        const leagueNameA = TAGS_LIST.find((t: TagInfo) => t.id == a)?.label;
+                        const leagueNameB = TAGS_LIST.find((t: TagInfo) => t.id == b)?.label;
+                        if (isFavouriteA == isFavouriteB) {
+                            return (leagueNameA || '') > (leagueNameB || '') ? 1 : -1;
+                        } else {
+                            return isFavouriteB - isFavouriteA;
+                        }
+                    })
+                    .map((leagueId: number, index: number) => {
+                        return (
+                            <MarketsList
+                                key={index}
+                                league={leagueId}
+                                markets={marketsMap.get(leagueId)}
+                                language={language}
+                                accountPositions={accountPositions}
+                            />
+                        );
+                    })}
+            </ListContainer>
+            {/* )} */}
         </Container>
     );
 };
