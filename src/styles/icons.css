@@ -74,43 +74,43 @@
 }
 
 .icon--wizard:before {
-    content: '\0057';
-}
-
-.icon--trivia:before {
-    content: '\0058';
-}
-
-.icon--leaderboard:before {
-    content: '\0059';
-}
-
-.icon--affiliate:before {
-    content: '\005A';
-}
-
-.icon--close:before {
     content: '\0061';
 }
 
-.icon--bnb:before {
+.icon--trivia:before {
     content: '\0062';
 }
 
-.icon--arb:before {
+.icon--leaderboard:before {
     content: '\0063';
 }
 
-.icon--op:before {
+.icon--affiliate:before {
     content: '\0064';
 }
 
-.icon--matic:before {
+.icon--close:before {
     content: '\0065';
 }
 
-.icon--eth:before {
+.icon--bnb:before {
     content: '\0066';
+}
+
+.icon--arb:before {
+    content: '\0067';
+}
+
+.icon--op:before {
+    content: '\0068';
+}
+
+.icon--matic:before {
+    content: '\0069';
+}
+
+.icon--eth:before {
+    content: '\006A';
 }
 
 .icon--motosport:before {
