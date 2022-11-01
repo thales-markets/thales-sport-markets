@@ -171,8 +171,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment }) => {
 
                     return parlayAmmQuote;
                 } catch (e: any) {
-                    const errorMessage = e.error.data.message;
-                    if (errorMessage.includes(TicketErrorMessage.RISK_PER_COMB)) {
+                    const errorMessage = e.error?.data?.message;
+                    if (errorMessage && errorMessage.includes(TicketErrorMessage.RISK_PER_COMB)) {
                         return { error: TicketErrorMessage.RISK_PER_COMB };
                     }
                     console.log(e);
