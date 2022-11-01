@@ -30,11 +30,8 @@ const ProfileItem: React.FC = () => {
 
 export const ProfileIconWidget: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    // const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state))
-        ? '0xf12c220b631125425f4c69823d6187FE3C8d0999'
-        : '0xf12c220b631125425f4c69823d6187FE3C8d0999';
     const claimablePositionsCountQuery = useClaimablePositionCountQuery(walletAddress, networkId, {
         enabled: isWalletConnected,
     });
