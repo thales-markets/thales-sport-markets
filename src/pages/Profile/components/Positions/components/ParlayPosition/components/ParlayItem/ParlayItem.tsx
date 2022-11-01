@@ -25,7 +25,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { t } from 'i18next';
 import { formatDateWithTime } from 'utils/formatters/date';
 
-const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData; quote: number }> = ({
+const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | undefined; quote: number }> = ({
     market,
     position,
     quote,
@@ -43,7 +43,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData; qu
     const isHomeWinner = market.isResolved && market.finalResult == 1 ? true : undefined;
     const isAwayWinner = market.isResolved && market.finalResult == 2 ? true : undefined;
 
-    const positionEnum = convertPositionNameToPositionType(position.side);
+    const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
 
     const parlayItemQuote = market.isCanceled ? 1 : quote ? quote : 0;
     const parlayStatus = getParlayItemStatus(market);

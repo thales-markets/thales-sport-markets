@@ -118,6 +118,7 @@ export const convertPositionNameToPositionType = (positionName: string) => {
     if (positionName?.toUpperCase() == 'HOME') return Position.HOME;
     if (positionName?.toUpperCase() == 'AWAY') return Position.AWAY;
     if (positionName?.toUpperCase() == 'DRAW') return Position.DRAW;
+    console.log('ULAZI OVDE');
     return Position.HOME;
 };
 
@@ -207,7 +208,15 @@ export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
     if (
         resolvedMarkets?.length == claimablePositions?.length &&
         resolvedMarkets?.length + canceledMarkets?.length == parlayMarket.sportMarkets.length
-    )
+    ) {
+        if (parlayMarket.sportMarkets[0].homeTeam.toLowerCase().includes('salzburg')) {
+            console.log('parlay address ', parlayMarket.id);
+            console.log('claimablePositions ', claimablePositions);
+            console.log('resolvedMarkets ', resolvedMarkets);
+            console.log('positions ', parlayMarket.positions);
+        }
         return true;
+    }
+
     return false;
 };

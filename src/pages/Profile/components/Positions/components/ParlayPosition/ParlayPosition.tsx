@@ -112,7 +112,9 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
                         return (
                             <ParlayItem
                                 market={sportMarket}
-                                position={parlayMarket.positions[index]}
+                                position={parlayMarket.positions.find(
+                                    (position) => position.market.address == sportMarket.address
+                                )}
                                 quote={parlayMarket.marketQuotes ? parlayMarket.marketQuotes[index] : 0}
                                 key={index}
                             />
