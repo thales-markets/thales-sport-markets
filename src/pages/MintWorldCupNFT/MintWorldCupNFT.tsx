@@ -11,6 +11,8 @@ import { Container, SymbolsContainer } from './styled-components';
 import Eligible from './components/Eligible';
 import NotEligible from './components/NotEligible';
 import ChooseNFT from './components/ChooseNFT';
+import AlreadyMinted from './components/AlreadyMinted';
+import Header from './components/Header';
 
 const MintWorldCupNFT: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -37,14 +39,22 @@ const MintWorldCupNFT: React.FC = () => {
             {favoriteTeamDataQuery.isLoading ? (
                 <Loader />
             ) : (
-                <Container>
-                    {!favoriteTeamData?.isEligible && <NotEligible />}
-                    {favoriteTeamData?.isEligible && !isChooseNFTOpen && <Eligible onChooseNft={handleChooseNFT} />}
-                    {isChooseNFTOpen && <ChooseNFT />}
+                <>
+                    <Container>
+                        <Header />
+                        {!favoriteTeamData?.isEligible && <NotEligible />}
+                        {favoriteTeamData?.isEligible && !favoriteTeamData.favoriteTeam && !isChooseNFTOpen && (
+                            <Eligible onChooseNft={handleChooseNFT} />
+                        )}
+                        {!!favoriteTeamData?.favoriteTeam && <AlreadyMinted />}
+                        {isChooseNFTOpen && !favoriteTeamData?.favoriteTeam && favoriteTeamData?.isEligible && (
+                            <ChooseNFT />
+                        )}
+                    </Container>
                     <SymbolsContainer>
                         <SymbolsBackground />
                     </SymbolsContainer>
-                </Container>
+                </>
             )}
         </>
     );

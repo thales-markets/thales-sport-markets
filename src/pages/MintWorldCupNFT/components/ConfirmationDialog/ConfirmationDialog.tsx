@@ -22,15 +22,6 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ closeDialog, se
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
-    // const [hasAllowance, setAllowance] = useState<boolean>(false);
-
-    // useEffect(() => {
-    //     const { favoriteTeamContract, signer } = networkConnector;
-    //     if (favoriteTeamContract && signer) {
-    //         const favoriteTeamContractWithSigner = favoriteTeamContract.connect(signer);
-    //     }
-    // }, [walletAddress]);
-
     const handleMintNFT = async () => {
         const { favoriteTeamContract, signer } = networkConnector;
         if (favoriteTeamContract && signer) {
@@ -105,10 +96,10 @@ const ContentContainer = styled.div`
 
 const Background = styled.div`
     position: absolute;
-    width: 100vw;
-    height: 100vh;
+    width: 120%;
     top: 0;
-    left: 0;
+    bottom: 0;
+    left: -10%;
     backdrop-filter: blur(8px);
     z-index: 1001;
 `;

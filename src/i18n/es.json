@@ -455,10 +455,26 @@
         "no": "No",
         "yes-mint": "Sí, menta NFT",
         "are-you-sure": "¿Estás seguro de que quieres acuñar este NFT? Puede acuñar SOLO UN NFT por monedero.",
-        "success-mint": "acuñado con éxito"
+        "success-mint": "acuñado con éxito",
+        "qatar-2022": "Catar 2022",
+        "already-minted": "Ya has acuñado tu NFT"
     },
     "profile": {
         "transaction-history": "Historial de transacciones",
-        "open-claimable": "Abierto/Reclamable"
+        "open-claimable": "Abierto/Reclamable",
+        "categories": {
+            "open": "Abierto",
+            "claimable": "Reclamable"
+        },
+        "card": {
+            "claim": "Reclamar",
+            "canceled": "Cancelado",
+            "total-quote": "Cotización total",
+            "to-claim": "Reclamar",
+            "ticket-id": "Identificación de entradas",
+            "to-win": "Ganar",
+            "ticket-paid": "boleto pagado",
+            "number-of-games": "Numero de juegos"
+        }
     }
 }

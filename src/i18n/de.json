@@ -452,10 +452,26 @@
         "no": "Nein",
         "yes-mint": "Ja, neuwertiges NFT",
         "success-mint": "Erfolgreich geprägt",
-        "are-you-sure": "Sind Sie sicher, dass Sie diese NFT prägen möchten? Sie können NUR EINE NFT pro Wallet prägen."
+        "are-you-sure": "Sind Sie sicher, dass Sie diese NFT prägen möchten? Sie können NUR EINE NFT pro Wallet prägen.",
+        "qatar-2022": "Katar 2022",
+        "already-minted": "Sie haben Ihr NFT bereits geprägt"
     },
     "profile": {
         "open-claimable": "Offen/Beanspruchbar",
-        "transaction-history": "Verlauf der Transaktionen"
+        "transaction-history": "Verlauf der Transaktionen",
+        "categories": {
+            "claimable": "Beanspruchbar",
+            "open": "Offen"
+        },
+        "card": {
+            "claim": "Beanspruchen",
+            "ticket-id": "Ticketnummer",
+            "canceled": "Abgesagt",
+            "to-win": "Gewinnen",
+            "number-of-games": "Anzahl von Spielen",
+            "to-claim": "Beanspruchen",
+            "total-quote": "Gesamtangebot",
+            "ticket-paid": "Ticket bezahlt"
+        }
     }
 }

@@ -458,10 +458,26 @@
         "no": "No",
         "yes-mint": "Sì, NFT nuovo",
         "are-you-sure": "Sei sicuro di voler coniare questo NFT? Puoi coniare SOLO UN NFT per portafoglio.",
-        "success-mint": "Coniato con successo"
+        "success-mint": "Coniato con successo",
+        "already-minted": "Hai già coniato il tuo NFT",
+        "qatar-2022": "Qatar 2022"
     },
     "profile": {
         "transaction-history": "Cronologia delle transazioni",
-        "open-claimable": "Aperto/Rivendicabile"
+        "open-claimable": "Aperto/Rivendicabile",
+        "categories": {
+            "claimable": "Rivendicabile",
+            "open": "Aprire"
+        },
+        "card": {
+            "canceled": "Annullato",
+            "ticket-id": "ID biglietto",
+            "to-claim": "Richiedere",
+            "claim": "Reclamo",
+            "number-of-games": "Numero di giochi",
+            "ticket-paid": "Biglietto pagato",
+            "total-quote": "Citazione totale",
+            "to-win": "Vincere"
+        }
     }
 }
