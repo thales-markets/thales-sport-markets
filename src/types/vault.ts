@@ -1,6 +1,5 @@
 export type VaultData = {
     round: number;
-    roundStartTime: number;
     roundEndTime: number;
     vaultStarted: boolean;
     maxAllowedDeposit: number;
@@ -16,6 +15,5 @@ export type UserVaultData = {
     balanceNextRound: number;
     balanceTotal: number;
     isWithdrawalRequested: boolean;
-    withdrawalAmount: number;
-    isWithdrawRoundEnded: boolean;
+    hasDepositForNextRound: boolean;
 };

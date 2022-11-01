@@ -13,7 +13,6 @@ const useVaultDataQuery = (networkId: NetworkId, options?: UseQueryOptions<Vault
                 vaultStarted: false,
                 maxAllowedDeposit: 0,
                 round: 0,
-                roundStartTime: 0,
                 roundEndTime: 0,
                 allocationNextRound: 0,
                 allocationNextRoundPercentage: 0,
@@ -36,26 +35,24 @@ const useVaultDataQuery = (networkId: NetworkId, options?: UseQueryOptions<Vault
                     vaultData.round = Number(round);
 
                     const [
-                        roundStartTime,
                         roundEndTime,
                         allocationCurrentRound,
                         allocationNextRound,
+                        availableAllocationNextRound,
                     ] = await Promise.all([
-                        sportVaultContract?.roundStartTime(vaultData.round),
-                        sportVaultContract?.roundEndTime(vaultData.round),
+                        sportVaultContract?.getCurrentRoundEnd(),
                         sportVaultContract?.allocationPerRound(vaultData.round),
                         sportVaultContract?.capPerRound(vaultData.round + 1),
+                        sportVaultContract?.getAvailableToDeposit(),
                     ]);
 
-                    vaultData.roundStartTime = Number(roundStartTime) * 1000;
                     vaultData.roundEndTime = Number(roundEndTime) * 1000;
                     vaultData.allocationCurrentRound = bigNumberFormatter(allocationCurrentRound);
                     vaultData.allocationNextRound = bigNumberFormatter(allocationNextRound);
                     vaultData.allocationNextRoundPercentage =
                         (vaultData.allocationNextRound / vaultData.maxAllowedDeposit) * 100;
                     vaultData.isRoundEnded = new Date().getTime() > vaultData.roundEndTime;
-                    vaultData.availableAllocationNextRound =
-                        vaultData.maxAllowedDeposit - vaultData.allocationNextRound;
+                    vaultData.availableAllocationNextRound = bigNumberFormatter(availableAllocationNextRound);
 
                     return vaultData;
                 }

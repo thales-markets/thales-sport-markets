@@ -18,8 +18,7 @@ const useUserVaultDataQuery = (
                 balanceNextRound: 0,
                 balanceTotal: 0,
                 isWithdrawalRequested: false,
-                withdrawalAmount: 0,
-                isWithdrawRoundEnded: false,
+                hasDepositForNextRound: false,
             };
 
             const { sportVaultContract } = networkConnector;
@@ -27,19 +26,17 @@ const useUserVaultDataQuery = (
                 if (sportVaultContract) {
                     const [round] = await Promise.all([sportVaultContract?.round()]);
 
-                    const [balanceCurrentRound, balanceNextRound, withdrawalRequest] = await Promise.all([
+                    const [balanceCurrentRound, balanceNextRound, withdrawalRequested] = await Promise.all([
                         sportVaultContract?.balancesPerRound(Number(round), walletAddress),
                         sportVaultContract?.balancesPerRound(Number(round) + 1, walletAddress),
-                        sportVaultContract?.withdrawalQueue(walletAddress),
+                        sportVaultContract?.withdrawalRequested(walletAddress),
                     ]);
 
                     userVaultData.balanceCurrentRound = bigNumberFormatter(balanceCurrentRound);
                     userVaultData.balanceNextRound = bigNumberFormatter(balanceNextRound);
                     userVaultData.balanceTotal = userVaultData.balanceCurrentRound + userVaultData.balanceNextRound;
-                    userVaultData.isWithdrawalRequested = withdrawalRequest.requested;
-                    userVaultData.withdrawalAmount = bigNumberFormatter(withdrawalRequest.amount);
-                    userVaultData.isWithdrawRoundEnded =
-                        userVaultData.isWithdrawalRequested && Number(withdrawalRequest.round) < Number(round);
+                    userVaultData.isWithdrawalRequested = withdrawalRequested;
+                    userVaultData.hasDepositForNextRound = userVaultData.balanceNextRound > 0;
 
                     return userVaultData;
                 }
