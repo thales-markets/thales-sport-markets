@@ -209,12 +209,6 @@ export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
         resolvedMarkets?.length == claimablePositions?.length &&
         resolvedMarkets?.length + canceledMarkets?.length == parlayMarket.sportMarkets.length
     ) {
-        if (parlayMarket.sportMarkets[0].homeTeam.toLowerCase().includes('salzburg')) {
-            console.log('parlay address ', parlayMarket.id);
-            console.log('claimablePositions ', claimablePositions);
-            console.log('resolvedMarkets ', resolvedMarkets);
-            console.log('positions ', parlayMarket.positions);
-        }
         return true;
     }
 
