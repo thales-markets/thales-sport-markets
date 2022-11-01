@@ -209,7 +209,8 @@ export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
 
     if (
         resolvedMarkets?.length == claimablePositions?.length &&
-        resolvedMarkets?.length + canceledMarkets?.length == parlayMarket.sportMarkets.length
+        resolvedMarkets?.length + canceledMarkets?.length == parlayMarket.sportMarkets.length &&
+        !parlayMarket.claimed
     ) {
         return true;
     }
