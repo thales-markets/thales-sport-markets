@@ -80,6 +80,12 @@ export const ArrowIcon = styled.i`
     margin-right: 5px;
 `;
 
+export const CollapsableContainer = styled(FlexDivColumnNative)<{ show?: boolean }>`
+    width: 100%;
+    max-height: ${(_props) => (_props?.show ? '100%' : '0')};
+    overflow: hidden;
+`;
+
 export const Divider = styled.div`
     height: 1px;
     border: none;

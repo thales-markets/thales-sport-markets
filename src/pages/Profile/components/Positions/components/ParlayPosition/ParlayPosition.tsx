@@ -16,6 +16,7 @@ import {
     ArrowIcon,
     ClaimLabel,
     ClaimValue,
+    CollapsableContainer,
     CollapseFooterContainer,
     Container,
     Divider,
@@ -104,41 +105,39 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
                     </ClaimButton>
                 )}
             </OverviewContainer>
-            {showDetails && (
-                <>
-                    <Divider />
-                    <ParlayDetailContainer>
-                        {parlayMarket.sportMarkets.map((sportMarket, index) => {
-                            return (
-                                <ParlayItem
-                                    market={sportMarket}
-                                    position={parlayMarket.positions[index]}
-                                    quote={parlayMarket.marketQuotes ? parlayMarket.marketQuotes[index] : 0}
-                                    key={index}
-                                />
-                            );
-                        })}
-                    </ParlayDetailContainer>
-                    <CollapseFooterContainer>
-                        <TotalQuoteContainer>
-                            <Label>{t('profile.card.total-quote')}:</Label>
-                            <Value>{formatMarketOdds(selectedOddsType, parlayMarket.totalQuote)}</Value>
-                        </TotalQuoteContainer>
-                        <ProfitContainer>
-                            {isClaimable ? (
-                                <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
-                            ) : (
-                                <WinLabel>{t('profile.card.to-win')}:</WinLabel>
-                            )}
-                            {isClaimable ? (
-                                <ClaimValue>+ {formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</ClaimValue>
-                            ) : (
-                                <WinValue>+ {formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</WinValue>
-                            )}
-                        </ProfitContainer>
-                    </CollapseFooterContainer>
-                </>
-            )}
+            <CollapsableContainer show={showDetails}>
+                <Divider />
+                <ParlayDetailContainer>
+                    {parlayMarket.sportMarkets.map((sportMarket, index) => {
+                        return (
+                            <ParlayItem
+                                market={sportMarket}
+                                position={parlayMarket.positions[index]}
+                                quote={parlayMarket.marketQuotes ? parlayMarket.marketQuotes[index] : 0}
+                                key={index}
+                            />
+                        );
+                    })}
+                </ParlayDetailContainer>
+                <CollapseFooterContainer>
+                    <TotalQuoteContainer>
+                        <Label>{t('profile.card.total-quote')}:</Label>
+                        <Value>{formatMarketOdds(selectedOddsType, parlayMarket.totalQuote)}</Value>
+                    </TotalQuoteContainer>
+                    <ProfitContainer>
+                        {isClaimable ? (
+                            <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
+                        ) : (
+                            <WinLabel>{t('profile.card.to-win')}:</WinLabel>
+                        )}
+                        {isClaimable ? (
+                            <ClaimValue>+ {formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</ClaimValue>
+                        ) : (
+                            <WinValue>+ {formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</WinValue>
+                        )}
+                    </ProfitContainer>
+                </CollapseFooterContainer>
+            </CollapsableContainer>
         </Container>
     );
 };

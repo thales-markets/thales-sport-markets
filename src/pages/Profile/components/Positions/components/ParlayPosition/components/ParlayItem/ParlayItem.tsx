@@ -56,7 +56,6 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData; qu
             : ODDS_COLOR.DRAW;
     };
 
-    console.log('Market ', market);
     return (
         <Wrapper>
             <MatchInfo>

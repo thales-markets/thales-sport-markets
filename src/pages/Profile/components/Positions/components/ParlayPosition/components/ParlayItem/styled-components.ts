@@ -26,7 +26,7 @@ export const ClubLogo = styled.img<{ awayTeam?: boolean; losingTeam?: boolean }>
     width: 45px;
     opacity: ${(_props) => (_props?.losingTeam == true ? `0.4` : '1')};
     z-index: ${(_props) => (_props?.losingTeam == true ? '1' : '2')};
-    ${(_props) => (_props?.awayTeam ? 'margin-left: -10px;' : '')}
+    ${(_props) => (_props?.awayTeam ? 'margin-left: -15px;' : '')}
 `;
 
 export const MatchLabel = styled(FlexDivRow)`

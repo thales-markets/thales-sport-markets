@@ -1,6 +1,6 @@
 import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivColumnNative } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
     width: 100%;
@@ -30,6 +30,6 @@ export const CategoryIcon = styled.i`
 `;
 //  ------------------------------------------------
 
-export const ListContainer = styled(FlexDivColumn)`
+export const ListContainer = styled(FlexDivColumnNative)`
     width: 100%;
 `;

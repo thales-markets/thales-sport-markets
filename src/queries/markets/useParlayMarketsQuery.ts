@@ -27,7 +27,7 @@ export const useParlayMarketsQuery = (
                 const parlayMarketsModified = parlayMarkets.map((parlayMarket: ParlayMarket) => {
                     return {
                         ...parlayMarket,
-                        sportMarket: parlayMarket.sportMarkets.map((market) => {
+                        sportMarkets: parlayMarket.sportMarkets.map((market) => {
                             return {
                                 ...market,
                                 homeTeam: market.isApex
@@ -40,6 +40,7 @@ export const useParlayMarketsQuery = (
                         }),
                     };
                 });
+                console.log('parlayMarketsModified ', parlayMarketsModified);
                 return parlayMarketsModified;
             } catch (e) {
                 console.log('E ', e);
