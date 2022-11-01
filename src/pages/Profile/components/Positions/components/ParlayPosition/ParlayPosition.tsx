@@ -1,6 +1,5 @@
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
-import { ethers } from 'ethers';
 import { ClaimButton } from 'pages/Markets/Market/MarketDetailsV2/components/Positions/styled-components';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
