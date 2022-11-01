@@ -237,7 +237,21 @@
     },
     "profile": {
         "open-claimable": "Open/Claimable",
-        "transaction-history": "Transaction history"
+        "transaction-history": "Transaction history",
+        "categories": {
+            "claimable": "Claimable",
+            "open": "Open"
+        },
+        "card": {
+            "ticket-id": "Ticket ID",
+            "number-of-games": "Number of games",
+            "ticket-paid": "Ticket paid",
+            "to-win": "To win",
+            "to-claim": "To claim",
+            "claim": "Claim",
+            "canceled": "Canceled",
+            "total-quote": "Total quote"
+        }
     },
     "markets": {
         "market-card": {
