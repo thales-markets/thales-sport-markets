@@ -554,5 +554,9 @@
         "success-mint": "Frappé avec succès",
         "are-you-sure": "Êtes-vous sûr de vouloir frapper ce NFT ? Vous pouvez frapper UN SEUL NFT par portefeuille.",
         "yes-mint": "Oui, menthe NFT"
+    },
+    "profile": {
+        "transaction-history": "Historique des transactions",
+        "open-claimable": "Ouvert/Réclamable"
     }
 }

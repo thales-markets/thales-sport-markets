@@ -456,5 +456,9 @@
         "yes-mint": "是的，薄荷 NFT",
         "are-you-sure": "你确定要铸造这个 NFT 吗？每个钱包只能铸造一个 NFT。",
         "success-mint": "成功铸造"
+    },
+    "profile": {
+        "transaction-history": "交易记录",
+        "open-claimable": "开放/可索赔"
     }
 }

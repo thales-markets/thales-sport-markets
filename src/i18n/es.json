@@ -456,5 +456,9 @@
         "yes-mint": "Sí, menta NFT",
         "are-you-sure": "¿Estás seguro de que quieres acuñar este NFT? Puede acuñar SOLO UN NFT por monedero.",
         "success-mint": "acuñado con éxito"
+    },
+    "profile": {
+        "transaction-history": "Historial de transacciones",
+        "open-claimable": "Abierto/Reclamable"
     }
 }

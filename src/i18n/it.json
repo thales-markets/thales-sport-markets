@@ -459,5 +459,9 @@
         "yes-mint": "Sì, NFT nuovo",
         "are-you-sure": "Sei sicuro di voler coniare questo NFT? Puoi coniare SOLO UN NFT per portafoglio.",
         "success-mint": "Coniato con successo"
+    },
+    "profile": {
+        "transaction-history": "Cronologia delle transazioni",
+        "open-claimable": "Aperto/Rivendicabile"
     }
 }

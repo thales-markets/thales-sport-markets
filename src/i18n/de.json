@@ -453,5 +453,9 @@
         "yes-mint": "Ja, neuwertiges NFT",
         "success-mint": "Erfolgreich geprägt",
         "are-you-sure": "Sind Sie sicher, dass Sie diese NFT prägen möchten? Sie können NUR EINE NFT pro Wallet prägen."
+    },
+    "profile": {
+        "open-claimable": "Offen/Beanspruchbar",
+        "transaction-history": "Verlauf der Transaktionen"
     }
 }
