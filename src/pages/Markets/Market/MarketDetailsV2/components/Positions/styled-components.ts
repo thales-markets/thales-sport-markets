@@ -91,7 +91,6 @@ export const ResultContainer = styled(InnerContainer)``;
 export const ClaimButton = styled(Button)<{ claimable?: boolean }>`
     background: ${(props) => props.theme.background.quaternary};
     color: ${(props) => props.theme.textColor.tertiary};
-    margin-right: 20px;
     text-transform: uppercase;
     cursor: pointer;
     border-radius: 5px;

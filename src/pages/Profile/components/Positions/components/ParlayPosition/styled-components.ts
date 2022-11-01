@@ -12,7 +12,7 @@ export const Container = styled(FlexDivColumnNative)`
 `;
 
 export const OverviewContainer = styled(FlexDivRow)`
-    justify-content: flex-start;
+    justify-content: center;
     width: 100%;
     align-items: center;
     height: 35px;
