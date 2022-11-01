@@ -8,6 +8,9 @@ export type VaultData = {
     availableAllocationNextRound: number;
     allocationNextRoundPercentage: number;
     isRoundEnded: boolean;
+    minDepositAmount: number;
+    maxAllowedUsers: number;
+    usersCurrentlyInVault: number;
 };
 
 export type UserVaultData = {

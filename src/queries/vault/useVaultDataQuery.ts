@@ -19,40 +19,53 @@ const useVaultDataQuery = (networkId: NetworkId, options?: UseQueryOptions<Vault
                 allocationCurrentRound: 0,
                 isRoundEnded: false,
                 availableAllocationNextRound: 0,
+                minDepositAmount: 0,
+                maxAllowedUsers: 0,
+                usersCurrentlyInVault: 0,
             };
 
             const { sportVaultContract } = networkConnector;
             try {
                 if (sportVaultContract) {
-                    const [vaultStarted, maxAllowedDeposit, round] = await Promise.all([
+                    const [
+                        vaultStarted,
+                        maxAllowedDeposit,
+                        round,
+                        roundEndTime,
+                        availableAllocationNextRound,
+                        minDepositAmount,
+                        maxAllowedUsers,
+                        usersCurrentlyInVault,
+                    ] = await Promise.all([
                         sportVaultContract?.vaultStarted(),
                         sportVaultContract?.maxAllowedDeposit(),
                         sportVaultContract?.round(),
+                        sportVaultContract?.getCurrentRoundEnd(),
+                        sportVaultContract?.getAvailableToDeposit(),
+                        sportVaultContract?.minDepositAmount(),
+                        sportVaultContract?.maxAllowedUsers(),
+                        sportVaultContract?.usersCurrentlyInVault(),
                     ]);
 
                     vaultData.vaultStarted = vaultStarted;
                     vaultData.maxAllowedDeposit = bigNumberFormatter(maxAllowedDeposit);
                     vaultData.round = Number(round);
+                    vaultData.roundEndTime = Number(roundEndTime) * 1000;
+                    vaultData.availableAllocationNextRound = bigNumberFormatter(availableAllocationNextRound);
+                    vaultData.isRoundEnded = new Date().getTime() > vaultData.roundEndTime;
+                    vaultData.minDepositAmount = bigNumberFormatter(minDepositAmount);
+                    vaultData.maxAllowedUsers = Number(maxAllowedUsers);
+                    vaultData.usersCurrentlyInVault = Number(usersCurrentlyInVault);
 
-                    const [
-                        roundEndTime,
-                        allocationCurrentRound,
-                        allocationNextRound,
-                        availableAllocationNextRound,
-                    ] = await Promise.all([
-                        sportVaultContract?.getCurrentRoundEnd(),
+                    const [allocationCurrentRound, allocationNextRound] = await Promise.all([
                         sportVaultContract?.allocationPerRound(vaultData.round),
                         sportVaultContract?.capPerRound(vaultData.round + 1),
-                        sportVaultContract?.getAvailableToDeposit(),
                     ]);
 
-                    vaultData.roundEndTime = Number(roundEndTime) * 1000;
                     vaultData.allocationCurrentRound = bigNumberFormatter(allocationCurrentRound);
                     vaultData.allocationNextRound = bigNumberFormatter(allocationNextRound);
                     vaultData.allocationNextRoundPercentage =
                         (vaultData.allocationNextRound / vaultData.maxAllowedDeposit) * 100;
-                    vaultData.isRoundEnded = new Date().getTime() > vaultData.roundEndTime;
-                    vaultData.availableAllocationNextRound = bigNumberFormatter(availableAllocationNextRound);
 
                     return vaultData;
                 }

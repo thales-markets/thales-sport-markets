@@ -125,6 +125,13 @@ const Vault: React.FC = () => {
     const exceededVaultCap = vaultData && vaultData.availableAllocationNextRound < Number(amount);
     const isWithdrawalRequested = userVaultData && userVaultData.isWithdrawalRequested;
     const nothingToWithdraw = userVaultData && userVaultData.balanceCurrentRound === 0;
+    const isMaximumAmountOfUsersReached =
+        vaultData &&
+        vaultData.usersCurrentlyInVault === vaultData.maxAllowedUsers &&
+        userVaultData &&
+        !userVaultData.hasDepositForNextRound;
+    const invalidAmount = vaultData && Number(vaultData.minDepositAmount) > Number(amount) && isAmountEntered;
+
     const isRequestWithdrawalButtonDisabled =
         !isWalletConnected ||
         isSubmitting ||
@@ -137,7 +144,9 @@ const Vault: React.FC = () => {
         insufficientBalance ||
         isSubmitting ||
         isWithdrawalRequested ||
-        exceededVaultCap;
+        exceededVaultCap ||
+        isMaximumAmountOfUsersReached ||
+        invalidAmount;
 
     useEffect(() => {
         const { signer, sUSDContract, sportVaultContract } = networkConnector;
@@ -459,26 +468,43 @@ const Vault: React.FC = () => {
                                     <ContentInfo>{t('vault.deposit-message')}</ContentInfo>
                                     {isWithdrawalRequested && (
                                         <WarningContentInfo>
-                                            <Trans i18nKey="vault.deposit-warning" />
+                                            <Trans i18nKey="vault.deposit-withdrawal-warning" />
+                                        </WarningContentInfo>
+                                    )}
+                                    {isMaximumAmountOfUsersReached && (
+                                        <WarningContentInfo>
+                                            <Trans i18nKey="vault.deposit-max-amount-of-users-warning" />
                                         </WarningContentInfo>
                                     )}
                                     <InputContainer>
                                         <InputLabel>{t('vault.deposit-amount-label')}:</InputLabel>
                                         <ValidationTooltip
-                                            open={insufficientBalance || exceededVaultCap}
+                                            open={insufficientBalance || exceededVaultCap || invalidAmount}
                                             title={
                                                 t(
                                                     `${
                                                         insufficientBalance
                                                             ? 'common.errors.insufficient-balance'
-                                                            : 'vault.deposit-vault-cap-error'
-                                                    }`
+                                                            : exceededVaultCap
+                                                            ? 'vault.deposit-vault-cap-error'
+                                                            : 'vault.deposit-min-amount-error'
+                                                    }`,
+                                                    {
+                                                        amount: formatCurrencyWithSign(
+                                                            USD_SIGN,
+                                                            vaultData.minDepositAmount
+                                                        ),
+                                                    }
                                                 ) as string
                                             }
                                         >
                                             <NumericInput
                                                 value={amount}
-                                                disabled={isSubmitting || isWithdrawalRequested}
+                                                disabled={
+                                                    isSubmitting ||
+                                                    isWithdrawalRequested ||
+                                                    isMaximumAmountOfUsersReached
+                                                }
                                                 onChange={(_, value) => setAmount(value)}
                                                 placeholder={t('vault.deposit-amount-placeholder')}
                                                 currencyLabel={PAYMENT_CURRENCY}
@@ -540,7 +566,7 @@ const Vault: React.FC = () => {
                                                 <>
                                                     {userVaultData.hasDepositForNextRound ? (
                                                         <WarningContentInfo>
-                                                            <Trans i18nKey="vault.withdrawal-warning" />
+                                                            <Trans i18nKey="vault.withdrawal-deposit-warning" />
                                                         </WarningContentInfo>
                                                     ) : (
                                                         <>
