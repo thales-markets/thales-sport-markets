@@ -4,6 +4,7 @@ import { FlexDiv, FlexDivColumn, FlexDivColumnNative } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
     width: 100%;
+    min-width: 668px;
 `;
 
 // --> Category Elements
@@ -28,6 +29,9 @@ export const CategoryIcon = styled.i`
     color: ${MAIN_COLORS.TEXT.DARK_GRAY};
     margin-right: 20px;
 `;
+
+export const Arrow = styled(CategoryIcon).attrs({ className: 'icon icon--arrow' })``;
+
 //  ------------------------------------------------
 
 export const ListContainer = styled(FlexDivColumnNative)`

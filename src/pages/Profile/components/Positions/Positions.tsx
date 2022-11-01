@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
 import useAccountMarketsQuery, { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import { ParlayMarket } from 'types/markets';
-import { CategoryContainer, CategoryIcon, CategoryLabel, Container, ListContainer } from './styled-components';
+import { Arrow, CategoryContainer, CategoryIcon, CategoryLabel, Container, ListContainer } from './styled-components';
 import { isParlayClaimable } from 'utils/markets';
 import ParlayPosition from './components/ParlayPosition';
 import SimpleLoader from 'components/SimpleLoader';
@@ -17,8 +17,8 @@ import { LoaderContainer } from 'pages/Markets/Home/Home';
 const Positions: React.FC = () => {
     const { t } = useTranslation();
 
-    // const [openClaimable, setClaimableState] = useState<boolean>(false);
-    // const [openOpenPositions, setOpenState] = useState<boolean>(false);
+    const [openClaimable, setClaimableState] = useState<boolean>(true);
+    const [openOpenPositions, setOpenState] = useState<boolean>(true);
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     // const walletAddress = useSelector((state: RootState) => getWalletAddress(state))
@@ -86,48 +86,54 @@ const Positions: React.FC = () => {
 
     return (
         <Container>
-            <CategoryContainer>
+            <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
                 <CategoryIcon className="icon icon--logo" />
+                <Arrow />
                 <CategoryLabel>{t('profile.categories.claimable')}</CategoryLabel>
             </CategoryContainer>
-            <ListContainer>
-                {parlayMarketsQuery.isLoading ? (
-                    <LoaderContainer>
-                        <SimpleLoader />
-                    </LoaderContainer>
-                ) : (
-                    <>
-                        {parlayMarketsByStatus.claimable?.length ? (
-                            parlayMarketsByStatus.claimable.map((parlayMarket, index) => {
-                                return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
-                            })
-                        ) : (
-                            <></>
-                        )}
-                    </>
-                )}
-            </ListContainer>
-            <CategoryContainer>
+            {openClaimable && (
+                <ListContainer>
+                    {parlayMarketsQuery.isLoading ? (
+                        <LoaderContainer>
+                            <SimpleLoader />
+                        </LoaderContainer>
+                    ) : (
+                        <>
+                            {parlayMarketsByStatus.claimable?.length ? (
+                                parlayMarketsByStatus.claimable.map((parlayMarket, index) => {
+                                    return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
+                                })
+                            ) : (
+                                <></>
+                            )}
+                        </>
+                    )}
+                </ListContainer>
+            )}
+            <CategoryContainer onClick={() => setOpenState(!openOpenPositions)}>
                 <CategoryIcon className="icon icon--logo" />
+                <Arrow />
                 <CategoryLabel>{t('profile.categories.open')}</CategoryLabel>
             </CategoryContainer>
-            <ListContainer>
-                {parlayMarketsQuery.isLoading ? (
-                    <LoaderContainer>
-                        <SimpleLoader />
-                    </LoaderContainer>
-                ) : (
-                    <>
-                        {parlayMarketsByStatus.open.length ? (
-                            parlayMarketsByStatus.open.map((parlayMarket, index) => {
-                                return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
-                            })
-                        ) : (
-                            <></>
-                        )}
-                    </>
-                )}
-            </ListContainer>
+            {openOpenPositions && (
+                <ListContainer>
+                    {parlayMarketsQuery.isLoading ? (
+                        <LoaderContainer>
+                            <SimpleLoader />
+                        </LoaderContainer>
+                    ) : (
+                        <>
+                            {parlayMarketsByStatus.open.length ? (
+                                parlayMarketsByStatus.open.map((parlayMarket, index) => {
+                                    return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
+                                })
+                            ) : (
+                                <></>
+                            )}
+                        </>
+                    )}
+                </ListContainer>
+            )}
         </Container>
     );
 };
