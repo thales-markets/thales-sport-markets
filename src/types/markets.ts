@@ -196,6 +196,8 @@ export type SportsMap = Record<number, string>;
 
 export type SportsTagsMap = Record<string, number[]>;
 
+export type TeamAbbreviationsMap = Record<string, string>;
+
 export enum PositionType {
     home = 'home',
     away = 'away',
