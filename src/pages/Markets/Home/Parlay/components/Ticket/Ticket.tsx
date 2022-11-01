@@ -138,6 +138,15 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment }) => {
         dispatch(setPayment({ selectedStableIndex, isVoucherSelected, amountToBuy: usdAmountValue }));
     }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
 
+    const isMounted = useRef(false);
+    useEffect(() => {
+        if (isMounted.current) {
+            dispatch(removeAll());
+        } else {
+            isMounted.current = true;
+        }
+    }, [dispatch, networkId]);
+
     const fetchParlayAmmQuote = useCallback(
         async (susdAmountForQuote: number) => {
             const { parlayMarketsAMMContract } = networkConnector;
@@ -162,8 +171,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment }) => {
 
                     return parlayAmmQuote;
                 } catch (e: any) {
-                    const errorMessage = e.error.data.message;
-                    if (errorMessage.includes(TicketErrorMessage.RISK_PER_COMB)) {
+                    const errorMessage = e.error?.data?.message;
+                    if (errorMessage && errorMessage.includes(TicketErrorMessage.RISK_PER_COMB)) {
                         return { error: TicketErrorMessage.RISK_PER_COMB };
                     }
                     console.log(e);

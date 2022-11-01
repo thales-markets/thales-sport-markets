@@ -54,7 +54,7 @@ import {
     SummaryValue,
 } from '../styled-components';
 import Payment from '../Payment';
-import { setPayment } from 'redux/modules/parlay';
+import { removeAll, setPayment } from 'redux/modules/parlay';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -151,6 +151,15 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         // Used for transition between Single and Ticket
         dispatch(setPayment({ selectedStableIndex, isVoucherSelected, amountToBuy: usdAmountValue }));
     }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
+
+    const isMounted = useRef(false);
+    useEffect(() => {
+        if (isMounted.current) {
+            dispatch(removeAll());
+        } else {
+            isMounted.current = true;
+        }
+    }, [dispatch, networkId]);
 
     const fetchAmmQuote = useCallback(
         async (amountForQuote: number) => {
