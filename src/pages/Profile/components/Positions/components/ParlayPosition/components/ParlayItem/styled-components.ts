@@ -40,6 +40,7 @@ export const ClubName = styled.span`
     text-transform: uppercase;
     color: ${MAIN_COLORS.TEXT.WHITE};
     margin-right: 5px;
+    word-wrap: normal;
 `;
 
 export const ParlayItemStatusContainer = styled(FlexDivRow)`

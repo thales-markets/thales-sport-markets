@@ -21,6 +21,7 @@ import { isParlayClaimable } from 'utils/markets';
 import ParlayPosition from './components/ParlayPosition';
 import SimpleLoader from 'components/SimpleLoader';
 import { LoaderContainer } from 'pages/Markets/Home/Home';
+import SinglePosition from './components/SinglePosition';
 
 const Positions: React.FC = () => {
     const { t } = useTranslation();
@@ -28,10 +29,10 @@ const Positions: React.FC = () => {
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
 
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    // const walletAddress = useSelector((state: RootState) => getWalletAddress(state))
-    //     ? '0xf12c220b631125425f4c69823d6187FE3C8d0999'
-    //     : '0xf12c220b631125425f4c69823d6187FE3C8d0999';
+    // const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state))
+        ? '0xf12c220b631125425f4c69823d6187FE3C8d0999'
+        : '0xf12c220b631125425f4c69823d6187FE3C8d0999';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
@@ -89,6 +90,8 @@ const Positions: React.FC = () => {
         return data;
     }, [parlayMarkets]);
 
+    const isLoading = parlayMarketsQuery.isLoading || accountMarketsQuery.isLoading;
+
     console.log('accountPositionsByStatus ', accountPositionsByStatus);
     console.log('parlayMarketsByStatus ', parlayMarketsByStatus);
 
@@ -101,16 +104,21 @@ const Positions: React.FC = () => {
             </CategoryContainer>
             {openClaimable && (
                 <ListContainer>
-                    {parlayMarketsQuery.isLoading ? (
+                    {isLoading ? (
                         <LoaderContainer>
                             <SimpleLoader />
                         </LoaderContainer>
                     ) : (
                         <>
-                            {parlayMarketsByStatus.claimable?.length ? (
-                                parlayMarketsByStatus.claimable.map((parlayMarket, index) => {
-                                    return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
-                                })
+                            {parlayMarketsByStatus.claimable.length || accountPositionsByStatus.claimable.length ? (
+                                <>
+                                    {accountPositionsByStatus.claimable.map((singleMarket, index) => {
+                                        return <SinglePosition position={singleMarket} key={`s-${index}`} />;
+                                    })}
+                                    {parlayMarketsByStatus.claimable.map((parlayMarket, index) => {
+                                        return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
+                                    })}
+                                </>
                             ) : (
                                 <EmptyContainer>{t('profile.messages.no-claimable')}</EmptyContainer>
                             )}
@@ -131,10 +139,15 @@ const Positions: React.FC = () => {
                         </LoaderContainer>
                     ) : (
                         <>
-                            {parlayMarketsByStatus.open.length ? (
-                                parlayMarketsByStatus.open.map((parlayMarket, index) => {
-                                    return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
-                                })
+                            {parlayMarketsByStatus.open.length || accountPositionsByStatus.open.length ? (
+                                <>
+                                    {accountPositionsByStatus.open.map((singleMarket, index) => {
+                                        return <SinglePosition position={singleMarket} key={`s-${index}`} />;
+                                    })}
+                                    {parlayMarketsByStatus.open.map((parlayMarket, index) => {
+                                        return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
+                                    })}
+                                </>
                             ) : (
                                 <EmptyContainer>{t('profile.messages.no-open')}</EmptyContainer>
                             )}
