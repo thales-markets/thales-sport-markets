@@ -6,11 +6,14 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getOddsType } from 'redux/modules/ui';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import { ParlayMarket } from 'types/markets';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
 import { formatMarketOdds, isParlayClaimable } from 'utils/markets';
 import networkConnector from 'utils/networkConnector';
+import { refetchAfterClaim } from 'utils/queryConnector';
 import ParlayItem from './components/ParlayItem';
 import {
     ArrowIcon,
@@ -42,6 +45,9 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
     const [showDetails, setShowDetails] = useState<boolean>(false);
     const selectedOddsType = useSelector(getOddsType);
 
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
+
     const claimParlay = async (parlayAddress: string) => {
         const id = toast.loading(t('market.toast-messsage.transaction-pending'));
         const { parlayMarketsAMMContract, signer } = networkConnector;
@@ -54,6 +60,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
 
                 if (txResult && txResult.transactionHash) {
                     toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
+                    refetchAfterClaim(walletAddress, networkId);
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));

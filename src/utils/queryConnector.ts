@@ -29,4 +29,9 @@ export const refetchBalances = (walletAddress: string, networkId: NetworkId) => 
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId));
 };
 
+export const refetchAfterClaim = (walletAddress: string, networkId: NetworkId) => {
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ParlayMarkets(networkId, walletAddress));
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.AccountPositionsProfile(walletAddress, networkId));
+};
+
 export default queryConnector;
