@@ -553,7 +553,9 @@
         "no": "Non",
         "success-mint": "Frappé avec succès",
         "are-you-sure": "Êtes-vous sûr de vouloir frapper ce NFT ? Vous pouvez frapper UN SEUL NFT par portefeuille.",
-        "yes-mint": "Oui, menthe NFT"
+        "yes-mint": "Oui, menthe NFT",
+        "qatar-2022": "Qatar 2022",
+        "already-minted": "Vous avez déjà frappé votre NFT"
     },
     "profile": {
         "transaction-history": "Historique des transactions",

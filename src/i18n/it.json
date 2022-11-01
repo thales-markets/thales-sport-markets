@@ -458,7 +458,9 @@
         "no": "No",
         "yes-mint": "Sì, NFT nuovo",
         "are-you-sure": "Sei sicuro di voler coniare questo NFT? Puoi coniare SOLO UN NFT per portafoglio.",
-        "success-mint": "Coniato con successo"
+        "success-mint": "Coniato con successo",
+        "already-minted": "Hai già coniato il tuo NFT",
+        "qatar-2022": "Qatar 2022"
     },
     "profile": {
         "transaction-history": "Cronologia delle transazioni",

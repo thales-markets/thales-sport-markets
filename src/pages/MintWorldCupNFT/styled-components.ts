@@ -10,7 +10,6 @@ export const Container = styled.div`
 `;
 
 export const EligibilityContainer = styled(FlexDivColumnCentered)`
-    margin-top: 80px;
     align-items: center;
     max-width: 100%;
     position: relative;
@@ -124,9 +123,7 @@ export const IncentivesTitle = styled.span`
     color: #04cfb6;
 `;
 
-export const GroupsContainer = styled.div`
-    margin-top: 80px;
-`;
+export const GroupsContainer = styled.div``;
 
 export const MintButtonContainer = styled.div`
     display: flex;
@@ -220,4 +217,30 @@ export const TeamFlagContainer = styled.div<{ index: number }>`
 export const TeamFlagImage = styled.img<{ selected: boolean }>`
     width: 40%;
     box-shadow: ${(props) => (props.selected ? '0px 0px 7px 4px #ac0033' : 'none')};
+`;
+
+export const HeaderContainer = styled(FlexDivColumnCentered)`
+    margin-top: 80px;
+    align-items: center;
+    max-width: 100%;
+    position: relative;
+`;
+
+export const HeaderText = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 150%;
+    letter-spacing: 0.025em;
+    color: white;
+    position: absolute;
+`;
+
+export const HeaderSymbolsContainer = styled.div`
+    padding: 10px;
+    width: 90%;
+    margin: auto;
 `;

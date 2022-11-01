@@ -452,6 +452,8 @@
         "are-you-sure": "Are you sure you want to mint this NFT? You can mint ONLY ONE NFT per wallet.",
         "no": "No",
         "yes-mint": "Yes, mint NFT",
-        "success-mint": "Successfully minted"
+        "success-mint": "Successfully minted",
+        "already-minted": "You have already minted your NFT",
+        "qatar-2022": "Qatar 2022"
     }
 }
