@@ -84,6 +84,7 @@ export const CollapsableContainer = styled(FlexDivColumnNative)<{ show?: boolean
     width: 100%;
     max-height: ${(_props) => (_props?.show ? '100%' : '0')};
     overflow: hidden;
+    align-items: center;
 `;
 
 export const Divider = styled.div`
