@@ -36,8 +36,6 @@ export const fixLongTeamName = (market: SportMarketInfo) => {
 };
 
 export const mapTeamNamesMobile = (teamName: string, individualCompetition: boolean) => {
-    console.log(teamName);
-    console.log(individualCompetition);
     if (individualCompetition) {
         const splittedName = teamName.split(' ');
         return splittedName[splittedName.length - 1];
