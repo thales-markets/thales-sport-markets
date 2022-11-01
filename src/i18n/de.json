@@ -289,7 +289,8 @@
                 "availability": "Geringe Verfügbarkeit für Marktposition",
                 "no-funds": "Bitte stellen Sie sicher, dass Ihr Portemonnaie über genügend Guthaben verfügt",
                 "risk-per-comb": "Risiko pro Kombination überschritten",
-                "not-supported": "Nicht unterstützter Validierungsfehler {{error}}"
+                "not-supported": "Nicht unterstützter Validierungsfehler {{error}}",
+                "single-min-amount": "Minimale Menge ist {{min}}"
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",
@@ -431,5 +432,30 @@
         "open-overtime": "Overtime Markets öffnen",
         "join-discord": "Brauchst du Hilfe? Tritt unserem Discord bei",
         "read-now": "Jetzt lesen"
+    },
+    "mint-world-cup-nft": {
+        "follow": "Folgen",
+        "retweet": "Retweeten",
+        "tag-3-friends": "Markiere 3 Freunde, teile deine ETH-Adresse und sag uns, welches Land du anfeuerst!",
+        "get-thales": "Holen Sie sich THALES",
+        "minting-is-free": "Minting ist kostenlos, Sie können nur eine NFT pro Wallet prägen. Diese NFT ist nicht übertragbar.",
+        "stake-thales": "Pfahl THALES",
+        "stake-10-thales": "Um einen NFT zu prägen, müssen Sie mindestens 10 THALES einsetzen.",
+        "choose-nft": "Wählen Sie NFT",
+        "go-to-twitter": "Gehen Sie zu Twitter",
+        "free-entry": "1 kostenloser Eintritt in FIFA Royale",
+        "incentives": "ANREIZE",
+        "second-option": "Die zweite Option, um Sie auf die Positivliste zu setzen, besteht darin, die folgenden Schritte auszuführen:",
+        "not-eligible-text": "Leider sind Sie nicht berechtigt, NFT zu prägen.",
+        "mint-nft-button": "Wie NFT",
+        "eligible-text": "Hey, Sie können jetzt Ihr Lieblingsteam NFT prägen.",
+        "no": "Nein",
+        "yes-mint": "Ja, neuwertiges NFT",
+        "success-mint": "Erfolgreich geprägt",
+        "are-you-sure": "Sind Sie sicher, dass Sie diese NFT prägen möchten? Sie können NUR EINE NFT pro Wallet prägen."
+    },
+    "profile": {
+        "open-claimable": "Offen/Beanspruchbar",
+        "transaction-history": "Verlauf der Transaktionen"
     }
 }

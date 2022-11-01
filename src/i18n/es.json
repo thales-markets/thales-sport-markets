@@ -292,7 +292,8 @@
                 "min-quote": "La cotización mínima es {{value}}",
                 "availability": "Baja disponibilidad para la posición de los mercados",
                 "not-supported": "Error de validación no compatible {{error}}",
-                "risk-per-comb": "Riesgo por combinación excedido"
+                "risk-per-comb": "Riesgo por combinación excedido",
+                "single-min-amount": "La cantidad mínima es {{min}}"
             },
             "fee": "Costo total",
             "payout": "Total recibido",
@@ -434,5 +435,30 @@
         "open-overtime": "Abrir los mercados de Overtime",
         "join-discord": "Necesitas ayuda? Unete a nuestro Discord",
         "read-now": "Leer ahora"
+    },
+    "mint-world-cup-nft": {
+        "retweet": "Retuitear",
+        "free-entry": "1 entrada gratis en FIFA Royale",
+        "choose-nft": "Elija NFT",
+        "follow": "Seguir",
+        "stake-thales": "Juego THALES",
+        "eligible-text": "Oye, ahora puedes acuñar tu NFT de equipo favorito.",
+        "get-thales": "Obtener THALES",
+        "mint-nft-button": "Me gusta NFT",
+        "second-option": "La segunda opción para incluirlo en la lista de permitidos es completar los siguientes pasos:",
+        "not-eligible-text": "Desafortunadamente, no es elegible para la acuñación de NFT.",
+        "incentives": "INCENTIVOS",
+        "go-to-twitter": "Ir a Twitter",
+        "tag-3-friends": "¡Etiqueta a 3 amigos, comparte tu dirección ETH y dinos a qué país estás animando!",
+        "minting-is-free": "Minting es gratis, solo puede acuñar un NFT por billetera. Este NFT es intransferible.",
+        "stake-10-thales": "Para acuñar un NFT, debe apostar al menos 10 THALES.",
+        "no": "No",
+        "yes-mint": "Sí, menta NFT",
+        "are-you-sure": "¿Estás seguro de que quieres acuñar este NFT? Puede acuñar SOLO UN NFT por monedero.",
+        "success-mint": "acuñado con éxito"
+    },
+    "profile": {
+        "transaction-history": "Historial de transacciones",
+        "open-claimable": "Abierto/Reclamable"
     }
 }

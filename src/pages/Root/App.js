@@ -27,6 +27,7 @@ const Market = lazy(() => import('pages/Markets/Market'));
 const Rewards = lazy(() => import('pages/Rewards'));
 const Quiz = lazy(() => import('pages/Quiz'));
 const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
+const MintWorldCupNFT = lazy(() => import('pages/MintWorldCupNFT'));
 
 const App = () => {
     const dispatch = useDispatch();
@@ -48,6 +49,8 @@ const App = () => {
                     provider:
                         !!signer && !!signer.provider
                             ? new ethers.providers.Web3Provider(signer.provider.provider, 'any')
+                            : window.ethereum
+                            ? new ethers.providers.Web3Provider(window.ethereum, 'any')
                             : provider,
                     signer,
                 });
@@ -137,6 +140,11 @@ const App = () => {
                             <Route exact path={ROUTES.QuizLeaderboard}>
                                 <DappLayout>
                                     <QuizLeaderboard />
+                                </DappLayout>
+                            </Route>
+                            <Route exact path={ROUTES.MintWorldCupNFT}>
+                                <DappLayout>
+                                    <MintWorldCupNFT />
                                 </DappLayout>
                             </Route>
                             <Route exact path={ROUTES.Home}>

@@ -36,7 +36,7 @@
             "mint-voucher": "Mint voucher",
             "modal": {
                 "title": "Mint Overtime voucher",
-                "description": "<p>Overtime voucher functionality has been implemented per <tip>TIP-76</tip>.<p/>",
+                "description": "<p>Overtime voucher functionality has been implemented per <tip>TIP-76</tip>.</p>",
                 "voucher-amount-label": "Voucher amount",
                 "another-wallet-label": "Send a voucher to another wallet",
                 "recipient-wallet-label": "Recipient wallet",
@@ -446,5 +446,26 @@
         "open-overtime": "Open Overtime markets",
         "join-discord": "Need any help? Join our discord",
         "read-now": "Read now"
+    },
+    "mint-world-cup-nft": {
+        "mint-nft-button": "Mint NFT",
+        "not-eligible-text": "Unfortunately you are not eligible for NFT minting.",
+        "eligible-text": "Hey, you can now mint your favorite team NFT.",
+        "stake-10-thales": "In order to mint an NFT, you need to stake at least 10 THALES.",
+        "second-option": "The second option to get you on allowlist, is to complete following steps:",
+        "get-thales": "Get THALES",
+        "stake-thales": "Stake THALES",
+        "go-to-twitter": "Go To Twitter",
+        "follow": "Follow",
+        "retweet": "Retweet",
+        "tag-3-friends": "Tag 3 Friends, share your ETH address, and tell us which country you are cheering for!",
+        "minting-is-free": "Minting is free, you can mint only one NFT per wallet. This NFT is non-transferable.",
+        "incentives": "INCENTIVES",
+        "free-entry": "1 free entry in FIFA Royale",
+        "choose-nft": "Choose NFT",
+        "are-you-sure": "Are you sure you want to mint this NFT? You can mint ONLY ONE NFT per wallet.",
+        "no": "No",
+        "yes-mint": "Yes, mint NFT",
+        "success-mint": "Successfully minted"
     }
 }

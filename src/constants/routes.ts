@@ -8,6 +8,7 @@ export const ROUTES = {
     Rewards: '/rewards',
     Quiz: '/trivia',
     QuizLeaderboard: '/trivia/leaderboard',
+    MintWorldCupNFT: '/mint-world-cup-nft',
 };
 export default ROUTES;
 

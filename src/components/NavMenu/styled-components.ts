@@ -63,7 +63,7 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     ${(_props) => (_props?.show == false || _props?.show == null ? 'right: -255px;' : '')}
     ${(_props) => _props?.show === true && animationOpen};
     ${({ show }) => show === false && animationClose};
-    background-color: ${MAIN_COLORS.LIGHT_GRAY};
+    background-color: ${(props) => props.theme.nav.background};
     justify-content: space-between;
     z-index: 3;
     ${(_props) => (_props?.show == true ? `-webkit-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
@@ -87,9 +87,9 @@ export const ItemContainer = styled.div`
     cursor: pointer;
     :hover {
         i {
-            color: ${MAIN_COLORS.TEXT.BLUE} !important;
+            color: ${(props) => props.theme.nav.text.primary}!important;
         }
-        color: ${MAIN_COLORS.TEXT.BLUE} !important;
+        color: ${(props) => props.theme.nav.text.primary} !important;
     }
 `;
 
@@ -103,7 +103,7 @@ export const NavLabel = styled.span<{ active?: boolean }>`
 export const NavIcon = styled.i<{ active?: boolean }>`
     font-size: 25px;
     margin-right: 10px;
-    color: ${(_props) => (_props?.active ? `${MAIN_COLORS.TEXT.BLUE}` : `${MAIN_COLORS.TEXT.WHITE}`)};
+    color: ${(_props) => (_props?.active ? `${_props.theme.nav.text.primary}` : `${_props.theme.nav.text.secondary}`)};
 `;
 
 export const ButtonsContainer = styled.div`
@@ -115,7 +115,7 @@ export const Button = styled.button`
     width: 49%;
     border: 1.5px solid #5f6180;
     padding: 6px 0px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.nav.text.secondary};
     background: transparent;
     cursor: pointer;
 `;
@@ -131,13 +131,13 @@ export const Network = styled(FlexDivRow)`
 
 export const NetworkIcon = styled.i`
     font-size: 20px;
-    color: ${MAIN_COLORS.TEXT.BLUE};
+    color: ${(props) => props.theme.nav.text.primary};
     margin-right: 5px;
 `;
 
 export const NetworkName = styled.span`
     font-size: 12px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.nav.text.secondary};
     font-weight: 600;
 `;
 
@@ -172,8 +172,8 @@ export const WalletAddressContainer = styled(FlexDivRow)`
     cursor: pointer;
     :hover {
         i {
-            color: ${MAIN_COLORS.TEXT.BLUE} !important;
+            color: ${(props) => props.theme.nav.text.primary} !important;
         }
-        color: ${MAIN_COLORS.TEXT.BLUE} !important;
+        color: ${(props) => props.theme.nav.text.primary} !important;
     }
 `;

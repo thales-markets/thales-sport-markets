@@ -2,10 +2,13 @@ import { TAGS_FLAGS, TAGS_LIST } from 'constants/tags';
 import React, { useState } from 'react';
 import Flag from 'react-flagpack';
 import { useDispatch, useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { AccountPositionsMap, SportMarkets, TagInfo } from 'types/markets';
 import MarketListCard from '../MarketListCard';
+import MarketListCardMobile from '../MarketListCard/MarketListCardMobile';
 
 type MarketsList = {
     markets: SportMarkets;
@@ -15,6 +18,7 @@ type MarketsList = {
 };
 
 const MarketsList: React.FC<MarketsList> = ({ markets, league, language, accountPositions }) => {
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const [hideLeague, setHideLeague] = useState<boolean>(false);
     const leagueName = TAGS_LIST.find((t: TagInfo) => t.id == league)?.label;
     const dispatch = useDispatch();
@@ -64,7 +68,14 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language, account
             </LeagueCard>
             <GamesContainer hidden={hideLeague}>
                 {markets.map((market: any, index: number) => {
-                    return (
+                    return isMobile ? (
+                        <MarketListCardMobile
+                            language={language}
+                            market={market}
+                            key={index + 'list'}
+                            accountPositions={accountPositions[market.address]}
+                        />
+                    ) : (
                         <MarketListCard
                             language={language}
                             market={market}

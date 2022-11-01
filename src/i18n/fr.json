@@ -390,7 +390,8 @@
                 "min-quote": "Le devis minimal est {{value}}",
                 "max-quote": "Le devis maximum est de {{value}}",
                 "not-supported": "Erreur de validation non prise en charge {{error}}",
-                "risk-per-comb": "Risque par combinaison dépassé"
+                "risk-per-comb": "Risque par combinaison dépassé",
+                "single-min-amount": "Le montant minimal est de {{min}}"
             },
             "payout": "Total reçu",
             "empty-title": "Aucun poste",
@@ -532,5 +533,30 @@
         "open-overtime": "Lancer Overtime",
         "join-discord": "Besoin d'aide ? Rejoignez notre Discord",
         "read-now": "Consulter"
+    },
+    "mint-world-cup-nft": {
+        "follow": "Suivre",
+        "incentives": "DES INCITATIONS",
+        "not-eligible-text": "Malheureusement, vous n'êtes pas éligible à la frappe NFT.",
+        "go-to-twitter": "Aller sur Twitter",
+        "retweet": "Retweet",
+        "free-entry": "1 entrée gratuite à FIFA Royale",
+        "minting-is-free": "La frappe est gratuite, vous ne pouvez frapper qu'un seul NFT par portefeuille. Ce NFT est incessible.",
+        "stake-10-thales": "Pour frapper un NFT, vous devez miser au moins 10 THALES.",
+        "get-thales": "Obtenez THALES",
+        "tag-3-friends": "Identifiez 3 amis, partagez votre adresse ETH et dites-nous pour quel pays vous encouragez !",
+        "second-option": "La deuxième option pour vous inscrire sur la liste d'autorisation consiste à suivre les étapes suivantes :",
+        "eligible-text": "Hé, vous pouvez maintenant frapper votre équipe préférée NFT.",
+        "mint-nft-button": "Comme NFT",
+        "stake-thales": "Pieu THALES",
+        "choose-nft": "Choisissez NFT",
+        "no": "Non",
+        "success-mint": "Frappé avec succès",
+        "are-you-sure": "Êtes-vous sûr de vouloir frapper ce NFT ? Vous pouvez frapper UN SEUL NFT par portefeuille.",
+        "yes-mint": "Oui, menthe NFT"
+    },
+    "profile": {
+        "transaction-history": "Historique des transactions",
+        "open-claimable": "Ouvert/Réclamable"
     }
 }

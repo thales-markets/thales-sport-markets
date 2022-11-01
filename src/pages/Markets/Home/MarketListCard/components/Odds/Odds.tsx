@@ -2,12 +2,12 @@ import PositionSymbol from 'components/PositionSymbol';
 import { ODDS_COLOR, STATUS_COLOR } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { convertFinalResultToResultType, formatMarketOdds, isDiscounted } from 'utils/markets';
+import { getOddsType } from '../../../../../../redux/modules/ui';
+import { AccountPosition, PositionType } from '../../../../../../types/markets';
 import { Status } from '../MatchStatus/MatchStatus';
 import { Container, OddsContainer, WinnerLabel } from './styled-components';
-import { AccountPosition, PositionType } from '../../../../../../types/markets';
-import { useSelector } from 'react-redux';
-import { getOddsType } from '../../../../../../redux/modules/ui';
 
 type OddsProps = {
     isResolved?: boolean;
@@ -26,6 +26,7 @@ type OddsProps = {
     awayPriceImpact: number;
     homePriceImpact: number;
     drawPriceImpact: number | undefined;
+    isMobile?: boolean;
 };
 
 const Odds: React.FC<OddsProps> = ({
@@ -41,6 +42,7 @@ const Odds: React.FC<OddsProps> = ({
     awayPriceImpact,
     homePriceImpact,
     drawPriceImpact,
+    isMobile,
 }) => {
     const { t } = useTranslation();
 
@@ -59,7 +61,7 @@ const Odds: React.FC<OddsProps> = ({
     const selectedOddsType = useSelector(getOddsType);
 
     return (
-        <Container resolved={!!resolvedGameFlag}>
+        <Container resolved={!!resolvedGameFlag} isMobile={isMobile}>
             {noOddsFlag && <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>}
             {resolvedGameFlag && (
                 <>

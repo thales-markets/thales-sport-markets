@@ -111,6 +111,7 @@ export const QUERY_KEYS = {
         Leaderboard: () => ['quiz', 'leaderboard'],
         Tweet: () => ['quiz', 'tweet'],
     },
+    FavoriteTeam: (walletAddress: string, networkId: NetworkId) => ['favoriteTeam', walletAddress, networkId],
 };
 
 export default QUERY_KEYS;
