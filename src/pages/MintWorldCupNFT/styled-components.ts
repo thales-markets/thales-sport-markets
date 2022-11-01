@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
 
 export const Container = styled.div`
+    position: relative;
     margin-bottom: 80px;
     width: 700px;
     @media (max-width: 768px) {

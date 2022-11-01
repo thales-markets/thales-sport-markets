@@ -39,20 +39,22 @@ const MintWorldCupNFT: React.FC = () => {
             {favoriteTeamDataQuery.isLoading ? (
                 <Loader />
             ) : (
-                <Container>
-                    <Header />
-                    {!favoriteTeamData?.isEligible && <NotEligible />}
-                    {favoriteTeamData?.isEligible && !favoriteTeamData.favoriteTeam && !isChooseNFTOpen && (
-                        <Eligible onChooseNft={handleChooseNFT} />
-                    )}
-                    {!!favoriteTeamData?.favoriteTeam && <AlreadyMinted />}
-                    {isChooseNFTOpen && !favoriteTeamData?.favoriteTeam && favoriteTeamData?.isEligible && (
-                        <ChooseNFT />
-                    )}
+                <>
+                    <Container>
+                        <Header />
+                        {!favoriteTeamData?.isEligible && <NotEligible />}
+                        {favoriteTeamData?.isEligible && !favoriteTeamData.favoriteTeam && !isChooseNFTOpen && (
+                            <Eligible onChooseNft={handleChooseNFT} />
+                        )}
+                        {!!favoriteTeamData?.favoriteTeam && <AlreadyMinted />}
+                        {isChooseNFTOpen && !favoriteTeamData?.favoriteTeam && favoriteTeamData?.isEligible && (
+                            <ChooseNFT />
+                        )}
+                    </Container>
                     <SymbolsContainer>
                         <SymbolsBackground />
                     </SymbolsContainer>
-                </Container>
+                </>
             )}
         </>
     );

@@ -462,6 +462,20 @@
     },
     "profile": {
         "transaction-history": "ประวัติการทำรายการ",
-        "open-claimable": "เปิด/อ้างสิทธิ์ได้"
+        "open-claimable": "เปิด/อ้างสิทธิ์ได้",
+        "categories": {
+            "open": "เปิด",
+            "claimable": "อ้างสิทธิ์ได้"
+        },
+        "card": {
+            "canceled": "ยกเลิก",
+            "to-win": "ที่จะชนะ",
+            "claim": "เรียกร้อง",
+            "ticket-paid": "จ่ายตั๋วแล้ว",
+            "ticket-id": "รหัสตั๋ว",
+            "total-quote": "ใบเสนอราคาทั้งหมด",
+            "to-claim": "ที่จะเรียกร้อง",
+            "number-of-games": "จำนวนเกม"
+        }
     }
 }
