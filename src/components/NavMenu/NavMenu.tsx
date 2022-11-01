@@ -29,7 +29,7 @@ import { buildHref } from 'utils/routes';
 
 type NavMenuProps = {
     visibility?: boolean | null;
-    hideVisibilityFunction: () => void;
+    hideVisibilityFunction: (value: boolean | null) => void;
 };
 
 const NavMenu: React.FC<NavMenuProps> = ({ visibility, hideVisibilityFunction }) => {
@@ -42,19 +42,23 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, hideVisibilityFunction })
     // const { openConnectModal } = useConnectModal();
 
     return (
-        <OutsideClickHandler onOutsideClick={() => visibility == true && hideVisibilityFunction()}>
+        <OutsideClickHandler onOutsideClick={() => visibility == true && hideVisibilityFunction(false)}>
             <Wrapper show={visibility}>
                 <HeaderContainer>
                     <Network>
                         <NetworkIcon className={getNetworkIconClassNameByNetworkId(networkId)} />
                         <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
                     </Network>
-                    <CloseIcon onClick={() => hideVisibilityFunction()} />
+                    <CloseIcon onClick={() => hideVisibilityFunction(false)} />
                 </HeaderContainer>
                 <ItemsContainer>
                     {NAV_MENU.map((item, index) => {
                         return (
-                            <SPAAnchor key={index} href={buildHref(item.route)}>
+                            <SPAAnchor
+                                key={index}
+                                href={buildHref(item.route)}
+                                onClick={() => hideVisibilityFunction(null)}
+                            >
                                 <ItemContainer key={index}>
                                     <NavIcon className={item.iconClass} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
