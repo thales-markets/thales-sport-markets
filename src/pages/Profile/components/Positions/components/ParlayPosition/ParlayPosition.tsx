@@ -94,7 +94,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
                         <WinLabel>{t('profile.card.to-win')}:</WinLabel>
                     )}
                     {isClaimable ? (
-                        <ClaimValue>+ {formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</ClaimValue>
+                        <ClaimValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</ClaimValue>
                     ) : (
                         <WinValue>+ {formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</WinValue>
                     )}
