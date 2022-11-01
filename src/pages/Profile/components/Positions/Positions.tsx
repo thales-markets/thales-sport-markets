@@ -20,8 +20,8 @@ const Positions: React.FC = () => {
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     // const walletAddress = useSelector((state: RootState) => getWalletAddress(state))
-    //     ? '0xf12c220b631125425f4c69823d6187FE3C8d0999'
-    //     : '0xf12c220b631125425f4c69823d6187FE3C8d0999';
+    // ? '0xf12c220b631125425f4c69823d6187FE3C8d0999'
+    // : '0xf12c220b631125425f4c69823d6187FE3C8d0999';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
@@ -65,7 +65,7 @@ const Positions: React.FC = () => {
                 const openMarkets = parlayMarket.sportMarkets.filter(
                     (market) => !market.isCanceled && !market.isResolved
                 );
-                if (!openMarkets?.length) {
+                if (!openMarkets?.length && !parlayMarket.claimed) {
                     if (isParlayClaimable(parlayMarket)) data.claimable.push(parlayMarket);
                 }
                 const resolvedOrCanceledMarkets = parlayMarket.sportMarkets.filter(
