@@ -22,6 +22,7 @@ import burger from 'assets/images/burger.svg';
 import NavMenu from 'components/NavMenu';
 import GetUsd from 'components/GetUsd';
 import { isMobile } from 'utils/device';
+import ProfileItem from './components/ProfileItem';
 
 const PULSING_COUNT = 10;
 
@@ -76,6 +77,7 @@ const DappHeader: React.FC = () => {
                         </SPAAnchor>
                         <LanguageSelector />
                         <WalletInfo />
+                        <ProfileItem />
                         <MenuIcon onClick={() => setNavMenuVisibility(true)} />
                         {/* {navMenuVisibility && ( */}
                         <NavMenu
