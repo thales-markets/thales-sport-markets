@@ -25,6 +25,7 @@ import {
     Wrapper,
 } from './styled-components';
 import { useAccountModal } from '@rainbow-me/rainbowkit';
+import { buildHref } from 'utils/routes';
 
 type NavMenuProps = {
     visibility?: boolean | null;
@@ -53,7 +54,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, hideVisibilityFunction })
                 <ItemsContainer>
                     {NAV_MENU.map((item, index) => {
                         return (
-                            <SPAAnchor key={index} href={'#'}>
+                            <SPAAnchor key={index} href={buildHref(item.route)}>
                                 <ItemContainer key={index}>
                                     <NavIcon className={item.iconClass} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
