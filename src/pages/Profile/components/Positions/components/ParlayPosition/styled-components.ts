@@ -16,6 +16,7 @@ export const OverviewContainer = styled(FlexDivRow)`
     width: 100%;
     align-items: center;
     height: 35px;
+    cursor: pointer;
 `;
 
 export const InfoContainer = styled(FlexDivRow)`

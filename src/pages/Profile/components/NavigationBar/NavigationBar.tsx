@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Item, Wrapper } from './styled-components';
 
-const navItems = [
+export const navItems = [
     {
         id: 1,
         i18Label: 'profile.open-claimable',
