@@ -41,6 +41,7 @@ export const MAIN_COLORS = {
     DIVIDER_COLOR: '#5F6180',
     BACKGROUNDS: {
         RED: '#BC515E',
+        BLUE: '#3FD1FF',
     },
     BORDERS: {
         GRAY: '#5f6180',
@@ -51,6 +52,7 @@ export const MAIN_COLORS = {
         DRAW: '0px 0px 33px -7px rgba(63,209,255,1)',
         POSITION_HOVER: '0px 0px 39px -16px rgba(64,210,255,1)',
         NAV_BAR: '-64px 0px 38px 3px rgba(0,0,0,0.41)',
+        NOTIFICATION: '0px 0px 20px rgba(63, 177, 213, 0.96)',
     },
     TEXT: {
         BLUE: '#64D9FE',
