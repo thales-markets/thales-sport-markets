@@ -292,7 +292,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment }) => {
                     refetchBalances(walletAddress, networkId);
                     toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')));
                     setIsBuying(false);
-                    setUsdAmount(0);
+                    setUsdAmount('');
 
                     trackEvent({
                         category: 'AMM',

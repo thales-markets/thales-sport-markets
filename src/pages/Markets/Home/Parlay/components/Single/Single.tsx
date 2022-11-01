@@ -416,7 +416,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     refetchBalances(walletAddress, networkId);
                     toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')));
                     setIsBuying(false);
-                    setUsdAmount(0);
+                    setUsdAmount('');
                     setTokenAmount(0);
 
                     trackEvent({

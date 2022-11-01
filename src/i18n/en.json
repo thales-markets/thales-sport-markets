@@ -36,7 +36,7 @@
             "mint-voucher": "Mint voucher",
             "modal": {
                 "title": "Mint Overtime voucher",
-                "description": "<p>Overtime voucher functionality has been implemented per <tip>TIP-76</tip>.<p/>",
+                "description": "<p>Overtime voucher functionality has been implemented per <tip>TIP-76</tip>.</p>",
                 "voucher-amount-label": "Voucher amount",
                 "another-wallet-label": "Send a voucher to another wallet",
                 "recipient-wallet-label": "Recipient wallet",
