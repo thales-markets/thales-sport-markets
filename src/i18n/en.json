@@ -238,6 +238,10 @@
     "profile": {
         "open-claimable": "Open/Claimable",
         "transaction-history": "Transaction history",
+        "messages": {
+            "no-claimable": "You don't have any claimable postiions",
+            "no-open": "You don't have any open position"
+        },
         "categories": {
             "claimable": "Claimable",
             "open": "Open"

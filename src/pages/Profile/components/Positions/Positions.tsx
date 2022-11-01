@@ -8,7 +8,15 @@ import { useTranslation } from 'react-i18next';
 import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
 import useAccountMarketsQuery, { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import { ParlayMarket } from 'types/markets';
-import { Arrow, CategoryContainer, CategoryIcon, CategoryLabel, Container, ListContainer } from './styled-components';
+import {
+    Arrow,
+    CategoryContainer,
+    CategoryIcon,
+    CategoryLabel,
+    Container,
+    EmptyContainer,
+    ListContainer,
+} from './styled-components';
 import { isParlayClaimable } from 'utils/markets';
 import ParlayPosition from './components/ParlayPosition';
 import SimpleLoader from 'components/SimpleLoader';
@@ -104,7 +112,7 @@ const Positions: React.FC = () => {
                                     return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
                                 })
                             ) : (
-                                <></>
+                                <EmptyContainer>{t('profile.messages.no-claimable')}</EmptyContainer>
                             )}
                         </>
                     )}
@@ -128,7 +136,7 @@ const Positions: React.FC = () => {
                                     return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
                                 })
                             ) : (
-                                <></>
+                                <EmptyContainer>{t('profile.messages.no-open')}</EmptyContainer>
                             )}
                         </>
                     )}

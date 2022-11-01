@@ -1,6 +1,6 @@
 import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivColumnNative } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivColumnNative, FlexDivRowCentered } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
     width: 100%;
@@ -33,6 +33,12 @@ export const CategoryIcon = styled.i`
 export const Arrow = styled(CategoryIcon).attrs({ className: 'icon icon--arrow' })``;
 
 //  ------------------------------------------------
+
+export const EmptyContainer = styled(FlexDivRowCentered)`
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+`;
 
 export const ListContainer = styled(FlexDivColumnNative)`
     width: 100%;
