@@ -1,9 +1,9 @@
 import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
+import { Position } from 'constants/options';
+import { MLS_TAG, PERSON_COMPETITIONS, TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
+import ordinal from 'ordinal';
 import { AccountPosition, MarketData, MarketInfo, ParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
 import { formatCurrency } from './formatters/number';
-import ordinal from 'ordinal';
-import { Position } from 'constants/options';
-import { MLS_TAG, TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
 
 export const getRoi = (ticketPrice: number, potentialWinnings: number, showRoi: boolean) =>
     showRoi ? (potentialWinnings - ticketPrice) / ticketPrice : 0;
@@ -199,6 +199,8 @@ export const isDiscounted = (priceImpact: number | undefined) => {
 };
 
 export const isMlsGame = (tag: number) => Number(tag) === MLS_TAG;
+
+export const getIsIndividualCompetition = (tag: number) => PERSON_COMPETITIONS.includes(tag);
 
 export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
     const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved);

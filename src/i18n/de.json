@@ -471,7 +471,14 @@
             "number-of-games": "Anzahl von Spielen",
             "to-claim": "Beanspruchen",
             "total-quote": "Gesamtangebot",
-            "ticket-paid": "Ticket bezahlt"
+            "ticket-paid": "Ticket bezahlt",
+            "starts": "Beginnt",
+            "result": "Ergebnis",
+            "position-size": "Positionsgröße"
+        },
+        "messages": {
+            "no-open": "Sie haben keine offene Stelle",
+            "no-claimable": "Sie haben keine beanspruchbaren Positionen"
         }
     }
 }

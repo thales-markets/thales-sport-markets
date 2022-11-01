@@ -477,7 +477,14 @@
             "number-of-games": "Numero di giochi",
             "ticket-paid": "Biglietto pagato",
             "total-quote": "Citazione totale",
-            "to-win": "Vincere"
+            "to-win": "Vincere",
+            "result": "Risultato",
+            "starts": "Inizia",
+            "position-size": "Dimensione della posizione"
+        },
+        "messages": {
+            "no-claimable": "Non hai posizioni rivendicabili",
+            "no-open": "Non hai nessuna posizione aperta"
         }
     }
 }

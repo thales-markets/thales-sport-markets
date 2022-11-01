@@ -572,7 +572,14 @@
             "ticket-id": "ID de billets",
             "total-quote": "Devis total",
             "number-of-games": "Nombre de parties",
-            "ticket-paid": "Billet payé"
+            "ticket-paid": "Billet payé",
+            "result": "Résultat",
+            "starts": "Départs",
+            "position-size": "Taille du poste"
+        },
+        "messages": {
+            "no-claimable": "Vous n'avez pas de poste réclamable",
+            "no-open": "Vous n'avez pas de poste ouvert"
         }
     }
 }

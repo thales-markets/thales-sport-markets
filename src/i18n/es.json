@@ -474,7 +474,14 @@
             "ticket-id": "Identificación de entradas",
             "to-win": "Ganar",
             "ticket-paid": "boleto pagado",
-            "number-of-games": "Numero de juegos"
+            "number-of-games": "Numero de juegos",
+            "result": "Resultado",
+            "starts": "Empieza",
+            "position-size": "Tamaño de la posición"
+        },
+        "messages": {
+            "no-open": "No tienes ninguna posición abierta",
+            "no-claimable": "No tienes ninguna posición reclamable"
         }
     }
 }
