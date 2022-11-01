@@ -18,9 +18,10 @@ const Positions: React.FC = () => {
     // const [openClaimable, setClaimableState] = useState<boolean>(false);
     // const [openOpenPositions, setOpenState] = useState<boolean>(false);
 
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state))
-        ? '0xf12c220b631125425f4c69823d6187FE3C8d0999'
-        : '0xf12c220b631125425f4c69823d6187FE3C8d0999';
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    // const walletAddress = useSelector((state: RootState) => getWalletAddress(state))
+    //     ? '0xf12c220b631125425f4c69823d6187FE3C8d0999'
+    //     : '0xf12c220b631125425f4c69823d6187FE3C8d0999';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
