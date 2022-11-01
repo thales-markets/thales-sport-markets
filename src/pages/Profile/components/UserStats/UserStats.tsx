@@ -30,10 +30,7 @@ const UserStats: React.FC = () => {
                     <Label>Total Volume:</Label>
                     <Value>{formatCurrencyWithKey('USD', user.volume, 2)}</Value>
                 </Section>
-                <Section>
-                    <Label>Total Volume:</Label>
-                    <Value>{formatCurrencyWithKey('USD', user.volume, 2)}</Value>
-                </Section>
+                <Section></Section>
             </SectionWrapper>
         </Wrapper>
     );
@@ -43,7 +40,6 @@ const Wrapper = styled.div`
     display: flex;
     background: #303656;
     border-radius: 5px;
-    max-width: 500px;
     width: 100%;
     flex-wrap: wrap;
     flex-direction: column;
