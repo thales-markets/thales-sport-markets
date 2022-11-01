@@ -34,6 +34,7 @@ export const MAIN_COLORS = {
     DARK_GRAY: '#1A1C2B',
     DISABLED_GRAY: '#303656',
     LIGHT_BLUE: 'rgba(63,209,255,1)',
+    DIVIDER_COLOR: '#5F6180',
     BACKGROUNDS: {
         RED: '#BC515E',
     },

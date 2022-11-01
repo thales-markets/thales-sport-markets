@@ -1,5 +1,5 @@
 import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
-import { AccountPosition, MarketData, MarketInfo, ParlaysMarket, SportMarketInfo } from 'types/markets';
+import { AccountPosition, MarketData, MarketInfo, ParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
 import { formatCurrency } from './formatters/number';
 import ordinal from 'ordinal';
 import { Position } from 'constants/options';
@@ -114,6 +114,13 @@ export const convertPositionNameToPosition = (positionName: string) => {
     if (positionName?.toUpperCase() == 'DRAW') return 2;
 };
 
+export const convertPositionNameToPositionType = (positionName: string) => {
+    if (positionName?.toUpperCase() == 'HOME') return Position.HOME;
+    if (positionName?.toUpperCase() == 'AWAY') return Position.AWAY;
+    if (positionName?.toUpperCase() == 'DRAW') return Position.DRAW;
+    return Position.HOME;
+};
+
 export const isApexGame = (tag: number) => tag >= APEX_GAME_MIN_TAG;
 
 export const getScoreForApexGame = (resultDetails: string, defaultHomeScore: string, defaultAwayScore: string) => {
@@ -167,6 +174,16 @@ export const getPositionOdds = (market: ParlaysMarket) => {
         : 0;
 };
 
+export const getPositionOddsFromSportMarket = (market: SportMarketInfo, position: Position) => {
+    return position === Position.HOME
+        ? market.homeOdds
+        : position === Position.AWAY
+        ? market.awayOdds
+        : market.drawOdds
+        ? market.drawOdds
+        : 0;
+};
+
 export const getVisibilityOfDrawOptionByTagId = (tags: Array<number>) => {
     const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(element));
     if (tag) return false;
@@ -181,3 +198,16 @@ export const isDiscounted = (priceImpact: number | undefined) => {
 };
 
 export const isMlsGame = (tag: number) => Number(tag) === MLS_TAG;
+
+export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
+    const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved);
+    const claimablePositions = parlayMarket.positions.filter((position) => position.claimable);
+    const canceledMarkets = parlayMarket.sportMarkets.filter((market) => market.isCanceled);
+
+    if (
+        resolvedMarkets?.length == claimablePositions?.length &&
+        resolvedMarkets?.length + canceledMarkets?.length == parlayMarket.sportMarkets.length
+    )
+        return true;
+    return false;
+};
