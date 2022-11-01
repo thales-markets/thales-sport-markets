@@ -464,6 +464,20 @@
     },
     "profile": {
         "transaction-history": "История транзакций",
-        "open-claimable": "Открыто/Заявлено"
+        "open-claimable": "Открыто/Заявлено",
+        "categories": {
+            "open": "Открытым",
+            "claimable": "Потребительский"
+        },
+        "card": {
+            "claim": "Требовать",
+            "to-win": "Побеждать",
+            "total-quote": "Общая котировка",
+            "canceled": "Отменено",
+            "number-of-games": "Количество игр",
+            "ticket-paid": "Билет оплачен",
+            "ticket-id": "Идентификатор билета",
+            "to-claim": "Требовать"
+        }
     }
 }

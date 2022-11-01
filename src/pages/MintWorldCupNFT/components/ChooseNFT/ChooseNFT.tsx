@@ -13,37 +13,39 @@ const ChooseNFT: React.FC = () => {
     const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState<boolean>(false);
 
     return (
-        <GroupsContainer>
-            {groups.map((group) => (
-                <Group
-                    key={group.letter}
-                    openedGroup={openedGroup}
-                    setOpenedGroup={setOpenedGroup}
-                    selectedTeam={selectedTeam}
-                    setSelectedTeam={setSelectedTeam}
-                    groupTeams={group.teams}
-                    groupLetter={group.letter}
-                />
-            ))}
-            <MintButtonContainer>
-                <StyledButton
-                    disabled={!selectedTeam}
-                    onClick={() => {
-                        if (selectedTeam) {
-                            setIsConfirmationDialogOpen(true);
-                        }
-                    }}
-                >
-                    {t('mint-world-cup-nft.mint-nft-button')}
-                </StyledButton>
-            </MintButtonContainer>
+        <>
+            <GroupsContainer>
+                {groups.map((group) => (
+                    <Group
+                        key={group.letter}
+                        openedGroup={openedGroup}
+                        setOpenedGroup={setOpenedGroup}
+                        selectedTeam={selectedTeam}
+                        setSelectedTeam={setSelectedTeam}
+                        groupTeams={group.teams}
+                        groupLetter={group.letter}
+                    />
+                ))}
+                <MintButtonContainer>
+                    <StyledButton
+                        disabled={!selectedTeam}
+                        onClick={() => {
+                            if (selectedTeam) {
+                                setIsConfirmationDialogOpen(true);
+                            }
+                        }}
+                    >
+                        {t('mint-world-cup-nft.mint-nft-button')}
+                    </StyledButton>
+                </MintButtonContainer>
+            </GroupsContainer>
             {isConfirmationDialogOpen && (
                 <ConfirmationDialog
                     selectedTeam={selectedTeam}
                     closeDialog={() => setIsConfirmationDialogOpen(false)}
                 />
             )}
-        </GroupsContainer>
+        </>
     );
 };
 

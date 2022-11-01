@@ -16,6 +16,7 @@ export const OverviewContainer = styled(FlexDivRow)`
     width: 100%;
     align-items: center;
     height: 35px;
+    cursor: pointer;
 `;
 
 export const InfoContainer = styled(FlexDivRow)`
@@ -77,6 +78,12 @@ export const ArrowIcon = styled.i`
     font-size: 12px;
     color: ${MAIN_COLORS.TEXT.WHITE};
     margin-right: 5px;
+`;
+
+export const CollapsableContainer = styled(FlexDivColumnNative)<{ show?: boolean }>`
+    width: 100%;
+    max-height: ${(_props) => (_props?.show ? '100%' : '0')};
+    overflow: hidden;
 `;
 
 export const Divider = styled.div`

@@ -6,6 +6,7 @@ import useUsersStatsQuery from 'queries/wallet/useUsersStatsQuery';
 import NavigationBar from './components/NavigationBar';
 import { Container } from './styled-components';
 import Positions from './components/Positions';
+import { navItems } from './components/NavigationBar/NavigationBar';
 
 const Profile: React.FC = () => {
     const [navItem, setNavItem] = useState<number>(1);
@@ -22,7 +23,7 @@ const Profile: React.FC = () => {
     return (
         <Container>
             <NavigationBar itemSelected={navItem} onSelectItem={(index) => setNavItem(index)} />
-            <Positions />
+            {navItems[0].id == navItem && <Positions />}
         </Container>
     );
 };

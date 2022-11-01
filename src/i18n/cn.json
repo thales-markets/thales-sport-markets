@@ -461,6 +461,20 @@
     },
     "profile": {
         "transaction-history": "交易记录",
-        "open-claimable": "开放/可索赔"
+        "open-claimable": "开放/可索赔",
+        "categories": {
+            "open": "打开",
+            "claimable": "可索赔"
+        },
+        "card": {
+            "claim": "宣称",
+            "to-win": "赢",
+            "ticket-id": "票号",
+            "ticket-paid": "已付票",
+            "canceled": "取消",
+            "to-claim": "索赔",
+            "total-quote": "总报价",
+            "number-of-games": "游戏数"
+        }
     }
 }

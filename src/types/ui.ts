@@ -6,4 +6,5 @@ export type NavMenuItem = {
     i18label: string;
     iconClass: string;
     name: string;
+    route: string;
 };

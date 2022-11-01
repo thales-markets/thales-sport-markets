@@ -464,6 +464,20 @@
     },
     "profile": {
         "transaction-history": "Cronologia delle transazioni",
-        "open-claimable": "Aperto/Rivendicabile"
+        "open-claimable": "Aperto/Rivendicabile",
+        "categories": {
+            "claimable": "Rivendicabile",
+            "open": "Aprire"
+        },
+        "card": {
+            "canceled": "Annullato",
+            "ticket-id": "ID biglietto",
+            "to-claim": "Richiedere",
+            "claim": "Reclamo",
+            "number-of-games": "Numero di giochi",
+            "ticket-paid": "Biglietto pagato",
+            "total-quote": "Citazione totale",
+            "to-win": "Vincere"
+        }
     }
 }

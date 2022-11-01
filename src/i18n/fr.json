@@ -559,6 +559,20 @@
     },
     "profile": {
         "transaction-history": "Historique des transactions",
-        "open-claimable": "Ouvert/Réclamable"
+        "open-claimable": "Ouvert/Réclamable",
+        "categories": {
+            "open": "Ouvert",
+            "claimable": "Réclamable"
+        },
+        "card": {
+            "canceled": "Annulé",
+            "claim": "Prétendre",
+            "to-claim": "Prétendre",
+            "to-win": "Gagner",
+            "ticket-id": "ID de billets",
+            "total-quote": "Devis total",
+            "number-of-games": "Nombre de parties",
+            "ticket-paid": "Billet payé"
+        }
     }
 }

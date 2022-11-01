@@ -845,7 +845,7 @@ const NoMarketsLabel = styled.span`
     margin-bottom: 30px;
 `;
 
-const LoaderContainer = styled(FlexDivColumn)`
+export const LoaderContainer = styled(FlexDivColumn)`
     position: relative;
     min-height: 300px;
 `;

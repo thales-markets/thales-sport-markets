@@ -2,6 +2,7 @@ import { NavMenuItem, ThemeInterface } from 'types/ui';
 import lightTheme from 'styles/themes/light';
 import darkTheme from 'styles/themes/dark';
 import worldCupTheme from 'styles/themes/worldcup';
+import ROUTES from './routes';
 
 export enum Theme {
     LIGHT,
@@ -64,35 +65,42 @@ export const NAV_MENU: NavMenuItem[] = [
         i18label: 'markets.nav-menu.items.markets',
         iconClass: 'icon icon--logo',
         name: 'markets',
+        route: ROUTES.Markets.Home,
     },
     {
         i18label: 'markets.nav-menu.items.profile',
         iconClass: 'icon icon--profile',
         name: 'profile',
+        route: ROUTES.Profile,
     },
     {
         i18label: 'markets.nav-menu.items.onboarding-wizard',
         iconClass: 'icon icon--wizard',
         name: 'onboarding-wizard',
+        route: ROUTES.Markets.Home,
     },
     {
         i18label: 'markets.nav-menu.items.history',
         iconClass: 'icon icon--history',
         name: 'history',
+        route: ROUTES.Profile,
     },
     {
         i18label: 'markets.nav-menu.items.sports-trivia',
         iconClass: 'icon icon--trivia',
         name: 'sports-trivia',
+        route: ROUTES.Quiz,
     },
     {
         i18label: 'markets.nav-menu.items.leaderboard',
         iconClass: 'icon icon--leaderboard',
         name: 'leaderboard',
+        route: ROUTES.QuizLeaderboard,
     },
     {
         i18label: 'markets.nav-menu.items.become-affiliate',
         iconClass: 'icon icon--affiliate',
         name: 'become-affiliate',
+        route: ROUTES.Profile,
     },
 ];

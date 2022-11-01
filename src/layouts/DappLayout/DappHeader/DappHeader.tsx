@@ -80,7 +80,7 @@ const DappHeader: React.FC = () => {
                         {/* {navMenuVisibility && ( */}
                         <NavMenu
                             visibility={navMenuVisibility}
-                            hideVisibilityFunction={() => setNavMenuVisibility(false)}
+                            hideVisibilityFunction={(value: boolean | null) => setNavMenuVisibility(value)}
                         />
                         {/* )} */}
                     </RightContainer>
