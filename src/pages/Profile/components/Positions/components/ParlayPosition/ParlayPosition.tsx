@@ -92,7 +92,14 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
                     )}
                 </InfoContainerColumn>
                 {isClaimable && (
-                    <ClaimButton claimable={true} onClick={() => claimParlay(parlayMarket.id)}>
+                    <ClaimButton
+                        claimable={true}
+                        onClick={(e: any) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            claimParlay(parlayMarket.id);
+                        }}
+                    >
                         {t('profile.card.claim')}
                     </ClaimButton>
                 )}
