@@ -6,7 +6,6 @@ import {
     CollateralName,
     Container,
     StableBalance,
-    TokenBalance,
 } from './styled-components';
 // import CurrencyIcon from 'components/Currency/v2/CurrencyIcon';
 import { getStableIcon, StablecoinKey } from 'utils/collaterals';
@@ -71,6 +70,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                         }
                         component={
                             <CollateralContainer>
+                                <CollateralName selected={isVoucherSelected}>{'VOUCHER'}</CollateralName>
                                 <CollateralIcon active={isVoucherSelected}>
                                     <OvertimeVoucherIcon
                                         onClick={() => {
@@ -91,7 +91,9 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                         }}
                                     />
                                 </CollateralIcon>
-                                <TokenBalance>{formatCurrency(overtimeVoucher.remainingAmount, 2)}</TokenBalance>
+                                <StableBalance selected={isVoucherSelected}>
+                                    {formatCurrency(overtimeVoucher.remainingAmount, 2)}
+                                </StableBalance>
                             </CollateralContainer>
                         }
                         overlayClassName="overtime-voucher-overlay"

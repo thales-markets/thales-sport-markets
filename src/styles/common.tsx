@@ -30,6 +30,10 @@ export const FlexDivColumn = styled(FlexDiv)`
     flex-direction: column;
 `;
 
+export const FlexDivColumnNative = styled(FlexDiv)`
+    flex-direction: column;
+`;
+
 export const FlexDivColumnCentered = styled(FlexDivColumn)`
     justify-content: center;
 `;
