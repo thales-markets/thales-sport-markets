@@ -68,7 +68,7 @@ const DappHeader: React.FC = () => {
                         {/* {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />} */}
                         <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>
                             <StyledButton disabled={!isWalletConnected}>
-                                {t('mint-world-cup-nft.mint-nft-button')}
+                                {t('mint-world-cup-nft.zebro-campaign')}
                             </StyledButton>
                         </SPAAnchor>
                         {/* <SPAAnchor href={buildHref(ROUTES.Quiz)}>

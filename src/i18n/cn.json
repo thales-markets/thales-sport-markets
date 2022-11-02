@@ -485,6 +485,7 @@
         "are-you-sure": "你确定要铸造这个 NFT 吗？每个钱包只能铸造一个 NFT。",
         "choose-nft": "铸造你的 Zebro NFT",
         "success-mint": "成功铸造",
-        "yes-mint": "是的，薄荷 NFT"
+        "yes-mint": "是的，薄荷 NFT",
+        "mint-this-zebro": "铸造这只斑马！"
     }
 }
