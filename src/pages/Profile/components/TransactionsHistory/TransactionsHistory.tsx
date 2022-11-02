@@ -11,7 +11,8 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { formatTxTimestamp } from 'utils/formatters/date';
+import { SportMarketInfo } from 'types/markets';
+import { formatDateWithTime, formatTxTimestamp } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
 import {
@@ -21,6 +22,7 @@ import {
     getIsApexTopGame,
 } from 'utils/markets';
 import { getPositionColor } from 'utils/ui';
+import { t } from 'i18next';
 // import { convertPositionNameToPosition, convertPositionToTeamName } from 'utils/markets';
 
 const TransactionsHistory: React.FC = () => {
@@ -120,8 +122,10 @@ const TransactionsHistory: React.FC = () => {
                     const toRender = row.original.positions.map((position: any, index: number) => {
                         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
                         return (
-                            <FlexDivRowCentered key={index}>
-                                <TableText>{position.market.homeTeam + ' vs ' + position.market.awayTeam}</TableText>
+                            <ParlayRow key={index}>
+                                <ParlayRowText>
+                                    {position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                                </ParlayRowText>
                                 <PositionSymbol
                                     type={convertPositionToSymbolType(
                                         positionEnum,
@@ -140,10 +144,23 @@ const TransactionsHistory: React.FC = () => {
                                         },
                                     }}
                                 />
-                            </FlexDivRowCentered>
+                                <TableText>{getParlayItemStatus(position.market)}</TableText>
+                            </ParlayRow>
                         );
                     });
-                    return <FlexDivColumnCentered>{toRender}</FlexDivColumnCentered>;
+                    return (
+                        <ExpandedRowWrapper>
+                            <FlexDivColumnCentered style={{ flex: 3 }}>{toRender}</FlexDivColumnCentered>
+                            <FlexDivColumnCentered style={{ flex: 1 }}>
+                                <TableText>
+                                    Total Quote: {formatMarketOdds(selectedOddsType, row.original.totalQuote)}
+                                </TableText>
+                                <TableText>
+                                    Total Amount: {formatCurrencyWithKey('', row.original.totalAmount, 2)}
+                                </TableText>
+                            </FlexDivColumnCentered>
+                        </ExpandedRowWrapper>
+                    );
                 }}
             ></Table>
             <Table
@@ -229,6 +246,12 @@ const TransactionsHistory: React.FC = () => {
     );
 };
 
+const getParlayItemStatus = (market: SportMarketInfo) => {
+    if (market.isCanceled) return t('profile.card.canceled');
+    if (market.isResolved) return `${market.homeScore} : ${market.awayScore}`;
+    return formatDateWithTime(Number(market.maturityDate) * 1000);
+};
+
 const TableText = styled.span`
     font-family: 'Roboto';
     font-style: normal;
@@ -275,6 +298,26 @@ const CircleNumber = styled.span`
     align-items: center;
     justify-content: center;
     margin-left: 4px;
+`;
+
+const ExpandedRowWrapper = styled.div`
+    display: flex;
+    padding-left: 30px;
+`;
+
+const ParlayRow = styled(FlexDivRowCentered)`
+    margin-top: 10px;
+    & > div {
+        flex: 1;
+    }
+    &:last-child {
+        margin-bottom: 10px;
+    }
+`;
+
+const ParlayRowText = styled(TableText)`
+    max-width: 220px;
+    width: 300px;
 `;
 
 export default TransactionsHistory;

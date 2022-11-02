@@ -188,7 +188,7 @@ const ExpandableRowReact: React.FC<{
     return (
         <>
             <TableRow
-                style={tableRowStyles}
+                style={{ ...tableRowStyles, borderBottom: hidden ? '' : 'none' }}
                 {...row.getRowProps()}
                 cursorPointer={true}
                 onClick={setHidden.bind(this, !hidden)}
