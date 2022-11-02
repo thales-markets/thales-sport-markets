@@ -115,17 +115,23 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
             <CollapsableContainer show={showDetails}>
                 <Divider />
                 <ParlayDetailContainer>
-                    {parlayMarket.sportMarkets.map((sportMarket, index) => {
-                        return (
-                            <ParlayItem
-                                market={sportMarket}
-                                position={parlayMarket.positions.find(
-                                    (position) => position.market.address == sportMarket.address
-                                )}
-                                quote={parlayMarket.marketQuotes ? parlayMarket.marketQuotes[index] : 0}
-                                key={index}
-                            />
+                    {parlayMarket.sportMarketsFromContract.map((address, index) => {
+                        const sportMarket = parlayMarket.sportMarkets.find(
+                            (market) => market.address.toLowerCase() == address.toLowerCase()
                         );
+                        const position = parlayMarket.positions.find(
+                            (position) => position.market.address == sportMarket?.address
+                        );
+                        if (sportMarket && position) {
+                            return (
+                                <ParlayItem
+                                    market={sportMarket}
+                                    position={position}
+                                    quote={parlayMarket.marketQuotes ? parlayMarket.marketQuotes[index] : 0}
+                                    key={index}
+                                />
+                            );
+                        }
                     })}
                 </ParlayDetailContainer>
                 <CollapseFooterContainer>

@@ -116,7 +116,9 @@ export type MarketData = {
 export type ParlayMarket = {
     id: string;
     sportMarkets: SportMarketInfo[];
+    sportMarketsFromContract: string[];
     positions: PositionData[];
+    positionsFromContract: number[];
     marketQuotes: number[];
     account: string;
     totalAmount: number;
