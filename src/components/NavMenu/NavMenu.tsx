@@ -26,6 +26,7 @@ import {
 } from './styled-components';
 import { useAccountModal } from '@rainbow-me/rainbowkit';
 import { buildHref } from 'utils/routes';
+import LanguageSelector from 'components/LanguageSelector';
 
 type NavMenuProps = {
     visibility?: boolean | null;
@@ -50,6 +51,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, hideVisibilityFunction })
                         <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
                     </Network>
                     <CloseIcon onClick={() => hideVisibilityFunction(false)} />
+                    <LanguageSelector />
                 </HeaderContainer>
                 <ItemsContainer>
                     {NAV_MENU.map((item, index) => {

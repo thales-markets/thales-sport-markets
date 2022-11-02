@@ -1,6 +1,6 @@
 import styled, { css, keyframes } from 'styled-components';
 import { MAIN_COLORS } from 'constants/ui';
-import { FlexDivRow } from 'styles/common';
+import { FlexDivColumnNative, FlexDivRow } from 'styles/common';
 
 export const WrapperAnimation = keyframes`
     0% {
@@ -127,6 +127,8 @@ export const FooterContainer = styled(FlexDivRow)`
 
 export const Network = styled(FlexDivRow)`
     align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
 `;
 
 export const NetworkIcon = styled.i`
@@ -141,8 +143,9 @@ export const NetworkName = styled.span`
     font-weight: 600;
 `;
 
-export const HeaderContainer = styled(FlexDivRow)`
+export const HeaderContainer = styled(FlexDivColumnNative)`
     justify-content: center;
+    width: 100%;
 `;
 
 export const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`

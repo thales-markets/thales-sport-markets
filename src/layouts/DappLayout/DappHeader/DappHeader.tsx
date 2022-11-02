@@ -13,7 +13,6 @@ import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { buildHref } from 'utils/routes';
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
-import LanguageSelector from 'components/LanguageSelector';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import useInterval from 'hooks/useInterval';
 // import MintVoucher from 'components/MintVoucher';
@@ -74,7 +73,6 @@ const DappHeader: React.FC = () => {
                         {/* <SPAAnchor href={buildHref(ROUTES.Quiz)}>
                             <StyledSportTriviaIcon stopPulsing={stopPulsing} src={sportTriviaIcon} />
                         </SPAAnchor> */}
-                        <LanguageSelector />
                         <WalletInfo />
                         <ProfileItem />
                         <MenuIcon onClick={() => setNavMenuVisibility(true)} />
