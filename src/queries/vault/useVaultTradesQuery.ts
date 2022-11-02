@@ -21,7 +21,8 @@ const useVaultTradesQuery = (networkId: NetworkId, options?: UseQueryOptions<Vau
                     position: Position[trade.position],
                     positionTeam:
                         // @ts-ignore
-                        trade.wholeMarket[`${trade.position.toLowerCase()}Team`] || i18n.t('markets.market-card.draw'),
+                        trade.wholeMarket[`${Position[trade.position].toLowerCase()}Team`] ||
+                        i18n.t('markets.market-card.draw'),
                     result: Position[trade.wholeMarket.finalResult - 1] as PositionName,
                     link: getEtherscanTxLink(networkId, trade.hash),
                 }));

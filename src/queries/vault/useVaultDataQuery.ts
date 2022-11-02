@@ -22,6 +22,7 @@ const useVaultDataQuery = (networkId: NetworkId, options?: UseQueryOptions<Vault
                 minDepositAmount: 0,
                 maxAllowedUsers: 0,
                 usersCurrentlyInVault: 0,
+                canCloseCurrentRound: false,
             };
 
             const { sportVaultContract } = networkConnector;
@@ -36,6 +37,7 @@ const useVaultDataQuery = (networkId: NetworkId, options?: UseQueryOptions<Vault
                         minDepositAmount,
                         maxAllowedUsers,
                         usersCurrentlyInVault,
+                        canCloseCurrentRound,
                     ] = await Promise.all([
                         sportVaultContract?.vaultStarted(),
                         sportVaultContract?.maxAllowedDeposit(),
@@ -45,6 +47,7 @@ const useVaultDataQuery = (networkId: NetworkId, options?: UseQueryOptions<Vault
                         sportVaultContract?.minDepositAmount(),
                         sportVaultContract?.maxAllowedUsers(),
                         sportVaultContract?.usersCurrentlyInVault(),
+                        sportVaultContract?.canCloseCurrentRound(),
                     ]);
 
                     vaultData.vaultStarted = vaultStarted;
@@ -56,6 +59,7 @@ const useVaultDataQuery = (networkId: NetworkId, options?: UseQueryOptions<Vault
                     vaultData.minDepositAmount = bigNumberFormatter(minDepositAmount);
                     vaultData.maxAllowedUsers = Number(maxAllowedUsers);
                     vaultData.usersCurrentlyInVault = Number(usersCurrentlyInVault);
+                    vaultData.canCloseCurrentRound = canCloseCurrentRound;
 
                     const [allocationCurrentRound, allocationNextRound] = await Promise.all([
                         sportVaultContract?.allocationPerRound(vaultData.round),

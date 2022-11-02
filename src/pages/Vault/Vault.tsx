@@ -368,7 +368,7 @@ const Vault: React.FC = () => {
                                                         showFullCounter
                                                     />
                                                 )}{' '}
-                                                {vaultData.isRoundEnded && (
+                                                {vaultData.canCloseCurrentRound && (
                                                     <CloseRoundButton disabled={isSubmitting} onClick={closeRound}>
                                                         {t('vault.button.close-round-label')}
                                                     </CloseRoundButton>

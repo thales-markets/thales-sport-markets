@@ -14,6 +14,7 @@ export type VaultData = {
     minDepositAmount: number;
     maxAllowedUsers: number;
     usersCurrentlyInVault: number;
+    canCloseCurrentRound: boolean;
 };
 
 export type UserVaultData = {
@@ -40,3 +41,11 @@ export type VaultTrade = {
 };
 
 export type VaultTrades = VaultTrade[];
+
+export type VaultPnlPerRound = {
+    timestamp: number;
+    round: number;
+    pnl: number;
+};
+
+export type VaultPnls = VaultPnlPerRound[];
