@@ -148,3 +148,19 @@
 .icon--cross-button-arrow:before {
     content: '\006B';
 }
+
+.icon--arrow-external::before {
+    content: '\006C';
+}
+
+.icon--arrow-down::before {
+    content: '\006D';
+}
+
+.icon--arrow-up::before {
+    content: '\006E';
+}
+
+.icon--claimable-flag::before {
+    content: '\006F';
+}
