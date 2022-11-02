@@ -48,7 +48,7 @@ export const parlaySlice = createSlice({
                     state.error = true;
                 }
             } else {
-                // UPDATE market
+                // UPDATE market position
                 const parlayCopy = [...state.parlay];
                 parlayCopy[index].position = action.payload.position;
                 state.parlay = [...parlayCopy];

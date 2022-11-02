@@ -28,6 +28,7 @@ const Parlay: React.FC = () => {
     const hasParlayError = useSelector(getParlayError);
 
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
+    const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
 
     const sportMarketsQuery = useSportMarketsQuery(networkId, GlobalFiltersEnum.OpenMarkets, null, {
         enabled: isAppReady,
@@ -70,8 +71,9 @@ const Parlay: React.FC = () => {
                 <>
                     <ListContainer>
                         {parlayMarkets.map((market, index) => {
+                            const outOfLiquidity = outOfLiquidityMarkets.includes(index);
                             return (
-                                <RowMarket key={index}>
+                                <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
                                     <MatchInfo market={market} />
                                 </RowMarket>
                             );
@@ -81,7 +83,11 @@ const Parlay: React.FC = () => {
                     {parlayMarkets.length === 1 ? (
                         <Single market={parlayMarkets[0]} parlayPayment={parlayPayment} />
                     ) : (
-                        <Ticket markets={parlayMarkets} parlayPayment={parlayPayment} />
+                        <Ticket
+                            markets={parlayMarkets}
+                            parlayPayment={parlayPayment}
+                            setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
+                        />
                     )}
                     <Footer>
                         <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Twitter}>
@@ -127,13 +133,17 @@ const ListContainer = styled.div`
     flex-direction: column;
 `;
 
-const RowMarket = styled.div`
+const RowMarket = styled.div<{ outOfLiquidity: boolean }>`
     display: flex;
     position: relative;
-    margin: 10px 0;
-    height: 40px;
+    margin: 5px 0;
+    height: 45px;
     align-items: center;
     text-align: center;
+    padding: ${(props) => (props.outOfLiquidity ? '5px' : '5px 7px')};
+    ${(props) => (props.outOfLiquidity ? 'background: rgba(26, 28, 43, 0.5);' : '')}
+    ${(props) => (props.outOfLiquidity ? 'border: 2px solid #e26a78;' : '')}
+    ${(props) => (props.outOfLiquidity ? 'border-radius: 2px;' : '')}
 `;
 
 const HorizontalLine = styled.hr`

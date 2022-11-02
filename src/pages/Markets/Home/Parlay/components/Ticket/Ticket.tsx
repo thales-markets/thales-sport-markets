@@ -56,13 +56,14 @@ import { removeAll, setPayment } from 'redux/modules/parlay';
 type TicketProps = {
     markets: ParlaysMarket[];
     parlayPayment: ParlayPayment;
+    setMarketsOutOfLiquidity: (indexes: number[]) => void;
 };
 
 const TicketErrorMessage = {
     RISK_PER_COMB: 'RiskPerComb exceeded',
 };
 
-const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment }) => {
+const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOfLiquidity }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
@@ -419,6 +420,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment }) => {
                     const fetchedFinalQuotes: number[] = (parlayAmmQuote['finalQuotes'] || []).map((quote: BigNumber) =>
                         bigNumberFormatter(quote)
                     );
+                    // Update markets (using order index) which are out of liquidity
+                    const marketsOutOfLiquidity = fetchedFinalQuotes
+                        .map((finalQuote, index) => (finalQuote === 0 ? index : -1))
+                        .filter((index) => index !== -1);
+                    setMarketsOutOfLiquidity(marketsOutOfLiquidity);
 
                     setFinalQuotes(fetchedFinalQuotes);
                     setTooltipTextMessageUsdAmount(usdAmountValue, fetchedFinalQuotes);
@@ -432,7 +438,13 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment }) => {
             setIsFetching(false);
         };
         fetchData();
-    }, [usdAmountValue, fetchParlayAmmQuote, setTooltipTextMessageUsdAmount, parlayAmmData?.minUsdAmount]);
+    }, [
+        usdAmountValue,
+        fetchParlayAmmQuote,
+        setTooltipTextMessageUsdAmount,
+        parlayAmmData?.minUsdAmount,
+        setMarketsOutOfLiquidity,
+    ]);
 
     useEffect(() => {
         setTooltipTextMessageUsdAmount(usdAmountValue, finalQuotes);

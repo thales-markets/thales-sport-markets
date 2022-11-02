@@ -32,7 +32,7 @@ const MintWorldCupNFT: React.FC = () => {
 
     useEffect(() => {
         dispatch(setTheme(Theme.WORLDCUP));
-    }, []);
+    }, [dispatch]);
 
     return (
         <>
