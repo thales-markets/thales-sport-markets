@@ -439,29 +439,6 @@
         "join-discord": "Bisogno di qualche aiuto? Unisciti alla nostra discordia",
         "info-text-2": "Quando le entità centralizzate cadono, la trasparenza è fondamentale. Tutto il nostro codice è pubblico e gli smart contract possono essere rivisti da chiunque"
     },
-    "mint-world-cup-nft": {
-        "free-entry": "1 ingresso gratuito in FIFA Royale",
-        "incentives": "INCENTIVI",
-        "stake-thales": "Palo THALES",
-        "choose-nft": "Scegli NFT",
-        "retweet": "Ritwittare",
-        "get-thales": "Prendi THALES",
-        "follow": "Seguire",
-        "stake-10-thales": "Per coniare un NFT, devi puntare almeno 10 THALES.",
-        "eligible-text": "Ehi, ora puoi coniare la tua squadra preferita NFT.",
-        "minting-is-free": "Il conio è gratuito, puoi coniare solo un NFT per portafoglio. Questo NFT non è trasferibile.",
-        "go-to-twitter": "Vai su Twitter",
-        "second-option": "La seconda opzione per metterti nella lista consentita è completare i seguenti passaggi:",
-        "tag-3-friends": "Tagga 3 amici, condividi il tuo indirizzo ETH e dicci per quale paese fai il tifo!",
-        "not-eligible-text": "Sfortunatamente non sei idoneo per il conio NFT.",
-        "mint-nft-button": "Come NFT",
-        "no": "No",
-        "yes-mint": "Sì, NFT nuovo",
-        "are-you-sure": "Sei sicuro di voler coniare questo NFT? Puoi coniare SOLO UN NFT per portafoglio.",
-        "success-mint": "Coniato con successo",
-        "already-minted": "Hai già coniato il tuo NFT",
-        "qatar-2022": "Qatar 2022"
-    },
     "profile": {
         "transaction-history": "Cronologia delle transazioni",
         "open-claimable": "Aperto/Rivendicabile",
@@ -478,6 +455,36 @@
             "ticket-paid": "Biglietto pagato",
             "total-quote": "Citazione totale",
             "to-win": "Vincere"
+        },
+        "messages": {
+            "no-claimable": "Non hai posizioni rivendicabili",
+            "no-open": "Non hai nessuna posizione aperta"
         }
+    },
+    "mint-world-cup-nft": {
+        "second-option": "La seconda opzione per metterti nella lista consentita è completare i seguenti passaggi:",
+        "choose-nft": "Conia il tuo Zebro NFT",
+        "success-mint": "Coniato con successo",
+        "tag-3-friends": "Nello stesso tweet, commenta il tuo indirizzo ETH e tagga 3 amici",
+        "no": "No",
+        "already-minted": "Hai già coniato il tuo NFT",
+        "go-to-twitter": "Vai su Twitter",
+        "not-eligible-text": "Il tuo portafoglio non è ancora idoneo per coniare uno Zebro NFT!",
+        "follow": "Segui Mercati straordinari su Twitter",
+        "are-you-sure": "Sei sicuro di voler coniare questo NFT? Puoi coniare SOLO UN NFT per portafoglio.",
+        "stake-thales": "Palo THALES",
+        "retweet": "Ritwitta questo tweet",
+        "mint-nft-button": "Menta questa Zebra!",
+        "stake-10-thales": "Per poter coniare uno Zebro NFT, devi avere almeno 10 THALES puntati.",
+        "zebro-campaign": "Campagna Zebra FIFA",
+        "eligible-text-2": "Conia uno Zebro della tua squadra nazionale preferita e avrai diritto a 50.000 OP e 30.000 premi bonus THALES!",
+        "incentives": "INCENTIVI",
+        "yes-mint": "Sì, NFT nuovo",
+        "get-thales": "Prendi THALES",
+        "minting-is-free": "Il conio è gratuito, puoi coniare solo un NFT per portafoglio. Questo NFT non è trasferibile.",
+        "eligible-text": "Ehi, ora puoi coniare la tua squadra preferita Zebro NFT.",
+        "eligible-text-1": "La collezione Zebro NFT viene utilizzata come voce per la campagna di Overtime FIFA World Cup.",
+        "leaderboard": "Classifica",
+        "get-your-nft": "Ottieni il tuo Qatar NFT 2022"
     }
 }

@@ -114,6 +114,10 @@ export const ListItemContainer = styled.div`
 
 export const ListItem = styled.span`
     margin-left: 10px;
+    width: 90%;
+    & > a {
+        color: #04cfb6;
+    }
 `;
 
 export const IncentivesTitle = styled.span`
@@ -244,4 +248,27 @@ export const HeaderSymbolsContainer = styled.div`
     padding: 10px;
     width: 90%;
     margin: auto;
+`;
+
+export const TabsContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 43px;
+`;
+
+export const Tab = styled.button<{ selected: boolean }>`
+    padding: 8px 40px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 14px;
+    background: ${(props) => (props.selected ? '#04cfb6' : 'transparent')};
+    color: white;
+    border: 2px solid ${(props) => (!props.selected ? '#04CFB6' : 'transparent')};
+    cursor: pointer;
+    z-index: 1;
+    width: 45%;
+    &:hover {
+        background: #04cfb6;
+        border: transparent;
+    }
 `;

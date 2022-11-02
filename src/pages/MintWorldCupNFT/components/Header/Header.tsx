@@ -11,7 +11,7 @@ const Header: React.FC = () => {
         <>
             <HeaderContainer>
                 <HeaderRectangle />
-                <HeaderText>{t('mint-world-cup-nft.qatar-2022')}</HeaderText>
+                <HeaderText>{t('mint-world-cup-nft.zebro-campaign')}</HeaderText>
             </HeaderContainer>
             <HeaderSymbolsContainer>
                 <HeaderSymbols />

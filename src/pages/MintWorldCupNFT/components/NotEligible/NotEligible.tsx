@@ -56,11 +56,23 @@ const NotEligible: React.FC = () => {
                     <InfoText>{t('mint-world-cup-nft.second-option')}</InfoText>
                     <ListItemContainer>
                         <ArrowRight />
-                        <ListItem>{t('mint-world-cup-nft.follow')}</ListItem>
+                        <ListItem>
+                            <a href="https://twitter.com/OvertimeMarkets" target="_blank" rel="noreferrer">
+                                {t('mint-world-cup-nft.follow')}
+                            </a>
+                        </ListItem>
                     </ListItemContainer>
                     <ListItemContainer>
                         <ArrowRight />
-                        <ListItem>{t('mint-world-cup-nft.retweet')}</ListItem>
+                        <ListItem>
+                            <a
+                                href="https://twitter.com/OvertimeMarkets/status/1584921675329687552"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                {t('mint-world-cup-nft.retweet')}
+                            </a>
+                        </ListItem>
                     </ListItemContainer>
                     <ListItemContainer>
                         <ArrowRight />
