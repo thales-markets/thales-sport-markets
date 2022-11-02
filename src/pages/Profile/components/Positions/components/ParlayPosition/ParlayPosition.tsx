@@ -86,7 +86,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
                 </InfoContainer>
                 <InfoContainerColumn>
                     <Label>{t('profile.card.ticket-paid')}:</Label>
-                    <Value>{formatCurrencyWithSign(USD_SIGN, parlayMarket.sUSDAfterFees)}</Value>
+                    <Value>{formatCurrencyWithSign(USD_SIGN, parlayMarket.sUSDPaid)}</Value>
                 </InfoContainerColumn>
                 <InfoContainerColumn>
                     {isClaimable ? (

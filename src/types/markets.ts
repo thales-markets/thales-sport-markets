@@ -120,6 +120,7 @@ export type ParlayMarket = {
     marketQuotes: number[];
     account: string;
     totalAmount: number;
+    sUSDPaid: number;
     sUSDAfterFees: number;
     totalQuote: number;
     skewImpact: number;
