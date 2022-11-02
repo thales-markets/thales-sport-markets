@@ -74,8 +74,7 @@ export const WinValue = styled(WinLabel)`
     text-transform: none;
 `;
 
-export const ArrowIcon = styled.i<{ visibility?: boolean }>`
-    visibility: ${(_props) => (_props?.visibility ? 'visible' : 'hidden')};
+export const ArrowIcon = styled.i`
     font-size: 12px;
     color: ${MAIN_COLORS.TEXT.WHITE};
     margin-right: 10px;

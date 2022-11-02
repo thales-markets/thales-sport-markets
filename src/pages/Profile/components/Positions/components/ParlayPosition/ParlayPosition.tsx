@@ -17,7 +17,6 @@ import { refetchAfterClaim } from 'utils/queryConnector';
 import ParlayItem from './components/ParlayItem';
 import {
     ArrowIcon,
-    ArrowIconFooter,
     ClaimLabel,
     ClaimValue,
     CollapsableContainer,
@@ -74,8 +73,8 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
     const isClaimable = isParlayClaimable(parlayMarket);
     return (
         <Container>
-            <OverviewContainer onClick={() => setShowDetails(true)}>
-                <ArrowIcon className="icon icon--arrow-down" visibility={!showDetails} />
+            <OverviewContainer onClick={() => setShowDetails(!showDetails)}>
+                <ArrowIcon className={showDetails ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
                 <TicketIdContainer>
                     <Label>{t('profile.card.ticket-id')}:</Label>
                     <TicketId>{truncateAddress(parlayMarket.id)}</TicketId>
@@ -130,7 +129,6 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
                     })}
                 </ParlayDetailContainer>
                 <CollapseFooterContainer>
-                    <ArrowIconFooter className="icon icon--arrow-up" onClick={() => setShowDetails(false)} />
                     <TotalQuoteContainer>
                         <Label>{t('profile.card.total-quote')}:</Label>
                         <Value>{formatMarketOdds(selectedOddsType, parlayMarket.totalQuote)}</Value>
