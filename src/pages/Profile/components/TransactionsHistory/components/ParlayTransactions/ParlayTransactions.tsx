@@ -106,8 +106,6 @@ const ParlayTransactions: React.FC = () => {
                 isLoading={parlaysTxQuery?.isLoading}
                 data={parlayTx ?? []}
                 expandedRow={(row) => {
-                    console.log(row);
-
                     const toRender = row.original.positions.map((position: any, index: number) => {
                         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
                         return (
@@ -121,32 +119,39 @@ const ParlayTransactions: React.FC = () => {
                                         getIsApexTopGame(position.market.isApex, position.market.betType)
                                     )}
                                     symbolColor={getPositionColor(positionEnum)}
+                                    symbolSize={'10'}
                                     additionalText={{
                                         firstText: formatMarketOdds(
                                             selectedOddsType,
                                             row.original.marketQuotes ? row.original.marketQuotes[index] : 0
                                         ),
                                         firstTextStyle: {
-                                            fontSize: '12px',
+                                            fontSize: '10.5px',
                                             color: getPositionColor(positionEnum),
                                             marginLeft: '5px',
                                         },
                                     }}
+                                    additionalStyle={{ width: 21, height: 21, fontSize: 9 }}
                                 />
-                                <TableText>{getParlayItemStatus(position.market)}</TableText>
+                                <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
                             </ParlayRow>
                         );
                     });
                     return (
                         <ExpandedRowWrapper>
-                            <FlexDivColumnCentered style={{ flex: 3 }}>{toRender}</FlexDivColumnCentered>
-                            <FlexDivColumnCentered style={{ flex: 1 }}>
-                                <TableText>
-                                    Total Quote: {formatMarketOdds(selectedOddsType, row.original.totalQuote)}
-                                </TableText>
-                                <TableText>
-                                    Total Amount: {formatCurrencyWithKey('', row.original.totalAmount, 2)}
-                                </TableText>
+                            <FlexDivColumnCentered style={{ flex: 2 }}>{toRender}</FlexDivColumnCentered>
+                            <FlexDivColumnCentered style={{ flex: 1, gap: 20 }}>
+                                <QuoteWrapper>
+                                    <QuoteLabel>Total Quote:</QuoteLabel>
+                                    <QuoteText>{formatMarketOdds(selectedOddsType, row.original.totalQuote)}</QuoteText>
+                                </QuoteWrapper>
+
+                                <QuoteWrapper>
+                                    <QuoteLabel>Total Amount:</QuoteLabel>
+                                    <QuoteText>
+                                        {formatCurrencyWithKey(USD_SIGN, row.original.totalAmount, 2)}
+                                    </QuoteText>
+                                </QuoteWrapper>
                             </FlexDivColumnCentered>
                         </ExpandedRowWrapper>
                     );
@@ -167,7 +172,35 @@ const TableText = styled.span`
     font-style: normal;
     font-weight: 700;
     font-size: 12px;
-    text-align: center;
+    text-align: left;
+`;
+
+const QuoteText = styled.span`
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 9px;
+    text-align: left;
+`;
+
+const QuoteLabel = styled.span`
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 9px;
+
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+
+    color: #64d9fe;
+`;
+
+const QuoteWrapper = styled.div`
+    display: flex;
+    flex: flex-start;
+    align-items: center;
+    gap: 6px;
+    margin-left: 30px;
 `;
 
 const TableHeaderStyle: React.CSSProperties = {
@@ -208,7 +241,7 @@ const ParlayRow = styled(FlexDivRowCentered)`
     }
 `;
 
-const ParlayRowText = styled(TableText)`
+const ParlayRowText = styled(QuoteText)`
     max-width: 220px;
     width: 300px;
 `;

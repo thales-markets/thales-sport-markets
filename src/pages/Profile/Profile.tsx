@@ -13,8 +13,8 @@ const Profile: React.FC = () => {
         <Container>
             <UserStats />
             <NavigationBar itemSelected={navItem} onSelectItem={(index) => setNavItem(index)} />
-            {navItems[0].id == navItem && <Positions />}
-            {navItems[1].id == navItem && <TransactionsHistory />}
+            {navItems[1].id == navItem && <Positions />}
+            {navItems[0].id == navItem && <TransactionsHistory />}
         </Container>
     );
 };

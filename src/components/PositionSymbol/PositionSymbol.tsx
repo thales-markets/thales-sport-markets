@@ -11,6 +11,7 @@ type SymbolProps = {
     type?: number;
     hideSymbol?: boolean;
     symbolColor?: string;
+    symbolSize?: string;
     additionalText?: {
         firstText?: string;
         secondText?: string;
@@ -29,6 +30,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     glow,
     type,
     symbolColor,
+    symbolSize,
     additionalText,
     showTooltip,
     additionalStyle,
@@ -75,7 +77,11 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                 style={additionalStyle}
                 addedToParlay={addedToParlay && addedToParlay.position == type}
             >
-                <Symbol color={symbolColor} addedToParlay={addedToParlay && addedToParlay.position == type}>
+                <Symbol
+                    color={symbolColor}
+                    size={symbolSize}
+                    addedToParlay={addedToParlay && addedToParlay.position == type}
+                >
                     {type == 0 && '1'}
                     {type == 1 && '2'}
                     {type == 2 && 'X'}
@@ -165,9 +171,9 @@ const AdditionalText = styled.span`
     flex-direction: row;
 `;
 
-const Symbol = styled.span<{ color?: string; addedToParlay?: boolean }>`
+const Symbol = styled.span<{ color?: string; addedToParlay?: boolean; size?: string }>`
     color: ${(_props) => (_props.addedToParlay ? '#64D9FE' : _props?.color ? _props.color : '')};
-    font-size: 12px;
+    font-size: ${(_props) => (_props.size ? _props.size : '12px')};
 `;
 
 const Discount = styled(FlexDivCentered)<{ color?: string }>`
