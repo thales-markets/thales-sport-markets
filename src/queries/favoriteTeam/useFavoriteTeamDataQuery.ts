@@ -1,7 +1,6 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery } from 'react-query';
 import { NetworkId } from 'types/network';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 
 type FavoriteTeamData = {
@@ -22,7 +21,7 @@ const useFavoriteTeamDataQuery = (walletAddress: string, networkId: NetworkId) =
             ]);
 
             favoriteTeamData.isEligible = isEligible;
-            favoriteTeamData.favoriteTeam = bigNumberFormatter(favoriteTeam[0]);
+            favoriteTeamData.favoriteTeam = Number(favoriteTeam[0]);
         }
 
         return favoriteTeamData;

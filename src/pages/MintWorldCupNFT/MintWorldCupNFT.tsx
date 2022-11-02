@@ -14,6 +14,7 @@ import NotEligible from './components/NotEligible';
 import ChooseNFT from './components/ChooseNFT';
 import AlreadyMinted from './components/AlreadyMinted';
 import Header from './components/Header';
+import Leaderboard from './components/Leaderboard';
 
 const MintWorldCupNFT: React.FC = () => {
     const { t } = useTranslation();
@@ -51,7 +52,7 @@ const MintWorldCupNFT: React.FC = () => {
                 return <AlreadyMinted />;
             }
         } else {
-            return <div />;
+            return <Leaderboard favoriteTeamNumber={favoriteTeamData?.favoriteTeam} />;
         }
     }, [favoriteTeamData?.favoriteTeam, favoriteTeamData?.isEligible, handleChooseNFT, isChooseNFTOpen, selectedTab]);
 
@@ -65,7 +66,7 @@ const MintWorldCupNFT: React.FC = () => {
                         <Header />
                         <TabsContainer>
                             <Tab selected={selectedTab === 0} onClick={() => setSelectedTab(0)}>
-                                {t('mint-world-cup-nft.leaderboard')}
+                                {t('mint-world-cup-nft.leaderboard-title')}
                             </Tab>
                             <Tab selected={selectedTab === 1} onClick={() => setSelectedTab(1)}>
                                 {t('mint-world-cup-nft.get-your-nft')}
