@@ -9,6 +9,7 @@ export const Wrapper = styled(FlexDivRow)`
     padding: 6px;
     border: 1px solid ${MAIN_COLORS.BORDERS.GRAY};
     border-radius: 5px;
+    margin: 10px 0px;
 `;
 
 export const Item = styled.span<{ selected: boolean }>`
