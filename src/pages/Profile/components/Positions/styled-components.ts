@@ -5,6 +5,9 @@ import { FlexDiv, FlexDivColumn, FlexDivColumnNative, FlexDivRowCentered } from 
 export const Container = styled(FlexDivColumn)`
     width: 100%;
     min-width: 668px;
+    @media (max-width: 768px) {
+        min-width: auto;
+    }
 `;
 
 // --> Category Elements
@@ -22,18 +25,27 @@ export const CategoryLabel = styled.span`
     color: ${MAIN_COLORS.TEXT.WHITE};
     text-transform: uppercase;
     cursor: pointer;
+    @media (max-width: 768px) {
+        font-size: 10px;
+    }
 `;
 
 export const CategoryIcon = styled.i`
     font-size: 24px;
     color: ${MAIN_COLORS.TEXT.DARK_GRAY};
     margin-right: 20px;
+    @media (max-width: 768px) {
+        font-size: 15px;
+    }
 `;
 
 export const Arrow = styled.i`
     font-size: 18px;
     color: ${MAIN_COLORS.TEXT.WHITE};
     margin-left: 15px;
+    @media (max-width: 768px) {
+        font-size: 10px;
+    }
 `;
 
 //  ------------------------------------------------

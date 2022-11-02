@@ -11,7 +11,13 @@ import {
     TeamContainer,
     Wrapper,
 } from './styled-components';
-import { ClaimLabel, ClaimValue, Label } from '../ParlayPosition/styled-components';
+import {
+    ClaimLabel,
+    ClaimValue,
+    ExternalLinkArrow,
+    ExternalLinkContainer,
+    Label,
+} from '../ParlayPosition/styled-components';
 import { useTranslation } from 'react-i18next';
 import { USD_SIGN } from 'constants/currency';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
@@ -25,9 +31,15 @@ import PositionSymbol from 'components/PositionSymbol';
 import { convertPositionNameToPositionType, convertPositionToSymbolType, getIsApexTopGame } from 'utils/markets';
 import { getPositionColor } from 'utils/ui';
 import { formatDateWithTime } from 'utils/formatters/date';
+import SPAAnchor from 'components/SPAAnchor';
+import { getEtherscanAddressLink } from 'utils/etherscan';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/rootReducer';
+import { getNetworkId } from 'redux/modules/wallet';
 
 const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ position }) => {
     const { t } = useTranslation();
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(
         getTeamImageSource(position.market.homeTeam, position.market.tags[0])
@@ -126,6 +138,11 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                         <Label>{t('profile.card.starts')}</Label>
                         <BoldValue>{formatDateWithTime(position.market.maturityDate)}</BoldValue>
                     </ColumnDirectionInfo>
+                    <SPAAnchor href={getEtherscanAddressLink(networkId, position.market.id)}>
+                        <ExternalLinkContainer>
+                            <ExternalLinkArrow />
+                        </ExternalLinkContainer>
+                    </SPAAnchor>
                 </>
             )}
         </Wrapper>

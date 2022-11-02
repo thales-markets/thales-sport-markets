@@ -17,22 +17,48 @@ export const OverviewContainer = styled(FlexDivRow)`
     align-items: center;
     height: 35px;
     cursor: pointer;
+    position: relative;
+    @media (max-width: 768px) {
+        justify-content: space-between;
+    }
 `;
 
 export const InfoContainer = styled(FlexDivRow)`
     min-width: 150px;
     justify-content: flex-start;
+    @media (max-width: 768px) {
+        min-width: auto;
+        flex-direction: column;
+    }
 `;
 
 export const TicketIdContainer = styled(FlexDivRow)`
     min-width: 150px;
     justify-content: flex-start;
     margin-right: 20px;
+    @media (max-width: 768px) {
+        min-width: auto;
+        flex-direction: column;
+    }
 `;
 
 export const InfoContainerColumn = styled(FlexDivColumnNative)`
     min-width: 100px;
     justify-content: flex-start;
+    @media (max-width: 768px) {
+        min-width: auto;
+        flex-direction: column;
+    }
+`;
+
+export const ClaimContainer = styled(FlexDivColumnNative)`
+    min-width: 100px;
+    justify-content: flex-start;
+    @media (max-width: 768px) {
+        min-width: auto;
+        flex-direction: column;
+        align-items: flex-end;
+    }
 `;
 
 export const Label = styled.span`
@@ -41,13 +67,24 @@ export const Label = styled.span`
     color: ${MAIN_COLORS.TEXT.WHITE};
     text-transform: uppercase;
     margin-right: 3px;
+    @media (max-width: 768px) {
+        font-size: 9px;
+        margin-bottom: 3px;
+    }
 `;
 
 export const TicketId = styled(Label)`
     text-transform: none;
+    @media (max-width: 768px) {
+        font-size: 9px;
+    }
 `;
 
-export const Value = styled(TicketId)``;
+export const Value = styled(TicketId)`
+    @media (max-width: 768px) {
+        font-size: 9px;
+    }
+`;
 
 export const NumberOfGames = styled(Label)`
     font-weight: 700;
@@ -58,6 +95,9 @@ export const ClaimLabel = styled(Label)`
     font-weight: 900;
     color: ${MAIN_COLORS.TEXT.BLUE};
     text-transform: uppercase;
+    @media (max-width: 768px) {
+        font-size: 9px;
+    }
 `;
 
 export const ClaimValue = styled(ClaimLabel)`
@@ -79,6 +119,11 @@ export const ArrowIcon = styled.i`
     color: ${MAIN_COLORS.TEXT.WHITE};
     margin-right: 10px;
     margin-left: 10px;
+    @media (max-width: 768px) {
+        margin-right: 5px;
+        margin-left: 5px;
+        font-size: 9px;
+    }
 `;
 
 export const ArrowIconFooter = styled.i`
@@ -117,6 +162,25 @@ export const CollapseFooterContainer = styled(FlexDivRow)`
     width: 100%;
     align-items: center;
     margin-bottom: 11px;
+    margin-top: 11px;
+`;
+
+export const ExternalLinkContainer = styled.div`
+    height: 20px;
+    width: 20px;
+    display: block;
+    cursor: pointer;
+    @media (max-width: 768px) {
+        display: none;
+    }
+`;
+
+export const ExternalLinkArrow = styled.i.attrs({ className: 'icon icon--arrow-external' })`
+    font-size: 20px;
+    color: ${MAIN_COLORS.TEXT.WHITE};
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
 `;
 
 export const TotalQuoteContainer = styled(FlexDivRow)``;
