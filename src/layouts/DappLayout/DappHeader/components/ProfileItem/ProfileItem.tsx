@@ -41,8 +41,6 @@ export const ProfileIconWidget: React.FC = () => {
             ? claimablePositionsCountQuery.data
             : null;
 
-    console.log('claimablePositionCount ', claimablePositionCount);
-
     return (
         <>
             <ProfileIconContainer>
