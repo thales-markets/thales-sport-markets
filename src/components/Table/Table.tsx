@@ -1,4 +1,4 @@
-import React, { useMemo, DependencyList, CSSProperties, useEffect } from 'react';
+import React, { useMemo, DependencyList, CSSProperties, useEffect, useState } from 'react';
 import { useTable, useSortBy, Column, Row, usePagination } from 'react-table';
 import SimpleLoader from 'components/SimpleLoader';
 import styled from 'styled-components';
@@ -27,6 +27,7 @@ type TableProps = {
     onSortByChanged?: any;
     currentPage?: number;
     rowsPerPage?: number;
+    expandedRow?: (row: Row<any>) => JSX.Element;
 };
 
 const Table: React.FC<TableProps> = ({
@@ -45,6 +46,7 @@ const Table: React.FC<TableProps> = ({
     onSortByChanged = undefined,
     currentPage,
     rowsPerPage,
+    expandedRow,
 }) => {
     const { t } = useTranslation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -96,7 +98,11 @@ const Table: React.FC<TableProps> = ({
                         <TableCellHead
                             {...column.getHeaderProps(column.sortable ? column.getSortByToggleProps() : undefined)}
                             key={headerIndex}
-                            style={column.sortable ? { cursor: 'pointer', ...tableHeadCellStyles } : {}}
+                            style={
+                                column.sortable
+                                    ? { cursor: 'pointer', ...tableHeadCellStyles }
+                                    : { ...tableHeadCellStyles }
+                            }
                             width={column.width}
                             id={column.id}
                         >
@@ -131,30 +137,75 @@ const Table: React.FC<TableProps> = ({
                             prepareRow(row);
 
                             return (
-                                <TableRow
-                                    style={tableRowStyles}
-                                    {...row.getRowProps()}
-                                    cursorPointer={!!onTableRowClick}
-                                    onClick={onTableRowClick ? () => onTableRowClick(row) : undefined}
-                                    key={rowIndex}
-                                >
-                                    {row.cells.map((cell, cellIndex: any) => (
-                                        <TableCell
-                                            style={tableRowCellStyles}
-                                            {...cell.getCellProps()}
-                                            key={cellIndex}
-                                            width={cell.column.width}
-                                            id={cell.column.id}
+                                <ExpandableRow key={rowIndex}>
+                                    {expandedRow ? (
+                                        <ExpandableRowReact
+                                            row={row}
+                                            tableRowCellStyles={tableRowCellStyles}
+                                            isVisible={false}
+                                            tableRowStyles={tableRowStyles}
                                         >
-                                            {cell.render('Cell')}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
+                                            {expandedRow(row)}
+                                        </ExpandableRowReact>
+                                    ) : (
+                                        <TableRow
+                                            style={tableRowStyles}
+                                            {...row.getRowProps()}
+                                            cursorPointer={!!onTableRowClick}
+                                            onClick={onTableRowClick ? () => onTableRowClick(row) : undefined}
+                                        >
+                                            {row.cells.map((cell, cellIndex: any) => (
+                                                <TableCell
+                                                    style={tableRowCellStyles}
+                                                    {...cell.getCellProps()}
+                                                    key={cellIndex}
+                                                    width={cell.column.width}
+                                                    id={cell.column.id}
+                                                >
+                                                    {cell.render('Cell')}
+                                                </TableCell>
+                                            ))}
+                                        </TableRow>
+                                    )}
+                                </ExpandableRow>
                             );
                         })}
                     </TableBody>
                 )}
             </ReactTable>
+        </>
+    );
+};
+
+const ExpandableRowReact: React.FC<{
+    isVisible: boolean;
+    tableRowStyles: React.CSSProperties;
+    row: Row<any>;
+    tableRowCellStyles: React.CSSProperties;
+}> = ({ isVisible, tableRowStyles, row, tableRowCellStyles, children }) => {
+    const [hidden, setHidden] = useState<boolean>(!isVisible);
+
+    return (
+        <>
+            <TableRow
+                style={tableRowStyles}
+                {...row.getRowProps()}
+                cursorPointer={true}
+                onClick={setHidden.bind(this, !hidden)}
+            >
+                {row.cells.map((cell, cellIndex: any) => (
+                    <TableCell
+                        style={tableRowCellStyles}
+                        {...cell.getCellProps()}
+                        key={cellIndex}
+                        width={cell.column.width}
+                        id={cell.column.id}
+                    >
+                        {cell.render('Cell')}
+                    </TableCell>
+                ))}
+            </TableRow>
+            <ExpandableRow style={{ display: hidden ? 'none' : 'block' }}>{children}</ExpandableRow>
         </>
     );
 };
@@ -276,5 +327,9 @@ const CellAlignment: Record<string, string> = {
     rewards: 'center',
     finishTime: 'center',
 };
+
+const ExpandableRow = styled.div`
+    display: block;
+`;
 
 export default Table;
