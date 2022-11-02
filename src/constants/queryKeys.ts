@@ -100,6 +100,7 @@ export const QUERY_KEYS = {
     Vault: {
         Data: (networkId: NetworkId) => ['vault', 'data', networkId],
         UserData: (walletAddress: string, networkId: NetworkId) => ['vault', 'data', walletAddress, networkId],
+        Trades: (networkId: NetworkId) => ['vault', 'trades', networkId],
     },
 };
 

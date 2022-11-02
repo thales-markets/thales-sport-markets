@@ -392,6 +392,10 @@
             "close-round-label": "Close round",
             "close-round-progress-label": "Closing round in progress...",
             "close-round-confirmation-message": "Round successfully closed"
+        },
+        "trades-history": {
+            "title": "Vault trades history",
+            "no-trades": "No trades associated with this vault."
         }
     }
 }

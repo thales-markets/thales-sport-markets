@@ -99,14 +99,8 @@ const Container = styled(FlexDivColumn)`
     color: ${(props) => props.theme.textColor.primary};
     position: relative;
     width: 100%;
-    @media (max-width: 991px) {
-        flex-direction: column;
-    }
-    @media (max-width: 575px) {
-        padding: 20px 10px;
-    }
-    max-height: 1035px;
-    min-height: 357px;
+    max-height: 500px;
+    min-height: 200px;
     overflow-y: auto;
 `;
 

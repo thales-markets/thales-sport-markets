@@ -55,6 +55,7 @@ import { checkAllowance } from 'utils/network';
 import { BigNumber, ethers } from 'ethers';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
+import TradesHistory from './TradesHistory';
 
 const Vault: React.FC = () => {
     const { t } = useTranslation();
@@ -651,6 +652,7 @@ const Vault: React.FC = () => {
                     )}
                 </RightContainer>
             </Container>
+            <TradesHistory />
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={amount}

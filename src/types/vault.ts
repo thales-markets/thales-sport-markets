@@ -1,3 +1,6 @@
+import { PositionName } from 'constants/options';
+import { SportMarketInfo } from './markets';
+
 export type VaultData = {
     round: number;
     roundEndTime: number;
@@ -21,3 +24,19 @@ export type UserVaultData = {
     hasDepositForCurrentRound: boolean;
     hasDepositForNextRound: boolean;
 };
+
+export type VaultTrade = {
+    hash: string;
+    timestamp: number;
+    amount: number;
+    paid: number;
+    blockNumber: number;
+    position: PositionName;
+    positionTeam: string;
+    market: string;
+    game: string;
+    result: PositionName;
+    wholeMarket: SportMarketInfo;
+};
+
+export type VaultTrades = VaultTrade[];
