@@ -65,7 +65,10 @@ export const sportsVaultContract = {
         },
         {
             anonymous: false,
-            inputs: [{ indexed: false, internalType: 'uint256', name: 'round', type: 'uint256' }],
+            inputs: [
+                { indexed: false, internalType: 'uint256', name: 'round', type: 'uint256' },
+                { indexed: false, internalType: 'uint256', name: 'roundPnL', type: 'uint256' },
+            ],
             name: 'RoundClosed',
             type: 'event',
         },

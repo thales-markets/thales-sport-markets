@@ -129,6 +129,7 @@ const Vault: React.FC = () => {
         vaultData &&
         vaultData.usersCurrentlyInVault === vaultData.maxAllowedUsers &&
         userVaultData &&
+        !userVaultData.hasDepositForCurrentRound &&
         !userVaultData.hasDepositForNextRound;
     const invalidAmount = vaultData && Number(vaultData.minDepositAmount) > Number(amount) && isAmountEntered;
 

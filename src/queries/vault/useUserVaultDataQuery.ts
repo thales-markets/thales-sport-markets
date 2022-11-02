@@ -18,6 +18,7 @@ const useUserVaultDataQuery = (
                 balanceNextRound: 0,
                 balanceTotal: 0,
                 isWithdrawalRequested: false,
+                hasDepositForCurrentRound: false,
                 hasDepositForNextRound: false,
             };
 
@@ -36,6 +37,7 @@ const useUserVaultDataQuery = (
                     userVaultData.balanceNextRound = bigNumberFormatter(balanceNextRound);
                     userVaultData.balanceTotal = userVaultData.balanceCurrentRound + userVaultData.balanceNextRound;
                     userVaultData.isWithdrawalRequested = withdrawalRequested;
+                    userVaultData.hasDepositForCurrentRound = userVaultData.balanceCurrentRound > 0;
                     userVaultData.hasDepositForNextRound = userVaultData.balanceNextRound > 0;
 
                     return userVaultData;

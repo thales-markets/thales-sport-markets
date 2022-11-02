@@ -41,7 +41,7 @@
         "react-toastify": "^8.2.0",
         "redux": "^4.1.2",
         "styled-components": "^5.3.3",
-        "thales-data": "^1.1.20",
+        "thales-data": "^1.1.28",
         "typescript": "^4.2.2",
         "wagmi": "^0.6.4",
         "web3": "^1.7.4"

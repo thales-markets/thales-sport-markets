@@ -18,5 +18,6 @@ export type UserVaultData = {
     balanceNextRound: number;
     balanceTotal: number;
     isWithdrawalRequested: boolean;
+    hasDepositForCurrentRound: boolean;
     hasDepositForNextRound: boolean;
 };
