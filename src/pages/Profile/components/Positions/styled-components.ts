@@ -25,12 +25,16 @@ export const CategoryLabel = styled.span`
 `;
 
 export const CategoryIcon = styled.i`
-    font-size: 20px;
+    font-size: 24px;
     color: ${MAIN_COLORS.TEXT.DARK_GRAY};
     margin-right: 20px;
 `;
 
-export const Arrow = styled(CategoryIcon).attrs({ className: 'icon icon--arrow' })``;
+export const Arrow = styled.i`
+    font-size: 18px;
+    color: ${MAIN_COLORS.TEXT.WHITE};
+    margin-left: 15px;
+`;
 
 //  ------------------------------------------------
 

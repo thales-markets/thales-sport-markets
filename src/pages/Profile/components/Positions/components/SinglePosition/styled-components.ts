@@ -8,7 +8,7 @@ export const Wrapper = styled(FlexDivRow)`
     justify-content: flex-start;
     background-color: ${MAIN_COLORS.LIGHT_GRAY};
     border-radius: 4px;
-    padding: 5px 10px;
+    padding: 7px 10px;
     width: 100%;
     margin-bottom: 5px;
 `;

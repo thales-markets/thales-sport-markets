@@ -98,9 +98,9 @@ const Positions: React.FC = () => {
     return (
         <Container>
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
-                <CategoryIcon className="icon icon--logo" />
-                <Arrow />
+                <CategoryIcon className="icon icon--claimable-flag" />
                 <CategoryLabel>{t('profile.categories.claimable')}</CategoryLabel>
+                <Arrow className={openClaimable ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
             </CategoryContainer>
             {openClaimable && (
                 <ListContainer>
@@ -128,8 +128,8 @@ const Positions: React.FC = () => {
             )}
             <CategoryContainer onClick={() => setOpenState(!openOpenPositions)}>
                 <CategoryIcon className="icon icon--logo" />
-                <Arrow />
                 <CategoryLabel>{t('profile.categories.open')}</CategoryLabel>
+                <Arrow className={openOpenPositions ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
             </CategoryContainer>
             {openOpenPositions && (
                 <ListContainer>
