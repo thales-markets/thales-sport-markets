@@ -204,6 +204,7 @@ const ExpandableRowReact: React.FC<{
                         {cell.render('Cell')}
                     </TableCell>
                 ))}
+                <ArrowIcon className={hidden ? 'icon icon--arrow-down' : 'icon icon--arrow-up'} />
             </TableRow>
             <ExpandableRow style={{ display: hidden ? 'none' : 'block' }}>{children}</ExpandableRow>
         </>
@@ -330,6 +331,13 @@ const CellAlignment: Record<string, string> = {
 
 const ExpandableRow = styled.div`
     display: block;
+`;
+
+const ArrowIcon = styled.i`
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    margin-right: 6px;
 `;
 
 export default Table;
