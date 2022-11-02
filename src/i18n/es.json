@@ -485,6 +485,8 @@
         "are-you-sure": "¿Estás seguro de que quieres acuñar este NFT? Puede acuñar SOLO UN NFT por monedero.",
         "eligible-text-1": "La colección Zebro NFT se utiliza como entrada para la campaña de la Copa Mundial de la FIFA en tiempo extra.",
         "not-eligible-text": "¡Su billetera aún no es elegible para acuñar un Zebro NFT!",
-        "eligible-text-2": "¡Acuña un Zebro de tu equipo nacional favorito y sé elegible para recompensas de bonificación de 50 000 OP y 30 000 THALES!"
+        "eligible-text-2": "¡Acuña un Zebro de tu equipo nacional favorito y sé elegible para recompensas de bonificación de 50 000 OP y 30 000 THALES!",
+        "mint-this-zebro": "Mint esta cebra!",
+        "leaderboard-title": "Tabla de clasificación"
     }
 }

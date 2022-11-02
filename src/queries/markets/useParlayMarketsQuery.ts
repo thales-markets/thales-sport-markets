@@ -40,7 +40,6 @@ export const useParlayMarketsQuery = (
                         }),
                     };
                 });
-                console.log('parlayMarketsModified ', parlayMarketsModified);
                 return parlayMarketsModified;
             } catch (e) {
                 console.log('E ', e);

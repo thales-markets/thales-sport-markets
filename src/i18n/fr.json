@@ -583,6 +583,8 @@
         "eligible-text": "Hé, vous pouvez maintenant créer votre équipe préférée Zebro NFT.",
         "second-option": "La deuxième option pour vous inscrire sur la liste d'autorisation consiste à suivre les étapes suivantes :",
         "not-eligible-text": "Votre portefeuille n'est pas encore éligible pour frapper un Zebro NFT !",
-        "minting-is-free": "La frappe est gratuite, vous ne pouvez frapper qu'un seul NFT par portefeuille. Ce NFT est incessible."
+        "minting-is-free": "La frappe est gratuite, vous ne pouvez frapper qu'un seul NFT par portefeuille. Ce NFT est incessible.",
+        "mint-this-zebro": "Frappez ce zèbre !",
+        "leaderboard-title": "Classement"
     }
 }
