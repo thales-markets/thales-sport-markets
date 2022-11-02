@@ -6,13 +6,13 @@ export const Container = styled(FlexDivColumnNative)`
     align-items: center;
     background-color: ${MAIN_COLORS.LIGHT_GRAY};
     border-radius: 4px;
-    padding: 5px 10px;
+    padding: 11px 10px;
     width: 100%;
     margin-bottom: 5px;
 `;
 
 export const OverviewContainer = styled(FlexDivRow)`
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
     align-items: center;
     height: 35px;
@@ -74,10 +74,21 @@ export const WinValue = styled(WinLabel)`
     text-transform: none;
 `;
 
-export const ArrowIcon = styled.i`
+export const ArrowIcon = styled.i<{ visibility?: boolean }>`
+    visibility: ${(_props) => (_props?.visibility ? 'visible' : 'hidden')};
     font-size: 12px;
     color: ${MAIN_COLORS.TEXT.WHITE};
-    margin-right: 5px;
+    margin-right: 10px;
+    margin-left: 10px;
+`;
+
+export const ArrowIconFooter = styled.i`
+    cursor: pointer;
+    font-size: 12px;
+    color: ${MAIN_COLORS.TEXT.WHITE};
+    margin-right: 10px;
+    position: absolute;
+    left: 10px;
 `;
 
 export const CollapsableContainer = styled(FlexDivColumnNative)<{ show?: boolean }>`
@@ -102,6 +113,7 @@ export const ParlayDetailContainer = styled(FlexDivColumnNative)`
 `;
 
 export const CollapseFooterContainer = styled(FlexDivRow)`
+    position: relative;
     justify-content: space-around;
     width: 100%;
     align-items: center;

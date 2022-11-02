@@ -21,6 +21,7 @@ import { isParlayClaimable } from 'utils/markets';
 import ParlayPosition from './components/ParlayPosition';
 import SimpleLoader from 'components/SimpleLoader';
 import { LoaderContainer } from 'pages/Markets/Home/Home';
+import SinglePosition from './components/SinglePosition';
 
 const Positions: React.FC = () => {
     const { t } = useTranslation();
@@ -89,28 +90,35 @@ const Positions: React.FC = () => {
         return data;
     }, [parlayMarkets]);
 
+    const isLoading = parlayMarketsQuery.isLoading || accountMarketsQuery.isLoading;
+
     console.log('accountPositionsByStatus ', accountPositionsByStatus);
     console.log('parlayMarketsByStatus ', parlayMarketsByStatus);
 
     return (
         <Container>
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
-                <CategoryIcon className="icon icon--logo" />
-                <Arrow />
+                <CategoryIcon className="icon icon--claimable-flag" />
                 <CategoryLabel>{t('profile.categories.claimable')}</CategoryLabel>
+                <Arrow className={openClaimable ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
             </CategoryContainer>
             {openClaimable && (
                 <ListContainer>
-                    {parlayMarketsQuery.isLoading ? (
+                    {isLoading ? (
                         <LoaderContainer>
                             <SimpleLoader />
                         </LoaderContainer>
                     ) : (
                         <>
-                            {parlayMarketsByStatus.claimable?.length ? (
-                                parlayMarketsByStatus.claimable.map((parlayMarket, index) => {
-                                    return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
-                                })
+                            {parlayMarketsByStatus.claimable.length || accountPositionsByStatus.claimable.length ? (
+                                <>
+                                    {accountPositionsByStatus.claimable.map((singleMarket, index) => {
+                                        return <SinglePosition position={singleMarket} key={`s-${index}`} />;
+                                    })}
+                                    {parlayMarketsByStatus.claimable.map((parlayMarket, index) => {
+                                        return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
+                                    })}
+                                </>
                             ) : (
                                 <EmptyContainer>{t('profile.messages.no-claimable')}</EmptyContainer>
                             )}
@@ -120,8 +128,8 @@ const Positions: React.FC = () => {
             )}
             <CategoryContainer onClick={() => setOpenState(!openOpenPositions)}>
                 <CategoryIcon className="icon icon--logo" />
-                <Arrow />
                 <CategoryLabel>{t('profile.categories.open')}</CategoryLabel>
+                <Arrow className={openOpenPositions ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
             </CategoryContainer>
             {openOpenPositions && (
                 <ListContainer>
@@ -131,10 +139,15 @@ const Positions: React.FC = () => {
                         </LoaderContainer>
                     ) : (
                         <>
-                            {parlayMarketsByStatus.open.length ? (
-                                parlayMarketsByStatus.open.map((parlayMarket, index) => {
-                                    return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
-                                })
+                            {parlayMarketsByStatus.open.length || accountPositionsByStatus.open.length ? (
+                                <>
+                                    {accountPositionsByStatus.open.map((singleMarket, index) => {
+                                        return <SinglePosition position={singleMarket} key={`s-${index}`} />;
+                                    })}
+                                    {parlayMarketsByStatus.open.map((parlayMarket, index) => {
+                                        return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
+                                    })}
+                                </>
                             ) : (
                                 <EmptyContainer>{t('profile.messages.no-open')}</EmptyContainer>
                             )}

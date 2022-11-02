@@ -107,4 +107,7 @@ export const MatchNamesContainerMobile = styled(FlexDivRow)`
     > :last-child {
         width: 45%;
     }
+    @media (max-width: 500px) {
+        width: 50%;
+    }
 `;

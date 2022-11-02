@@ -1,7 +1,5 @@
 import PositionSymbol from 'components/PositionSymbol';
-import { ODDS_COLOR } from 'constants/ui';
 import React, { useEffect, useState } from 'react';
-import { Position } from 'constants/options';
 import { PositionData, SportMarketInfo } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import {
@@ -24,6 +22,7 @@ import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
 import { t } from 'i18next';
 import { formatDateWithTime } from 'utils/formatters/date';
+import { getPositionColor } from 'utils/ui';
 
 const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | undefined; quote: number }> = ({
     market,
@@ -47,14 +46,6 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
 
     const parlayItemQuote = market.isCanceled ? 1 : quote ? quote : 0;
     const parlayStatus = getParlayItemStatus(market);
-
-    const getPositionColor = (position: Position): string => {
-        return position === Position.HOME
-            ? ODDS_COLOR.HOME
-            : position === Position.AWAY
-            ? ODDS_COLOR.AWAY
-            : ODDS_COLOR.DRAW;
-    };
 
     return (
         <Wrapper>

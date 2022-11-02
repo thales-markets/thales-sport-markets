@@ -451,11 +451,14 @@
             "canceled": "取消",
             "to-claim": "索赔",
             "total-quote": "总报价",
-            "number-of-games": "游戏数"
+            "number-of-games": "游戏数",
+            "result": "结果",
+            "starts": "开始",
+            "position-size": "仓位大小"
         },
         "messages": {
-            "no-open": "您没有任何空缺职位",
-            "no-claimable": "您没有任何可申请的职位"
+            "no-claimable": "您没有任何可申请的职位",
+            "no-open": "您没有任何空缺职位"
         }
     },
     "mint-world-cup-nft": {

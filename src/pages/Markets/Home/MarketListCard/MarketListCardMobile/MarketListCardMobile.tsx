@@ -6,8 +6,9 @@ import React, { useEffect, useState } from 'react';
 import { FlexDivRow } from 'styles/common';
 import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime, formatShortDate, formatTimeOfDate } from 'utils/formatters/date';
+import { mapTeamNamesMobile } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { getIsApexTopGame, isApexGame } from 'utils/markets';
+import { getIsApexTopGame, getIsIndividualCompetition, isApexGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import MatchStatus from '../components/MatchStatus';
 import Odds from '../components/Odds';
@@ -36,6 +37,10 @@ const MarketListCardMobile: React.FC<MarketRowCardProps> = ({ market, accountPos
 
     const isApexTopGame = getIsApexTopGame(market.isApex, market.betType);
 
+    const isIndividualCompetition = getIsIndividualCompetition(market.tags[0]);
+
+    const smallScreen = window.innerWidth < 500;
+
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
         setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
@@ -50,14 +55,18 @@ const MarketListCardMobile: React.FC<MarketRowCardProps> = ({ market, accountPos
             <MatchInfoMobile>
                 <MatchInfoLabelMobile>{formatShortDate(market.maturityDate)}</MatchInfoLabelMobile>
                 <MatchNamesContainerMobile>
-                    <MatchInfoLabelMobile>{market.homeTeam}</MatchInfoLabelMobile>
+                    <MatchInfoLabelMobile>
+                        {smallScreen ? mapTeamNamesMobile(market.homeTeam, isIndividualCompetition) : market.homeTeam}
+                    </MatchInfoLabelMobile>
                     <VSLabelMobile>
                         {'VS'}
                         {isApexGame(market.tags[0]) && (
                             <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={10} marginLeft={2} />
                         )}
                     </VSLabelMobile>
-                    <MatchInfoLabelMobile>{market.awayTeam}</MatchInfoLabelMobile>
+                    <MatchInfoLabelMobile>
+                        {smallScreen ? mapTeamNamesMobile(market.awayTeam, isIndividualCompetition) : market.awayTeam}
+                    </MatchInfoLabelMobile>
                 </MatchNamesContainerMobile>
                 <MatchInfoLabelMobile>{formatTimeOfDate(market.maturityDate)}</MatchInfoLabelMobile>
             </MatchInfoMobile>

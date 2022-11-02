@@ -254,7 +254,10 @@
             "to-claim": "To claim",
             "claim": "Claim",
             "canceled": "Canceled",
-            "total-quote": "Total quote"
+            "total-quote": "Total quote",
+            "result": "Result",
+            "position-size": "Position size",
+            "starts": "Starts"
         }
     },
     "markets": {

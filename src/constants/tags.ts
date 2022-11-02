@@ -180,3 +180,5 @@ export enum TAGS_FLAGS {
 }
 
 export const MLS_TAG = 9010;
+
+export const PERSON_COMPETITIONS = [9007, 9100, 9101];

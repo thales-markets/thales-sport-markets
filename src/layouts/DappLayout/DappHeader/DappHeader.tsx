@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 import Logo from 'components/Logo';
 import WalletInfo from 'components/WalletInfo';
 import React, { useEffect, useState } from 'react';
@@ -9,26 +9,26 @@ import { useTranslation } from 'react-i18next';
 import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { NetworkIdByName } from 'utils/network';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
-import Referral from 'components/Referral';
+// import Referral from 'components/Referral';
 import { buildHref } from 'utils/routes';
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
-import sportTriviaIcon from 'assets/images/sport-trivia.svg';
 import LanguageSelector from 'components/LanguageSelector';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import useInterval from 'hooks/useInterval';
-import MintVoucher from 'components/MintVoucher';
+// import MintVoucher from 'components/MintVoucher';
 import burger from 'assets/images/burger.svg';
 import NavMenu from 'components/NavMenu';
 import GetUsd from 'components/GetUsd';
 import { isMobile } from 'utils/device';
+import ProfileItem from './components/ProfileItem';
 
 const PULSING_COUNT = 10;
 
 const DappHeader: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const location = useLocation();
+    // const location = useLocation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
@@ -63,19 +63,20 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <Logo />
                     <RightContainer>
-                        <Referral />
+                        {/* <Referral /> */}
                         {isMobileState && networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
-                        {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />}
+                        {/* {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />} */}
                         <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>
                             <StyledButton disabled={!isWalletConnected}>
                                 {t('mint-world-cup-nft.mint-nft-button')}
                             </StyledButton>
                         </SPAAnchor>
-                        <SPAAnchor href={buildHref(ROUTES.Quiz)}>
+                        {/* <SPAAnchor href={buildHref(ROUTES.Quiz)}>
                             <StyledSportTriviaIcon stopPulsing={stopPulsing} src={sportTriviaIcon} />
-                        </SPAAnchor>
+                        </SPAAnchor> */}
                         <LanguageSelector />
                         <WalletInfo />
+                        <ProfileItem />
                         <MenuIcon onClick={() => setNavMenuVisibility(true)} />
                         {/* {navMenuVisibility && ( */}
                         <NavMenu
@@ -141,18 +142,18 @@ const RightContainer = styled(FlexDivRowCentered)`
     }
 `;
 
-const StyledSportTriviaIcon = styled.img<{ stopPulsing: boolean }>`
-    margin: 0 20px;
-    cursor: pointer;
-    height: 36px;
-    margin-bottom: -4px;
-    @media (max-width: 767px) {
-        margin-bottom: 5px;
-        margin-right: 0px;
-    }
-    animation: ${(props) => (props.stopPulsing ? 'none' : 'pulsing 1s ease-in')};
-    animation-iteration-count: 10;
-`;
+// const StyledSportTriviaIcon = styled.img<{ stopPulsing: boolean }>`
+//     margin: 0 20px;
+//     cursor: pointer;
+//     height: 36px;
+//     margin-bottom: -4px;
+//     @media (max-width: 767px) {
+//         margin-bottom: 5px;
+//         margin-right: 0px;
+//     }
+//     animation: ${(props) => (props.stopPulsing ? 'none' : 'pulsing 1s ease-in')};
+//     animation-iteration-count: 10;
+// `;
 
 const MenuIcon = styled.img.attrs({ src: burger })`
     cursor: pointer;
