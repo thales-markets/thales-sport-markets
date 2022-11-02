@@ -131,7 +131,7 @@ const ParlayTransactions: React.FC = () => {
                                             marginLeft: '5px',
                                         },
                                     }}
-                                    additionalStyle={{ width: 21, height: 21, fontSize: 9 }}
+                                    additionalStyle={{ width: 21, height: 21, fontSize: 10 }}
                                 />
                                 <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
                             </ParlayRow>
@@ -179,7 +179,7 @@ const QuoteText = styled.span`
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 700;
-    font-size: 9px;
+    font-size: 10px;
     text-align: left;
 `;
 
@@ -187,7 +187,7 @@ const QuoteLabel = styled.span`
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    font-size: 9px;
+    font-size: 10px;
 
     letter-spacing: 0.025em;
     text-transform: uppercase;
