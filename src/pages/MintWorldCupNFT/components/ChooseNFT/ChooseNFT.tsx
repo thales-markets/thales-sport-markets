@@ -35,7 +35,7 @@ const ChooseNFT: React.FC = () => {
                             }
                         }}
                     >
-                        {t('mint-world-cup-nft.mint-nft-button')}
+                        {t('mint-world-cup-nft.mint-this-zebro')}
                     </StyledButton>
                 </MintButtonContainer>
             </GroupsContainer>

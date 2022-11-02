@@ -437,29 +437,6 @@
         "join-discord": "ถ้าหากต้องการความช่วยเหลือ โปรดเข้าร่วม Discord ของเรา",
         "read-now": "อ่าน"
     },
-    "mint-world-cup-nft": {
-        "not-eligible-text": "ขออภัย คุณไม่มีสิทธิ์ใช้ NFT minting",
-        "eligible-text": "เฮ้ ตอนนี้คุณสามารถสร้าง NFT ทีมโปรดของคุณได้แล้ว",
-        "mint-nft-button": "ชอบ NFT",
-        "stake-10-thales": "ในการสร้าง NFT คุณต้องเดิมพันอย่างน้อย 10 THALES",
-        "follow": "ติดตาม",
-        "free-entry": "ฟรี 1 รายการใน FIFA Royale",
-        "retweet": "รีทวีต",
-        "go-to-twitter": "ไปที่ Twitter",
-        "choose-nft": "เลือก NFT",
-        "stake-thales": "เดิมพัน THALES",
-        "get-thales": "รับ THALES",
-        "incentives": "สิ่งจูงใจ",
-        "tag-3-friends": "แท็กเพื่อน 3 คน แชร์ที่อยู่ ETH ของคุณ และบอกเราว่าคุณเชียร์ประเทศใด!",
-        "second-option": "ตัวเลือกที่สองเพื่อให้คุณอยู่ในรายการที่อนุญาตคือทำตามขั้นตอนต่อไปนี้:",
-        "minting-is-free": "การทำเหรียญฟรี คุณสามารถสร้าง NFT ได้เพียงหนึ่ง NFT ต่อกระเป๋าเงิน NFT นี้ไม่สามารถโอนได้",
-        "no": "ไม่",
-        "yes-mint": "ใช่ มิ้นท์ NFT",
-        "success-mint": "ปั้นสำเร็จ",
-        "are-you-sure": "คุณแน่ใจหรือไม่ว่าต้องการสร้าง NFT นี้ คุณสามารถสร้าง NFT ได้เพียง 1 NFT ต่อกระเป๋าเงิน",
-        "already-minted": "คุณสร้าง NFT . ของคุณแล้ว",
-        "qatar-2022": "กาตาร์ 2022"
-    },
     "profile": {
         "transaction-history": "ประวัติการทำรายการ",
         "open-claimable": "เปิด/อ้างสิทธิ์ได้",
@@ -484,5 +461,33 @@
             "no-open": "คุณไม่มีตำแหน่งที่เปิดอยู่",
             "no-claimable": "คุณไม่มีตำแหน่งที่อ้างสิทธิ์ได้"
         }
+    },
+    "mint-world-cup-nft": {
+        "incentives": "สิ่งจูงใจ",
+        "zebro-campaign": "แคมเปญ Zebra FIFA",
+        "leaderboard": "ลีดเดอร์บอร์ด",
+        "yes-mint": "ใช่ มิ้นท์ NFT",
+        "no": "ไม่",
+        "eligible-text-1": "คอลเลกชัน Zebro NFT ใช้เป็นรายการสำหรับแคมเปญล่วงเวลา FIFA World Cup",
+        "minting-is-free": "การทำเหรียญฟรี คุณสามารถสร้าง NFT ได้เพียงหนึ่ง NFT ต่อกระเป๋าเงิน NFT นี้ไม่สามารถโอนได้",
+        "success-mint": "ปั้นสำเร็จ",
+        "choose-nft": "มิ้นต์ Zebro NFT . ของคุณ",
+        "get-your-nft": "รับกาตาร์ของคุณ 2022 NFT",
+        "eligible-text-2": "สร้าง Zebro ของทีมชาติที่คุณชื่นชอบและมีสิทธิ์ได้รับรางวัลโบนัส 50,000 OP & 30,000 THALES!",
+        "already-minted": "คุณสร้าง NFT . ของคุณแล้ว",
+        "are-you-sure": "คุณแน่ใจหรือไม่ว่าต้องการสร้าง NFT นี้ คุณสามารถสร้าง NFT ได้เพียง 1 NFT ต่อกระเป๋าเงิน",
+        "tag-3-friends": "ในทวีตเดียวกัน แสดงความคิดเห็นที่อยู่ ETH ของคุณและแท็กเพื่อน 3 คน",
+        "stake-thales": "สเตคทาเลส",
+        "get-thales": "รับ THALES",
+        "mint-nft-button": "มิ้นท์ม้าลายตัวนี้!",
+        "go-to-twitter": "ไปที่ Twitter",
+        "retweet": "รีทวีตทวีตนี้",
+        "follow": "ติดตามตลาดล่วงเวลาบน Twitter",
+        "not-eligible-text": "กระเป๋าเงินของคุณยังไม่มีสิทธิ์สร้าง Zebro NFT!",
+        "second-option": "ตัวเลือกที่สองเพื่อให้คุณอยู่ในรายการที่อนุญาตคือทำตามขั้นตอนต่อไปนี้:",
+        "stake-10-thales": "เพื่อให้สามารถสร้าง Zebro NFT ได้ คุณต้องมี THALES อย่างน้อย 10 เดิมพัน",
+        "eligible-text": "เฮ้ ตอนนี้คุณสามารถสร้างทีมโปรดของคุณ Zebro NFT ได้แล้ว",
+        "mint-this-zebro": "มิ้นท์ม้าลายตัวนี้!",
+        "leaderboard-title": "ลีดเดอร์บอร์ด"
     }
 }

@@ -436,29 +436,6 @@
         "join-discord": "Necesitas ayuda? Unete a nuestro Discord",
         "read-now": "Leer ahora"
     },
-    "mint-world-cup-nft": {
-        "retweet": "Retuitear",
-        "free-entry": "1 entrada gratis en FIFA Royale",
-        "choose-nft": "Elija NFT",
-        "follow": "Seguir",
-        "stake-thales": "Juego THALES",
-        "eligible-text": "Oye, ahora puedes acuñar tu NFT de equipo favorito.",
-        "get-thales": "Obtener THALES",
-        "mint-nft-button": "Me gusta NFT",
-        "second-option": "La segunda opción para incluirlo en la lista de permitidos es completar los siguientes pasos:",
-        "not-eligible-text": "Desafortunadamente, no es elegible para la acuñación de NFT.",
-        "incentives": "INCENTIVOS",
-        "go-to-twitter": "Ir a Twitter",
-        "tag-3-friends": "¡Etiqueta a 3 amigos, comparte tu dirección ETH y dinos a qué país estás animando!",
-        "minting-is-free": "Minting es gratis, solo puede acuñar un NFT por billetera. Este NFT es intransferible.",
-        "stake-10-thales": "Para acuñar un NFT, debe apostar al menos 10 THALES.",
-        "no": "No",
-        "yes-mint": "Sí, menta NFT",
-        "are-you-sure": "¿Estás seguro de que quieres acuñar este NFT? Puede acuñar SOLO UN NFT por monedero.",
-        "success-mint": "acuñado con éxito",
-        "qatar-2022": "Catar 2022",
-        "already-minted": "Ya has acuñado tu NFT"
-    },
     "profile": {
         "transaction-history": "Historial de transacciones",
         "open-claimable": "Abierto/Reclamable",
@@ -483,5 +460,33 @@
             "no-open": "No tienes ninguna posición abierta",
             "no-claimable": "No tienes ninguna posición reclamable"
         }
+    },
+    "mint-world-cup-nft": {
+        "mint-nft-button": "Mint esta cebra!",
+        "eligible-text": "Oye, ahora puedes acuñar tu equipo favorito Zebro NFT.",
+        "follow": "Siga a Overtime Markets en Twitter",
+        "stake-10-thales": "Para poder acuñar un Zebro NFT, debe tener al menos 10 THALES apostados.",
+        "stake-thales": "Juego THALES",
+        "get-thales": "Obtener THALES",
+        "go-to-twitter": "Ir a Twitter",
+        "incentives": "INCENTIVOS",
+        "second-option": "La segunda opción para incluirlo en la lista de permitidos es completar los siguientes pasos:",
+        "tag-3-friends": "En el mismo tweet, comenta tu dirección ETH y etiqueta a 3 amigos",
+        "no": "No",
+        "leaderboard": "Tabla de clasificación",
+        "yes-mint": "Sí, menta NFT",
+        "choose-nft": "Acuñe su Zebro NFT",
+        "success-mint": "acuñado con éxito",
+        "retweet": "Retuitear este tuit",
+        "zebro-campaign": "Campaña Zebra FIFA",
+        "get-your-nft": "Consigue tu NFT de Catar 2022",
+        "minting-is-free": "Minting es gratis, solo puede acuñar un NFT por billetera. Este NFT es intransferible.",
+        "already-minted": "Ya has acuñado tu NFT",
+        "are-you-sure": "¿Estás seguro de que quieres acuñar este NFT? Puede acuñar SOLO UN NFT por monedero.",
+        "eligible-text-1": "La colección Zebro NFT se utiliza como entrada para la campaña de la Copa Mundial de la FIFA en tiempo extra.",
+        "not-eligible-text": "¡Su billetera aún no es elegible para acuñar un Zebro NFT!",
+        "eligible-text-2": "¡Acuña un Zebro de tu equipo nacional favorito y sé elegible para recompensas de bonificación de 50 000 OP y 30 000 THALES!",
+        "mint-this-zebro": "Mint esta cebra!",
+        "leaderboard-title": "Tabla de clasificación"
     }
 }
