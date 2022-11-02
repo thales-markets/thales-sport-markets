@@ -6,7 +6,7 @@ export const Container = styled(FlexDivColumnNative)`
     align-items: center;
     background-color: ${MAIN_COLORS.LIGHT_GRAY};
     border-radius: 4px;
-    padding: 11px 10px;
+    padding: 12px 10px;
     width: 100%;
     margin-bottom: 5px;
 `;
