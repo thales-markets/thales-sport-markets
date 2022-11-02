@@ -116,10 +116,13 @@ export type MarketData = {
 export type ParlayMarket = {
     id: string;
     sportMarkets: SportMarketInfo[];
+    sportMarketsFromContract: string[];
     positions: PositionData[];
+    positionsFromContract: number[];
     marketQuotes: number[];
     account: string;
     totalAmount: number;
+    sUSDPaid: number;
     sUSDAfterFees: number;
     totalQuote: number;
     skewImpact: number;
@@ -195,6 +198,8 @@ export type Tags = TagInfo[];
 export type SportsMap = Record<number, string>;
 
 export type SportsTagsMap = Record<string, number[]>;
+
+export type TeamAbbreviationsMap = Record<string, string>;
 
 export enum PositionType {
     home = 'home',

@@ -4,6 +4,7 @@ import { PositionBalance, PositionType, SportMarketInfo } from 'types/markets';
 import thalesData from 'thales-data';
 import { NetworkId } from 'types/network';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { fixApexName, fixDuplicatedTeamName, fixLongTeamNameString } from 'utils/formatters/string';
 
 export type AccountPositionProfile = {
     id: string;
@@ -40,7 +41,15 @@ const useAccountMarketsQuery = (
                         amount: bigNumberFormatter(position.amount),
                         claimable: position.position.claimable,
                         open: !position.position.market.isCanceled && !position.position.market.isResolved,
-                        market: position.position.market,
+                        market: {
+                            ...position.position.market,
+                            homeTeam: position.position.market.isApex
+                                ? fixApexName(position.position.market.homeTeam)
+                                : fixLongTeamNameString(fixDuplicatedTeamName(position.position.market.homeTeam)),
+                            awayTeam: position.position.market.isApex
+                                ? fixApexName(position.position.market.awayTeam)
+                                : fixLongTeamNameString(fixDuplicatedTeamName(position.position.market.awayTeam)),
+                        },
                         side: position.position.side,
                     };
                 });

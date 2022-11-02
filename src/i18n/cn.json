@@ -436,29 +436,6 @@
         "join-discord": "需要帮助?请加入我们的discord",
         "read-now": "开始阅读"
     },
-    "mint-world-cup-nft": {
-        "minting-is-free": "铸造是免费的，每个钱包只能铸造一个 NFT。此 NFT 不可转让。",
-        "stake-10-thales": "为了铸造 NFT，您需要至少质押 10 THALES。",
-        "incentives": "激励措施",
-        "get-thales": "获得泰雷兹",
-        "second-option": "让您加入许可名单的第二个选项是完成以下步骤：",
-        "retweet": "转推",
-        "follow": "跟随",
-        "go-to-twitter": "去推特",
-        "free-entry": "1 次免费进入 FIFA Royale",
-        "choose-nft": "选择 NFT",
-        "mint-nft-button": "像 NFT",
-        "eligible-text": "嘿，你现在可以铸造你最喜欢的团队 NFT。",
-        "stake-thales": "股份 THALES",
-        "not-eligible-text": "不幸的是，您没有资格进行 NFT 铸造。",
-        "tag-3-friends": "标记 3 位好友，分享您的 ETH 地址，并告诉我们您为哪个国家而欢呼！",
-        "no": "不",
-        "yes-mint": "是的，薄荷 NFT",
-        "are-you-sure": "你确定要铸造这个 NFT 吗？每个钱包只能铸造一个 NFT。",
-        "success-mint": "成功铸造",
-        "qatar-2022": "卡塔尔 2022",
-        "already-minted": "你已经铸造了你的 NFT"
-    },
     "profile": {
         "transaction-history": "交易记录",
         "open-claimable": "开放/可索赔",
@@ -474,7 +451,42 @@
             "canceled": "取消",
             "to-claim": "索赔",
             "total-quote": "总报价",
-            "number-of-games": "游戏数"
+            "number-of-games": "游戏数",
+            "result": "结果",
+            "starts": "开始",
+            "position-size": "仓位大小"
+        },
+        "messages": {
+            "no-claimable": "您没有任何可申请的职位",
+            "no-open": "您没有任何空缺职位"
         }
+    },
+    "mint-world-cup-nft": {
+        "get-thales": "获得泰雷兹",
+        "go-to-twitter": "去推特",
+        "already-minted": "你已经铸造了你的 NFT",
+        "retweet": "转发这条推文",
+        "second-option": "让您加入许可名单的第二个选项是完成以下步骤：",
+        "minting-is-free": "铸造是免费的，每个钱包只能铸造一个 NFT。此 NFT 不可转让。",
+        "get-your-nft": "获取您的卡塔尔 2022 NFT",
+        "eligible-text-1": "Zebro NFT 系列被用作世界杯加时赛的参赛作品。",
+        "follow": "在 Twitter 上关注加班市场",
+        "incentives": "激励措施",
+        "stake-thales": "股份 THALES",
+        "leaderboard": "排行榜",
+        "tag-3-friends": "在同一条推文中，评论您的 ETH 地址并标记 3 个朋友",
+        "not-eligible-text": "您的钱包还没有资格铸造 Zebro NFT！",
+        "stake-10-thales": "为了能够铸造一个 Zebro NFT，您需要至少有 10 个 THALES 质押。",
+        "eligible-text-2": "铸造您最喜欢的国家队的斑马，并有资格获得 50,000 OP 和 30,000 THALES 奖金奖励！",
+        "mint-nft-button": "铸造这只斑马！",
+        "zebro-campaign": "斑马国际足联运动",
+        "eligible-text": "嘿，你现在可以铸造你最喜欢的团队 Zebro NFT。",
+        "no": "不",
+        "are-you-sure": "你确定要铸造这个 NFT 吗？每个钱包只能铸造一个 NFT。",
+        "choose-nft": "铸造你的 Zebro NFT",
+        "success-mint": "成功铸造",
+        "yes-mint": "是的，薄荷 NFT",
+        "mint-this-zebro": "铸造这只斑马！",
+        "leaderboard-title": "排行榜"
     }
 }

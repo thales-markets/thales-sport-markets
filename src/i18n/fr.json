@@ -534,29 +534,6 @@
         "join-discord": "Besoin d'aide ? Rejoignez notre Discord",
         "read-now": "Consulter"
     },
-    "mint-world-cup-nft": {
-        "follow": "Suivre",
-        "incentives": "DES INCITATIONS",
-        "not-eligible-text": "Malheureusement, vous n'êtes pas éligible à la frappe NFT.",
-        "go-to-twitter": "Aller sur Twitter",
-        "retweet": "Retweet",
-        "free-entry": "1 entrée gratuite à FIFA Royale",
-        "minting-is-free": "La frappe est gratuite, vous ne pouvez frapper qu'un seul NFT par portefeuille. Ce NFT est incessible.",
-        "stake-10-thales": "Pour frapper un NFT, vous devez miser au moins 10 THALES.",
-        "get-thales": "Obtenez THALES",
-        "tag-3-friends": "Identifiez 3 amis, partagez votre adresse ETH et dites-nous pour quel pays vous encouragez !",
-        "second-option": "La deuxième option pour vous inscrire sur la liste d'autorisation consiste à suivre les étapes suivantes :",
-        "eligible-text": "Hé, vous pouvez maintenant frapper votre équipe préférée NFT.",
-        "mint-nft-button": "Comme NFT",
-        "stake-thales": "Pieu THALES",
-        "choose-nft": "Choisissez NFT",
-        "no": "Non",
-        "success-mint": "Frappé avec succès",
-        "are-you-sure": "Êtes-vous sûr de vouloir frapper ce NFT ? Vous pouvez frapper UN SEUL NFT par portefeuille.",
-        "yes-mint": "Oui, menthe NFT",
-        "qatar-2022": "Qatar 2022",
-        "already-minted": "Vous avez déjà frappé votre NFT"
-    },
     "profile": {
         "transaction-history": "Historique des transactions",
         "open-claimable": "Ouvert/Réclamable",
@@ -572,7 +549,42 @@
             "ticket-id": "ID de billets",
             "total-quote": "Devis total",
             "number-of-games": "Nombre de parties",
-            "ticket-paid": "Billet payé"
+            "ticket-paid": "Billet payé",
+            "result": "Résultat",
+            "starts": "Départs",
+            "position-size": "Taille du poste"
+        },
+        "messages": {
+            "no-claimable": "Vous n'avez pas de poste réclamable",
+            "no-open": "Vous n'avez pas de poste ouvert"
         }
+    },
+    "mint-world-cup-nft": {
+        "no": "Non",
+        "leaderboard": "Classement",
+        "are-you-sure": "Êtes-vous sûr de vouloir frapper ce NFT ? Vous pouvez frapper UN SEUL NFT par portefeuille.",
+        "zebro-campaign": "Campagne Zebra FIFA",
+        "get-your-nft": "Obtenez votre Qatar 2022 NFT",
+        "retweet": "Retweetez ce tweet",
+        "success-mint": "Frappé avec succès",
+        "yes-mint": "Oui, menthe NFT",
+        "already-minted": "Vous avez déjà frappé votre NFT",
+        "mint-nft-button": "Frappez ce zèbre !",
+        "stake-thales": "Pieu THALES",
+        "incentives": "DES INCITATIONS",
+        "follow": "Suivez les marchés des heures supplémentaires sur Twitter",
+        "go-to-twitter": "Aller sur Twitter",
+        "choose-nft": "Frappez votre Zebro NFT",
+        "get-thales": "Obtenez THALES",
+        "eligible-text-1": "La collection Zebro NFT est utilisée comme entrée pour la campagne Overtime FIFA World Cup.",
+        "stake-10-thales": "Pour pouvoir frapper un Zebro NFT, vous devez avoir au moins 10 THALES jalonnés.",
+        "eligible-text-2": "Frappez un zèbre de votre équipe nationale préférée et soyez éligible à 50 000 OP et 30 000 bonus THALES !",
+        "tag-3-friends": "Sur le même tweet, commentez votre adresse ETH & taguez 3 amis",
+        "eligible-text": "Hé, vous pouvez maintenant créer votre équipe préférée Zebro NFT.",
+        "second-option": "La deuxième option pour vous inscrire sur la liste d'autorisation consiste à suivre les étapes suivantes :",
+        "not-eligible-text": "Votre portefeuille n'est pas encore éligible pour frapper un Zebro NFT !",
+        "minting-is-free": "La frappe est gratuite, vous ne pouvez frapper qu'un seul NFT par portefeuille. Ce NFT est incessible.",
+        "mint-this-zebro": "Frappez ce zèbre !",
+        "leaderboard-title": "Classement"
     }
 }

@@ -91,7 +91,6 @@ export const ResultContainer = styled(InnerContainer)``;
 export const ClaimButton = styled(Button)<{ claimable?: boolean }>`
     background: ${(props) => props.theme.background.quaternary};
     color: ${(props) => props.theme.textColor.tertiary};
-    margin-right: 20px;
     text-transform: uppercase;
     cursor: pointer;
     border-radius: 5px;
@@ -99,4 +98,9 @@ export const ClaimButton = styled(Button)<{ claimable?: boolean }>`
     font-size: 15px;
     letter-spacing: 0.025em;
     visibility: ${(props) => (!props.claimable ? 'hidden' : '')};
+    @media (max-width: 768px) {
+        font-size: 9px;
+        padding: 2px 5px;
+        min-height: 12px;
+    }
 `;

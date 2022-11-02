@@ -5,12 +5,10 @@ import {
     EligibilityText,
     InfoContainer,
     InfoContent,
-    InfoText,
     StyledButton,
     ListItemContainer,
     ListItem,
     GoToTwitterContainer,
-    IncentivesTitle,
 } from 'pages/MintWorldCupNFT/styled-components';
 import { ReactComponent as HappyFace } from 'assets/images/favorite-team/happy-face.svg';
 import { ReactComponent as FirstRectangle } from 'assets/images/favorite-team/first-rectangle.svg';
@@ -36,11 +34,13 @@ const Eligible: React.FC<EligibleProps> = ({ onChooseNft }) => {
             <InfoContainer>
                 <SecondRectangle />
                 <InfoContent>
-                    <InfoText>{t('mint-world-cup-nft.minting-is-free')}</InfoText>
-                    <IncentivesTitle>{t('mint-world-cup-nft.incentives')}:</IncentivesTitle>
                     <ListItemContainer>
                         <ArrowRight />
-                        <ListItem>{t('mint-world-cup-nft.free-entry')}</ListItem>
+                        <ListItem>{t('mint-world-cup-nft.eligible-text-1')}</ListItem>
+                    </ListItemContainer>
+                    <ListItemContainer>
+                        <ArrowRight />
+                        <ListItem>{t('mint-world-cup-nft.eligible-text-2')}</ListItem>
                     </ListItemContainer>
                     <GoToTwitterContainer>
                         <StyledButton onClick={onChooseNft}>{t('mint-world-cup-nft.choose-nft')}</StyledButton>
