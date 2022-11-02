@@ -61,6 +61,7 @@ type TicketProps = {
 
 const TicketErrorMessage = {
     RISK_PER_COMB: 'RiskPerComb exceeded',
+    SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
 };
 
 const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOfLiquidity }) => {
@@ -173,8 +174,12 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     return parlayAmmQuote;
                 } catch (e: any) {
                     const errorMessage = e.error?.data?.message;
-                    if (errorMessage && errorMessage.includes(TicketErrorMessage.RISK_PER_COMB)) {
-                        return { error: TicketErrorMessage.RISK_PER_COMB };
+                    if (errorMessage) {
+                        if (errorMessage.includes(TicketErrorMessage.RISK_PER_COMB)) {
+                            return { error: TicketErrorMessage.RISK_PER_COMB };
+                        } else if (errorMessage.includes(TicketErrorMessage.SAME_TEAM_IN_PARLAY)) {
+                            return { error: TicketErrorMessage.SAME_TEAM_IN_PARLAY };
+                        }
                     }
                     console.log(e);
                     return { error: errorMessage };
@@ -385,6 +390,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 switch (error) {
                     case TicketErrorMessage.RISK_PER_COMB:
                         setTooltipTextUsdAmount(t('markets.parlay.validation.risk-per-comb'));
+                        return;
+                    case TicketErrorMessage.SAME_TEAM_IN_PARLAY:
+                        setTooltipTextUsdAmount(t('markets.parlay.validation.same-team'));
                         return;
                     default:
                         setTooltipTextUsdAmount(t('markets.parlay.validation.not-supported', { error }));

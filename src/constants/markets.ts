@@ -101,3 +101,9 @@ export const ApexBetTypeKeyMapping = {
     [ApexBetType.TOP5]: 'top5',
     [ApexBetType.TOP10]: 'top10',
 };
+
+export enum ParlayErrorCode {
+    NO_ERROS = 0,
+    MAX_4_MATCHES = 1,
+    SAME_TEAM_TWICE = 2,
+}

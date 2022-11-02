@@ -6,7 +6,13 @@ import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getParlay, getParlayPayment, getParlayError, removeFromParlay, resetParlayError } from 'redux/modules/parlay';
+import {
+    getParlay,
+    getParlayPayment,
+    getHasParlayError,
+    removeFromParlay,
+    resetParlayError,
+} from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -25,7 +31,7 @@ const Parlay: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const parlay = useSelector(getParlay);
     const parlayPayment = useSelector(getParlayPayment);
-    const hasParlayError = useSelector(getParlayError);
+    const hasParlayError = useSelector(getHasParlayError);
 
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
@@ -37,7 +43,7 @@ const Parlay: React.FC = () => {
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
             const sportOpenMarkets = sportMarketsQuery.data[GlobalFiltersEnum.OpenMarkets];
-            const parlayOpenMarkets: ParlaysMarket[] = parlay
+            const parlayMarkets: ParlaysMarket[] = parlay
                 .filter((parlayMarket) => {
                     return sportOpenMarkets.some((market) => {
                         return market.id === parlayMarket.sportMarketId;
@@ -53,7 +59,7 @@ const Parlay: React.FC = () => {
                     };
                 });
             // If market is not opened any more remove it
-            if (parlay.length > parlayOpenMarkets.length) {
+            if (parlay.length > parlayMarkets.length) {
                 const notOpenedMarkets = parlay.filter((parlayMarket) => {
                     return sportOpenMarkets.some((market) => {
                         return market.id !== parlayMarket.sportMarketId;
@@ -61,7 +67,8 @@ const Parlay: React.FC = () => {
                 });
                 notOpenedMarkets.forEach((market) => dispatch(removeFromParlay(market.sportMarketId)));
             }
-            setParlayMarkets(parlayOpenMarkets);
+
+            setParlayMarkets(parlayMarkets);
         }
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay, dispatch]);
 

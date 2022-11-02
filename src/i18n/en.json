@@ -323,13 +323,14 @@
             },
             "validation": {
                 "title": "Parlay validation",
-                "max-markets": "Maximum 4 markets in Parlay",
+                "team-in-parlay": "<span>{{team}} is already in Parlay.</span><br><span> The same team can't be added to a Parlay more than once.</span>",
                 "amount-exceeded": "Amount exceeded the amount available on AMM",
                 "min-amount": "Minimal buy-in for a Parlay ticket is {{min}} $",
                 "single-min-amount": "Minimal buy-in is {{min}} $",
                 "availability": "Not enough liquidity for this buy-in amount",
                 "no-funds": "Please ensure your wallet has enough funds",
                 "risk-per-comb": "Risk per combination exceeded",
+                "same-team": "The same team can't be in a Parlay more than once",
                 "not-supported": "Not supported validation error: {{error}}"
             }
         },
