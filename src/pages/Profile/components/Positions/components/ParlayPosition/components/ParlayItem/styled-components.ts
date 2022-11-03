@@ -55,6 +55,8 @@ export const ClubName = styled.span`
     word-wrap: normal;
     @media (max-width: 768px) {
         font-size: 9px;
+        height: 15px;
+        margin-top: 3px;
     }
 `;
 

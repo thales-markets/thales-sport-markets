@@ -94,11 +94,14 @@ export const ClaimButton = styled(Button)<{ claimable?: boolean }>`
     text-transform: uppercase;
     cursor: pointer;
     border-radius: 5px;
+    position: absolute;
+    right: 10px;
     font-weight: 700;
     font-size: 15px;
     letter-spacing: 0.025em;
     visibility: ${(props) => (!props.claimable ? 'hidden' : '')};
     @media (max-width: 768px) {
+        position: initial;
         font-size: 9px;
         padding: 2px 5px;
         min-height: 12px;

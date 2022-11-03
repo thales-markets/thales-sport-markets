@@ -105,7 +105,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                     </ResultContainer>
                     <ClaimInfoContainer>
                         <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
-                        <ClaimValue>{formatCurrencyWithSign(USD_SIGN, position.amount)}</ClaimValue>
+                        <ClaimValue>{formatCurrencyWithSign(USD_SIGN, position.amount, 2)}</ClaimValue>
                     </ClaimInfoContainer>
                     <ClaimButton
                         claimable={true}
