@@ -484,12 +484,23 @@
         "tag-3-friends": "Kommentiere auf demselben Tweet deine ETH-Adresse & markiere 3 Freunde",
         "yes-mint": "Ja, neuwertiges NFT",
         "choose-nft": "Mint Ihr Zebro NFT",
-        "leaderboard": "Bestenliste",
         "success-mint": "Erfolgreich geprägt",
         "get-your-nft": "Holen Sie sich Ihren Katar 2022 NFT",
         "already-minted": "Sie haben Ihr NFT bereits geprägt",
         "zebro-campaign": "Zebra-FIFA-Kampagne",
         "mint-this-zebro": "Prägen Sie dieses Zebra!",
-        "leaderboard-title": "Bestenliste"
+        "leaderboard-title": "Bestenliste",
+        "leaderboard": {
+            "underdog-multiplier": "Underdog-Multiplikator:",
+            "parlay-boost": "Parlay-Boost:",
+            "two-game-parlay": "+10 %, wenn es sich um eine Kombination aus 2 Spielen handelt",
+            "four-game-parlay": "+20 %, wenn es sich um eine Kombination aus 4 Spielen handelt",
+            "home-country-multiplier-text": "Wenn an Ihrem WM-Spiel dieselbe Nationalmannschaft teilnimmt wie an Ihrem Zebro, erhalten Sie einen Prämien-Boost von +10 %",
+            "home-country-multiplier": "NFT-Multiplikator des Heimatlandes:",
+            "underdog-multiplier-text": "Wenn Ihre WM-Platzierung unter 0,3 liegt (Quoten über 1:3,33), erhalten Sie einen Prämien-Boost von 10 %.",
+            "parlay-boost-text": "Wenn Ihr WM-Spiel in einem Parlay-Ticket enthalten ist, erhalten Sie einen Boost von:",
+            "reward-calculations": "Belohnungsberechnungen werden anteilig volumenbasiert mit maximal 40 % zusätzlichem Volumenschub berechnet, wenn die folgenden Bedingungen erfüllt sind:",
+            "three-game-parlay": "+15 %, wenn es sich um eine Kombination aus 3 Spielen handelt"
+        }
     }
 }

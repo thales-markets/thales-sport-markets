@@ -479,7 +479,6 @@
         "second-option": "La segunda opción para incluirlo en la lista de permitidos es completar los siguientes pasos:",
         "tag-3-friends": "En el mismo tweet, comenta tu dirección ETH y etiqueta a 3 amigos",
         "no": "No",
-        "leaderboard": "Tabla de clasificación",
         "yes-mint": "Sí, menta NFT",
         "choose-nft": "Acuñe su Zebro NFT",
         "success-mint": "acuñado con éxito",
@@ -493,6 +492,18 @@
         "not-eligible-text": "¡Su billetera aún no es elegible para acuñar un Zebro NFT!",
         "eligible-text-2": "¡Acuña un Zebro de tu equipo nacional favorito y sé elegible para recompensas de bonificación de 50 000 OP y 30 000 THALES!",
         "mint-this-zebro": "Mint esta cebra!",
-        "leaderboard-title": "Tabla de clasificación"
+        "leaderboard-title": "Tabla de clasificación",
+        "leaderboard": {
+            "underdog-multiplier": "Multiplicador desvalido:",
+            "parlay-boost": "Impulso combinado:",
+            "three-game-parlay": "+15% si es un parlay de 3 juegos",
+            "four-game-parlay": "+20% si es un parlay de 4 juegos",
+            "underdog-multiplier-text": "Si su posición en el partido de la Copa Mundial tiene un precio inferior a 0,3 (las probabilidades son superiores a 1:3,33), obtendrá un aumento de recompensas del 10 %.",
+            "home-country-multiplier": "Multiplicador NFT del país de origen:",
+            "home-country-multiplier-text": "Si su partido de la Copa Mundial involucra al mismo equipo nacional que su Zebro, recibirá un aumento de recompensas de +10%",
+            "two-game-parlay": "+10% si es un parlay de 2 juegos",
+            "reward-calculations": "Los cálculos de recompensa serán prorrateados en función del volumen con un aumento de volumen adicional máximo del 40 % si se cumplen las siguientes condiciones:",
+            "parlay-boost-text": "Si tu partido de la Copa del Mundo es en un boleto Parlay, obtendrás un impulso de:"
+        }
     }
 }
