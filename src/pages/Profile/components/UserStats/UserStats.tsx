@@ -18,17 +18,17 @@ const UserStats: React.FC = () => {
             <SectionWrapper>
                 <Section>
                     <Label>Trades:</Label>
-                    <Value>{user.trades}</Value>
+                    <Value>{!user ? 0 : user.trades}</Value>
                 </Section>
                 <Section>
                     <Label>P&L:</Label>
-                    <Value>{formatCurrencyWithKey('USD', user.pnl, 2)}</Value>
+                    <Value>{!user ? 0 : formatCurrencyWithKey('USD', user.pnl, 2)}</Value>
                 </Section>
             </SectionWrapper>
             <SectionWrapper>
                 <Section>
                     <Label>Total Volume:</Label>
-                    <Value>{formatCurrencyWithKey('USD', user.volume, 2)}</Value>
+                    <Value>{!user ? 0 : formatCurrencyWithKey('USD', user.volume, 2)}</Value>
                 </Section>
                 <Section></Section>
             </SectionWrapper>
