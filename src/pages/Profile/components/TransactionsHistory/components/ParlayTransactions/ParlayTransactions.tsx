@@ -182,6 +182,7 @@ const TableText = styled.span`
     @media (max-width: 600px) {
         font-size: 10px;
     }
+    white-space: nowrap;
 `;
 
 const QuoteText = styled.span`
@@ -190,6 +191,7 @@ const QuoteText = styled.span`
     font-weight: 700;
     font-size: 10px;
     text-align: left;
+    white-space: nowrap;
 `;
 
 const QuoteLabel = styled.span`
