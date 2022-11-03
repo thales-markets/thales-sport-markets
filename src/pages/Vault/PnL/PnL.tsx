@@ -40,46 +40,52 @@ const PnL: React.FC = () => {
         return null;
     };
 
+    const noData = vaultPnls.length === 0;
+
     return (
         <Container>
             <Title>{t(`vault.pnl.title`)}</Title>
-            <ChartContainer>
-                <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={vaultPnls}>
-                        <CartesianGrid strokeDasharray="2 2" strokeWidth={0.5} stroke="#5F6180" />
-                        <XAxis
-                            dataKey="round"
-                            tickLine={false}
-                            axisLine={false}
-                            tick={{ fill: '#5F6180' }}
-                            style={{
-                                fontSize: '15px',
-                            }}
-                        />
-                        <YAxis
-                            tickFormatter={(val: any) => {
-                                return formatPercentageWithSign(val, 0);
-                            }}
-                            tickLine={false}
-                            axisLine={false}
-                            tick={{ fill: '#5F6180' }}
-                            style={{
-                                fontSize: '15px',
-                            }}
-                        />
-                        <Tooltip
-                            content={<CustomTooltip />}
-                            cursor={{ fill: '#5F6180', fillOpacity: '0.3' }}
-                            wrapperStyle={{ outline: 'none' }}
-                        />
-                        <Bar dataKey="pnl" radius={[4, 4, 0, 0]}>
-                            {vaultPnls.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={entry.pnl > 0 ? Colors.GREEN : Colors.RED} />
-                            ))}
-                        </Bar>
-                    </BarChart>
-                </ResponsiveContainer>
-            </ChartContainer>
+            {!noData ? (
+                <ChartContainer>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={vaultPnls}>
+                            <CartesianGrid strokeDasharray="2 2" strokeWidth={0.5} stroke="#5F6180" />
+                            <XAxis
+                                dataKey="round"
+                                tickLine={false}
+                                axisLine={false}
+                                tick={{ fill: '#5F6180' }}
+                                style={{
+                                    fontSize: '15px',
+                                }}
+                            />
+                            <YAxis
+                                tickFormatter={(val: any) => {
+                                    return formatPercentageWithSign(val, 0);
+                                }}
+                                tickLine={false}
+                                axisLine={false}
+                                tick={{ fill: '#5F6180' }}
+                                style={{
+                                    fontSize: '15px',
+                                }}
+                            />
+                            <Tooltip
+                                content={<CustomTooltip />}
+                                cursor={{ fill: '#5F6180', fillOpacity: '0.3' }}
+                                wrapperStyle={{ outline: 'none' }}
+                            />
+                            <Bar dataKey="pnl" radius={[4, 4, 0, 0]}>
+                                {vaultPnls.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={entry.pnl > 0 ? Colors.GREEN : Colors.RED} />
+                                ))}
+                            </Bar>
+                        </BarChart>
+                    </ResponsiveContainer>
+                </ChartContainer>
+            ) : (
+                <span>{t(`vault.pnl.no-data`)}</span>
+            )}
         </Container>
     );
 };

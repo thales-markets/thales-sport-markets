@@ -16,6 +16,7 @@ export type VaultData = {
     maxAllowedUsers: number;
     usersCurrentlyInVault: number;
     canCloseCurrentRound: boolean;
+    paused: boolean;
 };
 
 export type UserVaultData = {

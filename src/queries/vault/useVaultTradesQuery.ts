@@ -25,7 +25,7 @@ const useVaultTradesQuery = (networkId: NetworkId, options?: UseQueryOptions<Vau
                     const result = Position[trade.wholeMarket.finalResult - 1] as PositionName;
                     const link = getEtherscanTxLink(networkId, trade.hash);
                     const status =
-                        trade.wholeMarket.finalResult === 0
+                        trade.wholeMarket.finalResult || trade.wholeMarket.finalResult === 0
                             ? VaultTradeStatus.IN_PROGRESS
                             : // @ts-ignore
                             (position as PositionName) === result

@@ -352,6 +352,7 @@
     "vault": {
         "title": "Discount Vault",
         "vault-not-started-message": "The vault has not started",
+        "vault-paused-message": "The vault is paused",
         "round-allocation-label": "Round allocation",
         "round-end-label": "The round ends in",
         "description": "<p>Etiam eget magna scelerisque, dignissim arcu sed, condimentum odio. Duis laoreet ante non consequat semper. Duis consequat magna ut egestas aliquet. Sed luctus risus sapien, id semper mi pulvinar eu. Integer a ligula id elit sollicitudin molestie. Fusce convallis lorem ultricies, vestibulum arcu at, sodales mi. Etiam vulputate iaculis ligula, in dictum lorem bibendum bibendum. Nam in dapibus enim.<p></p>Aenean eget diam quam. Ut sed nunc libero. Vivamus sit amet tristique sem. Quisque ut consequat felis, et consequat purus. Ut feugiat id eros in eleifend. Donec sit amet blandit risus. Praesent vulputate lobortis felis, ac porta dui interdum ac. Morbi hendrerit, nulla in porttitor commodo, magna nibh cursus diam, id pharetra turpis felis in dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut vitae mollis leo, egestas interdum arcu. Integer ornare, est vel lacinia imperdiet, mi quam aliquam nibh, vulputate mattis magna mi et arcu. Etiam elit magna, malesuada eget rutrum ac, tristique et ligula.</p>",
@@ -371,6 +372,7 @@
         "round-ended-label": "Round ended",
         "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
         "deposit-max-amount-of-users-warning": "Maximum number of users in the vault is reached, you cannot deposit.",
+        "deposit-vault-cap-reached-warning": "The vault cap is reached, you cannot deposit.",
         "deposit-vault-cap-error": "Deposit amount exceeds vault cap",
         "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
         "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
@@ -398,7 +400,8 @@
             "no-trades": "No trades associated with this vault."
         },
         "pnl": {
-            "title": "PnL per round"
+            "title": "PnL per round",
+            "no-data": "No PnL data for previous rounds."
         }
     }
 }

@@ -35,7 +35,9 @@ const useUserVaultDataQuery = (
 
                     userVaultData.balanceCurrentRound = bigNumberFormatter(balanceCurrentRound);
                     userVaultData.balanceNextRound = bigNumberFormatter(balanceNextRound);
-                    userVaultData.balanceTotal = userVaultData.balanceCurrentRound + userVaultData.balanceNextRound;
+                    userVaultData.balanceTotal = withdrawalRequested
+                        ? 0
+                        : userVaultData.balanceCurrentRound + userVaultData.balanceNextRound;
                     userVaultData.isWithdrawalRequested = withdrawalRequested;
                     userVaultData.hasDepositForCurrentRound = userVaultData.balanceCurrentRound > 0;
                     userVaultData.hasDepositForNextRound = userVaultData.balanceNextRound > 0;

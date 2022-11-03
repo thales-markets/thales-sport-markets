@@ -134,12 +134,15 @@ const Vault: React.FC = () => {
         !userVaultData.hasDepositForCurrentRound &&
         !userVaultData.hasDepositForNextRound;
     const invalidAmount = vaultData && Number(vaultData.minDepositAmount) > Number(amount) && isAmountEntered;
+    const vaultPaused = vaultData && vaultData.paused;
+    const isVaultCapReached = vaultData && vaultData.allocationNextRoundPercentage >= 100;
 
     const isRequestWithdrawalButtonDisabled =
         !isWalletConnected ||
         isSubmitting ||
         nothingToWithdraw ||
-        (userVaultData && userVaultData.hasDepositForNextRound);
+        (userVaultData && userVaultData.hasDepositForNextRound) ||
+        vaultPaused;
 
     const isDepositButtonDisabled =
         !isWalletConnected ||
@@ -149,7 +152,12 @@ const Vault: React.FC = () => {
         isWithdrawalRequested ||
         exceededVaultCap ||
         isMaximumAmountOfUsersReached ||
-        invalidAmount;
+        invalidAmount ||
+        vaultPaused ||
+        isVaultCapReached;
+
+    const isDepositAmountInputDisabled =
+        isSubmitting || isWithdrawalRequested || isMaximumAmountOfUsersReached || vaultPaused || isVaultCapReached;
 
     useEffect(() => {
         const { signer, sUSDContract, sportVaultContract } = networkConnector;
@@ -349,7 +357,11 @@ const Vault: React.FC = () => {
                     {vaultData && (
                         <>
                             <RoundInfoWrapper>
-                                {vaultData.vaultStarted ? (
+                                {vaultData.paused ? (
+                                    <RoundInfoContainer>
+                                        <RoundInfo>{t('vault.vault-paused-message')}</RoundInfo>
+                                    </RoundInfoContainer>
+                                ) : vaultData.vaultStarted ? (
                                     <>
                                         <RoundInfoContainer>
                                             <RoundInfoLabel>{t('vault.round-allocation-label')}:</RoundInfoLabel>
@@ -427,10 +439,7 @@ const Vault: React.FC = () => {
                                                 bold: <BoldContent />,
                                             }}
                                             values={{
-                                                amount: formatCurrencyWithSign(
-                                                    USD_SIGN,
-                                                    userVaultData.balanceNextRound
-                                                ),
+                                                amount: formatCurrencyWithSign(USD_SIGN, userVaultData.balanceTotal),
                                             }}
                                         />
                                     </ContentInfo>
@@ -475,6 +484,11 @@ const Vault: React.FC = () => {
                                             <Trans i18nKey="vault.deposit-withdrawal-warning" />
                                         </WarningContentInfo>
                                     )}
+                                    {isVaultCapReached && (
+                                        <WarningContentInfo>
+                                            <Trans i18nKey="vault.deposit-vault-cap-reached-warning" />
+                                        </WarningContentInfo>
+                                    )}
                                     {isMaximumAmountOfUsersReached && (
                                         <WarningContentInfo>
                                             <Trans i18nKey="vault.deposit-max-amount-of-users-warning" />
@@ -504,11 +518,7 @@ const Vault: React.FC = () => {
                                         >
                                             <NumericInput
                                                 value={amount}
-                                                disabled={
-                                                    isSubmitting ||
-                                                    isWithdrawalRequested ||
-                                                    isMaximumAmountOfUsersReached
-                                                }
+                                                disabled={isDepositAmountInputDisabled}
                                                 onChange={(_, value) => setAmount(value)}
                                                 placeholder={t('vault.deposit-amount-placeholder')}
                                                 currencyLabel={PAYMENT_CURRENCY}
