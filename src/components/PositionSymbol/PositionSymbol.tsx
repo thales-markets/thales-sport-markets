@@ -173,6 +173,10 @@ const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: b
     border: ${(_props) =>
         _props?.glow ? '3px solid ' + _props.color : _props.addedToParlay ? '3px solid #64D9FE' : '3px solid #5f6180'};
     box-shadow: ${(_props) => (_props?.glow ? '0 0 6px 2px ' + _props.color : '')};
+    @media (max-width: 380px) {
+        width: 25px;
+        height: 25px;
+    }
 `;
 
 const AdditionalText = styled.span`
@@ -181,6 +185,9 @@ const AdditionalText = styled.span`
     margin-right: 10px;
     display: flex;
     flex-direction: row;
+    @media (max-width: 380px) {
+        font-size: 12px;
+    }
 `;
 
 const Symbol = styled.span<{ color?: string; addedToParlay?: boolean; size?: string }>`

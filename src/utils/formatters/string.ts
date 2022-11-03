@@ -40,7 +40,6 @@ export const mapTeamNamesMobile = (teamName: string, individualCompetition: bool
         const splittedName = teamName.split(' ');
         return splittedName[splittedName.length - 1];
     }
-    console.log(TEAM_ABBREVIATIONS_MAP[teamName.toLowerCase()]);
     return TEAM_ABBREVIATIONS_MAP[teamName.toLowerCase()];
 };
 
