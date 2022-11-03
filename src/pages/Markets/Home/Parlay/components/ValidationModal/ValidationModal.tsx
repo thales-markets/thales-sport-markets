@@ -4,7 +4,7 @@ import { ParlayErrorCode } from 'constants/markets';
 import useInterval from 'hooks/useInterval';
 import Lottie from 'lottie-react';
 import React, { CSSProperties } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getParlayError, resetParlayError } from 'redux/modules/parlay';
 import styled from 'styled-components';
@@ -32,14 +32,7 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => 
                 )}
                 {parlayError.code === ParlayErrorCode.SAME_TEAM_TWICE && (
                     <ErrorMessage>
-                        <Trans
-                            i18nKey="markets.parlay.validation.team-in-parlay"
-                            components={{
-                                span: <span />,
-                                br: <br />,
-                                team: parlayError.data,
-                            }}
-                        />
+                        {t('markets.parlay.validation.team-in-parlay', { team: parlayError.data })}
                     </ErrorMessage>
                 )}
             </Container>
@@ -59,10 +52,10 @@ const Container = styled(FlexDivColumnCentered)`
 const ErrorMessage = styled.p`
     margin-top: 20px;
     font-style: normal;
-    font-weight: 600;
     font-size: 15px;
     line-height: 22px;
     color: #ffffff;
+    text-transform: uppercase;
 `;
 
 const fiveMarketsStyle: CSSProperties = {

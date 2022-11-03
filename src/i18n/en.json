@@ -331,8 +331,8 @@
                 "max-quote": "Maximal TOTAL QUOTE supported is {{value}}"
             },
             "validation": {
-                "title": "Parlay validation",
-                "team-in-parlay": "<span>{{team}} is already in Parlay.</span><br><span> The same team can't be added to a Parlay more than once.</span>",
+                "title": "Parlay Validation",
+                "team-in-parlay": "{{team}} is already in Parlay. The same team can't be added to a Parlay more than once.",
                 "amount-exceeded": "Amount exceeded the amount available on AMM",
                 "min-amount": "Minimal buy-in for a Parlay ticket is {{min}} $",
                 "single-min-amount": "Minimal buy-in is {{min}} $",
