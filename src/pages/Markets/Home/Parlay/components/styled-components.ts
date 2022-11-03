@@ -57,10 +57,24 @@ export const ValidationTooltip = withStyles(() => ({
     tooltip: {
         minWidth: '100%',
         width: '270px',
-        margin: '0',
-        backgroundColor: '#FDB7B7',
-        color: '#F30101',
-        fontSize: '11px',
+        marginBottom: '7px',
+        backgroundColor: '#23273D',
+        color: '#E26A78',
+        border: '1.5px solid #E26A78',
+        borderRadius: '2px',
+        fontSize: '10px',
+        fontWeight: 600,
+        textTransform: 'uppercase',
+    },
+    arrow: {
+        '&:before': {
+            border: '1.5px solid #E26A78',
+            backgroundColor: '#23273D',
+            boxSizing: 'border-box',
+        },
+        width: '13px',
+        height: '10px',
+        top: '22px',
     },
 }))(Tooltip);
 
@@ -71,6 +85,7 @@ export const InfoTooltip = withStyles(() => ({
         backgroundColor: '#303656',
         color: '#FAC439',
         border: '1.5px solid #FAC439',
+        borderRadius: '2px',
         fontSize: '9px',
         lineHeight: '12px',
         textTransform: 'uppercase',

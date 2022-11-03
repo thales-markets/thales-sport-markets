@@ -231,7 +231,7 @@
         },
         "tooltip": {
             "amount-exceeded": "Amount exceeded the amount available on AMM",
-            "minimal-amount": "Minimal amount is 1",
+            "minimal-amount": "Minimal amount is {{min}}",
             "no-funds": "Please ensure your wallet has enough funds"
         }
     },

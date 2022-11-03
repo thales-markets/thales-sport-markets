@@ -103,11 +103,26 @@ export const MaxButton = styled.button`
 export const CustomTooltip = withStyles(() => ({
     tooltip: {
         minWidth: '100%',
-        width: '100%',
-        margin: '0',
-        backgroundColor: '#FDB7B7',
-        color: '#F30101',
+        width: '310px',
+        maxWidth: '310px',
+        marginBottom: '-2px',
+        backgroundColor: '#303656',
+        color: '#E26A78',
+        border: '1.5px solid #E26A78',
+        borderRadius: '2px',
         fontSize: '12px',
+        fontWeight: 600,
+        textTransform: 'uppercase',
+    },
+    arrow: {
+        '&:before': {
+            border: '1.5px solid #E26A78',
+            backgroundColor: '#303656',
+            boxSizing: 'border-box',
+        },
+        width: '13px',
+        height: '10px',
+        top: '25px',
     },
 }))(Tooltip);
 
