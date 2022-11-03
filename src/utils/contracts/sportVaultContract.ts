@@ -3,7 +3,7 @@ export const sportsVaultContract = {
         5: '',
         10: '',
         42: '',
-        420: '0x4013c5eeb3F48A50531315e07037fbEA6D16DE8F',
+        420: '0x28aC7A6DeF3D937129ac7245354E11ce89194FbB',
     },
     abi: [
         {
