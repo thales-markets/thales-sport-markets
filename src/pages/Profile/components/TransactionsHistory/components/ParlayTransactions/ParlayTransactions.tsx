@@ -106,7 +106,10 @@ const ParlayTransactions: React.FC = () => {
                 isLoading={parlaysTxQuery?.isLoading}
                 data={parlayTx ?? []}
                 expandedRow={(row) => {
-                    const toRender = row.original.positions.map((position: any, index: number) => {
+                    const toRender = row.original.sportMarketsFromContract.map((address: string, index: number) => {
+                        const position = row.original.positions.find(
+                            (position: any) => position.market.address == address
+                        );
                         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
                         return (
                             <ParlayRow key={index}>
@@ -137,6 +140,7 @@ const ParlayTransactions: React.FC = () => {
                             </ParlayRow>
                         );
                     });
+
                     return (
                         <ExpandedRowWrapper>
                             <FlexDivColumnCentered style={{ flex: 2 }}>{toRender}</FlexDivColumnCentered>
