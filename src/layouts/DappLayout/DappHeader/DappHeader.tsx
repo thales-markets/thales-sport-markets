@@ -1,7 +1,7 @@
 // import { useLocation } from 'react-router-dom';
 import Logo from 'components/Logo';
 import WalletInfo from 'components/WalletInfo';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -19,8 +19,8 @@ import useInterval from 'hooks/useInterval';
 import burger from 'assets/images/burger.svg';
 import NavMenu from 'components/NavMenu';
 import GetUsd from 'components/GetUsd';
-import { isMobile } from 'utils/device';
 import ProfileItem from './components/ProfileItem';
+import { getIsMobile } from 'redux/modules/app';
 
 const PULSING_COUNT = 10;
 
@@ -31,9 +31,10 @@ const DappHeader: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
+
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
-    const [isMobileState, setIsMobileState] = useState(false);
 
     useInterval(async () => {
         if (!stopPulsing) {
@@ -44,26 +45,14 @@ const DappHeader: React.FC = () => {
         }
     }, 1000);
 
-    const handleResize = () => {
-        isMobile() ? setIsMobileState(true) : setIsMobileState(false);
-    };
-
-    useEffect(() => {
-        window.addEventListener('resize', handleResize);
-        handleResize();
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
     return (
         <>
-            {!isMobileState && (
+            {!isMobile && (
                 <Container>
                     <Logo />
                     <RightContainer>
                         {/* <Referral /> */}
-                        {isMobileState && networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
+                        {isMobile && networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
                         {/* {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />} */}
                         <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>
                             <StyledButton disabled={!isWalletConnected}>
@@ -85,7 +74,7 @@ const DappHeader: React.FC = () => {
                     </RightContainer>
                 </Container>
             )}
-            {isMobileState && (
+            {isMobile && (
                 <WrapperMobile>
                     <LogoContainer>
                         <Logo />
