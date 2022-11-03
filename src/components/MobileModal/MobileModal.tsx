@@ -21,11 +21,11 @@ const customStyles = {
         padding: '0px',
         background: 'transparent',
         border: 'none',
-        width: '100%',
+        width: '300px',
         height: '100%',
     },
     overlay: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'rgba(26, 28, 43, 1)',
     },
 };
 
@@ -49,17 +49,17 @@ export const MobileModal: React.FC<MobileModalProps> = ({ onClose, children, sho
 
 const Container = styled.div`
     z-index: 1001;
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
+
     background: ${(props) => props.theme.background.secondary};
-    padding: 25px 30px 35px 30px;
+    padding-top: 25px;
     overflow: auto;
     border-radius: 23px;
-    @media (max-width: 575px) {
-        padding: 25px 0px 0px 0px;
-    }
     overflow-y: auto;
     max-height: 90vh;
     height: fit-content;
+    & > div > div {
+        margin-bottom: 0px !important;
+    }
 `;
 
 const Header = styled(FlexDivRow)`
