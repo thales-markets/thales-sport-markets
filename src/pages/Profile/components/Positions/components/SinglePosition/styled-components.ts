@@ -38,6 +38,17 @@ export const ResultContainer = styled(FlexDivRow)`
     }
 `;
 
+export const PositionContainer = styled(FlexDivRow)`
+    align-items: center;
+    margin-left: 15px;
+    justify-content: flex-start;
+    @media (max-width: 768px) {
+        margin-left: 5;
+        flex-direction: column;
+        min-width: 20px;
+    }
+`;
+
 export const BoldValue = styled(Value)`
     font-weight: 700;
 `;
