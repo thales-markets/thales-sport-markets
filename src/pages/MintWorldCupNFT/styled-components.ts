@@ -24,9 +24,10 @@ export const EligibilityText = styled.div`
     font-weight: 700;
     font-size: 22px;
     line-height: 150%;
-    letter-spacing: 0.025em;
+    letter-spacing: 0.05em;
     color: #04cfb6;
     position: absolute;
+    font-family: 'AtmaBold' !important;
 `;
 
 export const InfoContainer = styled.div`
@@ -104,6 +105,18 @@ export const SymbolsContainer = styled.div`
     right: 0;
     top: 0;
     transform: translateY(30%);
+`;
+
+export const MascotContainer = styled.div`
+    position: absolute;
+    left: 0;
+    top: 0;
+    left: -20%;
+    top: 200px;
+    z-index: 1;
+    @media (max-width: 768px) {
+        display: none;
+    }
 `;
 
 export const ListItemContainer = styled.div`

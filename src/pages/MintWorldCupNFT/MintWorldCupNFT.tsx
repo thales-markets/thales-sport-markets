@@ -5,10 +5,11 @@ import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { useTranslation } from 'react-i18next';
 import useFavoriteTeamDataQuery from 'queries/favoriteTeam/useFavoriteTeamDataQuery';
 import { ReactComponent as SymbolsBackground } from 'assets/images/favorite-team/symbols-background.svg';
+import { ReactComponent as QatarMascot } from 'assets/images/favorite-team/qatar-mascot.svg';
 import { setTheme } from 'redux/modules/ui';
 import { Theme } from 'constants/ui';
 import Loader from 'components/Loader';
-import { Container, Tab, SymbolsContainer, TabsContainer } from './styled-components';
+import { Container, Tab, SymbolsContainer, TabsContainer, MascotContainer } from './styled-components';
 import Eligible from './components/Eligible';
 import NotEligible from './components/NotEligible';
 import ChooseNFT from './components/ChooseNFT';
@@ -73,6 +74,9 @@ const MintWorldCupNFT: React.FC = () => {
                             </Tab>
                         </TabsContainer>
                         {getVisiblePage()}
+                        <MascotContainer>
+                            <QatarMascot />
+                        </MascotContainer>
                     </Container>
                     <SymbolsContainer>
                         <SymbolsBackground />
