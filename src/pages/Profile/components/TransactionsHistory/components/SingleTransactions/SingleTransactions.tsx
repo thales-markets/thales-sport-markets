@@ -3,6 +3,7 @@ import { USD_SIGN } from 'constants/currency';
 import { PositionName, POSITION_MAP } from 'constants/options';
 import useUserTransactionsQuery from 'queries/markets/useUserTransactionsQuery';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -14,6 +15,8 @@ const TransactionsHistory: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+
+    const { t } = useTranslation();
 
     const txQuery = useUserTransactionsQuery(walletAddress.toLowerCase(), networkId, {
         enabled: isWalletConnected,
@@ -101,6 +104,7 @@ const TransactionsHistory: React.FC = () => {
                 }}
                 isLoading={txQuery?.isLoading}
                 data={transactions}
+                noResultsMessage={t('profile.messages.no-transactions')}
             ></Table>
         </>
     );

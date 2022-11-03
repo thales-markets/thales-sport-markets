@@ -240,7 +240,8 @@
         "transaction-history": "Transaction history",
         "messages": {
             "no-claimable": "You don't have any claimable positions",
-            "no-open": "You don't have any open positions"
+            "no-open": "You don't have any open positions",
+            "no-transactions": "You don't have any trades"
         },
         "categories": {
             "claimable": "Claimable",

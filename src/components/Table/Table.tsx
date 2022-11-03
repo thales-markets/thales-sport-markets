@@ -305,6 +305,7 @@ const NoResultContainer = styled(TableRow)`
     padding-left: 18px;
     font-size: 14px;
     border: none;
+    margin: auto;
 `;
 
 const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`

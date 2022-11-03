@@ -21,9 +21,10 @@ import {
 } from 'utils/markets';
 import { getPositionColor } from 'utils/ui';
 import { t } from 'i18next';
-// import { convertPositionNameToPosition, convertPositionToTeamName } from 'utils/markets';
+import { useTranslation } from 'react-i18next';
 
 const ParlayTransactions: React.FC = () => {
+    const { t } = useTranslation();
     const selectedOddsType = useSelector(getOddsType);
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -105,6 +106,7 @@ const ParlayTransactions: React.FC = () => {
                 }}
                 isLoading={parlaysTxQuery?.isLoading}
                 data={parlayTx ?? []}
+                noResultsMessage={t('profile.messages.no-transactions')}
                 expandedRow={(row) => {
                     const toRender = row.original.sportMarketsFromContract.map((address: string, index: number) => {
                         const position = row.original.positions.find(
