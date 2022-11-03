@@ -116,6 +116,9 @@ const TableText = styled.span`
     font-weight: 700;
     font-size: 12px;
     text-align: center;
+    @media (max-width: 600px) {
+        font-size: 10px;
+    }
 `;
 
 const TableHeaderStyle: React.CSSProperties = {
@@ -156,6 +159,11 @@ const CircleNumber = styled.span`
     align-items: center;
     justify-content: center;
     margin-left: 4px;
+    @media (max-width: 600px) {
+        font-size: 10px;
+        width: 18px;
+        height: 18px;
+    }
 `;
 
 export default TransactionsHistory;
