@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import { ParlaysMarketPosition } from 'types/markets';
 
 type SymbolProps = {
     type?: number;
@@ -23,6 +24,8 @@ type SymbolProps = {
     showTooltip?: boolean;
     glow?: boolean;
     marketId?: string;
+    homeTeam?: string;
+    awayTeam?: string;
     discount?: number;
 };
 
@@ -35,6 +38,8 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     showTooltip,
     additionalStyle,
     marketId,
+    homeTeam,
+    awayTeam,
     children,
     discount,
 }) => {
@@ -54,17 +59,24 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                             dispatch(removeFromParlay(marketId));
                         } else {
                             if (type !== undefined) {
+                                const parlayMarket: ParlaysMarketPosition = {
+                                    sportMarketId: marketId,
+                                    position: Position.HOME,
+                                    homeTeam: homeTeam || '',
+                                    awayTeam: awayTeam || '',
+                                };
                                 switch (type) {
                                     case 3:
-                                        dispatch(updateParlay({ sportMarketId: marketId, position: Position.HOME }));
+                                        parlayMarket.position = Position.HOME;
                                         break;
                                     case 4:
-                                        dispatch(updateParlay({ sportMarketId: marketId, position: Position.AWAY }));
+                                        parlayMarket.position = Position.AWAY;
                                         break;
                                     default:
-                                        dispatch(updateParlay({ sportMarketId: marketId, position: type }));
+                                        parlayMarket.position = type;
                                         break;
                                 }
+                                dispatch(updateParlay(parlayMarket));
                             }
                         }
                     }

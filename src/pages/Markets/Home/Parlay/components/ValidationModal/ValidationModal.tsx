@@ -1,5 +1,6 @@
 import validationFiveMarketsAnimation from 'assets/lotties/validation-five-markets.json';
 import Modal from 'components/Modal';
+import { ParlayErrorCode } from 'constants/markets';
 import useInterval from 'hooks/useInterval';
 import Lottie from 'lottie-react';
 import React, { CSSProperties } from 'react';
@@ -17,18 +18,23 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => 
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
-    const hasParlayError = useSelector(getParlayError);
+    const parlayError = useSelector(getParlayError);
 
     useInterval(async () => {
-        if (hasParlayError) {
-            dispatch(resetParlayError());
-        }
+        dispatch(resetParlayError());
     }, 5800);
 
     return (
         <Modal title={t('markets.parlay.validation.title')} onClose={() => onClose()} shouldCloseOnOverlayClick={true}>
             <Container>
-                <Lottie animationData={validationFiveMarketsAnimation} style={fiveMarketsStyle} />
+                {parlayError.code === ParlayErrorCode.MAX_4_MATCHES && (
+                    <Lottie animationData={validationFiveMarketsAnimation} style={fiveMarketsStyle} />
+                )}
+                {parlayError.code === ParlayErrorCode.SAME_TEAM_TWICE && (
+                    <ErrorMessage>
+                        {t('markets.parlay.validation.team-in-parlay', { team: parlayError.data })}
+                    </ErrorMessage>
+                )}
             </Container>
         </Modal>
     );
@@ -41,6 +47,15 @@ const Container = styled(FlexDivColumnCentered)`
     @media (max-width: 575px) {
         width: auto;
     }
+`;
+
+const ErrorMessage = styled.p`
+    margin-top: 20px;
+    font-style: normal;
+    font-size: 15px;
+    line-height: 22px;
+    color: #ffffff;
+    text-transform: uppercase;
 `;
 
 const fiveMarketsStyle: CSSProperties = {

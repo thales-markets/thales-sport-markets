@@ -116,6 +116,8 @@ const MarketListCardMobile: React.FC<MarketRowCardProps> = ({ market, accountPos
                             drawOdds: market.drawOdds,
                         }}
                         marketId={market.id}
+                        homeTeam={market.homeTeam}
+                        awayTeam={market.awayTeam}
                         accountPositions={accountPositions}
                         isPaused={market.isPaused}
                         isApexTopGame={isApexTopGame}
