@@ -237,7 +237,7 @@ export const HeaderContainer = styled(FlexDivColumnCentered)`
 `;
 
 export const HeaderText = styled.div`
-    font-family: 'Atma' !important;
+    font-family: 'AtmaBold' !important;
     display: flex;
     flex-direction: column;
     align-items: center;
