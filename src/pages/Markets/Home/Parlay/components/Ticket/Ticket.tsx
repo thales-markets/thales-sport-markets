@@ -508,6 +508,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 <ValidationTooltip
                     open={inputRefVisible && !!tooltipTextUsdAmount && !openApprovalModal}
                     title={tooltipTextUsdAmount}
+                    placement={'top'}
+                    arrow={true}
                 >
                     <AmountToBuyContainer>
                         <AmountToBuyInput

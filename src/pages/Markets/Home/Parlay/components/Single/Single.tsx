@@ -533,6 +533,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 <ValidationTooltip
                     open={inputRefVisible && !!tooltipTextUsdAmount && !openApprovalModal}
                     title={tooltipTextUsdAmount}
+                    placement={'top'}
+                    arrow={true}
                 >
                     <AmountToBuyContainer>
                         <AmountToBuyInput

@@ -198,7 +198,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         if (Number(value) > availablePerSide.positions[selectedPosition].available) {
             setTooltipTextTokenAmount(t('market.tooltip.amount-exceeded'));
         } else if (value && Number(value) < 1) {
-            setTooltipTextTokenAmount(t('market.tooltip.minimal-amount'));
+            setTooltipTextTokenAmount(t('market.tooltip.minimal-amount', { min: 1 }));
         } else {
             setTooltipTextTokenAmount('');
         }
@@ -210,7 +210,10 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
     };
 
     const setTooltipTextMessageUsdAmount = (value: string | number) => {
-        if (Number(value) > paymentTokenBalance) {
+        const positionOdds = roundNumberToDecimals(market.positions[selectedPosition].sides[Side.BUY].odd || 0);
+        if (value && positionOdds && Number(value) < positionOdds) {
+            setTooltipTextUsdAmount(t('market.tooltip.minimal-amount', { min: positionOdds }));
+        } else if (Number(value) > paymentTokenBalance) {
             setTooltipTextUsdAmount(t('market.tooltip.no-funds'));
         } else {
             setTooltipTextUsdAmount('');
@@ -653,7 +656,12 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                         {isBuy ? t('markets.market-details.amount-to-buy') : t('markets.market-details.amount-to-sell')}
                     </PrimaryLabel>
                     {isBuy && (
-                        <CustomTooltip open={!!tooltipTextUsdAmount && !openApprovalModal} title={tooltipTextUsdAmount}>
+                        <CustomTooltip
+                            open={!!tooltipTextUsdAmount && !openApprovalModal}
+                            title={tooltipTextUsdAmount}
+                            placement={'top'}
+                            arrow={true}
+                        >
                             <AmountToBuyContainer>
                                 <AmountToBuyInput
                                     name="usdAmount"
@@ -677,6 +685,8 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                         <CustomTooltip
                             open={!!tooltipTextTokenAmount && !openApprovalModal}
                             title={tooltipTextTokenAmount}
+                            placement={'top'}
+                            arrow={true}
                         >
                             <AmountToBuyContainer>
                                 <AmountToBuyInput

@@ -51,6 +51,7 @@ import SportFilter from '../components/SportFilter';
 import TagsDropdown from '../components/TagsDropdown';
 import MarketsGrid from './MarketsGrid';
 import Parlay from './Parlay';
+import ParlayMobileModal from './Parlay/components/ParlayMobileModal';
 import UserHistory from './UserHistory';
 
 const Home: React.FC = () => {
@@ -75,6 +76,7 @@ const Home: React.FC = () => {
     const [sortBy, setSortBy] = useLocalStorage(LOCAL_STORAGE_KEYS.SORT_BY, DEFAULT_SORT_BY);
     const [marketsCached, setMarketsCached] = useState<typeof marketsCache>(marketsCache);
     const [showBurger, setShowBurger] = useState<boolean>(false);
+    const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
 
     const sortOptions: SortOptionType[] = useMemo(() => {
         return [
@@ -540,7 +542,6 @@ const Home: React.FC = () => {
                     })}
                 </SortingContainer>
             </BurgerFiltersContainer>
-            <FiltersContainer hidden={globalFilter === GlobalFiltersEnum.Claim}></FiltersContainer>
             <BurgerAndSwitchSwitchContainer>
                 <BurgerMenu
                     src={burger}
@@ -661,6 +662,10 @@ const Home: React.FC = () => {
                     <Parlay />
                 </SidebarContainer>
             </RowContainer>
+            {isMobile() && !showParlayMobileModal && (
+                <ParlayMobileButton onClick={() => setshowParlayMobileModal(true)}>Text</ParlayMobileButton>
+            )}
+            {showParlayMobileModal && <ParlayMobileModal onClose={() => setshowParlayMobileModal(false)} />}
         </Container>
     );
 };
@@ -764,12 +769,6 @@ const SwitchContainer = styled(FlexDivRow)`
     @media (max-width: 950px) {
         top: 15px;
     }
-`;
-
-const FiltersContainer = styled(FlexDivRow)<{ hidden: boolean }>`
-    align-self: center;
-    margin-bottom: 4px;
-    visibility: ${(props) => (props.hidden ? 'hidden' : '')};
 `;
 
 const GlobalFiltersContainer = styled(FlexDivColumn)`
@@ -904,6 +903,21 @@ export const Info = styled.div`
         cursor: pointer;
         color: #91bced;
     }
+`;
+
+const ParlayMobileButton = styled(Button)`
+    position: fixed;
+    bottom: 3%;
+    right: 4%;
+    width: 190px;
+    background: #3fd1ff;
+    color: black;
+    height: 34px;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
+    z-index: 1002;
 `;
 
 export default Home;
