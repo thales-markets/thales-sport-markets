@@ -118,14 +118,6 @@ export const AmountToBuyInput = styled.input`
     font-weight: bold;
     font-size: 18px;
     outline: none;
-    @media (max-width: 768px) {
-        width: 130px;
-        font-size: 15px;
-    }
-    @media (max-width: 500px) {
-        width: 100%;
-        font-size: 15px;
-    }
 `;
 
 export const MaxButton = styled.button`
