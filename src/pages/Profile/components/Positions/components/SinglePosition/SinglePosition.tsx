@@ -7,6 +7,7 @@ import {
     BoldValue,
     ClaimInfoContainer,
     ColumnDirectionInfo,
+    PositionContainer,
     ResultContainer,
     TeamContainer,
     Wrapper,
@@ -105,7 +106,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                     </ResultContainer>
                     <ClaimInfoContainer>
                         <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
-                        <ClaimValue>{formatCurrencyWithSign(USD_SIGN, position.amount)}</ClaimValue>
+                        <ClaimValue>{formatCurrencyWithSign(USD_SIGN, position.amount, 2)}</ClaimValue>
                     </ClaimInfoContainer>
                     <ClaimButton
                         claimable={true}
@@ -121,7 +122,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
             )}
             {!isClaimable && (
                 <>
-                    <ResultContainer>
+                    <PositionContainer>
                         <PositionSymbol
                             type={convertPositionToSymbolType(
                                 positionEnum,
@@ -129,7 +130,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                             )}
                             symbolColor={getPositionColor(positionEnum)}
                         />
-                    </ResultContainer>
+                    </PositionContainer>
                     <ColumnDirectionInfo>
                         <Label>{t('profile.card.position-size')}:</Label>
                         <BoldValue>{formatCurrencyWithSign(USD_SIGN, position.amount)}</BoldValue>

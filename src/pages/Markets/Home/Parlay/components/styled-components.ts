@@ -104,6 +104,9 @@ export const InfoTooltip = withStyles(() => ({
 
 export const AmountToBuyContainer = styled.div`
     position: relative;
+    @media (max-width: 500px) {
+        width: 100%;
+    }
 `;
 
 export const AmountToBuyInput = styled.input`
@@ -117,6 +120,10 @@ export const AmountToBuyInput = styled.input`
     outline: none;
     @media (max-width: 768px) {
         width: 130px;
+        font-size: 15px;
+    }
+    @media (max-width: 500px) {
+        width: 100%;
         font-size: 15px;
     }
 `;

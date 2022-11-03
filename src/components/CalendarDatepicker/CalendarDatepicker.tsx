@@ -57,7 +57,6 @@ const convertAndFormat = (date: any) => {
 };
 
 const DatePickerContainer = styled.div`
-    z-index: 1;
     position: relative;
     .react-datepicker {
         position: absolute;
@@ -67,6 +66,7 @@ const DatePickerContainer = styled.div`
         border-radius: 6px;
         margin-top: 4px;
         right: -29px;
+        z-index: 1;
     }
 
     .react-datepicker__header {

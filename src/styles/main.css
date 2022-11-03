@@ -218,6 +218,15 @@ a {
     font-family: 'Raleway', Helvetica;
 }
 
+@media (max-width: 380px) {
+    .discount-label {
+        width: 21px;
+    }
+    .discount-label span {
+        font-size: 12px;
+    }
+}
+
 .green {
     background-color: #5fc694;
 }
