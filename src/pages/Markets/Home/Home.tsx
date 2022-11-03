@@ -663,7 +663,9 @@ const Home: React.FC = () => {
                 </SidebarContainer>
             </RowContainer>
             {isMobile() && !showParlayMobileModal && (
-                <ParlayMobileButton onClick={() => setshowParlayMobileModal(true)}>Text</ParlayMobileButton>
+                <ParlayMobileButton onClick={() => setshowParlayMobileModal(true)}>
+                    {t('markets.parlay.show-parlay')}
+                </ParlayMobileButton>
             )}
             {showParlayMobileModal && <ParlayMobileModal onClose={() => setshowParlayMobileModal(false)} />}
         </Container>
@@ -909,7 +911,9 @@ const ParlayMobileButton = styled(Button)`
     position: fixed;
     bottom: 3%;
     right: 4%;
-    width: 190px;
+    width: 72%;
+    margin-left: 10%;
+    margin-right: 10%;
     background: #3fd1ff;
     color: black;
     height: 34px;
@@ -918,6 +922,7 @@ const ParlayMobileButton = styled(Button)`
     font-size: 20px;
     line-height: 23px;
     z-index: 1002;
+    box-shadow: ${(props) => '0 0 6px 2px ' + props.theme.borderColor.quaternary};
 `;
 
 export default Home;

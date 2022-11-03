@@ -330,6 +330,7 @@
                 "min-quote": "Minimal TOTAL QUOTE supported is {{value}}",
                 "max-quote": "Maximal TOTAL QUOTE supported is {{value}}"
             },
+            "show-parlay": "Show Parlay",
             "validation": {
                 "title": "Parlay Validation",
                 "team-in-parlay": "{{team}} is already in Parlay. The same team can't be added to a Parlay more than once.",

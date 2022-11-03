@@ -290,7 +290,9 @@
                 "no-funds": "Bitte stellen Sie sicher, dass Ihr Portemonnaie über genügend Guthaben verfügt",
                 "risk-per-comb": "Risiko pro Kombination überschritten",
                 "not-supported": "Nicht unterstützter Validierungsfehler {{error}}",
-                "single-min-amount": "Minimale Menge ist {{min}}"
+                "single-min-amount": "Minimale Menge ist {{min}}",
+                "same-team": "Dasselbe Team kann nicht mehr als einmal in einem Parlay sein",
+                "team-in-parlay": "{{team}} ist bereits in Parlay. Dasselbe Team kann nicht mehr als einmal zu einem Parlay hinzugefügt werden."
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",
@@ -303,7 +305,8 @@
             "info": {
                 "max-quote": "Das maximal unterstützte TOTAL QUOTE beträgt {{value}}",
                 "min-quote": "Das minimal unterstützte TOTAL QUOTE beträgt {{value}}"
-            }
+            },
+            "show-parlay": "Parlay anzeigen"
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {
@@ -438,7 +441,9 @@
         "transaction-history": "Verlauf der Transaktionen",
         "categories": {
             "claimable": "Beanspruchbar",
-            "open": "Offen"
+            "open": "Offen",
+            "parlay": "Parlay-Spiele",
+            "single": "Einzelne Spiele"
         },
         "card": {
             "claim": "Beanspruchen",

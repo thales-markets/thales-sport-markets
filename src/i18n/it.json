@@ -293,7 +293,9 @@
                 "min-quote": "La citazione minima è {{value}}",
                 "risk-per-comb": "Rischio per combinazione superato",
                 "not-supported": "Errore di convalida non supportato {{error}}",
-                "single-min-amount": "L'importo minimo è {{min}}"
+                "single-min-amount": "L'importo minimo è {{min}}",
+                "same-team": "La stessa squadra non può essere in un Parlay più di una volta",
+                "team-in-parlay": "{{team}} è già a Parlay. La stessa squadra non può essere aggiunta a un Parlay più di una volta."
             },
             "empty-title": "Nessuna posizione",
             "fee": "Tariffa totale",
@@ -306,7 +308,8 @@
             "info": {
                 "min-quote": "Il PREVENTIVO TOTALE minimo supportato è {{value}}",
                 "max-quote": "Il PREVENTIVO TOTALE massimo supportato è {{value}}"
-            }
+            },
+            "show-parlay": "Mostra Parlay"
         },
         "discounted-per": "Scontato come da",
         "nav-menu": {
@@ -444,7 +447,9 @@
         "open-claimable": "Aperto/Rivendicabile",
         "categories": {
             "claimable": "Rivendicabile",
-            "open": "Aprire"
+            "open": "Aprire",
+            "single": "Partite singole",
+            "parlay": "Giochi di Parlay"
         },
         "card": {
             "canceled": "Annullato",

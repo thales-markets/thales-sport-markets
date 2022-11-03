@@ -293,7 +293,9 @@
                 "availability": "Baja disponibilidad para la posición de los mercados",
                 "not-supported": "Error de validación no compatible {{error}}",
                 "risk-per-comb": "Riesgo por combinación excedido",
-                "single-min-amount": "La cantidad mínima es {{min}}"
+                "single-min-amount": "La cantidad mínima es {{min}}",
+                "same-team": "Un mismo equipo no puede estar en un Parlay más de una vez",
+                "team-in-parlay": "{{team}} ya está en Parlay. El mismo equipo no se puede agregar a un Parlay más de una vez."
             },
             "fee": "Costo total",
             "payout": "Total recibido",
@@ -306,7 +308,8 @@
             "info": {
                 "min-quote": "La COTIZACIÓN TOTAL mínima admitida es {{value}}",
                 "max-quote": "La COTIZACIÓN TOTAL máxima admitida es {{value}}"
-            }
+            },
+            "show-parlay": "Mostrar combinación"
         },
         "discounted-per": "Con descuento según",
         "nav-menu": {
@@ -441,7 +444,9 @@
         "open-claimable": "Abierto/Reclamable",
         "categories": {
             "open": "Abierto",
-            "claimable": "Reclamable"
+            "claimable": "Reclamable",
+            "parlay": "juegos combinados",
+            "single": "juegos individuales"
         },
         "card": {
             "claim": "Reclamar",

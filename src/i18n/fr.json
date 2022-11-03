@@ -391,7 +391,9 @@
                 "max-quote": "Le devis maximum est de {{value}}",
                 "not-supported": "Erreur de validation non prise en charge {{error}}",
                 "risk-per-comb": "Risque par combinaison dépassé",
-                "single-min-amount": "Le montant minimal est de {{min}}"
+                "single-min-amount": "Le montant minimal est de {{min}}",
+                "team-in-parlay": "{{team}} est déjà à Parlay. La même équipe ne peut pas être ajoutée à un Parlay plus d'une fois.",
+                "same-team": "La même équipe ne peut pas être dans un Parlay plus d'une fois"
             },
             "payout": "Total reçu",
             "empty-title": "Aucun poste",
@@ -404,7 +406,8 @@
             "info": {
                 "max-quote": "Le DEVIS TOTAL maximal pris en charge est de {{value}}",
                 "min-quote": "Le DEVIS TOTAL minimal pris en charge est de {{value}}"
-            }
+            },
+            "show-parlay": "Afficher Parlay"
         },
         "discounted-per": "Remise selon",
         "nav-menu": {
@@ -539,7 +542,9 @@
         "open-claimable": "Ouvert/Réclamable",
         "categories": {
             "open": "Ouvert",
-            "claimable": "Réclamable"
+            "claimable": "Réclamable",
+            "parlay": "Jeux de pari",
+            "single": "Jeux simples"
         },
         "card": {
             "canceled": "Annulé",

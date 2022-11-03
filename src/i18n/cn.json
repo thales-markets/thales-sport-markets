@@ -293,7 +293,9 @@
                 "max-quote": "最大报价为 {{value}}",
                 "not-supported": "不支持验证错误 {{error}}",
                 "risk-per-comb": "超出每个组合的风险",
-                "single-min-amount": "最低金额为 {{min}}"
+                "single-min-amount": "最低金额为 {{min}}",
+                "same-team": "同一支球队不能在 Parlay 中超过一次",
+                "team-in-parlay": "{{team}} 已经在 Parlay 中。同一支球队不能多次加入过关。"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",
@@ -306,7 +308,8 @@
             "info": {
                 "min-quote": "支持的最小 TOTAL QUOTE 为 {{value}}",
                 "max-quote": "支持的最大 TOTAL QUOTE 为 {{value}}"
-            }
+            },
+            "show-parlay": "显示过关"
         },
         "discounted-per": "折扣按",
         "nav-menu": {
@@ -441,7 +444,9 @@
         "open-claimable": "开放/可索赔",
         "categories": {
             "open": "打开",
-            "claimable": "可索赔"
+            "claimable": "可索赔",
+            "single": "单人游戏",
+            "parlay": "过关游戏"
         },
         "card": {
             "claim": "宣称",
