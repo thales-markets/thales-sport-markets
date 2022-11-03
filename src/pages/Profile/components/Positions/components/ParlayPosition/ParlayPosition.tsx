@@ -80,7 +80,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
 
     const { t } = useTranslation();
     const isClaimable = isParlayClaimable(parlayMarket);
-    console.log('Ismobile ', isMobile);
+
     return (
         <Container>
             <OverviewContainer onClick={() => setShowDetails(!showDetails)}>

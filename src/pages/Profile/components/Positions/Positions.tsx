@@ -92,9 +92,6 @@ const Positions: React.FC = () => {
 
     const isLoading = parlayMarketsQuery.isLoading || accountMarketsQuery.isLoading;
 
-    console.log('accountPositionsByStatus ', accountPositionsByStatus);
-    console.log('parlayMarketsByStatus ', parlayMarketsByStatus);
-
     return (
         <Container>
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
