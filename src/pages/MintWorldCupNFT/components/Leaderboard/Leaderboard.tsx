@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { truncateAddress } from 'utils/formatters/string';
 import { ReactComponent as ArrowRight } from 'assets/images/favorite-team/arrow-right.svg';
 import { countries } from 'pages/MintWorldCupNFT/countries';
 import { InfoContainer, InfoText } from 'pages/MintWorldCupNFT/styled-components';
 import { FlexDivCentered } from 'styles/common';
-// import Table from 'components/Table';
+import Table from 'components/Table';
 
 type LeaderboardProps = {
     favoriteTeamNumber: number | undefined;
@@ -62,7 +63,11 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
             <FlexDivCentered>
                 <SearchAddress placeholder="SEARCH WALLET ADDRESS" />
             </FlexDivCentered>
-            {/* <Table
+            <Table
+                tableRowHeadStyles={{
+                    borderBottom: '2px solid rgba(238, 238, 228, 0.8)',
+                    color: 'rgba(238, 238, 228, 0.8)',
+                }}
                 columns={[
                     {
                         Header: <>NFT</>,
@@ -71,9 +76,43 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
                         width: 150,
                         sortable: true,
                     },
+                    {
+                        Header: <>Address</>,
+                        accessor: 'address',
+                        Cell: (cellProps: any) => <p>{truncateAddress(cellProps.cell.value)}</p>,
+                        width: 150,
+                        sortable: true,
+                    },
+                    {
+                        Header: <>Volume</>,
+                        accessor: 'volume',
+                        Cell: (cellProps: any) => <p>{cellProps.cell.value}</p>,
+                        width: 150,
+                        sortable: true,
+                    },
+                    {
+                        Header: <>Rewards</>,
+                        accessor: 'rewards',
+                        Cell: (cellProps: any) => <p>{cellProps.cell.value}</p>,
+                        width: 150,
+                        sortable: true,
+                    },
                 ]}
-                data={[{ nft: 'test' }, { nft: 'test' }]}
-            /> */}
+                data={[
+                    {
+                        nft: 'test',
+                        address: '0xaf5FAc02Af62BcF245285386456e4340dE2188b8',
+                        volume: 50000,
+                        rewards: 3440,
+                    },
+                    {
+                        nft: 'test',
+                        address: '0xaf5FAc02Af62BcF245285386456e4340dE2188b8',
+                        volume: 50000,
+                        rewards: 3440,
+                    },
+                ]}
+            />
         </>
     );
 };
@@ -107,7 +146,7 @@ const ListItem = styled.span`
 const SearchAddress = styled.input`
     width: 90%;
     padding: 5px;
-    margin-top: 20px;
+    margin: 20px 0;
     background: rgba(4, 207, 182, 0.4);
     border: 1px solid rgba(4, 207, 182, 0.8);
     text-align: center;
