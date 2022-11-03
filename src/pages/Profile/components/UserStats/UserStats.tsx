@@ -37,7 +37,7 @@ const UserStats: React.FC = () => {
 };
 
 const Wrapper = styled.div`
-    margin-top: 15px;
+    margin-top: 30px;
     display: flex;
     background: #303656;
     border-radius: 5px;
