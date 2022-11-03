@@ -463,7 +463,8 @@
         },
         "messages": {
             "no-open": "No tienes ninguna posición abierta",
-            "no-claimable": "No tienes ninguna posición reclamable"
+            "no-claimable": "No tienes ninguna posición reclamable",
+            "no-transactions": "no tienes cambios"
         }
     },
     "mint-world-cup-nft": {

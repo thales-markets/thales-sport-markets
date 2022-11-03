@@ -9,7 +9,7 @@ const AlreadyMinted: React.FC = () => {
 
     return (
         <>
-            <EligibilityContainer style={{ marginBottom: '33vh' }}>
+            <EligibilityContainer style={{ marginBottom: '28vh' }}>
                 <FirstRectangle />
                 <EligibilityText>
                     {t('mint-world-cup-nft.already-minted')}

@@ -460,7 +460,8 @@
         },
         "messages": {
             "no-open": "Sie haben keine offene Stelle",
-            "no-claimable": "Sie haben keine beanspruchbaren Positionen"
+            "no-claimable": "Sie haben keine beanspruchbaren Positionen",
+            "no-transactions": "Sie haben keine Trades"
         }
     },
     "mint-world-cup-nft": {

@@ -116,6 +116,11 @@ export const ListItem = styled.span`
     margin-left: 10px;
     width: 90%;
     & > a {
+        text-decoration: underline;
+        color: white;
+    }
+    & > a:hover {
+        text-decoration: underline;
         color: #04cfb6;
     }
 `;
@@ -232,6 +237,7 @@ export const HeaderContainer = styled(FlexDivColumnCentered)`
 `;
 
 export const HeaderText = styled.div`
+    font-family: 'Atma' !important;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -239,7 +245,7 @@ export const HeaderText = styled.div`
     font-weight: 700;
     font-size: 22px;
     line-height: 150%;
-    letter-spacing: 0.025em;
+    letter-spacing: 0.05em;
     color: white;
     position: absolute;
 `;

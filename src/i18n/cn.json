@@ -463,7 +463,8 @@
         },
         "messages": {
             "no-claimable": "您没有任何可申请的职位",
-            "no-open": "您没有任何空缺职位"
+            "no-open": "您没有任何空缺职位",
+            "no-transactions": "您没有任何交易"
         }
     },
     "mint-world-cup-nft": {

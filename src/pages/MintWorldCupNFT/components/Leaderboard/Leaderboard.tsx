@@ -1,18 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
-// import { useTranslation } from 'react-i18next';
-// import { ReactComponent as Rectangle } from 'assets/images/favorite-team/group-rectangle.svg';
+import { useTranslation } from 'react-i18next';
 import { ReactComponent as ArrowRight } from 'assets/images/favorite-team/arrow-right.svg';
 import { countries } from 'pages/MintWorldCupNFT/countries';
 import { InfoContainer, InfoText } from 'pages/MintWorldCupNFT/styled-components';
-import { t } from 'i18next';
+import { FlexDivCentered } from 'styles/common';
+// import Table from 'components/Table';
 
 type LeaderboardProps = {
     favoriteTeamNumber: number | undefined;
 };
 
 const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
-    // const { t } = useTranslation();
+    const { t } = useTranslation();
     const favoriteTeam = favoriteTeamNumber ? countries[favoriteTeamNumber - 1] : null;
     console.log(favoriteTeam);
     return (
@@ -58,20 +58,22 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
                         </ListItem>
                     </ListItemContainer>
                 </InfoContent>
-                {/* {favoriteTeam && (
-                    <TeamContainer>
-                        <TeamImage
-                            src={`https://thales-protocol.s3.eu-north-1.amazonaws.com/zebro_${favoriteTeam
-                                .toLocaleLowerCase()
-                                .split(' ')
-                                .join('_')}.png`}
-                        />
-                        <TeamNameWrapper>
-                            <TeamName>{favoriteTeam}</TeamName>
-                        </TeamNameWrapper>
-                    </TeamContainer>
-                )} */}
             </InfoContainer>
+            <FlexDivCentered>
+                <SearchAddress placeholder="SEARCH WALLET ADDRESS" />
+            </FlexDivCentered>
+            {/* <Table
+                columns={[
+                    {
+                        Header: <>NFT</>,
+                        accessor: 'nft',
+                        Cell: (cellProps: any) => <p>{cellProps.cell.value}</p>,
+                        width: 150,
+                        sortable: true,
+                    },
+                ]}
+                data={[{ nft: 'test' }, { nft: 'test' }]}
+            /> */}
         </>
     );
 };
@@ -101,37 +103,32 @@ const ListItem = styled.span`
         font-weight: bold;
     }
 `;
-// const TeamContainer = styled.div`
-//     position: absolute;
-//     top: 50%;
-//     transform: translateY(-55%);
-//     left: 8%;
-//     width: 18%;
-//     border-radius: 50%;
-//     display: flex;
-//     flex-direction: column;
-//     border: 4px solid #6d152e;
-// `;
 
-// const TeamImage = styled.img`
-//     width: 100%;
-//     border-radius: 50%;
-// `;
-
-// const TeamNameWrapper = styled.div`
-//     position: relative;
-// `;
-
-// const TeamName = styled.span`
-//     position: absolute;
-//     left: 50%;
-//     transform: translateX(-50%);
-//     bottom: -22px;
-//     text-align: center;
-//     width: 100%;
-//     color: white;
-//     font-weight: bold;
-//     font-size: 18px;
-// `;
+const SearchAddress = styled.input`
+    width: 90%;
+    padding: 5px;
+    margin-top: 20px;
+    background: rgba(4, 207, 182, 0.4);
+    border: 1px solid rgba(4, 207, 182, 0.8);
+    text-align: center;
+    color: white;
+    ::placeholder {
+        text-align: center;
+    }
+    ::-webkit-input-placeholder {
+        text-align: center;
+    }
+    :-moz-placeholder {
+        /* Firefox 18- */
+        text-align: center;
+    }
+    ::-moz-placeholder {
+        /* Firefox 19+ */
+        text-align: center;
+    }
+    :-ms-input-placeholder {
+        text-align: center;
+    }
+`;
 
 export default Leaderboard;

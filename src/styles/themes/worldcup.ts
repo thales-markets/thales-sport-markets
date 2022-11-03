@@ -20,7 +20,7 @@ export default {
         quaternary: Colors.YELLOW,
     },
     borderColor: {
-        primary: Colors.GRAY_LIGHT,
+        primary: 'rgba(238, 238, 228, 0.4)',
         secondary: Colors.WHITE,
         tertiary: '#8A1538',
         quaternary: Colors.BLUE,

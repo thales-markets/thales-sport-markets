@@ -561,7 +561,8 @@
         },
         "messages": {
             "no-claimable": "Vous n'avez pas de poste réclamable",
-            "no-open": "Vous n'avez pas de poste ouvert"
+            "no-open": "Vous n'avez pas de poste ouvert",
+            "no-transactions": "Vous n'avez aucun métier"
         }
     },
     "mint-world-cup-nft": {
