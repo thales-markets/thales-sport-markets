@@ -39,7 +39,7 @@ const DappHeader: React.FC = () => {
         <Container>
             <Logo />
             <RightContainer>
-                <SPAAnchor href={buildHref(ROUTES.Quiz)}>
+                <SPAAnchor href={buildHref(ROUTES.Vault)}>
                     <StyledSportTriviaIcon stopPulsing={stopPulsing} src={sportTriviaIcon} />
                 </SPAAnchor>
                 <Referral />

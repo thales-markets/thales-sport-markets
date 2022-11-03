@@ -1,64 +1,100 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { FlexDivColumn } from 'styles/common';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getNetworkId } from 'redux/modules/wallet';
 import { useTranslation } from 'react-i18next';
-import { orderBy } from 'lodash';
 import { getIsAppReady } from 'redux/modules/app';
-import TradesTable from '../TradesTable';
-import useVaultTradesQuery from 'queries/vault/useVaultTradesQuery';
-import { VaultTrades } from 'types/vault';
+import { VaultPnls } from 'types/vault';
+import useVaultPnlsQuery from 'queries/vault/useVaultPnlsQuery';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { Colors, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
+import { formatPercentageWithSign } from 'utils/formatters/number';
 
 const PnL: React.FC = () => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const [vaultTrades, setVaultTrades] = useState<VaultTrades>([]);
+    const [vaultPnls, setVaultPnls] = useState<VaultPnls>([]);
 
-    const vaultTradesQuery = useVaultTradesQuery(networkId, {
+    const vaultPnlsQuery = useVaultPnlsQuery(networkId, {
         enabled: isAppReady,
     });
 
     useEffect(() => {
-        if (vaultTradesQuery.isSuccess && vaultTradesQuery.data) {
-            setVaultTrades(orderBy(vaultTradesQuery.data, ['timestamp', 'blockNumber'], ['desc', 'desc']));
+        if (vaultPnlsQuery.isSuccess && vaultPnlsQuery.data) {
+            setVaultPnls(vaultPnlsQuery.data);
         } else {
-            setVaultTrades([]);
+            setVaultPnls([]);
         }
-    }, [vaultTradesQuery.isSuccess, vaultTradesQuery.data]);
+    }, [vaultPnlsQuery.isSuccess, vaultPnlsQuery.data]);
 
-    const noResults = vaultTrades.length === 0;
+    const CustomTooltip = ({ active, payload }: any) => {
+        if (active && payload && payload.length) {
+            return (
+                <TooltipContainer>
+                    <TooltipAmount>{formatPercentageWithSign(payload[0].value)}</TooltipAmount>
+                </TooltipContainer>
+            );
+        }
+        return null;
+    };
 
     return (
         <Container>
-            <Title>{t(`vault.trades-history.title`)}</Title>
-            <TableContainer>
-                <TradesTable
-                    transactions={vaultTrades}
-                    isLoading={vaultTradesQuery.isLoading}
-                    noResultsMessage={noResults ? <span>{t(`vault.trades-history.no-trades`)}</span> : undefined}
-                />
-            </TableContainer>
+            <Title>{t(`vault.pnl.title`)}</Title>
+            <ChartContainer>
+                <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={vaultPnls}>
+                        <CartesianGrid strokeDasharray="2 2" strokeWidth={0.5} stroke="#5F6180" />
+                        <XAxis
+                            dataKey="round"
+                            tickLine={false}
+                            axisLine={false}
+                            tick={{ fill: '#5F6180' }}
+                            style={{
+                                fontSize: '15px',
+                            }}
+                        />
+                        <YAxis
+                            tickFormatter={(val: any) => {
+                                return formatPercentageWithSign(val, 0);
+                            }}
+                            tickLine={false}
+                            axisLine={false}
+                            tick={{ fill: '#5F6180' }}
+                            style={{
+                                fontSize: '15px',
+                            }}
+                        />
+                        <Tooltip
+                            content={<CustomTooltip />}
+                            cursor={{ fill: '#5F6180', fillOpacity: '0.3' }}
+                            wrapperStyle={{ outline: 'none' }}
+                        />
+                        <Bar dataKey="pnl" radius={[4, 4, 0, 0]}>
+                            {vaultPnls.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.pnl > 0 ? Colors.GREEN : Colors.RED} />
+                            ))}
+                        </Bar>
+                    </BarChart>
+                </ResponsiveContainer>
+            </ChartContainer>
         </Container>
     );
 };
 
 const Container = styled(FlexDivColumn)`
-    color: ${(props) => props.theme.textColor.primary};
-    position: relative;
+    align-items: center;
     width: 100%;
-    max-height: 500px;
-    min-height: 300px;
-    overflow-y: auto;
-    width: 60%;
-    @media (max-width: 1440px) {
-        width: 95%;
-    }
 `;
 
-export const Title = styled.span`
+const ChartContainer = styled.div`
+    height: 250px;
+    width: 100%;
+`;
+
+const Title = styled.span`
     font-style: normal;
     font-weight: bold;
     font-size: 20px;
@@ -69,25 +105,18 @@ export const Title = styled.span`
     text-align: center;
 `;
 
-const TableContainer = styled(FlexDivColumn)`
-    overflow: auto;
-    ::-webkit-scrollbar {
-        width: 5px;
-    }
-    ::-webkit-scrollbar-track {
-        background: #04045a;
-        border-radius: 8px;
-    }
-    ::-webkit-scrollbar-thumb {
-        border-radius: 15px;
-        background: #355dff;
-    }
-    ::-webkit-scrollbar-thumb:active {
-        background: #44e1e2;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: rgb(67, 116, 255);
-    }
+const TooltipContainer = styled(FlexDivColumnCentered)`
+    border-radius: 3px;
+    z-index: 999;
+    padding: 2px 12px;
+    background: #f6f6fe;
+    color: #303656;
+`;
+
+const TooltipAmount = styled(FlexDivColumn)`
+    font-weight: bold;
+    font-size: 15px;
+    text-align: center;
 `;
 
 export default PnL;

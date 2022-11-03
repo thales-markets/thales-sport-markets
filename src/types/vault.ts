@@ -1,4 +1,5 @@
 import { PositionName } from 'constants/options';
+import { VaultTradeStatus } from 'constants/vault';
 import { SportMarketInfo } from './markets';
 
 export type VaultData = {
@@ -38,13 +39,13 @@ export type VaultTrade = {
     game: string;
     result: PositionName;
     wholeMarket: SportMarketInfo;
+    status: VaultTradeStatus;
 };
 
 export type VaultTrades = VaultTrade[];
 
 export type VaultPnlPerRound = {
-    timestamp: number;
-    round: number;
+    round: number | string;
     pnl: number;
 };
 

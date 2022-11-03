@@ -3,8 +3,9 @@ import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
 import { NetworkId } from 'types/network';
 import { VaultPnls } from 'types/vault';
+import { orderBy } from 'lodash';
 
-const useVaultPnlQuery = (networkId: NetworkId, options?: UseQueryOptions<VaultPnls>) => {
+const useVaultPnlsQuery = (networkId: NetworkId, options?: UseQueryOptions<VaultPnls>) => {
     return useQuery<VaultPnls>(
         QUERY_KEYS.Vault.PnL(networkId),
         async () => {
@@ -12,7 +13,12 @@ const useVaultPnlQuery = (networkId: NetworkId, options?: UseQueryOptions<VaultP
                 const vaultPnls = await thalesData.sportMarkets.vaultPnls({
                     network: networkId,
                 });
-                return vaultPnls;
+                return orderBy(vaultPnls, ['round'], ['asc']).map((pnl) => {
+                    return {
+                        round: `R${pnl.round}`,
+                        pnl: pnl.pnl - 1,
+                    };
+                });
             } catch (e) {
                 console.log(e);
                 return [];
@@ -25,4 +31,4 @@ const useVaultPnlQuery = (networkId: NetworkId, options?: UseQueryOptions<VaultP
     );
 };
 
-export default useVaultPnlQuery;
+export default useVaultPnlsQuery;

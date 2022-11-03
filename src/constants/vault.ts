@@ -1,5 +1,10 @@
 export enum VaultTab {
     DEPOSIT = 'deposit',
-    // CLAIM = 'claim',
     WITHDRAW = 'withdraw',
+}
+
+export enum VaultTradeStatus {
+    IN_PROGRESS = 'IN_PROGRESS',
+    WIN = 'WIN',
+    LOSE = 'LOSE',
 }

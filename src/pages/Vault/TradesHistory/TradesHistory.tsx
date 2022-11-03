@@ -58,7 +58,7 @@ const Container = styled(FlexDivColumn)`
     }
 `;
 
-export const Title = styled.span`
+const Title = styled.span`
     font-style: normal;
     font-weight: bold;
     font-size: 20px;

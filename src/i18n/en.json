@@ -396,6 +396,9 @@
         "trades-history": {
             "title": "Vault trades history",
             "no-trades": "No trades associated with this vault."
+        },
+        "pnl": {
+            "title": "PnL per round"
         }
     }
 }

@@ -13,6 +13,8 @@ import i18n from 'i18n';
 import { formatCurrency } from 'utils/formatters/number';
 import SPAAnchor from 'components/SPAAnchor';
 import { VaultTrade, VaultTrades } from 'types/vault';
+import { VaultTradeStatus } from 'constants/vault';
+import { Colors } from 'styles/common';
 
 type TradesTableProps = {
     transactions: VaultTrades;
@@ -98,6 +100,17 @@ export const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResults
                                         {POSITION_MAP[cellProps.cell.value]}
                                     </PositionCircle>
                                 )}
+                                {cellProps.row.original.status !== VaultTradeStatus.IN_PROGRESS && (
+                                    <Status
+                                        color={
+                                            cellProps.row.original.status == VaultTradeStatus.WIN
+                                                ? Colors.GREEN
+                                                : Colors.RED
+                                        }
+                                    >
+                                        {cellProps.row.original.status}
+                                    </Status>
+                                )}
                             </>
                         ),
                         width: 150,
@@ -144,6 +157,10 @@ const PositionCircle = styled.span<{ color: string }>`
     padding-left: 1px;
     background-color: ${(props) => props.color};
     color: #1a1c2b;
+`;
+
+const Status = styled.span<{ color: string }>`
+    color: ${(props) => props.color};
 `;
 
 export default TradesTable;
