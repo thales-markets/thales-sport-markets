@@ -51,7 +51,6 @@ const Container = styled(FlexDivColumnCentered)`
     width: 400px;
     margin-top: 20px;
     align-items: center;
-    text-align: center;
     @media (max-width: 575px) {
         width: auto;
     }
@@ -60,9 +59,10 @@ const Container = styled(FlexDivColumnCentered)`
 const ErrorMessage = styled.p`
     margin-top: 20px;
     font-style: normal;
+    font-weight: 600;
     font-size: 15px;
     line-height: 22px;
-    color: #ca4c53;
+    color: #ffffff;
 `;
 
 const fiveMarketsStyle: CSSProperties = {
