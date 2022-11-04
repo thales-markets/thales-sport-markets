@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
+import { getParlay } from 'redux/modules/parlay';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -47,6 +48,7 @@ import GlobalFilter from '../components/GlobalFilter';
 import GlobalFilters from '../components/GlobalFilters';
 import SortOption from '../components/SortOption';
 import SportFilter from '../components/SportFilter';
+import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import TagsDropdown from '../components/TagsDropdown';
 import MarketsGrid from './MarketsGrid';
 import Parlay from './Parlay';
@@ -77,6 +79,7 @@ const Home: React.FC = () => {
     const [marketsCached, setMarketsCached] = useState<typeof marketsCache>(marketsCache);
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
+    const parlayMarkets = useSelector(getParlay);
 
     const sortOptions: SortOptionType[] = useMemo(() => {
         return [
@@ -632,6 +635,21 @@ const Home: React.FC = () => {
                     <UserHistory />
                 ) : (
                     <MainContainer>
+                        {isMobile && (
+                            <SportFilterMobile
+                                sportFilter={sportFilter}
+                                setDateFilter={setDateFilter}
+                                setDateParam={setDateParam}
+                                setGlobalFilter={setGlobalFilter}
+                                setGlobalFilterParam={setGlobalFilterParam}
+                                setTagFilter={setTagFilter}
+                                setTagParam={setTagParam}
+                                setSportFilter={setSportFilter}
+                                setSportParam={setSportParam}
+                                setAvailableTags={setAvailableTags}
+                                tagsList={tagsList}
+                            />
+                        )}
                         <GlobalFilters
                             setDateFilter={setDateFilter}
                             setDateParam={setDateParam}
@@ -661,7 +679,7 @@ const Home: React.FC = () => {
                     <Parlay />
                 </SidebarContainer>
             </RowContainer>
-            {isMobile && !showParlayMobileModal && (
+            {isMobile && !showParlayMobileModal && parlayMarkets.length > 0 && (
                 <ParlayMobileButton onClick={() => setshowParlayMobileModal(true)}>
                     {t('markets.parlay.show-parlay')}
                 </ParlayMobileButton>
