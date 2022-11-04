@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivStart } from 'styles/common';
-import { Arrow, CategoryContainer, CategoryIcon, CategoryLabel } from '../Positions/styled-components';
+import { CategoryContainer, CategoryIcon, CategoryLabel } from '../Positions/styled-components';
 import ParlayTransactions from './components/ParlayTransactions';
 import SingleTransactions from './components/SingleTransactions';
 
@@ -16,12 +16,10 @@ const TransactionsHistory: React.FC = () => {
                 <Wrapper active={showSingles} onClick={() => setShow(!showSingles)}>
                     <Icon className="icon icon--claimable-flag" />
                     <Label>{t('profile.categories.single')}</Label>
-                    <ArrowIcon className={!showSingles ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
                 </Wrapper>
                 <Wrapper active={!showSingles} onClick={() => setShow(!showSingles)}>
                     <Icon className="icon icon--logo" />
                     <Label>{t('profile.categories.parlay')}</Label>
-                    <ArrowIcon className={showSingles ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
                 </Wrapper>
             </Container>
             {showSingles && <SingleTransactions />}
@@ -47,15 +45,9 @@ const Label = styled(CategoryLabel)`
     color: #5f6180;
 `;
 
-const ArrowIcon = styled(Arrow)`
-    font-size: 10px;
-    color: #5f6180;
-`;
-
 const Wrapper = styled(CategoryContainer)<{ active: boolean }>`
     ${Icon},
-    ${Label},
-    ${ArrowIcon} {
+    ${Label} {
         color: ${(props) => (props.active ? 'white' : '#5f6180')};
     }
 `;

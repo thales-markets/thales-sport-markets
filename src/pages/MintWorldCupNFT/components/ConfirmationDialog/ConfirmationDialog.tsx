@@ -96,10 +96,10 @@ const ContentContainer = styled.div`
 
 const Background = styled.div`
     position: absolute;
-    width: 120%;
+    width: 140%;
     top: 0;
     bottom: 0;
-    left: -10%;
+    left: -20%;
     backdrop-filter: blur(8px);
     z-index: 1001;
 `;

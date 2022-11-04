@@ -49,3 +49,13 @@
     font-family: 'LeagueIcons';
     src: local('LeagueIcons'), url(../assets/fonts/LeagueIcons/LeagueIcons.ttf) format('truetype');
 }
+
+@font-face {
+    font-family: 'Atma';
+    src: local('Atma'), url(../assets/fonts/Atma/Atma-Regular.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'AtmaBold';
+    src: local('AtmaBold'), url(../assets/fonts/Atma/Atma-Bold.ttf) format('truetype');
+}

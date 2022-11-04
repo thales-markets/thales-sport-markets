@@ -22,7 +22,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsAppReady } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -38,7 +38,6 @@ import {
     TagInfo,
     Tags,
 } from 'types/markets';
-import { isMobile } from 'utils/device';
 import { addHoursToCurrentDate } from 'utils/formatters/date';
 import { isClaimAvailable } from 'utils/markets';
 import { NetworkIdByName } from 'utils/network';
@@ -64,6 +63,7 @@ const Home: React.FC = () => {
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
     const { trackPageView } = useMatomo();
     const location = useLocation();
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const [lastValidMarkets, setLastValidMarkets] = useState<SportMarkets>([]);
 
@@ -658,16 +658,16 @@ const Home: React.FC = () => {
                 )}
                 {/* RIGHT PART */}
                 <SidebarContainer>
-                    {!isMobile() && networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
+                    {!isMobile && networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
                     <Parlay />
                 </SidebarContainer>
             </RowContainer>
-            {isMobile() && !showParlayMobileModal && (
+            {isMobile && !showParlayMobileModal && (
                 <ParlayMobileButton onClick={() => setshowParlayMobileModal(true)}>
                     {t('markets.parlay.show-parlay')}
                 </ParlayMobileButton>
             )}
-            {showParlayMobileModal && <ParlayMobileModal onClose={() => setshowParlayMobileModal(false)} />}
+            {isMobile && showParlayMobileModal && <ParlayMobileModal onClose={() => setshowParlayMobileModal(false)} />}
         </Container>
     );
 };

@@ -51,6 +51,10 @@ const Wrapper = styled.div`
 const SectionWrapper = styled.div`
     display: flex;
     gap: 30px;
+    @media (max-width: 400px) {
+        flex-direction: column;
+        gap: 4px;
+    }
 `;
 
 const Section = styled.div`

@@ -561,12 +561,12 @@
         },
         "messages": {
             "no-claimable": "Vous n'avez pas de poste réclamable",
-            "no-open": "Vous n'avez pas de poste ouvert"
+            "no-open": "Vous n'avez pas de poste ouvert",
+            "no-transactions": "Vous n'avez aucun métier"
         }
     },
     "mint-world-cup-nft": {
         "no": "Non",
-        "leaderboard": "Classement",
         "are-you-sure": "Êtes-vous sûr de vouloir frapper ce NFT ? Vous pouvez frapper UN SEUL NFT par portefeuille.",
         "zebro-campaign": "Campagne Zebra FIFA",
         "get-your-nft": "Obtenez votre Qatar 2022 NFT",
@@ -590,6 +590,20 @@
         "not-eligible-text": "Votre portefeuille n'est pas encore éligible pour frapper un Zebro NFT !",
         "minting-is-free": "La frappe est gratuite, vous ne pouvez frapper qu'un seul NFT par portefeuille. Ce NFT est incessible.",
         "mint-this-zebro": "Frappez ce zèbre !",
-        "leaderboard-title": "Classement"
+        "leaderboard-title": "Classement",
+        "leaderboard": {
+            "parlay-boost": "Boost Parlay :",
+            "four-game-parlay": "+20 % s'il s'agit d'un pari de 4 matchs",
+            "reward-calculations": "Les calculs de récompense seront basés sur le volume au prorata avec une augmentation de volume supplémentaire maximale de 40 % si les conditions suivantes sont remplies :",
+            "underdog-multiplier": "Multiplicateur d'outsider :",
+            "two-game-parlay": "+10 % s'il s'agit d'un pari de 2 matchs",
+            "three-game-parlay": "+15 % s'il s'agit d'un pari de 3 matchs",
+            "underdog-multiplier-text": "Si votre position dans les matchs de la Coupe du monde est évaluée à moins de 0,3 (les cotes sont supérieures à 1: 3,33), vous obtiendrez une augmentation de 10 % des récompenses.",
+            "home-country-multiplier": "Multiplicateur NFT du pays d'origine :",
+            "home-country-multiplier-text": "Si votre match de Coupe du monde implique la même équipe nationale que votre Zebro, vous recevrez +10 % de bonus de récompenses",
+            "parlay-boost-text": "Si votre match de Coupe du monde est dans un ticket Parlay, vous obtiendrez un bonus de :"
+        },
+        "zebro-wct-collection": "La collection Zebro WC NFT",
+        "zebro-wct-collection-text": "fait partie d'une campagne incitative pour représenter votre pays préféré pendant la Coupe du monde et être éligible pour une part de 50 000 jetons OP et 30 000 jetons THALES, ainsi que des multiplicateurs exclusifs pour les parlays et les matchs individuels."
     }
 }

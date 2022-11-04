@@ -1,8 +1,10 @@
 import React from 'react';
+import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { HeaderContainer, HeaderSymbolsContainer, HeaderText } from 'pages/MintWorldCupNFT/styled-components';
+import { HeaderContainer, HeaderTextContainer, HeaderTitle } from 'pages/MintWorldCupNFT/styled-components';
 import { ReactComponent as HeaderRectangle } from 'assets/images/favorite-team/header-rectangle.svg';
-import { ReactComponent as HeaderSymbols } from 'assets/images/favorite-team/header-symbols.svg';
+import { ReactComponent as ZebraLeft } from 'assets/images/favorite-team/zebra-left.svg';
+import { ReactComponent as ZebraRight } from 'assets/images/favorite-team/zebra-right.svg';
 
 const Header: React.FC = () => {
     const { t } = useTranslation();
@@ -11,13 +13,37 @@ const Header: React.FC = () => {
         <>
             <HeaderContainer>
                 <HeaderRectangle />
-                <HeaderText>{t('mint-world-cup-nft.zebro-campaign')}</HeaderText>
+                <HeaderTitle>
+                    <StyledZebraLeft />
+                    <span>{t('mint-world-cup-nft.zebro-campaign')}</span>
+                    <StyledZebraRight />
+                </HeaderTitle>
             </HeaderContainer>
-            <HeaderSymbolsContainer>
-                <HeaderSymbols />
-            </HeaderSymbolsContainer>
+            <HeaderTextContainer>
+                <HeaderText>
+                    <span>{t('mint-world-cup-nft.zebro-wct-collection')}</span>{' '}
+                    {t('mint-world-cup-nft.zebro-wct-collection-text')}
+                </HeaderText>
+            </HeaderTextContainer>
         </>
     );
 };
+
+const StyledZebraLeft = styled(ZebraLeft)`
+    width: 105px;
+`;
+
+const StyledZebraRight = styled(ZebraRight)`
+    width: 105px;
+`;
+
+const HeaderText = styled.span`
+    text-align: justify;
+    & > span {
+        font-style: italic;
+        font-weight: bold;
+        line-height: 130%;
+    }
+`;
 
 export default Header;

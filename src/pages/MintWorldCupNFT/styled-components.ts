@@ -24,9 +24,10 @@ export const EligibilityText = styled.div`
     font-weight: 700;
     font-size: 22px;
     line-height: 150%;
-    letter-spacing: 0.025em;
+    letter-spacing: 0.05em;
     color: #04cfb6;
     position: absolute;
+    font-family: 'AtmaBold' !important;
 `;
 
 export const InfoContainer = styled.div`
@@ -46,6 +47,7 @@ export const InfoContent = styled.div`
     flex-direction: column;
     padding: 50px;
     justify-content: space-around;
+    text-align: justify;
 `;
 
 export const InfoText = styled.div`
@@ -106,6 +108,18 @@ export const SymbolsContainer = styled.div`
     transform: translateY(30%);
 `;
 
+export const MascotContainer = styled.div`
+    position: absolute;
+    left: 0;
+    top: 0;
+    left: -20%;
+    top: 250px;
+    z-index: 1;
+    @media (max-width: 768px) {
+        display: none;
+    }
+`;
+
 export const ListItemContainer = styled.div`
     display: flex;
     margin-top: 10px;
@@ -116,6 +130,11 @@ export const ListItem = styled.span`
     margin-left: 10px;
     width: 90%;
     & > a {
+        text-decoration: underline;
+        color: white;
+    }
+    & > a:hover {
+        text-decoration: underline;
         color: #04cfb6;
     }
 `;
@@ -231,23 +250,28 @@ export const HeaderContainer = styled(FlexDivColumnCentered)`
     position: relative;
 `;
 
-export const HeaderText = styled.div`
+export const HeaderTitle = styled.div`
+    width: 100%;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
     font-style: normal;
     font-weight: 700;
     font-size: 22px;
     line-height: 150%;
-    letter-spacing: 0.025em;
+    letter-spacing: 0.05em;
     color: white;
     position: absolute;
+    & > span {
+        font-family: 'AtmaBold' !important;
+    }
 `;
 
-export const HeaderSymbolsContainer = styled.div`
-    padding: 10px;
+export const HeaderTextContainer = styled.div`
+    padding: 20px 10px;
     width: 90%;
     margin: auto;
+    letter-spacing: 0.05em;
 `;
 
 export const TabsContainer = styled.div`

@@ -21,9 +21,10 @@ import {
 } from 'utils/markets';
 import { getPositionColor } from 'utils/ui';
 import { t } from 'i18next';
-// import { convertPositionNameToPosition, convertPositionToTeamName } from 'utils/markets';
+import { useTranslation } from 'react-i18next';
 
 const ParlayTransactions: React.FC = () => {
+    const { t } = useTranslation();
     const selectedOddsType = useSelector(getOddsType);
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -105,6 +106,7 @@ const ParlayTransactions: React.FC = () => {
                 }}
                 isLoading={parlaysTxQuery?.isLoading}
                 data={parlayTx ?? []}
+                noResultsMessage={t('profile.messages.no-transactions')}
                 expandedRow={(row) => {
                     const toRender = row.original.sportMarketsFromContract.map((address: string, index: number) => {
                         const position = row.original.positions.find(
@@ -144,7 +146,7 @@ const ParlayTransactions: React.FC = () => {
                     return (
                         <ExpandedRowWrapper>
                             <FlexDivColumnCentered style={{ flex: 2 }}>{toRender}</FlexDivColumnCentered>
-                            <FlexDivColumnCentered style={{ flex: 1, gap: 20 }}>
+                            <LastExpandedSection style={{ flex: 1, gap: 20 }}>
                                 <QuoteWrapper>
                                     <QuoteLabel>Total Quote:</QuoteLabel>
                                     <QuoteText>{formatMarketOdds(selectedOddsType, row.original.totalQuote)}</QuoteText>
@@ -156,7 +158,7 @@ const ParlayTransactions: React.FC = () => {
                                         {formatCurrencyWithKey(USD_SIGN, row.original.totalAmount, 2)}
                                     </QuoteText>
                                 </QuoteWrapper>
-                            </FlexDivColumnCentered>
+                            </LastExpandedSection>
                         </ExpandedRowWrapper>
                     );
                 }}
@@ -177,6 +179,10 @@ const TableText = styled.span`
     font-weight: 700;
     font-size: 12px;
     text-align: left;
+    @media (max-width: 600px) {
+        font-size: 10px;
+    }
+    white-space: nowrap;
 `;
 
 const QuoteText = styled.span`
@@ -185,6 +191,7 @@ const QuoteText = styled.span`
     font-weight: 700;
     font-size: 10px;
     text-align: left;
+    white-space: nowrap;
 `;
 
 const QuoteLabel = styled.span`
@@ -205,6 +212,9 @@ const QuoteWrapper = styled.div`
     align-items: center;
     gap: 6px;
     margin-left: 30px;
+    @media (max-width: 600px) {
+        margin-left: 0;
+    }
 `;
 
 const TableHeaderStyle: React.CSSProperties = {
@@ -233,6 +243,14 @@ const FlexCenter = styled.div`
 const ExpandedRowWrapper = styled.div`
     display: flex;
     padding-left: 30px;
+    @media (max-width: 600px) {
+        flex-direction: column;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    @media (max-width: 400px) {
+        padding: 0;
+    }
 `;
 
 const ParlayRow = styled(FlexDivRowCentered)`
@@ -248,6 +266,13 @@ const ParlayRow = styled(FlexDivRowCentered)`
 const ParlayRowText = styled(QuoteText)`
     max-width: 220px;
     width: 300px;
+`;
+
+const LastExpandedSection = styled(FlexDivColumnCentered)`
+    @media (max-width: 600px) {
+        flex-direction: row;
+        margin: 10px 0;
+    }
 `;
 
 export default ParlayTransactions;
