@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { truncateAddress } from 'utils/formatters/string';
 import { ReactComponent as ArrowRight } from 'assets/images/favorite-team/arrow-right.svg';
+import { ReactComponent as LeaderboardRectangle } from 'assets/images/favorite-team/rewards-rectangle.svg';
 import { countries } from 'pages/MintWorldCupNFT/countries';
-import { InfoContainer, InfoText } from 'pages/MintWorldCupNFT/styled-components';
+import { InfoContainer, InfoText, InfoContent } from 'pages/MintWorldCupNFT/styled-components';
 import { FlexDivCentered } from 'styles/common';
 import Table from 'components/Table';
 
@@ -19,6 +20,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
     return (
         <>
             <InfoContainer>
+                <LeaderboardRectangle />
                 <InfoContent>
                     <InfoText>{t('mint-world-cup-nft.leaderboard.reward-calculations')}</InfoText>
                     <ListItemContainer>
@@ -116,13 +118,6 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
         </>
     );
 };
-
-const InfoContent = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 0 40px;
-    justify-content: space-around;
-`;
 
 const ListItemContainer = styled.div`
     display: flex;

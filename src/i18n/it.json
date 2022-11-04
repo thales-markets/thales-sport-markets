@@ -507,6 +507,8 @@
             "underdog-multiplier": "Moltiplicatore perdente:",
             "home-country-multiplier": "Moltiplicatore NFT del Paese di origine:",
             "reward-calculations": "I calcoli delle ricompense verranno calcolati proporzionalmente in base al volume con un aumento del volume massimo del 40% aggiuntivo se vengono soddisfatte le seguenti condizioni:"
-        }
+        },
+        "zebro-wct-collection": "La collezione Zebro WC NFT",
+        "zebro-wct-collection-text": "fa parte di una campagna incentivata per rappresentare il tuo paese preferito durante la Coppa del Mondo e avere diritto a una quota di 50.000 token OP e 30.000 token THALES, insieme a moltiplicatori esclusivi per parlay e partite individuali."
     }
 }

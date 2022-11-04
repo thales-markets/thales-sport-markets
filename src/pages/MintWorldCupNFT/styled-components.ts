@@ -47,6 +47,7 @@ export const InfoContent = styled.div`
     flex-direction: column;
     padding: 50px;
     justify-content: space-around;
+    text-align: justify;
 `;
 
 export const InfoText = styled.div`
