@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import Toggle from 'components/Toggle/Toggle';
 import MatchInfo from './components/MatchInfo';
+import BackToLink from 'pages/Markets/components/BackToLink';
 
 import { Position, Side } from 'constants/options';
 import { MarketData } from 'types/markets';
@@ -12,8 +13,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected } from 'redux/modules/wallet';
 import AMM from './components/AMM';
-import { FlexDivColumn } from 'styles/common';
+import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import styled from 'styled-components';
+import { buildHref } from 'utils/routes';
+import ROUTES from 'constants/routes';
 
 type MarketDetailsPropType = {
     market: MarketData;
@@ -50,22 +53,29 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
     const showAMM = !market.resolved && !market.cancelled && !market.gameStarted;
     return (
         <Wrapper>
-            {showAMM && (
-                <Toggle
-                    label={{
-                        firstLabel: t('common.buy-side'),
-                        secondLabel: t('common.sell-side'),
-                        fontSize: '18px',
-                    }}
-                    active={selectedSide === Side.SELL}
-                    dotSize="18px"
-                    dotBackground="#303656"
-                    dotBorder="3px solid #3FD1FF"
-                    handleClick={() => {
-                        setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
-                    }}
+            <HeaderWrapper>
+                <BackToLink
+                    link={buildHref(ROUTES.Markets.Home)}
+                    text={t('market.back')}
+                    customStylingContainer={{ position: 'absolute', left: '5px', marginTop: '0px' }}
                 />
-            )}
+                {showAMM && (
+                    <Toggle
+                        label={{
+                            firstLabel: t('common.buy-side'),
+                            secondLabel: t('common.sell-side'),
+                            fontSize: '18px',
+                        }}
+                        active={selectedSide === Side.SELL}
+                        dotSize="18px"
+                        dotBackground="#303656"
+                        dotBorder="3px solid #3FD1FF"
+                        handleClick={() => {
+                            setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
+                        }}
+                    />
+                )}
+            </HeaderWrapper>
             <MatchInfo market={market} />
             <Positions
                 market={market}
@@ -89,6 +99,12 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
 const Wrapper = styled(FlexDivColumn)`
     margin-top: 30px;
     width: 100%;
+`;
+
+const HeaderWrapper = styled(FlexDivRow)`
+    width: 100%;
+    position: relative;
+    align-items: center;
 `;
 
 export default MarketDetails;

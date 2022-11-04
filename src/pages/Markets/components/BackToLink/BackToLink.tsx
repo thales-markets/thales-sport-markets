@@ -1,16 +1,17 @@
 import SPAAnchor from 'components/SPAAnchor';
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import styled from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
 
 type BackToLinkProps = {
     link: string;
     text: string;
+    customStylingContainer?: CSSProperties;
 };
 
-const BackToLink: React.FC<BackToLinkProps> = ({ link, text }) => {
+const BackToLink: React.FC<BackToLinkProps> = ({ link, text, customStylingContainer }) => {
     return (
-        <Container>
+        <Container style={customStylingContainer}>
             <SPAAnchor href={link}>
                 <Link>
                     <LeftIcon />
