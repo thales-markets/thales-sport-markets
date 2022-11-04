@@ -19,8 +19,8 @@ export const TeamOptionContainer = styled.div<{ disabled?: boolean; selected?: b
         border: ${(_props) =>
             !_props?.disabled && !_props.isResolved ? `0.5px solid ${MAIN_COLORS.LIGHT_BLUE}` : undefined};
     }
-    @media (max-width: 500px) {
-        padding: 13px 23px;
+    @media (max-width: 768px) {
+        padding: 13px 10px;
     }
 `;
 
@@ -57,6 +57,9 @@ export const InnerContainer = styled.div`
     align-items: center;
     justify-content: flex-start;
     width: 33%;
+    @media (max-width: 768px) {
+        width: 40%;
+    }
 `;
 
 export const PositionContainer = styled(InnerContainer)`
@@ -64,7 +67,7 @@ export const PositionContainer = styled(InnerContainer)`
     height: 30px;
     width: 60%;
     @media (max-width: 768px) {
-        width: 65%;
+        width: 50%;
     }
 `;
 
