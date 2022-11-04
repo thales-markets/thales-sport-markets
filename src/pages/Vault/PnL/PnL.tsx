@@ -8,14 +8,15 @@ import { getIsAppReady } from 'redux/modules/app';
 import { VaultPnls } from 'types/vault';
 import useVaultPnlsQuery from 'queries/vault/useVaultPnlsQuery';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { Colors, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
+import { Colors, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { formatPercentageWithSign } from 'utils/formatters/number';
 
 type PnlProps = {
     vaultAddress: string;
+    lifetimePnl: number;
 };
 
-const PnL: React.FC<PnlProps> = ({ vaultAddress }) => {
+const PnL: React.FC<PnlProps> = ({ vaultAddress, lifetimePnl }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -89,8 +90,14 @@ const PnL: React.FC<PnlProps> = ({ vaultAddress }) => {
                     </ResponsiveContainer>
                 </ChartContainer>
             ) : (
-                <span>{t(`vault.pnl.no-data`)}</span>
+                <NoData>{t(`vault.pnl.no-data`)}</NoData>
             )}
+            <LifetimePnlContainer>
+                <LifetimePnlLabel>{t('vault.pnl.lifetime-pnl')}:</LifetimePnlLabel>
+                <LifetimePnl color={lifetimePnl === 0 ? Colors.WHITE : lifetimePnl > 0 ? Colors.GREEN : Colors.RED}>
+                    {formatPercentageWithSign(lifetimePnl)}
+                </LifetimePnl>
+            </LifetimePnlContainer>
         </Container>
     );
 };
@@ -128,6 +135,22 @@ const TooltipAmount = styled(FlexDivColumn)`
     font-weight: bold;
     font-size: 15px;
     text-align: center;
+`;
+
+const LifetimePnlContainer = styled(FlexDivRow)`
+    align-items: center;
+`;
+
+const LifetimePnlLabel = styled.p``;
+
+const LifetimePnl = styled.p<{ color: string }>`
+    font-weight: 600;
+    margin-left: 6px;
+    color: ${(props) => props.color};
+`;
+
+const NoData = styled.span`
+    margin-bottom: 15px;
 `;
 
 export default PnL;

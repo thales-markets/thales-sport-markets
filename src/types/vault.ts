@@ -17,6 +17,7 @@ export type VaultData = {
     usersCurrentlyInVault: number;
     canCloseCurrentRound: boolean;
     paused: boolean;
+    lifetimePnl: number;
 };
 
 export type UserVaultData = {

@@ -415,7 +415,8 @@
         },
         "pnl": {
             "title": "PnL per round",
-            "no-data": "No PnL data for previous rounds."
+            "no-data": "No PnL data for previous rounds.",
+            "lifetime-pnl": "Lifetime PnL"
         }
     }
 }

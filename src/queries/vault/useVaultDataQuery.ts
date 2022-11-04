@@ -30,6 +30,7 @@ const useVaultDataQuery = (
                 usersCurrentlyInVault: 0,
                 canCloseCurrentRound: false,
                 paused: false,
+                lifetimePnl: 0,
             };
 
             try {
@@ -75,15 +76,17 @@ const useVaultDataQuery = (
                     vaultData.canCloseCurrentRound = canCloseCurrentRound;
                     vaultData.paused = paused;
 
-                    const [allocationCurrentRound, allocationNextRound] = await Promise.all([
+                    const [allocationCurrentRound, allocationNextRound, lifetimePnl] = await Promise.all([
                         sportVaultContract?.allocationPerRound(vaultData.round),
                         sportVaultContract?.capPerRound(vaultData.round + 1),
+                        sportVaultContract?.cumulativeProfitAndLoss(vaultData.round > 0 ? vaultData.round - 1 : 0),
                     ]);
 
                     vaultData.allocationCurrentRound = bigNumberFormatter(allocationCurrentRound);
                     vaultData.allocationNextRound = bigNumberFormatter(allocationNextRound);
                     vaultData.allocationNextRoundPercentage =
                         (vaultData.allocationNextRound / vaultData.maxAllowedDeposit) * 100;
+                    vaultData.lifetimePnl = bigNumberFormatter(lifetimePnl) - 1;
 
                     return vaultData;
                 }

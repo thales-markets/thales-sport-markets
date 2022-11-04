@@ -413,7 +413,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                             }}
                         />
                     </Description>
-                    <PnL vaultAddress={vaultAddress} />
+                    <PnL vaultAddress={vaultAddress} lifetimePnl={vaultData ? vaultData.lifetimePnl : 0} />
                 </LeftContainer>
                 <RightContainer>
                     {!vaultData ? (

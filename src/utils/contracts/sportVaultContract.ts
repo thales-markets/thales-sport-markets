@@ -115,6 +115,12 @@ export const sportsVaultContract = {
         },
         {
             anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: 'stakingThales', type: 'address' }],
+            name: 'StakingThalesChanged',
+            type: 'event',
+        },
+        {
+            anonymous: false,
             inputs: [
                 { indexed: false, internalType: 'address', name: 'market', type: 'address' },
                 { indexed: false, internalType: 'enum ISportsAMM.Position', name: 'position', type: 'uint8' },
@@ -193,6 +199,23 @@ export const sportsVaultContract = {
             type: 'function',
         },
         { inputs: [], name: 'closeRound', outputs: [], stateMutability: 'nonpayable', type: 'function' },
+        {
+            inputs: [
+                { internalType: 'uint256', name: 'roundA', type: 'uint256' },
+                { internalType: 'uint256', name: 'roundB', type: 'uint256' },
+            ],
+            name: 'cumulativePnLBetweenRounds',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            name: 'cumulativeProfitAndLoss',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
         {
             inputs: [{ internalType: 'uint256', name: 'amount', type: 'uint256' }],
             name: 'deposit',
@@ -459,6 +482,13 @@ export const sportsVaultContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'contract IStakingThales', name: '_stakingThales', type: 'address' }],
+            name: 'setStakingThales',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'uint256', name: '_utilizationRate', type: 'uint256' }],
             name: 'setUtilizationRate',
             outputs: [],
@@ -476,6 +506,13 @@ export const sportsVaultContract = {
             inputs: [],
             name: 'sportsAMM',
             outputs: [{ internalType: 'contract ISportsAMM', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'stakingThales',
+            outputs: [{ internalType: 'contract IStakingThales', name: '', type: 'address' }],
             stateMutability: 'view',
             type: 'function',
         },

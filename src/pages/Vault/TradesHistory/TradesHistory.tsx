@@ -92,6 +92,9 @@ const TableContainer = styled(FlexDivColumn)`
     ::-webkit-scrollbar-thumb:hover {
         background: rgb(67, 116, 255);
     }
+    @media (max-width: 767px) {
+        width: 700px;
+    }
 `;
 
 export default TradesHistory;
