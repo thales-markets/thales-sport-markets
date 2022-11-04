@@ -12,6 +12,15 @@ export const Wrapper = styled(FlexDivRow)`
     width: 100%;
     margin-bottom: 5px;
     position: relative;
+    @media (max-width: 768px) {
+        justify-content: space-between;
+    }
+`;
+
+export const GameParticipantsWrapper = styled(FlexDivRow)`
+    @media (max-width: 768px) {
+        width: 65%;
+    }
 `;
 
 export const TeamContainer = styled(FlexDivRow)`
@@ -23,6 +32,7 @@ export const TeamContainer = styled(FlexDivRow)`
         font-size: 9px !important;
         justify-content: center;
         text-align: center;
+        width: 50%;
     }
 `;
 
@@ -34,7 +44,7 @@ export const ResultContainer = styled(FlexDivRow)`
     @media (max-width: 768px) {
         margin-left: 5;
         flex-direction: column;
-        min-width: 20px;
+        min-width: 40px;
     }
 `;
 
@@ -64,4 +74,8 @@ export const ClaimInfoContainer = styled(ResultContainer)`
 
 export const ColumnDirectionInfo = styled(FlexDivColumnNative)`
     margin-left: 20px;
+    @media (max-width: 768px) {
+        min-width: 40px;
+        margin-left: 15px;
+    }
 `;

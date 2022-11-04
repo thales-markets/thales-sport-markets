@@ -8,13 +8,16 @@ export const Wrapper = styled(FlexDivRow)`
     justify-content: space-between;
     margin-bottom: 10px;
     padding: 5px 10px;
+    @media (max-width: 768px) {
+        padding: 5px 5px;
+    }
 `;
 
 export const MatchInfo = styled(FlexDivRow)`
     justify-content: flex-start;
     align-items: center;
     @media (max-width: 768px) {
-        max-width: 60%;
+        max-width: 50%;
     }
 `;
 
@@ -22,6 +25,9 @@ export const MatchLogo = styled.div`
     display: flex;
     align-items: center;
     margin-right: 15px;
+    @media (max-width: 768px) {
+        margin-right: 7px;
+    }
 `;
 
 export const ClubLogo = styled.img<{ awayTeam?: boolean; losingTeam?: boolean }>`
@@ -39,7 +45,7 @@ export const ClubLogo = styled.img<{ awayTeam?: boolean; losingTeam?: boolean }>
 export const MatchLabel = styled(FlexDivRow)`
     margin-right: 5px;
     @media (max-width: 768px) {
-        font-size: 9px;
+        font-size: 10px;
         flex-direction: column;
         justify-content: center;
     }
@@ -54,7 +60,7 @@ export const ClubName = styled.span`
     margin-right: 5px;
     word-wrap: normal;
     @media (max-width: 768px) {
-        font-size: 9px;
+        font-size: 10px;
         height: 15px;
         margin-top: 3px;
     }
@@ -65,7 +71,7 @@ export const ParlayItemStatusContainer = styled(FlexDivRow)`
     align-items: center;
     justify-content: flex-start;
     @media (max-width: 768px) {
-        width: 40%;
+        width: 45%;
     }
 `;
 

@@ -384,6 +384,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         );
     };
 
+    const isValidPayout: boolean = useMemo(() => {
+        return parlayAmmData?.maxSupportedAmount !== undefined && totalBuyAmount > parlayAmmData?.maxSupportedAmount;
+    }, [parlayAmmData?.maxSupportedAmount, totalBuyAmount]);
+
     const setTooltipTextMessageUsdAmount = useCallback(
         (value: string | number, quotes: number[], error?: string) => {
             if (error) {
@@ -401,17 +405,23 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 setTooltipTextUsdAmount(t('markets.parlay.validation.availability'));
             } else if (value && Number(value) < (parlayAmmData?.minUsdAmount || 0)) {
                 setTooltipTextUsdAmount(
-                    t('markets.parlay.validation.min-amount', { min: parlayAmmData?.minUsdAmount || 0 })
+                    t('markets.parlay.validation.min-amount', {
+                        min: formatCurrencyWithSign(USD_SIGN, parlayAmmData?.minUsdAmount || 0),
+                    })
                 );
-            } else if (parlayAmmData?.maxSupportedAmount && Number(value) > parlayAmmData?.maxSupportedAmount) {
-                setTooltipTextUsdAmount(t('markets.parlay.validation.amount-exceeded'));
+            } else if (isValidPayout) {
+                setTooltipTextUsdAmount(
+                    t('markets.parlay.validation.max-payout', {
+                        max: formatCurrencyWithSign(USD_SIGN, parlayAmmData?.maxSupportedAmount || 0),
+                    })
+                );
             } else if (Number(value) > paymentTokenBalance) {
                 setTooltipTextUsdAmount(t('markets.parlay.validation.no-funds'));
             } else {
                 setTooltipTextUsdAmount('');
             }
         },
-        [parlayAmmData?.maxSupportedAmount, parlayAmmData?.minUsdAmount, t, paymentTokenBalance]
+        [parlayAmmData?.maxSupportedAmount, parlayAmmData?.minUsdAmount, t, paymentTokenBalance, isValidPayout]
     );
 
     useEffect(() => {
@@ -530,26 +540,31 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 <InfoWrapper>
                     <InfoLabel>{t('markets.parlay.parlay-fee')}:</InfoLabel>
                     <InfoValue>
-                        {!parlayAmmData?.parlayAmmFee || isFetching
+                        {parlayAmmData?.parlayAmmFee === undefined || isFetching
                             ? '-'
                             : formatPercentage(parlayAmmData?.parlayAmmFee)}
                     </InfoValue>
                     <InfoLabel marginLeft={10}>{t('markets.parlay.safebox-fee')}:</InfoLabel>
                     <InfoValue>
-                        {!parlayAmmData?.safeBoxImpact || isFetching
+                        {parlayAmmData?.safeBoxImpact === undefined || isFetching
                             ? '-'
                             : formatPercentage(parlayAmmData?.safeBoxImpact)}
                     </InfoValue>
                 </InfoWrapper>
                 <InfoWrapper>
                     <InfoLabel>{t('markets.parlay.skew')}:</InfoLabel>
-                    <InfoValue>{isFetching ? '-' : formatPercentage(skew)}</InfoValue>
+                    <InfoValue>
+                        {isFetching || totalQuote === parlayAmmData?.maxSupportedOdds ? '-' : formatPercentage(skew)}
+                    </InfoValue>
                 </InfoWrapper>
             </InfoContainer>
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.payout')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>
-                    {Number(usdAmountValue) <= 0 || totalBuyAmount === 0 || tooltipTextUsdAmount || isFetching
+                    {Number(usdAmountValue) <= 0 ||
+                    totalBuyAmount === 0 ||
+                    (tooltipTextUsdAmount && !isValidPayout) ||
+                    isFetching
                         ? '-'
                         : formatCurrencyWithSign(USD_SIGN, totalBuyAmount, 2)}
                 </SummaryValue>

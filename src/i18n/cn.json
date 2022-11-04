@@ -237,7 +237,8 @@
             "min-quote": "最小报价是 {{value}}"
         },
         "match-time": "比赛时间",
-        "race-starts": "比赛开始"
+        "race-starts": "比赛开始",
+        "back": "后退"
     },
     "markets": {
         "market-card": {
@@ -295,7 +296,8 @@
                 "risk-per-comb": "超出每个组合的风险",
                 "single-min-amount": "最低金额为 {{min}}",
                 "same-team": "同一支球队不能在 Parlay 中超过一次",
-                "team-in-parlay": "{{team}} 已经在 Parlay 中。同一支球队不能多次加入过关。"
+                "team-in-parlay": "{{team}} 已经在 Parlay 中。同一支球队不能多次加入过关。",
+                "max-payout": "支持的最大支出为 {{max}}"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",

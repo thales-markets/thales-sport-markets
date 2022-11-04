@@ -9,6 +9,9 @@ export const Container = styled(FlexDivColumnNative)`
     padding: 12px 10px;
     width: 100%;
     margin-bottom: 5px;
+    @media (max-width: 768px) {
+        padding: 12px 5px;
+    }
 `;
 
 export const OverviewContainer = styled(FlexDivRow)`
@@ -68,7 +71,7 @@ export const Label = styled.span`
     text-transform: uppercase;
     margin-right: 3px;
     @media (max-width: 768px) {
-        font-size: 9px;
+        font-size: 10px;
         margin-bottom: 3px;
     }
 `;
@@ -76,13 +79,13 @@ export const Label = styled.span`
 export const TicketId = styled(Label)`
     text-transform: none;
     @media (max-width: 768px) {
-        font-size: 9px;
+        font-size: 10px;
     }
 `;
 
 export const Value = styled(TicketId)`
     @media (max-width: 768px) {
-        font-size: 9px;
+        font-size: 10px;
     }
 `;
 
@@ -96,7 +99,7 @@ export const ClaimLabel = styled(Label)`
     color: ${MAIN_COLORS.TEXT.BLUE};
     text-transform: uppercase;
     @media (max-width: 768px) {
-        font-size: 9px;
+        font-size: 10px;
     }
 `;
 
