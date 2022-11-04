@@ -112,7 +112,7 @@ export const MascotContainer = styled.div`
     left: 0;
     top: 0;
     left: -20%;
-    top: 200px;
+    top: 250px;
     z-index: 1;
     @media (max-width: 768px) {
         display: none;
@@ -249,10 +249,10 @@ export const HeaderContainer = styled(FlexDivColumnCentered)`
     position: relative;
 `;
 
-export const HeaderText = styled.div`
-    font-family: 'AtmaBold' !important;
+export const HeaderTitle = styled.div`
+    width: 100%;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
     font-style: normal;
     font-weight: 700;
@@ -261,12 +261,16 @@ export const HeaderText = styled.div`
     letter-spacing: 0.05em;
     color: white;
     position: absolute;
+    & > span {
+        font-family: 'AtmaBold' !important;
+    }
 `;
 
-export const HeaderSymbolsContainer = styled.div`
-    padding: 10px;
+export const HeaderTextContainer = styled.div`
+    padding: 20px 10px;
     width: 90%;
     margin: auto;
+    letter-spacing: 0.05em;
 `;
 
 export const TabsContainer = styled.div`
