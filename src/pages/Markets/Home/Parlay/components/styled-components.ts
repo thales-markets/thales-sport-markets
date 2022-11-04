@@ -74,7 +74,7 @@ export const ValidationTooltip = withStyles(() => ({
         },
         width: '13px',
         height: '10px',
-        top: '22px',
+        bottom: '-3px !important',
     },
 }))(Tooltip);
 
@@ -98,7 +98,7 @@ export const InfoTooltip = withStyles(() => ({
         },
         width: '11px',
         height: '8px',
-        top: '20px',
+        bottom: '-2px !important',
     },
 }))(Tooltip);
 

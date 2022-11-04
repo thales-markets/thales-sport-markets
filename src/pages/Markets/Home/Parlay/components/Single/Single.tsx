@@ -490,7 +490,11 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         (value: string | number) => {
             const positionOdds = roundNumberToDecimals(getPositionOdds(market));
             if (value && Number(value) < positionOdds) {
-                setTooltipTextUsdAmount(t('markets.parlay.validation.single-min-amount', { min: positionOdds }));
+                setTooltipTextUsdAmount(
+                    t('markets.parlay.validation.single-min-amount', {
+                        min: formatCurrencyWithSign(USD_SIGN, positionOdds, 2),
+                    })
+                );
             } else if (Number(value) > availableUsdAmount) {
                 setTooltipTextUsdAmount(t('markets.parlay.validation.amount-exceeded'));
             } else if (Number(value) > paymentTokenBalance) {

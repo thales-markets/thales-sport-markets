@@ -8,6 +8,10 @@ import { countries } from 'pages/MintWorldCupNFT/countries';
 import { InfoContainer, InfoText, InfoContent } from 'pages/MintWorldCupNFT/styled-components';
 import { FlexDivCentered } from 'styles/common';
 import Table from 'components/Table';
+import useZebroQuery from 'queries/favoriteTeam/useZebroQuery';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/rootReducer';
+import { getNetworkId } from 'redux/modules/wallet';
 
 type LeaderboardProps = {
     favoriteTeamNumber: number | undefined;
@@ -17,6 +21,11 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
     const { t } = useTranslation();
     const favoriteTeam = favoriteTeamNumber ? countries[favoriteTeamNumber - 1] : null;
     console.log(favoriteTeam);
+
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const zebrosQuery = useZebroQuery('', networkId);
+    const zebros = zebrosQuery.isSuccess ? zebrosQuery.data : [];
+    console.log(zebros);
     return (
         <>
             <InfoContainer>
@@ -66,54 +75,42 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
                 <SearchAddress placeholder="SEARCH WALLET ADDRESS" />
             </FlexDivCentered>
             <Table
+                tableHeadCellStyles={{ justifyContent: 'center' }}
                 tableRowHeadStyles={{
                     borderBottom: '2px solid rgba(238, 238, 228, 0.8)',
                     color: 'rgba(238, 238, 228, 0.8)',
                 }}
+                tableRowStyles={{
+                    borderBottom: '1px dashed rgba(238, 238, 228, 0.8)',
+                    paddingTop: 6,
+                    paddingBottom: 6,
+                }}
+                tableRowCellStyles={{
+                    justifyContent: 'center',
+                }}
                 columns={[
                     {
                         Header: <>NFT</>,
-                        accessor: 'nft',
-                        Cell: (cellProps: any) => <p>{cellProps.cell.value}</p>,
-                        width: 150,
-                        sortable: true,
+                        accessor: 'url',
+                        Cell: (cellProps: any) => <ZebroNft src={cellProps.cell.value} />,
                     },
                     {
-                        Header: <>Address</>,
-                        accessor: 'address',
-                        Cell: (cellProps: any) => <p>{truncateAddress(cellProps.cell.value)}</p>,
-                        width: 150,
-                        sortable: true,
+                        Header: <>Country</>,
+                        accessor: 'countryName',
+                        Cell: (cellProps: any) => <TableText>{cellProps.cell.value}</TableText>,
                     },
                     {
-                        Header: <>Volume</>,
-                        accessor: 'volume',
-                        Cell: (cellProps: any) => <p>{cellProps.cell.value}</p>,
-                        width: 150,
-                        sortable: true,
+                        Header: <>Owner</>,
+                        accessor: 'owner',
+                        Cell: (cellProps: any) => <TableText>{truncateAddress(cellProps.cell.value)}</TableText>,
                     },
                     {
-                        Header: <>Rewards</>,
-                        accessor: 'rewards',
-                        Cell: (cellProps: any) => <p>{cellProps.cell.value}</p>,
-                        width: 150,
-                        sortable: true,
+                        Header: <>TokenId</>,
+                        accessor: 'tokenId',
+                        Cell: (cellProps: any) => <TableText>{cellProps.cell.value}</TableText>,
                     },
                 ]}
-                data={[
-                    {
-                        nft: 'test',
-                        address: '0xaf5FAc02Af62BcF245285386456e4340dE2188b8',
-                        volume: 50000,
-                        rewards: 3440,
-                    },
-                    {
-                        nft: 'test',
-                        address: '0xaf5FAc02Af62BcF245285386456e4340dE2188b8',
-                        volume: 50000,
-                        rewards: 3440,
-                    },
-                ]}
+                data={zebros}
             />
         </>
     );
@@ -136,6 +133,25 @@ const ListItem = styled.span`
     & > span {
         font-weight: bold;
     }
+`;
+
+const ZebroNft = styled.img`
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 20px;
+`;
+
+const TableText = styled.p`
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 150%;
+    text-align: center;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: #eeeee4;
 `;
 
 const SearchAddress = styled.input`

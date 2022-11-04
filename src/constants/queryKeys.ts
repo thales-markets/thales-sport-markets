@@ -119,6 +119,7 @@ export const QUERY_KEYS = {
         Tweet: () => ['quiz', 'tweet'],
     },
     FavoriteTeam: (walletAddress: string, networkId: NetworkId) => ['favoriteTeam', walletAddress, networkId],
+    Zebro: (walletAddress: string, networkId: NetworkId) => ['zebro', walletAddress, networkId],
 };
 
 export default QUERY_KEYS;

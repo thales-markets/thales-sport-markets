@@ -5,7 +5,7 @@ import { t } from 'i18next';
 import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
     getParlay,
     getParlayPayment,
@@ -27,6 +27,7 @@ import ValidationModal from './components/ValidationModal';
 const Parlay: React.FC = () => {
     const dispatch = useDispatch();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const parlay = useSelector(getParlay);
@@ -73,7 +74,7 @@ const Parlay: React.FC = () => {
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay, dispatch]);
 
     return (
-        <Container isWalletConnected={isWalletConnected}>
+        <Container isMobile={isMobile} isWalletConnected={isWalletConnected}>
             {parlayMarkets.length > 0 ? (
                 <>
                     <ListContainer>
@@ -127,9 +128,8 @@ const Parlay: React.FC = () => {
     );
 };
 
-const Container = styled(FlexDivColumn)<{ isWalletConnected?: boolean }>`
-    margin-top: ${(props) => (props.isWalletConnected ? '20px' : '44px')};
-    margin-bottom: 20px;
+const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?: boolean }>`
+    ${(props) => (!props.isMobile ? `margin-top: ${props.isWalletConnected ? '20px' : '44px'};` : '')}
     max-width: 300px;
     padding: 15px;
     flex: none;
