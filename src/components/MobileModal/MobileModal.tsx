@@ -51,15 +51,12 @@ const Container = styled.div`
     z-index: 1001;
 
     background: ${(props) => props.theme.background.secondary};
-    padding-top: 25px;
+    padding-top: 20px;
     overflow: auto;
     border-radius: 23px;
     overflow-y: auto;
     max-height: 90vh;
     height: fit-content;
-    & > div > div {
-        margin-bottom: 0px !important;
-    }
 `;
 
 const Header = styled(FlexDivRow)`

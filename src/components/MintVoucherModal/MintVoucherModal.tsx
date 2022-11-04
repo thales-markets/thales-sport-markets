@@ -394,7 +394,7 @@ const ValidationTooltip = withStyles(() => ({
         },
         width: '13px',
         height: '10px',
-        top: '25px',
+        bottom: '-2px !important',
     },
 }))(Tooltip);
 
