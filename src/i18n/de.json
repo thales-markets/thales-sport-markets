@@ -234,7 +234,8 @@
             "no-funds": "Bitte stell sicher, dass dein Wallet ausreichend USD enthält"
         },
         "match-time": "Spielzeit",
-        "race-starts": "Rennen beginnt"
+        "race-starts": "Rennen beginnt",
+        "back": "Der Rücken"
     },
     "markets": {
         "market-card": {
@@ -292,7 +293,8 @@
                 "not-supported": "Nicht unterstützter Validierungsfehler {{error}}",
                 "single-min-amount": "Minimale Menge ist {{min}}",
                 "same-team": "Dasselbe Team kann nicht mehr als einmal in einem Parlay sein",
-                "team-in-parlay": "{{team}} ist bereits in Parlay. Dasselbe Team kann nicht mehr als einmal zu einem Parlay hinzugefügt werden."
+                "team-in-parlay": "{{team}} ist bereits in Parlay. Dasselbe Team kann nicht mehr als einmal zu einem Parlay hinzugefügt werden.",
+                "max-payout": "Die maximal unterstützte Auszahlung beträgt {{max}}"
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",

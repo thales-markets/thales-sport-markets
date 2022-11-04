@@ -237,7 +237,8 @@
             "min-quote": "La citazione minima è {{value}}"
         },
         "match-time": "Tempo di partita",
-        "race-starts": "La corsa inizia"
+        "race-starts": "La corsa inizia",
+        "back": "Di ritorno"
     },
     "markets": {
         "market-card": {
@@ -295,7 +296,8 @@
                 "not-supported": "Errore di convalida non supportato {{error}}",
                 "single-min-amount": "L'importo minimo è {{min}}",
                 "same-team": "La stessa squadra non può essere in un Parlay più di una volta",
-                "team-in-parlay": "{{team}} è già a Parlay. La stessa squadra non può essere aggiunta a un Parlay più di una volta."
+                "team-in-parlay": "{{team}} è già a Parlay. La stessa squadra non può essere aggiunta a un Parlay più di una volta.",
+                "max-payout": "Il pagamento massimo supportato è {{max}}"
             },
             "empty-title": "Nessuna posizione",
             "fee": "Tariffa totale",

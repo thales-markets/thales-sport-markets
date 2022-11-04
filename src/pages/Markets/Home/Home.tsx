@@ -542,15 +542,14 @@ const Home: React.FC = () => {
                     })}
                 </SortingContainer>
             </BurgerFiltersContainer>
-            <BurgerAndSwitchSwitchContainer>
+            <BurgerAndSwitchContainer>
                 <BurgerMenu
                     src={burger}
                     onClick={() => {
                         setShowBurger(!showBurger);
                     }}
                 />
-                <SwitchContainer></SwitchContainer>
-            </BurgerAndSwitchSwitchContainer>
+            </BurgerAndSwitchContainer>
 
             <RowContainer>
                 {/* LEFT FILTERS */}
@@ -758,21 +757,6 @@ const BurgerMenu = styled.img`
     }
 `;
 
-const SwitchContainer = styled(FlexDivRow)`
-    width: 25%;
-    min-width: 150px;
-    position: relative;
-    top: 20px;
-    align-self: end;
-    flex-direction: row;
-    justify-content: flex-end;
-    margin-bottom: 10px;
-    margin-right: 28px;
-    @media (max-width: 950px) {
-        top: 15px;
-    }
-`;
-
 const GlobalFiltersContainer = styled(FlexDivColumn)`
     height: fit-content;
     flex: 0;
@@ -870,7 +854,7 @@ const LogoContainer = styled.div`
     text-align: center;
 `;
 
-const BurgerAndSwitchSwitchContainer = styled(FlexDivRow)`
+const BurgerAndSwitchContainer = styled(FlexDivRow)`
     justify-content: flex-end;
     width: calc(100% - 240px);
     @media (max-width: 950px) {
@@ -921,7 +905,6 @@ const ParlayMobileButton = styled(Button)`
     font-weight: 700;
     font-size: 20px;
     line-height: 23px;
-    z-index: 1002;
     box-shadow: ${(props) => '0 0 6px 2px ' + props.theme.borderColor.quaternary};
 `;
 
