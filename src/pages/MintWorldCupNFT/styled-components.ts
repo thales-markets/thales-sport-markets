@@ -236,6 +236,7 @@ export const TeamFlagContainer = styled.div<{ index: number }>`
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
 `;
 
 export const TeamFlagImage = styled.img<{ selected: boolean }>`

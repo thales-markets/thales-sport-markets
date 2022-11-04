@@ -237,7 +237,8 @@
             "min-quote": "La cotización mínima es {{value}}"
         },
         "match-time": "tiempo de partido",
-        "race-starts": "Comienza la carrera"
+        "race-starts": "Comienza la carrera",
+        "back": "atrás"
     },
     "markets": {
         "market-card": {
@@ -295,7 +296,8 @@
                 "risk-per-comb": "Riesgo por combinación excedido",
                 "single-min-amount": "La cantidad mínima es {{min}}",
                 "same-team": "Un mismo equipo no puede estar en un Parlay más de una vez",
-                "team-in-parlay": "{{team}} ya está en Parlay. El mismo equipo no se puede agregar a un Parlay más de una vez."
+                "team-in-parlay": "{{team}} ya está en Parlay. El mismo equipo no se puede agregar a un Parlay más de una vez.",
+                "max-payout": "El pago máximo admitido es {{max}}"
             },
             "fee": "Costo total",
             "payout": "Total recibido",
@@ -484,7 +486,6 @@
         "success-mint": "acuñado con éxito",
         "retweet": "Retuitear este tuit",
         "zebro-campaign": "Campaña Zebra FIFA",
-        "get-your-nft": "Consigue tu NFT de Catar 2022",
         "minting-is-free": "Minting es gratis, solo puede acuñar un NFT por billetera. Este NFT es intransferible.",
         "already-minted": "Ya has acuñado tu NFT",
         "are-you-sure": "¿Estás seguro de que quieres acuñar este NFT? Puede acuñar SOLO UN NFT por monedero.",
@@ -506,6 +507,7 @@
             "parlay-boost-text": "Si tu partido de la Copa del Mundo es en un boleto Parlay, obtendrás un impulso de:"
         },
         "zebro-wct-collection-text": "es parte de una campaña incentivada para representar a su país favorito durante la Copa del Mundo y ser elegible para una parte de 50 000 tokens OP y 30 000 tokens THALES, junto con multiplicadores exclusivos para parlays y partidos individuales.",
-        "zebro-wct-collection": "La colección Zebro WC NFT"
+        "zebro-wct-collection": "La colección Zebro WC NFT",
+        "get-your-nft": "Catar 2022 NFT"
     }
 }

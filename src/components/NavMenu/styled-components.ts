@@ -6,12 +6,6 @@ export const WrapperAnimation = keyframes`
     0% {
         visibility: none;
         right: -255px;
-        height: 50%;
-    }
-    50% {
-        visibility: visible;
-        right: 0px;
-        height: 75%;
     }
     100% {
         visibility: visible;
@@ -30,26 +24,19 @@ export const WrapperAnimationClose = keyframes`
         -webkit-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};
         -moz-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};
         box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};
-        height: 100%;
-    }
-    50% {
-        visibility: visible;
-        right: 0px;
-        height: 75%;
     }
     100% {
         visibility: none;
         right: -255px;
-        height: 50%;
     }
 `;
 
 const animationOpen = css`
-    animation: ${WrapperAnimation} 0.5s linear;
+    animation: ${WrapperAnimation} 0.3s linear;
 `;
 
 const animationClose = css`
-    animation: ${WrapperAnimationClose} 0.5s linear;
+    animation: ${WrapperAnimationClose} 0.3s linear;
 `;
 
 export const Wrapper = styled.div<{ show?: boolean | null }>`

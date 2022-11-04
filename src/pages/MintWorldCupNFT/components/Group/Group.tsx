@@ -15,6 +15,7 @@ import {
     ArrowContainer,
     GroupInfoContainer,
 } from 'pages/MintWorldCupNFT/styled-components';
+import styled from 'styled-components';
 
 type GroupProps = {
     openedGroup: string;
@@ -61,17 +62,17 @@ const Group: React.FC<GroupProps> = ({
                     </>
                 ) : (
                     <>
-                        <GroupCollapsedRectangle />
+                        <StyledGroupCollapsedRectangle onClick={() => setOpenedGroup(groupLetter)} />
                         <GroupLetter color="white">{groupLetter}</GroupLetter>
                         {groupTeams.map((team, index) => (
-                            <TeamFlagContainer index={index} key={index}>
+                            <TeamFlagContainer onClick={() => setOpenedGroup(groupLetter)} index={index} key={index}>
                                 <TeamFlagImage
                                     selected={team.number === selectedTeam?.number}
                                     src={`logos/FIFA World Cup/${countriesFlagsNames[team.number - 1]}.png`}
                                 />
                             </TeamFlagContainer>
                         ))}
-                        <ArrowContainer onClick={() => setOpenedGroup(groupLetter)}>
+                        <ArrowContainer>
                             <ArrowDown />
                         </ArrowContainer>
                     </>
@@ -80,5 +81,9 @@ const Group: React.FC<GroupProps> = ({
         </>
     );
 };
+
+const StyledGroupCollapsedRectangle = styled(GroupCollapsedRectangle)`
+    cursor: pointer;
+`;
 
 export default Group;

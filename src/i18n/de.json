@@ -234,7 +234,8 @@
             "no-funds": "Bitte stell sicher, dass dein Wallet ausreichend USD enthält"
         },
         "match-time": "Spielzeit",
-        "race-starts": "Rennen beginnt"
+        "race-starts": "Rennen beginnt",
+        "back": "Der Rücken"
     },
     "markets": {
         "market-card": {
@@ -292,7 +293,8 @@
                 "not-supported": "Nicht unterstützter Validierungsfehler {{error}}",
                 "single-min-amount": "Minimale Menge ist {{min}}",
                 "same-team": "Dasselbe Team kann nicht mehr als einmal in einem Parlay sein",
-                "team-in-parlay": "{{team}} ist bereits in Parlay. Dasselbe Team kann nicht mehr als einmal zu einem Parlay hinzugefügt werden."
+                "team-in-parlay": "{{team}} ist bereits in Parlay. Dasselbe Team kann nicht mehr als einmal zu einem Parlay hinzugefügt werden.",
+                "max-payout": "Die maximal unterstützte Auszahlung beträgt {{max}}"
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",
@@ -485,7 +487,6 @@
         "yes-mint": "Ja, neuwertiges NFT",
         "choose-nft": "Mint Ihr Zebro NFT",
         "success-mint": "Erfolgreich geprägt",
-        "get-your-nft": "Holen Sie sich Ihren Katar 2022 NFT",
         "already-minted": "Sie haben Ihr NFT bereits geprägt",
         "zebro-campaign": "Zebra-FIFA-Kampagne",
         "mint-this-zebro": "Prägen Sie dieses Zebra!",
@@ -503,6 +504,7 @@
             "three-game-parlay": "+15 %, wenn es sich um eine Kombination aus 3 Spielen handelt"
         },
         "zebro-wct-collection": "Die Zebro WC NFT Kollektion",
-        "zebro-wct-collection-text": "ist Teil einer Anreizkampagne, um Ihr Lieblingsland während der Weltmeisterschaft zu vertreten und sich für einen Anteil von 50.000 OP-Token und 30.000 THALES-Token sowie exklusive Multiplikatoren für Kombinationen und Einzelspiele zu qualifizieren."
+        "zebro-wct-collection-text": "ist Teil einer Anreizkampagne, um Ihr Lieblingsland während der Weltmeisterschaft zu vertreten und sich für einen Anteil von 50.000 OP-Token und 30.000 THALES-Token sowie exklusive Multiplikatoren für Kombinationen und Einzelspiele zu qualifizieren.",
+        "get-your-nft": "Katar 2022 NFT"
     }
 }

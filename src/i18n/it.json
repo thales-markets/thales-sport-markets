@@ -237,7 +237,8 @@
             "min-quote": "La citazione minima è {{value}}"
         },
         "match-time": "Tempo di partita",
-        "race-starts": "La corsa inizia"
+        "race-starts": "La corsa inizia",
+        "back": "Di ritorno"
     },
     "markets": {
         "market-card": {
@@ -295,7 +296,8 @@
                 "not-supported": "Errore di convalida non supportato {{error}}",
                 "single-min-amount": "L'importo minimo è {{min}}",
                 "same-team": "La stessa squadra non può essere in un Parlay più di una volta",
-                "team-in-parlay": "{{team}} è già a Parlay. La stessa squadra non può essere aggiunta a un Parlay più di una volta."
+                "team-in-parlay": "{{team}} è già a Parlay. La stessa squadra non può essere aggiunta a un Parlay più di una volta.",
+                "max-payout": "Il pagamento massimo supportato è {{max}}"
             },
             "empty-title": "Nessuna posizione",
             "fee": "Tariffa totale",
@@ -493,7 +495,6 @@
         "minting-is-free": "Il conio è gratuito, puoi coniare solo un NFT per portafoglio. Questo NFT non è trasferibile.",
         "eligible-text": "Ehi, ora puoi coniare la tua squadra preferita Zebro NFT.",
         "eligible-text-1": "La collezione Zebro NFT viene utilizzata come voce per la campagna di Overtime FIFA World Cup.",
-        "get-your-nft": "Ottieni il tuo Qatar NFT 2022",
         "mint-this-zebro": "Menta questa Zebra!",
         "leaderboard-title": "Classifica",
         "leaderboard": {
@@ -509,6 +510,7 @@
             "reward-calculations": "I calcoli delle ricompense verranno calcolati proporzionalmente in base al volume con un aumento del volume massimo del 40% aggiuntivo se vengono soddisfatte le seguenti condizioni:"
         },
         "zebro-wct-collection": "La collezione Zebro WC NFT",
-        "zebro-wct-collection-text": "fa parte di una campagna incentivata per rappresentare il tuo paese preferito durante la Coppa del Mondo e avere diritto a una quota di 50.000 token OP e 30.000 token THALES, insieme a moltiplicatori esclusivi per parlay e partite individuali."
+        "zebro-wct-collection-text": "fa parte di una campagna incentivata per rappresentare il tuo paese preferito durante la Coppa del Mondo e avere diritto a una quota di 50.000 token OP e 30.000 token THALES, insieme a moltiplicatori esclusivi per parlay e partite individuali.",
+        "get-your-nft": "Qatar 2022 NFT"
     }
 }
