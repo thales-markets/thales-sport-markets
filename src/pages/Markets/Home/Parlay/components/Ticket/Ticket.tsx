@@ -94,6 +94,14 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const [hasAllowance, setAllowance] = useState<boolean>(false);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
 
+    // Used for cancelling the subscription and asynchronous tasks in a useEffect
+    const mountedRef = useRef(true);
+    useEffect(() => {
+        return () => {
+            mountedRef.current = false;
+        };
+    }, []);
+
     const parlayAmmDataQuery = useParlayAmmDataQuery(networkId, {
         enabled: isAppReady,
     });
@@ -212,6 +220,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         walletAddress,
                         parlayMarketsAMMContract.address
                     );
+                    if (!mountedRef.current) return null;
                     setAllowance(allowance);
                 } catch (e) {
                     console.log(e);
@@ -325,31 +334,28 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     };
 
     useEffect(() => {
-        const checkDisabled = async () => {
-            if (!hasAllowance) {
-                setSubmitDisabled(false);
-                return;
-            }
-            // Validation message is present
-            if (tooltipTextUsdAmount) {
-                setSubmitDisabled(true);
-                return;
-            }
-            // Minimum of sUSD
-            if (
-                !Number(usdAmountValue) ||
-                Number(usdAmountValue) < (parlayAmmData?.minUsdAmount || 0) ||
-                isBuying ||
-                isAllowing
-            ) {
-                setSubmitDisabled(true);
-                return;
-            }
-            // Not enough funds
-            setSubmitDisabled(!paymentTokenBalance || usdAmountValue > paymentTokenBalance);
+        if (!hasAllowance) {
+            setSubmitDisabled(false);
             return;
-        };
-        checkDisabled();
+        }
+        // Validation message is present
+        if (tooltipTextUsdAmount) {
+            setSubmitDisabled(true);
+            return;
+        }
+        // Minimum of sUSD
+        if (
+            !Number(usdAmountValue) ||
+            Number(usdAmountValue) < (parlayAmmData?.minUsdAmount || 0) ||
+            isBuying ||
+            isAllowing
+        ) {
+            setSubmitDisabled(true);
+            return;
+        }
+        // Not enough funds
+        setSubmitDisabled(!paymentTokenBalance || usdAmountValue > paymentTokenBalance);
+        return;
     }, [
         usdAmountValue,
         isBuying,
@@ -371,7 +377,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         }
         if (!hasAllowance) {
             return (
-                <SubmitButton disabled={submitDisabled} onClick={async () => setOpenApprovalModal(true)}>
+                <SubmitButton disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)}>
                     {t('common.wallet.approve')}
                 </SubmitButton>
             );
@@ -430,6 +436,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             const { parlayMarketsAMMContract } = networkConnector;
             if (parlayMarketsAMMContract && Number(usdAmountValue) >= 0 && parlayAmmData?.minUsdAmount) {
                 const parlayAmmQuote = await fetchParlayAmmQuote(Number(usdAmountValue));
+                if (!mountedRef.current) return null;
                 if (!parlayAmmQuote.error) {
                     setTotalQuote(bigNumberFormatter(parlayAmmQuote['totalQuote']));
                     setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));

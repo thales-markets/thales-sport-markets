@@ -116,6 +116,14 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         },
     });
 
+    // Used for cancelling the subscription and asynchronous tasks in a useEffect
+    const mountedRef = useRef(true);
+    useEffect(() => {
+        return () => {
+            mountedRef.current = false;
+        };
+    }, []);
+
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
@@ -198,6 +206,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 const susdToSpendForMaxAmount = await fetchAmmQuote(roundedMaxAmount);
                 const decimalSusdToSpendForMaxAmount = susdToSpendForMaxAmount / divider;
 
+                if (!mountedRef.current) return null;
                 setAvailableUsdAmount(floorNumberToDecimals(decimalSusdToSpendForMaxAmount));
 
                 if (paymentTokenBalance > decimalSusdToSpendForMaxAmount) {
@@ -250,6 +259,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                             availablePerSide.positions[market.position].available,
                             ammBalanceForSelectedPosition / divider
                         ) || 0;
+
+                    if (!mountedRef.current) return null;
 
                     if (amountOfTokens > availablePerSide.positions[market.position].available) {
                         setTokenAmount(0);
@@ -334,6 +345,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                         walletAddress,
                         sportsAMMContract.address
                     );
+                    if (!mountedRef.current) return null;
                     setAllowance(allowance);
                 } catch (e) {
                     console.log(e);
@@ -446,21 +458,17 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     useEffect(() => {
         const MIN_TOKEN_AMOUNT = 1;
 
-        const checkDisabled = async () => {
-            if (!hasAllowance) {
-                setSubmitDisabled(false);
-                return;
-            }
-
-            if (!Number(usdAmountValue) || !tokenAmount || tokenAmount < MIN_TOKEN_AMOUNT || isBuying || isAllowing) {
-                setSubmitDisabled(true);
-                return;
-            }
-
-            setSubmitDisabled(!paymentTokenBalance || usdAmountValue > paymentTokenBalance);
+        if (!hasAllowance) {
+            setSubmitDisabled(false);
             return;
-        };
-        checkDisabled();
+        }
+        if (!Number(usdAmountValue) || !tokenAmount || tokenAmount < MIN_TOKEN_AMOUNT || isBuying || isAllowing) {
+            setSubmitDisabled(true);
+            return;
+        }
+
+        setSubmitDisabled(!paymentTokenBalance || usdAmountValue > paymentTokenBalance);
+        return;
     }, [usdAmountValue, isBuying, isAllowing, hasAllowance, paymentTokenBalance, tokenAmount]);
 
     const getSubmitButton = () => {
@@ -473,7 +481,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         }
         if (!hasAllowance) {
             return (
-                <SubmitButton disabled={submitDisabled} onClick={async () => setOpenApprovalModal(true)}>
+                <SubmitButton disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)}>
                     {t('common.wallet.approve')}
                 </SubmitButton>
             );
