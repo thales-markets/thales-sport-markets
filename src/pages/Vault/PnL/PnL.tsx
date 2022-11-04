@@ -74,7 +74,7 @@ const PnL: React.FC<PnlProps> = ({ vaultAddress, lifetimePnl }) => {
                                 style={{
                                     fontSize: '15px',
                                 }}
-                                width={45}
+                                width={50}
                             />
                             <Tooltip
                                 content={<CustomTooltip />}
