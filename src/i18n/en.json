@@ -252,7 +252,7 @@
         },
         "card": {
             "ticket-id": "Ticket ID",
-            "number-of-games": "Number of games",
+            "number-of-games": "No. of games",
             "ticket-paid": "Ticket paid",
             "to-win": "win",
             "to-claim": "claim",

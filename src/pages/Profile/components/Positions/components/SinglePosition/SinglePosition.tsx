@@ -7,12 +7,14 @@ import {
     BoldValue,
     ClaimInfoContainer,
     ColumnDirectionInfo,
+    GameParticipantsWrapper,
     PositionContainer,
     ResultContainer,
     TeamContainer,
     Wrapper,
 } from './styled-components';
 import {
+    ClaimContainer,
     ClaimLabel,
     ClaimValue,
     ExternalLinkArrow,
@@ -37,10 +39,13 @@ import { getEtherscanAddressLink } from 'utils/etherscan';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getNetworkId } from 'redux/modules/wallet';
+import { getIsMobile } from 'redux/modules/app';
+import { FlexDivRow } from 'styles/common';
 
 const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ position }) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(
         getTeamImageSource(position.market.homeTeam, position.market.tags[0])
@@ -79,45 +84,67 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
 
     return (
         <Wrapper>
-            <TeamContainer>
-                <ClubLogo
-                    style={{ marginRight: '5px' }}
-                    alt={position.market.homeTeam}
-                    src={homeLogoSrc}
-                    onError={getOnImageError(setHomeLogoSrc, position.market.tags[0])}
-                />
-                <ClubName>{position.market.homeTeam}</ClubName>
-            </TeamContainer>
-            <ClubName>{' VS '}</ClubName>
-            <TeamContainer>
-                <ClubLogo
-                    style={{ marginRight: '5px' }}
-                    alt={position.market.awayTeam}
-                    src={awayLogoSrc}
-                    onError={getOnImageError(setAwayLogoSrc, position.market.tags[0])}
-                />
-                <ClubName>{position.market.awayTeam}</ClubName>
-            </TeamContainer>
+            <GameParticipantsWrapper>
+                <TeamContainer>
+                    <ClubLogo
+                        style={{ marginRight: '5px' }}
+                        alt={position.market.homeTeam}
+                        src={homeLogoSrc}
+                        onError={getOnImageError(setHomeLogoSrc, position.market.tags[0])}
+                    />
+                    <ClubName>{position.market.homeTeam}</ClubName>
+                </TeamContainer>
+                <ClubName>{' VS '}</ClubName>
+                <TeamContainer>
+                    <ClubLogo
+                        style={{ marginRight: '5px' }}
+                        alt={position.market.awayTeam}
+                        src={awayLogoSrc}
+                        onError={getOnImageError(setAwayLogoSrc, position.market.tags[0])}
+                    />
+                    <ClubName>{position.market.awayTeam}</ClubName>
+                </TeamContainer>
+            </GameParticipantsWrapper>
             {isClaimable && (
                 <>
                     <ResultContainer>
                         <Label>{t('profile.card.result')}</Label>
                         <BoldValue>{`${position.market.homeScore} : ${position.market.awayScore}`}</BoldValue>
                     </ResultContainer>
-                    <ClaimInfoContainer>
-                        <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
-                        <ClaimValue>{formatCurrencyWithSign(USD_SIGN, position.amount, 2)}</ClaimValue>
-                    </ClaimInfoContainer>
-                    <ClaimButton
-                        claimable={true}
-                        onClick={(e: any) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            claimReward();
-                        }}
-                    >
-                        {t('profile.card.claim')}
-                    </ClaimButton>
+                    {isMobile ? (
+                        <ClaimContainer>
+                            <FlexDivRow>
+                                <ClaimValue>{formatCurrencyWithSign(USD_SIGN, position.amount, 2)}</ClaimValue>
+                            </FlexDivRow>
+                            <ClaimButton
+                                claimable={true}
+                                onClick={(e: any) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    claimReward();
+                                }}
+                            >
+                                {t('profile.card.claim')}
+                            </ClaimButton>
+                        </ClaimContainer>
+                    ) : (
+                        <>
+                            <ClaimInfoContainer>
+                                <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
+                                <ClaimValue>{formatCurrencyWithSign(USD_SIGN, position.amount, 2)}</ClaimValue>
+                            </ClaimInfoContainer>
+                            <ClaimButton
+                                claimable={true}
+                                onClick={(e: any) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    claimReward();
+                                }}
+                            >
+                                {t('profile.card.claim')}
+                            </ClaimButton>
+                        </>
+                    )}
                 </>
             )}
             {!isClaimable && (
