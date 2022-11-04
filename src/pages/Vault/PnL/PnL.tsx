@@ -11,14 +11,18 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { Colors, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 import { formatPercentageWithSign } from 'utils/formatters/number';
 
-const PnL: React.FC = () => {
+type PnlProps = {
+    vaultAddress: string;
+};
+
+const PnL: React.FC<PnlProps> = ({ vaultAddress }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [vaultPnls, setVaultPnls] = useState<VaultPnls>([]);
 
-    const vaultPnlsQuery = useVaultPnlsQuery(networkId, {
-        enabled: isAppReady,
+    const vaultPnlsQuery = useVaultPnlsQuery(vaultAddress, networkId, {
+        enabled: isAppReady && !!vaultAddress,
     });
 
     useEffect(() => {
@@ -69,13 +73,14 @@ const PnL: React.FC = () => {
                                 style={{
                                     fontSize: '15px',
                                 }}
+                                width={45}
                             />
                             <Tooltip
                                 content={<CustomTooltip />}
                                 cursor={{ fill: '#5F6180', fillOpacity: '0.3' }}
                                 wrapperStyle={{ outline: 'none' }}
                             />
-                            <Bar dataKey="pnl" radius={[4, 4, 0, 0]}>
+                            <Bar dataKey="pnl" radius={[4, 4, 0, 0]} maxBarSize={60}>
                                 {vaultPnls.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={entry.pnl > 0 ? Colors.GREEN : Colors.RED} />
                                 ))}

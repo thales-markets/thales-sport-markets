@@ -8,13 +8,14 @@ import { getEtherscanTxLink } from 'utils/etherscan';
 import i18n from 'i18n';
 import { VaultTradeStatus } from 'constants/vault';
 
-const useVaultTradesQuery = (networkId: NetworkId, options?: UseQueryOptions<VaultTrades>) => {
+const useVaultTradesQuery = (vaultAddress: string, networkId: NetworkId, options?: UseQueryOptions<VaultTrades>) => {
     return useQuery<VaultTrades>(
-        QUERY_KEYS.Vault.Trades(networkId),
+        QUERY_KEYS.Vault.Trades(vaultAddress, networkId),
         async () => {
             try {
                 const vaultTrades = await thalesData.sportMarkets.vaultTransactions({
                     network: networkId,
+                    vault: vaultAddress,
                 });
                 return vaultTrades.map((trade: VaultTrade) => {
                     const game = `${trade.wholeMarket.homeTeam} - ${trade.wholeMarket.awayTeam}`;
@@ -25,7 +26,7 @@ const useVaultTradesQuery = (networkId: NetworkId, options?: UseQueryOptions<Vau
                     const result = Position[trade.wholeMarket.finalResult - 1] as PositionName;
                     const link = getEtherscanTxLink(networkId, trade.hash);
                     const status =
-                        trade.wholeMarket.finalResult || trade.wholeMarket.finalResult === 0
+                        Number(trade.wholeMarket.finalResult) === 0
                             ? VaultTradeStatus.IN_PROGRESS
                             : // @ts-ignore
                             (position as PositionName) === result

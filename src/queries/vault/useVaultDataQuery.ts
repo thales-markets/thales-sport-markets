@@ -4,10 +4,16 @@ import { bigNumberFormatter } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 import { NetworkId } from 'types/network';
 import { VaultData } from 'types/vault';
+import vaultContract from 'utils/contracts/sportVaultContract';
+import { ethers } from 'ethers';
 
-const useVaultDataQuery = (networkId: NetworkId, options?: UseQueryOptions<VaultData | undefined>) => {
+const useVaultDataQuery = (
+    vaultAddress: string,
+    networkId: NetworkId,
+    options?: UseQueryOptions<VaultData | undefined>
+) => {
     return useQuery<VaultData | undefined>(
-        QUERY_KEYS.Vault.Data(networkId),
+        QUERY_KEYS.Vault.Data(vaultAddress, networkId),
         async () => {
             const vaultData: VaultData = {
                 vaultStarted: false,
@@ -26,8 +32,12 @@ const useVaultDataQuery = (networkId: NetworkId, options?: UseQueryOptions<Vault
                 paused: false,
             };
 
-            const { sportVaultContract } = networkConnector;
             try {
+                const sportVaultContract = new ethers.Contract(
+                    vaultAddress,
+                    vaultContract.abi,
+                    networkConnector.provider
+                );
                 if (sportVaultContract) {
                     const [
                         vaultStarted,

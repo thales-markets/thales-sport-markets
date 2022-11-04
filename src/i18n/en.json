@@ -349,13 +349,27 @@
             "5": "Hard"
         }
     },
+    "vaults": {
+        "title": "Vaults"
+    },
     "vault": {
-        "title": "Discount Vault",
+        "discount-vault": {
+            "title": "Discount Vault",
+            "description": "<p>Etiam eget magna scelerisque, dignissim arcu sed, condimentum odio. Duis laoreet ante non consequat semper. Duis consequat magna ut egestas aliquet. Sed luctus risus sapien, id semper mi pulvinar eu. Integer a ligula id elit sollicitudin molestie. Fusce convallis lorem ultricies, vestibulum arcu at, sodales mi. Etiam vulputate iaculis ligula, in dictum lorem bibendum bibendum. Nam in dapibus enim.<p></p>Aenean eget diam quam. Ut sed nunc libero. Vivamus sit amet tristique sem. Quisque ut consequat felis, et consequat purus. Ut feugiat id eros in eleifend. Donec sit amet blandit risus. Praesent vulputate lobortis felis, ac porta dui interdum ac. Morbi hendrerit, nulla in porttitor commodo, magna nibh cursus diam, id pharetra turpis felis in dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut vitae mollis leo, egestas interdum arcu. Integer ornare, est vel lacinia imperdiet, mi quam aliquam nibh, vulputate mattis magna mi et arcu. Etiam elit magna, malesuada eget rutrum ac, tristique et ligula.</p>"
+        },
+        "vault-x": {
+            "title": "Vault X",
+            "description": "<p>Etiam eget magna scelerisque, dignissim arcu sed, condimentum odio. Duis laoreet ante non consequat semper. Duis consequat magna ut egestas aliquet. Sed luctus risus sapien, id semper mi pulvinar eu. Integer a ligula id elit sollicitudin molestie. Fusce convallis lorem ultricies, vestibulum arcu at, sodales mi. Etiam vulputate iaculis ligula, in dictum lorem bibendum bibendum. Nam in dapibus enim.<p></p>Aenean eget diam quam. Ut sed nunc libero. Vivamus sit amet tristique sem. Quisque ut consequat felis, et consequat purus. Ut feugiat id eros in eleifend. Donec sit amet blandit risus. Praesent vulputate lobortis felis, ac porta dui interdum ac. Morbi hendrerit, nulla in porttitor commodo, magna nibh cursus diam, id pharetra turpis felis in dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut vitae mollis leo, egestas interdum arcu. Integer ornare, est vel lacinia imperdiet, mi quam aliquam nibh, vulputate mattis magna mi et arcu. Etiam elit magna, malesuada eget rutrum ac, tristique et ligula.</p>"
+        },
+        "vault-y": {
+            "title": "Vault Y",
+            "description": "<p>Etiam eget magna scelerisque, dignissim arcu sed, condimentum odio. Duis laoreet ante non consequat semper. Duis consequat magna ut egestas aliquet. Sed luctus risus sapien, id semper mi pulvinar eu. Integer a ligula id elit sollicitudin molestie. Fusce convallis lorem ultricies, vestibulum arcu at, sodales mi. Etiam vulputate iaculis ligula, in dictum lorem bibendum bibendum. Nam in dapibus enim.<p></p>Aenean eget diam quam. Ut sed nunc libero. Vivamus sit amet tristique sem. Quisque ut consequat felis, et consequat purus. Ut feugiat id eros in eleifend. Donec sit amet blandit risus. Praesent vulputate lobortis felis, ac porta dui interdum ac. Morbi hendrerit, nulla in porttitor commodo, magna nibh cursus diam, id pharetra turpis felis in dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut vitae mollis leo, egestas interdum arcu. Integer ornare, est vel lacinia imperdiet, mi quam aliquam nibh, vulputate mattis magna mi et arcu. Etiam elit magna, malesuada eget rutrum ac, tristique et ligula.</p>"
+        },
+        "back-to-vaults": "Back to vaults",
         "vault-not-started-message": "The vault has not started",
         "vault-paused-message": "The vault is paused",
         "round-allocation-label": "Round allocation",
         "round-end-label": "The round ends in",
-        "description": "<p>Etiam eget magna scelerisque, dignissim arcu sed, condimentum odio. Duis laoreet ante non consequat semper. Duis consequat magna ut egestas aliquet. Sed luctus risus sapien, id semper mi pulvinar eu. Integer a ligula id elit sollicitudin molestie. Fusce convallis lorem ultricies, vestibulum arcu at, sodales mi. Etiam vulputate iaculis ligula, in dictum lorem bibendum bibendum. Nam in dapibus enim.<p></p>Aenean eget diam quam. Ut sed nunc libero. Vivamus sit amet tristique sem. Quisque ut consequat felis, et consequat purus. Ut feugiat id eros in eleifend. Donec sit amet blandit risus. Praesent vulputate lobortis felis, ac porta dui interdum ac. Morbi hendrerit, nulla in porttitor commodo, magna nibh cursus diam, id pharetra turpis felis in dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut vitae mollis leo, egestas interdum arcu. Integer ornare, est vel lacinia imperdiet, mi quam aliquam nibh, vulputate mattis magna mi et arcu. Etiam elit magna, malesuada eget rutrum ac, tristique et ligula.</p>",
         "your-round-allocation-label": "Your allocation for the round: <bold>{{amount}}</bold>",
         "your-next-round-allocation-label": "Your allocation for the next round: <bold>{{amount}}</bold>",
         "next-round-start-label": "The next round starts in: <counter />",

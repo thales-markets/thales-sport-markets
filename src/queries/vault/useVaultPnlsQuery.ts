@@ -5,13 +5,14 @@ import { NetworkId } from 'types/network';
 import { VaultPnls } from 'types/vault';
 import { orderBy } from 'lodash';
 
-const useVaultPnlsQuery = (networkId: NetworkId, options?: UseQueryOptions<VaultPnls>) => {
+const useVaultPnlsQuery = (vaultAddress: string, networkId: NetworkId, options?: UseQueryOptions<VaultPnls>) => {
     return useQuery<VaultPnls>(
-        QUERY_KEYS.Vault.PnL(networkId),
+        QUERY_KEYS.Vault.PnL(vaultAddress, networkId),
         async () => {
             try {
                 const vaultPnls = await thalesData.sportMarkets.vaultPnls({
                     network: networkId,
+                    vault: vaultAddress,
                 });
                 return orderBy(vaultPnls, ['round'], ['asc']).map((pnl) => {
                     return {

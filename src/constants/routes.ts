@@ -7,7 +7,8 @@ export const ROUTES = {
     Rewards: '/rewards',
     Quiz: '/trivia',
     QuizLeaderboard: '/trivia/leaderboard',
-    Vault: '/vault',
+    Vaults: '/vaults',
+    Vault: '/vaults/:vaultId',
 };
 export default ROUTES;
 

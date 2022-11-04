@@ -37,7 +37,7 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import SPAAnchor from 'components/SPAAnchor';
 import { Info } from 'pages/Markets/Home/Home';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { VaultTab } from 'constants/vault';
+import { VaultTab, VAULT_MAP } from 'constants/vault';
 import NumericInput from 'components/fields/NumericInput';
 import { getIsAppReady } from 'redux/modules/app';
 import { UserVaultData, VaultData } from 'types/vault';
@@ -57,8 +57,14 @@ import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
 import TradesHistory from './TradesHistory';
 import PnL from './PnL';
+import { RouteComponentProps } from 'react-router-dom';
+import vaultContract from 'utils/contracts/sportVaultContract';
 
-const Vault: React.FC = () => {
+type VaultProps = RouteComponentProps<{
+    vaultId: string;
+}>;
+
+const Vault: React.FC<VaultProps> = (props) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -71,6 +77,10 @@ const Vault: React.FC = () => {
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [selectedTab, setSelectedTab] = useState<VaultTab>(VaultTab.DEPOSIT);
     const [paymentTokenBalance, setPaymentTokenBalance] = useState<number | string>('');
+
+    const { params } = props.match;
+    const vaultId = params && params.vaultId ? params.vaultId : '';
+    const vaultAddress = !!VAULT_MAP[vaultId] ? VAULT_MAP[vaultId].addresses[networkId] : undefined;
 
     const tabContent: Array<{
         id: VaultTab;
@@ -101,8 +111,8 @@ const Vault: React.FC = () => {
         }
     }, [paymentTokenBalanceQuery.isSuccess, paymentTokenBalanceQuery.data]);
 
-    const vaultDataQuery = useVaultDataQuery(networkId, {
-        enabled: isAppReady,
+    const vaultDataQuery = useVaultDataQuery(vaultAddress, networkId, {
+        enabled: isAppReady && !!vaultAddress,
     });
     const vaultData: VaultData | undefined = useMemo(() => {
         if (vaultDataQuery.isSuccess && vaultDataQuery.data) {
@@ -111,8 +121,8 @@ const Vault: React.FC = () => {
         return undefined;
     }, [vaultDataQuery.isSuccess, vaultDataQuery.data]);
 
-    const userVaultDataQuery = useUserVaultDataQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
+    const userVaultDataQuery = useUserVaultDataQuery(vaultAddress, walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected && !!vaultAddress,
     });
     const userVaultData: UserVaultData | undefined = useMemo(() => {
         if (userVaultDataQuery.isSuccess && userVaultDataQuery.data) {
@@ -160,9 +170,8 @@ const Vault: React.FC = () => {
         isSubmitting || isWithdrawalRequested || isMaximumAmountOfUsersReached || vaultPaused || isVaultCapReached;
 
     useEffect(() => {
-        const { signer, sUSDContract, sportVaultContract } = networkConnector;
-        if (signer && sUSDContract && sportVaultContract) {
-            const addressToApprove = sportVaultContract.address;
+        const { signer, sUSDContract } = networkConnector;
+        if (signer && sUSDContract) {
             const sUSDContractWithSigner = sUSDContract.connect(signer);
             const getAllowance = async () => {
                 try {
@@ -171,7 +180,7 @@ const Vault: React.FC = () => {
                         parsedAmount,
                         sUSDContractWithSigner,
                         walletAddress,
-                        addressToApprove
+                        vaultAddress
                     );
                     setAllowance(allowance);
                 } catch (e) {
@@ -182,19 +191,18 @@ const Vault: React.FC = () => {
                 getAllowance();
             }
         }
-    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing]);
+    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, vaultAddress]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
-        const { signer, sUSDContract, sportVaultContract } = networkConnector;
-        if (signer && sUSDContract && sportVaultContract) {
+        const { signer, sUSDContract } = networkConnector;
+        if (signer && sUSDContract) {
             const id = toast.loading(t('market.toast-messsage.transaction-pending'));
             setIsAllowing(true);
 
             try {
-                const addressToApprove = sportVaultContract.address;
                 const sUSDContractWithSigner = sUSDContract.connect(signer);
 
-                const tx = (await sUSDContractWithSigner.approve(addressToApprove, approveAmount, {
+                const tx = (await sUSDContractWithSigner.approve(vaultAddress, approveAmount, {
                     gasLimit: MAX_GAS_LIMIT,
                 })) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
@@ -216,12 +224,12 @@ const Vault: React.FC = () => {
     };
 
     const handleDeposit = async () => {
-        const { sportVaultContract, signer } = networkConnector;
-        if (sportVaultContract && signer) {
+        const { signer } = networkConnector;
+        if (signer) {
             const id = toast.loading(t('market.toast-messsage.transaction-pending'));
             setIsSubmitting(true);
             try {
-                const sportVaultContractWithSigner = sportVaultContract.connect(signer);
+                const sportVaultContractWithSigner = new ethers.Contract(vaultAddress, vaultContract.abi, signer);
                 const parsedAmount = ethers.utils.parseEther(Number(amount).toString());
 
                 const tx = await sportVaultContractWithSigner.deposit(parsedAmount, {
@@ -243,12 +251,12 @@ const Vault: React.FC = () => {
     };
 
     const handleWithdrawalRequest = async () => {
-        const { sportVaultContract, signer } = networkConnector;
-        if (sportVaultContract && signer) {
+        const { signer } = networkConnector;
+        if (signer) {
             const id = toast.loading(t('market.toast-messsage.transaction-pending'));
             setIsSubmitting(true);
             try {
-                const sportVaultContractWithSigner = sportVaultContract.connect(signer);
+                const sportVaultContractWithSigner = new ethers.Contract(vaultAddress, vaultContract.abi, signer);
 
                 const tx = await sportVaultContractWithSigner.withdrawalRequest({
                     gasLimit: MAX_GAS_LIMIT,
@@ -269,12 +277,12 @@ const Vault: React.FC = () => {
     };
 
     const closeRound = async () => {
-        const { sportVaultContract, signer } = networkConnector;
-        if (sportVaultContract && signer) {
+        const { signer } = networkConnector;
+        if (signer) {
             const id = toast.loading(t('market.toast-messsage.transaction-pending'));
             setIsSubmitting(true);
             try {
-                const sportVaultContractWithSigner = sportVaultContract.connect(signer);
+                const sportVaultContractWithSigner = new ethers.Contract(vaultAddress, vaultContract.abi, signer);
 
                 const tx = await sportVaultContractWithSigner.closeRound({
                     gasLimit: MAX_GAS_LIMIT,
@@ -350,8 +358,8 @@ const Vault: React.FC = () => {
                     }}
                 />
             </Info>
-            <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
-            <Title>{t('vault.title')}</Title>
+            <BackToLink link={buildHref(ROUTES.Vaults)} text={t('vault.back-to-vaults')} />
+            <Title>{t(`vault.${vaultId}.title`)}</Title>
             <Container>
                 <LeftContainer>
                     {vaultData && (
@@ -399,13 +407,13 @@ const Vault: React.FC = () => {
                     )}
                     <Description>
                         <Trans
-                            i18nKey="vault.description"
+                            i18nKey={`vault.${vaultId}.description`}
                             components={{
                                 p: <p />,
                             }}
                         />
                     </Description>
-                    <PnL />
+                    <PnL vaultAddress={vaultAddress} />
                 </LeftContainer>
                 <RightContainer>
                     {!vaultData ? (
@@ -664,7 +672,7 @@ const Vault: React.FC = () => {
                     )}
                 </RightContainer>
             </Container>
-            <TradesHistory />
+            <TradesHistory vaultAddress={vaultAddress} />
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={amount}

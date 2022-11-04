@@ -1,10 +1,4 @@
 export const sportsVaultContract = {
-    addresses: {
-        5: '',
-        10: '',
-        42: '',
-        420: '0x28aC7A6DeF3D937129ac7245354E11ce89194FbB',
-    },
     abi: [
         {
             anonymous: false,

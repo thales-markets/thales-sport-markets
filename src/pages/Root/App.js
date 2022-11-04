@@ -23,6 +23,7 @@ const Market = lazy(() => import('pages/Markets/Market'));
 const Rewards = lazy(() => import('pages/Rewards'));
 const Quiz = lazy(() => import('pages/Quiz'));
 const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
+const Vaults = lazy(() => import('pages/Vaults'));
 const Vault = lazy(() => import('pages/Vault'));
 
 const App = () => {
@@ -108,11 +109,20 @@ const App = () => {
                                     <Quiz />
                                 </DappLayout>
                             </Route>
-                            <Route exact path={ROUTES.Vault}>
+                            <Route exact path={ROUTES.Vaults}>
                                 <DappLayout>
-                                    <Vault />
+                                    <Vaults />
                                 </DappLayout>
                             </Route>
+                            <Route
+                                exact
+                                path={ROUTES.Vault}
+                                render={(routeProps) => (
+                                    <DappLayout>
+                                        <Vault {...routeProps} />
+                                    </DappLayout>
+                                )}
+                            />
                             <Route exact path={ROUTES.QuizLeaderboard}>
                                 <DappLayout>
                                     <QuizLeaderboard />

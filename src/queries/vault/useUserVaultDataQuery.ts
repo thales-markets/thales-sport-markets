@@ -4,14 +4,17 @@ import { bigNumberFormatter } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 import { NetworkId } from 'types/network';
 import { UserVaultData } from 'types/vault';
+import vaultContract from 'utils/contracts/sportVaultContract';
+import { ethers } from 'ethers';
 
 const useUserVaultDataQuery = (
+    vaultAddress: string,
     walletAddress: string,
     networkId: NetworkId,
     options?: UseQueryOptions<UserVaultData | undefined>
 ) => {
     return useQuery<UserVaultData | undefined>(
-        QUERY_KEYS.Vault.UserData(walletAddress, networkId),
+        QUERY_KEYS.Vault.UserData(vaultAddress, walletAddress, networkId),
         async () => {
             const userVaultData: UserVaultData = {
                 balanceCurrentRound: 0,
@@ -22,8 +25,12 @@ const useUserVaultDataQuery = (
                 hasDepositForNextRound: false,
             };
 
-            const { sportVaultContract } = networkConnector;
             try {
+                const sportVaultContract = new ethers.Contract(
+                    vaultAddress,
+                    vaultContract.abi,
+                    networkConnector.provider
+                );
                 if (sportVaultContract) {
                     const [round] = await Promise.all([sportVaultContract?.round()]);
 

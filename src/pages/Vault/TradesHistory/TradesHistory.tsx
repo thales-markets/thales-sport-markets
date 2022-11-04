@@ -11,14 +11,18 @@ import TradesTable from '../TradesTable';
 import useVaultTradesQuery from 'queries/vault/useVaultTradesQuery';
 import { VaultTrades } from 'types/vault';
 
-const TradesHistory: React.FC = () => {
+type TradesHistoryProps = {
+    vaultAddress: string;
+};
+
+const TradesHistory: React.FC<TradesHistoryProps> = ({ vaultAddress }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [vaultTrades, setVaultTrades] = useState<VaultTrades>([]);
 
-    const vaultTradesQuery = useVaultTradesQuery(networkId, {
-        enabled: isAppReady,
+    const vaultTradesQuery = useVaultTradesQuery(vaultAddress, networkId, {
+        enabled: isAppReady && !!vaultAddress,
     });
 
     useEffect(() => {

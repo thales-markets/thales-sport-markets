@@ -98,10 +98,15 @@ export const QUERY_KEYS = {
         Tweet: () => ['quiz', 'tweet'],
     },
     Vault: {
-        Data: (networkId: NetworkId) => ['vault', 'data', networkId],
-        UserData: (walletAddress: string, networkId: NetworkId) => ['vault', 'data', walletAddress, networkId],
-        Trades: (networkId: NetworkId) => ['vault', 'trades', networkId],
-        PnL: (networkId: NetworkId) => ['vault', 'pnl', networkId],
+        Data: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'data', networkId],
+        UserData: (vaultAddress: string, walletAddress: string, networkId: NetworkId) => [
+            vaultAddress,
+            'data',
+            walletAddress,
+            networkId,
+        ],
+        Trades: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'trades', networkId],
+        PnL: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'pnl', networkId],
     },
 };
 
