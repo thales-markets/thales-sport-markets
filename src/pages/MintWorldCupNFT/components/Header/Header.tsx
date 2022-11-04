@@ -21,9 +21,8 @@ const Header: React.FC = () => {
             </HeaderContainer>
             <HeaderTextContainer>
                 <HeaderText>
-                    <span>The Zebro WC NFT Collection</span> is part of an incentivized campaign to represent your
-                    favorite country during the World Cup and be eligible for a share of 50,000 OP tokens and 30,000
-                    THALES tokens, along with exclusive multipliers for parlays and individual matches.
+                    <span>{t('mint-world-cup-nft.zebro-wct-collection')}</span>{' '}
+                    {t('mint-world-cup-nft.zebro-wct-collection-text')}
                 </HeaderText>
             </HeaderTextContainer>
         </>
