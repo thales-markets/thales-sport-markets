@@ -1,4 +1,4 @@
-// import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Logo from 'components/Logo';
 import WalletInfo from 'components/WalletInfo';
 import React, { useState } from 'react';
@@ -27,7 +27,7 @@ const PULSING_COUNT = 10;
 const DappHeader: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    // const location = useLocation();
+    const location = useLocation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
@@ -54,11 +54,13 @@ const DappHeader: React.FC = () => {
                         {/* <Referral /> */}
                         {isMobile && networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
                         {/* {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />} */}
-                        <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>
-                            <StyledButton disabled={!isWalletConnected}>
-                                {t('mint-world-cup-nft.zebro-campaign')}
-                            </StyledButton>
-                        </SPAAnchor>
+                        {location.pathname !== ROUTES.MintWorldCupNFT && (
+                            <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>
+                                <StyledButton style={{ marginRight: '10px' }} disabled={!isWalletConnected}>
+                                    {t('mint-world-cup-nft.zebro-campaign')}
+                                </StyledButton>
+                            </SPAAnchor>
+                        )}
                         {/* <SPAAnchor href={buildHref(ROUTES.Quiz)}>
                             <StyledSportTriviaIcon stopPulsing={stopPulsing} src={sportTriviaIcon} />
                         </SPAAnchor> */}

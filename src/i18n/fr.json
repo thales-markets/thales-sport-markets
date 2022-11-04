@@ -569,7 +569,6 @@
         "no": "Non",
         "are-you-sure": "Êtes-vous sûr de vouloir frapper ce NFT ? Vous pouvez frapper UN SEUL NFT par portefeuille.",
         "zebro-campaign": "Campagne Zebra FIFA",
-        "get-your-nft": "Obtenez votre Qatar 2022 NFT",
         "retweet": "Retweetez ce tweet",
         "success-mint": "Frappé avec succès",
         "yes-mint": "Oui, menthe NFT",
@@ -604,6 +603,7 @@
             "parlay-boost-text": "Si votre match de Coupe du monde est dans un ticket Parlay, vous obtiendrez un bonus de :"
         },
         "zebro-wct-collection": "La collection Zebro WC NFT",
-        "zebro-wct-collection-text": "fait partie d'une campagne incitative pour représenter votre pays préféré pendant la Coupe du monde et être éligible pour une part de 50 000 jetons OP et 30 000 jetons THALES, ainsi que des multiplicateurs exclusifs pour les parlays et les matchs individuels."
+        "zebro-wct-collection-text": "fait partie d'une campagne incitative pour représenter votre pays préféré pendant la Coupe du monde et être éligible pour une part de 50 000 jetons OP et 30 000 jetons THALES, ainsi que des multiplicateurs exclusifs pour les parlays et les matchs individuels.",
+        "get-your-nft": "Qatar 2022 NFT"
     }
 }

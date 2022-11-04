@@ -484,7 +484,6 @@
         "success-mint": "acuñado con éxito",
         "retweet": "Retuitear este tuit",
         "zebro-campaign": "Campaña Zebra FIFA",
-        "get-your-nft": "Consigue tu NFT de Catar 2022",
         "minting-is-free": "Minting es gratis, solo puede acuñar un NFT por billetera. Este NFT es intransferible.",
         "already-minted": "Ya has acuñado tu NFT",
         "are-you-sure": "¿Estás seguro de que quieres acuñar este NFT? Puede acuñar SOLO UN NFT por monedero.",
@@ -506,6 +505,7 @@
             "parlay-boost-text": "Si tu partido de la Copa del Mundo es en un boleto Parlay, obtendrás un impulso de:"
         },
         "zebro-wct-collection-text": "es parte de una campaña incentivada para representar a su país favorito durante la Copa del Mundo y ser elegible para una parte de 50 000 tokens OP y 30 000 tokens THALES, junto con multiplicadores exclusivos para parlays y partidos individuales.",
-        "zebro-wct-collection": "La colección Zebro WC NFT"
+        "zebro-wct-collection": "La colección Zebro WC NFT",
+        "get-your-nft": "Catar 2022 NFT"
     }
 }
