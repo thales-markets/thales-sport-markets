@@ -86,7 +86,8 @@ const useVaultDataQuery = (
                     vaultData.allocationNextRound = bigNumberFormatter(allocationNextRound);
                     vaultData.allocationNextRoundPercentage =
                         (vaultData.allocationNextRound / vaultData.maxAllowedDeposit) * 100;
-                    vaultData.lifetimePnl = bigNumberFormatter(lifetimePnl) - 1;
+                    vaultData.lifetimePnl =
+                        bigNumberFormatter(lifetimePnl) === 0 ? 0 : bigNumberFormatter(lifetimePnl) - 1;
 
                     return vaultData;
                 }
