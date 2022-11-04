@@ -148,7 +148,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     ]);
 
     useEffect(() => {
-        // Used for transition between Single and Ticket
+        // Used for transition between Ticket and Single to save payment selection and amount
         dispatch(setPayment({ selectedStableIndex, isVoucherSelected, amountToBuy: usdAmountValue }));
     }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
 

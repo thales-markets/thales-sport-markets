@@ -75,14 +75,14 @@ export const parlaySlice = createSlice({
         removeFromParlay: (state, action: PayloadAction<string>) => {
             state.parlay = state.parlay.filter((market) => market.sportMarketId !== action.payload);
             if (state.parlay.length === 0) {
-                state.payment = getDefaultPayment();
+                state.payment.amountToBuy = getDefaultPayment().amountToBuy;
             }
             state.error = getDefaultError();
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
         },
         removeAll: (state) => {
             state.parlay = [];
-            state.payment = getDefaultPayment();
+            state.payment.amountToBuy = getDefaultPayment().amountToBuy;
             state.error = getDefaultError();
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
         },

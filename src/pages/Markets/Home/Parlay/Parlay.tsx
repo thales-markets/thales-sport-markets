@@ -12,6 +12,7 @@ import {
     getHasParlayError,
     removeFromParlay,
     resetParlayError,
+    setPayment,
 } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -120,7 +121,20 @@ const Parlay: React.FC = () => {
                         />
                         <EmptyDesc>{t('markets.parlay.empty-description')}</EmptyDesc>
                     </Empty>
-                    {isWalletConnected && <Payment />}
+                    {isWalletConnected && (
+                        <Payment
+                            defaultSelectedStableIndex={parlayPayment.selectedStableIndex}
+                            defaultIsVoucherSelected={parlayPayment.isVoucherSelected}
+                            onChangeCollateral={(index) => {
+                                if (index !== parlayPayment.selectedStableIndex) {
+                                    dispatch(setPayment({ ...parlayPayment, selectedStableIndex: index }));
+                                }
+                            }}
+                            setIsVoucherSelectedProp={(isSelected) =>
+                                dispatch(setPayment({ ...parlayPayment, isVoucherSelected: isSelected }))
+                            }
+                        />
+                    )}
                 </>
             )}
             {hasParlayError && <ValidationModal onClose={() => dispatch(resetParlayError())} />}
