@@ -75,7 +75,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     const selectedOddsType = useSelector(getOddsType);
 
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
-    const [hasAllowance, setAllowance] = useState<boolean>(false);
+    const [hasAllowance, setHasAllowance] = useState<boolean>(false);
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
         parlayPayment.selectedStableIndex
@@ -346,13 +346,13 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                         sportsAMMContract.address
                     );
                     if (!mountedRef.current) return null;
-                    setAllowance(allowance);
+                    setHasAllowance(allowance);
                 } catch (e) {
                     console.log(e);
                 }
             };
-            if (isWalletConnected) {
-                isVoucherSelected ? setAllowance(true) : getAllowance();
+            if (isWalletConnected && usdAmountValue) {
+                isVoucherSelected ? setHasAllowance(true) : getAllowance();
             }
         }
     }, [
@@ -455,15 +455,16 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         }
     };
 
+    const MIN_TOKEN_AMOUNT = 1;
     useEffect(() => {
-        const MIN_TOKEN_AMOUNT = 1;
-
-        if (!hasAllowance) {
-            setSubmitDisabled(false);
-            return;
-        }
+        // Minimum of token amount
         if (!Number(usdAmountValue) || !tokenAmount || tokenAmount < MIN_TOKEN_AMOUNT || isBuying || isAllowing) {
             setSubmitDisabled(true);
+            return;
+        }
+        // Enable Approve if it hasn't allowance
+        if (!hasAllowance) {
+            setSubmitDisabled(false);
             return;
         }
 
@@ -479,7 +480,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 </SubmitButton>
             );
         }
-        if (!hasAllowance) {
+        // Show Approve only on valid input buy amount
+        if (!hasAllowance && usdAmountValue && tokenAmount >= MIN_TOKEN_AMOUNT) {
             return (
                 <SubmitButton disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)}>
                     {t('common.wallet.approve')}
