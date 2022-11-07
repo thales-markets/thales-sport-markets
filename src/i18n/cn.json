@@ -467,6 +467,14 @@
             "no-claimable": "您没有任何可申请的职位",
             "no-open": "您没有任何空缺职位",
             "no-transactions": "您没有任何交易"
+        },
+        "table": {
+            "position": "位置",
+            "amount": "数量",
+            "id": "ID",
+            "games": "游戏",
+            "paid": "有薪酬的",
+            "time": "时间"
         }
     },
     "mint-world-cup-nft": {
