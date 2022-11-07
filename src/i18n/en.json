@@ -262,6 +262,14 @@
             "result": "Result",
             "position-size": "Position size",
             "starts": "Starts"
+        },
+        "table": {
+            "time": "Time",
+            "games": "Games",
+            "paid": "Paid",
+            "amount": "amount",
+            "id": "Id",
+            "position": "Position"
         }
     },
     "markets": {

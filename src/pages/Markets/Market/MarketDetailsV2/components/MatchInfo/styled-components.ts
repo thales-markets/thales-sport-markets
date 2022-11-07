@@ -112,6 +112,7 @@ export const MatchTimeLabel = styled.span`
     font-weight: 300;
     font-size: 1em;
     line-height: 110%;
+    margin-right: 5px;
 `;
 
 export const MatchTime = styled.span`
