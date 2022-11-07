@@ -17,6 +17,8 @@ import {
     MarketNotice,
     MobileContainer,
     MatchTimeContainerMobile,
+    TeamNamesWrapper,
+    TeamName,
 } from './styled-components';
 import Tooltip from 'components/Tooltip';
 
@@ -24,11 +26,17 @@ import { MarketData } from 'types/markets';
 
 import { getErrorImage, getLeagueLogoClass, getTeamImageSource } from 'utils/images';
 import { formatDateWithTime } from 'utils/formatters/date';
-import { convertFinalResultToResultType, getIsApexTopGame, isApexGame } from 'utils/markets';
-import { ApexBetTypeKeyMapping } from 'constants/markets';
+import {
+    convertFinalResultToResultType,
+    getIsApexTopGame,
+    getMarketStatusFromMarketData,
+    isApexGame,
+} from 'utils/markets';
+import { ApexBetTypeKeyMapping, MarketStatus } from 'constants/markets';
 import { getIsMobile } from 'redux/modules/app';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
+import { fixLongTeamNameString } from 'utils/formatters/string';
 
 type MatchInfoPropsType = {
     market: MarketData;
@@ -149,6 +157,12 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                 <MatchTime>{formatDateWithTime(market.maturityDate)}</MatchTime>
                             </MatchTimeContainerMobile>
                         </Container>
+                    )}
+                    {getMarketStatusFromMarketData(market) !== MarketStatus.Open && (
+                        <TeamNamesWrapper>
+                            <TeamName>{fixLongTeamNameString(market.homeTeam)}</TeamName>
+                            <TeamName>{fixLongTeamNameString(market.awayTeam)}</TeamName>
+                        </TeamNamesWrapper>
                     )}
                     {isApexGame(market.tags[0]) && <MarketNotice>{market.leagueRaceName}</MarketNotice>}
                 </Wrapper>

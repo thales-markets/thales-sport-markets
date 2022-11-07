@@ -1,6 +1,6 @@
 import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
-import { FlexDiv } from 'styles/common';
+import { FlexDiv, FlexDivRow } from 'styles/common';
 
 export const Wrapper = styled.div`
     width: 100%;
@@ -152,4 +152,17 @@ export const MatchTimeContainerMobile = styled.div`
         margin-top: 10px;
         margin-bottom: 13px;
     }
+`;
+
+export const TeamNamesWrapper = styled(FlexDivRow)`
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    width: 100%;
+`;
+
+export const TeamName = styled.span`
+    padding: 10px 10px;
+    text-transform: uppercase;
 `;

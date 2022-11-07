@@ -65,7 +65,7 @@ const Container = styled(FlexDivColumn)`
     position: relative;
     align-items: center;
     @media (max-width: 1440px) {
-        width: 95%;
+        width: 100%;
     }
 `;
 
