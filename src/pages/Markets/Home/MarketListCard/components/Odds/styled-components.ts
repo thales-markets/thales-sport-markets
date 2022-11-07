@@ -20,10 +20,11 @@ export const WinnerLabel = styled.span`
     margin-left: 5px;
 `;
 
-export const OddsContainer = styled.div`
+export const OddsContainer = styled.div<{ isMobile?: boolean }>`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: ${(_props) => (_props?.isMobile ? 'space-around' : 'space-between')};
     width: 100%;
+    margin-top: ${(_props) => (_props?.isMobile ? '10px' : '')};
 `;

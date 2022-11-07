@@ -27,6 +27,7 @@ type SymbolProps = {
     homeTeam?: string;
     awayTeam?: string;
     discount?: number;
+    isMobile?: boolean;
 };
 
 const PositionSymbol: React.FC<SymbolProps> = ({
@@ -42,16 +43,17 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     awayTeam,
     children,
     discount,
+    isMobile,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const parlay = useSelector(getParlay);
-
     const addedToParlay = parlay.filter((game: any) => game.sportMarketId == marketId)[0];
 
     return (
         <Wrapper
             disabled={showTooltip}
+            isMobile={isMobile}
             onClick={() => {
                 if (!showTooltip) {
                     if (marketId) {
@@ -117,29 +119,9 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                 )}
                 {discount && (
                     <Discount>
-                        <Tooltip
-                            overlay={
-                                <span>
-                                    {t(`markets.discounted-per`)}{' '}
-                                    <a
-                                        href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        onClick={(e) => e.stopPropagation()}
-                                    >
-                                        TIP-95
-                                    </a>
-                                </span>
-                            }
-                            component={
-                                <div className="discount-label green">
-                                    <span>-{Math.ceil(Math.abs(discount))}%</span>
-                                </div>
-                            }
-                            iconFontSize={23}
-                            marginLeft={2}
-                            top={0}
-                        />
+                        <div className="discount-label green">
+                            <span>-{Math.ceil(Math.abs(discount))}%</span>
+                        </div>
                     </Discount>
                 )}
                 {additionalText?.secondText && (
@@ -152,11 +134,11 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     );
 };
 
-const Wrapper = styled.div<{ disabled?: boolean }>`
+const Wrapper = styled.div<{ disabled?: boolean; isMobile?: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: row;
+    flex-direction: ${(_props) => (_props?.isMobile ? 'column' : 'row')};
     cursor: ${(_props) => (_props?.disabled ? 'not-allowed' : 'pointer')};
 `;
 
@@ -173,7 +155,7 @@ const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: b
     border: ${(_props) =>
         _props?.glow ? '3px solid ' + _props.color : _props.addedToParlay ? '3px solid #64D9FE' : '3px solid #5f6180'};
     box-shadow: ${(_props) => (_props?.glow ? '0 0 6px 2px ' + _props.color : '')};
-    @media (max-width: 380px) {
+    @media (max-width: 500px) {
         width: 25px;
         height: 25px;
     }
@@ -197,7 +179,7 @@ const Symbol = styled.span<{ color?: string; addedToParlay?: boolean; size?: str
 
 const Discount = styled(FlexDivCentered)<{ color?: string }>`
     color: ${(_props) => (_props?.color ? _props.color : '')};
-    font-size: 14px;
+    font-size: 12px;
     margin-left: 2px;
 `;
 

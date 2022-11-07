@@ -97,6 +97,12 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
                     <Label>{t('profile.card.ticket-paid')}:</Label>
                     <Value>{formatCurrencyWithSign(USD_SIGN, parlayMarket.sUSDPaid)}</Value>
                 </InfoContainerColumn>
+                {isMobile && !isClaimable && (
+                    <InfoContainerColumn>
+                        <WinLabel>{t('profile.card.to-win')}:</WinLabel>
+                        <WinValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</WinValue>
+                    </InfoContainerColumn>
+                )}
                 {!isMobile && (
                     <InfoContainerColumn>
                         {isClaimable ? (
@@ -114,7 +120,6 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
                 {isMobile && isClaimable && (
                     <ClaimContainer>
                         <FlexDivRow>
-                            <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
                             <ClaimValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</ClaimValue>
                         </FlexDivRow>
                         <ClaimButton

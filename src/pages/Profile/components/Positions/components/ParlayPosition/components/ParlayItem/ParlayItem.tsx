@@ -56,6 +56,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                         src={homeLogoSrc}
                         losingTeam={isAwayWinner == true ? true : undefined}
                         onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
+                        customMobileSize={'35px'}
                     />
                     <ClubLogo
                         awayTeam={true}
@@ -63,6 +64,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                         src={awayLogoSrc}
                         losingTeam={isHomeWinner == true ? true : undefined}
                         onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
+                        customMobileSize={'35px'}
                     />
                 </MatchLogo>
                 <MatchLabel>
