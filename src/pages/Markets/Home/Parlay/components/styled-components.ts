@@ -48,7 +48,7 @@ export const InfoValue = styled.span`
     font-weight: 700;
     font-size: 10px;
     color: #ffffff;
-    margin-left: 5px;
+    margin-left: 4px;
 `;
 
 export const InputContainer = styled(FlexDiv)``;

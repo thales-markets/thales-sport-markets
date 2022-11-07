@@ -91,7 +91,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const [isBuying, setIsBuying] = useState<boolean>(false);
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState<string>('');
-    const [hasAllowance, setAllowance] = useState<boolean>(false);
+    const [hasAllowance, setHasAllowance] = useState<boolean>(false);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
@@ -221,13 +221,13 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         parlayMarketsAMMContract.address
                     );
                     if (!mountedRef.current) return null;
-                    setAllowance(allowance);
+                    setHasAllowance(allowance);
                 } catch (e) {
                     console.log(e);
                 }
             };
-            if (isWalletConnected) {
-                isVoucherSelected ? setAllowance(true) : getAllowance();
+            if (isWalletConnected && usdAmountValue) {
+                isVoucherSelected ? setHasAllowance(true) : getAllowance();
             }
         }
     }, [
@@ -334,15 +334,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     };
 
     useEffect(() => {
-        if (!hasAllowance) {
-            setSubmitDisabled(false);
-            return;
-        }
-        // Validation message is present
-        if (tooltipTextUsdAmount) {
-            setSubmitDisabled(true);
-            return;
-        }
         // Minimum of sUSD
         if (
             !Number(usdAmountValue) ||
@@ -350,6 +341,16 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             isBuying ||
             isAllowing
         ) {
+            setSubmitDisabled(true);
+            return;
+        }
+        // Enable Approve if it hasn't allowance
+        if (!hasAllowance) {
+            setSubmitDisabled(false);
+            return;
+        }
+        // Validation message is present
+        if (tooltipTextUsdAmount) {
             setSubmitDisabled(true);
             return;
         }
@@ -375,7 +376,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 </SubmitButton>
             );
         }
-        if (!hasAllowance) {
+        // Show Approve only on valid input buy amount
+        if (!hasAllowance && usdAmountValue && Number(usdAmountValue) >= (parlayAmmData?.minUsdAmount || 0)) {
             return (
                 <SubmitButton disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)}>
                     {t('common.wallet.approve')}
@@ -551,7 +553,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                             ? '-'
                             : formatPercentage(parlayAmmData?.parlayAmmFee)}
                     </InfoValue>
-                    <InfoLabel marginLeft={10}>{t('markets.parlay.safebox-fee')}:</InfoLabel>
+                    <InfoLabel marginLeft={7}>{t('markets.parlay.safebox-fee')}:</InfoLabel>
                     <InfoValue>
                         {parlayAmmData?.safeBoxImpact === undefined || isFetching
                             ? '-'

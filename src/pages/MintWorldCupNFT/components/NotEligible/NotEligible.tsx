@@ -17,9 +17,12 @@ import { ReactComponent as SadFace } from 'assets/images/favorite-team/sad-face.
 import { ReactComponent as FirstRectangle } from 'assets/images/favorite-team/first-rectangle.svg';
 import { ReactComponent as SecondRectangle } from 'assets/images/favorite-team/second-rectangle.svg';
 import { ReactComponent as ArrowRight } from 'assets/images/favorite-team/arrow-right.svg';
+import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 
 const NotEligible: React.FC = () => {
     const { t } = useTranslation();
+    const isMobile = useSelector(getIsMobile);
 
     return (
         <>
@@ -27,7 +30,7 @@ const NotEligible: React.FC = () => {
                 <FirstRectangle />
                 <EligibilityText>
                     {t('mint-world-cup-nft.not-eligible-text')}
-                    <SadFace />
+                    {!isMobile && <SadFace />}
                 </EligibilityText>
             </EligibilityContainer>
             <InfoContainer>
@@ -51,8 +54,8 @@ const NotEligible: React.FC = () => {
                 </InfoContent>
             </InfoContainer>
             <InfoContainer>
-                <SecondRectangle />
-                <InfoContent>
+                {!isMobile && <SecondRectangle />}
+                <InfoContent isMobile={isMobile}>
                     <InfoText>{t('mint-world-cup-nft.second-option')}</InfoText>
                     <ListItemContainer>
                         <ArrowRight />

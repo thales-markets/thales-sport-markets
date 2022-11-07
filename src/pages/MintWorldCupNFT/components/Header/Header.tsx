@@ -31,10 +31,16 @@ const Header: React.FC = () => {
 
 const StyledZebraLeft = styled(ZebraLeft)`
     width: 105px;
+    @media (max-width: 768px) {
+        width: 60px;
+    }
 `;
 
 const StyledZebraRight = styled(ZebraRight)`
     width: 105px;
+    @media (max-width: 768px) {
+        width: 60px;
+    }
 `;
 
 const HeaderText = styled.span`
@@ -43,6 +49,9 @@ const HeaderText = styled.span`
         font-style: italic;
         font-weight: bold;
         line-height: 130%;
+    }
+    @media (max-width: 768px) {
+        font-size: 12px;
     }
 `;
 
