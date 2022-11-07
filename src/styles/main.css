@@ -223,6 +223,7 @@ a {
         width: 21px;
         height: 18px;
         padding: 3px 0;
+        margin-bottom: 4px;
     }
     .discount-label:after {
         border-width: 9px;

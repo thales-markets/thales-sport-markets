@@ -19,6 +19,9 @@ export const WinnerLabel = styled.span`
     line-height: 120%;
     color: #3fd1ff;
     margin-left: 5px;
+    @media (max-width: 950px) {
+        margin-left: 0;
+    }
 `;
 
 export const OddsContainer = styled.div<{ isMobile?: boolean }>`

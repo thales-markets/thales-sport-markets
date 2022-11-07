@@ -70,7 +70,15 @@ const Odds: React.FC<OddsProps> = ({
                 <>
                     <PositionSymbol
                         type={convertFinalResultToResultType(finalResult, isApexTopGame)}
+                        symbolColor={
+                            convertFinalResultToResultType(finalResult, isApexTopGame) == 0
+                                ? ODDS_COLOR.HOME
+                                : convertFinalResultToResultType(finalResult, isApexTopGame) == 1
+                                ? ODDS_COLOR.AWAY
+                                : ODDS_COLOR.DRAW
+                        }
                         isMobile={isMobile}
+                        winningSymbol={true}
                     />
                     <WinnerLabel>{t('common.winner')}</WinnerLabel>
                 </>

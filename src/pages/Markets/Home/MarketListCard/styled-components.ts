@@ -1,3 +1,4 @@
+import { ODDS_COLOR } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 
@@ -80,9 +81,10 @@ export const MatchInfoMobile = styled(FlexDivColumn)`
     justify-content: space-between;
 `;
 
-export const MatchInfoLabelMobile = styled.label`
+export const MatchInfoLabelMobile = styled.label<{ home?: boolean; away?: boolean }>`
     font-size: 11px;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(_props) =>
+        _props?.home ? ODDS_COLOR.HOME : _props?.away ? ODDS_COLOR.AWAY : _props.theme.textColor.primary};
     text-transform: uppercase;
 `;
 
