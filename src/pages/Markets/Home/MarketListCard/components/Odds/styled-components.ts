@@ -1,14 +1,15 @@
 import styled from 'styled-components';
+import { FlexDiv } from 'styles/common';
 
-export const Container = styled.div<{ resolved?: boolean; isMobile?: boolean }>`
+export const Container = styled.div<{ resolved?: boolean; isMobile?: boolean; noOdds?: boolean }>`
     display: flex;
-    flex-direction: row;
+    flex-direction: ${(_props) => (_props?.resolved && _props?.isMobile ? 'column' : 'row')};
     align-items: center;
-    justify-content: ${(_props) => (_props?.resolved ? 'center' : '')};
-    margin-left: ${(_props) => (_props?.resolved ? '30px' : _props?.isMobile ? '' : 'auto')};
-    // width: ${(_props) => (_props?.resolved ? '33%' : '40%')};
+    justify-content: ${(_props) => (_props?.resolved ? 'center' : _props?.noOdds ? 'space-evenly' : '')};
+    margin-left: ${(_props) => (_props?.resolved && !_props.isMobile ? '30px' : _props?.isMobile ? '' : 'auto')};
     height: ${(_props) => (_props?.isMobile ? '40px' : '')};
     flex-grow: ${(_props) => (_props?.isMobile ? '1' : '')};
+    align-self: ${(_props) => (_props?.noOdds ? 'center' : '')};
 `;
 
 export const WinnerLabel = styled.span`
@@ -28,3 +29,5 @@ export const OddsContainer = styled.div<{ isMobile?: boolean }>`
     width: 100%;
     margin-top: ${(_props) => (_props?.isMobile ? '10px' : '')};
 `;
+
+export const WinnerContainer = styled(FlexDiv)``;

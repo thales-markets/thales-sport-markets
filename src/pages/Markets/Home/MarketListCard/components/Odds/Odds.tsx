@@ -64,7 +64,7 @@ const Odds: React.FC<OddsProps> = ({
     const showOdds = !pendingResolution && !noOddsFlag && !resolvedGameFlag && !isCancelled && !isPaused;
     const selectedOddsType = useSelector(getOddsType);
     return (
-        <Container resolved={!!resolvedGameFlag} isMobile={isMobile}>
+        <Container resolved={!!resolvedGameFlag} isMobile={isMobile} noOdds={noOddsFlag}>
             {noOddsFlag && <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>}
             {resolvedGameFlag && (
                 <>
