@@ -15,6 +15,7 @@ export const EligibilityContainer = styled(FlexDivColumnCentered)`
     max-width: 100%;
     position: relative;
     z-index: 1;
+    margin-top: 25px;
 `;
 
 export const EligibilityText = styled.div`
@@ -273,7 +274,7 @@ export const TeamFlagImage = styled.img<{ selected: boolean }>`
 `;
 
 export const HeaderContainer = styled(FlexDivColumnCentered)`
-    margin-top: 80px;
+    margin-top: 50px;
     align-items: center;
     max-width: 100%;
     position: relative;
