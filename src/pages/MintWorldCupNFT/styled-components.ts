@@ -14,6 +14,7 @@ export const EligibilityContainer = styled(FlexDivColumnCentered)`
     align-items: center;
     max-width: 100%;
     position: relative;
+    z-index: 1;
 `;
 
 export const EligibilityText = styled.div`
@@ -28,6 +29,11 @@ export const EligibilityText = styled.div`
     color: #04cfb6;
     position: absolute;
     font-family: 'AtmaBold' !important;
+    @media (max-width: 768px) {
+        padding: 15px;
+        font-size: 16px;
+        text-align: center;
+    }
 `;
 
 export const InfoContainer = styled.div`
@@ -35,35 +41,45 @@ export const InfoContainer = styled.div`
     max-width: 100%;
     margin-top: 25px;
     z-index: 1;
+    @media (max-width: 768px) {
+        margin-top: 15px;
+    }
 `;
 
-export const InfoContent = styled.div`
-    position: absolute;
+export const InfoContent = styled.div<{ isMobile?: boolean }>`
+    position: ${(props) => (props.isMobile ? 'static' : 'absolute')};
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     display: flex;
     flex-direction: column;
-    padding: 50px;
+    padding: ${(props) => (props.isMobile ? '10px' : '50px')};
     justify-content: space-around;
     text-align: justify;
+    font-size: ${(props) => (props.isMobile ? '13px' : '16px')};
 `;
 
-export const InfoText = styled.div`
+export const InfoText = styled.div<{ isMobile?: boolean }>`
     font-style: normal;
     font-weight: 400;
-    font-size: 16px;
+    font-size: ${(props) => (props.isMobile ? '14px' : '16px')};
     line-height: 150%;
     letter-spacing: 0.025em;
     color: #ffffff;
     margin-bottom: 10px;
+    @media (max-width: 768px) {
+        font-size: 13px;
+    }
 `;
 
 export const ButtonContainer = styled.div`
     display: flex;
     justify-content: space-between;
     margin-top: 50px;
+    @media (max-width: 768px) {
+        margin-top: 20px;
+    }
 `;
 
 export const GoToTwitterContainer = styled.div`
@@ -82,6 +98,10 @@ export const GetThalesButton = styled.button`
     font-size: 16px;
     line-height: 14px;
     cursor: pointer;
+    @media (max-width: 768px) {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
 `;
 
 export const StyledButton = styled.button`
@@ -98,6 +118,10 @@ export const StyledButton = styled.button`
     &:disabled {
         opacity: 0.4;
         cursor: not-allowed;
+    }
+    @media (max-width: 768px) {
+        padding: 8px 10px;
+        font-size: 13px;
     }
 `;
 
@@ -219,6 +243,10 @@ export const TeamName = styled.span<{ index: number }>`
     bottom: -22px;
     text-align: center;
     width: 100%;
+    @media (max-width: 768px) {
+        font-size: 11px;
+        bottom: -20px;
+    }
 `;
 
 export const ArrowContainer = styled.div`
@@ -249,6 +277,9 @@ export const HeaderContainer = styled(FlexDivColumnCentered)`
     align-items: center;
     max-width: 100%;
     position: relative;
+    @media (max-width: 768px) {
+        margin-top: 20px;
+    }
 `;
 
 export const HeaderTitle = styled.div`
@@ -266,6 +297,9 @@ export const HeaderTitle = styled.div`
     & > span {
         font-family: 'AtmaBold' !important;
     }
+    @media (max-width: 768px) {
+        font-size: 18px;
+    }
 `;
 
 export const HeaderTextContainer = styled.div`
@@ -279,6 +313,9 @@ export const TabsContainer = styled.div`
     display: flex;
     justify-content: space-between;
     padding: 10px 43px;
+    @media (max-width: 768px) {
+        padding: 10px 15px;
+    }
 `;
 
 export const Tab = styled.button<{ selected: boolean }>`
@@ -295,5 +332,9 @@ export const Tab = styled.button<{ selected: boolean }>`
     &:hover {
         background: #04cfb6;
         border: transparent;
+    }
+    @media (max-width: 768px) {
+        padding: 8px 20px;
+        font-size: 13px;
     }
 `;

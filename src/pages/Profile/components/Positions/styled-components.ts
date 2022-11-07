@@ -15,7 +15,7 @@ export const CategoryContainer = styled(FlexDiv)`
     width: 100%;
     flex-direction: row;
     align-items: center;
-    margin: 5px 0px;
+    margin: 20px 0px;
 `;
 
 export const CategoryLabel = styled.span`

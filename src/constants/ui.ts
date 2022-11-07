@@ -3,6 +3,7 @@ import lightTheme from 'styles/themes/light';
 import darkTheme from 'styles/themes/dark';
 import worldCupTheme from 'styles/themes/worldcup';
 import ROUTES from './routes';
+import { buildRouteWithParams } from 'utils/routes';
 
 export enum Theme {
     LIGHT,
@@ -85,7 +86,7 @@ export const NAV_MENU: NavMenuItem[] = [
         i18label: 'markets.nav-menu.items.history',
         iconClass: 'icon icon--history',
         name: 'history',
-        route: ROUTES.Profile,
+        route: buildRouteWithParams(ROUTES.Profile, [{ key: 'nav-item', value: '2' }]),
     },
     {
         i18label: 'markets.nav-menu.items.sports-trivia',

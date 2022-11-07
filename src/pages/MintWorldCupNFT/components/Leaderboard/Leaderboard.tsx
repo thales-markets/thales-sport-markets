@@ -12,6 +12,7 @@ import useZebroQuery from 'queries/favoriteTeam/useZebroQuery';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getNetworkId } from 'redux/modules/wallet';
+import { getIsMobile } from 'redux/modules/app';
 
 type LeaderboardProps = {
     favoriteTeamNumber: number | undefined;
@@ -20,6 +21,7 @@ type LeaderboardProps = {
 const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
     const { t } = useTranslation();
     const favoriteTeam = favoriteTeamNumber ? countries[favoriteTeamNumber - 1] : null;
+    const isMobile = useSelector(getIsMobile);
     console.log(favoriteTeam);
 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -29,9 +31,9 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
     return (
         <>
             <InfoContainer>
-                <LeaderboardRectangle />
-                <InfoContent>
-                    <InfoText>{t('mint-world-cup-nft.leaderboard.reward-calculations')}</InfoText>
+                {!isMobile && <LeaderboardRectangle />}
+                <InfoContent isMobile={isMobile}>
+                    <InfoText isMobile={isMobile}>{t('mint-world-cup-nft.leaderboard.reward-calculations')}</InfoText>
                     <ListItemContainer>
                         <ArrowRight />
                         <ListItem>
@@ -162,6 +164,7 @@ const SearchAddress = styled.input`
     border: 1px solid rgba(4, 207, 182, 0.8);
     text-align: center;
     color: white;
+    z-index: 1;
     ::placeholder {
         text-align: center;
     }

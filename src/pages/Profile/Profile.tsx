@@ -5,9 +5,11 @@ import Positions from './components/Positions';
 import { navItems } from './components/NavigationBar/NavigationBar';
 import TransactionsHistory from './components/TransactionsHistory';
 import UserStats from './components/UserStats';
+import { getQueryStringVal } from 'utils/useQueryParams';
 
 const Profile: React.FC = () => {
-    const [navItem, setNavItem] = useState<number>(1);
+    const navItemFromQuery = getQueryStringVal('nav-item');
+    const [navItem, setNavItem] = useState<number>(navItemFromQuery ? Number(navItemFromQuery) : 1);
 
     return (
         <Container>

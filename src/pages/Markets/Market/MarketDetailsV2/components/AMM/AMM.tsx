@@ -215,6 +215,8 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
             setTooltipTextUsdAmount(t('market.tooltip.minimal-amount', { min: positionOdds }));
         } else if (Number(value) > paymentTokenBalance) {
             setTooltipTextUsdAmount(t('market.tooltip.no-funds'));
+        } else if (Number(tokenAmount) > liquidityInfo) {
+            setTooltipTextUsdAmount(t('market.tooltip.amount-exceeded'));
         } else {
             setTooltipTextUsdAmount('');
         }
@@ -622,7 +624,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
 
     const isBuy = selectedSide == Side.BUY;
     const showPotentialProfit = !Number(tokenAmount) || positionPriceDetailsQuery.isLoading || !!tooltipTextUsdAmount;
-    const liqudityInfo = floorNumberToDecimals(availablePerSide.positions[selectedPosition].available);
+    const liquidityInfo = floorNumberToDecimals(availablePerSide.positions[selectedPosition].available);
     const showCollateralSelector = selectedSide == Side.BUY && !market.gameStarted;
     const skew = positionPriceDetailsQuery.isLoading
         ? '-'
@@ -714,7 +716,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                     <InputDetails>
                         <DetailContainer>
                             <SecondaryLabel>{t('markets.market-details.liquidity')}</SecondaryLabel>
-                            <SecondaryValue>{liqudityInfo}</SecondaryValue>
+                            <SecondaryValue>{liquidityInfo}</SecondaryValue>
                         </DetailContainer>
                         <DetailContainer>
                             <SecondaryLabel>{t('markets.market-details.positions')}</SecondaryLabel>

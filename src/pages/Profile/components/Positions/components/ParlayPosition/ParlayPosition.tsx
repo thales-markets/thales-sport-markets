@@ -107,7 +107,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
                         {isClaimable ? (
                             <ClaimValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</ClaimValue>
                         ) : (
-                            <WinValue>+ {formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</WinValue>
+                            <WinValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</WinValue>
                         )}
                     </InfoContainerColumn>
                 )}
@@ -185,7 +185,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
                         {isClaimable ? (
                             <ClaimValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</ClaimValue>
                         ) : (
-                            <WinValue>+ {formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</WinValue>
+                            <WinValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</WinValue>
                         )}
                     </ProfitContainer>
                 </CollapseFooterContainer>

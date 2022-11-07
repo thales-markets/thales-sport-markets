@@ -14,6 +14,8 @@ import { ReactComponent as HappyFace } from 'assets/images/favorite-team/happy-f
 import { ReactComponent as FirstRectangle } from 'assets/images/favorite-team/first-rectangle.svg';
 import { ReactComponent as SecondRectangle } from 'assets/images/favorite-team/second-rectangle.svg';
 import { ReactComponent as ArrowRight } from 'assets/images/favorite-team/arrow-right.svg';
+import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 
 type EligibleProps = {
     onChooseNft: VoidFunction;
@@ -21,6 +23,7 @@ type EligibleProps = {
 
 const Eligible: React.FC<EligibleProps> = ({ onChooseNft }) => {
     const { t } = useTranslation();
+    const isMobile = useSelector(getIsMobile);
 
     return (
         <>
@@ -28,12 +31,12 @@ const Eligible: React.FC<EligibleProps> = ({ onChooseNft }) => {
                 <FirstRectangle />
                 <EligibilityText>
                     {t('mint-world-cup-nft.eligible-text')}
-                    <HappyFace />
+                    {!isMobile && <HappyFace />}
                 </EligibilityText>
             </EligibilityContainer>
             <InfoContainer>
-                <SecondRectangle />
-                <InfoContent>
+                {!isMobile && <SecondRectangle />}
+                <InfoContent isMobile={isMobile}>
                     <ListItemContainer>
                         <ArrowRight />
                         <ListItem>{t('mint-world-cup-nft.eligible-text-1')}</ListItem>
