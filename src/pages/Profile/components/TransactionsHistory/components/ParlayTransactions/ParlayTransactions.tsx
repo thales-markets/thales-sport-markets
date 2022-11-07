@@ -181,6 +181,7 @@ const TableText = styled.span`
     text-align: left;
     @media (max-width: 600px) {
         font-size: 10px;
+        white-space: pre-wrap;
     }
     white-space: nowrap;
 `;
