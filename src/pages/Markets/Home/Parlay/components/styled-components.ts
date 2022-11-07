@@ -15,6 +15,9 @@ export const SummaryLabel = styled.span<{ alignRight?: boolean }>`
     text-transform: uppercase;
     color: #64d9fe;
     ${(props) => (props.alignRight ? `margin-left: auto;` : '')}
+    @media (max-width: 950px) {
+        line-height: 24px;
+    }
 `;
 
 export const SummaryValue = styled.span<{ isInfo?: boolean }>`
@@ -104,9 +107,6 @@ export const InfoTooltip = withStyles(() => ({
 
 export const AmountToBuyContainer = styled.div`
     position: relative;
-    @media (max-width: 500px) {
-        width: 100%;
-    }
 `;
 
 export const AmountToBuyInput = styled.input`
@@ -165,6 +165,9 @@ export const BalanceLabel = styled.span<{ marginLeft?: string; bold?: boolean; o
     color: #ffffff;
     ${(props) => (props.marginLeft ? `margin-left: ${props.marginLeft};` : '')}
     font-weight: ${(props) => (props.bold ? '700' : '400')};
+    @media (max-width: 950px) {
+        line-height: 24px;
+    }
 `;
 
 export const BalanceValue = styled.span`
@@ -174,6 +177,9 @@ export const BalanceValue = styled.span`
     letter-spacing: 0.025em;
     color: #ffffff;
     margin-left: 5px;
+    @media (max-width: 950px) {
+        line-height: 24px;
+    }
 `;
 
 export const XButton = styled.i<{ margin?: string }>`

@@ -51,7 +51,7 @@ const Container = styled.div`
     z-index: 1001;
 
     background: ${(props) => props.theme.background.secondary};
-    padding-top: 20px;
+    padding-top: 15px;
     overflow: auto;
     border-radius: 23px;
     overflow-y: auto;
@@ -60,8 +60,8 @@ const Container = styled.div`
 `;
 
 const Header = styled(FlexDivRow)`
-    justify-content: end;
-    padding: 0px 20px;
+    position: absolute;
+    right: 15px;
 `;
 
 const CloseIcon = styled.i`
