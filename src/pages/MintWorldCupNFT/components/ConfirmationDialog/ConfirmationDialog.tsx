@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { getWalletAddress } from 'redux/modules/wallet';
@@ -15,12 +15,14 @@ import { useSelector } from 'react-redux';
 type ConfirmationDialogProps = {
     closeDialog: VoidFunction;
     selectedTeam: Team | null;
+    setSelectedTab: (tabNumber: number) => void;
 };
 
-const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ closeDialog, selectedTeam }) => {
+const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ closeDialog, selectedTeam, setSelectedTab }) => {
     const { t } = useTranslation();
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const [minted, setMinted] = useState(false);
 
     const handleMintNFT = async () => {
         const { favoriteTeamContract, signer } = networkConnector;
@@ -33,7 +35,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ closeDialog, se
 
                 if (txResult && txResult.transactionHash) {
                     toast.update(id, getSuccessToastOptions(t('mint-world-cup-nft.success-mint')));
-                    closeDialog();
+                    setMinted(true);
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -43,11 +45,22 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ closeDialog, se
 
     return (
         <Background>
-            <OutsideClickHandler onOutsideClick={closeDialog}>
+            <OutsideClickHandler
+                onOutsideClick={
+                    minted
+                        ? () => {
+                              setSelectedTab(0);
+                              closeDialog();
+                          }
+                        : closeDialog
+                }
+            >
                 <DialogContainer>
                     <GroupCollapsedRectangle />
                     <ContentContainer>
-                        <AreYouSure>{t('mint-world-cup-nft.are-you-sure')}</AreYouSure>
+                        <AreYouSure>
+                            {minted ? t('mint-world-cup-nft.congrats') : t('mint-world-cup-nft.are-you-sure')}
+                        </AreYouSure>
                         <TeamWrapper>
                             <TeamContainer>
                                 <TeamImage
@@ -62,8 +75,20 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ closeDialog, se
                             </TeamContainer>
                         </TeamWrapper>
                         <ButtonsContainer>
-                            <NoButton onClick={closeDialog}>{t('mint-world-cup-nft.no')}</NoButton>
-                            <YesButton onClick={handleMintNFT}>{t('mint-world-cup-nft.yes-mint')}</YesButton>
+                            {!minted && <NoButton onClick={closeDialog}>{t('mint-world-cup-nft.no')}</NoButton>}
+                            {!minted && (
+                                <YesButton onClick={handleMintNFT}>{t('mint-world-cup-nft.yes-mint')}</YesButton>
+                            )}
+                            {minted && (
+                                <YesButton
+                                    onClick={() => {
+                                        setSelectedTab(0);
+                                        closeDialog();
+                                    }}
+                                >
+                                    {t('mint-world-cup-nft.go-to-leaderboard')}
+                                </YesButton>
+                            )}
                         </ButtonsContainer>
                     </ContentContainer>
                 </DialogContainer>
@@ -163,7 +188,7 @@ const NoButton = styled.button`
 
 const YesButton = styled(StyledButton)`
     width: 48%;
-    padding: 0;
+    padding: 5px 10px;
     font-size: 14px;
     font-weight: normal;
 `;

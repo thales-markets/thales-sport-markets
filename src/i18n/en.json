@@ -489,6 +489,8 @@
         "get-your-nft": "Qatar 2022 NFT",
         "zebro-wct-collection": "The Zebro WC NFT Collection",
         "zebro-wct-collection-text": "is part of an incentivized campaign to represent your favorite country during the World Cup and be eligible for a share of 50,000 OP tokens and 30,000 THALES tokens, along with exclusive multipliers for parlays and individual matches.",
+        "go-to-leaderboard": "Go To Leaderboard",
+        "congrats": "Congrats! You have successfully minted the Zebro NFT!",
         "leaderboard": {
             "reward-calculations": "Reward calculations will be pro-rata Volume Based with max additional 40% volume boost if the following conditions are met:",
             "home-country-multiplier": "Home Country NFT Multiplier:",

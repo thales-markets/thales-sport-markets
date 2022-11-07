@@ -5,7 +5,11 @@ import React, { useState } from 'react';
 import Group from '../Group';
 import ConfirmationDialog from '../ConfirmationDialog';
 
-const ChooseNFT: React.FC = () => {
+type ChooseNFTProps = {
+    setSelectedTab: (tabNumber: number) => void;
+};
+
+const ChooseNFT: React.FC<ChooseNFTProps> = ({ setSelectedTab }) => {
     const { t } = useTranslation();
 
     const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
@@ -41,6 +45,7 @@ const ChooseNFT: React.FC = () => {
             </GroupsContainer>
             {isConfirmationDialogOpen && (
                 <ConfirmationDialog
+                    setSelectedTab={setSelectedTab}
                     selectedTeam={selectedTeam}
                     closeDialog={() => setIsConfirmationDialogOpen(false)}
                 />
