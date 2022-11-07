@@ -1,4 +1,3 @@
-import SPAAnchor from 'components/SPAAnchor';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
 import { ClaimButton } from 'pages/Markets/Market/MarketDetailsV2/components/Positions/styled-components';
@@ -12,7 +11,7 @@ import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivRow } from 'styles/common';
 import { ParlayMarket } from 'types/markets';
-import { getEtherscanAddressLink } from 'utils/etherscan';
+import { getEtherscanTxLink } from 'utils/etherscan';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
 import { formatMarketOdds, isParlayClaimable } from 'utils/markets';
@@ -28,6 +27,7 @@ import {
     CollapseFooterContainer,
     Container,
     Divider,
+    ExternalLink,
     ExternalLinkArrow,
     ExternalLinkContainer,
     InfoContainer,
@@ -147,11 +147,11 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
                     </ClaimButton>
                 )}
                 {!isClaimable && (
-                    <SPAAnchor href={getEtherscanAddressLink(networkId, parlayMarket.id)}>
+                    <ExternalLink href={getEtherscanTxLink(networkId, parlayMarket.txHash)} target={'_blank'}>
                         <ExternalLinkContainer>
                             <ExternalLinkArrow style={{ right: '7px' }} />
                         </ExternalLinkContainer>
-                    </SPAAnchor>
+                    </ExternalLink>
                 )}
             </OverviewContainer>
             <CollapsableContainer show={showDetails}>
