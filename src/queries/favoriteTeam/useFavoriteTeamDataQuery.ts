@@ -1,5 +1,5 @@
 import QUERY_KEYS from 'constants/queryKeys';
-import { useQuery } from 'react-query';
+import { useQuery, UseQueryOptions } from 'react-query';
 import { NetworkId } from 'types/network';
 import networkConnector from 'utils/networkConnector';
 
@@ -8,24 +8,28 @@ type FavoriteTeamData = {
     favoriteTeam: number;
 };
 
-const useFavoriteTeamDataQuery = (walletAddress: string, networkId: NetworkId) => {
-    return useQuery<FavoriteTeamData>(QUERY_KEYS.FavoriteTeam(walletAddress, networkId), async () => {
-        const favoriteTeamData = { isEligible: false, favoriteTeam: 0 };
+const useFavoriteTeamDataQuery = (walletAddress: string, networkId: NetworkId, options?: UseQueryOptions<any>) => {
+    return useQuery<FavoriteTeamData>(
+        QUERY_KEYS.FavoriteTeam(walletAddress, networkId),
+        async () => {
+            const favoriteTeamData = { isEligible: false, favoriteTeam: 0 };
 
-        const favoriteTeamDataContract = networkConnector.favoriteTeamContract;
+            const favoriteTeamDataContract = networkConnector.favoriteTeamContract;
 
-        if (favoriteTeamDataContract && walletAddress !== '') {
-            const [isEligible, favoriteTeam] = await Promise.all([
-                await favoriteTeamDataContract.isMinterEligibleToMint(walletAddress),
-                await favoriteTeamDataContract.getFavoriteTeamForUser(walletAddress),
-            ]);
+            if (favoriteTeamDataContract && walletAddress !== '') {
+                const [isEligible, favoriteTeam] = await Promise.all([
+                    await favoriteTeamDataContract.isMinterEligibleToMint(walletAddress),
+                    await favoriteTeamDataContract.getFavoriteTeamForUser(walletAddress),
+                ]);
 
-            favoriteTeamData.isEligible = isEligible;
-            favoriteTeamData.favoriteTeam = Number(favoriteTeam[0]);
-        }
+                favoriteTeamData.isEligible = isEligible;
+                favoriteTeamData.favoriteTeam = Number(favoriteTeam[0]);
+            }
 
-        return favoriteTeamData;
-    });
+            return favoriteTeamData;
+        },
+        options
+    );
 };
 
 export default useFavoriteTeamDataQuery;

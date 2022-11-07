@@ -508,6 +508,8 @@
             "home-country-multiplier-text": "如果您的世界杯比赛涉及与您的 Zebro 相同的国家队，您将获得 +10% 奖励提升"
         },
         "zebro-wct-collection": "Zebro WC NFT 系列",
-        "zebro-wct-collection-text": "是在世界杯期间代表您最喜欢的国家的激励活动的一部分，并有资格分享 50,000 OP 代币和 30,000 THALES 代币，以及用于过关投注和个人比赛的独家乘数。"
+        "zebro-wct-collection-text": "是在世界杯期间代表您最喜欢的国家的激励活动的一部分，并有资格分享 50,000 OP 代币和 30,000 THALES 代币，以及用于过关投注和个人比赛的独家乘数。",
+        "go-to-leaderboard": "前往排行榜",
+        "congrats": "恭喜！您已经成功铸造了 Zebro NFT！"
     }
 }
