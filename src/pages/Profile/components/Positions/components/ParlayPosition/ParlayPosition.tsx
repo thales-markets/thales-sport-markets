@@ -97,24 +97,29 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
                     <Label>{t('profile.card.ticket-paid')}:</Label>
                     <Value>{formatCurrencyWithSign(USD_SIGN, parlayMarket.sUSDPaid)}</Value>
                 </InfoContainerColumn>
-                {/* {!isMobile && ( */}
-                <InfoContainerColumn>
-                    {isClaimable ? (
-                        <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
-                    ) : (
+                {isMobile && !isClaimable && (
+                    <InfoContainerColumn>
                         <WinLabel>{t('profile.card.to-win')}:</WinLabel>
-                    )}
-                    {isClaimable ? (
-                        <ClaimValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</ClaimValue>
-                    ) : (
                         <WinValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</WinValue>
-                    )}
-                </InfoContainerColumn>
-                {/* )} */}
+                    </InfoContainerColumn>
+                )}
+                {!isMobile && (
+                    <InfoContainerColumn>
+                        {isClaimable ? (
+                            <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
+                        ) : (
+                            <WinLabel>{t('profile.card.to-win')}:</WinLabel>
+                        )}
+                        {isClaimable ? (
+                            <ClaimValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</ClaimValue>
+                        ) : (
+                            <WinValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</WinValue>
+                        )}
+                    </InfoContainerColumn>
+                )}
                 {isMobile && isClaimable && (
                     <ClaimContainer>
                         <FlexDivRow>
-                            <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
                             <ClaimValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</ClaimValue>
                         </FlexDivRow>
                         <ClaimButton
