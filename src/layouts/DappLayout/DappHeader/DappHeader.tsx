@@ -21,6 +21,9 @@ import NavMenu from 'components/NavMenu';
 import GetUsd from 'components/GetUsd';
 import ProfileItem from './components/ProfileItem';
 import { getIsMobile } from 'redux/modules/app';
+import { ReactComponent as RightBall } from 'assets/images/favorite-team/right-ball.svg';
+import { ReactComponent as LeftBall } from 'assets/images/favorite-team/left-ball.svg';
+import { ReactComponent as QatarMascot } from 'assets/images/favorite-team/qatar-mascot.svg';
 
 const PULSING_COUNT = 10;
 
@@ -57,7 +60,10 @@ const DappHeader: React.FC = () => {
                         {location.pathname !== ROUTES.MintWorldCupNFT && (
                             <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>
                                 <StyledButton style={{ marginRight: '10px' }} disabled={!isWalletConnected}>
+                                    <StyledQatarMascot />
+                                    <LeftBallStyled />
                                     {t('mint-world-cup-nft.zebro-campaign')}
+                                    <RightBallStyled />
                                 </StyledButton>
                             </SPAAnchor>
                         )}
@@ -170,10 +176,10 @@ const LogoContainer = styled.div`
 
 const StyledButton = styled.button<{ disabled?: boolean }>`
     background: ${(props) => props.theme.button.background.secondary};
-    border: 2px solid ${(props) => props.theme.button.borderColor.secondary};
-    color: ${(props) => props.theme.button.textColor.quaternary};
+    border: 2px solid #04cfb6;
+    color: #04cfb6;
     border-radius: 5px;
-    padding: 1px 20px 0px 20px;
+    padding: 0 60px 0 75px;
     font-style: normal;
     font-weight: 400;
     font-size: 12.5px;
@@ -184,11 +190,32 @@ const StyledButton = styled.button<{ disabled?: boolean }>`
     min-height: 28px;
     width: fit-content;
     white-space: nowrap;
+    position: relative;
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     &:hover {
         cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
         opacity: ${(props) => (props.disabled ? '0.4' : '0.8')};
     }
+`;
+
+const LeftBallStyled = styled(LeftBall)`
+    position: absolute;
+    top: -6px;
+    left: 27px;
+`;
+
+const RightBallStyled = styled(RightBall)`
+    position: absolute;
+    top: -6px;
+    right: 10px;
+`;
+
+const StyledQatarMascot = styled(QatarMascot)`
+    position: absolute;
+    left: -10px;
+    top: -20px;
+    width: 44px;
+    height: auto;
 `;
 
 export default DappHeader;
