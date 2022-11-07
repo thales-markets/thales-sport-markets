@@ -452,10 +452,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         .map((finalQuote, index) => (finalQuote === 0 ? index : -1))
                         .filter((index) => index !== -1);
                     setMarketsOutOfLiquidity(marketsOutOfLiquidity);
-
                     setFinalQuotes(fetchedFinalQuotes);
+
                     setTooltipTextMessageUsdAmount(usdAmountValue, fetchedFinalQuotes);
                 } else {
+                    setMarketsOutOfLiquidity([]);
                     setTotalQuote(0);
                     setSkew(0);
                     setTotalBuyAmount(0);

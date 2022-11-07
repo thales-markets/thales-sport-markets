@@ -105,6 +105,7 @@ const HeaderWrapper = styled(FlexDivRow)`
     width: 100%;
     position: relative;
     align-items: center;
+    margin-bottom: 20px;
 `;
 
 export default MarketDetails;

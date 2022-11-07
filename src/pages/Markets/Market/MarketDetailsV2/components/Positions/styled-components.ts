@@ -71,6 +71,13 @@ export const PositionContainer = styled(InnerContainer)`
     }
 `;
 
+export const ClaimableInfoContainer = styled(InnerContainer)`
+    @media (max-width: 768px) {
+        flex-direction: column;
+        font-size: 12px;
+    }
+`;
+
 export const LiquidityInfoContainer = styled(InnerContainer)`
     @media (max-width: 768px) {
         display: none;
@@ -89,7 +96,12 @@ export const Value = styled.span`
     margin-left: 5px;
 `;
 
-export const ResultContainer = styled(InnerContainer)``;
+export const ResultContainer = styled(InnerContainer)`
+    @media (max-width: 768px) {
+        flex-direction: column;
+        font-size: 12px;
+    }
+`;
 
 export const ClaimButton = styled(Button)<{ claimable?: boolean }>`
     background: ${(props) => props.theme.background.quaternary};
