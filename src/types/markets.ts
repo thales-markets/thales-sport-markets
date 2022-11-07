@@ -308,6 +308,7 @@ export type ParlayAmmData = {
     maxSupportedOdds: number;
     parlayAmmFee: number;
     safeBoxImpact: number;
+    parlaySize: number;
 };
 
 export type ParlayPayment = {

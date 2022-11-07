@@ -335,6 +335,7 @@
             "show-parlay": "Show Parlay",
             "validation": {
                 "title": "Parlay Validation",
+                "max-teams": "Maximum {{max}} markets in Parlay",
                 "team-in-parlay": "{{team}} is already in Parlay. The same team can't be added to a Parlay more than once.",
                 "amount-exceeded": "Amount exceeded the amount available on AMM",
                 "max-payout": "Maximal supported payout is {{max}}",

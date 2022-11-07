@@ -33,17 +33,12 @@ const useClaimablePositionCountQuery = (
                     (positionBalance) => positionBalance.amount > 0
                 );
 
-                console.log('positionBalanceData ', positionBalanceData);
-                console.log('parlayMarketsData ', parlayMarketsData);
-                console.log('onlyNonZeroPositions ', onlyNonZeroPositions);
-
                 const onlyClaimableParlays = parlayMarketsData.filter((parlayMarket: ParlayMarket) => {
                     if (isParlayClaimable(parlayMarket)) {
                         return parlayMarket;
                     }
                 });
 
-                console.log('onlyClaimableParlays ', onlyClaimableParlays?.length);
                 return Number(onlyNonZeroPositions.length + onlyClaimableParlays.length);
             } catch (e) {
                 console.log(e);
