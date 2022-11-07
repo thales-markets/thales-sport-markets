@@ -606,6 +606,8 @@
         },
         "zebro-wct-collection": "La collection Zebro WC NFT",
         "zebro-wct-collection-text": "fait partie d'une campagne incitative pour représenter votre pays préféré pendant la Coupe du monde et être éligible pour une part de 50 000 jetons OP et 30 000 jetons THALES, ainsi que des multiplicateurs exclusifs pour les parlays et les matchs individuels.",
-        "get-your-nft": "Qatar 2022 NFT"
+        "get-your-nft": "Qatar 2022 NFT",
+        "congrats": "Félicitations! Vous avez frappé avec succès le Zebro NFT !",
+        "go-to-leaderboard": "Aller au classement"
     }
 }

@@ -23,7 +23,7 @@ const MintWorldCupNFT: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const dispatch = useDispatch();
 
-    const favoriteTeamDataQuery = useFavoriteTeamDataQuery(walletAddress, networkId);
+    const favoriteTeamDataQuery = useFavoriteTeamDataQuery(walletAddress, networkId, { refetchInterval: 5000 });
 
     const favoriteTeamData =
         favoriteTeamDataQuery.isSuccess && favoriteTeamDataQuery.data ? favoriteTeamDataQuery.data : null;
@@ -47,7 +47,14 @@ const MintWorldCupNFT: React.FC = () => {
                 return <Eligible onChooseNft={handleChooseNFT} />;
             }
             if (isChooseNFTOpen && !favoriteTeamData?.favoriteTeam && favoriteTeamData?.isEligible) {
-                return <ChooseNFT />;
+                return (
+                    <ChooseNFT
+                        setSelectedTab={(param) => {
+                            setSelectedTab(param);
+                            setIsChooseNFTOpen(false);
+                        }}
+                    />
+                );
             }
             if (!!favoriteTeamData?.favoriteTeam) {
                 return <AlreadyMinted />;

@@ -81,7 +81,7 @@ const MarketListCardMobile: React.FC<MarketRowCardProps> = ({ market, accountPos
                         isMobile={true}
                     />
                 )}
-                {!(new Date(market.maturityDate) >= new Date()) && (
+                {(new Date(market.maturityDate) <= new Date() || market.isCanceled || market.isPaused) && (
                     <MatchStatus
                         isResolved={market.isResolved}
                         isLive={market.maturityDate < new Date()}

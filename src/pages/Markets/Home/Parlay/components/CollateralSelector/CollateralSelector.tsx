@@ -138,10 +138,9 @@ export const Container = styled.div`
     flex-direction: row;
     margin: 13px 0px;
     align-items: center;
-    @media (max-width: 768px) {
+    @media (max-width: 950px) {
         justify-content: center;
-        margin-bottom: 20px;
-        margin-top: 20px;
+        margin: 5px 0px;
         flex-direction: column;
     }
 `;
