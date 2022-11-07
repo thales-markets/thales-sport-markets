@@ -20,6 +20,7 @@ import { ethers } from 'ethers';
 import BannerCarousel from 'components/BannerCarousel';
 import { isMobile } from 'utils/device';
 import Profile from 'pages/Profile';
+import Wizard from 'pages/Wizard';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -130,6 +131,11 @@ const App = () => {
                             <Route exact path={ROUTES.Profile}>
                                 <DappLayout>
                                     <Profile />
+                                </DappLayout>
+                            </Route>
+                            <Route exact path={ROUTES.Wizard}>
+                                <DappLayout>
+                                    <Wizard />
                                 </DappLayout>
                             </Route>
                             <Route exact path={ROUTES.Quiz}>

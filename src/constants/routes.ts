@@ -9,6 +9,7 @@ export const ROUTES = {
     Quiz: '/trivia',
     QuizLeaderboard: '/trivia/leaderboard',
     MintWorldCupNFT: '/mint-world-cup-nft',
+    Wizard: '/wizard',
 };
 export default ROUTES;
 
