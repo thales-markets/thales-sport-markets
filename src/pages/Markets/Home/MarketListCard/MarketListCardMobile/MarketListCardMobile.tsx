@@ -36,7 +36,7 @@ const MarketListCardMobile: React.FC<MarketRowCardProps> = ({ market, accountPos
         >
             <MatchInfoMobile>
                 <MatchInfoLabelMobile>{formatShortDateWithTime(market.maturityDate)}</MatchInfoLabelMobile>
-                <MatchInfoLabelMobile>{market.homeTeam}</MatchInfoLabelMobile>
+                <MatchInfoLabelMobile home={true}>{market.homeTeam}</MatchInfoLabelMobile>
                 {isApexGame(market.tags[0]) && (
                     <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={10} marginLeft={2} />
                 )}
@@ -54,7 +54,7 @@ const MarketListCardMobile: React.FC<MarketRowCardProps> = ({ market, accountPos
                         />
                     </BetTypeContainer>
                 ) : (
-                    <MatchInfoLabelMobile>{market.awayTeam}</MatchInfoLabelMobile>
+                    <MatchInfoLabelMobile away={true}>{market.awayTeam}</MatchInfoLabelMobile>
                 )}
             </MatchInfoMobile>
             <OddsWrapperMobile closedMarket={!market.isOpen || market.isPaused || market.isCanceled}>

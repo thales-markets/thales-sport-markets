@@ -8,11 +8,11 @@ import { RootState } from '../rootReducer';
 
 const sliceName = 'parlay';
 
-const MAX_NUMBER_OF_MATCHES = 4;
+const DEFAULT_MAX_NUMBER_OF_MATCHES = 4;
 
 const getDefaultParlay = (): ParlaysMarketPosition[] => {
     const lsParlay = localStore.get(LOCAL_STORAGE_KEYS.PARLAY);
-    return lsParlay !== undefined ? (lsParlay as ParlaysMarketPosition[]).slice(0, MAX_NUMBER_OF_MATCHES) : [];
+    return lsParlay !== undefined ? (lsParlay as ParlaysMarketPosition[]) : [];
 };
 
 const getDefaultPayment = (): ParlayPayment => {
@@ -29,12 +29,14 @@ const getDefaultError = () => {
 
 type ParlaySliceState = {
     parlay: ParlaysMarketPosition[];
+    parlaySize: number;
     payment: ParlayPayment;
     error: { code: ParlayErrorCode; data: string };
 };
 
 const initialState: ParlaySliceState = {
     parlay: getDefaultParlay(),
+    parlaySize: DEFAULT_MAX_NUMBER_OF_MATCHES,
     payment: getDefaultPayment(),
     error: getDefaultError(),
 };
@@ -47,7 +49,7 @@ export const parlaySlice = createSlice({
             const index = state.parlay.findIndex((el) => el.sportMarketId === action.payload.sportMarketId);
             if (index === -1) {
                 // ADD new market
-                if (state.parlay.length < MAX_NUMBER_OF_MATCHES) {
+                if (state.parlay.length < state.parlaySize) {
                     const parlayCopy = [...state.parlay];
                     const allParlayTeams = parlayCopy.map((market) => [market.homeTeam, market.awayTeam]).flat();
 
@@ -61,7 +63,8 @@ export const parlaySlice = createSlice({
                         state.parlay.push(action.payload);
                     }
                 } else {
-                    state.error.code = ParlayErrorCode.MAX_4_MATCHES;
+                    state.error.code = ParlayErrorCode.MAX_MATCHES;
+                    state.error.data = state.parlaySize.toString();
                 }
             } else {
                 // UPDATE market position
@@ -71,6 +74,9 @@ export const parlaySlice = createSlice({
             }
 
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
+        },
+        setParlaySize: (state, action: PayloadAction<number>) => {
+            state.parlaySize = action.payload;
         },
         removeFromParlay: (state, action: PayloadAction<string>) => {
             state.parlay = state.parlay.filter((market) => market.sportMarketId !== action.payload);
@@ -95,7 +101,14 @@ export const parlaySlice = createSlice({
     },
 });
 
-export const { updateParlay, removeFromParlay, removeAll, setPayment, resetParlayError } = parlaySlice.actions;
+export const {
+    updateParlay,
+    setParlaySize,
+    removeFromParlay,
+    removeAll,
+    setPayment,
+    resetParlayError,
+} = parlaySlice.actions;
 
 export const getParlayState = (state: RootState) => state[sliceName];
 export const getParlay = (state: RootState) => getParlayState(state).parlay;

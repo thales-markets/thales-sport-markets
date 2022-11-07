@@ -565,6 +565,14 @@
             "no-claimable": "Vous n'avez pas de poste réclamable",
             "no-open": "Vous n'avez pas de poste ouvert",
             "no-transactions": "Vous n'avez aucun métier"
+        },
+        "table": {
+            "paid": "Payé",
+            "games": "Jeux",
+            "id": "Identifiant",
+            "position": "Position",
+            "time": "Temps",
+            "amount": "montant"
         }
     },
     "mint-world-cup-nft": {

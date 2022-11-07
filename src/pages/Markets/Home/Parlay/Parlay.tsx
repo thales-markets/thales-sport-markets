@@ -2,6 +2,7 @@ import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.sv
 import { LINKS } from 'constants/links';
 import { GlobalFiltersEnum } from 'constants/markets';
 import { t } from 'i18next';
+import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
 import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +11,7 @@ import {
     getParlay,
     getParlayPayment,
     getHasParlayError,
+    setParlaySize,
     removeFromParlay,
     resetParlayError,
     setPayment,
@@ -38,9 +40,19 @@ const Parlay: React.FC = () => {
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
 
+    const parlayAmmDataQuery = useParlayAmmDataQuery(networkId, {
+        enabled: isAppReady,
+    });
+
     const sportMarketsQuery = useSportMarketsQuery(networkId, GlobalFiltersEnum.OpenMarkets, null, {
         enabled: isAppReady,
     });
+
+    useEffect(() => {
+        if (parlayAmmDataQuery.isSuccess && parlayAmmDataQuery.data) {
+            dispatch(setParlaySize(parlayAmmDataQuery.data.parlaySize));
+        }
+    }, [dispatch, parlayAmmDataQuery.isSuccess, parlayAmmDataQuery.data]);
 
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {

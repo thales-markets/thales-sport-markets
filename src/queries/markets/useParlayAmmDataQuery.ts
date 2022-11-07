@@ -16,6 +16,7 @@ const useParlayAmmDataQuery = (networkId: NetworkId, options?: UseQueryOptions<P
                     maxSupportedOdds: 0,
                     parlayAmmFee: 0,
                     safeBoxImpact: 0,
+                    parlaySize: 0,
                 };
 
                 const { parlayMarketsAMMContract } = networkConnector;
@@ -26,18 +27,21 @@ const useParlayAmmDataQuery = (networkId: NetworkId, options?: UseQueryOptions<P
                         maxSupportedOdds,
                         parlayAmmFee,
                         safeBoxImpact,
+                        parlaySize,
                     ] = await Promise.all([
                         parlayMarketsAMMContract.minUSDAmount(),
                         parlayMarketsAMMContract.maxSupportedAmount(),
                         parlayMarketsAMMContract.maxSupportedOdds(),
                         parlayMarketsAMMContract.parlayAmmFee(),
                         parlayMarketsAMMContract.safeBoxImpact(),
+                        parlayMarketsAMMContract.parlaySize(),
                     ]);
                     parlayData.minUsdAmount = bigNumberFormatter(minUsdAmount);
                     parlayData.maxSupportedAmount = bigNumberFormatter(maxSupportedAmount);
                     parlayData.maxSupportedOdds = bigNumberFormatter(maxSupportedOdds);
                     parlayData.parlayAmmFee = bigNumberFormatter(parlayAmmFee);
                     parlayData.safeBoxImpact = bigNumberFormatter(safeBoxImpact);
+                    parlayData.parlaySize = Number(parlaySize);
                 }
 
                 return parlayData;

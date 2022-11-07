@@ -44,7 +44,7 @@ const ParlayTransactions: React.FC = () => {
                 columns={[
                     {
                         id: 'time',
-                        Header: <>{'TIME'}</>,
+                        Header: <>{t('profile.table.time')}</>,
                         accessor: 'timestamp',
                         sortable: false,
                         Cell: (cellProps: any) => {
@@ -53,7 +53,7 @@ const ParlayTransactions: React.FC = () => {
                     },
                     {
                         id: 'id',
-                        Header: <>{'Parlay ID'}</>,
+                        Header: <>{t('profile.table.id')}</>,
                         accessor: 'id',
                         sortable: false,
                         Cell: (cellProps: any) => {
@@ -66,7 +66,7 @@ const ParlayTransactions: React.FC = () => {
                     },
                     {
                         id: 'position',
-                        Header: <>{'Number of Games'}</>,
+                        Header: <>{t('profile.table.games')}</>,
                         accessor: 'positions',
                         sortable: false,
                         Cell: (cellProps: any) => {
@@ -79,7 +79,7 @@ const ParlayTransactions: React.FC = () => {
                     },
                     {
                         id: 'paid',
-                        Header: <>{'PAID'}</>,
+                        Header: <>{t('profile.table.paid')}</>,
                         accessor: 'sUSDAfterFees',
                         sortable: false,
                         Cell: (cellProps: any) => {
@@ -88,7 +88,7 @@ const ParlayTransactions: React.FC = () => {
                     },
                     {
                         id: 'amount',
-                        Header: <>{'AMOUNT'}</>,
+                        Header: <>{t('profile.table.amount')}</>,
                         accessor: 'totalAmount',
                         sortable: false,
                         Cell: (cellProps: any) => {

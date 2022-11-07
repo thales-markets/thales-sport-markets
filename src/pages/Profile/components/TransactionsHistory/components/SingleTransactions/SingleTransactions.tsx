@@ -32,7 +32,7 @@ const TransactionsHistory: React.FC = () => {
                 columns={[
                     {
                         id: 'time',
-                        Header: <>{'TIME'}</>,
+                        Header: <>{t('profile.table.time')}</>,
                         accessor: 'timestamp',
                         sortable: false,
                         Cell: (cellProps: any) => {
@@ -41,7 +41,7 @@ const TransactionsHistory: React.FC = () => {
                     },
                     {
                         id: 'id',
-                        Header: <>{'ID'}</>,
+                        Header: <>{t('profile.table.id')}</>,
                         accessor: 'wholeMarket',
                         sortable: false,
                         Cell: (cellProps: any) => {
@@ -54,7 +54,7 @@ const TransactionsHistory: React.FC = () => {
                     },
                     {
                         id: 'position',
-                        Header: <>{'Position'}</>,
+                        Header: <>{t('profile.table.position')}</>,
                         accessor: 'position',
                         sortable: false,
                         Cell: (cellProps: any) => {
@@ -77,7 +77,7 @@ const TransactionsHistory: React.FC = () => {
                     },
                     {
                         id: 'paid',
-                        Header: <>{'PAID'}</>,
+                        Header: <>{t('profile.table.paid')}</>,
                         accessor: 'paid',
                         sortable: false,
                         Cell: (cellProps: any) => {
@@ -86,7 +86,7 @@ const TransactionsHistory: React.FC = () => {
                     },
                     {
                         id: 'amount',
-                        Header: <>{'AMOUNT'}</>,
+                        Header: <>{t('profile.table.amount')}</>,
                         accessor: 'amount',
                         sortable: false,
                         Cell: (cellProps: any) => {

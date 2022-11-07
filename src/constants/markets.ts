@@ -104,6 +104,6 @@ export const ApexBetTypeKeyMapping = {
 
 export enum ParlayErrorCode {
     NO_ERROS = 0,
-    MAX_4_MATCHES = 1,
+    MAX_MATCHES = 1,
     SAME_TEAM_TWICE = 2,
 }

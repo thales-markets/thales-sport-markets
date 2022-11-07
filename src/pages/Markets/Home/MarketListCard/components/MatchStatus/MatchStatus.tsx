@@ -63,8 +63,8 @@ const Container = styled.div<{ resolved?: boolean; paused?: boolean; mobile?: bo
     flex-direction: row;
     align-items: center;
     justify-content: ${(_props) => (_props?.mobile && _props?.paused ? 'center' : 'start')};
-    margin-right: ${(_props) => (_props?.mobile ? '10px' : '15px')};
-    margin-left: ${(_props) => (_props?.mobile ? '10px' : '')};
+    margin-right: 15px;
+    margin-left: 15px;
     width: ${(_props) => (_props?.resolved ? '33%' : '')};
     height: ${(_props) => (_props?.mobile ? '40px' : '')};
 `;
@@ -73,6 +73,8 @@ export const Status = styled.span<{ color?: string }>`
     font-size: 12px;
     text-transform: uppercase;
     color: ${(_props) => (_props?.color ? _props.color : '')};
+    align-self: center;
+    justify-content: space-evenly;
 `;
 
 const Result = styled.span<{ isLive?: boolean }>`
