@@ -17,7 +17,7 @@ export const MatchInfo = styled(FlexDivRow)`
     justify-content: flex-start;
     align-items: center;
     @media (max-width: 768px) {
-        max-width: 50%;
+        max-width: 60%;
     }
 `;
 
@@ -30,15 +30,15 @@ export const MatchLogo = styled.div`
     }
 `;
 
-export const ClubLogo = styled.img<{ awayTeam?: boolean; losingTeam?: boolean }>`
+export const ClubLogo = styled.img<{ awayTeam?: boolean; losingTeam?: boolean; customMobileSize?: string }>`
     height: 45px;
     width: 45px;
     opacity: ${(_props) => (_props?.losingTeam == true ? `0.4` : '1')};
     z-index: ${(_props) => (_props?.losingTeam == true ? '1' : '2')};
     ${(_props) => (_props?.awayTeam ? 'margin-left: -15px;' : '')}
     @media (max-width: 768px) {
-        height: 30px;
-        width: 30px;
+        height: ${(_props) => (_props?.customMobileSize ? _props.customMobileSize : '30px')};
+        width: ${(_props) => (_props?.customMobileSize ? _props.customMobileSize : '30px')};
     }
 `;
 
@@ -48,6 +48,7 @@ export const MatchLabel = styled(FlexDivRow)`
         font-size: 10px;
         flex-direction: column;
         justify-content: center;
+        word-wrap: unset;
     }
 `;
 
@@ -71,7 +72,7 @@ export const ParlayItemStatusContainer = styled(FlexDivRow)`
     align-items: center;
     justify-content: flex-start;
     @media (max-width: 768px) {
-        width: 45%;
+        width: 40%;
     }
 `;
 
