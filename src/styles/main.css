@@ -218,9 +218,15 @@ a {
     font-family: 'Raleway', Helvetica;
 }
 
-@media (max-width: 380px) {
+@media (max-width: 500px) {
     .discount-label {
         width: 21px;
+        height: 18px;
+        padding: 3px 0;
+    }
+    .discount-label:after {
+        border-width: 9px;
+        margin-top: -9px;
     }
     .discount-label span {
         font-size: 12px;

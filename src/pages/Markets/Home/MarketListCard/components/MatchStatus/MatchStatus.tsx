@@ -63,7 +63,8 @@ const Container = styled.div<{ resolved?: boolean; paused?: boolean; mobile?: bo
     flex-direction: row;
     align-items: center;
     justify-content: ${(_props) => (_props?.mobile && _props?.paused ? 'center' : 'start')};
-    margin-right: 15px;
+    margin-right: ${(_props) => (_props?.mobile ? '10px' : '15px')};
+    margin-left: ${(_props) => (_props?.mobile ? '10px' : '')};
     width: ${(_props) => (_props?.resolved ? '33%' : '')};
     height: ${(_props) => (_props?.mobile ? '40px' : '')};
 `;

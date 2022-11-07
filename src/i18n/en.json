@@ -269,7 +269,7 @@
             "starts": "starts",
             "claimable": "Claimable",
             "finished": "Finished",
-            "result": "Final result",
+            "result": "Result",
             "started": "Started",
             "canceled": "Cancelled",
             "pending-resolution": "Pending resolution",
