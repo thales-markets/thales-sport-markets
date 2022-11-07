@@ -76,12 +76,12 @@ export const NAV_MENU: NavMenuItem[] = [
         name: 'profile',
         route: ROUTES.Profile,
     },
-    {
-        i18label: 'markets.nav-menu.items.onboarding-wizard',
-        iconClass: 'icon icon--wizard',
-        name: 'onboarding-wizard',
-        route: ROUTES.Markets.Home,
-    },
+    // {
+    //     i18label: 'markets.nav-menu.items.onboarding-wizard',
+    //     iconClass: 'icon icon--wizard',
+    //     name: 'onboarding-wizard',
+    //     route: ROUTES.Markets.Home,
+    // },
     {
         i18label: 'markets.nav-menu.items.history',
         iconClass: 'icon icon--history',
