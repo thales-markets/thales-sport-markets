@@ -9,7 +9,6 @@ import { getQueryStringVal } from 'utils/useQueryParams';
 
 const Profile: React.FC = () => {
     const navItemFromQuery = getQueryStringVal('nav-item');
-    console.log('navItemFromQuery', navItemFromQuery);
     const [navItem, setNavItem] = useState<number>(navItemFromQuery ? Number(navItemFromQuery) : 1);
 
     return (
