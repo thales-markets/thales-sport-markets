@@ -39,12 +39,16 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market }) => {
                 <ClubLogo
                     alt="Home team logo"
                     src={homeLogoSrc}
+                    height={market.tags[0] == 9018 ? '20px' : ''}
+                    width={market.tags[0] == 9018 ? '33px' : ''}
                     onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                 />
                 <ClubLogo
                     awayTeam={true}
                     alt="Away team logo"
                     src={awayLogoSrc}
+                    height={market.tags[0] == 9018 ? '20px' : ''}
+                    width={market.tags[0] == 9018 ? '33px' : ''}
                     onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                 />
             </MatchLogo>
@@ -82,11 +86,11 @@ const MatchLogo = styled.div`
     height: 100%;
 `;
 
-const ClubLogo = styled.img<{ awayTeam?: boolean }>`
+const ClubLogo = styled.img<{ width?: string; height?: string; awayTeam?: boolean }>`
     position: absolute;
-    height: 35px;
-    width: 35px;
-    ${(_props) => (_props?.awayTeam ? 'margin-left: 1vw;' : '')}
+    height: ${(_props) => (_props?.height ? _props.height : '35px')};
+    width: ${(_props) => (_props?.width ? _props.width : '35px')};
+    ${(_props) => (_props?.awayTeam ? 'margin-left: 20px;' : '')}
     z-index: ${(_props) => (_props?.awayTeam ? '1' : '2')};
 `;
 

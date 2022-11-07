@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivRow } from 'styles/common';
+import { FlexDivColumn, FlexDivRow } from 'styles/common';
 
 export const Container = styled.div<{
     backgroundColor?: string;
@@ -9,9 +9,9 @@ export const Container = styled.div<{
     isMobile?: boolean;
 }>`
     display: flex;
-    flex-direction: ${(_props) => (_props?.isMobile ? 'column' : 'row')};
+    flex-direction: row;
     width: 100%;
-    padding: 10px 12px;
+    padding: 10px 10px;
     border-radius: 5px;
     margin-bottom: 15px;
     /* background-color: ${(_props) => (_props?.backgroundColor ? _props.backgroundColor : '')}; */
@@ -47,9 +47,9 @@ export const BetTypeContainer = styled.div`
 
 export const ClubVsClubContainer = styled.div<{ isMobile?: boolean }>`
     display: flex;
-    flex-direction: row;
-    justify-content: ${(_props) => (_props?.isMobile ? 'flex-start' : 'space-between')};
-    align-items: center;
+    flex-direction: ${(_props) => (_props?.isMobile ? 'column' : 'row')};
+    justify-content: ${(_props) => (_props?.isMobile ? 'space-evenly' : 'space-between')};
+    align-items: ${(_props) => (_props?.isMobile ? 'baseline' : 'center')};
     flex-grow: ${(_props) => (_props?.isMobile ? '1' : '')};
 `;
 
@@ -75,9 +75,9 @@ export const LinkIcon = styled.i<{ isMobile?: boolean }>`
     }
 `;
 
-export const MatchInfoMobile = styled(FlexDivRow)`
-    width: 100%;
-    margin-bottom: 5px;
+export const MatchInfoMobile = styled(FlexDivColumn)`
+    width: fit-content;
+    justify-content: space-between;
 `;
 
 export const MatchInfoLabelMobile = styled.label`
@@ -92,9 +92,10 @@ export const VSLabelMobile = styled.span`
 `;
 
 export const LinkWrapper = styled(FlexDivRow)`
-    flex-grow: 1;
+    flex-grow: 0.25;
     justify-content: end;
     align-items: center;
+    align-self: auto;
 `;
 
 export const MatchNamesContainerMobile = styled(FlexDivRow)`
@@ -110,4 +111,9 @@ export const MatchNamesContainerMobile = styled(FlexDivRow)`
     @media (max-width: 500px) {
         width: 50%;
     }
+`;
+
+export const OddsWrapperMobile = styled(FlexDivRow)<{ closedMarket?: boolean }>`
+    flex: 1;
+    align-self: ${(_props) => (_props?.closedMarket ? 'end' : '')};
 `;

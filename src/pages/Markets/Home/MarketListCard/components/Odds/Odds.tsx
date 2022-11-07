@@ -63,18 +63,20 @@ const Odds: React.FC<OddsProps> = ({
     const resolvedGameFlag = isResolved && finalResult;
     const showOdds = !pendingResolution && !noOddsFlag && !resolvedGameFlag && !isCancelled && !isPaused;
     const selectedOddsType = useSelector(getOddsType);
-
     return (
         <Container resolved={!!resolvedGameFlag} isMobile={isMobile}>
             {noOddsFlag && <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>}
             {resolvedGameFlag && (
                 <>
-                    <PositionSymbol type={convertFinalResultToResultType(finalResult, isApexTopGame)} />
+                    <PositionSymbol
+                        type={convertFinalResultToResultType(finalResult, isApexTopGame)}
+                        isMobile={isMobile}
+                    />
                     <WinnerLabel>{t('common.winner')}</WinnerLabel>
                 </>
             )}
             {showOdds && (
-                <OddsContainer>
+                <OddsContainer isMobile={isMobile}>
                     <PositionSymbol
                         marketId={marketId}
                         homeTeam={homeTeam}
@@ -91,6 +93,7 @@ const Odds: React.FC<OddsProps> = ({
                             !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.home)
                         }
                         discount={isDiscounted(homePriceImpact) ? homePriceImpact : undefined}
+                        isMobile={isMobile}
                     />
                     {typeof odds?.drawOdds !== 'undefined' && (
                         <PositionSymbol
@@ -109,6 +112,7 @@ const Odds: React.FC<OddsProps> = ({
                             }
                             discount={isDiscounted(drawPriceImpact) ? drawPriceImpact : undefined}
                             showTooltip={odds?.drawOdds == 0}
+                            isMobile={isMobile}
                         />
                     )}
                     <PositionSymbol
@@ -127,6 +131,7 @@ const Odds: React.FC<OddsProps> = ({
                             !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.away)
                         }
                         discount={isDiscounted(awayPriceImpact) ? awayPriceImpact : undefined}
+                        isMobile={isMobile}
                     />
                 </OddsContainer>
             )}
