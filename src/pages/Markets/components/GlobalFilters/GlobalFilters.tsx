@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOddsType, setOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { addHoursToCurrentDate } from 'utils/formatters/date';
 import { getQueryStringVal } from 'utils/useQueryParams';
 
@@ -204,7 +204,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
     );
 };
 
-export const Container = styled(FlexDiv)`
+const Container = styled(FlexDiv)`
     width: 100%;
     max-width: 750px;
 `;
@@ -216,19 +216,6 @@ export const Filters = styled(FlexDiv)<{ isMobile?: boolean }>`
     border: ${(props) => (props.isMobile ? '' : '1px solid ' + props.theme.borderColor.primary)};
     color: ${(props) => props.theme.textColor.secondary};
     border-radius: 5px;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 14px;
-    align-items: center;
-    letter-spacing: 0.01em;
-    margin: 0px 20px;
-    padding: 0px 10px;
-`;
-
-export const FiltersMobile = styled(FlexDivColumn)`
-    width: 100%;
-    color: ${(props) => props.theme.textColor.secondary};
     font-style: normal;
     font-weight: 600;
     font-size: 12px;

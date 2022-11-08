@@ -1,5 +1,4 @@
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-import burger from 'assets/images/burger.svg';
 import Button from 'components/Button';
 import GetUsd from 'components/GetUsd';
 import Logo from 'components/Logo';
@@ -449,14 +448,6 @@ const Home: React.FC = () => {
                     />
                 </GlobalFiltersContainer>
             </BurgerFiltersContainer>
-            <BurgerAndSwitchContainer>
-                <BurgerMenu
-                    src={burger}
-                    onClick={() => {
-                        setShowBurger(!showBurger);
-                    }}
-                />
-            </BurgerAndSwitchContainer>
 
             <RowContainer>
                 {/* LEFT FILTERS */}
@@ -558,6 +549,8 @@ const Home: React.FC = () => {
                                     globalFilter={globalFilter}
                                     dateFilter={dateFilter}
                                     sportFilter={sportFilter}
+                                    showBurger={showBurger}
+                                    setShowBurger={setShowBurger}
                                 />
                             </>
                         )}
@@ -679,16 +672,6 @@ const SidebarContainer = styled(FlexDivColumn)`
     }
 `;
 
-const BurgerMenu = styled.img`
-    position: relative;
-    top: 10px;
-    left: 10px;
-    display: none;
-    @media (max-width: 950px) {
-        display: block;
-    }
-`;
-
 const GlobalFiltersContainer = styled(FlexDivColumn)`
     height: fit-content;
     flex: 0;
@@ -750,16 +733,6 @@ const LogoContainer = styled.div`
     text-align: center;
 `;
 
-const BurgerAndSwitchContainer = styled(FlexDivRow)`
-    justify-content: flex-end;
-    width: calc(100% - 240px);
-    @media (max-width: 950px) {
-        width: 100%;
-        justify-content: space-between;
-        margin-bottom: 10px;
-    }
-`;
-
 export const Info = styled.div`
     width: 100%;
     color: #ffffff;
@@ -806,6 +779,8 @@ const ParlayMobileButton = styled(Button)`
 
 const ApplyFiltersButton = styled(Button)`
     align-self: center;
+    height: 10px;
+    margin-right: 5px;
 `;
 
 export default Home;

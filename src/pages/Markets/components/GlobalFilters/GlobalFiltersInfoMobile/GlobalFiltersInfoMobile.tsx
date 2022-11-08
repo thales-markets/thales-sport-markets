@@ -1,3 +1,4 @@
+import burger from 'assets/images/burger.svg';
 import Dropdown from 'components/Dropdown';
 import { GlobalFiltersEnum, OddsType, ODDS_TYPES, SportFilterEnum } from 'constants/markets';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -5,16 +6,25 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOddsType, setOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv } from 'styles/common';
 import { getQueryStringVal } from 'utils/useQueryParams';
+import { Circle, Filters, FilterTypeContainer, GlobalFilter, Label, TimeFilterContainer } from '../GlobalFilters';
 
 type GlobalFiltersInfoMobileProps = {
     globalFilter: GlobalFiltersEnum;
     dateFilter: Date | number;
     sportFilter: SportFilterEnum;
+    showBurger: boolean;
+    setShowBurger: (value: boolean) => void;
 };
 
-const GlobalFiltersInfoMobile: React.FC<GlobalFiltersInfoMobileProps> = ({ globalFilter, dateFilter, sportFilter }) => {
+const GlobalFiltersInfoMobile: React.FC<GlobalFiltersInfoMobileProps> = ({
+    globalFilter,
+    dateFilter,
+    sportFilter,
+    showBurger,
+    setShowBurger,
+}) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
@@ -67,11 +77,17 @@ const GlobalFiltersInfoMobile: React.FC<GlobalFiltersInfoMobileProps> = ({ globa
 
     return (
         <Container>
-            <Filters>
+            <Wrapper>
                 <FilterTypeContainer>
-                    <GlobalFilter selected={true}>
+                    <BurgerMenu
+                        src={burger}
+                        onClick={() => {
+                            setShowBurger(!showBurger);
+                        }}
+                    />
+                    <GlobalFilterLabel selected={true}>
                         {t(`market.filter-label.global.${globalFilter.toLowerCase()}`)}
-                    </GlobalFilter>
+                    </GlobalFilterLabel>
                 </FilterTypeContainer>
                 <FilterTypeContainer>
                     {selectedPeriod != 0 && globalFilter == GlobalFiltersEnum.OpenMarkets && (
@@ -82,104 +98,34 @@ const GlobalFiltersInfoMobile: React.FC<GlobalFiltersInfoMobileProps> = ({ globa
                     )}
                 </FilterTypeContainer>
                 <Dropdown<OddsType> list={ODDS_TYPES} selectedItem={selectedOddsType} onSelect={setSelectedOddsType} />
-            </Filters>
+            </Wrapper>
         </Container>
     );
 };
 
-export const Container = styled(FlexDiv)`
+const Container = styled(FlexDiv)`
     width: 100%;
     max-width: 750px;
     margin: 10px 0px;
 `;
 
-export const Filters = styled(FlexDiv)<{ isMobile?: boolean }>`
-    width: 100%;
-    height: ${(props) => (props.isMobile ? '' : '24px')};
-    flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
-    border: ${(props) => (props.isMobile ? '' : '1px solid ' + props.theme.borderColor.primary)};
-    color: ${(props) => props.theme.textColor.secondary};
-    border-radius: 5px;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 14px;
-    align-items: center;
-    letter-spacing: 0.01em;
-    margin: 0px 5px;
-    padding: 0px 10px;
+const Wrapper = styled(Filters)`
     justify-content: space-between;
+    margin: 0px 5px;
+    @media (max-width: 950px) {
+        font-size: 11px;
+        line-height: 11px;
+    }
 `;
 
-export const FiltersMobile = styled(FlexDivColumn)`
-    width: 100%;
-    color: ${(props) => props.theme.textColor.secondary};
-    font-style: normal;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 14px;
-    align-items: center;
-    letter-spacing: 0.01em;
-    margin: 0px 20px;
-    padding: 0px 10px;
+const BurgerMenu = styled.img`
+    display: flex;
+    height: 10px;
+    margin-right: 5px;
 `;
 
-export const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: boolean; isMobile?: boolean }>`
+const GlobalFilterLabel = styled(GlobalFilter)`
     width: max-content;
-    justify-content: ${(props) => (props.isMobile ? '' : props.timeFilters ? 'space-evenly' : 'space-around')};
-    align-items: ${(props) => (props.isMobile ? 'flex-start' : 'center')};
-    flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
-`;
-
-export const GlobalFilter = styled.span<{ selected?: boolean; isMobile?: boolean; cancelled?: boolean }>`
-    margin: 0px 2px;
-    text-transform: uppercase;
-    width: ${(props) => (props.cancelled ? 'max-content' : '')};
-    height: ${(props) => (props.isMobile ? '36px' : '')};
-    color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
-    &:hover {
-        cursor: pointer;
-        color: ${(props) => props.theme.textColor.quaternary};
-    }
-`;
-
-export const TimeFilterContainer = styled(FlexDivRow)<{ selected: boolean; isMobile?: boolean }>`
-    margin: 0px 2px;
-    color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
-    height: ${(props) => (props.isMobile ? '36px' : '')};
-    & > div {
-        background-color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
-    }
-    &:hover {
-        cursor: pointer;
-        color: ${(props) => props.theme.textColor.quaternary};
-        & > div {
-            cursor: pointer;
-            background-color: ${(props) => props.theme.textColor.quaternary};
-        }
-        & > label {
-            cursor: pointer;
-        }
-    }
-`;
-
-export const Circle = styled.div`
-    height: 9px;
-    width: 9px;
-    border-radius: 50px;
-    background-color: ${(props) => props.theme.textColor.secondary};
-    cursor: pointer;
-    margin-top: 2px;
-    margin-right: 3px;
-`;
-
-export const Label = styled.label`
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-    white-space: nowrap;
 `;
 
 export default GlobalFiltersInfoMobile;
