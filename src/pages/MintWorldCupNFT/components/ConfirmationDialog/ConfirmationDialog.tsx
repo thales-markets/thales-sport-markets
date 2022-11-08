@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { ReactComponent as GroupCollapsedRectangle } from 'assets/images/favorite-team/confirmation-rectangle.svg';
+import { ReactComponent as ConfirmationRectangle } from 'assets/images/favorite-team/confirmation-rectangle.svg';
 import styled from 'styled-components';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { Team } from 'pages/MintWorldCupNFT/groups';
@@ -56,7 +56,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ closeDialog, se
                 }
             >
                 <DialogContainer>
-                    <GroupCollapsedRectangle />
+                    <ConfirmationRectangle />
                     <ContentContainer>
                         <AreYouSure>
                             {minted ? t('mint-world-cup-nft.congrats') : t('mint-world-cup-nft.are-you-sure')}
@@ -109,7 +109,7 @@ const DialogContainer = styled.div`
 const ContentContainer = styled.div`
     position: absolute;
     left: 50%;
-    top: 15%;
+    top: 17%;
     width: 350px;
     z-index: 2;
     transform: translateX(-50%);

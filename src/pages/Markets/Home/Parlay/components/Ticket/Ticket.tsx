@@ -148,8 +148,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         dispatch(setPayment({ selectedStableIndex, isVoucherSelected, amountToBuy: usdAmountValue }));
     }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
 
+    // Clear Parlay when network is changed
     const isMounted = useRef(false);
     useEffect(() => {
+        // skip first render
         if (isMounted.current) {
             dispatch(removeAll());
         } else {
@@ -168,6 +170,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         ? parlayAmmData?.minUsdAmount // deafult value for qoute info
                         : susdAmountForQuote;
                 const susdPaid = ethers.utils.parseEther(roundNumberToDecimals(minUsdAmount).toString());
+
                 try {
                     const parlayAmmQuote = await getParlayMarketsAMMQuoteMethod(
                         true,
@@ -436,12 +439,16 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     );
 
     useEffect(() => {
+        let isSubscribed = true; // Use for race condition
+
         const fetchData = async () => {
             setIsFetching(true);
             const { parlayMarketsAMMContract } = networkConnector;
             if (parlayMarketsAMMContract && Number(usdAmountValue) >= 0 && parlayAmmData?.minUsdAmount) {
                 const parlayAmmQuote = await fetchParlayAmmQuote(Number(usdAmountValue));
-                if (!mountedRef.current) return null;
+
+                if (!mountedRef.current || !isSubscribed) return null;
+
                 if (!parlayAmmQuote.error) {
                     setTotalQuote(bigNumberFormatter(parlayAmmQuote['totalQuote']));
                     setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
@@ -468,7 +475,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             }
             setIsFetching(false);
         };
-        fetchData();
+        fetchData().catch((e) => console.log(e));
+
+        return () => {
+            isSubscribed = false;
+        };
     }, [
         usdAmountValue,
         fetchParlayAmmQuote,

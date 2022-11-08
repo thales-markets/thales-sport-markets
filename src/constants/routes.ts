@@ -5,6 +5,7 @@ export const ROUTES = {
         Market: '/markets/:marketAddress',
     },
     Profile: '/profile',
+    Referral: '/referral',
     Rewards: '/rewards',
     Quiz: '/trivia',
     QuizLeaderboard: '/trivia/leaderboard',

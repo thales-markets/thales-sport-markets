@@ -23,7 +23,7 @@ const MintWorldCupNFT: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const dispatch = useDispatch();
 
-    const favoriteTeamDataQuery = useFavoriteTeamDataQuery(walletAddress, networkId, { refetchInterval: 5000 });
+    const favoriteTeamDataQuery = useFavoriteTeamDataQuery(walletAddress, networkId, { refetchInterval: 10000 });
 
     const favoriteTeamData =
         favoriteTeamDataQuery.isSuccess && favoriteTeamDataQuery.data ? favoriteTeamDataQuery.data : null;

@@ -18,6 +18,7 @@ export const Wrapper = styled(FlexDivRow)`
 `;
 
 export const GameParticipantsWrapper = styled(FlexDivRow)`
+    align-items: center;
     @media (max-width: 768px) {
         width: 65%;
     }

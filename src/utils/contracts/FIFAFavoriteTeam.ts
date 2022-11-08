@@ -1,7 +1,7 @@
 export const FIFAFavoriteTeam = {
     addresses: {
         5: 'TBD',
-        10: 'TBD',
+        10: '0x0a47d5F27149270d45D74abD45FA30E567aB9b7D',
         42: 'TBD',
         69: 'TBD',
         420: '0xD66eE2D0F8810304402F6bE0E57E7C0a261b54A3',

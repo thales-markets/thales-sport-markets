@@ -55,6 +55,7 @@ import {
 } from '../styled-components';
 import Payment from '../Payment';
 import { removeAll, setPayment } from 'redux/modules/parlay';
+import useDebouncedEffect from 'hooks/useDebouncedEffect';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -160,8 +161,10 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         dispatch(setPayment({ selectedStableIndex, isVoucherSelected, amountToBuy: usdAmountValue }));
     }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
 
+    // Clear Parlay when network is changed
     const isMounted = useRef(false);
     useEffect(() => {
+        // skip first render
         if (isMounted.current) {
             dispatch(removeAll());
         } else {
@@ -236,7 +239,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         fetchAmmQuote,
     ]);
 
-    useEffect(() => {
+    useDebouncedEffect(() => {
         const fetchData = async () => {
             const divider = selectedStableIndex == 0 || selectedStableIndex == 1 ? 1e18 : 1e6;
             const { sportsAMMContract, signer } = networkConnector;
@@ -249,8 +252,9 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                         fetchAmmQuote(roundedMaxAmount),
                         contract.balancesOf(sportsAMMContract?.address),
                     ]);
-                    const ammBalanceForSelectedPosition = ammBalances[market.position];
+                    if (!mountedRef.current) return null;
 
+                    const ammBalanceForSelectedPosition = ammBalances[market.position];
                     const amountOfTokens =
                         fetchAmountOfTokensForXsUSDAmount(
                             Number(usdAmountValue),
@@ -259,15 +263,15 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                             availablePerSide.positions[market.position].available,
                             ammBalanceForSelectedPosition / divider
                         ) || 0;
-
-                    if (!mountedRef.current) return null;
-
                     if (amountOfTokens > availablePerSide.positions[market.position].available) {
                         setTokenAmount(0);
                         return;
                     }
                     const flooredAmountOfTokens = floorNumberToDecimals(amountOfTokens);
+
                     const quote = await fetchAmmQuote(flooredAmountOfTokens);
+                    if (!mountedRef.current) return null;
+
                     const parsedQuote = quote / divider;
 
                     const recalculatedTokenAmount = roundNumberToDecimals(

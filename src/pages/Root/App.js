@@ -21,6 +21,7 @@ import BannerCarousel from 'components/BannerCarousel';
 import { isMobile } from 'utils/device';
 import Profile from 'pages/Profile';
 import Wizard from 'pages/Wizard';
+import Referral from 'pages/Referral';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -131,6 +132,11 @@ const App = () => {
                             <Route exact path={ROUTES.Profile}>
                                 <DappLayout>
                                     <Profile />
+                                </DappLayout>
+                            </Route>
+                            <Route exact path={ROUTES.Referral}>
+                                <DappLayout>
+                                    <Referral />
                                 </DappLayout>
                             </Route>
                             <Route exact path={ROUTES.Wizard}>

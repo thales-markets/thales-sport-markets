@@ -17,6 +17,7 @@ import {
     ClaimContainer,
     ClaimLabel,
     ClaimValue,
+    ExternalLink,
     ExternalLinkArrow,
     ExternalLinkContainer,
     Label,
@@ -34,8 +35,7 @@ import PositionSymbol from 'components/PositionSymbol';
 import { convertPositionNameToPositionType, convertPositionToSymbolType, getIsApexTopGame } from 'utils/markets';
 import { getPositionColor } from 'utils/ui';
 import { formatDateWithTime } from 'utils/formatters/date';
-import SPAAnchor from 'components/SPAAnchor';
-import { getEtherscanAddressLink } from 'utils/etherscan';
+import { getEtherscanTxLink } from 'utils/etherscan';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getNetworkId } from 'redux/modules/wallet';
@@ -166,11 +166,11 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                         <Label>{t('profile.card.starts')}</Label>
                         <BoldValue>{formatDateWithTime(position.market.maturityDate)}</BoldValue>
                     </ColumnDirectionInfo>
-                    <SPAAnchor href={getEtherscanAddressLink(networkId, position.market.id)}>
+                    <ExternalLink href={getEtherscanTxLink(networkId, position.market.id)} target={'_blank'}>
                         <ExternalLinkContainer>
                             <ExternalLinkArrow />
                         </ExternalLinkContainer>
-                    </SPAAnchor>
+                    </ExternalLink>
                 </>
             )}
         </Wrapper>
