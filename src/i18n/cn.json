@@ -486,7 +486,6 @@
         "retweet": "转发这条推文",
         "second-option": "让您加入许可名单的第二个选项是完成以下步骤：",
         "minting-is-free": "铸造是免费的，每个钱包只能铸造一个 NFT。此 NFT 不可转让。",
-        "get-your-nft": "获取您的卡塔尔 2022 NFT",
         "eligible-text-1": "Zebro NFT 系列被用作世界杯加时赛的参赛作品。",
         "follow": "在 Twitter 上关注加班市场",
         "incentives": "激励措施",
@@ -520,7 +519,8 @@
         "zebro-wct-collection": "Zebro WC NFT 系列",
         "zebro-wct-collection-text": "是在世界杯期间代表您最喜欢的国家的激励活动的一部分，并有资格分享 50,000 OP 代币和 30,000 THALES 代币，以及用于过关投注和个人比赛的独家乘数。",
         "go-to-leaderboard": "前往排行榜",
-        "congrats": "恭喜！您已经成功铸造了 Zebro NFT！"
+        "congrats": "恭喜！您已经成功铸造了 Zebro NFT！",
+        "get-your-nft": "薄荷页"
     },
     "referral": {
         "nav-items": {
