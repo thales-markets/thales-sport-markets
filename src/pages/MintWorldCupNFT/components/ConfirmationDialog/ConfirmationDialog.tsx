@@ -23,9 +23,11 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ closeDialog, se
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const [minted, setMinted] = useState(false);
+    const [isMinting, setIsMinting] = useState(false);
 
     const handleMintNFT = async () => {
         const { favoriteTeamContract, signer } = networkConnector;
+        setIsMinting(true);
         if (favoriteTeamContract && signer) {
             const favoriteTeamContractWithSigner = favoriteTeamContract.connect(signer);
             const id = toast.loading(t('market.toast-messsage.transaction-pending'));
@@ -36,9 +38,11 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ closeDialog, se
                 if (txResult && txResult.transactionHash) {
                     toast.update(id, getSuccessToastOptions(t('mint-world-cup-nft.success-mint')));
                     setMinted(true);
+                    setIsMinting(false);
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                setIsMinting(false);
             }
         }
     };
@@ -77,7 +81,9 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ closeDialog, se
                         <ButtonsContainer>
                             {!minted && <NoButton onClick={closeDialog}>{t('mint-world-cup-nft.no')}</NoButton>}
                             {!minted && (
-                                <YesButton onClick={handleMintNFT}>{t('mint-world-cup-nft.yes-mint')}</YesButton>
+                                <YesButton disabled={isMinting} onClick={handleMintNFT}>
+                                    {t('mint-world-cup-nft.yes-mint')}
+                                </YesButton>
                             )}
                             {minted && (
                                 <YesButton
