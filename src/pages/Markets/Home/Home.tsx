@@ -675,7 +675,7 @@ const Home: React.FC = () => {
                 )}
                 {/* RIGHT PART */}
                 <SidebarContainer>
-                    {!isMobile && networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
+                    {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
                     <Parlay />
                 </SidebarContainer>
             </RowContainer>
