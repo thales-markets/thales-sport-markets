@@ -724,6 +724,15 @@ const BurgerFiltersContainer = styled(FlexDivColumn)<{ show: boolean }>`
     background: #303656;
     display: ${(props) => (props.show ? 'flex' : 'none')};
     z-index: 1000;
+    @media (max-width: 950px) {
+        margin: 0;
+        scrollbar-width: 0px; /* Firefox */
+        ::-webkit-scrollbar {
+            /* WebKit */
+            width: 0px;
+            height: 0px;
+        }
+    }
 `;
 
 const LogoContainer = styled.div`
