@@ -88,8 +88,19 @@ export const RoundInfo = styled.p`
 `;
 
 export const Description = styled.div`
-    font-size: 16px;
+    font-size: 18px;
+    line-height: 20px;
     text-align: justify;
+    p {
+        margin-bottom: 10px;
+    }
+    ul {
+        list-style: initial;
+        margin-left: 20px;
+    }
+    li {
+        margin-bottom: 8px;
+    }
 `;
 
 export const ContentInfoContainer = styled.div`

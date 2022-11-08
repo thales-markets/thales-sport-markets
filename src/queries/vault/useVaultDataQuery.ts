@@ -31,6 +31,12 @@ const useVaultDataQuery = (
                 canCloseCurrentRound: false,
                 paused: false,
                 lifetimePnl: 0,
+                utilizationRate: 0,
+                priceLowerLimit: 0,
+                priceUpperLimit: 0,
+                skewImpactLimit: 0,
+                allocationLimitsPerMarketPerRound: 0,
+                minTradeAmount: 0,
             };
 
             try {
@@ -51,6 +57,12 @@ const useVaultDataQuery = (
                         usersCurrentlyInVault,
                         canCloseCurrentRound,
                         paused,
+                        utilizationRate,
+                        priceLowerLimit,
+                        priceUpperLimit,
+                        skewImpactLimit,
+                        allocationLimitsPerMarketPerRound,
+                        minTradeAmount,
                     ] = await Promise.all([
                         sportVaultContract?.vaultStarted(),
                         sportVaultContract?.maxAllowedDeposit(),
@@ -62,6 +74,12 @@ const useVaultDataQuery = (
                         sportVaultContract?.usersCurrentlyInVault(),
                         sportVaultContract?.canCloseCurrentRound(),
                         sportVaultContract?.paused(),
+                        sportVaultContract?.utilizationRate(),
+                        sportVaultContract?.priceLowerLimit(),
+                        sportVaultContract?.priceUpperLimit(),
+                        sportVaultContract?.skewImpactLimit(),
+                        sportVaultContract?.allocationLimitsPerMarketPerRound(),
+                        sportVaultContract?.minTradeAmount(),
                     ]);
 
                     vaultData.vaultStarted = vaultStarted;
@@ -75,6 +93,13 @@ const useVaultDataQuery = (
                     vaultData.usersCurrentlyInVault = Number(usersCurrentlyInVault);
                     vaultData.canCloseCurrentRound = canCloseCurrentRound;
                     vaultData.paused = paused;
+                    vaultData.utilizationRate = bigNumberFormatter(utilizationRate);
+                    vaultData.priceLowerLimit = bigNumberFormatter(priceLowerLimit);
+                    vaultData.priceUpperLimit = bigNumberFormatter(priceUpperLimit);
+                    vaultData.skewImpactLimit = bigNumberFormatter(skewImpactLimit);
+                    vaultData.allocationLimitsPerMarketPerRound =
+                        bigNumberFormatter(allocationLimitsPerMarketPerRound) / 100;
+                    vaultData.minTradeAmount = bigNumberFormatter(minTradeAmount);
 
                     const [allocationCurrentRound, allocationNextRound, lifetimePnl] = await Promise.all([
                         sportVaultContract?.allocationPerRound(vaultData.round),

@@ -42,7 +42,7 @@ import NumericInput from 'components/fields/NumericInput';
 import { getIsAppReady } from 'redux/modules/app';
 import { UserVaultData, VaultData } from 'types/vault';
 import useVaultDataQuery from 'queries/vault/useVaultDataQuery';
-import { formatCurrencyWithSign } from 'utils/formatters/number';
+import { formatCurrencyWithSign, formatPercentage, formatCurrency } from 'utils/formatters/number';
 import { PAYMENT_CURRENCY, USD_SIGN } from 'constants/currency';
 import TimeRemaining from 'components/TimeRemaining';
 import useUserVaultDataQuery from 'queries/vault/useUserVaultDataQuery';
@@ -403,16 +403,50 @@ const Vault: React.FC<VaultProps> = (props) => {
                                     </RoundInfoContainer>
                                 )}
                             </RoundInfoWrapper>
+                            <Description>
+                                <Trans
+                                    i18nKey={`vault.${vaultId}.description`}
+                                    components={{
+                                        p: <p />,
+                                    }}
+                                    values={{
+                                        odds: formatPercentage(vaultData.priceLowerLimit, 0),
+                                        discount: formatPercentage(Math.abs(vaultData.skewImpactLimit), 0),
+                                    }}
+                                />
+                                <Trans
+                                    i18nKey={`vault.variables`}
+                                    components={{
+                                        p: <p />,
+                                        ul: <ul />,
+                                        li: <li />,
+                                    }}
+                                    values={{
+                                        utilizationRate: formatPercentage(vaultData.utilizationRate, 0),
+                                        priceLowerLimit: formatCurrencyWithSign(USD_SIGN, vaultData.priceLowerLimit, 2),
+                                        priceUpperLimit: formatCurrencyWithSign(USD_SIGN, vaultData.priceUpperLimit, 2),
+                                        skewImpactLimit: formatCurrency(vaultData.skewImpactLimit),
+                                        allocationLimitsPerMarketPerRound: formatPercentage(
+                                            vaultData.allocationLimitsPerMarketPerRound,
+                                            0
+                                        ),
+                                        maxAllowedDeposit: formatCurrencyWithSign(
+                                            USD_SIGN,
+                                            vaultData.maxAllowedDeposit,
+                                            0
+                                        ),
+                                        maxAllowedUsers: vaultData.maxAllowedUsers,
+                                        minTradeAmount: formatCurrencyWithSign(USD_SIGN, vaultData.minTradeAmount, 0),
+                                        minDepositAmount: formatCurrencyWithSign(
+                                            USD_SIGN,
+                                            vaultData.minDepositAmount,
+                                            0
+                                        ),
+                                    }}
+                                />
+                            </Description>
                         </>
                     )}
-                    <Description>
-                        <Trans
-                            i18nKey={`vault.${vaultId}.description`}
-                            components={{
-                                p: <p />,
-                            }}
-                        />
-                    </Description>
                     <PnL vaultAddress={vaultAddress} lifetimePnl={vaultData ? vaultData.lifetimePnl : 0} />
                 </LeftContainer>
                 <RightContainer>

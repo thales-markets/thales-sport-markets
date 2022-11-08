@@ -28,11 +28,11 @@ const Vault: React.FC = () => {
                 <SPAAnchor href={buildVaultLink('discount-vault', language)}>
                     <VaultContainer>{t(`vault.discount-vault.title`)}</VaultContainer>
                 </SPAAnchor>
-                <SPAAnchor href={buildVaultLink('vault-x', language)}>
-                    <VaultContainer>{t(`vault.vault-x.title`)}</VaultContainer>
+                <SPAAnchor href={buildVaultLink('degen-discount-vault', language)}>
+                    <VaultContainer>{t(`vault.degen-discount-vault.title`)}</VaultContainer>
                 </SPAAnchor>
-                <SPAAnchor href={buildVaultLink('vault-y', language)}>
-                    <VaultContainer>{t(`vault.vault-y.title`)}</VaultContainer>
+                <SPAAnchor href={buildVaultLink('safu-discount-vault', language)}>
+                    <VaultContainer>{t(`vault.safu-discount-vault.title`)}</VaultContainer>
                 </SPAAnchor>
             </Container>
         </Wrapper>

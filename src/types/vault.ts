@@ -18,6 +18,12 @@ export type VaultData = {
     canCloseCurrentRound: boolean;
     paused: boolean;
     lifetimePnl: number;
+    utilizationRate: number;
+    priceLowerLimit: number;
+    priceUpperLimit: number;
+    skewImpactLimit: number;
+    allocationLimitsPerMarketPerRound: number;
+    minTradeAmount: number;
 };
 
 export type UserVaultData = {
