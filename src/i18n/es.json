@@ -297,7 +297,9 @@
                 "single-min-amount": "La cantidad mínima es {{min}}",
                 "same-team": "Un mismo equipo no puede estar en un Parlay más de una vez",
                 "team-in-parlay": "{{team}} ya está en Parlay. El mismo equipo no se puede agregar a un Parlay más de una vez.",
-                "max-payout": "El pago máximo admitido es {{max}}"
+                "max-payout": "El pago máximo admitido es {{max}}",
+                "max-profit": "La ganancia máxima admitida es {{max}}",
+                "max-teams": "Máximo de {{max}} mercados en Parlay"
             },
             "fee": "Costo total",
             "payout": "Total recibido",
