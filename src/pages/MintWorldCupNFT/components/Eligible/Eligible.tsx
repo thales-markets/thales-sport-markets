@@ -10,7 +10,6 @@ import {
     ListItem,
     GoToTwitterContainer,
 } from 'pages/MintWorldCupNFT/styled-components';
-import { ReactComponent as HappyFace } from 'assets/images/favorite-team/happy-face.svg';
 import { ReactComponent as FirstRectangle } from 'assets/images/favorite-team/first-rectangle.svg';
 import { ReactComponent as SecondRectangle } from 'assets/images/favorite-team/second-rectangle.svg';
 import { ReactComponent as ArrowRight } from 'assets/images/favorite-team/arrow-right.svg';
@@ -29,10 +28,7 @@ const Eligible: React.FC<EligibleProps> = ({ onChooseNft }) => {
         <>
             <EligibilityContainer>
                 <FirstRectangle />
-                <EligibilityText>
-                    {t('mint-world-cup-nft.eligible-text')}
-                    {!isMobile && <HappyFace />}
-                </EligibilityText>
+                <EligibilityText>{t('mint-world-cup-nft.eligible-text')}</EligibilityText>
             </EligibilityContainer>
             <InfoContainer>
                 {!isMobile && <SecondRectangle />}

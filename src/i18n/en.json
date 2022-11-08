@@ -473,7 +473,7 @@
     "mint-world-cup-nft": {
         "mint-nft-button": "Mint this Zebro!",
         "not-eligible-text": "Your wallet is not eligible to mint a Zebro NFT yet!",
-        "eligible-text": "Hey, you can now mint your favorite team Zebro NFT.",
+        "eligible-text": "Your wallet is eligible to mint a Zebro NFT!",
         "stake-10-thales": "To be able to mint a Zebro NFT, you need to have at least 10 THALES staked.",
         "second-option": "The second option to get you on allowlist, is to complete following steps:",
         "get-thales": "Get THALES",
