@@ -89,7 +89,7 @@ export const RoundInfo = styled.p`
 
 export const Description = styled.div`
     font-size: 18px;
-    line-height: 20px;
+    line-height: 22px;
     text-align: justify;
     p {
         margin-bottom: 10px;
@@ -99,7 +99,7 @@ export const Description = styled.div`
         margin-left: 20px;
     }
     li {
-        margin-bottom: 8px;
+        margin-bottom: 4px;
     }
 `;
 
