@@ -186,6 +186,8 @@ export const ExternalLinkArrow = styled.i.attrs({ className: 'icon icon--arrow-e
     cursor: pointer;
 `;
 
+export const ExternalLink = styled.a``;
+
 export const TotalQuoteContainer = styled(FlexDivRow)``;
 
 export const ProfitContainer = styled(FlexDivRow)``;

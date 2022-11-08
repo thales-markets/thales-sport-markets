@@ -115,6 +115,7 @@ export type MarketData = {
 
 export type ParlayMarket = {
     id: string;
+    txHash: string;
     sportMarkets: SportMarketInfo[];
     sportMarketsFromContract: string[];
     positions: PositionData[];
@@ -216,6 +217,7 @@ export type AccountPositionGraph = {
 
 export type PositionBalance = {
     id: string;
+    firstTxHash: string;
     account: string;
     amount: number;
     position: AccountPositionGraph;
