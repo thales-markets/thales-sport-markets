@@ -325,7 +325,7 @@
         "parlay": {
             "total-quote": "Total quote",
             "clear": "Clear all",
-            "buy-amount": "Amount to buy",
+            "buy-amount": "Buy-in",
             "parlay-fee": "Parlay fee",
             "safebox-fee": "SafeBox fee",
             "positions": "Positions",
