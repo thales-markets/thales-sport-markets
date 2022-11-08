@@ -18,7 +18,7 @@ const getDefaultParlay = (): ParlaysMarketPosition[] => {
 const getDefaultPayment = (): ParlayPayment => {
     return {
         selectedStableIndex: COLLATERALS_INDEX.sUSD,
-        isVoucherSelected: true,
+        isVoucherSelected: undefined,
         amountToBuy: '',
     };
 };
