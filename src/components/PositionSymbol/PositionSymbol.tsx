@@ -28,6 +28,7 @@ type SymbolProps = {
     awayTeam?: string;
     discount?: number;
     isMobile?: boolean;
+    winningSymbol?: boolean;
 };
 
 const PositionSymbol: React.FC<SymbolProps> = ({
@@ -44,6 +45,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     children,
     discount,
     isMobile,
+    winningSymbol,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -85,6 +87,13 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                 }
             }}
         >
+            {isMobile && !winningSymbol && (
+                <Discount noDiscount={discount == null}>
+                    <div className="discount-label green">
+                        {discount && <span>-{Math.ceil(Math.abs(discount))}%</span>}
+                    </div>
+                </Discount>
+            )}
             <Container
                 glow={glow}
                 color={symbolColor}
@@ -117,7 +126,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                         )}
                     </AdditionalText>
                 )}
-                {discount && (
+                {discount && !isMobile && (
                     <Discount>
                         <div className="discount-label green">
                             <span>-{Math.ceil(Math.abs(discount))}%</span>
@@ -177,10 +186,11 @@ const Symbol = styled.span<{ color?: string; addedToParlay?: boolean; size?: str
     font-size: ${(_props) => (_props.size ? _props.size : '12px')};
 `;
 
-const Discount = styled(FlexDivCentered)<{ color?: string }>`
+const Discount = styled(FlexDivCentered)<{ color?: string; noDiscount?: boolean }>`
     color: ${(_props) => (_props?.color ? _props.color : '')};
     font-size: 12px;
     margin-left: 2px;
+    visibility: ${(_props) => (_props?.noDiscount ? 'hidden' : '')};
 `;
 
 export default PositionSymbol;

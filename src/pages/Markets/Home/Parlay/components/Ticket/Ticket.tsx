@@ -392,9 +392,12 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         );
     };
 
-    const isValidPayout: boolean = useMemo(() => {
-        return parlayAmmData?.maxSupportedAmount !== undefined && totalBuyAmount > parlayAmmData?.maxSupportedAmount;
-    }, [parlayAmmData?.maxSupportedAmount, totalBuyAmount]);
+    const isValidProfit: boolean = useMemo(() => {
+        return (
+            parlayAmmData?.maxSupportedAmount !== undefined &&
+            totalBuyAmount - Number(usdAmountValue) > parlayAmmData?.maxSupportedAmount
+        );
+    }, [parlayAmmData?.maxSupportedAmount, totalBuyAmount, usdAmountValue]);
 
     const setTooltipTextMessageUsdAmount = useCallback(
         (value: string | number, quotes: number[], error?: string) => {
@@ -417,9 +420,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         min: formatCurrencyWithSign(USD_SIGN, parlayAmmData?.minUsdAmount || 0),
                     })
                 );
-            } else if (isValidPayout) {
+            } else if (isValidProfit) {
                 setTooltipTextUsdAmount(
-                    t('markets.parlay.validation.max-payout', {
+                    t('markets.parlay.validation.max-profit', {
                         max: formatCurrencyWithSign(USD_SIGN, parlayAmmData?.maxSupportedAmount || 0),
                     })
                 );
@@ -429,7 +432,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 setTooltipTextUsdAmount('');
             }
         },
-        [parlayAmmData?.maxSupportedAmount, parlayAmmData?.minUsdAmount, t, paymentTokenBalance, isValidPayout]
+        [parlayAmmData?.maxSupportedAmount, parlayAmmData?.minUsdAmount, t, paymentTokenBalance, isValidProfit]
     );
 
     useEffect(() => {
@@ -452,10 +455,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         .map((finalQuote, index) => (finalQuote === 0 ? index : -1))
                         .filter((index) => index !== -1);
                     setMarketsOutOfLiquidity(marketsOutOfLiquidity);
-
                     setFinalQuotes(fetchedFinalQuotes);
+
                     setTooltipTextMessageUsdAmount(usdAmountValue, fetchedFinalQuotes);
                 } else {
+                    setMarketsOutOfLiquidity([]);
                     setTotalQuote(0);
                     setSkew(0);
                     setTotalBuyAmount(0);
@@ -572,7 +576,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 <SummaryValue isInfo={true}>
                     {Number(usdAmountValue) <= 0 ||
                     totalBuyAmount === 0 ||
-                    (tooltipTextUsdAmount && !isValidPayout) ||
+                    (tooltipTextUsdAmount && !isValidProfit) ||
                     isFetching
                         ? '-'
                         : formatCurrencyWithSign(USD_SIGN, totalBuyAmount, 2)}
@@ -581,7 +585,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.potential-profit')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>
-                    {Number(usdAmountValue) <= 0 || totalBuyAmount === 0 || tooltipTextUsdAmount || isFetching
+                    {Number(usdAmountValue) <= 0 ||
+                    totalBuyAmount === 0 ||
+                    (tooltipTextUsdAmount && !isValidProfit) ||
+                    isFetching
                         ? '-'
                         : `${formatCurrencyWithSign(
                               USD_SIGN,

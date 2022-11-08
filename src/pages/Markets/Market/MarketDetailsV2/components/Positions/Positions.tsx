@@ -12,6 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { AvailablePerSide, MarketData } from 'types/markets';
@@ -26,6 +27,7 @@ import {
 } from 'utils/markets';
 import networkConnector from 'utils/networkConnector';
 import {
+    ClaimableInfoContainer,
     ClaimButton,
     InnerContainer,
     Label,
@@ -61,6 +63,7 @@ const Positions: React.FC<PositionsProps> = ({
     // Redux states
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     // ------------
 
     // Queries
@@ -134,8 +137,6 @@ const Positions: React.FC<PositionsProps> = ({
     const homeTeam = isApexTopGame ? t('common.yes') : market.homeTeam;
     const awayTeam = isApexTopGame ? t('common.no') : market.awayTeam;
 
-    console.log('Available ', availablePerSide);
-
     const showHomeTeamDiscount =
         !!availablePerSide?.positions[Position.HOME]?.buyImpactPrice &&
         isDiscounted(availablePerSide?.positions[Position.HOME]?.buyImpactPrice);
@@ -155,9 +156,6 @@ const Positions: React.FC<PositionsProps> = ({
     const awayPositionDiscount = showAwayTeamDiscount
         ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.AWAY]?.buyImpactPrice)))
         : 0;
-
-    console.log('drawPositionDiscount ', drawPositionDiscount);
-    console.log('awayPositionDiscount ', awayPositionDiscount);
 
     const claimReward = async () => {
         const { signer } = networkConnector;
@@ -188,7 +186,9 @@ const Positions: React.FC<PositionsProps> = ({
             )}
             {pendingResolution && (
                 <StatusContainer isPendingResolve={pendingResolution}>
-                    <StatusLabel isPendingResolve={pendingResolution}>{t('markets.market-card.canceled')}</StatusLabel>
+                    <StatusLabel isPendingResolve={pendingResolution}>
+                        {t('markets.market-card.pending-resolution')}
+                    </StatusLabel>
                 </StatusContainer>
             )}
             {gameResolved && (
@@ -201,7 +201,7 @@ const Positions: React.FC<PositionsProps> = ({
                                 additionalText={{
                                     firstText: convertFinalResultToWinnerName(market.finalResult, market),
                                     firstTextStyle: {
-                                        fontSize: '19px',
+                                        fontSize: isMobile ? '12px' : '19px',
                                         marginLeft: '15px',
                                         textTransform: 'uppercase',
                                     },
@@ -215,10 +215,10 @@ const Positions: React.FC<PositionsProps> = ({
                         </ResultContainer>
                         {claimable && (
                             <>
-                                <InnerContainer style={{ width: '35%' }}>
+                                <ClaimableInfoContainer style={{ width: '35%' }}>
                                     <Label>{t('markets.market-card.claimable')}</Label>
                                     <Value>{formatCurrencyWithSign(USD_SIGN, claimableAmount, 2)}</Value>
-                                </InnerContainer>
+                                </ClaimableInfoContainer>
                                 <InnerContainer style={{ width: '15%' }}>
                                     <ClaimButton
                                         onClick={(e: any) => {

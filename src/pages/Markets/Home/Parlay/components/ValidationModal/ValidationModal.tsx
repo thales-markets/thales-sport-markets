@@ -27,8 +27,13 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => 
     return (
         <Modal title={t('markets.parlay.validation.title')} onClose={() => onClose()} shouldCloseOnOverlayClick={true}>
             <Container>
-                {parlayError.code === ParlayErrorCode.MAX_4_MATCHES && (
-                    <Lottie animationData={validationFiveMarketsAnimation} style={fiveMarketsStyle} />
+                {parlayError.code === ParlayErrorCode.MAX_MATCHES && (
+                    <>
+                        <ErrorMessage color={'#72c69b'}>
+                            {t('markets.parlay.validation.max-teams', { max: parlayError.data })}
+                        </ErrorMessage>
+                        <Lottie animationData={validationFiveMarketsAnimation} style={fiveMarketsStyle} />
+                    </>
                 )}
                 {parlayError.code === ParlayErrorCode.SAME_TEAM_TWICE && (
                     <ErrorMessage>
@@ -49,17 +54,18 @@ const Container = styled(FlexDivColumnCentered)`
     }
 `;
 
-const ErrorMessage = styled.p`
+const ErrorMessage = styled.p<{ color?: string }>`
     margin-top: 20px;
     font-style: normal;
     font-size: 15px;
     line-height: 22px;
-    color: #ffffff;
+    color: ${(props) => (props.color ? props.color : '#ffffff')};
     text-transform: uppercase;
 `;
 
 const fiveMarketsStyle: CSSProperties = {
     width: 350,
+    margin: '-80px 10px 0 0',
 };
 
 export default ValidationModal;

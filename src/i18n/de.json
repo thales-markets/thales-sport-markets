@@ -464,6 +464,14 @@
             "no-open": "Sie haben keine offene Stelle",
             "no-claimable": "Sie haben keine beanspruchbaren Positionen",
             "no-transactions": "Sie haben keine Trades"
+        },
+        "table": {
+            "games": "Spiele",
+            "time": "Zeit",
+            "id": "Ausweis",
+            "amount": "Menge",
+            "paid": "Bezahlt",
+            "position": "Position"
         }
     },
     "mint-world-cup-nft": {

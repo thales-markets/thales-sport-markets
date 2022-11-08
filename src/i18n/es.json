@@ -467,6 +467,14 @@
             "no-open": "No tienes ninguna posición abierta",
             "no-claimable": "No tienes ninguna posición reclamable",
             "no-transactions": "no tienes cambios"
+        },
+        "table": {
+            "paid": "Pagado",
+            "time": "Tiempo",
+            "amount": "Monto",
+            "position": "Posición",
+            "id": "Identificación",
+            "games": "Juegos"
         }
     },
     "mint-world-cup-nft": {

@@ -262,6 +262,14 @@
             "result": "Result",
             "position-size": "Position size",
             "starts": "Starts"
+        },
+        "table": {
+            "time": "Time",
+            "games": "Games",
+            "paid": "Paid",
+            "amount": "amount",
+            "id": "Id",
+            "position": "Position"
         }
     },
     "markets": {
@@ -335,9 +343,10 @@
             "show-parlay": "Show Parlay",
             "validation": {
                 "title": "Parlay Validation",
+                "max-teams": "Maximum {{max}} markets in Parlay",
                 "team-in-parlay": "{{team}} is already in Parlay. The same team can't be added to a Parlay more than once.",
                 "amount-exceeded": "Amount exceeded the amount available on AMM",
-                "max-payout": "Maximal supported payout is {{max}}",
+                "max-profit": "Maximal supported profit is {{max}}",
                 "min-amount": "Minimal buy-in for a Parlay ticket is {{min}}",
                 "single-min-amount": "Minimal buy-in is {{min}}",
                 "availability": "Not enough liquidity for this buy-in amount",

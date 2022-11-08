@@ -64,13 +64,21 @@ const Odds: React.FC<OddsProps> = ({
     const showOdds = !pendingResolution && !noOddsFlag && !resolvedGameFlag && !isCancelled && !isPaused;
     const selectedOddsType = useSelector(getOddsType);
     return (
-        <Container resolved={!!resolvedGameFlag} isMobile={isMobile}>
+        <Container resolved={!!resolvedGameFlag} isMobile={isMobile} noOdds={noOddsFlag}>
             {noOddsFlag && <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>}
             {resolvedGameFlag && (
                 <>
                     <PositionSymbol
                         type={convertFinalResultToResultType(finalResult, isApexTopGame)}
+                        symbolColor={
+                            convertFinalResultToResultType(finalResult, isApexTopGame) == 0
+                                ? ODDS_COLOR.HOME
+                                : convertFinalResultToResultType(finalResult, isApexTopGame) == 1
+                                ? ODDS_COLOR.AWAY
+                                : ODDS_COLOR.DRAW
+                        }
                         isMobile={isMobile}
+                        winningSymbol={true}
                     />
                     <WinnerLabel>{t('common.winner')}</WinnerLabel>
                 </>
