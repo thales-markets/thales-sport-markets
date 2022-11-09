@@ -20,7 +20,6 @@ import {
     VaultFilledText,
     RoundInfoWrapper,
     RoundInfoContainer,
-    RoundInfoLabel,
     RoundInfo,
     LeftContainer,
     RightContainer,
@@ -30,6 +29,12 @@ import {
     WarningContentInfo,
     CloseRoundButton,
     LoaderContainer,
+    RoundEndContainer,
+    RoundEndLabel,
+    RoundEnd,
+    RoundAllocationContainer,
+    RoundAllocationLabel,
+    RoundAllocation,
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -359,50 +364,50 @@ const Vault: React.FC<VaultProps> = (props) => {
                 />
             </Info>
             <BackToLink link={buildHref(ROUTES.Vaults)} text={t('vault.back-to-vaults')} />
-            <Title>{t(`vault.${vaultId}.title`)}</Title>
+            {vaultData && (
+                <>
+                    <RoundInfoWrapper>
+                        {vaultData.paused ? (
+                            <RoundInfoContainer>
+                                <RoundInfo>{t('vault.vault-paused-message')}</RoundInfo>
+                            </RoundInfoContainer>
+                        ) : vaultData.vaultStarted ? (
+                            <>
+                                <RoundEndContainer>
+                                    <RoundEndLabel>{t('vault.round-end-label')}:</RoundEndLabel>
+                                    <RoundEnd>
+                                        {vaultData.isRoundEnded ? (
+                                            t('vault.round-ended-label')
+                                        ) : (
+                                            <TimeRemaining end={vaultData.roundEndTime} fontSize={20} showFullCounter />
+                                        )}{' '}
+                                        {vaultData.canCloseCurrentRound && (
+                                            <CloseRoundButton disabled={isSubmitting} onClick={closeRound}>
+                                                {t('vault.button.close-round-label')}
+                                            </CloseRoundButton>
+                                        )}
+                                    </RoundEnd>
+                                </RoundEndContainer>
+                                <RoundAllocationContainer>
+                                    <RoundAllocationLabel>{t('vault.round-allocation-label')}:</RoundAllocationLabel>
+                                    <RoundAllocation>
+                                        {formatCurrencyWithSign(USD_SIGN, vaultData.allocationCurrentRound)}
+                                    </RoundAllocation>
+                                </RoundAllocationContainer>
+                            </>
+                        ) : (
+                            <RoundInfoContainer>
+                                <RoundInfo>{t('vault.vault-not-started-message')}</RoundInfo>
+                            </RoundInfoContainer>
+                        )}
+                    </RoundInfoWrapper>
+                </>
+            )}
             <Container>
                 <LeftContainer>
+                    <Title>{t(`vault.${vaultId}.title`)}</Title>
                     {vaultData && (
                         <>
-                            <RoundInfoWrapper>
-                                {vaultData.paused ? (
-                                    <RoundInfoContainer>
-                                        <RoundInfo>{t('vault.vault-paused-message')}</RoundInfo>
-                                    </RoundInfoContainer>
-                                ) : vaultData.vaultStarted ? (
-                                    <>
-                                        <RoundInfoContainer>
-                                            <RoundInfoLabel>{t('vault.round-allocation-label')}:</RoundInfoLabel>
-                                            <RoundInfo>
-                                                {formatCurrencyWithSign(USD_SIGN, vaultData.allocationCurrentRound)}
-                                            </RoundInfo>
-                                        </RoundInfoContainer>
-                                        <RoundInfoContainer>
-                                            <RoundInfoLabel>{t('vault.round-end-label')}:</RoundInfoLabel>
-                                            <RoundInfo>
-                                                {vaultData.isRoundEnded ? (
-                                                    t('vault.round-ended-label')
-                                                ) : (
-                                                    <TimeRemaining
-                                                        end={vaultData.roundEndTime}
-                                                        fontSize={20}
-                                                        showFullCounter
-                                                    />
-                                                )}{' '}
-                                                {vaultData.canCloseCurrentRound && (
-                                                    <CloseRoundButton disabled={isSubmitting} onClick={closeRound}>
-                                                        {t('vault.button.close-round-label')}
-                                                    </CloseRoundButton>
-                                                )}
-                                            </RoundInfo>
-                                        </RoundInfoContainer>
-                                    </>
-                                ) : (
-                                    <RoundInfoContainer>
-                                        <RoundInfo>{t('vault.vault-not-started-message')}</RoundInfo>
-                                    </RoundInfoContainer>
-                                )}
-                            </RoundInfoWrapper>
                             <Description>
                                 <Trans
                                     i18nKey={`vault.${vaultId}.description`}

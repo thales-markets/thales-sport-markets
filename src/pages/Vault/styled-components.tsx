@@ -42,7 +42,7 @@ export const ContentContainer = styled(FlexDivColumn)`
 
 export const LeftContainer = styled(ContentContainer)`
     margin-right: 20px;
-    padding-top: 30px;
+    text-align: start;
     @media (max-width: 767px) {
         margin-right: 0px;
         padding-top: 0px;
@@ -52,32 +52,56 @@ export const LeftContainer = styled(ContentContainer)`
 export const RightContainer = styled(ContentContainer)`
     background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
     padding: 30px 40px 20px 40px;
-    border-radius: 20px;
+    border-radius: 10px;
     @media (max-width: 767px) {
         padding: 20px 20px 10px 20px;
     }
 `;
 
-export const RoundInfoWrapper = styled(FlexDivRow)`
-    width: 100%;
+export const RoundInfoWrapper = styled(FlexDivColumn)`
     margin-bottom: 20px;
-    @media (max-width: 575px) {
-        flex-direction: column;
+    border-radius: 10px;
+    background: ${(props) => props.theme.background.secondary};
+    width: 60%;
+    @media (max-width: 1440px) {
+        width: 95%;
     }
+    padding: 20px;
+    margin-top: 30px;
+`;
+
+export const RoundEndContainer = styled(FlexDivColumn)`
+    align-items: center;
+    font-size: 20px;
+    span {
+        font-size: 30px;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+    margin-bottom: 15px;
+`;
+
+export const RoundEndLabel = styled.p`
+    margin-bottom: 10px;
+`;
+
+export const RoundEnd = styled.p`
+    font-weight: 600;
+`;
+
+export const RoundAllocationContainer = styled(FlexDivCentered)`
+    font-size: 20px;
+`;
+
+export const RoundAllocationLabel = styled.p``;
+
+export const RoundAllocation = styled.p`
+    font-weight: 600;
+    margin-left: 6px;
 `;
 
 export const RoundInfoContainer = styled(FlexDivColumn)`
     align-items: center;
-    color: #3fd1ff;
-    span {
-        color: #3fd1ff;
-        font-weight: 600;
-    }
-    @media (max-width: 575px) {
-        :first-child {
-            margin-bottom: 10px;
-        }
-    }
 `;
 
 export const RoundInfoLabel = styled.p``;
@@ -124,9 +148,9 @@ export const Title = styled.span`
     font-weight: bold;
     font-size: 25px;
     line-height: 100%;
-    margin-top: 30px;
     color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 40px;
+    margin-bottom: 30px;
+    margin-top: 10px;
 `;
 
 export const VaultFilledText = styled(ContentInfo)`

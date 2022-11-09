@@ -77,7 +77,6 @@ const Container = styled(FlexDivColumn)`
     color: ${(props) => props.theme.textColor.primary};
     border-radius: 10px;
     position: relative;
-    width: 100%;
     max-height: 500px;
     min-height: 350px;
     overflow-y: auto;
