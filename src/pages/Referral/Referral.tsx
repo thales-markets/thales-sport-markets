@@ -48,10 +48,11 @@ const NavigationItems = [
 const Referral: React.FC = () => {
     const { t } = useTranslation();
 
-    const walletAddress =
-        useSelector((state: RootState) => getWalletAddress(state)) || ''
-            ? '0xe21b80181304e3641424cdfb8376e73574ab4794'
-            : '0xe21b80181304e3641424cdfb8376e73574ab4794';
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    // const walletAddress =
+    //     useSelector((state: RootState) => getWalletAddress(state)) || ''
+    //         ? '0xe21b80181304e3641424cdfb8376e73574ab4794'
+    //         : '0xe21b80181304e3641424cdfb8376e73574ab4794';
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
 
@@ -82,8 +83,6 @@ const Referral: React.FC = () => {
         referredTradersQuery?.isSuccess && referredTradersQuery.data ? referredTradersQuery.data : [];
     const referralTransactionsData =
         referralTransactionsQuery?.isSuccess && referralTransactionsQuery.data ? referralTransactionsQuery.data : [];
-
-    console.log('referralTransactionsData ', referralTransactionsData);
 
     return (
         <Wrapper>
