@@ -140,12 +140,17 @@ const LabelContainer = styled(FlexDivRowCentered)`
     width: 100%;
     justify-content: flex-start;
     &.selected,
-    &:hover:not(.disabled) {
+    &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
     }
-    &.disabled {
-        cursor: default;
-        opacity: 0.4;
+
+    @media (max-width: 950px) {
+        &:hover {
+            color: ${(props) => props.theme.textColor.secondary};
+        }
+        &.selected {
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
     }
 `;
 

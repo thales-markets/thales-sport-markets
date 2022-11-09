@@ -23,9 +23,12 @@ const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, on
                 <Label>{`${children} ${disabled ? `\n ${t('common.coming-soon')}` : ''} `}</Label>
                 {sport.toLowerCase() != 'all' ? (
                     !selected ? (
-                        <ArrowIcon className={`icon-exotic icon-exotic--right`} />
+                        <ArrowIcon className={`icon-exotic icon-exotic--right ${selected ? 'selected' : ''}`} />
                     ) : (
-                        <ArrowIcon down={true} className={`icon-exotic icon-exotic--down`} />
+                        <ArrowIcon
+                            down={true}
+                            className={`icon-exotic icon-exotic--down ${selected ? 'selected' : ''}`}
+                        />
                     )
                 ) : (
                     ''
@@ -53,12 +56,17 @@ const Container = styled(FlexDivRowCentered)`
 
 const LabelContainer = styled(FlexDivRowCentered)`
     &.selected,
-    &:hover:not(.disabled) {
+    &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
     }
-    &.disabled {
-        cursor: default;
-        opacity: 0.4;
+
+    @media (max-width: 950px) {
+        &:hover {
+            color: ${(props) => props.theme.textColor.secondary};
+        }
+        &.selected {
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
     }
 `;
 
@@ -81,6 +89,7 @@ const ArrowIcon = styled.i<{ down?: boolean }>`
     margin-left: 5px;
     margin-top: ${(props) => (props.down ? '5px' : '')};
     margin-bottom: ${(props) => (props.down ? '' : '2px')};
+    &.selected,
     &:hover {
         cursor: pointer;
         color: ${(props) => props.theme.textColor.quaternary};
@@ -88,6 +97,9 @@ const ArrowIcon = styled.i<{ down?: boolean }>`
     @media (max-width: 950px) {
         &:hover {
             color: ${(props) => props.theme.textColor.secondary};
+        }
+        &.selected {
+            color: ${(props) => props.theme.textColor.quaternary};
         }
     }
 `;
