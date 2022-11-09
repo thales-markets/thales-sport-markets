@@ -72,7 +72,7 @@ const Home: React.FC = () => {
     const parlayMarkets = useSelector(getParlay);
 
     const tagsList = TAGS_LIST.map((tag) => {
-        return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite, hidden: tag.hidden };
+        return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite };
     });
 
     const favouriteLeagues = useSelector(getFavouriteLeagues);
@@ -420,7 +420,6 @@ const Home: React.FC = () => {
                                     key={filterItem + '1'}
                                     tags={availableTags}
                                     tagFilter={tagFilter}
-                                    sportFilter={sportFilter}
                                     setTagFilter={setTagFilter}
                                     setTagParam={setTagParam}
                                 ></TagsDropdown>
@@ -511,7 +510,6 @@ const Home: React.FC = () => {
                                         key={filterItem + '1'}
                                         tags={availableTags}
                                         tagFilter={tagFilter}
-                                        sportFilter={sportFilter}
                                         setTagFilter={setTagFilter}
                                         setTagParam={setTagParam}
                                     ></TagsDropdown>

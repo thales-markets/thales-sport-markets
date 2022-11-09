@@ -56,7 +56,6 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language, account
                                     label: favourite.label,
                                     logo: favourite.logo,
                                     favourite: newFavouriteFlag,
-                                    hidden: favourite.hidden,
                                 };
                             }
                             return favourite;
