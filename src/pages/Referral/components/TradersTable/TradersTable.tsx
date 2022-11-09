@@ -7,6 +7,9 @@ import { truncateAddress } from 'utils/formatters/string';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { USD_SIGN } from 'constants/currency';
 import { formatDateWithTime } from 'utils/formatters/date';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/rootReducer';
+import { getIsMobile } from 'redux/modules/app';
 
 type TradersTableProps = {
     referredTraders: ReferredTrader[] | [];
@@ -16,6 +19,7 @@ type TradersTableProps = {
 const TradersTable: React.FC<TradersTableProps> = ({ referredTraders, isLoading }) => {
     const { t } = useTranslation();
     const noResultsMessage = t('referral.no-result');
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     return (
         <>
             <Table
@@ -59,7 +63,7 @@ const TradersTable: React.FC<TradersTableProps> = ({ referredTraders, isLoading 
                 data={referredTraders}
                 isLoading={isLoading}
                 noResultsMessage={noResultsMessage}
-                tableHeadCellStyles={TableHeaderStyle}
+                tableHeadCellStyles={isMobile ? TableHeaderStyleMobile : TableHeaderStyle}
                 tableRowStyles={{ minHeight: '50px', fontSize: '12px' }}
             />
         </>
@@ -71,6 +75,17 @@ const TableHeaderStyle: React.CSSProperties = {
     fontStyle: 'normal',
     fontWeight: 600,
     fontSize: '12px',
+    lineHeight: '12px',
+    textTransform: 'uppercase',
+    color: '#5F6180',
+    justifyContent: 'flex-start',
+};
+
+export const TableHeaderStyleMobile: React.CSSProperties = {
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: 600,
+    fontSize: '9px',
     lineHeight: '12px',
     textTransform: 'uppercase',
     color: '#5F6180',

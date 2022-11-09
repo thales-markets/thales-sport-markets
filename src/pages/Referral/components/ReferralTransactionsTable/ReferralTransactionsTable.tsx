@@ -7,6 +7,10 @@ import { truncateAddress } from 'utils/formatters/string';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { USD_SIGN } from 'constants/currency';
 import { formatDateWithTime } from 'utils/formatters/date';
+import { TableHeaderStyleMobile } from '../TradersTable/TradersTable';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/rootReducer';
+import { getIsMobile } from 'redux/modules/app';
 
 type ReferralTransactionsTableProps = {
     transactions: ReferralTransaction[] | [];
@@ -15,6 +19,7 @@ type ReferralTransactionsTableProps = {
 
 const ReferralTransactionsTable: React.FC<ReferralTransactionsTableProps> = ({ transactions, isLoading }) => {
     const { t } = useTranslation();
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const noResultsMessage = t('referral.no-result');
     return (
         <>
@@ -61,7 +66,7 @@ const ReferralTransactionsTable: React.FC<ReferralTransactionsTableProps> = ({ t
                 data={transactions}
                 isLoading={isLoading}
                 noResultsMessage={noResultsMessage}
-                tableHeadCellStyles={TableHeaderStyle}
+                tableHeadCellStyles={isMobile ? TableHeaderStyleMobile : TableHeaderStyle}
                 tableRowStyles={{ minHeight: '50px', fontSize: '12px' }}
             />
         </>
