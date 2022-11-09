@@ -235,7 +235,8 @@
         },
         "match-time": "Spielzeit",
         "race-starts": "Rennen beginnt",
-        "back": "Der Rücken"
+        "back": "Der Rücken",
+        "apply-filters": "Filter anwenden"
     },
     "markets": {
         "market-card": {

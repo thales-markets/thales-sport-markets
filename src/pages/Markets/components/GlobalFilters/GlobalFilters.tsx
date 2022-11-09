@@ -22,6 +22,7 @@ type GlobalFiltersProps = {
     globalFilter: GlobalFiltersEnum;
     dateFilter: Date | number;
     sportFilter: SportFilterEnum;
+    isMobile: boolean;
 };
 
 const GlobalFilters: React.FC<GlobalFiltersProps> = ({
@@ -36,6 +37,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
     globalFilter,
     dateFilter,
     sportFilter,
+    isMobile,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -90,8 +92,8 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
 
     return (
         <Container>
-            <Filters>
-                <FilterTypeContainer>
+            <Filters isMobile={isMobile}>
+                <FilterTypeContainer isMobile={isMobile}>
                     {Object.values(GlobalFiltersEnum)
                         .filter(
                             (filterItem) =>
@@ -104,6 +106,8 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                             return (
                                 <GlobalFilter
                                     selected={globalFilter === filterItem}
+                                    isMobile={isMobile}
+                                    cancelled={filterItem == GlobalFiltersEnum.Canceled}
                                     onClick={() => {
                                         if (
                                             filterItem === GlobalFiltersEnum.OpenMarkets ||
@@ -125,15 +129,18 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                                 </GlobalFilter>
                             );
                         })}
-                    <Dropdown<OddsType>
-                        list={ODDS_TYPES}
-                        selectedItem={selectedOddsType}
-                        onSelect={setSelectedOddsType}
-                    />
+                    {!isMobile && (
+                        <Dropdown<OddsType>
+                            list={ODDS_TYPES}
+                            selectedItem={selectedOddsType}
+                            onSelect={setSelectedOddsType}
+                        />
+                    )}
                 </FilterTypeContainer>
-                <FilterTypeContainer timeFilters={true}>
+                <FilterTypeContainer isMobile={isMobile}>
                     <TimeFilterContainer
                         selected={selectedPeriod == 3}
+                        isMobile={isMobile}
                         onClick={() => {
                             if (selectedPeriod == 3) {
                                 setDateFilter(0);
@@ -152,6 +159,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                     </TimeFilterContainer>
                     <TimeFilterContainer
                         selected={selectedPeriod == 12}
+                        isMobile={isMobile}
                         onClick={() => {
                             if (selectedPeriod == 12) {
                                 setDateFilter(0);
@@ -170,6 +178,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                     </TimeFilterContainer>
                     <TimeFilterContainer
                         selected={selectedPeriod == 72}
+                        isMobile={isMobile}
                         onClick={() => {
                             if (selectedPeriod == 72) {
                                 setDateFilter(0);
@@ -186,22 +195,25 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                         <Circle />
                         <Label>3d</Label>
                     </TimeFilterContainer>
-                    <CalendarDatepicker date={dateFilter} setDate={setDateFilter} setDateParam={setDateParam} />
+                    {!isMobile && (
+                        <CalendarDatepicker date={dateFilter} setDate={setDateFilter} setDateParam={setDateParam} />
+                    )}
                 </FilterTypeContainer>
             </Filters>
         </Container>
     );
 };
 
-export const Container = styled(FlexDiv)`
+const Container = styled(FlexDiv)`
     width: 100%;
     max-width: 750px;
 `;
 
-export const Filters = styled(FlexDivRow)`
+export const Filters = styled(FlexDiv)<{ isMobile?: boolean }>`
     width: 100%;
-    height: 24px;
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
+    height: ${(props) => (props.isMobile ? '' : '24px')};
+    flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
+    border: ${(props) => (props.isMobile ? '' : '1px solid ' + props.theme.borderColor.primary)};
     color: ${(props) => props.theme.textColor.secondary};
     border-radius: 5px;
     font-style: normal;
@@ -214,33 +226,38 @@ export const Filters = styled(FlexDivRow)`
     padding: 0px 10px;
 `;
 
-export const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: boolean }>`
-    width: ${(props) => (props.timeFilters ? '30%' : '70%')};
-    justify-content: ${(props) => (props.timeFilters ? 'space-evenly' : 'space-around')};
+export const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: boolean; isMobile?: boolean }>`
+    width: ${(props) => (props.isMobile ? '100%' : props.timeFilters ? '30%' : '70%')};
+    justify-content: ${(props) => (props.isMobile ? '' : props.timeFilters ? 'space-evenly' : 'space-around')};
+    align-items: ${(props) => (props.isMobile ? 'flex-start' : 'center')};
+    flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
 `;
 
-export const GlobalFilter = styled.span<{ selected?: boolean }>`
+export const GlobalFilter = styled.span<{ selected?: boolean; isMobile?: boolean; cancelled?: boolean }>`
     margin: 0px 2px;
     text-transform: uppercase;
+    width: ${(props) => (props.cancelled ? 'max-content' : '')};
+    height: ${(props) => (props.isMobile ? '36px' : '')};
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
     &:hover {
         cursor: pointer;
-        color: ${(props) => props.theme.textColor.quaternary};
+        color: ${(props) => (!props.isMobile ? props.theme.textColor.quaternary : '')};
     }
 `;
 
-export const TimeFilterContainer = styled(FlexDivRow)<{ selected: boolean }>`
+export const TimeFilterContainer = styled(FlexDivRow)<{ selected: boolean; isMobile?: boolean }>`
     margin: 0px 2px;
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
+    height: ${(props) => (props.isMobile ? '36px' : '')};
     & > div {
         background-color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
     }
     &:hover {
         cursor: pointer;
-        color: ${(props) => props.theme.textColor.quaternary};
+        color: ${(props) => (!props.isMobile ? props.theme.textColor.quaternary : '')};
         & > div {
             cursor: pointer;
-            background-color: ${(props) => props.theme.textColor.quaternary};
+            color: ${(props) => (!props.isMobile ? props.theme.textColor.quaternary : '')};
         }
         & > label {
             cursor: pointer;

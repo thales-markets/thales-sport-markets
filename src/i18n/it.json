@@ -238,7 +238,8 @@
         },
         "match-time": "Tempo di partita",
         "race-starts": "La corsa inizia",
-        "back": "Di ritorno"
+        "back": "Di ritorno",
+        "apply-filters": "Applicare filtri"
     },
     "markets": {
         "market-card": {

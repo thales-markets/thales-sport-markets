@@ -56,7 +56,6 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language, account
                                     label: favourite.label,
                                     logo: favourite.logo,
                                     favourite: newFavouriteFlag,
-                                    hidden: favourite.hidden,
                                 };
                             }
                             return favourite;
@@ -143,6 +142,11 @@ const LeagueInfo = styled.div`
         cursor: pointer;
         color: ${(props) => props.theme.textColor.quaternary};
     }
+    @media (max-width: 950px) {
+        &:hover {
+            color: ${(props) => props.theme.textColor.primary};
+        }
+    }
 `;
 
 const GamesContainer = styled.div<{ hidden?: boolean }>`
@@ -173,6 +177,11 @@ const ArrowIcon = styled.i<{ down?: boolean }>`
     &:hover {
         cursor: pointer;
         color: ${(props) => props.theme.textColor.quaternary};
+    }
+    @media (max-width: 950px) {
+        &:hover {
+            color: ${(props) => props.theme.textColor.primary};
+        }
     }
 `;
 

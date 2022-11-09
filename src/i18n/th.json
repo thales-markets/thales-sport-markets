@@ -235,7 +235,8 @@
         },
         "match-time": "เวลาการแข่งขัน",
         "race-starts": "เริ่มการแข่งขัน",
-        "back": "กลับ"
+        "back": "กลับ",
+        "apply-filters": "ใช้ตัวกรอง"
     },
     "markets": {
         "market-card": {

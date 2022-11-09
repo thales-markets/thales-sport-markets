@@ -238,7 +238,8 @@
         },
         "match-time": "tiempo de partido",
         "race-starts": "Comienza la carrera",
-        "back": "atrás"
+        "back": "atrás",
+        "apply-filters": "Aplicar filtros"
     },
     "markets": {
         "market-card": {

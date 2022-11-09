@@ -73,7 +73,6 @@ const Container = styled(FlexDivColumnCentered)`
 
 const DropdownButton = styled.button`
     position: relative;
-    //width: 200px;
     height: 24px;
     border: none;
     background: transparent;
@@ -92,6 +91,13 @@ const DropdownButton = styled.button`
         opacity: 0.4;
         cursor: default;
         background: transparent;
+    }
+    @media (max-width: 950px) {
+        font-size: 11px;
+        line-height: 11px;
+        &:hover:not(.disabled) {
+            color: ${(props) => props.theme.textColor.secondary};
+        }
     }
 `;
 
@@ -137,6 +143,14 @@ const ArrowDownIcon = styled.i`
     &:hover {
         cursor: pointer;
         color: ${(props) => props.theme.textColor.quaternary};
+    }
+
+    @media (max-width: 950px) {
+        font-size: 13px;
+        top: 10px;
+        &:hover {
+            color: ${(props) => props.theme.textColor.secondary};
+        }
     }
 `;
 

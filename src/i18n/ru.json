@@ -238,7 +238,8 @@
         },
         "match-time": "Время матча",
         "race-starts": "Старт гонки",
-        "back": "Назад"
+        "back": "Назад",
+        "apply-filters": "Применить фильтры"
     },
     "markets": {
         "market-card": {

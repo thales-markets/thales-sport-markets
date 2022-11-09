@@ -325,7 +325,8 @@
         },
         "match-time": "Temps de match",
         "race-starts": "La course commence",
-        "back": "Retour"
+        "back": "Retour",
+        "apply-filters": "Appliquer des filtres"
     },
     "markets": {
         "market-card-list": {

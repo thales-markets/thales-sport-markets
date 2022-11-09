@@ -1,8 +1,5 @@
-import { SPORTS_TAGS_MAP } from 'constants/tags';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
 
@@ -16,9 +13,6 @@ type SportFilterProps = {
 const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, onClick, children }) => {
     const { t } = useTranslation();
 
-    const dispatch = useDispatch();
-    const favouriteLeagues = useSelector(getFavouriteLeagues);
-
     return (
         <Container>
             <LabelContainer
@@ -27,27 +21,16 @@ const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, on
             >
                 <SportIcon className={`icon icon--${sport.toLowerCase() == 'all' ? 'logo' : sport.toLowerCase()}`} />
                 <Label>{`${children} ${disabled ? `\n ${t('common.coming-soon')}` : ''} `}</Label>
+                {sport.toLowerCase() != 'all' ? (
+                    !selected ? (
+                        <ArrowIcon className={`icon-exotic icon-exotic--right`} />
+                    ) : (
+                        <ArrowIcon down={true} className={`icon-exotic icon-exotic--down`} />
+                    )
+                ) : (
+                    ''
+                )}
             </LabelContainer>
-
-            <RevertIcon
-                onClick={() => {
-                    const tagsPerSport = SPORTS_TAGS_MAP[sport];
-                    const showAllLeagues = favouriteLeagues.map((league) => {
-                        if (tagsPerSport.includes(league.id) && league.hidden) {
-                            return {
-                                id: league.id,
-                                label: league.label,
-                                logo: league.logo,
-                                favourite: league.favourite,
-                                hidden: false,
-                            };
-                        }
-                        return league;
-                    });
-                    dispatch(setFavouriteLeagues(showAllLeagues));
-                }}
-                className={`icon icon--revert ${sport.toLowerCase() == 'favourites' ? 'disabled' : ''}`}
-            ></RevertIcon>
         </Container>
     );
 };
@@ -93,15 +76,19 @@ const SportIcon = styled.i`
     margin-right: 15px;
 `;
 
-const RevertIcon = styled.i`
-    font-size: 20px;
-    position: absolute;
-    right: 0px;
+const ArrowIcon = styled.i<{ down?: boolean }>`
+    font-size: 12px;
+    margin-left: 5px;
+    margin-top: ${(props) => (props.down ? '5px' : '')};
+    margin-bottom: ${(props) => (props.down ? '' : '2px')};
     &:hover {
+        cursor: pointer;
         color: ${(props) => props.theme.textColor.quaternary};
     }
-    &.disabled {
-        display: none;
+    @media (max-width: 950px) {
+        &:hover {
+            color: ${(props) => props.theme.textColor.secondary};
+        }
     }
 `;
 
