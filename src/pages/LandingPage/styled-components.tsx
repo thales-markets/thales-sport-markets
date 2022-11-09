@@ -376,6 +376,10 @@ export const CallToAction = styled.label`
             line-height: 120%;
         }
     }
+    &.header {
+        margin-top: 0px;
+        margin-left: 15px;
+    }
     &.first {
         align-self: center;
         margin-left: 45%;

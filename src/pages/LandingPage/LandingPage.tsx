@@ -16,6 +16,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { FlexDivRowCentered } from 'styles/common';
 import { buildHref } from 'utils/routes';
 import {
     ArrowIcon,
@@ -52,10 +53,16 @@ const LandingPage: React.FC = () => {
         <Container>
             <Header>
                 <LogoContainer>
-                    {/* <ZebraLogo src={ZebraLogoImg} alt="zebra logo" /> */}
                     <Logo src={OvertimeLogo} alt="overtime logo" />
                 </LogoContainer>
-                <LanguageSelector />
+                <FlexDivRowCentered>
+                    <LanguageSelector />
+                    <CallToAction className="header">
+                        <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
+                            DAPP <ArrowIcon className={`icon icon--arrow`} />
+                        </SPAAnchor>
+                    </CallToAction>
+                </FlexDivRowCentered>
             </Header>
             <Section className="first">
                 <Zebro className="baseball" src={ZebraBaseball} alt="Zebro Baseball" />
