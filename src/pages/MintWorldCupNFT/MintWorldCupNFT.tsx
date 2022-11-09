@@ -99,6 +99,10 @@ const LeftOrnaments = styled(Ornaments)`
     top: 0;
     left: 5%;
     width: 20%;
+    transform: rotate(180deg);
+    @media (max-width: 767px) {
+        display: none;
+    }
 `;
 
 const RightOrnaments = styled(Ornaments)`
@@ -106,7 +110,9 @@ const RightOrnaments = styled(Ornaments)`
     bottom: 0;
     right: 5%;
     width: 20%;
-    transform: rotate(180deg);
+    @media (max-width: 767px) {
+        display: none;
+    }
 `;
 
 export default MintWorldCupNFT;
