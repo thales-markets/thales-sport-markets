@@ -1,4 +1,3 @@
-import { SportFilterEnum } from 'constants/markets';
 import { TAGS_FLAGS } from 'constants/tags';
 import React from 'react';
 import Flag from 'react-flagpack';
@@ -14,17 +13,9 @@ type TagsDropdownProps = {
     tagFilter: Tags;
     setTagFilter: any;
     setTagParam: any;
-    sportFilter: SportFilterEnum;
 };
 
-const TagsDropdown: React.FC<TagsDropdownProps> = ({
-    open,
-    tags,
-    tagFilter,
-    setTagFilter,
-    setTagParam,
-    sportFilter,
-}) => {
+const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, setTagFilter, setTagParam }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const tagFilterIds = tagFilter.map((tag) => tag.id);
@@ -32,9 +23,6 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     return (
         <Container open={open}>
             {tags
-                .filter((tag) => {
-                    return !favouriteLeagues.filter((league: TagInfo) => league.id == tag.id)[0].hidden;
-                })
                 .sort((a, b) => {
                     const isFavouriteA = Number(
                         favouriteLeagues.filter((league: TagInfo) => league.id == a.id)[0].favourite
@@ -63,7 +51,6 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                 label: league.label,
                                                 logo: league.logo,
                                                 favourite: newFavouriteFlag,
-                                                hidden: league.hidden,
                                             };
                                         }
                                         return league;
@@ -89,28 +76,6 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                 {LeagueFlag(tag.id)}
                                 <Label>{tag.label}</Label>
                             </LabelContainer>
-                            <XButton
-                                onClick={() => {
-                                    const newFavourites = favouriteLeagues.map((league: TagInfo) => {
-                                        if (league.id == tag.id) {
-                                            let newHiddenFlag;
-                                            !league.hidden ? (newHiddenFlag = true) : '';
-                                            return {
-                                                id: league.id,
-                                                label: league.label,
-                                                logo: league.logo,
-                                                favourite: league.favourite,
-                                                hidden: newHiddenFlag,
-                                            };
-                                        }
-                                        return league;
-                                    });
-                                    dispatch(setFavouriteLeagues(newFavourites));
-                                }}
-                                className={`icon icon--cross-button ${
-                                    sportFilter == SportFilterEnum.Favourites ? 'disabled' : 'none'
-                                }`}
-                            />
                         </TagContainer>
                     );
                 })}
@@ -200,19 +165,6 @@ const StarIcon = styled.i`
     &.selected,
     &:hover {
         color: #fac439;
-    }
-`;
-
-const XButton = styled.i`
-    font-size: 15px;
-    position: absolute;
-    right: 2px;
-    color: #ca4c53;
-    &:hover {
-        color: ${(props) => props.theme.textColor.quaternary};
-    }
-    &.disabled {
-        display: none;
     }
 `;
 

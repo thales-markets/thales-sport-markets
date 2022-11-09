@@ -78,6 +78,13 @@ export const QUERY_KEYS = {
         walletAddress,
         networkId,
     ],
+    ReferralTransaction: (walletAddress: string, networkId: NetworkId) => [
+        'referralTransaction',
+        walletAddress,
+        networkId,
+    ],
+    Referrers: (networkId: NetworkId) => ['referrers', networkId],
+    ReferredTraders: (walletAddress: string, networkId: NetworkId) => ['referredTraders', walletAddress, networkId],
     DiscountMarkets: (networkId: NetworkId) => ['discountMarkets', networkId],
     Wallet: {
         PaymentTokenBalance: (walletAddress: string, networkId: NetworkId) => [

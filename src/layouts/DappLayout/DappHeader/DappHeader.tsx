@@ -7,8 +7,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import { NetworkIdByName } from 'utils/network';
-import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
+import { getIsWalletConnected } from 'redux/modules/wallet';
 // import Referral from 'components/Referral';
 import { buildHref } from 'utils/routes';
 import SPAAnchor from 'components/SPAAnchor';
@@ -18,7 +17,6 @@ import useInterval from 'hooks/useInterval';
 // import MintVoucher from 'components/MintVoucher';
 import burger from 'assets/images/burger.svg';
 import NavMenu from 'components/NavMenu';
-import GetUsd from 'components/GetUsd';
 import ProfileItem from './components/ProfileItem';
 import { getIsMobile } from 'redux/modules/app';
 import { ReactComponent as RightBall } from 'assets/images/favorite-team/right-ball.svg';
@@ -31,7 +29,7 @@ const DappHeader: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const location = useLocation();
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -55,7 +53,6 @@ const DappHeader: React.FC = () => {
                     <Logo />
                     <RightContainer>
                         {/* <Referral /> */}
-                        {isMobile && networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
                         {/* {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />} */}
                         {location.pathname !== ROUTES.MintWorldCupNFT && (
                             <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>

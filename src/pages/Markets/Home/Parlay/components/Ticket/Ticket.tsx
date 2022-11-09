@@ -80,7 +80,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
         parlayPayment.selectedStableIndex
     );
-    const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(parlayPayment.isVoucherSelected);
+    const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [totalQuote, setTotalQuote] = useState(0);
     const [finalQuotes, setFinalQuotes] = useState<number[]>([]);
@@ -121,11 +121,16 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
     const overtimeVoucher = useMemo(() => {
         if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
+            if (parlayPayment.isVoucherSelected === undefined) {
+                setIsVoucherSelected(true);
+            }
             return overtimeVoucherQuery.data;
         }
-        setIsVoucherSelected(false);
+        if (parlayPayment.isVoucherSelected !== undefined) {
+            setIsVoucherSelected(false);
+        }
         return undefined;
-    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
+    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data, parlayPayment.isVoucherSelected]);
 
     const paymentTokenBalance: number = useMemo(() => {
         if (overtimeVoucher && isVoucherSelected) {

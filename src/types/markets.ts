@@ -315,6 +315,6 @@ export type ParlayAmmData = {
 
 export type ParlayPayment = {
     selectedStableIndex: COLLATERALS_INDEX;
-    isVoucherSelected: boolean;
+    isVoucherSelected: boolean | undefined;
     amountToBuy: number | string;
 };

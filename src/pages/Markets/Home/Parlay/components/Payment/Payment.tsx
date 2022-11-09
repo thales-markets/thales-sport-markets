@@ -47,7 +47,7 @@ const Payment: React.FC<PaymentProps> = ({
 
     const overtimeVoucher = useMemo(() => {
         if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
-            if (defaultIsVoucherSelected === undefined) {
+            if (defaultIsVoucherSelected === undefined || defaultIsVoucherSelected) {
                 setIsVoucherSelected(true);
             }
             return overtimeVoucherQuery.data;

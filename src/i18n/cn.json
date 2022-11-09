@@ -238,7 +238,8 @@
         },
         "match-time": "比赛时间",
         "race-starts": "比赛开始",
-        "back": "后退"
+        "back": "后退",
+        "apply-filters": "应用过滤器"
     },
     "markets": {
         "market-card": {
@@ -486,7 +487,6 @@
         "retweet": "转发这条推文",
         "second-option": "让您加入许可名单的第二个选项是完成以下步骤：",
         "minting-is-free": "铸造是免费的，每个钱包只能铸造一个 NFT。此 NFT 不可转让。",
-        "get-your-nft": "获取您的卡塔尔 2022 NFT",
         "eligible-text-1": "Zebro NFT 系列被用作世界杯加时赛的参赛作品。",
         "follow": "在 Twitter 上关注加班市场",
         "incentives": "激励措施",
@@ -520,6 +520,22 @@
         "zebro-wct-collection": "Zebro WC NFT 系列",
         "zebro-wct-collection-text": "是在世界杯期间代表您最喜欢的国家的激励活动的一部分，并有资格分享 50,000 OP 代币和 30,000 THALES 代币，以及用于过关投注和个人比赛的独家乘数。",
         "go-to-leaderboard": "前往排行榜",
-        "congrats": "恭喜！您已经成功铸造了 Zebro NFT！"
+        "congrats": "恭喜！您已经成功铸造了 Zebro NFT！",
+        "get-your-nft": "薄荷页"
+    },
+    "referral": {
+        "nav-items": {
+            "see-result-by-trader": "查看交易者的结果",
+            "all-transactions": "所有交易",
+            "affiliate-leaderboard": "联盟排行榜"
+        },
+        "copy-link": "复制链接",
+        "total-volume": "总容积",
+        "trades": "交易",
+        "header": "创建推荐链接",
+        "earned": "赢得",
+        "generate-link": "生成链接",
+        "total-trading-fees": "总交易费用",
+        "paragraph": "照顾病人很重要，医生要跟进，但这是一个非常痛苦和痛苦的时期。 Lacus luctus 在上面放了一层。一件衣服的两个喉咙比一个带箭的医生的卡通片。 Mus mauris vitae ultricies leo whole 预期现在或没有 quiver diam amet nislus suscip adipiscing。任何人都不需要下士，甚至是威严的钻石。 Pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna对于孩子来说，尊严是很多毒药。据说喝得像一床啤酒，而是赌场或箭袋。恶意饥饿和丑陋的贫困。但需要的是 fringilla phasellus faucibus scelerisque eleifend untill。也不是从明天开始的山谷。枕头什么元素都没有。但现在却是针对宣传湖漫画。街上说，大家应该带着箭度过一个愉快的周末。<br><br>因此，它不需要免费的键盘手。他们生活在老年和疾病中。恐惧面前的弗吉亚特的笑声说道。对付这种疾病并不容易。他希望有像足球这样的成员。猫现在需要在面团中加入一些纯净的味道。很明显，这后面是箭头。 Lobortis element nibh Tellus molestie 现在。恐惧中没有致命的土地。它需要付出巨大的努力来瞄准足球，而不是成为一个无阶段的门厅。直到 pretium vulputate sapien 或 sagittis aliquam malesuada bibendum arcu。事实上，也没有航空公司这样做。可以说，仅此而已。 Condimentum mattis pellentesque id nibh tortor id。 Massa tincidunt 现在 pulvinar sapien 和 ligula ullamcorper malesuada。 Hendret孕妆，大家都不是当地医生和广告的作者。这也是临床足球策略的一个非常重要的元素。现在，孩子们的喉咙将得到照顾。各位也可能是纯中软的粉丝了。"
     }
 }
