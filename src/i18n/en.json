@@ -528,5 +528,17 @@
             "see-result-by-trader": "See result by trader",
             "affiliate-leaderboard": "Affiliate Leaderboard"
         }
+    },
+    "wizard": {
+        "title": "Buy Crypto with credit card",
+        "steps": {
+            "description": {
+                "install-mm": "The first step is to <b>install Metamask on your browser</b>. You can skip this step if you already have it installed.<br/><br/>This step provides you with your own Ethereum 'Hot Wallet' which is a baseline for all interactions with the Web3 applications in the likes of Thales. Please make sure to <b>follow all steps provided by Metamask install wizard carefully, and read the safety tips with full attention</b>.",
+                "connect-mm": "After you install it you'll need to “connect” your Metamask wallet. To do this follow the link by <b>clicking on the Metamask icon on the connect wallet card</b>.<br/><br/>In this case, as we are using the Optimism network as an example, you'll need to connect your wallet and select the Optimism network.",
+                "buy": "Congratulations you have a web3 wallet!<br/><br/>The second step is to obtain Ethereum (ETH) on Optimism using your credit card with the integrated <b>'Fiat to Crypto' on-ramp</b>. If you completed the first step to set up a new Metamask wallet, you would need to use the same wallet's address for the deposit of the purchased Ethereum.<br/><br/>Use our handy on-ramp by <b>clicking on the card icon</b>. You can use any major card provider. Just follow the steps and if you need additional help you can read our documentation or watch the video that explains all the required steps.",
+                "exchange": "The third step is to <b>exchange some of your acquired Ethereum (ETH) for sUSD</b>, the decentralized stablecoin that is used for trading on Thales, or if you prefer for either USDT, USDC, or DAI (which are all also currently supported on Thales).<br/><br/>You'll need <b>Ethereum (ETH) to pay for transaction fees on the Optimism network</b>, so make sure to always have some.<br/><br/>And the <b>sUSD will be used to acquire positional tokens (UP or DOWN, IN or OUT)</b> when participating in Thales directional or ranged markets.<br/><br/>When you have Ethereum (ETH) and sUSD in your wallet, you are ready for the final step!<br/><br/><i>Note: If you already have any other supported cryptocurrencies you can exchange them for sUSD with our in-built swap functionality or in any of the major decentralized exchanges like 1Inch.exchange or Uniswap.</i>",
+                "trade": "You are <b>ready to trade</b>!<br/><br/>You have a working Metamask wallet and are connected to the network of your choice, in this case the Optimism network.<br/><br/>For additional information about our products read our documentation or check the video tutorials in the FAQ section.<br/><br/>If you have any questions regarding Thales protocol (and it’s products) or need help navigating this onboarding process we'll be happy to support you on Thales Discord."
+            }
+        }
     }
 }

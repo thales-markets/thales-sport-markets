@@ -77,12 +77,6 @@ export const NAV_MENU: NavMenuItem[] = [
         route: ROUTES.Profile,
     },
     {
-        i18label: 'markets.nav-menu.items.onboarding-wizard',
-        iconClass: 'icon icon--wizard',
-        name: 'onboarding-wizard',
-        route: ROUTES.Wizard,
-    },
-    {
         i18label: 'markets.nav-menu.items.history',
         iconClass: 'icon icon--history',
         name: 'history',
@@ -99,6 +93,12 @@ export const NAV_MENU: NavMenuItem[] = [
         iconClass: 'icon icon--leaderboard',
         name: 'leaderboard',
         route: ROUTES.QuizLeaderboard,
+    },
+    {
+        i18label: 'markets.nav-menu.items.onboarding-wizard',
+        iconClass: 'icon icon--wizard',
+        name: 'onboarding-wizard',
+        route: ROUTES.Wizard,
     },
     {
         i18label: 'markets.nav-menu.items.become-affiliate',
