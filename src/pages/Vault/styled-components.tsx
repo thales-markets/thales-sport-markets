@@ -281,29 +281,11 @@ export const LoaderContainer = styled(FlexDivCentered)`
     width: 100%;
 `;
 
-export const TabContainer = styled(FlexDiv)`
-    height: 40px;
-    margin-bottom: 30px;
-    width: 100%;
-`;
-
-export const Tab = styled(FlexDivCentered)<{ isActive: boolean; index: number }>`
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 48px;
-    color: #f6f6fe;
-    user-select: none;
-    border-bottom: 5px solid rgba(100, 217, 254, 0.3);
+export const ToggleContainer = styled(FlexDiv)`
+    font-weight: 600;
+    margin-bottom: 20px;
     width: 100%;
     text-transform: uppercase;
-    &.selected {
-        transition: 0.2s;
-        color: #f6f6fe;
-        border-bottom: 5px solid #64d9fe;
-    }
-    &:hover:not(.selected) {
-        cursor: pointer;
-        color: #00f9ff;
-    }
+    border-bottom: 2px solid #5f6180;
+    padding-bottom: 20px;
 `;

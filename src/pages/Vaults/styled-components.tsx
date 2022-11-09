@@ -7,7 +7,7 @@ export const Wrapper = styled(FlexDivColumn)`
 `;
 
 export const Container = styled(FlexDivRow)`
-    width: 60%;
+    width: 70%;
     position: relative;
     align-items: start;
     @media (max-width: 1440px) {
@@ -19,23 +19,33 @@ export const Container = styled(FlexDivRow)`
     }
 `;
 
+export const SpaContainer = styled(FlexDivColumn)`
+    border-radius: 15px;
+    :not(:last-child) {
+        margin-right: 25px;
+    }
+    background: linear-gradient(180deg, #2b2f4a 0%, rgba(43, 47, 74, 0) 100%);
+    :hover {
+        background: linear-gradient(180deg, #2b2f4a 0%, #333a69 100%);
+    }
+    cursor: pointer;
+    @media (max-width: 767px) {
+        width: 100%;
+        :not(:last-child) {
+            margin-right: 0;
+            margin-bottom: 20px;
+        }
+    }
+`;
+
 export const VaultContainer = styled(FlexDivColumn)`
-    width: 250px;
-    flex: initial;
     align-items: center;
     font-weight: 400;
     font-size: 18px;
     line-height: 20px;
-    margin-bottom: 15px;
-    background: ${(props) => props.theme.background.secondary};
     padding: 30px 40px 30px 40px;
-    border-radius: 20px;
-    cursor: pointer;
     @media (max-width: 767px) {
         padding: 20px 20px 20px 20px;
-    }
-    :hover {
-        transform: scale(1.1);
     }
 `;
 
@@ -47,4 +57,18 @@ export const Title = styled.span`
     margin-top: 30px;
     color: ${(props) => props.theme.textColor.primary};
     margin-bottom: 40px;
+`;
+
+export const VaultTitle = styled.span`
+    font-style: normal;
+    font-weight: bold;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 25px;
+    color: ${(props) => props.theme.textColor.primary};
+    margin-bottom: 40px;
+    width: 100%;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #5f6180;
+    text-align: center;
 `;

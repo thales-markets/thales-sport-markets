@@ -12,8 +12,7 @@ import {
     InputLabel,
     InputContainer,
     Wrapper,
-    TabContainer,
-    Tab,
+    ToggleContainer,
     Description,
     VaultFilledGraphicContainer,
     VaultFilledGraphicPercentage,
@@ -64,6 +63,7 @@ import TradesHistory from './TradesHistory';
 import PnL from './PnL';
 import { RouteComponentProps } from 'react-router-dom';
 import vaultContract from 'utils/contracts/sportVaultContract';
+import Toggle from 'components/Toggle/Toggle';
 
 type VaultProps = RouteComponentProps<{
     vaultId: string;
@@ -86,23 +86,6 @@ const Vault: React.FC<VaultProps> = (props) => {
     const { params } = props.match;
     const vaultId = params && params.vaultId ? params.vaultId : '';
     const vaultAddress = !!VAULT_MAP[vaultId] ? VAULT_MAP[vaultId].addresses[networkId] : undefined;
-
-    const tabContent: Array<{
-        id: VaultTab;
-        name: string;
-    }> = useMemo(
-        () => [
-            {
-                id: VaultTab.DEPOSIT,
-                name: t(`vault.tabs.${VaultTab.DEPOSIT}`),
-            },
-            {
-                id: VaultTab.WITHDRAW,
-                name: t(`vault.tabs.${VaultTab.WITHDRAW}`),
-            },
-        ],
-        [t]
-    );
 
     const { openConnectModal } = useConnectModal();
 
@@ -364,49 +347,55 @@ const Vault: React.FC<VaultProps> = (props) => {
                 />
             </Info>
             <BackToLink link={buildHref(ROUTES.Vaults)} text={t('vault.back-to-vaults')} />
-            {vaultData && (
-                <>
-                    <RoundInfoWrapper>
-                        {vaultData.paused ? (
-                            <RoundInfoContainer>
-                                <RoundInfo>{t('vault.vault-paused-message')}</RoundInfo>
-                            </RoundInfoContainer>
-                        ) : vaultData.vaultStarted ? (
-                            <>
-                                <RoundEndContainer>
-                                    <RoundEndLabel>{t('vault.round-end-label')}:</RoundEndLabel>
-                                    <RoundEnd>
-                                        {vaultData.isRoundEnded ? (
-                                            t('vault.round-ended-label')
-                                        ) : (
-                                            <TimeRemaining end={vaultData.roundEndTime} fontSize={20} showFullCounter />
-                                        )}{' '}
-                                        {vaultData.canCloseCurrentRound && (
-                                            <CloseRoundButton disabled={isSubmitting} onClick={closeRound}>
-                                                {t('vault.button.close-round-label')}
-                                            </CloseRoundButton>
-                                        )}
-                                    </RoundEnd>
-                                </RoundEndContainer>
-                                <RoundAllocationContainer>
-                                    <RoundAllocationLabel>{t('vault.round-allocation-label')}:</RoundAllocationLabel>
-                                    <RoundAllocation>
-                                        {formatCurrencyWithSign(USD_SIGN, vaultData.allocationCurrentRound)}
-                                    </RoundAllocation>
-                                </RoundAllocationContainer>
-                            </>
-                        ) : (
-                            <RoundInfoContainer>
-                                <RoundInfo>{t('vault.vault-not-started-message')}</RoundInfo>
-                            </RoundInfoContainer>
-                        )}
-                    </RoundInfoWrapper>
-                </>
+            {!vaultData ? (
+                <LoaderContainer>
+                    <SimpleLoader />
+                </LoaderContainer>
+            ) : (
+                <RoundInfoWrapper>
+                    {vaultData.paused ? (
+                        <RoundInfoContainer>
+                            <RoundInfo>{t('vault.vault-paused-message')}</RoundInfo>
+                        </RoundInfoContainer>
+                    ) : vaultData.vaultStarted ? (
+                        <>
+                            <RoundEndContainer>
+                                <RoundEndLabel>{t('vault.round-end-label')}:</RoundEndLabel>
+                                <RoundEnd>
+                                    {vaultData.isRoundEnded ? (
+                                        t('vault.round-ended-label')
+                                    ) : (
+                                        <TimeRemaining end={vaultData.roundEndTime} fontSize={20} showFullCounter />
+                                    )}{' '}
+                                    {vaultData.canCloseCurrentRound && (
+                                        <CloseRoundButton disabled={isSubmitting} onClick={closeRound}>
+                                            {t('vault.button.close-round-label')}
+                                        </CloseRoundButton>
+                                    )}
+                                </RoundEnd>
+                            </RoundEndContainer>
+                            <RoundAllocationContainer>
+                                <RoundAllocationLabel>{t('vault.round-allocation-label')}:</RoundAllocationLabel>
+                                <RoundAllocation>
+                                    {formatCurrencyWithSign(USD_SIGN, vaultData.allocationCurrentRound)}
+                                </RoundAllocation>
+                            </RoundAllocationContainer>
+                        </>
+                    ) : (
+                        <RoundInfoContainer>
+                            <RoundInfo>{t('vault.vault-not-started-message')}</RoundInfo>
+                        </RoundInfoContainer>
+                    )}
+                </RoundInfoWrapper>
             )}
             <Container>
                 <LeftContainer>
                     <Title>{t(`vault.${vaultId}.title`)}</Title>
-                    {vaultData && (
+                    {!vaultData ? (
+                        <LoaderContainer>
+                            <SimpleLoader />
+                        </LoaderContainer>
+                    ) : (
                         <>
                             <Description>
                                 <Trans
@@ -507,21 +496,24 @@ const Vault: React.FC<VaultProps> = (props) => {
                                     )}
                                 </ContentInfoContainer>
                             )}
-                            <TabContainer>
-                                {tabContent.map((tab, index) => (
-                                    <Tab
-                                        isActive={tab.id === selectedTab}
-                                        key={index}
-                                        index={index}
-                                        onClick={() => {
-                                            setSelectedTab(tab.id);
-                                        }}
-                                        className={`${tab.id === selectedTab ? 'selected' : ''}`}
-                                    >
-                                        {tab.name}
-                                    </Tab>
-                                ))}
-                            </TabContainer>
+                            <ToggleContainer>
+                                <Toggle
+                                    label={{
+                                        firstLabel: t(`vault.tabs.${VaultTab.DEPOSIT}`),
+                                        secondLabel: t(`vault.tabs.${VaultTab.WITHDRAW}`),
+                                        fontSize: '18px',
+                                    }}
+                                    active={selectedTab === VaultTab.WITHDRAW}
+                                    dotSize="18px"
+                                    dotBackground="#303656"
+                                    dotBorder="3px solid #3FD1FF"
+                                    handleClick={() => {
+                                        setSelectedTab(
+                                            selectedTab === VaultTab.DEPOSIT ? VaultTab.WITHDRAW : VaultTab.DEPOSIT
+                                        );
+                                    }}
+                                />
+                            </ToggleContainer>
                             {selectedTab === VaultTab.DEPOSIT && (
                                 <>
                                     <ContentInfo>{t('vault.deposit-message')}</ContentInfo>

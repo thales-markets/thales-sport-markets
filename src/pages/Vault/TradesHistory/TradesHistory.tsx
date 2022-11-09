@@ -91,12 +91,18 @@ const Container = styled(FlexDivColumn)`
 const Header = styled(FlexDivRow)`
     margin: 10px 18px;
     align-items: center;
+    @media (max-width: 767px) {
+        flex-direction: column;
+    }
 `;
 
 const Title = styled.span`
     font-weight: bold;
     font-size: 20px;
     color: ${(props) => props.theme.textColor.primary};
+    @media (max-width: 767px) {
+        margin-bottom: 10px;
+    }
 `;
 
 const TableContainer = styled(FlexDivColumn)`
