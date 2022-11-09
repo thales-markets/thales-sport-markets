@@ -2,7 +2,8 @@ import { Colors } from 'styles/common';
 
 export default {
     background: {
-        primary: 'radial-gradient(50% 88.89% at 50% 50%, #8A1538 0%, #5C0C24 60.5%, #31000F 95.48%)',
+        primary:
+            'radial-gradient(49.17% 87.57% at 50.83% 45.95%, #8A1538 10.65%, #5C0C24 33.48%, #450619 55.31%, #31000F 81.38%)',
         secondary: '#8A1538',
         tertiary: '#8e2442',
         quaternary: Colors.BLUE,
