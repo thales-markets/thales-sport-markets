@@ -42,7 +42,6 @@ export const ContentContainer = styled(FlexDivColumn)`
 
 export const LeftContainer = styled(ContentContainer)`
     margin-right: 20px;
-    text-align: start;
     @media (max-width: 767px) {
         margin-right: 0px;
         padding-top: 0px;
@@ -77,6 +76,7 @@ export const RoundEndContainer = styled(FlexDivColumn)`
         font-size: 30px;
         text-transform: uppercase;
         font-weight: 600;
+        color: #3fd1ff;
     }
     margin-bottom: 15px;
 `;
@@ -109,6 +109,7 @@ export const RoundInfoLabel = styled.p``;
 export const RoundInfo = styled.p`
     font-size: 20px;
     font-weight: 600;
+    color: #3fd1ff;
 `;
 
 export const Description = styled.div`
@@ -150,7 +151,7 @@ export const Title = styled.span`
     line-height: 100%;
     color: ${(props) => props.theme.textColor.primary};
     margin-bottom: 30px;
-    margin-top: 10px;
+    margin-top: 30px;
 `;
 
 export const VaultFilledText = styled(ContentInfo)`
