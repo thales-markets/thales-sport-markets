@@ -9,6 +9,7 @@ import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { getIsApexTopGame, isApexGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import MatchStatus from './components/MatchStatus';
+import { Result, ResultLabel } from './components/MatchStatus/MatchStatus';
 import Odds from './components/Odds';
 import {
     BetTypeContainer,
@@ -18,6 +19,7 @@ import {
     ClubVsClubContainer,
     Container,
     LinkIcon,
+    ResultWrapper,
     VSLabel,
 } from './styled-components';
 
@@ -113,6 +115,14 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 homePriceImpact={market.homePriceImpact}
                 drawPriceImpact={market.drawPriceImpact}
             />
+            {market.isResolved && !market.isCanceled && (
+                <ResultWrapper>
+                    <ResultLabel>{t('markets.market-card.result')}:</ResultLabel>
+                    <Result isLive={market.maturityDate < new Date()}>{`${market.homeScore}${
+                        isApexTopGame ? '' : `:${market.awayScore}`
+                    }`}</Result>
+                </ResultWrapper>
+            )}
             <SPAAnchor href={buildMarketLink(market.address, language)}>
                 <LinkIcon className={`icon-exotic icon-exotic--link`} />
             </SPAAnchor>

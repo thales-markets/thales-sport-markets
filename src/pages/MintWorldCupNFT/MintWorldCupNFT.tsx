@@ -4,18 +4,19 @@ import { RootState } from 'redux/rootReducer';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { useTranslation } from 'react-i18next';
 import useFavoriteTeamDataQuery from 'queries/favoriteTeam/useFavoriteTeamDataQuery';
-import { ReactComponent as SymbolsBackground } from 'assets/images/favorite-team/symbols-background.svg';
+import { ReactComponent as Ornaments } from 'assets/images/favorite-team/ornaments.svg';
 import { ReactComponent as QatarMascot } from 'assets/images/favorite-team/qatar-mascot.svg';
 import { setTheme } from 'redux/modules/ui';
 import { Theme } from 'constants/ui';
 import Loader from 'components/Loader';
-import { Container, Tab, SymbolsContainer, TabsContainer, MascotContainer } from './styled-components';
+import { Container, Tab, TabsContainer, MascotContainer } from './styled-components';
 import Eligible from './components/Eligible';
 import NotEligible from './components/NotEligible';
 import ChooseNFT from './components/ChooseNFT';
 import AlreadyMinted from './components/AlreadyMinted';
 import Header from './components/Header';
 import Leaderboard from './components/Leaderboard';
+import styled from 'styled-components';
 
 const MintWorldCupNFT: React.FC = () => {
     const { t } = useTranslation();
@@ -85,13 +86,33 @@ const MintWorldCupNFT: React.FC = () => {
                             <QatarMascot />
                         </MascotContainer>
                     </Container>
-                    <SymbolsContainer>
-                        <SymbolsBackground />
-                    </SymbolsContainer>
+                    <LeftOrnaments />
+                    <RightOrnaments />
                 </>
             )}
         </>
     );
 };
+
+const LeftOrnaments = styled(Ornaments)`
+    position: absolute;
+    top: 0;
+    left: 5%;
+    width: 20%;
+    transform: rotate(180deg);
+    @media (max-width: 767px) {
+        display: none;
+    }
+`;
+
+const RightOrnaments = styled(Ornaments)`
+    position: absolute;
+    bottom: 0;
+    right: 5%;
+    width: 20%;
+    @media (max-width: 767px) {
+        display: none;
+    }
+`;
 
 export default MintWorldCupNFT;

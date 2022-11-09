@@ -6,7 +6,7 @@ import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
 import SPAAnchor from 'components/SPAAnchor';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'constants/defaults';
-import { DEFAULT_SORT_BY, GlobalFiltersEnum, SortDirection, SportFilterEnum } from 'constants/markets';
+import { GlobalFiltersEnum, SortDirection, SportFilterEnum } from 'constants/markets';
 import ROUTES, { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
@@ -64,8 +64,6 @@ const Home: React.FC = () => {
         GlobalFiltersEnum.OpenMarkets
     );
     const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SPORT, SportFilterEnum.All);
-    const sortDirection = SortDirection.ASC;
-    const sortBy = DEFAULT_SORT_BY;
     const [marketsCached, setMarketsCached] = useState<typeof marketsCache>(marketsCache);
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
@@ -309,17 +307,17 @@ const Home: React.FC = () => {
         }
 
         const sortedFilteredMarkets = filteredMarkets.sort((a, b) => {
-            switch (sortBy) {
-                case 1:
-                    return sortByField(a, b, sortDirection, 'maturityDate');
-
+            switch (globalFilter) {
+                case GlobalFiltersEnum.ResolvedMarkets:
+                case GlobalFiltersEnum.Canceled:
+                    return sortByField(a, b, SortDirection.DESC, 'maturityDate');
                 default:
-                    return 0;
+                    return sortByField(a, b, SortDirection.ASC, 'maturityDate');
             }
         });
 
         return groupBySortedMarkets(sortedFilteredMarkets);
-    }, [tagsFilteredMarkets, globalFilter, accountPositions, sortBy, sortDirection]);
+    }, [tagsFilteredMarkets, globalFilter, accountPositions]);
 
     const resetFilters = useCallback(() => {
         setGlobalFilter(GlobalFiltersEnum.OpenMarkets);

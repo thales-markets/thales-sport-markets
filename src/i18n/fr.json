@@ -445,7 +445,7 @@
         "header": "Récompenses",
         "op-rewards-banner-message": "Les récompenses OP ont commencé, vérifiez comment vous pouvez les obtenir via <bold>la page des récompenses OP</bold>",
         "search-placeholder": "Rechercher l'adresse du portefeuille",
-        "description": "<0>Un total de <0>8,000 OP</0> et  <0>8,000 Thales</0> seront distribués du 26 septembre au 10 octobre 00:00 UTC pour compenser les frais payés aux contrats SafeBox.</0> <0>Le classement calculera les récompenses comme une remise de 90 % sur les frais SafeBox, soit 2 % du montant total payé en sUSD.</0> <0> La valeur en $ de OP et THALES sera calculée en utilisant un twap de 7 jours au début de la période.</0> <0>  Si à la fin de la période de deux semaines, le total des remises est supérieur à la valeur de twap initiale des jetons OP et THALES, la remise sera réduite proportionnellement pour chaque utilisateur.</0>",
+        "description": "<0>Un total de <0>8,000 OP</0> et  <0>8,000 Thales</0> seront distribués du 24 octobre au 7 novembre 00:00 UTC pour compenser les frais payés aux contrats SafeBox.</0> <0>Le classement calculera les récompenses comme une remise de 90 % sur les frais SafeBox, soit 2 % du montant total payé en sUSD.</0> <0> La valeur en $ de OP et THALES sera calculée en utilisant un twap de 7 jours au début de la période.</0> <0>  Si à la fin de la période de deux semaines, le total des remises est supérieur à la valeur de twap initiale des jetons OP et THALES, la remise sera réduite proportionnellement pour chaque utilisateur.</0>",
         "total-negative-pnl": "Pertes totales",
         "periods": {
             "period-0": "Première période",

@@ -38,7 +38,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
                 <>
                     {isCanceled && <Status color={STATUS_COLOR.CANCELED}>{t('markets.market-card.canceled')}</Status>}
                     {regularFlag && !isMobile && <MatchStarts>{`${startsAt}`}</MatchStarts>}
-                    {isResolved && !isCanceled && (
+                    {isResolved && !isCanceled && isMobile && (
                         <>
                             <ResultLabel>{t('markets.market-card.result')}:</ResultLabel>
                             <Result isLive={isLive}>{result}</Result>
@@ -77,13 +77,13 @@ export const Status = styled.span<{ color?: string }>`
     justify-content: space-evenly;
 `;
 
-const Result = styled.span<{ isLive?: boolean }>`
+export const Result = styled.span<{ isLive?: boolean }>`
     font-size: ${(_props) => (_props?.isLive ? '12px' : '12px')};
     font-weight: ${(_props) => (_props?.isLive ? '400' : '700')};
     // margin-right: ${(_props) => (_props?.isLive ? '7px' : '50px')};
 `;
 
-const ResultLabel = styled.span`
+export const ResultLabel = styled.span`
     font-weight: 300;
     font-size: 12px;
     margin-right: 2px;

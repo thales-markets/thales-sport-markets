@@ -1,6 +1,6 @@
 import { ODDS_COLOR } from 'constants/ui';
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Container = styled.div<{
     backgroundColor?: string;
@@ -118,4 +118,8 @@ export const MatchNamesContainerMobile = styled(FlexDivRow)`
 export const OddsWrapperMobile = styled(FlexDivRow)<{ closedMarket?: boolean }>`
     flex: 1;
     align-self: ${(_props) => (_props?.closedMarket ? 'end' : '')};
+`;
+
+export const ResultWrapper = styled(FlexDivRowCentered)`
+    margin-left: 30px;
 `;

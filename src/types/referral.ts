@@ -24,7 +24,7 @@ export type ReferredTrader = {
     id: string;
     trades: number;
     totalVolume: number;
-    totalEarned: number;
+    totalAmount: number;
     referrer: {
         id: string;
     };
