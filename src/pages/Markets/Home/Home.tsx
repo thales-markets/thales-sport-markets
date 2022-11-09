@@ -786,6 +786,8 @@ const ApplyFiltersButton = styled(Button)`
     align-self: center;
     height: 10px;
     margin-right: 5px;
+    position: fixed;
+    bottom: 3%;
 `;
 
 export default Home;
