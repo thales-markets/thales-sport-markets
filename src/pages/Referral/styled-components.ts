@@ -7,6 +7,7 @@ export const Wrapper = styled(FlexDivColumnNative)`
     font-weight: 400;
     width: 700px;
     align-items: flex-start;
+    margin-top: 20px;
     @media (max-width: 768px) {
         width: 100%;
         min-width: auto;
@@ -102,4 +103,10 @@ export const Tab = styled.span<{ active?: boolean }>`
     padding-bottom: 5px;
     cursor: pointer;
     font-weight: 600;
+`;
+
+export const TableContainer = styled.div`
+    width: 100%;
+    margin-top: 10px;
+    min-height: 400px;
 `;

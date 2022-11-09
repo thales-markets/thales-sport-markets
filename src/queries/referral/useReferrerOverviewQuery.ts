@@ -4,23 +4,21 @@ import { NetworkId } from 'types/network';
 import { Referrer } from 'types/referral';
 import thalesData from 'thales-data';
 
-const useReferrersQuery = (
+const useReferrerOverviewQuery = (
+    referrer: string,
     networkId: NetworkId,
-    orderBy?: string,
-    orderDirection?: 'asc' | 'desc',
-    options?: UseQueryOptions<Referrer[] | null>
+    options?: UseQueryOptions<Referrer | null>
 ) => {
-    return useQuery<Referrer[] | null>(
-        QUERY_KEYS.Referrers(networkId),
+    return useQuery<Referrer | null>(
+        QUERY_KEYS.ReferralOverview(referrer, networkId),
         async () => {
             try {
                 const referrers: Referrer[] = await thalesData.sportMarkets.referrers({
                     network: networkId,
-                    orderBy: orderBy ? orderBy : undefined,
-                    orderDirection: orderDirection ? orderDirection : undefined,
+                    referrer,
                 });
 
-                return referrers;
+                return referrers ? referrers[0] : null;
             } catch (e) {
                 console.log('E ', e);
                 return null;
@@ -32,4 +30,4 @@ const useReferrersQuery = (
     );
 };
 
-export default useReferrersQuery;
+export default useReferrerOverviewQuery;

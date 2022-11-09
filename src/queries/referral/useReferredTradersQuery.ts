@@ -15,7 +15,7 @@ const useReferredTradersQuery = (
         QUERY_KEYS.ReferredTraders(referrer || '', networkId),
         async () => {
             try {
-                const referredTraders: ReferredTrader[] = thalesData.sportMarkets.referredTraders({
+                const referredTraders: ReferredTrader[] = await thalesData.sportMarkets.referredTraders({
                     network: networkId,
                     referrer,
                     orderBy,
