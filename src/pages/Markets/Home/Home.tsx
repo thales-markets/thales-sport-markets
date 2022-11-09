@@ -371,9 +371,6 @@ const Home: React.FC = () => {
                 <LogoContainer>
                     <Logo />
                 </LogoContainer>
-                <ApplyFiltersButton onClick={() => setShowBurger(false)}>
-                    {t('market.apply-filters')}
-                </ApplyFiltersButton>
                 <SportFiltersContainer>
                     {Object.values(SportFilterEnum).map((filterItem: any, index) => {
                         return (
@@ -447,6 +444,9 @@ const Home: React.FC = () => {
                         isMobile={isMobile}
                     />
                 </GlobalFiltersContainer>
+                <ApplyFiltersButton onClick={() => setShowBurger(false)}>
+                    {t('market.apply-filters')}
+                </ApplyFiltersButton>
             </BurgerFiltersContainer>
 
             <RowContainer>
