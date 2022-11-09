@@ -83,11 +83,11 @@ const Container = styled(FlexDiv)`
     }
     @media (max-width: 950px) {
         margin: 0;
-        scrollbar-width: 3px; /* Firefox */
+        scrollbar-width: 0px; /* Firefox */
         ::-webkit-scrollbar {
             /* WebKit */
-            width: 5px;
-            height: 5px;
+            width: 0px;
+            height: 0px;
         }
     }
 `;

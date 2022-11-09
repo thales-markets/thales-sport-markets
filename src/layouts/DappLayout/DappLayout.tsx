@@ -96,6 +96,7 @@ const Background = styled.section`
     min-height: 100vh;
     background: ${(props) => props.theme.background.primary};
     color: ${(props) => props.theme.textColor.primary};
+    position: relative;
 `;
 
 const Wrapper = styled(FlexDivColumn)`

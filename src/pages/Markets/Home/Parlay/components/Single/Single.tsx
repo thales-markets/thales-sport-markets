@@ -81,7 +81,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
         parlayPayment.selectedStableIndex
     );
-    const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(parlayPayment.isVoucherSelected);
+    const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [tokenAmount, setTokenAmount] = useState<number>(0);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [maxUsdAmount, setMaxUsdAmount] = useState<number>(0);
@@ -134,11 +134,16 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
 
     const overtimeVoucher = useMemo(() => {
         if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
+            if (parlayPayment.isVoucherSelected === undefined) {
+                setIsVoucherSelected(true);
+            }
             return overtimeVoucherQuery.data;
         }
-        setIsVoucherSelected(false);
+        if (parlayPayment.isVoucherSelected !== undefined) {
+            setIsVoucherSelected(false);
+        }
         return undefined;
-    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
+    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data, parlayPayment.isVoucherSelected]);
 
     const paymentTokenBalance: number = useMemo(() => {
         if (overtimeVoucher && isVoucherSelected) {

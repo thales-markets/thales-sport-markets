@@ -27,11 +27,11 @@ export enum SportFilterEnum {
     All = 'All',
     Soccer = 'Soccer',
     Football = 'Football',
-    UFC = 'UFC',
-    Baseball = 'Baseball',
-    Motosport = 'Motosport',
     Basketball = 'Basketball',
+    Baseball = 'Baseball',
     Hockey = 'Hockey',
+    UFC = 'UFC',
+    Motosport = 'Motosport',
 }
 
 export const COLLATERALS = [

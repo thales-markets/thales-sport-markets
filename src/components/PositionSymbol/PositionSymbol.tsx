@@ -121,7 +121,11 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                             <Tooltip
                                 overlay={<>{t('markets.zero-odds-tooltip')}</>}
                                 iconFontSize={10}
-                                customIconStyling={{ marginTop: '-10px', display: 'flex', marginLeft: '3px' }}
+                                customIconStyling={{
+                                    marginTop: isMobile ? '2px' : '-10px',
+                                    display: 'flex',
+                                    marginLeft: '3px',
+                                }}
                             />
                         )}
                     </AdditionalText>
