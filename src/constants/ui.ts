@@ -104,6 +104,6 @@ export const NAV_MENU: NavMenuItem[] = [
         i18label: 'markets.nav-menu.items.become-affiliate',
         iconClass: 'icon icon--affiliate',
         name: 'become-affiliate',
-        route: ROUTES.Profile,
+        route: ROUTES.Referral,
     },
 ];
