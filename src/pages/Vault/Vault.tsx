@@ -447,7 +447,6 @@ const Vault: React.FC<VaultProps> = (props) => {
                             </Description>
                         </>
                     )}
-                    <PnL vaultAddress={vaultAddress} lifetimePnl={vaultData ? vaultData.lifetimePnl : 0} />
                 </LeftContainer>
                 <RightContainer>
                     {!vaultData ? (
@@ -706,7 +705,8 @@ const Vault: React.FC<VaultProps> = (props) => {
                     )}
                 </RightContainer>
             </Container>
-            <TradesHistory vaultAddress={vaultAddress} />
+            {vaultData && <PnL vaultAddress={vaultAddress} lifetimePnl={vaultData.lifetimePnl} />}
+            {vaultData && <TradesHistory vaultAddress={vaultAddress} currentRound={vaultData.round} />}
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={amount}

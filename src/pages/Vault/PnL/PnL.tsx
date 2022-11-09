@@ -8,7 +8,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { VaultPnls } from 'types/vault';
 import useVaultPnlsQuery from 'queries/vault/useVaultPnlsQuery';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { Colors, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { Colors, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { formatPercentageWithSign } from 'utils/formatters/number';
 
 type PnlProps = {
@@ -49,7 +49,15 @@ const PnL: React.FC<PnlProps> = ({ vaultAddress, lifetimePnl }) => {
 
     return (
         <Container>
-            <Title>{t(`vault.pnl.title`)}</Title>
+            <Header noData={noData}>
+                <Title>{t(`vault.pnl.title`)}</Title>
+                <LifetimePnlContainer>
+                    <LifetimePnlLabel>{t('vault.pnl.lifetime-pnl')}:</LifetimePnlLabel>
+                    <LifetimePnl color={lifetimePnl === 0 ? Colors.WHITE : lifetimePnl > 0 ? Colors.GREEN : Colors.RED}>
+                        {formatPercentageWithSign(lifetimePnl)}
+                    </LifetimePnl>
+                </LifetimePnlContainer>
+            </Header>
             {!noData ? (
                 <ChartContainer>
                     <ResponsiveContainer width="100%" height="100%">
@@ -92,35 +100,20 @@ const PnL: React.FC<PnlProps> = ({ vaultAddress, lifetimePnl }) => {
             ) : (
                 <NoData>{t(`vault.pnl.no-data`)}</NoData>
             )}
-            <LifetimePnlContainer>
-                <LifetimePnlLabel>{t('vault.pnl.lifetime-pnl')}:</LifetimePnlLabel>
-                <LifetimePnl color={lifetimePnl === 0 ? Colors.WHITE : lifetimePnl > 0 ? Colors.GREEN : Colors.RED}>
-                    {formatPercentageWithSign(lifetimePnl)}
-                </LifetimePnl>
-            </LifetimePnlContainer>
         </Container>
     );
 };
 
 const Container = styled(FlexDivColumn)`
-    align-items: center;
-    width: 100%;
+    width: 60%;
+    @media (max-width: 1440px) {
+        width: 95%;
+    }
 `;
 
 const ChartContainer = styled.div`
     height: 250px;
     width: 100%;
-`;
-
-const Title = styled.span`
-    font-style: normal;
-    font-weight: bold;
-    font-size: 20px;
-    line-height: 100%;
-    margin-top: 20px;
-    color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 20px;
-    text-align: center;
 `;
 
 const TooltipContainer = styled(FlexDivColumnCentered)`
@@ -137,6 +130,14 @@ const TooltipAmount = styled(FlexDivColumn)`
     text-align: center;
 `;
 
+const Header = styled(FlexDivRow)<{ noData?: boolean }>`
+    margin: ${(props) => (props.noData ? '20px 0px 6px 0px' : '20px 6px 6px 55px')};
+`;
+
+const Title = styled.span`
+    color: #5f6180;
+`;
+
 const LifetimePnlContainer = styled(FlexDivRow)`
     align-items: center;
 `;
@@ -149,8 +150,11 @@ const LifetimePnl = styled.p<{ color: string }>`
     color: ${(props) => props.color};
 `;
 
-const NoData = styled.span`
-    margin-bottom: 15px;
+const NoData = styled(FlexDivCentered)`
+    border: 2px dotted #5f6180;
+    margin-bottom: 10px;
+    height: 200px;
+    color: #5f6180;
 `;
 
 export default PnL;

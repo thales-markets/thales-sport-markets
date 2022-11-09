@@ -50,7 +50,7 @@ export const LeftContainer = styled(ContentContainer)`
 `;
 
 export const RightContainer = styled(ContentContainer)`
-    background: ${(props) => props.theme.background.secondary};
+    background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
     padding: 30px 40px 20px 40px;
     border-radius: 20px;
     @media (max-width: 767px) {
