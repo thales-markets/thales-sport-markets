@@ -1,3 +1,4 @@
+import { TEAM_ABBREVIATIONS_MAP } from 'constants/teamNames';
 import { SportMarketInfo } from 'types/markets';
 
 export const truncateAddress = (address: string, first = 5, last = 5) =>
@@ -27,9 +28,19 @@ export const fixDuplicatedTeamName = (name: string) => {
 export const fixLongTeamName = (market: SportMarketInfo) => {
     market.homeTeam.toLowerCase() == 'wolverhampton' ? (market.homeTeam = 'Wolves') : '';
     market.awayTeam.toLowerCase() == 'wolverhampton' ? (market.awayTeam = 'Wolves') : '';
+    market.homeTeam.toLowerCase() == 'miami (fl) hurricanes' ? (market.homeTeam = 'Miami Hurricanes') : '';
+    market.awayTeam.toLowerCase() == 'miami (fl) hurricanes' ? (market.awayTeam = 'Miami Hurricanes') : '';
     market.homeTeam.toLowerCase() == 'borussia monchengladbach' ? (market.homeTeam = "Borussia M'gladbach") : '';
     market.awayTeam.toLowerCase() == 'borussia monchengladbach' ? (market.awayTeam = "Borussia M'gladbach") : '';
     return market;
+};
+
+export const mapTeamNamesMobile = (teamName: string, individualCompetition: boolean) => {
+    if (individualCompetition) {
+        const splittedName = teamName.split(' ');
+        return splittedName[splittedName.length - 1];
+    }
+    return TEAM_ABBREVIATIONS_MAP[teamName.toLowerCase()];
 };
 
 export const fixLongTeamNameString = (team: string) => {

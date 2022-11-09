@@ -9,6 +9,26 @@
 }
 
 @font-face {
+    font-family: 'Jost';
+    src: local('Jost'), url(../assets/fonts/Jost/Jost.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'JostExtraBold';
+    src: local('JostExtraBold'), url(../assets/fonts/Jost/Jost-ExtraBold.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Nunito';
+    src: local('Nunito'), url(../assets/fonts/Nunito/Nunito.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'NunitoExtraBold';
+    src: local('NunitoExtraBold'), url(../assets/fonts/Nunito/Nunito-ExtraBold.ttf) format('truetype');
+}
+
+@font-face {
     font-family: 'ExoticIcons';
     src: local('ExoticIcons'), url(../assets/fonts/ExoticIcons/ExoticIcons.ttf) format('truetype');
 }
@@ -21,4 +41,21 @@
 @font-face {
     font-family: 'HomepageIcons';
     src: local('HomepageIcons'), url(../assets/fonts/HomepageIcons/homepage.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'LeaguesIcons';
+    src: local('LeaguesIcons'), url(../assets/fonts/OvertimeIcons/LeaguesIcons.ttf) format('truetype');
+    font-family: 'LeagueIcons';
+    src: local('LeagueIcons'), url(../assets/fonts/LeagueIcons/LeagueIcons.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Atma';
+    src: local('Atma'), url(../assets/fonts/Atma/Atma-Regular.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'AtmaBold';
+    src: local('AtmaBold'), url(../assets/fonts/Atma/Atma-Bold.ttf) format('truetype');
 }

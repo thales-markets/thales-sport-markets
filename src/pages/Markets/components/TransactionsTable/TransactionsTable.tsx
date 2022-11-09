@@ -6,6 +6,9 @@ import Table from 'components/Table';
 import ViewEtherscanLink from 'components/ViewEtherscanLink';
 import { MarketTransaction, MarketTransactions } from 'types/markets';
 import { formatCurrency } from 'utils/formatters/number';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/rootReducer';
+import { getIsMobile } from 'redux/modules/app';
 
 type TransactionsTableProps = {
     transactions: MarketTransactions;
@@ -15,6 +18,7 @@ type TransactionsTableProps = {
 
 export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noResultsMessage, isLoading }) => {
     const { t } = useTranslation();
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     return (
         <>
             <Table
@@ -79,10 +83,33 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                 data={transactions}
                 isLoading={isLoading}
                 noResultsMessage={noResultsMessage}
+                tableHeadCellStyles={isMobile ? TableHeaderStyleMobile : TableHeaderStyle}
             />
         </>
     );
 });
+
+const TableHeaderStyle: React.CSSProperties = {
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: 600,
+    fontSize: '12px',
+    lineHeight: '12px',
+    textTransform: 'uppercase',
+    color: '#5F6180',
+    justifyContent: 'flex-start',
+};
+
+const TableHeaderStyleMobile: React.CSSProperties = {
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: 600,
+    fontSize: '10px',
+    lineHeight: '12px',
+    textTransform: 'uppercase',
+    color: '#5F6180',
+    justifyContent: 'center',
+};
 
 const paidSort = () => (rowA: any, rowB: any) => {
     return rowA.original.paid - rowB.original.paid;

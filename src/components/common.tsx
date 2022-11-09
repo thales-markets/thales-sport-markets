@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 
 export const BondInfo = styled(FlexDivColumn)`
     font-size: 15px;
@@ -376,4 +376,11 @@ export const ProfitLabel = styled.label<{ claimable: boolean }>`
     text-align: center;
     cursor: pointer;
     margin-top: 37px;
+`;
+
+export const Discount = styled(FlexDivCentered)<{ visible?: boolean; color?: string }>`
+    color: ${(_props) => (_props?.color ? _props.color : '')};
+    font-size: 14px;
+    margin-left: 11px;
+    visibility: ${(_props) => (_props?.visible ? 'visible' : 'hidden')};
 `;

@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery, UseQueryOptions } from 'react-query';
 import { Position, Side } from '../../constants/options';
 import { AMMPosition } from '../../types/markets';
 import QUERY_KEYS from '../../constants/queryKeys';
@@ -13,7 +13,8 @@ const usePositionPriceDetailsQuery = (
     position: Position,
     amount: number,
     stableIndex: number,
-    networkId: NetworkId
+    networkId: NetworkId,
+    options?: UseQueryOptions<AMMPosition>
 ) => {
     return useQuery<AMMPosition>(
         QUERY_KEYS.PositionDetails(marketAddress, position, amount, stableIndex, networkId),
@@ -86,6 +87,9 @@ const usePositionPriceDetailsQuery = (
                     },
                 };
             }
+        },
+        {
+            ...options,
         }
     );
 };

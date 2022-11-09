@@ -1,24 +1,114 @@
 import { Tags, SportsMap, SportsTagsMap } from 'types/markets';
 
 export const TAGS_LIST: Tags = [
-    { id: 9001, label: 'NCAA Football' },
-    { id: 9002, label: 'NFL' },
-    { id: 9003, label: 'MLB' },
-    { id: 9004, label: 'NBA' },
-    { id: 9005, label: 'NCAA Basketball' },
-    { id: 9006, label: 'NHL' },
-    { id: 9007, label: 'UFC', logo: '/logos/ufc-logo.png' },
-    { id: 9008, label: 'WNBA' },
-    { id: 9010, label: 'MLS' },
-    { id: 9011, label: 'EPL' },
-    { id: 9012, label: 'Ligue 1' },
-    { id: 9013, label: 'Bundesliga' },
-    { id: 9014, label: 'La Liga' },
-    { id: 9015, label: 'Serie A' },
-    { id: 9016, label: 'UEFA Champions League' },
-    { id: 9018, label: 'FIFA World Cup' },
-    { id: 9100, label: 'Formula1' },
-    { id: 9101, label: 'MotoGP' },
+    {
+        id: 9001,
+        label: 'NCAA Football',
+        logo: `/logos/leagueLogos/ncaa.png`,
+        logoClass: 'icon-league league--ncaa',
+        favourite: false,
+    },
+    {
+        id: 9002,
+        label: 'NFL',
+        logo: `/logos/leagueLogos/nfl.png`,
+        logoClass: 'icon-league league--nfl',
+        favourite: false,
+    },
+    {
+        id: 9003,
+        label: 'MLB',
+        logo: `/logos/leagueLogos/mlb.svg`,
+        logoClass: 'icon-league league--mlb',
+        favourite: false,
+    },
+    {
+        id: 9004,
+        label: 'NBA',
+        logo: `/logos/leagueLogos/nba.svg`,
+        logoClass: 'icon-league league--nba',
+        favourite: false,
+    },
+    { id: 9005, label: 'NCAA Basketball', logoClass: 'icon-league league--ncaa', favourite: false },
+    {
+        id: 9006,
+        label: 'NHL',
+        logo: `/logos/leagueLogos/nhl.png`,
+        logoClass: 'icon-league league--nhl',
+        favourite: false,
+    },
+    {
+        id: 9007,
+        label: 'UFC',
+        logo: '/logos/ufc-logo.png',
+        logoClass: 'icon-league league--ufc',
+        favourite: false,
+    },
+    { id: 9008, label: 'WNBA', logoClass: 'icon-league league--wnba', favourite: false },
+    {
+        id: 9010,
+        label: 'MLS',
+        logo: `/logos/leagueLogos/mls.png`,
+        logoClass: 'icon-league league--mls',
+        favourite: false,
+    },
+    {
+        id: 9011,
+        label: 'EPL',
+        logo: `/logos/leagueLogos/EPL.png`,
+        logoClass: 'icon-league league--epl',
+        favourite: false,
+    },
+    {
+        id: 9012,
+        label: 'Ligue 1',
+        logo: `/logos/leagueLogos/Ligue1.png`,
+        logoClass: 'icon-league league--ligue1',
+        favourite: false,
+    },
+    {
+        id: 9013,
+        label: 'Bundesliga',
+        logo: '/logos/leagueLogos/bundesliga.png',
+        logoClass: 'icon-league league--bundesliga',
+        favourite: false,
+    },
+    {
+        id: 9014,
+        label: 'La Liga',
+        logo: `/logos/leagueLogos/LaLiga.png`,
+        logoClass: 'icon-league league--laliga',
+        favourite: false,
+    },
+    {
+        id: 9015,
+        label: 'Serie A',
+        logo: `/logos/leagueLogos/seriea.png`,
+        logoClass: 'icon-league league--seriea',
+        favourite: false,
+    },
+    {
+        id: 9016,
+        label: 'UEFA Champions League',
+        logo: `/logos/leagueLogos/ucl-white.png`,
+        logoClass: 'icon-league league--ucl',
+        favourite: false,
+    },
+    { id: 9018, label: 'FIFA World Cup', logo: ``, logoClass: '', favourite: false },
+    {
+        id: 9100,
+        label: 'Formula 1',
+        logo: '/logos/leagueLogos/f1.png',
+        logoClass: 'icon-league league--f1',
+        favourite: false,
+    },
+    {
+        id: 9101,
+        label: 'MotoGP',
+        logo: `/logos/leagueLogos/motogp.png`,
+        logoClass: 'icon-league league--motogp',
+        favourite: false,
+    },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -38,9 +128,11 @@ export const SPORTS_MAP: SportsMap = {
     9015: 'Soccer',
     9016: 'Soccer',
     9018: 'Soccer',
-    9100: 'Formula1',
-    9101: 'MotoGP',
+    9100: 'Motosport',
+    9101: 'Motosport',
 };
+
+export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [9002, 9003, 9004, 9005, 9006, 9008, 9007, 9100, 9101];
 
 export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Football: [9001, 9002],
@@ -49,8 +141,29 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Hockey: [9006],
     Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9018],
     UFC: [9007],
-    Formula1: [9100],
-    MotoGP: [9101],
+    Motosport: [9100, 9101],
 };
 
+export enum TAGS_FLAGS {
+    NCAA_FOOTBALL = 9001,
+    NFL = 9002,
+    MLB = 9003,
+    NBA = 9004,
+    NCAA_BASKETBALL = 9005,
+    NHL = 9006,
+    UFC = 9007,
+    WNBA = 9008,
+    MLS = 9010,
+    EPL = 9011,
+    LIGUE_ONE = 9012,
+    BUNDESLIGA = 9013,
+    LA_LIGA = 9014,
+    SERIE_A = 9015,
+    UEFA_CL = 9016,
+    FORMULA1 = 9100,
+    MOTOGP = 9101,
+}
+
 export const MLS_TAG = 9010;
+
+export const PERSON_COMPETITIONS = [9007, 9100, 9101];

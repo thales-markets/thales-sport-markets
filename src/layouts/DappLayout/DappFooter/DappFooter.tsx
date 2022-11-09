@@ -64,8 +64,8 @@ const DappFooter: React.FC = () => {
 
 const Container = styled(FlexDivColumnCentered)`
     max-height: 75px;
-    @media (max-width: 400px) {
-        margin-top: 15px;
+    @media (max-width: 950px) {
+        margin-top: 100px;
     }
 `;
 

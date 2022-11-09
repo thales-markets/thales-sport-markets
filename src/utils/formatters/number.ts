@@ -77,6 +77,10 @@ export const floorNumberToDecimals = (value: number, decimals = DEFAULT_CURRENCY
     return Math.floor(value * Math.pow(10, decimals)) / Math.pow(10, decimals);
 };
 
+export const roundNumberToDecimals = (value: number, decimals = DEFAULT_CURRENCY_DECIMALS) => {
+    return +(Math.round(Number(value + 'e+' + decimals)) + 'e-' + decimals);
+};
+
 export const countDecimals = (value: number) => {
     if (Math.floor(value) === value) return 0;
 

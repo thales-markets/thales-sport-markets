@@ -1,8 +1,9 @@
 import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
-import { AccountPosition, MarketData, MarketInfo, SportMarketInfo } from 'types/markets';
-import { formatCurrency } from './formatters/number';
+import { Position } from 'constants/options';
+import { MLS_TAG, PERSON_COMPETITIONS, TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
 import ordinal from 'ordinal';
-import { MLS_TAG } from 'constants/tags';
+import { AccountPosition, MarketData, MarketInfo, ParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
+import { formatCurrency } from './formatters/number';
 
 export const getRoi = (ticketPrice: number, potentialWinnings: number, showRoi: boolean) =>
     showRoi ? (potentialWinnings - ticketPrice) / ticketPrice : 0;
@@ -43,6 +44,13 @@ export const getMarketStatus = (market: MarketInfo) => {
     }
 };
 
+export const getMarketStatusFromMarketData = (market: MarketData) => {
+    if (market.paused) return MarketStatus.Paused;
+    if (market.resolved) return MarketStatus.ResolvedConfirmed;
+    if (market.cancelled) return MarketStatus.CancelledConfirmed;
+    return MarketStatus.Open;
+};
+
 export const isValidHttpsUrl = (text: string) => {
     let url;
 
@@ -58,10 +66,17 @@ export const isValidHttpsUrl = (text: string) => {
 export const convertFinalResultToResultType = (result: number, isApexTopGame?: boolean) => {
     if (result == 1 && isApexTopGame) return 3;
     if (result == 2 && isApexTopGame) return 4;
-    if (result == 2) return 1;
     if (result == 1) return 0;
     if (result == 2) return 1;
     if (result == 3) return 2;
+};
+
+export const convertPositionToSymbolType = (position: Position, isApexTopGame: boolean) => {
+    if (position == Position.HOME && isApexTopGame) return 3;
+    if (position == Position.AWAY && isApexTopGame) return 4;
+    if (position == Position.HOME) return 0;
+    if (position == Position.AWAY) return 1;
+    if (position == Position.DRAW) return 2;
 };
 
 export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) => {
@@ -86,7 +101,7 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
 
 export const convertFinalResultToWinnerName = (result: number, market: MarketData) => {
     if (result == 1 && getIsApexTopGame(market.isApex, market.betType)) return 'YES';
-    if (result == 2 && getIsApexTopGame(market.isApex, market.betType)) return 'NO';
+    if (result == 1 && getIsApexTopGame(market.isApex, market.betType)) return 'NO';
     if (result == 1) return market.homeTeam;
     if (result == 2) return market.awayTeam;
     if (result == 3) return 'DRAW';
@@ -98,6 +113,20 @@ export const convertPositionToTeamName = (result: number, market: MarketData) =>
     if (result == 0) return market.homeTeam;
     if (result == 1) return market.awayTeam;
     if (result == 2) return 'DRAW';
+};
+
+export const convertPositionNameToPosition = (positionName: string) => {
+    if (positionName?.toUpperCase() == 'HOME') return 0;
+    if (positionName?.toUpperCase() == 'AWAY') return 1;
+    if (positionName?.toUpperCase() == 'DRAW') return 2;
+};
+
+export const convertPositionNameToPositionType = (positionName: string) => {
+    if (positionName?.toUpperCase() == 'HOME') return Position.HOME;
+    if (positionName?.toUpperCase() == 'AWAY') return Position.AWAY;
+    if (positionName?.toUpperCase() == 'DRAW') return Position.DRAW;
+    console.log('ULAZI OVDE');
+    return Position.HOME;
 };
 
 export const isApexGame = (tag: number) => tag >= APEX_GAME_MIN_TAG;
@@ -143,6 +172,32 @@ export const appplyLogicForApexGame = (market: SportMarketInfo) => {
 export const getIsApexTopGame = (isApex: boolean, betType: ApexBetType) =>
     isApex && (betType === ApexBetType.TOP3 || betType === ApexBetType.TOP5 || betType === ApexBetType.TOP10);
 
+export const getPositionOdds = (market: ParlaysMarket) => {
+    return market.position === Position.HOME
+        ? market.homeOdds
+        : market.position === Position.AWAY
+        ? market.awayOdds
+        : market.drawOdds
+        ? market.drawOdds
+        : 0;
+};
+
+export const getPositionOddsFromSportMarket = (market: SportMarketInfo, position: Position) => {
+    return position === Position.HOME
+        ? market.homeOdds
+        : position === Position.AWAY
+        ? market.awayOdds
+        : market.drawOdds
+        ? market.drawOdds
+        : 0;
+};
+
+export const getVisibilityOfDrawOptionByTagId = (tags: Array<number>) => {
+    const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(element));
+    if (tag) return false;
+    return true;
+};
+
 export const isDiscounted = (priceImpact: number | undefined) => {
     if (priceImpact) {
         return Number(priceImpact) < 0;
@@ -151,3 +206,21 @@ export const isDiscounted = (priceImpact: number | undefined) => {
 };
 
 export const isMlsGame = (tag: number) => Number(tag) === MLS_TAG;
+
+export const getIsIndividualCompetition = (tag: number) => PERSON_COMPETITIONS.includes(tag);
+
+export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
+    const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved);
+    const claimablePositions = parlayMarket.positions.filter((position) => position.claimable);
+    const canceledMarkets = parlayMarket.sportMarkets.filter((market) => market.isCanceled);
+
+    if (
+        resolvedMarkets?.length == claimablePositions?.length &&
+        resolvedMarkets?.length + canceledMarkets?.length == parlayMarket.sportMarkets.length &&
+        !parlayMarket.claimed
+    ) {
+        return true;
+    }
+
+    return false;
+};

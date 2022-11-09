@@ -21,7 +21,8 @@
             "disclaimer": "En connectant votre portefeuille vous reconnaissez que vous avez lu et compris la <a target=\"_blank\" href={{link}}>décharge de responsabilité</a> d’Overtime et accepté les conditions d’utilisation.",
             "disclaimer-lowercase": "clause de non-responsabilité",
             "disclaimer2": "et acceptez ses conditions d'utilisation.",
-            "disclaimer1": "En connectant un portefeuille, vous reconnaissez avoir lu et compris les marchés des heures supplémentaires"
+            "disclaimer1": "En connectant un portefeuille, vous reconnaissez avoir lu et compris les marchés des heures supplémentaires",
+            "wallet-info": "Informations sur le portefeuille"
         },
         "referral": {
             "link-copied": "Lien de parrainage copié !",
@@ -250,16 +251,16 @@
         },
         "filter-label": {
             "global": {
-                "all": "Tous les marchés",
-                "openmarkets": "Marchés ouverts",
-                "resolvedmarkets": "Marchés résolus",
                 "yourpositions": "Vos positions",
                 "claim": "Réclamable",
                 "history": "Vos transactions",
-                "canceled": "Annulés",
                 "allmarkets": "Tous les marchés",
                 "tooltip": "Les marchés ont été résolus il y a plus de 7 jours",
-                "archivedmarkets": "Marchés archivés"
+                "archivedmarkets": "Marchés archivés",
+                "pendingmarkets": "En attente",
+                "resolvedmarkets": "Achevé",
+                "openmarkets": "Tout",
+                "canceled": "En pause / Annulé"
             },
             "sport": {
                 "all": "Tous les sports",
@@ -272,7 +273,9 @@
                 "formula1": "Formule 1",
                 "motogp": "MotoGP",
                 "soon": "Plus de sports à venir!",
-                "ufc": "MMA"
+                "ufc": "MMA",
+                "motosport": "Sport automobile",
+                "favourites": "Favoris"
             },
             "all": "Tous",
             "datepicker": {
@@ -315,8 +318,15 @@
         "tooltip": {
             "minimal-amount": "Le montant minimal est de 1",
             "no-funds": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds",
-            "amount-exceeded": "Le montant saisi dépasse le montant disponible via l'AMM"
-        }
+            "amount-exceeded": "Le montant saisi dépasse le montant disponible via l'AMM",
+            "min-amount": "Le montant minimal est de {{min}}",
+            "min-quote": "Le devis minimal est {{value}}",
+            "max-quote": "Le devis maximum est de {{value}}"
+        },
+        "match-time": "Temps de match",
+        "race-starts": "La course commence",
+        "back": "Retour",
+        "apply-filters": "Appliquer des filtres"
     },
     "markets": {
         "market-card-list": {
@@ -359,10 +369,67 @@
             "claim-back": "Réclamer",
             "max": "Max",
             "skew": "Skew",
-            "discount": "Remise"
+            "discount": "Remise",
+            "available": "Disponible",
+            "amount-to-buy": "Montant à acheter",
+            "positions": "Postes"
         },
         "zero-odds-tooltip": "Le Sport AMM ne propose des liquidités que dans la fourchette de prix de 0,05 $ à 0,95 $. Cela signifie que si les cotes d'une position sont inférieures à 5 % ou supérieures à 95 %, cette position n'aura pas de liquidité.",
-        "discounted-per": "Remise selon"
+        "parlay": {
+            "skew": "Fausser",
+            "buy-amount": "Montant à acheter",
+            "available": "Disponible",
+            "potential-profit": "Gain potentiel",
+            "total-quote": "Devis total",
+            "pay-with": "Payer avec",
+            "validation": {
+                "title": "Validation Parlay",
+                "max-markets": "Maximum 4 marchés à Parlay",
+                "availability": "Faible disponibilité pour la position des marchés",
+                "amount-exceeded": "Le montant a dépassé le montant disponible sur AMM",
+                "no-funds": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds",
+                "min-amount": "Le montant minimal est de {{min}}",
+                "min-quote": "Le devis minimal est {{value}}",
+                "max-quote": "Le devis maximum est de {{value}}",
+                "not-supported": "Erreur de validation non prise en charge {{error}}",
+                "risk-per-comb": "Risque par combinaison dépassé",
+                "single-min-amount": "Le montant minimal est de {{min}}",
+                "team-in-parlay": "{{team}} est déjà à Parlay. La même équipe ne peut pas être ajoutée à un Parlay plus d'une fois.",
+                "same-team": "La même équipe ne peut pas être dans un Parlay plus d'une fois",
+                "max-payout": "Le paiement maximal pris en charge est de {{max}}",
+                "max-teams": "Maximum {{max}} marchés à Parlay",
+                "max-profit": "Le profit maximal pris en charge est de {{max}}"
+            },
+            "payout": "Total reçu",
+            "empty-title": "Aucun poste",
+            "empty-description": "Ajoutez une position, choisissez un marché et faites votre sélection.",
+            "fee": "Montant total",
+            "safebox-fee": "Frais SafeBox",
+            "positions": "Postes",
+            "parlay-fee": "Frais de parlay",
+            "clear": "Tout effacer",
+            "info": {
+                "max-quote": "Le DEVIS TOTAL maximal pris en charge est de {{value}}",
+                "min-quote": "Le DEVIS TOTAL minimal pris en charge est de {{value}}"
+            },
+            "show-parlay": "Afficher Parlay"
+        },
+        "discounted-per": "Remise selon",
+        "nav-menu": {
+            "items": {
+                "markets": "Marchés",
+                "leaderboard": "Classement",
+                "profile": "Profil",
+                "sports-trivia": "Anecdotes sportives",
+                "become-affiliate": "Devenir affilié",
+                "onboarding-wizard": "Assistant d'intégration",
+                "history": "Histoire"
+            },
+            "buttons": {
+                "disconnect": "Déconnecter",
+                "switch": "Changer"
+            }
+        }
     },
     "rewards": {
         "table": {
@@ -448,5 +515,125 @@
         "start-quiz-description": "<p>Salut les fans de sport! Prêt à tester vos connaissances et à battre tout le monde?</p><p>Overtime a lancé un concours de quiz sportifs. Le quiz est accessible à tous pour tester ses connaissances et participer.</p><p>Connectez votre portefeuille et entrez votre identifiant Twitter pour commencer le quiz! Pour toute question, veuillez rejoindre notre <discord>Discord</discord>.</p>",
         "question-weight-label": "Poids de la question : {{points}}",
         "help-us-improve-tooltip": "Aidez-nous à améliorer les quiz sportifs en ajoutant de nouvelles questions à la base de données de questions."
+    },
+    "landing-page": {
+        "best-odds": "Les meilleures cotes du secteur",
+        "try-now": "Essayer maintenant",
+        "powered-by": "Propulsé par",
+        "no-kyc": "Positionnement sportif sans inscription",
+        "launch-dapp": "Accéder à l'application",
+        "leagues": "Ligues",
+        "info-text-title-1": "Aucune inscription requise",
+        "info-text-title-2": "Tout se passe sur la blockchain",
+        "info-text-title-3": "Marchés non verrouillés",
+        "info-text-title-4": "Données fournies par Chainlink",
+        "info-text-title-5": "Transactions rapides et économiques",
+        "info-text-1": "Vous n'avez pas besoin de créer un compte utilisateur. Nous ne recueillons aucune information personnelle.",
+        "info-text-2": "Lorsque les entités centralisées s'écroulent, la transparence est essentielle. Tous nos contrats sont publics.",
+        "info-text-3": "Personne ne détient vos fonds. Vos clés, vos jetons.",
+        "info-text-4": "Leader de l'industrie avec des cotes démentielles et des résultats de d'évènements sportifs de manière décentralisée.",
+        "info-text-5": "Chaque interaction avec Overtime sports AMM se fait sur le réseau robuste d'Optimism.",
+        "browse-markets": "Consulter les marchés sportifs",
+        "web3-positioning": "Positionnement sportif web3",
+        "learn-more": "Vous voulez en savoir plus ?",
+        "documentation": "Consultez notre documentation",
+        "jump-in": "Prêts à vous lancer ?",
+        "open-overtime": "Lancer Overtime",
+        "join-discord": "Besoin d'aide ? Rejoignez notre Discord",
+        "read-now": "Consulter"
+    },
+    "profile": {
+        "transaction-history": "Historique des transactions",
+        "open-claimable": "Ouvert/Réclamable",
+        "categories": {
+            "open": "Ouvert",
+            "claimable": "Réclamable",
+            "parlay": "Jeux de pari",
+            "single": "Jeux simples"
+        },
+        "card": {
+            "canceled": "Annulé",
+            "claim": "Prétendre",
+            "to-claim": "Prétendre",
+            "to-win": "Gagner",
+            "ticket-id": "ID de billets",
+            "total-quote": "Devis total",
+            "number-of-games": "Nombre de parties",
+            "ticket-paid": "Billet payé",
+            "result": "Résultat",
+            "starts": "Départs",
+            "position-size": "Taille du poste"
+        },
+        "messages": {
+            "no-claimable": "Vous n'avez pas de poste réclamable",
+            "no-open": "Vous n'avez pas de poste ouvert",
+            "no-transactions": "Vous n'avez aucun métier"
+        },
+        "table": {
+            "paid": "Payé",
+            "games": "Jeux",
+            "id": "Identifiant",
+            "position": "Position",
+            "time": "Temps",
+            "amount": "montant"
+        }
+    },
+    "mint-world-cup-nft": {
+        "no": "Non",
+        "are-you-sure": "Êtes-vous sûr de vouloir frapper ce NFT ? Vous pouvez frapper UN SEUL NFT par portefeuille.",
+        "zebro-campaign": "Campagne Zebra FIFA",
+        "retweet": "Retweetez ce tweet",
+        "success-mint": "Frappé avec succès",
+        "yes-mint": "Oui, menthe NFT",
+        "already-minted": "Vous avez déjà frappé votre NFT",
+        "mint-nft-button": "Frappez ce zèbre !",
+        "stake-thales": "Pieu THALES",
+        "incentives": "DES INCITATIONS",
+        "follow": "Suivez les marchés des heures supplémentaires sur Twitter",
+        "go-to-twitter": "Aller sur Twitter",
+        "choose-nft": "Frappez votre Zebro NFT",
+        "get-thales": "Obtenez THALES",
+        "eligible-text-1": "La collection Zebro NFT est utilisée comme entrée pour la campagne Overtime FIFA World Cup.",
+        "stake-10-thales": "Pour pouvoir frapper un Zebro NFT, vous devez avoir au moins 10 THALES jalonnés.",
+        "eligible-text-2": "Frappez un zèbre de votre équipe nationale préférée et soyez éligible à 50 000 OP et 30 000 bonus THALES !",
+        "tag-3-friends": "Sur le même tweet, commentez votre adresse ETH & taguez 3 amis",
+        "eligible-text": "Hé, vous pouvez maintenant créer votre équipe préférée Zebro NFT.",
+        "second-option": "La deuxième option pour vous inscrire sur la liste d'autorisation consiste à suivre les étapes suivantes :",
+        "not-eligible-text": "Votre portefeuille n'est pas encore éligible pour frapper un Zebro NFT !",
+        "minting-is-free": "La frappe est gratuite, vous ne pouvez frapper qu'un seul NFT par portefeuille. Ce NFT est incessible.",
+        "mint-this-zebro": "Frappez ce zèbre !",
+        "leaderboard-title": "Classement",
+        "leaderboard": {
+            "parlay-boost": "Boost Parlay :",
+            "four-game-parlay": "+20 % s'il s'agit d'un pari de 4 matchs",
+            "reward-calculations": "Les calculs de récompense seront basés sur le volume au prorata avec une augmentation de volume supplémentaire maximale de 40 % si les conditions suivantes sont remplies :",
+            "underdog-multiplier": "Multiplicateur d'outsider :",
+            "two-game-parlay": "+10 % s'il s'agit d'un pari de 2 matchs",
+            "three-game-parlay": "+15 % s'il s'agit d'un pari de 3 matchs",
+            "underdog-multiplier-text": "Si votre position dans les matchs de la Coupe du monde est évaluée à moins de 0,3 (les cotes sont supérieures à 1: 3,33), vous obtiendrez une augmentation de 10 % des récompenses.",
+            "home-country-multiplier": "Multiplicateur NFT du pays d'origine :",
+            "home-country-multiplier-text": "Si votre match de Coupe du monde implique la même équipe nationale que votre Zebro, vous recevrez +10 % de bonus de récompenses",
+            "parlay-boost-text": "Si votre match de Coupe du monde est dans un ticket Parlay, vous obtiendrez un bonus de :"
+        },
+        "zebro-wct-collection": "La collection Zebro WC NFT",
+        "zebro-wct-collection-text": "fait partie d'une campagne incitative pour représenter votre pays préféré pendant la Coupe du monde et être éligible pour une part de 50 000 jetons OP et 30 000 jetons THALES, ainsi que des multiplicateurs exclusifs pour les parlays et les matchs individuels.",
+        "congrats": "Félicitations! Vous avez frappé avec succès le Zebro NFT !",
+        "go-to-leaderboard": "Aller au classement",
+        "get-your-nft": "Page de menthe"
+    },
+    "referral": {
+        "nav-items": {
+            "see-result-by-trader": "Voir le résultat par commerçant",
+            "affiliate-leaderboard": "Classement des affiliés",
+            "all-transactions": "Toutes transactions"
+        },
+        "trades": "Métiers",
+        "earned": "Gagné",
+        "generate-link": "Générer un lien",
+        "total-volume": "Volume total",
+        "copy-link": "Copier le lien",
+        "total-trading-fees": "Total des frais de négociation",
+        "header": "Créer des liens de parrainage",
+        "paragraph": "Il est important de prendre soin du patient, d&#39;être suivi par le médecin, mais c&#39;est un moment de grande douleur et de souffrance. Lacus luctus pour mettre une couche sur le dessus. Deux gorges dans une robe qu&#39;un dessin animé d&#39;un médecin avec des flèches. Mus mauris vitae ultricies leo entier attendu maintenant ou Il n&#39;y a pas de carquois diam amet nislus suscip adipiscing. Il n&#39;y a besoin d&#39;un caporal, même dignissim diam, pour personne. Pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna Pour les enfants, le dignissim est beaucoup de poison. On dit qu&#39;elle se boit comme un lit de bière, mais un casino ou un carquois. La faim malveillante et l&#39;horrible pauvreté. Mais le besoin est le besoin du fringilla phasellus faucibus scelerisque eleifend jusqu&#39;à. Ni la vallée de demain jamais. Quel élément l&#39;oreiller n&#39;est même pas. Mais maintenant, il vise le dessin animé du lac de propagande. La rue a dit que tout le monde devrait passer un bon week-end avec des flèches.<br><br> Par conséquent, il ne nécessite pas de clavier gratuit. Ils vivent dans la vieillesse et la maladie. Le rire de Feugiat devant la peur était dit. Il n&#39;y a pas de moment facile pour cibler cette maladie. Il aimerait avoir des membres comme le football. Le chat a maintenant besoin d&#39;un peu de saveur pure dans la pâte. Il est clair que cela est suivi de flèches. Lobortis élément nibh tellus molestie maintenant. Il n&#39;y a pas de terre mortelle dans la peur. Il faut un gros effort pour cibler le football, pas pour être un vestibule sans phase. Jusqu&#39;au pretium vulputate sapien ni sagittis aliquam malesuada bibendum arcu. En fait, aucune masse aérienne ne fait cela non plus. Qu&#39;on se le dise, ce n&#39;est que cela. Condimentum mattis pellentesque id nibh tortor id. Massa tincidunt maintenant pulvinar sapien et ligula ullamcorper malesuada. Maquillage enceinte Hendret, tout le monde n&#39;est pas un médecin local et l&#39;auteur de la publicité. C&#39;est aussi un élément très important de la stratégie du football clinique. Pour l&#39;instant la gorge des enfants sera prise en charge. Les membres peuvent aussi être fans de pure in the soft now."
     }
 }

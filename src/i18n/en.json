@@ -20,6 +20,7 @@
             "connect-your-wallet": "Connect wallet",
             "switch-wallet": "Switch wallet",
             "disconnect-wallet": "Disconnect wallet",
+            "wallet-info": "Wallet info",
             "wallet-options": "Wallet options",
             "get-usd": "Get {{amount}}",
             "approve": "Approve",
@@ -35,7 +36,7 @@
             "mint-voucher": "Mint voucher",
             "modal": {
                 "title": "Mint Overtime voucher",
-                "description": "<p>Overtime voucher functionality has been implemented per <tip>TIP-76</tip>.<p/>",
+                "description": "<p>Overtime voucher functionality has been implemented per <tip>TIP-76</tip>.</p>",
                 "voucher-amount-label": "Voucher amount",
                 "another-wallet-label": "Send a voucher to another wallet",
                 "recipient-wallet-label": "Recipient wallet",
@@ -144,6 +145,8 @@
         "github": "GitHub"
     },
     "market": {
+        "match-time": "Match time",
+        "race-starts": "Race starts",
         "question-label": "Question",
         "time-remaining-label": "Time remaining",
         "sport": "Sport",
@@ -152,7 +155,7 @@
         "tags-label": "Tags",
         "search-placeholder": "Search games",
         "open-markets-label": "Opened",
-        "resolved-markets-label": "Resolved",
+        "resolved-markets-label": "Finished",
         "grid-view": "Grid",
         "list-view": "List",
         "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
@@ -169,18 +172,20 @@
         },
         "filter-label": {
             "global": {
-                "allmarkets": "All markets",
-                "openmarkets": "Open markets",
-                "resolvedmarkets": "Resolved markets",
+                "allmarkets": "All",
+                "openmarkets": "All",
+                "resolvedmarkets": "Finished",
+                "pendingmarkets": "Pending",
                 "yourpositions": "Your positions",
                 "claim": "Claimable",
                 "history": "Your transactions",
-                "canceled": "Cancelled",
+                "canceled": "Paused / Cancelled",
                 "archivedmarkets": "Archived markets",
                 "tooltip": "Markets resolved more than 7 days ago"
             },
             "sport": {
                 "all": "All sports",
+                "favourites": "Favourites",
                 "basketball": "Basketball",
                 "soccer": "Soccer",
                 "hockey": "Hockey",
@@ -190,6 +195,7 @@
                 "baseball": "Baseball",
                 "formula1": "Formula 1",
                 "motogp": "MotoGP",
+                "motosport": "Motosport",
                 "soon": "More sports coming soon!"
             },
             "all": "All",
@@ -198,7 +204,9 @@
             }
         },
         "back-to-markets": "Back to markets",
+        "back": "Back",
         "back-to-market": "Back to market",
+        "apply-filters": "Apply filters",
         "no-markets-found": "No markets found",
         "view-all-markets": "View all markets",
         "table": {
@@ -225,8 +233,44 @@
         },
         "tooltip": {
             "amount-exceeded": "Amount exceeded the amount available on AMM",
-            "minimal-amount": "Minimal amount is 1",
+            "minimal-amount": "Minimal amount is {{min}}",
             "no-funds": "Please ensure your wallet has enough funds"
+        }
+    },
+    "profile": {
+        "open-claimable": "Open/Claimable",
+        "transaction-history": "Transaction history",
+        "messages": {
+            "no-claimable": "You don't have any claimable positions",
+            "no-open": "You don't have any open positions",
+            "no-transactions": "You don't have any trades"
+        },
+        "categories": {
+            "claimable": "Claimable",
+            "open": "Open",
+            "single": "Single games",
+            "parlay": "Parlay games"
+        },
+        "card": {
+            "ticket-id": "Ticket ID",
+            "number-of-games": "No. of games",
+            "ticket-paid": "Ticket paid",
+            "to-win": "win",
+            "to-claim": "claim",
+            "claim": "Claim",
+            "canceled": "Canceled",
+            "total-quote": "Total quote",
+            "result": "Result",
+            "position-size": "Position size",
+            "starts": "Starts"
+        },
+        "table": {
+            "time": "Time",
+            "games": "Games",
+            "paid": "Paid",
+            "amount": "amount",
+            "id": "Id",
+            "position": "Position"
         }
     },
     "markets": {
@@ -250,15 +294,67 @@
             "discount": "Discount",
             "usd-amount": "USD amount",
             "positions-amount": "Positions amount",
+            "positions": "Positions",
             "amount-to-sell": "Amount to sell",
+            "amount-to-buy": "Amount to buy",
             "total-to-receive": "Total to receive",
             "potential-profit": "Potential profit",
             "amount-claimable": "Amount claimable",
             "claim-back": "Claim back",
+            "available": "Available",
             "skew": "Skew",
             "max": "Max",
             "wallet-info": {
                 "title": "In wallet"
+            }
+        },
+        "nav-menu": {
+            "items": {
+                "markets": "Markets",
+                "profile": "Profile",
+                "onboarding-wizard": "Onboarding wizard",
+                "history": "History",
+                "sports-trivia": "Sports trivia",
+                "leaderboard": "Leaderboard",
+                "become-affiliate": "Become affiliate"
+            },
+            "buttons": {
+                "switch": "Switch",
+                "disconnect": "Disconnect"
+            }
+        },
+        "parlay": {
+            "total-quote": "Total quote",
+            "clear": "Clear all",
+            "buy-amount": "Buy-in",
+            "parlay-fee": "Parlay fee",
+            "safebox-fee": "SafeBox fee",
+            "positions": "Positions",
+            "payout": "Payout",
+            "potential-profit": "Potential profit",
+            "pay-with": "Pay with",
+            "available": "Available",
+            "skew": "Skew",
+            "empty-title": "No positions",
+            "empty-description": "Add position, choose a market and make your selection.",
+            "info": {
+                "min-quote": "Minimal TOTAL QUOTE supported is {{value}}",
+                "max-quote": "Maximal TOTAL QUOTE supported is {{value}}"
+            },
+            "show-parlay": "Show Parlay",
+            "validation": {
+                "title": "Parlay Validation",
+                "max-teams": "Maximum {{max}} markets in Parlay",
+                "team-in-parlay": "{{team}} is already in Parlay. The same team can't be added to a Parlay more than once.",
+                "amount-exceeded": "Amount exceeded the amount available on AMM",
+                "max-profit": "Maximal supported profit is {{max}}",
+                "min-amount": "Minimal buy-in for a Parlay ticket is {{min}}",
+                "single-min-amount": "Minimal buy-in is {{min}}",
+                "availability": "Not enough liquidity for this buy-in amount",
+                "no-funds": "Please ensure your wallet has enough funds",
+                "risk-per-comb": "Risk per combination exceeded",
+                "same-team": "The same team can't be in a Parlay more than once",
+                "not-supported": "Not supported validation error: {{error}}"
             }
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
@@ -347,6 +443,103 @@
             "3": "Moderate",
             "4": "Challenging",
             "5": "Hard"
+        }
+    },
+    "landing-page": {
+        "best-odds": "Join the Web3 sports markets revolution",
+        "try-now": "Try it now",
+        "powered-by": "Powered by",
+        "no-kyc": "No registration needed to participate",
+        "launch-dapp": "Launch dapp",
+        "leagues": "Leagues",
+        "info-text-title-1": "No sign-up required",
+        "info-text-title-2": "Everything is on-chain",
+        "info-text-title-3": "Non-custodial markets",
+        "info-text-title-4": "Data provided by Chainlink",
+        "info-text-title-5": "Fast & low-cost transactions",
+        "info-text-1": "You don’t need to create an user. We don't gather any kind of personal information either.",
+        "info-text-2": "When centralized entities are falling, transparency is key. All our code is public and the smart contracts can be reviewed by anyone",
+        "info-text-3": "There’s no one holding your collateral. Your keys, your tokens.",
+        "info-text-4": "Industry-leader provides tamper-proof odds and sport matches result in a decentralized way.",
+        "info-text-5": "Every interaction with Overtime sports AMM is done on Optimism network, leader in scalability.",
+        "browse-markets": "Browse sport markets",
+        "web3-positioning": "Web3 sport positioning",
+        "learn-more": "Wanna learn more?",
+        "documentation": "Check our documentation",
+        "jump-in": "Ready to jump in?",
+        "open-overtime": "Open Overtime markets",
+        "join-discord": "Need any help? Join our discord",
+        "read-now": "Read now"
+    },
+    "mint-world-cup-nft": {
+        "mint-nft-button": "Mint this Zebro!",
+        "not-eligible-text": "Your wallet is not eligible to mint a Zebro NFT yet!",
+        "eligible-text": "Your wallet is eligible to mint a Zebro NFT!",
+        "stake-10-thales": "To be able to mint a Zebro NFT, you need to have at least 10 THALES staked.",
+        "second-option": "The second option to get you on allowlist, is to complete following steps:",
+        "get-thales": "Get THALES",
+        "stake-thales": "Stake THALES",
+        "go-to-twitter": "Go To Twitter",
+        "follow": "Follow Overtime Markets on Twitter",
+        "retweet": "Retweet this tweet",
+        "tag-3-friends": "On the same tweet, comment your ETH address & tag 3 friends",
+        "minting-is-free": "Minting is free, you can mint only one NFT per wallet. This NFT is non-transferable.",
+        "incentives": "INCENTIVES",
+        "eligible-text-1": "Zebro NFT collection is used as an entry for the Overtime FIFA World Cup campaign.",
+        "eligible-text-2": "Mint a Zebro of your favourite national team and be eligible for 50,000 OP & 30,000 THALES bonus rewards!",
+        "choose-nft": "Mint your Zebro NFT  ",
+        "are-you-sure": "Are you sure you want to mint this NFT? You can mint ONLY ONE NFT per wallet.",
+        "no": "No",
+        "yes-mint": "Yes, mint NFT",
+        "success-mint": "Successfully minted",
+        "already-minted": "You have already minted your NFT",
+        "zebro-campaign": "Zebro FIFA Campaign",
+        "leaderboard-title": "Leaderboard",
+        "mint-this-zebro": "Mint this Zebro!",
+        "get-your-nft": "Mint Page",
+        "zebro-wct-collection": "The Zebro WC NFT Collection",
+        "zebro-wct-collection-text": "is part of an incentivized campaign to represent your favorite country during the World Cup and be eligible for a share of 50,000 OP tokens and 30,000 THALES tokens, along with exclusive multipliers for parlays and individual matches.",
+        "go-to-leaderboard": "Go To Leaderboard",
+        "congrats": "Congrats! You have successfully minted the Zebro NFT!",
+        "leaderboard": {
+            "reward-calculations": "Reward calculations will be pro-rata Volume Based with max additional 40% volume boost if the following conditions are met:",
+            "home-country-multiplier": "Home Country NFT Multiplier:",
+            "home-country-multiplier-text": "If your World Cup match involves the same National team as your Zebro, you will receive +10% rewards boost",
+            "parlay-boost": "Parlay boost:",
+            "parlay-boost-text": "If your World Cup match is in a Parlay ticket, you will get a boost of:",
+            "two-game-parlay": "+10% if it's a 2 game parlay",
+            "three-game-parlay": "+15% if it's a 3 game parlay",
+            "four-game-parlay": "+20% if it's a 4 game parlay",
+            "underdog-multiplier": "Underdog Multiplier:",
+            "underdog-multiplier-text": "If your World Cup match position is priced under 0.3 (odds are above 1:3.33), you will get a 10% rewards boost."
+        }
+    },
+    "referral": {
+        "generate-link": "Generate link",
+        "copy-link": "Copy link",
+        "trades": "Trades",
+        "total-volume": "Total volume",
+        "total-earned": "Total earned",
+        "total-trading-fees": "Total trading fees",
+        "affiliate-leaderboard-table": {
+            "address": "Address",
+            "number-of-trades": "Trades",
+            "total-volume": "Total volume",
+            "first-transaction": "First transaction",
+            "total-earned": "Total earned",
+            "amount": "Amount",
+            "volume": "Volume",
+            "type": "Type",
+            "timestamp": "Date/Time"
+        },
+        "no-result": "There are no results for this table",
+        "earned": "Earned",
+        "header": "Create referral links",
+        "paragraph": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lacus luctus accumsan tortor posuere. Dui faucibus in ornare quam viverra orci sagittis. Mus mauris vitae ultricies leo integer malesuada nunc vel. Nulla pharetra diam sit amet nisl suscipit adipiscing. Est ullamcorper eget nulla facilisi etiam dignissim diam quis enim. Pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna. Pellentesque dignissim enim sit amet venenatis. Augue ut lectus arcu bibendum at varius vel pharetra vel. Malesuada fames ac turpis egestas. Sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec. Neque convallis a cras semper. Quam elementum pulvinar etiam non. Iaculis nunc sed augue lacus viverra. Platea dictumst quisque sagittis purus sit amet volutpat.<br><br>Consectetur libero id faucibus nisl tincidunt eget nullam non. Habitant morbi tristique senectus et. Aliquet risus feugiat in ante metus dictum. Nulla facilisi morbi tempus iaculis urna id. Velit dignissim sodales ut eu. Felis eget nunc lobortis mattis aliquam faucibus purus in massa. Aliquet sagittis id consectetur purus ut. Lobortis elementum nibh tellus molestie nunc. Nulla at volutpat diam ut venenatis tellus in metus. Eget magna fermentum iaculis eu non diam phasellus vestibulum lorem. Donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu. Ut diam quam nulla porttitor massa id neque. Sit amet dictum sit amet justo. Condimentum mattis pellentesque id nibh tortor id. Massa tincidunt nunc pulvinar sapien et ligula ullamcorper malesuada. Hendrerit gravida rutrum quisque non tellus orci ac auctor augue. Facilisis magna etiam tempor orci eu lobortis elementum nibh. Enim nunc faucibus a pellentesque sit amet. Sodales ut etiam sit amet nisl purus in mollis nunc.",
+        "nav-items": {
+            "all-transactions": "All transactions",
+            "see-result-by-trader": "See result by trader",
+            "affiliate-leaderboard": "Affiliate Leaderboard"
         }
     }
 }

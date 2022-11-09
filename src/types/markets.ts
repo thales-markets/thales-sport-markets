@@ -1,3 +1,4 @@
+import { COLLATERALS_INDEX } from 'constants/currency';
 import { ApexBetType, MarketStatus } from 'constants/markets';
 import { Position, PositionName, Side } from '../constants/options';
 
@@ -112,6 +113,34 @@ export type MarketData = {
     isApex: boolean;
 };
 
+export type ParlayMarket = {
+    id: string;
+    txHash: string;
+    sportMarkets: SportMarketInfo[];
+    sportMarketsFromContract: string[];
+    positions: PositionData[];
+    positionsFromContract: number[];
+    marketQuotes: number[];
+    account: string;
+    totalAmount: number;
+    sUSDPaid: number;
+    sUSDAfterFees: number;
+    totalQuote: number;
+    skewImpact: number;
+    timestamp: number;
+    lastGameStarts: number;
+    blockNumber: number;
+    claimed: boolean;
+    won: boolean;
+};
+
+export type PositionData = {
+    id: string;
+    market: SportMarketInfo;
+    side: PositionName;
+    claimable: boolean;
+};
+
 export type Markets = MarketInfo[];
 
 export type SportMarkets = SportMarketInfo[];
@@ -160,6 +189,9 @@ export type TagInfo = {
     id: number;
     label: string;
     logo?: string;
+    logoClass?: string;
+    favourite?: boolean;
+    hidden?: boolean;
 };
 
 export type Tags = TagInfo[];
@@ -167,6 +199,8 @@ export type Tags = TagInfo[];
 export type SportsMap = Record<number, string>;
 
 export type SportsTagsMap = Record<string, number[]>;
+
+export type TeamAbbreviationsMap = Record<string, string>;
 
 export enum PositionType {
     home = 'home',
@@ -183,6 +217,7 @@ export type AccountPositionGraph = {
 
 export type PositionBalance = {
     id: string;
+    firstTxHash: string;
     account: string;
     amount: number;
     position: AccountPositionGraph;
@@ -256,4 +291,30 @@ export type Odds = {
     home: number;
     away: number;
     draw: number;
+};
+
+export type ParlaysMarketPosition = {
+    sportMarketId: string;
+    position: Position;
+    homeTeam: string;
+    awayTeam: string;
+};
+
+export type ParlaysMarket = SportMarketInfo & {
+    position: Position;
+};
+
+export type ParlayAmmData = {
+    minUsdAmount: number;
+    maxSupportedAmount: number;
+    maxSupportedOdds: number;
+    parlayAmmFee: number;
+    safeBoxImpact: number;
+    parlaySize: number;
+};
+
+export type ParlayPayment = {
+    selectedStableIndex: COLLATERALS_INDEX;
+    isVoucherSelected: boolean | undefined;
+    amountToBuy: number | string;
 };

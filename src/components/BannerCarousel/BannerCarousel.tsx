@@ -50,6 +50,8 @@ const BannerCarousel: React.FC = () => {
 };
 
 const Container = styled.div`
+    position: relative;
+    z-index: 0;
     width: 1700px;
     height: 165px;
     border: 1.4px solid #5f6180;
