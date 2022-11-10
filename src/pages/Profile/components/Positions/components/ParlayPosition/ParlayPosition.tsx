@@ -69,7 +69,9 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
 
                 if (txResult && txResult.transactionHash) {
                     toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
-                    refetchAfterClaim(walletAddress, networkId);
+                    setTimeout(() => {
+                        refetchAfterClaim(walletAddress, networkId);
+                    }, 3000);
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));

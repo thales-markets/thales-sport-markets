@@ -32,6 +32,7 @@ export const refetchBalances = (walletAddress: string, networkId: NetworkId) => 
 export const refetchAfterClaim = (walletAddress: string, networkId: NetworkId) => {
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ParlayMarkets(networkId, walletAddress));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.AccountPositionsProfile(walletAddress, networkId));
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ClaimableCount(walletAddress, networkId));
 };
 
 export default queryConnector;

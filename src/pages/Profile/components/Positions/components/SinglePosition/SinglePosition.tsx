@@ -38,14 +38,16 @@ import { formatDateWithTime } from 'utils/formatters/date';
 import { getEtherscanTxLink } from 'utils/etherscan';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getNetworkId } from 'redux/modules/wallet';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { getIsMobile } from 'redux/modules/app';
 import { FlexDivRow } from 'styles/common';
+import { refetchAfterClaim } from 'utils/queryConnector';
 
 const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ position }) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(
         getTeamImageSource(position.market.homeTeam, position.market.tags[0])
@@ -70,6 +72,9 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
+                    setTimeout(() => {
+                        refetchAfterClaim(walletAddress, networkId);
+                    }, 3000);
                     toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
                 }
             } catch (e) {
