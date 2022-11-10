@@ -325,7 +325,9 @@
                 "markets": "Mercados",
                 "onboarding-wizard": "asistente de incorporación",
                 "become-affiliate": "Conviértete en afiliado",
-                "sports-trivia": "curiosidades deportivas"
+                "sports-trivia": "curiosidades deportivas",
+                "fee-rebates": "Reembolsos de tarifas",
+                "fifa-campaign": "Campaña Zebro FIFA"
             },
             "buttons": {
                 "disconnect": "Desconectar",

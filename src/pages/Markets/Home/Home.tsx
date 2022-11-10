@@ -299,7 +299,7 @@ const Home: React.FC = () => {
                 break;
             case GlobalFiltersEnum.Canceled:
                 filteredMarkets = filteredMarkets.filter(
-                    (market: SportMarketInfo) => market.isCanceled || market.isPaused
+                    (market: SportMarketInfo) => (market.isCanceled || market.isPaused) && !market.isResolved
                 );
                 break;
             default:

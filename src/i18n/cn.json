@@ -325,7 +325,9 @@
                 "become-affiliate": "成为会员",
                 "sports-trivia": "体育琐事",
                 "profile": "轮廓",
-                "history": "历史"
+                "history": "历史",
+                "fifa-campaign": "斑马FIFA活动",
+                "fee-rebates": "费用回扣"
             },
             "buttons": {
                 "disconnect": "断开",

@@ -29,7 +29,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
 
     return (
         <Container resolved={isResolved && !isCanceled} paused={isPaused} mobile={isMobile}>
-            {isPaused ? (
+            {isPaused && !isResolved ? (
                 <>
                     <Status color={STATUS_COLOR.PAUSED}>{t('markets.market-card.paused')}</Status>
                     {!isMobile && <MatchStarts>{`${startsAt}`}</MatchStarts>}
