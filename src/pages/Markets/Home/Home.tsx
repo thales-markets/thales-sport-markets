@@ -264,6 +264,7 @@ const Home: React.FC = () => {
                     (market: SportMarketInfo) =>
                         market.isOpen &&
                         !market.isCanceled &&
+                        !market.isPaused &&
                         (market.homeOdds !== 0 || market.awayOdds !== 0 || market.drawOdds !== 0)
                 );
                 break;
@@ -299,7 +300,7 @@ const Home: React.FC = () => {
                 break;
             case GlobalFiltersEnum.Canceled:
                 filteredMarkets = filteredMarkets.filter(
-                    (market: SportMarketInfo) => market.isCanceled || market.isPaused
+                    (market: SportMarketInfo) => (market.isCanceled || market.isPaused) && !market.isResolved
                 );
                 break;
             default:
