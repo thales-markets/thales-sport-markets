@@ -14,7 +14,8 @@
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use.",
             "disclaimer-lowercase": "отказ от ответственности",
             "disclaimer2": "и соглашаетесь с его условиями использования.",
-            "disclaimer1": "Подключая кошелек, вы подтверждаете, что прочитали и поняли Overtime Markets."
+            "disclaimer1": "Подключая кошелек, вы подтверждаете, что прочитали и поняли Overtime Markets.",
+            "wallet-info": "Информация о кошельке"
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -127,13 +128,13 @@
         },
         "coming-soon": "Вскоре!",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
-        "mls-tooltip": "MLS markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
         "top3": "TOP 3",
         "top5": "TOP 5",
         "top10": "TOP 10",
         "yes": "YES",
-        "no": "NO"
+        "no": "NO",
+        "mls-tooltip": "Результаты рынков MLS основаны на результатах регулирования, и если они перейдут к овертайму, результатом регулирования будет тот, на котором будет решать рынок."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -178,7 +179,8 @@
                 "history": "Your transactions",
                 "canceled": "Cancelled",
                 "archivedmarkets": "Archived markets",
-                "tooltip": "Markets resolved more than 7 days ago"
+                "tooltip": "Markets resolved more than 7 days ago",
+                "pendingmarkets": "В ожидании"
             },
             "sport": {
                 "all": "All sports",
@@ -191,7 +193,9 @@
                 "baseball": "Baseball",
                 "formula1": "Formula 1",
                 "motogp": "MotoGP",
-                "soon": "More sports coming soon!"
+                "soon": "More sports coming soon!",
+                "motosport": "Мотоспорт",
+                "favourites": "Избранное"
             },
             "all": "All",
             "datepicker": {
@@ -227,8 +231,15 @@
         "tooltip": {
             "amount-exceeded": "Amount exceeded the amount available on AMM",
             "minimal-amount": "Minimal amount is 1",
-            "no-funds": "Please ensure your wallet has enough funds"
-        }
+            "no-funds": "Please ensure your wallet has enough funds",
+            "min-amount": "Минимальная сумма: {{min}}",
+            "max-quote": "Максимальная котировка: {{value}}",
+            "min-quote": "Минимальная котировка: {{value}}"
+        },
+        "match-time": "Время матча",
+        "race-starts": "Старт гонки",
+        "back": "Назад",
+        "apply-filters": "Применить фильтры"
     },
     "markets": {
         "market-card": {
@@ -260,10 +271,69 @@
             },
             "max": "Max",
             "skew": "перекос",
-            "discount": "Скидка"
+            "available": "Доступный",
+            "amount-to-buy": "Сумма покупки",
+            "discount": "Скидка",
+            "positions": "Позиции"
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
-        "discounted-per": "Со скидкой согласно"
+        "parlay": {
+            "skew": "перекос",
+            "total-quote": "Общая котировка",
+            "pay-with": "Платить с помощью",
+            "potential-profit": "Потенциальная прибыль",
+            "buy-amount": "Сумма покупки",
+            "available": "Доступный",
+            "validation": {
+                "title": "Экспресс-проверка",
+                "max-markets": "Максимум 4 рынка в Parlay",
+                "min-amount": "Минимальная сумма: {{min}}",
+                "availability": "Низкая доступность для рынка",
+                "min-quote": "Минимальная котировка: {{value}}",
+                "max-quote": "Максимальная котировка: {{value}}",
+                "no-funds": "Убедитесь, что в вашем кошельке достаточно средств",
+                "amount-exceeded": "Сумма превысила доступную сумму на AMM",
+                "not-supported": "Не поддерживается ошибка проверки {{error}}",
+                "risk-per-comb": "Превышение риска на комбинацию",
+                "single-min-amount": "Минимальная сумма: {{min}}",
+                "team-in-parlay": "{{team}} уже находится в Parlay. Одна и та же команда не может быть добавлена в экспресс более одного раза.",
+                "same-team": "Одна и та же команда не может участвовать в переговорах более одного раза.",
+                "max-payout": "Максимальная поддерживаемая выплата: {{max}}",
+                "max-profit": "Максимальная поддерживаемая прибыль составляет {{max}}",
+                "max-teams": "Максимум {{max}} рынков в Parlay"
+            },
+            "fee": "Общая плата",
+            "empty-title": "Нет позиций",
+            "empty-description": "Добавьте позицию, выберите рынок и сделайте свой выбор.",
+            "payout": "Всего получено",
+            "safebox-fee": "Плата за сейф",
+            "parlay-fee": "Экспресс-плата",
+            "positions": "Позиции",
+            "clear": "Очистить все",
+            "info": {
+                "max-quote": "Максимальная поддерживаемая ОБЩАЯ ЦИТА: {{value}}",
+                "min-quote": "Поддерживается минимальная ОБЩАЯ ЦИТАТА: {{value}}"
+            },
+            "show-parlay": "Показать экспресс"
+        },
+        "discounted-per": "Со скидкой согласно",
+        "nav-menu": {
+            "items": {
+                "become-affiliate": "Стать партнером",
+                "onboarding-wizard": "Мастер адаптации",
+                "leaderboard": "Таблица лидеров",
+                "profile": "Профиль",
+                "sports-trivia": "Спортивные мелочи",
+                "history": "История",
+                "markets": "Рынки",
+                "fee-rebates": "Комиссионные скидки",
+                "fifa-campaign": "Кампания Зебро ФИФА"
+            },
+            "buttons": {
+                "disconnect": "Отключить",
+                "switch": "Выключатель"
+            }
+        }
     },
     "rewards": {
         "header": "Rewards",
@@ -294,7 +364,7 @@
     },
     "quiz": {
         "title": "Sports Trivia competition",
-        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition. The trivia is available to everyone to test their knowledge and compete.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! For any questions please join our <discord>Discord</discord>.</p>",
+        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition where weekly winners will receive NFT Vouchers that can be used instead of sUSD to participate in any sports market you like.</p><p>Read all the information about this trivia in our <blogPost>blog post</blogPost>.</p><p>How to participate? The trivia is available to everyone to test their knowledge and compete, but to be eligible for rewards you need to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime's Twitter</twitter>.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
         "twitter-handle-label": "Twitter handle",
         "twitter-handle-placeholder": "Enter your Twitter handle",
         "twitter-handle-validation": "Invalid Twitter handle. Try again.",
@@ -317,7 +387,7 @@
         },
         "leaderboard": {
             "title": "Trivia Leaderboard",
-            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
+            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition for any given week.</p><p>All the details about how to participate for NFT sUSD vouchers that can be used on any sports market available <blogPost>here</blogPost>.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
             "back-to-quiz": "Back to trivia",
             "search-placeholder": "Search...",
             "table": {
@@ -333,13 +403,16 @@
             "period-ended-label": "Period ended",
             "week-label": "Week",
             "overtime-voucher": "Overtime voucher",
-            "all-time-leaderboard-label": "All time leaderboard"
+            "all-time-leaderboard-label": "Таблица лидеров всех времен"
         },
         "help-us-improve-label": "Help us improve",
         "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
         "finish-messages": {
             "your-best-result": "Your best result: {{points}} {{pointsLabel}}",
-            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants."
+            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants.",
+            "not-quilfied-for-rewards": "You are missing {{points}} {{pointsLabel}} to get into the TOP {{numberOfRewards}} and qualify for rewards. Try again and improve your score.",
+            "quilfied-for-rewards": "You are currently in the TOP {{numberOfRewards}} and qualified for rewards. Try again to get a better rank and higher rewards.",
+            "quilfied-for-rewards-first": "You are currently leading the leaderboard! Try again to get a better score and secure your spot."
         },
         "difficulty-label": "Difficulty",
         "difficulty": {
@@ -349,5 +422,142 @@
             "4": "Challenging",
             "5": "Hard"
         }
+    },
+    "landing-page": {
+        "open-overtime": "Открытые рынки сверхурочной работы",
+        "info-text-2": "Когда централизованные организации рушатся, прозрачность является ключевым моментом. Весь наш код является общедоступным, а смарт-контракты могут быть просмотрены кем угодно.",
+        "jump-in": "Готовы прыгнуть?",
+        "powered-by": "Питаться от",
+        "try-now": "Попробуй это сейчас",
+        "info-text-title-1": "Регистрация не требуется",
+        "web3-positioning": "Спортивное позиционирование Web3",
+        "read-now": "Прочитай сейчас",
+        "best-odds": "Присоединяйтесь к революции спортивных рынков Web3",
+        "info-text-1": "Вам не нужно создавать пользователя. Мы также не собираем никакой личной информации.",
+        "info-text-title-2": "Все по цепочке",
+        "info-text-title-4": "Данные предоставлены Chainlink",
+        "info-text-5": "Каждое взаимодействие с Overtime sports AMM осуществляется в сети Optimism, лидере по масштабируемости.",
+        "documentation": "Ознакомьтесь с нашей документацией",
+        "launch-dapp": "Запустить децентрализованное приложение",
+        "no-kyc": "Для участия не требуется регистрация",
+        "info-text-title-5": "Быстрые и недорогие транзакции",
+        "leagues": "Лиги",
+        "info-text-3": "Никто не держит ваш залог. Ваши ключи, ваши жетоны.",
+        "browse-markets": "Обзор спортивных рынков",
+        "info-text-4": "Лидер отрасли предоставляет защищенные от несанкционированного доступа коэффициенты и результаты спортивных матчей децентрализованным способом.",
+        "join-discord": "Нужна помощь? Присоединяйтесь к нашему раздору",
+        "info-text-title-3": "Рынки, не связанные с тюремным заключением",
+        "learn-more": "Хотите узнать больше?"
+    },
+    "profile": {
+        "transaction-history": "История транзакций",
+        "open-claimable": "Открыто/Заявлено",
+        "categories": {
+            "open": "Открытым",
+            "claimable": "Потребительский",
+            "parlay": "Экспресс-игры",
+            "single": "Одиночные игры"
+        },
+        "card": {
+            "claim": "Требовать",
+            "to-win": "Побеждать",
+            "total-quote": "Общая котировка",
+            "canceled": "Отменено",
+            "number-of-games": "Количество игр",
+            "ticket-paid": "Билет оплачен",
+            "ticket-id": "Идентификатор билета",
+            "to-claim": "Требовать",
+            "starts": "Старт",
+            "result": "Результат",
+            "position-size": "Размер позиции"
+        },
+        "messages": {
+            "no-claimable": "У вас нет требуемых должностей",
+            "no-open": "У вас нет открытой позиции",
+            "no-transactions": "У вас нет сделок"
+        },
+        "table": {
+            "games": "Игры",
+            "paid": "Оплаченный",
+            "amount": "количество",
+            "id": "Идентификатор",
+            "time": "Время",
+            "position": "Должность"
+        }
+    },
+    "mint-world-cup-nft": {
+        "zebro-campaign": "Кампания Зебра ФИФА",
+        "eligible-text-1": "Коллекция Zebro NFT используется в качестве входа в кампанию Overtime FIFA World Cup.",
+        "retweet": "Сделать репост этого твита",
+        "stake-thales": "Ставка THALES",
+        "follow": "Следите за Overtime Markets в Twitter",
+        "already-minted": "Вы уже выпустили свой NFT",
+        "no": "Нет",
+        "go-to-twitter": "Перейти в Твиттер",
+        "eligible-text": "Эй, теперь вы можете создать свою любимую команду Zebro NFT.",
+        "incentives": "СТИМУЛЫ",
+        "eligible-text-2": "Выпустите зебро своей любимой национальной команды и получите право на получение 50 000 OP и 30 000 бонусных наград THALES!",
+        "not-eligible-text": "Ваш кошелек еще не подходит для создания Zebro NFT!",
+        "yes-mint": "Да, монетный двор NFT",
+        "tag-3-friends": "В этом же твите прокомментируйте свой адрес ETH и отметьте 3 друзей.",
+        "mint-nft-button": "Мята эта Зебра!",
+        "choose-nft": "Чеканите свой Zebro NFT",
+        "success-mint": "Успешно отчеканено",
+        "get-thales": "Получить THALES",
+        "are-you-sure": "Вы уверены, что хотите создать этот NFT? Вы можете чеканить ТОЛЬКО ОДИН NFT на кошелек.",
+        "second-option": "Второй способ попасть в белый список — выполнить следующие шаги:",
+        "stake-10-thales": "Чтобы иметь возможность чеканить Zebro NFT, вам необходимо иметь как минимум 10 THALES.",
+        "minting-is-free": "Минтинг бесплатный, вы можете чеканить только один NFT на кошелек. Этот NFT не подлежит передаче.",
+        "mint-this-zebro": "Мята эта Зебра!",
+        "leaderboard-title": "Таблица лидеров",
+        "leaderboard": {
+            "three-game-parlay": "+15%, если это экспресс из 3 игр",
+            "parlay-boost-text": "Если ваш матч чемпионата мира находится в билете Parlay, вы получите бонус:",
+            "parlay-boost": "Повышение ставок:",
+            "two-game-parlay": "+10%, если это экспресс из 2 игр",
+            "four-game-parlay": "+20%, если это экспресс из 4 игр.",
+            "home-country-multiplier": "Множитель NFT страны проживания:",
+            "underdog-multiplier-text": "Если ваша позиция в матче чемпионата мира оценена ниже 0,3 (коэффициент выше 1:3,33), вы получите 10%-ное увеличение вознаграждения.",
+            "reward-calculations": "Расчеты вознаграждения будут производиться пропорционально объему с максимальным увеличением объема на 40% при соблюдении следующих условий:",
+            "underdog-multiplier": "Множитель аутсайдера:",
+            "home-country-multiplier-text": "Если в вашем матче чемпионата мира участвует та же национальная команда, что и ваш Zebro, вы получите +10% к вознаграждению.",
+            "nft": "NFT",
+            "country": "Страна",
+            "owner": "Владелец",
+            "search-placeholder": "ПОИСК ПО АДРЕСУ КОШЕЛЬКА"
+        },
+        "zebro-wct-collection": "Коллекция Zebro WC NFT",
+        "zebro-wct-collection-text": "является частью поощрительной кампании, чтобы представлять свою любимую страну во время чемпионата мира и иметь право на долю из 50 000 токенов OP и 30 000 токенов THALES, а также эксклюзивные множители для ставок и отдельных матчей.",
+        "congrats": "Поздравляю! Вы успешно выпустили Zebro NFT!",
+        "go-to-leaderboard": "Перейти к таблице лидеров",
+        "get-your-nft": "Страница монетного двора"
+    },
+    "referral": {
+        "nav-items": {
+            "affiliate-leaderboard": "Партнерская таблица лидеров",
+            "all-transactions": "Все транзакции",
+            "see-result-by-trader": "Посмотреть результат трейдера"
+        },
+        "trades": "Сделки",
+        "total-volume": "Общий объем",
+        "earned": "Заработано",
+        "generate-link": "Создать ссылку",
+        "copy-link": "Копировать ссылку",
+        "total-trading-fees": "Общие торговые сборы",
+        "header": "Создавайте реферальные ссылки",
+        "paragraph": "Важно заботиться о пациенте, следить за врачом, но это время великой боли и страданий. Lacus luctus положить слой сверху. Два горла в платье, чем мульт доктора со стрелами. Mus mauris vitae ultricies leo весь ожидается сейчас или Нет колчана diam amet nislus suscip adipiscing. Капрал, даже dignissim diam, никому не нужен. Pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna Для детей dignissim — это много яда. Говорят, что его пьют как ложе пива, но казино или колчан. Злобный голод и уродливая нищета. Но потребность есть потребность в fringilla Phasellus faucibus scelerisque eleifend untill. Ни долина с завтрашнего дня никогда. Какой элемент подушки даже не. Но теперь это нацелено на пропагандистский мультфильм озера. Улица сказала, что у всех должны быть хорошие выходные со стрелками.<br><br> В результате для него не требуется бесплатный клавишник. Они живут в старости и болезни. Сказался смех Фёжиа перед страхом. Нет легкого времени для борьбы с этой болезнью. Он хотел бы, чтобы участники любили футбол. Теперь кошке нужно немного чистого аромата в тесте. Понятно, что за этим следуют стрелки. Lobortis element nibh tellus molestie сейчас. Нет такой вещи, как смертельная земля в страхе. Нужны большие усилия, чтобы ориентироваться на футбол, а не быть безфазным вестибюлем. До появления pretium vulputate sapien nor sagittis aliquam malesuada bibendum arcu. На самом деле, ни одна авиакомпания этого не делает. Пусть говорят, что это просто так. Condimentum mattis pellentesque id nibh tortor id. Massa tincidunt теперь pulvinar sapien и ligula ullamcorper malesuada. Hendret беременная косметика, все не местный врач и автор рекламы. Это также очень важный элемент стратегии клинического футбола. А пока о горлах детей позаботятся. Участники теперь также могут быть поклонниками pure in the soft.",
+        "affiliate-leaderboard-table": {
+            "type": "Тип",
+            "first-transaction": "Первая транзакция",
+            "volume": "Объем",
+            "amount": "Количество",
+            "number-of-trades": "Сделки",
+            "total-volume": "Общий объем",
+            "timestamp": "Дата/время",
+            "address": "Адрес",
+            "total-earned": "Всего заработано"
+        },
+        "no-result": "Для этой таблицы нет результатов",
+        "total-earned": "Всего заработано"
     }
 }

@@ -5,7 +5,9 @@ import { Position, Side } from './options';
 export const QUERY_KEYS = {
     Rewards: (networkId: NetworkId, period: number) => ['rewards', networkId, period],
     Markets: (networkId: NetworkId) => ['markets', networkId],
+    ParlayMarkets: (networkId: NetworkId, account: string) => ['parlayMarkets', networkId, account],
     SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
+    ParlayAmmData: (networkId: NetworkId) => ['parlayAmmData', networkId],
     OpenSportMarkets: (networkId: NetworkId) => ['openSportMarkets', networkId],
     CanceledSportMarkets: (networkId: NetworkId) => ['canceledSportMarkets', networkId],
     ResolvedSportMarkets: (networkId: NetworkId) => ['resolvedSportMarkets', networkId],
@@ -19,6 +21,12 @@ export const QUERY_KEYS = {
         stableIndex: number,
         networkId: NetworkId
     ) => ['positionDetails', marketAddress, position, amount, stableIndex, networkId],
+    PositionSellPrice: (marketAddress: string, networkId: NetworkId, balances: any) => [
+        'positionSellPrice',
+        marketAddress,
+        networkId,
+        balances,
+    ],
     AvailablePerSide: (marketAddress: string, side: Side) => ['availablePerSide', marketAddress, side],
     MarketTransactions: (marketAddress: string, networkId: NetworkId) => [
         'market',
@@ -33,6 +41,13 @@ export const QUERY_KEYS = {
         networkId,
     ],
     ClaimTx: (market: string, networkId: NetworkId) => ['claim', 'transactions', market, networkId],
+    ClaimableCount: (walletAddress: string, networkId: NetworkId) => [
+        'claimable',
+        'count',
+        'notification',
+        walletAddress,
+        networkId,
+    ],
     UserTransactionsPerMarket: (walletAddress: string, marketAddress: string, networkId: NetworkId) => [
         'user',
         'market',
@@ -58,6 +73,19 @@ export const QUERY_KEYS = {
     Tags: (networkId: NetworkId) => ['tags', networkId],
     NormalizedOdds: (sportMarket: SportMarketInfo, networkId: NetworkId) => ['normalizedOdds', sportMarket, networkId],
     AccountPositions: (walletAddress: string, networkId: NetworkId) => ['positions', walletAddress, networkId],
+    AccountPositionsProfile: (walletAddress: string, networkId: NetworkId) => [
+        'accountPosition',
+        walletAddress,
+        networkId,
+    ],
+    ReferralTransaction: (walletAddress: string, networkId: NetworkId) => [
+        'referralTransaction',
+        walletAddress,
+        networkId,
+    ],
+    Referrers: (networkId: NetworkId) => ['referrers', networkId],
+    ReferredTraders: (walletAddress: string, networkId: NetworkId) => ['referredTraders', walletAddress, networkId],
+    ReferralOverview: (walletAddress: string, networkId: NetworkId) => ['referralOverview', walletAddress, networkId],
     DiscountMarkets: (networkId: NetworkId) => ['discountMarkets', networkId],
     Wallet: {
         PaymentTokenBalance: (walletAddress: string, networkId: NetworkId) => [
@@ -92,11 +120,14 @@ export const QUERY_KEYS = {
             walletAddress,
             networkId,
         ],
+        Stats: (networkId: NetworkId, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
     },
     Quiz: {
         Leaderboard: () => ['quiz', 'leaderboard'],
         Tweet: () => ['quiz', 'tweet'],
     },
+    FavoriteTeam: (walletAddress: string, networkId: NetworkId) => ['favoriteTeam', walletAddress, networkId],
+    Zebro: (walletAddress: string, networkId: NetworkId) => ['zebro', walletAddress, networkId],
 };
 
 export default QUERY_KEYS;

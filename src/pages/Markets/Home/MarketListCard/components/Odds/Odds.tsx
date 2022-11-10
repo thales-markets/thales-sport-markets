@@ -2,18 +2,21 @@ import PositionSymbol from 'components/PositionSymbol';
 import { ODDS_COLOR, STATUS_COLOR } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { convertFinalResultToResultType, formatMarketOdds, isDiscounted } from 'utils/markets';
+import { getOddsType } from '../../../../../../redux/modules/ui';
+import { AccountPosition, PositionType } from '../../../../../../types/markets';
 import { Status } from '../MatchStatus/MatchStatus';
 import { Container, OddsContainer, WinnerLabel } from './styled-components';
-import { AccountPosition, PositionType } from '../../../../../../types/markets';
-import { useSelector } from 'react-redux';
-import { getOddsType } from '../../../../../../redux/modules/ui';
 
 type OddsProps = {
     isResolved?: boolean;
     finalResult?: number;
     isLive?: boolean;
     isCancelled?: boolean;
+    marketId: string;
+    homeTeam: string;
+    awayTeam: string;
     odds?: {
         homeOdds: number;
         awayOdds: number;
@@ -25,6 +28,7 @@ type OddsProps = {
     awayPriceImpact: number;
     homePriceImpact: number;
     drawPriceImpact: number | undefined;
+    isMobile?: boolean;
 };
 
 const Odds: React.FC<OddsProps> = ({
@@ -32,6 +36,9 @@ const Odds: React.FC<OddsProps> = ({
     finalResult,
     isLive,
     isCancelled,
+    marketId,
+    homeTeam,
+    awayTeam,
     odds,
     accountPositions,
     isPaused,
@@ -39,6 +46,7 @@ const Odds: React.FC<OddsProps> = ({
     awayPriceImpact,
     homePriceImpact,
     drawPriceImpact,
+    isMobile,
 }) => {
     const { t } = useTranslation();
 
@@ -55,24 +63,37 @@ const Odds: React.FC<OddsProps> = ({
     const resolvedGameFlag = isResolved && finalResult;
     const showOdds = !pendingResolution && !noOddsFlag && !resolvedGameFlag && !isCancelled && !isPaused;
     const selectedOddsType = useSelector(getOddsType);
-
     return (
-        <Container>
+        <Container resolved={!!resolvedGameFlag} isMobile={isMobile} noOdds={noOddsFlag}>
             {noOddsFlag && <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>}
             {resolvedGameFlag && (
                 <>
-                    <PositionSymbol type={convertFinalResultToResultType(finalResult, isApexTopGame)} />
+                    <PositionSymbol
+                        type={convertFinalResultToResultType(finalResult, isApexTopGame)}
+                        symbolColor={
+                            convertFinalResultToResultType(finalResult, isApexTopGame) == 0
+                                ? ODDS_COLOR.HOME
+                                : convertFinalResultToResultType(finalResult, isApexTopGame) == 1
+                                ? ODDS_COLOR.AWAY
+                                : ODDS_COLOR.DRAW
+                        }
+                        isMobile={isMobile}
+                        winningSymbol={true}
+                    />
                     <WinnerLabel>{t('common.winner')}</WinnerLabel>
                 </>
             )}
             {showOdds && (
-                <OddsContainer>
+                <OddsContainer isMobile={isMobile}>
                     <PositionSymbol
+                        marketId={marketId}
+                        homeTeam={homeTeam}
+                        awayTeam={awayTeam}
                         type={isApexTopGame ? 3 : 0}
                         symbolColor={ODDS_COLOR.HOME}
                         additionalText={{
                             firstText: formatMarketOdds(selectedOddsType, odds?.homeOdds),
-                            firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.HOME, marginLeft: '10px' },
+                            firstTextStyle: { color: ODDS_COLOR.HOME, marginLeft: '7px' },
                         }}
                         showTooltip={odds?.homeOdds == 0}
                         glow={
@@ -80,14 +101,18 @@ const Odds: React.FC<OddsProps> = ({
                             !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.home)
                         }
                         discount={isDiscounted(homePriceImpact) ? homePriceImpact : undefined}
+                        isMobile={isMobile}
                     />
                     {typeof odds?.drawOdds !== 'undefined' && (
                         <PositionSymbol
+                            marketId={marketId}
+                            homeTeam={homeTeam}
+                            awayTeam={awayTeam}
                             type={2}
                             symbolColor={ODDS_COLOR.DRAW}
                             additionalText={{
                                 firstText: formatMarketOdds(selectedOddsType, odds?.drawOdds),
-                                firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.DRAW, marginLeft: '10px' },
+                                firstTextStyle: { color: ODDS_COLOR.DRAW, marginLeft: '7px' },
                             }}
                             glow={
                                 accountPositions &&
@@ -95,14 +120,18 @@ const Odds: React.FC<OddsProps> = ({
                             }
                             discount={isDiscounted(drawPriceImpact) ? drawPriceImpact : undefined}
                             showTooltip={odds?.drawOdds == 0}
+                            isMobile={isMobile}
                         />
                     )}
                     <PositionSymbol
+                        marketId={marketId}
+                        homeTeam={homeTeam}
+                        awayTeam={awayTeam}
                         type={isApexTopGame ? 4 : 1}
                         symbolColor={ODDS_COLOR.AWAY}
                         additionalText={{
                             firstText: formatMarketOdds(selectedOddsType, odds?.awayOdds),
-                            firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.AWAY, marginLeft: '10px' },
+                            firstTextStyle: { color: ODDS_COLOR.AWAY, marginLeft: '7px' },
                         }}
                         showTooltip={odds?.awayOdds == 0}
                         glow={
@@ -110,6 +139,7 @@ const Odds: React.FC<OddsProps> = ({
                             !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.away)
                         }
                         discount={isDiscounted(awayPriceImpact) ? awayPriceImpact : undefined}
+                        isMobile={isMobile}
                     />
                 </OddsContainer>
             )}

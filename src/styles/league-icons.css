@@ -1,0 +1,149 @@
+.league {
+    display: inline-block;
+    font-family: LeaguesIcons !important;
+}
+.icon-league {
+    display: inline-block;
+    font-family: LeagueIcons !important;
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.league--nba:before {
+    content: '\0041';
+}
+
+.league--ncaa:before {
+    content: '\0042';
+}
+
+.league--wnba:before {
+    content: '\0043';
+}
+
+.league--nhl:before {
+    content: '\0044';
+}
+
+.league--motogp:before {
+    content: '\0045';
+}
+
+.league--f1:before {
+    content: '\0046';
+}
+
+.league--mlb:before {
+    content: '\0047';
+}
+
+.league--ufc:before {
+    content: '\0048';
+}
+
+.league--nfl:before {
+    content: '\0049';
+}
+
+.league--bundesliga:before {
+    content: '\004A';
+}
+
+.league--epl:before {
+    content: '\004B';
+}
+
+.league--laliga:before {
+    content: '\004D';
+}
+
+.league--ligue1:before {
+    content: '\004E';
+}
+
+.league--mls:before {
+    content: '\004F';
+}
+
+.league--seriea:before {
+    content: '\0050';
+}
+
+.league--ucl:before {
+    content: '\0051';
+}
+
+.league--overtime:before {
+    content: '\0052';
+}
+.icon-league--nba:before {
+    content: '\0041';
+}
+
+.icon-league--ncaa:before {
+    content: '\0042';
+}
+
+.icon-league--wnba:before {
+    content: '\0043';
+}
+
+.icon-league--nhl:before {
+    content: '\0044';
+}
+
+.icon-league--motogp:before {
+    content: '\0045';
+}
+
+.icon-league--f1:before {
+    content: '\0046';
+}
+
+.icon-league--mlb:before {
+    content: '\0047';
+}
+
+.icon-league--ufc:before {
+    content: '\0048';
+}
+
+.icon-league--nfl:before {
+    content: '\0049';
+}
+
+.icon-league--bundesliga:before {
+    content: '\004A';
+}
+
+.icon-league--epl:before {
+    content: '\004B';
+}
+
+.icon-league--wnba:before {
+    content: '\0043';
+}
+
+.icon-league--fifa-world-cup:before {
+    content: '\004C';
+}
+
+.icon-league--la-liga:before {
+    content: '\004D';
+}
+
+.icon-league--ligue1:before {
+    content: '\004E';
+}
+
+.icon-league--mls:before {
+    content: '\004F';
+}
+
+.icon-league--serie-a:before {
+    content: '\0050';
+}
+
+.icon-league--uefa-cl:before {
+    content: '\0051';
+}

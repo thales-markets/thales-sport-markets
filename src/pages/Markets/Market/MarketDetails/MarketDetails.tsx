@@ -54,6 +54,7 @@ import {
     formatCurrency,
     formatCurrencyWithSign,
     formatPercentage,
+    roundNumberToDecimals,
 } from '../../../../utils/formatters/number';
 import { checkAllowance } from '../../../../utils/network';
 import networkConnector from '../../../../utils/networkConnector';
@@ -249,8 +250,10 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     const usdAmountValueAsNumber = Number(usdAmountValue);
                     const parsedQuote = quote / divider;
 
-                    const recalculatedTokenAmount = ((X * usdAmountValueAsNumber) / parsedQuote).toFixed(2);
-                    setTokenAmount(recalculatedTokenAmount);
+                    const recalculatedTokenAmount = roundNumberToDecimals((X * usdAmountValueAsNumber) / parsedQuote);
+                    const maxAvailableTokenAmount =
+                        recalculatedTokenAmount > roundedAmount ? roundedAmount : recalculatedTokenAmount;
+                    setTokenAmount(maxAvailableTokenAmount);
                 }
             }
         };

@@ -40,18 +40,20 @@ const Wrapper = styled(FlexDivStart)<{ marginBottom?: number }>`
 `;
 
 const Input = styled.input<{ width?: number }>`
-    background: ${(props) => props.theme.background.secondary};
+    background: ${(props) => props.theme.background.primary};
     border-radius: 5px;
-    border: 1px solid ${(props) => props.theme.background.secondary};
-    color: ${(props) => props.theme.textColor.primary};
-    width: ${(props) => props.width || 230}px;
-    height: 34px;
+    border: 1px solid ${(props) => props.theme.borderColor.quaternary};
+    color: ${(props) => props.theme.textColor.secondary};
+    width: ${(props) => props.width || 250}px;
+    height: 24px;
     padding-left: 32px;
     padding-right: 24px;
-    font-size: 18px;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 12px;
     outline: none;
     &::placeholder {
-        color: ${(props) => props.theme.textColor.primary};
+        color: ${(props) => props.theme.textColor.secondary};
     }
     &:focus {
         border: 1px solid #3fd1ff !important;
@@ -60,32 +62,32 @@ const Input = styled.input<{ width?: number }>`
 
 const IconWrapper = styled.div`
     border-radius: 30px;
-    background: ${(props) => props.theme.textColor.primary};
+    background: ${(props) => props.theme.textColor.secondary};
     position: absolute;
-    width: 22px;
-    height: 22px;
-    top: 6px;
+    width: 15px;
+    height: 15px;
+    top: 5px;
     left: 6px;
 `;
 
 const SearchIcon = styled.i`
-    font-size: 28px;
+    font-size: 20px;
     position: absolute;
-    top: -5px;
-    left: -4px;
+    top: -4px;
+    left: -3px;
     &:before {
         font-family: ExoticIcons !important;
         content: '\\0042';
-        color: ${(props) => props.theme.background.secondary};
+        color: ${(props) => props.theme.background.primary};
     }
 `;
 
 const ClearButton = styled.button`
-    font-size: 18px;
+    font-size: 12px;
     position: absolute;
     right: 5px;
-    background: ${(props) => props.theme.background.secondary};
-    color: ${(props) => props.theme.textColor.primary};
+    background: ${(props) => props.theme.background.primary};
+    color: ${(props) => props.theme.textColor.secondary};
     cursor: pointer;
     border: none;
     margin-top: 5px;

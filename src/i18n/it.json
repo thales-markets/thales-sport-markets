@@ -14,7 +14,8 @@
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use.",
             "disclaimer-lowercase": "disclaimer",
             "disclaimer1": "Collegando un portafoglio dichiari di aver letto e compreso i Mercati Straordinari",
-            "disclaimer2": "e accetta le sue condizioni d'uso."
+            "disclaimer2": "e accetta le sue condizioni d'uso.",
+            "wallet-info": "Informazioni sul portafoglio"
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -127,13 +128,13 @@
         },
         "coming-soon": "Prossimamente!",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
-        "mls-tooltip": "MLS markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
         "top3": "TOP 3",
         "top5": "TOP 5",
         "top10": "TOP 10",
         "yes": "YES",
-        "no": "NO"
+        "no": "NO",
+        "mls-tooltip": "I risultati dei mercati MLS si basano sui risultati della regolamentazione, se dovessero andare agli straordinari il risultato della regolamentazione è quello in cui il mercato deciderà."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -178,7 +179,8 @@
                 "history": "Your transactions",
                 "canceled": "Cancelled",
                 "archivedmarkets": "Archived markets",
-                "tooltip": "Markets resolved more than 7 days ago"
+                "tooltip": "Markets resolved more than 7 days ago",
+                "pendingmarkets": "In attesa di"
             },
             "sport": {
                 "all": "All sports",
@@ -191,7 +193,9 @@
                 "baseball": "Baseball",
                 "formula1": "Formula 1",
                 "motogp": "MotoGP",
-                "soon": "More sports coming soon!"
+                "soon": "More sports coming soon!",
+                "motosport": "Motosport",
+                "favourites": "Preferiti"
             },
             "all": "All",
             "datepicker": {
@@ -227,8 +231,15 @@
         "tooltip": {
             "amount-exceeded": "Amount exceeded the amount available on AMM",
             "minimal-amount": "Minimal amount is 1",
-            "no-funds": "Please ensure your wallet has enough funds"
-        }
+            "no-funds": "Please ensure your wallet has enough funds",
+            "min-amount": "L'importo minimo è {{min}}",
+            "max-quote": "La quotazione massima è {{value}}",
+            "min-quote": "La citazione minima è {{value}}"
+        },
+        "match-time": "Tempo di partita",
+        "race-starts": "La corsa inizia",
+        "back": "Di ritorno",
+        "apply-filters": "Applicare filtri"
     },
     "markets": {
         "market-card": {
@@ -260,10 +271,69 @@
             },
             "max": "Max",
             "skew": "Storto",
-            "discount": "Sconto"
+            "available": "A disposizione",
+            "amount-to-buy": "Importo da acquistare",
+            "discount": "Sconto",
+            "positions": "Posizioni"
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
-        "discounted-per": "Scontato come da"
+        "parlay": {
+            "potential-profit": "Potenziale profitto",
+            "skew": "Storto",
+            "buy-amount": "Importo da acquistare",
+            "pay-with": "Paga con",
+            "total-quote": "Citazione totale",
+            "available": "A disposizione",
+            "validation": {
+                "title": "Convalida Parlay",
+                "max-markets": "Massimo 4 mercati a Parlay",
+                "min-amount": "L'importo minimo è {{min}}",
+                "amount-exceeded": "L'importo ha superato l'importo disponibile su AMM",
+                "max-quote": "La quotazione massima è {{value}}",
+                "availability": "Bassa disponibilità per posizione sui mercati",
+                "no-funds": "Assicurati che il tuo portafoglio abbia fondi sufficienti",
+                "min-quote": "La citazione minima è {{value}}",
+                "risk-per-comb": "Rischio per combinazione superato",
+                "not-supported": "Errore di convalida non supportato {{error}}",
+                "single-min-amount": "L'importo minimo è {{min}}",
+                "same-team": "La stessa squadra non può essere in un Parlay più di una volta",
+                "team-in-parlay": "{{team}} è già a Parlay. La stessa squadra non può essere aggiunta a un Parlay più di una volta.",
+                "max-payout": "Il pagamento massimo supportato è {{max}}",
+                "max-teams": "Massimo {{max}} mercati a Parlay",
+                "max-profit": "Il profitto massimo supportato è {{max}}"
+            },
+            "empty-title": "Nessuna posizione",
+            "fee": "Tariffa totale",
+            "payout": "Totale ricevuto",
+            "empty-description": "Aggiungi posizione, scegli un mercato e fai la tua selezione.",
+            "parlay-fee": "Tariffa Parlay",
+            "safebox-fee": "Tariffa SafeBox",
+            "positions": "Posizioni",
+            "clear": "Cancella tutto",
+            "info": {
+                "min-quote": "Il PREVENTIVO TOTALE minimo supportato è {{value}}",
+                "max-quote": "Il PREVENTIVO TOTALE massimo supportato è {{value}}"
+            },
+            "show-parlay": "Mostra Parlay"
+        },
+        "discounted-per": "Scontato come da",
+        "nav-menu": {
+            "items": {
+                "history": "Storia",
+                "profile": "Profilo",
+                "leaderboard": "Classifica",
+                "onboarding-wizard": "Procedura guidata di inserimento",
+                "sports-trivia": "Curiosità sullo sport",
+                "markets": "Mercati",
+                "become-affiliate": "Diventa affiliato",
+                "fifa-campaign": "Campagna Zebro FIFA",
+                "fee-rebates": "Riduzioni sulle commissioni"
+            },
+            "buttons": {
+                "switch": "Interruttore",
+                "disconnect": "Disconnetti"
+            }
+        }
     },
     "rewards": {
         "header": "Rewards",
@@ -294,7 +364,7 @@
     },
     "quiz": {
         "title": "Sports Trivia competition",
-        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition. The trivia is available to everyone to test their knowledge and compete.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! For any questions please join our <discord>Discord</discord>.</p>",
+        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition where weekly winners will receive NFT Vouchers that can be used instead of sUSD to participate in any sports market you like.</p><p>Read all the information about this trivia in our <blogPost>blog post</blogPost>.</p><p>How to participate? The trivia is available to everyone to test their knowledge and compete, but to be eligible for rewards you need to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime's Twitter</twitter>.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
         "twitter-handle-label": "Twitter handle",
         "twitter-handle-placeholder": "Enter your Twitter handle",
         "twitter-handle-validation": "Invalid Twitter handle. Try again.",
@@ -317,7 +387,7 @@
         },
         "leaderboard": {
             "title": "Trivia Leaderboard",
-            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
+            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition for any given week.</p><p>All the details about how to participate for NFT sUSD vouchers that can be used on any sports market available <blogPost>here</blogPost>.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
             "back-to-quiz": "Back to trivia",
             "search-placeholder": "Search...",
             "table": {
@@ -333,13 +403,16 @@
             "period-ended-label": "Period ended",
             "week-label": "Week",
             "overtime-voucher": "Overtime voucher",
-            "all-time-leaderboard-label": "All time leaderboard"
+            "all-time-leaderboard-label": "Classifica di tutti i tempi"
         },
         "help-us-improve-label": "Help us improve",
         "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
         "finish-messages": {
             "your-best-result": "Your best result: {{points}} {{pointsLabel}}",
-            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants."
+            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants.",
+            "not-quilfied-for-rewards": "You are missing {{points}} {{pointsLabel}} to get into the TOP {{numberOfRewards}} and qualify for rewards. Try again and improve your score.",
+            "quilfied-for-rewards": "You are currently in the TOP {{numberOfRewards}} and qualified for rewards. Try again to get a better rank and higher rewards.",
+            "quilfied-for-rewards-first": "You are currently leading the leaderboard! Try again to get a better score and secure your spot."
         },
         "difficulty-label": "Difficulty",
         "difficulty": {
@@ -349,5 +422,142 @@
             "4": "Challenging",
             "5": "Hard"
         }
+    },
+    "landing-page": {
+        "web3-positioning": "Posizionamento sportivo Web3",
+        "launch-dapp": "Avvia dapp",
+        "read-now": "Leggi ora",
+        "info-text-title-5": "Transazioni veloci e a basso costo",
+        "no-kyc": "Non è necessaria la registrazione per partecipare",
+        "open-overtime": "Mercati straordinari aperti",
+        "browse-markets": "Sfoglia i mercati sportivi",
+        "info-text-5": "Ogni interazione con gli sport straordinari AMM avviene sulla rete Optimism, leader nella scalabilità.",
+        "leagues": "leghe",
+        "try-now": "Provalo ora",
+        "info-text-title-2": "Tutto è in catena",
+        "jump-in": "Pronto a saltare?",
+        "info-text-title-3": "Mercati non detentivi",
+        "documentation": "Consulta la nostra documentazione",
+        "info-text-1": "Non è necessario creare un utente. Non raccogliamo nemmeno alcun tipo di informazione personale.",
+        "learn-more": "Vuoi saperne di più?",
+        "info-text-title-4": "Dati forniti da Chainlink",
+        "info-text-4": "Il leader del settore fornisce quote a prova di manomissione e le partite sportive risultano in modo decentralizzato.",
+        "powered-by": "Offerto da",
+        "info-text-3": "Non c'è nessuno in possesso della tua garanzia. Le tue chiavi, i tuoi gettoni.",
+        "info-text-title-1": "Nessuna registrazione richiesta",
+        "best-odds": "Unisciti alla rivoluzione dei mercati sportivi di Web3",
+        "join-discord": "Bisogno di qualche aiuto? Unisciti alla nostra discordia",
+        "info-text-2": "Quando le entità centralizzate cadono, la trasparenza è fondamentale. Tutto il nostro codice è pubblico e gli smart contract possono essere rivisti da chiunque"
+    },
+    "profile": {
+        "transaction-history": "Cronologia delle transazioni",
+        "open-claimable": "Aperto/Rivendicabile",
+        "categories": {
+            "claimable": "Rivendicabile",
+            "open": "Aprire",
+            "single": "Partite singole",
+            "parlay": "Giochi di Parlay"
+        },
+        "card": {
+            "canceled": "Annullato",
+            "ticket-id": "ID biglietto",
+            "to-claim": "Richiedere",
+            "claim": "Reclamo",
+            "number-of-games": "Numero di giochi",
+            "ticket-paid": "Biglietto pagato",
+            "total-quote": "Citazione totale",
+            "to-win": "Vincere",
+            "result": "Risultato",
+            "starts": "Inizia",
+            "position-size": "Dimensione della posizione"
+        },
+        "messages": {
+            "no-claimable": "Non hai posizioni rivendicabili",
+            "no-open": "Non hai nessuna posizione aperta",
+            "no-transactions": "Non hai scambi"
+        },
+        "table": {
+            "id": "Id",
+            "amount": "Quantità",
+            "games": "Giochi",
+            "time": "Volta",
+            "paid": "Pagato",
+            "position": "Posizione"
+        }
+    },
+    "mint-world-cup-nft": {
+        "second-option": "La seconda opzione per metterti nella lista consentita è completare i seguenti passaggi:",
+        "choose-nft": "Conia il tuo Zebro NFT",
+        "success-mint": "Coniato con successo",
+        "tag-3-friends": "Nello stesso tweet, commenta il tuo indirizzo ETH e tagga 3 amici",
+        "no": "No",
+        "already-minted": "Hai già coniato il tuo NFT",
+        "go-to-twitter": "Vai su Twitter",
+        "not-eligible-text": "Il tuo portafoglio non è ancora idoneo per coniare uno Zebro NFT!",
+        "follow": "Segui Mercati straordinari su Twitter",
+        "are-you-sure": "Sei sicuro di voler coniare questo NFT? Puoi coniare SOLO UN NFT per portafoglio.",
+        "stake-thales": "Palo THALES",
+        "retweet": "Ritwitta questo tweet",
+        "mint-nft-button": "Menta questa Zebra!",
+        "stake-10-thales": "Per poter coniare uno Zebro NFT, devi avere almeno 10 THALES puntati.",
+        "zebro-campaign": "Campagna Zebra FIFA",
+        "eligible-text-2": "Conia uno Zebro della tua squadra nazionale preferita e avrai diritto a 50.000 OP e 30.000 premi bonus THALES!",
+        "incentives": "INCENTIVI",
+        "yes-mint": "Sì, NFT nuovo",
+        "get-thales": "Prendi THALES",
+        "minting-is-free": "Il conio è gratuito, puoi coniare solo un NFT per portafoglio. Questo NFT non è trasferibile.",
+        "eligible-text": "Ehi, ora puoi coniare la tua squadra preferita Zebro NFT.",
+        "eligible-text-1": "La collezione Zebro NFT viene utilizzata come voce per la campagna di Overtime FIFA World Cup.",
+        "mint-this-zebro": "Menta questa Zebra!",
+        "leaderboard-title": "Classifica",
+        "leaderboard": {
+            "home-country-multiplier-text": "Se la tua partita di Coppa del Mondo coinvolge la stessa squadra nazionale del tuo Zebro, riceverai un aumento dei premi del +10%.",
+            "four-game-parlay": "+20% se si tratta di un parlay a 4 giochi",
+            "three-game-parlay": "+15% se si tratta di un parlay a 3 giochi",
+            "underdog-multiplier-text": "Se la tua posizione in una partita di Coppa del Mondo ha un prezzo inferiore a 0,3 (le quote sono superiori a 1:3,33), otterrai un aumento dei premi del 10%.",
+            "two-game-parlay": "+10% se si tratta di un parlay a 2 giochi",
+            "parlay-boost": "Spinta Parlay:",
+            "parlay-boost-text": "Se la tua partita della Coppa del Mondo è in un biglietto Parlay, otterrai una spinta di:",
+            "underdog-multiplier": "Moltiplicatore perdente:",
+            "home-country-multiplier": "Moltiplicatore NFT del Paese di origine:",
+            "reward-calculations": "I calcoli delle ricompense verranno calcolati proporzionalmente in base al volume con un aumento del volume massimo del 40% aggiuntivo se vengono soddisfatte le seguenti condizioni:",
+            "nft": "NFT",
+            "country": "Paese",
+            "owner": "Proprietario",
+            "search-placeholder": "CERCA INDIRIZZO PORTAFOGLIO"
+        },
+        "zebro-wct-collection": "La collezione Zebro WC NFT",
+        "zebro-wct-collection-text": "fa parte di una campagna incentivata per rappresentare il tuo paese preferito durante la Coppa del Mondo e avere diritto a una quota di 50.000 token OP e 30.000 token THALES, insieme a moltiplicatori esclusivi per parlay e partite individuali.",
+        "go-to-leaderboard": "Vai alla classifica",
+        "congrats": "Congratulazioni! Hai coniato con successo lo Zebro NFT!",
+        "get-your-nft": "Pagina di menta"
+    },
+    "referral": {
+        "nav-items": {
+            "affiliate-leaderboard": "Classifica di affiliazione",
+            "all-transactions": "Tutte le transazioni",
+            "see-result-by-trader": "Vedi il risultato per commerciante"
+        },
+        "copy-link": "Copia link",
+        "trades": "Commerci",
+        "generate-link": "Genera collegamento",
+        "total-trading-fees": "Commissioni di negoziazione totali",
+        "earned": "Guadagnato",
+        "total-volume": "Volume totale",
+        "header": "Crea link di riferimento",
+        "paragraph": "È importante prendersi cura del paziente, essere seguiti dal medico, ma è un momento di grande dolore e sofferenza. Lacus luctus per mettere uno strato sopra. Due gole in un vestito che un cartone animato di un dottore con le frecce. Mus mauris vitae ultricies leo intero previsto ora o Non c&#39;è faretra diam amet nislus suscip adipiscing. Non c&#39;è bisogno di un caporale, nemmeno di un dignissim diam, per nessuno. Pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna Per i bambini, il dignissim è molto veleno. Si dice che sia ubriaco come un letto di birra, ma un casinò o una faretra. Fame maligna e brutta povertà. Ma il bisogno è il bisogno del fringilla phasellus faucibus scelerisque eleifend tilll. Né la valle da domani mai. Quale elemento il cuscino non è nemmeno. Ma ora è rivolto al fumetto di propaganda del lago. La strada diceva che tutti dovrebbero passare un buon fine settimana con le frecce.<br><br> Di conseguenza, non richiede un tastierista libero. Vivono nella vecchiaia e nella malattia. Si diceva la risata di Feugiat davanti alla paura. Non c&#39;è un momento facile per prendere di mira questa malattia. Vorrebbe avere membri come il calcio. Il gatto ora ha bisogno di un po&#39; di sapore puro nell&#39;impasto. È chiaro che questo è seguito da frecce. Lobortis element nibh tellus molestie ora. Non esiste una terra mortale nella paura. Serve un grande sforzo per prendere di mira il calcio, non per essere un vestibolo senza fasi. Fino al pretium vulputate sapien né sagittis aliquam malesuada bibendum arcu. In effetti, nemmeno la massa delle compagnie aeree lo fa. Diciamo che è proprio questo. Condimentum mattis pellentesque id nibh tortor id. Massa tincidunt ora pulvinar sapien e ligula ullamcorper malesuada. Trucco incinta Hendret, tutti non sono un medico locale e l&#39;autore dell&#39;annuncio. È anche un elemento molto importante della strategia clinica del calcio. Per ora ci si occuperà della gola dei bambini. I membri possono anche essere fan di pure in the soft ora.",
+        "affiliate-leaderboard-table": {
+            "amount": "Quantità",
+            "address": "Indirizzo",
+            "first-transaction": "Prima transazione",
+            "total-volume": "Volume totale",
+            "timestamp": "Appuntamento",
+            "type": "Tipo",
+            "volume": "Volume",
+            "number-of-trades": "Commerci",
+            "total-earned": "Totale guadagnato"
+        },
+        "no-result": "Non ci sono risultati per questa tabella",
+        "total-earned": "Totale guadagnato"
     }
 }

@@ -5,6 +5,26 @@
     font-size: 20px;
 }
 
-.icon-exotic--info:before {
-    content: '\0044';
+.icon-exotic--right:before {
+    content: '\004B';
+}
+
+.icon-exotic--down:before {
+    content: '\004D';
+}
+
+.icon-exotic--link:before {
+    content: '\004E';
+}
+
+.icon-exotic--right:before {
+    content: '\004B';
+}
+
+.icon-exotic--down:before {
+    content: '\004D';
+}
+
+.icon-exotic--link:before {
+    content: '\004E';
 }

@@ -49,6 +49,17 @@ export const OPTIMISM_NETWORKS: Record<number, OptimismNetwork> = {
             decimals: 18,
         },
     },
+    420: {
+        chainId: '0x420',
+        chainName: 'Optimism Goerli',
+        rpcUrls: ['https://goerli.optimism.io/'],
+        blockExplorerUrls: ['https://goerli-optimism.etherscan.io/'],
+        iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
+        nativeCurrency: {
+            symbol: 'ETH',
+            decimals: 18,
+        },
+    },
 };
 
 export const OPTIMISM_OPTIONS = [

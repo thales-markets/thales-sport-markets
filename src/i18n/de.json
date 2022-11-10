@@ -23,7 +23,8 @@
             "disclaimer": "Indem du ein Wallet verbindest, bestätigst du, dass du den Overtime Markets <a target=\"_blank\" href={{link}}>Haftungsausschluss</a> gelesen und verstanden hast und mit den Nutzungsbedingungen einverstanden bist.",
             "disclaimer1": "Indem du eine Wallet verbindest, bestätigst du, dass Sie die Overtime Markets gelesen und verstanden hast",
             "disclaimer2": "und stimme den Nutzungsbedingungen zu.",
-            "disclaimer-lowercase": "Haftungsausschluss"
+            "disclaimer-lowercase": "Haftungsausschluss",
+            "wallet-info": "Wallet-Info"
         },
         "voucher": {
             "remaining-amount": "Verbleibender Betrag",
@@ -170,15 +171,16 @@
         },
         "filter-label": {
             "global": {
-                "allmarkets": "Alle Märkte",
-                "openmarkets": "Offene Märkte",
-                "resolvedmarkets": "Beendete Märkte",
                 "yourpositions": "Deine Positionen",
                 "claim": "Einforderbar",
                 "history": "Deine Transactions",
-                "canceled": "Abgesagt",
                 "archivedmarkets": "Archivierte Märkte",
-                "tooltip": "Märkte vor mehr als 7 Tagen beendet"
+                "tooltip": "Märkte aufgelöst vor mehr als 7 Tagen",
+                "pendingmarkets": "Ausstehend",
+                "resolvedmarkets": "Fertig",
+                "allmarkets": "Alle",
+                "openmarkets": "Alle",
+                "canceled": "Angehalten / Abgebrochen"
             },
             "sport": {
                 "all": "alle Sportarten",
@@ -191,7 +193,9 @@
                 "baseball": "Baseball",
                 "formula1": "Formel 1",
                 "motogp": "MotoGP",
-                "soon": "Bald noch mehr Sportarten!"
+                "soon": "Bald noch mehr Sportarten!",
+                "motosport": "Motorsport",
+                "favourites": "Favoriten"
             },
             "all": "Alle",
             "datepicker": {
@@ -228,7 +232,11 @@
             "amount-exceeded": "Der Betrag überstieg den auf der AMM verfügbaren Betrag",
             "minimal-amount": "Der Mindestbetrag ist 1",
             "no-funds": "Bitte stell sicher, dass dein Wallet ausreichend USD enthält"
-        }
+        },
+        "match-time": "Spielzeit",
+        "race-starts": "Rennen beginnt",
+        "back": "Der Rücken",
+        "apply-filters": "Filter anwenden"
     },
     "markets": {
         "market-card": {
@@ -260,10 +268,69 @@
                 "title": "Im Wallet"
             },
             "skew": "Skew",
-            "discount": "Rabatt"
+            "available": "Verfügbar",
+            "amount-to-buy": "Betrag zu kaufen",
+            "discount": "Rabatt",
+            "positions": "Positionen"
         },
         "zero-odds-tooltip": "Sports AMM bietet nur Liquidität in der Preisspanne von $0,05 bis $0,95. Dies bedeutet, dass wenn die Quoten für eine Position weniger als 5% oder mehr als 95% betragen, diese Position keine Liquidität hat.",
-        "discounted-per": "Ermäßigt gem"
+        "parlay": {
+            "available": "Verfügbar",
+            "total-quote": "Gesamtangebot",
+            "pay-with": "Bezahlen mit",
+            "buy-amount": "Betrag zu kaufen",
+            "potential-profit": "Möglicher Gewinn",
+            "skew": "Schräg",
+            "validation": {
+                "title": "Parlay-Validierung",
+                "max-markets": "Maximal 4 Märkte in Parlay",
+                "min-amount": "Minimale Menge ist {{min}}",
+                "max-quote": "Das maximale Zitat ist {{value}}",
+                "amount-exceeded": "Der Betrag hat den auf AMM verfügbaren Betrag überschritten",
+                "min-quote": "Minimales Zitat ist {{value}}",
+                "availability": "Geringe Verfügbarkeit für Marktposition",
+                "no-funds": "Bitte stellen Sie sicher, dass Ihr Portemonnaie über genügend Guthaben verfügt",
+                "risk-per-comb": "Risiko pro Kombination überschritten",
+                "not-supported": "Nicht unterstützter Validierungsfehler {{error}}",
+                "single-min-amount": "Minimale Menge ist {{min}}",
+                "same-team": "Dasselbe Team kann nicht mehr als einmal in einem Parlay sein",
+                "team-in-parlay": "{{team}} ist bereits in Parlay. Dasselbe Team kann nicht mehr als einmal zu einem Parlay hinzugefügt werden.",
+                "max-payout": "Die maximal unterstützte Auszahlung beträgt {{max}}",
+                "max-profit": "Der maximal unterstützte Gewinn beträgt {{max}}",
+                "max-teams": "Maximal {{max}} Märkte in Parlay"
+            },
+            "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
+            "payout": "Insgesamt erhalten",
+            "empty-title": "Keine Positionen",
+            "fee": "Gesamtgebühr",
+            "parlay-fee": "Parlay-Gebühr",
+            "safebox-fee": "SafeBox-Gebühr",
+            "positions": "Positionen",
+            "clear": "Alles löschen",
+            "info": {
+                "max-quote": "Das maximal unterstützte TOTAL QUOTE beträgt {{value}}",
+                "min-quote": "Das minimal unterstützte TOTAL QUOTE beträgt {{value}}"
+            },
+            "show-parlay": "Parlay anzeigen"
+        },
+        "discounted-per": "Ermäßigt gem",
+        "nav-menu": {
+            "items": {
+                "onboarding-wizard": "Onboarding-Assistent",
+                "profile": "Profil",
+                "markets": "Märkte",
+                "sports-trivia": "Sport Trivia",
+                "become-affiliate": "Partner werden",
+                "history": "Geschichte",
+                "leaderboard": "Bestenliste",
+                "fee-rebates": "Gebührenrückerstattungen",
+                "fifa-campaign": "Zebro FIFA-Kampagne"
+            },
+            "buttons": {
+                "switch": "Schalter",
+                "disconnect": "Trennen"
+            }
+        }
     },
     "rewards": {
         "header": "Preise",
@@ -349,5 +416,142 @@
             "4": "Herausfordernd",
             "5": "Schwer"
         }
+    },
+    "landing-page": {
+        "best-odds": "Beste Quoten in der Branche",
+        "try-now": "Jetzt probieren",
+        "powered-by": "Ein Angebot von",
+        "no-kyc": "Positionierung im Sport ohne KYC",
+        "launch-dapp": "dapp starten",
+        "leagues": "Ligen",
+        "info-text-title-1": "Keine Registrierung erforderlich",
+        "info-text-title-2": "Alles ist on-chain",
+        "info-text-title-3": "Non-custodial Märkte",
+        "info-text-title-4": "Daten bereitgestellt von Chainlink",
+        "info-text-title-5": "Schnelle und günstige Transaktionen",
+        "info-text-1": "Du brauchst keinen Benutzer anzulegen. Wir sammeln auch keine persönlichen Informationen.",
+        "info-text-2": "Wenn zentralisierte Einheiten fallen, ist Transparenz der entscheidende Faktor. Alle unsere Smart Contracts sind öffentlich.",
+        "info-text-3": "Es gibt niemanden, der dein Collateral hält. Deine Schlüssel, deine Tokene.",
+        "info-text-4": "Der Branchenführer bietet manipulationssichere Quoten und Sportergebnisse auf dezentralisierte Weise.",
+        "info-text-5": "Jede Interaktion mit Overtime sports AMM erfolgt über das Optimism-Netzwerk, dem Marktführer in Skalierbarkeit.",
+        "browse-markets": "Sportmärkte durchsuchen",
+        "web3-positioning": "Web3 Sport Positionierung",
+        "learn-more": "Möchtest du mehr erfahren?",
+        "documentation": "Siehe unsere Dokumentation",
+        "jump-in": "Bereit zum Einsteigen??",
+        "open-overtime": "Overtime Markets öffnen",
+        "join-discord": "Brauchst du Hilfe? Tritt unserem Discord bei",
+        "read-now": "Jetzt lesen"
+    },
+    "profile": {
+        "open-claimable": "Offen/Beanspruchbar",
+        "transaction-history": "Verlauf der Transaktionen",
+        "categories": {
+            "claimable": "Beanspruchbar",
+            "open": "Offen",
+            "parlay": "Parlay-Spiele",
+            "single": "Einzelne Spiele"
+        },
+        "card": {
+            "claim": "Beanspruchen",
+            "ticket-id": "Ticketnummer",
+            "canceled": "Abgesagt",
+            "to-win": "Gewinnen",
+            "number-of-games": "Anzahl von Spielen",
+            "to-claim": "Beanspruchen",
+            "total-quote": "Gesamtangebot",
+            "ticket-paid": "Ticket bezahlt",
+            "starts": "Beginnt",
+            "result": "Ergebnis",
+            "position-size": "Positionsgröße"
+        },
+        "messages": {
+            "no-open": "Sie haben keine offene Stelle",
+            "no-claimable": "Sie haben keine beanspruchbaren Positionen",
+            "no-transactions": "Sie haben keine Trades"
+        },
+        "table": {
+            "games": "Spiele",
+            "time": "Zeit",
+            "id": "Ausweis",
+            "amount": "Menge",
+            "paid": "Bezahlt",
+            "position": "Position"
+        }
+    },
+    "mint-world-cup-nft": {
+        "eligible-text-2": "Prägen Sie ein Zebro Ihrer Lieblingsnationalmannschaft und qualifizieren Sie sich für 50.000 OP & 30.000 THALES-Bonusprämien!",
+        "no": "Nein",
+        "get-thales": "Holen Sie sich THALES",
+        "incentives": "ANREIZE",
+        "stake-thales": "Pfahl THALES",
+        "stake-10-thales": "Um einen Zebro NFT prägen zu können, müssen Sie mindestens 10 THALES gestaket haben.",
+        "retweet": "Retweete diesen Tweet",
+        "eligible-text": "Hey, Sie können jetzt Ihr Lieblingsteam Zebro NFT prägen.",
+        "not-eligible-text": "Ihre Brieftasche ist noch nicht berechtigt, ein Zebro NFT zu prägen!",
+        "minting-is-free": "Minting ist kostenlos, Sie können nur eine NFT pro Wallet prägen. Diese NFT ist nicht übertragbar.",
+        "follow": "Folgen Sie Overtime Markets auf Twitter",
+        "are-you-sure": "Sind Sie sicher, dass Sie diese NFT prägen möchten? Sie können NUR EINE NFT pro Wallet prägen.",
+        "mint-nft-button": "Prägen Sie dieses Zebra!",
+        "go-to-twitter": "Gehen Sie zu Twitter",
+        "eligible-text-1": "Die NFT-Kollektion von Zebro wird als Eintrag für die Überstunden-Kampagne der FIFA-Weltmeisterschaft verwendet.",
+        "second-option": "Die zweite Option, um Sie auf die Positivliste zu setzen, besteht darin, die folgenden Schritte auszuführen:",
+        "tag-3-friends": "Kommentiere auf demselben Tweet deine ETH-Adresse & markiere 3 Freunde",
+        "yes-mint": "Ja, neuwertiges NFT",
+        "choose-nft": "Mint Ihr Zebro NFT",
+        "success-mint": "Erfolgreich geprägt",
+        "already-minted": "Sie haben Ihr NFT bereits geprägt",
+        "zebro-campaign": "Zebra-FIFA-Kampagne",
+        "mint-this-zebro": "Prägen Sie dieses Zebra!",
+        "leaderboard-title": "Bestenliste",
+        "leaderboard": {
+            "underdog-multiplier": "Underdog-Multiplikator:",
+            "parlay-boost": "Parlay-Boost:",
+            "two-game-parlay": "+10 %, wenn es sich um eine Kombination aus 2 Spielen handelt",
+            "four-game-parlay": "+20 %, wenn es sich um eine Kombination aus 4 Spielen handelt",
+            "home-country-multiplier-text": "Wenn an Ihrem WM-Spiel dieselbe Nationalmannschaft teilnimmt wie an Ihrem Zebro, erhalten Sie einen Prämien-Boost von +10 %",
+            "home-country-multiplier": "NFT-Multiplikator des Heimatlandes:",
+            "underdog-multiplier-text": "Wenn Ihre WM-Platzierung unter 0,3 liegt (Quoten über 1:3,33), erhalten Sie einen Prämien-Boost von 10 %.",
+            "parlay-boost-text": "Wenn Ihr WM-Spiel in einem Parlay-Ticket enthalten ist, erhalten Sie einen Boost von:",
+            "reward-calculations": "Belohnungsberechnungen werden anteilig volumenbasiert mit maximal 40 % zusätzlichem Volumenschub berechnet, wenn die folgenden Bedingungen erfüllt sind:",
+            "three-game-parlay": "+15 %, wenn es sich um eine Kombination aus 3 Spielen handelt",
+            "country": "Land",
+            "owner": "Eigentümer",
+            "nft": "NFT",
+            "search-placeholder": "WALLET-ADRESSE SUCHEN"
+        },
+        "zebro-wct-collection": "Die Zebro WC NFT Kollektion",
+        "zebro-wct-collection-text": "ist Teil einer Anreizkampagne, um Ihr Lieblingsland während der Weltmeisterschaft zu vertreten und sich für einen Anteil von 50.000 OP-Token und 30.000 THALES-Token sowie exklusive Multiplikatoren für Kombinationen und Einzelspiele zu qualifizieren.",
+        "congrats": "Herzlichen Glückwunsch! Sie haben das Zebro NFT erfolgreich geprägt!",
+        "go-to-leaderboard": "Gehen Sie zur Bestenliste",
+        "get-your-nft": "Minze Seite"
+    },
+    "referral": {
+        "nav-items": {
+            "all-transactions": "Alle Transaktionen",
+            "see-result-by-trader": "Siehe Ergebnis nach Händler",
+            "affiliate-leaderboard": "Affiliate-Bestenliste"
+        },
+        "trades": "Handel",
+        "copy-link": "Link kopieren",
+        "total-volume": "Volle Lautstärke",
+        "earned": "Verdient",
+        "header": "Empfehlungslinks erstellen",
+        "total-trading-fees": "Gesamte Handelsgebühren",
+        "generate-link": "Verknüpfung generieren",
+        "paragraph": "Es ist wichtig, sich um den Patienten zu kümmern und vom Arzt begleitet zu werden, aber es ist eine Zeit großer Schmerzen und Leiden. Lacus luctus, um eine Schicht darüber zu legen. Zwei Kehlen in einem Kleid als eine Karikatur eines Arztes mit Pfeilen. Mus mauris vitae ultricies leo ganz jetzt erwartet oder Es gibt keinen Köcher diam amet nislus suscip adipiscing. Niemand braucht einen Corporal, nicht einmal einen dignissim diam. Pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna Für Kinder ist der Dignissim viel Gift. Es soll wie ein Bierbett getrunken werden, aber ein Casino oder ein Köcher. Bösartiger Hunger und hässliche Armut. Aber die Notwendigkeit ist die Notwendigkeit für die fringilla phasellus faucibus scelerisque eleifend tilll. Noch das Tal von morgen je. Welches Element ist das Kissen nicht einmal. Aber jetzt richtet es sich gegen die Propagandasee-Karikatur. Die Straße sagte, dass jeder ein gutes Wochenende mit Pfeilen haben sollte.<br><br> Daher ist kein kostenloser Keyboarder erforderlich. Sie leben in Alter und Krankheit. Das Lachen von Feugiat vor Angst wurde gesagt. Es gibt keinen einfachen Zeitpunkt, um diese Krankheit zu bekämpfen. Er hätte gerne Mitglieder wie Fußball. Die Katze braucht jetzt etwas puren Geschmack im Teig. Es ist klar, dass darauf Pfeile folgen. Lobortis Element Nibh Tellus Molestie jetzt. Es gibt kein tödliches Land in Angst. Es braucht eine große Anstrengung, Fußball zu zielen, kein phasenloser Vorraum zu sein. Bis zum Pretium vulputate sapien noch sagittis aliquam malesuada bibendum arcu. Tatsächlich tut das auch keine Airline-Masse. Es sei gesagt, dass es genau das ist. Condimentum mattis pellentesque id nibh tortor id. Massa tincidunt jetzt pulvinar sapien und ligula ullamcorper malesuada. Hendret schwanger Make-up, jeder ist kein lokaler Arzt und der Autor der Anzeige. Es ist auch ein sehr wichtiges Element der klinischen Fußballstrategie. Vorerst werden die Kehlen der Kinder versorgt. Mitglieder können jetzt auch Fans von pure in the soft sein.",
+        "affiliate-leaderboard-table": {
+            "volume": "Volumen",
+            "first-transaction": "Erste Transaktion",
+            "total-earned": "Insgesamt verdient",
+            "total-volume": "Volle Lautstärke",
+            "number-of-trades": "Handel",
+            "address": "Adresse",
+            "type": "Typ",
+            "amount": "Menge",
+            "timestamp": "Terminzeit"
+        },
+        "total-earned": "Insgesamt verdient",
+        "no-result": "Es gibt keine Ergebnisse für diese Tabelle"
     }
 }

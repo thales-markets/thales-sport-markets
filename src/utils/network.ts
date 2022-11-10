@@ -1,10 +1,9 @@
 import { getContractFactory, predeploys } from '@eth-optimism/contracts';
-import detectEthereumProvider from '@metamask/detect-provider';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
 import { GWEI_UNIT } from 'constants/network';
-import { BigNumber } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { serializeTransaction, UnsignedTransaction } from 'ethers/lib/utils';
-import { EthereumProvider, NetworkId } from 'types/network';
+import { NetworkId } from 'types/network';
 import networkConnector from 'utils/networkConnector';
 
 export const NetworkIdByName: Record<string, NetworkId> = {
@@ -46,11 +45,9 @@ export const hasEthereumInjected = () => !!window.ethereum;
 export async function getDefaultNetworkId(): Promise<NetworkId> {
     try {
         if (hasEthereumInjected()) {
-            const provider = (await detectEthereumProvider()) as EthereumProvider;
-            if (provider && (provider as any).networkVersion != null) {
-                const networkId = Number((provider as any).networkVersion) as NetworkId;
-                return (networkId || DEFAULT_NETWORK_ID) as NetworkId;
-            }
+            const provider = new ethers.providers.Web3Provider(<any>window.ethereum, 'any');
+            const networkId = (await provider.getNetwork()).chainId;
+            return (networkId || DEFAULT_NETWORK_ID) as NetworkId;
         }
         return DEFAULT_NETWORK_ID;
     } catch (e) {
@@ -112,4 +109,14 @@ export const checkAllowance = async (amount: BigNumber, token: any, walletAddres
         console.log(err);
         return false;
     }
+};
+
+export const getNetworkIconClassNameByNetworkId = (networkId: NetworkId): string => {
+    if (networkId == 10) return 'icon icon--op';
+    return 'icon icon--op';
+};
+
+export const getNetworkNameByNetworkId = (networkId: NetworkId): string => {
+    if (networkId == 10) return 'Optimism Mainnet';
+    return 'Optimism Mainnet';
 };

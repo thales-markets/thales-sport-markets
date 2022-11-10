@@ -8,7 +8,7 @@ const BannerCarousel: React.FC = () => {
     useEffect(() => {
         const map = {} as Record<number, string>;
         const fetchData = async () => {
-            for (let i = 1; i <= 3; i++) {
+            for (let i = 1; i <= 5; i++) {
                 try {
                     const response = await fetch(`https://api.thalesmarket.io/banner-json/${i}`);
                     if (response) {
@@ -26,7 +26,7 @@ const BannerCarousel: React.FC = () => {
         <Container>
             <Carousel
                 transitionTime={1000}
-                interval={5000}
+                interval={10000}
                 showStatus={false}
                 showArrows={false}
                 showThumbs={false}
@@ -42,12 +42,16 @@ const BannerCarousel: React.FC = () => {
                 <StyledDiv hasHref={!!urlMap[1]} index={1} />
                 <StyledDiv hasHref={!!urlMap[2]} index={2} />
                 <StyledDiv hasHref={!!urlMap[3]} index={3} />
+                <StyledDiv hasHref={!!urlMap[3]} index={4} />
+                <StyledDiv hasHref={!!urlMap[3]} index={5} />
             </Carousel>
         </Container>
     );
 };
 
 const Container = styled.div`
+    position: relative;
+    z-index: 0;
     width: 1700px;
     height: 165px;
     border: 1.4px solid #5f6180;
