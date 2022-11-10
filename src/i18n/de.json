@@ -514,7 +514,11 @@
             "underdog-multiplier-text": "Wenn Ihre WM-Platzierung unter 0,3 liegt (Quoten über 1:3,33), erhalten Sie einen Prämien-Boost von 10 %.",
             "parlay-boost-text": "Wenn Ihr WM-Spiel in einem Parlay-Ticket enthalten ist, erhalten Sie einen Boost von:",
             "reward-calculations": "Belohnungsberechnungen werden anteilig volumenbasiert mit maximal 40 % zusätzlichem Volumenschub berechnet, wenn die folgenden Bedingungen erfüllt sind:",
-            "three-game-parlay": "+15 %, wenn es sich um eine Kombination aus 3 Spielen handelt"
+            "three-game-parlay": "+15 %, wenn es sich um eine Kombination aus 3 Spielen handelt",
+            "country": "Land",
+            "owner": "Eigentümer",
+            "nft": "NFT",
+            "search-placeholder": "WALLET-ADRESSE SUCHEN"
         },
         "zebro-wct-collection": "Die Zebro WC NFT Kollektion",
         "zebro-wct-collection-text": "ist Teil einer Anreizkampagne, um Ihr Lieblingsland während der Weltmeisterschaft zu vertreten und sich für einen Anteil von 50.000 OP-Token und 30.000 THALES-Token sowie exklusive Multiplikatoren für Kombinationen und Einzelspiele zu qualifizieren.",
