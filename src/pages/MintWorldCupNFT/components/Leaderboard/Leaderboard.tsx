@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { truncateAddress } from 'utils/formatters/string';
@@ -27,7 +27,15 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const zebrosQuery = useZebroQuery('', networkId);
     const zebros = zebrosQuery.isSuccess ? zebrosQuery.data : [];
-    console.log(zebros);
+
+    const zebrosMemo = useMemo(
+        () =>
+            zebros.map((zebro) => {
+                return { ...zebro, url: zebro.url.replace('.json', '.png') };
+            }),
+        [zebros]
+    );
+
     return (
         <>
             <InfoContainer>
@@ -112,7 +120,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
                         Cell: (cellProps: any) => <TableText>{cellProps.cell.value}</TableText>,
                     },
                 ]}
-                data={zebros}
+                data={zebrosMemo}
             />
         </>
     );
