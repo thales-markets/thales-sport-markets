@@ -47,11 +47,11 @@ const NavigationItems = [
 const Referral: React.FC = () => {
     const { t } = useTranslation();
 
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state))?.toLowerCase() || '';
     // const walletAddress =
-    //     useSelector((state: RootState) => getWalletAddress(state)) || ''
-    //         ? '0xe21b80181304e3641424cdfb8376e73574ab4794'
-    //         : '0xe21b80181304e3641424cdfb8376e73574ab4794';
+    //     useSelector((state: RootState) => getWalletAddress(state))?.toLowerCase() || ''
+    //         ? '0xe966c59c15566A994391f6226fee5bc0ef70f87a'.toLowerCase()
+    //         : '0xe966c59c15566A994391f6226fee5bc0ef70f87a'.toLowerCase();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
 
