@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import Button from 'components/Button';
 import MintVoucherModal from 'components/MintVoucherModal';
 
-const GetUsd: React.FC = () => {
+const MintVoucher: React.FC = () => {
     const { t } = useTranslation();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const [openMintVoucherModal, setOpenMintVoucherModal] = useState<boolean>(false);
@@ -41,4 +41,4 @@ const Container = styled(FlexDivCentered)`
     }
 `;
 
-export default GetUsd;
+export default MintVoucher;

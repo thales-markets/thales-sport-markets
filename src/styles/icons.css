@@ -164,3 +164,11 @@
 .icon--claimable-flag::before {
     content: '\006F';
 }
+
+.icon--fee-rebates::before {
+    content: '\0075';
+}
+
+.icon--fifa-world-cup::before {
+    content: '\0076';
+}

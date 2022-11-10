@@ -61,7 +61,7 @@ const DappHeader: React.FC = () => {
                                 </StyledButton>
                             </SPAAnchor>
                         )}
-                        <MintVoucher />
+                        {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />}
                         <WalletInfo />
                         <ProfileItem />
                         <MenuIcon onClick={() => setNavMenuVisibility(true)} />
