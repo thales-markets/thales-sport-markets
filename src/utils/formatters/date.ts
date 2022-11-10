@@ -11,6 +11,7 @@ export const formatShortDateWithTime = (date: Date | number) => format(date, 'MM
 export const formatDateWithTime = (date: Date | number) => format(date, 'dd MMM HH:mm');
 export const formatShortDateNoYear = (date: Date | number) => format(date, 'MMM d');
 export const formatDayOfWeek = (date: Date | number) => format(date, 'EEE');
+export const formatTimeOfDate = (date: Date | number) => format(date, 'HH:mm');
 
 export const formattedDuration = (
     duration: Duration,
@@ -100,4 +101,15 @@ export const convertLocalToUTCDate = (date: Date) => {
 export const setDateTimeToUtcNoon = (date: Date) => {
     date.setUTCHours(12, 0, 0, 0);
     return date;
+};
+
+export const addHoursToCurrentDate = (numberOfHours: number, setToEOD?: boolean) => {
+    const newDateFilter = new Date();
+    if (setToEOD) {
+        newDateFilter.setHours(23, 59, 59, 999);
+        newDateFilter.setTime(newDateFilter.getTime() + numberOfHours * 60 * 60 * 1000);
+    } else {
+        newDateFilter.setTime(newDateFilter.getTime() + numberOfHours * 60 * 60 * 1000);
+    }
+    return newDateFilter;
 };

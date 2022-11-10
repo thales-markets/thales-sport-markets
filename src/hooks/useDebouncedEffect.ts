@@ -29,6 +29,10 @@ export function useDebouncedEffect(
         if (dependency) {
             makeChangeTodependency(dependency);
         }
+
+        return () => {
+            makeChangeTodependency.cancel();
+        };
     }, [dependency, makeChangeTodependency]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

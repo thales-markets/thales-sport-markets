@@ -4,7 +4,7 @@ import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
-import { setAppReady } from 'redux/modules/app';
+import { setAppReady, setMobileState } from 'redux/modules/app';
 import { getNetworkId, updateNetworkSettings, updateWallet } from 'redux/modules/wallet';
 import { getDefaultNetworkId } from 'utils/network';
 import queryConnector from 'utils/queryConnector';
@@ -15,14 +15,20 @@ import Theme from 'layouts/Theme';
 import DappLayout from 'layouts/DappLayout';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useAccount, useProvider, useSigner } from 'wagmi';
-import BannerCarousel from 'components/BannerCarousel';
+import LandingPageLayout from 'layouts/LandingPageLayout';
 import { ethers } from 'ethers';
+import BannerCarousel from 'components/BannerCarousel';
+import { isMobile } from 'utils/device';
+import Profile from 'pages/Profile';
+import Referral from 'pages/Referral';
 
+const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
 const Rewards = lazy(() => import('pages/Rewards'));
 const Quiz = lazy(() => import('pages/Quiz'));
 const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
+const MintWorldCupNFT = lazy(() => import('pages/MintWorldCupNFT'));
 const Vaults = lazy(() => import('pages/Vaults'));
 const Vault = lazy(() => import('pages/Vault'));
 
@@ -46,6 +52,8 @@ const App = () => {
                     provider:
                         !!signer && !!signer.provider
                             ? new ethers.providers.Web3Provider(signer.provider.provider, 'any')
+                            : window.ethereum
+                            ? new ethers.providers.Web3Provider(window.ethereum, 'any')
                             : provider,
                     signer,
                 });
@@ -61,6 +69,28 @@ const App = () => {
     useEffect(() => {
         dispatch(updateWallet({ walletAddress: address }));
     }, [address, dispatch]);
+
+    useEffect(() => {
+        const handlePageResized = () => {
+            dispatch(setMobileState(isMobile()));
+        };
+
+        if (typeof window !== 'undefined') {
+            window.addEventListener('resize', handlePageResized);
+            window.addEventListener('orientationchange', handlePageResized);
+            window.addEventListener('load', handlePageResized);
+            window.addEventListener('reload', handlePageResized);
+        }
+
+        return () => {
+            if (typeof window !== 'undefined') {
+                window.removeEventListener('resize', handlePageResized);
+                window.removeEventListener('orientationchange', handlePageResized);
+                window.removeEventListener('load', handlePageResized);
+                window.removeEventListener('reload', handlePageResized);
+            }
+        };
+    }, [dispatch]);
 
     useEffect(() => {
         if (window.ethereum) {
@@ -95,13 +125,19 @@ const App = () => {
                                     <Markets />
                                 </DappLayout>
                             </Route>
-                            <Route exact path={ROUTES.Home}>
-                                <Redirect to={ROUTES.Markets.Home} />
-                                {/*<HomeLayout />*/}
-                            </Route>
                             <Route exact path={ROUTES.Rewards}>
                                 <DappLayout>
                                     <Rewards />
+                                </DappLayout>
+                            </Route>
+                            <Route exact path={ROUTES.Profile}>
+                                <DappLayout>
+                                    <Profile />
+                                </DappLayout>
+                            </Route>
+                            <Route exact path={ROUTES.Referral}>
+                                <DappLayout>
+                                    <Referral />
                                 </DappLayout>
                             </Route>
                             <Route exact path={ROUTES.Quiz}>
@@ -127,6 +163,22 @@ const App = () => {
                                 <DappLayout>
                                     <QuizLeaderboard />
                                 </DappLayout>
+                            </Route>
+                            <Route exact path={ROUTES.MintWorldCupNFT}>
+                                <DappLayout>
+                                    <MintWorldCupNFT />
+                                </DappLayout>
+                            </Route>
+                            <Route exact path={ROUTES.Home}>
+                                <LandingPageLayout>
+                                    <LandingPage />
+                                </LandingPageLayout>
+                            </Route>
+                            <Route>
+                                <Redirect to={ROUTES.Home} />
+                                <LandingPageLayout>
+                                    <LandingPage />
+                                </LandingPageLayout>
                             </Route>
                         </Switch>
                     </Router>

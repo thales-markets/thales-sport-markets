@@ -23,7 +23,8 @@
             "disclaimer": "将你的钱包连接到Overtime意味着您已经阅读并理解了参与Overtime活动的风险 <a target=\"_blank\" href={{link}}>免责声明</a> 并决定继续使用.",
             "disclaimer-lowercase": "免责声明",
             "disclaimer2": "并同意其使用条件。",
-            "disclaimer1": "通过连接钱包，您承认您已阅读并理解加班市场"
+            "disclaimer1": "通过连接钱包，您承认您已阅读并理解加班市场",
+            "wallet-info": "钱包信息"
         },
         "voucher": {
             "remaining-amount": "余额",
@@ -178,7 +179,8 @@
                 "history": "竞猜记录",
                 "canceled": "已取消",
                 "archivedmarkets": "已存档的比赛",
-                "tooltip": "已结束超过7天的比赛"
+                "tooltip": "已结束超过7天的比赛",
+                "pendingmarkets": "待办的"
             },
             "sport": {
                 "all": "所有运动",
@@ -191,7 +193,9 @@
                 "baseball": "棒球",
                 "formula1": "一级方程式赛车",
                 "motogp": "世界摩托车锦标赛",
-                "soon": "即将开放!"
+                "soon": "即将开放!",
+                "motosport": "摩托车运动",
+                "favourites": "收藏夹"
             },
             "all": "所有",
             "datepicker": {
@@ -227,8 +231,15 @@
         "tooltip": {
             "amount-exceeded": "金额超过AMM的余额。",
             "minimal-amount": "最小数量为1",
-            "no-funds": "请确认您的钱包有足够余额"
-        }
+            "no-funds": "请确认您的钱包有足够余额",
+            "min-amount": "最低金额为 {{min}}",
+            "max-quote": "最大报价为 {{value}}",
+            "min-quote": "最小报价是 {{value}}"
+        },
+        "match-time": "比赛时间",
+        "race-starts": "比赛开始",
+        "back": "后退",
+        "apply-filters": "应用过滤器"
     },
     "markets": {
         "market-card": {
@@ -260,15 +271,74 @@
                 "title": "钱包中"
             },
             "skew": "偏斜",
-            "discount": "折扣"
+            "available": "可用的",
+            "amount-to-buy": "购买金额",
+            "discount": "折扣",
+            "positions": "职位"
         },
         "zero-odds-tooltip": "Sports AMM 仅提供0.05美元至0.95美元价格范围内的流动性，这意味着，如果一个投注选择的赔率低于5%或者高于95%，该选择就不会有流动性。",
-        "discounted-per": "折扣按"
+        "parlay": {
+            "total-quote": "总报价",
+            "skew": "偏斜",
+            "pay-with": "使用。。。支付",
+            "buy-amount": "购买金额",
+            "potential-profit": "潜在利润",
+            "available": "可用的",
+            "validation": {
+                "title": "过关投注验证",
+                "max-markets": "Parlay 中最多 4 个盘口",
+                "amount-exceeded": "金额超过 AMM 上可用的金额",
+                "min-amount": "最低金额为 {{min}}",
+                "no-funds": "请确保您的钱包有足够的资金",
+                "availability": "市场地位的低可用性",
+                "min-quote": "最小报价是 {{value}}",
+                "max-quote": "最大报价为 {{value}}",
+                "not-supported": "不支持验证错误 {{error}}",
+                "risk-per-comb": "超出每个组合的风险",
+                "single-min-amount": "最低金额为 {{min}}",
+                "same-team": "同一支球队不能在 Parlay 中超过一次",
+                "team-in-parlay": "{{team}} 已经在 Parlay 中。同一支球队不能多次加入过关。",
+                "max-payout": "支持的最大支出为 {{max}}",
+                "max-teams": "Parlay 中的最大 {{max}} 个盘口",
+                "max-profit": "最大支持利润为 {{max}}"
+            },
+            "empty-description": "添加头寸，选择市场并做出选择。",
+            "payout": "收到的总数",
+            "fee": "总费用",
+            "empty-title": "没有职位",
+            "positions": "职位",
+            "safebox-fee": "保险箱费用",
+            "parlay-fee": "过关费",
+            "clear": "全部清除",
+            "info": {
+                "min-quote": "支持的最小 TOTAL QUOTE 为 {{value}}",
+                "max-quote": "支持的最大 TOTAL QUOTE 为 {{value}}"
+            },
+            "show-parlay": "显示过关"
+        },
+        "discounted-per": "折扣按",
+        "nav-menu": {
+            "items": {
+                "onboarding-wizard": "入职向导",
+                "markets": "市场",
+                "leaderboard": "排行榜",
+                "become-affiliate": "成为会员",
+                "sports-trivia": "体育琐事",
+                "profile": "轮廓",
+                "history": "历史",
+                "fifa-campaign": "斑马FIFA活动",
+                "fee-rebates": "费用回扣"
+            },
+            "buttons": {
+                "disconnect": "断开",
+                "switch": "转变"
+            }
+        }
     },
     "rewards": {
         "header": "奖励",
         "search-placeholder": "搜索钱包",
-        "description": "<0>总额为 8,000 枚OP代币和 8,000 枚THALES代币，将用于补贴用户在9月26日至10月10日支付的手续费。</0>  <0>排行榜将以用户手续费的90%作为返利的基准（用户手续费为sUSD交易金额的2%）</0>   <0>OP和THALES代币的美元价值将以7天加权平均价格为准（9月26日） </0>   <0> 如果两周后，总手续费的返利超过OP和THALES代币的总价值，那么返利将会按总手续费的比例降低。 </0> <0> 本次的手续费补贴项目将可能在10月10日活动结束后修改。</0> ",
+        "description": "<0>总额为 8,000 枚OP代币和 8,000 枚THALES代币，将用于补贴用户在10月24日至11月7日支付的手续费。</0>  <0>排行榜将以用户手续费的90%作为返利的基准（用户手续费为sUSD交易金额的3%）</0>   <0>OP和THALES代币的美元价值将以7天加权平均价格为准（10月24日） </0>   <0> 如果两周后，总手续费的返利超过OP和THALES代币的总价值，那么返利将会按总手续费的比例降低。 </0> <0> 本次的手续费补贴项目将可能在11月7日活动结束后修改。</0> ",
         "total-negative-pnl": "所有亏损金额",
         "op-rewards-banner-message": "OP代币奖励已启动, 查看如何领取<bold>OP代币奖励攻略</bold>",
         "table": {
@@ -349,5 +419,138 @@
             "4": "困难",
             "5": "极困难"
         }
+    },
+    "landing-page": {
+        "best-odds": "市场最佳赔率",
+        "try-now": "立刻尝试",
+        "powered-by": "技术支持",
+        "no-kyc": "无需KYC的体育比赛竞猜",
+        "launch-dapp": "启动应用程序",
+        "leagues": "联赛",
+        "info-text-title-1": "无需注册",
+        "info-text-title-2": "100%运行于区块链上",
+        "info-text-title-3": "无需托管资产",
+        "info-text-title-4": "Chainlink提供数据",
+        "info-text-title-5": "极速且低成本的交易",
+        "info-text-1": "无需创建用户, 我们也不收集任何种类的个人信息",
+        "info-text-2": "通过智能合约彻底去中心化, 所有交易都公开透明",
+        "info-text-3": "除了您自己的私钥之外, 无人可以动用您的资金",
+        "info-text-4": "行业领先的预言机, 以去中心化的方式防止比赛结果和赔率的篡改",
+        "info-text-5": "在以太坊扩容方案领导者Optimism网络上, 您可以完成所有与Overtim体育做市机制的互动",
+        "browse-markets": "浏览所有比赛",
+        "web3-positioning": "Web3体育赛事竞猜",
+        "learn-more": "想要了解更多信息?",
+        "documentation": "查阅我们的文档",
+        "jump-in": "准备开始了?",
+        "open-overtime": "启动Overtime市场",
+        "join-discord": "需要帮助?请加入我们的discord",
+        "read-now": "开始阅读"
+    },
+    "profile": {
+        "transaction-history": "交易记录",
+        "open-claimable": "开放/可索赔",
+        "categories": {
+            "open": "打开",
+            "claimable": "可索赔",
+            "single": "单人游戏",
+            "parlay": "过关游戏"
+        },
+        "card": {
+            "claim": "宣称",
+            "to-win": "赢",
+            "ticket-id": "票号",
+            "ticket-paid": "已付票",
+            "canceled": "取消",
+            "to-claim": "索赔",
+            "total-quote": "总报价",
+            "number-of-games": "游戏数",
+            "result": "结果",
+            "starts": "开始",
+            "position-size": "仓位大小"
+        },
+        "messages": {
+            "no-claimable": "您没有任何可申请的职位",
+            "no-open": "您没有任何空缺职位",
+            "no-transactions": "您没有任何交易"
+        },
+        "table": {
+            "position": "位置",
+            "amount": "数量",
+            "id": "ID",
+            "games": "游戏",
+            "paid": "有薪酬的",
+            "time": "时间"
+        }
+    },
+    "mint-world-cup-nft": {
+        "get-thales": "获得泰雷兹",
+        "go-to-twitter": "去推特",
+        "already-minted": "你已经铸造了你的 NFT",
+        "retweet": "转发这条推文",
+        "second-option": "让您加入许可名单的第二个选项是完成以下步骤：",
+        "minting-is-free": "铸造是免费的，每个钱包只能铸造一个 NFT。此 NFT 不可转让。",
+        "eligible-text-1": "Zebro NFT 系列被用作世界杯加时赛的参赛作品。",
+        "follow": "在 Twitter 上关注加班市场",
+        "incentives": "激励措施",
+        "stake-thales": "股份 THALES",
+        "tag-3-friends": "在同一条推文中，评论您的 ETH 地址并标记 3 个朋友",
+        "not-eligible-text": "您的钱包还没有资格铸造 Zebro NFT！",
+        "stake-10-thales": "为了能够铸造一个 Zebro NFT，您需要至少有 10 个 THALES 质押。",
+        "eligible-text-2": "铸造您最喜欢的国家队的斑马，并有资格获得 50,000 OP 和 30,000 THALES 奖金奖励！",
+        "mint-nft-button": "铸造这只斑马！",
+        "zebro-campaign": "斑马国际足联运动",
+        "eligible-text": "嘿，你现在可以铸造你最喜欢的团队 Zebro NFT。",
+        "no": "不",
+        "are-you-sure": "你确定要铸造这个 NFT 吗？每个钱包只能铸造一个 NFT。",
+        "choose-nft": "铸造你的 Zebro NFT",
+        "success-mint": "成功铸造",
+        "yes-mint": "是的，薄荷 NFT",
+        "mint-this-zebro": "铸造这只斑马！",
+        "leaderboard-title": "排行榜",
+        "leaderboard": {
+            "three-game-parlay": "+15% 如果是 3 场过关投注",
+            "two-game-parlay": "+10% 如果是 2 场过关投注",
+            "reward-calculations": "如果满足以下条件，奖励计算将根据交易量按比例计算，最大额外增加 40% 的交易量：",
+            "underdog-multiplier": "失败者乘数：",
+            "home-country-multiplier": "本国 NFT 乘数：",
+            "four-game-parlay": "+20% 如果是 4 场过关投注",
+            "underdog-multiplier-text": "如果您的世界杯比赛位置价格低于 0.3（赔率高于 1:3.33），您将获得 10% 的奖励提升。",
+            "parlay-boost": "过关提升：",
+            "parlay-boost-text": "如果您的世界杯比赛使用过关投注，您将获得以下好处：",
+            "home-country-multiplier-text": "如果您的世界杯比赛涉及与您的 Zebro 相同的国家队，您将获得 +10% 奖励提升"
+        },
+        "zebro-wct-collection": "Zebro WC NFT 系列",
+        "zebro-wct-collection-text": "是在世界杯期间代表您最喜欢的国家的激励活动的一部分，并有资格分享 50,000 OP 代币和 30,000 THALES 代币，以及用于过关投注和个人比赛的独家乘数。",
+        "go-to-leaderboard": "前往排行榜",
+        "congrats": "恭喜！您已经成功铸造了 Zebro NFT！",
+        "get-your-nft": "薄荷页"
+    },
+    "referral": {
+        "nav-items": {
+            "see-result-by-trader": "查看交易者的结果",
+            "all-transactions": "所有交易",
+            "affiliate-leaderboard": "联盟排行榜"
+        },
+        "copy-link": "复制链接",
+        "total-volume": "总容积",
+        "trades": "交易",
+        "header": "创建推荐链接",
+        "earned": "赢得",
+        "generate-link": "生成链接",
+        "total-trading-fees": "总交易费用",
+        "paragraph": "照顾病人很重要，医生要跟进，但这是一个非常痛苦和痛苦的时期。 Lacus luctus 在上面放了一层。一件衣服的两个喉咙比一个带箭的医生的卡通片。 Mus mauris vitae ultricies leo whole 预期现在或没有 quiver diam amet nislus suscip adipiscing。任何人都不需要下士，甚至是威严的钻石。 Pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna对于孩子来说，尊严是很多毒药。据说喝得像一床啤酒，而是赌场或箭袋。恶意饥饿和丑陋的贫困。但需要的是 fringilla phasellus faucibus scelerisque eleifend untill。也不是从明天开始的山谷。枕头什么元素都没有。但现在却是针对宣传湖漫画。街上说，大家应该带着箭度过一个愉快的周末。<br><br>因此，它不需要免费的键盘手。他们生活在老年和疾病中。恐惧面前的弗吉亚特的笑声说道。对付这种疾病并不容易。他希望有像足球这样的成员。猫现在需要在面团中加入一些纯净的味道。很明显，这后面是箭头。 Lobortis element nibh Tellus molestie 现在。恐惧中没有致命的土地。它需要付出巨大的努力来瞄准足球，而不是成为一个无阶段的门厅。直到 pretium vulputate sapien 或 sagittis aliquam malesuada bibendum arcu。事实上，也没有航空公司这样做。可以说，仅此而已。 Condimentum mattis pellentesque id nibh tortor id。 Massa tincidunt 现在 pulvinar sapien 和 ligula ullamcorper malesuada。 Hendret孕妆，大家都不是当地医生和广告的作者。这也是临床足球策略的一个非常重要的元素。现在，孩子们的喉咙将得到照顾。各位也可能是纯中软的粉丝了。",
+        "affiliate-leaderboard-table": {
+            "amount": "数量",
+            "type": "类型",
+            "number-of-trades": "交易",
+            "address": "地址",
+            "total-earned": "总收入",
+            "total-volume": "总容积",
+            "first-transaction": "第一笔交易",
+            "timestamp": "约会时间",
+            "volume": "体积"
+        },
+        "no-result": "此表没有结果",
+        "total-earned": "总收入"
     }
 }

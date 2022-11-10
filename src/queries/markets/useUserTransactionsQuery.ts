@@ -8,9 +8,9 @@ import { Position } from 'constants/options';
 const useUserTransactionsQuery = (
     walletAddress: string,
     networkId: NetworkId,
-    options?: UseQueryOptions<MarketTransactions | undefined>
+    options?: UseQueryOptions<MarketTransactions>
 ) => {
-    return useQuery<MarketTransactions | undefined>(
+    return useQuery<MarketTransactions>(
         QUERY_KEYS.UserTransactions(walletAddress, networkId),
         async () => {
             try {
@@ -21,7 +21,7 @@ const useUserTransactionsQuery = (
                 return marketTransactions.map((tx: MarketTransaction) => ({ ...tx, position: Position[tx.position] }));
             } catch (e) {
                 console.log(e);
-                return undefined;
+                return [];
             }
         },
         {

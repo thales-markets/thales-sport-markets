@@ -4,6 +4,7 @@ import wallet from './modules/wallet';
 import app from './modules/app';
 import market from './modules/market';
 import quiz from './modules/quiz';
+import parlay from './modules/parlay';
 
 const rootReducer = combineReducers({
     app,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
     ui,
     market,
     quiz,
+    parlay,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

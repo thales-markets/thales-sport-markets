@@ -30,6 +30,10 @@ export const FlexDivColumn = styled(FlexDiv)`
     flex-direction: column;
 `;
 
+export const FlexDivColumnNative = styled(FlexDiv)`
+    flex-direction: column;
+`;
+
 export const FlexDivColumnCentered = styled(FlexDivColumn)`
     justify-content: center;
 `;
@@ -37,10 +41,12 @@ export const FlexDivColumnCentered = styled(FlexDivColumn)`
 export const Colors = {
     GRAY: '#303656',
     GRAY_LIGHT: '#5F6180',
+    LIGHT_GRAY: '#303656',
     GRAY_DARK: '#1A1C2B',
     WHITE: '#FFFFFF',
     GREEN: '#5FC694',
     BLUE: '#3FD1FF',
+    LIGHT_BLUE: '#64D9FE',
     RED: '#e26a78',
     YELLOW: '#FAC439',
 };

@@ -1,10 +1,10 @@
 import { CRYPTO_CURRENCY_MAP } from './currency';
 
-export enum GlobalFilterEnum {
+export enum GlobalFiltersEnum {
     OpenMarkets = 'OpenMarkets',
+    PendingMarkets = 'PendingMarkets',
     ResolvedMarkets = 'ResolvedMarkets',
     Canceled = 'Canceled',
-    Archived = 'ArchivedMarkets',
     All = 'AllMarkets',
     YourPositions = 'YourPositions',
     Claim = 'Claim',
@@ -23,16 +23,15 @@ export enum MarketType {
 }
 
 export enum SportFilterEnum {
+    Favourites = 'Favourites',
     All = 'All',
     Soccer = 'Soccer',
     Football = 'Football',
-    UFC = 'UFC',
-    Baseball = 'Baseball',
-    Formula1 = 'Formula1',
-    MotoGP = 'MotoGP',
-    Hockey = 'Hockey',
     Basketball = 'Basketball',
-    // Tennis = 'Tennis',
+    Baseball = 'Baseball',
+    Hockey = 'Hockey',
+    UFC = 'UFC',
+    Motosport = 'Motosport',
 }
 
 export const COLLATERALS = [
@@ -102,3 +101,9 @@ export const ApexBetTypeKeyMapping = {
     [ApexBetType.TOP5]: 'top5',
     [ApexBetType.TOP10]: 'top10',
 };
+
+export enum ParlayErrorCode {
+    NO_ERROS = 0,
+    MAX_MATCHES = 1,
+    SAME_TEAM_TWICE = 2,
+}
