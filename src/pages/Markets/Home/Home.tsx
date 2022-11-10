@@ -366,7 +366,7 @@ const Home: React.FC = () => {
                 />
             </Info>
 
-            <BurgerFiltersContainer show={showBurger}>
+            <BurgerFiltersContainer show={showBurger && isMobile}>
                 <LogoContainer>
                     <Logo />
                 </LogoContainer>
@@ -721,7 +721,7 @@ const BurgerFiltersContainer = styled(FlexDivColumn)<{ show: boolean }>`
     background: #303656;
     display: ${(props) => (props.show ? 'flex' : 'none')};
     z-index: 1000;
-    @media (max-width: 950px) {
+    @media (max-width: 1300px) {
         margin: 0;
         scrollbar-width: 0px; /* Firefox */
         ::-webkit-scrollbar {
