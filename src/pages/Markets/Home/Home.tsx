@@ -264,6 +264,7 @@ const Home: React.FC = () => {
                     (market: SportMarketInfo) =>
                         market.isOpen &&
                         !market.isCanceled &&
+                        !market.isPaused &&
                         (market.homeOdds !== 0 || market.awayOdds !== 0 || market.drawOdds !== 0)
                 );
                 break;
