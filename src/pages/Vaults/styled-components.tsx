@@ -19,36 +19,6 @@ export const Container = styled(FlexDivRow)`
     }
 `;
 
-export const SpaContainer = styled(FlexDivColumn)`
-    border-radius: 15px;
-    :not(:last-child) {
-        margin-right: 25px;
-    }
-    background: linear-gradient(180deg, #2b2f4a 0%, rgba(43, 47, 74, 0) 100%);
-    :hover {
-        background: linear-gradient(180deg, #2b2f4a 0%, #333a69 100%);
-    }
-    cursor: pointer;
-    @media (max-width: 767px) {
-        width: 100%;
-        :not(:last-child) {
-            margin-right: 0;
-            margin-bottom: 20px;
-        }
-    }
-`;
-
-export const VaultContainer = styled(FlexDivColumn)`
-    align-items: start;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 20px;
-    padding: 30px 40px 30px 40px;
-    @media (max-width: 767px) {
-        padding: 20px 20px 20px 20px;
-    }
-`;
-
 export const Title = styled.span`
     font-style: normal;
     font-weight: bold;
@@ -57,32 +27,4 @@ export const Title = styled.span`
     margin-top: 30px;
     color: ${(props) => props.theme.textColor.primary};
     margin-bottom: 40px;
-`;
-
-export const VaultTitle = styled.span`
-    font-style: normal;
-    font-weight: bold;
-    font-weight: 600;
-    font-size: 22px;
-    line-height: 25px;
-    color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 10px;
-    width: 100%;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #5f6180;
-    text-align: center;
-`;
-
-export const VaultSectionTitle = styled.span`
-    text-align: start;
-    font-weight: 500;
-    font-size: 22px;
-    margin-bottom: 20px;
-    margin-top: 20px;
-`;
-
-export const VaultSectionDescription = styled.span`
-    text-align: justify;
-    font-weight: 400;
-    font-size: 16px;
 `;

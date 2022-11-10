@@ -87,6 +87,8 @@ export const RoundEndLabel = styled.p`
 
 export const RoundEnd = styled.p`
     font-weight: 600;
+    font-size: 25px;
+    color: #3fd1ff;
 `;
 
 export const RoundAllocationContainer = styled(FlexDivCentered)`
@@ -208,9 +210,9 @@ export const SubmitButton = styled.button`
 export const CloseRoundButton = styled(SubmitButton)`
     margin: 0;
     width: auto;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
-    line-height: 12px;
+    line-height: 14px;
     top: -2px;
     position: relative;
 `;
