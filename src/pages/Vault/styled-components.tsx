@@ -24,6 +24,7 @@ export const Container = styled(FlexDivRow)`
     @media (max-width: 767px) {
         flex-direction: column;
     }
+    margin-top: 30px;
 `;
 
 export const ContentContainer = styled(FlexDivColumn)`
@@ -58,7 +59,6 @@ export const RightContainer = styled(ContentContainer)`
 `;
 
 export const RoundInfoWrapper = styled(FlexDivColumn)`
-    margin-bottom: 20px;
     border-radius: 10px;
     background: ${(props) => props.theme.background.secondary};
     width: 60%;

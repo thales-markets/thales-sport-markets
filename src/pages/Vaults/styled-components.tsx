@@ -39,7 +39,7 @@ export const SpaContainer = styled(FlexDivColumn)`
 `;
 
 export const VaultContainer = styled(FlexDivColumn)`
-    align-items: center;
+    align-items: start;
     font-weight: 400;
     font-size: 18px;
     line-height: 20px;
@@ -66,9 +66,23 @@ export const VaultTitle = styled.span`
     font-size: 22px;
     line-height: 25px;
     color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 40px;
+    margin-bottom: 10px;
     width: 100%;
     padding-bottom: 20px;
     border-bottom: 2px solid #5f6180;
     text-align: center;
+`;
+
+export const VaultSectionTitle = styled.span`
+    text-align: start;
+    font-weight: 500;
+    font-size: 22px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+`;
+
+export const VaultSectionDescription = styled.span`
+    text-align: justify;
+    font-weight: 400;
+    font-size: 16px;
 `;

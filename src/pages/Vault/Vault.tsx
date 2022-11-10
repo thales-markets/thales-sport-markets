@@ -347,46 +347,44 @@ const Vault: React.FC<VaultProps> = (props) => {
                 />
             </Info>
             <BackToLink link={buildHref(ROUTES.Vaults)} text={t('vault.back-to-vaults')} />
-            {!vaultData ? (
-                <LoaderContainer>
-                    <SimpleLoader />
-                </LoaderContainer>
-            ) : (
-                <RoundInfoWrapper>
-                    {vaultData.paused ? (
-                        <RoundInfoContainer>
-                            <RoundInfo>{t('vault.vault-paused-message')}</RoundInfo>
-                        </RoundInfoContainer>
-                    ) : vaultData.vaultStarted ? (
-                        <>
-                            <RoundEndContainer>
-                                <RoundEndLabel>{t('vault.round-end-label')}:</RoundEndLabel>
-                                <RoundEnd>
-                                    {vaultData.isRoundEnded ? (
-                                        t('vault.round-ended-label')
-                                    ) : (
-                                        <TimeRemaining end={vaultData.roundEndTime} fontSize={20} showFullCounter />
-                                    )}{' '}
-                                    {vaultData.canCloseCurrentRound && (
-                                        <CloseRoundButton disabled={isSubmitting} onClick={closeRound}>
-                                            {t('vault.button.close-round-label')}
-                                        </CloseRoundButton>
-                                    )}
-                                </RoundEnd>
-                            </RoundEndContainer>
-                            <RoundAllocationContainer>
-                                <RoundAllocationLabel>{t('vault.round-allocation-label')}:</RoundAllocationLabel>
-                                <RoundAllocation>
-                                    {formatCurrencyWithSign(USD_SIGN, vaultData.allocationCurrentRound)}
-                                </RoundAllocation>
-                            </RoundAllocationContainer>
-                        </>
-                    ) : (
-                        <RoundInfoContainer>
-                            <RoundInfo>{t('vault.vault-not-started-message')}</RoundInfo>
-                        </RoundInfoContainer>
-                    )}
-                </RoundInfoWrapper>
+            {vaultData && (
+                <>
+                    <RoundInfoWrapper>
+                        {vaultData.paused ? (
+                            <RoundInfoContainer>
+                                <RoundInfo>{t('vault.vault-paused-message')}</RoundInfo>
+                            </RoundInfoContainer>
+                        ) : vaultData.vaultStarted ? (
+                            <>
+                                <RoundEndContainer>
+                                    <RoundEndLabel>{t('vault.round-end-label')}:</RoundEndLabel>
+                                    <RoundEnd>
+                                        {vaultData.isRoundEnded ? (
+                                            t('vault.round-ended-label')
+                                        ) : (
+                                            <TimeRemaining end={vaultData.roundEndTime} fontSize={20} showFullCounter />
+                                        )}{' '}
+                                        {vaultData.canCloseCurrentRound && (
+                                            <CloseRoundButton disabled={isSubmitting} onClick={closeRound}>
+                                                {t('vault.button.close-round-label')}
+                                            </CloseRoundButton>
+                                        )}
+                                    </RoundEnd>
+                                </RoundEndContainer>
+                                <RoundAllocationContainer>
+                                    <RoundAllocationLabel>{t('vault.round-allocation-label')}:</RoundAllocationLabel>
+                                    <RoundAllocation>
+                                        {formatCurrencyWithSign(USD_SIGN, vaultData.allocationCurrentRound)}
+                                    </RoundAllocation>
+                                </RoundAllocationContainer>
+                            </>
+                        ) : (
+                            <RoundInfoContainer>
+                                <RoundInfo>{t('vault.vault-not-started-message')}</RoundInfo>
+                            </RoundInfoContainer>
+                        )}
+                    </RoundInfoWrapper>
+                </>
             )}
             <Container>
                 <LeftContainer>
