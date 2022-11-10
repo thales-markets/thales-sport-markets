@@ -275,7 +275,13 @@ export const ValidationTooltip = withStyles(() => ({
     },
 }))(Tooltip);
 
-export const LoaderContainer = styled(FlexDivCentered)`
+export const LeftLoaderContainer = styled(FlexDivCentered)`
+    position: relative;
+    min-height: 240px;
+    width: 100%;
+`;
+
+export const RightLoaderContainer = styled(FlexDivCentered)`
     position: relative;
     min-height: 350px;
     width: 100%;

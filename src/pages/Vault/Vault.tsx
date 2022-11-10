@@ -27,7 +27,8 @@ import {
     BoldContent,
     WarningContentInfo,
     CloseRoundButton,
-    LoaderContainer,
+    LeftLoaderContainer,
+    RightLoaderContainer,
     RoundEndContainer,
     RoundEndLabel,
     RoundEnd,
@@ -82,6 +83,8 @@ const Vault: React.FC<VaultProps> = (props) => {
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [selectedTab, setSelectedTab] = useState<VaultTab>(VaultTab.DEPOSIT);
     const [paymentTokenBalance, setPaymentTokenBalance] = useState<number | string>('');
+    const [lastValidVaultData, setLastValidVaultData] = useState<VaultData | undefined>(undefined);
+    const [lastValidUserVaultData, setLastValidUserVaultData] = useState<UserVaultData | undefined>(undefined);
 
     const { params } = props.match;
     const vaultId = params && params.vaultId ? params.vaultId : '';
@@ -102,22 +105,36 @@ const Vault: React.FC<VaultProps> = (props) => {
     const vaultDataQuery = useVaultDataQuery(vaultAddress, networkId, {
         enabled: isAppReady && !!vaultAddress,
     });
+
+    useEffect(() => {
+        if (vaultDataQuery.isSuccess && vaultDataQuery.data) {
+            setLastValidVaultData(vaultDataQuery.data);
+        }
+    }, [vaultDataQuery.isSuccess, vaultDataQuery.data]);
+
     const vaultData: VaultData | undefined = useMemo(() => {
         if (vaultDataQuery.isSuccess && vaultDataQuery.data) {
             return vaultDataQuery.data;
         }
-        return undefined;
-    }, [vaultDataQuery.isSuccess, vaultDataQuery.data]);
+        return lastValidVaultData;
+    }, [vaultDataQuery.isSuccess, vaultDataQuery.data, lastValidVaultData]);
 
     const userVaultDataQuery = useUserVaultDataQuery(vaultAddress, walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected && !!vaultAddress,
     });
+
+    useEffect(() => {
+        if (userVaultDataQuery.isSuccess && userVaultDataQuery.data) {
+            setLastValidUserVaultData(userVaultDataQuery.data);
+        }
+    }, [userVaultDataQuery.isSuccess, userVaultDataQuery.data]);
+
     const userVaultData: UserVaultData | undefined = useMemo(() => {
         if (userVaultDataQuery.isSuccess && userVaultDataQuery.data) {
             return userVaultDataQuery.data;
         }
-        return undefined;
-    }, [userVaultDataQuery.isSuccess, userVaultDataQuery.data]);
+        return lastValidUserVaultData;
+    }, [userVaultDataQuery.isSuccess, userVaultDataQuery.data, lastValidUserVaultData]);
 
     const isAmountEntered = Number(amount) > 0;
     const insufficientBalance =
@@ -390,9 +407,9 @@ const Vault: React.FC<VaultProps> = (props) => {
                 <LeftContainer>
                     <Title>{t(`vault.${vaultId}.title`)}</Title>
                     {!vaultData ? (
-                        <LoaderContainer>
+                        <LeftLoaderContainer>
                             <SimpleLoader />
-                        </LoaderContainer>
+                        </LeftLoaderContainer>
                     ) : (
                         <>
                             <Description>
@@ -442,9 +459,9 @@ const Vault: React.FC<VaultProps> = (props) => {
                 </LeftContainer>
                 <RightContainer>
                     {!vaultData ? (
-                        <LoaderContainer>
+                        <RightLoaderContainer>
                             <SimpleLoader />
-                        </LoaderContainer>
+                        </RightLoaderContainer>
                     ) : (
                         <>
                             {userVaultData && (
@@ -606,37 +623,41 @@ const Vault: React.FC<VaultProps> = (props) => {
                             )}
                             {selectedTab === VaultTab.WITHDRAW && (
                                 <>
-                                    {vaultData && userVaultData && !userVaultData.isWithdrawalRequested && (
+                                    {((vaultData && userVaultData && !isWithdrawalRequested) || !isWalletConnected) && (
                                         <>
-                                            {nothingToWithdraw ? (
+                                            {nothingToWithdraw || !isWalletConnected ? (
                                                 <ContentInfo>
                                                     <Trans i18nKey="vault.nothing-to-withdraw-label" />
                                                 </ContentInfo>
                                             ) : (
                                                 <>
-                                                    {userVaultData.hasDepositForNextRound ? (
-                                                        <WarningContentInfo>
-                                                            <Trans i18nKey="vault.withdrawal-deposit-warning" />
-                                                        </WarningContentInfo>
-                                                    ) : (
+                                                    {userVaultData && (
                                                         <>
-                                                            <ContentInfo>
-                                                                <Trans
-                                                                    i18nKey="vault.available-to-withdraw-label"
-                                                                    components={{
-                                                                        bold: <BoldContent />,
-                                                                    }}
-                                                                    values={{
-                                                                        amount: formatCurrencyWithSign(
-                                                                            USD_SIGN,
-                                                                            userVaultData.balanceCurrentRound
-                                                                        ),
-                                                                    }}
-                                                                />
-                                                            </ContentInfo>
-                                                            <ContentInfo>
-                                                                <Trans i18nKey="vault.withdrawal-message" />
-                                                            </ContentInfo>
+                                                            {userVaultData.hasDepositForNextRound ? (
+                                                                <WarningContentInfo>
+                                                                    <Trans i18nKey="vault.withdrawal-deposit-warning" />
+                                                                </WarningContentInfo>
+                                                            ) : (
+                                                                <>
+                                                                    <ContentInfo>
+                                                                        <Trans
+                                                                            i18nKey="vault.available-to-withdraw-label"
+                                                                            components={{
+                                                                                bold: <BoldContent />,
+                                                                            }}
+                                                                            values={{
+                                                                                amount: formatCurrencyWithSign(
+                                                                                    USD_SIGN,
+                                                                                    userVaultData.balanceCurrentRound
+                                                                                ),
+                                                                            }}
+                                                                        />
+                                                                    </ContentInfo>
+                                                                    <ContentInfo>
+                                                                        <Trans i18nKey="vault.withdrawal-message" />
+                                                                    </ContentInfo>
+                                                                </>
+                                                            )}
                                                         </>
                                                     )}
                                                     {!vaultData.isRoundEnded && (
