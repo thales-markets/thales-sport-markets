@@ -61,8 +61,8 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, hideVisibilityFunction })
                                 href={buildHref(item.route)}
                                 onClick={() => hideVisibilityFunction(null)}
                             >
-                                <ItemContainer key={index}>
-                                    <NavIcon className={item.iconClass} />
+                                <ItemContainer key={index} active={location.pathname === item.route}>
+                                    <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
                                 </ItemContainer>
                             </SPAAnchor>
