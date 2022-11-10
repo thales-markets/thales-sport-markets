@@ -5,7 +5,7 @@ import useReferredTradersQuery from 'queries/referral/useReferredTradersQuery';
 import useReferrerOverviewQuery from 'queries/referral/useReferrerOverviewQuery';
 import useReferrersQuery from 'queries/referral/useReferrersQuery';
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -108,7 +108,14 @@ const Referral: React.FC = () => {
             </MainInfoContainer>
             <ParagraphContainer>
                 <ParagraphHeader>{t('referral.header')}</ParagraphHeader>
-                <Paragraph>{t('referral.paragraph')}</Paragraph>
+                <Paragraph>
+                    <Trans
+                        i18nKey={'referral.paragraph'}
+                        components={{
+                            bold: <strong style={{ fontWeight: '900' }} />,
+                        }}
+                    />
+                </Paragraph>
             </ParagraphContainer>
             <TabsContainer>
                 {NavigationItems.map((item, index) => {
