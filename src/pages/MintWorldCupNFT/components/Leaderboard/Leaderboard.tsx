@@ -27,6 +27,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
     const favoriteTeam = favoriteTeamNumber ? countries[favoriteTeamNumber - 1] : null;
     const isMobile = useSelector(getIsMobile);
     const [searchValue, setSearchValue] = useState('');
+    console.log(favoriteTeam);
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const zebrosQuery = useZebroQuery(networkId);
     const leaderboard = zebrosQuery.isSuccess ? zebrosQuery.data.leaderboard : [];
