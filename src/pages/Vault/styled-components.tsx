@@ -15,7 +15,7 @@ export const Wrapper = styled(FlexDivColumn)`
 `;
 
 export const Container = styled(FlexDivRow)`
-    width: 60%;
+    width: 80%;
     position: relative;
     align-items: start;
     @media (max-width: 1440px) {
@@ -61,7 +61,7 @@ export const RightContainer = styled(ContentContainer)`
 export const RoundInfoWrapper = styled(FlexDivColumn)`
     border-radius: 10px;
     background: ${(props) => props.theme.background.secondary};
-    width: 60%;
+    width: 80%;
     @media (max-width: 1440px) {
         width: 95%;
     }

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
-    width: 60%;
+    width: 80%;
     position: relative;
     align-items: center;
     @media (max-width: 1440px) {

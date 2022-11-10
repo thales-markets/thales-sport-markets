@@ -105,7 +105,7 @@ const PnL: React.FC<PnlProps> = ({ vaultAddress, lifetimePnl }) => {
 };
 
 const Container = styled(FlexDivColumn)`
-    width: 60%;
+    width: 80%;
     @media (max-width: 1440px) {
         width: 95%;
     }

@@ -80,7 +80,7 @@ const Container = styled(FlexDivColumn)`
     max-height: 500px;
     min-height: 350px;
     overflow-y: auto;
-    width: 60%;
+    width: 80%;
     padding: 10px;
     margin-top: 20px;
     @media (max-width: 1440px) {

@@ -7,7 +7,7 @@ export const Wrapper = styled(FlexDivColumn)`
 `;
 
 export const Container = styled(FlexDivRow)`
-    width: 70%;
+    width: 95%;
     position: relative;
     align-items: start;
     @media (max-width: 1440px) {
