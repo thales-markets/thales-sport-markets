@@ -74,7 +74,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                 if (txResult && txResult.transactionHash) {
                     setTimeout(() => {
                         refetchAfterClaim(walletAddress, networkId);
-                    }, 3000);
+                    }, 1500);
                     toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
                 }
             } catch (e) {
