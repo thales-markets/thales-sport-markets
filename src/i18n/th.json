@@ -321,7 +321,9 @@
                 "become-affiliate": "ร่วมเป็นพันธมิตร",
                 "profile": "ประวัติโดยย่อ",
                 "leaderboard": "ลีดเดอร์บอร์ด",
-                "onboarding-wizard": "วิซาร์ดการเริ่มต้นใช้งาน"
+                "onboarding-wizard": "วิซาร์ดการเริ่มต้นใช้งาน",
+                "fee-rebates": "ส่วนลดค่าธรรมเนียม",
+                "fifa-campaign": "แคมเปญ Zebro FIFA"
             },
             "buttons": {
                 "switch": "สวิตช์",

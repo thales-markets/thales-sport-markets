@@ -325,7 +325,9 @@
                 "profile": "Профиль",
                 "sports-trivia": "Спортивные мелочи",
                 "history": "История",
-                "markets": "Рынки"
+                "markets": "Рынки",
+                "fee-rebates": "Комиссионные скидки",
+                "fifa-campaign": "Кампания Зебро ФИФА"
             },
             "buttons": {
                 "disconnect": "Отключить",

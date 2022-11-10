@@ -423,7 +423,9 @@
                 "sports-trivia": "Anecdotes sportives",
                 "become-affiliate": "Devenir affilié",
                 "onboarding-wizard": "Assistant d'intégration",
-                "history": "Histoire"
+                "history": "Histoire",
+                "fee-rebates": "Remises sur les frais",
+                "fifa-campaign": "Campagne Zebro FIFA"
             },
             "buttons": {
                 "disconnect": "Déconnecter",

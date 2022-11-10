@@ -10,7 +10,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
 import { buildReferralLink } from 'utils/routes';
-const Referral: React.FC = () => {
+const ReferralButton: React.FC = () => {
     const { t } = useTranslation();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
@@ -65,12 +65,7 @@ const Container = styled(FlexDivCentered)`
     height: 28px;
     button {
         padding: 0 20px;
-    }
-    @media (max-width: 500px) {
         width: 100%;
-        button {
-            width: 100%;
-        }
     }
 `;
 
@@ -97,4 +92,4 @@ const StyledButton = styled.button<{ customDisabled?: boolean }>`
     }
 `;
 
-export default Referral;
+export default ReferralButton;
