@@ -72,7 +72,7 @@ const Group: React.FC<GroupProps> = ({
                                 />
                             </TeamFlagContainer>
                         ))}
-                        <ArrowContainer>
+                        <ArrowContainer onClick={() => setOpenedGroup(groupLetter)}>
                             <ArrowDown />
                         </ArrowContainer>
                     </>
