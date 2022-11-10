@@ -1,3 +1,4 @@
+import ReferralButton from 'components/ReferralButton';
 import { USD_SIGN } from 'constants/currency';
 import useReferralTransactionsQuery from 'queries/referral/useReferralTransactionsQuery';
 import useReferredTradersQuery from 'queries/referral/useReferredTradersQuery';
@@ -14,8 +15,6 @@ import ReferralTransactionsTable from './components/ReferralTransactionsTable';
 import TradersTable from './components/TradersTable';
 import {
     ButtonContainer,
-    CopyLink,
-    GenerateLink,
     InfoContainer,
     KeyValueContainer,
     Label,
@@ -88,8 +87,7 @@ const Referral: React.FC = () => {
         <Wrapper>
             <MainInfoContainer>
                 <ButtonContainer>
-                    <GenerateLink>{t('referral.generate-link')}</GenerateLink>
-                    <CopyLink>{t('referral.copy-link')}</CopyLink>
+                    <ReferralButton />
                 </ButtonContainer>
                 <InfoContainer>
                     <KeyValueContainer>
