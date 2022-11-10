@@ -66,12 +66,13 @@ export const ItemsContainer = styled.div`
     margin-right: auto;
 `;
 
-export const ItemContainer = styled.div`
+export const ItemContainer = styled.div<{ active?: boolean }>`
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-top: 15px;
     cursor: pointer;
+    ${(props) => (props.active ? `color: ${props.theme.nav.text.primary};` : '')}
     :hover {
         i {
             color: ${(props) => props.theme.nav.text.primary}!important;
