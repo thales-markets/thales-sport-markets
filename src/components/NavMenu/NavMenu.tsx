@@ -6,6 +6,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -32,10 +33,10 @@ type NavMenuProps = {
 
 const NavMenu: React.FC<NavMenuProps> = ({ visibility, hideVisibilityFunction }) => {
     const { t } = useTranslation();
+    const location = useLocation();
+
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-
-    // const { openConnectModal } = useConnectModal();
 
     return (
         <OutsideClickHandler onOutsideClick={() => visibility == true && hideVisibilityFunction(false)}>
