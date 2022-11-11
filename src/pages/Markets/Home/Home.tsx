@@ -693,6 +693,8 @@ const SportFiltersContainer = styled(FlexDivColumn)`
 const NoMarketsContainer = styled(FlexDivColumnCentered)`
     min-height: 200px;
     align-items: center;
+    justify-content: start;
+    margin-top: 100px;
     font-style: normal;
     font-weight: bold;
     font-size: 28px;
