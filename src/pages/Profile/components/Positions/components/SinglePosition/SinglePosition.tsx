@@ -95,6 +95,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                         style={{ marginRight: '5px' }}
                         alt={position.market.homeTeam}
                         src={homeLogoSrc}
+                        isFlag={position.market.tags[0] == 9018}
                         onError={getOnImageError(setHomeLogoSrc, position.market.tags[0])}
                     />
                     <ClubName>{position.market.homeTeam}</ClubName>
@@ -105,6 +106,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                         style={{ marginRight: '5px' }}
                         alt={position.market.awayTeam}
                         src={awayLogoSrc}
+                        isFlag={position.market.tags[0] == 9018}
                         onError={getOnImageError(setAwayLogoSrc, position.market.tags[0])}
                     />
                     <ClubName>{position.market.awayTeam}</ClubName>

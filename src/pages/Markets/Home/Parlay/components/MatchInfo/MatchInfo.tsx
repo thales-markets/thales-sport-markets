@@ -35,20 +35,18 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market }) => {
 
     return (
         <>
-            <MatchLogo>
+            <MatchLogo isFlag={market.tags[0] == 9018}>
                 <ClubLogo
                     alt="Home team logo"
                     src={homeLogoSrc}
-                    height={market.tags[0] == 9018 ? '20px' : ''}
-                    width={market.tags[0] == 9018 ? '33px' : ''}
+                    isFlag={market.tags[0] == 9018}
                     onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                 />
                 <ClubLogo
                     awayTeam={true}
                     alt="Away team logo"
                     src={awayLogoSrc}
-                    height={market.tags[0] == 9018 ? '20px' : ''}
-                    width={market.tags[0] == 9018 ? '33px' : ''}
+                    isFlag={market.tags[0] == 9018}
                     onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                 />
             </MatchLogo>
@@ -78,20 +76,23 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market }) => {
     );
 };
 
-const MatchLogo = styled.div`
+const MatchLogo = styled.div<{ isFlag?: boolean }>`
     display: flex;
     position: relative;
     align-items: center;
     width: 120px;
     height: 100%;
+    ${(props) => (props?.isFlag ? 'padding-left: 4px;' : '')}
 `;
 
-const ClubLogo = styled.img<{ width?: string; height?: string; awayTeam?: boolean }>`
+const ClubLogo = styled.img<{ isFlag?: boolean; awayTeam?: boolean }>`
     position: absolute;
-    height: ${(_props) => (_props?.height ? _props.height : '35px')};
-    width: ${(_props) => (_props?.width ? _props.width : '35px')};
-    ${(_props) => (_props?.awayTeam ? 'margin-left: 20px;' : '')}
-    z-index: ${(_props) => (_props?.awayTeam ? '1' : '2')};
+    ${(props) => (props?.isFlag ? 'object-fit: cover;' : '')}
+    ${(props) => (props?.isFlag ? 'border-radius: 50%;' : '')}
+    height: ${(props) => (props?.isFlag ? '25px' : '35px')};
+    width: ${(props) => (props?.isFlag ? '25px' : '35px')};
+    ${(props) => (props?.awayTeam ? `margin-left: ${props.isFlag ? '23' : '20'}px;` : '')}
+    z-index: ${(props) => (props?.awayTeam ? '1' : '2')};
 `;
 
 const MatchLabel = styled.div`
