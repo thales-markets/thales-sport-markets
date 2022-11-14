@@ -30,7 +30,6 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
     console.log(favoriteTeam);
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const zebrosQuery = useZebroQuery(networkId);
-    const leaderboard = zebrosQuery.isSuccess ? zebrosQuery.data.leaderboard : [];
 
     const [page, setPage] = useState(0);
     const handleChangePage = (_event: unknown, newPage: number) => {
@@ -43,10 +42,10 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
         setPage(0);
     };
 
-    const filteredZebros = useMemo(() => leaderboard.filter((user) => user.address.includes(searchValue)), [
-        leaderboard,
-        searchValue,
-    ]);
+    const filteredZebros = useMemo(() => {
+        const leaderboard = zebrosQuery.isSuccess ? zebrosQuery.data.leaderboard : [];
+        return leaderboard.filter((user) => user.address.includes(searchValue));
+    }, [zebrosQuery.isSuccess, zebrosQuery.data?.leaderboard, searchValue]);
 
     return (
         <>
