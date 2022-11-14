@@ -521,7 +521,11 @@
             "nft": "NFT",
             "country": "País",
             "owner": "Dueño",
-            "search-placeholder": "BUSCAR DIRECCIÓN DE CARTERA"
+            "search-placeholder": "BUSCAR DIRECCIÓN DE CARTERA",
+            "volume": "Volumen",
+            "rewards": "Recompensas",
+            "bonus-volume": "Prima",
+            "base-volume": "Base"
         },
         "zebro-wct-collection-text": "es parte de una campaña incentivada para representar a su país favorito durante la Copa del Mundo y ser elegible para una parte de 50 000 tokens OP y 30 000 tokens THALES, junto con multiplicadores exclusivos para parlays y partidos individuales.",
         "zebro-wct-collection": "La colección Zebro WC NFT",
