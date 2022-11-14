@@ -6,7 +6,7 @@ export const LOCAL_STORAGE_KEYS = {
     FILTER_GLOBAL: 'filterGlobal',
     FILTER_MARKET_SEARCH: 'filterMarketSearch',
     FILTER_TAGS: 'tagsFilter',
-    FILTER_DATES: 'filterDate',
+    FILTER_DATE: 'filterDate',
     FILTER_SPORT: 'filterSport',
     LIST_VIEW: 'listView',
     ODDS_TYPE: 'typeOdds',

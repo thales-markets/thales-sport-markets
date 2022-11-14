@@ -33,6 +33,7 @@ import { AccountPosition, AccountPositionsMap, SportMarketInfo, SportMarkets, Ta
 import { addHoursToCurrentDate } from 'utils/formatters/date';
 import { isClaimAvailable } from 'utils/markets';
 import { NetworkIdByName } from 'utils/network';
+import networkConnector from 'utils/networkConnector';
 import { buildHref, history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
 import GlobalFilters from '../components/GlobalFilters';
@@ -79,8 +80,8 @@ const Home: React.FC = () => {
     const [availableTags, setAvailableTags] = useState<Tags>(tagsList.sort((a, b) => a.label.localeCompare(b.label)));
 
     const [dateFilter, setDateFilter] = useLocalStorage<Date | number>(
-        LOCAL_STORAGE_KEYS.FILTER_DATES,
-        !isMobile ? new Date() : 0
+        LOCAL_STORAGE_KEYS.FILTER_DATE,
+        !isMobile ? addHoursToCurrentDate(72, true).getTime() : 0
     );
 
     const [sportParam, setSportParam] = useQueryParam('sport', '');
@@ -95,8 +96,8 @@ const Home: React.FC = () => {
         return discountQuery.isSuccess ? discountQuery.data : new Map();
     }, [discountQuery.isSuccess, discountQuery.data]);
 
-    const calculateDate = (hours: number) => {
-        const calculatedDate = addHoursToCurrentDate(hours);
+    const calculateDate = (hours: number, endOfDay?: boolean) => {
+        const calculatedDate = addHoursToCurrentDate(hours, endOfDay);
         setDateFilter(calculatedDate.getTime());
     };
 
@@ -120,13 +121,17 @@ const Home: React.FC = () => {
                             calculateDate(12);
                             break;
                         case '72':
-                            calculateDate(72);
+                            calculateDate(72, true);
                             break;
                     }
                 } else {
                     const formattedDate = new Date(dateParam);
                     formattedDate.setHours(23, 59, 59, 999);
                     setDateFilter(formattedDate);
+                }
+            } else {
+                if (dateFilter == addHoursToCurrentDate(72, true).getTime()) {
+                    setDateParam('72hours');
                 }
             }
 
@@ -214,7 +219,6 @@ const Home: React.FC = () => {
 
     const datesFilteredMarkets = useMemo(() => {
         let filteredMarkets = marketSearch ? searchFilteredMarkets : markets;
-
         if (dateFilter !== 0) {
             filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => {
                 if (typeof dateFilter === 'number') {
@@ -225,6 +229,7 @@ const Home: React.FC = () => {
                 }
             });
         }
+
         return filteredMarkets;
     }, [markets, searchFilteredMarkets, dateFilter, marketSearch]);
 
@@ -277,10 +282,25 @@ const Home: React.FC = () => {
                 );
                 break;
             case GlobalFiltersEnum.PendingMarkets:
-                filteredMarkets = filteredMarkets.filter(
-                    (market: SportMarketInfo) =>
-                        market.maturityDate < new Date() && !market.isResolved && !market.isCanceled
-                );
+                filteredMarkets = filteredMarkets.filter(async (market: SportMarketInfo) => {
+                    if (market.maturityDate < new Date() && !market.isResolved && !market.isCanceled) {
+                        if (market.isPaused) {
+                            const rundownConsumerContract = networkConnector.theRundownConsumerContract;
+
+                            const [marketInvalidOdds] = await Promise.all([
+                                await rundownConsumerContract?.invalidOdds(market.address),
+                            ]);
+                            if (marketInvalidOdds) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        } else {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
                 break;
             case GlobalFiltersEnum.YourPositions:
                 filteredMarkets = filteredMarkets.filter((market: SportMarketInfo) => {
@@ -299,9 +319,23 @@ const Home: React.FC = () => {
                 });
                 break;
             case GlobalFiltersEnum.Canceled:
-                filteredMarkets = filteredMarkets.filter(
-                    (market: SportMarketInfo) => (market.isCanceled || market.isPaused) && !market.isResolved
-                );
+                filteredMarkets = filteredMarkets.filter(async (market: SportMarketInfo) => {
+                    if ((market.isCanceled || market.isPaused) && !market.isResolved) {
+                        if (market.isPaused && market.maturityDate < new Date()) {
+                            const rundownConsumerContract = networkConnector.theRundownConsumerContract;
+
+                            const [marketInvalidOdds] = await Promise.all([
+                                await rundownConsumerContract?.invalidOdds(market.address),
+                            ]);
+
+                            if (marketInvalidOdds) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                    return false;
+                });
                 break;
             default:
                 break;
