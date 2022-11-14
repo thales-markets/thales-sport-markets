@@ -83,8 +83,8 @@ const Container = styled(FlexDivColumn)`
     color: ${(props) => props.theme.textColor.primary};
     border-radius: 10px;
     position: relative;
-    max-height: 500px;
-    min-height: 350px;
+    max-height: 370px;
+    min-height: 370px;
     overflow-y: auto;
     width: 80%;
     padding: 10px;
