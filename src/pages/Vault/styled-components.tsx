@@ -72,7 +72,6 @@ export const RoundEndContainer = styled(FlexDivColumn)`
     font-size: 20px;
     span {
         font-size: 30px;
-        text-transform: uppercase;
         font-weight: 600;
         color: #3fd1ff;
     }

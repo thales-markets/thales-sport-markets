@@ -70,6 +70,12 @@ export const NAV_MENU: NavMenuItem[] = [
         route: ROUTES.Markets.Home,
     },
     {
+        i18label: 'markets.nav-menu.items.vaults',
+        iconClass: 'icon icon--vaults',
+        name: 'vaults',
+        route: ROUTES.Vaults,
+    },
+    {
         i18label: 'markets.nav-menu.items.profile',
         iconClass: 'icon icon--profile',
         name: 'profile',

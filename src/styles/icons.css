@@ -192,3 +192,7 @@
 .icon--risks::before {
     content: '\0071';
 }
+
+.icon--vaults::before {
+    content: '\0077';
+}
