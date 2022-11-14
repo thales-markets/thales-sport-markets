@@ -68,7 +68,7 @@ function Dropdown<T>({ list, onSelect, disabled, itemRenderer, selectedItem, sty
 }
 
 const Container = styled(FlexDivColumnCentered)`
-    width: 211px;
+    width: 200px;
 `;
 
 const DropdownButton = styled.button`
@@ -82,6 +82,8 @@ const DropdownButton = styled.button`
     font-size: 12px;
     line-height: 14px;
     align-items: center;
+    text-align: right;
+    padding-right: 23px;
     letter-spacing: 0.01em;
     &:hover:not(.disabled) {
         cursor: pointer;

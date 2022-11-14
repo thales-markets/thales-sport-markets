@@ -236,6 +236,7 @@ export const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: bo
 export const GlobalFilter = styled.span<{ selected?: boolean; isMobile?: boolean; cancelled?: boolean }>`
     margin: 0px 2px;
     text-transform: uppercase;
+    white-space: nowrap;
     width: ${(props) => (props.cancelled ? 'max-content' : '')};
     height: ${(props) => (props.isMobile ? '36px' : '')};
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
