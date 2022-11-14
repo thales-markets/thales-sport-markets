@@ -9,7 +9,7 @@ import { orderBy } from 'lodash';
 import { getIsAppReady } from 'redux/modules/app';
 import TradesTable from '../TradesTable';
 import useVaultTradesQuery from 'queries/vault/useVaultTradesQuery';
-import { VaultTrades } from 'types/vault';
+import { VaultTrades, VaultTrade } from 'types/vault';
 import SelectInput from 'components/SelectInput';
 
 type TradesHistoryProps = {
@@ -38,11 +38,17 @@ const TradesHistory: React.FC<TradesHistoryProps> = ({ vaultAddress, currentRoun
 
     useEffect(() => {
         if (vaultTradesQuery.isSuccess && vaultTradesQuery.data) {
-            setVaultTrades(orderBy(vaultTradesQuery.data, ['timestamp', 'blockNumber'], ['desc', 'desc']));
+            setVaultTrades(
+                orderBy(
+                    vaultTradesQuery.data.filter((trade: VaultTrade) => trade.round === round + 1),
+                    ['timestamp', 'blockNumber'],
+                    ['desc', 'desc']
+                )
+            );
         } else {
             setVaultTrades([]);
         }
-    }, [vaultTradesQuery.isSuccess, vaultTradesQuery.data]);
+    }, [vaultTradesQuery.isSuccess, vaultTradesQuery.data, round]);
 
     const noResults = vaultTrades.length === 0;
 

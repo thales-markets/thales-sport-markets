@@ -48,6 +48,7 @@ export type VaultTrade = {
     result: PositionName;
     wholeMarket: SportMarketInfo;
     status: VaultTradeStatus;
+    round: number;
 };
 
 export type VaultTrades = VaultTrade[];

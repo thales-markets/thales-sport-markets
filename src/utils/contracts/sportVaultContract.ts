@@ -165,6 +165,13 @@ export const sportsVaultContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            name: 'allocationSpentInARound',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [
                 { internalType: 'uint256', name: '', type: 'uint256' },
                 { internalType: 'address', name: '', type: 'address' },
