@@ -8,13 +8,12 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { getIsWalletConnected } from 'redux/modules/wallet';
-// import Referral from 'components/Referral';
 import { buildHref } from 'utils/routes';
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import useInterval from 'hooks/useInterval';
-// import MintVoucher from 'components/MintVoucher';
+import MintVoucher from 'components/MintVoucher';
 import burger from 'assets/images/burger.svg';
 import NavMenu from 'components/NavMenu';
 import ProfileItem from './components/ProfileItem';
@@ -52,8 +51,6 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <Logo />
                     <RightContainer>
-                        {/* <Referral /> */}
-                        {/* {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />} */}
                         {location.pathname !== ROUTES.MintWorldCupNFT && (
                             <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>
                                 <StyledButton style={{ marginRight: '10px' }} disabled={!isWalletConnected}>
@@ -64,18 +61,14 @@ const DappHeader: React.FC = () => {
                                 </StyledButton>
                             </SPAAnchor>
                         )}
-                        {/* <SPAAnchor href={buildHref(ROUTES.Quiz)}>
-                            <StyledSportTriviaIcon stopPulsing={stopPulsing} src={sportTriviaIcon} />
-                        </SPAAnchor> */}
+                        {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />}
                         <WalletInfo />
                         <ProfileItem />
                         <MenuIcon onClick={() => setNavMenuVisibility(true)} />
-                        {/* {navMenuVisibility && ( */}
                         <NavMenu
                             visibility={navMenuVisibility}
                             hideVisibilityFunction={(value: boolean | null) => setNavMenuVisibility(value)}
                         />
-                        {/* )} */}
                     </RightContainer>
                 </Container>
             )}

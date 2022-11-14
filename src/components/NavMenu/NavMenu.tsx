@@ -1,13 +1,16 @@
+import LanguageSelector from 'components/LanguageSelector';
 import SPAAnchor from 'components/SPAAnchor';
+import WalletInfo from 'components/WalletInfo';
 import { NAV_MENU } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsMobile } from 'redux/modules/app';
+import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { truncateAddress } from 'utils/formatters/string';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
+import { buildHref } from 'utils/routes';
 import {
     CloseIcon,
     FooterContainer,
@@ -19,14 +22,8 @@ import {
     Network,
     NetworkIcon,
     NetworkName,
-    WalletAddress,
-    WalletAddressContainer,
-    WalletIcon,
     Wrapper,
 } from './styled-components';
-import { useAccountModal } from '@rainbow-me/rainbowkit';
-import { buildHref } from 'utils/routes';
-import LanguageSelector from 'components/LanguageSelector';
 
 type NavMenuProps = {
     visibility?: boolean | null;
@@ -36,10 +33,8 @@ type NavMenuProps = {
 const NavMenu: React.FC<NavMenuProps> = ({ visibility, hideVisibilityFunction }) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
-    const { openAccountModal } = useAccountModal();
     // const { openConnectModal } = useConnectModal();
 
     return (
@@ -61,22 +56,15 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, hideVisibilityFunction })
                                 href={buildHref(item.route)}
                                 onClick={() => hideVisibilityFunction(null)}
                             >
-                                <ItemContainer key={index}>
-                                    <NavIcon className={item.iconClass} />
+                                <ItemContainer key={index} active={location.pathname === item.route}>
+                                    <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
                                 </ItemContainer>
                             </SPAAnchor>
                         );
                     })}
                 </ItemsContainer>
-                <FooterContainer>
-                    {isWalletConnected && (
-                        <WalletAddressContainer onClick={() => openAccountModal?.()}>
-                            <WalletIcon />
-                            <WalletAddress>{truncateAddress(walletAddress)}</WalletAddress>
-                        </WalletAddressContainer>
-                    )}
-                </FooterContainer>
+                <FooterContainer>{isMobile && <WalletInfo />}</FooterContainer>
             </Wrapper>
         </OutsideClickHandler>
     );

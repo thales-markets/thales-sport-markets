@@ -517,7 +517,11 @@
             "home-country-multiplier-text": "Si su partido de la Copa Mundial involucra al mismo equipo nacional que su Zebro, recibirá un aumento de recompensas de +10%",
             "two-game-parlay": "+10% si es un parlay de 2 juegos",
             "reward-calculations": "Los cálculos de recompensa serán prorrateados en función del volumen con un aumento de volumen adicional máximo del 40 % si se cumplen las siguientes condiciones:",
-            "parlay-boost-text": "Si tu partido de la Copa del Mundo es en un boleto Parlay, obtendrás un impulso de:"
+            "parlay-boost-text": "Si tu partido de la Copa del Mundo es en un boleto Parlay, obtendrás un impulso de:",
+            "nft": "NFT",
+            "country": "País",
+            "owner": "Dueño",
+            "search-placeholder": "BUSCAR DIRECCIÓN DE CARTERA"
         },
         "zebro-wct-collection-text": "es parte de una campaña incentivada para representar a su país favorito durante la Copa del Mundo y ser elegible para una parte de 50 000 tokens OP y 30 000 tokens THALES, junto con multiplicadores exclusivos para parlays y partidos individuales.",
         "zebro-wct-collection": "La colección Zebro WC NFT",

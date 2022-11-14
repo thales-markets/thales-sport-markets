@@ -517,7 +517,11 @@
             "underdog-multiplier-text": "如果您的世界杯比赛位置价格低于 0.3（赔率高于 1:3.33），您将获得 10% 的奖励提升。",
             "parlay-boost": "过关提升：",
             "parlay-boost-text": "如果您的世界杯比赛使用过关投注，您将获得以下好处：",
-            "home-country-multiplier-text": "如果您的世界杯比赛涉及与您的 Zebro 相同的国家队，您将获得 +10% 奖励提升"
+            "home-country-multiplier-text": "如果您的世界杯比赛涉及与您的 Zebro 相同的国家队，您将获得 +10% 奖励提升",
+            "country": "国家",
+            "owner": "所有者",
+            "search-placeholder": "搜索钱包地址",
+            "nft": "NFT"
         },
         "zebro-wct-collection": "Zebro WC NFT 系列",
         "zebro-wct-collection-text": "是在世界杯期间代表您最喜欢的国家的激励活动的一部分，并有资格分享 50,000 OP 代币和 30,000 THALES 代币，以及用于过关投注和个人比赛的独家乘数。",
