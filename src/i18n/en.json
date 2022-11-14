@@ -517,6 +517,10 @@
             "nft": "NFT",
             "country": "Country",
             "owner": "Owner",
+            "volume": "Volume",
+            "base-volume": "Base",
+            "bonus-volume": "Bonus",
+            "rewards": "Rewards",
             "search-placeholder": "SEARCH WALLET ADDRESS"
         }
     },

@@ -8,12 +8,15 @@ import { countries } from 'pages/MintWorldCupNFT/countries';
 import { InfoContainer, InfoText, InfoContent } from 'pages/MintWorldCupNFT/styled-components';
 import { FlexDivCentered } from 'styles/common';
 import Table from 'components/Table';
-import useZebroQuery from 'queries/favoriteTeam/useZebroQuery';
+import useZebroQuery, { User } from 'queries/favoriteTeam/useZebroQuery';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getNetworkId } from 'redux/modules/wallet';
 import { getIsMobile } from 'redux/modules/app';
 import { TablePagination } from '@material-ui/core';
+import { formatCurrencyWithSign } from 'utils/formatters/number';
+import { USD_SIGN } from 'constants/currency';
+import { CellProps } from 'react-table';
 
 type LeaderboardProps = {
     favoriteTeamNumber: number | undefined;
@@ -26,8 +29,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
     const [searchValue, setSearchValue] = useState('');
     console.log(favoriteTeam);
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const zebrosQuery = useZebroQuery('', networkId);
-    const zebros = zebrosQuery.isSuccess ? zebrosQuery.data : [];
+    const zebrosQuery = useZebroQuery(networkId);
 
     const [page, setPage] = useState(0);
     const handleChangePage = (_event: unknown, newPage: number) => {
@@ -40,18 +42,10 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
         setPage(0);
     };
 
-    const zebrosMemo = useMemo(
-        () =>
-            zebros.map((zebro) => {
-                return { ...zebro, url: zebro.url.replace('.json', '.png') };
-            }),
-        [zebros]
-    );
-
-    const filteredZebros = useMemo(() => zebrosMemo.filter((zebro) => zebro.owner.includes(searchValue)), [
-        zebrosMemo,
-        searchValue,
-    ]);
+    const filteredZebros = useMemo(() => {
+        const leaderboard = zebrosQuery.isSuccess ? zebrosQuery.data.leaderboard : [];
+        return leaderboard.filter((user) => user.address.includes(searchValue));
+    }, [zebrosQuery.isSuccess, zebrosQuery.data?.leaderboard, searchValue]);
 
     return (
         <>
@@ -126,19 +120,54 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
                         Cell: (cellProps: any) => <ZebroNft src={cellProps.cell.value} />,
                     },
                     {
-                        Header: <>{t('mint-world-cup-nft.leaderboard.country')}</>,
-                        accessor: 'countryName',
-                        Cell: (cellProps: any) => <TableText>{cellProps.cell.value}</TableText>,
+                        Header: <>{t('mint-world-cup-nft.leaderboard.owner')}</>,
+                        accessor: 'address',
+                        Cell: (cellProps: any) => <TableText>{truncateAddress(cellProps.cell.value)}</TableText>,
                     },
                     {
-                        Header: <>{t('mint-world-cup-nft.leaderboard.owner')}</>,
-                        accessor: 'owner',
-                        Cell: (cellProps: any) => <TableText>{truncateAddress(cellProps.cell.value)}</TableText>,
+                        Header: <>{t('mint-world-cup-nft.leaderboard.volume')}</>,
+                        accessor: 'volume',
+                        Cell: (cellProps: any) => (
+                            <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>
+                        ),
+                    },
+                    {
+                        Header: <>{t('mint-world-cup-nft.leaderboard.base-volume')}</>,
+                        accessor: 'baseVolume',
+                        Cell: (cellProps: any) => (
+                            <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>
+                        ),
+                    },
+                    {
+                        Header: <>{t('mint-world-cup-nft.leaderboard.bonus-volume')}</>,
+                        accessor: 'bonusVolume',
+                        Cell: (cellProps: any) => (
+                            <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>
+                        ),
+                    },
+                    {
+                        Header: <>{t('mint-world-cup-nft.leaderboard.rewards')}</>,
+                        accessor: 'rewards',
+                        Cell: (cellProps: CellProps<User, User['rewards']>) => (
+                            <TableText>{`${Number(cellProps.cell.value?.op).toFixed(2)} OP + ${Number(
+                                cellProps.cell.value?.thales
+                            ).toFixed(2)} THALES`}</TableText>
+                        ),
+                        sortType: rewardsSort(),
+                        sortable: true,
                     },
                 ]}
                 rowsPerPage={rowsPerPage}
                 currentPage={page}
                 data={filteredZebros}
+                initialState={{
+                    sortBy: [
+                        {
+                            id: 'rewards',
+                            desc: true,
+                        },
+                    ],
+                }}
             />
             <PaginationContainer>
                 <PaginationWrapper
@@ -191,6 +220,9 @@ const TableText = styled.p`
     letter-spacing: 0.025em;
     text-transform: uppercase;
     color: #eeeee4;
+    @media (max-width: 600px) {
+        font-size: 10px;
+    }
 `;
 
 const SearchAddress = styled.input`
@@ -260,4 +292,9 @@ const PaginationWrapper = styled(TablePagination)`
         }
     }
 `;
+
+const rewardsSort = () => (rowA: any, rowB: any) => {
+    return rowA.original.rewards.op - rowB.original.rewards.op;
+};
+
 export default Leaderboard;

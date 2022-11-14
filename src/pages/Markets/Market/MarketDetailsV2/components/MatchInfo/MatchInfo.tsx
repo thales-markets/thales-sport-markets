@@ -72,7 +72,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                         </InnerWrapper>
                         <InnerWrapper>
                             <ParticipantLogoContainer>
-                                <ParticipantLogo src={homeLogoSrc} />
+                                <ParticipantLogo src={homeLogoSrc} isFlag={market.tags[0] == 9018} />
                             </ParticipantLogoContainer>
                         </InnerWrapper>
                         <InnerWrapper>
@@ -96,14 +96,20 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                     isWinner={isResolved && convertFinalResultToResultType(market?.finalResult) == 0}
                                     isDraw={isResolved && convertFinalResultToResultType(market?.finalResult) == 2}
                                 >
-                                    <ParticipantLogo src={homeLogoSrc ? homeLogoSrc : getErrorImage(market.tags[0])} />
+                                    <ParticipantLogo
+                                        src={homeLogoSrc ? homeLogoSrc : getErrorImage(market.tags[0])}
+                                        isFlag={market.tags[0] == 9018}
+                                    />
                                 </ParticipantLogoContainer>
                                 <ParticipantLogoContainer
                                     isWinner={isResolved && convertFinalResultToResultType(market?.finalResult) == 1}
                                     isDraw={isResolved && convertFinalResultToResultType(market?.finalResult) == 2}
                                     awayTeam={true}
                                 >
-                                    <ParticipantLogo src={awayLogoSrc ? awayLogoSrc : getErrorImage(market.tags[0])} />
+                                    <ParticipantLogo
+                                        src={awayLogoSrc ? awayLogoSrc : getErrorImage(market.tags[0])}
+                                        isFlag={market.tags[0] == 9018}
+                                    />
                                 </ParticipantLogoContainer>
                             </ParticipantsContainer>
                             <MatchTimeContainer>

@@ -94,7 +94,13 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--ucl',
         favourite: false,
     },
-    { id: 9018, label: 'FIFA World Cup', logo: ``, logoClass: '', favourite: false },
+    {
+        id: 9018,
+        label: 'FIFA World Cup',
+        logo: ``,
+        logoClass: 'icon-league icon-league--fifa-world-cup',
+        favourite: false,
+    },
     {
         id: 9100,
         label: 'Formula 1',

@@ -30,7 +30,14 @@ export const MatchLogo = styled.div`
     }
 `;
 
-export const ClubLogo = styled.img<{ awayTeam?: boolean; losingTeam?: boolean; customMobileSize?: string }>`
+export const ClubLogo = styled.img<{
+    awayTeam?: boolean;
+    losingTeam?: boolean;
+    customMobileSize?: string;
+    isFlag?: boolean;
+}>`
+    ${(props) => (props?.isFlag ? 'object-fit: cover;' : '')}
+    ${(props) => (props?.isFlag ? 'border-radius: 50%;' : '')}
     height: 45px;
     width: 45px;
     opacity: ${(_props) => (_props?.losingTeam == true ? `0.4` : '1')};

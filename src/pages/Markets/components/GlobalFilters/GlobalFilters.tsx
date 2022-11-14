@@ -53,6 +53,22 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
     );
 
     useEffect(() => {
+        if (sportFilter == SportFilterEnum.All) {
+            setSelectedPeriod(0);
+        }
+    }, [sportFilter]);
+
+    useEffect(() => {
+        if (typeof dateFilter != 'number') {
+            setSelectedPeriod(0);
+        }
+    }, [dateFilter]);
+
+    useEffect(() => {
+        setSelectedPeriod(0);
+    }, [globalFilter]);
+
+    useEffect(() => {
         if (typeof dateFilter == 'number') {
             const dateParam = getQueryStringVal('date');
             const timeFilter = dateParam?.split('h')[0];
@@ -73,22 +89,6 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    useEffect(() => {
-        if (typeof dateFilter != 'number') {
-            setSelectedPeriod(0);
-        }
-    }, [dateFilter]);
-
-    useEffect(() => {
-        setSelectedPeriod(0);
-    }, [globalFilter]);
-
-    useEffect(() => {
-        if (sportFilter == SportFilterEnum.All) {
-            setSelectedPeriod(0);
-        }
-    }, [sportFilter]);
 
     return (
         <Container>
@@ -236,6 +236,7 @@ export const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: bo
 export const GlobalFilter = styled.span<{ selected?: boolean; isMobile?: boolean; cancelled?: boolean }>`
     margin: 0px 2px;
     text-transform: uppercase;
+    white-space: nowrap;
     width: ${(props) => (props.cancelled ? 'max-content' : '')};
     height: ${(props) => (props.isMobile ? '36px' : '')};
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};

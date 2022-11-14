@@ -67,9 +67,9 @@ export const ParticipantLogoContainer = styled.div<{ awayTeam?: boolean; isWinne
     }
 `;
 
-export const ParticipantLogo = styled.img`
+export const ParticipantLogo = styled.img<{ isFlag?: boolean }>`
     width: 65px;
-    height: 65px;
+    height: ${(props) => (props?.isFlag ? '40' : '65')}px;
 `;
 
 export const LeagueLogoContainer = styled(FlexDiv)`

@@ -518,7 +518,11 @@
             "country": "Land",
             "owner": "Eigentümer",
             "nft": "NFT",
-            "search-placeholder": "WALLET-ADRESSE SUCHEN"
+            "search-placeholder": "WALLET-ADRESSE SUCHEN",
+            "rewards": "Belohnung",
+            "base-volume": "Base",
+            "bonus-volume": "Bonus",
+            "volume": "Volumen"
         },
         "zebro-wct-collection": "Die Zebro WC NFT Kollektion",
         "zebro-wct-collection-text": "ist Teil einer Anreizkampagne, um Ihr Lieblingsland während der Weltmeisterschaft zu vertreten und sich für einen Anteil von 50.000 OP-Token und 30.000 THALES-Token sowie exklusive Multiplikatoren für Kombinationen und Einzelspiele zu qualifizieren.",
