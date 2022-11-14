@@ -35,6 +35,7 @@ import {
     RoundAllocationContainer,
     RoundAllocationLabel,
     RoundAllocation,
+    RoundAllocationWrapper,
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -388,12 +389,30 @@ const Vault: React.FC<VaultProps> = (props) => {
                                         )}
                                     </RoundEnd>
                                 </RoundEndContainer>
-                                <RoundAllocationContainer>
-                                    <RoundAllocationLabel>{t('vault.round-allocation-label')}:</RoundAllocationLabel>
-                                    <RoundAllocation>
-                                        {formatCurrencyWithSign(USD_SIGN, vaultData.allocationCurrentRound)}
-                                    </RoundAllocation>
-                                </RoundAllocationContainer>
+                                <RoundAllocationWrapper>
+                                    <RoundAllocationContainer>
+                                        <RoundAllocationLabel>
+                                            {t('vault.round-allocation-label')}:
+                                        </RoundAllocationLabel>
+                                        <RoundAllocation>
+                                            {formatCurrencyWithSign(USD_SIGN, vaultData.allocationCurrentRound)}
+                                        </RoundAllocation>
+                                    </RoundAllocationContainer>
+                                    <RoundAllocationContainer>
+                                        <RoundAllocationLabel>{t('vault.spent-trading-label')}:</RoundAllocationLabel>
+                                        <RoundAllocation>
+                                            {formatCurrencyWithSign(USD_SIGN, vaultData.allocationSpentInARound)}
+                                        </RoundAllocation>
+                                    </RoundAllocationContainer>
+                                    <RoundAllocationContainer>
+                                        <RoundAllocationLabel>
+                                            {t('vault.available-trading-label')}:
+                                        </RoundAllocationLabel>
+                                        <RoundAllocation>
+                                            {formatCurrencyWithSign(USD_SIGN, vaultData.availableAllocationInARound)}
+                                        </RoundAllocation>
+                                    </RoundAllocationContainer>
+                                </RoundAllocationWrapper>
                             </>
                         ) : (
                             <RoundInfoContainer>

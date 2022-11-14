@@ -37,6 +37,8 @@ const useVaultDataQuery = (
                 skewImpactLimit: 0,
                 allocationLimitsPerMarketPerRound: 0,
                 minTradeAmount: 0,
+                allocationSpentInARound: 0,
+                availableAllocationInARound: 0,
             };
 
             try {
@@ -101,10 +103,18 @@ const useVaultDataQuery = (
                         bigNumberFormatter(allocationLimitsPerMarketPerRound) / 100;
                     vaultData.minTradeAmount = bigNumberFormatter(minTradeAmount);
 
-                    const [allocationCurrentRound, allocationNextRound, lifetimePnl] = await Promise.all([
+                    const [
+                        allocationCurrentRound,
+                        allocationNextRound,
+                        lifetimePnl,
+                        allocationSpentInARound,
+                        tradingAllocation,
+                    ] = await Promise.all([
                         sportVaultContract?.allocationPerRound(vaultData.round),
                         sportVaultContract?.capPerRound(vaultData.round + 1),
                         sportVaultContract?.cumulativeProfitAndLoss(vaultData.round > 0 ? vaultData.round - 1 : 0),
+                        sportVaultContract?.allocationSpentInARound(vaultData.round),
+                        sportVaultContract?.tradingAllocation(),
                     ]);
 
                     vaultData.allocationCurrentRound = bigNumberFormatter(allocationCurrentRound);
@@ -113,6 +123,9 @@ const useVaultDataQuery = (
                         (vaultData.allocationNextRound / vaultData.maxAllowedDeposit) * 100;
                     vaultData.lifetimePnl =
                         bigNumberFormatter(lifetimePnl) === 0 ? 0 : bigNumberFormatter(lifetimePnl) - 1;
+                    vaultData.allocationSpentInARound = bigNumberFormatter(allocationSpentInARound);
+                    vaultData.availableAllocationInARound =
+                        bigNumberFormatter(tradingAllocation) - vaultData.allocationSpentInARound;
 
                     return vaultData;
                 }

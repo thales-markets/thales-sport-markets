@@ -24,6 +24,8 @@ export type VaultData = {
     skewImpactLimit: number;
     allocationLimitsPerMarketPerRound: number;
     minTradeAmount: number;
+    allocationSpentInARound: number;
+    availableAllocationInARound: number;
 };
 
 export type UserVaultData = {

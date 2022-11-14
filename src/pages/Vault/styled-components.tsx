@@ -59,8 +59,6 @@ export const RightContainer = styled(ContentContainer)`
 `;
 
 export const RoundInfoWrapper = styled(FlexDivColumn)`
-    border-radius: 10px;
-    background: ${(props) => props.theme.background.secondary};
     width: 80%;
     @media (max-width: 1440px) {
         width: 95%;
@@ -91,15 +89,34 @@ export const RoundEnd = styled.p`
     color: #3fd1ff;
 `;
 
-export const RoundAllocationContainer = styled(FlexDivCentered)`
-    font-size: 20px;
+export const RoundAllocationWrapper = styled(FlexDivCentered)`
+    @media (max-width: 767px) {
+        flex-direction: column;
+    }
 `;
 
-export const RoundAllocationLabel = styled.p``;
+export const RoundAllocationContainer = styled(FlexDivColumn)`
+    align-items: center;
+    max-width: 200px;
+    :not(:last-child) {
+        border-right: 2px solid ${(props) => props.theme.borderColor.primary};
+    }
+    padding: 5px 0;
+    @media (max-width: 767px) {
+        :not(:last-child) {
+            border-right: none;
+        }
+    }
+`;
+
+export const RoundAllocationLabel = styled.p`
+    margin-bottom: 6px;
+`;
 
 export const RoundAllocation = styled.p`
+    font-size: 25px;
     font-weight: 600;
-    margin-left: 6px;
+    color: #3fd1ff;
 `;
 
 export const RoundInfoContainer = styled(FlexDivColumn)`
@@ -154,6 +171,9 @@ export const Title = styled.span`
     color: ${(props) => props.theme.textColor.primary};
     margin-bottom: 30px;
     margin-top: 30px;
+    @media (max-width: 767px) {
+        margin-top: 0px;
+    }
 `;
 
 export const VaultFilledText = styled(ContentInfo)`
