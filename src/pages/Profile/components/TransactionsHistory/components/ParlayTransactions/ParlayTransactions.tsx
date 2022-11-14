@@ -80,7 +80,7 @@ const ParlayTransactions: React.FC = () => {
                     {
                         id: 'paid',
                         Header: <>{t('profile.table.paid')}</>,
-                        accessor: 'sUSDAfterFees',
+                        accessor: 'sUSDPaid',
                         sortable: false,
                         Cell: (cellProps: any) => {
                             return <TableText>{formatCurrencyWithKey('sUSD', cellProps.cell.value, 2)}</TableText>;
