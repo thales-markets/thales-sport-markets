@@ -172,3 +172,27 @@
 .icon--fifa-world-cup::before {
     content: '\0076';
 }
+
+.icon--discount-vault::before {
+    content: '\0070';
+}
+
+.icon--degen-discount-vault::before {
+    content: '\0072';
+}
+
+.icon--safu-discount-vault::before {
+    content: '\0073';
+}
+
+.icon--strategy::before {
+    content: '\0074';
+}
+
+.icon--risks::before {
+    content: '\0071';
+}
+
+.icon--vaults::before {
+    content: '\0077';
+}

@@ -82,8 +82,13 @@ const NumericInput: React.FC<NumericInputProps> = ({
                 min="0"
                 max={max || 'any'}
                 step={step || 'any'}
+                title=""
             />
-            {currencyLabel && <CurrencyLabel className={disabled ? 'disabled' : ''}>{currencyLabel}</CurrencyLabel>}
+            {currencyLabel && (
+                <CurrencyLabel className={disabled ? 'currency-label disabled' : 'currency-label'}>
+                    {currencyLabel}
+                </CurrencyLabel>
+            )}
             <FieldValidationMessage showValidation={showValidation} message={validationMessage} />
             {note && <FieldNote>{note}</FieldNote>}
         </FieldContainer>

@@ -16,6 +16,9 @@ export const buildHref = (route: string) => `${ifIpfsDeployment ? '#' : ''}${rou
 export const buildMarketLink = (marketAddress: string, language: string, excludeSlash = false) =>
     `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${ROUTES.Markets.Home}/${marketAddress}?lang=${language}`;
 
+export const buildVaultLink = (vaultId: string, language: string, excludeSlash = false) =>
+    `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${ROUTES.Vaults}/${vaultId}?lang=${language}`;
+
 export const buildRouteWithParams = (route: string, params: { key: string; value: string }[]) => {
     return `${ifIpfsDeployment ? '#' : ''}${route}?${params.map((item) => `&${item.key}=${item.value}`)}`;
 };
