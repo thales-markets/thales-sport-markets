@@ -10,6 +10,8 @@ export const ROUTES = {
     Quiz: '/trivia',
     QuizLeaderboard: '/trivia/leaderboard',
     MintWorldCupNFT: '/mint-world-cup-nft',
+    Vaults: '/vaults',
+    Vault: '/vaults/:vaultId',
 };
 export default ROUTES;
 

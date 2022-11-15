@@ -40,6 +40,7 @@
         "react-table": "^7.7.0",
         "react-tag-autocomplete": "^6.3.0",
         "react-toastify": "^8.2.0",
+        "recharts": "^2.1.16",
         "redux": "^4.1.2",
         "styled-components": "^5.3.3",
         "thales-data": "^1.1.36",

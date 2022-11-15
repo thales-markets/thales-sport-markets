@@ -318,7 +318,8 @@
                 "sports-trivia": "Sports trivia",
                 "leaderboard": "Leaderboard",
                 "fee-rebates": "Fee rebates",
-                "become-affiliate": "Become affiliate"
+                "become-affiliate": "Become affiliate",
+                "vaults": "Vaults"
             },
             "buttons": {
                 "switch": "Switch",
@@ -550,6 +551,86 @@
             "all-transactions": "All transactions",
             "see-result-by-trader": "See result by trader",
             "affiliate-leaderboard": "Affiliate Leaderboard"
+        }
+    },
+    "vaults": {
+        "title": "Sport Vaults",
+        "strategy-label": "Vault strategy",
+        "risks-label": "Vault risks"
+    },
+    "vault": {
+        "discount-vault": {
+            "title": "Discount Vault",
+            "description": "<p>Buys positions that have more than {{odds}} odds and are available at a discount larger than {{discount}}.</p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
+        },
+        "degen-discount-vault": {
+            "title": "Degen Discount Vault",
+            "description": "<p>Buys positions at any odds that are available for more than {{discount}} discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market.</p>"
+        },
+        "safu-discount-vault": {
+            "title": "Safu Discount Vault",
+            "description": "<p>Buys positions that have more than {{odds}} odds and are available at any discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
+        },
+        "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li></ul>",
+        "back-to-vaults": "Back to vaults",
+        "vault-not-started-message": "The vault has not started",
+        "vault-paused-message": "The vault is paused",
+        "round-allocation-label": "Total round deposit",
+        "spent-trading-label": "Spent on trading",
+        "available-trading-label": "Available for trading",
+        "round-end-label": "The round ends in",
+        "your-round-allocation-label": "Your allocation for the round: <bold>{{amount}}</bold>",
+        "your-next-round-allocation-label": "Your allocation for the next round: <bold>{{amount}}</bold>",
+        "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
+        "next-round-start-label": "The next round starts in: <counter />",
+        "vault-filled-label": "Vault filled: {{amount}} / {{max}}",
+        "deposit-message": "Deposit funds into the vault for the next round.",
+        "deposit-amount-label": "Deposit amount",
+        "deposit-amount-placeholder": "Enter amount",
+        "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "Nothing to withdraw.",
+        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdraw-round-end-label": "The round ends in: <counter />",
+        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdrawal-request-label": "Withdrawal request: <bold>{{amount}}</bold>",
+        "round-ended-label": "Round ended",
+        "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
+        "deposit-max-amount-of-users-warning": "Maximum number of users in the vault is reached, you cannot deposit.",
+        "deposit-vault-cap-reached-warning": "The vault cap is reached, you cannot deposit.",
+        "deposit-vault-cap-error": "Deposit amount exceeds vault cap",
+        "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
+        "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
+        "tabs": {
+            "deposit": "Deposit",
+            "claim": "Claim",
+            "withdraw": "Withdraw"
+        },
+        "button": {
+            "deposit-label": "Deposit",
+            "deposit-progress-label": "Deposit in progress...",
+            "deposit-confirmation-message": "Deposit successfully placed",
+            "request-withdrawal-label": "Request withdrawal",
+            "request-withdrawal-progress-label": "Request in progress...",
+            "request-withdrawal-confirmation-message": "Withdrawal request successfully sent",
+            "withdraw-label": "Withdraw",
+            "withdraw-progress-label": "Withdrawal in progress...",
+            "withdraw-confirmation-message": "Funds successfully withdrawn",
+            "close-round-label": "Close round",
+            "close-round-progress-label": "Closing round in progress...",
+            "close-round-confirmation-message": "Round successfully closed"
+        },
+        "trades-history": {
+            "title": "Vault trades history",
+            "no-trades": "No trades associated with this vault in the selected round.",
+            "round-label": "Round"
+        },
+        "pnl": {
+            "title": "PnL per round",
+            "no-data": "No PnL data for previous rounds.",
+            "lifetime-pnl": "Lifetime PnL"
         }
     }
 }

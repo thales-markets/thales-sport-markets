@@ -91,7 +91,8 @@ const mapResult = async (markets: any, globalFilter: GlobalFiltersEnum) => {
                         (market: SportMarketInfo) =>
                             market.isOpen &&
                             !market.isCanceled &&
-                            (market.homeOdds !== 0 || market.awayOdds !== 0 || market.drawOdds !== 0)
+                            (market.homeOdds !== 0 || market.awayOdds !== 0 || (market.drawOdds || 0) !== 0) &&
+                            market.maturityDate.getTime() > new Date().getTime()
                     );
                 }
                 return mappedMarkets;
@@ -132,7 +133,7 @@ const mapMarkets = (allMarkets: SportMarkets) => {
         if (
             market.isOpen &&
             !market.isCanceled &&
-            (market.homeOdds !== 0 || market.awayOdds !== 0 || market.drawOdds !== 0) &&
+            (market.homeOdds !== 0 || market.awayOdds !== 0 || (market.drawOdds || 0) !== 0) &&
             market.maturityDate.getTime() > new Date().getTime()
         ) {
             openMarkets.push(market);
