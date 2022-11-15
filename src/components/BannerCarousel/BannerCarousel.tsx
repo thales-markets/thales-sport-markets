@@ -2,13 +2,28 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
+import { navigateTo } from 'utils/routes';
 
 const BannerCarousel: React.FC = () => {
     const [urlMap, setUrlMap] = useState<Record<number, string>>({});
+    const [imageCount, setImageCount] = useState<number>(0);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`https://api.thalesmarket.io/banner-image-count`);
+                if (response) {
+                    const json = await response.json();
+                    setImageCount(json.count);
+                }
+            } catch (e) {}
+        };
+        fetchData();
+    }, []);
     useEffect(() => {
         const map = {} as Record<number, string>;
         const fetchData = async () => {
-            for (let i = 1; i <= 5; i++) {
+            for (let i = 1; i <= imageCount; i++) {
                 try {
                     const response = await fetch(`https://api.thalesmarket.io/banner-json/${i}`);
                     if (response) {
@@ -20,7 +35,7 @@ const BannerCarousel: React.FC = () => {
             setUrlMap(map);
         };
         fetchData();
-    }, []);
+    }, [imageCount]);
 
     return (
         <Container>
@@ -35,7 +50,11 @@ const BannerCarousel: React.FC = () => {
                 autoPlay={true}
                 onClickItem={(index) => {
                     if (urlMap[index + 1]) {
-                        window.open(urlMap[index + 1]);
+                        if (urlMap[index + 1].includes('https://overtimemarkets.xyz/#/')) {
+                            navigateTo(urlMap[index + 1].replace('https://overtimemarkets.xyz/#/', ''));
+                        } else {
+                            window.open(urlMap[index + 1]);
+                        }
                     }
                 }}
             >
