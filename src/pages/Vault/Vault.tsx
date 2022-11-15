@@ -66,6 +66,7 @@ import PnL from './PnL';
 import { RouteComponentProps } from 'react-router-dom';
 import vaultContract from 'utils/contracts/sportVaultContract';
 import Toggle from 'components/Toggle/Toggle';
+import Tooltip from 'components/Tooltip';
 
 type VaultProps = RouteComponentProps<{
     vaultId: string;
@@ -511,6 +512,14 @@ const Vault: React.FC<VaultProps> = (props) => {
                                                 amount: formatCurrencyWithSign(USD_SIGN, userVaultData.balanceTotal),
                                             }}
                                         />
+                                        {userVaultData.balanceCurrentRound > 0 && !isWithdrawalRequested && (
+                                            <Tooltip
+                                                overlay={t(`vault.estimated-amount-tooltip`)}
+                                                iconFontSize={18}
+                                                marginLeft={2}
+                                                top={-2}
+                                            />
+                                        )}
                                     </ContentInfo>
                                     {isWithdrawalRequested && (
                                         <WarningContentInfo>
@@ -525,6 +534,12 @@ const Vault: React.FC<VaultProps> = (props) => {
                                                         userVaultData.balanceCurrentRound
                                                     ),
                                                 }}
+                                            />
+                                            <Tooltip
+                                                overlay={t(`vault.estimated-amount-tooltip`)}
+                                                iconFontSize={18}
+                                                marginLeft={2}
+                                                top={-2}
                                             />
                                         </WarningContentInfo>
                                     )}
@@ -671,6 +686,14 @@ const Vault: React.FC<VaultProps> = (props) => {
                                                                                 ),
                                                                             }}
                                                                         />
+                                                                        <Tooltip
+                                                                            overlay={t(
+                                                                                `vault.estimated-amount-tooltip`
+                                                                            )}
+                                                                            iconFontSize={18}
+                                                                            marginLeft={2}
+                                                                            top={-2}
+                                                                        />
                                                                     </ContentInfo>
                                                                     <ContentInfo>
                                                                         <Trans i18nKey="vault.withdrawal-message" />
@@ -707,6 +730,14 @@ const Vault: React.FC<VaultProps> = (props) => {
                                                     i18nKey="vault.withdrawal-requested-message"
                                                     components={{
                                                         bold: <BoldContent />,
+                                                        tooltip: (
+                                                            <Tooltip
+                                                                overlay={t(`vault.estimated-amount-tooltip`)}
+                                                                iconFontSize={18}
+                                                                marginLeft={2}
+                                                                top={-2}
+                                                            />
+                                                        ),
                                                     }}
                                                     values={{
                                                         amount: formatCurrencyWithSign(

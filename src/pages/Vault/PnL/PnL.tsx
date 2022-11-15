@@ -74,7 +74,7 @@ const PnL: React.FC<PnlProps> = ({ vaultAddress, lifetimePnl }) => {
                             />
                             <YAxis
                                 tickFormatter={(val: any) => {
-                                    return formatPercentageWithSign(val, 0);
+                                    return formatPercentageWithSign(val, val < 0.1 && val > -0.1 ? 2 : 0);
                                 }}
                                 tickLine={false}
                                 axisLine={false}
@@ -82,7 +82,7 @@ const PnL: React.FC<PnlProps> = ({ vaultAddress, lifetimePnl }) => {
                                 style={{
                                     fontSize: '15px',
                                 }}
-                                width={50}
+                                width={55}
                             />
                             <Tooltip
                                 content={<CustomTooltip />}
