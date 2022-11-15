@@ -56,6 +56,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
         <Wrapper
             disabled={showTooltip}
             isMobile={isMobile}
+            notClickable={!marketId}
             onClick={() => {
                 if (!showTooltip) {
                     if (marketId) {
@@ -147,12 +148,12 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     );
 };
 
-const Wrapper = styled.div<{ disabled?: boolean; isMobile?: boolean }>`
+const Wrapper = styled.div<{ disabled?: boolean; isMobile?: boolean; notClickable?: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: ${(_props) => (_props?.isMobile ? 'column' : 'row')};
-    cursor: ${(_props) => (_props?.disabled ? 'not-allowed' : 'pointer')};
+    cursor: ${(_props) => (_props?.disabled ? 'not-allowed' : _props.notClickable ? 'default' : 'pointer')};
 `;
 
 const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: boolean }>`

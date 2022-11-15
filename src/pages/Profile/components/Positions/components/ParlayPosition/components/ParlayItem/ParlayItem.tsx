@@ -54,6 +54,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                     <ClubLogo
                         alt={market.homeTeam}
                         src={homeLogoSrc}
+                        isFlag={market.tags[0] == 9018}
                         losingTeam={isAwayWinner == true ? true : undefined}
                         onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                         customMobileSize={'35px'}
@@ -62,6 +63,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                         awayTeam={true}
                         alt={market.awayTeam}
                         src={awayLogoSrc}
+                        isFlag={market.tags[0] == 9018}
                         losingTeam={isHomeWinner == true ? true : undefined}
                         onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                         customMobileSize={'35px'}

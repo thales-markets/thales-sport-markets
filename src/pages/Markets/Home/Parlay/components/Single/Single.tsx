@@ -537,6 +537,18 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
 
+    const hidePayout =
+        !tokenAmount ||
+        positionPriceDetailsQuery.isLoading ||
+        // hide when validation tooltip exists except in case of not enough funds
+        (tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
+    const hideProfit =
+        ammPosition.sides[Side.BUY].quote <= 0 ||
+        !tokenAmount ||
+        positionPriceDetailsQuery.isLoading ||
+        // hide when validation tooltip exists except in case of not enough funds
+        (tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
+
     return (
         <>
             <RowSummary>
@@ -594,18 +606,13 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.payout')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>
-                    {!tokenAmount || positionPriceDetailsQuery.isLoading || !!tooltipTextUsdAmount
-                        ? '-'
-                        : formatCurrencyWithSign(USD_SIGN, tokenAmount, 2)}
+                    {hidePayout ? '-' : formatCurrencyWithSign(USD_SIGN, tokenAmount, 2)}
                 </SummaryValue>
             </RowSummary>
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.potential-profit')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>
-                    {ammPosition.sides[Side.BUY].quote <= 0 ||
-                    !tokenAmount ||
-                    positionPriceDetailsQuery.isLoading ||
-                    !!tooltipTextUsdAmount
+                    {hideProfit
                         ? '-'
                         : `${formatCurrencyWithSign(
                               USD_SIGN,

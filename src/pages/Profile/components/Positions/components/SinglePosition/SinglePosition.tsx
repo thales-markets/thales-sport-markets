@@ -35,15 +35,17 @@ import PositionSymbol from 'components/PositionSymbol';
 import { convertPositionNameToPositionType, convertPositionToSymbolType, getIsApexTopGame } from 'utils/markets';
 import { getPositionColor } from 'utils/ui';
 import { formatDateWithTime } from 'utils/formatters/date';
-import { getEtherscanTxLink } from 'utils/etherscan';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { getIsMobile } from 'redux/modules/app';
 import { FlexDivRow } from 'styles/common';
 import { refetchAfterClaim } from 'utils/queryConnector';
+import { buildMarketLink } from 'utils/routes';
+import i18n from 'i18n';
 
 const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ position }) => {
+    const language = i18n.language;
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -95,6 +97,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                         style={{ marginRight: '5px' }}
                         alt={position.market.homeTeam}
                         src={homeLogoSrc}
+                        isFlag={position.market.tags[0] == 9018}
                         onError={getOnImageError(setHomeLogoSrc, position.market.tags[0])}
                     />
                     <ClubName>{position.market.homeTeam}</ClubName>
@@ -105,6 +108,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                         style={{ marginRight: '5px' }}
                         alt={position.market.awayTeam}
                         src={awayLogoSrc}
+                        isFlag={position.market.tags[0] == 9018}
                         onError={getOnImageError(setAwayLogoSrc, position.market.tags[0])}
                     />
                     <ClubName>{position.market.awayTeam}</ClubName>
@@ -171,7 +175,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                         <Label>{t('profile.card.starts')}</Label>
                         <BoldValue>{formatDateWithTime(position.market.maturityDate)}</BoldValue>
                     </ColumnDirectionInfo>
-                    <ExternalLink href={getEtherscanTxLink(networkId, position.market.id)} target={'_blank'}>
+                    <ExternalLink href={buildMarketLink(position.market.address, language)} target={'_blank'}>
                         <ExternalLinkContainer>
                             <ExternalLinkArrow />
                         </ExternalLinkContainer>

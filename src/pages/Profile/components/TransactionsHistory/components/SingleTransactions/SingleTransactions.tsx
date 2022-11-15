@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
+import { getEtherscanTxLink } from 'utils/etherscan';
 import { formatTxTimestamp } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
 
@@ -29,6 +30,9 @@ const TransactionsHistory: React.FC = () => {
             <Table
                 tableHeadCellStyles={TableHeaderStyle}
                 tableRowCellStyles={TableRowStyle}
+                onTableRowClick={(data: any) => {
+                    open(getEtherscanTxLink(networkId, data.original.hash));
+                }}
                 columns={[
                     {
                         id: 'time',
@@ -58,7 +62,6 @@ const TransactionsHistory: React.FC = () => {
                         accessor: 'position',
                         sortable: false,
                         Cell: (cellProps: any) => {
-                            console.log(cellProps);
                             return (
                                 <FlexCenter>
                                     <TableText>
