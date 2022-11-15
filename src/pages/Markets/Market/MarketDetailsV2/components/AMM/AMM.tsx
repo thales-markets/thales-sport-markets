@@ -623,14 +623,17 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
     };
 
     const isBuy = selectedSide == Side.BUY;
-    const showPotentialProfit = !Number(tokenAmount) || positionPriceDetailsQuery.isLoading || !!tooltipTextUsdAmount;
+    const hidePotentialProfit =
+        !Number(tokenAmount) ||
+        positionPriceDetailsQuery.isLoading ||
+        (!!tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
     const liquidityInfo = floorNumberToDecimals(availablePerSide.positions[selectedPosition].available);
     const showCollateralSelector = selectedSide == Side.BUY && !market.gameStarted;
     const skew = positionPriceDetailsQuery.isLoading
         ? '-'
         : formatPercentage(ammPosition.sides[selectedSide].priceImpact);
 
-    const totalToReceive = showPotentialProfit ? '-' : formatCurrencyWithSign(USD_SIGN, tokenAmount);
+    const totalToReceive = hidePotentialProfit ? '-' : formatCurrencyWithSign(USD_SIGN, tokenAmount);
     const balancesObjectKeys = Object.keys(balances ? balances : {});
     const showPositionInfo =
         !balanceValueQuery.isLoading && balances && (balances.home > 0 || balances.draw > 0 || balances.away > 0);
@@ -736,7 +739,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                             <PotentialProfitContainer>
                                 <PrimaryLabel>{t('markets.market-details.potential-profit')}</PrimaryLabel>
                                 <PotentialProfit>
-                                    {showPotentialProfit
+                                    {hidePotentialProfit
                                         ? '-'
                                         : `$ ${formatCurrency(
                                               Number(tokenAmount) - ammPosition.sides[selectedSide].quote

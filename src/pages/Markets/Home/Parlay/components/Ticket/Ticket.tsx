@@ -515,6 +515,13 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
               });
     };
 
+    const hidePayout =
+        Number(usdAmountValue) <= 0 ||
+        totalBuyAmount === 0 ||
+        // hide when validation tooltip exists except in case of invalid profit and not enough funds
+        (tooltipTextUsdAmount && !isValidProfit && usdAmountValue <= paymentTokenBalance) ||
+        isFetching;
+
     return (
         <>
             <RowSummary>
@@ -590,23 +597,13 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.payout')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>
-                    {Number(usdAmountValue) <= 0 ||
-                    totalBuyAmount === 0 ||
-                    // hide when validation tooltip exists except in case of invalid profit and not enough funds
-                    (tooltipTextUsdAmount && !isValidProfit && usdAmountValue <= paymentTokenBalance) ||
-                    isFetching
-                        ? '-'
-                        : formatCurrencyWithSign(USD_SIGN, totalBuyAmount, 2)}
+                    {hidePayout ? '-' : formatCurrencyWithSign(USD_SIGN, totalBuyAmount, 2)}
                 </SummaryValue>
             </RowSummary>
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.potential-profit')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>
-                    {Number(usdAmountValue) <= 0 ||
-                    totalBuyAmount === 0 ||
-                    // hide when validation tooltip exists except in case of invalid profit and not enough funds
-                    (tooltipTextUsdAmount && !isValidProfit && usdAmountValue <= paymentTokenBalance) ||
-                    isFetching
+                    {hidePayout
                         ? '-'
                         : `${formatCurrencyWithSign(
                               USD_SIGN,
