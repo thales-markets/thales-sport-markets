@@ -592,7 +592,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 <SummaryValue isInfo={true}>
                     {Number(usdAmountValue) <= 0 ||
                     totalBuyAmount === 0 ||
-                    (tooltipTextUsdAmount && !isValidProfit) ||
+                    // hide when validation tooltip exists except in case of invalid profit and not enough funds
+                    (tooltipTextUsdAmount && !isValidProfit && usdAmountValue <= paymentTokenBalance) ||
                     isFetching
                         ? '-'
                         : formatCurrencyWithSign(USD_SIGN, totalBuyAmount, 2)}
@@ -603,7 +604,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 <SummaryValue isInfo={true}>
                     {Number(usdAmountValue) <= 0 ||
                     totalBuyAmount === 0 ||
-                    (tooltipTextUsdAmount && !isValidProfit) ||
+                    // hide when validation tooltip exists except in case of invalid profit and not enough funds
+                    (tooltipTextUsdAmount && !isValidProfit && usdAmountValue <= paymentTokenBalance) ||
                     isFetching
                         ? '-'
                         : `${formatCurrencyWithSign(

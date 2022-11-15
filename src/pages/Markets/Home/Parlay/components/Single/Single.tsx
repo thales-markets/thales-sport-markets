@@ -594,7 +594,10 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.payout')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>
-                    {!tokenAmount || positionPriceDetailsQuery.isLoading || !!tooltipTextUsdAmount
+                    {!tokenAmount ||
+                    positionPriceDetailsQuery.isLoading ||
+                    // hide when validation tooltip exists except in case of not enough funds
+                    (tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance)
                         ? '-'
                         : formatCurrencyWithSign(USD_SIGN, tokenAmount, 2)}
                 </SummaryValue>
@@ -605,7 +608,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     {ammPosition.sides[Side.BUY].quote <= 0 ||
                     !tokenAmount ||
                     positionPriceDetailsQuery.isLoading ||
-                    !!tooltipTextUsdAmount
+                    // hide when validation tooltip exists except in case of not enough funds
+                    (tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance)
                         ? '-'
                         : `${formatCurrencyWithSign(
                               USD_SIGN,
