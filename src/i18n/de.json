@@ -561,85 +561,85 @@
         "paragraph": "<bold>Das Überstunden-Empfehlungsprogramm ist ein On-Chain-Incentive-Tool zur Benutzerakquise und zum Onboarding.</bold> Das Programm erlaubt es jedem<bold> einen Empfehlungslink generieren</bold> und teilen Sie es mit Benutzern, die sie einbinden möchten.<br /><br /> Wenn Sie Ihren persönlichen Empfehlungslink teilen, verdienen Sie<bold> 0,5% des gesamten sUSD-Volumens, das Ihre geworbenen Benutzer produzieren!</bold> Es sind keine manuellen Ansprüche erforderlich, die sUSD werden automatisch in Form von einfachen sUSD-Überweisungen in Ihrer Brieftasche gesammelt."
     },
     "vaults": {
-        "risks-label": "Tresorrisiken",
-        "title": "Sport Gewölbe",
-        "strategy-label": "Vault-Strategie"
+        "title": "Sport Vaults",
+        "strategy-label": "Vault strategy",
+        "risks-label": "Vault risks"
     },
     "vault": {
         "discount-vault": {
-            "description": "<p>Kauft Positionen, die mehr als {{odds}} Quoten haben und zu einem Rabatt von mehr als {{discount}} verfügbar sind.</p> Alle Einzahlungen, die in eine Runde eingehen, zählen zum gamifizierten Staking-Volumen.</p>",
-            "title": "Rabatttresor",
-            "risks": "<p>Der Tresor hat eine Auslastungsrate von {{utilizationRate}}, was sicherstellt, dass nicht mehr als {{utilizationRate}} pro Runde eingezahlt werden. Darüber hinaus können von diesen {{utilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} auf einem einzelnen Markt ausgegeben werden, wodurch das Risiko auf mehrere Märkte verteilt wird, die Quoten von mehr als {{odds}} haben.</p>"
+            "title": "Discount Vault",
+            "description": "<p>Buys positions that have more than {{odds}} odds and are available at a discount larger than {{discount}}.</p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
         },
         "degen-discount-vault": {
-            "title": "Degener Rabatttresor",
-            "description": "<p>Kauft Positionen zu beliebigen Quoten, die für mehr als {{discount}} Rabatt verfügbar sind.</p><p> Alle Einzahlungen, die in eine Runde eingehen, zählen zum gamifizierten Staking-Volumen.</p>",
-            "risks": "<p>Der Tresor hat eine Auslastungsrate von {{utilizationRate}}, was sicherstellt, dass nicht mehr als {{utilizationRate}} pro Runde eingezahlt werden. Außerdem können von diesen {{utilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} auf einem einzelnen Markt ausgegeben werden.</p>"
+            "title": "Degen Discount Vault",
+            "description": "<p>Buys positions at any odds that are available for more than {{discount}} discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market.</p>"
         },
         "safu-discount-vault": {
-            "description": "<p>Kauft Positionen, die mehr als {{odds}} Quoten haben und mit jedem Rabatt verfügbar sind.</p><p> Alle Einzahlungen, die in eine Runde eingehen, zählen zum gamifizierten Staking-Volumen.</p>",
-            "risks": "<p>Der Tresor hat eine Auslastungsrate von {{utilizationRate}}, was sicherstellt, dass nicht mehr als {{utilizationRate}} pro Runde eingezahlt werden. Darüber hinaus können von diesen {{utilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} auf einem einzelnen Markt ausgegeben werden, wodurch das Risiko auf mehrere Märkte verteilt wird, die Quoten von mehr als {{odds}} haben.</p>",
-            "title": "Spaltenrabatttresor"
+            "title": "Safu Discount Vault",
+            "description": "<p>Buys positions that have more than {{odds}} odds and are available at any discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
         },
+        "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
+        "back-to-vaults": "Back to vaults",
+        "vault-not-started-message": "The vault has not started",
+        "vault-paused-message": "The vault is paused",
+        "round-allocation-label": "Total round deposit",
+        "spent-trading-label": "Spent on trading",
+        "available-trading-label": "Available for trading",
+        "round-end-label": "The round ends in",
+        "your-round-allocation-label": "Your allocation for the round: <bold>{{amount}}</bold>",
+        "your-next-round-allocation-label": "Your allocation for the next round: <bold>{{amount}}</bold>",
+        "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
+        "next-round-start-label": "The next round starts in: <counter />",
+        "users-in-vault-label": "Users in the vault: {{number}} / {{max}}",
+        "vault-filled-label": "Vault filled: {{amount}} / {{max}}",
+        "deposit-message": "Deposit funds into the vault for the next round.",
+        "deposit-amount-label": "Deposit amount",
+        "deposit-amount-placeholder": "Enter amount",
+        "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "Nothing to withdraw.",
+        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdraw-round-end-label": "The round ends in: <counter />",
+        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdrawal-request-label": "Withdrawal request: <bold>{{amount}}</bold>",
+        "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
+        "round-ended-label": "Round ended",
+        "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
+        "deposit-max-amount-of-users-warning": "Maximum number of users in the vault is reached, you cannot deposit.",
+        "deposit-vault-cap-reached-warning": "The vault cap is reached, you cannot deposit.",
+        "deposit-vault-cap-error": "Deposit amount exceeds vault cap",
+        "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
+        "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
         "tabs": {
-            "withdraw": "Abheben",
-            "deposit": "Kaution",
-            "claim": "Beanspruchen"
+            "deposit": "Deposit",
+            "claim": "Claim",
+            "withdraw": "Withdraw"
         },
         "button": {
-            "deposit-progress-label": "Einzahlung läuft...",
-            "close-round-progress-label": "Abschlussrunde läuft...",
-            "request-withdrawal-confirmation-message": "Auszahlungsantrag erfolgreich gesendet",
-            "close-round-label": "Runde schließen",
-            "request-withdrawal-progress-label": "Anfrage in Bearbeitung...",
-            "deposit-confirmation-message": "Anzahlung erfolgreich platziert",
-            "request-withdrawal-label": "Auszahlung beantragen",
-            "deposit-label": "Kaution",
-            "withdraw-confirmation-message": "Guthaben erfolgreich abgehoben",
-            "withdraw-label": "Abheben",
-            "close-round-confirmation-message": "Runde erfolgreich abgeschlossen",
-            "withdraw-progress-label": "Auszahlung läuft..."
+            "deposit-label": "Deposit",
+            "deposit-progress-label": "Deposit in progress...",
+            "deposit-confirmation-message": "Deposit successfully placed",
+            "request-withdrawal-label": "Request withdrawal",
+            "request-withdrawal-progress-label": "Request in progress...",
+            "request-withdrawal-confirmation-message": "Withdrawal request successfully sent",
+            "withdraw-label": "Withdraw",
+            "withdraw-progress-label": "Withdrawal in progress...",
+            "withdraw-confirmation-message": "Funds successfully withdrawn",
+            "close-round-label": "Close round",
+            "close-round-progress-label": "Closing round in progress...",
+            "close-round-confirmation-message": "Round successfully closed"
         },
         "trades-history": {
-            "round-label": "Runden",
-            "title": "Geschichte des Tresorhandels",
-            "no-trades": "Keine Trades mit diesem Tresor in der ausgewählten Runde verbunden."
+            "title": "Vault trades history",
+            "no-trades": "No trades associated with this vault in the selected round.",
+            "round-label": "Round"
         },
         "pnl": {
-            "no-data": "Keine PnL-Daten für frühere Runden.",
-            "title": "PnL pro Runde",
-            "lifetime-pnl": "Lebenslang PnL"
-        },
-        "round-end-label": "Die Runde endet in",
-        "your-round-allocation-label": "Ihre Zuteilung für die Runde: <bold>{{amount}}</bold>",
-        "available-trading-label": "Für den Handel verfügbar",
-        "back-to-vaults": "Zurück zu Gewölben",
-        "vault-paused-message": "Der Tresor wird angehalten",
-        "your-next-round-allocation-label": "Ihre Zuteilung für die nächste Runde: <bold>{{amount}}</bold>",
-        "round-allocation-label": "Gesamtrunde Einzahlung",
-        "deposit-amount-label": "Einzahlungsbetrag",
-        "deposit-message": "Zahlen Sie Geld für die nächste Runde in den Tresor ein.",
-        "variables": "<p>Variablen:</p><ul><li> Nutzungsrate: {{utilizationRate}}</li><li> Preisuntergrenze: {{priceLowerLimit}}</li><li> Preisobergrenze: {{priceUpperLimit}}</li><li> Max. Skew-Auswirkung: {{skewImpactLimit}}</li><li> Maximale Allokation auf einem einzelnen Markt: {{allocationLimitsPerMarketPerRound}}</li><li> Maximale Gesamteinzahlung: {{maxAllowedDeposit}}</li><li> Max. Benutzer im Tresor: {{maxAllowedUsers}}</li><li> Mindestbetrag für einen einzelnen Handel: {{minTradeAmount}}</li><li> Mindesteinzahlung: {{minDepositAmount}}</li></ul>",
-        "next-round-start-label": "Die nächste Runde beginnt in: <counter />",
-        "vault-filled-label": "Tresor gefüllt: {{amount}} / {{max}}",
-        "nothing-to-withdraw-label": "Nichts zu entziehen.",
-        "estimated-amount-tooltip": "Dies ist ein geschätzter Betrag. Der tatsächliche Betrag wird nach Abschluss der aktuellen Runde basierend auf dem Runden-PnL berechnet.",
-        "spent-trading-label": "Für den Handel ausgegeben",
-        "vault-not-started-message": "Der Tresor wurde nicht gestartet",
-        "deposit-min-amount-error": "Der Mindestbetrag für die Einzahlung beträgt {{amount}}",
-        "withdrawal-request-label": "Auszahlungsantrag: <bold>{{amount}}</bold>",
-        "deposit-vault-cap-error": "Der Einzahlungsbetrag übersteigt die Tresorobergrenze",
-        "deposit-vault-cap-reached-warning": "Die Tresorobergrenze ist erreicht, Sie können keine Einzahlungen vornehmen.",
-        "withdrawal-message": "Sie können eine Auszahlung beantragen und Ihr Geld wird Ihnen am Ende der Runde automatisch zugeschickt, wenn die Runde endet.",
-        "deposit-max-amount-of-users-warning": "Die maximale Anzahl von Benutzern im Tresor ist erreicht, Sie können keine Einzahlungen vornehmen.",
-        "withdrawal-deposit-warning": "Sie können sich nicht zurückziehen, da Sie bereits für die nächste Runde eingezahlt haben.",
-        "deposit-withdrawal-warning": "Eine Auszahlung wird angefordert, Sie können keine Einzahlungen vornehmen.",
-        "round-ended-label": "Runde beendet",
-        "withdraw-round-end-label": "Die Runde endet in: <Zähler />",
-        "available-to-withdraw-label": "Zur Auszahlung verfügbar: <bold>{{amount}}</bold>",
-        "deposit-amount-placeholder": "Menge eingeben",
-        "withdrawal-requested-message": "Sie haben beantragt, <bold>{{amount}}</bold><tooltip /> abzuheben. Ihr Geld wird Ihnen am Ende der Runde automatisch zugeschickt, wenn die Runde endet.",
-        "first-deposit-withdrawal-message": "Sie haben für die nächste Runde eingezahlt und können diese Gelder am Ende der nächsten Runde abheben.",
-        "users-in-vault-label": "Benutzer im Tresor: {{number}} / {{max}}"
+            "title": "PnL per round",
+            "no-data": "No PnL data for previous rounds.",
+            "lifetime-pnl": "Lifetime PnL"
+        }
     }
 }

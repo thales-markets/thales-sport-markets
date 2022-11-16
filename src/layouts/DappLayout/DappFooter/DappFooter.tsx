@@ -88,6 +88,7 @@ const DisclaimerContainer = styled(FlexDivCentered)`
     font-size: 10px;
     line-height: 12px;
     color: ${(props) => props.theme.textColor.secondary};
+    text-align: justify;
     @media (max-width: 650px) {
         margin-top: 30px;
     }

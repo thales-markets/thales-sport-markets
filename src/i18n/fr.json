@@ -662,85 +662,85 @@
         "paragraph": "<bold>Le programme de parrainage d&#39;heures supplémentaires est un outil d&#39;acquisition et d&#39;intégration d&#39;utilisateurs incitatifs en chaîne.</bold> Le programme permet à quiconque de<bold> générer un lien de parrainage</bold> et partagez-le avec les utilisateurs qu&#39;ils essaient d&#39;intégrer.<br /><br /> En partageant votre lien de parrainage personnel, vous gagnez<bold> 0,5 % de tout le volume de sUSD produit par vos utilisateurs référés !</bold> Aucune réclamation manuelle n&#39;est nécessaire, le sUSD s&#39;accumule automatiquement dans votre portefeuille sous la forme de simples transferts de sUSD."
     },
     "vaults": {
-        "risks-label": "Risques de coffre-fort",
-        "title": "Voûtes sportives",
-        "strategy-label": "Stratégie de coffre-fort"
+        "title": "Sport Vaults",
+        "strategy-label": "Vault strategy",
+        "risks-label": "Vault risks"
     },
     "vault": {
         "discount-vault": {
-            "risks": "<p>Le coffre-fort a un taux d&#39;utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôts pour un tour ne sont mis en danger. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>",
-            "title": "Coffre-fort à rabais",
-            "description": "<p>Achète des positions qui ont plus de {{odds}} de cotes et sont disponibles avec une remise supérieure à {{discount}}.</p> Tous les dépôts qui entrent dans un tour comptent pour le volume de mise gamifié.</p>"
+            "title": "Discount Vault",
+            "description": "<p>Buys positions that have more than {{odds}} odds and are available at a discount larger than {{discount}}.</p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
         },
         "degen-discount-vault": {
-            "risks": "<p>Le coffre-fort a un taux d&#39;utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôts pour un tour ne sont mis en danger. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché.</p>",
-            "description": "<p>Achète des positions à n&#39;importe quelle cote qui sont disponibles pour plus de {{discount}} remise.</p><p> Tous les dépôts qui entrent dans un tour comptent pour le volume de mise gamifié.</p>",
-            "title": "Degen Discount Vault"
+            "title": "Degen Discount Vault",
+            "description": "<p>Buys positions at any odds that are available for more than {{discount}} discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market.</p>"
         },
         "safu-discount-vault": {
-            "description": "<p>Achète des positions qui ont plus de {{odds}} de cotes et sont disponibles avec n&#39;importe quelle remise.</p><p> Tous les dépôts qui entrent dans un tour comptent pour le volume de mise gamifié.</p>",
-            "title": "Coffre-fort de remise de colonne",
-            "risks": "<p>Le coffre-fort a un taux d&#39;utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôts pour un tour ne sont mis en danger. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
+            "title": "Safu Discount Vault",
+            "description": "<p>Buys positions that have more than {{odds}} odds and are available at any discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
         },
+        "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
+        "back-to-vaults": "Back to vaults",
+        "vault-not-started-message": "The vault has not started",
+        "vault-paused-message": "The vault is paused",
+        "round-allocation-label": "Total round deposit",
+        "spent-trading-label": "Spent on trading",
+        "available-trading-label": "Available for trading",
+        "round-end-label": "The round ends in",
+        "your-round-allocation-label": "Your allocation for the round: <bold>{{amount}}</bold>",
+        "your-next-round-allocation-label": "Your allocation for the next round: <bold>{{amount}}</bold>",
+        "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
+        "next-round-start-label": "The next round starts in: <counter />",
+        "users-in-vault-label": "Users in the vault: {{number}} / {{max}}",
+        "vault-filled-label": "Vault filled: {{amount}} / {{max}}",
+        "deposit-message": "Deposit funds into the vault for the next round.",
+        "deposit-amount-label": "Deposit amount",
+        "deposit-amount-placeholder": "Enter amount",
+        "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "Nothing to withdraw.",
+        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdraw-round-end-label": "The round ends in: <counter />",
+        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdrawal-request-label": "Withdrawal request: <bold>{{amount}}</bold>",
+        "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
+        "round-ended-label": "Round ended",
+        "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
+        "deposit-max-amount-of-users-warning": "Maximum number of users in the vault is reached, you cannot deposit.",
+        "deposit-vault-cap-reached-warning": "The vault cap is reached, you cannot deposit.",
+        "deposit-vault-cap-error": "Deposit amount exceeds vault cap",
+        "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
+        "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
         "tabs": {
-            "claim": "Prétendre",
-            "withdraw": "Se désister",
-            "deposit": "Verser"
+            "deposit": "Deposit",
+            "claim": "Claim",
+            "withdraw": "Withdraw"
         },
         "button": {
-            "request-withdrawal-progress-label": "Demande en cours...",
-            "deposit-confirmation-message": "Dépôt placé avec succès",
-            "withdraw-label": "Se désister",
-            "withdraw-confirmation-message": "Fonds retirés avec succès",
-            "close-round-progress-label": "Ronde de clôture en cours...",
-            "deposit-label": "Verser",
-            "deposit-progress-label": "Dépôt en cours...",
-            "withdraw-progress-label": "Retrait en cours...",
-            "close-round-confirmation-message": "Round clôturé avec succès",
-            "close-round-label": "Fermer le tour",
-            "request-withdrawal-label": "Demander un retrait",
-            "request-withdrawal-confirmation-message": "Demande de retrait envoyée avec succès"
+            "deposit-label": "Deposit",
+            "deposit-progress-label": "Deposit in progress...",
+            "deposit-confirmation-message": "Deposit successfully placed",
+            "request-withdrawal-label": "Request withdrawal",
+            "request-withdrawal-progress-label": "Request in progress...",
+            "request-withdrawal-confirmation-message": "Withdrawal request successfully sent",
+            "withdraw-label": "Withdraw",
+            "withdraw-progress-label": "Withdrawal in progress...",
+            "withdraw-confirmation-message": "Funds successfully withdrawn",
+            "close-round-label": "Close round",
+            "close-round-progress-label": "Closing round in progress...",
+            "close-round-confirmation-message": "Round successfully closed"
         },
         "trades-history": {
-            "round-label": "Tour",
-            "no-trades": "Aucun échange associé à ce coffre-fort dans le tour sélectionné.",
-            "title": "Historique des métiers du coffre-fort"
+            "title": "Vault trades history",
+            "no-trades": "No trades associated with this vault in the selected round.",
+            "round-label": "Round"
         },
         "pnl": {
-            "no-data": "Pas de données PnL pour les tours précédents.",
-            "lifetime-pnl": "PnL à vie",
-            "title": "PnL par tour"
-        },
-        "round-end-label": "Le tour se termine en",
-        "vault-filled-label": "Coffre-fort rempli : {{amount}} / {{max}}",
-        "deposit-message": "Déposez des fonds dans le coffre-fort pour le tour suivant.",
-        "back-to-vaults": "Retour aux coffres",
-        "deposit-amount-placeholder": "Entrer le montant",
-        "your-round-allocation-label": "Votre allocation pour le tour : <bold>{{amount}}</bold>",
-        "your-next-round-allocation-label": "Votre allocation pour le tour suivant : <bold>{{amount}}</bold>",
-        "round-allocation-label": "Dépôt rond total",
-        "deposit-vault-cap-reached-warning": "Le plafond du coffre est atteint, vous ne pouvez pas déposer.",
-        "available-trading-label": "Disponible pour le commerce",
-        "deposit-amount-label": "Montant du dépôt",
-        "vault-not-started-message": "Le coffre n'a pas démarré",
-        "next-round-start-label": "Le prochain tour commence dans : <counter />",
-        "round-ended-label": "Tour terminé",
-        "spent-trading-label": "Dépensé en trading",
-        "withdrawal-deposit-warning": "Vous ne pouvez pas retirer car vous avez déjà déposé pour le tour suivant.",
-        "estimated-amount-tooltip": "Il s'agit d'un montant estimé. Le montant réel sera calculé à la clôture du tour en cours sur la base du tour PnL.",
-        "variables": "<p>Variable :</p><ul><li> Taux d&#39;utilisation : {{utilizationRate}}</li><li> Limite inférieure de prix : {{priceLowerLimit}}</li><li> Limite supérieure de prix : {{priceUpperLimit}}</li><li> Impact d&#39;inclinaison maximum : {{skewImpactLimit}}</li><li> Allocation maximale sur un seul marché : {{allocationLimitsPerMarketPerRound}}</li><li> Dépôt total maximum : {{maxAllowedDeposit}}</li><li> Nombre maximum d&#39;utilisateurs dans le coffre : {{maxAllowedUsers}}</li><li> Montant minimum sur une seule transaction : {{minTradeAmount}}</li><li> Dépôt minimum : {{minDepositAmount}}</li></ul>",
-        "available-to-withdraw-label": "Disponible pour retrait : <bold>{{amount}}</bold>",
-        "withdraw-round-end-label": "La manche se termine dans : <counter />",
-        "deposit-withdrawal-warning": "Le retrait est demandé, vous ne pouvez pas déposer.",
-        "nothing-to-withdraw-label": "Rien à retirer.",
-        "withdrawal-message": "Vous pouvez demander un retrait et vos fonds vous seront automatiquement envoyés à la fin du tour, à la clôture du tour.",
-        "deposit-vault-cap-error": "Le montant du dépôt dépasse le plafond du coffre-fort",
-        "deposit-min-amount-error": "Le montant minimum pour le dépôt est de {{amount}}",
-        "withdrawal-request-label": "Demande de retrait : <bold>{{amount}}</bold>",
-        "withdrawal-requested-message": "Vous avez demandé à retirer <bold>{{amount}}</bold><tooltip />. Vos fonds vous seront envoyés automatiquement à la fin du tour, à la clôture du tour.",
-        "vault-paused-message": "Le coffre-fort est en pause",
-        "deposit-max-amount-of-users-warning": "Le nombre maximum d'utilisateurs dans le coffre-fort est atteint, vous ne pouvez pas effectuer de dépôt.",
-        "users-in-vault-label": "Utilisateurs dans le coffre : {{number}} / {{max}}",
-        "first-deposit-withdrawal-message": "Vous avez déposé pour le tour suivant et vous pouvez retirer ces fonds à la fin du tour suivant."
+            "title": "PnL per round",
+            "no-data": "No PnL data for previous rounds.",
+            "lifetime-pnl": "Lifetime PnL"
+        }
     }
 }

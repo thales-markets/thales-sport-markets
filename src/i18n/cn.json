@@ -564,85 +564,85 @@
         "total-earned": "总收入"
     },
     "vaults": {
-        "risks-label": "金库风险",
-        "title": "运动拱顶",
-        "strategy-label": "金库策略"
+        "title": "Sport Vaults",
+        "strategy-label": "Vault strategy",
+        "risks-label": "Vault risks"
     },
     "vault": {
         "discount-vault": {
-            "risks": "<p>金库的利用率为 {{utilizationRate}}，确保不超过 {{utilizationRate}} 的存入一轮风险。此外，在这些 {{utilizationRate}} 中，最多可以将 {{allocationLimitsPerMarketPerRound}} 花在一个市场上，从而将风险分散到赔率大于 {{odds}} 的多个市场。</p>",
-            "description": "<p>买入赔率高于 {{odds}} 且折扣大于 {{discount}} 的头寸。</p>进入一轮的所有存款都计入游戏化的质押量。</p>",
-            "title": "折扣金库"
+            "title": "Discount Vault",
+            "description": "<p>Buys positions that have more than {{odds}} odds and are available at a discount larger than {{discount}}.</p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
         },
         "degen-discount-vault": {
-            "description": "<p>以超过 {{discount}} 折扣的任何赔率买入头寸。</p><p>进入一轮的所有存款都计入游戏化的质押量。</p>",
-            "title": "德劲折扣金库",
-            "risks": "<p>金库的利用率为 {{utilizationRate}}，确保不超过 {{utilizationRate}} 的存入一轮风险。此外，在这些 {{utilizationRate}} 中，最多可以在单个市场上花费 {{allocationLimitsPerMarketPerRound}}。</p>"
+            "title": "Degen Discount Vault",
+            "description": "<p>Buys positions at any odds that are available for more than {{discount}} discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market.</p>"
         },
         "safu-discount-vault": {
-            "risks": "<p>金库的利用率为 {{utilizationRate}}，确保不超过 {{utilizationRate}} 的存入一轮风险。此外，在这些 {{utilizationRate}} 中，最多可以将 {{allocationLimitsPerMarketPerRound}} 花在一个市场上，从而将风险分散到赔率大于 {{odds}} 的多个市场。</p>",
-            "description": "<p>购买赔率超过 {{odds}} 且可享受任何折扣的头寸。</p><p>进入一轮的所有存款都计入游戏化的质押量。</p>",
-            "title": "列折扣库"
+            "title": "Safu Discount Vault",
+            "description": "<p>Buys positions that have more than {{odds}} odds and are available at any discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
         },
+        "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
+        "back-to-vaults": "Back to vaults",
+        "vault-not-started-message": "The vault has not started",
+        "vault-paused-message": "The vault is paused",
+        "round-allocation-label": "Total round deposit",
+        "spent-trading-label": "Spent on trading",
+        "available-trading-label": "Available for trading",
+        "round-end-label": "The round ends in",
+        "your-round-allocation-label": "Your allocation for the round: <bold>{{amount}}</bold>",
+        "your-next-round-allocation-label": "Your allocation for the next round: <bold>{{amount}}</bold>",
+        "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
+        "next-round-start-label": "The next round starts in: <counter />",
+        "users-in-vault-label": "Users in the vault: {{number}} / {{max}}",
+        "vault-filled-label": "Vault filled: {{amount}} / {{max}}",
+        "deposit-message": "Deposit funds into the vault for the next round.",
+        "deposit-amount-label": "Deposit amount",
+        "deposit-amount-placeholder": "Enter amount",
+        "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "Nothing to withdraw.",
+        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdraw-round-end-label": "The round ends in: <counter />",
+        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdrawal-request-label": "Withdrawal request: <bold>{{amount}}</bold>",
+        "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
+        "round-ended-label": "Round ended",
+        "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
+        "deposit-max-amount-of-users-warning": "Maximum number of users in the vault is reached, you cannot deposit.",
+        "deposit-vault-cap-reached-warning": "The vault cap is reached, you cannot deposit.",
+        "deposit-vault-cap-error": "Deposit amount exceeds vault cap",
+        "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
+        "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
         "tabs": {
-            "claim": "宣称",
-            "withdraw": "提取",
-            "deposit": "订金"
+            "deposit": "Deposit",
+            "claim": "Claim",
+            "withdraw": "Withdraw"
         },
         "button": {
-            "request-withdrawal-label": "请求撤回",
-            "deposit-label": "订金",
-            "deposit-progress-label": "存款进行中...",
-            "deposit-confirmation-message": "入金成功",
-            "request-withdrawal-confirmation-message": "取款请求已成功发送",
-            "request-withdrawal-progress-label": "请求进行中...",
-            "withdraw-label": "提取",
-            "withdraw-confirmation-message": "资金成功提取",
-            "withdraw-progress-label": "提现中...",
-            "close-round-label": "关闭回合",
-            "close-round-progress-label": "收尾正在进行中...",
-            "close-round-confirmation-message": "回合成功结束"
+            "deposit-label": "Deposit",
+            "deposit-progress-label": "Deposit in progress...",
+            "deposit-confirmation-message": "Deposit successfully placed",
+            "request-withdrawal-label": "Request withdrawal",
+            "request-withdrawal-progress-label": "Request in progress...",
+            "request-withdrawal-confirmation-message": "Withdrawal request successfully sent",
+            "withdraw-label": "Withdraw",
+            "withdraw-progress-label": "Withdrawal in progress...",
+            "withdraw-confirmation-message": "Funds successfully withdrawn",
+            "close-round-label": "Close round",
+            "close-round-progress-label": "Closing round in progress...",
+            "close-round-confirmation-message": "Round successfully closed"
         },
         "trades-history": {
-            "no-trades": "在选定的回合中没有与此保险库关联的交易。",
-            "round-label": "圆形的",
-            "title": "金库交易历史"
+            "title": "Vault trades history",
+            "no-trades": "No trades associated with this vault in the selected round.",
+            "round-label": "Round"
         },
         "pnl": {
-            "lifetime-pnl": "终身盈亏",
-            "no-data": "没有前几轮的 PnL 数据。",
-            "title": "每轮盈亏"
-        },
-        "withdrawal-message": "您可以请求提款，您的资金将在该轮结束时自动发送给您。",
-        "back-to-vaults": "返回金库",
-        "deposit-max-amount-of-users-warning": "已达到保险库中的最大用户数，您无法存款。",
-        "withdrawal-requested-message": "您请求提取<bold>{{amount}}</bold><tooltip />。当回合结束时，您的资金将在回合结束时自动发送给您。",
-        "vault-paused-message": "保险库已暂停",
-        "deposit-min-amount-error": "存款的最低金额为 {{amount}}",
-        "withdraw-round-end-label": "回合结束于：<counter />",
-        "round-allocation-label": "总存款",
-        "deposit-withdrawal-warning": "要求提款，您不能存款。",
-        "deposit-vault-cap-reached-warning": "已达到金库上限，无法入金。",
-        "withdrawal-request-label": "提款请求：<bold>{{amount}}</bold>",
-        "withdrawal-deposit-warning": "您不能退出，因为您已经为下一轮存款。",
-        "round-ended-label": "回合结束",
-        "nothing-to-withdraw-label": "没什么可退的。",
-        "vault-not-started-message": "保险库尚未启动",
-        "round-end-label": "回合结束于",
-        "estimated-amount-tooltip": "这是一个估计数额。实际金额将在本轮结束时根据该轮PnL计算。",
-        "available-to-withdraw-label": "可提取：<bold>{{amount}}</bold>",
-        "variables": "<p>变量：</p><ul><li>利用率：{{utilizationRate}}</li><li>价格下限：{{priceLowerLimit}}</li><li>价格上限：{{priceUpperLimit}}</li><li>最大偏斜影响：{{skewImpactLimit}}</li><li>单一市场的最大分配：{{allocationLimitsPerMarketPerRound}}</li><li>最大总存款：{{maxAllowedDeposit}}</li><li>保险库中的最大用户数：{{maxAllowedUsers}}</li><li>单笔交易的最低金额：{{minTradeAmount}}</li><li>最低存款：{{minDepositAmount}}</li></ul>",
-        "deposit-vault-cap-error": "入金金额超过金库上限",
-        "spent-trading-label": "交易花费",
-        "deposit-amount-placeholder": "输入金额",
-        "available-trading-label": "可供交易",
-        "deposit-message": "为下一轮将资金存入金库。",
-        "next-round-start-label": "下一轮开始于：<counter />",
-        "deposit-amount-label": "存款金额",
-        "your-round-allocation-label": "您在本轮的分配：<bold>{{amount}}</bold>",
-        "your-next-round-allocation-label": "您下一轮的分配：<bold>{{amount}}</bold>",
-        "vault-filled-label": "保险库已满：{{amount}} / {{max}}",
-        "users-in-vault-label": "保管库中的用户：{{number}} / {{max}}",
-        "first-deposit-withdrawal-message": "您为下一轮存入资金，您可以在下一轮结束时提取这些资金。"
+            "title": "PnL per round",
+            "no-data": "No PnL data for previous rounds.",
+            "lifetime-pnl": "Lifetime PnL"
+        }
     }
 }
