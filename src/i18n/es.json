@@ -560,7 +560,8 @@
             "first-transaction": "Primera transacción"
         },
         "no-result": "No hay resultados para esta tabla.",
-        "total-earned": "Total de Ganancias"
+        "total-earned": "Total de Ganancias",
+        "paragraph": "<bold>El programa de referencias de tiempo extra es una herramienta de adquisición e incorporación de usuarios incentivada en cadena.</bold> El programa permite a cualquier persona<bold> generar un enlace de referencia</bold> y compártalo con los usuarios que intentan incorporar.<br /><br /> Al compartir su enlace de recomendación personal, gana<bold> ¡0.5% de todo el volumen de sUSD que producen sus usuarios referidos!</bold> No se necesitan reclamos manuales, el sUSD se acumula automáticamente en su billetera en forma de simples transferencias de sUSD."
     },
     "vaults": {
         "risks-label": "Riesgos de la bóveda",

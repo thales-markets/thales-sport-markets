@@ -563,7 +563,8 @@
             "total-earned": "Totale guadagnato"
         },
         "no-result": "Non ci sono risultati per questa tabella",
-        "total-earned": "Totale guadagnato"
+        "total-earned": "Totale guadagnato",
+        "paragraph": "<bold>Overtime Referral Program è uno strumento di onboarding e acquisizione di utenti incentivato sulla catena.</bold> Il programma permette a chiunque di<bold> generare un link di riferimento</bold> e condividerlo con gli utenti che stanno tentando di integrare.<br /><br /> Quando condividi il tuo Referral Link personale, guadagni<bold> 0,5% di tutto il volume sUSD prodotto dai tuoi utenti segnalati!</bold> Non sono necessarie richieste manuali, sUSD si accumula automaticamente nel tuo portafoglio sotto forma di semplici trasferimenti sUSD."
     },
     "vaults": {
         "title": "Volte sportive",

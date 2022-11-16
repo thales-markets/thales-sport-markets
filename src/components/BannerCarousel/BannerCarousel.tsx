@@ -19,6 +19,7 @@ const BannerCarousel: React.FC = () => {
         };
         fetchData();
     }, []);
+
     useEffect(() => {
         const map = {} as Record<number, string>;
         const fetchData = async () => {

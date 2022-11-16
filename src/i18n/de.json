@@ -557,7 +557,8 @@
             "timestamp": "Terminzeit"
         },
         "total-earned": "Insgesamt verdient",
-        "no-result": "Es gibt keine Ergebnisse für diese Tabelle"
+        "no-result": "Es gibt keine Ergebnisse für diese Tabelle",
+        "paragraph": "<bold>Das Überstunden-Empfehlungsprogramm ist ein On-Chain-Incentive-Tool zur Benutzerakquise und zum Onboarding.</bold> Das Programm erlaubt es jedem<bold> einen Empfehlungslink generieren</bold> und teilen Sie es mit Benutzern, die sie einbinden möchten.<br /><br /> Wenn Sie Ihren persönlichen Empfehlungslink teilen, verdienen Sie<bold> 0,5% des gesamten sUSD-Volumens, das Ihre geworbenen Benutzer produzieren!</bold> Es sind keine manuellen Ansprüche erforderlich, die sUSD werden automatisch in Form von einfachen sUSD-Überweisungen in Ihrer Brieftasche gesammelt."
     },
     "vaults": {
         "risks-label": "Tresorrisiken",

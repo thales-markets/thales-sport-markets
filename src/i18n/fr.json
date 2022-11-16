@@ -658,7 +658,8 @@
             "amount": "Montant"
         },
         "total-earned": "Total Gagné",
-        "no-result": "Il n'y a pas de résultats pour ce tableau"
+        "no-result": "Il n'y a pas de résultats pour ce tableau",
+        "paragraph": "<bold>Le programme de parrainage d&#39;heures supplémentaires est un outil d&#39;acquisition et d&#39;intégration d&#39;utilisateurs incitatifs en chaîne.</bold> Le programme permet à quiconque de<bold> générer un lien de parrainage</bold> et partagez-le avec les utilisateurs qu&#39;ils essaient d&#39;intégrer.<br /><br /> En partageant votre lien de parrainage personnel, vous gagnez<bold> 0,5 % de tout le volume de sUSD produit par vos utilisateurs référés !</bold> Aucune réclamation manuelle n&#39;est nécessaire, le sUSD s&#39;accumule automatiquement dans votre portefeuille sous la forme de simples transferts de sUSD."
     },
     "vaults": {
         "risks-label": "Risques de coffre-fort",
