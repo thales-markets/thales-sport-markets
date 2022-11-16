@@ -169,6 +169,13 @@ const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: b
     border: ${(_props) =>
         _props?.glow ? '3px solid ' + _props.color : _props.addedToParlay ? '3px solid #64D9FE' : '3px solid #5f6180'};
     box-shadow: ${(_props) => (_props?.glow ? '0 0 6px 2px ' + _props.color : '')};
+    &:hover {
+        border: 3px solid #64d9fe;
+        & > span {
+            color: #64d9fe !important;
+        }
+    }
+
     @media (max-width: 500px) {
         width: 25px;
         height: 25px;
