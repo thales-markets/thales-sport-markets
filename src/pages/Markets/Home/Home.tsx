@@ -670,7 +670,7 @@ const groupBySortedMarkets = (markets: SportMarkets) => {
         if (market.maturityDate < new Date() && !market.isResolved && !market.isCanceled)
             pendingResolutionMarkets.push(market);
         if (market.isResolved && !market.isCanceled) finishedMarkets.push(market);
-        if (market.isCanceled || market.isPaused) canceledMarkets.push(market);
+        if ((market.isCanceled || market.isPaused) && !market.isResolved) canceledMarkets.push(market);
     });
 
     return [...openMarkets, ...comingSoonMarkets, ...pendingResolutionMarkets, ...finishedMarkets, ...canceledMarkets];
