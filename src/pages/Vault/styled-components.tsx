@@ -175,8 +175,13 @@ export const Title = styled.span`
     }
 `;
 
-export const VaultFilledText = styled(ContentInfo)`
+export const UsersInVaultText = styled(ContentInfo)`
     margin-top: 20px;
+    margin-bottom: 10px;
+`;
+
+export const VaultFilledText = styled(ContentInfo)`
+    margin-top: 10px;
     margin-bottom: 10px;
 `;
 

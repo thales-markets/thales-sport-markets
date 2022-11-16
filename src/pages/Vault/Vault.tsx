@@ -36,6 +36,7 @@ import {
     RoundAllocationLabel,
     RoundAllocation,
     RoundAllocationWrapper,
+    UsersInVaultText
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -471,6 +472,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                                             vaultData.minDepositAmount,
                                             0
                                         ),
+                                        roundLength: 7, // vaultData.roundLength,
                                     }}
                                 />
                             </Description>
@@ -630,6 +632,15 @@ const Vault: React.FC<VaultProps> = (props) => {
                                                     />
                                                 </ContentInfo>
                                             )}
+                                            <UsersInVaultText>
+                                                <Trans
+                                                    i18nKey="vault.users-in-vault-label"
+                                                    values={{
+                                                        number: vaultData.usersCurrentlyInVault,
+                                                        max: vaultData.maxAllowedUsers,
+                                                    }}
+                                                />
+                                            </UsersInVaultText>
                                             <VaultFilledText>
                                                 <Trans
                                                     i18nKey="vault.vault-filled-label"
@@ -660,9 +671,16 @@ const Vault: React.FC<VaultProps> = (props) => {
                                     {((vaultData && userVaultData && !isWithdrawalRequested) || !isWalletConnected) && (
                                         <>
                                             {nothingToWithdraw || !isWalletConnected ? (
-                                                <ContentInfo>
-                                                    <Trans i18nKey="vault.nothing-to-withdraw-label" />
-                                                </ContentInfo>
+                                                <>
+                                                    <ContentInfo>
+                                                        <Trans i18nKey="vault.nothing-to-withdraw-label" />
+                                                    </ContentInfo>
+                                                    {userVaultData && userVaultData.balanceNextRound > 0 && (
+                                                        <ContentInfo>
+                                                            <Trans i18nKey="vault.first-deposit-withdrawal-message" />
+                                                        </ContentInfo>
+                                                    )}
+                                                </>
                                             ) : (
                                                 <>
                                                     {userVaultData && (

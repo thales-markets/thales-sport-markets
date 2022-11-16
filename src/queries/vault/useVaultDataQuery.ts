@@ -39,6 +39,7 @@ const useVaultDataQuery = (
                 minTradeAmount: 0,
                 allocationSpentInARound: 0,
                 availableAllocationInARound: 0,
+                roundLength: 0,
             };
 
             try {
@@ -65,6 +66,7 @@ const useVaultDataQuery = (
                         skewImpactLimit,
                         allocationLimitsPerMarketPerRound,
                         minTradeAmount,
+                        roundLength,
                     ] = await Promise.all([
                         sportVaultContract?.vaultStarted(),
                         sportVaultContract?.maxAllowedDeposit(),
@@ -82,6 +84,7 @@ const useVaultDataQuery = (
                         sportVaultContract?.skewImpactLimit(),
                         sportVaultContract?.allocationLimitsPerMarketPerRound(),
                         sportVaultContract?.minTradeAmount(),
+                        sportVaultContract?.roundLength(),
                     ]);
 
                     vaultData.vaultStarted = vaultStarted;
@@ -102,6 +105,7 @@ const useVaultDataQuery = (
                     vaultData.allocationLimitsPerMarketPerRound =
                         bigNumberFormatter(allocationLimitsPerMarketPerRound) / 100;
                     vaultData.minTradeAmount = bigNumberFormatter(minTradeAmount);
+                    vaultData.roundLength = Number(roundLength) / 60 / 60 / 24;
 
                     const [
                         allocationCurrentRound,
