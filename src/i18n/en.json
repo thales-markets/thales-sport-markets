@@ -142,7 +142,8 @@
         "docs": "Docs",
         "medium": "Medium",
         "tutorial": "Tutorial",
-        "github": "GitHub"
+        "github": "GitHub",
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own."
     },
     "market": {
         "match-time": "Match time",
@@ -366,7 +367,7 @@
     "rewards": {
         "header": "Rewards",
         "search-placeholder": "Search wallet address",
-        "description": "<0>A total of <0>8,000 OP</0> and <0>8,000 Thales</0> will be distributed from the 24th of October to November 7th 00:00 UTC to offset fees paid to the safebox contracts.</0> <0>The leaderboard will calculate rewards as 90% rebate of the SafeBox fee, which is 3% of total amount paid in sUSD.</0> The $ value of OP and THALES will be calculated using a 7 days twap at the start of the period.   If at the end of the two weeks period the total rebates end up being more than the initial twap value of OP and THALES tokens, the rebate will be reduced proportionally for every trader.",
+        "description": "<0>A total of <0>8,000 OP</0> and <0>8,000 Thales</0> will be distributed bi-weekly on a continuous basis as per TIP-96 to offset fees paid to the safebox contracts.</0> <0>The leaderboard will calculate rewards as 90% rebate of the SafeBox fee, which is 3% of total amount paid in sUSD.</0> The $ value of OP and THALES will be calculated using a 7 days twap at the start of the period. If at the end of the two weeks period the total rebates end up being more than the initial twap value of OP and THALES tokens, the rebate will be reduced proportionally for every trader.",
         "total-negative-pnl": "Total losses",
         "twap": "One week TWAP",
         "total-global-rebates": "Total rebates to pay",

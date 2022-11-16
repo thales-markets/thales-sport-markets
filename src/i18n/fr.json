@@ -163,7 +163,8 @@
         "docs": "Documents",
         "medium": "Medium",
         "twitter": "Twitter",
-        "discord": "Discord"
+        "discord": "Discord",
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own."
     },
     "market": {
         "question-label": "Question",
@@ -425,7 +426,8 @@
                 "onboarding-wizard": "Assistant d'intégration",
                 "history": "Histoire",
                 "fee-rebates": "Remises sur les frais",
-                "fifa-campaign": "Campagne Zebro FIFA"
+                "fifa-campaign": "Campagne Zebro FIFA",
+                "vaults": "coffres"
             },
             "buttons": {
                 "disconnect": "Déconnecter",
@@ -644,7 +646,6 @@
         "copy-link": "Copier le lien",
         "total-trading-fees": "Total des frais de négociation",
         "header": "Créer des liens de parrainage",
-        "paragraph": "Il est important de prendre soin du patient, d&#39;être suivi par le médecin, mais c&#39;est un moment de grande douleur et de souffrance. Lacus luctus pour mettre une couche sur le dessus. Deux gorges dans une robe qu&#39;un dessin animé d&#39;un médecin avec des flèches. Mus mauris vitae ultricies leo entier attendu maintenant ou Il n&#39;y a pas de carquois diam amet nislus suscip adipiscing. Il n&#39;y a besoin d&#39;un caporal, même dignissim diam, pour personne. Pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna Pour les enfants, le dignissim est beaucoup de poison. On dit qu&#39;elle se boit comme un lit de bière, mais un casino ou un carquois. La faim malveillante et l&#39;horrible pauvreté. Mais le besoin est le besoin du fringilla phasellus faucibus scelerisque eleifend jusqu&#39;à. Ni la vallée de demain jamais. Quel élément l&#39;oreiller n&#39;est même pas. Mais maintenant, il vise le dessin animé du lac de propagande. La rue a dit que tout le monde devrait passer un bon week-end avec des flèches.<br><br> Par conséquent, il ne nécessite pas de clavier gratuit. Ils vivent dans la vieillesse et la maladie. Le rire de Feugiat devant la peur était dit. Il n&#39;y a pas de moment facile pour cibler cette maladie. Il aimerait avoir des membres comme le football. Le chat a maintenant besoin d&#39;un peu de saveur pure dans la pâte. Il est clair que cela est suivi de flèches. Lobortis élément nibh tellus molestie maintenant. Il n&#39;y a pas de terre mortelle dans la peur. Il faut un gros effort pour cibler le football, pas pour être un vestibule sans phase. Jusqu&#39;au pretium vulputate sapien ni sagittis aliquam malesuada bibendum arcu. En fait, aucune masse aérienne ne fait cela non plus. Qu&#39;on se le dise, ce n&#39;est que cela. Condimentum mattis pellentesque id nibh tortor id. Massa tincidunt maintenant pulvinar sapien et ligula ullamcorper malesuada. Maquillage enceinte Hendret, tout le monde n&#39;est pas un médecin local et l&#39;auteur de la publicité. C&#39;est aussi un élément très important de la stratégie du football clinique. Pour l&#39;instant la gorge des enfants sera prise en charge. Les membres peuvent aussi être fans de pure in the soft now.",
         "affiliate-leaderboard-table": {
             "total-earned": "Total Gagné",
             "number-of-trades": "Métiers",
@@ -657,6 +658,89 @@
             "amount": "Montant"
         },
         "total-earned": "Total Gagné",
-        "no-result": "Il n'y a pas de résultats pour ce tableau"
+        "no-result": "Il n'y a pas de résultats pour ce tableau",
+        "paragraph": "<bold>Le programme de parrainage d&#39;heures supplémentaires est un outil d&#39;acquisition et d&#39;intégration d&#39;utilisateurs incitatifs en chaîne.</bold> Le programme permet à quiconque de<bold> générer un lien de parrainage</bold> et partagez-le avec les utilisateurs qu&#39;ils essaient d&#39;intégrer.<br /><br /> En partageant votre lien de parrainage personnel, vous gagnez<bold> 0,5 % de tout le volume de sUSD produit par vos utilisateurs référés !</bold> Aucune réclamation manuelle n&#39;est nécessaire, le sUSD s&#39;accumule automatiquement dans votre portefeuille sous la forme de simples transferts de sUSD."
+    },
+    "vaults": {
+        "title": "Sport Vaults",
+        "strategy-label": "Vault strategy",
+        "risks-label": "Vault risks"
+    },
+    "vault": {
+        "discount-vault": {
+            "title": "Discount Vault",
+            "description": "<p>Buys positions that have more than {{odds}} odds and are available at a discount larger than {{discount}}.</p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
+        },
+        "degen-discount-vault": {
+            "title": "Degen Discount Vault",
+            "description": "<p>Buys positions at any odds that are available for more than {{discount}} discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market.</p>"
+        },
+        "safu-discount-vault": {
+            "title": "Safu Discount Vault",
+            "description": "<p>Buys positions that have more than {{odds}} odds and are available at any discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
+        },
+        "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
+        "back-to-vaults": "Back to vaults",
+        "vault-not-started-message": "The vault has not started",
+        "vault-paused-message": "The vault is paused",
+        "round-allocation-label": "Total round deposit",
+        "spent-trading-label": "Spent on trading",
+        "available-trading-label": "Available for trading",
+        "round-end-label": "The round ends in",
+        "your-round-allocation-label": "Your allocation for the round: <bold>{{amount}}</bold>",
+        "your-next-round-allocation-label": "Your allocation for the next round: <bold>{{amount}}</bold>",
+        "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
+        "next-round-start-label": "The next round starts in: <counter />",
+        "users-in-vault-label": "Users in the vault: {{number}} / {{max}}",
+        "vault-filled-label": "Vault filled: {{amount}} / {{max}}",
+        "deposit-message": "Deposit funds into the vault for the next round.",
+        "deposit-amount-label": "Deposit amount",
+        "deposit-amount-placeholder": "Enter amount",
+        "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "Nothing to withdraw.",
+        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdraw-round-end-label": "The round ends in: <counter />",
+        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdrawal-request-label": "Withdrawal request: <bold>{{amount}}</bold>",
+        "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
+        "round-ended-label": "Round ended",
+        "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
+        "deposit-max-amount-of-users-warning": "Maximum number of users in the vault is reached, you cannot deposit.",
+        "deposit-vault-cap-reached-warning": "The vault cap is reached, you cannot deposit.",
+        "deposit-vault-cap-error": "Deposit amount exceeds vault cap",
+        "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
+        "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
+        "tabs": {
+            "deposit": "Deposit",
+            "claim": "Claim",
+            "withdraw": "Withdraw"
+        },
+        "button": {
+            "deposit-label": "Deposit",
+            "deposit-progress-label": "Deposit in progress...",
+            "deposit-confirmation-message": "Deposit successfully placed",
+            "request-withdrawal-label": "Request withdrawal",
+            "request-withdrawal-progress-label": "Request in progress...",
+            "request-withdrawal-confirmation-message": "Withdrawal request successfully sent",
+            "withdraw-label": "Withdraw",
+            "withdraw-progress-label": "Withdrawal in progress...",
+            "withdraw-confirmation-message": "Funds successfully withdrawn",
+            "close-round-label": "Close round",
+            "close-round-progress-label": "Closing round in progress...",
+            "close-round-confirmation-message": "Round successfully closed"
+        },
+        "trades-history": {
+            "title": "Vault trades history",
+            "no-trades": "No trades associated with this vault in the selected round.",
+            "round-label": "Round"
+        },
+        "pnl": {
+            "title": "PnL per round",
+            "no-data": "No PnL data for previous rounds.",
+            "lifetime-pnl": "Lifetime PnL"
+        }
     }
 }
