@@ -143,7 +143,8 @@
         "docs": "เอกสาร",
         "medium": "Medium",
         "twitter": "Twitter",
-        "discord": "Discord"
+        "discord": "Discord",
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own."
     },
     "market": {
         "question-label": "คำถาม",
@@ -323,7 +324,8 @@
                 "leaderboard": "ลีดเดอร์บอร์ด",
                 "onboarding-wizard": "วิซาร์ดการเริ่มต้นใช้งาน",
                 "fee-rebates": "ส่วนลดค่าธรรมเนียม",
-                "fifa-campaign": "แคมเปญ Zebro FIFA"
+                "fifa-campaign": "แคมเปญ Zebro FIFA",
+                "vaults": "ห้องใต้ดิน"
             },
             "buttons": {
                 "switch": "สวิตช์",
@@ -561,5 +563,85 @@
         },
         "total-earned": "รายได้ทั้งหมด",
         "no-result": "ไม่มีผลลัพธ์สำหรับตารางนี้"
+    },
+    "vaults": {
+        "risks-label": "ความเสี่ยงของห้องนิรภัย",
+        "title": "ห้องนิรภัยกีฬา",
+        "strategy-label": "กลยุทธ์ห้องนิรภัย"
+    },
+    "vault": {
+        "discount-vault": {
+            "title": "ห้องเก็บส่วนลด",
+            "description": "<p>ซื้อตำแหน่งที่มีอัตราต่อรองมากกว่า {{odds}} และมีส่วนลดมากกว่า {{discount}}</p> เงินฝากทั้งหมดที่เข้าสู่รอบจะนับรวมกับปริมาณการเดิมพันแบบเกม</p>",
+            "risks": "<p>ห้องนิรภัยมีอัตราการใช้งาน {{utilizationRate}} ซึ่งรับรองว่าไม่เกิน {{utilizationRate}} ของเงินฝากในแต่ละรอบที่มีความเสี่ยง นอกจากนี้ จาก {{utilizationRate}} เหล่านั้น คุณสามารถใช้จ่ายได้สูงสุด {{allocationLimitsPerMarketPerRound}} ตลาดเดียว ดังนั้นจึงเป็นการกระจายความเสี่ยงไปยังตลาดต่างๆ ที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
+        },
+        "degen-discount-vault": {
+            "title": "ห้องเก็บส่วนลด Degen",
+            "risks": "<p>ห้องนิรภัยมีอัตราการใช้งาน {{utilizationRate}} ซึ่งรับรองว่าไม่เกิน {{utilizationRate}} ของเงินฝากในแต่ละรอบที่มีความเสี่ยง นอกจากนี้ จาก {{utilizationRate}} เหล่านั้น คุณสามารถใช้จ่ายได้สูงสุด {{allocationLimitsPerMarketPerRound}} ในตลาดเดียว</p>",
+            "description": "<p>ซื้อตำแหน่งในอัตราต่อรองใด ๆ ที่มีให้สำหรับส่วนลดมากกว่า {{discount}}</p><p> เงินฝากทั้งหมดที่เข้าสู่รอบจะนับรวมกับปริมาณการเดิมพันแบบเกม</p>"
+        },
+        "safu-discount-vault": {
+            "description": "<p>ซื้อตำแหน่งที่มีอัตราต่อรองมากกว่า {{odds}} และมีส่วนลดใดๆ</p><p> เงินฝากทั้งหมดที่เข้าสู่รอบจะนับรวมกับปริมาณการเดิมพันแบบเกม</p>",
+            "title": "ห้องเก็บส่วนลดคอลัมน์",
+            "risks": "<p>ห้องนิรภัยมีอัตราการใช้งาน {{utilizationRate}} ซึ่งรับรองว่าไม่เกิน {{utilizationRate}} ของเงินฝากในแต่ละรอบที่มีความเสี่ยง นอกจากนี้ จาก {{utilizationRate}} เหล่านั้น คุณสามารถใช้จ่ายได้สูงสุด {{allocationLimitsPerMarketPerRound}} ตลาดเดียว ดังนั้นจึงเป็นการกระจายความเสี่ยงไปยังตลาดต่างๆ ที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
+        },
+        "tabs": {
+            "deposit": "เงินฝาก",
+            "claim": "เรียกร้อง",
+            "withdraw": "ถอน"
+        },
+        "button": {
+            "request-withdrawal-progress-label": "กำลังดำเนินการขอ...",
+            "deposit-label": "เงินฝาก",
+            "withdraw-label": "ถอน",
+            "withdraw-progress-label": "กำลังดำเนินการถอนเงิน...",
+            "deposit-progress-label": "อยู่ระหว่างฝาก...",
+            "withdraw-confirmation-message": "ถอนเงินสำเร็จ",
+            "close-round-progress-label": "กำลังดำเนินการปิดรอบ...",
+            "request-withdrawal-label": "ขอถอนเงิน",
+            "close-round-confirmation-message": "ปิดรอบสำเร็จ",
+            "request-withdrawal-confirmation-message": "ส่งคำขอถอนสำเร็จแล้ว",
+            "deposit-confirmation-message": "วางเงินมัดจำเรียบร้อยแล้ว",
+            "close-round-label": "ปิดรอบ"
+        },
+        "trades-history": {
+            "title": "ประวัติการแลกเปลี่ยนห้องนิรภัย",
+            "round-label": "กลม",
+            "no-trades": "ไม่มีการซื้อขายที่เกี่ยวข้องกับห้องนิรภัยนี้ในรอบที่เลือก"
+        },
+        "pnl": {
+            "no-data": "ไม่มีข้อมูล PnL สำหรับรอบก่อนหน้า",
+            "lifetime-pnl": "อายุการใช้งาน PnL",
+            "title": "PnL ต่อรอบ"
+        },
+        "available-to-withdraw-label": "สามารถถอนได้: <bold>{{amount}}</bold>",
+        "deposit-max-amount-of-users-warning": "ถึงจำนวนผู้ใช้สูงสุดในห้องนิรภัยแล้ว คุณไม่สามารถฝากเงินได้",
+        "round-end-label": "รอบสิ้นสุดใน",
+        "vault-not-started-message": "ห้องนิรภัยยังไม่เริ่มทำงาน",
+        "withdraw-round-end-label": "รอบสิ้นสุดใน: <เคาน์เตอร์ />",
+        "withdrawal-deposit-warning": "คุณไม่สามารถถอนได้เนื่องจากคุณฝากไว้แล้วสำหรับรอบถัดไป",
+        "deposit-message": "ฝากเงินเข้าคลังสำหรับรอบต่อไป",
+        "your-next-round-allocation-label": "การจัดสรรของคุณสำหรับรอบถัดไป: <bold>{{amount}}</bold>",
+        "vault-paused-message": "ห้องนิรภัยถูกหยุดชั่วคราว",
+        "deposit-min-amount-error": "จำนวนเงินขั้นต่ำสำหรับการฝากคือ {{amount}}",
+        "withdrawal-requested-message": "คุณขอถอน <bold>{{amount}}</bold><tooltip /> เงินของคุณจะถูกส่งถึงคุณโดยอัตโนมัติเมื่อสิ้นสุดรอบเมื่อปิดรอบ",
+        "nothing-to-withdraw-label": "ไม่มีอะไรจะถอน",
+        "deposit-amount-placeholder": "ใส่จำนวนเงิน",
+        "spent-trading-label": "ใช้จ่ายในการซื้อขาย",
+        "available-trading-label": "ซื้อขายได้",
+        "variables": "<p>ตัวแปร:</p><ul><li> อัตราการใช้: {{utilizationRate}}</li><li> ขีดจำกัดล่างของราคา: {{priceLowerLimit}}</li><li> ขีดจำกัดสูงสุดของราคา: {{priceUpperLimit}}</li><li> ผลกระทบเอียงสูงสุด: {{skewImpactLimit}}</li><li> การจัดสรรสูงสุดในตลาดเดียว: {{allocationLimitsPerMarketPerRound}}</li><li> เงินฝากทั้งหมดสูงสุด: {{maxAllowedDeposit}}</li><li> ผู้ใช้สูงสุดในห้องนิรภัย: {{maxAllowedUsers}}</li><li> จำนวนเงินขั้นต่ำในการซื้อขายครั้งเดียว: {{minTradeAmount}}</li><li> เงินฝากขั้นต่ำ: {{minDepositAmount}}</li></ul>",
+        "withdrawal-request-label": "คำขอถอนเงิน: <bold>{{amount}}</bold>",
+        "deposit-vault-cap-reached-warning": "ถึงขีดจำกัดของห้องนิรภัยแล้ว คุณไม่สามารถฝากได้",
+        "estimated-amount-tooltip": "นี่คือจำนวนเงินโดยประมาณ จำนวนเงินจริงจะถูกคำนวณเมื่อปิดรอบปัจจุบันตามรอบ PnL",
+        "your-round-allocation-label": "การจัดสรรของคุณสำหรับรอบนี้: <bold>{{amount}}</bold>",
+        "vault-filled-label": "ห้องนิรภัยเต็มแล้ว: {{amount}} / {{max}}",
+        "deposit-withdrawal-warning": "มีการร้องขอการถอน คุณไม่สามารถฝากได้",
+        "next-round-start-label": "รอบต่อไปจะเริ่มใน: <เคาน์เตอร์ />",
+        "back-to-vaults": "กลับไปที่ห้องใต้ดิน",
+        "deposit-vault-cap-error": "จำนวนเงินฝากเกินขีดจำกัดของห้องนิรภัย",
+        "withdrawal-message": "คุณสามารถขอถอนเงินและเงินของคุณจะถูกส่งถึงคุณโดยอัตโนมัติเมื่อสิ้นสุดรอบเมื่อปิดรอบ",
+        "round-allocation-label": "เงินฝากรวมรอบ",
+        "deposit-amount-label": "จำนวนเงินฝาก",
+        "round-ended-label": "สิ้นสุดรอบ"
     }
 }
