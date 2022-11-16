@@ -337,7 +337,7 @@
     "rewards": {
         "header": "Preise",
         "search-placeholder": "Wallet Addresse suchen",
-        "description": "<0> Insgesamt 8.000 OP und 8.000 Thales werden vom 24. Oktober bis zum 7. November 00:00 UTC verteilt, um die an die SafeBox-Verträge gezahlten Gebühren auszugleichen. </0> <0> Die Rangliste berechnet die Belohnungen als 90% Rabatt auf die SafeBox-Gebühr, die 3% des Gesamtbetrags in sUSD beträgt. </0> <0> Der $-Wert von OP und THALES wird mit einem 7-Tage-Twap zu Beginn des Zeitraums berechnet. </0> <0>Wenn am Ende des zweiwöchigen Zeitraums die Gesamtrebatte mehr als der anfängliche Twap-Wert der OP- und THALES-Tokens beträgt, wird der Rabatt für jeden Trader proportional reduziert.</0>",
+        "description": "<0> Insgesamt <0>8.000 OP</0> und <0>8.000 Thales</0> werden alle zwei Wochen auf kontinuierlicher Basis gemäß TIP-96 verteilt, um die an die SafeBox-Verträge gezahlten Gebühren auszugleichen. </0> <0> Die Rangliste berechnet die Belohnungen als 90 % Rabatt auf die SafeBox-Gebühr, die 3 % des in sUSD gezahlten Gesamtbetrags beträgt. </0> <0> Der $-Wert von OP und THALES wird mit einem 7-Tage-TWAP zu Beginn des Zeitraums berechnet. Wenn am Ende des zweiwöchigen Zeitraums die Gesamtrabatte mehr als der anfängliche TWAP-Wert der OP- und THALES-Tokens beträgt, wird der Rabatt für jeden Trader proportional reduziert.</0>",
         "op-rewards-banner-message": "Die OP-Prämien haben begonnen. Wie ihr sie verdienen könnt, erfahrt ihr auf <bold>der OP-Prämienseite</bold>.",
         "table": {
             "wallet-address": "Wallet Addresse",
