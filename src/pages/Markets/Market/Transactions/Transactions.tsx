@@ -49,7 +49,7 @@ const Transactions: React.FC<TransactionsProps> = ({ market }) => {
                     amount: claimTx.amount,
                     position: convertFinalResultToWinnerName(claimTx.market.finalResult, market),
                     market: claimTx?.market?.address,
-                    paid: claimTx.amount,
+                    paid: 0,
                     blockNumber: 0,
                 });
             });

@@ -26,6 +26,7 @@ export type VaultData = {
     minTradeAmount: number;
     allocationSpentInARound: number;
     availableAllocationInARound: number;
+    roundLength: number;
 };
 
 export type UserVaultData = {
