@@ -143,7 +143,8 @@
         "twitter": "Twitter",
         "medium": "Medium",
         "discord": "Discord",
-        "tutorial": "Anleitung"
+        "tutorial": "Anleitung",
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own."
     },
     "market": {
         "question-label": "Frage",
@@ -324,7 +325,8 @@
                 "history": "Geschichte",
                 "leaderboard": "Bestenliste",
                 "fee-rebates": "Gebührenrückerstattungen",
-                "fifa-campaign": "Zebro FIFA-Kampagne"
+                "fifa-campaign": "Zebro FIFA-Kampagne",
+                "vaults": "Gewölbe"
             },
             "buttons": {
                 "switch": "Schalter",
@@ -335,7 +337,7 @@
     "rewards": {
         "header": "Preise",
         "search-placeholder": "Wallet Addresse suchen",
-        "description": "<0> Insgesamt 8.000 OP und 8.000 Thales werden vom 24. Oktober bis zum 7. November 00:00 UTC verteilt, um die an die SafeBox-Verträge gezahlten Gebühren auszugleichen. </0> <0> Die Rangliste berechnet die Belohnungen als 90% Rabatt auf die SafeBox-Gebühr, die 3% des Gesamtbetrags in sUSD beträgt. </0> <0> Der $-Wert von OP und THALES wird mit einem 7-Tage-Twap zu Beginn des Zeitraums berechnet. </0> <0>Wenn am Ende des zweiwöchigen Zeitraums die Gesamtrebatte mehr als der anfängliche Twap-Wert der OP- und THALES-Tokens beträgt, wird der Rabatt für jeden Trader proportional reduziert.</0>",
+        "description": "<0> Insgesamt <0>8.000 OP</0> und <0>8.000 Thales</0> werden alle zwei Wochen auf kontinuierlicher Basis gemäß TIP-96 verteilt, um die an die SafeBox-Verträge gezahlten Gebühren auszugleichen. </0> <0> Die Rangliste berechnet die Belohnungen als 90 % Rabatt auf die SafeBox-Gebühr, die 3 % des in sUSD gezahlten Gesamtbetrags beträgt. </0> <0> Der $-Wert von OP und THALES wird mit einem 7-Tage-TWAP zu Beginn des Zeitraums berechnet. Wenn am Ende des zweiwöchigen Zeitraums die Gesamtrabatte mehr als der anfängliche TWAP-Wert der OP- und THALES-Tokens beträgt, wird der Rabatt für jeden Trader proportional reduziert.</0>",
         "op-rewards-banner-message": "Die OP-Prämien haben begonnen. Wie ihr sie verdienen könnt, erfahrt ihr auf <bold>der OP-Prämienseite</bold>.",
         "table": {
             "wallet-address": "Wallet Addresse",
@@ -556,5 +558,87 @@
         },
         "total-earned": "Insgesamt verdient",
         "no-result": "Es gibt keine Ergebnisse für diese Tabelle"
+    },
+    "vaults": {
+        "risks-label": "Tresorrisiken",
+        "title": "Sport Gewölbe",
+        "strategy-label": "Vault-Strategie"
+    },
+    "vault": {
+        "discount-vault": {
+            "description": "<p>Kauft Positionen, die mehr als {{odds}} Quoten haben und zu einem Rabatt von mehr als {{discount}} verfügbar sind.</p> Alle Einzahlungen, die in eine Runde eingehen, zählen zum gamifizierten Staking-Volumen.</p>",
+            "title": "Rabatttresor",
+            "risks": "<p>Der Tresor hat eine Auslastungsrate von {{utilizationRate}}, was sicherstellt, dass nicht mehr als {{utilizationRate}} pro Runde eingezahlt werden. Darüber hinaus können von diesen {{utilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} auf einem einzelnen Markt ausgegeben werden, wodurch das Risiko auf mehrere Märkte verteilt wird, die Quoten von mehr als {{odds}} haben.</p>"
+        },
+        "degen-discount-vault": {
+            "title": "Degener Rabatttresor",
+            "description": "<p>Kauft Positionen zu beliebigen Quoten, die für mehr als {{discount}} Rabatt verfügbar sind.</p><p> Alle Einzahlungen, die in eine Runde eingehen, zählen zum gamifizierten Staking-Volumen.</p>",
+            "risks": "<p>Der Tresor hat eine Auslastungsrate von {{utilizationRate}}, was sicherstellt, dass nicht mehr als {{utilizationRate}} pro Runde eingezahlt werden. Außerdem können von diesen {{utilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} auf einem einzelnen Markt ausgegeben werden.</p>"
+        },
+        "safu-discount-vault": {
+            "description": "<p>Kauft Positionen, die mehr als {{odds}} Quoten haben und mit jedem Rabatt verfügbar sind.</p><p> Alle Einzahlungen, die in eine Runde eingehen, zählen zum gamifizierten Staking-Volumen.</p>",
+            "risks": "<p>Der Tresor hat eine Auslastungsrate von {{utilizationRate}}, was sicherstellt, dass nicht mehr als {{utilizationRate}} pro Runde eingezahlt werden. Darüber hinaus können von diesen {{utilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} auf einem einzelnen Markt ausgegeben werden, wodurch das Risiko auf mehrere Märkte verteilt wird, die Quoten von mehr als {{odds}} haben.</p>",
+            "title": "Spaltenrabatttresor"
+        },
+        "tabs": {
+            "withdraw": "Abheben",
+            "deposit": "Kaution",
+            "claim": "Beanspruchen"
+        },
+        "button": {
+            "deposit-progress-label": "Einzahlung läuft...",
+            "close-round-progress-label": "Abschlussrunde läuft...",
+            "request-withdrawal-confirmation-message": "Auszahlungsantrag erfolgreich gesendet",
+            "close-round-label": "Runde schließen",
+            "request-withdrawal-progress-label": "Anfrage in Bearbeitung...",
+            "deposit-confirmation-message": "Anzahlung erfolgreich platziert",
+            "request-withdrawal-label": "Auszahlung beantragen",
+            "deposit-label": "Kaution",
+            "withdraw-confirmation-message": "Guthaben erfolgreich abgehoben",
+            "withdraw-label": "Abheben",
+            "close-round-confirmation-message": "Runde erfolgreich abgeschlossen",
+            "withdraw-progress-label": "Auszahlung läuft..."
+        },
+        "trades-history": {
+            "round-label": "Runden",
+            "title": "Geschichte des Tresorhandels",
+            "no-trades": "Keine Trades mit diesem Tresor in der ausgewählten Runde verbunden."
+        },
+        "pnl": {
+            "no-data": "Keine PnL-Daten für frühere Runden.",
+            "title": "PnL pro Runde",
+            "lifetime-pnl": "Lebenslang PnL"
+        },
+        "round-end-label": "Die Runde endet in",
+        "your-round-allocation-label": "Ihre Zuteilung für die Runde: <bold>{{amount}}</bold>",
+        "available-trading-label": "Für den Handel verfügbar",
+        "back-to-vaults": "Zurück zu Gewölben",
+        "vault-paused-message": "Der Tresor wird angehalten",
+        "your-next-round-allocation-label": "Ihre Zuteilung für die nächste Runde: <bold>{{amount}}</bold>",
+        "round-allocation-label": "Gesamtrunde Einzahlung",
+        "deposit-amount-label": "Einzahlungsbetrag",
+        "deposit-message": "Zahlen Sie Geld für die nächste Runde in den Tresor ein.",
+        "variables": "<p>Variablen:</p><ul><li> Nutzungsrate: {{utilizationRate}}</li><li> Preisuntergrenze: {{priceLowerLimit}}</li><li> Preisobergrenze: {{priceUpperLimit}}</li><li> Max. Skew-Auswirkung: {{skewImpactLimit}}</li><li> Maximale Allokation auf einem einzelnen Markt: {{allocationLimitsPerMarketPerRound}}</li><li> Maximale Gesamteinzahlung: {{maxAllowedDeposit}}</li><li> Max. Benutzer im Tresor: {{maxAllowedUsers}}</li><li> Mindestbetrag für einen einzelnen Handel: {{minTradeAmount}}</li><li> Mindesteinzahlung: {{minDepositAmount}}</li></ul>",
+        "next-round-start-label": "Die nächste Runde beginnt in: <counter />",
+        "vault-filled-label": "Tresor gefüllt: {{amount}} / {{max}}",
+        "nothing-to-withdraw-label": "Nichts zu entziehen.",
+        "estimated-amount-tooltip": "Dies ist ein geschätzter Betrag. Der tatsächliche Betrag wird nach Abschluss der aktuellen Runde basierend auf dem Runden-PnL berechnet.",
+        "spent-trading-label": "Für den Handel ausgegeben",
+        "vault-not-started-message": "Der Tresor wurde nicht gestartet",
+        "deposit-min-amount-error": "Der Mindestbetrag für die Einzahlung beträgt {{amount}}",
+        "withdrawal-request-label": "Auszahlungsantrag: <bold>{{amount}}</bold>",
+        "deposit-vault-cap-error": "Der Einzahlungsbetrag übersteigt die Tresorobergrenze",
+        "deposit-vault-cap-reached-warning": "Die Tresorobergrenze ist erreicht, Sie können keine Einzahlungen vornehmen.",
+        "withdrawal-message": "Sie können eine Auszahlung beantragen und Ihr Geld wird Ihnen am Ende der Runde automatisch zugeschickt, wenn die Runde endet.",
+        "deposit-max-amount-of-users-warning": "Die maximale Anzahl von Benutzern im Tresor ist erreicht, Sie können keine Einzahlungen vornehmen.",
+        "withdrawal-deposit-warning": "Sie können sich nicht zurückziehen, da Sie bereits für die nächste Runde eingezahlt haben.",
+        "deposit-withdrawal-warning": "Eine Auszahlung wird angefordert, Sie können keine Einzahlungen vornehmen.",
+        "round-ended-label": "Runde beendet",
+        "withdraw-round-end-label": "Die Runde endet in: <Zähler />",
+        "available-to-withdraw-label": "Zur Auszahlung verfügbar: <bold>{{amount}}</bold>",
+        "deposit-amount-placeholder": "Menge eingeben",
+        "withdrawal-requested-message": "Sie haben beantragt, <bold>{{amount}}</bold><tooltip /> abzuheben. Ihr Geld wird Ihnen am Ende der Runde automatisch zugeschickt, wenn die Runde endet.",
+        "first-deposit-withdrawal-message": "Sie haben für die nächste Runde eingezahlt und können diese Gelder am Ende der nächsten Runde abheben.",
+        "users-in-vault-label": "Benutzer im Tresor: {{number}} / {{max}}"
     }
 }

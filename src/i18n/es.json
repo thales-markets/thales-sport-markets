@@ -143,7 +143,8 @@
         "docs": "Documentos",
         "medium": "Medium",
         "twitter": "Twitter",
-        "discord": "Discord"
+        "discord": "Discord",
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own."
     },
     "market": {
         "question-label": "Pregunta",
@@ -327,7 +328,8 @@
                 "become-affiliate": "Conviértete en afiliado",
                 "sports-trivia": "curiosidades deportivas",
                 "fee-rebates": "Reembolsos de tarifas",
-                "fifa-campaign": "Campaña Zebro FIFA"
+                "fifa-campaign": "Campaña Zebro FIFA",
+                "vaults": "Bóvedas"
             },
             "buttons": {
                 "disconnect": "Desconectar",
@@ -338,7 +340,7 @@
     "rewards": {
         "header": "Recompensas",
         "search-placeholder": "Buscar dirección de billetera",
-        "description": "<0>Un total de 8.000 OP y 8.000 THALES seran distribuidos entre el 24 de Octubre y el 7 de Noviembre 00:00 UTC para compensar la comisión pagada al contrato SafeBox. </0>  <0> Esta tabla de posiciones calcula las recompensas como un reembolso del 90% de la comisión que va al contrato SafeBox, que es 3% de la cantidad pagada en sUSD. </0>  <0> El valor en USD de los tokens OP y THALES será calculado usando una medida de TWAP (compras promediadas en el tiempo) de 7 días desde el comienzo de el periodo de recompensas. </0>  <0> Si al final de este periodo de 2 semanas los reembolsos totales terminan siendo mayores que el valor inicial TWAP de los tokens OP y THALES, entonces el reembolso será reducido proporcionalmente por cada participante. </0>",
+        "description": "<0>Un total de <0>8,000 OP</0> y <0>8,000 THALES</0> tokens serán distribuidos cada 2 semanas de forma continua de acuerdo a TIP-96 para así reducir la comisión pagada a al contrato SafeBox.</0>  <0> Este ranking considera el calculo de recompensas como un 90% de lo pagado en comisión al contrato SafeBox, la cual es el 3% de la cantidad pagada en sUSD. </0>  <0> El valor en USD de los tokens OP y THALES será calculada usando el metodo TWAP (del inglés Time-weighted average price, o precio promedio en un rango de tiempo) durante 7 días, comenzando al principio de cada periodo de 2 semanas. Si al final de este periodo de 2 semanas el total de reembolsos termina siendo mayor que el valor TWAP inicial para los tokens de OP y THALES, entonces el reembolso será reducido proporcionalmente para cada participante.</0>",
         "op-rewards-banner-message": "Las recompensas en OP han comenzado, revisa como obtenerlas en <bold>la pagína de recompensas OP</bold>",
         "table": {
             "wallet-address": "Dirección de billetera",
@@ -559,5 +561,87 @@
         },
         "no-result": "No hay resultados para esta tabla.",
         "total-earned": "Total de Ganancias"
+    },
+    "vaults": {
+        "risks-label": "Riesgos de la bóveda",
+        "strategy-label": "estrategia de bóveda",
+        "title": "Bóvedas deportivas"
+    },
+    "vault": {
+        "discount-vault": {
+            "title": "Bóveda de descuento",
+            "description": "<p>Compra posiciones que tienen más de {{odds}} probabilidades y están disponibles con un descuento mayor que {{discount}}.</p> Todos los depósitos que ingresan a una ronda cuentan para el volumen de participación gamificado.</p>",
+            "risks": "<p>La bóveda tiene una tasa de utilización de {{utilizationRate}}, lo que garantiza que no se ponga en riesgo más de {{utilizationRate}} de lo depositado en una ronda. Además, de esos {{utilizationRate}}, se puede gastar un máximo de {{allocationLimitsPerMarketPerRound}} en un solo mercado, diversificando así el riesgo en múltiples mercados que tienen probabilidades de más de {{odds}}.</p>"
+        },
+        "degen-discount-vault": {
+            "risks": "<p>La bóveda tiene una tasa de utilización de {{utilizationRate}}, lo que garantiza que no se ponga en riesgo más de {{utilizationRate}} de lo depositado en una ronda. Además, de esos {{utilizationRate}}, se puede gastar un máximo de {{allocationLimitsPerMarketPerRound}} en un solo mercado.</p>",
+            "title": "Bóveda de descuento de Degen",
+            "description": "<p>Compra posiciones con cualquier cuota que esté disponible por más de {{discount}} de descuento.</p><p> Todos los depósitos que ingresan a una ronda cuentan para el volumen de participación gamificado.</p>"
+        },
+        "safu-discount-vault": {
+            "description": "<p>Compra posiciones que tienen más de {{odds}} probabilidades y están disponibles con cualquier descuento.</p><p> Todos los depósitos que ingresan a una ronda cuentan para el volumen de participación gamificado.</p>",
+            "title": "Bóveda de descuento de columna",
+            "risks": "<p>La bóveda tiene una tasa de utilización de {{utilizationRate}}, lo que garantiza que no se ponga en riesgo más de {{utilizationRate}} de lo depositado en una ronda. Además, de esos {{utilizationRate}}, se puede gastar un máximo de {{allocationLimitsPerMarketPerRound}} en un solo mercado, diversificando así el riesgo en múltiples mercados que tienen probabilidades de más de {{odds}}.</p>"
+        },
+        "tabs": {
+            "deposit": "Depósito",
+            "claim": "Reclamar",
+            "withdraw": "Retirar"
+        },
+        "button": {
+            "request-withdrawal-progress-label": "Solicitud en curso...",
+            "request-withdrawal-label": "Solicitud de retirada",
+            "deposit-label": "Depósito",
+            "withdraw-progress-label": "Retiro en proceso...",
+            "withdraw-label": "Retirar",
+            "deposit-progress-label": "Depósito en curso...",
+            "withdraw-confirmation-message": "Fondos retirados con éxito",
+            "deposit-confirmation-message": "Depósito realizado con éxito",
+            "close-round-label": "Cerrar ronda",
+            "close-round-confirmation-message": "Ronda cerrada con éxito",
+            "close-round-progress-label": "Ronda de cierre en curso...",
+            "request-withdrawal-confirmation-message": "Solicitud de retiro enviada con éxito"
+        },
+        "trades-history": {
+            "round-label": "Redondo",
+            "no-trades": "No hay intercambios asociados con esta bóveda en la ronda seleccionada.",
+            "title": "Historial de operaciones de bóveda"
+        },
+        "pnl": {
+            "lifetime-pnl": "PnL de por vida",
+            "title": "PnL por ronda",
+            "no-data": "No hay datos de PnL para rondas anteriores."
+        },
+        "vault-filled-label": "Bóveda llena: {{amount}} / {{max}}",
+        "estimated-amount-tooltip": "Esta es una cantidad estimada. El monto real se calculará al cerrar la ronda actual en función del PnL de la ronda.",
+        "next-round-start-label": "La próxima ronda comienza en: <contador />",
+        "your-round-allocation-label": "Su asignación para la ronda: <bold>{{amount}}</bold>",
+        "available-trading-label": "Disponible para negociar",
+        "withdrawal-deposit-warning": "No puede retirar como ya depositó para la próxima ronda.",
+        "spent-trading-label": "Gastado en comercio",
+        "withdrawal-request-label": "Solicitud de retiro: <bold>{{amount}}</bold>",
+        "deposit-amount-label": "Cantidad del depósito",
+        "vault-paused-message": "La bóveda está en pausa",
+        "round-allocation-label": "Depósito redondo total",
+        "deposit-min-amount-error": "El monto mínimo para el depósito es {{amount}}",
+        "deposit-amount-placeholder": "Ingrese la cantidad",
+        "your-next-round-allocation-label": "Su asignación para la próxima ronda: <bold>{{amount}}</bold>",
+        "withdraw-round-end-label": "La ronda termina en: <contador />",
+        "round-ended-label": "Ronda terminada",
+        "round-end-label": "La ronda termina en",
+        "withdrawal-message": "Puede solicitar un retiro y sus fondos se le enviarán automáticamente al final de la ronda cuando se cierre la ronda.",
+        "vault-not-started-message": "La bóveda no ha comenzado",
+        "deposit-vault-cap-reached-warning": "Se alcanza el límite de la bóveda, no puede depositar.",
+        "nothing-to-withdraw-label": "Nada que retirar.",
+        "deposit-vault-cap-error": "El monto del depósito excede el límite de la bóveda",
+        "withdrawal-requested-message": "Solicitó retirar <bold>{{amount}}</bold><tooltip />. Sus fondos se le enviarán automáticamente al final de la ronda cuando se cierre la ronda.",
+        "available-to-withdraw-label": "Disponible para retirar: <bold>{{amount}}</bold>",
+        "deposit-message": "Deposite fondos en la bóveda para la siguiente ronda.",
+        "deposit-max-amount-of-users-warning": "Se alcanzó el número máximo de usuarios en la bóveda, no puede depositar.",
+        "deposit-withdrawal-warning": "Se solicita retiro, no se puede depositar.",
+        "variables": "<p>Variables:</p><ul><li> Tasa de utilización: {{utilizationRate}}</li><li> Límite inferior de precio: {{priceLowerLimit}}</li><li> Límite superior de precio: {{priceUpperLimit}}</li><li> Impacto sesgado máximo: {{skewImpactLimit}}</li><li> Asignación máxima en un solo mercado: {{allocationLimitsPerMarketPerRound}}</li><li> Depósito total máximo: {{maxAllowedDeposit}}</li><li> Usuarios máximos en la bóveda: {{maxAllowedUsers}}</li><li> Monto mínimo en una sola operación: {{minTradeAmount}}</li><li> Depósito mínimo: {{minDepositAmount}}</li></ul>",
+        "back-to-vaults": "volver a las bóvedas",
+        "users-in-vault-label": "Usuarios en la bóveda: {{number}} / {{max}}",
+        "first-deposit-withdrawal-message": "Usted depositó para la próxima ronda y puede retirar estos fondos al final de la próxima ronda."
     }
 }

@@ -143,7 +143,8 @@
         "twitter": "Twitter",
         "discord": "Discord",
         "docs": "文档",
-        "github": "GitHub"
+        "github": "GitHub",
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own."
     },
     "market": {
         "question-label": "问题标签",
@@ -327,7 +328,8 @@
                 "profile": "轮廓",
                 "history": "历史",
                 "fifa-campaign": "斑马FIFA活动",
-                "fee-rebates": "费用回扣"
+                "fee-rebates": "费用回扣",
+                "vaults": "金库"
             },
             "buttons": {
                 "disconnect": "断开",
@@ -560,5 +562,87 @@
         },
         "no-result": "此表没有结果",
         "total-earned": "总收入"
+    },
+    "vaults": {
+        "risks-label": "金库风险",
+        "title": "运动拱顶",
+        "strategy-label": "金库策略"
+    },
+    "vault": {
+        "discount-vault": {
+            "risks": "<p>金库的利用率为 {{utilizationRate}}，确保不超过 {{utilizationRate}} 的存入一轮风险。此外，在这些 {{utilizationRate}} 中，最多可以将 {{allocationLimitsPerMarketPerRound}} 花在一个市场上，从而将风险分散到赔率大于 {{odds}} 的多个市场。</p>",
+            "description": "<p>买入赔率高于 {{odds}} 且折扣大于 {{discount}} 的头寸。</p>进入一轮的所有存款都计入游戏化的质押量。</p>",
+            "title": "折扣金库"
+        },
+        "degen-discount-vault": {
+            "description": "<p>以超过 {{discount}} 折扣的任何赔率买入头寸。</p><p>进入一轮的所有存款都计入游戏化的质押量。</p>",
+            "title": "德劲折扣金库",
+            "risks": "<p>金库的利用率为 {{utilizationRate}}，确保不超过 {{utilizationRate}} 的存入一轮风险。此外，在这些 {{utilizationRate}} 中，最多可以在单个市场上花费 {{allocationLimitsPerMarketPerRound}}。</p>"
+        },
+        "safu-discount-vault": {
+            "risks": "<p>金库的利用率为 {{utilizationRate}}，确保不超过 {{utilizationRate}} 的存入一轮风险。此外，在这些 {{utilizationRate}} 中，最多可以将 {{allocationLimitsPerMarketPerRound}} 花在一个市场上，从而将风险分散到赔率大于 {{odds}} 的多个市场。</p>",
+            "description": "<p>购买赔率超过 {{odds}} 且可享受任何折扣的头寸。</p><p>进入一轮的所有存款都计入游戏化的质押量。</p>",
+            "title": "列折扣库"
+        },
+        "tabs": {
+            "claim": "宣称",
+            "withdraw": "提取",
+            "deposit": "订金"
+        },
+        "button": {
+            "request-withdrawal-label": "请求撤回",
+            "deposit-label": "订金",
+            "deposit-progress-label": "存款进行中...",
+            "deposit-confirmation-message": "入金成功",
+            "request-withdrawal-confirmation-message": "取款请求已成功发送",
+            "request-withdrawal-progress-label": "请求进行中...",
+            "withdraw-label": "提取",
+            "withdraw-confirmation-message": "资金成功提取",
+            "withdraw-progress-label": "提现中...",
+            "close-round-label": "关闭回合",
+            "close-round-progress-label": "收尾正在进行中...",
+            "close-round-confirmation-message": "回合成功结束"
+        },
+        "trades-history": {
+            "no-trades": "在选定的回合中没有与此保险库关联的交易。",
+            "round-label": "圆形的",
+            "title": "金库交易历史"
+        },
+        "pnl": {
+            "lifetime-pnl": "终身盈亏",
+            "no-data": "没有前几轮的 PnL 数据。",
+            "title": "每轮盈亏"
+        },
+        "withdrawal-message": "您可以请求提款，您的资金将在该轮结束时自动发送给您。",
+        "back-to-vaults": "返回金库",
+        "deposit-max-amount-of-users-warning": "已达到保险库中的最大用户数，您无法存款。",
+        "withdrawal-requested-message": "您请求提取<bold>{{amount}}</bold><tooltip />。当回合结束时，您的资金将在回合结束时自动发送给您。",
+        "vault-paused-message": "保险库已暂停",
+        "deposit-min-amount-error": "存款的最低金额为 {{amount}}",
+        "withdraw-round-end-label": "回合结束于：<counter />",
+        "round-allocation-label": "总存款",
+        "deposit-withdrawal-warning": "要求提款，您不能存款。",
+        "deposit-vault-cap-reached-warning": "已达到金库上限，无法入金。",
+        "withdrawal-request-label": "提款请求：<bold>{{amount}}</bold>",
+        "withdrawal-deposit-warning": "您不能退出，因为您已经为下一轮存款。",
+        "round-ended-label": "回合结束",
+        "nothing-to-withdraw-label": "没什么可退的。",
+        "vault-not-started-message": "保险库尚未启动",
+        "round-end-label": "回合结束于",
+        "estimated-amount-tooltip": "这是一个估计数额。实际金额将在本轮结束时根据该轮PnL计算。",
+        "available-to-withdraw-label": "可提取：<bold>{{amount}}</bold>",
+        "variables": "<p>变量：</p><ul><li>利用率：{{utilizationRate}}</li><li>价格下限：{{priceLowerLimit}}</li><li>价格上限：{{priceUpperLimit}}</li><li>最大偏斜影响：{{skewImpactLimit}}</li><li>单一市场的最大分配：{{allocationLimitsPerMarketPerRound}}</li><li>最大总存款：{{maxAllowedDeposit}}</li><li>保险库中的最大用户数：{{maxAllowedUsers}}</li><li>单笔交易的最低金额：{{minTradeAmount}}</li><li>最低存款：{{minDepositAmount}}</li></ul>",
+        "deposit-vault-cap-error": "入金金额超过金库上限",
+        "spent-trading-label": "交易花费",
+        "deposit-amount-placeholder": "输入金额",
+        "available-trading-label": "可供交易",
+        "deposit-message": "为下一轮将资金存入金库。",
+        "next-round-start-label": "下一轮开始于：<counter />",
+        "deposit-amount-label": "存款金额",
+        "your-round-allocation-label": "您在本轮的分配：<bold>{{amount}}</bold>",
+        "your-next-round-allocation-label": "您下一轮的分配：<bold>{{amount}}</bold>",
+        "vault-filled-label": "保险库已满：{{amount}} / {{max}}",
+        "users-in-vault-label": "保管库中的用户：{{number}} / {{max}}",
+        "first-deposit-withdrawal-message": "您为下一轮存入资金，您可以在下一轮结束时提取这些资金。"
     }
 }
