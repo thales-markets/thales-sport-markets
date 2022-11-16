@@ -45,8 +45,8 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
 
                 if (resolved) {
                     result = isApex
-                        ? await apexConsumerContract?.getGameResolvedById(gameDetails.gameId)
-                        : await rundownConsumerContract?.getGameResolvedById(gameDetails.gameId);
+                        ? await apexConsumerContract?.gameResolved(gameDetails.gameId)
+                        : await rundownConsumerContract?.gameResolved(gameDetails.gameId);
                 }
 
                 let homeScore = result ? result.homeScore : undefined;
