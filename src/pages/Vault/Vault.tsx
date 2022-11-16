@@ -36,7 +36,7 @@ import {
     RoundAllocationLabel,
     RoundAllocation,
     RoundAllocationWrapper,
-    UsersInVaultText
+    UsersInVaultText,
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
