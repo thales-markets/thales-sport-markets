@@ -56,7 +56,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                         sortType: paidSort(),
                         accessor: 'paid',
                         Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['paid']>) => (
-                            <p>$ {formatCurrency(cellProps.cell.value)}</p>
+                            <p>{cellProps.cell.value ? `$ ${formatCurrency(cellProps.cell.value)}` : 'N/A'}</p>
                         ),
                         width: 150,
                         sortable: true,
