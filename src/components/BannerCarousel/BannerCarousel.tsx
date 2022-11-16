@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
-import { navigateTo } from 'utils/routes';
 
 const BannerCarousel: React.FC = () => {
     const [urlMap, setUrlMap] = useState<Record<number, string>>({});
@@ -50,11 +49,7 @@ const BannerCarousel: React.FC = () => {
                 autoPlay={true}
                 onClickItem={(index) => {
                     if (urlMap[index + 1]) {
-                        if (urlMap[index + 1].includes('https://overtimemarkets.xyz/#/')) {
-                            navigateTo(urlMap[index + 1].replace('https://overtimemarkets.xyz/#/', ''));
-                        } else {
-                            window.open(urlMap[index + 1]);
-                        }
+                        window.open(urlMap[index + 1]);
                     }
                 }}
             >
