@@ -644,6 +644,8 @@
         "spent-trading-label": "Потрачено на торговлю",
         "deposit-max-amount-of-users-warning": "Достигнуто максимальное количество пользователей в хранилище, вы не можете внести депозит.",
         "deposit-min-amount-error": "Минимальная сумма депозита: {{amount}}",
-        "available-to-withdraw-label": "Доступно для снятия: <bold>{{amount}}</bold>"
+        "available-to-withdraw-label": "Доступно для снятия: <bold>{{amount}}</bold>",
+        "users-in-vault-label": "Пользователи в хранилище: {{number}} / {{max}}",
+        "first-deposit-withdrawal-message": "Вы внесли депозит для следующего раунда, и вы можете вывести эти средства в конце следующего раунда."
     }
 }

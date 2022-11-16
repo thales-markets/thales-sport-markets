@@ -642,6 +642,8 @@
         "withdrawal-message": "คุณสามารถขอถอนเงินและเงินของคุณจะถูกส่งถึงคุณโดยอัตโนมัติเมื่อสิ้นสุดรอบเมื่อปิดรอบ",
         "round-allocation-label": "เงินฝากรวมรอบ",
         "deposit-amount-label": "จำนวนเงินฝาก",
-        "round-ended-label": "สิ้นสุดรอบ"
+        "round-ended-label": "สิ้นสุดรอบ",
+        "first-deposit-withdrawal-message": "คุณฝากเงินในรอบถัดไป และคุณสามารถถอนเงินเหล่านี้ได้เมื่อสิ้นสุดรอบถัดไป",
+        "users-in-vault-label": "ผู้ใช้ในห้องนิรภัย: {{number}} / {{max}}"
     }
 }

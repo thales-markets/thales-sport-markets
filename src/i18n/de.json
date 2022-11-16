@@ -144,7 +144,7 @@
         "medium": "Medium",
         "discord": "Discord",
         "tutorial": "Anleitung",
-        "disclaimer": "Dieses Frontend wird dezentral auf IPFS (InterPlanetary File System) gehostet. Es dient zur Visualisierung der Blockchain-Daten und hilft Benutzern bei der Interaktion mit den Überstundenverträgen, die Thales DAO gehören. Auf diese Weise hilft es den Benutzern, die Risiken der Verwendung dieser intelligenten Verträge und die damit verbundenen spezifischen Interaktionen zu verstehen. Das Frontend ermöglicht nichts anderes, als mit diesen Verträgen auf visuell umfassende Weise zu interagieren. Dabei unterscheidet es sich nicht von der Funktionalität, die Etherscan oder RPCs (Remote Procedure Calls) bieten. Das Frontend selbst gehört nicht Thales DAO oder einer anderen Person. Es speichert keine Benutzerdaten und hat kein dediziertes Backend oder Datenbank. Der gesamte Code wird statisch direkt in das IPFS hochgeladen. So wie die Blockchain kein Geo-Fencing und kein KYC macht, kann dieses Frontend dies auch nicht. Durch die Interaktion mit Thales DAO-Verträgen verpflichten Sie sich jedoch, die <Disclaimer>Nutzungsbedingungen von Thales DAO</Disclaimer> gelesen, verstanden und akzeptiert zu haben, und Sie übernehmen die volle Haftung, falls Sie sich nicht an diese Bedingungen gehalten haben. Thales DAO verwendet den dezentralisierten sUSD-Token als Sicherheit für alle seine Transaktionen. Dabei erbt es alle Nutzungsregeln von Synthetix DAO in Bezug auf Sicherheiten und führt keine eigenen ein."
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own."
     },
     "market": {
         "question-label": "Frage",
@@ -638,6 +638,8 @@
         "withdraw-round-end-label": "Die Runde endet in: <Zähler />",
         "available-to-withdraw-label": "Zur Auszahlung verfügbar: <bold>{{amount}}</bold>",
         "deposit-amount-placeholder": "Menge eingeben",
-        "withdrawal-requested-message": "Sie haben beantragt, <bold>{{amount}}</bold><tooltip /> abzuheben. Ihr Geld wird Ihnen am Ende der Runde automatisch zugeschickt, wenn die Runde endet."
+        "withdrawal-requested-message": "Sie haben beantragt, <bold>{{amount}}</bold><tooltip /> abzuheben. Ihr Geld wird Ihnen am Ende der Runde automatisch zugeschickt, wenn die Runde endet.",
+        "first-deposit-withdrawal-message": "Sie haben für die nächste Runde eingezahlt und können diese Gelder am Ende der nächsten Runde abheben.",
+        "users-in-vault-label": "Benutzer im Tresor: {{number}} / {{max}}"
     }
 }

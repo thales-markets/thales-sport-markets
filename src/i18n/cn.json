@@ -144,7 +144,7 @@
         "discord": "Discord",
         "docs": "文档",
         "github": "GitHub",
-        "disclaimer": "该前端分散托管在 IPFS（星际文件系统）上。它用于可视化区块链数据并帮助用户与属于 Thales DAO 的 Overtime 合约进行交互。通过这样做，它可以帮助用户了解使用这些智能合约的风险以及特定交互的含义。除了以视觉上全面的方式与这些合约进行交互之外，前端不会提供任何其他便利。这样做与 Etherscan 或 RPC（远程过程调用）提供的功能没有什么不同。前端本身不属于 Thales DAO 或任何个人。它不存储用户数据，也没有专用的后端或数据库。所有代码都直接静态上传到 IPFS。正如区块链没有地理围栏和 KYC，这个前端也不能这样做。但是，通过与 Thales DAO 合约互动，您承诺已阅读、理解并接受<disclaimer>Thales DAO 的使用条款</disclaimer>，如果您不遵守这些条款，您将承担全部责任。 Thales DAO 使用去中心化的 sUSD 代币作为其所有交易的抵押品。在这样做时，它继承了 Synthetix DAO 关于抵押品的所有使用规则，并且没有引入自己的规则。"
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own."
     },
     "market": {
         "question-label": "问题标签",
@@ -641,6 +641,8 @@
         "deposit-amount-label": "存款金额",
         "your-round-allocation-label": "您在本轮的分配：<bold>{{amount}}</bold>",
         "your-next-round-allocation-label": "您下一轮的分配：<bold>{{amount}}</bold>",
-        "vault-filled-label": "保险库已满：{{amount}} / {{max}}"
+        "vault-filled-label": "保险库已满：{{amount}} / {{max}}",
+        "users-in-vault-label": "保管库中的用户：{{number}} / {{max}}",
+        "first-deposit-withdrawal-message": "您为下一轮存入资金，您可以在下一轮结束时提取这些资金。"
     }
 }
