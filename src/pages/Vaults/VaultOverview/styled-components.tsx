@@ -96,3 +96,19 @@ export const VaultInfo = styled.p<{ color: string }>`
     font-size: 20px;
     margin-top: 4px;
 `;
+
+export const TitleVaultIcon = styled.i`
+    font-weight: 400;
+    font-size: 28px;
+    margin-right: 8px;
+    top: -2px;
+    position: relative;
+`;
+
+export const VaultSectionIcon = styled.i`
+    font-weight: 400;
+    font-size: 25px;
+    margin-right: 8px;
+    top: -2px;
+    position: relative;
+`;

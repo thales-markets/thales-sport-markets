@@ -36,6 +36,7 @@ import {
     RoundAllocationLabel,
     RoundAllocation,
     RoundAllocationWrapper,
+    TitleVaultIcon,
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -425,7 +426,10 @@ const Vault: React.FC<VaultProps> = (props) => {
             )}
             <Container>
                 <LeftContainer>
-                    <Title>{t(`vault.${vaultId}.title`)}</Title>
+                    <Title>
+                        <TitleVaultIcon className={`icon icon--${vaultId}`} />
+                        {t(`vault.${vaultId}.title`)}
+                    </Title>
                     {!vaultData ? (
                         <LeftLoaderContainer>
                             <SimpleLoader />

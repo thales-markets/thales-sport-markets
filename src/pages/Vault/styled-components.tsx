@@ -175,6 +175,14 @@ export const Title = styled.span`
     }
 `;
 
+export const TitleVaultIcon = styled.i`
+    font-weight: 400;
+    font-size: 30px;
+    margin-right: 8px;
+    top: -3px;
+    position: relative;
+`;
+
 export const VaultFilledText = styled(ContentInfo)`
     margin-top: 20px;
     margin-bottom: 10px;
