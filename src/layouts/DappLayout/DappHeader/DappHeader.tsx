@@ -13,7 +13,6 @@ import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import useInterval from 'hooks/useInterval';
-import MintVoucher from 'components/MintVoucher';
 import burger from 'assets/images/burger.svg';
 import NavMenu from 'components/NavMenu';
 import ProfileItem from './components/ProfileItem';
@@ -21,6 +20,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { ReactComponent as RightBall } from 'assets/images/favorite-team/right-ball.svg';
 import { ReactComponent as LeftBall } from 'assets/images/favorite-team/left-ball.svg';
 import { ReactComponent as QatarMascot } from 'assets/images/favorite-team/qatar-mascot.svg';
+import MintVoucher from 'components/MintVoucher';
 
 const PULSING_COUNT = 10;
 
@@ -64,7 +64,11 @@ const DappHeader: React.FC = () => {
                         {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />}
                         <WalletInfo />
                         <ProfileItem />
-                        <MenuIcon onClick={() => setNavMenuVisibility(true)} />
+                        <MenuIcon
+                            onClick={() => setNavMenuVisibility(true)}
+                            data-matomo-category="dapp-header"
+                            data-matomo-action="menu-icon"
+                        />
                         <NavMenu
                             visibility={navMenuVisibility}
                             hideVisibilityFunction={(value: boolean | null) => setNavMenuVisibility(value)}

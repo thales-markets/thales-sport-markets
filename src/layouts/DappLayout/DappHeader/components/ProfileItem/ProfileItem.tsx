@@ -23,7 +23,7 @@ const ProfileItem: React.FC = () => {
     const { t } = useTranslation();
     return (
         <SPAAnchor href={buildHref(ROUTES.Profile)}>
-            <ProfileContainer>
+            <ProfileContainer data-matomo-category="dapp-header" data-matomo-action="profile">
                 <ProfileIconWidget />
                 <ProfileLabel>{t('markets.nav-menu.items.profile')}</ProfileLabel>
             </ProfileContainer>
