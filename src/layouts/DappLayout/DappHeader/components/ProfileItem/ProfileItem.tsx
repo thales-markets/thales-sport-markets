@@ -1,5 +1,7 @@
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
+import { countries } from 'pages/MintWorldCupNFT/countries';
+import useFavoriteTeamDataQuery from 'queries/favoriteTeam/useFavoriteTeamDataQuery';
 import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +16,7 @@ import {
     NotificationCount,
     ProfileLabel,
     Count,
+    TeamImage,
 } from './styled-components';
 
 const ProfileItem: React.FC = () => {
@@ -36,15 +39,30 @@ export const ProfileIconWidget: React.FC = () => {
         enabled: isWalletConnected,
     });
 
+    const favoriteTeamDataQuery = useFavoriteTeamDataQuery(walletAddress, networkId);
+    const favoriteTeamData =
+        favoriteTeamDataQuery.isSuccess && favoriteTeamDataQuery.data ? favoriteTeamDataQuery.data : null;
+
     const claimablePositionCount =
         claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
             ? claimablePositionsCountQuery.data
             : null;
-
     return (
         <>
             <ProfileIconContainer>
-                <ProfileIcon />
+                {favoriteTeamData?.favoriteTeam ? (
+                    <TeamImage
+                        src={`https://thales-protocol.s3.eu-north-1.amazonaws.com/zebro_${countries[
+                            favoriteTeamData?.favoriteTeam - 1
+                        ]
+                            .toLocaleLowerCase()
+                            .split(' ')
+                            .join('_')}.png`}
+                    />
+                ) : (
+                    <ProfileIcon />
+                )}
+
                 {claimablePositionCount && (
                     <NotificationCount>
                         <Count>{claimablePositionCount}</Count>
