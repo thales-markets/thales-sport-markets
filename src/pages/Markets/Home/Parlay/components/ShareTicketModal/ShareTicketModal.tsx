@@ -1,11 +1,13 @@
 import TimeProgressBar from 'components/TimeProgressBar';
 import useInterval from 'hooks/useInterval';
+import { t } from 'i18next';
 import React from 'react';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
 import MyTicket from '../MyTicket';
+import { TwitterIcon } from '../styled-components';
 
 type ShareTicketModalProps = {
     markets: ParlaysMarket[];
@@ -38,7 +40,7 @@ const customStyles = {
 };
 
 const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
-    const CLOSE_AFTER_SECONDS = 5;
+    const CLOSE_AFTER_SECONDS = 500;
 
     useInterval(async () => {
         onClose();
@@ -50,6 +52,10 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 <TimeProgressBar durationInSec={CLOSE_AFTER_SECONDS} increasing={false} />
                 <CloseIcon className={`icon icon--close`} onClick={onClose} />
                 <MyTicket markets={markets} totalQuote={totalQuote} paid={paid} payout={payout} />
+                <TwitterShare>
+                    <TwitterIcon fontSize={'30px'} />
+                    <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
+                </TwitterShare>
             </Container>
         </ReactModal>
     );
@@ -69,6 +75,29 @@ const CloseIcon = styled.i`
     right: -30px;
     font-size: 20px;
     cursor: pointer;
+    color: #ffffff;
+`;
+
+const TwitterShare = styled(FlexDivColumnCentered)`
+    align-items: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: linear-gradient(217.61deg, #123eae 9.6%, #3ca8ca 78.9%);
+    cursor: pointer;
+`;
+
+const TwitterShareLabel = styled.span`
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 25px;
+    text-transform: uppercase;
     color: #ffffff;
 `;
 
