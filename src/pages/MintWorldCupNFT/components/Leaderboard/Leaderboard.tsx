@@ -44,7 +44,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
 
     const filteredZebros = useMemo(() => {
         const leaderboard = zebrosQuery.isSuccess ? zebrosQuery.data.leaderboard : [];
-        return leaderboard.filter((user) => user.address.includes(searchValue));
+        return leaderboard.filter((user) => user.address.toLowerCase().includes(searchValue.toLowerCase()));
     }, [zebrosQuery.isSuccess, zebrosQuery.data?.leaderboard, searchValue]);
 
     return (
