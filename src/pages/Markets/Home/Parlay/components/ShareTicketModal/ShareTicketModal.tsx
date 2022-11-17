@@ -1,7 +1,8 @@
 import TimeProgressBar from 'components/TimeProgressBar';
 import useInterval from 'hooks/useInterval';
+import { toPng } from 'html-to-image';
 import { t } from 'i18next';
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
@@ -15,7 +16,10 @@ type ShareTicketModalProps = {
     paid: number;
     payout: number;
     onClose: () => void;
+    closeAfterSec?: number;
 };
+
+const DEFAULT_CLOSE_AFTER_SECONDS = 10;
 
 const customStyles = {
     content: {
@@ -39,20 +43,50 @@ const customStyles = {
     },
 };
 
-const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
-    const CLOSE_AFTER_SECONDS = 500;
+const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
+    markets,
+    totalQuote,
+    paid,
+    payout,
+    onClose,
+    closeAfterSec,
+}) => {
+    const ref = useRef<HTMLDivElement>(null);
+
+    const onTwitterShareClick = useCallback(async () => {
+        if (ref.current === null) {
+            return;
+        }
+
+        toPng(ref.current, { cacheBust: true })
+            .then((dataUrl) => {
+                //     const link = document.createElement('a');
+                //     link.download = 'my-image-name.png';
+                //     link.href = dataUrl;
+                //     link.click();
+                const image = new Image();
+                image.src = dataUrl;
+                const w = window.open('');
+                w?.document.write(image.outerHTML);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [ref]);
+
+    const closeModaleTime = closeAfterSec ? closeAfterSec : DEFAULT_CLOSE_AFTER_SECONDS;
 
     useInterval(async () => {
         onClose();
-    }, CLOSE_AFTER_SECONDS * 1000);
+    }, closeModaleTime * 1000);
 
     return (
         <ReactModal isOpen onRequestClose={onClose} shouldCloseOnOverlayClick={true} style={customStyles}>
-            <Container>
-                <TimeProgressBar durationInSec={CLOSE_AFTER_SECONDS} increasing={false} />
+            <Container ref={ref}>
+                <TimeProgressBar durationInSec={closeModaleTime} increasing={false} />
                 <CloseIcon className={`icon icon--close`} onClick={onClose} />
                 <MyTicket markets={markets} totalQuote={totalQuote} paid={paid} payout={payout} />
-                <TwitterShare>
+                <TwitterShare onClick={onTwitterShareClick}>
                     <TwitterIcon fontSize={'30px'} />
                     <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
                 </TwitterShare>
