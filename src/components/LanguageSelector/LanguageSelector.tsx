@@ -38,7 +38,11 @@ export const LanguageSelectorV2: React.FC<LanguageSelectorProps> = ({ isBurger }
     return (
         <>
             <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
-                <Container className={isBurger ? 'burger' : ''}>
+                <Container
+                    className={isBurger ? 'burger' : ''}
+                    data-matomo-category="language-selector"
+                    data-matomo-action="click"
+                >
                     <LanguageButton
                         onClick={() => {
                             setDropdownIsOpen(!languageDropdownIsOpen);
@@ -56,6 +60,8 @@ export const LanguageSelectorV2: React.FC<LanguageSelectorProps> = ({ isBurger }
                                         setDropdownIsOpen(false);
                                         setSelectedLanguage(language);
                                     }}
+                                    data-matomo-category="language-selector"
+                                    data-matomo-action={language}
                                 >
                                     <>
                                         {LanguageFlag(language as any)}
