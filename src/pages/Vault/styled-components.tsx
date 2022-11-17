@@ -18,13 +18,14 @@ export const Container = styled(FlexDivRow)`
     width: 80%;
     position: relative;
     align-items: start;
+    margin-top: 30px;
     @media (max-width: 1440px) {
         width: 95%;
     }
     @media (max-width: 767px) {
         flex-direction: column;
+        margin-top: 10px;
     }
-    margin-top: 30px;
 `;
 
 export const ContentContainer = styled(FlexDivColumn)`
@@ -64,7 +65,7 @@ export const RoundInfoWrapper = styled(FlexDivColumn)`
         width: 95%;
     }
     padding: 20px;
-    margin-top: 30px;
+    margin-top: 20px;
 `;
 
 export const RoundEndContainer = styled(FlexDivColumn)`
@@ -173,6 +174,13 @@ export const Title = styled.span`
     @media (max-width: 767px) {
         margin-top: 0px;
     }
+`;
+export const TitleVaultIcon = styled.i`
+    font-weight: 400;
+    font-size: 30px;
+    margin-right: 8px;
+    top: -3px;
+    position: relative;
 `;
 
 export const UsersInVaultText = styled(ContentInfo)`
