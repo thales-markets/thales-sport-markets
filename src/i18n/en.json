@@ -367,7 +367,7 @@
     "rewards": {
         "header": "Rewards",
         "search-placeholder": "Search wallet address",
-        "description": "<0>A total of <0>8,000 OP</0> and <0>8,000 Thales</0> will be distributed bi-weekly on a continuous basis as per TIP-96 to offset fees paid to the safebox contracts.</0> <0>The leaderboard will calculate rewards as 90% rebate of the SafeBox fee, which is 3% of total amount paid in sUSD.</0> The $ value of OP and THALES will be calculated using a 7 days twap at the start of the period. If at the end of the two weeks period the total rebates end up being more than the initial twap value of OP and THALES tokens, the rebate will be reduced proportionally for every trader.",
+        "description": "<div>A total of <bold>8,000 OP</bold> and <bold>8,000 Thales</bold> will be distributed bi-weekly on a continuous basis as per <tipLink>TIP-96</tipLink> to offset fees paid to the safebox contracts.</div> <div>The leaderboard will calculate rewards as 90% rebate of the SafeBox fee, which is 3% of total amount paid in sUSD.</div> <div>The $ value of OP and THALES will be calculated using a 7 days twap at the start of the period. If at the end of the two weeks period the total rebates end up being more than the initial twap value of OP and THALES tokens, the rebate will be reduced proportionally for every trader. </div>",
         "total-negative-pnl": "Total losses",
         "twap": "One week TWAP",
         "total-global-rebates": "Total rebates to pay",
