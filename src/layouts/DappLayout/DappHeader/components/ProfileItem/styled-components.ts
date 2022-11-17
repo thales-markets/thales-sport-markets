@@ -44,3 +44,9 @@ export const Count = styled.span`
     font-weight: 800;
     font-size: 10px;
 `;
+
+export const TeamImage = styled.img`
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+`;
