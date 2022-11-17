@@ -497,7 +497,7 @@
         "yes-mint": "Yes, mint NFT",
         "success-mint": "Successfully minted",
         "already-minted": "You have already minted your NFT",
-        "zebro-campaign": "Zebro FIFA Campaign",
+        "zebro-campaign": "Zebro FIFA",
         "leaderboard-title": "Leaderboard",
         "mint-this-zebro": "Mint this Zebro!",
         "get-your-nft": "Mint Page",
@@ -523,7 +523,8 @@
             "base-volume": "Base",
             "bonus-volume": "Bonus",
             "rewards": "Rewards",
-            "search-placeholder": "SEARCH WALLET ADDRESS"
+            "search-placeholder": "SEARCH WALLET ADDRESS",
+            "player": "Player"
         }
     },
     "referral": {
