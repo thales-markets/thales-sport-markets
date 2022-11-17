@@ -65,8 +65,6 @@ const App = () => {
                 elementsToCheck &&
                 elementsToCheck.find((item) => item?.dataset?.matomoCategory || item?.data?.matomoAction);
 
-            console.log('elementWithMatomoTags ', elementWithMatomoTags);
-
             if (elementWithMatomoTags) {
                 console.log('elementWithMatomoTags ', elementWithMatomoTags);
                 trackEvent({
