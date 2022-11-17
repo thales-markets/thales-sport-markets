@@ -1,3 +1,5 @@
+import TimeProgressBar from 'components/TimeProgressBar';
+import useInterval from 'hooks/useInterval';
 import React from 'react';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
@@ -35,10 +37,17 @@ const customStyles = {
     },
 };
 
-export const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
+const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
+    const CLOSE_AFTER_SECONDS = 5;
+
+    useInterval(async () => {
+        onClose();
+    }, CLOSE_AFTER_SECONDS * 1000);
+
     return (
         <ReactModal isOpen onRequestClose={onClose} shouldCloseOnOverlayClick={true} style={customStyles}>
             <Container>
+                <TimeProgressBar durationInSec={CLOSE_AFTER_SECONDS} increasing={false} />
                 <CloseIcon className={`icon icon--close`} onClick={onClose} />
                 <MyTicket markets={markets} totalQuote={totalQuote} paid={paid} payout={payout} />
             </Container>
@@ -47,7 +56,6 @@ export const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, tot
 };
 
 const Container = styled(FlexDivColumnCentered)`
-    z-index: 1001;
     max-width: 400px;
     padding: 15px;
     flex: none;
@@ -64,4 +72,4 @@ const CloseIcon = styled.i`
     color: #ffffff;
 `;
 
-export default ShareTicketModal;
+export default React.memo(ShareTicketModal);

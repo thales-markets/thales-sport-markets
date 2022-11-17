@@ -194,12 +194,12 @@ export const XButton = styled.i<{ margin?: string }>`
 `;
 
 export const ShareWrapper = styled(FlexDivCentered)`
-    margin-top: 20px;
+    margin-top: 15px;
 `;
 
 export const TwitterIcon = styled.i<{ disabled: boolean }>`
+    font-size: 20px;
     color: #ffffff;
-    cursor: pointer;
     cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     &:before {
