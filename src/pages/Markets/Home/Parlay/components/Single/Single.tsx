@@ -52,10 +52,13 @@ import {
     SubmitButton,
     SummaryLabel,
     SummaryValue,
+    ShareWrapper,
+    TwitterIcon,
 } from '../styled-components';
 import Payment from '../Payment';
 import { removeAll, setPayment } from 'redux/modules/parlay';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
+import ShareTicketModal from '../ShareTicketModal';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -116,6 +119,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             },
         },
     });
+    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -624,6 +628,18 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 </SummaryValue>
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
+            <ShareWrapper>
+                <TwitterIcon disabled={submitDisabled} onClick={() => setShowShareTicketModal(!submitDisabled)} />
+            </ShareWrapper>
+            {showShareTicketModal && (
+                <ShareTicketModal
+                    markets={[market]}
+                    totalQuote={getPositionOdds(market)}
+                    paid={Number(usdAmountValue)}
+                    payout={tokenAmount}
+                    onClose={() => setShowShareTicketModal(false)}
+                />
+            )}
             {openApprovalModal && (
                 <ApprovalModal
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS

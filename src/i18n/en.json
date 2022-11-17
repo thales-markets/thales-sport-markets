@@ -359,6 +359,13 @@
                 "risk-per-comb": "Risk per combination exceeded",
                 "same-team": "The same team can't be in a Parlay more than once",
                 "not-supported": "Not supported validation error: {{error}}"
+            },
+            "share-ticket": {
+                "header": "Web 3 Sport markets on",
+                "payout": "payout",
+                "total-quote": "Total quote",
+                "stake": "Stake",
+                "referral": "Referral link"
             }
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",

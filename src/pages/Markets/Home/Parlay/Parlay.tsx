@@ -1,5 +1,4 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
-import { LINKS } from 'constants/links';
 import { GlobalFiltersEnum } from 'constants/markets';
 import { t } from 'i18next';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
@@ -19,7 +18,7 @@ import {
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import { FlexDivColumn } from 'styles/common';
 import { ParlaysMarket, SportMarketInfo } from 'types/markets';
 import MatchInfo from './components/MatchInfo';
 import Payment from './components/Payment';
@@ -110,14 +109,6 @@ const Parlay: React.FC = () => {
                             setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
                         />
                     )}
-                    <Footer>
-                        <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Twitter}>
-                            <TwitterIcon />
-                        </Link>
-                        <Link target="_blank" rel="noreferrer" href={'TODO: Share Parlay'}>
-                            <ShareIcon />
-                        </Link>
-                    </Footer>
                 </>
             ) : (
                 <>
@@ -163,10 +154,7 @@ const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?:
     border-radius: 10px;
 `;
 
-const ListContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
+const ListContainer = styled(FlexDivColumn)``;
 
 const RowMarket = styled.div<{ outOfLiquidity: boolean }>`
     display: flex;
@@ -212,34 +200,6 @@ const EmptyDesc = styled.span`
     line-height: 14px;
     letter-spacing: 0.025em;
     color: #64d9fe;
-`;
-
-const Footer = styled(FlexDivCentered)`
-    display: none; // TODO: Twitter is not supported yet
-    margin-top: 20px;
-`;
-
-const Link = styled.a`
-    font-size: 20px;
-    :not(:last-child) {
-        margin-right: 20px;
-    }
-`;
-
-const TwitterIcon = styled.i`
-    color: #ffffff;
-    &:before {
-        font-family: ExoticIcons !important;
-        content: '\\005C';
-    }
-`;
-
-const ShareIcon = styled.i`
-    color: #ffffff;
-    &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0052';
-    }
 `;
 
 export default Parlay;

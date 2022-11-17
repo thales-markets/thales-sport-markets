@@ -49,9 +49,12 @@ import {
     SummaryValue,
     XButton,
     InfoTooltip,
+    ShareWrapper,
+    TwitterIcon,
 } from '../styled-components';
 import Payment from '../Payment';
 import { removeAll, setPayment } from 'redux/modules/parlay';
+import ShareTicketModal from '../ShareTicketModal';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -93,6 +96,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState<string>('');
     const [hasAllowance, setHasAllowance] = useState<boolean>(false);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
+    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -613,6 +617,18 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 </SummaryValue>
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
+            <ShareWrapper>
+                <TwitterIcon disabled={submitDisabled} onClick={() => setShowShareTicketModal(!submitDisabled)} />
+            </ShareWrapper>
+            {showShareTicketModal && (
+                <ShareTicketModal
+                    markets={markets}
+                    totalQuote={totalQuote}
+                    paid={Number(usdAmountValue)}
+                    payout={totalBuyAmount}
+                    onClose={() => setShowShareTicketModal(false)}
+                />
+            )}
             {openApprovalModal && (
                 <ApprovalModal
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS

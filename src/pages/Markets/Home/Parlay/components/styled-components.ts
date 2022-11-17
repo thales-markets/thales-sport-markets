@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Tooltip, withStyles } from '@material-ui/core';
-import { FlexDiv } from 'styles/common';
+import { FlexDiv, FlexDivCentered } from 'styles/common';
 
 export const RowSummary = styled.div`
     display: flex;
@@ -190,5 +190,20 @@ export const XButton = styled.i<{ margin?: string }>`
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
     &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
+    }
+`;
+
+export const ShareWrapper = styled(FlexDivCentered)`
+    margin-top: 20px;
+`;
+
+export const TwitterIcon = styled.i<{ disabled: boolean }>`
+    color: #ffffff;
+    cursor: pointer;
+    cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+    opacity: ${(props) => (props.disabled ? '0.4' : '1')};
+    &:before {
+        font-family: ExoticIcons !important;
+        content: '\\005C';
     }
 `;
