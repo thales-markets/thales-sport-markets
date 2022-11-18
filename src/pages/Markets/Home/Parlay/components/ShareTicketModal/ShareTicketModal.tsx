@@ -19,7 +19,7 @@ type ShareTicketModalProps = {
     closeAfterSec?: number;
 };
 
-const DEFAULT_CLOSE_AFTER_SECONDS = 10;
+const DEFAULT_CLOSE_AFTER_SECONDS = 5;
 
 const customStyles = {
     content: {
@@ -57,33 +57,33 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         if (ref.current === null) {
             return;
         }
-
+        const start = new Date().getTime();
         toPng(ref.current, { cacheBust: true })
-            .then((dataUrl) => {
-                //     const link = document.createElement('a');
-                //     link.download = 'my-image-name.png';
-                //     link.href = dataUrl;
-                //     link.click();
+            .then((data) => {
+                const end = new Date().getTime();
+                console.log('screenshot took: ', end - start, 'ms');
                 const image = new Image();
-                image.src = dataUrl;
+                image.src = data;
                 const w = window.open('');
                 w?.document.write(image.outerHTML);
+
+                console.log('screenshot opened after: ', new Date().getTime() - end, 'ms');
             })
             .catch((err) => {
                 console.log(err);
             });
-    }, [ref]);
+    }, []);
 
-    const closeModaleTime = closeAfterSec ? closeAfterSec : DEFAULT_CLOSE_AFTER_SECONDS;
+    const closeModalTimeSec = closeAfterSec ? closeAfterSec : DEFAULT_CLOSE_AFTER_SECONDS;
 
     useInterval(async () => {
         onClose();
-    }, closeModaleTime * 1000);
+    }, closeModalTimeSec * 1000);
 
     return (
         <ReactModal isOpen onRequestClose={onClose} shouldCloseOnOverlayClick={true} style={customStyles}>
             <Container ref={ref}>
-                <TimeProgressBar durationInSec={closeModaleTime} increasing={false} />
+                <TimeProgressBar durationInSec={closeModalTimeSec} increasing={false} />
                 <CloseIcon className={`icon icon--close`} onClick={onClose} />
                 <MyTicket markets={markets} totalQuote={totalQuote} paid={paid} payout={payout} />
                 <TwitterShare onClick={onTwitterShareClick}>

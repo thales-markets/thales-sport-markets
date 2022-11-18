@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 type TimeProgressBarProps = {
@@ -9,7 +9,10 @@ type TimeProgressBarProps = {
 const TimeProgressBar: React.FC<TimeProgressBarProps> = ({ durationInSec, increasing }) => {
     const [percent, setPercent] = useState(increasing ? 0 : 100);
 
-    setTimeout(() => setPercent(increasing ? 100 : 0), 1);
+    useEffect(() => {
+        const timeoutId = setTimeout(() => setPercent(increasing ? 100 : 0), 1);
+        return () => clearTimeout(timeoutId);
+    }, [increasing]);
 
     return (
         <Container>
@@ -41,7 +44,7 @@ const Background = styled(BaseBox)`
     width: 100%;
 `;
 
-const Progress = styled(BaseBox)<{ percent: number; duration?: number }>`
+const Progress = styled(BaseBox)<{ percent: number }>`
     background: linear-gradient(269.97deg, #64d9fe 16.18%, #3f75ff 77.77%);
     width: ${(props) => props.percent}%;
 `;
