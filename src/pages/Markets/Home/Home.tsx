@@ -1,6 +1,7 @@
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import Button from 'components/Button';
 import GetUsd from 'components/GetUsd';
+import Loader from 'components/Loader';
 import Logo from 'components/Logo';
 import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
@@ -12,11 +13,10 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
-import SidebarLeaderboard from 'pages/MintWorldCupNFT/components/SidebarLeaderboard';
 import useAccountPositionsQuery from 'queries/markets/useAccountPositionsQuery';
 import useDiscountMarkets from 'queries/markets/useDiscountMarkets';
 import useSportMarketsQueryNew from 'queries/markets/useSportsMarketsQueryNew';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -39,10 +39,18 @@ import GlobalFiltersInfoMobile from '../components/GlobalFilters/GlobalFiltersIn
 import SportFilter from '../components/SportFilter';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import TagsDropdown from '../components/TagsDropdown';
-import MarketsGrid from './MarketsGrid';
-import Parlay from './Parlay';
-import ParlayMobileModal from './Parlay/components/ParlayMobileModal';
-import UserHistory from './UserHistory';
+
+const SidebarLeaderboard = lazy(
+    () => import(/* webpackChunkName: "SidebarLeaderboard" */ 'pages/MintWorldCupNFT/components/SidebarLeaderboard')
+);
+
+const Parlay = lazy(() => import(/* webpackChunkName: "Parlay" */ './Parlay'));
+
+const ParlayMobileModal = lazy(
+    () => import(/* webpackChunkName: "ParlayMobileModal" */ './Parlay/components/ParlayMobileModal')
+);
+
+const MarketsGrid = lazy(() => import(/* webpackChunkName: "MarketsGrid" */ './MarketsGrid'));
 
 type AllMarkets = {
     OpenMarkets: SportMarkets;
@@ -468,15 +476,15 @@ const Home: React.FC = () => {
                             );
                         })}
                     </SportFiltersContainer>
-                    <SidebarLeaderboard />
+                    <Suspense fallback={<Loader />}>
+                        <SidebarLeaderboard />
+                    </Suspense>
                 </SidebarContainer>
                 {/* MAIN PART */}
                 {sportMarketsQueryNew.isLoading ? (
                     <LoaderContainer>
                         <SimpleLoader />
                     </LoaderContainer>
-                ) : globalFilter === GlobalFiltersEnum.History ? (
-                    <UserHistory />
                 ) : (
                     <MainContainer>
                         {isMobile && (
@@ -525,22 +533,32 @@ const Home: React.FC = () => {
                                 <Button onClick={resetFilters}>{t('market.view-all-markets')}</Button>
                             </NoMarketsContainer>
                         ) : (
-                            <MarketsGrid markets={finalMarkets} accountPositions={accountPositions} />
+                            <Suspense fallback={<Loader />}>
+                                <MarketsGrid markets={finalMarkets} accountPositions={accountPositions} />
+                            </Suspense>
                         )}
                     </MainContainer>
                 )}
                 {/* RIGHT PART */}
                 <SidebarContainer>
                     {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
-                    <Parlay />
+                    <Suspense fallback={<Loader />}>
+                        <Parlay />
+                    </Suspense>
                 </SidebarContainer>
             </RowContainer>
             {isMobile && !showParlayMobileModal && parlayMarkets.length > 0 && (
-                <ParlayMobileButton onClick={() => setshowParlayMobileModal(true)}>
-                    {t('markets.parlay.show-parlay')}
-                </ParlayMobileButton>
+                <Suspense fallback={<Loader />}>
+                    <ParlayMobileButton onClick={() => setshowParlayMobileModal(true)}>
+                        {t('markets.parlay.show-parlay')}
+                    </ParlayMobileButton>
+                </Suspense>
             )}
-            {isMobile && showParlayMobileModal && <ParlayMobileModal onClose={() => setshowParlayMobileModal(false)} />}
+            {isMobile && showParlayMobileModal && (
+                <Suspense fallback={<Loader />}>
+                    <ParlayMobileModal onClose={() => setshowParlayMobileModal(false)} />
+                </Suspense>
+            )}
         </Container>
     );
 };
