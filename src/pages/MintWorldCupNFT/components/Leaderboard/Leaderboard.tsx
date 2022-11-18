@@ -6,7 +6,7 @@ import { ReactComponent as ArrowRight } from 'assets/images/favorite-team/arrow-
 import { ReactComponent as LeaderboardRectangle } from 'assets/images/favorite-team/rewards-rectangle.svg';
 import { countries } from 'pages/MintWorldCupNFT/countries';
 import { InfoContainer, InfoText, InfoContent } from 'pages/MintWorldCupNFT/styled-components';
-import { FlexDivCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import Table from 'components/Table';
 import useZebroQuery, { User } from 'queries/favoriteTeam/useZebroQuery';
 import { useSelector } from 'react-redux';
@@ -17,6 +17,7 @@ import { TablePagination } from '@material-ui/core';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { USD_SIGN } from 'constants/currency';
 import { CellProps } from 'react-table';
+import Tooltip from 'components/Tooltip';
 
 type LeaderboardProps = {
     favoriteTeamNumber: number | undefined;
@@ -117,7 +118,17 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
                     {
                         Header: <>{t('mint-world-cup-nft.leaderboard.nft')}</>,
                         accessor: 'url',
-                        Cell: (cellProps: any) => <ZebroNft src={cellProps.cell.value} />,
+                        Cell: (cellProps: any) => (
+                            <Tooltip
+                                overlay={
+                                    <OverlayContainer>{extractCountryName(cellProps.cell.value)}</OverlayContainer>
+                                }
+                                component={<ZebroNft src={cellProps.cell.value} />}
+                                iconFontSize={23}
+                                marginLeft={2}
+                                top={0}
+                            />
+                        ),
                     },
                     {
                         Header: <>{t('mint-world-cup-nft.leaderboard.owner')}</>,
@@ -297,8 +308,25 @@ const PaginationWrapper = styled(TablePagination)`
     }
 `;
 
+export const OverlayContainer = styled(FlexDivColumn)`
+    text-align: center;
+    text-transform: uppercase;
+`;
+
 const rewardsSort = () => (rowA: any, rowB: any) => {
     return rowA.original.rewards.op - rowB.original.rewards.op;
+};
+
+const extractCountryName = (url: string) => {
+    const countryRaw = url.split('zebro_')[1].split('.')[0];
+    let country;
+    if (countryRaw.includes('_')) {
+        const countryNameArray = countryRaw.split('_');
+        country = countryNameArray[0] + ' ' + countryNameArray[1];
+    } else {
+        country = countryRaw;
+    }
+    return country;
 };
 
 export default Leaderboard;
