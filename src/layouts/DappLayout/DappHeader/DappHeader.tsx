@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { FlexDiv, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { getIsWalletConnected } from 'redux/modules/wallet';
 import { buildHref } from 'utils/routes';
 import SPAAnchor from 'components/SPAAnchor';
@@ -74,18 +74,41 @@ const DappHeader: React.FC = () => {
                 </Container>
             )}
             {isMobile && (
-                <WrapperMobile>
-                    <LogoContainer>
-                        <Logo />
-                    </LogoContainer>
-                    <MenuIconContainer>
-                        <MenuIcon onClick={() => setNavMenuVisibility(true)} />
-                        <NavMenu
-                            visibility={navMenuVisibility}
-                            hideVisibilityFunction={() => setNavMenuVisibility(false)}
+                <>
+                    <WrapperMobile>
+                        <LogoContainer>
+                            <Logo />
+                        </LogoContainer>
+                        <MenuIconContainer>
+                            <MenuIcon onClick={() => setNavMenuVisibility(true)} />
+                            <NavMenu
+                                visibility={navMenuVisibility}
+                                hideVisibilityFunction={() => setNavMenuVisibility(false)}
+                            />
+                        </MenuIconContainer>
+                        <MobileProfileContainer>
+                            <ProfileItem avatarSize={30} labelHidden={true} />
+                        </MobileProfileContainer>
+                    </WrapperMobile>
+                    {location.pathname !== ROUTES.MintWorldCupNFT && (
+                        <div style={{ width: '100%' }}>
+                            <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>
+                                <StyledButton style={{ width: '100%', padding: '5px' }} disabled={!isWalletConnected}>
+                                    <FlexDivCentered>
+                                        <FifaIcon className="icon icon--fifa-world-cup" />
+                                        {t('mint-world-cup-nft.zebro-campaign')}
+                                    </FlexDivCentered>
+                                </StyledButton>
+                            </SPAAnchor>
+                        </div>
+                    )}
+                    {location.pathname !== ROUTES.MintWorldCupNFT && (
+                        <MintVoucher
+                            buttonStyle={{ padding: '7px', background: '#303656' }}
+                            style={{ marginTop: '10px' }}
                         />
-                    </MenuIconContainer>
-                </WrapperMobile>
+                    )}
+                </>
             )}
         </>
     );
@@ -152,11 +175,21 @@ const WrapperMobile = styled(FlexDivRow)`
 `;
 
 const MenuIconContainer = styled.div`
-    width: 100%;
+    width: 50%;
     display: flex;
     justify-content: end;
     position: absolute;
     right: 12px;
+    margin-top: 10px;
+`;
+
+const MobileProfileContainer = styled.div`
+    width: 50%;
+    display: flex;
+    justify-content: start;
+    position: absolute;
+    left: 12px;
+    margin-top: 10px;
 `;
 
 const LogoContainer = styled.div`
