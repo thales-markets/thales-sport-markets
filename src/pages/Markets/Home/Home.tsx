@@ -13,7 +13,7 @@ import { SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
 import useDebouncedMemo from 'hooks/useDebouncedMemo';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
-import SidebarLeaderboard from 'pages/Quiz/SidebarLeaderboard';
+import SidebarLeaderboard from 'pages/MintWorldCupNFT/components/SidebarLeaderboard';
 import useAccountPositionsQuery from 'queries/markets/useAccountPositionsQuery';
 import useDiscountMarkets from 'queries/markets/useDiscountMarkets';
 import useSportMarketsQuery, { marketsCache } from 'queries/markets/useSportMarketsQuery';
