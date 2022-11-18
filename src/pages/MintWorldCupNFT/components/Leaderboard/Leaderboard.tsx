@@ -122,7 +122,11 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
                     {
                         Header: <>{t('mint-world-cup-nft.leaderboard.owner')}</>,
                         accessor: 'address',
-                        Cell: (cellProps: any) => <TableText>{truncateAddress(cellProps.cell.value)}</TableText>,
+                        Cell: (cellProps: any) => (
+                            <TableText>
+                                {truncateAddress(cellProps.cell.value, isMobile ? 3 : 5, isMobile ? 3 : 5)}
+                            </TableText>
+                        ),
                     },
                     {
                         Header: <>{t('mint-world-cup-nft.leaderboard.volume')}</>,
