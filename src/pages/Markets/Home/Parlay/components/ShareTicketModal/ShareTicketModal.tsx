@@ -1,8 +1,7 @@
-import TimeProgressBar from 'components/TimeProgressBar';
-import useInterval from 'hooks/useInterval';
+import SimpleLoader from 'components/SimpleLoader';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
@@ -16,10 +15,7 @@ type ShareTicketModalProps = {
     paid: number;
     payout: number;
     onClose: () => void;
-    closeAfterSec?: number;
 };
-
-const DEFAULT_CLOSE_AFTER_SECONDS = 5;
 
 const customStyles = {
     content: {
@@ -43,54 +39,58 @@ const customStyles = {
     },
 };
 
-const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
-    markets,
-    totalQuote,
-    paid,
-    payout,
-    onClose,
-    closeAfterSec,
-}) => {
+const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [image, setImage] = useState('');
+
     const ref = useRef<HTMLDivElement>(null);
 
     const onTwitterShareClick = useCallback(async () => {
+        if (image) {
+            // TODO: upload data to Twitter
+            const imageI = new Image();
+            imageI.src = image;
+            const w = window.open('');
+            w?.document.write(imageI.outerHTML);
+            return;
+        }
         if (ref.current === null) {
             return;
         }
-        const start = new Date().getTime();
+        setIsLoading(true);
+
         toPng(ref.current, { cacheBust: true })
             .then((data) => {
-                const end = new Date().getTime();
-                console.log('screenshot took: ', end - start, 'ms');
-                const image = new Image();
-                image.src = data;
+                // TODO: upload data to Twitter
+                const imageI = new Image();
+                imageI.src = data;
                 const w = window.open('');
-                w?.document.write(image.outerHTML);
+                w?.document.write(imageI.outerHTML);
 
-                console.log('screenshot opened after: ', new Date().getTime() - end, 'ms');
+                if (!ref.current) return null;
+                setImage(data);
+                setIsLoading(false);
             })
             .catch((err) => {
                 console.log(err);
             });
-    }, []);
-
-    const closeModalTimeSec = closeAfterSec ? closeAfterSec : DEFAULT_CLOSE_AFTER_SECONDS;
-
-    useInterval(async () => {
-        onClose();
-    }, closeModalTimeSec * 1000);
+    }, [image]);
 
     return (
         <ReactModal isOpen onRequestClose={onClose} shouldCloseOnOverlayClick={true} style={customStyles}>
             <Container ref={ref}>
-                <TimeProgressBar durationInSec={closeModalTimeSec} increasing={false} />
                 <CloseIcon className={`icon icon--close`} onClick={onClose} />
                 <MyTicket markets={markets} totalQuote={totalQuote} paid={paid} payout={payout} />
-                <TwitterShare onClick={onTwitterShareClick}>
-                    <TwitterIcon fontSize={'30px'} />
+                <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
+                    <TwitterIcon disabled={isLoading} fontSize={'30px'} />
                     <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
                 </TwitterShare>
             </Container>
+            {isLoading && (
+                <LoaderContainer>
+                    <SimpleLoader />
+                </LoaderContainer>
+            )}
         </ReactModal>
     );
 };
@@ -105,14 +105,14 @@ const Container = styled(FlexDivColumnCentered)`
 
 const CloseIcon = styled.i`
     position: absolute;
-    top: -40px;
-    right: -30px;
+    top: -25px;
+    right: -25px;
     font-size: 20px;
     cursor: pointer;
     color: #ffffff;
 `;
 
-const TwitterShare = styled(FlexDivColumnCentered)`
+const TwitterShare = styled(FlexDivColumnCentered)<{ disabled?: boolean }>`
     align-items: center;
     position: absolute;
     left: 0;
@@ -124,7 +124,8 @@ const TwitterShare = styled(FlexDivColumnCentered)`
     height: 84px;
     border-radius: 50%;
     background: linear-gradient(217.61deg, #123eae 9.6%, #3ca8ca 78.9%);
-    cursor: pointer;
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+    opacity: ${(props) => (props.disabled ? '0.4' : '1')};
 `;
 
 const TwitterShareLabel = styled.span`
@@ -133,6 +134,14 @@ const TwitterShareLabel = styled.span`
     line-height: 25px;
     text-transform: uppercase;
     color: #ffffff;
+`;
+
+const LoaderContainer = styled.div`
+    position: absolute;
+    position: absolute;
+    left: -5px;
+    right: 0;
+    bottom: -56px;
 `;
 
 export default React.memo(ShareTicketModal);
