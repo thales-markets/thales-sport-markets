@@ -534,32 +534,32 @@
         "get-your-nft": "Minze Seite"
     },
     "referral": {
-        "nav-items": {
-            "all-transactions": "Alle Transaktionen",
-            "see-result-by-trader": "Siehe Ergebnis nach Händler",
-            "affiliate-leaderboard": "Affiliate-Bestenliste"
-        },
-        "trades": "Handel",
+        "generate-link": "Link generieren",
         "copy-link": "Link kopieren",
-        "total-volume": "Volle Lautstärke",
-        "earned": "Verdient",
-        "header": "Empfehlungslinks erstellen",
-        "total-trading-fees": "Gesamte Handelsgebühren",
-        "generate-link": "Verknüpfung generieren",
+        "trades": "Trades",
+        "total-volume": "Gesamtvolumen",
+        "total-earned": "Insgesamt verdient",
+        "total-trading-fees": "Summe der Handelsgebühren",
         "affiliate-leaderboard-table": {
-            "volume": "Volumen",
+            "address": "Adresse",
+            "number-of-trades": "Trades",
+            "total-volume": "Gesamtvolumen",
             "first-transaction": "Erste Transaktion",
             "total-earned": "Insgesamt verdient",
-            "total-volume": "Volle Lautstärke",
-            "number-of-trades": "Handel",
-            "address": "Adresse",
+            "amount": "Betrag",
+            "volume": "Volumen",
             "type": "Typ",
-            "amount": "Menge",
-            "timestamp": "Terminzeit"
+            "timestamp": "Datum/Zeit"
         },
-        "total-earned": "Insgesamt verdient",
         "no-result": "Es gibt keine Ergebnisse für diese Tabelle",
-        "paragraph": "<bold>Das Überstunden-Empfehlungsprogramm ist ein On-Chain-Incentive-Tool zur Benutzerakquise und zum Onboarding.</bold> Das Programm erlaubt es jedem<bold> einen Empfehlungslink generieren</bold> und teilen Sie es mit Benutzern, die sie einbinden möchten.<br /><br /> Wenn Sie Ihren persönlichen Empfehlungslink teilen, verdienen Sie<bold> 0,5% des gesamten sUSD-Volumens, das Ihre geworbenen Benutzer produzieren!</bold> Es sind keine manuellen Ansprüche erforderlich, die sUSD werden automatisch in Form von einfachen sUSD-Überweisungen in Ihrer Brieftasche gesammelt."
+        "earned": "Verdient",
+        "header": "Empfehlungslinks generieren",
+        "paragraph": "<bold>Das Overtime Referrals Program ist ein On-Chain-Incentivierungs-Tool für die Akquisition und das Onboarding von Nutzern.</bold>Das Programm erlaubt es jedem, <bold>einen Referral Link</bold> zu generieren und ihn mit Nutzern zu teilen, die sie versuchen zu onboarden.<br /><br />Wenn du deinen persönlichen Referral Link teilst, verdienst du <bold>0,5% des gesamten sUSD-Volumens, das deine geworbenen Nutzer produzieren!</bold> Es sind keine manuellen Ansprüche nötig, der sUSD fließt automatisch in Form von einfachen sUSD-Transfers in dein Wallet.",
+        "nav-items": {
+            "all-transactions": "Alle Transaktionen",
+            "see-result-by-trader": "Siehe Ergebnis nach Trader",
+            "affiliate-leaderboard": "Affiliate-Rangliste"
+        }
     },
     "vaults": {
         "title": "Sport Vaults",
