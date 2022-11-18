@@ -340,7 +340,7 @@
     "rewards": {
         "header": "奖励",
         "search-placeholder": "搜索钱包",
-        "description": "<0>总额为 8,000 枚OP代币和 8,000 枚THALES代币，将用于补贴用户在10月24日至11月7日支付的手续费。</0>  <0>排行榜将以用户手续费的90%作为返利的基准（用户手续费为sUSD交易金额的3%）</0>   <0>OP和THALES代币的美元价值将以7天加权平均价格为准（10月24日） </0>   <0> 如果两周后，总手续费的返利超过OP和THALES代币的总价值，那么返利将会按总手续费的比例降低。 </0> <0> 本次的手续费补贴项目将可能在11月7日活动结束后修改。</0> ",
+        "description": "<div>根据 <tipLink>TIP-96</tipLink>，总额为 8,000 枚OP代币和 8,000 枚THALES代币，将每两周发放一次 ，用于补贴用户支付的手续费。</div>  <div>Th排行榜将以用户手续费的90%作为返利的基准（用户手续费为sUSD交易金额的3%）</div>   <div> OP和THALES代币的美元价值将以每轮第一天的7天加权平均价格为准。如果两周后，总手续费的返利超过OP和THALES代币的总价值，那么返利将会按总手续费的比例降低。</div> ",
         "total-negative-pnl": "所有亏损金额",
         "op-rewards-banner-message": "OP代币奖励已启动, 查看如何领取<bold>OP代币奖励攻略</bold>",
         "table": {
@@ -527,7 +527,8 @@
             "volume": "体积",
             "rewards": "奖励",
             "base-volume": "根据",
-            "bonus-volume": "奖金"
+            "bonus-volume": "奖金",
+            "player": "播放器"
         },
         "zebro-wct-collection": "Zebro WC NFT 系列",
         "zebro-wct-collection-text": "是在世界杯期间代表您最喜欢的国家的激励活动的一部分，并有资格分享 50,000 OP 代币和 30,000 THALES 代币，以及用于过关投注和个人比赛的独家乘数。",

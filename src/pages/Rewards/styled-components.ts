@@ -109,3 +109,8 @@ export const AddressLink = styled.a`
         color: ${(props) => props.theme.textColor.quaternary};
     }
 `;
+
+export const TipLink = styled.a`
+    display: contents;
+    color: ${(props) => props.theme.textColor.quaternary};
+`;

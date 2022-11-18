@@ -145,7 +145,7 @@ const mapMarkets = (allMarkets: SportMarkets) => {
         ) {
             resolvedMarkets.push(market);
         }
-        if (market.isCanceled || market.isPaused) {
+        if ((market.isCanceled || market.isPaused) && !market.isResolved) {
             canceledMarkets.push(market);
         }
         if (market.maturityDate.getTime() < new Date().getTime() && !market.isResolved && !market.isCanceled) {

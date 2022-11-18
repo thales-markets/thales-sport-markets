@@ -18,13 +18,14 @@ export const Container = styled(FlexDivRow)`
     width: 80%;
     position: relative;
     align-items: start;
+    margin-top: 30px;
     @media (max-width: 1440px) {
         width: 95%;
     }
     @media (max-width: 767px) {
         flex-direction: column;
+        margin-top: 10px;
     }
-    margin-top: 30px;
 `;
 
 export const ContentContainer = styled(FlexDivColumn)`

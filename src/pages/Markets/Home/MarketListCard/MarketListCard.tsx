@@ -50,7 +50,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 startsAt={formatDateWithTime(market.maturityDate)}
                 isPaused={market.isPaused}
             />
-            <ClubVsClubContainer>
+            <ClubVsClubContainer data-matomo-category="market-list-card" data-matomo-action="click-match-participants">
                 <ClubContainer>
                     <ClubLogo
                         height={market.tags[0] == 9018 ? '20px' : ''}
@@ -124,7 +124,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 </ResultWrapper>
             )}
             <SPAAnchor href={buildMarketLink(market.address, language)}>
-                <LinkIcon className={`icon-exotic icon-exotic--link`} />
+                <LinkIcon
+                    className={`icon-exotic icon-exotic--link`}
+                    data-matomo-category="market-list-card"
+                    data-matomo-action="click-market-details"
+                />
             </SPAAnchor>
         </Container>
     );

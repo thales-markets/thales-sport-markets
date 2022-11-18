@@ -34,13 +34,49 @@ const Vault = lazy(() => import('pages/Vault'));
 
 const App = () => {
     const dispatch = useDispatch();
-    const { trackPageView } = useMatomo();
+    const { trackPageView, trackEvent } = useMatomo();
     const networkId = useSelector((state) => getNetworkId(state));
     const provider = useProvider({ chainId: networkId });
     const { address } = useAccount();
     const { data: signer } = useSigner();
 
     queryConnector.setQueryClient();
+
+    useEffect(() => {
+        const root = document.querySelector('#root');
+
+        if (!root) return false;
+
+        root.addEventListener('click', (e) => {
+            const elementsToCheck = [];
+            const parentLevelCheck = 3;
+
+            let targetElement = e.target;
+            elementsToCheck.push(e.target);
+
+            for (var i = 0; i < parentLevelCheck; i++) {
+                const parent = targetElement?.parentElement;
+                if (!parent) break;
+                targetElement = targetElement.parentElement;
+                elementsToCheck.push(parent);
+            }
+
+            const elementWithMatomoTags =
+                elementsToCheck &&
+                elementsToCheck.find((item) => item?.dataset?.matomoCategory || item?.data?.matomoAction);
+
+            if (elementWithMatomoTags) {
+                console.log('elementWithMatomoTags ', elementWithMatomoTags);
+                trackEvent({
+                    category: elementWithMatomoTags.dataset.matomoCategory,
+                    action: elementWithMatomoTags.dataset?.matomoAction
+                        ? elementWithMatomoTags.dataset?.matomoAction
+                        : '',
+                });
+            }
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         const init = async () => {

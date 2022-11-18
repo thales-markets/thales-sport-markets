@@ -105,6 +105,8 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                         .map((filterItem) => {
                             return (
                                 <GlobalFilter
+                                    data-matomo-category="filters"
+                                    data-matomo-action={`status-${filterItem.toLowerCase()}`}
                                     selected={globalFilter === filterItem}
                                     isMobile={isMobile}
                                     cancelled={filterItem == GlobalFiltersEnum.Canceled}
@@ -130,11 +132,13 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                             );
                         })}
                     {!isMobile && (
-                        <Dropdown<OddsType>
-                            list={ODDS_TYPES}
-                            selectedItem={selectedOddsType}
-                            onSelect={setSelectedOddsType}
-                        />
+                        <DropdownContrainer data-matomo-category="filters" data-matomo-action="odds-selector">
+                            <Dropdown<OddsType>
+                                list={ODDS_TYPES}
+                                selectedItem={selectedOddsType}
+                                onSelect={setSelectedOddsType}
+                            />
+                        </DropdownContrainer>
                     )}
                 </FilterTypeContainer>
                 <FilterTypeContainer isMobile={isMobile}>
@@ -153,6 +157,8 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                                 setSelectedPeriod(3);
                             }
                         }}
+                        data-matomo-category="filters"
+                        data-matomo-action="time-filter-3h"
                     >
                         <Circle />
                         <Label>3h</Label>
@@ -172,6 +178,8 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                                 setSelectedPeriod(12);
                             }
                         }}
+                        data-matomo-category="filters"
+                        data-matomo-action="time-filter-12h"
                     >
                         <Circle />
                         <Label>12h</Label>
@@ -191,6 +199,8 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                                 setSelectedPeriod(72);
                             }
                         }}
+                        data-matomo-category="filters"
+                        data-matomo-action="time-filter-3d"
                     >
                         <Circle />
                         <Label>3d</Label>
@@ -207,6 +217,11 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
 const Container = styled(FlexDiv)`
     width: 100%;
     max-width: 750px;
+`;
+
+const DropdownContrainer = styled.div`
+    height: auto;
+    width: auto;
 `;
 
 export const Filters = styled(FlexDiv)<{ isMobile?: boolean }>`
