@@ -105,8 +105,7 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
                                             values={{
                                                 utilizationRate: formatPercentage(vaultData.utilizationRate, 0),
                                                 allocationLimitsPerMarketPerRound: formatPercentage(
-                                                    vaultData.allocationLimitsPerMarketPerRound,
-                                                    0
+                                                    vaultData.allocationLimitsPerMarketPerRound
                                                 ),
                                                 odds: formatPercentage(vaultData.priceLowerLimit, 0),
                                             }}
