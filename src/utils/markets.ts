@@ -2,6 +2,7 @@ import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constant
 import { Position } from 'constants/options';
 import { FIFA_WC_TAG, MLS_TAG, PERSON_COMPETITIONS, TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
 import ordinal from 'ordinal';
+import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import { AccountPosition, MarketData, MarketInfo, ParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
 import { formatCurrency } from './formatters/number';
 
@@ -125,8 +126,17 @@ export const convertPositionNameToPositionType = (positionName: string) => {
     if (positionName?.toUpperCase() == 'HOME') return Position.HOME;
     if (positionName?.toUpperCase() == 'AWAY') return Position.AWAY;
     if (positionName?.toUpperCase() == 'DRAW') return Position.DRAW;
-    console.log('ULAZI OVDE');
     return Position.HOME;
+};
+
+export const getCanceledGameClaimAmount = (position: AccountPositionProfile) => {
+    const positionType = convertPositionNameToPositionType(position.side);
+
+    if (positionType == Position.HOME) return formatCurrency(position.market.homeOdds * position.amount, 2);
+    if (positionType == Position.AWAY) return formatCurrency(position.market.awayOdds * position.amount, 2);
+    if (positionType == Position.DRAW)
+        return position.market.drawOdds ? formatCurrency(position.market.drawOdds * position.amount, 2) : 0;
+    return 0;
 };
 
 export const isApexGame = (tag: number) => tag >= APEX_GAME_MIN_TAG;

@@ -32,7 +32,12 @@ import { ethers } from 'ethers';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { toast } from 'react-toastify';
 import PositionSymbol from 'components/PositionSymbol';
-import { convertPositionNameToPositionType, convertPositionToSymbolType, getIsApexTopGame } from 'utils/markets';
+import {
+    convertPositionNameToPositionType,
+    convertPositionToSymbolType,
+    getCanceledGameClaimAmount,
+    getIsApexTopGame,
+} from 'utils/markets';
 import { getPositionColor } from 'utils/ui';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { useSelector } from 'react-redux';
@@ -87,7 +92,13 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
     };
 
     const isClaimable = position.claimable;
+    const isCanceled = position.market.isCanceled;
     const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
+    const claimCanceledGame = isClaimable && isCanceled;
+
+    const claimAmountForCanceledGame = claimCanceledGame ? getCanceledGameClaimAmount(position) : 0;
+
+    const claimAmount = claimCanceledGame ? claimAmountForCanceledGame : position.amount;
 
     return (
         <Wrapper>
@@ -117,13 +128,22 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
             {isClaimable && (
                 <>
                     <ResultContainer>
-                        <Label>{t('profile.card.result')}</Label>
-                        <BoldValue>{`${position.market.homeScore} : ${position.market.awayScore}`}</BoldValue>
+                        {!isCanceled && (
+                            <>
+                                <Label>{t('profile.card.result')}</Label>
+                                <BoldValue>{`${position.market.homeScore} : ${position.market.awayScore}`}</BoldValue>
+                            </>
+                        )}
+                        {isCanceled && (
+                            <>
+                                <Label canceled={true}>{t('profile.card.canceled')}</Label>
+                            </>
+                        )}
                     </ResultContainer>
                     {isMobile ? (
                         <ClaimContainer>
                             <FlexDivRow>
-                                <ClaimValue>{formatCurrencyWithSign(USD_SIGN, position.amount, 2)}</ClaimValue>
+                                <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
                             </FlexDivRow>
                             <ClaimButton
                                 claimable={true}
@@ -140,7 +160,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                         <>
                             <ClaimInfoContainer>
                                 <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
-                                <ClaimValue>{formatCurrencyWithSign(USD_SIGN, position.amount, 2)}</ClaimValue>
+                                <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
                             </ClaimInfoContainer>
                             <ClaimButton
                                 claimable={true}

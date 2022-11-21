@@ -31,8 +31,8 @@ const Positions: React.FC = () => {
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     // const walletAddress = useSelector((state: RootState) => getWalletAddress(state))
-    //     ? '0xe966C59c15566A994391F6226fee5bc0eF70F87A'
-    //     : '0xe966C59c15566A994391F6226fee5bc0eF70F87A';
+    //     ? '0x4a24fd841e74c28309bca5730b40679e18c5fca0'
+    //     : '0x4a24fd841e74c28309bca5730b40679e18c5fca0';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
