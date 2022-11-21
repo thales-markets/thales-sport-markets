@@ -1,8 +1,11 @@
-import SimpleLoader from 'components/SimpleLoader';
+// import SimpleLoader from 'components/SimpleLoader';
+import { getSuccessToastOptions } from 'config/toast';
+import { LINKS } from 'constants/links';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
 import React, { useCallback, useRef, useState } from 'react';
 import ReactModal from 'react-modal';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
@@ -40,6 +43,8 @@ const customStyles = {
     },
 };
 
+const TWITTER_MESSAGE = 'My Ticket: <JUST PASTE HERE>';
+
 const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isSimpleView /*, setIsSimpleView*/] = useState(false);
@@ -51,23 +56,26 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
             return;
         }
         setIsLoading(true);
+        const id = toast.loading('Generating your image to clipboard...'); // TODO: translate
 
         const base64Image = await toPng(ref.current, { cacheBust: true });
-        // const image = new Image();
-        // image.src = base64Image;
-        // const w = window.open('');
-        // w?.document.write(image.outerHTML);
         const b64Blob = (await fetch(base64Image)).blob();
         const cbi = new ClipboardItem({
             'image/png': b64Blob,
         });
         await navigator.clipboard.write([cbi]);
 
+        toast.update(id, getSuccessToastOptions('Image is in your clipboard!')); // TODO: translate
+        setTimeout(() => {
+            window.open(LINKS.TwitterStatus + TWITTER_MESSAGE);
+        }, 2000);
+
         if (ref.current === null) {
             return;
         }
         setIsLoading(false);
-    }, []);
+        onClose();
+    }, [onClose]);
 
     return (
         <ReactModal isOpen onRequestClose={onClose} shouldCloseOnOverlayClick={true} style={customStyles}>
@@ -83,11 +91,11 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                     <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
                 </TwitterShare>
             </Container>
-            {isLoading && (
+            {/* {isLoading && (
                 <LoaderContainer>
                     <SimpleLoader />
                 </LoaderContainer>
-            )}
+            )} */}
         </ReactModal>
     );
 };
@@ -133,12 +141,11 @@ const TwitterShareLabel = styled.span`
     color: #ffffff;
 `;
 
-const LoaderContainer = styled.div`
-    position: absolute;
-    position: absolute;
-    left: -5px;
-    right: 0;
-    bottom: -56px;
-`;
+// const LoaderContainer = styled.div`
+//     position: absolute;
+//     left: -5px;
+//     right: 0;
+//     bottom: -56px;
+// `;
 
 export default React.memo(ShareTicketModal);
