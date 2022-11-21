@@ -1,6 +1,6 @@
 import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
 import { Position } from 'constants/options';
-import { MLS_TAG, PERSON_COMPETITIONS, TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
+import { FIFA_WC_TAG, MLS_TAG, PERSON_COMPETITIONS, TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
 import ordinal from 'ordinal';
 import { AccountPosition, MarketData, MarketInfo, ParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
 import { formatCurrency } from './formatters/number';
@@ -207,6 +207,8 @@ export const isDiscounted = (priceImpact: number | undefined) => {
 
 export const isMlsGame = (tag: number) => Number(tag) === MLS_TAG;
 
+export const isFifaWCGame = (tag: number) => Number(tag) === FIFA_WC_TAG;
+
 export const getIsIndividualCompetition = (tag: number) => PERSON_COMPETITIONS.includes(tag);
 
 export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
@@ -223,4 +225,16 @@ export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
     }
 
     return false;
+};
+
+export const isParlayOpen = (parlayMarket: ParlayMarket) => {
+    const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved);
+    const resolvedAndClaimable = parlayMarket.positions.filter(
+        (position) => position.claimable && position.market.isResolved
+    );
+
+    if (resolvedMarkets?.length == 0) return true;
+
+    if (resolvedMarkets?.length !== resolvedAndClaimable?.length) return false;
+    return true;
 };

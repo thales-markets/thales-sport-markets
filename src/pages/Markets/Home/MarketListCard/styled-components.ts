@@ -115,11 +115,18 @@ export const MatchNamesContainerMobile = styled(FlexDivRow)`
     }
 `;
 
+export const OddsWrapper = styled(FlexDivRow)`
+    flex-grow: 1;
+`;
+
 export const OddsWrapperMobile = styled(FlexDivRow)<{ closedMarket?: boolean }>`
     flex: 1;
     align-self: ${(_props) => (_props?.closedMarket ? 'end' : '')};
 `;
 
 export const ResultWrapper = styled(FlexDivRowCentered)`
-    margin-left: 30px;
+    margin-left: 15px;
+    min-width: 90px;
+    margin-right: 5px;
+    justify-content: flex-start;
 `;
