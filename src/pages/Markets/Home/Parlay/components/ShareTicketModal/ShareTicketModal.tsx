@@ -1,5 +1,5 @@
 import SimpleLoader from 'components/SimpleLoader';
-import { generalConfig } from 'config/general';
+// import { generalConfig } from 'config/general';
 // import { LINKS } from 'constants/links';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
