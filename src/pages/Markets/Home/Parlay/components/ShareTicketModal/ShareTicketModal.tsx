@@ -1,4 +1,6 @@
 import SimpleLoader from 'components/SimpleLoader';
+import { generalConfig } from 'config/general';
+// import { LINKS } from 'constants/links';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
 import React, { useCallback, useRef, useState } from 'react';
@@ -6,6 +8,7 @@ import ReactModal from 'react-modal';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
+import MySimpleTicket from '../MySimpleTicket';
 import MyTicket from '../MyTicket';
 import { TwitterIcon } from '../styled-components';
 
@@ -41,46 +44,60 @@ const customStyles = {
 
 const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [image, setImage] = useState('');
+    const [isSimpleView /*, setIsSimpleView*/] = useState(false);
 
     const ref = useRef<HTMLDivElement>(null);
 
     const onTwitterShareClick = useCallback(async () => {
-        if (image) {
-            // TODO: upload data to Twitter
-            const imageI = new Image();
-            imageI.src = image;
-            const w = window.open('');
-            w?.document.write(imageI.outerHTML);
-            return;
-        }
         if (ref.current === null) {
             return;
         }
         setIsLoading(true);
 
-        toPng(ref.current, { cacheBust: true })
-            .then((data) => {
-                // TODO: upload data to Twitter
-                const imageI = new Image();
-                imageI.src = data;
-                const w = window.open('');
-                w?.document.write(imageI.outerHTML);
+        try {
+            const base64Image = await toPng(ref.current, { cacheBust: true });
+            const base64Data = base64Image.split(',')[1];
 
-                if (!ref.current) return null;
-                setImage(data);
-                setIsLoading(false);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, [image]);
+            const myHeaders = new Headers();
+            myHeaders.append('Content-Type', 'application/json');
+            const raw = JSON.stringify({ base64Data, status: 'Testing Tweet with media API...' });
+            const requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow' as RequestRedirect,
+            };
+            // TODO: set real API url
+            // const response = await fetch(`${generalConfig.API_URL}/tweet-media/`, requestOptions);
+            const response = await fetch('http://localhost:4050/tweet-media', requestOptions);
+            if (response) {
+                const json = await response.json();
+                if (json.data?.id) {
+                    // TODO: successfully posted shared tweet
+                    // window.open(LINKS.Twitter + '/status/' + json.data?.id);
+                    window.open('https://twitter.com/lotina_sasa/status/' + json.data?.id);
+                    onClose();
+                    return;
+                }
+            }
+        } catch (e) {
+            console.log(e);
+        }
+        if (ref.current === null) {
+            return;
+        }
+        setIsLoading(false);
+    }, [onClose]);
 
     return (
         <ReactModal isOpen onRequestClose={onClose} shouldCloseOnOverlayClick={true} style={customStyles}>
             <Container ref={ref}>
                 <CloseIcon className={`icon icon--close`} onClick={onClose} />
-                <MyTicket markets={markets} totalQuote={totalQuote} paid={paid} payout={payout} />
+                {isSimpleView ? (
+                    <MySimpleTicket payout={payout} />
+                ) : (
+                    <MyTicket markets={markets} totalQuote={totalQuote} paid={paid} payout={payout} />
+                )}
                 <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
                     <TwitterIcon disabled={isLoading} fontSize={'30px'} />
                     <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
