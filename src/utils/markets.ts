@@ -224,3 +224,15 @@ export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
 
     return false;
 };
+
+export const isParlayOpen = (parlayMarket: ParlayMarket) => {
+    const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved);
+    const resolvedAndClaimable = parlayMarket.positions.filter(
+        (position) => position.claimable && position.market.isResolved
+    );
+
+    if (resolvedMarkets?.length == 0) return true;
+
+    if (resolvedMarkets?.length !== resolvedAndClaimable?.length) return false;
+    return true;
+};
