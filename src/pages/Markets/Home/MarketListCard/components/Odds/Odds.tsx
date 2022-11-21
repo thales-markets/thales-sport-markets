@@ -50,19 +50,14 @@ const Odds: React.FC<OddsProps> = ({
 }) => {
     const { t } = useTranslation();
 
-    const pendingResolution =
-        odds?.awayOdds == 0 && odds?.homeOdds == 0 && odds?.awayOdds == 0 && isLive && !isResolved;
+    const pendingResolution = odds?.awayOdds == 0 && odds?.homeOdds == 0 && isLive && !isResolved;
     const noOddsFlag =
-        odds?.awayOdds == 0 &&
-        odds?.homeOdds == 0 &&
-        odds?.awayOdds == 0 &&
-        !isLive &&
-        !isResolved &&
-        !isCancelled &&
-        !isPaused;
+        odds?.awayOdds == 0 && odds?.homeOdds == 0 && !isLive && !isResolved && !isCancelled && !isPaused;
     const resolvedGameFlag = isResolved && finalResult;
+    const twoPositionalSport = typeof odds?.drawOdds == 'undefined' && odds?.awayOdds != 0 && odds?.homeOdds != 0;
     const showOdds = !pendingResolution && !noOddsFlag && !resolvedGameFlag && !isCancelled && !isPaused;
     const selectedOddsType = useSelector(getOddsType);
+
     return (
         <Container resolved={!!resolvedGameFlag} isMobile={isMobile} noOdds={noOddsFlag}>
             {noOddsFlag && <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>}
@@ -84,7 +79,7 @@ const Odds: React.FC<OddsProps> = ({
                 </>
             )}
             {showOdds && (
-                <OddsContainer isMobile={isMobile}>
+                <OddsContainer isMobile={isMobile} twoPositionalSport={twoPositionalSport}>
                     <PositionSymbol
                         marketId={marketId}
                         homeTeam={homeTeam}
