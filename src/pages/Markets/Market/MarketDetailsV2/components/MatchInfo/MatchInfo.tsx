@@ -31,6 +31,7 @@ import {
     getIsApexTopGame,
     getMarketStatusFromMarketData,
     isApexGame,
+    isFifaWCGame,
 } from 'utils/markets';
 import { ApexBetTypeKeyMapping, MarketStatus } from 'constants/markets';
 import { getIsMobile } from 'redux/modules/app';
@@ -125,6 +126,9 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                     {matchStartsLabel}:
                                     {isApexGame(market.tags[0]) && (
                                         <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={15} marginLeft={2} />
+                                    )}
+                                    {isFifaWCGame(market.tags[0]) && (
+                                        <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={15} marginLeft={2} />
                                     )}
                                 </MatchTimeLabel>
                                 <MatchTime>{formatDateWithTime(market.maturityDate)}</MatchTime>

@@ -19,19 +19,24 @@ import {
     TeamImage,
 } from './styled-components';
 
-const ProfileItem: React.FC = () => {
+type ProfileItemProperties = {
+    labelHidden?: boolean;
+    avatarSize?: number;
+};
+
+const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize }) => {
     const { t } = useTranslation();
     return (
         <SPAAnchor href={buildHref(ROUTES.Profile)}>
             <ProfileContainer data-matomo-category="dapp-header" data-matomo-action="profile">
-                <ProfileIconWidget />
-                <ProfileLabel>{t('markets.nav-menu.items.profile')}</ProfileLabel>
+                <ProfileIconWidget avatarSize={avatarSize} />
+                {!labelHidden && <ProfileLabel>{t('markets.nav-menu.items.profile')}</ProfileLabel>}
             </ProfileContainer>
         </SPAAnchor>
     );
 };
 
-export const ProfileIconWidget: React.FC = () => {
+export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -52,6 +57,7 @@ export const ProfileIconWidget: React.FC = () => {
             <ProfileIconContainer>
                 {favoriteTeamData?.favoriteTeam ? (
                     <TeamImage
+                        avatarSize={avatarSize}
                         src={`https://thales-protocol.s3.eu-north-1.amazonaws.com/zebro_${countries[
                             favoriteTeamData?.favoriteTeam - 1
                         ]
@@ -60,7 +66,7 @@ export const ProfileIconWidget: React.FC = () => {
                             .join('_')}.png`}
                     />
                 ) : (
-                    <ProfileIcon />
+                    <ProfileIcon avatarSize={avatarSize} />
                 )}
 
                 {claimablePositionCount && (

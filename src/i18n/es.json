@@ -134,7 +134,8 @@
         "top5": "TOP 5",
         "top10": "TOP 10",
         "yes": "YES",
-        "no": "NO"
+        "no": "NO",
+        "fifa-tooltip": "Los resultados de los mercados de la Copa Mundial de la FIFA se basan en los resultados reglamentarios; en caso de que vayan a la prórroga, el resultado reglamentario es el que resolverá el mercado."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS.",
@@ -537,113 +538,113 @@
         "get-your-nft": "Página de menta"
     },
     "referral": {
+        "generate-link": "Generar enlace",
+        "copy-link": "Copiar enlace",
+        "trades": "Transacciones",
+        "total-volume": "Volumen total",
+        "total-earned": "Ganancia total",
+        "total-trading-fees": "Comisiones de transaccion total",
+        "affiliate-leaderboard-table": {
+            "address": "Direccion",
+            "number-of-trades": "Transacciones",
+            "total-volume": "Volumen total",
+            "first-transaction": "Primera transaccion",
+            "total-earned": "Ganancia total",
+            "amount": "Cantidad",
+            "volume": "Volumen",
+            "type": "Tipo",
+            "timestamp": "Fecha/hora"
+        },
+        "no-result": "No hay resultados para esta tabla",
+        "earned": "Obtenido",
+        "header": "Crear enlace de referido",
+        "paragraph": "<bold>El programa de referidos de Overtime actua como una herramienta on-chain que incentiva la adquisicion de nuevos usuarios.</bold>Este programa permita a cualquiera <bold>generar un enlace de referido</bold> y compartirlo con las personas que quiera invitar a la plataforma.<br /><br /> Al compartir tu enlace personal de referido, obtendras <bold>0.5% de todo el volumen en sUSD que tu referido genere.</bold> No hay necesidad de reclamar manualmente estas comisiones, ya que el sUSD se auto-acumula en tu billetera Web3 en forma de simples transferencias de sUSD.",
         "nav-items": {
             "all-transactions": "Todas las transacciones",
-            "see-result-by-trader": "Ver resultado por comerciante",
-            "affiliate-leaderboard": "Tabla de clasificación de afiliados"
-        },
-        "trades": "Vientos alisios",
-        "total-trading-fees": "Tarifas comerciales totales",
-        "copy-link": "Copiar link",
-        "earned": "ganado",
-        "total-volume": "Volumen total",
-        "header": "Crear enlaces de referencia",
-        "generate-link": "Generar enlace",
-        "affiliate-leaderboard-table": {
-            "total-volume": "Volumen total",
-            "number-of-trades": "Vientos alisios",
-            "address": "Dirección",
-            "volume": "Volumen",
-            "amount": "Monto",
-            "type": "Escribe",
-            "total-earned": "Total de Ganancias",
-            "timestamp": "Fecha y hora",
-            "first-transaction": "Primera transacción"
-        },
-        "no-result": "No hay resultados para esta tabla.",
-        "total-earned": "Total de Ganancias",
-        "paragraph": "<bold>El programa de referencias de tiempo extra es una herramienta de adquisición e incorporación de usuarios incentivada en cadena.</bold> El programa permite a cualquier persona<bold> generar un enlace de referencia</bold> y compártalo con los usuarios que intentan incorporar.<br /><br /> Al compartir su enlace de recomendación personal, gana<bold> ¡0.5% de todo el volumen de sUSD que producen sus usuarios referidos!</bold> No se necesitan reclamos manuales, el sUSD se acumula automáticamente en su billetera en forma de simples transferencias de sUSD."
+            "see-result-by-trader": "Ver resultado por participante",
+            "affiliate-leaderboard": "Leaderboard de afiliados"
+        }
     },
     "vaults": {
-        "title": "Sport Vaults",
-        "strategy-label": "Vault strategy",
-        "risks-label": "Vault risks"
+        "title": "Bovedas de deportes",
+        "strategy-label": "Estrategia de la boveda",
+        "risks-label": "Riesgos de la boveda"
     },
     "vault": {
         "discount-vault": {
-            "title": "Discount Vault",
-            "description": "<p>Buys positions that have more than {{odds}} odds and are available at a discount larger than {{discount}}.</p>All deposits that enter a round count towards gamified staking volume.</p>",
-            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
+            "title": "Boveda de Descuentos",
+            "description": "<p>Compra posiciones que tengan odds mayores a {{odds}} y que esten disponibles con un descuento mayor a {{discount}}.</p>Todos los depositos que sean ingresados a un round cuentan como parte del volumen de la iniciative staking gamificado.</p>",
+            "risks": "<p>Esta boveda tiene una tasa de utilizacion de {{utilizationRate}} lo que asegura que no mas de {{utilizationRate}} del total depositado es expuesto al riesgo de la estrategia. Es mas, de este {{utilizationRate}} un maximo de {{allocationLimitsPerMarketPerRound}} puede ser invertido en un solo mercado, de esta forma diversificando el riesgo en multiples mercados que tienen mas de {{odds}} odds.</p>"
         },
         "degen-discount-vault": {
-            "title": "Degen Discount Vault",
-            "description": "<p>Buys positions at any odds that are available for more than {{discount}} discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
-            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market.</p>"
+            "title": "Boveda de Descuentos Degen",
+            "description": "<p>Compra posiciones, sin importar los odds, que esten disponibles por un descuento mayor a {{discount}}.</p><p>Todos los depositos que sean ingresados a un round cuentan como parte del volumen de la iniciative staking gamificado.</p>",
+            "risks": "<p>Esta boveda tiene una tasa de utilizacion de {{utilizationRate}} lo que asegura que no mas de {{utilizationRate}} del total depositado es expuesto al riesgo de la estrategia. Es mas, de este {{utilizationRate}} un maximo de {{allocationLimitsPerMarketPerRound}} puede ser invertido en un solo mercado.</p>"
         },
         "safu-discount-vault": {
-            "title": "Safu Discount Vault",
-            "description": "<p>Buys positions that have more than {{odds}} odds and are available at any discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
-            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
+            "title": "Boveda de Descuentos Safu",
+            "description": "<p>Compra posiciones que tengan odds mayores a {{odds}} y que esten disponibles con cualquier descuento.</p><p>Todos los depositos que sean ingresados a un round cuentan como parte del volumen de la iniciative staking gamificado.</p>",
+            "risks": "<p>Esta boveda tiene una tasa de utilizacion de {{utilizationRate}} lo que asegura que no mas de {{utilizationRate}} del total depositado es expuesto al riesgo de la estrategia. Es mas, de este {{utilizationRate}} un maximo de {{allocationLimitsPerMarketPerRound}} puede ser invertido en un solo mercado, de esta forma diversificando el riesgo en multiples mercados que tienen mas de {{odds}} odds.</p>"
         },
-        "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
-        "back-to-vaults": "Back to vaults",
-        "vault-not-started-message": "The vault has not started",
-        "vault-paused-message": "The vault is paused",
-        "round-allocation-label": "Total round deposit",
-        "spent-trading-label": "Spent on trading",
-        "available-trading-label": "Available for trading",
-        "round-end-label": "The round ends in",
-        "your-round-allocation-label": "Your allocation for the round: <bold>{{amount}}</bold>",
-        "your-next-round-allocation-label": "Your allocation for the next round: <bold>{{amount}}</bold>",
-        "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
-        "next-round-start-label": "The next round starts in: <counter />",
-        "users-in-vault-label": "Users in the vault: {{number}} / {{max}}",
-        "vault-filled-label": "Vault filled: {{amount}} / {{max}}",
-        "deposit-message": "Deposit funds into the vault for the next round.",
-        "deposit-amount-label": "Deposit amount",
-        "deposit-amount-placeholder": "Enter amount",
-        "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
-        "nothing-to-withdraw-label": "Nothing to withdraw.",
-        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
-        "withdraw-round-end-label": "The round ends in: <counter />",
-        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
-        "withdrawal-request-label": "Withdrawal request: <bold>{{amount}}</bold>",
-        "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
-        "round-ended-label": "Round ended",
-        "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
-        "deposit-max-amount-of-users-warning": "Maximum number of users in the vault is reached, you cannot deposit.",
-        "deposit-vault-cap-reached-warning": "The vault cap is reached, you cannot deposit.",
-        "deposit-vault-cap-error": "Deposit amount exceeds vault cap",
-        "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
-        "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
+        "variables": "<p>Variables:</p><ul><li>Tasa de utilizacion: {{utilizationRate}}</li><li>Limite inferior del precio: {{priceLowerLimit}}</li><li>Limite superior del precio: {{priceUpperLimit}}</li><li>Impacto maximo de Skew: {{skewImpactLimit}}</li><li>Asignacion maxima por mercado: {{allocationLimitsPerMarketPerRound}}</li><li>Deposito total maximo: {{maxAllowedDeposit}}</li><li>Cantidad de usuarios maxima en la boveda: {{maxAllowedUsers}}</li><li>Cantidad minima por transaccion: {{minTradeAmount}}</li><li>Deposito minimo: {{minDepositAmount}}</li><li>Duracion del round: {{roundLength}} dias</li></ul>",
+        "back-to-vaults": "Volver a bovedas",
+        "vault-not-started-message": "La boveda aun no ha sido iniciada",
+        "vault-paused-message": "La boveda esta en pausa",
+        "round-allocation-label": "Deposito total en este round",
+        "spent-trading-label": "Invertido en estrategia",
+        "available-trading-label": "Disponible para estrategia",
+        "round-end-label": "Este round termina en",
+        "your-round-allocation-label": "Tu deposito para este round: <bold>{{amount}}</bold>",
+        "your-next-round-allocation-label": "Tu deposito para el proximo round: <bold>{{amount}}</bold>",
+        "estimated-amount-tooltip": "Esta es una cantidad estimada. La cantidad definitiva sera calculada una vez finalice el round actual basado en el PnL del round.",
+        "next-round-start-label": "El proximo round comienza en: <counter />",
+        "users-in-vault-label": "Ususarios en la boveda: {{number}} / {{max}}",
+        "vault-filled-label": "Capacidad de la boveda: {{amount}} / {{max}}",
+        "deposit-message": "Fondos depositados en la boveda para el proximo round.",
+        "deposit-amount-label": "Depositar cantidad",
+        "deposit-amount-placeholder": "Ingresar cantidad",
+        "available-to-withdraw-label": "Disponible para retiro: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "Nada que retirar.",
+        "withdrawal-message": "Puedes solicitar un retiro y tus fondos seran enviados automaticamente al finalizar el round una vez este se encuentre cerrado.",
+        "withdraw-round-end-label": "El round termina en: <counter />",
+        "withdrawal-requested-message": "Solicitaste retirar <bold>{{amount}}</bold><tooltip />. Tus fondos seran nviados automaticamente al finalizar el round una vez este se encuentre cerrado.",
+        "withdrawal-request-label": "Solicitud de retiro: <bold>{{amount}}</bold>",
+        "first-deposit-withdrawal-message": "Has depositado para el proximo round y puedes retirar estos fondos al finalizar el proximo round.",
+        "round-ended-label": "Round finalizado",
+        "deposit-withdrawal-warning": "Retiro solicitado, no puedes depositar.",
+        "deposit-max-amount-of-users-warning": "Numero maximo de usuarios en la boveda ha sido alcanzado, no puedes depositar.",
+        "deposit-vault-cap-reached-warning": "El limite de la boveda ha sido alcanzado, no puedes depositar.",
+        "deposit-vault-cap-error": "Cantidad depositada excede el limite de la boveda",
+        "deposit-min-amount-error": "La cantidad minima a depositar es {{amount}}",
+        "withdrawal-deposit-warning": "No puedes retirar ya que has depositado para el siguiente round.",
         "tabs": {
-            "deposit": "Deposit",
-            "claim": "Claim",
-            "withdraw": "Withdraw"
+            "deposit": "Depositar",
+            "claim": "Reclamar",
+            "withdraw": "Retirar"
         },
         "button": {
-            "deposit-label": "Deposit",
-            "deposit-progress-label": "Deposit in progress...",
-            "deposit-confirmation-message": "Deposit successfully placed",
-            "request-withdrawal-label": "Request withdrawal",
-            "request-withdrawal-progress-label": "Request in progress...",
-            "request-withdrawal-confirmation-message": "Withdrawal request successfully sent",
-            "withdraw-label": "Withdraw",
-            "withdraw-progress-label": "Withdrawal in progress...",
+            "deposit-label": "Depositar",
+            "deposit-progress-label": "Deposito en proceso...",
+            "deposit-confirmation-message": "Deposito realizado con exito",
+            "request-withdrawal-label": "Solicitar retiro",
+            "request-withdrawal-progress-label": "Solicitud en proceso...",
+            "request-withdrawal-confirmation-message": "Solicitud de retiro enviada con exito",
+            "withdraw-label": "Retirar",
+            "withdraw-progress-label": "Retiro en proceso...",
             "withdraw-confirmation-message": "Funds successfully withdrawn",
-            "close-round-label": "Close round",
-            "close-round-progress-label": "Closing round in progress...",
-            "close-round-confirmation-message": "Round successfully closed"
+            "close-round-label": "Round finalizado",
+            "close-round-progress-label": "Finalización de round en proceso...",
+            "close-round-confirmation-message": "Round finalizado con exito"
         },
         "trades-history": {
-            "title": "Vault trades history",
-            "no-trades": "No trades associated with this vault in the selected round.",
+            "title": "Historia de transacciones de la boveda",
+            "no-trades": "No hay transacciones asociadas con esta boveda en el round seleccionado.",
             "round-label": "Round"
         },
         "pnl": {
-            "title": "PnL per round",
-            "no-data": "No PnL data for previous rounds.",
-            "lifetime-pnl": "Lifetime PnL"
+            "title": "PnL por round",
+            "no-data": "No hay data de PnL para rounds previos.",
+            "lifetime-pnl": "PnL Total"
         }
     }
 }

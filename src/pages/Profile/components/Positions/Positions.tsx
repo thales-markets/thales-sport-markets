@@ -17,7 +17,7 @@ import {
     EmptyContainer,
     ListContainer,
 } from './styled-components';
-import { isParlayClaimable } from 'utils/markets';
+import { isParlayClaimable, isParlayOpen } from 'utils/markets';
 import ParlayPosition from './components/ParlayPosition';
 import SimpleLoader from 'components/SimpleLoader';
 import { LoaderContainer } from 'pages/Markets/Home/Home';
@@ -31,8 +31,8 @@ const Positions: React.FC = () => {
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     // const walletAddress = useSelector((state: RootState) => getWalletAddress(state))
-    //     ? '0xf12c220b631125425f4c69823d6187FE3C8d0999'
-    //     : '0xf12c220b631125425f4c69823d6187FE3C8d0999';
+    //     ? '0x4a24fd841e74c28309bca5730b40679e18c5fca0'
+    //     : '0x4a24fd841e74c28309bca5730b40679e18c5fca0';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
@@ -84,7 +84,7 @@ const Positions: React.FC = () => {
                 );
 
                 if (resolvedOrCanceledMarkets?.length !== parlayMarket.sportMarkets.length)
-                    data.open.push(parlayMarket);
+                    if (isParlayOpen(parlayMarket)) data.open.push(parlayMarket);
             });
         }
         return data;

@@ -60,11 +60,11 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
 
 const Container = styled.div<{ resolved?: boolean; paused?: boolean; mobile?: boolean }>`
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: ${(_props) => (_props?.mobile && _props?.paused ? 'center' : 'start')};
-    margin-right: 15px;
-    margin-left: 15px;
+    flex-direction: ${(_props) => (_props?.mobile && _props?.resolved ? 'column' : 'row')};
+    align-items: ${(_props) => (_props?.mobile && _props?.resolved ? 'baseline' : 'center')};
+    justify-content: ${(_props) =>
+        _props?.mobile && _props?.paused ? 'center' : _props?.mobile && _props?.resolved ? 'space-evenly' : 'start'};
+    margin-right: ${(_props) => (_props?.mobile && _props?.resolved ? '' : '15px')};
     width: ${(_props) => (_props?.resolved ? '33%' : '')};
     height: ${(_props) => (_props?.mobile ? '40px' : '')};
 `;

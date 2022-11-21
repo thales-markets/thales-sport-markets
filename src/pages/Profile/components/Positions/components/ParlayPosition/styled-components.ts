@@ -64,10 +64,10 @@ export const ClaimContainer = styled(FlexDivColumnNative)`
     }
 `;
 
-export const Label = styled.span`
+export const Label = styled.span<{ canceled?: boolean }>`
     font-weight: 400;
     font-size: 12px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(_props) => (_props?.canceled ? `${MAIN_COLORS.TEXT.CANCELED}` : `${MAIN_COLORS.TEXT.WHITE}`)};
     text-transform: uppercase;
     margin-right: 3px;
     @media (max-width: 768px) {
