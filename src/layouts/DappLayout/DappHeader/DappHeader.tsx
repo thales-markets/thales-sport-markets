@@ -6,21 +6,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { getIsWalletConnected } from 'redux/modules/wallet';
 import { buildHref } from 'utils/routes';
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import useInterval from 'hooks/useInterval';
-import MintVoucher from 'components/MintVoucher';
 import burger from 'assets/images/burger.svg';
 import NavMenu from 'components/NavMenu';
 import ProfileItem from './components/ProfileItem';
 import { getIsMobile } from 'redux/modules/app';
-import { ReactComponent as RightBall } from 'assets/images/favorite-team/right-ball.svg';
-import { ReactComponent as LeftBall } from 'assets/images/favorite-team/left-ball.svg';
-import { ReactComponent as QatarMascot } from 'assets/images/favorite-team/qatar-mascot.svg';
+import MintVoucher from 'components/MintVoucher';
 
 const PULSING_COUNT = 10;
 
@@ -54,17 +51,21 @@ const DappHeader: React.FC = () => {
                         {location.pathname !== ROUTES.MintWorldCupNFT && (
                             <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>
                                 <StyledButton style={{ marginRight: '10px' }} disabled={!isWalletConnected}>
-                                    <StyledQatarMascot />
-                                    <LeftBallStyled />
-                                    {t('mint-world-cup-nft.zebro-campaign')}
-                                    <RightBallStyled />
+                                    <FlexDiv>
+                                        <FifaIcon className="icon icon--fifa-world-cup" />
+                                        {t('mint-world-cup-nft.zebro-campaign')}
+                                    </FlexDiv>
                                 </StyledButton>
                             </SPAAnchor>
                         )}
                         {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />}
                         <WalletInfo />
                         <ProfileItem />
-                        <MenuIcon onClick={() => setNavMenuVisibility(true)} />
+                        <MenuIcon
+                            onClick={() => setNavMenuVisibility(true)}
+                            data-matomo-category="dapp-header"
+                            data-matomo-action="menu-icon"
+                        />
                         <NavMenu
                             visibility={navMenuVisibility}
                             hideVisibilityFunction={(value: boolean | null) => setNavMenuVisibility(value)}
@@ -73,18 +74,41 @@ const DappHeader: React.FC = () => {
                 </Container>
             )}
             {isMobile && (
-                <WrapperMobile>
-                    <LogoContainer>
-                        <Logo />
-                    </LogoContainer>
-                    <MenuIconContainer>
-                        <MenuIcon onClick={() => setNavMenuVisibility(true)} />
-                        <NavMenu
-                            visibility={navMenuVisibility}
-                            hideVisibilityFunction={() => setNavMenuVisibility(false)}
+                <>
+                    <WrapperMobile>
+                        <LogoContainer>
+                            <Logo />
+                        </LogoContainer>
+                        <MenuIconContainer>
+                            <MenuIcon onClick={() => setNavMenuVisibility(true)} />
+                            <NavMenu
+                                visibility={navMenuVisibility}
+                                hideVisibilityFunction={() => setNavMenuVisibility(false)}
+                            />
+                        </MenuIconContainer>
+                        <MobileProfileContainer>
+                            <ProfileItem avatarSize={30} labelHidden={true} />
+                        </MobileProfileContainer>
+                    </WrapperMobile>
+                    {location.pathname !== ROUTES.MintWorldCupNFT && (
+                        <div style={{ width: '100%' }}>
+                            <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>
+                                <StyledButton style={{ width: '100%', padding: '5px' }} disabled={!isWalletConnected}>
+                                    <FlexDivCentered>
+                                        <FifaIcon className="icon icon--fifa-world-cup" />
+                                        {t('mint-world-cup-nft.zebro-campaign')}
+                                    </FlexDivCentered>
+                                </StyledButton>
+                            </SPAAnchor>
+                        </div>
+                    )}
+                    {location.pathname !== ROUTES.MintWorldCupNFT && (
+                        <MintVoucher
+                            buttonStyle={{ padding: '7px', background: '#303656' }}
+                            style={{ marginTop: '10px' }}
                         />
-                    </MenuIconContainer>
-                </WrapperMobile>
+                    )}
+                </>
             )}
         </>
     );
@@ -151,11 +175,21 @@ const WrapperMobile = styled(FlexDivRow)`
 `;
 
 const MenuIconContainer = styled.div`
-    width: 100%;
+    width: 50%;
     display: flex;
     justify-content: end;
     position: absolute;
     right: 12px;
+    margin-top: 10px;
+`;
+
+const MobileProfileContainer = styled.div`
+    width: 50%;
+    display: flex;
+    justify-content: start;
+    position: absolute;
+    left: 12px;
+    margin-top: 10px;
 `;
 
 const LogoContainer = styled.div`
@@ -165,17 +199,17 @@ const LogoContainer = styled.div`
 `;
 
 const StyledButton = styled.button<{ disabled?: boolean }>`
-    background: ${(props) => props.theme.button.background.secondary};
-    border: 2px solid #04cfb6;
-    color: #04cfb6;
+    background: #891538;
+    border: 2px solid #891538;
+    color: white;
     border-radius: 5px;
     padding: 0 60px 0 75px;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12.5px;
+    font-weight: 800;
+    font-size: 15px;
+    line-height: 18px;
+    text-transform: uppercase;
     text-align: center;
     outline: none;
-    text-transform: none;
     cursor: pointer;
     min-height: 28px;
     width: fit-content;
@@ -188,24 +222,12 @@ const StyledButton = styled.button<{ disabled?: boolean }>`
     }
 `;
 
-const LeftBallStyled = styled(LeftBall)`
-    position: absolute;
-    top: -6px;
-    left: 27px;
-`;
-
-const RightBallStyled = styled(RightBall)`
-    position: absolute;
-    top: -6px;
-    right: 10px;
-`;
-
-const StyledQatarMascot = styled(QatarMascot)`
-    position: absolute;
-    left: -10px;
-    top: -20px;
-    width: 44px;
-    height: auto;
+const FifaIcon = styled.i`
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 35px;
+    margin-right: 10px;
+    font-weight: 400;
+    text-transform: none;
 `;
 
 export default DappHeader;

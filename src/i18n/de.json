@@ -134,7 +134,8 @@
         "top5": "TOP 5",
         "top10": "TOP 10",
         "yes": "YES",
-        "no": "NO"
+        "no": "NO",
+        "fifa-tooltip": "Die Ergebnisse der FIFA-Weltmeisterschaftsmärkte basieren auf den regulären Ergebnissen. Sollte es in die Verlängerung gehen, ist das reguläre Ergebnis dasjenige, zu dem der Markt entscheidet."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",
@@ -337,7 +338,7 @@
     "rewards": {
         "header": "Preise",
         "search-placeholder": "Wallet Addresse suchen",
-        "description": "<0> Insgesamt <0>8.000 OP</0> und <0>8.000 Thales</0> werden alle zwei Wochen auf kontinuierlicher Basis gemäß TIP-96 verteilt, um die an die SafeBox-Verträge gezahlten Gebühren auszugleichen. </0> <0> Die Rangliste berechnet die Belohnungen als 90 % Rabatt auf die SafeBox-Gebühr, die 3 % des in sUSD gezahlten Gesamtbetrags beträgt. </0> <0> Der $-Wert von OP und THALES wird mit einem 7-Tage-TWAP zu Beginn des Zeitraums berechnet. Wenn am Ende des zweiwöchigen Zeitraums die Gesamtrabatte mehr als der anfängliche TWAP-Wert der OP- und THALES-Tokens beträgt, wird der Rabatt für jeden Trader proportional reduziert.</0>",
+        "description": "<div> Insgesamt <bold>8.000 OP</bold> und <bold>8.000 Thales</bold> werden alle zwei Wochen auf kontinuierlicher Basis gemäß <tipLink>TIP-96</tipLink> verteilt, um die an die SafeBox-Verträge gezahlten Gebühren auszugleichen. </div> <div> Die Rangliste berechnet die Belohnungen als 90 % Rabatt auf die SafeBox-Gebühr, die 3 % des in sUSD gezahlten Gesamtbetrags beträgt. </div> <div> Der $-Wert von OP und THALES wird mit einem 7-Tage-TWAP zu Beginn des Zeitraums berechnet. Wenn am Ende des zweiwöchigen Zeitraums die Gesamtrabatte mehr als der anfängliche TWAP-Wert der OP- und THALES-Tokens beträgt, wird der Rabatt für jeden Trader proportional reduziert.</div>",
         "op-rewards-banner-message": "Die OP-Prämien haben begonnen. Wie ihr sie verdienen könnt, erfahrt ihr auf <bold>der OP-Prämienseite</bold>.",
         "table": {
             "wallet-address": "Wallet Addresse",
@@ -503,7 +504,7 @@
         "choose-nft": "Mint Ihr Zebro NFT",
         "success-mint": "Erfolgreich geprägt",
         "already-minted": "Sie haben Ihr NFT bereits geprägt",
-        "zebro-campaign": "Zebra-FIFA-Kampagne",
+        "zebro-campaign": "Zebro-FIFA",
         "mint-this-zebro": "Prägen Sie dieses Zebra!",
         "leaderboard-title": "Bestenliste",
         "leaderboard": {
@@ -524,7 +525,8 @@
             "rewards": "Belohnung",
             "base-volume": "Base",
             "bonus-volume": "Bonus",
-            "volume": "Volumen"
+            "volume": "Volumen",
+            "player": "Spieler"
         },
         "zebro-wct-collection": "Die Zebro WC NFT Kollektion",
         "zebro-wct-collection-text": "ist Teil einer Anreizkampagne, um Ihr Lieblingsland während der Weltmeisterschaft zu vertreten und sich für einen Anteil von 50.000 OP-Token und 30.000 THALES-Token sowie exklusive Multiplikatoren für Kombinationen und Einzelspiele zu qualifizieren.",
@@ -533,112 +535,112 @@
         "get-your-nft": "Minze Seite"
     },
     "referral": {
-        "nav-items": {
-            "all-transactions": "Alle Transaktionen",
-            "see-result-by-trader": "Siehe Ergebnis nach Händler",
-            "affiliate-leaderboard": "Affiliate-Bestenliste"
-        },
-        "trades": "Handel",
+        "generate-link": "Link generieren",
         "copy-link": "Link kopieren",
-        "total-volume": "Volle Lautstärke",
-        "earned": "Verdient",
-        "header": "Empfehlungslinks erstellen",
-        "total-trading-fees": "Gesamte Handelsgebühren",
-        "generate-link": "Verknüpfung generieren",
+        "trades": "Trades",
+        "total-volume": "Gesamtvolumen",
+        "total-earned": "Insgesamt verdient",
+        "total-trading-fees": "Summe der Handelsgebühren",
         "affiliate-leaderboard-table": {
-            "volume": "Volumen",
+            "address": "Adresse",
+            "number-of-trades": "Trades",
+            "total-volume": "Gesamtvolumen",
             "first-transaction": "Erste Transaktion",
             "total-earned": "Insgesamt verdient",
-            "total-volume": "Volle Lautstärke",
-            "number-of-trades": "Handel",
-            "address": "Adresse",
+            "amount": "Betrag",
+            "volume": "Volumen",
             "type": "Typ",
-            "amount": "Menge",
-            "timestamp": "Terminzeit"
+            "timestamp": "Datum/Zeit"
         },
-        "total-earned": "Insgesamt verdient",
         "no-result": "Es gibt keine Ergebnisse für diese Tabelle",
-        "paragraph": "<bold>Das Überstunden-Empfehlungsprogramm ist ein On-Chain-Incentive-Tool zur Benutzerakquise und zum Onboarding.</bold> Das Programm erlaubt es jedem<bold> einen Empfehlungslink generieren</bold> und teilen Sie es mit Benutzern, die sie einbinden möchten.<br /><br /> Wenn Sie Ihren persönlichen Empfehlungslink teilen, verdienen Sie<bold> 0,5% des gesamten sUSD-Volumens, das Ihre geworbenen Benutzer produzieren!</bold> Es sind keine manuellen Ansprüche erforderlich, die sUSD werden automatisch in Form von einfachen sUSD-Überweisungen in Ihrer Brieftasche gesammelt."
+        "earned": "Verdient",
+        "header": "Empfehlungslinks generieren",
+        "paragraph": "<bold>Das Overtime Referrals Program ist ein On-Chain-Incentivierungs-Tool für die Akquisition und das Onboarding von Nutzern.</bold>Das Programm erlaubt es jedem, <bold>einen Referral Link</bold> zu generieren und ihn mit Nutzern zu teilen, die sie versuchen zu onboarden.<br /><br />Wenn du deinen persönlichen Referral Link teilst, verdienst du <bold>0,5% des gesamten sUSD-Volumens, das deine geworbenen Nutzer produzieren!</bold> Es sind keine manuellen Ansprüche nötig, der sUSD fließt automatisch in Form von einfachen sUSD-Transfers in dein Wallet.",
+        "nav-items": {
+            "all-transactions": "Alle Transaktionen",
+            "see-result-by-trader": "Siehe Ergebnis nach Trader",
+            "affiliate-leaderboard": "Affiliate-Rangliste"
+        }
     },
     "vaults": {
         "title": "Sport Vaults",
-        "strategy-label": "Vault strategy",
-        "risks-label": "Vault risks"
+        "strategy-label": "Vault-Strategie",
+        "risks-label": "Vault-Risiken"
     },
     "vault": {
         "discount-vault": {
-            "title": "Discount Vault",
-            "description": "<p>Buys positions that have more than {{odds}} odds and are available at a discount larger than {{discount}}.</p>All deposits that enter a round count towards gamified staking volume.</p>",
-            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
+            "title": "Rabatt Vault",
+            "description": "<p>Kauft Positionen, die eine höhere Quote als {{odds}} haben und mit einem größeren Rabatt als {{discount}} erhältlich sind.</p>Alle Einzahlungen, die in eine Runde eingehen, zählen für das gamifizierte Staking Volumen.</p>",
+            "risks": "<p>Die Vault hat eine Nutzungsrate von {{UtilizationRate}}, die sicherstellt, dass nicht mehr als {{UtilizationRate}} der für eine Runde eingezahlten Mittel dem Risiko ausgesetzt werden. Darüber hinaus kann von diesen {{UtilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für einen einzigen Markt ausgegeben werden, wodurch das Risiko auf mehrere Märkte verteilt wird, die Quoten von mehr als {{odds}} haben.</p>"
         },
         "degen-discount-vault": {
-            "title": "Degen Discount Vault",
-            "description": "<p>Buys positions at any odds that are available for more than {{discount}} discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
-            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market.</p>"
+            "title": "Degen Rabatt Vault",
+            "description": "<p>Kauft Positionen zu allen Quoten, die für mehr als {{Rabatt}} Rabatt verfügbar sind.</p><p>Alle Einzahlungen, die in eine Runde einfließen, zählen für das gamifizierte Staking Volumen.</p>",
+            "risks": "<p>Die Vault hat eine Nutzungsrate von {{utilizationRate}}, die sicherstellt, dass nicht mehr als {{utilizationRate}} der in einer Runde eingezahlten Mittel riskiert wird. Außerdem kann von diesen {{UtilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für einen einzelnen Markt ausgegeben werden.</p>"
         },
         "safu-discount-vault": {
-            "title": "Safu Discount Vault",
-            "description": "<p>Buys positions that have more than {{odds}} odds and are available at any discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
-            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
+            "title": "Safu Rabatt Vault",
+            "description": "<p>Kauft Positionen, die mehr als {{odds}} Quoten haben und mit einem beliebigen Rabatt verfügbar sind.</p><p>Alle Einzahlungen, die in einer Runde getätigt werden, zählen für das gamifizierte Staking Volumen.</p>",
+            "risks": "<p>Die Vault hat eine Nutzungsrate von {{utilizationRate}}, die sicherstellt, dass nicht mehr als {{utilizationRate}} des eingezahlten Geldes pro Runde riskiert wird. Darüber hinaus kann von diesen {{UtilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für einen einzelnen Markt ausgegeben werden, wodurch das Risiko auf mehrere Märkte verteilt wird, die Quoten von mehr als {{odds}} haben.</p>"
         },
-        "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
-        "back-to-vaults": "Back to vaults",
-        "vault-not-started-message": "The vault has not started",
-        "vault-paused-message": "The vault is paused",
-        "round-allocation-label": "Total round deposit",
-        "spent-trading-label": "Spent on trading",
-        "available-trading-label": "Available for trading",
-        "round-end-label": "The round ends in",
-        "your-round-allocation-label": "Your allocation for the round: <bold>{{amount}}</bold>",
-        "your-next-round-allocation-label": "Your allocation for the next round: <bold>{{amount}}</bold>",
-        "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
-        "next-round-start-label": "The next round starts in: <counter />",
-        "users-in-vault-label": "Users in the vault: {{number}} / {{max}}",
-        "vault-filled-label": "Vault filled: {{amount}} / {{max}}",
-        "deposit-message": "Deposit funds into the vault for the next round.",
-        "deposit-amount-label": "Deposit amount",
-        "deposit-amount-placeholder": "Enter amount",
-        "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
-        "nothing-to-withdraw-label": "Nothing to withdraw.",
-        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
-        "withdraw-round-end-label": "The round ends in: <counter />",
-        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
-        "withdrawal-request-label": "Withdrawal request: <bold>{{amount}}</bold>",
-        "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
-        "round-ended-label": "Round ended",
-        "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
-        "deposit-max-amount-of-users-warning": "Maximum number of users in the vault is reached, you cannot deposit.",
-        "deposit-vault-cap-reached-warning": "The vault cap is reached, you cannot deposit.",
-        "deposit-vault-cap-error": "Deposit amount exceeds vault cap",
-        "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
-        "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
+        "variables": "<p>Variablen:</p><ul><li>Nutzungsrate: {{utilizationRate}}</li><li>Preis-Untergrenze: {{priceLowerLimit}}</li><li>Preis-Obergrenze: {{priceUpperLimit}}</li><li>Max Skew Impact: {{skewImpactLimit}}</li><li>Maximale Allokation auf einem einzelnen Markt:  {{allocationLimitsPerMarketPerRound}}</li><li>Maximale Gesamteinlage: {{maxAllowedDeposit}}</li><li>Maximum Benutzer im Tresor: {{maxAllowedUsers}}</li><li>Mindestbetrag für ein einzelnes Trade: {{minTradeAmount}}</li><li>Mindesteinzahlung: {{minDepositAmount}}</li><li>Dauer der Runde: {{roundLength}} Tage</li></ul>",
+        "back-to-vaults": "Zurück zu den Vaults",
+        "vault-not-started-message": "Die Vault wurde nicht gestartet",
+        "vault-paused-message": "Die Vault ist pausiert",
+        "round-allocation-label": "Gesamteinlage für die Runde",
+        "spent-trading-label": "Für Trades aufgewendet",
+        "available-trading-label": "Für Trades verfügbar",
+        "round-end-label": "Die Runde endet in",
+        "your-round-allocation-label": "Ihre Zuteilung für diese Runde: <bold>{{Betrag}}</bold>",
+        "your-next-round-allocation-label": "Ihre Zuteilung für die nächste Runde: <bold>{{Betrag}}</bold>",
+        "estimated-amount-tooltip": "Dies ist ein geschätzter Betrag. Der tatsächliche Betrag wird nach Abschluss der aktuellen Runde auf der Grundlage der Runden-PnL berechnet.",
+        "next-round-start-label": "Die nächste Runde beginnt in: <counter />",
+        "users-in-vault-label": "Benutzer in Vault: {{number}} / {{max}}",
+        "vault-filled-label": "Vault gefüllt: {{amount}} / {{max}}",
+        "deposit-message": "Mittel in die Vault für die nächste Runde einzahlen.",
+        "deposit-amount-label": "Mittel einzahlen",
+        "deposit-amount-placeholder": "Betrag eingeben",
+        "available-to-withdraw-label": "Verfügbar zum Abheben: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "Nichts zum Abheben.",
+        "withdrawal-message": "Du kannst eine Auszahlung beantragen, und dein Geld wird dir am Ende der Runde automatisch zugeschickt, wenn die Runde beendet ist.",
+        "withdraw-round-end-label": "Die Runde endet in <counter />",
+        "withdrawal-requested-message": "Du hast beantragt, <bold>{{Betrag}}</bold><tooltip /> abzuheben. Dein Geld wird dir automatisch am Ende der Runde überwiesen, wenn die Runde abgeschlossen ist.",
+        "withdrawal-request-label": "Antrag auf Aufhebung: <bold>{{amount}}</bold>",
+        "first-deposit-withdrawal-message": "Du hast für die nächste Runde eingezahlt und kannst diese Mittel am Ende der nächsten Runde abheben.",
+        "round-ended-label": "Runde beendet",
+        "deposit-withdrawal-warning": "Die Abhebung wird beantragt, Einzahlung ist nicht möglich.",
+        "deposit-max-amount-of-users-warning": "Die maximale Anzahl der Benutzer für die Vault ist erreicht, du kannst nicht einzahlen.",
+        "deposit-vault-cap-reached-warning": "Die Obergrenze der Vault ist erreicht, eine Einzahlung ist nicht möglich.",
+        "deposit-vault-cap-error": "Einzahlungsbetrag überschreitet Tresorobergrenze",
+        "deposit-min-amount-error": "Der Mindestbetrag für die Einzahlung beträgt {{amount}}",
+        "withdrawal-deposit-warning": "Du kannst dich nicht zurückziehen, da du bereits für die nächste Runde eingezahlt hast.",
         "tabs": {
-            "deposit": "Deposit",
-            "claim": "Claim",
-            "withdraw": "Withdraw"
+            "deposit": "Einzahlung",
+            "claim": "Beanspruchen",
+            "withdraw": "Rückzug"
         },
         "button": {
-            "deposit-label": "Deposit",
-            "deposit-progress-label": "Deposit in progress...",
-            "deposit-confirmation-message": "Deposit successfully placed",
-            "request-withdrawal-label": "Request withdrawal",
-            "request-withdrawal-progress-label": "Request in progress...",
-            "request-withdrawal-confirmation-message": "Withdrawal request successfully sent",
-            "withdraw-label": "Withdraw",
-            "withdraw-progress-label": "Withdrawal in progress...",
-            "withdraw-confirmation-message": "Funds successfully withdrawn",
-            "close-round-label": "Close round",
-            "close-round-progress-label": "Closing round in progress...",
-            "close-round-confirmation-message": "Round successfully closed"
+            "deposit-label": "Einzahlung",
+            "deposit-progress-label": "Einzahlung in Arbeit...",
+            "deposit-confirmation-message": "Einzahlung erfolgreich platziert",
+            "request-withdrawal-label": "Antrag auf Abhebung",
+            "request-withdrawal-progress-label": "Anfrage in Bearbeitung...",
+            "request-withdrawal-confirmation-message": "Abhebungsantrag erfolgreich gesendet",
+            "withdraw-label": "Abheben",
+            "withdraw-progress-label": "Abhebung in Arbeit...",
+            "withdraw-confirmation-message": "Mittel erfolgreich abgehoben",
+            "close-round-label": "Runde schließen",
+            "close-round-progress-label": "Abschlussrunde im Gange...",
+            "close-round-confirmation-message": "Runde erfolgreich abgeschlossen"
         },
         "trades-history": {
-            "title": "Vault trades history",
-            "no-trades": "No trades associated with this vault in the selected round.",
-            "round-label": "Round"
+            "title": "Historie der Vault",
+            "no-trades": "Mit der Vault sind in der ausgewählten Runde keine Trades verbunden.",
+            "round-label": "Runde"
         },
         "pnl": {
-            "title": "PnL per round",
-            "no-data": "No PnL data for previous rounds.",
+            "title": "PnL per Runde",
+            "no-data": "Keine PnL-Daten für frühere Runden.",
             "lifetime-pnl": "Lifetime PnL"
         }
     }

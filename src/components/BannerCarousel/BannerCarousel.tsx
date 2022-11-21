@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
@@ -37,29 +37,35 @@ const BannerCarousel: React.FC = () => {
         fetchData();
     }, [imageCount]);
 
+    const getStyledDivs = useCallback(() => {
+        const divList = [];
+        for (let i = 1; i <= imageCount; i++) {
+            divList.push(<StyledDiv key={i} hasHref={!!urlMap[i]} index={i} />);
+        }
+        return divList;
+    }, [imageCount, urlMap]);
+
     return (
         <Container>
-            <Carousel
-                transitionTime={1000}
-                interval={10000}
-                showStatus={false}
-                showArrows={false}
-                showThumbs={false}
-                infiniteLoop={true}
-                dynamicHeight={true}
-                autoPlay={true}
-                onClickItem={(index) => {
-                    if (urlMap[index + 1]) {
-                        window.open(urlMap[index + 1]);
-                    }
-                }}
-            >
-                <StyledDiv hasHref={!!urlMap[1]} index={1} />
-                <StyledDiv hasHref={!!urlMap[2]} index={2} />
-                <StyledDiv hasHref={!!urlMap[3]} index={3} />
-                <StyledDiv hasHref={!!urlMap[3]} index={4} />
-                <StyledDiv hasHref={!!urlMap[3]} index={5} />
-            </Carousel>
+            {!!imageCount && (
+                <Carousel
+                    transitionTime={1000}
+                    interval={10000}
+                    showStatus={false}
+                    showArrows={false}
+                    showThumbs={false}
+                    infiniteLoop={true}
+                    dynamicHeight={true}
+                    autoPlay={true}
+                    onClickItem={(index) => {
+                        if (urlMap[index + 1]) {
+                            window.open(urlMap[index + 1]);
+                        }
+                    }}
+                >
+                    {getStyledDivs()}
+                </Carousel>
+            )}
         </Container>
     );
 };

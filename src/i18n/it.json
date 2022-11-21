@@ -134,7 +134,8 @@
         "top10": "TOP 10",
         "yes": "YES",
         "no": "NO",
-        "mls-tooltip": "I risultati dei mercati MLS si basano sui risultati della regolamentazione, se dovessero andare agli straordinari il risultato della regolamentazione è quello in cui il mercato deciderà."
+        "mls-tooltip": "I risultati dei mercati MLS si basano sui risultati della regolamentazione, se dovessero andare agli straordinari il risultato della regolamentazione è quello in cui il mercato deciderà.",
+        "fifa-tooltip": "I risultati dei mercati della Coppa del Mondo FIFA si basano sui risultati regolamentari, se dovessero andare ai tempi supplementari il risultato regolamentare è quello in base al quale si risolverà il mercato."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -502,7 +503,7 @@
         "retweet": "Ritwitta questo tweet",
         "mint-nft-button": "Menta questa Zebra!",
         "stake-10-thales": "Per poter coniare uno Zebro NFT, devi avere almeno 10 THALES puntati.",
-        "zebro-campaign": "Campagna Zebra FIFA",
+        "zebro-campaign": "Zebro FIFA",
         "eligible-text-2": "Conia uno Zebro della tua squadra nazionale preferita e avrai diritto a 50.000 OP e 30.000 premi bonus THALES!",
         "incentives": "INCENTIVI",
         "yes-mint": "Sì, NFT nuovo",
@@ -530,7 +531,8 @@
             "rewards": "Ricompense",
             "volume": "Volume",
             "base-volume": "Base",
-            "bonus-volume": "Bonus"
+            "bonus-volume": "Bonus",
+            "player": "Giocatore"
         },
         "zebro-wct-collection": "La collezione Zebro WC NFT",
         "zebro-wct-collection-text": "fa parte di una campagna incentivata per rappresentare il tuo paese preferito durante la Coppa del Mondo e avere diritto a una quota di 50.000 token OP e 30.000 token THALES, insieme a moltiplicatori esclusivi per parlay e partite individuali.",

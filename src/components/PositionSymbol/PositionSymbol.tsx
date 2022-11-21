@@ -1,3 +1,4 @@
+import { useMatomo } from '@datapunt/matomo-tracker-react';
 import Tooltip from 'components/Tooltip';
 import { Position } from 'constants/options';
 import React, { CSSProperties } from 'react';
@@ -49,6 +50,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const { trackEvent } = useMatomo();
     const parlay = useSelector(getParlay);
     const addedToParlay = parlay.filter((game: any) => game.sportMarketId == marketId)[0];
 
@@ -64,6 +66,11 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                             dispatch(removeFromParlay(marketId));
                         } else {
                             if (type !== undefined) {
+                                trackEvent({
+                                    category: 'position',
+                                    action: discount == null ? 'non-discount' : 'discount',
+                                    value: discount == null ? 0 : Math.ceil(Math.abs(discount)),
+                                });
                                 const parlayMarket: ParlaysMarketPosition = {
                                     sportMarketId: marketId,
                                     position: Position.HOME,

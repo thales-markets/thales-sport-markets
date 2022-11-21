@@ -454,7 +454,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     setTokenAmount(0);
 
                     trackEvent({
-                        category: 'AMM',
+                        category: 'parlay-single',
                         action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
                         value: Number(formatCurrency(ammPosition.sides[Side.BUY].quote, 3, true)),
                     });

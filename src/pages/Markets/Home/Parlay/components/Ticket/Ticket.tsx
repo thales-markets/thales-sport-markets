@@ -23,7 +23,6 @@ import { getAmountForApproval } from 'utils/amm';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import {
     countDecimals,
-    formatCurrency,
     formatCurrencyWithSign,
     formatPercentage,
     roundNumberToDecimals,
@@ -331,9 +330,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     setUsdAmount('');
 
                     trackEvent({
-                        category: 'AMM',
+                        category: 'parlay',
                         action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
-                        value: Number(formatCurrency(totalQuote, 3, true)),
+                        value: Number(usdAmountValue),
                     });
                 }
             } catch (e) {

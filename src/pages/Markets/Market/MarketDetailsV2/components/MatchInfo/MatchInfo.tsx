@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -24,13 +24,14 @@ import Tooltip from 'components/Tooltip';
 
 import { MarketData } from 'types/markets';
 
-import { getErrorImage, getLeagueLogoClass, getTeamImageSource } from 'utils/images';
+import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatDateWithTime } from 'utils/formatters/date';
 import {
     convertFinalResultToResultType,
     getIsApexTopGame,
     getMarketStatusFromMarketData,
     isApexGame,
+    isFifaWCGame,
 } from 'utils/markets';
 import { ApexBetTypeKeyMapping, MarketStatus } from 'constants/markets';
 import { getIsMobile } from 'redux/modules/app';
@@ -45,11 +46,17 @@ type MatchInfoPropsType = {
 const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
     const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const [homeLogoSrc, setHomeLogoSrc] = useState(
+        getTeamImageSource(market.homeTeam, market.tags[0])
+            ? getTeamImageSource(market.homeTeam, market.tags[0])
+            : getErrorImage(market.tags[0])
+    );
+    const [awayLogoSrc, setAwayLogoSrc] = useState(
+        getTeamImageSource(market.awayTeam, market.tags[0])
+            ? getTeamImageSource(market.awayTeam, market.tags[0])
+            : getErrorImage(market.tags[0])
+    );
 
-    const homeLogoSrc = getTeamImageSource(market.homeTeam, market.tags[0])
-        ? getTeamImageSource(market.homeTeam, market.tags[0])
-        : getErrorImage(market.tags[0]);
-    const awayLogoSrc = getTeamImageSource(market.awayTeam, market.tags[0]);
     const leagueLogo = getLeagueLogoClass(market.tags[0]);
     const isApexTopGame = getIsApexTopGame(market.isApex, market.betType);
 
@@ -99,6 +106,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                     <ParticipantLogo
                                         src={homeLogoSrc ? homeLogoSrc : getErrorImage(market.tags[0])}
                                         isFlag={market.tags[0] == 9018}
+                                        onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                                     />
                                 </ParticipantLogoContainer>
                                 <ParticipantLogoContainer
@@ -109,6 +117,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                     <ParticipantLogo
                                         src={awayLogoSrc ? awayLogoSrc : getErrorImage(market.tags[0])}
                                         isFlag={market.tags[0] == 9018}
+                                        onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                                     />
                                 </ParticipantLogoContainer>
                             </ParticipantsContainer>
@@ -117,6 +126,9 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                     {matchStartsLabel}:
                                     {isApexGame(market.tags[0]) && (
                                         <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={15} marginLeft={2} />
+                                    )}
+                                    {isFifaWCGame(market.tags[0]) && (
+                                        <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={15} marginLeft={2} />
                                     )}
                                 </MatchTimeLabel>
                                 <MatchTime>{formatDateWithTime(market.maturityDate)}</MatchTime>
@@ -138,6 +150,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                     >
                                         <ParticipantLogo
                                             src={homeLogoSrc ? homeLogoSrc : getErrorImage(market.tags[0])}
+                                            onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                                         />
                                     </ParticipantLogoContainer>
                                     <ParticipantLogoContainer
@@ -149,6 +162,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                     >
                                         <ParticipantLogo
                                             src={awayLogoSrc ? awayLogoSrc : getErrorImage(market.tags[0])}
+                                            onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                                         />
                                     </ParticipantLogoContainer>
                                 </ParticipantsContainer>

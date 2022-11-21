@@ -13,6 +13,8 @@ import {
     VaultInfo,
     VaultBottomWrapper,
     VaultTopWrapper,
+    TitleVaultIcon,
+    VaultSectionIcon,
 } from './styled-components';
 import SPAAnchor from 'components/SPAAnchor';
 import i18n from 'i18n';
@@ -27,7 +29,6 @@ import { formatPercentage, formatPercentageWithSign } from 'utils/formatters/num
 import SimpleLoader from 'components/SimpleLoader';
 import TimeRemaining from 'components/TimeRemaining';
 import { Colors, FlexDivColumn } from 'styles/common';
-import styled from 'styled-components';
 
 type VaultOverviewProps = {
     vaultId: string;
@@ -104,8 +105,7 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
                                             values={{
                                                 utilizationRate: formatPercentage(vaultData.utilizationRate, 0),
                                                 allocationLimitsPerMarketPerRound: formatPercentage(
-                                                    vaultData.allocationLimitsPerMarketPerRound,
-                                                    0
+                                                    vaultData.allocationLimitsPerMarketPerRound
                                                 ),
                                                 odds: formatPercentage(vaultData.priceLowerLimit, 0),
                                             }}
@@ -150,21 +150,5 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
         </SpaContainer>
     );
 };
-
-const TitleVaultIcon = styled.i`
-    font-weight: 400;
-    font-size: 28px;
-    margin-right: 8px;
-    top: -2px;
-    position: relative;
-`;
-
-const VaultSectionIcon = styled.i`
-    font-weight: 400;
-    font-size: 25px;
-    margin-right: 8px;
-    top: -2px;
-    position: relative;
-`;
 
 export default VaultOverview;

@@ -22,6 +22,7 @@ import {
     TableContainer,
     Title,
     TotalPnl,
+    TipLink,
 } from './styled-components';
 import useRewardsDataQuery from 'queries/rewards/useRewardsDataQuery';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -41,6 +42,9 @@ type RewardsType = {
         thales: number;
     };
 };
+
+const TIP_96 =
+    'https://thalesmarket.io/governance/thalesgov.eth/0xb8390244729d261029d9c5510dbd290c745a84693820e2ed229a6dc30ef6f4b8';
 
 const Rewards: React.FC = () => {
     const { t } = useTranslation();
@@ -106,15 +110,12 @@ const Rewards: React.FC = () => {
                         <Title>{t('rewards.header')}</Title>
                         <Description>
                             <Trans
-                                i18nKey={t('rewards.description')}
-                                components={[
-                                    <div key="0">
-                                        <BoldText />
-                                    </div>,
-                                    <p key="1">
-                                        <BoldText />
-                                    </p>,
-                                ]}
+                                i18nKey="rewards.description"
+                                components={{
+                                    div: <div />,
+                                    bold: <BoldText />,
+                                    tipLink: <TipLink href={TIP_96} rel="noreferrer" target="_blank" />,
+                                }}
                             />
                         </Description>
                         <Search

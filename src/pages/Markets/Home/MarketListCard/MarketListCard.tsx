@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { getIsApexTopGame, isApexGame } from 'utils/markets';
+import { getIsApexTopGame, isApexGame, isFifaWCGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import MatchStatus from './components/MatchStatus';
 import { Result, ResultLabel } from './components/MatchStatus/MatchStatus';
@@ -19,6 +19,7 @@ import {
     ClubVsClubContainer,
     Container,
     LinkIcon,
+    OddsWrapper,
     ResultWrapper,
     VSLabel,
 } from './styled-components';
@@ -50,7 +51,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 startsAt={formatDateWithTime(market.maturityDate)}
                 isPaused={market.isPaused}
             />
-            <ClubVsClubContainer>
+            <ClubVsClubContainer data-matomo-category="market-list-card" data-matomo-action="click-match-participants">
                 <ClubContainer>
                     <ClubLogo
                         height={market.tags[0] == 9018 ? '20px' : ''}
@@ -81,6 +82,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                             {isApexGame(market.tags[0]) && (
                                 <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={17} marginLeft={2} />
                             )}
+                            {isFifaWCGame(market.tags[0]) && (
+                                <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={10} marginLeft={2} />
+                            )}
                         </VSLabel>
                         <ClubContainer>
                             <ClubLogo
@@ -95,37 +99,43 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                     </>
                 )}
             </ClubVsClubContainer>
-            <Odds
-                isResolved={market.isResolved && !market.isCanceled}
-                finalResult={market.finalResult}
-                isLive={market.maturityDate < new Date()}
-                isCancelled={market.isCanceled}
-                odds={{
-                    homeOdds: market.homeOdds,
-                    awayOdds: market.awayOdds,
-                    drawOdds: market.drawOdds,
-                }}
-                marketId={market.id}
-                homeTeam={market.homeTeam}
-                awayTeam={market.awayTeam}
-                accountPositions={accountPositions}
-                isPaused={market.isPaused}
-                isApexTopGame={isApexTopGame}
-                awayPriceImpact={market.awayPriceImpact}
-                homePriceImpact={market.homePriceImpact}
-                drawPriceImpact={market.drawPriceImpact}
-            />
-            {market.isResolved && !market.isCanceled && (
-                <ResultWrapper>
-                    <ResultLabel>{t('markets.market-card.result')}:</ResultLabel>
-                    <Result isLive={market.maturityDate < new Date()}>{`${market.homeScore}${
-                        isApexTopGame ? '' : `:${market.awayScore}`
-                    }`}</Result>
-                </ResultWrapper>
-            )}
-            <SPAAnchor href={buildMarketLink(market.address, language)}>
-                <LinkIcon className={`icon-exotic icon-exotic--link`} />
-            </SPAAnchor>
+            <OddsWrapper>
+                <Odds
+                    isResolved={market.isResolved && !market.isCanceled}
+                    finalResult={market.finalResult}
+                    isLive={market.maturityDate < new Date()}
+                    isCancelled={market.isCanceled}
+                    odds={{
+                        homeOdds: market.homeOdds,
+                        awayOdds: market.awayOdds,
+                        drawOdds: market.drawOdds,
+                    }}
+                    marketId={market.id}
+                    homeTeam={market.homeTeam}
+                    awayTeam={market.awayTeam}
+                    accountPositions={accountPositions}
+                    isPaused={market.isPaused}
+                    isApexTopGame={isApexTopGame}
+                    awayPriceImpact={market.awayPriceImpact}
+                    homePriceImpact={market.homePriceImpact}
+                    drawPriceImpact={market.drawPriceImpact}
+                />
+                {market.isResolved && !market.isCanceled && (
+                    <ResultWrapper>
+                        <ResultLabel>{t('markets.market-card.result')}:</ResultLabel>
+                        <Result isLive={market.maturityDate < new Date()}>{`${market.homeScore}${
+                            isApexTopGame ? '' : `:${market.awayScore}`
+                        }`}</Result>
+                    </ResultWrapper>
+                )}
+                <SPAAnchor href={buildMarketLink(market.address, language)}>
+                    <LinkIcon
+                        className={`icon-exotic icon-exotic--link`}
+                        data-matomo-category="market-list-card"
+                        data-matomo-action="click-market-details"
+                    />
+                </SPAAnchor>
+            </OddsWrapper>
         </Container>
     );
 };
