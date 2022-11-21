@@ -1,6 +1,4 @@
 import SimpleLoader from 'components/SimpleLoader';
-// import { generalConfig } from 'config/general';
-// import { LINKS } from 'constants/links';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
 import React, { useCallback, useRef, useState } from 'react';
@@ -54,40 +52,14 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
         }
         setIsLoading(true);
 
-        try {
-            const base64Image = await toPng(ref.current, { cacheBust: true });
-            const base64Data = base64Image.split(',')[1];
+        const base64Image = await toPng(ref.current, { cacheBust: true });
+        console.log(base64Image);
 
-            const myHeaders = new Headers();
-            myHeaders.append('Content-Type', 'application/json');
-            const raw = JSON.stringify({ base64Data, status: 'Testing Tweet with media API...' });
-            const requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow' as RequestRedirect,
-            };
-            // TODO: set real API url
-            // const response = await fetch(`${generalConfig.API_URL}/tweet-media/`, requestOptions);
-            const response = await fetch('http://localhost:4050/tweet-media', requestOptions);
-            if (response) {
-                const json = await response.json();
-                if (json.data?.id) {
-                    // TODO: successfully posted shared tweet
-                    // window.open(LINKS.Twitter + '/status/' + json.data?.id);
-                    window.open('https://twitter.com/lotina_sasa/status/' + json.data?.id);
-                    onClose();
-                    return;
-                }
-            }
-        } catch (e) {
-            console.log(e);
-        }
         if (ref.current === null) {
             return;
         }
         setIsLoading(false);
-    }, [onClose]);
+    }, []);
 
     return (
         <ReactModal isOpen onRequestClose={onClose} shouldCloseOnOverlayClick={true} style={customStyles}>
@@ -108,6 +80,10 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                     <SimpleLoader />
                 </LoaderContainer>
             )}
+            <meta name="twitter:card" content="summary" />
+            <meta name="twitter:title" content="Parlay Test" />
+            <meta name="twitter:description" content="View the album on Flickr." />
+            <meta name="twitter:image" content="https://farm6.staticflickr.com/5510/14338202952_93595258ff_z.jpg" />
         </ReactModal>
     );
 };
