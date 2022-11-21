@@ -6,7 +6,7 @@ export const Container = styled.div<{ resolved?: boolean; isMobile?: boolean; no
     flex-direction: ${(_props) => (_props?.resolved && _props?.isMobile ? 'column' : 'row')};
     align-items: center;
     justify-content: ${(_props) => (_props?.resolved ? 'center' : _props?.noOdds ? 'space-evenly' : '')};
-    margin-left: ${(_props) => (_props?.resolved && !_props.isMobile ? '30px' : _props?.isMobile ? '' : '12px')};
+    margin-left: ${(_props) => (_props?.resolved && !_props.isMobile ? '30px' : _props?.isMobile ? '' : '10px')};
     height: ${(_props) => (_props?.isMobile ? '40px' : '')};
     flex-grow: 1;
     align-self: ${(_props) => (_props?.noOdds ? 'center' : '')};
