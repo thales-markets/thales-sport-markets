@@ -170,9 +170,6 @@ const App = () => {
                                     <MintWorldCupNFT />
                                 </DappLayout>
                             </Route>
-                            <Route exact path={ROUTES.TwitterFlexCard}>
-                                <TwitterFlexCard />
-                            </Route>
                             <Route exact path={ROUTES.Home}>
                                 <LandingPageLayout>
                                     <LandingPage />

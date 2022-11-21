@@ -12,7 +12,6 @@ export const ROUTES = {
     MintWorldCupNFT: '/mint-world-cup-nft',
     Vaults: '/vaults',
     Vault: '/vaults/:vaultId',
-    TwitterFlexCard: '/tweet',
 };
 export default ROUTES;
 
