@@ -31,7 +31,6 @@ const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
 const MintWorldCupNFT = lazy(() => import('pages/MintWorldCupNFT'));
 const Vaults = lazy(() => import('pages/Vaults'));
 const Vault = lazy(() => import('pages/Vault'));
-const TwitterFlexCard = lazy(() => import('pages/TwitterFlexCard'));
 
 const App = () => {
     const dispatch = useDispatch();
