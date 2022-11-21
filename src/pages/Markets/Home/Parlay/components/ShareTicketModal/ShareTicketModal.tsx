@@ -53,7 +53,10 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
         setIsLoading(true);
 
         const base64Image = await toPng(ref.current, { cacheBust: true });
-        console.log(base64Image);
+        const image = new Image();
+        image.src = base64Image;
+        const w = window.open('');
+        w?.document.write(image.outerHTML);
 
         if (ref.current === null) {
             return;
@@ -80,10 +83,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                     <SimpleLoader />
                 </LoaderContainer>
             )}
-            <meta name="twitter:card" content="summary" />
-            <meta name="twitter:title" content="Parlay Test" />
-            <meta name="twitter:description" content="View the album on Flickr." />
-            <meta name="twitter:image" content="https://farm6.staticflickr.com/5510/14338202952_93595258ff_z.jpg" />
         </ReactModal>
     );
 };
