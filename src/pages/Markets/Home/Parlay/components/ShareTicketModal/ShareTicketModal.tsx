@@ -53,10 +53,15 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
         setIsLoading(true);
 
         const base64Image = await toPng(ref.current, { cacheBust: true });
-        const image = new Image();
-        image.src = base64Image;
-        const w = window.open('');
-        w?.document.write(image.outerHTML);
+        // const image = new Image();
+        // image.src = base64Image;
+        // const w = window.open('');
+        // w?.document.write(image.outerHTML);
+        const b64Blob = (await fetch(base64Image)).blob();
+        const cbi = new ClipboardItem({
+            'image/png': b64Blob,
+        });
+        await navigator.clipboard.write([cbi]);
 
         if (ref.current === null) {
             return;

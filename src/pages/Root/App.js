@@ -171,9 +171,7 @@ const App = () => {
                                 </DappLayout>
                             </Route>
                             <Route exact path={ROUTES.TwitterFlexCard}>
-                                <DappLayout>
-                                    <TwitterFlexCard />
-                                </DappLayout>
+                                <TwitterFlexCard />
                             </Route>
                             <Route exact path={ROUTES.Home}>
                                 <LandingPageLayout>
