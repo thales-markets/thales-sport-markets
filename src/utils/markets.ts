@@ -4,7 +4,10 @@ import { FIFA_WC_TAG, MLS_TAG, PERSON_COMPETITIONS, TAGS_OF_MARKETS_WITHOUT_DRAW
 import ordinal from 'ordinal';
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import { AccountPosition, MarketData, MarketInfo, ParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
+import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
+
+const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 35;
 
 export const getRoi = (ticketPrice: number, potentialWinnings: number, showRoi: boolean) =>
     showRoi ? (potentialWinnings - ticketPrice) / ticketPrice : 0;
@@ -226,6 +229,15 @@ export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
     const claimablePositions = parlayMarket.positions.filter((position) => position.claimable);
     const canceledMarkets = parlayMarket.sportMarkets.filter((market) => market.isCanceled);
 
+    const lastGameStartsPlusExpirationPeriod = addDaysToEnteredTimestamp(
+        EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS,
+        parlayMarket.lastGameStarts
+    );
+
+    if (lastGameStartsPlusExpirationPeriod < new Date().getTime()) {
+        return false;
+    }
+
     if (
         resolvedMarkets?.length == claimablePositions?.length &&
         resolvedMarkets?.length + canceledMarkets?.length == parlayMarket.sportMarkets.length &&
@@ -246,5 +258,18 @@ export const isParlayOpen = (parlayMarket: ParlayMarket) => {
     if (resolvedMarkets?.length == 0) return true;
 
     if (resolvedMarkets?.length !== resolvedAndClaimable?.length) return false;
+    return true;
+};
+
+export const isSportMarketExpired = (sportMarket: SportMarketInfo) => {
+    const maturyDatePlusExpirationPeriod = addDaysToEnteredTimestamp(
+        EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS,
+        new Date(sportMarket.maturityDate).getTime()
+    );
+
+    if (maturyDatePlusExpirationPeriod < new Date().getTime()) {
+        return false;
+    }
+
     return true;
 };
