@@ -62,3 +62,15 @@ export type VaultPnlPerRound = {
 };
 
 export type VaultPnls = VaultPnlPerRound[];
+
+export type VaultUserTransaction = {
+    hash: string;
+    timestamp: number;
+    blockNumber: number;
+    type: string;
+    account: string;
+    amount: number;
+    round: number;
+};
+
+export type VaultUserTransactions = VaultUserTransaction[];
