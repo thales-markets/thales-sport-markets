@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ReferralTransaction } from 'types/referral';
 import Table from 'components/Table';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ import { TableHeaderStyleMobile } from '../TradersTable/TradersTable';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
+import { PaginationWrapper } from 'pages/Quiz/styled-components';
 
 type ReferralTransactionsTableProps = {
     transactions: ReferralTransaction[] | [];
@@ -20,6 +21,18 @@ type ReferralTransactionsTableProps = {
 const ReferralTransactionsTable: React.FC<ReferralTransactionsTableProps> = ({ transactions, isLoading }) => {
     const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(20);
+
+    const handleChangePage = (_event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(Number(event.target.value));
+        setPage(0);
+    };
+
     const noResultsMessage = t('referral.no-result');
     return (
         <>
@@ -64,10 +77,25 @@ const ReferralTransactionsTable: React.FC<ReferralTransactionsTableProps> = ({ t
                     },
                 ]}
                 data={transactions}
+                initialState={{
+                    pageIndex: 0,
+                }}
                 isLoading={isLoading}
                 noResultsMessage={noResultsMessage}
                 tableHeadCellStyles={isMobile ? TableHeaderStyleMobile : TableHeaderStyle}
                 tableRowStyles={{ minHeight: '50px', fontSize: '12px' }}
+                onSortByChanged={() => setPage(0)}
+                rowsPerPage={rowsPerPage}
+                currentPage={page}
+            />
+            <PaginationWrapper
+                rowsPerPageOptions={[10, 20, 50, 100]}
+                count={transactions.length ? transactions.length : 0}
+                labelRowsPerPage={t(`common.pagination.rows-per-page`)}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
             />
         </>
     );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Referrer } from 'types/referral';
 import Table from 'components/Table';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
 import { TableHeaderStyleMobile } from '../TradersTable/TradersTable';
+import { PaginationWrapper } from 'pages/Quiz/styled-components';
 
 type AffiliateLeaderboardProps = {
     referrers: Referrer[] | [];
@@ -21,6 +22,18 @@ const AffiliateLeaderboard: React.FC<AffiliateLeaderboardProps> = ({ referrers, 
     const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const noResultsMessage = t('referral.no-result');
+
+    const [page, setPage] = useState(0);
+    const handleChangePage = (_event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const [rowsPerPage, setRowsPerPage] = useState(20);
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(Number(event.target.value));
+        setPage(0);
+    };
+
     return (
         <>
             <Table
@@ -63,9 +76,20 @@ const AffiliateLeaderboard: React.FC<AffiliateLeaderboardProps> = ({ referrers, 
                 ]}
                 data={referrers}
                 isLoading={isLoading}
+                rowsPerPage={rowsPerPage}
+                currentPage={page}
                 noResultsMessage={noResultsMessage}
                 tableHeadCellStyles={isMobile ? TableHeaderStyleMobile : TableHeaderStyle}
                 tableRowStyles={{ minHeight: '50px', fontSize: '12px' }}
+            />
+            <PaginationWrapper
+                rowsPerPageOptions={[10, 20, 50, 100]}
+                count={referrers.length ? referrers.length : 0}
+                labelRowsPerPage={t(`common.pagination.rows-per-page`)}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
             />
         </>
     );
