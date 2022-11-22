@@ -525,6 +525,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         (tooltipTextUsdAmount && !isValidProfit && usdAmountValue <= paymentTokenBalance) ||
         isFetching;
 
+    const onModalClose = useCallback(() => {
+        setShowShareTicketModal(false);
+    }, []);
+
     return (
         <>
             <RowSummary>
@@ -625,7 +629,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     totalQuote={totalQuote}
                     paid={Number(usdAmountValue)}
                     payout={totalBuyAmount}
-                    onClose={() => setShowShareTicketModal(false)}
+                    onClose={onModalClose}
                 />
             )}
             {openApprovalModal && (

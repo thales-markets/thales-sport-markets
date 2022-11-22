@@ -1,9 +1,8 @@
-// import SimpleLoader from 'components/SimpleLoader';
-import { getSuccessToastOptions } from 'config/toast';
+import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
 import { LINKS } from 'constants/links';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import ReactModal from 'react-modal';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
@@ -43,42 +42,84 @@ const customStyles = {
     },
 };
 
-const TWITTER_MESSAGE = 'My Ticket: <JUST PASTE HERE>';
+const TWITTER_MESSAGE = '<PASTE YOUR IMAGE>';
 
 const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [toastId, setToastId] = useState<string | number>(0);
     const [isSimpleView /*, setIsSimpleView*/] = useState(false);
 
     const ref = useRef<HTMLDivElement>(null);
 
-    const onTwitterShareClick = useCallback(async () => {
-        if (ref.current === null) {
-            return;
+    const saveImageAndOpenTwitter = useCallback(
+        async (toastIdParam: string | number) => {
+            if (!isLoading) {
+                if (ref.current === null) {
+                    return;
+                }
+
+                try {
+                    const base64Image = await toPng(ref.current, { cacheBust: true });
+                    const b64Blob = (await fetch(base64Image)).blob();
+                    const cbi = new ClipboardItem({
+                        'image/png': b64Blob,
+                    });
+                    await navigator.clipboard.write([cbi]);
+
+                    if (ref.current === null) {
+                        return;
+                    }
+
+                    toast.update(
+                        toastIdParam,
+                        getSuccessToastOptions(
+                            <>
+                                {t('market.toast-message.image-created')}
+                                <br />
+                                {t('market.toast-message.open-twitter')}
+                            </>
+                        )
+                    );
+
+                    setTimeout(() => {
+                        window.open(LINKS.TwitterStatus + TWITTER_MESSAGE);
+                        onClose();
+                    }, 3000);
+
+                    setIsLoading(false);
+                } catch (e) {
+                    console.log(e);
+                    setIsLoading(false);
+                    toast.update(toastIdParam, getErrorToastOptions(t('market.toast-message.save-image-error')));
+                }
+            }
+        },
+        [isLoading, onClose]
+    );
+
+    const onTwitterShareClick = () => {
+        if (!isLoading) {
+            const id = toast.loading(t('market.toast-message.save-image'));
+            setToastId(id);
+            setIsLoading(true);
+
+            // If image creation is not postponed with timeout toaster is not displayed immediately, it is rendered in parallel with toPng() execution.
+            // Function toPng is causing UI to freez for couple of seconds and there is no notification message during that time, so it confuses user.
+            setTimeout(() => {
+                saveImageAndOpenTwitter(id);
+            }, 100);
         }
-        setIsLoading(true);
-        const id = toast.loading('Generating your image to clipboard...'); // TODO: translate
+    };
 
-        const base64Image = await toPng(ref.current, { cacheBust: true });
-        const b64Blob = (await fetch(base64Image)).blob();
-        const cbi = new ClipboardItem({
-            'image/png': b64Blob,
-        });
-        await navigator.clipboard.write([cbi]);
-
-        toast.update(id, getSuccessToastOptions('Image is in your clipboard!')); // TODO: translate
-        setTimeout(() => {
-            window.open(LINKS.TwitterStatus + TWITTER_MESSAGE);
-        }, 2000);
-
-        if (ref.current === null) {
-            return;
+    const onModalClose = () => {
+        if (isLoading) {
+            toast.update(toastId, getErrorToastOptions('Image saving canceled!')); // TODO: translate
         }
-        setIsLoading(false);
         onClose();
-    }, [onClose]);
+    };
 
     return (
-        <ReactModal isOpen onRequestClose={onClose} shouldCloseOnOverlayClick={true} style={customStyles}>
+        <ReactModal isOpen onRequestClose={onModalClose} shouldCloseOnOverlayClick={true} style={customStyles}>
             <Container ref={ref}>
                 <CloseIcon className={`icon icon--close`} onClick={onClose} />
                 {isSimpleView ? (
@@ -91,11 +132,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                     <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
                 </TwitterShare>
             </Container>
-            {/* {isLoading && (
-                <LoaderContainer>
-                    <SimpleLoader />
-                </LoaderContainer>
-            )} */}
         </ReactModal>
     );
 };
@@ -140,12 +176,5 @@ const TwitterShareLabel = styled.span`
     text-transform: uppercase;
     color: #ffffff;
 `;
-
-// const LoaderContainer = styled.div`
-//     position: absolute;
-//     left: -5px;
-//     right: 0;
-//     bottom: -56px;
-// `;
 
 export default React.memo(ShareTicketModal);

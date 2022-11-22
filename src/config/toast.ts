@@ -10,7 +10,7 @@ const defaultToastOptions = {
     pauseOnFocusLoss: true,
 };
 
-export const getSuccessToastOptions = (message: string) => {
+export const getSuccessToastOptions = (message: string | React.ReactNode) => {
     return {
         ...defaultToastOptions,
         render: message,
@@ -18,7 +18,7 @@ export const getSuccessToastOptions = (message: string) => {
     };
 };
 
-export const getErrorToastOptions = (message: string) => {
+export const getErrorToastOptions = (message: string | React.ReactNode) => {
     return {
         ...defaultToastOptions,
         render: message,

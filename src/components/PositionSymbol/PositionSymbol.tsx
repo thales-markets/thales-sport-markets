@@ -107,6 +107,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                 color={symbolColor}
                 style={additionalStyle}
                 addedToParlay={addedToParlay && addedToParlay.position == type}
+                notClickable={!marketId}
             >
                 <Symbol
                     color={symbolColor}
@@ -163,7 +164,7 @@ const Wrapper = styled.div<{ disabled?: boolean; isMobile?: boolean; notClickabl
     cursor: ${(_props) => (_props?.disabled ? 'not-allowed' : _props.notClickable ? 'default' : 'pointer')};
 `;
 
-const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: boolean }>`
+const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: boolean; notClickable?: boolean }>`
     width: 30px;
     height: 30px;
     border-radius: 60%;
@@ -177,9 +178,9 @@ const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: b
         _props?.glow ? '3px solid ' + _props.color : _props.addedToParlay ? '3px solid #64D9FE' : '3px solid #5f6180'};
     box-shadow: ${(_props) => (_props?.glow ? '0 0 6px 2px ' + _props.color : '')};
     &:hover {
-        border: 3px solid #64d9fe;
+        ${(props) => (props.notClickable ? '' : 'border: 3px solid #64d9fe;')}
         & > span {
-            color: #64d9fe !important;
+            ${(props) => (props.notClickable ? '' : 'color: #64d9fe !important;')}
         }
     }
 

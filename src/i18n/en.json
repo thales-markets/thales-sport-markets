@@ -170,7 +170,11 @@
             "claim-winnings-success": "Winnings successfully claimed",
             "claim-refund-success": "Refund successfully claimed",
             "withdraw-success": "Successfuly withdrawn",
-            "get-usd-success": "{{amount}} successfully minted"
+            "get-usd-success": "{{amount}} successfully minted",
+            "save-image": "Saving image to clipboard. Please wait...",
+            "save-image-error": "Failed to save image!",
+            "image-created": "Image is in clipboard!",
+            "open-twitter": "Openning Twitter..."
         },
         "filter-label": {
             "global": {

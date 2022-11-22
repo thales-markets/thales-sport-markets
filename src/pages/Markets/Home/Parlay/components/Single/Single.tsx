@@ -553,6 +553,10 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         // hide when validation tooltip exists except in case of not enough funds
         (tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
 
+    const onModalClose = useCallback(() => {
+        setShowShareTicketModal(false);
+    }, []);
+
     return (
         <>
             <RowSummary>
@@ -637,7 +641,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     totalQuote={getPositionOdds(market)}
                     paid={Number(usdAmountValue)}
                     payout={tokenAmount}
-                    onClose={() => setShowShareTicketModal(false)}
+                    onClose={onModalClose}
                 />
             )}
             {openApprovalModal && (
