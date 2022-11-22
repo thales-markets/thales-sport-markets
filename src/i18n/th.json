@@ -337,7 +337,7 @@
     "rewards": {
         "header": "รางวัล",
         "search-placeholder": "ค้นหาที่อยู่กระเป๋าเงิน",
-        "description": "<0><0>8,000 OP </0> และ <0>8,000 Thales</0> จะถูกแจกจ่ายตั้งแต่ 24 ตุลาคม ถึง 7 พฤศจิกายน เวลา 00:00 UTC เพื่อชดเชยค่าธรรมเนียมที่จ่ายให้กับสัญญา Safebox</0 <0>Leaderboard จะคำนวณรางวัลเป็นเงินคืน 90% ของค่าธรรมเนียม SafeBox ซึ่งเท่ากับ 3% ของจำนวนเงินทั้งหมดที่ชำระเป็น sUSD </0> มูลค่าของ OP และ THALES ในหน่วย $ จะคำนวณโดยใช้ 7 วัน TWAP ตั้งแต่เริ่มต้นรอบเวลานั้นๆ หากเมื่อสิ้นสุดระยะเวลาสองสัปดาห์ เงินคืนทั้งหมดจบลงมากกว่ามูลค่า twap เริ่มต้นของโทเค็น OP และ THALES เงินคืนจะลดลงตามสัดส่วนสำหรับเทรดเดอร์ทุกราย",
+        "description": "<0><0>8,000 OP</0> และ <0>8,000 Thales</0> จะถูกแจกจ่ายทุกสองสัปดาห์อย่างต่อเนื่องตามที่ระบุไว้ใน TIP-96 เพื่อเป็นการชดเชยค่าธรรมเนียมที่จ่ายให้กับ safebox contracts.</0> <0>ลีดเดอร์บอร์ดจะคำนวณรางวัลเป็นเงินคืน 90% ของค่าธรรมเนียม SafeBox ซึ่งเท่ากับ 3% ของยอดรวมที่จ่ายในสกุลเงิน sUSD</0> มูลค่า $ ของ OP และ THALES จะถูกคำนวณโดยใช้ twap 7 วันเมื่อเริ่มต้นรอบ หากเมื่อสิ้นสุดระยะเวลาสองสัปดาห์ การคืนเงินทั้งหมดจบลงที่มากกว่ามูลค่า twap เริ่มต้นของโทเค็น OP และ THALES การคืนเงินจะลดลงตามสัดส่วนสำหรับเทรดเดอร์ทุกราย",
         "total-negative-pnl": "สูญเสียรวม",
         "op-rewards-banner-message": "การแจกรางวัล OP ได้เริ่มขึ้นแล้ว ตรวจสอบว่าคุณจะสามารถรับ OP ได้อย่างไรที่ <bold>หน้ารางวัล OP</bold>",
         "table": {
@@ -539,112 +539,113 @@
         "get-your-nft": "มิ้นท์ เพจ"
     },
     "referral": {
+        "generate-link": "สร้างลิงค์",
+        "copy-link": "คัดลอกลิงค์",
+        "trades": "เทรด",
+        "total-volume": "วอลลุ่มทั้งหมด",
+        "total-earned": "ที่ได้รับทั้งหมด",
+        "total-trading-fees": "ค่าธรรมเนียมการเทรดทั้งหมด",
+        "affiliate-leaderboard-table": {
+            "address": "ที่อยู่",
+            "number-of-trades": "จำนวนการเทรด",
+            "total-volume": "วอลลุ่มทั้งหมด",
+            "first-transaction": "ธุรกรรมครั้งแรก",
+            "total-earned": "ที่ได้รับทั้งหมด",
+            "amount": "ปริมาณ",
+            "volume": "วอลลุ่ม",
+            "type": "Type",
+            "timestamp": "วัน/เวลา"
+        },
+        "no-result": "ไม่มีผลลัพธ์สำหรับตารางนี้",
+        "earned": "ได้รับ",
+        "header": "สร้าง Referral links",
+        "paragraph": "<bold>Overtime Referrals Program เป็นการสร้างแรงจูงใจบน on-chain เพื่อเพิ่มยอดผู้ใช้งาน และ เป็นอุปการ์สำหรับการสอนการใช้งาน</bold>โปรแกรมนี้อนุญาตให้ใครก็ตามสามารถ<bold>สร้าง Referral Link</bold> ได้และแชร์ให้กับผู้ใช้งานรายอื่นที่อยากให้มาลองใช้งาน Overtime Market<br /><br /> คุณจะได้รับ<bold>0.5% จากยอดวอลลุ่ม sUSD จากผู้ใช้ลิงค์อ้างอิงของคุณ!</bold> ไม่จำเป็นต้องกดรับ sUSD มันจะถูกส่งเข้ากระเป๋าเงินของคุณโดยอัตโนมัติ",
         "nav-items": {
             "all-transactions": "ธุรกรรมทั้งหมด",
-            "affiliate-leaderboard": "กระดานผู้นำพันธมิตร",
-            "see-result-by-trader": "เห็นผลโดยเทรดเดอร์"
-        },
-        "trades": "การค้า",
-        "copy-link": "คัดลอกลิงค์",
-        "header": "สร้างลิงค์อ้างอิง",
-        "total-volume": "ปริมาณรวม",
-        "earned": "ได้รับ",
-        "total-trading-fees": "ค่าธรรมเนียมการซื้อขายทั้งหมด",
-        "generate-link": "สร้างลิงค์",
-        "affiliate-leaderboard-table": {
-            "timestamp": "วันเวลา",
-            "number-of-trades": "การซื้อขาย",
-            "total-earned": "รายได้ทั้งหมด",
-            "volume": "ปริมาณ",
-            "address": "ที่อยู่",
-            "first-transaction": "รายการแรก",
-            "amount": "จำนวน",
-            "type": "พิมพ์",
-            "total-volume": "ปริมาณรวม"
-        },
-        "total-earned": "รายได้ทั้งหมด",
-        "no-result": "ไม่มีผลลัพธ์สำหรับตารางนี้",
-        "paragraph": "<bold>โปรแกรมการอ้างอิงการทำงานล่วงเวลาเป็นเครื่องมือในการหาผู้ใช้และการเริ่มต้นใช้งานบนเครือข่ายที่สร้างแรงจูงใจ</bold> โปรแกรมช่วยให้ทุกคนสามารถ<bold> สร้างลิงค์อ้างอิง</bold> และแบ่งปันกับผู้ใช้ที่พวกเขาพยายามเข้าร่วม<br /><br /> เมื่อแชร์ลิงก์แนะนำส่วนตัวของคุณ คุณจะได้รับ<bold> 0.5% ของปริมาณ sUSD ทั้งหมดที่ผู้ใช้อ้างอิงของคุณสร้างขึ้น!</bold> ไม่จำเป็นต้องอ้างสิทธิ์ด้วยตนเอง sUSD จะเพิ่มขึ้นโดยอัตโนมัติในกระเป๋าเงินของคุณในรูปแบบของการโอน sUSD ง่ายๆ"
+            "see-result-by-trader": "ดูผลลัพธ์โดยเทรดเดอร์",
+            "affiliate-leaderboard": "กระดานผู้นำ"
+        }
     },
+
     "vaults": {
         "title": "Sport Vaults",
-        "strategy-label": "Vault strategy",
-        "risks-label": "Vault risks"
+        "strategy-label": "กลยุทธ์ของ Vault",
+        "risks-label": "ความเสี่ยงของ Vault"
     },
     "vault": {
         "discount-vault": {
             "title": "Discount Vault",
-            "description": "<p>Buys positions that have more than {{odds}} odds and are available at a discount larger than {{discount}}.</p>All deposits that enter a round count towards gamified staking volume.</p>",
-            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
+            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และมีส่วนลดมากกว่า {{discount}}.</p>การฝากใน Vault จะถูกนับในส่วนของปริมาณการซื้อขายของ gamified staking ด้วย</p>",
+            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
         },
         "degen-discount-vault": {
             "title": "Degen Discount Vault",
-            "description": "<p>Buys positions at any odds that are available for more than {{discount}} discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
-            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market.</p>"
+            "description": "<p>ซื้อโพสิชั่นที่ odds ใดๆ ที่มีส่วนลดมากกว่า {{discount}}</p><p>การฝากใน Vault จะถูกนับในส่วนของปริมาณการซื้อขายของ gamified staking ด้วย</p>",
+            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอด {{utilizationRate}} จะมีเพียงมากที่สุด {{allocationLimitsPerMarketPerRound}} เท่านั้นที่สามารถใช้กับเกมการแข่งขั้นหนึ่งเกม</p>"
         },
         "safu-discount-vault": {
             "title": "Safu Discount Vault",
-            "description": "<p>Buys positions that have more than {{odds}} odds and are available at any discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
-            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
+            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และ มีส่วนลดใดๆ </p><p>การฝากใน Vault จะถูกนับในส่วนของปริมาณการซื้อขายของ gamified staking ด้วย</p>",
+            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
         },
         "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
-        "back-to-vaults": "Back to vaults",
-        "vault-not-started-message": "The vault has not started",
-        "vault-paused-message": "The vault is paused",
-        "round-allocation-label": "Total round deposit",
-        "spent-trading-label": "Spent on trading",
-        "available-trading-label": "Available for trading",
-        "round-end-label": "The round ends in",
-        "your-round-allocation-label": "Your allocation for the round: <bold>{{amount}}</bold>",
-        "your-next-round-allocation-label": "Your allocation for the next round: <bold>{{amount}}</bold>",
-        "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
-        "next-round-start-label": "The next round starts in: <counter />",
-        "users-in-vault-label": "Users in the vault: {{number}} / {{max}}",
-        "vault-filled-label": "Vault filled: {{amount}} / {{max}}",
-        "deposit-message": "Deposit funds into the vault for the next round.",
-        "deposit-amount-label": "Deposit amount",
-        "deposit-amount-placeholder": "Enter amount",
-        "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
-        "nothing-to-withdraw-label": "Nothing to withdraw.",
-        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
-        "withdraw-round-end-label": "The round ends in: <counter />",
-        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
-        "withdrawal-request-label": "Withdrawal request: <bold>{{amount}}</bold>",
-        "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
-        "round-ended-label": "Round ended",
-        "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
-        "deposit-max-amount-of-users-warning": "Maximum number of users in the vault is reached, you cannot deposit.",
-        "deposit-vault-cap-reached-warning": "The vault cap is reached, you cannot deposit.",
-        "deposit-vault-cap-error": "Deposit amount exceeds vault cap",
-        "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
-        "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
+        "back-to-vaults": "กลับไปที่ Vaults",
+        "vault-not-started-message": "Vault ยังไม่เริ่ม",
+        "vault-paused-message": "Vault ถูกหยุดทำงาน",
+        "round-allocation-label": "ยอดการฝากทั้งหมด",
+        "spent-trading-label": "ยอดที่ถูกนำไปเทรด",
+        "available-trading-label": "ยอดฝากที่สามารถนำไปเทรดได้",
+        "round-end-label": "รอบนี้จะจบใน",
+        "your-round-allocation-label": "เงินฝากของคุณในรอบนี้: <bold>{{amount}}</bold>",
+        "your-next-round-allocation-label": "เงินฝากของคุณในรอบถัดไป: <bold>{{amount}}</bold>",
+        "estimated-amount-tooltip": "จำนวนนี้เป็นเพียงการประมาณ จำนวนที่แท้จริงจะถูกคำนวณหลังจากจบรอบโดยจะนำ PnL มาคิด",
+        "next-round-start-label": "รอบต่อไปจะเริ่มใน: <counter />",
+        "users-in-vault-label": "จำนวนผู้ใช้งานใน Vault : {{number}} / {{max}}",
+        "vault-filled-label": "จำนวนเงินฝากใน Vault: {{amount}} / {{max}}",
+        "deposit-message": "ฝากเงินเข้าสู่ Vault เพื่อเข้าร่วมรอบต่อไป",
+        "deposit-amount-label": "จำนวนเงินฝาก",
+        "deposit-amount-placeholder": "ระบุจำนวน",
+        "available-to-withdraw-label": "จำนวนเงินฝากที่สามารถถอนได้: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "ไม่มีสิ่งที่จะสามารถถอนได้",
+        "withdrawal-message": "คุณสามารถขอถอนเงินและเงินของคุณจะถูกส่งถึงคุณโดยอัตโนมัติเมื่อสิ้นสุดรอบเมื่อรอบปิด",
+        "withdraw-round-end-label": "รอบนี้จะสิ้นสุดใน: <counter />",
+        "withdrawal-requested-message": "คุณขอถอนเงินเป็นจำนวน <bold>{{amount}}</bold><tooltip />. เงินของคุณจะถูกส่งถึงคุณโดยอัตโนมัติเมื่อสิ้นสุดรอบเมื่อปิดรอบ",
+        "withdrawal-request-label": "ขอถอน: <bold>{{amount}}</bold>",
+        "first-deposit-withdrawal-message": "คุณฝากเงินในรอบถัดไป และคุณสามารถถอนเงินเหล่านี้ได้เมื่อสิ้นสุดรอบถัดไป",
+        "round-ended-label": "จบรอบ",
+        "deposit-withdrawal-warning": "มีการร้องขอการถอน คุณไม่สามารถฝากได้",
+        "deposit-max-amount-of-users-warning": "ถึงจำนวนผู้ใช้สูงสุดของ Vault แล้ว คุณไม่สามารถฝากเงินได้",
+        "deposit-vault-cap-reached-warning": "ถึงจำนวนฝากสูงสุดของ Vault แล้ว คุณไม่สามารถฝากเงินได้",
+        "deposit-vault-cap-error": "จำนวนเงินฝากเกินขีดจำกัดของ Vault",
+        "deposit-min-amount-error": "จำนวนเงินขั้นต่ำสำหรับการฝากคือ {{amount}}",
+        "withdrawal-deposit-warning": "คุณไม่สามารถถอนได้เนื่องจากคุณฝากไว้แล้วสำหรับรอบถัดไป",
         "tabs": {
-            "deposit": "Deposit",
-            "claim": "Claim",
-            "withdraw": "Withdraw"
+            "deposit": "ฝาก",
+            "claim": "รับ",
+            "withdraw": "ถอน"
         },
         "button": {
-            "deposit-label": "Deposit",
-            "deposit-progress-label": "Deposit in progress...",
-            "deposit-confirmation-message": "Deposit successfully placed",
-            "request-withdrawal-label": "Request withdrawal",
-            "request-withdrawal-progress-label": "Request in progress...",
-            "request-withdrawal-confirmation-message": "Withdrawal request successfully sent",
-            "withdraw-label": "Withdraw",
-            "withdraw-progress-label": "Withdrawal in progress...",
-            "withdraw-confirmation-message": "Funds successfully withdrawn",
-            "close-round-label": "Close round",
-            "close-round-progress-label": "Closing round in progress...",
-            "close-round-confirmation-message": "Round successfully closed"
+            "deposit-label": "ฝาก",
+            "deposit-progress-label": "กำลังทำการฝาก...",
+            "deposit-confirmation-message": "การฝากสำเร็จ",
+            "request-withdrawal-label": "ขอถอนเงิน",
+            "request-withdrawal-progress-label": "กำลังทำคำร้อง...",
+            "request-withdrawal-confirmation-message": "ส่งคำขอถอนสำเร็จแล้ว",
+            "withdraw-label": "ถอน",
+            "withdraw-progress-label": "กำลังดำเนินการถอนเงิน…",
+            "withdraw-confirmation-message": "ถอนเงินสำเร็จ",
+            "close-round-label": "ปิดรอบ",
+            "close-round-progress-label": "กำลังดำเนินการปิดรอบ…",
+            "close-round-confirmation-message": "ปิดรอบสำเร็จ"
         },
         "trades-history": {
-            "title": "Vault trades history",
-            "no-trades": "No trades associated with this vault in the selected round.",
-            "round-label": "Round"
+            "title": "ประวัติการเทรดของ Vault",
+            "no-trades": "ไม่มีการเทรดที่เกี่ยวข้องกับ Vault นี้ในรอบที่เลือก",
+            "round-label": "รอบ"
         },
         "pnl": {
-            "title": "PnL per round",
-            "no-data": "No PnL data for previous rounds.",
+            "title": "PnL ต่อรอบ",
+            "no-data": "ไม่มีข้อมูล PnL สำหรับรอบก่อนหน้า",
             "lifetime-pnl": "Lifetime PnL"
         },
         "user-transactions": {
