@@ -268,8 +268,8 @@ export const isSportMarketExpired = (sportMarket: SportMarketInfo) => {
     );
 
     if (maturyDatePlusExpirationPeriod < new Date().getTime()) {
-        return false;
+        return true;
     }
 
-    return true;
+    return false;
 };

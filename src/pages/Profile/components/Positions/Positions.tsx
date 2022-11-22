@@ -59,7 +59,7 @@ const Positions: React.FC = () => {
                     data.open.push(market);
                 }
                 if (market.claimable) {
-                    if (isSportMarketExpired(market.market)) {
+                    if (!isSportMarketExpired(market.market)) {
                         data.claimable.push(market);
                     }
                 }
