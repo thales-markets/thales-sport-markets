@@ -648,6 +648,15 @@
         "variables": "<p>Variabili:</p><ul><li> Tasso di utilizzo: {{utilizationRate}}</li><li> Limite inferiore del prezzo: {{priceLowerLimit}}</li><li> Limite massimo del prezzo: {{priceUpperLimit}}</li><li> Impatto Max Skew: {{skewImpactLimit}}</li><li> Allocazione massima su un singolo mercato: {{allocationLimitsPerMarketPerRound}}</li><li> Deposito totale massimo: {{maxAllowedDeposit}}</li><li> Numero massimo di utenti nel vault: {{maxAllowedUsers}}</li><li> Importo minimo su una singola operazione: {{minTradeAmount}}</li><li> Deposito minimo: {{minDepositAmount}}</li></ul>",
         "vault-paused-message": "Il caveau è in pausa",
         "users-in-vault-label": "Utenti nel caveau: {{number}} / {{max}}",
-        "first-deposit-withdrawal-message": "Hai depositato per il round successivo e puoi prelevare questi fondi alla fine del round successivo."
+        "first-deposit-withdrawal-message": "Hai depositato per il round successivo e puoi prelevare questi fondi alla fine del round successivo.",
+        "user-transactions": {
+            "type": {
+                "deposit": "Depositare",
+                "withdrawalRequest": "Richiesta di prelievo",
+                "claim": "Richiesta di recesso"
+            },
+            "title": "Transazioni utente",
+            "no-transactions": "Nessuna transazione utente associata a questo vault nel round selezionato."
+        }
     }
 }

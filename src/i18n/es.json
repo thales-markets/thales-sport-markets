@@ -645,6 +645,15 @@
             "title": "PnL por round",
             "no-data": "No hay data de PnL para rounds previos.",
             "lifetime-pnl": "PnL Total"
+        },
+        "user-transactions": {
+            "type": {
+                "deposit": "Depósito",
+                "withdrawalRequest": "Solicitud de Retiro",
+                "claim": "Reclamo de Retiro"
+            },
+            "no-transactions": "No hay transacciones de usuario asociadas con esta bóveda en la ronda seleccionada.",
+            "title": "Transacciones de usuario"
         }
     }
 }

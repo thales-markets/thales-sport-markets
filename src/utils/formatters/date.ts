@@ -114,3 +114,7 @@ export const addHoursToCurrentDate = (numberOfHours: number, setToEOD?: boolean)
     }
     return newDateFilter;
 };
+
+export const addDaysToEnteredTimestamp = (numberOfDays: number, timestamp: number) => {
+    return new Date().setTime(new Date(timestamp).getTime() + numberOfDays * 24 * 60 * 60 * 1000);
+};

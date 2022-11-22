@@ -138,6 +138,7 @@ export const QUERY_KEYS = {
         ],
         Trades: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'trades', networkId],
         PnL: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'pnl', networkId],
+        UserTransactions: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'userTransactions', networkId],
     },
 };
 

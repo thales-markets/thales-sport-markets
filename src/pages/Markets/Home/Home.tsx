@@ -286,7 +286,6 @@ const Home: React.FC = () => {
                     if (market.maturityDate < new Date() && !market.isResolved && !market.isCanceled) {
                         if (market.isPaused) {
                             const rundownConsumerContract = networkConnector.theRundownConsumerContract;
-
                             const [marketInvalidOdds] = await Promise.all([
                                 await rundownConsumerContract?.invalidOdds(market.address),
                             ]);
@@ -340,7 +339,6 @@ const Home: React.FC = () => {
             default:
                 break;
         }
-
         const sortedFilteredMarkets = filteredMarkets.sort((a, b) => {
             switch (globalFilter) {
                 case GlobalFiltersEnum.ResolvedMarkets:
@@ -351,7 +349,10 @@ const Home: React.FC = () => {
             }
         });
 
-        return groupBySortedMarkets(sortedFilteredMarkets);
+        if (GlobalFiltersEnum.OpenMarkets == globalFilter) {
+            return groupBySortedMarkets(sortedFilteredMarkets);
+        }
+        return sortedFilteredMarkets;
     }, [tagsFilteredMarkets, globalFilter, accountPositions]);
 
     const resetFilters = useCallback(() => {
@@ -646,10 +647,6 @@ const sortByField = (
 const groupBySortedMarkets = (markets: SportMarkets) => {
     const openMarkets: SportMarkets = [];
     const comingSoonMarkets: SportMarkets = [];
-    const pendingResolutionMarkets: SportMarkets = [];
-    const finishedMarkets: SportMarkets = [];
-    const canceledMarkets: SportMarkets = [];
-
     markets.forEach((market: SportMarketInfo) => {
         if (
             market.isOpen &&
@@ -667,13 +664,9 @@ const groupBySortedMarkets = (markets: SportMarkets) => {
             market.drawOdds === 0
         )
             comingSoonMarkets.push(market);
-        if (market.maturityDate < new Date() && !market.isResolved && !market.isCanceled)
-            pendingResolutionMarkets.push(market);
-        if (market.isResolved && !market.isCanceled) finishedMarkets.push(market);
-        if ((market.isCanceled || market.isPaused) && !market.isResolved) canceledMarkets.push(market);
     });
 
-    return [...openMarkets, ...comingSoonMarkets, ...pendingResolutionMarkets, ...finishedMarkets, ...canceledMarkets];
+    return [...openMarkets, ...comingSoonMarkets];
 };
 
 const Container = styled(FlexDivColumnCentered)`
