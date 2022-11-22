@@ -646,6 +646,15 @@
             "title": "PnL per round",
             "no-data": "No PnL data for previous rounds.",
             "lifetime-pnl": "Lifetime PnL"
+        },
+        "user-transactions": {
+            "type": {
+                "deposit": "เงินฝาก",
+                "claim": "การเรียกร้องการถอน",
+                "withdrawalRequest": "คำขอถอนเงิน"
+            },
+            "title": "การทำธุรกรรมของผู้ใช้",
+            "no-transactions": "ไม่มีธุรกรรมของผู้ใช้ที่เกี่ยวข้องกับห้องนิรภัยนี้ในรอบที่เลือก"
         }
     }
 }
