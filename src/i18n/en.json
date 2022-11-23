@@ -161,7 +161,7 @@
         "grid-view": "Grid",
         "list-view": "List",
         "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "Transaction pending",
             "swap-success": "Successfully swapped {{ currencyKey }}",
             "approve-success": "Successfully approved",
@@ -371,7 +371,15 @@
                 "total-quote": "Total quote",
                 "stake": "Stake",
                 "referral": "Referral link",
-                "share": "Share"
+                "share": "Share",
+                "options": {
+                    "title": "Display options",
+                    "view-details": "Details",
+                    "view-simple": "Simple",
+                    "percentage": "% Percentage",
+                    "usd-amount": "USD amount",
+                    "timestamp": "Timestamp"
+                }
             }
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",

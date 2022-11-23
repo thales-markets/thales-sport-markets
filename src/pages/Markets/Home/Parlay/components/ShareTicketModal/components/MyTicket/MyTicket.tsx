@@ -14,7 +14,7 @@ import { formatShortDateWithTimeZone } from 'utils/formatters/date';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { formatMarketOdds } from 'utils/markets';
 import { generateReferralLink } from 'utils/referral';
-import MatchInfo from '../MatchInfo';
+import MatchInfo from '../../../MatchInfo';
 
 type MyTicketProps = {
     markets: ParlaysMarket[];
@@ -31,6 +31,8 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
         return new Date();
     }, []);
 
+    const ticketLost = markets.some((market) => market.isResolved && !market.winning);
+
     return (
         <Container>
             <Header>
@@ -44,7 +46,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
                     <PayoutLabel>{t('markets.parlay.share-ticket.payout')}</PayoutLabel>
                     <Square />
                 </PayoutLabelWrapper>
-                <PayoutValue>{formatCurrencyWithSign(USD_SIGN, payout)}</PayoutValue>
+                <PayoutValue isLost={ticketLost}>{formatCurrencyWithSign(USD_SIGN, payout)}</PayoutValue>
             </Payout>
             <HorizontalLine />
             <MarketsContainer>
@@ -119,10 +121,11 @@ const PayoutLabel = styled.span`
     font-weight: 300;
 `;
 
-const PayoutValue = styled.span`
+const PayoutValue = styled.span<{ isLost?: boolean }>`
     font-size: 45px;
     line-height: 42px;
     font-weight: 800;
+    ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')}
 `;
 
 const Square = styled.div`

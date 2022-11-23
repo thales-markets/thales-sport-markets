@@ -8,9 +8,10 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
-import MySimpleTicket from '../MySimpleTicket';
-import MyTicket from '../MyTicket';
+import MySimpleTicket from './components/MySimpleTicket';
+import MyTicket from './components/MyTicket';
 import { TwitterIcon } from '../styled-components';
+import DisplayOptions from './components/DisplayOptions';
 
 type ShareTicketModalProps = {
     markets: ParlaysMarket[];
@@ -47,7 +48,7 @@ const TWITTER_MESSAGE = '<PASTE YOUR IMAGE>';
 const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
-    const [isSimpleView /*, setIsSimpleView*/] = useState(false);
+    const [isSimpleView, setIsSimpleView] = useState(false);
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -119,24 +120,38 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
     };
 
     return (
-        <ReactModal isOpen onRequestClose={onModalClose} shouldCloseOnOverlayClick={true} style={customStyles}>
-            <Container ref={ref}>
-                <CloseIcon className={`icon icon--close`} onClick={onClose} />
-                {isSimpleView ? (
-                    <MySimpleTicket payout={payout} />
-                ) : (
-                    <MyTicket markets={markets} totalQuote={totalQuote} paid={paid} payout={payout} />
+        <>
+            <ReactModal
+                isOpen
+                onRequestClose={onModalClose}
+                shouldCloseOnOverlayClick={true}
+                style={customStyles}
+                contentElement={(props, children) => (
+                    <>
+                        <div {...props}>{children}</div>
+                        <DisplayOptions isSimpleView={isSimpleView} setSimpleView={setIsSimpleView} />
+                    </>
                 )}
-                <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
-                    <TwitterIcon disabled={isLoading} fontSize={'30px'} />
-                    <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
-                </TwitterShare>
-            </Container>
-        </ReactModal>
+            >
+                <Container ref={ref}>
+                    <CloseIcon className={`icon icon--close`} onClick={onClose} />
+                    {isSimpleView ? (
+                        <MySimpleTicket payout={payout} />
+                    ) : (
+                        <MyTicket markets={markets} totalQuote={totalQuote} paid={paid} payout={payout} />
+                    )}
+                    <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
+                        <TwitterIcon disabled={isLoading} fontSize={'30px'} />
+                        <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
+                    </TwitterShare>
+                </Container>
+            </ReactModal>
+        </>
     );
 };
 
 const Container = styled(FlexDivColumnCentered)`
+    min-width: 300px;
     max-width: 400px;
     padding: 15px;
     flex: none;
