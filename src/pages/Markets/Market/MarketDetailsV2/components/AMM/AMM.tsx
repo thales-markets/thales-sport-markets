@@ -29,14 +29,12 @@ import {
 } from './styled-components';
 import { toast } from 'react-toastify';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useMarketBalancesQuery from 'queries/markets/useMarketBalancesQuery';
 import usePositionPriceDetailsQuery from 'queries/markets/usePositionPriceDetailsQuery';
 import { refetchBalances } from 'utils/queryConnector';
-
-import { MAX_L2_GAS_LIMIT, Position, Side } from 'constants/options';
+import { Position, Side } from 'constants/options';
 import { AMMPosition, AvailablePerSide, Balances, MarketData, PositionType } from 'types/markets';
 import {
     countDecimals,
@@ -514,7 +512,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                         ammQuote,
                         referralId,
                         ethers.utils.parseEther('0.02'),
-                        { gasLimit: MAX_L2_GAS_LIMIT }
+                        { gasLimit: MAX_GAS_LIMIT }
                     );
 
                     const txResult = await tx.wait();

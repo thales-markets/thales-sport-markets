@@ -1,5 +1,6 @@
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
+import { MAX_GAS_LIMIT } from 'constants/network';
 import { ClaimButton } from 'pages/Markets/Market/MarketDetailsV2/components/Positions/styled-components';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -64,7 +65,9 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
             try {
                 const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
 
-                const tx = await parlayMarketsAMMContractWithSigner?.exerciseParlay(parlayAddress);
+                const tx = await parlayMarketsAMMContractWithSigner?.exerciseParlay(parlayAddress, {
+                    gasLimit: MAX_GAS_LIMIT,
+                });
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
