@@ -17,7 +17,7 @@ import {
     EmptyContainer,
     ListContainer,
 } from './styled-components';
-import { isParlayClaimable, isParlayOpen } from 'utils/markets';
+import { isParlayClaimable, isParlayOpen, isSportMarketExpired } from 'utils/markets';
 import ParlayPosition from './components/ParlayPosition';
 import SimpleLoader from 'components/SimpleLoader';
 import { LoaderContainer } from 'pages/Markets/Home/Home';
@@ -59,7 +59,9 @@ const Positions: React.FC = () => {
                     data.open.push(market);
                 }
                 if (market.claimable) {
-                    data.claimable.push(market);
+                    if (!isSportMarketExpired(market.market)) {
+                        data.claimable.push(market);
+                    }
                 }
             });
         }

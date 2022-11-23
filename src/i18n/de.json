@@ -642,6 +642,15 @@
             "title": "PnL per Runde",
             "no-data": "Keine PnL-Daten für frühere Runden.",
             "lifetime-pnl": "Lifetime PnL"
+        },
+        "user-transactions": {
+            "type": {
+                "deposit": "Kaution",
+                "withdrawalRequest": "Auszahlungsantrag",
+                "claim": "Rücktrittsanspruch"
+            },
+            "title": "Benutzertransaktionen",
+            "no-transactions": "Mit diesem Tresor sind in der ausgewählten Runde keine Benutzertransaktionen verbunden."
         }
     }
 }

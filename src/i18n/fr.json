@@ -743,6 +743,15 @@
             "title": "PnL par tour",
             "no-data": "Pas de données PnL pour les tours précédents.",
             "lifetime-pnl": "PnL à vie"
+        },
+        "user-transactions": {
+            "type": {
+                "deposit": "Verser",
+                "claim": "Demande de retrait",
+                "withdrawalRequest": "Demande de retrait"
+            },
+            "title": "Opérations utilisateur",
+            "no-transactions": "Aucune transaction utilisateur associée à ce coffre dans le tour sélectionné."
         }
     }
 }

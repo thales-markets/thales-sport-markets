@@ -636,6 +636,15 @@
             "title": "PnL per round",
             "no-data": "No PnL data for previous rounds.",
             "lifetime-pnl": "Lifetime PnL"
+        },
+        "user-transactions": {
+            "title": "User transactions",
+            "no-transactions": "No user transactions associated with this vault in the selected round.",
+            "type": {
+                "deposit": "Deposit",
+                "withdrawalRequest": "Withdrawal Request",
+                "claim": "Withdrawal Claim"
+            }
         }
     }
 }
