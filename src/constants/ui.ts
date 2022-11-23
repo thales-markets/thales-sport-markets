@@ -59,6 +59,7 @@ export const MAIN_COLORS = {
         WHITE: '#FFFFFF',
         POTENTIAL_PROFIT: '#5FC694',
         DARK_GRAY: '#5F6180',
+        CANCELED: '#E26A78',
     },
 };
 
