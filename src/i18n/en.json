@@ -173,6 +173,7 @@
             "get-usd-success": "{{amount}} successfully minted",
             "save-image": "Saving image to clipboard. Please wait...",
             "save-image-error": "Failed to save image!",
+            "save-image-cancel": "Image saving canceled!",
             "image-created": "Image is in clipboard!",
             "open-twitter": "Openning Twitter..."
         },
@@ -372,6 +373,8 @@
                 "stake": "Stake",
                 "referral": "Referral link",
                 "share": "Share",
+                "winner": "Winner",
+                "loser": "Loser",
                 "options": {
                     "title": "Display options",
                     "view-details": "Details",

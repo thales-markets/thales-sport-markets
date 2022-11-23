@@ -6,39 +6,46 @@ import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 
 export type DisplayOptionsType = {
+    isSimpleView: boolean;
     showUsdAmount: boolean;
     showPercentage: boolean;
     showTimestamp: boolean;
 };
 
 type DisplayOptionsProps = {
-    isSimpleView: boolean;
-    setSimpleView: (simple: boolean) => void;
     setDisplayOptions: (options: DisplayOptionsType) => void;
     onShare: () => void;
+    isDisabled: boolean;
 };
 
-const DisplayOptions: React.FC<DisplayOptionsProps> = ({ isSimpleView, setSimpleView, setDisplayOptions, onShare }) => {
+const DisplayOptions: React.FC<DisplayOptionsProps> = ({ setDisplayOptions, isDisabled, onShare }) => {
+    const [isSimpleView, setIsSimpleView] = useState(false);
     const [showUsdAmount, setShowUsdAmount] = useState(true);
     const [showPercentage, setShowPercentage] = useState(false);
     const [showTimestamp, setShowTimestamp] = useState(true);
 
+    const onOptionToggleViewClickHandler = () => {
+        const newIsSimpleView = !isSimpleView;
+        setIsSimpleView(newIsSimpleView);
+        setDisplayOptions({ isSimpleView: newIsSimpleView, showUsdAmount, showPercentage, showTimestamp });
+    };
+
     const onOptionUsdAmountClickHandler = () => {
         const newShowUsdAmount = !showUsdAmount;
         setShowUsdAmount(newShowUsdAmount);
-        setDisplayOptions({ showUsdAmount: newShowUsdAmount, showPercentage, showTimestamp });
+        setDisplayOptions({ isSimpleView, showUsdAmount: newShowUsdAmount, showPercentage, showTimestamp });
     };
 
     const onOptionPercentageClickHandler = () => {
         const newShowPercentage = !showPercentage;
         setShowPercentage(newShowPercentage);
-        setDisplayOptions({ showUsdAmount, showPercentage: newShowPercentage, showTimestamp });
+        setDisplayOptions({ isSimpleView, showUsdAmount, showPercentage: newShowPercentage, showTimestamp });
     };
 
     const onOptionTimestampClickHandler = () => {
         const newShowTimestamp = !showTimestamp;
         setShowTimestamp(newShowTimestamp);
-        setDisplayOptions({ showUsdAmount, showPercentage, showTimestamp: newShowTimestamp });
+        setDisplayOptions({ isSimpleView, showUsdAmount, showPercentage, showTimestamp: newShowTimestamp });
     };
 
     const onShareClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -63,35 +70,39 @@ const DisplayOptions: React.FC<DisplayOptionsProps> = ({ isSimpleView, setSimple
                     lineHeight: '36px',
                 }}
                 active={isSimpleView}
+                disabled={isDisabled}
                 dotSize="18px"
                 dotBackground="#ffffff"
-                handleClick={() => {
-                    setSimpleView(!isSimpleView);
-                }}
+                handleClick={onOptionToggleViewClickHandler}
             />
             <Option>
-                <OptionLabel>{t('markets.parlay.share-ticket.options.usd-amount')}</OptionLabel>
+                <OptionLabel disabled={isDisabled}>{t('markets.parlay.share-ticket.options.usd-amount')}</OptionLabel>
                 <OptionSymbol
                     className={`icon ${showUsdAmount ? 'icon--correct' : 'icon--hide'}`}
+                    disabled={isDisabled}
                     onClick={onOptionUsdAmountClickHandler}
                 />
             </Option>
             <Option>
-                <OptionLabel>{t('markets.parlay.share-ticket.options.percentage')}</OptionLabel>
+                <OptionLabel disabled={isDisabled}>{t('markets.parlay.share-ticket.options.percentage')}</OptionLabel>
                 <OptionSymbol
                     className={`icon ${showPercentage ? 'icon--correct' : 'icon--hide'}`}
+                    disabled={isDisabled}
                     onClick={onOptionPercentageClickHandler}
                 />
             </Option>
             <Option>
-                <OptionLabel>{t('markets.parlay.share-ticket.options.timestamp')}</OptionLabel>
+                <OptionLabel disabled={isDisabled}>{t('markets.parlay.share-ticket.options.timestamp')}</OptionLabel>
                 <OptionSymbol
                     className={`icon ${showTimestamp ? 'icon--correct' : 'icon--hide'}`}
+                    disabled={isDisabled}
                     onClick={onOptionTimestampClickHandler}
                 />
             </Option>
             <Option>
-                <ShareButton onClick={onShareClickHandler}>{t('markets.parlay.share-ticket.share')}</ShareButton>
+                <ShareButton disabled={isDisabled} onClick={onShareClickHandler}>
+                    {t('markets.parlay.share-ticket.share')}
+                </ShareButton>
             </Option>
         </Container>
     );
@@ -123,15 +134,17 @@ const Option = styled(FlexDivRowCentered)`
     padding: 0 5px;
 `;
 
-const OptionLabel = styled.span`
+const OptionLabel = styled.span<{ disabled?: boolean }>`
     font-weight: 500;
     line-height: 36px;
+    opacity: ${(props: any) => (props.disabled ? '0.4' : '1')};
 `;
 
-const OptionSymbol = styled.i`
+const OptionSymbol = styled.i<{ disabled?: boolean }>`
     font-size: 18px;
     font-weight: 500;
-    cursor: pointer;
+    cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+    opacity: ${(props: any) => (props.disabled ? '0.4' : '1')};
 `;
 
 const ShareButton = styled(Button)`

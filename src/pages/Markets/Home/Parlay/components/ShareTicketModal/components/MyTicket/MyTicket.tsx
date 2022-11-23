@@ -1,4 +1,4 @@
-import { ReactComponent as LogoIcon } from 'assets/images/overtime-logo.svg';
+import { ReactComponent as OvertimeLogoIcon } from 'assets/images/overtime-logo.svg';
 import { USD_SIGN } from 'constants/currency';
 import { t } from 'i18next';
 import React, { useMemo } from 'react';
@@ -29,20 +29,16 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout, 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
 
-    const payoutDisplayText = displayOptions.showUsdAmount
-        ? `${formatCurrencyWithSign(USD_SIGN, payout)}${
-              displayOptions.showPercentage ? ` (${formatPercentage(payout / paid)})` : ''
-          }`
-        : displayOptions.showPercentage
-        ? formatPercentage(payout / paid)
-        : '';
+    const percentage = (payout - paid) / paid;
+    const payoutDisplayText = displayOptions.showUsdAmount ? formatCurrencyWithSign(USD_SIGN, payout) : '';
+    const percentageDisplayText = displayOptions.showPercentage ? `+ ${formatPercentage(percentage)}` : '';
 
     const timestamp = useMemo(() => {
         return new Date();
     }, []);
     const timestampDisplayText = displayOptions.showTimestamp ? formatShortDateWithTimeZone(timestamp) : '';
 
-    const ticketLost = markets.some((market) => market.isResolved && !market.winning);
+    const isTicketLost = markets.some((market) => market.isResolved && !market.winning);
 
     return (
         <Container>
@@ -50,15 +46,24 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout, 
                 {t('markets.parlay.share-ticket.header')}
                 <BoldContent>{' overtimemarkets.xyz'}</BoldContent>
             </Header>
-            <StyledLogo />
-            <Payout>
-                <PayoutLabelWrapper>
+            <OvertimeLogo />
+            <PayoutWrapper>
+                <PayoutRow>
                     <Square />
                     <PayoutLabel>{t('markets.parlay.share-ticket.payout')}</PayoutLabel>
                     <Square />
-                </PayoutLabelWrapper>
-                {payoutDisplayText && <PayoutValue isLost={ticketLost}>{payoutDisplayText}</PayoutValue>}
-            </Payout>
+                </PayoutRow>
+                {payoutDisplayText && (
+                    <PayoutRow>
+                        <PayoutValue isLost={isTicketLost}>{payoutDisplayText}</PayoutValue>
+                    </PayoutRow>
+                )}
+                {percentageDisplayText && (
+                    <PayoutRow>
+                        <PayoutValue isLost={isTicketLost}>{percentageDisplayText}</PayoutValue>
+                    </PayoutRow>
+                )}
+            </PayoutWrapper>
             <HorizontalLine />
             <MarketsContainer>
                 {markets.map((market, index) => {
@@ -93,6 +98,7 @@ const matchInfoStyle = { fontSize: '12px', lineHeight: '14px', positionColor: '#
 
 const Container = styled(FlexDivColumnCentered)`
     align-items: center;
+    max-width: 370px;
 `;
 
 const MarketsContainer = styled(FlexDivColumn)`
@@ -113,20 +119,20 @@ const BoldContent = styled.span`
     font-weight: 900;
 `;
 
-const StyledLogo = styled(LogoIcon)`
+const OvertimeLogo = styled(OvertimeLogoIcon)`
     margin-top: 15px;
     fill: ${(props) => props.theme.textColor.primary};
     height: 35px;
 `;
 
-const Payout = styled.div`
+const PayoutWrapper = styled.div`
     text-align: center;
     text-transform: uppercase;
     color: #5fc694;
     margin: 15px 0;
 `;
 
-const PayoutLabelWrapper = styled(FlexDivCentered)``;
+const PayoutRow = styled(FlexDivCentered)``;
 
 const PayoutLabel = styled.span`
     font-size: 40px;

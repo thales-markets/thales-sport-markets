@@ -2,7 +2,7 @@ import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
 import { LINKS } from 'constants/links';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import ReactModal from 'react-modal';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
@@ -13,6 +13,7 @@ import MyTicket from './components/MyTicket';
 import { TwitterIcon } from '../styled-components';
 import DisplayOptions from './components/DisplayOptions';
 import { DisplayOptionsType } from './components/DisplayOptions/DisplayOptions';
+import { getOnImageError, getTeamImageSource } from 'utils/images';
 
 type ShareTicketModalProps = {
     markets: ParlaysMarket[];
@@ -49,9 +50,9 @@ const TWITTER_MESSAGE = '<PASTE YOUR IMAGE>';
 const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
-    const [isSimpleView, setIsSimpleView] = useState(false);
 
     const defaultDisplayOptions: DisplayOptionsType = {
+        isSimpleView: false,
         showUsdAmount: true,
         showPercentage: false,
         showTimestamp: true,
@@ -59,6 +60,15 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
     const [displayOptions, setDisplayOptions] = useState<DisplayOptionsType>(defaultDisplayOptions);
 
     const ref = useRef<HTMLDivElement>(null);
+
+    const market = markets[0];
+    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
+    const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+
+    useEffect(() => {
+        setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
+        setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
+    }, [market.homeTeam, market.awayTeam, market.tags]);
 
     const saveImageAndOpenTwitter = useCallback(
         async (toastIdParam: string | number) => {
@@ -121,7 +131,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
 
     const onModalClose = () => {
         if (isLoading) {
-            toast.update(toastId, getErrorToastOptions('Image saving canceled!')); // TODO: translate
+            toast.update(toastId, getErrorToastOptions(t('market.toast-message.save-image-cancel')));
         }
         onClose();
     };
@@ -137,18 +147,45 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                     <>
                         <div {...props}>{children}</div>
                         <DisplayOptions
-                            isSimpleView={isSimpleView}
-                            setSimpleView={setIsSimpleView}
                             setDisplayOptions={setDisplayOptions}
                             onShare={onTwitterShareClick}
+                            isDisabled={isLoading}
                         />
                     </>
                 )}
             >
-                <Container ref={ref}>
+                <Container ref={ref} isSimpleView={displayOptions.isSimpleView}>
                     <CloseIcon className={`icon icon--close`} onClick={onClose} />
-                    {isSimpleView ? (
-                        <MySimpleTicket payout={payout} displayOptions={displayOptions} />
+                    {displayOptions.isSimpleView ? (
+                        <>
+                            {markets.length === 1 && (
+                                <>
+                                    <ClubWrapper>
+                                        <ClubLogo
+                                            alt="Home team logo"
+                                            src={homeLogoSrc}
+                                            isFlag={market.tags[0] == 9018}
+                                            onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
+                                        />
+                                    </ClubWrapper>
+                                    <ClubWrapper awayTeam={true}>
+                                        <ClubLogo
+                                            awayTeam={true}
+                                            alt="Away team logo"
+                                            src={awayLogoSrc}
+                                            isFlag={market.tags[0] == 9018}
+                                            onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
+                                        />
+                                    </ClubWrapper>
+                                </>
+                            )}
+                            <MySimpleTicket
+                                markets={markets}
+                                paid={paid}
+                                payout={payout}
+                                displayOptions={displayOptions}
+                            />
+                        </>
                     ) : (
                         <MyTicket
                             markets={markets}
@@ -168,13 +205,33 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
     );
 };
 
-const Container = styled(FlexDivColumnCentered)`
+const Container = styled(FlexDivColumnCentered)<{ isSimpleView: boolean }>`
     min-width: 300px;
-    max-width: 400px;
     padding: 15px;
     flex: none;
-    background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
+    background: ${(props) =>
+        props.isSimpleView
+            ? 'linear-gradient(135deg, #070814 0%, #424470 100%)'
+            : 'linear-gradient(180deg, #303656 0%, #1a1c2b 100%)'};
     border-radius: 10px;
+`;
+
+const ClubWrapper = styled.div<{ awayTeam?: boolean }>`
+    position: absolute;
+    overflow: hidden;
+    ${(props) => (props.awayTeam ? 'right: 0;' : 'left: 0;')}
+    width: 250px;
+    height: 250px;
+`;
+
+const ClubLogo = styled.img<{ isFlag?: boolean; awayTeam?: boolean }>`
+    position: absolute;
+    ${(props) => (props.awayTeam ? 'right: ' : 'left: ')}-70px;
+    ${(props) => (props.isFlag ? 'object-fit: cover;' : '')}
+    ${(props) => (props.isFlag ? 'border-radius: 50%;' : '')}
+    height: ${(props) => (props.isFlag ? '250px' : '35px')};
+    width: ${(props) => (props.isFlag ? '250px' : '35px')};
+    opacity: 0.15;
 `;
 
 const CloseIcon = styled.i`
