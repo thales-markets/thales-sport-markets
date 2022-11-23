@@ -160,7 +160,7 @@
         "grid-view": "网格",
         "list-view": "列表",
         "skew-tooltip": "偏度影响是指当前AMM持仓的分布也会影响投注价格。",
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "待定事务",
             "swap-success": "兑换 {{ currencyKey }} 成功",
             "approve-success": "批准成功",

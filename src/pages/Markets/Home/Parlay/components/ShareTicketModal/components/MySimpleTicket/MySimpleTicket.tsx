@@ -18,15 +18,16 @@ type MySimpleTicketProps = {
     markets: ParlaysMarket[];
     paid: number;
     payout: number;
+    profitPercentage?: number;
     displayOptions: DisplayOptionsType;
 };
 
-const MySimpleTicket: React.FC<MySimpleTicketProps> = ({ markets, paid, payout, displayOptions }) => {
+const MySimpleTicket: React.FC<MySimpleTicketProps> = ({ markets, paid, payout, profitPercentage, displayOptions }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
-    const percentage = (payout - paid) / paid;
+    const percentage = profitPercentage ? profitPercentage : (payout - paid) / paid;
     const payoutDisplayText = displayOptions.showUsdAmount ? formatCurrencyWithSign(USD_SIGN, payout) : '';
-    const percentageDisplayText = displayOptions.showPercentage ? `+ ${formatPercentage(percentage)}` : '';
+    const percentageDisplayText = displayOptions.showPercentage ? `+ ${formatPercentage(percentage, 0)}` : '';
 
     const timestamp = useMemo(() => {
         return new Date();

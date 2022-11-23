@@ -236,7 +236,7 @@
             "distribute-bonds-label": "Distribuer les dépôts de garantie",
             "distribute-progress-label": "Distribution en cours..."
         },
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "Transaction en cours",
             "swap-success": "Échange réussi {{ currencyKey }}",
             "approve-success": "Autorisation réussi",

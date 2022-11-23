@@ -160,7 +160,7 @@
         "grid-view": "Raster",
         "list-view": "Liste",
         "skew-tooltip": "Skew Impact ist die Höhe der Prämie, die auf der Grundlage des aktuellen Risikos, das AMM auf diesem spezifischen Markt eingeht, zum Preis einer Position hinzugefügt wird.",
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "Ausstehende Transaktion",
             "swap-success": "Erfolgreich ausgetauscht {{ currencyKey }}",
             "approve-success": "Erfolgreich genehmigt",

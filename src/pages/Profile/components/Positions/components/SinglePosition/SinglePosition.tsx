@@ -74,7 +74,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
         if (signer) {
             const contract = new ethers.Contract(position.market.address, sportsMarketContract.abi, signer);
             contract.connect(signer);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 const tx = await contract.exerciseOptions({
                     gasLimit: MAX_GAS_LIMIT,
@@ -85,7 +85,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                     setTimeout(() => {
                         refetchAfterClaim(walletAddress, networkId);
                     }, 1500);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));

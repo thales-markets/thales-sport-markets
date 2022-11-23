@@ -112,7 +112,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { signer } = networkConnector;
         if (signer) {
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsAllowing(true);
 
             try {
@@ -127,7 +127,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
                 if (txResult && txResult.transactionHash) {
                     toast.update(
                         id,
-                        getSuccessToastOptions(t('market.toast-messsage.approve-success', { token: PAYMENT_CURRENCY }))
+                        getSuccessToastOptions(t('market.toast-message.approve-success', { token: PAYMENT_CURRENCY }))
                     );
                     setIsAllowing(false);
                 }
@@ -172,7 +172,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
     }, 5000);
 
     const handleSubmit = async () => {
-        const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
         setIsSubmitting(true);
         try {
             const fetchUrl = `${ONE_INCH_EXCHANGE_URL}${networkId}${SWAP_SUFFIX}?fromTokenAddress=${
@@ -198,7 +198,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
                 if (txResult && txResult.transactionHash) {
                     toast.update(
                         id,
-                        getSuccessToastOptions(t('market.toast-messsage.swap-success', { currencyKey: OP_SUSD.symbol }))
+                        getSuccessToastOptions(t('market.toast-message.swap-success', { currencyKey: OP_SUSD.symbol }))
                     );
                     setIsSubmitting(false);
                 }

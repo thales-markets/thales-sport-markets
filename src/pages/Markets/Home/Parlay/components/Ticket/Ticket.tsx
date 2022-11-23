@@ -255,7 +255,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         const { parlayMarketsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (parlayMarketsAMMContract && signer) {
             setIsAllowing(true);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 let collateralContractWithSigner: ethers.Contract | undefined;
 
@@ -275,7 +275,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
                 if (txResult && txResult.transactionHash) {
                     setIsAllowing(false);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.approve-success')));
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -292,7 +292,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
             const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
 
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
 
             try {
                 const referralId =
@@ -328,7 +328,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
                 if (txResult && txResult.transactionHash) {
                     refetchBalances(walletAddress, networkId);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')));
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
                     setIsBuying(false);
                     setUsdAmount('');
 
@@ -528,6 +528,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         (tooltipTextUsdAmount && !isValidProfit && usdAmountValue <= paymentTokenBalance) ||
         isFetching;
 
+    const profitPercentage = (totalBuyAmount - Number(usdAmountValue)) / Number(usdAmountValue);
+
     const onModalClose = useCallback(() => {
         setShowShareTicketModal(false);
     }, []);
@@ -619,7 +621,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                               USD_SIGN,
                               totalBuyAmount - Number(usdAmountValue),
                               2
-                          )} (${formatPercentage((totalBuyAmount - Number(usdAmountValue)) / Number(usdAmountValue))})`}
+                          )} (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
@@ -632,6 +634,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     totalQuote={totalQuote}
                     paid={Number(usdAmountValue)}
                     payout={totalBuyAmount}
+                    profitPercentage={profitPercentage}
                     onClose={onModalClose}
                 />
             )}

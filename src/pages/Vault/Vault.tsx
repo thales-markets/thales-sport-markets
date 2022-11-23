@@ -206,7 +206,7 @@ const Vault: React.FC<VaultProps> = (props) => {
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { signer, sUSDContract } = networkConnector;
         if (signer && sUSDContract) {
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsAllowing(true);
 
             try {
@@ -221,7 +221,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                 if (txResult && txResult.transactionHash) {
                     toast.update(
                         id,
-                        getSuccessToastOptions(t('market.toast-messsage.approve-success', { token: PAYMENT_CURRENCY }))
+                        getSuccessToastOptions(t('market.toast-message.approve-success', { token: PAYMENT_CURRENCY }))
                     );
                     setIsAllowing(false);
                 }
@@ -236,7 +236,7 @@ const Vault: React.FC<VaultProps> = (props) => {
     const handleDeposit = async () => {
         const { signer } = networkConnector;
         if (signer) {
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsSubmitting(true);
             try {
                 const sportVaultContractWithSigner = new ethers.Contract(vaultAddress, vaultContract.abi, signer);
@@ -263,7 +263,7 @@ const Vault: React.FC<VaultProps> = (props) => {
     const handleWithdrawalRequest = async () => {
         const { signer } = networkConnector;
         if (signer) {
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsSubmitting(true);
             try {
                 const sportVaultContractWithSigner = new ethers.Contract(vaultAddress, vaultContract.abi, signer);
@@ -289,7 +289,7 @@ const Vault: React.FC<VaultProps> = (props) => {
     const closeRound = async () => {
         const { signer } = networkConnector;
         if (signer) {
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsSubmitting(true);
             try {
                 const sportVaultContractWithSigner = new ethers.Contract(vaultAddress, vaultContract.abi, signer);

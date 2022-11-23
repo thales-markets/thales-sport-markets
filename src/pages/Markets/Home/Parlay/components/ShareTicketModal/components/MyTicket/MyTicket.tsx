@@ -22,16 +22,17 @@ type MyTicketProps = {
     totalQuote: number;
     paid: number;
     payout: number;
+    profitPercentage?: number;
     displayOptions: DisplayOptionsType;
 };
 
-const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout, displayOptions }) => {
+const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout, profitPercentage, displayOptions }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
 
-    const percentage = (payout - paid) / paid;
+    const percentage = profitPercentage ? profitPercentage : (payout - paid) / paid;
     const payoutDisplayText = displayOptions.showUsdAmount ? formatCurrencyWithSign(USD_SIGN, payout) : '';
-    const percentageDisplayText = displayOptions.showPercentage ? `+ ${formatPercentage(percentage)}` : '';
+    const percentageDisplayText = displayOptions.showPercentage ? `+ ${formatPercentage(percentage, 0)}` : '';
 
     const timestamp = useMemo(() => {
         return new Date();
@@ -142,7 +143,7 @@ const PayoutLabel = styled.span`
 
 const PayoutValue = styled.span<{ isLost?: boolean }>`
     font-size: 45px;
-    line-height: 42px;
+    line-height: 45px;
     font-weight: 800;
     ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')}
 `;

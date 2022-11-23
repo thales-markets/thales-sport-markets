@@ -59,7 +59,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const claimParlay = async (parlayAddress: string) => {
-        const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
         const { parlayMarketsAMMContract, signer } = networkConnector;
         if (signer && parlayMarketsAMMContract) {
             try {
@@ -71,7 +71,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
                     setTimeout(() => {
                         refetchAfterClaim(walletAddress, networkId);
                     }, 1500);

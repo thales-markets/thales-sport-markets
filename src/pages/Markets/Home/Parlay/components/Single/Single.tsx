@@ -382,7 +382,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMContract && signer) {
             setIsAllowing(true);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 let collateralContractWithSigner: ethers.Contract | undefined;
 
@@ -402,7 +402,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
 
                 if (txResult && txResult.transactionHash) {
                     setIsAllowing(false);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.approve-success')));
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -420,7 +420,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
             const ammQuote = await fetchAmmQuote(tokenAmount || 1);
             const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(tokenAmount).toString());
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
 
             try {
                 const referralId =
@@ -448,7 +448,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
 
                 if (txResult && txResult.transactionHash) {
                     refetchBalances(walletAddress, networkId);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')));
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
                     setIsBuying(false);
                     setUsdAmount('');
                     setTokenAmount(0);
@@ -553,6 +553,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         // hide when validation tooltip exists except in case of not enough funds
         (tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
 
+    const profitPercentage = (tokenAmount - ammPosition.sides[Side.BUY].quote) / ammPosition.sides[Side.BUY].quote;
+
     const onModalClose = useCallback(() => {
         setShowShareTicketModal(false);
     }, []);
@@ -626,9 +628,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                               USD_SIGN,
                               tokenAmount - ammPosition.sides[Side.BUY].quote,
                               2
-                          )} (${formatPercentage(
-                              (tokenAmount - ammPosition.sides[Side.BUY].quote) / ammPosition.sides[Side.BUY].quote
-                          )})`}
+                          )} (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
@@ -641,6 +641,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     totalQuote={getPositionOdds(market)}
                     paid={Number(usdAmountValue)}
                     payout={tokenAmount}
+                    profitPercentage={profitPercentage}
                     onClose={onModalClose}
                 />
             )}

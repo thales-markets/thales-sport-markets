@@ -20,6 +20,7 @@ type ShareTicketModalProps = {
     totalQuote: number;
     paid: number;
     payout: number;
+    profitPercentage?: number;
     onClose: () => void;
 };
 
@@ -47,7 +48,14 @@ const customStyles = {
 
 const TWITTER_MESSAGE = '<PASTE YOUR IMAGE>';
 
-const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
+const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
+    markets,
+    totalQuote,
+    paid,
+    payout,
+    profitPercentage,
+    onClose,
+}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
 
@@ -183,6 +191,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                                 markets={markets}
                                 paid={paid}
                                 payout={payout}
+                                profitPercentage={profitPercentage}
                                 displayOptions={displayOptions}
                             />
                         </>
@@ -192,6 +201,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                             totalQuote={totalQuote}
                             paid={paid}
                             payout={payout}
+                            profitPercentage={profitPercentage}
                             displayOptions={displayOptions}
                         />
                     )}
@@ -229,8 +239,8 @@ const ClubLogo = styled.img<{ isFlag?: boolean; awayTeam?: boolean }>`
     ${(props) => (props.awayTeam ? 'right: ' : 'left: ')}-70px;
     ${(props) => (props.isFlag ? 'object-fit: cover;' : '')}
     ${(props) => (props.isFlag ? 'border-radius: 50%;' : '')}
-    height: ${(props) => (props.isFlag ? '250px' : '35px')};
-    width: ${(props) => (props.isFlag ? '250px' : '35px')};
+    height: 100%;
+    width: 100%;
     opacity: 0.15;
 `;
 

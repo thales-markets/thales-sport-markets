@@ -160,7 +160,7 @@
         "grid-view": "Rejilla",
         "list-view": "Lista",
         "skew-tooltip": "El impacto del skew es la cantidad de premium añadido a una posición basado en el riesgo actual que afecta al AMM en este mercado en específico.",
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "Transacción pendiente",
             "swap-success": "Intercambiado {{ currencyKey }} exitosamente",
             "approve-success": "Aprobado exitosamente",

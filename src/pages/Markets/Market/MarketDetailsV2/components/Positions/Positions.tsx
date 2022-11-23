@@ -163,7 +163,7 @@ const Positions: React.FC<PositionsProps> = ({
         if (signer) {
             const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
             contract.connect(signer);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 const tx = await contract.exerciseOptions({
                     gasLimit: MAX_GAS_LIMIT,
@@ -171,7 +171,7 @@ const Positions: React.FC<PositionsProps> = ({
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
