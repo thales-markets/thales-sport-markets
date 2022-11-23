@@ -11,25 +11,36 @@ import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
 import { formatShortDateWithTimeZone } from 'utils/formatters/date';
-import { formatCurrencyWithSign } from 'utils/formatters/number';
+import { formatCurrencyWithSign, formatPercentage } from 'utils/formatters/number';
 import { formatMarketOdds } from 'utils/markets';
 import { generateReferralLink } from 'utils/referral';
 import MatchInfo from '../../../MatchInfo';
+import { DisplayOptionsType } from '../DisplayOptions/DisplayOptions';
 
 type MyTicketProps = {
     markets: ParlaysMarket[];
     totalQuote: number;
     paid: number;
     payout: number;
+    displayOptions: DisplayOptionsType;
 };
 
-const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }) => {
+const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout, displayOptions }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
+
+    const payoutDisplayText = displayOptions.showUsdAmount
+        ? `${formatCurrencyWithSign(USD_SIGN, payout)}${
+              displayOptions.showPercentage ? ` (${formatPercentage(payout / paid)})` : ''
+          }`
+        : displayOptions.showPercentage
+        ? formatPercentage(payout / paid)
+        : '';
 
     const timestamp = useMemo(() => {
         return new Date();
     }, []);
+    const timestampDisplayText = displayOptions.showTimestamp ? formatShortDateWithTimeZone(timestamp) : '';
 
     const ticketLost = markets.some((market) => market.isResolved && !market.winning);
 
@@ -46,7 +57,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
                     <PayoutLabel>{t('markets.parlay.share-ticket.payout')}</PayoutLabel>
                     <Square />
                 </PayoutLabelWrapper>
-                <PayoutValue isLost={ticketLost}>{formatCurrencyWithSign(USD_SIGN, payout)}</PayoutValue>
+                {payoutDisplayText && <PayoutValue isLost={ticketLost}>{payoutDisplayText}</PayoutValue>}
             </Payout>
             <HorizontalLine />
             <MarketsContainer>
@@ -73,7 +84,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
             <HorizontalLine />
             <ReferralLabel>{t('markets.parlay.share-ticket.referral')}</ReferralLabel>
             <QRCode size={100} value={generateReferralLink(walletAddress)} />
-            <Timestamp>{formatShortDateWithTimeZone(timestamp)}</Timestamp>
+            {timestampDisplayText && <Timestamp>{timestampDisplayText}</Timestamp>}
         </Container>
     );
 };
@@ -84,7 +95,9 @@ const Container = styled(FlexDivColumnCentered)`
     align-items: center;
 `;
 
-const MarketsContainer = styled(FlexDivColumn)``;
+const MarketsContainer = styled(FlexDivColumn)`
+    width: 100%;
+`;
 
 const Header = styled.span`
     font-weight: 200;
@@ -180,7 +193,6 @@ const Timestamp = styled.span`
     text-transform: uppercase;
     color: #ffffff;
     margin-top: 10px;
-    margin-bottom: 5px;
 `;
 
 const HorizontalLine = styled.hr`

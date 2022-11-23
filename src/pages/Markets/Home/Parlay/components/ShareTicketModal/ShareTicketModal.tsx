@@ -12,6 +12,7 @@ import MySimpleTicket from './components/MySimpleTicket';
 import MyTicket from './components/MyTicket';
 import { TwitterIcon } from '../styled-components';
 import DisplayOptions from './components/DisplayOptions';
+import { DisplayOptionsType } from './components/DisplayOptions/DisplayOptions';
 
 type ShareTicketModalProps = {
     markets: ParlaysMarket[];
@@ -50,6 +51,13 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
     const [toastId, setToastId] = useState<string | number>(0);
     const [isSimpleView, setIsSimpleView] = useState(false);
 
+    const defaultDisplayOptions: DisplayOptionsType = {
+        showUsdAmount: true,
+        showPercentage: false,
+        showTimestamp: true,
+    };
+    const [displayOptions, setDisplayOptions] = useState<DisplayOptionsType>(defaultDisplayOptions);
+
     const ref = useRef<HTMLDivElement>(null);
 
     const saveImageAndOpenTwitter = useCallback(
@@ -84,10 +92,9 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
 
                     setTimeout(() => {
                         window.open(LINKS.TwitterStatus + TWITTER_MESSAGE);
+                        setIsLoading(false);
                         onClose();
                     }, 3000);
-
-                    setIsLoading(false);
                 } catch (e) {
                     console.log(e);
                     setIsLoading(false);
@@ -129,16 +136,27 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 contentElement={(props, children) => (
                     <>
                         <div {...props}>{children}</div>
-                        <DisplayOptions isSimpleView={isSimpleView} setSimpleView={setIsSimpleView} />
+                        <DisplayOptions
+                            isSimpleView={isSimpleView}
+                            setSimpleView={setIsSimpleView}
+                            setDisplayOptions={setDisplayOptions}
+                            onShare={onTwitterShareClick}
+                        />
                     </>
                 )}
             >
                 <Container ref={ref}>
                     <CloseIcon className={`icon icon--close`} onClick={onClose} />
                     {isSimpleView ? (
-                        <MySimpleTicket payout={payout} />
+                        <MySimpleTicket payout={payout} displayOptions={displayOptions} />
                     ) : (
-                        <MyTicket markets={markets} totalQuote={totalQuote} paid={paid} payout={payout} />
+                        <MyTicket
+                            markets={markets}
+                            totalQuote={totalQuote}
+                            paid={paid}
+                            payout={payout}
+                            displayOptions={displayOptions}
+                        />
                     )}
                     <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
                         <TwitterIcon disabled={isLoading} fontSize={'30px'} />
