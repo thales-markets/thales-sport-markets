@@ -48,6 +48,7 @@ import { FlexDivRow } from 'styles/common';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import { buildMarketLink } from 'utils/routes';
 import i18n from 'i18n';
+import { MAX_GAS_LIMIT } from 'constants/network';
 
 const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ position }) => {
     const language = i18n.language;
@@ -75,7 +76,9 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
             contract.connect(signer);
             const id = toast.loading(t('market.toast-messsage.transaction-pending'));
             try {
-                const tx = await contract.exerciseOptions();
+                const tx = await contract.exerciseOptions({
+                    gasLimit: MAX_GAS_LIMIT,
+                });
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {

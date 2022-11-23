@@ -5,7 +5,7 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE } from 'constants/markets';
 import { MAX_GAS_LIMIT } from 'constants/network';
-import { MAX_L2_GAS_LIMIT, Position, Side } from 'constants/options';
+import { Position, Side } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
 import useAvailablePerSideQuery from 'queries/markets/useAvailablePerSideQuery';
 import useMarketBalancesQuery from 'queries/markets/useMarketBalancesQuery';
@@ -437,7 +437,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     ammQuote,
                     referralId,
                     ethers.utils.parseEther('0.02'),
-                    { gasLimit: MAX_L2_GAS_LIMIT }
+                    { gasLimit: MAX_GAS_LIMIT }
                 );
 
                 const txResult = await tx.wait();
