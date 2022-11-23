@@ -59,6 +59,8 @@ const ParlayLeaderboard: React.FC = () => {
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['totalQuote']>) => (
                             <TableText>{formatMarketOdds(OddsType.Decimal, cellProps.cell.value)}</TableText>
                         ),
+                        sortable: true,
+                        sortType: quoteSort(),
                     },
                     {
                         accessor: 'sUSDAfterFees',
@@ -66,6 +68,7 @@ const ParlayLeaderboard: React.FC = () => {
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['sUSDAfterFees']>) => (
                             <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>
                         ),
+                        sortable: true,
                     },
                     {
                         accessor: 'totalAmount',
@@ -73,6 +76,7 @@ const ParlayLeaderboard: React.FC = () => {
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['totalAmount']>) => (
                             <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>
                         ),
+                        sortable: true,
                     },
                 ]}
             ></Table>
@@ -103,5 +107,9 @@ const TableText = styled.p`
         font-size: 10px;
     }
 `;
+
+const quoteSort = () => (rowA: any, rowB: any) => {
+    return rowA.original.totalQuote - rowB.original.totalQuote;
+};
 
 export default ParlayLeaderboard;
