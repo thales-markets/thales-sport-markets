@@ -46,6 +46,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) 
                     alt="Home team logo"
                     src={homeLogoSrc}
                     isFlag={market.tags[0] == 9018}
+                    isHighlighted={market.position !== Position.AWAY}
                     onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                 />
                 <ClubLogo
@@ -53,6 +54,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) 
                     alt="Away team logo"
                     src={awayLogoSrc}
                     isFlag={market.tags[0] == 9018}
+                    isHighlighted={market.position !== Position.HOME}
                     onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                 />
             </MatchLogo>
@@ -107,7 +109,7 @@ const MatchLogo = styled.div<{ isFlag?: boolean }>`
     ${(props) => (props.isFlag ? 'padding-left: 4px;' : '')}
 `;
 
-const ClubLogo = styled.img<{ isFlag?: boolean; awayTeam?: boolean }>`
+const ClubLogo = styled.img<{ isFlag?: boolean; awayTeam?: boolean; isHighlighted?: boolean }>`
     position: absolute;
     ${(props) => (props.isFlag ? 'object-fit: cover;' : '')}
     ${(props) => (props.isFlag ? 'border-radius: 50%;' : '')}
@@ -115,6 +117,7 @@ const ClubLogo = styled.img<{ isFlag?: boolean; awayTeam?: boolean }>`
     width: ${(props) => (props.isFlag ? '25px' : '35px')};
     ${(props) => (props.awayTeam ? `margin-left: ${props.isFlag ? '23' : '20'}px;` : '')}
     z-index: ${(props) => (props.awayTeam ? '1' : '2')};
+    opacity: ${(props) => (props.isHighlighted ? '1' : '0.4')};
 `;
 
 const MatchLabel = styled.div`
