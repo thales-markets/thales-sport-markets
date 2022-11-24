@@ -40,8 +40,8 @@ export const ClubLogo = styled.img<{
     ${(props) => (props?.isFlag ? 'border-radius: 50%;' : '')}
     height: 45px;
     width: 45px;
-    opacity: ${(_props) => (_props?.losingTeam == true ? `0.4` : '1')};
-    z-index: ${(_props) => (_props?.losingTeam == true ? '1' : '2')};
+    opacity: ${(_props) => (_props?.losingTeam ? `0.4` : '1')};
+    z-index: ${(_props) => (_props?.losingTeam ? '1' : '2')};
     ${(_props) => (_props?.awayTeam ? 'margin-left: -15px;' : '')}
     @media (max-width: 768px) {
         height: ${(_props) => (_props?.customMobileSize ? _props.customMobileSize : '30px')};
