@@ -139,7 +139,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                 position: convertPositionNameToPosition(position?.side ? position?.side : ''),
             } as ParlaysMarket,
         ],
-        totalQuote: position.amount / (0.97 * sumOfTransactionPaidAmount),
+        totalQuote: (0.97 * sumOfTransactionPaidAmount) / position.amount,
         paid: sumOfTransactionPaidAmount,
         payout: position.amount,
     };
