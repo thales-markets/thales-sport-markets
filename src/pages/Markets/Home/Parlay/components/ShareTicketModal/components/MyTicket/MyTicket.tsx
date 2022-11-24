@@ -48,23 +48,25 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout, 
                 <BoldContent>{' overtimemarkets.xyz'}</BoldContent>
             </Header>
             <OvertimeLogo />
-            <PayoutWrapper>
-                <PayoutRow>
-                    <Square />
-                    <PayoutLabel>{t('markets.parlay.share-ticket.payout')}</PayoutLabel>
-                    <Square />
-                </PayoutRow>
-                {payoutDisplayText && (
+            {(payoutDisplayText || percentageDisplayText) && (
+                <PayoutWrapper>
                     <PayoutRow>
-                        <PayoutValue isLost={isTicketLost}>{payoutDisplayText}</PayoutValue>
+                        <Square />
+                        <PayoutLabel>{t('markets.parlay.share-ticket.payout')}</PayoutLabel>
+                        <Square />
                     </PayoutRow>
-                )}
-                {percentageDisplayText && (
-                    <PayoutRow>
-                        <PayoutValue isLost={isTicketLost}>{percentageDisplayText}</PayoutValue>
-                    </PayoutRow>
-                )}
-            </PayoutWrapper>
+                    {payoutDisplayText && (
+                        <PayoutRow>
+                            <PayoutValue isLost={isTicketLost}>{payoutDisplayText}</PayoutValue>
+                        </PayoutRow>
+                    )}
+                    {percentageDisplayText && (
+                        <PayoutRow>
+                            <PayoutValue isLost={isTicketLost}>{percentageDisplayText}</PayoutValue>
+                        </PayoutRow>
+                    )}
+                </PayoutWrapper>
+            )}
             <HorizontalLine />
             <MarketsContainer>
                 {markets.map((market, index) => {
@@ -121,7 +123,7 @@ const BoldContent = styled.span`
 `;
 
 const OvertimeLogo = styled(OvertimeLogoIcon)`
-    margin-top: 15px;
+    margin: 15px 0;
     fill: ${(props) => props.theme.textColor.primary};
     height: 35px;
 `;
@@ -130,7 +132,7 @@ const PayoutWrapper = styled.div`
     text-align: center;
     text-transform: uppercase;
     color: #5fc694;
-    margin: 15px 0;
+    margin-bottom: 15px;
 `;
 
 const PayoutRow = styled(FlexDivCentered)``;
