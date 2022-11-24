@@ -11,13 +11,14 @@ import Table from 'components/Table';
 import useZebroQuery, { User } from 'queries/favoriteTeam/useZebroQuery';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getNetworkId } from 'redux/modules/wallet';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { getIsMobile } from 'redux/modules/app';
 import { TablePagination } from '@material-ui/core';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { USD_SIGN } from 'constants/currency';
 import { CellProps } from 'react-table';
 import Tooltip from 'components/Tooltip';
+import { ReactComponent as GroupRectangle } from 'assets/images/favorite-team/group-collapsed-rectangle.svg';
 
 type LeaderboardProps = {
     favoriteTeamNumber: number | undefined;
@@ -26,10 +27,13 @@ type LeaderboardProps = {
 const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
     const { t } = useTranslation();
     const favoriteTeam = favoriteTeamNumber ? countries[favoriteTeamNumber - 1] : null;
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isMobile = useSelector(getIsMobile);
+
     const [searchValue, setSearchValue] = useState('');
     console.log(favoriteTeam);
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+
     const zebrosQuery = useZebroQuery(networkId);
 
     const [page, setPage] = useState(0);
@@ -47,6 +51,47 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
         const leaderboard = zebrosQuery.isSuccess ? zebrosQuery.data.leaderboard : [];
         return leaderboard.filter((user) => user.address.toLowerCase().includes(searchValue.toLowerCase()));
     }, [zebrosQuery.isSuccess, zebrosQuery.data?.leaderboard, searchValue]);
+
+    const stickyRow = useMemo(() => {
+        const leaderboard = zebrosQuery.isSuccess ? zebrosQuery.data.leaderboard : [];
+        const user = leaderboard.filter((user) => user.address.toLowerCase().includes(walletAddress.toLowerCase()))[0];
+        if (user) {
+            return (
+                <StickyRowWrapper>
+                    <GroupRectangleHeight />
+                    <FlexWrapper>
+                        <div>
+                            <TableText style={{ marginRight: 6 }}>{user.rank}</TableText>
+                            <Tooltip
+                                overlay={<OverlayContainer>{extractCountryName(user.url)}</OverlayContainer>}
+                                component={<ZebroNft src={user.url} />}
+                                iconFontSize={23}
+                                marginLeft={2}
+                                top={0}
+                            />
+                        </div>
+                        <div>
+                            <TableText>{truncateAddress(user.address, isMobile ? 3 : 5, isMobile ? 3 : 5)}</TableText>
+                        </div>
+                        <div>
+                            <TableText>{formatCurrencyWithSign(USD_SIGN, user.volume, 2)}</TableText>
+                        </div>
+                        <div>
+                            <TableText>{formatCurrencyWithSign(USD_SIGN, user.baseVolume, 2)}</TableText>
+                        </div>
+                        <div>
+                            <TableText>{formatCurrencyWithSign(USD_SIGN, user.bonusVolume, 2)}</TableText>
+                        </div>
+                        <div>
+                            <TableText>{`${Number(user.rewards?.op).toFixed(2)} OP + ${Number(
+                                user.rewards?.thales
+                            ).toFixed(2)} THALES`}</TableText>
+                        </div>
+                    </FlexWrapper>
+                </StickyRowWrapper>
+            );
+        }
+    }, [zebrosQuery.isSuccess, zebrosQuery.data?.leaderboard, walletAddress, isMobile]);
 
     return (
         <>
@@ -123,7 +168,12 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
                                 overlay={
                                     <OverlayContainer>{extractCountryName(cellProps.cell.value)}</OverlayContainer>
                                 }
-                                component={<ZebroNft src={cellProps.cell.value} />}
+                                component={
+                                    <>
+                                        <TableText style={{ marginRight: 6 }}>{cellProps.row.original.rank}</TableText>
+                                        <ZebroNft src={cellProps.cell.value} />
+                                    </>
+                                }
                                 iconFontSize={23}
                                 marginLeft={2}
                                 top={0}
@@ -183,6 +233,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
                         },
                     ],
                 }}
+                stickyRow={stickyRow}
             />
             <PaginationContainer>
                 <PaginationWrapper
@@ -198,6 +249,49 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
         </>
     );
 };
+
+const StickyRowWrapper = styled.div`
+    padding: 10px 0;
+`;
+
+const TableText = styled.p`
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 150%;
+    text-align: center;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: #eeeee4;
+    @media (max-width: 600px) {
+        font-size: 10px;
+    }
+`;
+
+const GroupRectangleHeight = styled(GroupRectangle)`
+    max-height: 64px;
+`;
+
+const FlexWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 25px;
+    max-height: 64px;
+    padding-right: 20px;
+    width: 100%;
+    & > div {
+        display: flex;
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+    }
+    & > div:first-child {
+        padding-left: 18px;
+    }
+`;
 
 const ListItemContainer = styled.div`
     display: flex;
@@ -223,21 +317,6 @@ const ZebroNft = styled.img`
     height: 40px;
     object-fit: contain;
     border-radius: 20px;
-`;
-
-const TableText = styled.p`
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 13px;
-    line-height: 150%;
-    text-align: center;
-    letter-spacing: 0.025em;
-    text-transform: uppercase;
-    color: #eeeee4;
-    @media (max-width: 600px) {
-        font-size: 10px;
-    }
 `;
 
 const SearchAddress = styled.input`
