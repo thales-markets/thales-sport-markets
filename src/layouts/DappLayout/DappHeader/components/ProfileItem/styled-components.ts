@@ -9,7 +9,7 @@ export const ProfileContainer = styled(FlexDivRow)`
 export const ProfileLabel = styled.span`
     font-weight: 600;
     font-size: 12px;
-    color: ${MAIN_COLORS.TEXT.DARK_GRAY};
+    color: ${MAIN_COLORS.TEXT.WHITE};
     text-transform: uppercase;
     margin-right: 15px;
 `;

@@ -130,7 +130,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, accountPositions
                 )}
                 <SPAAnchor href={buildMarketLink(market.address, language)}>
                     <LinkIcon
-                        className={`icon-exotic icon-exotic--link`}
+                        className={`icon icon--arrow-external`}
                         data-matomo-category="market-list-card"
                         data-matomo-action="click-market-details"
                     />
