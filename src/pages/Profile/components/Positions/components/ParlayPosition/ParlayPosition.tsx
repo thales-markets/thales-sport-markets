@@ -1,6 +1,8 @@
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
 import { MAX_GAS_LIMIT } from 'constants/network';
+import { Position } from 'constants/options';
+import ShareTicketModal from 'pages/Markets/Home/Parlay/components/ShareTicketModal';
 import { ClaimButton } from 'pages/Markets/Market/MarketDetailsV2/components/Positions/styled-components';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,11 +13,16 @@ import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivRow } from 'styles/common';
-import { ParlayMarket } from 'types/markets';
+import { ParlayMarket, ParlaysMarket } from 'types/markets';
 import { getEtherscanTxLink } from 'utils/etherscan';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
-import { formatMarketOdds, isParlayClaimable } from 'utils/markets';
+import {
+    convertPositionNameToPosition,
+    convertPositionNameToPositionType,
+    formatMarketOdds,
+    isParlayClaimable,
+} from 'utils/markets';
 import networkConnector from 'utils/networkConnector';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import ParlayItem from './components/ParlayItem';
@@ -51,6 +58,8 @@ type ParlayPosition = {
 
 const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
     const [showDetails, setShowDetails] = useState<boolean>(false);
+    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
+
     const selectedOddsType = useSelector(getOddsType);
 
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -72,6 +81,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
 
                 if (txResult && txResult.transactionHash) {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
+                    setShowShareTicketModal(true);
                     setTimeout(() => {
                         refetchAfterClaim(walletAddress, networkId);
                     }, 1500);
@@ -79,12 +89,40 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 console.log(e);
+                setShowShareTicketModal(true);
             }
         }
     };
 
     const { t } = useTranslation();
     const isClaimable = isParlayClaimable(parlayMarket);
+
+    const shareParlayData = {
+        markets: parlayMarket.sportMarketsFromContract.map((address, index) => {
+            const sportMarket = parlayMarket.sportMarkets.find(
+                (market) => market.address.toLowerCase() == address.toLowerCase()
+            );
+            const position = parlayMarket.positions.find((position) => position.market.address == sportMarket?.address);
+
+            return {
+                ...sportMarket,
+                ...(convertPositionNameToPositionType(position?.side ? position?.side : '') == Position.HOME && {
+                    homeOdds: parlayMarket.marketQuotes[index],
+                }),
+                ...(convertPositionNameToPositionType(position?.side ? position?.side : '') == Position.AWAY && {
+                    awayOdds: parlayMarket.marketQuotes[index],
+                }),
+                ...(convertPositionNameToPositionType(position?.side ? position?.side : '') == Position.DRAW && {
+                    drawOdds: parlayMarket.marketQuotes[index],
+                }),
+                position: convertPositionNameToPosition(position?.side ? position?.side : ''),
+                winning: isParlayClaimable(parlayMarket),
+            } as ParlaysMarket;
+        }),
+        totalQuote: parlayMarket.totalQuote,
+        paid: parlayMarket.sUSDPaid,
+        payout: parlayMarket.totalAmount,
+    };
 
     return (
         <Container>
@@ -200,6 +238,15 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
                     </ProfitContainer>
                 </CollapseFooterContainer>
             </CollapsableContainer>
+            {showShareTicketModal && (
+                <ShareTicketModal
+                    markets={shareParlayData.markets}
+                    totalQuote={shareParlayData.totalQuote}
+                    paid={Number(shareParlayData.paid)}
+                    payout={shareParlayData.payout}
+                    onClose={() => setShowShareTicketModal(false)}
+                />
+            )}
         </Container>
     );
 };
