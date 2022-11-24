@@ -83,7 +83,7 @@ const DappHeader: React.FC = () => {
                             <MenuIcon onClick={() => setNavMenuVisibility(true)} />
                             <NavMenu
                                 visibility={navMenuVisibility}
-                                hideVisibilityFunction={() => setNavMenuVisibility(false)}
+                                hideVisibilityFunction={(value: boolean | null) => setNavMenuVisibility(value)}
                             />
                         </MenuIconContainer>
                         <MobileProfileContainer>
