@@ -31,7 +31,7 @@ const DappHeader: React.FC = () => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
-    const [navMenuVisibility, setNavMenuVisibility] = useState<boolean>(false);
+    const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
 
     useInterval(async () => {
         if (!stopPulsing) {
@@ -68,7 +68,7 @@ const DappHeader: React.FC = () => {
                         />
                         <NavMenu
                             visibility={navMenuVisibility}
-                            setNavMenuVisibility={(value: boolean) => setNavMenuVisibility(value)}
+                            setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
                         />
                     </RightContainer>
                 </Container>
@@ -83,7 +83,7 @@ const DappHeader: React.FC = () => {
                             <MenuIcon onClick={() => setNavMenuVisibility(true)} />
                             <NavMenu
                                 visibility={navMenuVisibility}
-                                setNavMenuVisibility={(value: boolean) => setNavMenuVisibility(value)}
+                                setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
                             />
                         </MenuIconContainer>
                         <MobileProfileContainer>

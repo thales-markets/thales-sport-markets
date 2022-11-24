@@ -27,8 +27,8 @@ import {
 } from './styled-components';
 
 type NavMenuProps = {
-    visibility: boolean;
-    setNavMenuVisibility: (value: boolean) => void;
+    visibility?: boolean | null;
+    setNavMenuVisibility: (value: boolean | null) => void;
 };
 
 const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) => {
@@ -39,7 +39,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     return (
-        <OutsideClickHandler onOutsideClick={() => visibility && setNavMenuVisibility(false)}>
+        <OutsideClickHandler onOutsideClick={() => visibility == true && setNavMenuVisibility(false)}>
             <Wrapper show={visibility}>
                 <HeaderContainer>
                     <Network>
@@ -55,7 +55,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                             <SPAAnchor
                                 key={index}
                                 href={buildHref(item.route)}
-                                onClick={() => setNavMenuVisibility(false)}
+                                onClick={() => setNavMenuVisibility(null)}
                             >
                                 <ItemContainer key={index} active={location.pathname === item.route}>
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
