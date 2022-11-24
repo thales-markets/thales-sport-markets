@@ -327,6 +327,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')));
                     setIsBuying(false);
                     setUsdAmount('');
+                    dispatch(removeAll());
 
                     trackEvent({
                         category: 'parlay',
