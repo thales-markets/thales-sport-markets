@@ -39,23 +39,23 @@ const animationClose = css`
     animation: ${WrapperAnimationClose} 0.3s linear;
 `;
 
-export const Wrapper = styled.div<{ show?: boolean | null }>`
+export const Wrapper = styled.div<{ show: boolean }>`
     display: flex;
     flex-direction: column;
     width: 255px;
     height: 100%;
     position: fixed;
     top: 0;
-    ${(_props) => (_props?.show == true ? 'right: 0;' : '')}
-    ${(_props) => (_props?.show == false || _props?.show == null ? 'right: -255px;' : '')}
-    ${(_props) => _props?.show === true && animationOpen};
-    ${({ show }) => show === false && animationClose};
+    ${(_props) => (_props.show ? 'right: 0;' : '')}
+    ${(_props) => (_props.show ? '' : 'right: -255px;')}
+    ${(_props) => _props.show && animationOpen};
+    ${({ show }) => !show && animationClose};
     background-color: ${(props) => props.theme.nav.background};
     justify-content: space-between;
     z-index: 3;
-    ${(_props) => (_props?.show == true ? `-webkit-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
-    ${(_props) => (_props?.show == true ? `-moz-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
-    ${(_props) => (_props?.show == true ? `${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
+    ${(_props) => (_props.show ? `-webkit-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
+    ${(_props) => (_props.show ? `-moz-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
+    ${(_props) => (_props.show ? `${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
     padding: 20px 10px;
 `;
 
