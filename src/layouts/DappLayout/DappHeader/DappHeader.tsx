@@ -279,7 +279,7 @@ const SearchIcon = styled.i`
     margin-bottom: 3px;
     position: absolute;
     top: -5px;
-    left: -4px;
+    left: -5px;
     &:before {
         font-family: ExoticIcons !important;
         content: '\\0042';

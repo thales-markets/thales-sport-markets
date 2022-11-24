@@ -45,7 +45,6 @@ const Search: React.FC<SearchProps> = ({ text, customPlaceholder, customStyle, h
 
 const Wrapper = styled(FlexDivStart)<{ marginBottom?: number; isMobile: boolean }>`
     position: relative;
-    width: fit-content;
     margin-bottom: ${(props) => props.marginBottom || 0}px;
     width: ${(props) => (props.isMobile ? '100%' : 'fit-content')};
     height: ${(props) => (props.isMobile ? '100%' : '')};
@@ -56,7 +55,7 @@ const Input = styled.input<{ width?: number; isMobile: boolean }>`
     border-radius: 5px;
     border: 1px solid ${(props) => props.theme.borderColor.quaternary};
     color: ${(props) => props.theme.textColor.secondary};
-    width: ${(props) => (props.isMobile ? '100%' : props.width || 250 + 'px')};
+    width: ${(props) => (props.isMobile ? '100%' : props.width + 'px' || 250 + 'px')};
     height: ${(props) => (props.isMobile ? '100%' : '24px')};
     padding-left: 32px;
     padding-right: 24px;
@@ -75,7 +74,7 @@ const Input = styled.input<{ width?: number; isMobile: boolean }>`
 
 const IconWrapper = styled.div<{ isMobile: boolean }>`
     border-radius: 30px;
-    background: ${(props) => props.theme.textColor.quaternary};
+    background: ${(props) => (props.isMobile ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
     position: absolute;
     width: ${(props) => (props.isMobile ? '25px' : '15px')};
     height: ${(props) => (props.isMobile ? '25px' : '15px')};
@@ -86,8 +85,8 @@ const IconWrapper = styled.div<{ isMobile: boolean }>`
 const SearchIcon = styled.i<{ isMobile: boolean }>`
     font-size: ${(props) => (props.isMobile ? '32px' : '20px')};
     position: absolute;
-    top: ${(props) => (props.isMobile ? '-6px' : '4px')};
-    left: ${(props) => (props.isMobile ? '-4px' : '3px')};
+    top: ${(props) => (props.isMobile ? '-6px' : '-4px')};
+    left: ${(props) => (props.isMobile ? '-4px' : '-3px')};
     &:before {
         font-family: ExoticIcons !important;
         content: '\\0042';
@@ -96,7 +95,7 @@ const SearchIcon = styled.i<{ isMobile: boolean }>`
 `;
 
 const ClearButton = styled.button<{ isMobile: boolean }>`
-    font-size: ${(props) => (props.isMobile ? '20px' : '20px')};
+    font-size: ${(props) => (props.isMobile ? '20px' : '12px')};
     position: absolute;
     top: ${(props) => (props.isMobile ? '2px' : '')};
     right: 5px;
