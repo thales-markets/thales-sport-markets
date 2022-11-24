@@ -49,7 +49,6 @@ export const MobileModal: React.FC<MobileModalProps> = ({ onClose, children, sho
 
 const Container = styled.div`
     z-index: 1001;
-
     background: ${(props) => props.theme.background.secondary};
     padding-top: 15px;
     overflow: auto;
@@ -57,6 +56,7 @@ const Container = styled.div`
     overflow-y: auto;
     max-height: 90vh;
     height: fit-content;
+    margin-top: 20px;
 `;
 
 const Header = styled(FlexDivRow)`

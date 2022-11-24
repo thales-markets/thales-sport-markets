@@ -18,6 +18,8 @@ export const ParylayMobileModal: React.FC<ParylayMobileModalProps> = ({ onClose 
     );
 };
 
-const Container = styled(FlexDivColumnCentered)``;
+const Container = styled(FlexDivColumnCentered)`
+    margin-top: 20px;
+`;
 
 export default ParylayMobileModal;

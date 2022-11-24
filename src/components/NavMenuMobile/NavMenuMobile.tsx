@@ -1,4 +1,5 @@
 import LanguageSelector from 'components/LanguageSelector';
+import Logo from 'components/Logo';
 import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
 import { NAV_MENU } from 'constants/ui';
@@ -7,9 +8,9 @@ import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsMobile } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
+import { FlexDivCentered } from 'styles/common';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
 import {
@@ -18,36 +19,41 @@ import {
     HeaderContainer,
     ItemContainer,
     ItemsContainer,
+    LogoContainer,
     NavIcon,
     NavLabel,
     Network,
     NetworkIcon,
     NetworkName,
     Wrapper,
+    WalletWrapper,
 } from './styled-components';
 
-type NavMenuProps = {
-    visibility: boolean;
+type NavMenuMobileProps = {
+    visibility?: boolean | null;
     setNavMenuVisibility: (value: boolean) => void;
 };
 
-const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) => {
+const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVisibility }) => {
     const { t } = useTranslation();
     const location = useLocation();
 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     return (
         <OutsideClickHandler onOutsideClick={() => visibility && setNavMenuVisibility(false)}>
             <Wrapper show={visibility}>
                 <HeaderContainer>
-                    <Network>
-                        <NetworkIcon className={getNetworkIconClassNameByNetworkId(networkId)} />
-                        <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
-                    </Network>
-                    <CloseIcon onClick={() => setNavMenuVisibility(false)} />
-                    <LanguageSelector />
+                    <FlexDivCentered>
+                        <Network>
+                            <NetworkIcon className={getNetworkIconClassNameByNetworkId(networkId)} />
+                            <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
+                        </Network>
+                        <LanguageSelector />
+                    </FlexDivCentered>
+                    <WalletWrapper>
+                        <WalletInfo />
+                    </WalletWrapper>
                 </HeaderContainer>
                 <ItemsContainer>
                     {NAV_MENU.map((item, index) => {
@@ -65,10 +71,15 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                         );
                     })}
                 </ItemsContainer>
-                <FooterContainer>{isMobile && <WalletInfo />}</FooterContainer>
+                <FooterContainer>
+                    <LogoContainer>
+                        <Logo />
+                    </LogoContainer>
+                    <CloseIcon onClick={() => setNavMenuVisibility(false)} />
+                </FooterContainer>
             </Wrapper>
         </OutsideClickHandler>
     );
 };
 
-export default NavMenu;
+export default NavMenuMobile;

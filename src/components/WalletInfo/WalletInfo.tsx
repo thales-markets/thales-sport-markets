@@ -5,7 +5,7 @@ import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 import { useTranslation } from 'react-i18next';
-import { getIsAppReady } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { PAYMENT_CURRENCY } from 'constants/currency';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
@@ -19,6 +19,7 @@ const WalletInfo: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -31,7 +32,7 @@ const WalletInfo: React.FC = () => {
     }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
 
     return (
-        <Container hasVoucher={!!overtimeVoucher}>
+        <Container hasVoucher={!!overtimeVoucher} isMobile={isMobile}>
             <FlexDivColumn>
                 <ConnectButton />
                 {overtimeVoucher && (
@@ -65,8 +66,8 @@ const WalletInfo: React.FC = () => {
     );
 };
 
-const Container = styled(FlexDivCentered)<{ hasVoucher: boolean }>`
-    border: 1px solid ${(props) => props.theme.borderColor.tertiary};
+const Container = styled(FlexDivCentered)<{ hasVoucher: boolean; isMobile?: boolean }>`
+    border: ${(props) => (props.isMobile ? '1px solid ' + props.theme.borderColor.primary : ' ')};
     color: ${(props) => props.theme.textColor.primary};
     background: ${(props) => props.theme.background.secondary};
     border-radius: 5px;

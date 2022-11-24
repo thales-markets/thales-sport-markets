@@ -1,25 +1,49 @@
-import { useLocation } from 'react-router-dom';
+import burger from 'assets/images/burger.svg';
 import Logo from 'components/Logo';
+import MintVoucher from 'components/MintVoucher';
+import NavMenu from 'components/NavMenu';
+import NavMenuMobile from 'components/NavMenuMobile';
+import Search from 'components/Search';
+import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
+import ROUTES from 'constants/routes';
+import useInterval from 'hooks/useInterval';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { getIsMobile } from 'redux/modules/app';
+import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
+import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
+import { getIsWalletConnected } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
 import { FlexDiv, FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import { getIsWalletConnected } from 'redux/modules/wallet';
 import { buildHref } from 'utils/routes';
-import SPAAnchor from 'components/SPAAnchor';
-import ROUTES from 'constants/routes';
-import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
-import useInterval from 'hooks/useInterval';
-import burger from 'assets/images/burger.svg';
-import NavMenu from 'components/NavMenu';
 import ProfileItem from './components/ProfileItem';
-import { getIsMobile } from 'redux/modules/app';
-import MintVoucher from 'components/MintVoucher';
 
 const PULSING_COUNT = 10;
+
+const customModalStyles = {
+    content: {
+        top: '125px',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        padding: '0px',
+        background: 'transparent',
+        border: 'none',
+        width: '100%',
+        height: '40px',
+    },
+    overlay: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backdropFilter: 'blur(10px)',
+    },
+};
 
 const DappHeader: React.FC = () => {
     const { t } = useTranslation();
@@ -31,7 +55,9 @@ const DappHeader: React.FC = () => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
-    const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
+    const [navMenuVisibility, setNavMenuVisibility] = useState<boolean>(false);
+    const [showSearcHModal, setShowSearchModal] = useState<boolean>(false);
+    const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
 
     useInterval(async () => {
         if (!stopPulsing) {
@@ -68,7 +94,7 @@ const DappHeader: React.FC = () => {
                         />
                         <NavMenu
                             visibility={navMenuVisibility}
-                            setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
+                            setNavMenuVisibility={(value: boolean) => setNavMenuVisibility(value)}
                         />
                     </RightContainer>
                 </Container>
@@ -79,16 +105,35 @@ const DappHeader: React.FC = () => {
                         <LogoContainer>
                             <Logo />
                         </LogoContainer>
+                        <SearchIconContainer>
+                            <IconWrapper>
+                                <SearchIcon onClick={() => setShowSearchModal(true)} />
+                            </IconWrapper>
+                            <ReactModal
+                                isOpen={showSearcHModal}
+                                onRequestClose={() => {
+                                    setShowSearchModal(false);
+                                }}
+                                shouldCloseOnOverlayClick={true}
+                                style={customModalStyles}
+                            >
+                                <SearchContainer>
+                                    <Search
+                                        text={marketSearch}
+                                        handleChange={(value) => {
+                                            dispatch(setMarketSearch(value));
+                                        }}
+                                    />
+                                </SearchContainer>
+                            </ReactModal>
+                        </SearchIconContainer>
                         <MenuIconContainer>
                             <MenuIcon onClick={() => setNavMenuVisibility(true)} />
-                            <NavMenu
+                            <NavMenuMobile
                                 visibility={navMenuVisibility}
-                                setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
+                                setNavMenuVisibility={(value: boolean) => setNavMenuVisibility(value)}
                             />
                         </MenuIconContainer>
-                        <MobileProfileContainer>
-                            <ProfileItem avatarSize={30} labelHidden={true} />
-                        </MobileProfileContainer>
                     </WrapperMobile>
                     {location.pathname !== ROUTES.MintWorldCupNFT && (
                         <div style={{ width: '100%' }}>
@@ -151,21 +196,11 @@ const RightContainer = styled(FlexDivRowCentered)`
     }
 `;
 
-// const StyledSportTriviaIcon = styled.img<{ stopPulsing: boolean }>`
-//     margin: 0 20px;
-//     cursor: pointer;
-//     height: 36px;
-//     margin-bottom: -4px;
-//     @media (max-width: 767px) {
-//         margin-bottom: 5px;
-//         margin-right: 0px;
-//     }
-//     animation: ${(props) => (props.stopPulsing ? 'none' : 'pulsing 1s ease-in')};
-//     animation-iteration-count: 10;
-// `;
-
 const MenuIcon = styled.img.attrs({ src: burger })`
     cursor: pointer;
+    height: 25px;
+    width: 35px;
+    filter: invert(39%) sepia(9%) saturate(1318%) hue-rotate(199deg) brightness(71%) contrast(88%);
 `;
 
 const WrapperMobile = styled(FlexDivRow)`
@@ -174,16 +209,15 @@ const WrapperMobile = styled(FlexDivRow)`
     justify-content: center;
 `;
 
-const MenuIconContainer = styled.div`
+const SearchIconContainer = styled.div`
     width: 50%;
     display: flex;
     justify-content: end;
     position: absolute;
     right: 12px;
-    margin-top: 10px;
 `;
 
-const MobileProfileContainer = styled.div`
+const MenuIconContainer = styled.div`
     width: 50%;
     display: flex;
     justify-content: start;
@@ -228,6 +262,35 @@ const FifaIcon = styled.i`
     margin-right: 10px;
     font-weight: 400;
     text-transform: none;
+`;
+
+const IconWrapper = styled.div`
+    border-radius: 30px;
+    background: ${(props) => props.theme.background.tertiary};
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    top: -6px;
+`;
+
+const SearchIcon = styled.i`
+    font-size: 32px;
+    cursor: pointer;
+    margin-bottom: 3px;
+    position: absolute;
+    top: -5px;
+    left: -4px;
+    &:before {
+        font-family: ExoticIcons !important;
+        content: '\\0042';
+        color: ${(props) => props.theme.background.primary};
+    }
+`;
+
+const SearchContainer = styled.div`
+    background: ${(props) => props.theme.background.secondary};
+    height: 100%;
+    text-align: center;
 `;
 
 export default DappHeader;

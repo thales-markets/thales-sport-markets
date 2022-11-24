@@ -1,5 +1,8 @@
 import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivStart } from 'styles/common';
 
@@ -15,8 +18,10 @@ type SearchProps = {
 const Search: React.FC<SearchProps> = ({ text, customPlaceholder, customStyle, handleChange, width, marginBottom }) => {
     const { t } = useTranslation();
 
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
+
     return (
-        <Wrapper marginBottom={marginBottom}>
+        <Wrapper marginBottom={marginBottom} isMobile={isMobile}>
             <Input
                 type="text"
                 placeholder={customPlaceholder ? customPlaceholder : t('market.search-placeholder')}
@@ -24,57 +29,65 @@ const Search: React.FC<SearchProps> = ({ text, customPlaceholder, customStyle, h
                 style={customStyle}
                 onChange={(event) => handleChange(event.target.value)}
                 width={width}
+                isMobile={isMobile}
             />
-            <IconWrapper>
-                <SearchIcon />
+            <IconWrapper isMobile={isMobile}>
+                <SearchIcon isMobile={isMobile} />
             </IconWrapper>
-            {text !== '' && <ClearButton onClick={() => handleChange('')}>X</ClearButton>}
+            {text !== '' && (
+                <ClearButton isMobile={isMobile} onClick={() => handleChange('')}>
+                    X
+                </ClearButton>
+            )}
         </Wrapper>
     );
 };
 
-const Wrapper = styled(FlexDivStart)<{ marginBottom?: number }>`
+const Wrapper = styled(FlexDivStart)<{ marginBottom?: number; isMobile: boolean }>`
     position: relative;
     width: fit-content;
     margin-bottom: ${(props) => props.marginBottom || 0}px;
+    width: ${(props) => (props.isMobile ? '100%' : 'fit-content')};
+    height: ${(props) => (props.isMobile ? '100%' : '')};
 `;
 
-const Input = styled.input<{ width?: number }>`
+const Input = styled.input<{ width?: number; isMobile: boolean }>`
     background: ${(props) => props.theme.background.primary};
     border-radius: 5px;
     border: 1px solid ${(props) => props.theme.borderColor.quaternary};
     color: ${(props) => props.theme.textColor.secondary};
-    width: ${(props) => props.width || 250}px;
-    height: 24px;
+    width: ${(props) => (props.isMobile ? '100%' : props.width || 250 + 'px')};
+    height: ${(props) => (props.isMobile ? '100%' : '24px')};
     padding-left: 32px;
     padding-right: 24px;
     font-weight: 500;
-    font-size: 12px;
-    line-height: 12px;
+    font-size: ${(props) => (props.isMobile ? '20px' : '12px')};
+    line-height: ${(props) => (props.isMobile ? '23px' : '12px')};
+    text-align: ${(props) => (props.isMobile ? 'center' : '')};
     outline: none;
     &::placeholder {
-        color: ${(props) => props.theme.textColor.secondary};
+        color: ${(props) => (props.isMobile ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
     }
     &:focus {
         border: 1px solid #3fd1ff !important;
     }
 `;
 
-const IconWrapper = styled.div`
+const IconWrapper = styled.div<{ isMobile: boolean }>`
     border-radius: 30px;
-    background: ${(props) => props.theme.textColor.secondary};
+    background: ${(props) => props.theme.textColor.quaternary};
     position: absolute;
-    width: 15px;
-    height: 15px;
-    top: 5px;
+    width: ${(props) => (props.isMobile ? '25px' : '15px')};
+    height: ${(props) => (props.isMobile ? '25px' : '15px')};
+    top: ${(props) => (props.isMobile ? '8px' : '5px')};
     left: 6px;
 `;
 
-const SearchIcon = styled.i`
-    font-size: 20px;
+const SearchIcon = styled.i<{ isMobile: boolean }>`
+    font-size: ${(props) => (props.isMobile ? '32px' : '20px')};
     position: absolute;
-    top: -4px;
-    left: -3px;
+    top: ${(props) => (props.isMobile ? '-6px' : '4px')};
+    left: ${(props) => (props.isMobile ? '-4px' : '3px')};
     &:before {
         font-family: ExoticIcons !important;
         content: '\\0042';
@@ -82,9 +95,10 @@ const SearchIcon = styled.i`
     }
 `;
 
-const ClearButton = styled.button`
-    font-size: 12px;
+const ClearButton = styled.button<{ isMobile: boolean }>`
+    font-size: ${(props) => (props.isMobile ? '20px' : '20px')};
     position: absolute;
+    top: ${(props) => (props.isMobile ? '2px' : '')};
     right: 5px;
     background: ${(props) => props.theme.background.primary};
     color: ${(props) => props.theme.textColor.secondary};
