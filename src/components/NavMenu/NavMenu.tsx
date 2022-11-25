@@ -52,12 +52,12 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                 <ItemsContainer>
                     {NAV_MENU.map((item, index) => {
                         return (
-                            <SPAAnchor
-                                key={index}
-                                href={buildHref(item.route)}
-                                onClick={() => setNavMenuVisibility(null)}
-                            >
-                                <ItemContainer key={index} active={location.pathname === item.route}>
+                            <SPAAnchor key={index} href={buildHref(item.route)}>
+                                <ItemContainer
+                                    key={index}
+                                    active={location.pathname === item.route}
+                                    onClick={() => setNavMenuVisibility(null)}
+                                >
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
                                 </ItemContainer>
