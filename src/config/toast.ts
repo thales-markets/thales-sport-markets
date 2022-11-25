@@ -1,4 +1,4 @@
-import { TypeOptions } from 'react-toastify';
+import { TypeOptions, UpdateOptions } from 'react-toastify';
 
 const defaultToastOptions = {
     isLoading: false,
@@ -10,17 +10,17 @@ const defaultToastOptions = {
     pauseOnFocusLoss: true,
 };
 
-export const getSuccessToastOptions = (message: string | React.ReactNode) => {
+export const getSuccessToastOptions = (message: string | React.ReactNode, options?: UpdateOptions) => {
     return {
-        ...defaultToastOptions,
+        ...{ ...defaultToastOptions, ...options },
         render: message,
         type: 'success' as TypeOptions,
     };
 };
 
-export const getErrorToastOptions = (message: string | React.ReactNode) => {
+export const getErrorToastOptions = (message: string | React.ReactNode, options?: UpdateOptions) => {
     return {
-        ...defaultToastOptions,
+        ...{ ...defaultToastOptions, ...options },
         render: message,
         type: 'error' as TypeOptions,
     };

@@ -96,22 +96,34 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                         return;
                     }
 
-                    toast.update(
-                        toastIdParam,
-                        getSuccessToastOptions(
-                            <>
-                                {t('market.toast-message.image-created')}
-                                <br />
-                                {t('market.toast-message.open-twitter')}
-                            </>
-                        )
-                    );
+                    // Mobile requires user action in order to open new window, it can't open in async call
+                    isMobile
+                        ? toast.update(
+                              toastIdParam,
+                              getSuccessToastOptions(
+                                  <a onClick={() => window.open(LINKS.TwitterStatus + TWITTER_MESSAGE)}>
+                                      {t('market.toast-message.image-created')}
+                                      <br />
+                                      {t('market.toast-message.click-open-twitter')}
+                                  </a>,
+                                  { autoClose: false }
+                              )
+                          )
+                        : toast.update(
+                              toastIdParam,
+                              getSuccessToastOptions(
+                                  <>
+                                      {t('market.toast-message.image-created')}
+                                      <br />
+                                      {t('market.toast-message.open-twitter')}
+                                  </>
+                              )
+                          );
 
-                    if (isMobile) {
-                        window.open('https://twitter.com/');
-                    }
                     setTimeout(() => {
-                        window.open(LINKS.TwitterStatus + TWITTER_MESSAGE);
+                        if (!isMobile) {
+                            window.open(LINKS.TwitterStatus + TWITTER_MESSAGE);
+                        }
                         setIsLoading(false);
                         onClose();
                     }, 3000);

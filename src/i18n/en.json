@@ -175,7 +175,8 @@
             "save-image-error": "Failed to save image! Try again",
             "save-image-cancel": "Image saving canceled!",
             "image-created": "Image is in clipboard!",
-            "open-twitter": "Openning Twitter..."
+            "open-twitter": "Openning Twitter...",
+            "click-open-twitter": "Click here to open Twitter"
         },
         "filter-label": {
             "global": {
