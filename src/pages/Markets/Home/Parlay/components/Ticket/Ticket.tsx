@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
+import { removeAll, setPayment } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -33,27 +34,27 @@ import networkConnector from 'utils/networkConnector';
 import { getParlayAMMTransaction, getParlayMarketsAMMQuoteMethod } from 'utils/parlayAmm';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
+import Payment from '../Payment';
+import ShareTicketModal from '../ShareTicketModal';
+import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import {
     AmountToBuyContainer,
     AmountToBuyInput,
-    ValidationTooltip,
     InfoContainer,
     InfoLabel,
+    InfoTooltip,
     InfoValue,
     InfoWrapper,
     InputContainer,
     RowSummary,
+    ShareWrapper,
     SubmitButton,
     SummaryLabel,
     SummaryValue,
-    XButton,
-    InfoTooltip,
-    ShareWrapper,
     TwitterIcon,
+    ValidationTooltip,
+    XButton,
 } from '../styled-components';
-import Payment from '../Payment';
-import { removeAll, setPayment } from 'redux/modules/parlay';
-import ShareTicketModal from '../ShareTicketModal';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -96,6 +97,13 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const [hasAllowance, setHasAllowance] = useState<boolean>(false);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
+    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
+        markets: [],
+        totalQuote: 0,
+        paid: 0,
+        payout: 0,
+        onClose: () => {},
+    });
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -534,6 +542,19 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         setShowShareTicketModal(false);
     }, []);
 
+    const onTwitterIconClick = () => {
+        // create data copy to avoid modal re-render while opened
+        const modalData: ShareTicketModalProps = {
+            markets: [...markets],
+            totalQuote,
+            paid: Number(usdAmountValue),
+            payout: totalBuyAmount,
+            onClose: onModalClose,
+        };
+        setShareTicketModalData(modalData);
+        setShowShareTicketModal(!submitDisabled);
+    };
+
     return (
         <>
             <RowSummary>
@@ -626,14 +647,14 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
             <ShareWrapper>
-                <TwitterIcon disabled={submitDisabled} onClick={() => setShowShareTicketModal(!submitDisabled)} />
+                <TwitterIcon disabled={submitDisabled} onClick={onTwitterIconClick} />
             </ShareWrapper>
             {showShareTicketModal && (
                 <ShareTicketModal
-                    markets={markets}
-                    totalQuote={totalQuote}
-                    paid={Number(usdAmountValue)}
-                    payout={totalBuyAmount}
+                    markets={shareTicketModalData.markets}
+                    totalQuote={shareTicketModalData.totalQuote}
+                    paid={shareTicketModalData.paid}
+                    payout={shareTicketModalData.payout}
                     onClose={onModalClose}
                 />
             )}

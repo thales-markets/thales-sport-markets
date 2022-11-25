@@ -59,6 +59,7 @@ import Payment from '../Payment';
 import { removeAll, setPayment } from 'redux/modules/parlay';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import ShareTicketModal from '../ShareTicketModal';
+import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -120,6 +121,13 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         },
     });
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
+    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
+        markets: [],
+        totalQuote: 0,
+        paid: 0,
+        payout: 0,
+        onClose: () => {},
+    });
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -559,6 +567,19 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         setShowShareTicketModal(false);
     }, []);
 
+    const onTwitterIconClick = () => {
+        // create data copy to avoid modal re-render while opened
+        const modalData: ShareTicketModalProps = {
+            markets: [market],
+            totalQuote: getPositionOdds(market),
+            paid: Number(usdAmountValue),
+            payout: tokenAmount,
+            onClose: onModalClose,
+        };
+        setShareTicketModalData(modalData);
+        setShowShareTicketModal(!submitDisabled);
+    };
+
     return (
         <>
             <RowSummary>
@@ -633,14 +654,14 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
             <ShareWrapper>
-                <TwitterIcon disabled={submitDisabled} onClick={() => setShowShareTicketModal(!submitDisabled)} />
+                <TwitterIcon disabled={submitDisabled} onClick={onTwitterIconClick} />
             </ShareWrapper>
             {showShareTicketModal && (
                 <ShareTicketModal
-                    markets={[market]}
-                    totalQuote={getPositionOdds(market)}
-                    paid={Number(usdAmountValue)}
-                    payout={tokenAmount}
+                    markets={shareTicketModalData.markets}
+                    totalQuote={shareTicketModalData.totalQuote}
+                    paid={shareTicketModalData.paid}
+                    payout={shareTicketModalData.payout}
                     onClose={onModalClose}
                 />
             )}

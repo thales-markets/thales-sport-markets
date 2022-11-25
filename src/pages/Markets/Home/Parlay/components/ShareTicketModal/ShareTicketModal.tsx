@@ -15,7 +15,7 @@ import DisplayOptions from './components/DisplayOptions';
 import { DisplayOptionsType } from './components/DisplayOptions/DisplayOptions';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 
-type ShareTicketModalProps = {
+export type ShareTicketModalProps = {
     markets: ParlaysMarket[];
     totalQuote: number;
     paid: number;
