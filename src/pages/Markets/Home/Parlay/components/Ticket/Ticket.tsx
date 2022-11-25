@@ -634,7 +634,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     totalQuote={totalQuote}
                     paid={Number(usdAmountValue)}
                     payout={totalBuyAmount}
-                    profitPercentage={profitPercentage}
                     onClose={onModalClose}
                 />
             )}

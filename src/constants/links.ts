@@ -1,4 +1,5 @@
 export const LINKS = {
+    Overtime: 'https://overtimemarkets.xyz/',
     Thales: 'https://thalesmarket.io/',
     ThalesDiscord: 'https://discord.gg/thales',
     ThalesGithubGuidelines:

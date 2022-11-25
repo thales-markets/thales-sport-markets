@@ -641,7 +641,6 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     totalQuote={getPositionOdds(market)}
                     paid={Number(usdAmountValue)}
                     payout={tokenAmount}
-                    profitPercentage={profitPercentage}
                     onClose={onModalClose}
                 />
             )}

@@ -1,7 +1,7 @@
 import { ReactComponent as OvertimeLogoIcon } from 'assets/images/overtime-logo.svg';
 import { USD_SIGN } from 'constants/currency';
 import { t } from 'i18next';
-import React, { useMemo } from 'react';
+import React from 'react';
 import QRCode from 'react-qr-code';
 import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
@@ -10,8 +10,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
-import { formatShortDateWithTimeZone } from 'utils/formatters/date';
-import { formatCurrencyWithSign, formatPercentage } from 'utils/formatters/number';
+import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { formatMarketOdds } from 'utils/markets';
 import { generateReferralLink } from 'utils/referral';
 import MatchInfo from '../../../MatchInfo';
@@ -22,22 +21,14 @@ type MyTicketProps = {
     totalQuote: number;
     paid: number;
     payout: number;
-    profitPercentage?: number;
     displayOptions: DisplayOptionsType;
 };
 
-const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout, profitPercentage, displayOptions }) => {
+const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout, displayOptions }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
 
-    const percentage = profitPercentage ? profitPercentage : (payout - paid) / paid;
     const payoutDisplayText = displayOptions.showUsdAmount ? formatCurrencyWithSign(USD_SIGN, payout) : '';
-    const percentageDisplayText = displayOptions.showPercentage ? `+ ${formatPercentage(percentage, 0)}` : '';
-
-    const timestamp = useMemo(() => {
-        return new Date();
-    }, []);
-    const timestampDisplayText = displayOptions.showTimestamp ? formatShortDateWithTimeZone(timestamp) : '';
 
     const isTicketLost = markets.some((market) => market.isResolved && !market.winning);
 
@@ -48,7 +39,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout, 
                 <BoldContent>{' overtimemarkets.xyz'}</BoldContent>
             </Header>
             <OvertimeLogo />
-            {(payoutDisplayText || percentageDisplayText) && (
+            {payoutDisplayText && (
                 <PayoutWrapper>
                     <PayoutRow>
                         <Square />
@@ -58,11 +49,6 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout, 
                     {payoutDisplayText && (
                         <PayoutRow>
                             <PayoutValue isLost={isTicketLost}>{payoutDisplayText}</PayoutValue>
-                        </PayoutRow>
-                    )}
-                    {percentageDisplayText && (
-                        <PayoutRow>
-                            <PayoutValue isLost={isTicketLost}>{percentageDisplayText}</PayoutValue>
                         </PayoutRow>
                     )}
                 </PayoutWrapper>
@@ -81,18 +67,17 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout, 
                 })}
             </MarketsContainer>
             <HorizontalLine />
-            <InfoRow>
+            <InfoRow margin={'2px 0 0 0'}>
                 <InfoLabel>{t('markets.parlay.share-ticket.total-quote')}:</InfoLabel>
                 <InfoValue>{formatMarketOdds(selectedOddsType, totalQuote)}</InfoValue>
             </InfoRow>
-            <InfoRow>
-                <InfoLabel>{t('markets.parlay.share-ticket.stake')}:</InfoLabel>
+            <InfoRow margin={'0 0 2px 0'}>
+                <InfoLabel>{t('markets.parlay.share-ticket.paid')}:</InfoLabel>
                 <InfoValue>{formatCurrencyWithSign(USD_SIGN, paid)}</InfoValue>
             </InfoRow>
             <HorizontalLine />
             <ReferralLabel>{t('markets.parlay.share-ticket.referral')}</ReferralLabel>
             <QRCode size={100} value={generateReferralLink(walletAddress)} />
-            {timestampDisplayText && <Timestamp>{timestampDisplayText}</Timestamp>}
         </Container>
     );
 };
@@ -101,7 +86,6 @@ const matchInfoStyle = { fontSize: '12px', lineHeight: '14px', positionColor: '#
 
 const Container = styled(FlexDivColumnCentered)`
     align-items: center;
-    max-width: 370px;
 `;
 
 const MarketsContainer = styled(FlexDivColumn)`
@@ -110,12 +94,11 @@ const MarketsContainer = styled(FlexDivColumn)`
 
 const Header = styled.span`
     font-weight: 200;
-    font-size: 11px;
-    line-height: 13px;
+    font-size: 10px;
+    line-height: 12px;
     text-align: center;
     text-transform: uppercase;
     color: #ffffff;
-    margin-top: 5px;
 `;
 
 const BoldContent = styled.span`
@@ -123,37 +106,37 @@ const BoldContent = styled.span`
 `;
 
 const OvertimeLogo = styled(OvertimeLogoIcon)`
-    margin: 15px 0;
+    margin: 8px 0;
     fill: ${(props) => props.theme.textColor.primary};
-    height: 35px;
+    height: 20px;
 `;
 
 const PayoutWrapper = styled.div`
     text-align: center;
     text-transform: uppercase;
     color: #5fc694;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
 `;
 
 const PayoutRow = styled(FlexDivCentered)``;
 
 const PayoutLabel = styled.span`
-    font-size: 40px;
-    line-height: 40px;
+    font-size: 30px;
+    line-height: 30px;
     font-weight: 300;
 `;
 
 const PayoutValue = styled.span<{ isLost?: boolean }>`
-    font-size: 45px;
-    line-height: 45px;
+    font-size: 35px;
+    line-height: 35px;
     font-weight: 800;
-    ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')}
+    ${(props) => (props.isLost ? 'color: #ca4c53;' : '')}
 `;
 
 const Square = styled.div`
     margin: 0 10px;
-    width: 14px;
-    height: 14px;
+    width: 10px;
+    height: 10px;
     background: #5fc694;
     transform: rotate(-45deg);
 `;
@@ -161,21 +144,21 @@ const Square = styled.div`
 const RowMarket = styled.div`
     display: flex;
     position: relative;
-    margin: 5px 0;
-    height: 45px;
+    height: 43px;
     align-items: center;
     text-align: center;
     padding: 5px 7px;
 `;
 
-const InfoRow = styled(FlexDiv)`
+const InfoRow = styled(FlexDiv)<{ margin?: string }>`
     font-size: 12px;
-    line-height: 24px;
+    line-height: 18px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
     color: #ffffff;
     width: 100%;
     padding: 0 15px;
+    ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
 `;
 const InfoLabel = styled.span`
     font-weight: 600;
@@ -195,21 +178,13 @@ const ReferralLabel = styled.span`
     margin-bottom: 5px;
 `;
 
-const Timestamp = styled.span`
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 14px;
-    text-transform: uppercase;
-    color: #ffffff;
-    margin-top: 10px;
-`;
-
 const HorizontalLine = styled.hr`
     width: 100%;
     border-top: 1.5px solid #64d9fe33;
     border-bottom: none;
     border-right: none;
     border-left: none;
+    margin: 0;
 `;
 const HorizontalDashedLine = styled.hr`
     width: 100%;
@@ -217,6 +192,7 @@ const HorizontalDashedLine = styled.hr`
     border-bottom: none;
     border-right: none;
     border-left: none;
+    margin: 0;
 `;
 
 export default MyTicket;

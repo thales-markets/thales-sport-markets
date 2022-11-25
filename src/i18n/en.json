@@ -370,18 +370,16 @@
                 "header": "Web 3 Sport markets on",
                 "payout": "payout",
                 "total-quote": "Total quote",
-                "stake": "Stake",
+                "paid": "Paid",
                 "referral": "Referral link",
                 "share": "Share",
                 "winner": "Winner",
                 "loser": "Loser",
                 "options": {
                     "title": "Display options",
-                    "view-details": "Details",
+                    "view-details": "Detailed",
                     "view-simple": "Simple",
-                    "percentage": "% Percentage",
-                    "usd-amount": "USD amount",
-                    "timestamp": "Timestamp"
+                    "usd-amount": "USD amount"
                 }
             }
         },

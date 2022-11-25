@@ -20,7 +20,6 @@ type ShareTicketModalProps = {
     totalQuote: number;
     paid: number;
     payout: number;
-    profitPercentage?: number;
     onClose: () => void;
 };
 
@@ -46,24 +45,15 @@ const customStyles = {
     },
 };
 
-const TWITTER_MESSAGE = '<PASTE YOUR IMAGE>';
+const TWITTER_MESSAGE = LINKS.Overtime + '%0A<PASTE YOUR IMAGE>';
 
-const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
-    markets,
-    totalQuote,
-    paid,
-    payout,
-    profitPercentage,
-    onClose,
-}) => {
+const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
 
     const defaultDisplayOptions: DisplayOptionsType = {
         isSimpleView: false,
         showUsdAmount: true,
-        showPercentage: false,
-        showTimestamp: true,
     };
     const [displayOptions, setDisplayOptions] = useState<DisplayOptionsType>(defaultDisplayOptions);
 
@@ -144,6 +134,30 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         onClose();
     };
 
+    const getLogoBackground = () => {
+        return (
+            <>
+                <ClubWrapper>
+                    <ClubLogo
+                        alt="Home team logo"
+                        src={homeLogoSrc}
+                        isFlag={market.tags[0] == 9018}
+                        onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
+                    />
+                </ClubWrapper>
+                <ClubWrapper awayTeam={true}>
+                    <ClubLogo
+                        awayTeam={true}
+                        alt="Away team logo"
+                        src={awayLogoSrc}
+                        isFlag={market.tags[0] == 9018}
+                        onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
+                    />
+                </ClubWrapper>
+            </>
+        );
+    };
+
     return (
         <>
             <ReactModal
@@ -166,34 +180,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     <CloseIcon className={`icon icon--close`} onClick={onClose} />
                     {displayOptions.isSimpleView ? (
                         <>
-                            {markets.length === 1 && (
-                                <>
-                                    <ClubWrapper>
-                                        <ClubLogo
-                                            alt="Home team logo"
-                                            src={homeLogoSrc}
-                                            isFlag={market.tags[0] == 9018}
-                                            onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
-                                        />
-                                    </ClubWrapper>
-                                    <ClubWrapper awayTeam={true}>
-                                        <ClubLogo
-                                            awayTeam={true}
-                                            alt="Away team logo"
-                                            src={awayLogoSrc}
-                                            isFlag={market.tags[0] == 9018}
-                                            onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
-                                        />
-                                    </ClubWrapper>
-                                </>
-                            )}
-                            <MySimpleTicket
-                                markets={markets}
-                                paid={paid}
-                                payout={payout}
-                                profitPercentage={profitPercentage}
-                                displayOptions={displayOptions}
-                            />
+                            {markets.length === 1 && getLogoBackground()}
+                            <MySimpleTicket markets={markets} payout={payout} />
                         </>
                     ) : (
                         <MyTicket
@@ -201,7 +189,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                             totalQuote={totalQuote}
                             paid={paid}
                             payout={payout}
-                            profitPercentage={profitPercentage}
                             displayOptions={displayOptions}
                         />
                     )}
@@ -216,7 +203,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 };
 
 const Container = styled(FlexDivColumnCentered)<{ isSimpleView: boolean }>`
-    min-width: 300px;
+    width: ${(props) => (props.isSimpleView ? '550' : '380')}px;
     padding: 15px;
     flex: none;
     background: ${(props) =>
@@ -230,13 +217,13 @@ const ClubWrapper = styled.div<{ awayTeam?: boolean }>`
     position: absolute;
     overflow: hidden;
     ${(props) => (props.awayTeam ? 'right: 0;' : 'left: 0;')}
-    width: 250px;
-    height: 250px;
+    width: 230px;
+    height: 230px;
 `;
 
 const ClubLogo = styled.img<{ isFlag?: boolean; awayTeam?: boolean }>`
     position: absolute;
-    ${(props) => (props.awayTeam ? 'right: ' : 'left: ')}-70px;
+    ${(props) => (props.awayTeam ? 'right: ' : 'left: ')}-80px;
     ${(props) => (props.isFlag ? 'object-fit: cover;' : '')}
     ${(props) => (props.isFlag ? 'border-radius: 50%;' : '')}
     height: 100%;
