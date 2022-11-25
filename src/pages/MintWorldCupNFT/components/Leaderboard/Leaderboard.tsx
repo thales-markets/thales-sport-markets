@@ -136,6 +136,11 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
                             {t('mint-world-cup-nft.leaderboard.underdog-multiplier-text')}
                         </ListItem>
                     </ListItemContainer>
+                    <ListItemContainer>
+                        <ListItem>
+                            <span style={{ color: '#ffcc00' }}>{t('mint-world-cup-nft.leaderboard.wash-trading')}</span>
+                        </ListItem>
+                    </ListItemContainer>
                 </InfoContent>
             </InfoContainer>
             <FlexDivCentered>
