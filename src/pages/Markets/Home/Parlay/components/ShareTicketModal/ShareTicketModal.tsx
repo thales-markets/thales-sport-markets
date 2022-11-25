@@ -14,6 +14,9 @@ import { TwitterIcon } from '../styled-components';
 import DisplayOptions from './components/DisplayOptions';
 import { DisplayOptionsType } from './components/DisplayOptions/DisplayOptions';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/rootReducer';
+import { getIsMobile } from 'redux/modules/app';
 
 export type ShareTicketModalProps = {
     markets: ParlaysMarket[];
@@ -48,6 +51,8 @@ const customStyles = {
 const TWITTER_MESSAGE = LINKS.Overtime + '%0A<PASTE YOUR IMAGE>';
 
 const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
+
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
 
@@ -76,12 +81,19 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 }
 
                 try {
+                    console.log('create image');
                     const base64Image = await toPng(ref.current, { cacheBust: true });
+                    console.log('copy image to clipboard');
                     const b64Blob = (await fetch(base64Image)).blob();
                     const cbi = new ClipboardItem({
                         'image/png': b64Blob,
                     });
-                    await navigator.clipboard.write([cbi]);
+                    if (isMobile) {
+                        // Mobile copy to clipboard
+                    } else {
+                        await navigator.clipboard.write([cbi]);
+                    }
+                    console.log('image processed');
 
                     if (ref.current === null) {
                         return;
