@@ -138,7 +138,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
                     </ListItemContainer>
                     <ListItemContainer>
                         <ListItem>
-                            <span style={{ color: '#ffcc00' }}>{t('mint-world-cup-nft.leaderboard.wash-trading')}</span>
+                            <Warning>{t('mint-world-cup-nft.leaderboard.wash-trading')}</Warning>
                         </ListItem>
                     </ListItemContainer>
                 </InfoContent>
@@ -257,6 +257,14 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
 
 const StickyRowWrapper = styled.div`
     padding: 10px 0;
+`;
+
+const Warning = styled.p`
+    text-align: center;
+    color: #ffcc00;
+    font-style: italic;
+    font-family: 'Roboto';
+    font-size: 14px;
 `;
 
 const TableText = styled.p`
