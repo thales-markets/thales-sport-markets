@@ -6,7 +6,7 @@ export const LINKS = {
         'https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/Oracle_Council.md',
     ThalesTip28: 'https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-28.md',
     Twitter: 'https://twitter.com/OvertimeMarkets',
-    TwitterStatus: 'https://twitter.com/intent/tweet?text=',
+    TwitterTweetStatus: 'https://twitter.com/intent/tweet?text=',
     QuizBlogPost:
         'https://medium.com/@OvertimeMarkets.xyz/overtime-is-on-a-winning-streak-updates-more-incentives-and-trivia-5852ea0bc9a9',
     QuizRetweetLink: 'https://twitter.com/OvertimeMarkets',

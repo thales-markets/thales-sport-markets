@@ -567,6 +567,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         setShowShareTicketModal(false);
     }, []);
 
+    const twitterShareDisabled = submitDisabled || !hasAllowance;
     const onTwitterIconClick = () => {
         // create data copy to avoid modal re-render while opened
         const modalData: ShareTicketModalProps = {
@@ -577,7 +578,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             onClose: onModalClose,
         };
         setShareTicketModalData(modalData);
-        setShowShareTicketModal(!submitDisabled);
+        setShowShareTicketModal(!twitterShareDisabled);
     };
 
     return (
@@ -654,7 +655,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
             <ShareWrapper>
-                <TwitterIcon disabled={submitDisabled} onClick={onTwitterIconClick} />
+                <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />
             </ShareWrapper>
             {showShareTicketModal && (
                 <ShareTicketModal

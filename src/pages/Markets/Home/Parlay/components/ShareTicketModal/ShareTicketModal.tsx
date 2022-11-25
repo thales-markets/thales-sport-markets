@@ -17,6 +17,7 @@ import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
+import { isFirefox } from 'utils/device';
 
 export type ShareTicketModalProps = {
     markets: ParlaysMarket[];
@@ -48,7 +49,9 @@ const customStyles = {
     },
 };
 
-const TWITTER_MESSAGE = LINKS.Overtime + '%0A<PASTE YOUR IMAGE>';
+const PARLAY_IMAGE_NAME = 'ParlayImage.png';
+const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
+const TWITTER_MESSAGE_UPLOAD = `%0A<UPLOAD YOUR ${PARLAY_IMAGE_NAME}>`;
 
 const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -82,28 +85,45 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
 
                 try {
                     const base64Image = await toPng(ref.current, { cacheBust: true });
-                    const b64Blob = (await fetch(base64Image)).blob();
-                    const cbi = new ClipboardItem({
-                        'image/png': b64Blob,
-                    });
-                    if (isMobile) {
-                        // TODO: Mobile copy to clipboard
+
+                    if (isFirefox) {
+                        // clipboard.write is not supported/enabled in Firefox, so just download it
+                        const link = document.createElement('a');
+                        link.href = base64Image;
+                        link.download = PARLAY_IMAGE_NAME;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
                     } else {
-                        await navigator.clipboard.write([cbi]);
+                        // Save to clipboard
+                        const b64Blob = (await fetch(base64Image)).blob();
+                        const cbi = new ClipboardItem({
+                            'image/png': b64Blob,
+                        });
+                        await navigator.clipboard.write([cbi]); // not supported by FF
                     }
 
                     if (ref.current === null) {
                         return;
                     }
 
+                    const twitterLinkWithStatusMessage =
+                        LINKS.TwitterTweetStatus +
+                        LINKS.Overtime +
+                        (isFirefox ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+
                     // Mobile requires user action in order to open new window, it can't open in async call
                     isMobile
                         ? toast.update(
                               toastIdParam,
                               getSuccessToastOptions(
-                                  <a onClick={() => window.open(LINKS.TwitterStatus + TWITTER_MESSAGE)}>
-                                      {t('market.toast-message.image-created')}
-                                      <br />
+                                  <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
+                                      {!isFirefox && (
+                                          <>
+                                              {t('market.toast-message.image-created')}
+                                              <br />
+                                          </>
+                                      )}
                                       {t('market.toast-message.click-open-twitter')}
                                   </a>,
                                   { autoClose: false }
@@ -113,8 +133,12 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                               toastIdParam,
                               getSuccessToastOptions(
                                   <>
-                                      {t('market.toast-message.image-created')}
-                                      <br />
+                                      {!isFirefox && (
+                                          <>
+                                              {t('market.toast-message.image-created')}
+                                              <br />
+                                          </>
+                                      )}
                                       {t('market.toast-message.open-twitter')}
                                   </>
                               )
@@ -122,7 +146,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
 
                     setTimeout(() => {
                         if (!isMobile) {
-                            window.open(LINKS.TwitterStatus + TWITTER_MESSAGE);
+                            window.open(twitterLinkWithStatusMessage);
                         }
                         setIsLoading(false);
                         onClose();
@@ -139,7 +163,9 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
 
     const onTwitterShareClick = () => {
         if (!isLoading) {
-            const id = toast.loading(t('market.toast-message.save-image'));
+            const id = toast.loading(
+                isFirefox ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
+            );
             setToastId(id);
             setIsLoading(true);
 
