@@ -136,6 +136,11 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
                             {t('mint-world-cup-nft.leaderboard.underdog-multiplier-text')}
                         </ListItem>
                     </ListItemContainer>
+                    <ListItemContainer>
+                        <ListItem>
+                            <Warning>{t('mint-world-cup-nft.leaderboard.wash-trading')}</Warning>
+                        </ListItem>
+                    </ListItemContainer>
                 </InfoContent>
             </InfoContainer>
             <FlexDivCentered>
@@ -252,6 +257,14 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
 
 const StickyRowWrapper = styled.div`
     padding: 10px 0;
+`;
+
+const Warning = styled.p`
+    text-align: center;
+    color: #ffcc00;
+    font-style: italic;
+    font-family: 'Roboto';
+    font-size: 14px;
 `;
 
 const TableText = styled.p`
