@@ -86,7 +86,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 try {
                     const base64Image = await toPng(ref.current, { cacheBust: true });
 
-                    if (isFirefox) {
+                    if (isFirefox || isMobile) {
                         // clipboard.write is not supported/enabled in Firefox, so just download it
                         const link = document.createElement('a');
                         link.href = base64Image;
@@ -118,12 +118,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                               toastIdParam,
                               getSuccessToastOptions(
                                   <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
-                                      {!isFirefox && (
-                                          <>
-                                              {t('market.toast-message.image-created')}
-                                              <br />
-                                          </>
-                                      )}
                                       {t('market.toast-message.click-open-twitter')}
                                   </a>,
                                   { autoClose: false }
@@ -164,7 +158,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
     const onTwitterShareClick = () => {
         if (!isLoading) {
             const id = toast.loading(
-                isFirefox ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
+                isFirefox || isMobile ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
             );
             setToastId(id);
             setIsLoading(true);
