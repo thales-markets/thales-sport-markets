@@ -28,10 +28,10 @@ import {
 
 type NavMenuProps = {
     visibility?: boolean | null;
-    hideVisibilityFunction: (value: boolean | null) => void;
+    setNavMenuVisibility: (value: boolean | null) => void;
 };
 
-const NavMenu: React.FC<NavMenuProps> = ({ visibility, hideVisibilityFunction }) => {
+const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) => {
     const { t } = useTranslation();
     const location = useLocation();
 
@@ -39,14 +39,14 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, hideVisibilityFunction })
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     return (
-        <OutsideClickHandler onOutsideClick={() => visibility == true && hideVisibilityFunction(false)}>
+        <OutsideClickHandler onOutsideClick={() => visibility == true && setNavMenuVisibility(false)}>
             <Wrapper show={visibility}>
                 <HeaderContainer>
                     <Network>
                         <NetworkIcon className={getNetworkIconClassNameByNetworkId(networkId)} />
                         <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
                     </Network>
-                    <CloseIcon onClick={() => hideVisibilityFunction(false)} />
+                    <CloseIcon onClick={() => setNavMenuVisibility(false)} />
                     <LanguageSelector />
                 </HeaderContainer>
                 <ItemsContainer>
@@ -55,7 +55,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, hideVisibilityFunction })
                             <SPAAnchor
                                 key={index}
                                 href={buildHref(item.route)}
-                                onClick={() => hideVisibilityFunction(null)}
+                                onClick={() => setNavMenuVisibility(null)}
                             >
                                 <ItemContainer key={index} active={location.pathname === item.route}>
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />

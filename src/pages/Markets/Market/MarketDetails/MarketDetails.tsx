@@ -38,7 +38,7 @@ import ApprovalModal from '../../../../components/ApprovalModal/ApprovalModal';
 import Toggle from '../../../../components/Toggle/Toggle';
 import { USD_SIGN } from '../../../../constants/currency';
 import { MAX_GAS_LIMIT } from '../../../../constants/network';
-import { MAX_L2_GAS_LIMIT, Position, Side } from '../../../../constants/options';
+import { Position, Side } from '../../../../constants/options';
 import { ODDS_COLOR } from '../../../../constants/ui';
 import useAvailablePerSideQuery from '../../../../queries/markets/useAvailablePerSideQuery';
 import useMarketBalancesQuery from '../../../../queries/markets/useMarketBalancesQuery';
@@ -427,7 +427,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                         ammQuote,
                         referralId,
                         ethers.utils.parseEther('0.02'),
-                        { gasLimit: MAX_L2_GAS_LIMIT }
+                        { gasLimit: MAX_GAS_LIMIT }
                     );
 
                     const txResult = await tx.wait();
@@ -611,7 +611,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
             contract.connect(signer);
             const id = toast.loading(t('market.toast-messsage.transaction-pending'));
             try {
-                const tx = await contract.exerciseOptions();
+                const tx = await contract.exerciseOptions({
+                    gasLimit: MAX_GAS_LIMIT,
+                });
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {

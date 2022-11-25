@@ -314,7 +314,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     susdPaid,
                     expectedPayout,
                     referralId,
-                    additionalSlippage
+                    additionalSlippage,
+                    {
+                        gasLimit: MAX_GAS_LIMIT,
+                    }
                 );
 
                 const txResult = await tx.wait();
@@ -324,6 +327,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')));
                     setIsBuying(false);
                     setUsdAmount('');
+                    dispatch(removeAll());
 
                     trackEvent({
                         category: 'parlay',

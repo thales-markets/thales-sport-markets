@@ -3,6 +3,7 @@ import PositionSymbol from 'components/PositionSymbol';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
+import { MAX_GAS_LIMIT } from 'constants/network';
 import { Position, Side } from 'constants/options';
 import { ODDS_COLOR } from 'constants/ui';
 import { ethers } from 'ethers';
@@ -164,7 +165,9 @@ const Positions: React.FC<PositionsProps> = ({
             contract.connect(signer);
             const id = toast.loading(t('market.toast-messsage.transaction-pending'));
             try {
-                const tx = await contract.exerciseOptions();
+                const tx = await contract.exerciseOptions({
+                    gasLimit: MAX_GAS_LIMIT,
+                });
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {

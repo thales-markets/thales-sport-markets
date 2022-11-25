@@ -5,6 +5,7 @@ import axios from 'axios';
 import { generalConfig } from 'config/general';
 
 export type User = {
+    rank: number;
     address: string;
     url: string;
     baseVolume: number;
