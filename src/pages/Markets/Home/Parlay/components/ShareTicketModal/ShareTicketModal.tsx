@@ -81,19 +81,16 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 }
 
                 try {
-                    console.log('create image');
                     const base64Image = await toPng(ref.current, { cacheBust: true });
-                    console.log('copy image to clipboard');
                     const b64Blob = (await fetch(base64Image)).blob();
                     const cbi = new ClipboardItem({
                         'image/png': b64Blob,
                     });
                     if (isMobile) {
-                        // Mobile copy to clipboard
+                        // TODO: Mobile copy to clipboard
                     } else {
                         await navigator.clipboard.write([cbi]);
                     }
-                    console.log('image processed');
 
                     if (ref.current === null) {
                         return;
@@ -110,6 +107,9 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                         )
                     );
 
+                    if (isMobile) {
+                        window.open(LINKS.TwitterStatus + TWITTER_MESSAGE);
+                    }
                     setTimeout(() => {
                         window.open(LINKS.TwitterStatus + TWITTER_MESSAGE);
                         setIsLoading(false);
@@ -122,7 +122,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 }
             }
         },
-        [isLoading, onClose]
+        [isLoading, isMobile, onClose]
     );
 
     const onTwitterShareClick = () => {

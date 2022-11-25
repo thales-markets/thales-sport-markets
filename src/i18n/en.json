@@ -172,7 +172,7 @@
             "withdraw-success": "Successfuly withdrawn",
             "get-usd-success": "{{amount}} successfully minted",
             "save-image": "Saving image to clipboard. Please wait...",
-            "save-image-error": "Failed to save image!",
+            "save-image-error": "Failed to save image! Try again",
             "save-image-cancel": "Image saving canceled!",
             "image-created": "Image is in clipboard!",
             "open-twitter": "Openning Twitter..."
