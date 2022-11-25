@@ -108,7 +108,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                     );
 
                     if (isMobile) {
-                        window.open(LINKS.TwitterStatus + TWITTER_MESSAGE);
+                        window.open('https://twitter.com/');
                     }
                     setTimeout(() => {
                         window.open(LINKS.TwitterStatus + TWITTER_MESSAGE);
