@@ -272,7 +272,8 @@
             "paid": "Paid",
             "amount": "amount",
             "id": "Id",
-            "position": "Position"
+            "position": "Position",
+            "status": "Status"
         }
     },
     "markets": {

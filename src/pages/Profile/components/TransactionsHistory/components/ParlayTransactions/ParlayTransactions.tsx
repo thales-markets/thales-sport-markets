@@ -9,15 +9,18 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { SportMarketInfo } from 'types/markets';
+import { PositionData, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime, formatTxTimestamp } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
 import {
+    convertFinalResultToResultType,
+    convertPositionNameToPosition,
     convertPositionNameToPositionType,
     convertPositionToSymbolType,
     formatMarketOdds,
     getIsApexTopGame,
+    isParlayOpen,
 } from 'utils/markets';
 import { getPositionColor } from 'utils/ui';
 import { t } from 'i18next';
@@ -95,6 +98,22 @@ const ParlayTransactions: React.FC = () => {
                             return <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>;
                         },
                     },
+                    {
+                        id: 'status',
+                        Header: <>{t('profile.table.status')}</>,
+                        sortable: false,
+                        Cell: (cellProps: any) => {
+                            if (cellProps.row.original.won) {
+                                return <StatusWrapper color="#5FC694">WON </StatusWrapper>;
+                            } else {
+                                return isParlayOpen(cellProps.row.original) ? (
+                                    <StatusWrapper color="#FFFFFF">OPEN</StatusWrapper>
+                                ) : (
+                                    <StatusWrapper color="#E26A78">LOSS</StatusWrapper>
+                                );
+                            }
+                        },
+                    },
                 ]}
                 initialState={{
                     sortBy: [
@@ -112,10 +131,12 @@ const ParlayTransactions: React.FC = () => {
                         const position = row.original.positions.find(
                             (position: any) => position.market.address == address
                         );
+
                         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
                         return (
                             <ParlayRow key={index}>
                                 <ParlayRowText>
+                                    {getPositionStatus(position)}
                                     {position.market.homeTeam + ' vs ' + position.market.awayTeam}
                                 </ParlayRowText>
                                 <PositionSymbol
@@ -167,6 +188,20 @@ const ParlayTransactions: React.FC = () => {
     );
 };
 
+const getPositionStatus = (position: PositionData) => {
+    if (position.market.isResolved) {
+        if (
+            convertPositionNameToPosition(position.side) === convertFinalResultToResultType(position.market.finalResult)
+        ) {
+            return 'win';
+        } else {
+            return 'lost';
+        }
+    } else {
+        return 'open';
+    }
+};
+
 const getParlayItemStatus = (market: SportMarketInfo) => {
     if (market.isCanceled) return t('profile.card.canceled');
     if (market.isResolved) return `${market.homeScore} : ${market.awayScore}`;
@@ -184,6 +219,23 @@ const TableText = styled.span`
         white-space: pre-wrap;
     }
     white-space: nowrap;
+`;
+
+const StatusWrapper = styled.div`
+    width: 62px;
+    height: 25px;
+    border: 2px solid ${(props) => props.color || 'white'};
+    border-radius: 5px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: justify;
+    text-transform: uppercase;
+    text-align: center;
+    color: ${(props) => props.color || 'white'};
+    padding-top: 3px;
 `;
 
 const QuoteText = styled.span`
