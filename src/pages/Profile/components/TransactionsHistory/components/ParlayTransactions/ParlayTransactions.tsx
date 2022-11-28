@@ -193,12 +193,12 @@ const getPositionStatus = (position: PositionData) => {
         if (
             convertPositionNameToPosition(position.side) === convertFinalResultToResultType(position.market.finalResult)
         ) {
-            return 'win';
+            return <StatusIcon color="#5FC694" className={`icon icon--win`} />;
         } else {
-            return 'lost';
+            return <StatusIcon color="#E26A78" className={`icon icon--lost`} />;
         }
     } else {
-        return 'open';
+        return <StatusIcon color="#FFFFFF" className={`icon icon--open`} />;
     }
 };
 
@@ -207,6 +207,14 @@ const getParlayItemStatus = (market: SportMarketInfo) => {
     if (market.isResolved) return `${market.homeScore} : ${market.awayScore}`;
     return formatDateWithTime(Number(market.maturityDate) * 1000);
 };
+
+const StatusIcon = styled.i`
+    font-size: 14px;
+    margin-right: 4px;
+    &::before {
+        color: ${(props) => props.color || 'white'};
+    }
+`;
 
 const TableText = styled.span`
     font-family: 'Roboto';
