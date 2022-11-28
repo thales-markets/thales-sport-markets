@@ -1,5 +1,6 @@
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import Button from 'components/Button';
+import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import GetUsd from 'components/GetUsd';
 import Logo from 'components/Logo';
 import Search from 'components/Search';
@@ -618,12 +619,14 @@ const Home: React.FC = () => {
                     <Parlay />
                 </SidebarContainer>
             </RowContainer>
-            {isMobile && !showParlayMobileModal && parlayMarkets.length > 0 && (
-                <ParlayMobileButton onClick={() => setshowParlayMobileModal(true)}>
-                    {t('markets.parlay.show-parlay')}
-                </ParlayMobileButton>
-            )}
             {isMobile && showParlayMobileModal && <ParlayMobileModal onClose={() => setshowParlayMobileModal(false)} />}
+            {isMobile && (
+                <FooterSidebarMobile
+                    setParlayMobileVisibility={setshowParlayMobileModal}
+                    setShowBurger={setShowBurger}
+                    parlayMarkets={parlayMarkets}
+                />
+            )}
         </Container>
     );
 };
@@ -793,23 +796,6 @@ export const Info = styled.div`
         cursor: pointer;
         color: #91bced;
     }
-`;
-
-const ParlayMobileButton = styled(Button)`
-    position: fixed;
-    bottom: 3%;
-    right: 4%;
-    width: 72%;
-    margin-left: 10%;
-    margin-right: 10%;
-    background: #3fd1ff;
-    color: black;
-    height: 34px;
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 23px;
-    box-shadow: ${(props) => '0 0 6px 2px ' + props.theme.borderColor.quaternary};
 `;
 
 const ApplyFiltersButton = styled(Button)`

@@ -7,7 +7,9 @@ import Search from 'components/Search';
 import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
+import { MAIN_COLORS } from 'constants/ui';
 import useInterval from 'hooks/useInterval';
+import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -16,7 +18,7 @@ import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
-import { getIsWalletConnected } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
@@ -50,6 +52,9 @@ const DappHeader: React.FC = () => {
     const dispatch = useDispatch();
     const location = useLocation();
 
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -58,6 +63,15 @@ const DappHeader: React.FC = () => {
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean>(false);
     const [showSearcHModal, setShowSearchModal] = useState<boolean>(false);
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
+
+    const claimablePositionsCountQuery = useClaimablePositionCountQuery(walletAddress, networkId, {
+        enabled: isWalletConnected,
+    });
+
+    const claimablePositionCount =
+        claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
+            ? claimablePositionsCountQuery.data
+            : null;
 
     useInterval(async () => {
         if (!stopPulsing) {
@@ -129,6 +143,11 @@ const DappHeader: React.FC = () => {
                         </SearchIconContainer>
                         <MenuIconContainer>
                             <MenuIcon onClick={() => setNavMenuVisibility(true)} />
+                            {claimablePositionCount && (
+                                <NotificationCount>
+                                    <Count>{claimablePositionCount}</Count>
+                                </NotificationCount>
+                            )}
                             <NavMenuMobile
                                 visibility={navMenuVisibility}
                                 setNavMenuVisibility={(value: boolean) => setNavMenuVisibility(value)}
@@ -267,19 +286,19 @@ const FifaIcon = styled.i`
 const IconWrapper = styled.div`
     border-radius: 30px;
     background: ${(props) => props.theme.background.tertiary};
-    width: 25px;
-    height: 25px;
+    width: 32px;
+    height: 32px;
     position: absolute;
-    top: -6px;
+    top: -10px;
 `;
 
 const SearchIcon = styled.i`
-    font-size: 32px;
+    font-size: 40px;
     cursor: pointer;
     margin-bottom: 3px;
     position: absolute;
-    top: -5px;
-    left: -5px;
+    top: -7px;
+    left: -6px;
     &:before {
         font-family: ExoticIcons !important;
         content: '\\0042';
@@ -291,6 +310,27 @@ const SearchContainer = styled.div`
     background: ${(props) => props.theme.background.secondary};
     height: 100%;
     text-align: center;
+`;
+
+const NotificationCount = styled.div`
+    position: absolute;
+    border-radius: 50%;
+    bottom: -8px;
+    left: 24px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    height: 16px;
+    width: 16px;
+    background-color: ${MAIN_COLORS.BACKGROUNDS.BLUE};
+    box-shadow: ${MAIN_COLORS.SHADOWS.NOTIFICATION};
+`;
+
+const Count = styled.span`
+    color: ${MAIN_COLORS.DARK_GRAY};
+    font-weight: 800;
+    font-size: 12px;
 `;
 
 export default DappHeader;
