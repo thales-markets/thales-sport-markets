@@ -22,7 +22,6 @@ import {
     getIsApexTopGame,
     isParlayOpen,
 } from 'utils/markets';
-import { getPositionColor } from 'utils/ui';
 import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
@@ -134,7 +133,7 @@ const ParlayTransactions: React.FC = () => {
 
                         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
                         return (
-                            <ParlayRow key={index}>
+                            <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
                                 <ParlayRowText>
                                     {getPositionStatus(position)}
                                     {position.market.homeTeam + ' vs ' + position.market.awayTeam}
@@ -144,7 +143,7 @@ const ParlayTransactions: React.FC = () => {
                                         positionEnum,
                                         getIsApexTopGame(position.market.isApex, position.market.betType)
                                     )}
-                                    symbolColor={getPositionColor(positionEnum)}
+                                    symbolColor={'white'}
                                     symbolSize={'10'}
                                     additionalText={{
                                         firstText: formatMarketOdds(
@@ -153,7 +152,7 @@ const ParlayTransactions: React.FC = () => {
                                         ),
                                         firstTextStyle: {
                                             fontSize: '10.5px',
-                                            color: getPositionColor(positionEnum),
+                                            color: 'white',
                                             marginLeft: '5px',
                                         },
                                     }}
@@ -199,6 +198,20 @@ const getPositionStatus = (position: PositionData) => {
         }
     } else {
         return <StatusIcon color="#FFFFFF" className={`icon icon--open`} />;
+    }
+};
+
+const getOpacity = (position: PositionData) => {
+    if (position.market.isResolved) {
+        if (
+            convertPositionNameToPosition(position.side) === convertFinalResultToResultType(position.market.finalResult)
+        ) {
+            return 1;
+        } else {
+            return 0.5;
+        }
+    } else {
+        return 1;
     }
 };
 
@@ -263,8 +276,6 @@ const QuoteLabel = styled.span`
 
     letter-spacing: 0.025em;
     text-transform: uppercase;
-
-    color: #64d9fe;
 `;
 
 const QuoteWrapper = styled.div`
