@@ -42,7 +42,6 @@ const ConnectWalletButtonMobile: React.FC = () => {
 };
 
 const IconContainer = styled(FlexDiv)`
-    height: 28px;
     cursor: pointer;
 `;
 

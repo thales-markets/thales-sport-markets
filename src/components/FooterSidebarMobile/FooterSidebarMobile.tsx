@@ -50,7 +50,7 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({
                     <ItemIcon
                         className="icon icon--odds"
                         onClick={() => {
-                            setDropdownIsOpen(true);
+                            setDropdownIsOpen(!dropdownIsOpen);
                         }}
                     />
                 </ItemContainer>

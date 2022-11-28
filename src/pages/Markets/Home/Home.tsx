@@ -38,7 +38,6 @@ import networkConnector from 'utils/networkConnector';
 import { buildHref, history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
 import GlobalFilters from '../components/GlobalFilters';
-import GlobalFiltersInfoMobile from '../components/GlobalFilters/GlobalFiltersInfoMobile';
 import SportFilter from '../components/SportFilter';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import TagsDropdown from '../components/TagsDropdown';
@@ -577,13 +576,6 @@ const Home: React.FC = () => {
                                     setSportParam={setSportParam}
                                     setAvailableTags={setAvailableTags}
                                     tagsList={tagsList}
-                                />
-                                <GlobalFiltersInfoMobile
-                                    globalFilter={globalFilter}
-                                    dateFilter={dateFilter}
-                                    sportFilter={sportFilter}
-                                    showBurger={showBurger}
-                                    setShowBurger={setShowBurger}
                                 />
                             </>
                         )}
