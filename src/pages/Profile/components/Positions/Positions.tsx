@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
 import useAccountMarketsQuery, { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
@@ -11,6 +11,7 @@ import { ParlayMarket } from 'types/markets';
 import {
     Arrow,
     CategoryContainer,
+    CategoryDisclaimer,
     CategoryIcon,
     CategoryLabel,
     Container,
@@ -22,6 +23,7 @@ import ParlayPosition from './components/ParlayPosition';
 import SimpleLoader from 'components/SimpleLoader';
 import { LoaderContainer } from 'pages/Markets/Home/Home';
 import SinglePosition from './components/SinglePosition';
+import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
 
 const Positions: React.FC = () => {
     const { t } = useTranslation();
@@ -44,9 +46,14 @@ const Positions: React.FC = () => {
         enabled: isWalletConnected,
     });
 
+    const marketDurationQuery = useMarketDurationQuery(networkId);
+
     const parlayMarkets = parlayMarketsQuery.isSuccess && parlayMarketsQuery.data ? parlayMarketsQuery.data : null;
     const accountPositions =
         accountMarketsQuery.isSuccess && accountMarketsQuery.data ? accountMarketsQuery.data : null;
+
+    const marketDuration =
+        marketDurationQuery.isSuccess && marketDurationQuery.data ? Math.floor(marketDurationQuery.data) : 30;
 
     const accountPositionsByStatus = useMemo(() => {
         const data = {
@@ -100,6 +107,9 @@ const Positions: React.FC = () => {
                 <CategoryIcon className="icon icon--claimable-flag" />
                 <CategoryLabel>{t('profile.categories.claimable')}</CategoryLabel>
                 <Arrow className={openClaimable ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
+                <CategoryDisclaimer>
+                    <Trans i18nKey="profile.winnings-are-forfeit" values={{ amount: marketDuration }} />
+                </CategoryDisclaimer>
             </CategoryContainer>
             {openClaimable && (
                 <ListContainer>

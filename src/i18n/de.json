@@ -481,7 +481,8 @@
             "paid": "Bezahlt",
             "position": "Position",
             "status": "Status"
-        }
+        },
+        "winnings-are-forfeit": "*Gewinne, die nicht innerhalb von {{amount}} Tagen nach Auflösung eines Marktes beansprucht werden, verfallen."
     },
     "mint-world-cup-nft": {
         "eligible-text-2": "Prägen Sie ein Zebro Ihrer Lieblingsnationalmannschaft und qualifizieren Sie sich für 50.000 OP & 30.000 THALES-Bonusprämien!",

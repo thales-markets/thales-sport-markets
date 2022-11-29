@@ -484,7 +484,8 @@
             "id": "Identificación",
             "games": "Juegos",
             "status": "Estado"
-        }
+        },
+        "winnings-are-forfeit": "*Las ganancias no reclamadas dentro de {{amount}} días de la resolución de un mercado se perderán."
     },
     "mint-world-cup-nft": {
         "mint-nft-button": "Mint esta cebra!",

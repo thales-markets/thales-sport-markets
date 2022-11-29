@@ -487,7 +487,8 @@
             "paid": "Pagato",
             "position": "Posizione",
             "status": "Stato"
-        }
+        },
+        "winnings-are-forfeit": "*Le vincite non riscosse entro {{amount}} giorni dalla risoluzione di un mercato vengono annullate."
     },
     "mint-world-cup-nft": {
         "second-option": "La seconda opzione per metterti nella lista consentita è completare i seguenti passaggi:",

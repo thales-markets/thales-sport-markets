@@ -582,7 +582,8 @@
             "time": "Temps",
             "amount": "montant",
             "status": "Statut"
-        }
+        },
+        "winnings-are-forfeit": "*Les gains non réclamés dans les {{amount}} jours suivant la résolution d'un marché sont annulés."
     },
     "mint-world-cup-nft": {
         "no": "Non",

@@ -274,7 +274,8 @@
             "id": "Id",
             "position": "Position",
             "status": "Status"
-        }
+        },
+        "winnings-are-forfeit": "*Winnings not claimed within {{amount}} days of a market being resolved are forfeit."
     },
     "markets": {
         "market-card": {
