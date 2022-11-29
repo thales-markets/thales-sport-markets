@@ -18,6 +18,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
 import { isFirefox } from 'utils/device';
+import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 export type ShareTicketModalProps = {
     markets: ParlaysMarket[];
@@ -55,6 +56,7 @@ const TWITTER_MESSAGE_UPLOAD = `%0A<UPLOAD YOUR ${PARLAY_IMAGE_NAME}>`;
 
 const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const { trackEvent } = useMatomo();
 
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
@@ -157,6 +159,10 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
 
     const onTwitterShareClick = () => {
         if (!isLoading) {
+            trackEvent({
+                category: 'share-ticket-modal',
+                action: 'click-on-share-tw-icon',
+            });
             const id = toast.loading(
                 isFirefox || isMobile ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
             );
