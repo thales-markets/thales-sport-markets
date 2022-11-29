@@ -39,6 +39,7 @@ const DisplayOptions: React.FC<DisplayOptionsProps> = ({
     const onShareClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.currentTarget.disabled = true;
         onShare();
+        event.currentTarget.disabled = false;
     };
 
     return (
