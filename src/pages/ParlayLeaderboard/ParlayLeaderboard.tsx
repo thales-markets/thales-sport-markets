@@ -11,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { CellProps } from 'react-table';
 import { getIsAppReady } from 'redux/modules/app';
-import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -34,7 +33,6 @@ const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const selectedOddsType = useSelector(getOddsType);
 
     const query = useParlayLeaderboardQuery(networkId, undefined, undefined, { enabled: isAppReady });
     const parlays = query.isSuccess ? query.data : [];
@@ -139,7 +137,7 @@ const ParlayLeaderboard: React.FC = () => {
                             <LastExpandedSection style={{ gap: 20 }}>
                                 <QuoteWrapper>
                                     <QuoteLabel>Total Quote:</QuoteLabel>
-                                    <QuoteText>{formatMarketOdds(selectedOddsType, row.original.totalQuote)}</QuoteText>
+                                    <QuoteText>{formatMarketOdds(OddsType.Decimal, row.original.totalQuote)}</QuoteText>
                                 </QuoteWrapper>
 
                                 <QuoteWrapper>
