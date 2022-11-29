@@ -56,9 +56,9 @@ const ParlayLeaderboard: React.FC = () => {
                                 <Tooltip
                                     overlay={<>{Rewards[cellProps.cell.value - 1]} OP</>}
                                     component={
-                                        <FlexDivRowCentered>
+                                        <FlexDivRowCentered style={{ position: 'relative', width: 14 }}>
                                             <StatusIcon
-                                                style={{ fontSize: 16 }}
+                                                style={{ fontSize: 16, position: 'absolute', left: '-20px' }}
                                                 color="rgb(95, 97, 128)"
                                                 className={`icon icon--fee-rebates`}
                                             />
