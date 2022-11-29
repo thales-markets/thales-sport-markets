@@ -446,6 +446,7 @@ const Home: React.FC = () => {
                                         }
                                     }}
                                     key={filterItem}
+                                    isMobile={isMobile}
                                 >
                                     {t(`market.filter-label.sport.${filterItem.toLowerCase()}`)}
                                 </SportFilter>
@@ -478,6 +479,7 @@ const Home: React.FC = () => {
                     />
                 </GlobalFiltersContainer>
                 <ApplyFiltersButton onClick={() => setShowBurger(false)}>
+                    <ArrowIcon className={`icon icon--arrow-down`} />
                     {t('market.apply-filters')}
                 </ApplyFiltersButton>
             </BurgerFiltersContainer>
@@ -694,14 +696,14 @@ const SidebarContainer = styled(FlexDivColumn)`
 const GlobalFiltersContainer = styled(FlexDivColumn)`
     height: fit-content;
     flex: 0;
-    padding-top: 20px;
     &:before {
         content: '';
         height: 3px;
         background: ${(props) => props.theme.borderColor.primary};
         border-radius: 10px 10px 10px 10px;
         margin-bottom: 20px;
-        margin-left: 10px;
+        margin-left: 50px;
+        margin-right: 50px;
     }
 `;
 
@@ -792,10 +794,26 @@ export const Info = styled.div`
 
 const ApplyFiltersButton = styled(Button)`
     align-self: center;
-    height: 10px;
+    height: 43px;
     margin-right: 5px;
     position: fixed;
+    background: ${(props) => props.theme.background.quaternary};
+    color: ${(props) => props.theme.background.primary};
+    border: none;
+    border-radius: 40px;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 210%;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
     bottom: 3%;
+`;
+
+const ArrowIcon = styled.i`
+    font-size: 30px;
+    margin-left: -10px;
+    text-transform: none;
+    writing-mode: vertical-lr;
 `;
 
 export default Home;

@@ -8,7 +8,7 @@ export const Container = styled(FlexDiv)`
     left: 50%;
     transform: translateX(-50%);
     height: 43px;
-    color: black;
+    color: ${(props) => props.theme.background.primary};
     background: linear-gradient(101.62deg, #64d9fe 14.92%, #a38cff 94.73%);
     border-radius: 40px;
     justify-content: space-around;
@@ -21,13 +21,13 @@ export const ItemContainer = styled(FlexDiv)`
 
 export const ItemIcon = styled.i`
     font-size: 33px;
-    color: black;
+    color: ${(props) => props.theme.background.primary};
 `;
 
 export const ParlayButton = styled.button`
     width: 33px;
     height: 33px;
-    background: black;
+    background: ${(props) => props.theme.background.primary};
     border-radius: 50px;
     border: none;
     color: #94c5f2;

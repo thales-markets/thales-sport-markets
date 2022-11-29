@@ -217,15 +217,15 @@
     content: '\0038';
 }
 
-.icon--pending::before {
+.icon--pendingmarkets::before {
     content: '\0039';
 }
 
-.icon--finished::before {
+.icon--resolvedmarkets::before {
     content: '\003A';
 }
 
-.icon--paused::before {
+.icon--canceled::before {
     content: '\003B';
 }
 
