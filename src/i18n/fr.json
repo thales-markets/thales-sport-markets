@@ -580,7 +580,8 @@
             "id": "Identifiant",
             "position": "Position",
             "time": "Temps",
-            "amount": "montant"
+            "amount": "montant",
+            "status": "Statut"
         }
     },
     "mint-world-cup-nft": {
@@ -627,7 +628,8 @@
             "volume": "Le volume",
             "bonus-volume": "Prime",
             "rewards": "Récompenses",
-            "player": "Joueur"
+            "player": "Joueur",
+            "wash-trading": "* L'équipe des heures supplémentaires a le droit de disqualifier les commerçants de lavage de la campagne"
         },
         "zebro-wct-collection": "La collection Zebro WC NFT",
         "zebro-wct-collection-text": "fait partie d'une campagne incitative pour représenter votre pays préféré pendant la Coupe du monde et être éligible pour une part de 50 000 jetons OP et 30 000 jetons THALES, ainsi que des multiplicateurs exclusifs pour les parlays et les matchs individuels.",
