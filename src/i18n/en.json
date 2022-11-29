@@ -171,6 +171,7 @@
             "claim-refund-success": "Refund successfully claimed",
             "withdraw-success": "Successfuly withdrawn",
             "get-usd-success": "{{amount}} successfully minted",
+            "create-image": "Creating image. Please wait...",
             "save-image": "Saving image to clipboard. Please wait...",
             "download-image": "Downloading image. Please wait...",
             "save-image-error": "Failed to save image! Try again",
@@ -178,7 +179,7 @@
             "image-in-clipboard": "Image is in clipboard!",
             "open-twitter": "Openning Twitter...",
             "click-open-twitter": "Click here to open Twitter",
-            "metamask-not-supported": "Metamask doesn't support image download! Please use another browser..."
+            "metamask-not-supported": "Metamask doesn't support image download, please use another browser! Click here to open image..."
         },
         "filter-label": {
             "global": {

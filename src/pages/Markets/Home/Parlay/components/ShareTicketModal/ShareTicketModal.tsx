@@ -77,7 +77,18 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 try {
                     const base64Image = await toPng(ref.current, { cacheBust: true });
 
-                    if (isFirefox()) {
+                    if (isMetamask()) {
+                        // Metamask dosn't support image download neither clipboard.write
+                        toast.update(
+                            toastIdParam,
+                            getErrorToastOptions(
+                                <a onClick={() => window.open(base64Image, '_blank')}>
+                                    {t('market.toast-message.metamask-not-supported')}
+                                </a>,
+                                { autoClose: false }
+                            )
+                        );
+                    } else if (isFirefox()) {
                         // Download image: clipboard.write is not supported/enabled in Firefox, so just download it
                         const link = document.createElement('a');
                         link.href = base64Image;
@@ -98,44 +109,46 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                         return;
                     }
 
-                    const twitterLinkWithStatusMessage =
-                        LINKS.TwitterTweetStatus +
-                        LINKS.Overtime +
-                        (isFirefox() ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+                    if (!isMetamask()) {
+                        const twitterLinkWithStatusMessage =
+                            LINKS.TwitterTweetStatus +
+                            LINKS.Overtime +
+                            (isFirefox() ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
 
-                    // Mobile requires user action in order to open new window, it can't open in async call
-                    isMobile
-                        ? toast.update(
-                              toastIdParam,
-                              getSuccessToastOptions(
-                                  <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
-                                      {t('market.toast-message.click-open-twitter')}
-                                  </a>,
-                                  { autoClose: false }
+                        // Mobile requires user action in order to open new window, it can't open in async call
+                        isMobile
+                            ? toast.update(
+                                  toastIdParam,
+                                  getSuccessToastOptions(
+                                      <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
+                                          {t('market.toast-message.click-open-twitter')}
+                                      </a>,
+                                      { autoClose: false }
+                                  )
                               )
-                          )
-                        : toast.update(
-                              toastIdParam,
-                              getSuccessToastOptions(
-                                  <>
-                                      {!isFirefox() && (
-                                          <>
-                                              {t('market.toast-message.image-in-clipboard')}
-                                              <br />
-                                          </>
-                                      )}
-                                      {t('market.toast-message.open-twitter')}
-                                  </>
-                              )
-                          );
+                            : toast.update(
+                                  toastIdParam,
+                                  getSuccessToastOptions(
+                                      <>
+                                          {!isFirefox() && (
+                                              <>
+                                                  {t('market.toast-message.image-in-clipboard')}
+                                                  <br />
+                                              </>
+                                          )}
+                                          {t('market.toast-message.open-twitter')}
+                                      </>
+                                  )
+                              );
 
-                    setTimeout(() => {
-                        if (!isMobile) {
-                            window.open(twitterLinkWithStatusMessage);
-                        }
-                        setIsLoading(false);
-                        onClose();
-                    }, 3000);
+                        setTimeout(() => {
+                            if (!isMobile) {
+                                window.open(twitterLinkWithStatusMessage);
+                            }
+                            setIsLoading(false);
+                            onClose();
+                        }, 3000);
+                    }
                 } catch (e) {
                     console.log(e);
                     setIsLoading(false);
@@ -153,13 +166,12 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 action: 'click-on-share-tw-icon',
             });
 
-            if (isMetamask()) {
-                toast.loading(getErrorToastOptions(t('market.toast-message.metamask-not-supported')));
-                return;
-            }
-
             const id = toast.loading(
-                isFirefox() ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
+                isMetamask()
+                    ? t('market.toast-message.create-image')
+                    : isFirefox()
+                    ? t('market.toast-message.download-image')
+                    : t('market.toast-message.save-image')
             );
             setToastId(id);
             setIsLoading(true);
