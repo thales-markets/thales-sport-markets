@@ -482,8 +482,10 @@
             "amount": "Monto",
             "position": "Posición",
             "id": "Identificación",
-            "games": "Juegos"
-        }
+            "games": "Juegos",
+            "status": "Estado"
+        },
+        "winnings-are-forfeit": "*Las ganancias no reclamadas dentro de {{amount}} días de la resolución de un mercado se perderán."
     },
     "mint-world-cup-nft": {
         "mint-nft-button": "Mint esta cebra!",
@@ -529,7 +531,8 @@
             "rewards": "Recompensas",
             "bonus-volume": "Prima",
             "base-volume": "Base",
-            "player": "Jugador"
+            "player": "Jugador",
+            "wash-trading": "*El equipo de tiempo extra se reserva el derecho de descalificar a los comerciantes de lavado de la campaña"
         },
         "zebro-wct-collection-text": "es parte de una campaña incentivada para representar a su país favorito durante la Copa del Mundo y ser elegible para una parte de 50 000 tokens OP y 30 000 tokens THALES, junto con multiplicadores exclusivos para parlays y partidos individuales.",
         "zebro-wct-collection": "La colección Zebro WC NFT",

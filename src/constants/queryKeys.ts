@@ -36,6 +36,7 @@ export const QUERY_KEYS = {
         marketAddress,
         networkId,
     ],
+    MarketDuration: (networkId: NetworkId) => ['marketDuration', networkId],
     UserTransactions: (walletAddress: string, networkId: NetworkId) => [
         'user',
         'transactions',

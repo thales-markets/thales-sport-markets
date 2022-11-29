@@ -16,6 +16,7 @@ export const CategoryContainer = styled(FlexDiv)`
     flex-direction: row;
     align-items: center;
     margin: 20px 0px;
+    position: relative;
 `;
 
 export const CategoryLabel = styled.span`
@@ -46,6 +47,13 @@ export const Arrow = styled.i`
     @media (max-width: 768px) {
         font-size: 10px;
     }
+`;
+
+export const CategoryDisclaimer = styled.div`
+    position: absolute;
+    transform: translateY(120%);
+    left: 45px;
+    font-size: 13px;
 `;
 
 //  ------------------------------------------------
