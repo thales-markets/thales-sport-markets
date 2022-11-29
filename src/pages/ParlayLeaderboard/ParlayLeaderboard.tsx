@@ -275,6 +275,7 @@ const ExpandedRowWrapper = styled.div`
     justify-content: space-evenly;
     padding-left: 60px;
     padding-right: 60px;
+    border-bottom: 2px dotted rgb(95, 97, 128);
     @media (max-width: 600px) {
         flex-direction: column;
         padding-left: 10px;
