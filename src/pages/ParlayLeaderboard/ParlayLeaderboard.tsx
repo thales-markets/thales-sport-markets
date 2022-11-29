@@ -1,5 +1,6 @@
 import PositionSymbol from 'components/PositionSymbol';
 import Table from 'components/Table';
+import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import { OddsType } from 'constants/markets';
 import { t } from 'i18next';
@@ -29,6 +30,8 @@ import {
     getIsApexTopGame,
 } from 'utils/markets';
 
+const Rewards = [2000, 1500, 1000, 800, 750, 700, 600, 500, 300, 250, 225, 210, 200, 185, 170, 145, 130, 125, 110, 100];
+
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -48,9 +51,21 @@ const ParlayLeaderboard: React.FC = () => {
                     {
                         accessor: 'rank',
                         Header: <>Rank</>,
-                        Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['rank']>) => (
-                            <TableText>{cellProps.cell.value}</TableText>
-                        ),
+                        Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['rank']>) => {
+                            return cellProps.cell.value <= 20 ? (
+                                <Tooltip
+                                    overlay={Rewards[cellProps.cell.value - 1]}
+                                    component={
+                                        <TableText>
+                                            <StatusIcon color="rgb(95, 97, 128)" className={`icon icon--fee-rebates`} />{' '}
+                                            {cellProps.cell.value}
+                                        </TableText>
+                                    }
+                                ></Tooltip>
+                            ) : (
+                                <TableText>{cellProps.cell.value}</TableText>
+                            );
+                        },
                     },
                     {
                         Header: <>{t('rewards.table.wallet-address')}</>,
@@ -76,7 +91,7 @@ const ParlayLeaderboard: React.FC = () => {
                         sortType: quoteSort(),
                     },
                     {
-                        accessor: 'sUSDAfterFees',
+                        accessor: 'sUSDPaid',
                         Header: <>Paid</>,
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['sUSDAfterFees']>) => (
                             <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>
