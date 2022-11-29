@@ -9,17 +9,19 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { SportMarketInfo } from 'types/markets';
+import { PositionData, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime, formatTxTimestamp } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
 import {
+    convertFinalResultToResultType,
+    convertPositionNameToPosition,
     convertPositionNameToPositionType,
     convertPositionToSymbolType,
     formatMarketOdds,
     getIsApexTopGame,
+    isParlayOpen,
 } from 'utils/markets';
-import { getPositionColor } from 'utils/ui';
 import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
@@ -95,6 +97,22 @@ const ParlayTransactions: React.FC = () => {
                             return <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>;
                         },
                     },
+                    {
+                        id: 'status',
+                        Header: <>{t('profile.table.status')}</>,
+                        sortable: false,
+                        Cell: (cellProps: any) => {
+                            if (cellProps.row.original.won) {
+                                return <StatusWrapper color="#5FC694">WON </StatusWrapper>;
+                            } else {
+                                return isParlayOpen(cellProps.row.original) ? (
+                                    <StatusWrapper color="#FFFFFF">OPEN</StatusWrapper>
+                                ) : (
+                                    <StatusWrapper color="#E26A78">LOSS</StatusWrapper>
+                                );
+                            }
+                        },
+                    },
                 ]}
                 initialState={{
                     sortBy: [
@@ -112,10 +130,12 @@ const ParlayTransactions: React.FC = () => {
                         const position = row.original.positions.find(
                             (position: any) => position.market.address == address
                         );
+
                         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
                         return (
-                            <ParlayRow key={index}>
+                            <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
                                 <ParlayRowText>
+                                    {getPositionStatus(position)}
                                     {position.market.homeTeam + ' vs ' + position.market.awayTeam}
                                 </ParlayRowText>
                                 <PositionSymbol
@@ -123,7 +143,7 @@ const ParlayTransactions: React.FC = () => {
                                         positionEnum,
                                         getIsApexTopGame(position.market.isApex, position.market.betType)
                                     )}
-                                    symbolColor={getPositionColor(positionEnum)}
+                                    symbolColor={'white'}
                                     symbolSize={'10'}
                                     additionalText={{
                                         firstText: formatMarketOdds(
@@ -132,7 +152,7 @@ const ParlayTransactions: React.FC = () => {
                                         ),
                                         firstTextStyle: {
                                             fontSize: '10.5px',
-                                            color: getPositionColor(positionEnum),
+                                            color: 'white',
                                             marginLeft: '5px',
                                         },
                                     }}
@@ -167,11 +187,47 @@ const ParlayTransactions: React.FC = () => {
     );
 };
 
+const getPositionStatus = (position: PositionData) => {
+    if (position.market.isResolved) {
+        if (
+            convertPositionNameToPosition(position.side) === convertFinalResultToResultType(position.market.finalResult)
+        ) {
+            return <StatusIcon color="#5FC694" className={`icon icon--win`} />;
+        } else {
+            return <StatusIcon color="#E26A78" className={`icon icon--lost`} />;
+        }
+    } else {
+        return <StatusIcon color="#FFFFFF" className={`icon icon--open`} />;
+    }
+};
+
+const getOpacity = (position: PositionData) => {
+    if (position.market.isResolved) {
+        if (
+            convertPositionNameToPosition(position.side) === convertFinalResultToResultType(position.market.finalResult)
+        ) {
+            return 1;
+        } else {
+            return 0.5;
+        }
+    } else {
+        return 1;
+    }
+};
+
 const getParlayItemStatus = (market: SportMarketInfo) => {
     if (market.isCanceled) return t('profile.card.canceled');
     if (market.isResolved) return `${market.homeScore} : ${market.awayScore}`;
     return formatDateWithTime(Number(market.maturityDate) * 1000);
 };
+
+const StatusIcon = styled.i`
+    font-size: 14px;
+    margin-right: 4px;
+    &::before {
+        color: ${(props) => props.color || 'white'};
+    }
+`;
 
 const TableText = styled.span`
     font-family: 'Roboto';
@@ -184,6 +240,23 @@ const TableText = styled.span`
         white-space: pre-wrap;
     }
     white-space: nowrap;
+`;
+
+const StatusWrapper = styled.div`
+    width: 62px;
+    height: 25px;
+    border: 2px solid ${(props) => props.color || 'white'};
+    border-radius: 5px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: justify;
+    text-transform: uppercase;
+    text-align: center;
+    color: ${(props) => props.color || 'white'};
+    padding-top: 3px;
 `;
 
 const QuoteText = styled.span`
@@ -203,8 +276,6 @@ const QuoteLabel = styled.span`
 
     letter-spacing: 0.025em;
     text-transform: uppercase;
-
-    color: #64d9fe;
 `;
 
 const QuoteWrapper = styled.div`

@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import { getEtherscanTxLink } from 'utils/etherscan';
 import { formatTxTimestamp } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
+import { convertFinalResultToResultType, convertPositionNameToPosition } from 'utils/markets';
 
 const TransactionsHistory: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -96,6 +97,12 @@ const TransactionsHistory: React.FC = () => {
                             return <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>;
                         },
                     },
+                    {
+                        id: 'status',
+                        Header: <>{t('profile.table.status')}</>,
+                        sortable: false,
+                        Cell: (cellProps: any) => getPositionStatus(cellProps.row.original),
+                    },
                 ]}
                 initialState={{
                     sortBy: [
@@ -113,6 +120,21 @@ const TransactionsHistory: React.FC = () => {
     );
 };
 
+const getPositionStatus = (position: any) => {
+    if (position.wholeMarket.isResolved) {
+        if (
+            convertPositionNameToPosition(position.position) ===
+            convertFinalResultToResultType(position.wholeMarket.finalResult)
+        ) {
+            return <StatusWrapper color="#5FC694">WON </StatusWrapper>;
+        } else {
+            return <StatusWrapper color="#E26A78">LOSS</StatusWrapper>;
+        }
+    } else {
+        return <StatusWrapper color="#FFFFFF">OPEN</StatusWrapper>;
+    }
+};
+
 const TableText = styled.span`
     font-family: 'Roboto';
     font-style: normal;
@@ -122,6 +144,23 @@ const TableText = styled.span`
     @media (max-width: 600px) {
         font-size: 10px;
     }
+`;
+
+const StatusWrapper = styled.div`
+    width: 62px;
+    height: 25px;
+    border: 2px solid ${(props) => props.color || 'white'};
+    border-radius: 5px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: justify;
+    text-transform: uppercase;
+    text-align: center;
+    color: ${(props) => props.color || 'white'};
+    padding-top: 3px;
 `;
 
 const TableHeaderStyle: React.CSSProperties = {

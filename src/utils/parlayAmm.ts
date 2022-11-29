@@ -18,7 +18,10 @@ export const getParlayAMMTransaction: any = (
     sUSDPaid: BigNumber,
     expectedPayout: BigNumber,
     referral?: string | null,
-    additionalSlippage?: BigNumber
+    additionalSlippage?: BigNumber,
+    providerOptions?: {
+        gasLimit: number | null;
+    }
 ): Promise<ethers.ContractTransaction> => {
     const isNonSusdCollateral = stableIndex !== COLLATERALS_INDEX.sUSD;
     const collateralAddress = getCollateralAddress(isBuy, isNonSusdCollateral, networkId, stableIndex);
@@ -31,7 +34,8 @@ export const getParlayAMMTransaction: any = (
                 sUSDPaid,
                 additionalSlippage,
                 expectedPayout,
-                voucherId
+                voucherId,
+                providerOptions
             );
         }
 
@@ -43,7 +47,8 @@ export const getParlayAMMTransaction: any = (
                 additionalSlippage,
                 expectedPayout,
                 collateralAddress,
-                referral || ZERO_ADDRESS
+                referral || ZERO_ADDRESS,
+                providerOptions
             );
         }
 
@@ -55,7 +60,8 @@ export const getParlayAMMTransaction: any = (
                   additionalSlippage,
                   expectedPayout,
                   ZERO_ADDRESS,
-                  referral
+                  referral,
+                  providerOptions
               )
             : parlayMarketsAMMContract?.buyFromParlay(
                   marketsAddresses,
@@ -63,11 +69,12 @@ export const getParlayAMMTransaction: any = (
                   sUSDPaid,
                   additionalSlippage,
                   expectedPayout,
-                  ZERO_ADDRESS
+                  ZERO_ADDRESS,
+                  providerOptions
               );
     } else {
         // Sell not supported yet, this is just placeholder
-        return parlayMarketsAMMContract?.buyFromParlay([], [], 0, 0, 0, ZERO_ADDRESS);
+        return parlayMarketsAMMContract?.buyFromParlay([], [], 0, 0, 0, ZERO_ADDRESS, providerOptions);
     }
 };
 

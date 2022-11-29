@@ -28,6 +28,7 @@ type TableProps = {
     currentPage?: number;
     rowsPerPage?: number;
     expandedRow?: (row: Row<any>) => JSX.Element;
+    stickyRow?: JSX.Element;
 };
 
 const Table: React.FC<TableProps> = ({
@@ -47,6 +48,7 @@ const Table: React.FC<TableProps> = ({
     currentPage,
     rowsPerPage,
     expandedRow,
+    stickyRow,
 }) => {
     const { t } = useTranslation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,6 +135,7 @@ const Table: React.FC<TableProps> = ({
                     <NoResultContainer>{noResultsMessage}</NoResultContainer>
                 ) : (
                     <TableBody {...getTableBodyProps()}>
+                        {stickyRow ?? <></>}
                         {(currentPage !== undefined ? page : rows).map((row, rowIndex: any) => {
                             prepareRow(row);
 
