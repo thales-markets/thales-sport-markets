@@ -16,7 +16,7 @@ import { DisplayOptionsType } from './components/DisplayOptions/DisplayOptions';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
-import { isFirefox, isMetamask } from 'utils/device';
+import { isFirefox } from 'utils/device';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 export type ShareTicketModalProps = {
@@ -152,11 +152,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 category: 'share-ticket-modal',
                 action: 'click-on-share-tw-icon',
             });
-
-            if (isMetamask()) {
-                toast.loading(getErrorToastOptions(t('market.toast-message.metamask-not-supported')));
-                return;
-            }
 
             const id = toast.loading(
                 isFirefox() ? t('market.toast-message.download-image') : t('market.toast-message.save-image')

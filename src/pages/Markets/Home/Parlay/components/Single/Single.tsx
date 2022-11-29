@@ -60,6 +60,7 @@ import { removeAll, setPayment } from 'redux/modules/parlay';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import ShareTicketModal from '../ShareTicketModal';
 import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
+import { isMetamask } from 'utils/device';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -569,6 +570,11 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
 
     const twitterShareDisabled = submitDisabled || !hasAllowance;
     const onTwitterIconClick = () => {
+        if (isMetamask()) {
+            toast.loading(getErrorToastOptions(t('market.toast-message.metamask-not-supported')));
+            return;
+        }
+
         // create data copy to avoid modal re-render while opened
         const modalData: ShareTicketModalProps = {
             markets: [market],

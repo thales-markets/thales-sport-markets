@@ -21,6 +21,7 @@ import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { ParlayPayment, ParlaysMarket } from 'types/markets';
 import { getAmountForApproval } from 'utils/amm';
+import { isMetamask } from 'utils/device';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import {
     countDecimals,
@@ -544,6 +545,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
     const twitterShareDisabled = submitDisabled || !hasAllowance;
     const onTwitterIconClick = () => {
+        if (isMetamask()) {
+            toast.loading(getErrorToastOptions(t('market.toast-message.metamask-not-supported')));
+            return;
+        }
+
         // create data copy to avoid modal re-render while opened
         const modalData: ShareTicketModalProps = {
             markets: [...markets],
