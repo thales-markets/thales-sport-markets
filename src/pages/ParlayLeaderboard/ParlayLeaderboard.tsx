@@ -54,12 +54,16 @@ const ParlayLeaderboard: React.FC = () => {
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['rank']>) => {
                             return cellProps.cell.value <= 20 ? (
                                 <Tooltip
-                                    overlay={Rewards[cellProps.cell.value - 1]}
+                                    overlay={<>{Rewards[cellProps.cell.value - 1]} OP</>}
                                     component={
-                                        <TableText>
-                                            <StatusIcon color="rgb(95, 97, 128)" className={`icon icon--fee-rebates`} />{' '}
-                                            {cellProps.cell.value}
-                                        </TableText>
+                                        <FlexDivRowCentered>
+                                            <StatusIcon
+                                                style={{ fontSize: 16 }}
+                                                color="rgb(95, 97, 128)"
+                                                className={`icon icon--fee-rebates`}
+                                            />
+                                            <TableText>{cellProps.cell.value}</TableText>
+                                        </FlexDivRowCentered>
                                     }
                                 ></Tooltip>
                             ) : (
