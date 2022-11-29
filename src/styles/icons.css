@@ -197,6 +197,18 @@
     content: '\0077';
 }
 
+.icon--lost::before {
+    content: '\0078';
+}
+
+.icon--win::before {
+    content: '\0079';
+}
+
+.icon--open::before {
+    content: '\007A';
+}
+
 .icon--odds::before {
     content: '\0037';
 }
