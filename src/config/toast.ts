@@ -1,6 +1,6 @@
 import { TypeOptions, UpdateOptions } from 'react-toastify';
 
-const defaultToastOptions = {
+export const defaultToastOptions = {
     isLoading: false,
     autoClose: 4000,
     hideProgressBar: false,

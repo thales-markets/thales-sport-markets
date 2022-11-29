@@ -1,4 +1,4 @@
-import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
+import { getSuccessToastOptions, getErrorToastOptions, defaultToastOptions } from 'config/toast';
 import { LINKS } from 'constants/links';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
@@ -67,6 +67,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
         },
     };
 
+    const isMetamaskBrowser = isMetamask() && isMobile;
+
     const saveImageAndOpenTwitter = useCallback(
         async (toastIdParam: string | number) => {
             if (!isLoading) {
@@ -77,18 +79,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 try {
                     const base64Image = await toPng(ref.current, { cacheBust: true });
 
-                    if (isMetamask()) {
-                        // Metamask dosn't support image download neither clipboard.write
-                        toast.update(
-                            toastIdParam,
-                            getErrorToastOptions(
-                                <a onClick={() => window.open(base64Image, '_blank')}>
-                                    {t('market.toast-message.metamask-not-supported')}
-                                </a>,
-                                { autoClose: false }
-                            )
-                        );
-                    } else if (isFirefox()) {
+                    if (isFirefox()) {
                         // Download image: clipboard.write is not supported/enabled in Firefox, so just download it
                         const link = document.createElement('a');
                         link.href = base64Image;
@@ -109,7 +100,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                         return;
                     }
 
-                    if (!isMetamask()) {
+                    if (!isMetamaskBrowser) {
                         const twitterLinkWithStatusMessage =
                             LINKS.TwitterTweetStatus +
                             LINKS.Overtime +
@@ -156,7 +147,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 }
             }
         },
-        [isLoading, isMobile, onClose]
+        [isLoading, isMobile, isMetamaskBrowser, onClose]
     );
 
     const onTwitterShareClick = () => {
@@ -166,21 +157,22 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 action: 'click-on-share-tw-icon',
             });
 
-            const id = toast.loading(
-                isMetamask()
-                    ? t('market.toast-message.create-image')
-                    : isFirefox()
-                    ? t('market.toast-message.download-image')
-                    : t('market.toast-message.save-image')
-            );
-            setToastId(id);
-            setIsLoading(true);
+            if (!isMetamaskBrowser) {
+                // Metamask dosn't support image download neither clipboard.write
+                toast.error(t('market.toast-message.metamask-not-supported'), defaultToastOptions);
+            } else {
+                const id = toast.loading(
+                    isFirefox() ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
+                );
+                setToastId(id);
+                setIsLoading(true);
 
-            // If image creation is not postponed with timeout toaster is not displayed immediately, it is rendered in parallel with toPng() execution.
-            // Function toPng is causing UI to freez for couple of seconds and there is no notification message during that time, so it confuses user.
-            setTimeout(() => {
-                saveImageAndOpenTwitter(id);
-            }, 100);
+                // If image creation is not postponed with timeout toaster is not displayed immediately, it is rendered in parallel with toPng() execution.
+                // Function toPng is causing UI to freez for couple of seconds and there is no notification message during that time, so it confuses user.
+                setTimeout(() => {
+                    saveImageAndOpenTwitter(id);
+                }, 100);
+            }
         }
     };
 
