@@ -86,7 +86,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                         link.click();
                         document.body.removeChild(link);
                     } else if (isMetamask()) {
-                        toast.update(toastIdParam, getSuccessToastOptions('This is MM'));
                     } else {
                         // Save to clipboard
                         const b64Blob = (await fetch(base64Image)).blob();
@@ -107,15 +106,17 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
 
                     // Mobile requires user action in order to open new window, it can't open in async call
                     isMobile
-                        ? toast.update(
-                              toastIdParam,
-                              getSuccessToastOptions(
-                                  <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
-                                      {t('market.toast-message.click-open-twitter')}
-                                  </a>,
-                                  { autoClose: false }
+                        ? isMetamask()
+                            ? toast.update(toastIdParam, getSuccessToastOptions('This is MM'))
+                            : toast.update(
+                                  toastIdParam,
+                                  getSuccessToastOptions(
+                                      <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
+                                          {t('market.toast-message.click-open-twitter')}
+                                      </a>,
+                                      { autoClose: false }
+                                  )
                               )
-                          )
                         : toast.update(
                               toastIdParam,
                               getSuccessToastOptions(
@@ -155,7 +156,11 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 action: 'click-on-share-tw-icon',
             });
             const id = toast.loading(
-                isFirefox() ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
+                isFirefox()
+                    ? t('market.toast-message.download-image')
+                    : isMetamask()
+                    ? 'Creating image...'
+                    : t('market.toast-message.save-image')
             );
             setToastId(id);
             setIsLoading(true);
@@ -171,6 +176,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
     const onModalClose = () => {
         if (isLoading) {
             toast.update(toastId, getErrorToastOptions(t('market.toast-message.save-image-cancel')));
+        } else if (isMobile) {
+            toast.dismiss();
         }
         onClose();
     };
