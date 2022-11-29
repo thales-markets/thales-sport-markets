@@ -16,7 +16,7 @@ import { DisplayOptionsType } from './components/DisplayOptions/DisplayOptions';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
-import { isFirefox } from 'utils/device';
+import { isFirefox, isMetamask } from 'utils/device';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 export type ShareTicketModalProps = {
@@ -67,8 +67,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
         },
     };
 
-    const downloadImage = isFirefox || isMobile;
-
     const saveImageAndOpenTwitter = useCallback(
         async (toastIdParam: string | number) => {
             if (!isLoading) {
@@ -79,14 +77,16 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 try {
                     const base64Image = await toPng(ref.current, { cacheBust: true });
 
-                    if (downloadImage) {
-                        // clipboard.write is not supported/enabled in Firefox, so just download it
+                    if (isFirefox()) {
+                        // Download image: clipboard.write is not supported/enabled in Firefox, so just download it
                         const link = document.createElement('a');
                         link.href = base64Image;
                         link.download = PARLAY_IMAGE_NAME;
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);
+                    } else if (isMetamask()) {
+                        toast.update(toastIdParam, getSuccessToastOptions('This is MM'));
                     } else {
                         // Save to clipboard
                         const b64Blob = (await fetch(base64Image)).blob();
@@ -103,7 +103,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                     const twitterLinkWithStatusMessage =
                         LINKS.TwitterTweetStatus +
                         LINKS.Overtime +
-                        (downloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+                        (isFirefox() ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
 
                     // Mobile requires user action in order to open new window, it can't open in async call
                     isMobile
@@ -120,9 +120,9 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                               toastIdParam,
                               getSuccessToastOptions(
                                   <>
-                                      {!isFirefox && (
+                                      {!isFirefox() && (
                                           <>
-                                              {t('market.toast-message.image-created')}
+                                              {t('market.toast-message.image-in-clipboard')}
                                               <br />
                                           </>
                                       )}
@@ -145,7 +145,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 }
             }
         },
-        [isLoading, isMobile, downloadImage, onClose]
+        [isLoading, isMobile, onClose]
     );
 
     const onTwitterShareClick = () => {
@@ -155,7 +155,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 action: 'click-on-share-tw-icon',
             });
             const id = toast.loading(
-                downloadImage ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
+                isFirefox() ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
             );
             setToastId(id);
             setIsLoading(true);

@@ -175,7 +175,7 @@
             "download-image": "Downloading image. Please wait...",
             "save-image-error": "Failed to save image! Try again",
             "save-image-cancel": "Image saving canceled!",
-            "image-created": "Image is in clipboard!",
+            "image-in-clipboard": "Image is in clipboard!",
             "open-twitter": "Openning Twitter...",
             "click-open-twitter": "Click here to open Twitter"
         },

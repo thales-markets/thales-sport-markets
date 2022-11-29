@@ -104,6 +104,15 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         payout: 0,
         onClose: () => {},
     });
+    const [showShareTicketModal2, setShowShareTicketModal2] = useState(false);
+    const [showShareTicketModal3, setShowShareTicketModal3] = useState(false);
+
+    const markets2 = markets.map((market) => {
+        return { ...market, isResolved: true, winning: true };
+    });
+    const markets3 = markets.map((market, index) => {
+        return { ...market, isResolved: true, winning: index > 0 };
+    });
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -540,6 +549,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
     const onModalClose = useCallback(() => {
         setShowShareTicketModal(false);
+        setShowShareTicketModal2(false);
+        setShowShareTicketModal3(false);
     }, []);
 
     const twitterShareDisabled = submitDisabled || !hasAllowance;
@@ -650,12 +661,40 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             <ShareWrapper>
                 <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />
             </ShareWrapper>
+            <ShareWrapper>
+                <TwitterIcon disabled={submitDisabled} onClick={() => setShowShareTicketModal2(!submitDisabled)}>
+                    Test ticket won
+                </TwitterIcon>
+            </ShareWrapper>
+            <ShareWrapper>
+                <TwitterIcon disabled={submitDisabled} onClick={() => setShowShareTicketModal3(!submitDisabled)}>
+                    Test ticket lost
+                </TwitterIcon>
+            </ShareWrapper>
             {showShareTicketModal && (
                 <ShareTicketModal
                     markets={shareTicketModalData.markets}
                     totalQuote={shareTicketModalData.totalQuote}
                     paid={shareTicketModalData.paid}
                     payout={shareTicketModalData.payout}
+                    onClose={onModalClose}
+                />
+            )}
+            {showShareTicketModal2 && (
+                <ShareTicketModal
+                    markets={markets2}
+                    totalQuote={totalQuote}
+                    paid={Number(usdAmountValue)}
+                    payout={totalBuyAmount}
+                    onClose={onModalClose}
+                />
+            )}
+            {showShareTicketModal3 && (
+                <ShareTicketModal
+                    markets={markets3}
+                    totalQuote={totalQuote}
+                    paid={Number(usdAmountValue)}
+                    payout={totalBuyAmount}
                     onClose={onModalClose}
                 />
             )}
