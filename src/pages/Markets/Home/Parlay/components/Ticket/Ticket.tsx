@@ -582,7 +582,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 setIsVoucherSelectedProp={setIsVoucherSelected}
             />
             <RowSummary>
-                <SummaryLabel>{t('markets.parlay.buy-amount')}:</SummaryLabel>
+                <SummaryLabel>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>
             <InputContainer ref={inputRef}>
                 <ValidationTooltip
