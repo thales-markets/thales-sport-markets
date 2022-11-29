@@ -113,8 +113,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                                   getSuccessToastOptions(
                                       <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
                                           {t('market.toast-message.click-open-twitter')}
-                                      </a>,
-                                      { autoClose: false }
+                                      </a>
                                   )
                               )
                             : toast.update(
@@ -135,8 +134,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                         setTimeout(() => {
                             if (!isMobile) {
                                 window.open(twitterLinkWithStatusMessage);
+                                setIsLoading(false);
                             }
-                            setIsLoading(false);
                             onClose();
                         }, 3000);
                     }
@@ -179,8 +178,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
     const onModalClose = () => {
         if (isLoading) {
             toast.update(toastId, getErrorToastOptions(t('market.toast-message.save-image-cancel')));
-        } else if (isMobile) {
-            toast.dismiss();
         }
         onClose();
     };
