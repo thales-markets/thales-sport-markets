@@ -16,7 +16,7 @@ import { DisplayOptionsType } from './components/DisplayOptions/DisplayOptions';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
-import { isFirefox, isMetamask } from 'utils/device';
+import { isFirefox } from 'utils/device';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 export type ShareTicketModalProps = {
@@ -85,7 +85,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);
-                    } else if (isMetamask()) {
                     } else {
                         // Save to clipboard
                         const b64Blob = (await fetch(base64Image)).blob();
@@ -106,17 +105,15 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
 
                     // Mobile requires user action in order to open new window, it can't open in async call
                     isMobile
-                        ? isMetamask()
-                            ? toast.update(toastIdParam, getSuccessToastOptions('This is MM'))
-                            : toast.update(
-                                  toastIdParam,
-                                  getSuccessToastOptions(
-                                      <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
-                                          {t('market.toast-message.click-open-twitter')}
-                                      </a>,
-                                      { autoClose: false }
-                                  )
+                        ? toast.update(
+                              toastIdParam,
+                              getSuccessToastOptions(
+                                  <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
+                                      {t('market.toast-message.click-open-twitter')}
+                                  </a>,
+                                  { autoClose: false }
                               )
+                          )
                         : toast.update(
                               toastIdParam,
                               getSuccessToastOptions(
@@ -155,12 +152,9 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 category: 'share-ticket-modal',
                 action: 'click-on-share-tw-icon',
             });
+
             const id = toast.loading(
-                isFirefox()
-                    ? t('market.toast-message.download-image')
-                    : isMetamask()
-                    ? 'Creating image...'
-                    : t('market.toast-message.save-image')
+                isFirefox() ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
             );
             setToastId(id);
             setIsLoading(true);
