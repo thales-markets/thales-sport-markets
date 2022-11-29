@@ -3,7 +3,6 @@ import ROUTES from 'constants/routes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { matchPath, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -14,18 +13,14 @@ const ReferralButton: React.FC = () => {
     const { t } = useTranslation();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
-    const location = useLocation();
 
     const referralClickHandler = () => {
         if (!walletAddress) {
             return;
         }
-        const referralPath = matchPath(location.pathname, ROUTES.Markets.Market)
-            ? location.pathname
-            : ROUTES.Markets.Home;
 
         const referralLink = `${window.location.origin}${buildReferralLink(
-            referralPath,
+            ROUTES.Markets.Home,
             window.location.hash,
             window.location.search,
             walletAddress
