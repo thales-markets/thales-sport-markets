@@ -56,7 +56,7 @@ const Container = styled.div`
     overflow-y: auto;
     max-height: 90vh;
     height: fit-content;
-    margin-top: 20px;
+    margin-top: 40px;
 `;
 
 const Header = styled(FlexDivRow)`
