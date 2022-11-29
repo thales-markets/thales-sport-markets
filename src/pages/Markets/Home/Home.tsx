@@ -479,8 +479,8 @@ const Home: React.FC = () => {
                     />
                 </GlobalFiltersContainer>
                 <ApplyFiltersButton onClick={() => setShowBurger(false)}>
-                    <ArrowIcon className={`icon icon--arrow-down`} />
                     {t('market.apply-filters')}
+                    <ArrowIcon className={`icon icon--arrow-up`} />
                 </ApplyFiltersButton>
             </BurgerFiltersContainer>
 
@@ -811,7 +811,7 @@ const ApplyFiltersButton = styled(Button)`
 
 const ArrowIcon = styled.i`
     font-size: 30px;
-    margin-left: -10px;
+    margin-right: -10px;
     text-transform: none;
     writing-mode: vertical-lr;
 `;
