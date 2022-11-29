@@ -132,6 +132,13 @@ export const convertPositionNameToPositionType = (positionName: string) => {
     return Position.HOME;
 };
 
+export const convertPositionToPositionName = (position: number): 'home' | 'away' | 'draw' => {
+    if (position == 0) return 'home';
+    if (position == 1) return 'away';
+    if (position == 2) return 'draw';
+    return 'home';
+};
+
 export const getCanceledGameClaimAmount = (position: AccountPositionProfile) => {
     const positionType = convertPositionNameToPositionType(position.side);
 
@@ -272,4 +279,34 @@ export const isSportMarketExpired = (sportMarket: SportMarketInfo) => {
     }
 
     return false;
+};
+
+export const convertMarketDataTypeToSportMarketInfoType = (marketData: MarketData): SportMarketInfo => {
+    return {
+        id: marketData.address,
+        address: marketData.address,
+        maturityDate: new Date(marketData.maturityDate),
+        tags: marketData.tags,
+        isOpen: !marketData.resolved && !marketData.cancelled && !marketData.gameStarted ? true : false,
+        isResolved: marketData.resolved,
+        isCanceled: marketData.cancelled,
+        finalResult: marketData.finalResult,
+        poolSize: 0,
+        numberOfParticipants: 0,
+        homeTeam: marketData.homeTeam,
+        awayTeam: marketData.awayTeam,
+        homeOdds: marketData.positions[0].sides.BUY.odd ? marketData.positions[0].sides.BUY.odd : 0,
+        awayOdds: marketData.positions[1].sides.BUY.odd ? marketData.positions[1].sides.BUY.odd : 0,
+        drawOdds: marketData.positions[2].sides.BUY.odd,
+        homeScore: marketData.homeScore ? marketData.homeScore : 0,
+        awayScore: marketData.awayScore ? marketData.awayScore : 0,
+        sport: '',
+        isApex: marketData.isApex,
+        resultDetails: '',
+        isPaused: marketData.paused,
+        arePostQualifyingOddsFetched: false,
+        betType: marketData.betType,
+        homePriceImpact: 0,
+        awayPriceImpact: 0,
+    };
 };
