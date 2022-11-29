@@ -14,7 +14,7 @@ export const Container = styled.div<{
     width: 100%;
     padding: 10px 10px;
     border-radius: 5px;
-    margin-bottom: 15px;
+    margin-bottom: ${(_props) => (_props?.isMobile ? '5px' : '15px')};
     /* background-color: ${(_props) => (_props?.backgroundColor ? _props.backgroundColor : '')}; */
     background-color: ${(_props) =>
         _props.isResolved && !_props.claimBorder ? 'rgb(36,41,64, 0.5)' : 'rgba(48, 54, 86, 0.5)'};

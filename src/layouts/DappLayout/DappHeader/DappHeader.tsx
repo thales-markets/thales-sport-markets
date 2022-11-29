@@ -29,7 +29,7 @@ const PULSING_COUNT = 10;
 
 const customModalStyles = {
     content: {
-        top: '125px',
+        top: '85px',
         left: '50%',
         right: 'auto',
         bottom: 'auto',
@@ -43,7 +43,7 @@ const customModalStyles = {
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        backdropFilter: 'blur(10px)',
+        zIndex: '1',
     },
 };
 
