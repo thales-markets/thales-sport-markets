@@ -230,6 +230,7 @@ const QuoteText = styled.span`
     font-size: 12px;
     text-align: left;
     white-space: nowrap;
+    display: flex;
 `;
 
 const QuoteLabel = styled.span`
