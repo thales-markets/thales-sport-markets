@@ -1,33 +1,26 @@
 import PositionSymbol from 'components/PositionSymbol';
 import { Position } from 'constants/options';
 import { ODDS_COLOR } from 'constants/ui';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { ParlaysMarket } from 'types/markets';
-import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { convertPositionToSymbolType, formatMarketOdds, getIsApexTopGame, getPositionOdds } from 'utils/markets';
+import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
 
 type MatchInfoProps = {
     market: ParlaysMarket;
     readOnly?: boolean;
+    isHighlighted?: boolean;
     customStyle?: { fontSize?: string; lineHeight?: string; positionColor?: string };
 };
 
-const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) => {
+const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, customStyle }) => {
     const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
-
-    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
-    const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
-
-    useEffect(() => {
-        setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
-        setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
-    }, [market.homeTeam, market.awayTeam, market.tags]);
 
     const getPositionColor = (position: Position): string => {
         return customStyle?.positionColor
@@ -41,23 +34,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) 
 
     return (
         <>
-            <MatchLogo isFlag={market.tags[0] == 9018}>
-                <ClubLogo
-                    alt="Home team logo"
-                    src={homeLogoSrc}
-                    isFlag={market.tags[0] == 9018}
-                    isHighlighted={market.position !== Position.AWAY}
-                    onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
-                />
-                <ClubLogo
-                    awayTeam={true}
-                    alt="Away team logo"
-                    src={awayLogoSrc}
-                    isFlag={market.tags[0] == 9018}
-                    isHighlighted={market.position !== Position.HOME}
-                    onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
-                />
-            </MatchLogo>
+            <MatchLogos market={market} width={'120px'} padding={'0 0 0 4px'} isHighlighted={isHighlighted} />
             <MatchLabel>
                 <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
                     {market.homeTeam}
@@ -99,26 +76,6 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) 
         </>
     );
 };
-
-const MatchLogo = styled.div<{ isFlag?: boolean }>`
-    display: flex;
-    position: relative;
-    align-items: center;
-    width: 120px;
-    height: 100%;
-    ${(props) => (props.isFlag ? 'padding-left: 4px;' : '')}
-`;
-
-const ClubLogo = styled.img<{ isFlag?: boolean; awayTeam?: boolean; isHighlighted?: boolean }>`
-    position: absolute;
-    ${(props) => (props.isFlag ? 'object-fit: cover;' : '')}
-    ${(props) => (props.isFlag ? 'border-radius: 50%;' : '')}
-    height: ${(props) => (props.isFlag ? '25px' : '35px')};
-    width: ${(props) => (props.isFlag ? '25px' : '35px')};
-    ${(props) => (props.awayTeam ? `margin-left: ${props.isFlag ? '23' : '20'}px;` : '')}
-    z-index: ${(props) => (props.awayTeam ? '1' : '2')};
-    opacity: ${(props) => (props.isHighlighted ? '1' : '0.4')};
-`;
 
 const MatchLabel = styled.div`
     display: block;

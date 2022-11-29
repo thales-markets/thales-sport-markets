@@ -338,7 +338,7 @@
         "parlay": {
             "total-quote": "Total quote",
             "clear": "Clear all",
-            "buy-amount": "Buy-in",
+            "buy-in": "Buy-in",
             "parlay-fee": "Parlay fee",
             "safebox-fee": "SafeBox fee",
             "positions": "Positions",
@@ -370,9 +370,9 @@
             },
             "share-ticket": {
                 "header": "Web 3 Sport markets on",
-                "payout": "payout",
+                "parlay": "parlay",
+                "potential-payout": "Potential payout",
                 "total-quote": "Total quote",
-                "paid": "Paid",
                 "referral": "Referral link",
                 "share": "Share",
                 "winner": "Winner",

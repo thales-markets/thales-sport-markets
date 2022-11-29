@@ -8,58 +8,80 @@ import { getOddsType } from 'redux/modules/ui';
 import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { formatMarketOdds } from 'utils/markets';
 import { generateReferralLink } from 'utils/referral';
 import MatchInfo from '../../../MatchInfo';
-import { DisplayOptionsType } from '../DisplayOptions/DisplayOptions';
 
 type MyTicketProps = {
     markets: ParlaysMarket[];
     totalQuote: number;
     paid: number;
     payout: number;
-    displayOptions: DisplayOptionsType;
 };
 
-const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout, displayOptions }) => {
+const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
 
-    const payoutDisplayText = displayOptions.showUsdAmount ? formatCurrencyWithSign(USD_SIGN, payout) : '';
-
     const isTicketLost = markets.some((market) => market.isResolved && !market.winning);
+    const isTicketResolved = markets.every((market) => market.isResolved);
+    const isParlay = markets.length > 1;
 
     return (
         <Container>
-            <Header>
-                {t('markets.parlay.share-ticket.header')}
-                <BoldContent>{' overtimemarkets.xyz'}</BoldContent>
-            </Header>
-            <OvertimeLogo />
-            {payoutDisplayText && (
+            <ContentRow>
+                <OvertimeLogo />
+                {isParlay && <ParlayLabel>{t('markets.parlay.share-ticket.parlay')}</ParlayLabel>}
+                {!isParlay && (
+                    <Header isParlay={isParlay}>
+                        {t('markets.parlay.share-ticket.header')}
+                        <BoldContent>{' overtimemarkets.xyz'}</BoldContent>
+                    </Header>
+                )}
+            </ContentRow>
+            {isParlay && (
+                <Header isParlay={isParlay}>
+                    {t('markets.parlay.share-ticket.header')}
+                    <BoldContent>{' overtimemarkets.xyz'}</BoldContent>
+                </Header>
+            )}
+            <ContentRow margin={'5px 0 10px 0'}>
+                <ReferralWrapper>
+                    <QRCode size={90} value={generateReferralLink(walletAddress)} />
+                    <ReferralLabel>{t('markets.parlay.share-ticket.referral')}</ReferralLabel>
+                </ReferralWrapper>
                 <PayoutWrapper>
                     <PayoutRow>
-                        <Square />
-                        <PayoutLabel>{t('markets.parlay.share-ticket.payout')}</PayoutLabel>
-                        <Square />
+                        <Square isLost={isTicketLost} isResolved={isTicketResolved} />
+                        <PayoutLabel isLost={isTicketLost} isResolved={isTicketResolved}>
+                            {isTicketResolved
+                                ? t('markets.parlay.payout')
+                                : t('markets.parlay.share-ticket.potential-payout')}
+                        </PayoutLabel>
+                        <Square isLost={isTicketLost} isResolved={isTicketResolved} />
                     </PayoutRow>
-                    {payoutDisplayText && (
-                        <PayoutRow>
-                            <PayoutValue isLost={isTicketLost}>{payoutDisplayText}</PayoutValue>
-                        </PayoutRow>
-                    )}
+                    <PayoutRow>
+                        <PayoutValue isLost={isTicketLost} isResolved={isTicketResolved}>
+                            {formatCurrencyWithSign(USD_SIGN, payout)}
+                        </PayoutValue>
+                    </PayoutRow>
                 </PayoutWrapper>
-            )}
+            </ContentRow>
             <HorizontalLine />
             <MarketsContainer>
                 {markets.map((market, index) => {
                     return (
                         <React.Fragment key={index}>
                             <RowMarket>
-                                <MatchInfo market={market} readOnly={true} customStyle={matchInfoStyle} />
+                                <MatchInfo
+                                    market={market}
+                                    readOnly={true}
+                                    isHighlighted={true}
+                                    customStyle={matchInfoStyle}
+                                />
                             </RowMarket>
                             {markets.length !== index + 1 && <HorizontalDashedLine />}
                         </React.Fragment>
@@ -67,38 +89,53 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout, 
                 })}
             </MarketsContainer>
             <HorizontalLine />
-            <InfoRow margin={'2px 0 0 0'}>
+            <InfoRow margin={'8px 0 0 0'}>
                 <InfoLabel>{t('markets.parlay.share-ticket.total-quote')}:</InfoLabel>
                 <InfoValue>{formatMarketOdds(selectedOddsType, totalQuote)}</InfoValue>
             </InfoRow>
-            <InfoRow margin={'0 0 2px 0'}>
-                <InfoLabel>{t('markets.parlay.share-ticket.paid')}:</InfoLabel>
+            <InfoRow>
+                <InfoLabel>{t('markets.parlay.buy-in')}:</InfoLabel>
                 <InfoValue>{formatCurrencyWithSign(USD_SIGN, paid)}</InfoValue>
             </InfoRow>
-            <HorizontalLine />
-            <ReferralLabel>{t('markets.parlay.share-ticket.referral')}</ReferralLabel>
-            <QRCode size={100} value={generateReferralLink(walletAddress)} />
         </Container>
     );
 };
 
-const matchInfoStyle = { fontSize: '12px', lineHeight: '14px', positionColor: '#ffffff' };
+const matchInfoStyle = { fontSize: '11px', lineHeight: '13px', positionColor: '#ffffff' };
 
 const Container = styled(FlexDivColumnCentered)`
     align-items: center;
+`;
+
+const ContentRow = styled(FlexDivRowCentered)<{ margin?: string }>`
+    width: 294px;
+    ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
 `;
 
 const MarketsContainer = styled(FlexDivColumn)`
     width: 100%;
 `;
 
-const Header = styled.span`
-    font-weight: 200;
-    font-size: 10px;
-    line-height: 12px;
-    text-align: center;
+const ParlayLabel = styled.span`
+    font-size: 34px;
+    line-height: 27px;
+    letter-spacing: 0.1em;
+    font-weight: 300;
     text-transform: uppercase;
     color: #ffffff;
+    padding-left: 5px;
+    opacity: 0.8;
+`;
+
+const Header = styled.span<{ isParlay: boolean }>`
+    font-weight: 200;
+    font-size: ${(props) => (props.isParlay ? '11' : '10')}px;
+    line-height: ${(props) => (props.isParlay ? '13' : '12')}px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+    ${(props) => (props.isParlay ? 'margin-top: 5px' : '')};
 `;
 
 const BoldContent = styled.span`
@@ -106,45 +143,45 @@ const BoldContent = styled.span`
 `;
 
 const OvertimeLogo = styled(OvertimeLogoIcon)`
-    margin: 8px 0;
     fill: ${(props) => props.theme.textColor.primary};
-    height: 20px;
 `;
 
 const PayoutWrapper = styled.div`
+    width: 100%;
     text-align: center;
     text-transform: uppercase;
-    color: #5fc694;
-    margin-bottom: 8px;
 `;
 
 const PayoutRow = styled(FlexDivCentered)``;
 
-const PayoutLabel = styled.span`
-    font-size: 30px;
-    line-height: 30px;
-    font-weight: 300;
+const PayoutLabel = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
+    font-size: ${(props) => (props.isResolved ? '32' : '18')}px;
+    line-height: ${(props) => (props.isResolved ? '32' : '18')}px;
+    font-weight: 200;
+    padding: 0 5px;
+    color: ${(props) => (props.isLost ? '#ca4c53' : '#5fc694')};
+    ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')};
 `;
 
-const PayoutValue = styled.span<{ isLost?: boolean }>`
-    font-size: 35px;
-    line-height: 35px;
-    font-weight: 800;
-    ${(props) => (props.isLost ? 'color: #ca4c53;' : '')}
-`;
-
-const Square = styled.div`
-    margin: 0 10px;
-    width: 10px;
-    height: 10px;
-    background: #5fc694;
+const Square = styled.div<{ isLost?: boolean; isResolved?: boolean }>`
+    width: ${(props) => (props.isResolved ? '10' : '8')}px;
+    height: ${(props) => (props.isResolved ? '10' : '8')}px;
     transform: rotate(-45deg);
+    background: ${(props) => (props.isLost ? '#ca4c53' : '#5fc694')};
+`;
+
+const PayoutValue = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
+    font-size: ${(props) => (props.isResolved ? '35' : '30')}px;
+    line-height: ${(props) => (props.isResolved ? '37' : '32')}px;
+    font-weight: 800;
+    color: ${(props) => (props.isLost ? '#ca4c53' : '#5fc694')};
+    ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')}
 `;
 
 const RowMarket = styled.div`
     display: flex;
     position: relative;
-    height: 43px;
+    height: 45px;
     align-items: center;
     text-align: center;
     padding: 5px 7px;
@@ -168,14 +205,16 @@ const InfoValue = styled.span`
     margin-left: auto;
 `;
 
+const ReferralWrapper = styled(FlexDivColumnCentered)``;
+
 const ReferralLabel = styled.span`
     font-weight: 600;
-    font-size: 14px;
-    line-height: 16px;
+    font-size: 12px;
+    line-height: 14px;
+    letter-spacing: 0.025em;
     text-transform: uppercase;
     color: #ffffff;
-    margin-top: 10px;
-    margin-bottom: 5px;
+    margin-top: 5px;
 `;
 
 const HorizontalLine = styled.hr`

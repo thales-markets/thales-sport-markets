@@ -177,10 +177,13 @@ const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: b
     border: ${(_props) =>
         _props?.glow ? '3px solid ' + _props.color : _props.addedToParlay ? '3px solid #64D9FE' : '3px solid #5f6180'};
     box-shadow: ${(_props) => (_props?.glow ? '0 0 6px 2px ' + _props.color : '')};
-    &:hover {
-        ${(props) => (props.notClickable ? '' : 'border: 3px solid #64d9fe;')}
-        & > span {
-            ${(props) => (props.notClickable ? '' : 'color: #64d9fe !important;')}
+
+    @media (hover: hover) {
+        &:hover {
+            ${(props) => (props.notClickable ? '' : 'border: 3px solid #64d9fe;')}
+            & > span {
+                ${(props) => (props.notClickable ? '' : 'color: #64d9fe !important;')}
+            }
         }
     }
 

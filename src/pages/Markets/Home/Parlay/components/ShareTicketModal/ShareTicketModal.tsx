@@ -2,7 +2,7 @@ import { getSuccessToastOptions, getErrorToastOptions } from 'config/toast';
 import { LINKS } from 'constants/links';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
-import React, { useRef, useState, useCallback, useEffect } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import ReactModal from 'react-modal';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
@@ -13,7 +13,6 @@ import MyTicket from './components/MyTicket';
 import { TwitterIcon } from '../styled-components';
 import DisplayOptions from './components/DisplayOptions';
 import { DisplayOptionsType } from './components/DisplayOptions/DisplayOptions';
-import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
@@ -61,20 +60,12 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
 
     const defaultDisplayOptions: DisplayOptionsType = {
         isSimpleView: false,
-        showUsdAmount: true,
     };
     const [displayOptions, setDisplayOptions] = useState<DisplayOptionsType>(defaultDisplayOptions);
 
     const ref = useRef<HTMLDivElement>(null);
 
-    const market = markets[0];
-    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
-    const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
-
-    useEffect(() => {
-        setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
-        setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
-    }, [market.homeTeam, market.awayTeam, market.tags]);
+    const downloadImage = isFirefox || isMobile;
 
     const saveImageAndOpenTwitter = useCallback(
         async (toastIdParam: string | number) => {
@@ -86,7 +77,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 try {
                     const base64Image = await toPng(ref.current, { cacheBust: true });
 
-                    if (isFirefox || isMobile) {
+                    if (downloadImage) {
                         // clipboard.write is not supported/enabled in Firefox, so just download it
                         const link = document.createElement('a');
                         link.href = base64Image;
@@ -110,7 +101,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                     const twitterLinkWithStatusMessage =
                         LINKS.TwitterTweetStatus +
                         LINKS.Overtime +
-                        (isFirefox ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+                        (downloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
 
                     // Mobile requires user action in order to open new window, it can't open in async call
                     isMobile
@@ -152,13 +143,13 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 }
             }
         },
-        [isLoading, isMobile, onClose]
+        [isLoading, isMobile, downloadImage, onClose]
     );
 
     const onTwitterShareClick = () => {
         if (!isLoading) {
             const id = toast.loading(
-                isFirefox || isMobile ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
+                downloadImage ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
             );
             setToastId(id);
             setIsLoading(true);
@@ -176,30 +167,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
             toast.update(toastId, getErrorToastOptions(t('market.toast-message.save-image-cancel')));
         }
         onClose();
-    };
-
-    const getLogoBackground = () => {
-        return (
-            <>
-                <ClubWrapper>
-                    <ClubLogo
-                        alt="Home team logo"
-                        src={homeLogoSrc}
-                        isFlag={market.tags[0] == 9018}
-                        onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
-                    />
-                </ClubWrapper>
-                <ClubWrapper awayTeam={true}>
-                    <ClubLogo
-                        awayTeam={true}
-                        alt="Away team logo"
-                        src={awayLogoSrc}
-                        isFlag={market.tags[0] == 9018}
-                        onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
-                    />
-                </ClubWrapper>
-            </>
-        );
     };
 
     return (
@@ -223,18 +190,9 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 <Container ref={ref} isSimpleView={displayOptions.isSimpleView}>
                     <CloseIcon className={`icon icon--close`} onClick={onClose} />
                     {displayOptions.isSimpleView ? (
-                        <>
-                            {markets.length === 1 && getLogoBackground()}
-                            <MySimpleTicket markets={markets} payout={payout} />
-                        </>
+                        <MySimpleTicket markets={markets} payout={payout} />
                     ) : (
-                        <MyTicket
-                            markets={markets}
-                            totalQuote={totalQuote}
-                            paid={paid}
-                            payout={payout}
-                            displayOptions={displayOptions}
-                        />
+                        <MyTicket markets={markets} totalQuote={totalQuote} paid={paid} payout={payout} />
                     )}
                     <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
                         <TwitterIcon disabled={isLoading} fontSize={'30px'} />
@@ -246,8 +204,11 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
     );
 };
 
+// Aspect ratio is important for Twitter: horizontal (Simple View) 2:1 and vertical max 3:4
 const Container = styled(FlexDivColumnCentered)<{ isSimpleView: boolean }>`
-    width: ${(props) => (props.isSimpleView ? '550' : '380')}px;
+    width: ${(props) => (props.isSimpleView ? '400' : '324')}px;
+    ${(props) => (props.isSimpleView ? 'height: 200px;' : '')}
+    ${(props) => (!props.isSimpleView ? 'max-height: 432px;' : '')}
     padding: 15px;
     flex: none;
     background: ${(props) =>
@@ -257,28 +218,10 @@ const Container = styled(FlexDivColumnCentered)<{ isSimpleView: boolean }>`
     border-radius: 10px;
 `;
 
-const ClubWrapper = styled.div<{ awayTeam?: boolean }>`
-    position: absolute;
-    overflow: hidden;
-    ${(props) => (props.awayTeam ? 'right: 0;' : 'left: 0;')}
-    width: 230px;
-    height: 230px;
-`;
-
-const ClubLogo = styled.img<{ isFlag?: boolean; awayTeam?: boolean }>`
-    position: absolute;
-    ${(props) => (props.awayTeam ? 'right: ' : 'left: ')}-80px;
-    ${(props) => (props.isFlag ? 'object-fit: cover;' : '')}
-    ${(props) => (props.isFlag ? 'border-radius: 50%;' : '')}
-    height: 100%;
-    width: 100%;
-    opacity: 0.15;
-`;
-
 const CloseIcon = styled.i`
     position: absolute;
-    top: -25px;
-    right: -25px;
+    top: -20px;
+    right: -20px;
     font-size: 20px;
     cursor: pointer;
     color: #ffffff;

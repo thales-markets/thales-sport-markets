@@ -7,7 +7,6 @@ import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 
 export type DisplayOptionsType = {
     isSimpleView: boolean;
-    showUsdAmount: boolean;
 };
 
 type DisplayOptionsProps = {
@@ -18,19 +17,11 @@ type DisplayOptionsProps = {
 
 const DisplayOptions: React.FC<DisplayOptionsProps> = ({ setDisplayOptions, isDisabled, onShare }) => {
     const [isSimpleView, setIsSimpleView] = useState(false);
-    const [showUsdAmount, setShowUsdAmount] = useState(true);
 
     const onOptionToggleViewClickHandler = () => {
         const newIsSimpleView = !isSimpleView;
         setIsSimpleView(newIsSimpleView);
-        setDisplayOptions({ isSimpleView: newIsSimpleView, showUsdAmount });
-    };
-
-    const onOptionUsdAmountClickHandler = () => {
-        if (isSimpleView) return;
-        const newShowUsdAmount = !showUsdAmount;
-        setShowUsdAmount(newShowUsdAmount);
-        setDisplayOptions({ isSimpleView, showUsdAmount: newShowUsdAmount });
+        setDisplayOptions({ isSimpleView: newIsSimpleView });
     };
 
     const onShareClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -61,16 +52,6 @@ const DisplayOptions: React.FC<DisplayOptionsProps> = ({ setDisplayOptions, isDi
                 handleClick={onOptionToggleViewClickHandler}
             />
             <Option>
-                <OptionLabel disabled={isDisabled || isSimpleView}>
-                    {t('markets.parlay.share-ticket.options.usd-amount')}
-                </OptionLabel>
-                <OptionSymbol
-                    className={`icon ${showUsdAmount ? 'icon--correct' : 'icon--hide'}`}
-                    disabled={isDisabled || isSimpleView}
-                    onClick={onOptionUsdAmountClickHandler}
-                />
-            </Option>
-            <Option>
                 <ShareButton disabled={isDisabled} onClick={onShareClickHandler}>
                     {t('markets.parlay.share-ticket.share')}
                 </ShareButton>
@@ -85,7 +66,7 @@ const Container = styled(FlexDivColumnCentered)`
     bottom: 35px;
     right: 35px;
     width: 243px;
-    height: 200px;
+    height: 155px;
     padding: 15px;
     background: linear-gradient(180deg, #5f6180 0%, #2f303f 100%);
     border-radius: 8px;
@@ -94,6 +75,15 @@ const Container = styled(FlexDivColumnCentered)`
     line-height: 25px;
     text-transform: uppercase;
     color: #ffffff;
+    @media (max-width: 950px) {
+        top: 10px;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        height: 90px;
+        padding: 10px;
+    }
 `;
 
 const Title = styled.span`
@@ -103,19 +93,6 @@ const Title = styled.span`
 const Option = styled(FlexDivRowCentered)`
     width: 100%;
     padding: 0 5px;
-`;
-
-const OptionLabel = styled.span<{ disabled?: boolean }>`
-    font-weight: 500;
-    line-height: 36px;
-    opacity: ${(props: any) => (props.disabled ? '0.4' : '1')};
-`;
-
-const OptionSymbol = styled.i<{ disabled?: boolean }>`
-    font-size: 18px;
-    font-weight: 500;
-    cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
-    opacity: ${(props: any) => (props.disabled ? '0.4' : '1')};
 `;
 
 const ShareButton = styled(Button)`
@@ -128,6 +105,8 @@ const ShareButton = styled(Button)`
     font-weight: 700;
     font-size: 20px;
     line-height: 23px;
+    @media (max-width: 950px) {
+        display: none;
 `;
 
 export default DisplayOptions;
