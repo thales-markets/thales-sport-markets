@@ -4,6 +4,7 @@ import { t } from 'i18next';
 import React from 'react';
 import QRCode from 'react-qr-code';
 import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -20,6 +21,7 @@ type MySimpleTicketProps = {
 
 const MySimpleTicket: React.FC<MySimpleTicketProps> = ({ markets, payout }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const isTicketLost = markets.some((market) => market.isResolved && !market.winning);
     const isTicketResolved = markets.every((market) => market.isResolved);
@@ -32,7 +34,7 @@ const MySimpleTicket: React.FC<MySimpleTicketProps> = ({ markets, payout }) => {
             </Header>
             <ContentRow>
                 <ContentColumn>
-                    <ContentRow margin={'0 0 10px 0'}>
+                    <ContentRow margin={isMobile ? '0 0 5px 0' : '0 0 10px 0'}>
                         <OvertimeLogo />
                         {markets.length > 1 && <ParlayLabel>{t('markets.parlay.share-ticket.parlay')}</ParlayLabel>}
                     </ContentRow>
@@ -48,14 +50,14 @@ const MySimpleTicket: React.FC<MySimpleTicketProps> = ({ markets, payout }) => {
                     <PayoutRow>
                         <PayoutValue isLost={isTicketLost}>{formatCurrencyWithSign(USD_SIGN, payout)}</PayoutValue>
                     </PayoutRow>
-                    <ContentRow height={'35px'} margin={'10px 0 0 0'} justify={'space-around'}>
+                    <ContentRow height={'35px'} margin={isMobile ? '5px 0 0 0' : '10px 0 0 0'} justify={'space-around'}>
                         {markets.map((market, index) => (
                             <MatchLogos key={index} market={market} width={'50px'} isHighlighted={true} />
                         ))}
                     </ContentRow>
                 </ContentColumn>
                 <ReferralWrapper>
-                    <QRCode size={100} value={generateReferralLink(walletAddress)} />
+                    <QRCode size={isMobile ? 80 : 100} value={generateReferralLink(walletAddress)} />
                     <ReferralLabel>{t('markets.parlay.share-ticket.referral')}</ReferralLabel>
                 </ReferralWrapper>
             </ContentRow>
@@ -92,6 +94,13 @@ const Header = styled.span`
     color: #ffffff;
     margin-bottom: 10px;
     letter-spacing: 0.08em;
+    white-space: nowrap;
+    @media (max-width: 950px) {
+        font-size: 12px;
+        line-height: 14px;
+        letter-spacing: 0.06em;
+        margin-bottom: 4px;
+    }
 `;
 
 const BoldContent = styled.span`
@@ -122,6 +131,10 @@ const PayoutLabel = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
     padding: 0 5px;
     color: ${(props) => (props.isLost ? '#ca4c53' : '#5fc694')};
     ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')};
+    @media (max-width: 950px) {
+        font-size: ${(props) => (props.isResolved ? '32' : '20')}px;
+        line-height: ${(props) => (props.isResolved ? '32' : '20')}px;
+    }
 `;
 
 const Square = styled.div<{ isLost?: boolean; isResolved?: boolean }>`
@@ -143,11 +156,19 @@ const ReferralWrapper = styled(FlexDivColumnCentered)``;
 
 const ReferralLabel = styled.span`
     font-weight: 600;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 16px;
+    letter-spacing: 0.02em;
     text-transform: uppercase;
     color: #ffffff;
     margin-top: 5px;
+    white-space: nowrap;
+    text-align: center;
+    @media (max-width: 950px) {
+        font-size: 10px;
+        line-height: 12px;
+        letter-spacing: 0.03em;
+    }
 `;
 
 export default MySimpleTicket;

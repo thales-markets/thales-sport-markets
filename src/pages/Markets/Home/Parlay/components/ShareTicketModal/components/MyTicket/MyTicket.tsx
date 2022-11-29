@@ -116,6 +116,22 @@ const MarketsContainer = styled(FlexDivColumn)`
     width: 100%;
 `;
 
+const Header = styled.span<{ isParlay: boolean }>`
+    font-weight: 200;
+    font-size: ${(props) => (props.isParlay ? '11' : '10')}px;
+    line-height: ${(props) => (props.isParlay ? '13' : '12')}px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.045em;
+    color: #ffffff;
+    ${(props) => (props.isParlay ? 'white-space: nowrap;' : '')};
+    ${(props) => (props.isParlay ? 'margin-top: 5px' : '')};
+`;
+
+const BoldContent = styled.span`
+    font-weight: 900;
+`;
+
 const ParlayLabel = styled.span`
     font-size: 34px;
     line-height: 27px;
@@ -125,21 +141,6 @@ const ParlayLabel = styled.span`
     color: #ffffff;
     padding-left: 5px;
     opacity: 0.8;
-`;
-
-const Header = styled.span<{ isParlay: boolean }>`
-    font-weight: 200;
-    font-size: ${(props) => (props.isParlay ? '11' : '10')}px;
-    line-height: ${(props) => (props.isParlay ? '13' : '12')}px;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #ffffff;
-    ${(props) => (props.isParlay ? 'margin-top: 5px' : '')};
-`;
-
-const BoldContent = styled.span`
-    font-weight: 900;
 `;
 
 const OvertimeLogo = styled(OvertimeLogoIcon)`
@@ -211,10 +212,11 @@ const ReferralLabel = styled.span`
     font-weight: 600;
     font-size: 12px;
     line-height: 14px;
-    letter-spacing: 0.025em;
+    letter-spacing: 0.02em;
     text-transform: uppercase;
     color: #ffffff;
     margin-top: 5px;
+    white-space: nowrap;
 `;
 
 const HorizontalLine = styled.hr`

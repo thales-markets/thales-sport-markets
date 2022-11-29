@@ -2,21 +2,33 @@ import Button from 'components/Button';
 import Toggle from 'components/Toggle/Toggle';
 import { t } from 'i18next';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import { TwitterIcon } from '../../../styled-components';
 
 export type DisplayOptionsType = {
     isSimpleView: boolean;
 };
 
 type DisplayOptionsProps = {
+    defaultDisplayOptions: DisplayOptionsType;
     setDisplayOptions: (options: DisplayOptionsType) => void;
     onShare: () => void;
     isDisabled: boolean;
 };
 
-const DisplayOptions: React.FC<DisplayOptionsProps> = ({ setDisplayOptions, isDisabled, onShare }) => {
-    const [isSimpleView, setIsSimpleView] = useState(false);
+const DisplayOptions: React.FC<DisplayOptionsProps> = ({
+    defaultDisplayOptions,
+    setDisplayOptions,
+    isDisabled,
+    onShare,
+}) => {
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
+
+    const [isSimpleView, setIsSimpleView] = useState(defaultDisplayOptions.isSimpleView);
 
     const onOptionToggleViewClickHandler = () => {
         const newIsSimpleView = !isSimpleView;
@@ -54,6 +66,7 @@ const DisplayOptions: React.FC<DisplayOptionsProps> = ({ setDisplayOptions, isDi
             <Option>
                 <ShareButton disabled={isDisabled} onClick={onShareClickHandler}>
                     {t('markets.parlay.share-ticket.share')}
+                    {isMobile && <TwitterIcon disabled={isDisabled} fontSize={'27px'} padding={'0 0 0 10px'} />}
                 </ShareButton>
             </Option>
         </Container>
@@ -76,18 +89,19 @@ const Container = styled(FlexDivColumnCentered)`
     text-transform: uppercase;
     color: #ffffff;
     @media (max-width: 950px) {
-        top: 10px;
+        width: 100%;
+        bottom: -132px;
         left: 0;
-        right: 0;
-        margin-left: auto;
-        margin-right: auto;
-        height: 90px;
+        height: 127px;
         padding: 10px;
     }
 `;
 
 const Title = styled.span`
     padding-bottom: 10px;
+    @media (max-width: 950px) {
+        padding-bottom: 2px;
+    }
 `;
 
 const Option = styled(FlexDivRowCentered)`
@@ -99,14 +113,18 @@ const ShareButton = styled(Button)`
     width: 100%;
     margin-top: 20px;
     background: #3fd1ff;
-    color: black;
+    color: #04045a;
     height: 34px;
     text-transform: uppercase;
     font-weight: 700;
     font-size: 20px;
     line-height: 23px;
     @media (max-width: 950px) {
-        display: none;
+        margin-top: 10px;
+        background: linear-gradient(88.08deg, #3ca8ca 0.6%, #1748b1 101.56%);
+        color: #ffffff;
+        border: none;
+    }
 `;
 
 export default DisplayOptions;
