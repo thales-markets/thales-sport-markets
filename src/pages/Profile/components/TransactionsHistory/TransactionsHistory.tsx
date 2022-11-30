@@ -46,6 +46,8 @@ const Label = styled(CategoryLabel)`
 `;
 
 const Wrapper = styled(CategoryContainer)<{ active: boolean }>`
+    flex-direction: row;
+    align-items: center;
     ${Icon},
     ${Label} {
         color: ${(props) => (props.active ? 'white' : '#5f6180')};
