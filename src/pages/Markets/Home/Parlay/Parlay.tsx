@@ -2,7 +2,7 @@ import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.sv
 import { GlobalFiltersEnum } from 'constants/markets';
 import { t } from 'i18next';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
-import useSportMarketsQuery from 'queries/markets/useSportMarketsQuery';
+import useSportMarketsQueryNew from 'queries/markets/useSportsMarketsQueryNew';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
@@ -43,7 +43,7 @@ const Parlay: React.FC = () => {
         enabled: isAppReady,
     });
 
-    const sportMarketsQuery = useSportMarketsQuery(networkId, GlobalFiltersEnum.OpenMarkets, null, {
+    const sportMarketsQuery = useSportMarketsQueryNew(networkId, {
         enabled: isAppReady,
     });
 
@@ -58,13 +58,13 @@ const Parlay: React.FC = () => {
             const sportOpenMarkets = sportMarketsQuery.data[GlobalFiltersEnum.OpenMarkets];
             const parlayMarkets: ParlaysMarket[] = parlay
                 .filter((parlayMarket) => {
-                    return sportOpenMarkets.some((market) => {
+                    return sportOpenMarkets.some((market: SportMarketInfo) => {
                         return market.id === parlayMarket.sportMarketId;
                     });
                 })
                 .map((parlayMarket) => {
                     const openMarket: SportMarketInfo = sportOpenMarkets.filter(
-                        (market) => market.id === parlayMarket.sportMarketId
+                        (market: SportMarketInfo) => market.id === parlayMarket.sportMarketId
                     )[0];
                     return {
                         ...openMarket,
@@ -74,7 +74,7 @@ const Parlay: React.FC = () => {
             // If market is not opened any more remove it
             if (parlay.length > parlayMarkets.length) {
                 const notOpenedMarkets = parlay.filter((parlayMarket) => {
-                    return sportOpenMarkets.some((market) => {
+                    return sportOpenMarkets.some((market: SportMarketInfo) => {
                         return market.id !== parlayMarket.sportMarketId;
                     });
                 });

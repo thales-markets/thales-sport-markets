@@ -471,7 +471,8 @@
         "messages": {
             "no-open": "Sie haben keine offene Stelle",
             "no-claimable": "Sie haben keine beanspruchbaren Positionen",
-            "no-transactions": "Sie haben keine Trades"
+            "no-transactions": "Sie haben keine Trades",
+            "ticket-subtitle": "Position hinzufügen, Markt auswählen und Auswahl treffen."
         },
         "table": {
             "games": "Spiele",
@@ -652,5 +653,10 @@
             "title": "Benutzertransaktionen",
             "no-transactions": "Mit diesem Tresor sind in der ausgewählten Runde keine Benutzertransaktionen verbunden."
         }
+    },
+    "parlay-leaderboard": {
+        "title": "Parlay Incentives-Rangliste",
+        "description": "Insgesamt 10.000 OP werden an die besten Parlays des Monats vergeben. Die Tickets werden nach den höchsten Quoten geordnet, bei Gleichstand entscheidet das Volumen.",
+        "distribution-note": "Die Belohnungen werden an die 20 besten Parlays des Monats Dezember vergeben!"
     }
 }

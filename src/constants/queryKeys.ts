@@ -6,7 +6,9 @@ export const QUERY_KEYS = {
     Rewards: (networkId: NetworkId, period: number) => ['rewards', networkId, period],
     Markets: (networkId: NetworkId) => ['markets', networkId],
     ParlayMarkets: (networkId: NetworkId, account: string) => ['parlayMarkets', networkId, account],
+    ParlayLeaderboard: (networkId: NetworkId) => ['parlayLeaderboard', networkId],
     SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
+    SportMarketsNew: (networkId: NetworkId) => ['sportMarketsNew', networkId],
     ParlayAmmData: (networkId: NetworkId) => ['parlayAmmData', networkId],
     OpenSportMarkets: (networkId: NetworkId) => ['openSportMarkets', networkId],
     CanceledSportMarkets: (networkId: NetworkId) => ['canceledSportMarkets', networkId],
@@ -34,6 +36,7 @@ export const QUERY_KEYS = {
         marketAddress,
         networkId,
     ],
+    MarketDuration: (networkId: NetworkId) => ['marketDuration', networkId],
     UserTransactions: (walletAddress: string, networkId: NetworkId) => [
         'user',
         'transactions',
