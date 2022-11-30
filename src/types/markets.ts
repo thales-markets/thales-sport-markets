@@ -134,6 +134,8 @@ export type ParlayMarket = {
     won: boolean;
 };
 
+export type ParlayMarketWithRank = ParlayMarket & { rank: number };
+
 export type PositionData = {
     id: string;
     market: SportMarketInfo;

@@ -31,6 +31,7 @@ const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
 const MintWorldCupNFT = lazy(() => import('pages/MintWorldCupNFT'));
 const Vaults = lazy(() => import('pages/Vaults'));
 const Vault = lazy(() => import('pages/Vault'));
+const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
 
 const App = () => {
     const dispatch = useDispatch();
@@ -158,6 +159,11 @@ const App = () => {
                                 <DappLayout>
                                     <BannerCarousel />
                                     <Markets />
+                                </DappLayout>
+                            </Route>
+                            <Route exact path={ROUTES.Leaderboard}>
+                                <DappLayout>
+                                    <ParlayLeaderboard />
                                 </DappLayout>
                             </Route>
                             <Route exact path={ROUTES.Rewards}>
