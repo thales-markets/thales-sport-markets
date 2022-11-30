@@ -6,11 +6,11 @@ import {
     Container,
     ItemContainer,
     ItemIcon,
-    ParlayButton,
     DropdownContainer,
     DropDown,
     DropDownItem,
     Label,
+    ParlayNumber,
 } from './styled-components';
 import ConnectWalletButtonMobile from 'components/ConnectWalletButtonMobile';
 import { ParlaysMarketPosition } from 'types/markets';
@@ -42,6 +42,8 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({
         },
         [dispatch]
     );
+
+    console.log(parlayMarkets);
 
     return (
         <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
@@ -80,7 +82,8 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({
                     </SPAAnchor>
                 </ItemContainer>
                 <ItemContainer>
-                    <ParlayButton onClick={() => setParlayMobileVisibility(true)}>{parlayMarkets.length}</ParlayButton>
+                    <ItemIcon className="icon icon--parlay" onClick={() => setParlayMobileVisibility(true)} />
+                    <ParlayNumber>{parlayMarkets.length}</ParlayNumber>
                 </ItemContainer>
                 <ItemContainer>
                     <ItemIcon

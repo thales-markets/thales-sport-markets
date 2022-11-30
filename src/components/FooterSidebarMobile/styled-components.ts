@@ -72,3 +72,14 @@ export const Label = styled.div`
     display: block;
     text-transform: capitalize;
 `;
+
+export const ParlayNumber = styled.span`
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 14px;
+    color: : ${(props) => props.theme.background.primary};
+    display: block;
+    text-transform: capitalize;
+    position: absolute;
+    bottom: 10px;
+`;
