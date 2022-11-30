@@ -245,7 +245,8 @@
         "messages": {
             "no-claimable": "You don't have any claimable positions",
             "no-open": "You don't have any open positions",
-            "no-transactions": "You don't have any trades"
+            "no-transactions": "You don't have any trades",
+            "ticket-subtitle": "Add position, choose a market and make your selection."
         },
         "categories": {
             "claimable": "Claimable",

@@ -16,6 +16,8 @@ import {
     CategoryLabel,
     Container,
     EmptyContainer,
+    EmptySubtitle,
+    EmptyTitle,
     ListContainer,
 } from './styled-components';
 import { isParlayClaimable, isParlayOpen, isSportMarketExpired } from 'utils/markets';
@@ -24,6 +26,8 @@ import SimpleLoader from 'components/SimpleLoader';
 import { LoaderContainer } from 'pages/Markets/Home/Home';
 import SinglePosition from './components/SinglePosition';
 import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
+import { ReactComponent as OvertimeTicket } from 'assets/images/parlay-empty.svg';
+import { FlexDivCentered } from 'styles/common';
 
 const Positions: React.FC = () => {
     const { t } = useTranslation();
@@ -104,9 +108,11 @@ const Positions: React.FC = () => {
     return (
         <Container>
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
-                <CategoryIcon className="icon icon--claimable-flag" />
-                <CategoryLabel>{t('profile.categories.claimable')}</CategoryLabel>
-                <Arrow className={openClaimable ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
+                <FlexDivCentered>
+                    <CategoryIcon className="icon icon--claimable-flag" />
+                    <CategoryLabel>{t('profile.categories.claimable')}</CategoryLabel>
+                    <Arrow className={openClaimable ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
+                </FlexDivCentered>
                 <CategoryDisclaimer>
                     <Trans i18nKey="profile.winnings-are-forfeit" values={{ amount: marketDuration }} />
                 </CategoryDisclaimer>
@@ -129,16 +135,22 @@ const Positions: React.FC = () => {
                                     })}
                                 </>
                             ) : (
-                                <EmptyContainer>{t('profile.messages.no-claimable')}</EmptyContainer>
+                                <EmptyContainer>
+                                    <EmptyTitle>{t('profile.messages.no-claimable')}</EmptyTitle>
+                                    <OvertimeTicket />
+                                    <EmptySubtitle>{t('profile.messages.ticket-subtitle')}</EmptySubtitle>
+                                </EmptyContainer>
                             )}
                         </>
                     )}
                 </ListContainer>
             )}
             <CategoryContainer onClick={() => setOpenState(!openOpenPositions)}>
-                <CategoryIcon className="icon icon--logo" />
-                <CategoryLabel>{t('profile.categories.open')}</CategoryLabel>
-                <Arrow className={openOpenPositions ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
+                <FlexDivCentered>
+                    <CategoryIcon className="icon icon--logo" />
+                    <CategoryLabel>{t('profile.categories.open')}</CategoryLabel>
+                    <Arrow className={openOpenPositions ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
+                </FlexDivCentered>
             </CategoryContainer>
             {openOpenPositions && (
                 <ListContainer>
@@ -158,7 +170,11 @@ const Positions: React.FC = () => {
                                     })}
                                 </>
                             ) : (
-                                <EmptyContainer>{t('profile.messages.no-open')}</EmptyContainer>
+                                <EmptyContainer>
+                                    <EmptyTitle>{t('profile.messages.no-open')}</EmptyTitle>
+                                    <OvertimeTicket />
+                                    <EmptySubtitle>{t('profile.messages.ticket-subtitle')}</EmptySubtitle>
+                                </EmptyContainer>
                             )}
                         </>
                     )}

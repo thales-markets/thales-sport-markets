@@ -13,8 +13,8 @@ export const Container = styled(FlexDivColumn)`
 // --> Category Elements
 export const CategoryContainer = styled(FlexDiv)`
     width: 100%;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: start;
     margin: 20px 0px;
     position: relative;
 `;
@@ -50,10 +50,13 @@ export const Arrow = styled.i`
 `;
 
 export const CategoryDisclaimer = styled.div`
-    position: absolute;
-    transform: translateY(120%);
-    left: 45px;
+    padding-top: 5px;
+    margin-left: 45px;
     font-size: 13px;
+    @media (max-width: 768px) {
+        font-size: 11px;
+        margin-left: 15px;
+    }
 `;
 
 //  ------------------------------------------------
@@ -61,7 +64,27 @@ export const CategoryDisclaimer = styled.div`
 export const EmptyContainer = styled(FlexDivRowCentered)`
     width: 100%;
     text-align: center;
-    justify-content: center;
+    justify-content: space-evenly;
+    background: linear-gradient(180deg, #303656 41.5%, #1a1c2b 100%);
+    border-radius: 4px;
+    height: 200px;
+    flex-direction: column;
+`;
+
+export const EmptyTitle = styled.span`
+    font-family: 'Nunito';
+    font-weight: bold;
+    color: #64d9fe;
+    text-transform: uppercase;
+    font-size: 16px;
+    letter-spacing: 0.025em;
+`;
+export const EmptySubtitle = styled.span`
+    font-family: 'Nunito';
+    color: #64d9fe;
+    font-size: 12px;
+    width: 180px;
+    letter-spacing: 0.025em;
 `;
 
 export const ListContainer = styled(FlexDivColumnNative)`
