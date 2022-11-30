@@ -16,6 +16,7 @@ export const CategoryContainer = styled(FlexDiv)`
     flex-direction: column;
     align-items: start;
     margin: 20px 0px;
+    position: relative;
 `;
 
 export const CategoryLabel = styled.span`

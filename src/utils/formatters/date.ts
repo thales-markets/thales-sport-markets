@@ -7,7 +7,6 @@ export const toJSTimestamp = (timestamp: number) => timestamp * 1000;
 
 export const formatShortDate = (date: Date | number) => format(date, 'MMM d, yyyy');
 export const formatShortDateWithTime = (date: Date | number) => format(date, 'MMM d, yyyy | HH:mm');
-export const formatShortDateWithTimeZone = (date: Date | number) => format(date, 'MMM d, yyyy | HH:mm O');
 
 export const formatDateWithTime = (date: Date | number) => format(date, 'dd MMM HH:mm');
 export const formatShortDateNoYear = (date: Date | number) => format(date, 'MMM d');

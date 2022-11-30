@@ -470,7 +470,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                                             0
                                         ),
                                         maxAllowedUsers: vaultData.maxAllowedUsers,
-                                        minTradeAmount: formatCurrencyWithSign(USD_SIGN, vaultData.minTradeAmount, 0),
+                                        minTradeAmount: vaultData.minTradeAmount,
                                         minDepositAmount: formatCurrencyWithSign(
                                             USD_SIGN,
                                             vaultData.minDepositAmount,

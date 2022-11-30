@@ -13,7 +13,7 @@ type CalendarDatepickerProps = {
 const CalendarDatepicker: React.FC<CalendarDatepickerProps> = ({ date, setDate, setDateParam }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
-        <DatePickerContainer data-matomo-category="filters" data-matomo-action="time-filter-custom">
+        <DatePickerContainer data-matomo-category="filters" data-matomo-action="time-filter-custome">
             <DatepickerButton className={`${typeof date != 'number' ? 'blue' : ''}`} onClick={() => setIsOpen(!isOpen)}>
                 {typeof date != 'number' ? convertAndFormat(date) : 'Choose date'}
             </DatepickerButton>

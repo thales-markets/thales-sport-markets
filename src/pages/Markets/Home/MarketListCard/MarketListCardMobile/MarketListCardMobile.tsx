@@ -99,7 +99,7 @@ const MarketListCardMobile: React.FC<MarketRowCardProps> = ({ market, accountPos
                 )}
                 <LinkWrapper>
                     <SPAAnchor href={buildMarketLink(market.address, language)}>
-                        <LinkIcon isMobile={true} className={`icon-exotic icon-exotic--link`} />
+                        <LinkIcon isMobile={true} className={`icon icon--arrow-external`} />
                     </SPAAnchor>
                 </LinkWrapper>
             </OddsWrapperMobile>

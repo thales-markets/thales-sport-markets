@@ -48,7 +48,7 @@ import {
 type PositionsProps = {
     market: MarketData;
     selectedSide: Side;
-    availablePerSide: AvailablePerSide | null;
+    availablePerSide: AvailablePerSide;
     selectedPosition: Position;
     setSelectedPosition: (index: number) => void;
 };
@@ -172,32 +172,14 @@ const Positions: React.FC<PositionsProps> = ({
         isDiscounted(availablePerSide?.positions[Position.AWAY]?.buyImpactPrice);
 
     const homePositionDiscount = showHomeTeamDiscount
-        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.HOME]?.buyImpactPrice)))
+        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.HOME]?.buyImpactPrice) * 100))
         : 0;
     const drawPositionDiscount = showDrawTeamDiscount
-        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.DRAW]?.buyImpactPrice)))
+        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.DRAW]?.buyImpactPrice) * 100))
         : 0;
     const awayPositionDiscount = showAwayTeamDiscount
-        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.AWAY]?.buyImpactPrice)))
+        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.AWAY]?.buyImpactPrice) * 100))
         : 0;
-
-    const shareParlayData = useMemo(() => {
-        return {
-            markets: [
-                {
-                    ...convertMarketDataTypeToSportMarketInfoType(market),
-                    homeOdds: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
-                    awayOdds: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
-                    drawOdds: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
-                    winning: claimable,
-                    position: market.finalResult - 1,
-                } as ParlaysMarket,
-            ],
-            totalQuote: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
-            paid: sumOfTransactionPaidAmount,
-            payout: claimableAmount,
-        };
-    }, [market, sumOfTransactionPaidAmount, claimableAmount, claimable]);
 
     const claimReward = async () => {
         const { signer } = networkConnector;
