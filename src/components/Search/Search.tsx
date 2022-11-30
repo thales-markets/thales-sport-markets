@@ -30,6 +30,7 @@ const Search: React.FC<SearchProps> = ({ text, customPlaceholder, customStyle, h
                 onChange={(event) => handleChange(event.target.value)}
                 width={width}
                 isMobile={isMobile}
+                autoFocus={isMobile ? true : false}
             />
             <IconWrapper isMobile={isMobile}>
                 <SearchIcon isMobile={isMobile} />
