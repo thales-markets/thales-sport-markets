@@ -76,7 +76,9 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
         checkMetamaskBrowser().catch((e) => console.log(e));
     }, [isMobile]);
 
-    const useDownloadImage = (isMobile && !isChrome()) || isFirefox();
+    // Download image mobile: clipboard.write is not supported by all browsers
+    // Download image desktop: clipboard.write not supported/enabled in Firefox
+    const useDownloadImage = isMobile || isFirefox();
 
     const saveImageAndOpenTwitter = useCallback(
         async (toastIdParam: string | number) => {
@@ -89,7 +91,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                     const base64Image = await toPng(ref.current, { cacheBust: true });
 
                     if (useDownloadImage) {
-                        // Download image: clipboard.write is not supported/enabled in Firefox, so just download it
+                        // Download image
                         const link = document.createElement('a');
                         link.href = base64Image;
                         link.download = PARLAY_IMAGE_NAME;
@@ -121,7 +123,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                               getSuccessToastOptions(
                                   <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
                                       {t('market.toast-message.click-open-twitter')}
-                                  </a>
+                                  </a>,
+                                  { autoClose: false }
                               )
                           )
                         : toast.update(
@@ -177,7 +180,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 // Function toPng is causing UI to freez for couple of seconds and there is no notification message during that time, so it confuses user.
                 setTimeout(() => {
                     saveImageAndOpenTwitter(id);
-                }, 100);
+                }, 300);
             }
         }
     };
