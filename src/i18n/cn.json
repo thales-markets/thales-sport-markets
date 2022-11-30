@@ -483,8 +483,10 @@
             "id": "ID",
             "games": "游戏",
             "paid": "有薪酬的",
-            "time": "时间"
-        }
+            "time": "时间",
+            "status": "地位"
+        },
+        "winnings-are-forfeit": "*在盘口解决后的 {{amount}} 天内未领取的奖金将被没收。"
     },
     "mint-world-cup-nft": {
         "get-thales": "获得泰雷兹",
@@ -530,7 +532,8 @@
             "rewards": "奖励",
             "base-volume": "根据",
             "bonus-volume": "奖金",
-            "player": "播放器"
+            "player": "播放器",
+            "wash-trading": "*加班团队有权取消清洗交易员参加活动的资格"
         },
         "zebro-wct-collection": "Zebro WC NFT 系列",
         "zebro-wct-collection-text": "是在世界杯期间代表您最喜欢的国家的激励活动的一部分，并有资格分享 50,000 OP 代币和 30,000 THALES 代币，以及用于过关投注和个人比赛的独家乘数。",

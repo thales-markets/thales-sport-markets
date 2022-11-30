@@ -281,8 +281,10 @@
             "paid": "Paid",
             "amount": "amount",
             "id": "Id",
-            "position": "Position"
-        }
+            "position": "Position",
+            "status": "Status"
+        },
+        "winnings-are-forfeit": "*Winnings not claimed within {{amount}} days of a market being resolved are forfeit."
     },
     "markets": {
         "market-card": {
@@ -535,6 +537,7 @@
             "reward-calculations": "Reward calculations will be pro-rata Volume Based with max additional 40% volume boost if the following conditions are met:",
             "home-country-multiplier": "Home Country NFT Multiplier:",
             "home-country-multiplier-text": "If your World Cup match involves the same National team as your Zebro, you will receive +10% rewards boost",
+            "wash-trading": "*Overtime team holds the right to disqualify wash traders from the campaign",
             "parlay-boost": "Parlay boost:",
             "parlay-boost-text": "If your World Cup match is in a Parlay ticket, you will get a boost of:",
             "two-game-parlay": "+10% if it's a 2 game parlay",
