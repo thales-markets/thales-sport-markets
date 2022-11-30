@@ -2,7 +2,7 @@ import { getSuccessToastOptions, getErrorToastOptions, defaultToastOptions } fro
 import { LINKS } from 'constants/links';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import ReactModal from 'react-modal';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
@@ -37,6 +37,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
 
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
+    const [isMetamaskBrowser, setIsMetamaskBrowser] = useState(false);
 
     const defaultDisplayOptions: DisplayOptionsType = {
         isSimpleView: false,
@@ -67,7 +68,13 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
         },
     };
 
-    const isMetamaskBrowser = isMetamask() && isMobile;
+    useEffect(() => {
+        const checkMetamaskBrowser = async () => {
+            const isMMBrowser = (await isMetamask()) && isMobile;
+            setIsMetamaskBrowser(isMMBrowser);
+        };
+        checkMetamaskBrowser().catch((e) => console.log(e));
+    }, [isMobile]);
 
     const saveImageAndOpenTwitter = useCallback(
         async (toastIdParam: string | number) => {
