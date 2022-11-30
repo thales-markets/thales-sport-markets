@@ -124,7 +124,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                                   <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
                                       {t('market.toast-message.click-open-twitter')}
                                   </a>,
-                                  { autoClose: false }
+                                  { autoClose: 10 * 1000 }
                               )
                           )
                         : toast.update(
@@ -166,7 +166,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 action: 'click-on-share-tw-icon',
             });
 
-            if (isMetamaskBrowser) {
+            if (!isMetamaskBrowser) {
                 // Metamask dosn't support image download neither clipboard.write
                 toast.error(t('market.toast-message.metamask-not-supported'), defaultToastOptions);
             } else {
