@@ -26,7 +26,7 @@ import SimpleLoader from 'components/SimpleLoader';
 import { LoaderContainer } from 'pages/Markets/Home/Home';
 import SinglePosition from './components/SinglePosition';
 import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
-import { ReactComponent as OvertimeTicket } from 'assets/images/overtime-ticket.svg';
+import { ReactComponent as OvertimeTicket } from 'assets/images/parlay-empty.svg';
 import { FlexDivCentered } from 'styles/common';
 
 const Positions: React.FC = () => {
