@@ -42,6 +42,8 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const dateParam = getQueryStringVal('date');
+
+    const dateTagLabel = dateParam?.split('h')[0] + ' ' + t('common.time-remaining.hours');
     const hideContainer =
         marketSearch == '' &&
         globalFilter == GlobalFiltersEnum.OpenMarkets &&
@@ -83,7 +85,7 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
             {dateParam != null && (
                 <FilterTagContainer>
                     <FilterTagLabel>
-                        {dateParam}
+                        {dateTagLabel}
                         <ClearButton
                             onClick={() => {
                                 setDateFilter(0);
