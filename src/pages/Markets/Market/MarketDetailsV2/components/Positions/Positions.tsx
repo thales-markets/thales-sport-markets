@@ -181,6 +181,24 @@ const Positions: React.FC<PositionsProps> = ({
         ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.AWAY]?.buyImpactPrice) * 100))
         : 0;
 
+    const shareParlayData = useMemo(() => {
+        return {
+            markets: [
+                {
+                    ...convertMarketDataTypeToSportMarketInfoType(market),
+                    homeOdds: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
+                    awayOdds: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
+                    drawOdds: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
+                    winning: claimable,
+                    position: market.finalResult - 1,
+                } as ParlaysMarket,
+            ],
+            totalQuote: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
+            paid: sumOfTransactionPaidAmount,
+            payout: claimableAmount,
+        };
+    }, [market, sumOfTransactionPaidAmount, claimableAmount, claimable]);
+
     const claimReward = async () => {
         const { signer } = networkConnector;
         if (signer) {
