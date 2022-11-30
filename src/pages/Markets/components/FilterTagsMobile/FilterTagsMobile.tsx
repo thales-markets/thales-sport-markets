@@ -55,7 +55,7 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
             {marketSearch != '' && (
                 <FilterTagContainer>
                     <FilterTagLabel>
-                        {t(`market.filter-label.mobile-tags.search}`)}: {marketSearch}
+                        {t(`market.filter-label.mobile-tags.search`)}: {marketSearch}
                         <ClearButton
                             onClick={() => {
                                 dispatch(setMarketSearch(''));
