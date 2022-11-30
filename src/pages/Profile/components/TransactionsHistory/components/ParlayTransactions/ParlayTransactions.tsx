@@ -323,6 +323,7 @@ const ExpandedRowWrapper = styled.div`
     @media (max-width: 400px) {
         padding: 0;
     }
+    border-bottom: 2px dotted rgb(95, 97, 128);
 `;
 
 const ParlayRow = styled(FlexDivRowCentered)`
