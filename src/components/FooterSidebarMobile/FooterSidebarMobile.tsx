@@ -43,8 +43,6 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({
         [dispatch]
     );
 
-    console.log(parlayMarkets);
-
     return (
         <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
             <Container>

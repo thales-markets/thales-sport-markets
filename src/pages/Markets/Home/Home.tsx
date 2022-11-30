@@ -522,7 +522,6 @@ const Home: React.FC = () => {
                                     setSportFilter={setSportFilter}
                                     setSportParam={setSportParam}
                                     setSearchParam={setSearchParam}
-                                    tagsList={tagsList}
                                 />
                             </>
                         )}

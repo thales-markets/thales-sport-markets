@@ -10,7 +10,6 @@ import { getQueryStringVal } from 'utils/useQueryParams';
 
 type FilterTagsMobileProps = {
     sportFilter: string;
-    tagsList: Tags;
     tagFilter: Tags;
     globalFilter: string;
     marketSearch: string;
@@ -27,7 +26,6 @@ type FilterTagsMobileProps = {
 
 const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
     sportFilter,
-    tagsList,
     tagFilter,
     globalFilter,
     marketSearch,
@@ -45,18 +43,13 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
     const dispatch = useDispatch();
     const dateParam = getQueryStringVal('date');
     const hideContainer =
-        marketSearch != '' &&
-        globalFilter != GlobalFiltersEnum.OpenMarkets &&
-        dateParam != null &&
-        sportFilter != SportFilterEnum.All;
-    console.log(hideContainer);
-    console.log(marketSearch != '');
-    console.log(globalFilter != GlobalFiltersEnum.OpenMarkets);
-    console.log(dateParam != null);
-    console.log(dateParam);
-    console.log(sportFilter != SportFilterEnum.All);
+        marketSearch == '' &&
+        globalFilter == GlobalFiltersEnum.OpenMarkets &&
+        dateParam == null &&
+        sportFilter == SportFilterEnum.All;
+
     return (
-        <Container>
+        <Container hideContainer={hideContainer}>
             {marketSearch != '' && (
                 <FilterTagContainer>
                     <FilterTagLabel>
@@ -110,6 +103,8 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
                             onClick={() => {
                                 setSportFilter(SportFilterEnum.All);
                                 setSportParam(SportFilterEnum.All);
+                                setTagFilter([]);
+                                setTagParam('');
                             }}
                         >
                             X
@@ -117,43 +112,66 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
                     </FilterTagLabel>
                 </FilterTagContainer>
             )}
-            {tagsList.length == 0 &&
-                tagsList.map((tag) => {
-                    <FilterTagContainer>
-                        <FilterTagLabel>
-                            {tag.label}
-                            <ClearButton
-                                onClick={() => {
-                                    if (tagsList.length == 1) {
-                                        setTagFilter([]);
-                                        setTagParam('');
-                                    } else {
-                                        const newTagFilters = tagFilter.filter((tagInfo) => tagInfo.id != tag.id);
-                                        setTagFilter(newTagFilters);
-                                        const newTagParam = newTagFilters.map((tagInfo) => tagInfo.label).toString();
-                                        setTagParam(newTagParam);
-                                    }
-                                }}
-                            >
-                                X
-                            </ClearButton>
-                        </FilterTagLabel>
-                    </FilterTagContainer>;
+            {tagFilter.length != 0 &&
+                tagFilter.map((tag, index) => {
+                    return (
+                        <FilterTagContainer key={index}>
+                            <FilterTagLabel>
+                                {tag.label}
+                                <ClearButton
+                                    onClick={() => {
+                                        if (tagFilter.length == 1) {
+                                            setTagFilter([]);
+                                            setTagParam('');
+                                        } else {
+                                            const newTagFilters = tagFilter.filter((tagInfo) => tagInfo.id != tag.id);
+                                            setTagFilter(newTagFilters);
+                                            const newTagParam = newTagFilters
+                                                .map((tagInfo) => tagInfo.label)
+                                                .toString();
+                                            setTagParam(newTagParam);
+                                        }
+                                    }}
+                                >
+                                    X
+                                </ClearButton>
+                            </FilterTagLabel>
+                        </FilterTagContainer>
+                    );
                 })}
         </Container>
     );
 };
 
-const Container = styled(FlexDivRowCentered)`
+const Container = styled(FlexDivRowCentered)<{ hideContainer: boolean }>`
     height: 36px;
     position: relative;
     margin-bottom: 5px;
     justify-content: flex-start;
     width: 100%;
+    display: ${(props) => (props.hideContainer ? 'none' : '')};
+    overflow-x: auto;
+    scrollbar-width: 5px; /* Firefox */
+    -ms-overflow-style: none;
+    ::-webkit-scrollbar {
+        /* WebKit */
+        width: 5px;
+        height: 5px;
+    }
+    @media (max-width: 950px) {
+        margin: 0;
+        scrollbar-width: 0px; /* Firefox */
+        ::-webkit-scrollbar {
+            /* WebKit */
+            width: 0px;
+            height: 0px;
+        }
+    }
 `;
 
 const FilterTagContainer = styled(FlexDiv)`
-    width: fit-content;
+    width: max-content;
+    max-width: 180px;
     background: ${(props) => props.theme.background.tertiary};
     height: 24px;
     border-radius: 15px;
@@ -169,9 +187,12 @@ const FilterTagLabel = styled.span`
     line-height: 15px;
     color: ${(props) => props.theme.background.primary};
     text-transform: lowercase;
+    display: flex;
+    width: max-content;
 `;
 
 const ClearButton = styled.button`
+    display: flex;
     font-size: 13px;
     font-weight: 800;
     background: ${(props) => props.theme.background.tertiary};
