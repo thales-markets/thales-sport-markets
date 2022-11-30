@@ -43,7 +43,7 @@ const customModalStyles = {
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        zIndex: '1',
+        zIndex: '2',
     },
 };
 
