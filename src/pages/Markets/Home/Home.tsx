@@ -818,6 +818,3 @@ const ArrowIcon = styled.i`
 `;
 
 export default Home;
-`;
-
-export default Home;
