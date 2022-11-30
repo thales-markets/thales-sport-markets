@@ -795,6 +795,7 @@ export const Info = styled.div`
 const ApplyFiltersButton = styled(Button)`
     align-self: center;
     height: 43px;
+    width: 180px;
     margin-right: 5px;
     position: fixed;
     background: ${(props) => props.theme.background.quaternary};
