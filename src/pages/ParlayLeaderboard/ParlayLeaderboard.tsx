@@ -42,6 +42,12 @@ const ParlayLeaderboard: React.FC = () => {
 
     return (
         <Container>
+            <TextContainer>
+                <Title>{t('parlay-leaderboard.title')}</Title>
+                <Description>{t('parlay-leaderboard.description')}</Description>
+                <Description>{t('parlay-leaderboard.distribution-note')}</Description>
+            </TextContainer>
+
             <Table
                 data={parlays}
                 tableRowHeadStyles={{ width: '100%' }}
@@ -213,6 +219,35 @@ const Container = styled(FlexDivColumn)`
     align-items: center;
     max-width: 800px;
     width: 100%;
+`;
+
+const TextContainer = styled.div`
+    padding: 20px 0;
+    text-align: justify;
+`;
+
+const Title = styled.p`
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 150%;
+    text-align: justify;
+    letter-spacing: 0.025em;
+    color: #eeeee4;
+    margin: 10px 0;
+`;
+
+const Description = styled.p`
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 150%;
+    text-align: justify;
+    letter-spacing: 0.025em;
+    color: #eeeee4;
+    margin-bottom: 10px;
 `;
 
 const TableText = styled.p`
