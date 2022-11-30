@@ -1,16 +1,24 @@
 import PositionSymbol from 'components/PositionSymbol';
 import Table from 'components/Table';
+import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
-import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
+import { OddsType } from 'constants/markets';
+import { t } from 'i18next';
+import { AddressLink } from 'pages/Rewards/styled-components';
+
+import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getOddsType } from 'redux/modules/ui';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { CellProps } from 'react-table';
+import { getIsAppReady } from 'redux/modules/app';
+import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { PositionData, SportMarketInfo } from 'types/markets';
-import { formatDateWithTime, formatTxTimestamp } from 'utils/formatters/date';
+import { FlexDivColumn, FlexDivRowCentered } from 'styles/common';
+import { ParlayMarketWithRank, PositionData, SportMarketInfo } from 'types/markets';
+import { getEtherscanAddressLink } from 'utils/etherscan';
+import { formatDateWithTime } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
 import {
@@ -20,111 +28,103 @@ import {
     convertPositionToSymbolType,
     formatMarketOdds,
     getIsApexTopGame,
-    isParlayOpen,
 } from 'utils/markets';
-import { t } from 'i18next';
-import { useTranslation } from 'react-i18next';
 
-const ParlayTransactions: React.FC = () => {
+const Rewards = [2000, 1500, 1000, 800, 750, 700, 600, 500, 300, 250, 225, 210, 200, 185, 170, 145, 130, 125, 110, 100];
+const START_DATE = new Date(2022, 11, 1, 0, 0, 0);
+const END_DATE = new Date(2022, 11, 31, 24, 0, 0);
+
+const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
-    const selectedOddsType = useSelector(getOddsType);
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
-    const parlaysTxQuery = useParlayMarketsQuery(walletAddress.toLowerCase(), networkId, undefined, undefined, {
-        enabled: isWalletConnected,
-        refetchInterval: false,
-    });
-    const parlayTx = parlaysTxQuery.isSuccess ? parlaysTxQuery.data : [];
+    const query = useParlayLeaderboardQuery(
+        networkId,
+        parseInt(START_DATE.getTime() / 1000 + ''),
+        parseInt(END_DATE.getTime() / 1000 + ''),
+        { enabled: isAppReady }
+    );
+    const parlays = query.isSuccess ? query.data : [];
 
     return (
-        <>
+        <Container>
+            <TextContainer>
+                <Title>{t('parlay-leaderboard.title')}</Title>
+                <Description>{t('parlay-leaderboard.description')}</Description>
+                <Description>{t('parlay-leaderboard.distribution-note')}</Description>
+            </TextContainer>
+
             <Table
+                data={parlays}
+                tableRowHeadStyles={{ width: '100%' }}
                 tableHeadCellStyles={TableHeaderStyle}
                 tableRowCellStyles={TableRowStyle}
                 columns={[
                     {
-                        id: 'time',
-                        Header: <>{t('profile.table.time')}</>,
-                        accessor: 'timestamp',
-                        sortable: false,
-                        Cell: (cellProps: any) => {
-                            return <TableText>{formatTxTimestamp(cellProps.cell.value)}</TableText>;
-                        },
-                    },
-                    {
-                        id: 'id',
-                        Header: <>{t('profile.table.id')}</>,
-                        accessor: 'id',
-                        sortable: false,
-                        Cell: (cellProps: any) => {
-                            return (
-                                <FlexCenter>
-                                    <TableText>{truncateAddress(cellProps.cell.value)}</TableText>
-                                </FlexCenter>
+                        accessor: 'rank',
+                        Header: <>Rank</>,
+                        Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['rank']>) => {
+                            return cellProps.cell.value <= 20 ? (
+                                <Tooltip
+                                    overlay={<>{Rewards[cellProps.cell.value - 1]} OP</>}
+                                    component={
+                                        <FlexDivRowCentered style={{ position: 'relative', width: 14 }}>
+                                            <StatusIcon
+                                                style={{ fontSize: 16, position: 'absolute', left: '-20px' }}
+                                                color="rgb(95, 97, 128)"
+                                                className={`icon icon--fee-rebates`}
+                                            />
+                                            <TableText>{cellProps.cell.value}</TableText>
+                                        </FlexDivRowCentered>
+                                    }
+                                ></Tooltip>
+                            ) : (
+                                <TableText>{cellProps.cell.value}</TableText>
                             );
                         },
                     },
                     {
-                        id: 'position',
-                        Header: <>{t('profile.table.games')}</>,
-                        accessor: 'positions',
-                        sortable: false,
-                        Cell: (cellProps: any) => {
-                            return (
-                                <FlexCenter>
-                                    <TableText>{cellProps.cell.value.length}</TableText>
-                                </FlexCenter>
-                            );
-                        },
+                        Header: <>{t('rewards.table.wallet-address')}</>,
+                        accessor: 'account',
+                        Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['account']>) => (
+                            <AddressLink
+                                href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{ fontSize: 12 }}
+                            >
+                                {truncateAddress(cellProps.cell.value, 5)}
+                            </AddressLink>
+                        ),
                     },
                     {
-                        id: 'paid',
-                        Header: <>{t('profile.table.paid')}</>,
+                        accessor: 'totalQuote',
+                        Header: <>Quote</>,
+                        Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['totalQuote']>) => (
+                            <TableText>{formatMarketOdds(OddsType.Decimal, cellProps.cell.value)}</TableText>
+                        ),
+                        sortable: true,
+                        sortType: quoteSort(),
+                    },
+                    {
                         accessor: 'sUSDPaid',
-                        sortable: false,
-                        Cell: (cellProps: any) => {
-                            return <TableText>{formatCurrencyWithKey('sUSD', cellProps.cell.value, 2)}</TableText>;
-                        },
+                        Header: <>Paid</>,
+                        Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['sUSDAfterFees']>) => (
+                            <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>
+                        ),
+                        sortable: true,
                     },
                     {
-                        id: 'amount',
-                        Header: <>{t('profile.table.amount')}</>,
                         accessor: 'totalAmount',
-                        sortable: false,
-                        Cell: (cellProps: any) => {
-                            return <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>;
-                        },
-                    },
-                    {
-                        id: 'status',
-                        Header: <>{t('profile.table.status')}</>,
-                        sortable: false,
-                        Cell: (cellProps: any) => {
-                            if (cellProps.row.original.won) {
-                                return <StatusWrapper color="#5FC694">WON </StatusWrapper>;
-                            } else {
-                                return isParlayOpen(cellProps.row.original) ? (
-                                    <StatusWrapper color="#FFFFFF">OPEN</StatusWrapper>
-                                ) : (
-                                    <StatusWrapper color="#E26A78">LOSS</StatusWrapper>
-                                );
-                            }
-                        },
+                        Header: <>Won</>,
+                        Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['totalAmount']>) => (
+                            <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>
+                        ),
+                        sortable: true,
                     },
                 ]}
-                initialState={{
-                    sortBy: [
-                        {
-                            id: 'time',
-                            desc: true,
-                        },
-                    ],
-                }}
-                isLoading={parlaysTxQuery?.isLoading}
-                data={parlayTx ?? []}
-                noResultsMessage={t('profile.messages.no-transactions')}
+                noResultsMessage={t('parlay-leaderboard.no-parlays')}
                 expandedRow={(row) => {
                     const toRender = row.original.sportMarketsFromContract.map((address: string, index: number) => {
                         const position = row.original.positions.find(
@@ -147,7 +147,7 @@ const ParlayTransactions: React.FC = () => {
                                     symbolSize={'10'}
                                     additionalText={{
                                         firstText: formatMarketOdds(
-                                            selectedOddsType,
+                                            OddsType.Decimal,
                                             row.original.marketQuotes ? row.original.marketQuotes[index] : 0
                                         ),
                                         firstTextStyle: {
@@ -165,11 +165,11 @@ const ParlayTransactions: React.FC = () => {
 
                     return (
                         <ExpandedRowWrapper>
-                            <FlexDivColumnCentered style={{ flex: 2 }}>{toRender}</FlexDivColumnCentered>
-                            <LastExpandedSection style={{ flex: 1, gap: 20 }}>
+                            <FirstSection>{toRender}</FirstSection>
+                            <LastExpandedSection style={{ gap: 20 }}>
                                 <QuoteWrapper>
                                     <QuoteLabel>Total Quote:</QuoteLabel>
-                                    <QuoteText>{formatMarketOdds(selectedOddsType, row.original.totalQuote)}</QuoteText>
+                                    <QuoteText>{formatMarketOdds(OddsType.Decimal, row.original.totalQuote)}</QuoteText>
                                 </QuoteWrapper>
 
                                 <QuoteWrapper>
@@ -183,7 +183,7 @@ const ParlayTransactions: React.FC = () => {
                     );
                 }}
             ></Table>
-        </>
+        </Container>
     );
 };
 
@@ -221,58 +221,84 @@ const getParlayItemStatus = (market: SportMarketInfo) => {
     return formatDateWithTime(Number(market.maturityDate) * 1000);
 };
 
-const StatusIcon = styled.i`
+const Container = styled(FlexDivColumn)`
+    position: relative;
+    align-items: center;
+    max-width: 800px;
+    width: 100%;
+`;
+
+const TextContainer = styled.div`
+    padding: 20px 0;
+    text-align: justify;
+`;
+
+const Title = styled.p`
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 150%;
+    text-align: justify;
+    letter-spacing: 0.025em;
+    color: #eeeee4;
+    margin: 10px 0;
+`;
+
+const Description = styled.p`
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
     font-size: 14px;
+    line-height: 150%;
+    text-align: justify;
+    letter-spacing: 0.025em;
+    color: #eeeee4;
+    margin-bottom: 10px;
+`;
+
+const TableText = styled.p`
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 150%;
+    text-align: center;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: #eeeee4;
+    @media (max-width: 600px) {
+        font-size: 12px;
+    }
+`;
+
+const quoteSort = () => (rowA: any, rowB: any) => {
+    return rowA.original.totalQuote - rowB.original.totalQuote;
+};
+
+const StatusIcon = styled.i`
+    font-size: 12px;
     margin-right: 4px;
     &::before {
         color: ${(props) => props.color || 'white'};
     }
 `;
 
-const TableText = styled.span`
+const QuoteText = styled.span`
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 700;
     font-size: 12px;
     text-align: left;
-    @media (max-width: 600px) {
-        font-size: 10px;
-        white-space: pre-wrap;
-    }
     white-space: nowrap;
-`;
-
-const StatusWrapper = styled.div`
-    width: 62px;
-    height: 25px;
-    border: 2px solid ${(props) => props.color || 'white'};
-    border-radius: 5px;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 16px;
-    text-align: justify;
-    text-transform: uppercase;
-    text-align: center;
-    color: ${(props) => props.color || 'white'};
-    padding-top: 3px;
-`;
-
-const QuoteText = styled.span`
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 10px;
-    text-align: left;
-    white-space: nowrap;
+    display: flex;
 `;
 
 const QuoteLabel = styled.span`
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    font-size: 10px;
+    font-size: 12px;
 
     letter-spacing: 0.025em;
     text-transform: uppercase;
@@ -306,15 +332,12 @@ const TableRowStyle: React.CSSProperties = {
     padding: '0',
 };
 
-const FlexCenter = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
 const ExpandedRowWrapper = styled.div`
     display: flex;
-    padding-left: 30px;
+    justify-content: space-evenly;
+    padding-left: 60px;
+    padding-right: 60px;
+    border-bottom: 2px dotted rgb(95, 97, 128);
     @media (max-width: 600px) {
         flex-direction: column;
         padding-left: 10px;
@@ -323,14 +346,11 @@ const ExpandedRowWrapper = styled.div`
     @media (max-width: 400px) {
         padding: 0;
     }
-    border-bottom: 2px dotted rgb(95, 97, 128);
 `;
 
 const ParlayRow = styled(FlexDivRowCentered)`
     margin-top: 10px;
-    & > div {
-        flex: 1;
-    }
+    justify-content: space-evenly;
     &:last-child {
         margin-bottom: 10px;
     }
@@ -341,11 +361,21 @@ const ParlayRowText = styled(QuoteText)`
     width: 300px;
 `;
 
-const LastExpandedSection = styled(FlexDivColumnCentered)`
+const FirstSection = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+`;
+
+const LastExpandedSection = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     @media (max-width: 600px) {
         flex-direction: row;
         margin: 10px 0;
     }
 `;
 
-export default ParlayTransactions;
+export default ParlayLeaderboard;

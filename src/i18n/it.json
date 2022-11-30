@@ -477,7 +477,8 @@
         "messages": {
             "no-claimable": "Non hai posizioni rivendicabili",
             "no-open": "Non hai nessuna posizione aperta",
-            "no-transactions": "Non hai scambi"
+            "no-transactions": "Non hai scambi",
+            "ticket-subtitle": "Aggiungi posizione, scegli un mercato ed effettua la tua selezione."
         },
         "table": {
             "id": "Id",
@@ -485,8 +486,10 @@
             "games": "Giochi",
             "time": "Volta",
             "paid": "Pagato",
-            "position": "Posizione"
-        }
+            "position": "Posizione",
+            "status": "Stato"
+        },
+        "winnings-are-forfeit": "*Le vincite non riscosse entro {{amount}} giorni dalla risoluzione di un mercato vengono annullate."
     },
     "mint-world-cup-nft": {
         "second-option": "La seconda opzione per metterti nella lista consentita è completare i seguenti passaggi:",
@@ -532,7 +535,8 @@
             "volume": "Volume",
             "base-volume": "Base",
             "bonus-volume": "Bonus",
-            "player": "Giocatore"
+            "player": "Giocatore",
+            "wash-trading": "*La squadra degli straordinari si riserva il diritto di squalificare i commercianti di lavaggio dalla campagna"
         },
         "zebro-wct-collection": "La collezione Zebro WC NFT",
         "zebro-wct-collection-text": "fa parte di una campagna incentivata per rappresentare il tuo paese preferito durante la Coppa del Mondo e avere diritto a una quota di 50.000 token OP e 30.000 token THALES, insieme a moltiplicatori esclusivi per parlay e partite individuali.",
@@ -658,5 +662,10 @@
             "title": "Transazioni utente",
             "no-transactions": "Nessuna transazione utente associata a questo vault nel round selezionato."
         }
+    },
+    "parlay-leaderboard": {
+        "title": "Classifica degli incentivi Parlay",
+        "description": "Un totale di 10.000 OP sarà distribuito ai migliori parlay del mese. I biglietti saranno classificati in base alle quote più alte, seguite dal volume in caso di pareggio.",
+        "distribution-note": "I premi saranno distribuiti ai primi 20 parlay per il mese di dicembre!"
     }
 }

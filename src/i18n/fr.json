@@ -572,7 +572,8 @@
         "messages": {
             "no-claimable": "Vous n'avez pas de poste réclamable",
             "no-open": "Vous n'avez pas de poste ouvert",
-            "no-transactions": "Vous n'avez aucun métier"
+            "no-transactions": "Vous n'avez aucun métier",
+            "ticket-subtitle": "Ajoutez une position, choisissez un marché et faites votre sélection."
         },
         "table": {
             "paid": "Payé",
@@ -580,8 +581,10 @@
             "id": "Identifiant",
             "position": "Position",
             "time": "Temps",
-            "amount": "montant"
-        }
+            "amount": "montant",
+            "status": "Statut"
+        },
+        "winnings-are-forfeit": "*Les gains non réclamés dans les {{amount}} jours suivant la résolution d'un marché sont annulés."
     },
     "mint-world-cup-nft": {
         "no": "Non",
@@ -627,7 +630,8 @@
             "volume": "Le volume",
             "bonus-volume": "Prime",
             "rewards": "Récompenses",
-            "player": "Joueur"
+            "player": "Joueur",
+            "wash-trading": "* L'équipe des heures supplémentaires a le droit de disqualifier les commerçants de lavage de la campagne"
         },
         "zebro-wct-collection": "La collection Zebro WC NFT",
         "zebro-wct-collection-text": "fait partie d'une campagne incitative pour représenter votre pays préféré pendant la Coupe du monde et être éligible pour une part de 50 000 jetons OP et 30 000 jetons THALES, ainsi que des multiplicateurs exclusifs pour les parlays et les matchs individuels.",
@@ -753,5 +757,11 @@
             "title": "Opérations utilisateur",
             "no-transactions": "Aucune transaction utilisateur associée à ce coffre dans le tour sélectionné."
         }
+    },
+    "parlay-leaderboard": {
+        "distribution-note": "Les récompenses seront distribuées aux 20 meilleurs parlays du mois de décembre!",
+        "title": "Classement Parlay Incentives",
+        "description": "Au total, 10 000 OP seront distribués aux meilleurs parlays du mois. Les billets seront classés en fonction des cotes les plus élevées, suivies du volume en cas d'égalité.",
+        "no-parlays": "Aucun parlay gagnant enregistré pour l'instant."
     }
 }

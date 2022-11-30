@@ -40,12 +40,15 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
                   positions: {
                       [Position.HOME]: {
                           available: 0,
+                          buyImpactPrice: 0,
                       },
                       [Position.AWAY]: {
                           available: 0,
+                          buyImpactPrice: 0,
                       },
                       [Position.DRAW]: {
                           available: 0,
+                          buyImpactPrice: 0,
                       },
                   },
               };

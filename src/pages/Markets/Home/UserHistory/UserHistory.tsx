@@ -1,20 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
-import useUserTransactionsQuery from '../../../../queries/markets/useUserTransactionsQuery';
+import useUserTransactionsQuery from 'queries/markets/useUserTransactionsQuery';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../redux/rootReducer';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from '../../../../redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { useTranslation } from 'react-i18next';
-import { MarketTransactions, SportMarkets, UserTransaction, UserTransactions } from '../../../../types/markets';
+import { MarketTransactions, SportMarkets, UserTransaction, UserTransactions } from 'types/markets';
 import { orderBy } from 'lodash';
-import useSportMarketsQuery from '../../../../queries/markets/useSportMarketsQuery';
-import { getIsAppReady } from '../../../../redux/modules/app';
+import { getIsAppReady } from 'redux/modules/app';
 import HistoryTable from '../../components/HistoryTable';
-import { Position, PositionName } from '../../../../constants/options';
-import { getEtherscanTxLink } from '../../../../utils/etherscan';
-import { ApexBetTypeKeyMapping, GlobalFiltersEnum } from 'constants/markets';
+import { Position, PositionName } from 'constants/options';
+import { getEtherscanTxLink } from 'utils/etherscan';
+import { ApexBetTypeKeyMapping } from 'constants/markets';
 import { getIsApexTopGame } from 'utils/markets';
+import useSportMarketsQueryNew from 'queries/markets/useSportsMarketsQueryNew';
 
 const UserHistory: React.FC = () => {
     const { t } = useTranslation();
@@ -25,7 +25,7 @@ const UserHistory: React.FC = () => {
     const userTransactionsQuery = useUserTransactionsQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
-    const sportMarketsQuery = useSportMarketsQuery(networkId, GlobalFiltersEnum.All, null, {
+    const sportMarketsQuery = useSportMarketsQueryNew(networkId, {
         enabled: isAppReady && isWalletConnected,
     });
 

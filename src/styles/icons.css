@@ -196,3 +196,51 @@
 .icon--vaults::before {
     content: '\0077';
 }
+
+.icon--lost::before {
+    content: '\0078';
+}
+
+.icon--win::before {
+    content: '\0079';
+}
+
+.icon--open::before {
+    content: '\007A';
+}
+
+.icon--odds::before {
+    content: '\0037';
+}
+
+.icon--filters::before {
+    content: '\0038';
+}
+
+.icon--pending::before {
+    content: '\0039';
+}
+
+.icon--finished::before {
+    content: '\003A';
+}
+
+.icon--paused::before {
+    content: '\003B';
+}
+
+.icon--wallet-connected::before {
+    content: '\0035';
+}
+
+.icon--wallet-disconnected::before {
+    content: '\0036';
+}
+
+.icon--parlay::before {
+    content: '\007B';
+}
+
+.icon--competition::before {
+    content: '\007C';
+}

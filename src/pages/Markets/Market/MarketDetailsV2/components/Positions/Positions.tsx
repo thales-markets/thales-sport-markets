@@ -45,7 +45,7 @@ import {
 type PositionsProps = {
     market: MarketData;
     selectedSide: Side;
-    availablePerSide: AvailablePerSide | null;
+    availablePerSide: AvailablePerSide;
     selectedPosition: Position;
     setSelectedPosition: (index: number) => void;
 };
@@ -149,13 +149,13 @@ const Positions: React.FC<PositionsProps> = ({
         isDiscounted(availablePerSide?.positions[Position.AWAY]?.buyImpactPrice);
 
     const homePositionDiscount = showHomeTeamDiscount
-        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.HOME]?.buyImpactPrice)))
+        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.HOME]?.buyImpactPrice) * 100))
         : 0;
     const drawPositionDiscount = showDrawTeamDiscount
-        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.DRAW]?.buyImpactPrice)))
+        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.DRAW]?.buyImpactPrice) * 100))
         : 0;
     const awayPositionDiscount = showAwayTeamDiscount
-        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.AWAY]?.buyImpactPrice)))
+        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.AWAY]?.buyImpactPrice) * 100))
         : 0;
 
     const claimReward = async () => {

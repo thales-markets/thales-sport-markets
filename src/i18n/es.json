@@ -474,7 +474,8 @@
         "messages": {
             "no-open": "No tienes ninguna posición abierta",
             "no-claimable": "No tienes ninguna posición reclamable",
-            "no-transactions": "no tienes cambios"
+            "no-transactions": "no tienes cambios",
+            "ticket-subtitle": "Agregue una posición, elija un mercado y haga su selección."
         },
         "table": {
             "paid": "Pagado",
@@ -482,8 +483,10 @@
             "amount": "Monto",
             "position": "Posición",
             "id": "Identificación",
-            "games": "Juegos"
-        }
+            "games": "Juegos",
+            "status": "Estado"
+        },
+        "winnings-are-forfeit": "*Las ganancias no reclamadas dentro de {{amount}} días de la resolución de un mercado se perderán."
     },
     "mint-world-cup-nft": {
         "mint-nft-button": "Mint esta cebra!",
@@ -529,7 +532,8 @@
             "rewards": "Recompensas",
             "bonus-volume": "Prima",
             "base-volume": "Base",
-            "player": "Jugador"
+            "player": "Jugador",
+            "wash-trading": "*El equipo de tiempo extra se reserva el derecho de descalificar a los comerciantes de lavado de la campaña"
         },
         "zebro-wct-collection-text": "es parte de una campaña incentivada para representar a su país favorito durante la Copa del Mundo y ser elegible para una parte de 50 000 tokens OP y 30 000 tokens THALES, junto con multiplicadores exclusivos para parlays y partidos individuales.",
         "zebro-wct-collection": "La colección Zebro WC NFT",
@@ -655,5 +659,11 @@
             "no-transactions": "No hay transacciones de usuario asociadas con esta bóveda en la ronda seleccionada.",
             "title": "Transacciones de usuario"
         }
+    },
+    "parlay-leaderboard": {
+        "title": "Leaderboard de incentivos en Parlays",
+        "description": "Un total de 10,000 OP tokens seran distribuidos entre los mejores parlays de cada mes. Los tickets seran rankeados basados en las mayores odds (o mayor multiplicador), seguido de volumen en caso de un empate de odds entre tickets.",
+        "distribution-note": "Las recompensas seran distribuidas entre los top 20 parlays al final del mes de Diciembre.",
+        "no-parlays": "Aun no hay parlays ganadores registrados en este periodo."
     }
 }

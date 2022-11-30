@@ -245,7 +245,8 @@
         "messages": {
             "no-claimable": "You don't have any claimable positions",
             "no-open": "You don't have any open positions",
-            "no-transactions": "You don't have any trades"
+            "no-transactions": "You don't have any trades",
+            "ticket-subtitle": "Add position, choose a market and make your selection."
         },
         "categories": {
             "claimable": "Claimable",
@@ -272,8 +273,10 @@
             "paid": "Paid",
             "amount": "amount",
             "id": "Id",
-            "position": "Position"
-        }
+            "position": "Position",
+            "status": "Status"
+        },
+        "winnings-are-forfeit": "*Winnings not claimed within {{amount}} days of a market being resolved are forfeit."
     },
     "markets": {
         "market-card": {
@@ -318,7 +321,7 @@
                 "history": "History",
                 "fifa-campaign": "Zebro FIFA campaign",
                 "sports-trivia": "Sports trivia",
-                "leaderboard": "Leaderboard",
+                "leaderboard": "Parlay leaderboard",
                 "fee-rebates": "Fee rebates",
                 "become-affiliate": "Become affiliate",
                 "vaults": "Vaults"
@@ -565,7 +568,7 @@
     "vault": {
         "discount-vault": {
             "title": "Discount Vault",
-            "description": "<p>Buys positions that have more than {{odds}} odds and are available at a discount larger than {{discount}}.</p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "description": "<p>Buys positions that have more than {{odds}} odds and are available at a discount larger than {{discount}}.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
             "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
         },
         "degen-discount-vault": {
@@ -647,5 +650,11 @@
                 "claim": "Withdrawal Claim"
             }
         }
+    },
+    "parlay-leaderboard": {
+        "title": "Parlay Incentives Leaderboard",
+        "description": "A total of 10,000 OP will be distributed to the best parlays of the month. The tickets will be ranked based on the highest odds, followed by volume in case of a tie.",
+        "distribution-note": "Rewards will be distributed to the top 20 parlays for the month of December!",
+        "no-parlays": "No winning parlays registered in the period yet."
     }
 }
