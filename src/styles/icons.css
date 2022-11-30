@@ -236,3 +236,7 @@
 .icon--wallet-disconnected::before {
     content: '\0036';
 }
+
+.icon--parlay::before {
+    content: '\007B';
+}
