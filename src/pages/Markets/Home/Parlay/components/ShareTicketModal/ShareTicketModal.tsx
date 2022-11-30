@@ -16,7 +16,7 @@ import { DisplayOptionsType } from './components/DisplayOptions/DisplayOptions';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
-import { isFirefox, isMetamask } from 'utils/device';
+import { isMetamask, isChrome, isFirefox } from 'utils/device';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 export type ShareTicketModalProps = {
@@ -76,6 +76,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
         checkMetamaskBrowser().catch((e) => console.log(e));
     }, [isMobile]);
 
+    const useDownloadImage = (isMobile && !isChrome()) || isFirefox();
+
     const saveImageAndOpenTwitter = useCallback(
         async (toastIdParam: string | number) => {
             if (!isLoading) {
@@ -86,7 +88,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 try {
                     const base64Image = await toPng(ref.current, { cacheBust: true });
 
-                    if (isFirefox()) {
+                    if (useDownloadImage) {
                         // Download image: clipboard.write is not supported/enabled in Firefox, so just download it
                         const link = document.createElement('a');
                         link.href = base64Image;
@@ -107,45 +109,43 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                         return;
                     }
 
-                    if (!isMetamaskBrowser) {
-                        const twitterLinkWithStatusMessage =
-                            LINKS.TwitterTweetStatus +
-                            LINKS.Overtime +
-                            (isFirefox() ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+                    const twitterLinkWithStatusMessage =
+                        LINKS.TwitterTweetStatus +
+                        LINKS.Overtime +
+                        (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
 
-                        // Mobile requires user action in order to open new window, it can't open in async call
-                        isMobile
-                            ? toast.update(
-                                  toastIdParam,
-                                  getSuccessToastOptions(
-                                      <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
-                                          {t('market.toast-message.click-open-twitter')}
-                                      </a>
-                                  )
+                    // Mobile requires user action in order to open new window, it can't open in async call
+                    isMobile
+                        ? toast.update(
+                              toastIdParam,
+                              getSuccessToastOptions(
+                                  <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
+                                      {t('market.toast-message.click-open-twitter')}
+                                  </a>
                               )
-                            : toast.update(
-                                  toastIdParam,
-                                  getSuccessToastOptions(
-                                      <>
-                                          {!isFirefox() && (
-                                              <>
-                                                  {t('market.toast-message.image-in-clipboard')}
-                                                  <br />
-                                              </>
-                                          )}
-                                          {t('market.toast-message.open-twitter')}
-                                      </>
-                                  )
-                              );
+                          )
+                        : toast.update(
+                              toastIdParam,
+                              getSuccessToastOptions(
+                                  <>
+                                      {!useDownloadImage && (
+                                          <>
+                                              {t('market.toast-message.image-in-clipboard')}
+                                              <br />
+                                          </>
+                                      )}
+                                      {t('market.toast-message.open-twitter')}
+                                  </>
+                              )
+                          );
 
-                        setTimeout(() => {
-                            if (!isMobile) {
-                                window.open(twitterLinkWithStatusMessage);
-                                setIsLoading(false);
-                            }
-                            onClose();
-                        }, 3000);
-                    }
+                    setTimeout(() => {
+                        if (!isMobile) {
+                            window.open(twitterLinkWithStatusMessage);
+                            setIsLoading(false);
+                        }
+                        onClose();
+                    }, 3000);
                 } catch (e) {
                     console.log(e);
                     setIsLoading(false);
@@ -153,7 +153,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 }
             }
         },
-        [isLoading, isMobile, isMetamaskBrowser, onClose]
+        [isLoading, isMobile, useDownloadImage, onClose]
     );
 
     const onTwitterShareClick = () => {
@@ -168,7 +168,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 toast.error(t('market.toast-message.metamask-not-supported'), defaultToastOptions);
             } else {
                 const id = toast.loading(
-                    isFirefox() ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
+                    useDownloadImage ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
                 );
                 setToastId(id);
                 setIsLoading(true);
