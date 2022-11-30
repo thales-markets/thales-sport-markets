@@ -43,13 +43,13 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 70vh;
+    height: 520px;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     ${(_props) => (_props?.show == true ? 'top: 0;' : '')}
-    ${(_props) => (_props?.show == false || _props?.show == null ? 'top: -70vh;' : '')}
+    ${(_props) => (_props?.show == false || _props?.show == null ? 'top: -520px;' : '')}
     ${(_props) => _props?.show === true && animationOpen};
     ${({ show }) => show === false && animationClose};
     background-color: ${(props) => props.theme.nav.background};
