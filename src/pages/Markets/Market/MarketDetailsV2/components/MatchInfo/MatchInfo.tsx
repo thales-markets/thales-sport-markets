@@ -63,6 +63,10 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
     const isResolved = market?.resolved;
     const matchStartsLabel = isApexGame(market.tags[0]) ? t('market.race-starts') : t('market.match-time');
 
+    const showMatchParticipantsBelow =
+        getMarketStatusFromMarketData(market) !== MarketStatus.Open ||
+        getMarketStatusFromMarketData(market) == MarketStatus.ResolvePending;
+
     return (
         <>
             {isApexTopGame && (
@@ -178,7 +182,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                             </MatchTimeContainerMobile>
                         </Container>
                     )}
-                    {getMarketStatusFromMarketData(market) !== MarketStatus.Open && (
+                    {showMatchParticipantsBelow && (
                         <TeamNamesWrapper>
                             <TeamName>{fixLongTeamNameString(market.homeTeam)}</TeamName>
                             <TeamName>{fixLongTeamNameString(market.awayTeam)}</TeamName>

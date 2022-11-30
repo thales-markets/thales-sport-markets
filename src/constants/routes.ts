@@ -12,6 +12,7 @@ export const ROUTES = {
     MintWorldCupNFT: '/mint-world-cup-nft',
     Vaults: '/vaults',
     Vault: '/vaults/:vaultId',
+    Leaderboard: '/parlay-leaderboard',
 };
 export default ROUTES;
 

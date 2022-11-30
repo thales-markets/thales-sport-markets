@@ -49,6 +49,7 @@ export const getMarketStatus = (market: MarketInfo) => {
 };
 
 export const getMarketStatusFromMarketData = (market: MarketData) => {
+    if (market.gameStarted && !market.resolved) return MarketStatus.ResolvePending;
     if (market.paused) return MarketStatus.Paused;
     if (market.resolved) return MarketStatus.ResolvedConfirmed;
     if (market.cancelled) return MarketStatus.CancelledConfirmed;

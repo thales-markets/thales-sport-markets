@@ -474,7 +474,8 @@
         "messages": {
             "no-claimable": "您没有任何可申请的职位",
             "no-open": "您没有任何空缺职位",
-            "no-transactions": "您没有任何交易"
+            "no-transactions": "您没有任何交易",
+            "ticket-subtitle": "添加头寸，选择市场并做出选择。"
         },
         "table": {
             "position": "位置",
@@ -484,7 +485,8 @@
             "paid": "有薪酬的",
             "time": "时间",
             "status": "地位"
-        }
+        },
+        "winnings-are-forfeit": "*在盘口解决后的 {{amount}} 天内未领取的奖金将被没收。"
     },
     "mint-world-cup-nft": {
         "get-thales": "获得泰雷兹",
@@ -657,5 +659,10 @@
             "title": "用户交易",
             "no-transactions": "在选定的回合中没有与此保管库关联的用户交易。"
         }
+    },
+    "parlay-leaderboard": {
+        "title": "Parlay 奖励排行榜",
+        "distribution-note": "奖励将分发给 12 月份的前 20 名过关玩家！",
+        "description": "总计 10,000 OP 将分配给当月最好的 parlays。门票将根据最高赔率排名，如果出现平局，则按数量排名。"
     }
 }
