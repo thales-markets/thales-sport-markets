@@ -274,7 +274,9 @@ const Home: React.FC = () => {
             }
         });
 
-        return groupBySortedMarkets(sortedFilteredMarkets);
+        return globalFilter === GlobalFiltersEnum.OpenMarkets
+            ? groupBySortedMarkets(sortedFilteredMarkets)
+            : sortedFilteredMarkets;
     }, [marketSearch, tagFilter, dateFilter, sportFilter, newMarkets, discountsMap, globalFilter, favouriteLeagues]);
 
     useEffect(() => {

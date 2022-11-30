@@ -759,8 +759,9 @@
         }
     },
     "parlay-leaderboard": {
-        "distribution-note": "Des récompenses seront distribuées aux 20 meilleurs parlays du mois de décembre !",
+        "distribution-note": "Les récompenses seront distribuées aux 20 meilleurs parlays du mois de décembre!",
         "title": "Classement Parlay Incentives",
-        "description": "Au total, 10 000 OP seront distribués aux meilleurs parlays du mois. Les billets seront classés en fonction des cotes les plus élevées, suivies du volume en cas d'égalité."
+        "description": "Au total, 10 000 OP seront distribués aux meilleurs parlays du mois. Les billets seront classés en fonction des cotes les plus élevées, suivies du volume en cas d'égalité.",
+        "no-parlays": "Aucun parlay gagnant enregistré pour l'instant."
     }
 }

@@ -240,3 +240,7 @@
 .icon--parlay::before {
     content: '\007B';
 }
+
+.icon--competition::before {
+    content: '\007C';
+}
