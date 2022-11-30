@@ -477,7 +477,8 @@
         "messages": {
             "no-claimable": "Non hai posizioni rivendicabili",
             "no-open": "Non hai nessuna posizione aperta",
-            "no-transactions": "Non hai scambi"
+            "no-transactions": "Non hai scambi",
+            "ticket-subtitle": "Aggiungi posizione, scegli un mercato ed effettua la tua selezione."
         },
         "table": {
             "id": "Id",
@@ -661,5 +662,10 @@
             "title": "Transazioni utente",
             "no-transactions": "Nessuna transazione utente associata a questo vault nel round selezionato."
         }
+    },
+    "parlay-leaderboard": {
+        "title": "Classifica degli incentivi Parlay",
+        "description": "Un totale di 10.000 OP sarà distribuito ai migliori parlay del mese. I biglietti saranno classificati in base alle quote più alte, seguite dal volume in caso di pareggio.",
+        "distribution-note": "I premi saranno distribuiti ai primi 20 parlay per il mese di dicembre!"
     }
 }

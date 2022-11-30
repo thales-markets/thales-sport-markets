@@ -572,7 +572,8 @@
         "messages": {
             "no-claimable": "Vous n'avez pas de poste réclamable",
             "no-open": "Vous n'avez pas de poste ouvert",
-            "no-transactions": "Vous n'avez aucun métier"
+            "no-transactions": "Vous n'avez aucun métier",
+            "ticket-subtitle": "Ajoutez une position, choisissez un marché et faites votre sélection."
         },
         "table": {
             "paid": "Payé",
@@ -756,5 +757,10 @@
             "title": "Opérations utilisateur",
             "no-transactions": "Aucune transaction utilisateur associée à ce coffre dans le tour sélectionné."
         }
+    },
+    "parlay-leaderboard": {
+        "distribution-note": "Des récompenses seront distribuées aux 20 meilleurs parlays du mois de décembre !",
+        "title": "Classement Parlay Incentives",
+        "description": "Au total, 10 000 OP seront distribués aux meilleurs parlays du mois. Les billets seront classés en fonction des cotes les plus élevées, suivies du volume en cas d'égalité."
     }
 }
