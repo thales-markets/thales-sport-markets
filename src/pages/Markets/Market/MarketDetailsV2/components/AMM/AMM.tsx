@@ -290,6 +290,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
 
                     if (X > availablePerSide.positions[selectedPosition].available) {
                         setTokenAmount(0);
+                        setTooltipTextUsdAmount(t('market.tooltip.amount-exceeded'));
                         return;
                     }
                     const roundedAmount = floorNumberToDecimals(X);
