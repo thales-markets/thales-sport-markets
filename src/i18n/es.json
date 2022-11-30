@@ -661,8 +661,9 @@
         }
     },
     "parlay-leaderboard": {
-        "title": "Tabla de clasificación de incentivos de Parlay",
-        "description": "Se distribuirá un total de 10.000 OP a los mejores parlays del mes. Los boletos se clasificarán en función de las probabilidades más altas, seguidas por el volumen en caso de empate.",
-        "distribution-note": "¡Las recompensas se distribuirán a los 20 mejores parlays del mes de diciembre!"
+        "title": "Leaderboard de incentivos en Parlays",
+        "description": "Un total de 10,000 OP tokens seran distribuidos entre los mejores parlays de cada mes. Los tickets seran rankeados basados en las mayores odds (o mayor multiplicador), seguido de volumen en caso de un empate de odds entre tickets.",
+        "distribution-note": "LLas recompensas seran distribuidas entre los top 20 parlays al final del mes de Diciembre.",
+        "no-parlays": "Aun no hay parlays ganadores registrados en este periodo"
     }
 }
