@@ -166,7 +166,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 action: 'click-on-share-tw-icon',
             });
 
-            if (!isMetamaskBrowser) {
+            if (isMetamaskBrowser) {
                 // Metamask dosn't support image download neither clipboard.write
                 toast.error(t('market.toast-message.metamask-not-supported'), defaultToastOptions);
             } else {
