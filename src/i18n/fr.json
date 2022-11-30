@@ -282,6 +282,9 @@
             "all": "Tous",
             "datepicker": {
                 "games": "{{numberOfGames}} marchés"
+            },
+            "mobile-tags": {
+                "search": "Chercher"
             }
         },
         "back-to-markets": "Retour aux marchés",

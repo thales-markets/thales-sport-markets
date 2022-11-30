@@ -202,7 +202,10 @@
             "datepicker": {
                 "games": "{{numberOfGames}} เกม"
             },
-            "all": "ทั้งหมด"
+            "all": "ทั้งหมด",
+            "mobile-tags": {
+                "search": "ค้นหา"
+            }
         },
         "back-to-markets": "กลับไปที่ตลาด",
         "back-to-market": "กลับไปที่ตลาด",

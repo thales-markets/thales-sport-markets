@@ -202,6 +202,9 @@
             "all": "所有",
             "datepicker": {
                 "games": "{{numberOfGames}} 场比赛"
+            },
+            "mobile-tags": {
+                "search": "搜索"
             }
         },
         "back-to-markets": "查看其他比赛",
@@ -663,6 +666,7 @@
     "parlay-leaderboard": {
         "title": "Parlay 奖励排行榜",
         "distribution-note": "奖励将分发给 12 月份的前 20 名过关玩家！",
-        "description": "总计 10,000 OP 将分配给当月最好的 parlays。门票将根据最高赔率排名，如果出现平局，则按数量排名。"
+        "description": "总计 10,000 OP 将分配给当月最好的 parlays。门票将根据最高赔率排名，如果出现平局，则按数量排名。",
+        "no-parlays": "在此期间还没有注册获胜的过关彩。"
     }
 }
