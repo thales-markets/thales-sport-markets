@@ -58,7 +58,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ favoriteTeamNumber }) => {
         if (user) {
             return (
                 <StickyRowWrapper>
-                    <GroupRectangleHeight />
+                    {!isMobile && <GroupRectangleHeight />}
                     <FlexWrapper>
                         <div>
                             <TableText style={{ marginRight: 6 }}>{user.rank}</TableText>
@@ -303,6 +303,10 @@ const FlexWrapper = styled.div`
     }
     & > div:first-child {
         padding-left: 18px;
+    }
+    @media (max-width: 949px) {
+        position: static;
+        background: #009e92;
     }
 `;
 
