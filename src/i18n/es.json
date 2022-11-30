@@ -664,6 +664,6 @@
         "title": "Leaderboard de incentivos en Parlays",
         "description": "Un total de 10,000 OP tokens seran distribuidos entre los mejores parlays de cada mes. Los tickets seran rankeados basados en las mayores odds (o mayor multiplicador), seguido de volumen en caso de un empate de odds entre tickets.",
         "distribution-note": "Las recompensas seran distribuidas entre los top 20 parlays al final del mes de Diciembre.",
-        "no-parlays": "Aun no hay parlays ganadores registrados en este periodo"
+        "no-parlays": "Aun no hay parlays ganadores registrados en este periodo."
     }
 }
