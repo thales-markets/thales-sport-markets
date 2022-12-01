@@ -7,8 +7,8 @@ import { fixApexName, fixDuplicatedTeamName, fixLongTeamNameString } from 'utils
 
 export const useParlayLeaderboardQuery = (
     networkId: NetworkId,
-    minTimestamp?: number,
-    maxTimestamp?: number,
+    startPeriod?: number,
+    endPeriod?: number,
     options?: UseQueryOptions<ParlayMarketWithRank[]>
 ) => {
     return useQuery<ParlayMarketWithRank[]>(
@@ -17,12 +17,10 @@ export const useParlayLeaderboardQuery = (
             try {
                 const parlayMarkets = await thalesData.sportMarkets.parlayMarkets({
                     network: networkId,
-                    maxTimestamp,
-                    minTimestamp,
+                    startPeriod,
+                    endPeriod,
                     won: 'true',
                 });
-
-                console.log(parlayMarkets);
 
                 const parlayMarketsModified = parlayMarkets
                     .sort((a: ParlayMarket, b: ParlayMarket) => a.totalQuote - b.totalQuote)

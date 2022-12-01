@@ -88,6 +88,12 @@ export const NAV_MENU: NavMenuItem[] = [
         name: 'fifa-campaign',
         route: ROUTES.MintWorldCupNFT,
     },
+    {
+        i18label: 'markets.nav-menu.items.leaderboard',
+        iconClass: 'icon icon--competition',
+        name: 'parlay-competition',
+        route: ROUTES.Leaderboard,
+    },
 
     {
         i18label: 'markets.nav-menu.items.fee-rebates',
