@@ -179,7 +179,7 @@
             "open-twitter": "Openning Twitter...",
             "click-open-twitter": "Click here to open Twitter",
             "metamask-not-supported": "Metamask browser doesn't support image download! Please use another browser to share image",
-            "ios-not-supported": "Device is not supported! Please use desktop version to share image"
+            "ios-not-supported": "Sharing images not supported on iOS devices. If you want to share the image please use desktop version"
         },
         "filter-label": {
             "global": {
