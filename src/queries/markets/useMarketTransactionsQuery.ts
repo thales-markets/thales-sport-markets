@@ -11,7 +11,7 @@ const useMarketTransactionsQuery = (
     options?: UseQueryOptions<MarketTransactions | undefined>
 ) => {
     return useQuery<MarketTransactions | undefined>(
-        QUERY_KEYS.MarketTransactions(marketAddress, networkId),
+        QUERY_KEYS.MarketTransactions(marketAddress, networkId, account),
         async () => {
             try {
                 const marketTransactions = await thalesData.sportMarkets.marketTransactions({
