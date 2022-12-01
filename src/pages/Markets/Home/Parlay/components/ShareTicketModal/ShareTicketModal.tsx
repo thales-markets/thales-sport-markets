@@ -16,7 +16,7 @@ import { DisplayOptionsType } from './components/DisplayOptions/DisplayOptions';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
-import { isMetamask, isFirefox } from 'utils/device';
+import { isMetamask, isFirefox, isIos } from 'utils/device';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 export type ShareTicketModalProps = {
@@ -166,7 +166,9 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 action: 'click-on-share-tw-icon',
             });
 
-            if (isMetamaskBrowser) {
+            if (isIos()) {
+                toast.error(t('market.toast-message.ios-not-supported'), defaultToastOptions);
+            } else if (isMetamaskBrowser) {
                 // Metamask dosn't support image download neither clipboard.write
                 toast.error(t('market.toast-message.metamask-not-supported'), defaultToastOptions);
             } else {
