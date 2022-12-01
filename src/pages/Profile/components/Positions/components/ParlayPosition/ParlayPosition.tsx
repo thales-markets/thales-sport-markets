@@ -89,7 +89,6 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ parlayMarket }) => {
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 console.log(e);
-                setShowShareTicketModal(true);
             }
         }
     };
