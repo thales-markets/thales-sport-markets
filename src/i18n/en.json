@@ -282,7 +282,9 @@
             "amount": "amount",
             "id": "Id",
             "position": "Position",
-            "status": "Status"
+            "status": "Status",
+            "total-quote": "Total Quote",
+            "total-amount": "Total Amount"
         },
         "winnings-are-forfeit": "*Winnings not claimed within {{amount}} days of a market being resolved are forfeit."
     },
