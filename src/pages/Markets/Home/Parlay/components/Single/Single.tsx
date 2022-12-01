@@ -52,10 +52,14 @@ import {
     SubmitButton,
     SummaryLabel,
     SummaryValue,
+    ShareWrapper,
+    TwitterIcon,
 } from '../styled-components';
 import Payment from '../Payment';
 import { removeAll, setPayment } from 'redux/modules/parlay';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
+import ShareTicketModal from '../ShareTicketModal';
+import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -115,6 +119,14 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 priceImpact: 0,
             },
         },
+    });
+    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
+    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
+        markets: [],
+        totalQuote: 0,
+        paid: 0,
+        payout: 0,
+        onClose: () => {},
     });
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
@@ -378,7 +390,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMContract && signer) {
             setIsAllowing(true);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 let collateralContractWithSigner: ethers.Contract | undefined;
 
@@ -398,7 +410,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
 
                 if (txResult && txResult.transactionHash) {
                     setIsAllowing(false);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.approve-success')));
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -416,7 +428,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
             const ammQuote = await fetchAmmQuote(tokenAmount || 1);
             const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(tokenAmount).toString());
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
 
             try {
                 const referralId =
@@ -444,11 +456,10 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
 
                 if (txResult && txResult.transactionHash) {
                     refetchBalances(walletAddress, networkId);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')));
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
                     setIsBuying(false);
                     setUsdAmount('');
                     setTokenAmount(0);
-                    dispatch(removeAll());
 
                     trackEvent({
                         category: 'parlay-single',
@@ -550,6 +561,26 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         // hide when validation tooltip exists except in case of not enough funds
         (tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
 
+    const profitPercentage = (tokenAmount - ammPosition.sides[Side.BUY].quote) / ammPosition.sides[Side.BUY].quote;
+
+    const onModalClose = useCallback(() => {
+        setShowShareTicketModal(false);
+    }, []);
+
+    const twitterShareDisabled = submitDisabled || !hasAllowance;
+    const onTwitterIconClick = () => {
+        // create data copy to avoid modal re-render while opened
+        const modalData: ShareTicketModalProps = {
+            markets: [market],
+            totalQuote: getPositionOdds(market),
+            paid: Number(usdAmountValue),
+            payout: tokenAmount,
+            onClose: onModalClose,
+        };
+        setShareTicketModalData(modalData);
+        setShowShareTicketModal(!twitterShareDisabled);
+    };
+
     return (
         <>
             <RowSummary>
@@ -563,7 +594,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 setIsVoucherSelectedProp={setIsVoucherSelected}
             />
             <RowSummary>
-                <SummaryLabel>{t('markets.parlay.buy-amount')}:</SummaryLabel>
+                <SummaryLabel>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>
             <InputContainer ref={inputRef}>
                 <ValidationTooltip
@@ -619,12 +650,22 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                               USD_SIGN,
                               tokenAmount - ammPosition.sides[Side.BUY].quote,
                               2
-                          )} (${formatPercentage(
-                              (tokenAmount - ammPosition.sides[Side.BUY].quote) / ammPosition.sides[Side.BUY].quote
-                          )})`}
+                          )} (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
+            <ShareWrapper>
+                <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />
+            </ShareWrapper>
+            {showShareTicketModal && (
+                <ShareTicketModal
+                    markets={shareTicketModalData.markets}
+                    totalQuote={shareTicketModalData.totalQuote}
+                    paid={shareTicketModalData.paid}
+                    payout={shareTicketModalData.payout}
+                    onClose={onModalClose}
+                />
+            )}
             {openApprovalModal && (
                 <ApprovalModal
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS

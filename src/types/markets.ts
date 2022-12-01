@@ -304,6 +304,7 @@ export type ParlaysMarketPosition = {
 
 export type ParlaysMarket = SportMarketInfo & {
     position: Position;
+    winning?: boolean;
 };
 
 export type ParlayAmmData = {

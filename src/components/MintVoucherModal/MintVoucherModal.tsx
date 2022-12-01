@@ -110,7 +110,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { signer, sUSDContract, overtimeVoucherContract } = networkConnector;
         if (signer && sUSDContract && overtimeVoucherContract) {
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsAllowing(true);
 
             try {
@@ -126,7 +126,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
                 if (txResult && txResult.transactionHash) {
                     toast.update(
                         id,
-                        getSuccessToastOptions(t('market.toast-messsage.approve-success', { token: PAYMENT_CURRENCY }))
+                        getSuccessToastOptions(t('market.toast-message.approve-success', { token: PAYMENT_CURRENCY }))
                     );
                     setIsAllowing(false);
                 }
@@ -141,7 +141,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
     const handleSubmit = async () => {
         const { overtimeVoucherContract, signer } = networkConnector;
         if (overtimeVoucherContract && signer) {
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsSubmitting(true);
             try {
                 const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);

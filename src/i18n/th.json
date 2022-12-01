@@ -160,7 +160,7 @@
         "grid-view": "กริด",
         "list-view": "รายการ",
         "skew-tooltip": "Skew Impact คือจำนวนพรีเมี่ยมที่ถูกเพิ่มในราคาโดยพิจารณาจากความเสี่ยงใน AMM ที่เกิดขึ้น ณ ปัจจุบันจากตลาดนี้",
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "ธุรกรรมที่รอดำเนินการ",
             "swap-success": "แลกเปลี่ยนสำเร็จแล้ว {{ currencyKey }}",
             "approve-success": "อนุมัติเรียบร้อย",

@@ -160,7 +160,7 @@
         "grid-view": "Grid",
         "list-view": "List",
         "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "Transaction pending",
             "swap-success": "Successfully swapped {{ currencyKey }}",
             "approve-success": "Successfully approved",

@@ -192,9 +192,9 @@ const CircleNumber = styled.span`
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
-    color: #5fc694;
+    color: #ffffff;
     background: #1a1c2b;
-    border: 2px solid #5fc694;
+    border: 2px solid #ffffff;
     border-radius: 50%;
     width: 23px;
     height: 23px;

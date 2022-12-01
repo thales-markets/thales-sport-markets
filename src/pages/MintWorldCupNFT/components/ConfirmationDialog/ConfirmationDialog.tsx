@@ -31,7 +31,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ closeDialog, se
         setIsMinting(true);
         if (favoriteTeamContract && signer) {
             const favoriteTeamContractWithSigner = favoriteTeamContract.connect(signer);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 const tx = await favoriteTeamContractWithSigner.mint(walletAddress, selectedTeam?.number, {
                     gasLimit: MAX_GAS_LIMIT,
