@@ -53,6 +53,7 @@ const ParlayLeaderboard: React.FC = () => {
                 <Title>{t('parlay-leaderboard.title')}</Title>
                 <Description>{t('parlay-leaderboard.description')}</Description>
                 <Description>{t('parlay-leaderboard.distribution-note')}</Description>
+                <Warning>{t('parlay-leaderboard.warning')}</Warning>
             </TextContainer>
 
             <Table
@@ -254,6 +255,18 @@ const Description = styled.p`
     text-align: justify;
     letter-spacing: 0.025em;
     color: #eeeee4;
+    margin-bottom: 10px;
+`;
+
+const Warning = styled.p`
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 150%;
+    text-align: justify;
+    letter-spacing: 0.025em;
+    color: #ffcc00;
     margin-bottom: 10px;
 `;
 
