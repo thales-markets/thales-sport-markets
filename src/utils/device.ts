@@ -14,7 +14,7 @@ export const isMetamask = async () => {
     return window && window.ethereum.isMetaMask && isMetamaskClientVersion;
 };
 
-export const isIphone = () => {
+export const isIos = () => {
     return (
         ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'].includes(
             navigator.platform
