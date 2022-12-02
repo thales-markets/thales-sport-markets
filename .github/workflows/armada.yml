@@ -1,0 +1,30 @@
+name: Armada Release
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build application
+        run: |
+          npm install
+          npm run build
+
+      - name: Bundle release for Armada
+        uses: armada-network/armada-release-action@v1
+        id: armada
+        with:
+          build_dir: build
+          bundle_name: overtime-${{ github.ref_name }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Log the Armada bundle data
+        run: |
+          echo "Armada bundle url: ${{ steps.armada.outputs.bundle_url }}"
+          echo "Armada bundle checksum: ${{ steps.armada.outputs.checksum }}"
