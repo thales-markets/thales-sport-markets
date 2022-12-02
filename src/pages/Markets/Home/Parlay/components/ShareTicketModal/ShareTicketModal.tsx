@@ -87,6 +87,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                     return;
                 }
 
+                const IOS_DOWNLOAD_DELAY = 15 * 1000; // 15 seconds
+                const MOBILE_TWITTER_TOAST_AUTO_CLOSE = 15 * 1000; // 15 seconds
                 try {
                     const base64Image = await toPng(ref.current, { cacheBust: true });
 
@@ -96,8 +98,14 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                         link.href = base64Image;
                         link.download = PARLAY_IMAGE_NAME;
                         document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
+                        setTimeout(
+                            () => {
+                                link.click();
+                                // Cleanup the DOM
+                                document.body.removeChild(link);
+                            },
+                            isIos() ? IOS_DOWNLOAD_DELAY : 0 // fix for iOS
+                        );
                     } else {
                         // Save to clipboard
                         const b64Blob = (await fetch(base64Image)).blob();
@@ -116,17 +124,29 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                         LINKS.Overtime +
                         (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
 
-                    // Mobile requires user action in order to open new window, it can't open in async call
+                    // Mobile requires user action in order to open new window, it can't open in async call, so adding <a>
                     isMobile
-                        ? toast.update(
-                              toastIdParam,
-                              getSuccessToastOptions(
-                                  <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
-                                      {t('market.toast-message.click-open-twitter')}
-                                  </a>,
-                                  { autoClose: 10 * 1000 }
+                        ? isIos()
+                            ? setTimeout(() => {
+                                  toast.update(
+                                      toastIdParam,
+                                      getSuccessToastOptions(
+                                          <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
+                                              {t('market.toast-message.click-open-twitter')}
+                                          </a>,
+                                          { autoClose: MOBILE_TWITTER_TOAST_AUTO_CLOSE }
+                                      )
+                                  );
+                              }, IOS_DOWNLOAD_DELAY)
+                            : toast.update(
+                                  toastIdParam,
+                                  getSuccessToastOptions(
+                                      <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
+                                          {t('market.toast-message.click-open-twitter')}
+                                      </a>,
+                                      { autoClose: MOBILE_TWITTER_TOAST_AUTO_CLOSE }
+                                  )
                               )
-                          )
                         : toast.update(
                               toastIdParam,
                               getSuccessToastOptions(
@@ -142,13 +162,13 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                               )
                           );
 
-                    setTimeout(() => {
-                        if (!isMobile) {
+                    if (!isMobile) {
+                        setTimeout(() => {
                             window.open(twitterLinkWithStatusMessage);
                             setIsLoading(false);
-                        }
-                        onClose();
-                    }, 3000);
+                        }, 3000);
+                    }
+                    onClose();
                 } catch (e) {
                     console.log(e);
                     setIsLoading(false);
@@ -166,9 +186,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 action: 'click-on-share-tw-icon',
             });
 
-            if (isIos()) {
-                toast.error(t('market.toast-message.ios-not-supported'), defaultToastOptions);
-            } else if (isMetamaskBrowser) {
+            if (isMetamaskBrowser) {
                 // Metamask dosn't support image download neither clipboard.write
                 toast.error(t('market.toast-message.metamask-not-supported'), defaultToastOptions);
             } else {
