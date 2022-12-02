@@ -16,7 +16,7 @@ import { DisplayOptionsType } from './components/DisplayOptions/DisplayOptions';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
-import { isMetamask, isFirefox, isIos } from 'utils/device';
+import { isMetamask, isFirefox } from 'utils/device';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 export type ShareTicketModalProps = {
@@ -97,7 +97,10 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                         link.download = PARLAY_IMAGE_NAME;
                         document.body.appendChild(link);
                         link.click();
-                        document.body.removeChild(link);
+                        setTimeout(() => {
+                            // Cleanup the DOM
+                            document.body.removeChild(link);
+                        }, 1000); // fix for iOS
                     } else {
                         // Save to clipboard
                         const b64Blob = (await fetch(base64Image)).blob();
@@ -142,13 +145,13 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                               )
                           );
 
-                    setTimeout(() => {
-                        if (!isMobile) {
+                    if (!isMobile) {
+                        setTimeout(() => {
                             window.open(twitterLinkWithStatusMessage);
                             setIsLoading(false);
-                        }
-                        onClose();
-                    }, 3000);
+                        }, 3000);
+                    }
+                    onClose();
                 } catch (e) {
                     console.log(e);
                     setIsLoading(false);
@@ -166,9 +169,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 action: 'click-on-share-tw-icon',
             });
 
-            if (isIos()) {
-                toast.error(t('market.toast-message.ios-not-supported'), defaultToastOptions);
-            } else if (isMetamaskBrowser) {
+            if (isMetamaskBrowser) {
                 // Metamask dosn't support image download neither clipboard.write
                 toast.error(t('market.toast-message.metamask-not-supported'), defaultToastOptions);
             } else {
