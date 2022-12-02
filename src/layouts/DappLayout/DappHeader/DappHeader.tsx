@@ -60,7 +60,7 @@ const DappHeader: React.FC = () => {
                         )}
                         {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />}
                         <WalletInfo />
-                        <ProfileItem />
+                        {isWalletConnected && <ProfileItem />}
                         <MenuIcon
                             onClick={() => setNavMenuVisibility(true)}
                             data-matomo-category="dapp-header"
@@ -86,9 +86,11 @@ const DappHeader: React.FC = () => {
                                 setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
                             />
                         </MenuIconContainer>
-                        <MobileProfileContainer>
-                            <ProfileItem avatarSize={30} labelHidden={true} />
-                        </MobileProfileContainer>
+                        {isWalletConnected && (
+                            <MobileProfileContainer>
+                                <ProfileItem avatarSize={30} labelHidden={true} />
+                            </MobileProfileContainer>
+                        )}
                     </WrapperMobile>
                     {location.pathname !== ROUTES.MintWorldCupNFT && (
                         <div style={{ width: '100%' }}>
