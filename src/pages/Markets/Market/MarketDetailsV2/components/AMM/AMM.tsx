@@ -308,7 +308,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         };
 
         fetchData().catch((e) => console.log(e));
-    }, [usdAmountValue, selectedStableIndex]);
+    }, [usdAmountValue, selectedStableIndex, selectedPosition]);
 
     useEffect(() => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;

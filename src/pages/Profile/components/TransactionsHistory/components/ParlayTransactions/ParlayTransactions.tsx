@@ -55,7 +55,7 @@ const ParlayTransactions: React.FC = () => {
         const sportMarkets: SportMarketInfo[] = data.sportMarkets;
 
         const parlaysMarket: ParlaysMarket[] = sportMarkets
-            .map((sportMarket, index) => {
+            .map((sportMarket) => {
                 const sportMarketFromContractIndex = data.sportMarketsFromContract.findIndex(
                     (address: string) => address === sportMarket.address
                 );
@@ -78,10 +78,14 @@ const ParlayTransactions: React.FC = () => {
                             : sportMarket.awayOdds,
                 };
 
+                const positionsIndex = data.positions.findIndex(
+                    (positionData: PositionData) => positionData.market.address === sportMarket.address
+                );
+
                 return {
                     ...sportMarketWithBuyQuotes,
                     position,
-                    winning: getMarketWinStatus(data.positions[index]),
+                    winning: getMarketWinStatus(data.positions[positionsIndex]),
                 };
             })
             .sort(
