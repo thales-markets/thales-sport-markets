@@ -479,7 +479,14 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     const MIN_TOKEN_AMOUNT = 1;
     useEffect(() => {
         // Minimum of token amount
-        if (!Number(usdAmountValue) || !tokenAmount || tokenAmount < MIN_TOKEN_AMOUNT || isBuying || isAllowing) {
+        if (
+            !Number(usdAmountValue) ||
+            !tokenAmount ||
+            tokenAmount < MIN_TOKEN_AMOUNT ||
+            isBuying ||
+            isAllowing ||
+            positionPriceDetailsQuery.isLoading
+        ) {
             setSubmitDisabled(true);
             return;
         }
@@ -491,7 +498,15 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
 
         setSubmitDisabled(!paymentTokenBalance || usdAmountValue > paymentTokenBalance);
         return;
-    }, [usdAmountValue, isBuying, isAllowing, hasAllowance, paymentTokenBalance, tokenAmount]);
+    }, [
+        usdAmountValue,
+        isBuying,
+        isAllowing,
+        hasAllowance,
+        paymentTokenBalance,
+        tokenAmount,
+        positionPriceDetailsQuery.isLoading,
+    ]);
 
     const getSubmitButton = () => {
         if (!isWalletConnected) {
