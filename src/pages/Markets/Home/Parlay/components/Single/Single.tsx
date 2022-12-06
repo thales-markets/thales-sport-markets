@@ -460,6 +460,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     setIsBuying(false);
                     setUsdAmount('');
                     setTokenAmount(0);
+                    dispatch(removeAll());
 
                     trackEvent({
                         category: 'parlay-single',

@@ -186,14 +186,14 @@ const Positions: React.FC<PositionsProps> = ({
             markets: [
                 {
                     ...convertMarketDataTypeToSportMarketInfoType(market),
-                    homeOdds: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
-                    awayOdds: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
-                    drawOdds: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
+                    homeOdds: sumOfTransactionPaidAmount / claimableAmount,
+                    awayOdds: sumOfTransactionPaidAmount / claimableAmount,
+                    drawOdds: sumOfTransactionPaidAmount / claimableAmount,
                     winning: claimable,
                     position: market.finalResult - 1,
                 } as ParlaysMarket,
             ],
-            totalQuote: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
+            totalQuote: sumOfTransactionPaidAmount / claimableAmount,
             paid: sumOfTransactionPaidAmount,
             payout: claimableAmount,
         };

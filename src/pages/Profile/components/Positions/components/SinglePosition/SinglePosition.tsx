@@ -80,13 +80,15 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
 
         if (marketTransactionsQuery.data) {
             marketTransactionsQuery.data.forEach((transaction) => {
-                if (transaction.type == 'sell') sum -= transaction.paid;
-                if (transaction.type == 'buy') sum += transaction.paid;
+                if (transaction.position == position.market.finalResult - 1) {
+                    if (transaction.type == 'sell') sum -= transaction.paid;
+                    if (transaction.type == 'buy') sum += transaction.paid;
+                }
             });
         }
 
         return sum;
-    }, [marketTransactionsQuery.data]);
+    }, [marketTransactionsQuery.data, position.market.finalResult]);
 
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(position.market.homeTeam, position.market.tags[0]));
@@ -132,14 +134,14 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
         markets: [
             {
                 ...position.market,
-                homeOdds: (0.97 * sumOfTransactionPaidAmount) / position.amount,
-                awayOdds: (0.97 * sumOfTransactionPaidAmount) / position.amount,
-                drawOdds: (0.97 * sumOfTransactionPaidAmount) / position.amount,
+                homeOdds: sumOfTransactionPaidAmount / position.amount,
+                awayOdds: sumOfTransactionPaidAmount / position.amount,
+                drawOdds: sumOfTransactionPaidAmount / position.amount,
                 winning: position.claimable,
                 position: convertPositionNameToPosition(position?.side ? position?.side : ''),
             } as ParlaysMarket,
         ],
-        totalQuote: (0.97 * sumOfTransactionPaidAmount) / position.amount,
+        totalQuote: sumOfTransactionPaidAmount / position.amount,
         paid: sumOfTransactionPaidAmount,
         payout: position.amount,
     };
