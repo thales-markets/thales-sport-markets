@@ -30,11 +30,12 @@ export const QUERY_KEYS = {
         balances,
     ],
     AvailablePerSide: (marketAddress: string, side: Side) => ['availablePerSide', marketAddress, side],
-    MarketTransactions: (marketAddress: string, networkId: NetworkId) => [
+    MarketTransactions: (marketAddress: string, networkId: NetworkId, walletAddress?: string) => [
         'market',
         'transactions',
         marketAddress,
         networkId,
+        walletAddress,
     ],
     MarketDuration: (networkId: NetworkId) => ['marketDuration', networkId],
     UserTransactions: (walletAddress: string, networkId: NetworkId) => [

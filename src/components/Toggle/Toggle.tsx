@@ -5,6 +5,8 @@ type LabelProps = {
     firstLabel?: string;
     secondLabel?: string;
     fontSize?: string;
+    fontWeight?: string;
+    lineHeight?: string;
 };
 
 type SwitchProps = {
@@ -68,7 +70,11 @@ const Toggle: React.FC<SwitchProps> = ({
 }) => {
     return (
         <Wrapper margin={margin} disabled={disabled}>
-            {label?.firstLabel && <Label fontSize={label?.fontSize}>{label.firstLabel}</Label>}
+            {label?.firstLabel && (
+                <Label fontSize={label?.fontSize} fontWeight={label?.fontWeight} lineHeight={label?.lineHeight}>
+                    {label.firstLabel}
+                </Label>
+            )}
             <SwitchContainer
                 disabled={disabled}
                 borderWidth={borderWidth}
@@ -88,7 +94,11 @@ const Toggle: React.FC<SwitchProps> = ({
                     dotBorder={dotBorder}
                 />
             </SwitchContainer>
-            {label?.secondLabel && <Label fontSize={label?.fontSize}>{label.secondLabel}</Label>}
+            {label?.secondLabel && (
+                <Label fontSize={label?.fontSize} fontWeight={label?.fontWeight} lineHeight={label?.lineHeight}>
+                    {label.secondLabel}
+                </Label>
+            )}
         </Wrapper>
     );
 };
@@ -104,8 +114,10 @@ const Wrapper = styled.div<{ margin?: string; disabled?: boolean }>`
     cursor: ${(props: any) => (props.disabled ? 'not-allowed' : 'default')};
 `;
 
-const Label = styled.span<{ fontSize?: string }>`
+const Label = styled.span<{ fontSize?: string; fontWeight?: string; lineHeight?: string }>`
     font-size: ${(_props) => (_props?.fontSize ? _props.fontSize : '12px')};
+    ${(_props) => (_props.fontWeight ? `font-weight: ${_props.fontWeight};` : '')}
+    ${(_props) => (_props.lineHeight ? `line-height: ${_props.lineHeight};` : '')}
     color: white;
     margin-left: 5px;
     margin-right: 5px;

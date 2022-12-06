@@ -161,7 +161,7 @@
         "grid-view": "Grid",
         "list-view": "List",
         "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "Transaction pending",
             "swap-success": "Successfully swapped {{ currencyKey }}",
             "approve-success": "Successfully approved",
@@ -170,7 +170,16 @@
             "claim-winnings-success": "Winnings successfully claimed",
             "claim-refund-success": "Refund successfully claimed",
             "withdraw-success": "Successfuly withdrawn",
-            "get-usd-success": "{{amount}} successfully minted"
+            "get-usd-success": "{{amount}} successfully minted",
+            "save-image": "Saving image to clipboard. Please wait...",
+            "download-image": "Downloading image. Please wait...",
+            "save-image-error": "Failed to save image! Try again",
+            "save-image-cancel": "Image saving canceled!",
+            "image-in-clipboard": "Image is in clipboard!",
+            "open-twitter": "Openning Twitter...",
+            "click-open-twitter": "Click here to open Twitter",
+            "metamask-not-supported": "Metamask browser doesn't support image download! Please use another browser to share image",
+            "ios-not-supported": "Sharing images not supported on iOS devices. If you want to share the image please use desktop version"
         },
         "filter-label": {
             "global": {
@@ -274,7 +283,9 @@
             "amount": "amount",
             "id": "Id",
             "position": "Position",
-            "status": "Status"
+            "status": "Status",
+            "total-quote": "Total Quote",
+            "total-amount": "Total Amount"
         },
         "winnings-are-forfeit": "*Winnings not claimed within {{amount}} days of a market being resolved are forfeit."
     },
@@ -321,7 +332,7 @@
                 "history": "History",
                 "fifa-campaign": "Zebro FIFA campaign",
                 "sports-trivia": "Sports trivia",
-                "leaderboard": "Leaderboard",
+                "leaderboard": "Parlay leaderboard",
                 "fee-rebates": "Fee rebates",
                 "become-affiliate": "Become affiliate",
                 "vaults": "Vaults"
@@ -334,7 +345,7 @@
         "parlay": {
             "total-quote": "Total quote",
             "clear": "Clear all",
-            "buy-amount": "Buy-in",
+            "buy-in": "Buy-in",
             "parlay-fee": "Parlay fee",
             "safebox-fee": "SafeBox fee",
             "positions": "Positions",
@@ -363,6 +374,22 @@
                 "risk-per-comb": "Risk per combination exceeded",
                 "same-team": "The same team can't be in a Parlay more than once",
                 "not-supported": "Not supported validation error: {{error}}"
+            },
+            "share-ticket": {
+                "header": "Web 3 Sport markets on",
+                "parlay": "parlay",
+                "potential-payout": "Potential payout",
+                "total-quote": "Total quote",
+                "referral": "Referral link",
+                "share": "Share",
+                "winner": "Winner",
+                "loser": "Loser",
+                "options": {
+                    "title": "Display options",
+                    "view-details": "Detailed",
+                    "view-simple": "Simple",
+                    "usd-amount": "USD amount"
+                }
             }
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
@@ -392,7 +419,12 @@
             "period-1": "Second period",
             "period-2": "Third period",
             "period-3": "Fourth period",
-            "period-4": "Fifth period"
+            "period-4": "Fifth period",
+            "period-5": "Sixth period",
+            "period-6": "Seventh period",
+            "period-7": "Eighth period",
+            "period-8": "Nineth period",
+            "period-9": "Tenth period"
         }
     },
     "quiz": {
@@ -654,6 +686,8 @@
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
         "description": "A total of 10,000 OP will be distributed to the best parlays of the month. The tickets will be ranked based on the highest odds, followed by volume in case of a tie.",
-        "distribution-note": "Rewards will be distributed to the top 20 parlays for the month of December!"
+        "distribution-note": "Rewards will be distributed to the top 20 parlays for the month of December!",
+        "no-parlays": "No winning parlays registered in the period yet.",
+        "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system."
     }
 }

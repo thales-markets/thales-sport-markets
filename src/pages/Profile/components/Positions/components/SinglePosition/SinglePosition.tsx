@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import { ClubLogo, ClubName } from '../ParlayPosition/components/ParlayItem/styled-components';
@@ -33,6 +33,7 @@ import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { toast } from 'react-toastify';
 import PositionSymbol from 'components/PositionSymbol';
 import {
+    convertPositionNameToPosition,
     convertPositionNameToPositionType,
     convertPositionToSymbolType,
     getCanceledGameClaimAmount,
@@ -42,13 +43,16 @@ import { getPositionColor } from 'utils/ui';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { getIsMobile } from 'redux/modules/app';
 import { FlexDivRow } from 'styles/common';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import { buildMarketLink } from 'utils/routes';
 import i18n from 'i18n';
 import { MAX_GAS_LIMIT } from 'constants/network';
+import ShareTicketModal from 'pages/Markets/Home/Parlay/components/ShareTicketModal';
+import useMarketTransactionsQuery from 'queries/markets/useMarketTransactionsQuery';
+import { ParlaysMarket } from 'types/markets';
 
 const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ position }) => {
     const language = i18n.language;
@@ -56,6 +60,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isWalletConnect = useSelector((state: RootState) => getIsWalletConnected(state));
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(
         getTeamImageSource(position.market.homeTeam, position.market.tags[0])
@@ -63,6 +68,27 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
     const [awayLogoSrc, setAwayLogoSrc] = useState(
         getTeamImageSource(position.market.awayTeam, position.market.tags[0])
     );
+
+    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
+
+    const marketTransactionsQuery = useMarketTransactionsQuery(position.market.address, networkId, position.account, {
+        enabled: isWalletConnect,
+    });
+
+    const sumOfTransactionPaidAmount = useMemo(() => {
+        let sum = 0;
+
+        if (marketTransactionsQuery.data) {
+            marketTransactionsQuery.data.forEach((transaction) => {
+                if (transaction.position == position.market.finalResult - 1) {
+                    if (transaction.type == 'sell') sum -= transaction.paid;
+                    if (transaction.type == 'buy') sum += transaction.paid;
+                }
+            });
+        }
+
+        return sum;
+    }, [marketTransactionsQuery.data, position.market.finalResult]);
 
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(position.market.homeTeam, position.market.tags[0]));
@@ -74,7 +100,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
         if (signer) {
             const contract = new ethers.Contract(position.market.address, sportsMarketContract.abi, signer);
             contract.connect(signer);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 const tx = await contract.exerciseOptions({
                     gasLimit: MAX_GAS_LIMIT,
@@ -85,7 +111,8 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                     setTimeout(() => {
                         refetchAfterClaim(walletAddress, networkId);
                     }, 1500);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
+                    setShowShareTicketModal(true);
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -102,6 +129,22 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
     const claimAmountForCanceledGame = claimCanceledGame ? getCanceledGameClaimAmount(position) : 0;
 
     const claimAmount = claimCanceledGame ? claimAmountForCanceledGame : position.amount;
+
+    const shareTicketData = {
+        markets: [
+            {
+                ...position.market,
+                homeOdds: sumOfTransactionPaidAmount / position.amount,
+                awayOdds: sumOfTransactionPaidAmount / position.amount,
+                drawOdds: sumOfTransactionPaidAmount / position.amount,
+                winning: position.claimable,
+                position: convertPositionNameToPosition(position?.side ? position?.side : ''),
+            } as ParlaysMarket,
+        ],
+        totalQuote: sumOfTransactionPaidAmount / position.amount,
+        paid: sumOfTransactionPaidAmount,
+        payout: position.amount,
+    };
 
     return (
         <Wrapper>
@@ -204,6 +247,15 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                         </ExternalLinkContainer>
                     </ExternalLink>
                 </>
+            )}
+            {showShareTicketModal && (
+                <ShareTicketModal
+                    markets={shareTicketData.markets}
+                    totalQuote={shareTicketData.totalQuote}
+                    paid={Number(shareTicketData.paid)}
+                    payout={shareTicketData.payout}
+                    onClose={() => setShowShareTicketModal(false)}
+                />
             )}
         </Wrapper>
     );

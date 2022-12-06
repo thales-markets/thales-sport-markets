@@ -160,7 +160,7 @@
         "grid-view": "Raster",
         "list-view": "Liste",
         "skew-tooltip": "Skew Impact ist die Höhe der Prämie, die auf der Grundlage des aktuellen Risikos, das AMM auf diesem spezifischen Markt eingeht, zum Preis einer Position hinzugefügt wird.",
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "Ausstehende Transaktion",
             "swap-success": "Erfolgreich ausgetauscht {{ currencyKey }}",
             "approve-success": "Erfolgreich genehmigt",
@@ -660,6 +660,7 @@
     "parlay-leaderboard": {
         "title": "Parlay Incentives-Rangliste",
         "description": "Insgesamt 10.000 OP werden an die besten Parlays des Monats vergeben. Die Tickets werden nach den höchsten Quoten geordnet, bei Gleichstand entscheidet das Volumen.",
-        "distribution-note": "Die Belohnungen werden an die 20 besten Parlays des Monats Dezember vergeben!"
+        "distribution-note": "Die Belohnungen werden an die 20 besten Parlays des Monats Dezember vergeben!",
+        "no-parlays": "Noch keine Gewinner-Parlays registriert."
     }
 }

@@ -7,21 +7,24 @@ import { MAX_GAS_LIMIT } from 'constants/network';
 import { Position, Side } from 'constants/options';
 import { ODDS_COLOR } from 'constants/ui';
 import { ethers } from 'ethers';
+import ShareTicketModal from 'pages/Markets/Home/Parlay/components/ShareTicketModal';
 import useMarketBalancesQuery from 'queries/markets/useMarketBalancesQuery';
 import useMarketCancellationOddsQuery from 'queries/markets/useMarketCancellationOddsQuery';
-import React, { useEffect, useState } from 'react';
+import useMarketTransactionsQuery from 'queries/markets/useMarketTransactionsQuery';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { AvailablePerSide, MarketData } from 'types/markets';
+import { AvailablePerSide, MarketData, ParlaysMarket } from 'types/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { floorNumberToDecimals, formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
 import {
     convertFinalResultToResultType,
     convertFinalResultToWinnerName,
+    convertMarketDataTypeToSportMarketInfoType,
     getIsApexTopGame,
     getVisibilityOfDrawOptionByTagId,
     isDiscounted,
@@ -60,10 +63,12 @@ const Positions: React.FC<PositionsProps> = ({
     const { t } = useTranslation();
     const [claimable, setClaimable] = useState<boolean>(false);
     const [claimableAmount, setClaimableAmount] = useState<number>(0);
+    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
 
     // Redux states
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     // ------------
 
@@ -74,7 +79,25 @@ const Positions: React.FC<PositionsProps> = ({
     const marketCancellationOddsQuery = useMarketCancellationOddsQuery(market?.address || '', {
         enabled: market?.cancelled,
     });
+    const marketTransactionsQuery = useMarketTransactionsQuery(market.address, networkId, walletAddress, {
+        enabled: isWalletConnected,
+    });
     // ------------
+
+    const sumOfTransactionPaidAmount = useMemo(() => {
+        let sum = 0;
+
+        if (marketTransactionsQuery.data) {
+            marketTransactionsQuery.data.forEach((transaction) => {
+                if (transaction.position == market.finalResult - 1) {
+                    if (transaction.type == 'sell') sum -= transaction.paid;
+                    if (transaction.type == 'buy') sum += transaction.paid;
+                }
+            });
+        }
+
+        return sum;
+    }, [market.finalResult, marketTransactionsQuery.data]);
 
     const balances = marketBalancesQuery.isSuccess && marketBalancesQuery.data ? marketBalancesQuery.data : undefined;
     const oddsOnCancellation =
@@ -158,12 +181,30 @@ const Positions: React.FC<PositionsProps> = ({
         ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.AWAY]?.buyImpactPrice) * 100))
         : 0;
 
+    const shareParlayData = useMemo(() => {
+        return {
+            markets: [
+                {
+                    ...convertMarketDataTypeToSportMarketInfoType(market),
+                    homeOdds: sumOfTransactionPaidAmount / claimableAmount,
+                    awayOdds: sumOfTransactionPaidAmount / claimableAmount,
+                    drawOdds: sumOfTransactionPaidAmount / claimableAmount,
+                    winning: claimable,
+                    position: market.finalResult - 1,
+                } as ParlaysMarket,
+            ],
+            totalQuote: sumOfTransactionPaidAmount / claimableAmount,
+            paid: sumOfTransactionPaidAmount,
+            payout: claimableAmount,
+        };
+    }, [market, sumOfTransactionPaidAmount, claimableAmount, claimable]);
+
     const claimReward = async () => {
         const { signer } = networkConnector;
         if (signer) {
             const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
             contract.connect(signer);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 const tx = await contract.exerciseOptions({
                     gasLimit: MAX_GAS_LIMIT,
@@ -171,7 +212,8 @@ const Positions: React.FC<PositionsProps> = ({
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
+                    setShowShareTicketModal(true);
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -438,6 +480,15 @@ const Positions: React.FC<PositionsProps> = ({
                         </LiquidityInfoContainer>
                     </TeamOptionContainer>
                 </Wrapper>
+            )}
+            {showShareTicketModal && (
+                <ShareTicketModal
+                    markets={shareParlayData.markets}
+                    totalQuote={shareParlayData.totalQuote}
+                    paid={Number(shareParlayData.paid)}
+                    payout={shareParlayData.payout}
+                    onClose={() => setShowShareTicketModal(false)}
+                />
             )}
         </>
     );

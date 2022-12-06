@@ -31,13 +31,20 @@ import {
 } from 'utils/markets';
 
 const Rewards = [2000, 1500, 1000, 800, 750, 700, 600, 500, 300, 250, 225, 210, 200, 185, 170, 145, 130, 125, 110, 100];
+const START_DATE = new Date(2022, 11, 1, 0, 0, 0);
+const END_DATE = new Date(2022, 11, 31, 24, 0, 0);
 
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
-    const query = useParlayLeaderboardQuery(networkId, undefined, undefined, { enabled: isAppReady });
+    const query = useParlayLeaderboardQuery(
+        networkId,
+        parseInt(START_DATE.getTime() / 1000 + ''),
+        parseInt(END_DATE.getTime() / 1000 + ''),
+        { enabled: isAppReady }
+    );
     const parlays = query.isSuccess ? query.data : [];
 
     return (
@@ -46,6 +53,7 @@ const ParlayLeaderboard: React.FC = () => {
                 <Title>{t('parlay-leaderboard.title')}</Title>
                 <Description>{t('parlay-leaderboard.description')}</Description>
                 <Description>{t('parlay-leaderboard.distribution-note')}</Description>
+                <Warning>{t('parlay-leaderboard.warning')}</Warning>
             </TextContainer>
 
             <Table
@@ -117,7 +125,7 @@ const ParlayLeaderboard: React.FC = () => {
                         sortable: true,
                     },
                 ]}
-                noResultsMessage={t('profile.messages.no-transactions')}
+                noResultsMessage={t('parlay-leaderboard.no-parlays')}
                 expandedRow={(row) => {
                     const toRender = row.original.sportMarketsFromContract.map((address: string, index: number) => {
                         const position = row.original.positions.find(
@@ -247,6 +255,18 @@ const Description = styled.p`
     text-align: justify;
     letter-spacing: 0.025em;
     color: #eeeee4;
+    margin-bottom: 10px;
+`;
+
+const Warning = styled.p`
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 150%;
+    text-align: justify;
+    letter-spacing: 0.025em;
+    color: #ffcc00;
     margin-bottom: 10px;
 `;
 
