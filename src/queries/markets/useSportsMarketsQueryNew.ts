@@ -21,7 +21,7 @@ const marketsCache = {
     [GlobalFiltersEnum.History]: [] as SportMarkets,
 };
 
-const mapMarkets = async (allMarkets: SportMarkets) => {
+const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolean) => {
     const openMarkets = [] as SportMarkets;
     const canceledMarkets = [] as SportMarkets;
     const resolvedMarkets = [] as SportMarkets;
@@ -61,25 +61,33 @@ const mapMarkets = async (allMarkets: SportMarkets) => {
             market.isOpen &&
             !market.isCanceled &&
             (market.homeOdds !== 0 || market.awayOdds !== 0 || (market.drawOdds || 0) !== 0) &&
-            market.maturityDate.getTime() > new Date().getTime()
+            market.maturityDate.getTime() > new Date().getTime() &&
+            mapOnlyOpenedMarkets
         ) {
             openMarkets.push(market);
         }
         if (
             market.isResolved &&
             !market.isCanceled &&
-            market.maturityDate.getTime() + 7 * 24 * 60 * 60 * 1000 > new Date().getTime()
+            market.maturityDate.getTime() + 7 * 24 * 60 * 60 * 1000 > new Date().getTime() &&
+            !mapOnlyOpenedMarkets
         ) {
             resolvedMarkets.push(market);
         }
         if (
             (market.isCanceled || market.isPaused) &&
             !market.isResolved &&
-            market.maturityDate.getTime() + 30 * 24 * 60 * 60 * 1000 > new Date().getTime()
+            market.maturityDate.getTime() + 30 * 24 * 60 * 60 * 1000 > new Date().getTime() &&
+            !mapOnlyOpenedMarkets
         ) {
             canceledMarkets.push(market);
         }
-        if (market.maturityDate.getTime() < new Date().getTime() && !market.isResolved && !market.isCanceled) {
+        if (
+            market.maturityDate.getTime() < new Date().getTime() &&
+            !market.isResolved &&
+            !market.isCanceled &&
+            !mapOnlyOpenedMarkets
+        ) {
             pendingMarkets.push(market);
         }
     });
@@ -123,17 +131,17 @@ const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions
                     await thalesData.sportMarkets.markets({
                         isOpen: true,
                         network: networkId,
-                    })
+                    }),
+                    true
                 );
 
                 // fetch and map markets in the background that are not opened
                 thalesData.sportMarkets
                     .markets({
-                        isOpen: false,
                         network: networkId,
                     })
                     .then(async (result: any) => {
-                        mapMarkets(result);
+                        mapMarkets(result, false);
                     });
 
                 return marketsCache;
