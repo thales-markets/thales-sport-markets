@@ -51,7 +51,7 @@ export const PrimaryLabel = styled.span`
 export const PrimaryValue = styled.span<{ color?: string }>`
     font-size: 15px;
     line-height: 22.5px;
-    color: ${(_props) => (_props?.color ? _props.color : '')};
+    color: ${(props) => (props?.color ? props.color : '')};
 `;
 
 export const SecondaryLabel = styled.span`

@@ -47,11 +47,11 @@ export const ParticipantsContainer = styled(FlexDiv)`
 `;
 
 export const ParticipantLogoContainer = styled.div<{ awayTeam?: boolean; isWinner?: boolean; isDraw?: boolean }>`
-    ${(_props) => (_props?.awayTeam ? 'margin-left: -1vw;' : '')}
+    ${(props) => (props?.awayTeam ? 'margin-left: -1vw;' : '')}
     background-color: ${MAIN_COLORS.DARK_GRAY};
-    border-color: ${(_props) =>
-        _props?.isWinner ? `${MAIN_COLORS.BORDERS.WINNER} !important` : MAIN_COLORS.BORDERS.GRAY};
-    ${(_props) => (_props?.isWinner || _props?.isDraw ? `box-shadow: ${MAIN_COLORS.SHADOWS.WINNER};` : '')}
+    border-color: ${(props) =>
+        props?.isWinner ? `${MAIN_COLORS.BORDERS.WINNER} !important` : MAIN_COLORS.BORDERS.GRAY};
+    ${(props) => (props?.isWinner || props?.isDraw ? `box-shadow: ${MAIN_COLORS.SHADOWS.WINNER};` : '')}
     width: 100px;
     height: 100px;
     padding: 5px;
@@ -61,7 +61,7 @@ export const ParticipantLogoContainer = styled.div<{ awayTeam?: boolean; isWinne
     justify-content: center;
     border: 2.5px solid #5f6180;
     @media (max-width: 500px) {
-        ${(_props) => (_props?.awayTeam ? 'margin-left: -3vw;' : '')}
+        ${(props) => (props?.awayTeam ? 'margin-left: -3vw;' : '')}
         margin-right: 0px;
         background-color: ${MAIN_COLORS.LIGHT_GRAY};
     }

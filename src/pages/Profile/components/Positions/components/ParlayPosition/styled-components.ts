@@ -67,7 +67,7 @@ export const ClaimContainer = styled(FlexDivColumnNative)`
 export const Label = styled.span<{ canceled?: boolean }>`
     font-weight: 400;
     font-size: 12px;
-    color: ${(_props) => (_props?.canceled ? `${MAIN_COLORS.TEXT.CANCELED}` : `${MAIN_COLORS.TEXT.WHITE}`)};
+    color: ${(props) => (props?.canceled ? `${MAIN_COLORS.TEXT.CANCELED}` : `${MAIN_COLORS.TEXT.WHITE}`)};
     text-transform: uppercase;
     margin-right: 3px;
     @media (max-width: 768px) {
@@ -140,7 +140,7 @@ export const ArrowIconFooter = styled.i`
 
 export const CollapsableContainer = styled(FlexDivColumnNative)<{ show?: boolean }>`
     width: 100%;
-    max-height: ${(_props) => (_props?.show ? '100%' : '0')};
+    max-height: ${(props) => (props?.show ? '100%' : '0')};
     overflow: hidden;
     align-items: center;
 `;
