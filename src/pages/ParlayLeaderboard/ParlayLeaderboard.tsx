@@ -101,7 +101,14 @@ const ParlayLeaderboard: React.FC = () => {
                 <Title>{t('parlay-leaderboard.title')}</Title>
                 <Description>{t('parlay-leaderboard.description')}</Description>
                 <Description>{t('parlay-leaderboard.distribution-note')}</Description>
+                <Description>{t('parlay-leaderboard.info')}</Description>
+                <ul style={{ paddingLeft: 10 }}>
+                    <Description>{t('parlay-leaderboard.info1')}</Description>
+                    <Description>{t('parlay-leaderboard.info2')}</Description>
+                    <Description>{t('parlay-leaderboard.info3')}</Description>
+                </ul>
                 <Warning>{t('parlay-leaderboard.warning')}</Warning>
+
                 <Search
                     text={searchText}
                     customPlaceholder={t('rewards.search-placeholder')}
