@@ -165,8 +165,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                     if (!isMobile) {
                         setTimeout(() => {
                             window.open(twitterLinkWithStatusMessage);
-                            setIsLoading(false);
-                        }, 3000);
+                        }, defaultToastOptions.autoClose);
                     }
                     onClose();
                 } catch (e) {
