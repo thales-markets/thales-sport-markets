@@ -5,6 +5,19 @@ import { NetworkId } from 'types/network';
 import thalesData from 'thales-data';
 import { fixApexName, fixDuplicatedTeamName, fixLongTeamNameString } from 'utils/formatters/string';
 
+const sortByTotalQuote = (a: ParlayMarket, b: ParlayMarket) => {
+    let firstQuote = 1;
+    a.marketQuotes.map((quote) => {
+        firstQuote = firstQuote * quote;
+    });
+
+    let secondQuote = 1;
+    b.marketQuotes.map((quote) => {
+        secondQuote = secondQuote * quote;
+    });
+    return firstQuote - secondQuote;
+};
+
 export const useParlayLeaderboardQuery = (
     networkId: NetworkId,
     startPeriod?: number,
@@ -23,7 +36,15 @@ export const useParlayLeaderboardQuery = (
                 });
 
                 const parlayMarketsModified = parlayMarkets
-                    .sort((a: ParlayMarket, b: ParlayMarket) => a.totalQuote - b.totalQuote)
+                    .sort((a: ParlayMarket, b: ParlayMarket) =>
+                        a.totalQuote !== b.totalQuote
+                            ? a.totalQuote - b.totalQuote
+                            : a.positions.length !== b.positions.length
+                            ? b.positions.length - a.positions.length
+                            : a.sUSDPaid !== b.sUSDPaid
+                            ? b.sUSDPaid - a.sUSDPaid
+                            : sortByTotalQuote(a, b)
+                    )
                     .map((parlayMarket: ParlayMarket, index: number) => {
                         return {
                             rank: index + 1,
