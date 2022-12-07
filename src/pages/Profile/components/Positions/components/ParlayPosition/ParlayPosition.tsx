@@ -127,8 +127,8 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
         paid: parlayMarket.sUSDPaid,
         payout: parlayMarket.totalAmount,
         onClose: () => {
-            setShowShareTicketModal ? setShowShareTicketModal(false) : null;
             refetchAfterClaim(walletAddress, networkId);
+            setShowShareTicketModal ? setShowShareTicketModal(false) : null;
         },
     };
 

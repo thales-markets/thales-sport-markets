@@ -153,8 +153,8 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
         paid: sumOfTransactionPaidAmount,
         payout: position.amount,
         onClose: () => {
-            setShowShareTicketModal ? setShowShareTicketModal(false) : null;
             refetchAfterClaim(walletAddress, networkId);
+            setShowShareTicketModal ? setShowShareTicketModal(false) : null;
         },
     };
 
