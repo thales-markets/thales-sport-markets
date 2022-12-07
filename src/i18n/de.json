@@ -169,7 +169,16 @@
             "claim-winnings-success": "Der Gewinn wurde erfolgreich eingefordert",
             "claim-refund-success": "Die Erstattung wurde erfolgreich eingefordert.",
             "withdraw-success": "Erfolgreich abgehoben",
-            "get-usd-success": "{{amount}} erfolgreich gemintet"
+            "get-usd-success": "{{amount}} erfolgreich gemintet",
+            "metamask-not-supported": "Der Metamask-Browser unterstützt das Herunterladen von Bildern nicht! Bitte verwenden Sie einen anderen Browser, um das Bild zu teilen",
+            "image-in-clipboard": "Bild ist in der Zwischenablage!",
+            "click-open-twitter": "Klicken Sie hier, um Twitter zu öffnen",
+            "save-image-error": "Bild konnte nicht gespeichert werden! Versuchen Sie es nochmal",
+            "save-image-cancel": "Bildspeicherung abgebrochen!",
+            "download-image": "Bild herunterladen. Warten Sie mal...",
+            "save-image": "Bild in Zwischenablage speichern. Warten Sie mal...",
+            "open-twitter": "Twitter öffnen...",
+            "ios-not-supported": "Das Teilen von Bildern wird auf iOS-Geräten nicht unterstützt. Wenn Sie das Bild teilen möchten, verwenden Sie bitte die Desktop-Version"
         },
         "filter-label": {
             "global": {
@@ -313,7 +322,24 @@
                 "max-quote": "Das maximal unterstützte TOTAL QUOTE beträgt {{value}}",
                 "min-quote": "Das minimal unterstützte TOTAL QUOTE beträgt {{value}}"
             },
-            "show-parlay": "Parlay anzeigen"
+            "show-parlay": "Parlay anzeigen",
+            "share-ticket": {
+                "options": {
+                    "view-simple": "Einfach",
+                    "view-details": "Ausführlich",
+                    "usd-amount": "USD-Betrag",
+                    "title": "Anzeigeoptionen"
+                },
+                "parlay": "spielen",
+                "share": "Teilen",
+                "referral": "Empfehlungslink",
+                "loser": "Verlierer",
+                "winner": "Gewinner",
+                "total-quote": "Gesamtangebot",
+                "header": "Web 3 Sportmärkte auf",
+                "potential-payout": "Mögliche Auszahlung"
+            },
+            "buy-in": "Kaufen"
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {
@@ -355,7 +381,12 @@
             "period-1": "Erste Periode",
             "period-2": "Dritte Periode",
             "period-3": "Vierte Periode",
-            "period-4": "Fünfte Periode"
+            "period-4": "Fünfte Periode",
+            "period-6": "Siebte Periode",
+            "period-7": "Achte Periode",
+            "period-8": "Neunte Periode",
+            "period-5": "Sechste Periode",
+            "period-9": "Zehnte Periode"
         },
         "your-score": "Ihr Ergebnis",
         "total-negative-pnl": "Totalverluste",
@@ -481,7 +512,9 @@
             "amount": "Menge",
             "paid": "Bezahlt",
             "position": "Position",
-            "status": "Status"
+            "status": "Status",
+            "total-amount": "Gesamtsumme",
+            "total-quote": "Gesamtangebot"
         },
         "winnings-are-forfeit": "*Gewinne, die nicht innerhalb von {{amount}} Tagen nach Auflösung eines Marktes beansprucht werden, verfallen."
     },
@@ -661,6 +694,11 @@
         "title": "Parlay Incentives-Rangliste",
         "description": "Insgesamt 10.000 OP werden an die besten Parlays des Monats vergeben. Die Tickets werden nach den höchsten Quoten geordnet, bei Gleichstand entscheidet das Volumen.",
         "distribution-note": "Die Belohnungen werden an die 20 besten Parlays des Monats Dezember vergeben!",
-        "no-parlays": "Noch keine Gewinner-Parlays registriert."
+        "no-parlays": "Noch keine Gewinner-Parlays registriert.",
+        "warning": "*Überstundenteam behält sich das Recht vor, Brieftaschen zu disqualifizieren, von denen wir vermuten, dass sie das System spielen.",
+        "info": "Wenn mehrere Parlays dieselbe Quote haben, wird Folgendes als Tie-Breaker in der jeweiligen Reihenfolge verwendet:",
+        "info3": "- Tatsächliche Gesamtquote (erhalten durch Multiplizieren der Positionen einzeln)",
+        "info2": "- Der gezahlte Betrag",
+        "info1": "- Anzahl der Positionen im Parlay"
     }
 }
