@@ -95,7 +95,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
             </InfoRow>
             <InfoRow>
                 <InfoLabel>{t('markets.parlay.buy-in')}:</InfoLabel>
-                <InfoValue>{formatCurrencyWithSign(USD_SIGN, paid)}</InfoValue>
+                <InfoValue>{formatCurrencyWithSign(USD_SIGN, paid, 2)}</InfoValue>
             </InfoRow>
         </Container>
     );

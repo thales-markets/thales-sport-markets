@@ -50,11 +50,21 @@ import { refetchAfterClaim } from 'utils/queryConnector';
 import { buildMarketLink } from 'utils/routes';
 import i18n from 'i18n';
 import { MAX_GAS_LIMIT } from 'constants/network';
-import ShareTicketModal from 'pages/Markets/Home/Parlay/components/ShareTicketModal';
 import useMarketTransactionsQuery from 'queries/markets/useMarketTransactionsQuery';
 import { ParlaysMarket } from 'types/markets';
+import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 
-const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ position }) => {
+type SinglePositionProps = {
+    position: AccountPositionProfile;
+    setShareTicketModalData?: (shareTicketData: ShareTicketModalProps) => void;
+    setShowShareTicketModal?: (show: boolean) => void;
+};
+
+const SinglePosition: React.FC<SinglePositionProps> = ({
+    position,
+    setShareTicketModalData,
+    setShowShareTicketModal,
+}) => {
     const language = i18n.language;
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -68,8 +78,6 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
     const [awayLogoSrc, setAwayLogoSrc] = useState(
         getTeamImageSource(position.market.awayTeam, position.market.tags[0])
     );
-
-    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
 
     const marketTransactionsQuery = useMarketTransactionsQuery(position.market.address, networkId, position.account, {
         enabled: isWalletConnect,
@@ -108,11 +116,11 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    setTimeout(() => {
-                        refetchAfterClaim(walletAddress, networkId);
-                    }, 1500);
-                    setShowShareTicketModal(true);
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
+                    if (setShareTicketModalData && setShowShareTicketModal) {
+                        setShareTicketModalData(shareTicketData);
+                        setShowShareTicketModal(true);
+                    }
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -130,7 +138,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
 
     const claimAmount = claimCanceledGame ? claimAmountForCanceledGame : position.amount;
 
-    const shareTicketData = {
+    const shareTicketData: ShareTicketModalProps = {
         markets: [
             {
                 ...position.market,
@@ -144,6 +152,10 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
         totalQuote: sumOfTransactionPaidAmount / position.amount,
         paid: sumOfTransactionPaidAmount,
         payout: position.amount,
+        onClose: () => {
+            setShowShareTicketModal ? setShowShareTicketModal(false) : null;
+            refetchAfterClaim(walletAddress, networkId);
+        },
     };
 
     return (
@@ -247,15 +259,6 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                         </ExternalLinkContainer>
                     </ExternalLink>
                 </>
-            )}
-            {showShareTicketModal && (
-                <ShareTicketModal
-                    markets={shareTicketData.markets}
-                    totalQuote={shareTicketData.totalQuote}
-                    paid={Number(shareTicketData.paid)}
-                    payout={shareTicketData.payout}
-                    onClose={() => setShowShareTicketModal(false)}
-                />
             )}
         </Wrapper>
     );
