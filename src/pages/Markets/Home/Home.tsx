@@ -418,7 +418,7 @@ const Home: React.FC = () => {
                             dispatch(setMarketSearch(value));
                             setSearchParam(value);
                         }}
-                        width={300}
+                        width={280}
                     />
                     <SportFiltersContainer>
                         {Object.values(SportFilterEnum).map((filterItem: any, index) => {
@@ -620,13 +620,13 @@ const RowContainer = styled(FlexDivRow)`
 const MainContainer = styled(FlexDivColumn)`
     padding-top: 25px;
     width: 100%;
-    max-width: 750px;
+    max-width: 800px;
     flex-grow: 1;
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`
     padding-top: 25px;
-    max-width: 300px;
+    max-width: 280px;
     flex-grow: 1;
     @media (max-width: 950px) {
         display: none;

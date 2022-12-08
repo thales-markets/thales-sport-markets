@@ -216,7 +216,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
 
 const Container = styled(FlexDiv)`
     width: 100%;
-    max-width: 750px;
+    max-width: 800px;
 `;
 
 const DropdownContrainer = styled.div`
@@ -237,7 +237,7 @@ export const Filters = styled(FlexDiv)<{ isMobile?: boolean }>`
     line-height: 14px;
     align-items: center;
     letter-spacing: 0.01em;
-    margin: 0px 20px;
+    margin: 0px 10px;
     padding: 0px 10px;
 `;
 
