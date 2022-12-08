@@ -79,8 +79,8 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({
                         <ItemIcon className="icon icon--profile" />
                     </SPAAnchor>
                 </ItemContainer>
-                <ItemContainer>
-                    <ItemIcon className="icon icon--parlay" onClick={() => setParlayMobileVisibility(true)} />
+                <ItemContainer onClick={() => setParlayMobileVisibility(true)}>
+                    <ItemIcon className="icon icon--parlay" />
                     <ParlayNumber>{parlayMarkets.length}</ParlayNumber>
                 </ItemContainer>
                 <ItemContainer>
