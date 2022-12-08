@@ -410,7 +410,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                 const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
                 const ammQuote = await fetchAmmQuote(+Number(tokenAmount).toFixed(2) || 1);
                 const parsedAmount = ethers.utils.parseEther(Number(tokenAmount).toFixed(2));
-                const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+                const id = toast.loading(t('market.toast-message.transaction-pending'));
 
                 try {
                     const tx = await getAMMSportsTransaction(
@@ -435,8 +435,8 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
                     if (txResult && txResult.transactionHash) {
                         refetchBalances(walletAddress, networkId);
                         selectedSide === Side.BUY
-                            ? toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')))
-                            : toast.update(id, getSuccessToastOptions(t('market.toast-messsage.sell-success')));
+                            ? toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')))
+                            : toast.update(id, getSuccessToastOptions(t('market.toast-message.sell-success')));
                         setIsBuying(false);
                         setTokenAmount(0);
                         setUsdAmount(0);
@@ -468,7 +468,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMContract && signer) {
             setIsAllowing(true);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 let collateralContractWithSigner: ethers.Contract | undefined;
 
@@ -488,7 +488,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
                 if (txResult && txResult.transactionHash) {
                     setIsAllowing(false);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.approve-success')));
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -609,7 +609,7 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
         if (signer) {
             const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
             contract.connect(signer);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 const tx = await contract.exerciseOptions({
                     gasLimit: MAX_GAS_LIMIT,
@@ -618,9 +618,9 @@ const MarketDetails: React.FC<MarketDetailsProps> = ({ market, selectedSide, set
 
                 if (txResult && txResult.transactionHash) {
                     if (market.finalResult === 0) {
-                        toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-refund-success')));
+                        toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-refund-success')));
                     } else {
-                        toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
+                        toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
                     }
                     setClaimable(false);
                 }

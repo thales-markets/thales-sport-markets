@@ -52,7 +52,7 @@ const GetUsd: React.FC = () => {
         const { exoticUsdContract, provider, signer } = networkConnector;
         const faucetSigner = new ethers.Wallet(process.env.REACT_APP_FAUCET_WALLET_PRIVATE_KEY || '', provider);
         if (exoticUsdContract && signer && faucetSigner) {
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsSubmitting(true);
 
             try {
@@ -69,7 +69,7 @@ const GetUsd: React.FC = () => {
                 if (txResult && txResult.transactionHash) {
                     toast.update(
                         id,
-                        getSuccessToastOptions(t('market.toast-messsage.get-usd-success', { amount: formattedAmount }))
+                        getSuccessToastOptions(t('market.toast-message.get-usd-success', { amount: formattedAmount }))
                     );
                     setIsSubmitting(false);
                 }

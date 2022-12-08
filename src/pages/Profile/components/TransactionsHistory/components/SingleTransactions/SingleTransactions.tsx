@@ -121,6 +121,9 @@ const TransactionsHistory: React.FC = () => {
 };
 
 const getPositionStatus = (position: any) => {
+    if (position.wholeMarket.isCanceled) {
+        return <StatusWrapper color="#808080">CANCELED</StatusWrapper>;
+    }
     if (position.wholeMarket.isResolved) {
         if (
             convertPositionNameToPosition(position.position) ===
@@ -147,7 +150,7 @@ const TableText = styled.span`
 `;
 
 const StatusWrapper = styled.div`
-    width: 62px;
+    width: auto;
     height: 25px;
     border: 2px solid ${(props) => props.color || 'white'};
     border-radius: 5px;
@@ -161,6 +164,8 @@ const StatusWrapper = styled.div`
     text-align: center;
     color: ${(props) => props.color || 'white'};
     padding-top: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
 `;
 
 const TableHeaderStyle: React.CSSProperties = {
@@ -192,9 +197,9 @@ const CircleNumber = styled.span`
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
-    color: #5fc694;
+    color: #ffffff;
     background: #1a1c2b;
-    border: 2px solid #5fc694;
+    border: 2px solid #ffffff;
     border-radius: 50%;
     width: 23px;
     height: 23px;

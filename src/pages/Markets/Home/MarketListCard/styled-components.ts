@@ -35,7 +35,7 @@ export const ClubContainer = styled.div<{ away?: boolean }>`
     display: flex;
     flex-direction: row;
     align-items: center;
-    ${(_props) => (_props?.away ? `justify-content: end;` : '')};
+    ${(props) => (props?.away ? `justify-content: end;` : '')};
 `;
 
 export const BetTypeContainer = styled.div`
@@ -48,10 +48,10 @@ export const BetTypeContainer = styled.div`
 
 export const ClubVsClubContainer = styled.div<{ isMobile?: boolean }>`
     display: flex;
-    flex-direction: ${(_props) => (_props?.isMobile ? 'column' : 'row')};
-    justify-content: ${(_props) => (_props?.isMobile ? 'space-evenly' : 'space-between')};
-    align-items: ${(_props) => (_props?.isMobile ? 'baseline' : 'center')};
-    flex-grow: ${(_props) => (_props?.isMobile ? '1' : '')};
+    flex-direction: ${(props) => (props?.isMobile ? 'column' : 'row')};
+    justify-content: ${(props) => (props?.isMobile ? 'space-evenly' : 'space-between')};
+    align-items: ${(props) => (props?.isMobile ? 'baseline' : 'center')};
+    flex-grow: ${(props) => (props?.isMobile ? '1' : '')};
 `;
 
 export const VSLabel = styled.span`
@@ -61,14 +61,14 @@ export const VSLabel = styled.span`
 `;
 
 export const ClubLogo = styled.img<{ width?: string; height?: string }>`
-    height: ${(_props) => (_props?.height ? _props.height : '30px')};
-    width: ${(_props) => (_props?.width ? _props.width : '30px')};
+    height: ${(props) => (props?.height ? props.height : '30px')};
+    width: ${(props) => (props?.width ? props.width : '30px')};
 `;
 
 export const LinkIcon = styled.i<{ isMobile?: boolean }>`
     font-size: 16px;
-    margin-left: ${(_props) => (_props?.isMobile ? '' : '10px')};
-    margin-top: ${(_props) => (_props?.isMobile ? '' : '12px')};
+    margin-left: ${(props) => (props?.isMobile ? '' : '10px')};
+    margin-top: ${(props) => (props?.isMobile ? '' : '12px')};
     color: ${(props) => props.theme.textColor.secondary};
     &:hover {
         cursor: pointer;
@@ -83,8 +83,8 @@ export const MatchInfoMobile = styled(FlexDivColumn)`
 
 export const MatchInfoLabelMobile = styled.label<{ home?: boolean; away?: boolean }>`
     font-size: 11px;
-    color: ${(_props) =>
-        _props?.home ? ODDS_COLOR.HOME : _props?.away ? ODDS_COLOR.AWAY : _props.theme.textColor.primary};
+    color: ${(props) =>
+        props?.home ? ODDS_COLOR.HOME : props?.away ? ODDS_COLOR.AWAY : props.theme.textColor.primary};
     text-transform: uppercase;
 `;
 
@@ -121,7 +121,7 @@ export const OddsWrapper = styled(FlexDivRow)`
 
 export const OddsWrapperMobile = styled(FlexDivRow)<{ closedMarket?: boolean }>`
     flex: 1;
-    align-self: ${(_props) => (_props?.closedMarket ? 'end' : '')};
+    align-self: ${(props) => (props?.closedMarket ? 'end' : '')};
 `;
 
 export const ResultWrapper = styled(FlexDivRowCentered)`

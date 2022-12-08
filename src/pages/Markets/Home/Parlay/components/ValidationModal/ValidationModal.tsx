@@ -22,7 +22,7 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => 
 
     useInterval(async () => {
         dispatch(resetParlayError());
-    }, 5800);
+    }, 2000);
 
     return (
         <Modal title={t('markets.parlay.validation.title')} onClose={() => onClose()} shouldCloseOnOverlayClick={true}>

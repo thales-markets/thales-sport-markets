@@ -47,6 +47,7 @@ export const useParlayMarketsQuery = (
             }
         },
         {
+            refetchInterval: 5000,
             ...options,
         }
     );

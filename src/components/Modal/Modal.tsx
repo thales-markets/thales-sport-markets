@@ -6,6 +6,7 @@ import ReactModal from 'react-modal';
 type ModalProps = {
     title: string;
     shouldCloseOnOverlayClick?: boolean;
+    zIndex?: number;
     onClose: () => void;
 };
 
@@ -28,13 +29,17 @@ const customStyles = {
     },
 };
 
-export const Modal: React.FC<ModalProps> = ({ title, onClose, children, shouldCloseOnOverlayClick }) => {
+export const Modal: React.FC<ModalProps> = ({ title, onClose, children, shouldCloseOnOverlayClick, zIndex }) => {
+    const customStylesOverride = zIndex
+        ? { ...customStyles, overlay: { ...customStyles.overlay, zIndex } }
+        : customStyles;
+
     return (
         <ReactModal
             isOpen
             onRequestClose={onClose}
             shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
-            style={customStyles}
+            style={customStylesOverride}
         >
             <Container>
                 <Header>

@@ -308,7 +308,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         };
 
         fetchData().catch((e) => console.log(e));
-    }, [usdAmountValue, selectedStableIndex]);
+    }, [usdAmountValue, selectedStableIndex, selectedPosition]);
 
     useEffect(() => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
@@ -367,7 +367,8 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                     !Number(tokenAmount) ||
                     Number(tokenAmount) < 1 ||
                     isBuying ||
-                    isAllowing
+                    isAllowing ||
+                    positionPriceDetailsQuery.isLoading
                 ) {
                     setSubmitDisabled(true);
                     return;
@@ -390,7 +391,17 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
             }
         };
         checkDisabled();
-    }, [tokenAmount, usdAmountValue, isBuying, isAllowing, hasAllowance, selectedSide, paymentTokenBalance, maxAmount]);
+    }, [
+        tokenAmount,
+        usdAmountValue,
+        isBuying,
+        isAllowing,
+        hasAllowance,
+        selectedSide,
+        paymentTokenBalance,
+        maxAmount,
+        positionPriceDetailsQuery.isLoading,
+    ]);
 
     useEffect(() => {
         const getMaxAmount = async () => {
@@ -496,7 +507,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                 const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
                 const ammQuote = await fetchAmmQuote(+Number(tokenAmount).toFixed(2) || 1);
                 const parsedAmount = ethers.utils.parseEther(Number(tokenAmount).toFixed(2));
-                const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+                const id = toast.loading(t('market.toast-message.transaction-pending'));
 
                 try {
                     const tx = await getAMMSportsTransaction(
@@ -521,8 +532,8 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                     if (txResult && txResult.transactionHash) {
                         refetchBalances(walletAddress, networkId);
                         selectedSide === Side.BUY
-                            ? toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')))
-                            : toast.update(id, getSuccessToastOptions(t('market.toast-messsage.sell-success')));
+                            ? toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')))
+                            : toast.update(id, getSuccessToastOptions(t('market.toast-message.sell-success')));
                         setIsBuying(false);
                         setTokenAmount(0);
                         setUsdAmount(0);
@@ -554,7 +565,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMContract && signer) {
             setIsAllowing(true);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 let collateralContractWithSigner: ethers.Contract | undefined;
 
@@ -574,7 +585,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
 
                 if (txResult && txResult.transactionHash) {
                     setIsAllowing(false);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.approve-success')));
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));

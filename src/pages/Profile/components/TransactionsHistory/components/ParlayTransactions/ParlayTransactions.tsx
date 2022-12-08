@@ -2,14 +2,14 @@ import PositionSymbol from 'components/PositionSymbol';
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
 import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { PositionData, SportMarketInfo } from 'types/markets';
+import { ParlaysMarket, PositionData, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime, formatTxTimestamp } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
@@ -24,6 +24,10 @@ import {
 } from 'utils/markets';
 import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
+import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
+import ShareTicketModal from 'pages/Markets/Home/Parlay/components/ShareTicketModal';
+import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
+import { Position } from 'constants/options';
 
 const ParlayTransactions: React.FC = () => {
     const { t } = useTranslation();
@@ -32,11 +36,74 @@ const ParlayTransactions: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
+    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
+    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
+        markets: [],
+        totalQuote: 0,
+        paid: 0,
+        payout: 0,
+        onClose: () => {},
+    });
+
     const parlaysTxQuery = useParlayMarketsQuery(walletAddress.toLowerCase(), networkId, undefined, undefined, {
         enabled: isWalletConnected,
         refetchInterval: false,
     });
     const parlayTx = parlaysTxQuery.isSuccess ? parlaysTxQuery.data : [];
+
+    const onTwitterIconClick = (data: any) => {
+        const sportMarkets: SportMarketInfo[] = data.sportMarkets;
+
+        const parlaysMarket: ParlaysMarket[] = sportMarkets
+            .map((sportMarket) => {
+                const sportMarketFromContractIndex = data.sportMarketsFromContract.findIndex(
+                    (address: string) => address === sportMarket.address
+                );
+                const position: Position = Number(data.positionsFromContract[sportMarketFromContractIndex]);
+
+                // Update odds with values from contract when position was bought
+                const sportMarketWithBuyQuotes = {
+                    ...sportMarket,
+                    homeOdds:
+                        position === Position.HOME
+                            ? data.marketQuotes[sportMarketFromContractIndex]
+                            : sportMarket.homeOdds,
+                    drawOdds:
+                        position === Position.DRAW
+                            ? data.marketQuotes[sportMarketFromContractIndex]
+                            : sportMarket.drawOdds,
+                    awayOdds:
+                        position === Position.AWAY
+                            ? data.marketQuotes[sportMarketFromContractIndex]
+                            : sportMarket.awayOdds,
+                };
+
+                const positionsIndex = data.positions.findIndex(
+                    (positionData: PositionData) => positionData.market.address === sportMarket.address
+                );
+
+                return {
+                    ...sportMarketWithBuyQuotes,
+                    position,
+                    winning: getMarketWinStatus(data.positions[positionsIndex]),
+                };
+            })
+            .sort(
+                (a, b) =>
+                    data.sportMarketsFromContract.findIndex((address: string) => address === a.address) -
+                    data.sportMarketsFromContract.findIndex((address: string) => address === b.address)
+            );
+
+        const modalData: ShareTicketModalProps = {
+            markets: parlaysMarket,
+            totalQuote: data.totalQuote,
+            paid: data.sUSDPaid,
+            payout: data.totalAmount,
+            onClose: () => setShowShareTicketModal(false),
+        };
+        setShareTicketModalData(modalData);
+        setShowShareTicketModal(true);
+    };
 
     return (
         <>
@@ -136,7 +203,9 @@ const ParlayTransactions: React.FC = () => {
                             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
                                 <ParlayRowText>
                                     {getPositionStatus(position)}
-                                    {position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                                    <ParlayRowTeam title={position.market.homeTeam + ' vs ' + position.market.awayTeam}>
+                                        {position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                                    </ParlayRowTeam>
                                 </ParlayRowText>
                                 <PositionSymbol
                                     type={convertPositionToSymbolType(
@@ -165,40 +234,54 @@ const ParlayTransactions: React.FC = () => {
 
                     return (
                         <ExpandedRowWrapper>
-                            <FlexDivColumnCentered style={{ flex: 2 }}>{toRender}</FlexDivColumnCentered>
-                            <LastExpandedSection style={{ flex: 1, gap: 20 }}>
+                            <FirstExpandedSection>{toRender}</FirstExpandedSection>
+                            <LastExpandedSection>
                                 <QuoteWrapper>
-                                    <QuoteLabel>Total Quote:</QuoteLabel>
+                                    <QuoteLabel>{t('profile.table.total-quote')}:</QuoteLabel>
                                     <QuoteText>{formatMarketOdds(selectedOddsType, row.original.totalQuote)}</QuoteText>
                                 </QuoteWrapper>
-
                                 <QuoteWrapper>
-                                    <QuoteLabel>Total Amount:</QuoteLabel>
+                                    <QuoteLabel>{t('profile.table.total-amount')}:</QuoteLabel>
                                     <QuoteText>
                                         {formatCurrencyWithKey(USD_SIGN, row.original.totalAmount, 2)}
                                     </QuoteText>
                                 </QuoteWrapper>
+                                <TwitterWrapper>
+                                    <TwitterIcon fontSize={'15px'} onClick={() => onTwitterIconClick(row.original)} />
+                                </TwitterWrapper>
                             </LastExpandedSection>
                         </ExpandedRowWrapper>
                     );
                 }}
             ></Table>
+            {showShareTicketModal && (
+                <ShareTicketModal
+                    markets={shareTicketModalData.markets}
+                    totalQuote={shareTicketModalData.totalQuote}
+                    paid={shareTicketModalData.paid}
+                    payout={shareTicketModalData.payout}
+                    onClose={shareTicketModalData.onClose}
+                />
+            )}
         </>
     );
 };
 
+const getMarketWinStatus = (position: PositionData) =>
+    position.market.isResolved
+        ? convertPositionNameToPosition(position.side) === convertFinalResultToResultType(position.market.finalResult)
+        : undefined;
+
 const getPositionStatus = (position: PositionData) => {
-    if (position.market.isResolved) {
-        if (
-            convertPositionNameToPosition(position.side) === convertFinalResultToResultType(position.market.finalResult)
-        ) {
-            return <StatusIcon color="#5FC694" className={`icon icon--win`} />;
-        } else {
-            return <StatusIcon color="#E26A78" className={`icon icon--lost`} />;
-        }
-    } else {
-        return <StatusIcon color="#FFFFFF" className={`icon icon--open`} />;
-    }
+    const winStatus = getMarketWinStatus(position);
+
+    return winStatus === undefined ? (
+        <StatusIcon color="#FFFFFF" className={`icon icon--open`} />
+    ) : winStatus ? (
+        <StatusIcon color="#5FC694" className={`icon icon--win`} />
+    ) : (
+        <StatusIcon color="#E26A78" className={`icon icon--lost`} />
+    );
 };
 
 const getOpacity = (position: PositionData) => {
@@ -339,12 +422,38 @@ const ParlayRow = styled(FlexDivRowCentered)`
 const ParlayRowText = styled(QuoteText)`
     max-width: 220px;
     width: 300px;
+    display: flex;
+    align-items: center;
+`;
+
+const ParlayRowTeam = styled.span`
+    white-space: nowrap;
+    width: 190px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
+
+const FirstExpandedSection = styled(FlexDivColumnCentered)`
+    flex: 2;
 `;
 
 const LastExpandedSection = styled(FlexDivColumnCentered)`
+    position: relative;
+    flex: 1;
+    gap: 20px;
     @media (max-width: 600px) {
         flex-direction: row;
         margin: 10px 0;
+    }
+`;
+
+const TwitterWrapper = styled.div`
+    position: absolute;
+    bottom: 10px;
+    right: 5px;
+    @media (max-width: 600px) { {
+        bottom: -2px;
+        right: 2px;
     }
 `;
 

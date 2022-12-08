@@ -1,4 +1,5 @@
 import PositionSymbol from 'components/PositionSymbol';
+import Search from 'components/Search';
 import Table from 'components/Table';
 import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
@@ -7,12 +8,12 @@ import { t } from 'i18next';
 import { AddressLink } from 'pages/Rewards/styled-components';
 
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { CellProps } from 'react-table';
 import { getIsAppReady } from 'redux/modules/app';
-import { getNetworkId } from 'redux/modules/wallet';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRowCentered } from 'styles/common';
@@ -37,15 +38,62 @@ const END_DATE = new Date(2022, 11, 31, 24, 0, 0);
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-
+    const [searchText, setSearchText] = useState<string>('');
+    const [expandStickyRow, setExpandStickyRowState] = useState<boolean>(false);
     const query = useParlayLeaderboardQuery(
         networkId,
         parseInt(START_DATE.getTime() / 1000 + ''),
         parseInt(END_DATE.getTime() / 1000 + ''),
         { enabled: isAppReady }
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const parlays = query.isSuccess ? query.data : [];
+
+    const parlaysData = useMemo(() => {
+        if (!searchText) return parlays;
+        return parlays.filter((parlay) => parlay.account.toLowerCase().includes(searchText.toLowerCase()));
+    }, [searchText, parlays]);
+
+    const stickyRow = useMemo(() => {
+        const data = parlays.find((parlay) => parlay.account.toLowerCase() == walletAddress?.toLowerCase());
+        if (!data) return undefined;
+        return (
+            <StickyRow>
+                <StickyContrainer>
+                    <StickyCell>
+                        {data.rank <= 20 ? (
+                            <Tooltip
+                                overlay={<>{Rewards[data.rank - 1]} OP</>}
+                                component={
+                                    <FlexDivRowCentered style={{ position: 'relative', width: 14 }}>
+                                        <StatusIcon
+                                            style={{ fontSize: 16, position: 'absolute', left: '-20px' }}
+                                            color="rgb(95, 97, 128)"
+                                            className={`icon icon--fee-rebates`}
+                                        />
+                                        <TableText>{data.rank}</TableText>
+                                    </FlexDivRowCentered>
+                                }
+                            ></Tooltip>
+                        ) : (
+                            <TableText>{data.rank}</TableText>
+                        )}
+                    </StickyCell>
+                    <StickyCell>{truncateAddress(data.account, 5)}</StickyCell>
+                    <StickyCell>{formatMarketOdds(OddsType.Decimal, data.totalQuote)}</StickyCell>
+                    <StickyCell>{formatCurrencyWithSign(USD_SIGN, data.sUSDPaid, 2)}</StickyCell>
+                    <StickyCell>{formatCurrencyWithSign(USD_SIGN, data.totalAmount, 2)}</StickyCell>
+                    <ExpandStickyRowIcon
+                        className={!expandStickyRow ? 'icon icon--arrow-down' : 'icon icon--arrow-up'}
+                        onClick={() => setExpandStickyRowState(!expandStickyRow)}
+                    />
+                </StickyContrainer>
+                <ExpandedContainer hide={!expandStickyRow}>{getExpandedRow(data)}</ExpandedContainer>
+            </StickyRow>
+        );
+    }, [expandStickyRow, parlays, walletAddress]);
 
     return (
         <Container>
@@ -53,10 +101,24 @@ const ParlayLeaderboard: React.FC = () => {
                 <Title>{t('parlay-leaderboard.title')}</Title>
                 <Description>{t('parlay-leaderboard.description')}</Description>
                 <Description>{t('parlay-leaderboard.distribution-note')}</Description>
-            </TextContainer>
+                <Description>{t('parlay-leaderboard.info')}</Description>
+                <ul style={{ paddingLeft: 10 }}>
+                    <Description>{t('parlay-leaderboard.info1')}</Description>
+                    <Description>{t('parlay-leaderboard.info2')}</Description>
+                    <Description>{t('parlay-leaderboard.info3')}</Description>
+                </ul>
+                <Warning>{t('parlay-leaderboard.warning')}</Warning>
 
+                <Search
+                    text={searchText}
+                    customPlaceholder={t('rewards.search-placeholder')}
+                    handleChange={(e) => setSearchText(e)}
+                    customStyle={{ border: '1px solid #fffff' }}
+                    width={300}
+                />
+            </TextContainer>
             <Table
-                data={parlays}
+                data={parlaysData}
                 tableRowHeadStyles={{ width: '100%' }}
                 tableHeadCellStyles={TableHeaderStyle}
                 tableRowCellStyles={TableRowStyle}
@@ -125,6 +187,7 @@ const ParlayLeaderboard: React.FC = () => {
                     },
                 ]}
                 noResultsMessage={t('parlay-leaderboard.no-parlays')}
+                stickyRow={stickyRow}
                 expandedRow={(row) => {
                     const toRender = row.original.sportMarketsFromContract.map((address: string, index: number) => {
                         const position = row.original.positions.find(
@@ -136,7 +199,9 @@ const ParlayLeaderboard: React.FC = () => {
                             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
                                 <ParlayRowText>
                                     {getPositionStatus(position)}
-                                    {position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                                    <ParlayRowTeam title={position.market.homeTeam + ' vs ' + position.market.awayTeam}>
+                                        {position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                                    </ParlayRowTeam>
                                 </ParlayRowText>
                                 <PositionSymbol
                                     type={convertPositionToSymbolType(
@@ -215,6 +280,63 @@ const getOpacity = (position: PositionData) => {
     }
 };
 
+const getExpandedRow = (parlay: ParlayMarketWithRank) => {
+    const gameList = parlay.sportMarketsFromContract.map((address: string, index: number) => {
+        const position = parlay.positions.find((position: any) => position.market.address == address);
+        if (!position) return;
+
+        const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
+        return (
+            <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
+                <ParlayRowText>
+                    {getPositionStatus(position)}
+                    <ParlayRowTeam title={position.market.homeTeam + ' vs ' + position.market.awayTeam}>
+                        {position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                    </ParlayRowTeam>
+                </ParlayRowText>
+                <PositionSymbol
+                    type={convertPositionToSymbolType(
+                        positionEnum,
+                        getIsApexTopGame(position.market.isApex, position.market.betType)
+                    )}
+                    symbolColor={'white'}
+                    symbolSize={'10'}
+                    additionalText={{
+                        firstText: formatMarketOdds(
+                            OddsType.Decimal,
+                            parlay.marketQuotes ? parlay.marketQuotes[index] : 0
+                        ),
+                        firstTextStyle: {
+                            fontSize: '10.5px',
+                            color: 'white',
+                            marginLeft: '5px',
+                        },
+                    }}
+                    additionalStyle={{ width: 21, height: 21, fontSize: 10 }}
+                />
+                <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
+            </ParlayRow>
+        );
+    });
+
+    return (
+        <ExpandedRowWrapper>
+            <FirstSection>{gameList}</FirstSection>
+            <LastExpandedSection style={{ gap: 20 }}>
+                <QuoteWrapper>
+                    <QuoteLabel>Total Quote:</QuoteLabel>
+                    <QuoteText>{formatMarketOdds(OddsType.Decimal, parlay.totalQuote)}</QuoteText>
+                </QuoteWrapper>
+
+                <QuoteWrapper>
+                    <QuoteLabel>Total Amount:</QuoteLabel>
+                    <QuoteText>{formatCurrencyWithKey(USD_SIGN, parlay.totalAmount, 2)}</QuoteText>
+                </QuoteWrapper>
+            </LastExpandedSection>
+        </ExpandedRowWrapper>
+    );
+};
+
 const getParlayItemStatus = (market: SportMarketInfo) => {
     if (market.isCanceled) return t('profile.card.canceled');
     if (market.isResolved) return `${market.homeScore} : ${market.awayScore}`;
@@ -254,6 +376,18 @@ const Description = styled.p`
     text-align: justify;
     letter-spacing: 0.025em;
     color: #eeeee4;
+    margin-bottom: 10px;
+`;
+
+const Warning = styled.p`
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 150%;
+    text-align: justify;
+    letter-spacing: 0.025em;
+    color: #ffcc00;
     margin-bottom: 10px;
 `;
 
@@ -361,6 +495,13 @@ const ParlayRowText = styled(QuoteText)`
     width: 300px;
 `;
 
+const ParlayRowTeam = styled.span`
+    white-space: nowrap;
+    width: 208px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
+
 const FirstSection = styled.div`
     display: flex;
     flex-direction: column;
@@ -376,6 +517,35 @@ const LastExpandedSection = styled.div`
         flex-direction: row;
         margin: 10px 0;
     }
+`;
+
+const StickyRow = styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border: 1px solid #ffffff;
+    border-radius: 7px;
+`;
+
+const StickyContrainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+`;
+
+const StickyCell = styled.div`
+    text-align: center;
+`;
+
+const ExpandStickyRowIcon = styled.i`
+    position: absolute;
+    font-size: 9px;
+    right: 10px;
+`;
+
+const ExpandedContainer = styled.div<{ hide?: boolean }>`
+    display: ${(_props) => (_props?.hide ? 'none' : 'flex')};
+    flex-direction: column;
 `;
 
 export default ParlayLeaderboard;

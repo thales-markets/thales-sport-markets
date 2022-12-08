@@ -158,15 +158,15 @@ const CollateralName = styled.span<{ selected?: boolean; uppercase?: boolean }>`
     line-height: 150%;
     margin-bottom: 7px;
     color: white;
-    ${(_props) => (_props?.selected ? `opacity: 1;` : `opacity: 0.5`)};
-    ${(_props) => (_props?.uppercase ? `text-transform: uppercase;` : '')};
+    ${(props) => (props?.selected ? `opacity: 1;` : `opacity: 0.5`)};
+    ${(props) => (props?.uppercase ? `text-transform: uppercase;` : '')};
 `;
 
 const CollateralIcon = styled.div<{ active?: boolean }>`
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    box-shadow: ${(_props) => (_props?.active ? 'var(--shadow)' : '')};
+    box-shadow: ${(props) => (props?.active ? 'var(--shadow)' : '')};
     cursor: pointer;
     margin-bottom: 7px;
 `;
@@ -182,7 +182,7 @@ const CollateralBalance = styled.span<{ selected?: boolean }>`
     font-size: 10px;
     line-height: 150%;
     color: #ffffff;
-    ${(_props) => (_props?.selected ? `opacity: 1;` : `opacity: 0.5`)};
+    ${(props) => (props?.selected ? `opacity: 1;` : `opacity: 0.5`)};
 `;
 
 export default CollateralSelector;

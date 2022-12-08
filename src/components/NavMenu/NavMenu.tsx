@@ -8,7 +8,7 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
-import { getNetworkId } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
@@ -37,6 +37,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
 
     return (
         <OutsideClickHandler onOutsideClick={() => visibility && setNavMenuVisibility(false)}>
@@ -51,6 +52,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                 </HeaderContainer>
                 <ItemsContainer>
                     {NAV_MENU.map((item, index) => {
+                        if (item.name == 'profile' && !isWalletConnected) return;
                         return (
                             <SPAAnchor
                                 key={index}

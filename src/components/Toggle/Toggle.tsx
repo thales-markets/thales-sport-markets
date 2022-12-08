@@ -5,6 +5,8 @@ type LabelProps = {
     firstLabel?: string;
     secondLabel?: string;
     fontSize?: string;
+    fontWeight?: string;
+    lineHeight?: string;
 };
 
 type SwitchProps = {
@@ -68,7 +70,11 @@ const Toggle: React.FC<SwitchProps> = ({
 }) => {
     return (
         <Wrapper margin={margin} disabled={disabled}>
-            {label?.firstLabel && <Label fontSize={label?.fontSize}>{label.firstLabel}</Label>}
+            {label?.firstLabel && (
+                <Label fontSize={label?.fontSize} fontWeight={label?.fontWeight} lineHeight={label?.lineHeight}>
+                    {label.firstLabel}
+                </Label>
+            )}
             <SwitchContainer
                 disabled={disabled}
                 borderWidth={borderWidth}
@@ -88,13 +94,17 @@ const Toggle: React.FC<SwitchProps> = ({
                     dotBorder={dotBorder}
                 />
             </SwitchContainer>
-            {label?.secondLabel && <Label fontSize={label?.fontSize}>{label.secondLabel}</Label>}
+            {label?.secondLabel && (
+                <Label fontSize={label?.fontSize} fontWeight={label?.fontWeight} lineHeight={label?.lineHeight}>
+                    {label.secondLabel}
+                </Label>
+            )}
         </Wrapper>
     );
 };
 
 const Wrapper = styled.div<{ margin?: string; disabled?: boolean }>`
-    ${(_props) => (_props?.margin ? `margin: ${_props.margin}` : '')};
+    ${(props) => (props?.margin ? `margin: ${props.margin}` : '')};
     opacity: ${(props: any) => (props.disabled ? '0.4' : '1')};
     display: flex;
     flex-direction: row;
@@ -104,8 +114,10 @@ const Wrapper = styled.div<{ margin?: string; disabled?: boolean }>`
     cursor: ${(props: any) => (props.disabled ? 'not-allowed' : 'default')};
 `;
 
-const Label = styled.span<{ fontSize?: string }>`
-    font-size: ${(_props) => (_props?.fontSize ? _props.fontSize : '12px')};
+const Label = styled.span<{ fontSize?: string; fontWeight?: string; lineHeight?: string }>`
+    font-size: ${(props) => (props?.fontSize ? props.fontSize : '12px')};
+    ${(props) => (props.fontWeight ? `font-weight: ${props.fontWeight};` : '')}
+    ${(props) => (props.lineHeight ? `line-height: ${props.lineHeight};` : '')}
     color: white;
     margin-left: 5px;
     margin-right: 5px;
@@ -122,7 +134,7 @@ const SwitchContainer = styled.div<SwitchContainerProps>`
     border-radius: 30px;
     width: ${(props: any) => (props?.width ? props.width : defaultSwitchHeight * 2.18 + 'px')};
     height: ${(props: any) => (props?.height ? props.height : defaultSwitchHeight + 'px')};
-    ${(_props) => (_props.shadow ? 'box-shadow: 0px 0px 40px #64d9fe' : '')}
+    ${(props) => (props.shadow ? 'box-shadow: 0px 0px 40px #64d9fe' : '')}
 `;
 
 const Circle = styled.div<CircleProps>`

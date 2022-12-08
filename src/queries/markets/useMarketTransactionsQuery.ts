@@ -7,15 +7,17 @@ import { NetworkId } from 'types/network';
 const useMarketTransactionsQuery = (
     marketAddress: string,
     networkId: NetworkId,
+    account?: string,
     options?: UseQueryOptions<MarketTransactions | undefined>
 ) => {
     return useQuery<MarketTransactions | undefined>(
-        QUERY_KEYS.MarketTransactions(marketAddress, networkId),
+        QUERY_KEYS.MarketTransactions(marketAddress, networkId, account),
         async () => {
             try {
                 const marketTransactions = await thalesData.sportMarkets.marketTransactions({
                     market: marketAddress,
                     network: networkId,
+                    account,
                 });
 
                 return marketTransactions;

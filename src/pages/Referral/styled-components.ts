@@ -73,7 +73,7 @@ export const KeyValueContainer = styled(FlexDivRow)`
 
 export const Label = styled.span<{ win?: boolean }>`
     text-transform: uppercase;
-    color: ${(_props) => (_props?.win ? `${MAIN_COLORS.TEXT.POTENTIAL_PROFIT}` : `${MAIN_COLORS.LIGHT_BLUE}`)};
+    color: ${(props) => (props?.win ? `${MAIN_COLORS.TEXT.POTENTIAL_PROFIT}` : `${MAIN_COLORS.LIGHT_BLUE}`)};
     ::after {
         content: ': ';
     }
@@ -81,7 +81,7 @@ export const Label = styled.span<{ win?: boolean }>`
 
 export const Value = styled.span<{ win?: boolean }>`
     font-weight: 800;
-    color: ${(_props) => (_props?.win ? `${MAIN_COLORS.TEXT.POTENTIAL_PROFIT}` : `${MAIN_COLORS.TEXT.WHITE}`)};
+    color: ${(props) => (props?.win ? `${MAIN_COLORS.TEXT.POTENTIAL_PROFIT}` : `${MAIN_COLORS.TEXT.WHITE}`)};
 `;
 
 export const ParagraphContainer = styled(FlexDivColumnNative)`
@@ -113,7 +113,7 @@ export const TabsContainer = styled(FlexDivRow)`
 
 export const Tab = styled.span<{ active?: boolean }>`
     text-transform: uppercase;
-    color: ${(_props) => (_props?.active ? `${MAIN_COLORS.LIGHT_BLUE}` : `${MAIN_COLORS.LIGHT_GRAY}`)};
+    color: ${(props) => (props?.active ? `${MAIN_COLORS.LIGHT_BLUE}` : `${MAIN_COLORS.LIGHT_GRAY}`)};
     padding-bottom: 5px;
     cursor: pointer;
     font-weight: 600;

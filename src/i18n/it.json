@@ -160,7 +160,7 @@
         "grid-view": "Grid",
         "list-view": "List",
         "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "Transaction pending",
             "swap-success": "Successfully swapped {{ currencyKey }}",
             "approve-success": "Successfully approved",
@@ -169,7 +169,16 @@
             "claim-winnings-success": "Winnings successfully claimed",
             "claim-refund-success": "Refund successfully claimed",
             "withdraw-success": "Successfuly withdrawn",
-            "get-usd-success": "{{amount}} successfully minted"
+            "get-usd-success": "{{amount}} successfully minted",
+            "ios-not-supported": "Condivisione di immagini non supportata su dispositivi iOS. Se vuoi condividere l'immagine usa la versione desktop",
+            "download-image": "Download dell'immagine. Attendere prego...",
+            "metamask-not-supported": "Il browser Metamask non supporta il download di immagini! Si prega di utilizzare un altro browser per condividere l'immagine",
+            "open-twitter": "Apertura di Twitter...",
+            "click-open-twitter": "Clicca qui per aprire Twitter",
+            "save-image": "Salvataggio dell'immagine negli appunti. Attendere prego...",
+            "image-in-clipboard": "L'immagine è negli appunti!",
+            "save-image-error": "Impossibile salvare l'immagine! Riprova",
+            "save-image-cancel": "Salvataggio dell'immagine annullato!"
         },
         "filter-label": {
             "global": {
@@ -319,7 +328,24 @@
                 "min-quote": "Il PREVENTIVO TOTALE minimo supportato è {{value}}",
                 "max-quote": "Il PREVENTIVO TOTALE massimo supportato è {{value}}"
             },
-            "show-parlay": "Mostra Parlay"
+            "show-parlay": "Mostra Parlay",
+            "share-ticket": {
+                "options": {
+                    "title": "Opzioni di visualizzazione",
+                    "view-simple": "Semplice",
+                    "view-details": "Dettagliato",
+                    "usd-amount": "Importo USD"
+                },
+                "header": "Web 3 Sport sui mercati",
+                "parlay": "parlay",
+                "share": "Condividere",
+                "winner": "Vincitore",
+                "total-quote": "Citazione totale",
+                "potential-payout": "Potenziale pagamento",
+                "loser": "Perdente",
+                "referral": "Link di riferimento"
+            },
+            "buy-in": "Consenso"
         },
         "discounted-per": "Scontato come da",
         "nav-menu": {
@@ -361,7 +387,12 @@
             "period-2": "Terzo periodo",
             "period-0": "Primo periodo",
             "period-4": "Quinto periodo",
-            "period-3": "Quarto periodo"
+            "period-3": "Quarto periodo",
+            "period-5": "Sesto periodo",
+            "period-8": "Nono periodo",
+            "period-9": "Decimo periodo",
+            "period-6": "Settimo periodo",
+            "period-7": "Ottavo periodo"
         },
         "your-score": "Il tuo punteggio",
         "total-negative-pnl": "Perdite totali",
@@ -490,7 +521,9 @@
             "time": "Volta",
             "paid": "Pagato",
             "position": "Posizione",
-            "status": "Stato"
+            "status": "Stato",
+            "total-amount": "Importo totale",
+            "total-quote": "Citazione totale"
         },
         "winnings-are-forfeit": "*Le vincite non riscosse entro {{amount}} giorni dalla risoluzione di un mercato vengono annullate."
     },
@@ -670,6 +703,11 @@
         "title": "Classifica degli incentivi Parlay",
         "description": "Un totale di 10.000 OP sarà distribuito ai migliori parlay del mese. I biglietti saranno classificati in base alle quote più alte, seguite dal volume in caso di pareggio.",
         "distribution-note": "I premi saranno distribuiti ai primi 20 parlay per il mese di dicembre!",
-        "no-parlays": "Nessun parlay vincente registrato nel periodo ancora."
+        "info1": "- Numero di posizioni sul parlay",
+        "no-parlays": "Nessun parlay vincente registrato nel periodo ancora.",
+        "info3": "- Quota totale effettiva (ottenuta moltiplicando le singole posizioni)",
+        "info": "Se più parlay hanno la stessa quotazione, quanto segue verrà utilizzato come spareggio nel rispettivo ordine:",
+        "warning": "*Il team degli straordinari detiene il diritto di squalificare i portafogli che sospettiamo giochino con il sistema.",
+        "info2": "- L'importo pagato"
     }
 }

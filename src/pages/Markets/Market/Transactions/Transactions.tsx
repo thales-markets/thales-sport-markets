@@ -28,7 +28,7 @@ const Transactions: React.FC<TransactionsProps> = ({ market }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const marketTransactionsQuery = useMarketTransactionsQuery(market.address, networkId, {
+    const marketTransactionsQuery = useMarketTransactionsQuery(market.address, networkId, undefined, {
         enabled: isAppReady,
     });
 

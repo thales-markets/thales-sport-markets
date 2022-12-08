@@ -160,7 +160,7 @@
         "grid-view": "Rejilla",
         "list-view": "Lista",
         "skew-tooltip": "El impacto del skew es la cantidad de premium añadido a una posición basado en el riesgo actual que afecta al AMM en este mercado en específico.",
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "Transacción pendiente",
             "swap-success": "Intercambiado {{ currencyKey }} exitosamente",
             "approve-success": "Aprobado exitosamente",
@@ -169,7 +169,16 @@
             "claim-winnings-success": "Ganancias reclamadas exitosamente",
             "claim-refund-success": "Devolución reclamada exitosamente",
             "withdraw-success": "Retiro exitoso",
-            "get-usd-success": "{{amount}} obtenido exitosamente"
+            "get-usd-success": "{{amount}} obtenido exitosamente",
+            "ios-not-supported": "Compartir imágenes no es compatible con dispositivos iOS. Si desea compartir la imagen, utilice la versión de escritorio",
+            "save-image-cancel": "¡Guardado de imagen cancelado!",
+            "save-image": "Guardar imagen en el portapapeles. Espere por favor...",
+            "open-twitter": "Abriendo Twitter...",
+            "download-image": "Descargando imagen. Espere por favor...",
+            "image-in-clipboard": "¡La imagen está en el portapapeles!",
+            "click-open-twitter": "Haga clic aquí para abrir Twitter",
+            "metamask-not-supported": "¡El navegador Metamask no admite la descarga de imágenes! Utilice otro navegador para compartir la imagen.",
+            "save-image-error": "¡Error al guardar la imagen! Intentar otra vez"
         },
         "filter-label": {
             "global": {
@@ -319,7 +328,24 @@
                 "min-quote": "La COTIZACIÓN TOTAL mínima admitida es {{value}}",
                 "max-quote": "La COTIZACIÓN TOTAL máxima admitida es {{value}}"
             },
-            "show-parlay": "Mostrar combinación"
+            "show-parlay": "Mostrar combinación",
+            "share-ticket": {
+                "options": {
+                    "view-details": "Detallado",
+                    "usd-amount": "monto en USD",
+                    "view-simple": "Simple",
+                    "title": "opciones de pantalla"
+                },
+                "parlay": "incrementar dinero en apuestas",
+                "header": "Web 3 Mercados deportivos en",
+                "referral": "Enlace de referencia",
+                "total-quote": "Cotización total",
+                "winner": "Ganador",
+                "share": "Cuota",
+                "loser": "Perdedor",
+                "potential-payout": "Pago potencial"
+            },
+            "buy-in": "Aceptacion"
         },
         "discounted-per": "Con descuento según",
         "nav-menu": {
@@ -361,7 +387,12 @@
             "period-1": "Cuarto periodo",
             "period-2": "Segundo período",
             "period-3": "Tercer periodo",
-            "period-4": "Quinto periodo"
+            "period-4": "Quinto periodo",
+            "period-7": "Octavo periodo",
+            "period-6": "Septimo periodo",
+            "period-5": "Sexto periodo",
+            "period-9": "Décimo período",
+            "period-8": "noveno periodo"
         },
         "your-score": "Tu puntuación",
         "total-negative-pnl": "pérdidas totales",
@@ -487,7 +518,9 @@
             "position": "Posición",
             "id": "Identificación",
             "games": "Juegos",
-            "status": "Estado"
+            "status": "Estado",
+            "total-amount": "Cantidad total",
+            "total-quote": "Cotización total"
         },
         "winnings-are-forfeit": "*Las ganancias no reclamadas dentro de {{amount}} días de la resolución de un mercado se perderán."
     },
@@ -667,6 +700,11 @@
         "title": "Leaderboard de incentivos en Parlays",
         "description": "Un total de 10,000 OP tokens seran distribuidos entre los mejores parlays de cada mes. Los tickets seran rankeados basados en las mayores odds (o mayor multiplicador), seguido de volumen en caso de un empate de odds entre tickets.",
         "distribution-note": "Las recompensas seran distribuidas entre los top 20 parlays al final del mes de Diciembre.",
-        "no-parlays": "Aun no hay parlays ganadores registrados en este periodo."
+        "no-parlays": "Aun no hay parlays ganadores registrados en este periodo.",
+        "info1": "- Número de posiciones en el parlay",
+        "info": "Si varios parlays tienen la misma cotización, se usará lo siguiente como desempate en el orden respectivo:",
+        "info2": "- La cantidad pagada",
+        "info3": "- Cotización total real (obtenida al multiplicar posiciones individualmente)",
+        "warning": "*El equipo de tiempo extra se reserva el derecho de descalificar monederos que sospechemos que manipulan el sistema."
     }
 }

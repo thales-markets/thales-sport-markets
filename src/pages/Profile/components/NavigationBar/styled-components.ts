@@ -13,7 +13,7 @@ export const Wrapper = styled(FlexDivRow)`
 `;
 
 export const Item = styled.span<{ selected: boolean }>`
-    color: ${(_props) => (_props?.selected ? `${MAIN_COLORS.TEXT.BLUE}` : `${MAIN_COLORS.TEXT.DARK_GRAY}`)};
+    color: ${(props) => (props?.selected ? `${MAIN_COLORS.TEXT.BLUE}` : `${MAIN_COLORS.TEXT.DARK_GRAY}`)};
     padding: 0px 20px;
     font-size: 12px;
     font-weight: 600;

@@ -89,7 +89,7 @@ export const HighlightRow = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    ${(_props) => `border: 1px solid ${_props?.theme?.textColor?.quaternary};`};
+    ${(props) => `border: 1px solid ${props?.theme?.textColor?.quaternary};`};
     box-shadow: 0px 0px 26px 0px rgba(0, 0, 0, 0.75);
     border-radius: 10px;
     margin-bottom: 10px;

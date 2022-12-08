@@ -23,9 +23,11 @@ const customStyles = {
         border: 'none',
         width: '300px',
         height: '100%',
+        overflow: 'visible',
     },
     overlay: {
         backgroundColor: 'rgba(26, 28, 43, 1)',
+        zIndex: 2,
     },
 };
 
@@ -50,7 +52,6 @@ export const MobileModal: React.FC<MobileModalProps> = ({ onClose, children, sho
 const Container = styled.div`
     z-index: 1001;
     background: ${(props) => props.theme.background.secondary};
-    padding-top: 15px;
     overflow: auto;
     border-radius: 23px;
     overflow-y: auto;
@@ -61,7 +62,8 @@ const Container = styled.div`
 
 const Header = styled(FlexDivRow)`
     position: absolute;
-    right: 15px;
+    top: -18px;
+    right: -18px;
 `;
 
 const CloseIcon = styled.i`

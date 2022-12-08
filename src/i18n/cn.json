@@ -160,7 +160,7 @@
         "grid-view": "网格",
         "list-view": "列表",
         "skew-tooltip": "偏度影响是指当前AMM持仓的分布也会影响投注价格。",
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "待定事务",
             "swap-success": "兑换 {{ currencyKey }} 成功",
             "approve-success": "批准成功",
@@ -169,7 +169,16 @@
             "claim-winnings-success": "成功领取奖金",
             "claim-refund-success": "成功领取退款",
             "withdraw-success": "成功提款",
-            "get-usd-success": "成功铸造 {{amount}} 美元"
+            "get-usd-success": "成功铸造 {{amount}} 美元",
+            "metamask-not-supported": "Metamask 浏览器不支持图片下载！请使用其他浏览器分享图片",
+            "ios-not-supported": "iOS 设备不支持共享图像。如果您想分享图片，请使用桌面版",
+            "download-image": "正在下载图像。请稍等...",
+            "image-in-clipboard": "图像在剪贴板中！",
+            "save-image-cancel": "图片保存已取消！",
+            "click-open-twitter": "点击此处打开推特",
+            "save-image-error": "图片保存失败！再试一次",
+            "save-image": "将图像保存到剪贴板。请稍等...",
+            "open-twitter": "打开推特..."
         },
         "filter-label": {
             "global": {
@@ -319,7 +328,24 @@
                 "min-quote": "支持的最小 TOTAL QUOTE 为 {{value}}",
                 "max-quote": "支持的最大 TOTAL QUOTE 为 {{value}}"
             },
-            "show-parlay": "显示过关"
+            "show-parlay": "显示过关",
+            "share-ticket": {
+                "options": {
+                    "usd-amount": "美元金额",
+                    "title": "显示选项",
+                    "view-simple": "简单的",
+                    "view-details": "详细的"
+                },
+                "parlay": "过关",
+                "loser": "失败者",
+                "share": "分享",
+                "referral": "推荐链接",
+                "header": "Web 3 体育市场上",
+                "winner": "优胜者",
+                "potential-payout": "潜在支出",
+                "total-quote": "总报价"
+            },
+            "buy-in": "买入"
         },
         "discounted-per": "折扣按",
         "nav-menu": {
@@ -362,7 +388,12 @@
             "period-1": "第二阶段",
             "period-2": "第三期",
             "period-3": "第五期",
-            "period-4": "第四期"
+            "period-4": "第四期",
+            "period-5": "第六期",
+            "period-6": "第七期",
+            "period-7": "第八期",
+            "period-8": "第九期",
+            "period-9": "第十期"
         },
         "your-score": "你的分数",
         "twap": "一周TWAP",
@@ -487,7 +518,9 @@
             "games": "游戏",
             "paid": "有薪酬的",
             "time": "时间",
-            "status": "地位"
+            "status": "地位",
+            "total-amount": "总金额",
+            "total-quote": "总报价"
         },
         "winnings-are-forfeit": "*在盘口解决后的 {{amount}} 天内未领取的奖金将被没收。"
     },
@@ -667,6 +700,11 @@
         "title": "Parlay 奖励排行榜",
         "distribution-note": "奖励将分发给 12 月份的前 20 名过关玩家！",
         "description": "总计 10,000 OP 将分配给当月最好的 parlays。门票将根据最高赔率排名，如果出现平局，则按数量排名。",
-        "no-parlays": "在此期间还没有注册获胜的过关彩。"
+        "warning": "*超时团队有权取消我们怀疑玩弄系统的钱包的资格。",
+        "info2": "- 支付的金额",
+        "info1": "- parlay 的位置数",
+        "no-parlays": "在此期间还没有注册获胜的过关彩。",
+        "info3": "- 实际总报价（通过单独乘以头寸获得）",
+        "info": "如果多个 parlays 有相同的报价，以下将按各自的顺序用作决胜局："
     }
 }

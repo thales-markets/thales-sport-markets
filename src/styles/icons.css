@@ -5,6 +5,27 @@
     font-size: 20px;
 }
 
+.icon--hide:before {
+    content: '\0030';
+}
+
+.icon--wrong:before {
+    content: '\0031';
+}
+
+.icon--toggle-right:before {
+    content: '\0032';
+}
+
+.icon--toggle-left:before {
+    content: '\0033';
+}
+
+.icon--correct:before {
+    content: '\0034';
+}
+
+
 .icon--overtime:before {
     content: '\0041';
 }
