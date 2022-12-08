@@ -52,6 +52,7 @@ export const ParticipantLogoContainer = styled.div<{ awayTeam?: boolean; isWinne
     border-color: ${(props) =>
         props?.isWinner ? `${MAIN_COLORS.BORDERS.WINNER} !important` : MAIN_COLORS.BORDERS.GRAY};
     ${(props) => (props?.isWinner || props?.isDraw ? `box-shadow: ${MAIN_COLORS.SHADOWS.WINNER};` : '')}
+    ${(props) => (props?.isWinner ? `z-index: 1;` : '')}
     width: 100px;
     height: 100px;
     padding: 5px;
@@ -75,10 +76,14 @@ export const ParticipantLogo = styled.img<{ isFlag?: boolean }>`
 export const LeagueLogoContainer = styled(FlexDiv)`
     width: 70px;
     height: 70px;
-    margin-right: 20px;
+    margin-right: 15px;
     padding: 5px;
     justify-content: center;
     align-items: center;
+    @media (min-width: 950px) {
+        width: 200px;
+        text-align: end;
+    }
     @media (max-width: 500px) {
         margin-right: 20px;
         margin-bottom: 13px;
@@ -102,6 +107,10 @@ export const MatchTimeContainer = styled.div`
     text-align: center;
     justify-content: center;
     margin-left: 15px;
+    @media (min-width: 950px) {
+        width: 200px;
+        align-items: start;
+    }
     @media (max-width: 500px) {
         margin-left: 0px;
         margin-bottom: 13px;
@@ -163,7 +172,13 @@ export const TeamNamesWrapper = styled(FlexDivRow)`
     width: 100%;
 `;
 
-export const TeamName = styled.span`
-    padding: 10px 10px;
+export const TeamName = styled.span<{ isHomeTeam?: boolean }>`
+    padding: 10px;
+    text-transform: uppercase;
+    width: 300px;
+    text-align: ${(props) => (props.isHomeTeam ? 'end' : 'start')};
+`;
+
+export const Versus = styled.span`
     text-transform: uppercase;
 `;

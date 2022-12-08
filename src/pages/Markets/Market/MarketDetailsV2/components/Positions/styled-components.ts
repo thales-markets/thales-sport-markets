@@ -94,6 +94,7 @@ export const Label = styled.span`
 export const Value = styled.span`
     font-weight: 700;
     margin-left: 5px;
+    margin-right: 5px;
 `;
 
 export const ResultContainer = styled(InnerContainer)`
