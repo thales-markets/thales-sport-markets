@@ -101,8 +101,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                         setTimeout(
                             () => {
                                 link.click();
-                                // Cleanup the DOM
-                                document.body.removeChild(link);
                             },
                             isIos() ? IOS_DOWNLOAD_DELAY : 0 // fix for iOS
                         );
