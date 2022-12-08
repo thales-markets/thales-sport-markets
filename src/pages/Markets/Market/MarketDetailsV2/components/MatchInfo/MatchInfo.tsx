@@ -19,6 +19,7 @@ import {
     MatchTimeContainerMobile,
     TeamNamesWrapper,
     TeamName,
+    Versus,
 } from './styled-components';
 import Tooltip from 'components/Tooltip';
 
@@ -46,6 +47,7 @@ type MatchInfoPropsType = {
 const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
     const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+
     const [homeLogoSrc, setHomeLogoSrc] = useState(
         getTeamImageSource(market.homeTeam, market.tags[0])
             ? getTeamImageSource(market.homeTeam, market.tags[0])
@@ -154,6 +156,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                     >
                                         <ParticipantLogo
                                             src={homeLogoSrc ? homeLogoSrc : getErrorImage(market.tags[0])}
+                                            isFlag={market.tags[0] == 9018}
                                             onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                                         />
                                     </ParticipantLogoContainer>
@@ -166,6 +169,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                     >
                                         <ParticipantLogo
                                             src={awayLogoSrc ? awayLogoSrc : getErrorImage(market.tags[0])}
+                                            isFlag={market.tags[0] == 9018}
                                             onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                                         />
                                     </ParticipantLogoContainer>
@@ -184,8 +188,9 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                     )}
                     {showMatchParticipantsBelow && (
                         <TeamNamesWrapper>
-                            <TeamName>{fixLongTeamNameString(market.homeTeam)}</TeamName>
-                            <TeamName>{fixLongTeamNameString(market.awayTeam)}</TeamName>
+                            <TeamName isHomeTeam={true}>{fixLongTeamNameString(market.homeTeam)}</TeamName>
+                            <Versus>{' vs '}</Versus>
+                            <TeamName isHomeTeam={false}>{fixLongTeamNameString(market.awayTeam)}</TeamName>
                         </TeamNamesWrapper>
                     )}
                     {isApexGame(market.tags[0]) && <MarketNotice>{market.leagueRaceName}</MarketNotice>}

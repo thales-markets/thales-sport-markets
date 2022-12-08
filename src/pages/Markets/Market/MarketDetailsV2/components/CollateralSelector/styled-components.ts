@@ -34,7 +34,7 @@ export const CollateralName = styled.span<{ selected?: boolean }>`
     line-height: 150%;
     margin-bottom: 7px;
     color: white;
-    ${(_props) => (_props?.selected ? `opacity: 1;` : `opacity: 0.5`)};
+    ${(props) => (props?.selected ? `opacity: 1;` : `opacity: 0.5`)};
     text-transform: uppercase;
 `;
 
@@ -50,7 +50,7 @@ export const CollateralIcon = styled.div<{ active?: boolean }>`
     height: 40px;
     border-radius: 50%;
     margin-bottom: 7px;
-    box-shadow: ${(_props) => (_props?.active ? 'var(--shadow)' : '')};
+    box-shadow: ${(props) => (props?.active ? 'var(--shadow)' : '')};
     cursor: pointer;
 `;
 
@@ -74,5 +74,5 @@ export const StableBalance = styled.span<{ selected?: boolean }>`
     font-size: 10px;
     line-height: 150%;
     color: #ffffff;
-    ${(_props) => (_props?.selected ? `opacity: 1;` : `opacity: 0.5`)};
+    ${(props) => (props?.selected ? `opacity: 1;` : `opacity: 0.5`)};
 `;

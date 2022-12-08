@@ -60,27 +60,27 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
 
 const Container = styled.div<{ resolved?: boolean; paused?: boolean; mobile?: boolean }>`
     display: flex;
-    flex-direction: ${(_props) => (_props?.mobile && _props?.resolved ? 'column' : 'row')};
-    align-items: ${(_props) => (_props?.mobile && _props?.resolved ? 'baseline' : 'center')};
-    justify-content: ${(_props) =>
-        _props?.mobile && _props?.paused ? 'center' : _props?.mobile && _props?.resolved ? 'space-evenly' : 'start'};
-    margin-right: ${(_props) => (_props?.mobile && _props?.resolved ? '' : '15px')};
-    width: ${(_props) => (_props?.resolved ? '33%' : '')};
-    height: ${(_props) => (_props?.mobile ? '40px' : '')};
+    flex-direction: ${(props) => (props?.mobile && props?.resolved ? 'column' : 'row')};
+    align-items: ${(props) => (props?.mobile && props?.resolved ? 'baseline' : 'center')};
+    justify-content: ${(props) =>
+        props?.mobile && props?.paused ? 'center' : props?.mobile && props?.resolved ? 'space-evenly' : 'start'};
+    margin-right: ${(props) => (props?.mobile && props?.resolved ? '' : '15px')};
+    width: ${(props) => (props?.resolved ? '33%' : '')};
+    height: ${(props) => (props?.mobile ? '40px' : '')};
 `;
 
 export const Status = styled.span<{ color?: string }>`
     font-size: 12px;
     text-transform: uppercase;
-    color: ${(_props) => (_props?.color ? _props.color : '')};
+    color: ${(props) => (props?.color ? props.color : '')};
     align-self: center;
     justify-content: space-evenly;
 `;
 
 export const Result = styled.span<{ isLive?: boolean }>`
-    font-size: ${(_props) => (_props?.isLive ? '12px' : '12px')};
-    font-weight: ${(_props) => (_props?.isLive ? '400' : '700')};
-    // margin-right: ${(_props) => (_props?.isLive ? '7px' : '50px')};
+    font-size: ${(props) => (props?.isLive ? '12px' : '12px')};
+    font-weight: ${(props) => (props?.isLive ? '400' : '700')};
+    // margin-right: ${(props) => (props?.isLive ? '7px' : '50px')};
 `;
 
 export const ResultLabel = styled.span`

@@ -160,8 +160,8 @@ const Wrapper = styled.div<{ disabled?: boolean; isMobile?: boolean; notClickabl
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: ${(_props) => (_props?.isMobile ? 'column' : 'row')};
-    cursor: ${(_props) => (_props?.disabled ? 'not-allowed' : _props.notClickable ? 'default' : 'pointer')};
+    flex-direction: ${(props) => (props?.isMobile ? 'column' : 'row')};
+    cursor: ${(props) => (props?.disabled ? 'not-allowed' : props.notClickable ? 'default' : 'pointer')};
 `;
 
 const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: boolean; notClickable?: boolean }>`
@@ -174,9 +174,9 @@ const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: b
     justify-content: center;
     flex-direction: row;
     font-size: 14px;
-    border: ${(_props) =>
-        _props?.glow ? '3px solid ' + _props.color : _props.addedToParlay ? '3px solid #64D9FE' : '3px solid #5f6180'};
-    box-shadow: ${(_props) => (_props?.glow ? '0 0 6px 2px ' + _props.color : '')};
+    border: ${(props) =>
+        props?.glow ? '3px solid ' + props.color : props.addedToParlay ? '3px solid #64D9FE' : '3px solid #5f6180'};
+    box-shadow: ${(props) => (props?.glow ? '0 0 6px 2px ' + props.color : '')};
 
     @media (hover: hover) {
         &:hover {
@@ -205,15 +205,15 @@ const AdditionalText = styled.span`
 `;
 
 const Symbol = styled.span<{ color?: string; addedToParlay?: boolean; size?: string }>`
-    color: ${(_props) => (_props.addedToParlay ? '#64D9FE' : _props?.color ? _props.color : '')};
-    font-size: ${(_props) => (_props.size ? _props.size : '12px')};
+    color: ${(props) => (props.addedToParlay ? '#64D9FE' : props?.color ? props.color : '')};
+    font-size: ${(props) => (props.size ? props.size : '12px')};
 `;
 
 const Discount = styled(FlexDivCentered)<{ color?: string; noDiscount?: boolean }>`
-    color: ${(_props) => (_props?.color ? _props.color : '')};
+    color: ${(props) => (props?.color ? props.color : '')};
     font-size: 12px;
     margin-left: 2px;
-    visibility: ${(_props) => (_props?.noDiscount ? 'hidden' : '')};
+    visibility: ${(props) => (props?.noDiscount ? 'hidden' : '')};
 `;
 
 export default PositionSymbol;

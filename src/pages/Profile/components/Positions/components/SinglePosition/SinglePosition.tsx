@@ -50,11 +50,21 @@ import { refetchAfterClaim } from 'utils/queryConnector';
 import { buildMarketLink } from 'utils/routes';
 import i18n from 'i18n';
 import { MAX_GAS_LIMIT } from 'constants/network';
-import ShareTicketModal from 'pages/Markets/Home/Parlay/components/ShareTicketModal';
 import useMarketTransactionsQuery from 'queries/markets/useMarketTransactionsQuery';
 import { ParlaysMarket } from 'types/markets';
+import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 
-const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ position }) => {
+type SinglePositionProps = {
+    position: AccountPositionProfile;
+    setShareTicketModalData?: (shareTicketData: ShareTicketModalProps) => void;
+    setShowShareTicketModal?: (show: boolean) => void;
+};
+
+const SinglePosition: React.FC<SinglePositionProps> = ({
+    position,
+    setShareTicketModalData,
+    setShowShareTicketModal,
+}) => {
     const language = i18n.language;
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -69,8 +79,6 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
         getTeamImageSource(position.market.awayTeam, position.market.tags[0])
     );
 
-    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
-
     const marketTransactionsQuery = useMarketTransactionsQuery(position.market.address, networkId, position.account, {
         enabled: isWalletConnect,
     });
@@ -80,13 +88,15 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
 
         if (marketTransactionsQuery.data) {
             marketTransactionsQuery.data.forEach((transaction) => {
-                if (transaction.type == 'sell') sum -= transaction.paid;
-                if (transaction.type == 'buy') sum += transaction.paid;
+                if (transaction.position == position.market.finalResult - 1) {
+                    if (transaction.type == 'sell') sum -= transaction.paid;
+                    if (transaction.type == 'buy') sum += transaction.paid;
+                }
             });
         }
 
         return sum;
-    }, [marketTransactionsQuery.data]);
+    }, [marketTransactionsQuery.data, position.market.finalResult]);
 
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(position.market.homeTeam, position.market.tags[0]));
@@ -106,11 +116,11 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    setTimeout(() => {
-                        refetchAfterClaim(walletAddress, networkId);
-                    }, 1500);
-                    setShowShareTicketModal(true);
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
+                    if (setShareTicketModalData && setShowShareTicketModal) {
+                        setShareTicketModalData(shareTicketData);
+                        setShowShareTicketModal(true);
+                    }
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -128,20 +138,24 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
 
     const claimAmount = claimCanceledGame ? claimAmountForCanceledGame : position.amount;
 
-    const shareTicketData = {
+    const shareTicketData: ShareTicketModalProps = {
         markets: [
             {
                 ...position.market,
-                homeOdds: (0.97 * sumOfTransactionPaidAmount) / position.amount,
-                awayOdds: (0.97 * sumOfTransactionPaidAmount) / position.amount,
-                drawOdds: (0.97 * sumOfTransactionPaidAmount) / position.amount,
+                homeOdds: sumOfTransactionPaidAmount / position.amount,
+                awayOdds: sumOfTransactionPaidAmount / position.amount,
+                drawOdds: sumOfTransactionPaidAmount / position.amount,
                 winning: position.claimable,
                 position: convertPositionNameToPosition(position?.side ? position?.side : ''),
             } as ParlaysMarket,
         ],
-        totalQuote: (0.97 * sumOfTransactionPaidAmount) / position.amount,
+        totalQuote: sumOfTransactionPaidAmount / position.amount,
         paid: sumOfTransactionPaidAmount,
         payout: position.amount,
+        onClose: () => {
+            refetchAfterClaim(walletAddress, networkId);
+            setShowShareTicketModal ? setShowShareTicketModal(false) : null;
+        },
     };
 
     return (
@@ -245,15 +259,6 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                         </ExternalLinkContainer>
                     </ExternalLink>
                 </>
-            )}
-            {showShareTicketModal && (
-                <ShareTicketModal
-                    markets={shareTicketData.markets}
-                    totalQuote={shareTicketData.totalQuote}
-                    paid={Number(shareTicketData.paid)}
-                    payout={shareTicketData.payout}
-                    onClose={() => setShowShareTicketModal(false)}
-                />
             )}
         </Wrapper>
     );

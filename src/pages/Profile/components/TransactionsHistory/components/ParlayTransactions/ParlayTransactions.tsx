@@ -203,7 +203,9 @@ const ParlayTransactions: React.FC = () => {
                             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
                                 <ParlayRowText>
                                     {getPositionStatus(position)}
-                                    {position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                                    <ParlayRowTeam title={position.market.homeTeam + ' vs ' + position.market.awayTeam}>
+                                        {position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                                    </ParlayRowTeam>
                                 </ParlayRowText>
                                 <PositionSymbol
                                     type={convertPositionToSymbolType(
@@ -420,6 +422,15 @@ const ParlayRow = styled(FlexDivRowCentered)`
 const ParlayRowText = styled(QuoteText)`
     max-width: 220px;
     width: 300px;
+    display: flex;
+    align-items: center;
+`;
+
+const ParlayRowTeam = styled.span`
+    white-space: nowrap;
+    width: 190px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const FirstExpandedSection = styled(FlexDivColumnCentered)`
