@@ -55,7 +55,7 @@ const ParlayTransactions: React.FC = () => {
         const sportMarkets: SportMarketInfo[] = data.sportMarkets;
 
         const parlaysMarket: ParlaysMarket[] = sportMarkets
-            .map((sportMarket, index) => {
+            .map((sportMarket) => {
                 const sportMarketFromContractIndex = data.sportMarketsFromContract.findIndex(
                     (address: string) => address === sportMarket.address
                 );
@@ -78,10 +78,14 @@ const ParlayTransactions: React.FC = () => {
                             : sportMarket.awayOdds,
                 };
 
+                const positionsIndex = data.positions.findIndex(
+                    (positionData: PositionData) => positionData.market.address === sportMarket.address
+                );
+
                 return {
                     ...sportMarketWithBuyQuotes,
                     position,
-                    winning: getMarketWinStatus(data.positions[index]),
+                    winning: getMarketWinStatus(data.positions[positionsIndex]),
                 };
             })
             .sort(
@@ -199,7 +203,9 @@ const ParlayTransactions: React.FC = () => {
                             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
                                 <ParlayRowText>
                                     {getPositionStatus(position)}
-                                    {position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                                    <ParlayRowTeam title={position.market.homeTeam + ' vs ' + position.market.awayTeam}>
+                                        {position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                                    </ParlayRowTeam>
                                 </ParlayRowText>
                                 <PositionSymbol
                                     type={convertPositionToSymbolType(
@@ -416,6 +422,15 @@ const ParlayRow = styled(FlexDivRowCentered)`
 const ParlayRowText = styled(QuoteText)`
     max-width: 220px;
     width: 300px;
+    display: flex;
+    align-items: center;
+`;
+
+const ParlayRowTeam = styled.span`
+    white-space: nowrap;
+    width: 190px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const FirstExpandedSection = styled(FlexDivColumnCentered)`
@@ -436,6 +451,10 @@ const TwitterWrapper = styled.div`
     position: absolute;
     bottom: 10px;
     right: 5px;
+    @media (max-width: 600px) { {
+        bottom: -2px;
+        right: 2px;
+    }
 `;
 
 export default ParlayTransactions;

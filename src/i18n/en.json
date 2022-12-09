@@ -306,6 +306,7 @@
         },
         "market-details": {
             "price": "Price",
+            "odds": "Odds",
             "liquidity": "Liquidity",
             "discount": "Discount",
             "usd-amount": "USD amount",
@@ -419,7 +420,12 @@
             "period-1": "Second period",
             "period-2": "Third period",
             "period-3": "Fourth period",
-            "period-4": "Fifth period"
+            "period-4": "Fifth period",
+            "period-5": "Sixth period",
+            "period-6": "Seventh period",
+            "period-7": "Eighth period",
+            "period-8": "Nineth period",
+            "period-9": "Tenth period"
         }
     },
     "quiz": {
@@ -683,6 +689,10 @@
         "description": "A total of 10,000 OP will be distributed to the best parlays of the month. The tickets will be ranked based on the highest odds, followed by volume in case of a tie.",
         "distribution-note": "Rewards will be distributed to the top 20 parlays for the month of December!",
         "no-parlays": "No winning parlays registered in the period yet.",
-        "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system."
+        "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
+        "info": "If multiple parlays have the same quote the following will be used as tie-breakers in respective order:",
+        "info1": "- Number of positions on the parlay",
+        "info2": "- The amount paid",
+        "info3": "- Actual total quote (gotten by multiplying positions individually)"
     }
 }

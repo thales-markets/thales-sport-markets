@@ -104,7 +104,7 @@ const Toggle: React.FC<SwitchProps> = ({
 };
 
 const Wrapper = styled.div<{ margin?: string; disabled?: boolean }>`
-    ${(_props) => (_props?.margin ? `margin: ${_props.margin}` : '')};
+    ${(props) => (props?.margin ? `margin: ${props.margin}` : '')};
     opacity: ${(props: any) => (props.disabled ? '0.4' : '1')};
     display: flex;
     flex-direction: row;
@@ -115,9 +115,9 @@ const Wrapper = styled.div<{ margin?: string; disabled?: boolean }>`
 `;
 
 const Label = styled.span<{ fontSize?: string; fontWeight?: string; lineHeight?: string }>`
-    font-size: ${(_props) => (_props?.fontSize ? _props.fontSize : '12px')};
-    ${(_props) => (_props.fontWeight ? `font-weight: ${_props.fontWeight};` : '')}
-    ${(_props) => (_props.lineHeight ? `line-height: ${_props.lineHeight};` : '')}
+    font-size: ${(props) => (props?.fontSize ? props.fontSize : '12px')};
+    ${(props) => (props.fontWeight ? `font-weight: ${props.fontWeight};` : '')}
+    ${(props) => (props.lineHeight ? `line-height: ${props.lineHeight};` : '')}
     color: white;
     margin-left: 5px;
     margin-right: 5px;
@@ -134,7 +134,7 @@ const SwitchContainer = styled.div<SwitchContainerProps>`
     border-radius: 30px;
     width: ${(props: any) => (props?.width ? props.width : defaultSwitchHeight * 2.18 + 'px')};
     height: ${(props: any) => (props?.height ? props.height : defaultSwitchHeight + 'px')};
-    ${(_props) => (_props.shadow ? 'box-shadow: 0px 0px 40px #64d9fe' : '')}
+    ${(props) => (props.shadow ? 'box-shadow: 0px 0px 40px #64d9fe' : '')}
 `;
 
 const Circle = styled.div<CircleProps>`

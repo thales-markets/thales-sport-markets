@@ -8,6 +8,9 @@ export const Container = styled(FlexDivColumn)`
     @media (max-width: 1440px) {
         width: 95%;
     }
+    @media (max-width: 500px) {
+        width: 100%;
+    }
 `;
 
 export const Title = styled.span`
@@ -19,6 +22,10 @@ export const Title = styled.span`
     /* text-align: center; */
     color: ${(props) => props.theme.textColor.primary};
     margin-bottom: 20px;
+    @media (max-width: 500px) {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
 `;
 
 export const Description = styled.p`
@@ -89,11 +96,15 @@ export const HighlightRow = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    ${(_props) => `border: 1px solid ${_props?.theme?.textColor?.quaternary};`};
+    ${(props) => `border: 1px solid ${props?.theme?.textColor?.quaternary};`};
     box-shadow: 0px 0px 26px 0px rgba(0, 0, 0, 0.75);
     border-radius: 10px;
     margin-bottom: 10px;
     margin-top: 10px;
+    @media (max-width: 600px) {
+        height: 66px;
+        padding-right: 5px;
+    }
 `;
 
 export const HighlightColumn = styled.div`
@@ -113,4 +124,12 @@ export const AddressLink = styled.a`
 export const TipLink = styled.a`
     display: contents;
     color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+export const ColumnValue = styled.p<{ padding?: string }>`
+    @media (max-width: 400px) {
+        ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
+        text-align: right;
+        width: 100%;
+    }
 `;

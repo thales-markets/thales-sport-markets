@@ -308,7 +308,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         };
 
         fetchData().catch((e) => console.log(e));
-    }, [usdAmountValue, selectedStableIndex]);
+    }, [usdAmountValue, selectedStableIndex, selectedPosition]);
 
     useEffect(() => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
@@ -367,7 +367,8 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                     !Number(tokenAmount) ||
                     Number(tokenAmount) < 1 ||
                     isBuying ||
-                    isAllowing
+                    isAllowing ||
+                    positionPriceDetailsQuery.isLoading
                 ) {
                     setSubmitDisabled(true);
                     return;
@@ -390,7 +391,17 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
             }
         };
         checkDisabled();
-    }, [tokenAmount, usdAmountValue, isBuying, isAllowing, hasAllowance, selectedSide, paymentTokenBalance, maxAmount]);
+    }, [
+        tokenAmount,
+        usdAmountValue,
+        isBuying,
+        isAllowing,
+        hasAllowance,
+        selectedSide,
+        paymentTokenBalance,
+        maxAmount,
+        positionPriceDetailsQuery.isLoading,
+    ]);
 
     useEffect(() => {
         const getMaxAmount = async () => {

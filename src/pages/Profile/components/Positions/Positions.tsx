@@ -28,17 +28,25 @@ import SinglePosition from './components/SinglePosition';
 import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
 import { ReactComponent as OvertimeTicket } from 'assets/images/parlay-empty.svg';
 import { FlexDivCentered } from 'styles/common';
+import ShareTicketModal, {
+    ShareTicketModalProps,
+} from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 
 const Positions: React.FC = () => {
     const { t } = useTranslation();
 
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
+    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
+    const [shareTicketData, setShareTicketData] = useState<ShareTicketModalProps>({
+        markets: [],
+        totalQuote: 0,
+        paid: 0,
+        payout: 0,
+        onClose: () => {},
+    });
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    // const walletAddress = useSelector((state: RootState) => getWalletAddress(state))
-    //     ? '0x4a24fd841e74c28309bca5730b40679e18c5fca0'
-    //     : '0x4a24fd841e74c28309bca5730b40679e18c5fca0';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
@@ -128,10 +136,24 @@ const Positions: React.FC = () => {
                             {parlayMarketsByStatus.claimable.length || accountPositionsByStatus.claimable.length ? (
                                 <>
                                     {accountPositionsByStatus.claimable.map((singleMarket, index) => {
-                                        return <SinglePosition position={singleMarket} key={`s-${index}`} />;
+                                        return (
+                                            <SinglePosition
+                                                position={singleMarket}
+                                                key={`s-${index}`}
+                                                setShareTicketModalData={setShareTicketData}
+                                                setShowShareTicketModal={setShowShareTicketModal}
+                                            />
+                                        );
                                     })}
                                     {parlayMarketsByStatus.claimable.map((parlayMarket, index) => {
-                                        return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
+                                        return (
+                                            <ParlayPosition
+                                                parlayMarket={parlayMarket}
+                                                key={index}
+                                                setShareTicketModalData={setShareTicketData}
+                                                setShowShareTicketModal={setShowShareTicketModal}
+                                            />
+                                        );
                                     })}
                                 </>
                             ) : (
@@ -179,6 +201,15 @@ const Positions: React.FC = () => {
                         </>
                     )}
                 </ListContainer>
+            )}
+            {showShareTicketModal && (
+                <ShareTicketModal
+                    markets={shareTicketData.markets}
+                    totalQuote={shareTicketData.totalQuote}
+                    paid={shareTicketData.paid}
+                    payout={shareTicketData.payout}
+                    onClose={shareTicketData.onClose}
+                />
             )}
         </Container>
     );

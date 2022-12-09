@@ -16,11 +16,12 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
+import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { AvailablePerSide, MarketData, ParlaysMarket } from 'types/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
-import { floorNumberToDecimals, formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
+import { floorNumberToDecimals, formatCurrencyWithSign } from 'utils/formatters/number';
 import {
     convertFinalResultToResultType,
     convertFinalResultToWinnerName,
@@ -28,6 +29,7 @@ import {
     getIsApexTopGame,
     getVisibilityOfDrawOptionByTagId,
     isDiscounted,
+    formatMarketOdds,
 } from 'utils/markets';
 import networkConnector from 'utils/networkConnector';
 import {
@@ -70,6 +72,7 @@ const Positions: React.FC<PositionsProps> = ({
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const selectedOddsType = useSelector(getOddsType);
     // ------------
 
     // Queries
@@ -186,14 +189,14 @@ const Positions: React.FC<PositionsProps> = ({
             markets: [
                 {
                     ...convertMarketDataTypeToSportMarketInfoType(market),
-                    homeOdds: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
-                    awayOdds: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
-                    drawOdds: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
+                    homeOdds: sumOfTransactionPaidAmount / claimableAmount,
+                    awayOdds: sumOfTransactionPaidAmount / claimableAmount,
+                    drawOdds: sumOfTransactionPaidAmount / claimableAmount,
                     winning: claimable,
                     position: market.finalResult - 1,
                 } as ParlaysMarket,
             ],
-            totalQuote: (0.97 * sumOfTransactionPaidAmount) / claimableAmount,
+            totalQuote: sumOfTransactionPaidAmount / claimableAmount,
             paid: sumOfTransactionPaidAmount,
             payout: claimableAmount,
         };
@@ -304,13 +307,11 @@ const Positions: React.FC<PositionsProps> = ({
                             />
                         </PositionContainer>
                         <InnerContainer>
-                            <Label>{t('markets.market-details.price')}</Label>
+                            <Label>{t('markets.market-details.odds')}</Label>
                             <Value>
-                                {formatCurrencyWithKey(
-                                    USD_SIGN,
-                                    // @ts-ignore
-                                    market.positions[Position.HOME]?.sides[selectedSide]?.odd,
-                                    2
+                                {formatMarketOdds(
+                                    selectedOddsType,
+                                    market.positions[Position.HOME]?.sides[selectedSide]?.odd
                                 )}
                             </Value>
                             <Discount visible={showHomeTeamDiscount}>
@@ -369,13 +370,11 @@ const Positions: React.FC<PositionsProps> = ({
                                 />
                             </PositionContainer>
                             <InnerContainer>
-                                <Label>{t('markets.market-details.price')}</Label>
+                                <Label>{t('markets.market-details.odds')}</Label>
                                 <Value>
-                                    {formatCurrencyWithKey(
-                                        USD_SIGN,
-                                        // @ts-ignore
-                                        market.positions[Position.DRAW]?.sides[selectedSide]?.odd,
-                                        2
+                                    {formatMarketOdds(
+                                        selectedOddsType,
+                                        market.positions[Position.DRAW]?.sides[selectedSide]?.odd
                                     )}
                                 </Value>
                                 <Discount visible={showDrawTeamDiscount}>
@@ -435,13 +434,11 @@ const Positions: React.FC<PositionsProps> = ({
                             />
                         </PositionContainer>
                         <InnerContainer>
-                            <Label>{t('markets.market-details.price')}</Label>
+                            <Label>{t('markets.market-details.odds')}</Label>
                             <Value>
-                                {formatCurrencyWithKey(
-                                    USD_SIGN,
-                                    // @ts-ignore
-                                    market.positions[Position.AWAY]?.sides[selectedSide]?.odd,
-                                    2
+                                {formatMarketOdds(
+                                    selectedOddsType,
+                                    market.positions[Position.AWAY]?.sides[selectedSide]?.odd
                                 )}
                             </Value>
                             <Discount visible={showAwayTeamDiscount}>
