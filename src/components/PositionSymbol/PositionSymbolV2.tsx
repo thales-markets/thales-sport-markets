@@ -100,6 +100,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                 style={additionalStyle}
                 addedToParlay={addedToParlay && addedToParlay.position == type}
                 notClickable={!marketId}
+                flexDirection={flexDirection}
             >
                 <Symbol
                     color={symbolColor}
@@ -152,7 +153,13 @@ const Wrapper = styled(FlexDivColumn)<{ disabled?: boolean; flexDirection?: stri
     flex-direction: ${(props) => (props.flexDirection ? props.flexDirection : 'row')};
 `;
 
-const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: boolean; notClickable?: boolean }>`
+const Container = styled.div<{
+    glow?: boolean;
+    color?: string;
+    addedToParlay?: boolean;
+    notClickable?: boolean;
+    flexDirection?: string;
+}>`
     position: relative;
     width: 30px;
     height: 30px;
@@ -180,7 +187,7 @@ const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: b
         width: 25px;
         height: 25px;
     }
-    margin: 0 10px;
+    margin: ${(props) => (props.flexDirection === 'column' ? '0 10px' : '0 0')};
 `;
 
 const AdditionalText = styled.span`

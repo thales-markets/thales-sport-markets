@@ -9,7 +9,7 @@ export const Container = styled.div<{
     width: 100%;
     padding: 6px 8px 4px 8px;
     border-radius: 5px;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     background-color: ${(props) => (props.isResolved ? 'rgb(36,41,64, 0.5)' : 'rgba(48, 54, 86, 0.5)')};
 `;
 

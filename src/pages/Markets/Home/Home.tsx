@@ -401,7 +401,7 @@ const Home: React.FC = () => {
 
             <RowContainer>
                 {/* LEFT FILTERS */}
-                <SidebarContainer>
+                <SidebarContainer maxWidth={280}>
                     <Search
                         text={marketSearch}
                         handleChange={(value) => {
@@ -532,7 +532,7 @@ const Home: React.FC = () => {
                     </MainContainer>
                 )}
                 {/* RIGHT PART */}
-                <SidebarContainer>
+                <SidebarContainer maxWidth={300}>
                     {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
                     <Suspense fallback={<Loader />}>
                         <Parlay />
@@ -614,9 +614,9 @@ const MainContainer = styled(FlexDivColumn)`
     flex-grow: 1;
 `;
 
-const SidebarContainer = styled(FlexDivColumn)`
+const SidebarContainer = styled(FlexDivColumn)<{ maxWidth: number }>`
     padding-top: 25px;
-    max-width: 280px;
+    max-width: ${(props) => props.maxWidth}px;
     flex-grow: 1;
     @media (max-width: 950px) {
         display: none;
