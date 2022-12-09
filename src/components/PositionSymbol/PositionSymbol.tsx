@@ -16,9 +16,7 @@ type SymbolProps = {
     symbolSize?: string;
     additionalText?: {
         firstText?: string;
-        secondText?: string;
         firstTextStyle?: CSSProperties;
-        secondTextStyle?: CSSProperties;
     };
     additionalStyle?: CSSProperties;
     children?: any;
@@ -29,7 +27,7 @@ type SymbolProps = {
     awayTeam?: string;
     discount?: number;
     isMobile?: boolean;
-    winningSymbol?: boolean;
+    flexDirection?: string;
 };
 
 const PositionSymbol: React.FC<SymbolProps> = ({
@@ -45,8 +43,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     awayTeam,
     children,
     discount,
-    isMobile,
-    winningSymbol,
+    flexDirection,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -57,7 +54,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     return (
         <Wrapper
             disabled={showTooltip}
-            isMobile={isMobile}
+            flexDirection={flexDirection}
             notClickable={!marketId}
             onClick={() => {
                 if (!showTooltip) {
@@ -95,19 +92,13 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                 }
             }}
         >
-            {isMobile && !winningSymbol && (
-                <Discount noDiscount={discount == null}>
-                    <div className="discount-label green">
-                        {discount && <span>-{Math.ceil(Math.abs(discount))}%</span>}
-                    </div>
-                </Discount>
-            )}
             <Container
                 glow={glow}
                 color={symbolColor}
                 style={additionalStyle}
                 addedToParlay={addedToParlay && addedToParlay.position == type}
                 notClickable={!marketId}
+                flexDirection={flexDirection}
             >
                 <Symbol
                     color={symbolColor}
@@ -121,17 +112,22 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                     {type == 4 && t('common.no')}
                     {type == undefined && children}
                 </Symbol>
+                {discount && (
+                    <Discount>
+                        <span>+{Math.ceil(Math.abs(discount))}%</span>
+                    </Discount>
+                )}
             </Container>
             <FlexDivColumn>
                 {additionalText?.firstText && (
-                    <AdditionalText style={additionalText?.firstTextStyle}>
+                    <AdditionalText style={additionalText?.firstTextStyle} flexDirection={flexDirection}>
                         {additionalText?.firstText}
                         {showTooltip && (
                             <Tooltip
                                 overlay={<>{t('markets.zero-odds-tooltip')}</>}
                                 iconFontSize={10}
                                 customIconStyling={{
-                                    marginTop: isMobile ? '2px' : '-10px',
+                                    marginTop: '2px',
                                     display: 'flex',
                                     marginLeft: '3px',
                                 }}
@@ -139,32 +135,25 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                         )}
                     </AdditionalText>
                 )}
-                {discount && !isMobile && (
-                    <Discount>
-                        <div className="discount-label green">
-                            <span>-{Math.ceil(Math.abs(discount))}%</span>
-                        </div>
-                    </Discount>
-                )}
-                {additionalText?.secondText && (
-                    <AdditionalText style={additionalText?.secondTextStyle}>
-                        {additionalText?.secondText}
-                    </AdditionalText>
-                )}
             </FlexDivColumn>
         </Wrapper>
     );
 };
 
-const Wrapper = styled.div<{ disabled?: boolean; isMobile?: boolean; notClickable?: boolean }>`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: ${(props) => (props?.isMobile ? 'column' : 'row')};
+const Wrapper = styled(FlexDivColumn)<{ disabled?: boolean; flexDirection?: string; notClickable?: boolean }>`
     cursor: ${(props) => (props?.disabled ? 'not-allowed' : props.notClickable ? 'default' : 'pointer')};
+    align-items: center;
+    flex-direction: ${(props) => (props.flexDirection ? props.flexDirection : 'row')};
 `;
 
-const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: boolean; notClickable?: boolean }>`
+const Container = styled.div<{
+    glow?: boolean;
+    color?: string;
+    addedToParlay?: boolean;
+    notClickable?: boolean;
+    flexDirection?: string;
+}>`
+    position: relative;
     width: 30px;
     height: 30px;
     border-radius: 60%;
@@ -173,7 +162,7 @@ const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: b
     align-items: center;
     justify-content: center;
     flex-direction: row;
-    font-size: 14px;
+    font-size: 13px;
     border: ${(props) =>
         props?.glow ? '3px solid ' + props.color : props.addedToParlay ? '3px solid #64D9FE' : '3px solid #5f6180'};
     box-shadow: ${(props) => (props?.glow ? '0 0 6px 2px ' + props.color : '')};
@@ -191,14 +180,15 @@ const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: b
         width: 25px;
         height: 25px;
     }
+    margin: ${(props) => (props.flexDirection === 'column' ? '0 10px' : '0 0')};
 `;
 
-const AdditionalText = styled.span`
-    line-height: normal;
-    font-size: 14px;
-    margin-right: 10px;
-    display: flex;
-    flex-direction: row;
+const AdditionalText = styled.span<{
+    flexDirection?: string;
+}>`
+    font-size: 13px;
+    margin-top: ${(props) => (props.flexDirection === 'column' ? 2 : 0)}px;
+    margin-right: ${(props) => (props.flexDirection === 'column' ? 0 : 10)}px;
     @media (max-width: 380px) {
         font-size: 12px;
     }
@@ -209,11 +199,16 @@ const Symbol = styled.span<{ color?: string; addedToParlay?: boolean; size?: str
     font-size: ${(props) => (props.size ? props.size : '12px')};
 `;
 
-const Discount = styled(FlexDivCentered)<{ color?: string; noDiscount?: boolean }>`
-    color: ${(props) => (props?.color ? props.color : '')};
+const Discount = styled(FlexDivCentered)`
+    position: absolute;
+    top: -7px;
+    right: -18px;
     font-size: 12px;
-    margin-left: 2px;
-    visibility: ${(props) => (props?.noDiscount ? 'hidden' : '')};
+    color: #5fc694;
+    border-radius: 60%;
+    font-weight: 700;
+    background: #252940;
+    padding: 2px;
 `;
 
 export default PositionSymbol;

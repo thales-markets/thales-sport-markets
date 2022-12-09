@@ -38,10 +38,6 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
 
     allMarkets.forEach((market) => {
         market.maturityDate = new Date(market.maturityDate);
-        if (market.address === '0xfa21ca1f29e238d1314b89c2fec8ecdc712cf411') {
-            market.isPaused = true;
-            market.maturityDate = new Date(1670575720000);
-        }
         market.homeTeam = market.isApex ? fixApexName(market.homeTeam) : fixDuplicatedTeamName(market.homeTeam);
         market.awayTeam = market.isApex ? fixApexName(market.awayTeam) : fixDuplicatedTeamName(market.awayTeam);
         if (market.isApex) {

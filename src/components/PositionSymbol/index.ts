@@ -1,1 +1,1 @@
-export { default } from './PositionSymbolV2';
+export { default } from './PositionSymbol';
