@@ -1,1 +1,1 @@
-export { default } from './OddsV2';
+export { default } from './Odds';

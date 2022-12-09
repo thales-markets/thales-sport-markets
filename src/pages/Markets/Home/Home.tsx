@@ -13,7 +13,6 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
-import useAccountPositionsQuery from 'queries/markets/useAccountPositionsQuery';
 import useDiscountMarkets from 'queries/markets/useDiscountMarkets';
 import useSportMarketsQueryNew from 'queries/markets/useSportsMarketsQueryNew';
 import React, { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
@@ -24,11 +23,11 @@ import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getParlay } from 'redux/modules/parlay';
 import { getFavouriteLeagues } from 'redux/modules/ui';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { AccountPositionsMap, SportMarketInfo, SportMarkets, TagInfo, Tags } from 'types/markets';
+import { SportMarketInfo, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { addHoursToCurrentDate } from 'utils/formatters/date';
 import { NetworkIdByName } from 'utils/network';
 
@@ -68,8 +67,6 @@ const Home: React.FC = () => {
     const dispatch = useDispatch();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
     const { trackPageView } = useMatomo();
     const location = useLocation();
@@ -172,13 +169,6 @@ const Home: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
-
-    const accountPositionsQuery = useAccountPositionsQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
-    const accountPositions: AccountPositionsMap = useMemo(() => {
-        return accountPositionsQuery.isSuccess ? accountPositionsQuery.data : {};
-    }, [accountPositionsQuery.data, accountPositionsQuery.isSuccess]);
 
     const [lastValidMarkets, setLastValidMarkets] = useState<AllMarkets>({
         OpenMarkets: [],
@@ -536,7 +526,7 @@ const Home: React.FC = () => {
                             </NoMarketsContainer>
                         ) : (
                             <Suspense fallback={<Loader />}>
-                                <MarketsGrid markets={finalMarkets} accountPositions={accountPositions} />
+                                <MarketsGrid markets={finalMarkets} />
                             </Suspense>
                         )}
                     </MainContainer>

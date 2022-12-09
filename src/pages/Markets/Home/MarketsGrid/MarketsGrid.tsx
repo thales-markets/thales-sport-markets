@@ -6,15 +6,14 @@ import { useSelector } from 'react-redux';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { AccountPositionsMap, SportMarkets, TagInfo } from 'types/markets';
+import { SportMarkets, TagInfo } from 'types/markets';
 import MarketsList from '../MarketsList';
 
 type MarketsGridProps = {
     markets: SportMarkets;
-    accountPositions: AccountPositionsMap;
 };
 
-const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) => {
+const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const language = i18n.language;
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const marketsMap = new Map();
@@ -52,7 +51,6 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) 
                                 league={leagueId}
                                 markets={marketsMap.get(leagueId)}
                                 language={language}
-                                accountPositions={accountPositions}
                             />
                         );
                     })}
