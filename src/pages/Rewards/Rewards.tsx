@@ -23,6 +23,7 @@ import {
     Title,
     TotalPnl,
     TipLink,
+    ColumnValue,
 } from './styled-components';
 import useRewardsDataQuery from 'queries/rewards/useRewardsDataQuery';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -174,7 +175,7 @@ const Rewards: React.FC = () => {
                                     Header: <>{t('rewards.table.volume')}</>,
                                     accessor: 'volume',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['volume']>) => (
-                                        <p>{`${Number(cellProps.cell.value).toFixed(2)} $`}</p>
+                                        <ColumnValue>{`${Number(cellProps.cell.value).toFixed(2)} $`}</ColumnValue>
                                     ),
                                     sortType: volumeSort(),
                                     sortable: true,
@@ -183,7 +184,7 @@ const Rewards: React.FC = () => {
                                     Header: <>{t('rewards.table.rebates')}</>,
                                     accessor: 'rebates',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['rebates']>) => (
-                                        <p>{`${Number(cellProps.cell.value).toFixed(2)} $`}</p>
+                                        <ColumnValue>{`${Number(cellProps.cell.value).toFixed(2)} $`}</ColumnValue>
                                     ),
                                     sortType: volumeSort(),
                                     sortable: true,
@@ -192,7 +193,9 @@ const Rewards: React.FC = () => {
                                     Header: <>{t('rewards.table.percentage')}</>,
                                     accessor: 'percentage',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['percentage']>) => (
-                                        <p>{`${Number(cellProps.cell.value).toFixed(2)} %`}</p>
+                                        <ColumnValue padding={'0 5px 0 0'}>{`${Number(cellProps.cell.value).toFixed(
+                                            2
+                                        )} %`}</ColumnValue>
                                     ),
                                     sortType: percentageSort(),
                                     sortable: true,
@@ -201,12 +204,16 @@ const Rewards: React.FC = () => {
                                     Header: <>{t('rewards.table.reward-amount')}</>,
                                     accessor: 'rewards',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['rewards']>) => (
-                                        <p>{`${Number(cellProps.cell.value?.op).toFixed(2)} OP + ${Number(
-                                            cellProps.cell.value?.thales
-                                        ).toFixed(2)} THALES`}</p>
+                                        <ColumnValue padding={'5px 0'}>{`${Number(cellProps.cell.value?.op).toFixed(
+                                            2
+                                        )} OP + ${Number(cellProps.cell.value?.thales).toFixed(
+                                            2
+                                        )} THALES`}</ColumnValue>
                                     ),
                                     sortType: rewardsSort(),
                                     sortable: true,
+                                    headStyle: { mediaMaxWidth: '600px', minWidth: '80px', textAlign: 'right' },
+                                    headTitleStyle: { mediaMaxWidth: '600px', width: '100%' },
                                 },
                             ]}
                             initialState={{
