@@ -57,7 +57,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
     const showAMM = !market.resolved && !market.cancelled && !market.gameStarted;
     return (
         <RowContainer>
-            <MainContainer>
+            <MainContainer showAMM={showAMM}>
                 <HeaderWrapper>
                     <BackToLink
                         link={buildHref(ROUTES.Markets.Home)}
@@ -106,11 +106,11 @@ const RowContainer = styled(FlexDivRow)`
     justify-content: center;
 `;
 
-const MainContainer = styled(FlexDivColumn)`
+const MainContainer = styled(FlexDivColumn)<{ showAMM: boolean }>`
     margin-top: 30px;
     width: 100%;
     max-width: 800px;
-    margin-right: 20px;
+    margin-right: ${(props) => (props.showAMM ? 20 : 0)}px;
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`

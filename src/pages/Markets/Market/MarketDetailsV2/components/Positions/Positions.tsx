@@ -1,5 +1,4 @@
 import PositionSymbol from 'components/PositionSymbol';
-import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
 import { MAX_GAS_LIMIT } from 'constants/network';
@@ -12,27 +11,23 @@ import useMarketCancellationOddsQuery from 'queries/markets/useMarketCancellatio
 import useMarketTransactionsQuery from 'queries/markets/useMarketTransactionsQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
-import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { AvailablePerSide, MarketData, ParlaysMarket, ParlaysMarketPosition } from 'types/markets';
+import { AvailablePerSide, MarketData, ParlaysMarket } from 'types/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
 import {
     convertFinalResultToResultType,
     convertMarketDataTypeToSportMarketInfoType,
     getVisibilityOfDrawOptionByTagId,
-    isDiscounted,
-    formatMarketOdds,
 } from 'utils/markets';
 import networkConnector from 'utils/networkConnector';
+import PositionDetails from '../PositionDetails';
 import {
     ClaimableInfoContainer,
     ClaimButton,
-    Discount,
     InnerContainer,
     Label,
     PositionContainer,
@@ -60,7 +55,6 @@ const Positions: React.FC<PositionsProps> = ({
     setSelectedPosition,
 }) => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
     const [claimable, setClaimable] = useState<boolean>(false);
     const [claimableAmount, setClaimableAmount] = useState<number>(0);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
@@ -69,10 +63,7 @@ const Positions: React.FC<PositionsProps> = ({
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const selectedOddsType = useSelector(getOddsType);
 
-    const parlay = useSelector(getParlay);
-    const addedToParlay = parlay.filter((game: any) => game.sportMarketId == market.gameDetails.gameId)[0];
     // ------------
 
     // Queries
@@ -146,38 +137,11 @@ const Positions: React.FC<PositionsProps> = ({
         oddsOnCancellation?.home,
     ]);
 
-    // @ts-ignore
-    const disabledDrawOption = !(market?.positions[Position.DRAW]?.sides[selectedSide]?.odd > 0);
-    // @ts-ignore
-    const disableddHomeOption = !(market?.positions[Position.HOME]?.sides[selectedSide]?.odd > 0);
-    // @ts-ignore
-    const disabledAwayOption = !(market?.positions[Position.AWAY]?.sides[selectedSide]?.odd > 0);
-
     const showDrawOdds = getVisibilityOfDrawOptionByTagId(market.tags);
     const gameCancelled = market.cancelled || (!market.gameStarted && market.resolved);
     const gameResolved = market.gameStarted && market.resolved;
     const pendingResolution = market.gameStarted && !market.resolved;
     const showPositions = !market.resolved && !market.cancelled && !market.gameStarted;
-
-    const showHomeTeamDiscount =
-        !!availablePerSide?.positions[Position.HOME]?.buyImpactPrice &&
-        isDiscounted(availablePerSide?.positions[Position.HOME]?.buyImpactPrice);
-    const showDrawTeamDiscount =
-        !!availablePerSide?.positions[Position.DRAW]?.buyImpactPrice &&
-        isDiscounted(availablePerSide?.positions[Position.DRAW]?.buyImpactPrice);
-    const showAwayTeamDiscount =
-        !!availablePerSide?.positions[Position.AWAY]?.buyImpactPrice &&
-        isDiscounted(availablePerSide?.positions[Position.AWAY]?.buyImpactPrice);
-
-    const homePositionDiscount = showHomeTeamDiscount
-        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.HOME]?.buyImpactPrice) * 100))
-        : 0;
-    const drawPositionDiscount = showDrawTeamDiscount
-        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.DRAW]?.buyImpactPrice) * 100))
-        : 0;
-    const awayPositionDiscount = showAwayTeamDiscount
-        ? Math.ceil(Math.abs(Number(availablePerSide?.positions[Position.AWAY]?.buyImpactPrice) * 100))
-        : 0;
 
     const shareParlayData = useMemo(() => {
         return {
@@ -273,167 +237,32 @@ const Positions: React.FC<PositionsProps> = ({
             )}
             {showPositions && (
                 <Wrapper>
-                    <TeamOptionContainer
-                        disabled={disableddHomeOption}
-                        selected={selectedPosition == Position.HOME}
-                        onClick={() => {
-                            if (!disableddHomeOption) {
-                                setSelectedPosition(Position.HOME);
-                                if (addedToParlay && addedToParlay.position == Position.HOME) {
-                                    dispatch(removeFromParlay(market.gameDetails.gameId));
-                                } else {
-                                    const parlayMarket: ParlaysMarketPosition = {
-                                        sportMarketId: market.gameDetails.gameId,
-                                        position: Position.HOME,
-                                        homeTeam: market.homeTeam || '',
-                                        awayTeam: market.awayTeam || '',
-                                    };
-                                    dispatch(updateParlay(parlayMarket));
-                                }
-                            }
-                        }}
-                    >
-                        <Value>1</Value>
-                        <Value>
-                            {formatMarketOdds(
-                                selectedOddsType,
-                                market.positions[Position.HOME]?.sides[selectedSide]?.odd
-                            )}
-                        </Value>
-                        {homePositionDiscount > 0 && (
-                            <Tooltip
-                                overlay={
-                                    <span>
-                                        {t(`markets.discounted-per`)}{' '}
-                                        <a
-                                            href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            TIP-95
-                                        </a>
-                                    </span>
-                                }
-                                component={
-                                    <Discount>
-                                        <span>+{homePositionDiscount}%</span>
-                                    </Discount>
-                                }
-                                iconFontSize={23}
-                                marginLeft={2}
-                                top={0}
-                            />
-                        )}
-                    </TeamOptionContainer>
+                    <PositionDetails
+                        market={market}
+                        selectedSide={selectedSide}
+                        availablePerSide={availablePerSide}
+                        selectedPosition={selectedPosition}
+                        setSelectedPosition={setSelectedPosition}
+                        position={Position.HOME}
+                    />
                     {showDrawOdds && (
-                        <TeamOptionContainer
-                            disabled={disabledDrawOption}
-                            selected={selectedPosition == Position.DRAW}
-                            onClick={() => {
-                                if (!disabledDrawOption) {
-                                    setSelectedPosition(Position.DRAW);
-                                    if (addedToParlay && addedToParlay.position == Position.DRAW) {
-                                        dispatch(removeFromParlay(market.gameDetails.gameId));
-                                    } else {
-                                        const parlayMarket: ParlaysMarketPosition = {
-                                            sportMarketId: market.gameDetails.gameId,
-                                            position: Position.DRAW,
-                                            homeTeam: market.homeTeam || '',
-                                            awayTeam: market.awayTeam || '',
-                                        };
-                                        dispatch(updateParlay(parlayMarket));
-                                    }
-                                }
-                            }}
-                        >
-                            <Value>X</Value>
-                            <Value>
-                                {formatMarketOdds(
-                                    selectedOddsType,
-                                    market.positions[Position.DRAW]?.sides[selectedSide]?.odd
-                                )}
-                            </Value>
-                            {drawPositionDiscount > 0 && (
-                                <Tooltip
-                                    overlay={
-                                        <span>
-                                            {t(`markets.discounted-per`)}{' '}
-                                            <a
-                                                href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                onClick={(e) => e.stopPropagation()}
-                                            >
-                                                TIP-95
-                                            </a>
-                                        </span>
-                                    }
-                                    component={
-                                        <Discount>
-                                            <span>+{drawPositionDiscount}%</span>
-                                        </Discount>
-                                    }
-                                    iconFontSize={23}
-                                    marginLeft={2}
-                                    top={0}
-                                />
-                            )}
-                        </TeamOptionContainer>
+                        <PositionDetails
+                            market={market}
+                            selectedSide={selectedSide}
+                            availablePerSide={availablePerSide}
+                            selectedPosition={selectedPosition}
+                            setSelectedPosition={setSelectedPosition}
+                            position={Position.DRAW}
+                        />
                     )}
-                    <TeamOptionContainer
-                        disabled={disabledAwayOption}
-                        selected={selectedPosition == Position.AWAY}
-                        onClick={() => {
-                            if (!disabledAwayOption) {
-                                setSelectedPosition(Position.AWAY);
-                                if (addedToParlay && addedToParlay.position == Position.AWAY) {
-                                    dispatch(removeFromParlay(market.gameDetails.gameId));
-                                } else {
-                                    const parlayMarket: ParlaysMarketPosition = {
-                                        sportMarketId: market.gameDetails.gameId,
-                                        position: Position.AWAY,
-                                        homeTeam: market.homeTeam || '',
-                                        awayTeam: market.awayTeam || '',
-                                    };
-                                    dispatch(updateParlay(parlayMarket));
-                                }
-                            }
-                        }}
-                    >
-                        <Value>2</Value>
-                        <Value>
-                            {formatMarketOdds(
-                                selectedOddsType,
-                                market.positions[Position.AWAY]?.sides[selectedSide]?.odd
-                            )}
-                        </Value>
-                        {awayPositionDiscount > 0 && (
-                            <Tooltip
-                                overlay={
-                                    <span>
-                                        {t(`markets.discounted-per`)}{' '}
-                                        <a
-                                            href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            TIP-95
-                                        </a>
-                                    </span>
-                                }
-                                component={
-                                    <Discount>
-                                        <span>+{awayPositionDiscount}%</span>
-                                    </Discount>
-                                }
-                                iconFontSize={23}
-                                marginLeft={2}
-                                top={0}
-                            />
-                        )}
-                    </TeamOptionContainer>
+                    <PositionDetails
+                        market={market}
+                        selectedSide={selectedSide}
+                        availablePerSide={availablePerSide}
+                        selectedPosition={selectedPosition}
+                        setSelectedPosition={setSelectedPosition}
+                        position={Position.AWAY}
+                    />
                 </Wrapper>
             )}
             {showShareTicketModal && (
