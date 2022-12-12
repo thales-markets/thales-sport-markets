@@ -287,6 +287,7 @@
             "total-quote": "Total Quote",
             "total-amount": "Total Amount"
         },
+        "search-field": "Search wallet",
         "winnings-are-forfeit": "*Winnings not claimed within {{amount}} days of a market being resolved are forfeit."
     },
     "markets": {
