@@ -1,27 +1,43 @@
 import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import Button from 'components/Button';
+import { FlexDivCentered, FlexDivRow } from 'styles/common';
 
-export const TeamOptionContainer = styled.div<{ disabled?: boolean; selected?: boolean; isResolved?: boolean }>`
-    width: 100%;
-    display: flex;
-    flex-direction: row;
+export const Wrapper = styled(FlexDivRow)`
+    background-color: ${MAIN_COLORS.LIGHT_GRAY};
+    padding: 15px;
+    border-radius: 5px;
+`;
+
+export const Header = styled(FlexDivRow)``;
+
+export const TeamOptionContainer = styled(FlexDivRow)<{ disabled?: boolean; selected?: boolean; isResolved?: boolean }>`
+    position: relative;
     opacity: ${(props) => (props?.disabled ? '0.4' : '1')};
-    background-color: ${(props) => (props?.disabled ? MAIN_COLORS.DISABLED_GRAY : MAIN_COLORS.LIGHT_GRAY)};
-    border-radius: 15px;
-    padding: 10px 50px;
+    background: linear-gradient(180deg, #303656 41.5%, #1a1c2b 100%);
+    border-radius: 5px;
+    padding: 0 20px;
     justify-content: ${(props) => (!props?.isResolved ? 'space-between' : '')};
     align-items: center;
-    margin-bottom: 7px;
     cursor: ${(props) => (!props?.isResolved ? 'pointer' : '')};
-    border: ${(props) => (props?.selected ? `0.5px solid ${MAIN_COLORS.LIGHT_BLUE}` : '0.5px solid transparent')};
+    border: ${(props) =>
+        props?.selected ? `1px solid ${MAIN_COLORS.LIGHT_BLUE}` : `1px solid ${MAIN_COLORS.BORDERS.GRAY}`};
     :hover {
         border: ${(props) =>
-            !props?.disabled && !props.isResolved ? `0.5px solid ${MAIN_COLORS.LIGHT_BLUE}` : undefined};
+            !props?.disabled && !props.isResolved ? `1px solid ${MAIN_COLORS.LIGHT_BLUE}` : undefined};
     }
     @media (max-width: 768px) {
         padding: 13px 10px;
     }
+    :not(:last-child) {
+        margin-right: 15px;
+    }
+    flex: 1 1 0;
+    width: 0;
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 16px;
+    height: 30px;
 `;
 
 export const StatusContainer = styled.div<{ isCancelled?: boolean; isPendingResolve?: boolean }>`
@@ -43,12 +59,6 @@ export const StatusLabel = styled.span<{ isCancelled?: boolean; isPendingResolve
     text-transform: uppercase;
     ${(props) => (props?.isCancelled ? `color: ${MAIN_COLORS.TEXT.WHITE};` : '')};
     ${(props) => (props?.isPendingResolve ? `color: ${MAIN_COLORS.TEXT.WHITE};` : '')};
-`;
-
-export const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
 `;
 
 export const InnerContainer = styled.div`
@@ -91,10 +101,8 @@ export const Label = styled.span`
     }
 `;
 
-export const Value = styled.span`
+export const Value = styled.div`
     font-weight: 700;
-    margin-left: 5px;
-    margin-right: 5px;
 `;
 
 export const ResultContainer = styled(InnerContainer)`
@@ -122,4 +130,16 @@ export const ClaimButton = styled(Button)<{ claimable?: boolean }>`
         padding: 2px 5px;
         min-height: 12px;
     }
+`;
+
+export const Discount = styled(FlexDivCentered)`
+    color: #5fc694;
+    font-size: 14px;
+    position: absolute;
+    top: -10px;
+    right: -16px;
+    font-size: 14px;
+    font-weight: 700;
+    background-color: ${MAIN_COLORS.LIGHT_GRAY};
+    padding: 4px;
 `;

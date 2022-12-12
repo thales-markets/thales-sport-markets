@@ -12,7 +12,6 @@ import { FlexDivColumn } from 'styles/common';
 import { MarketData } from 'types/markets';
 // import { buildHref } from 'utils/routes';
 // import BackToLink from '../components/BackToLink';
-import Transactions from './Transactions';
 import { Side } from '../../../constants/options';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import MarketDetailsV2 from './MarketDetailsV2';
@@ -51,7 +50,6 @@ const Market: React.FC<MarketProps> = (props) => {
                 <>
                     {/* <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} /> */}
                     <MarketDetailsV2 market={market} selectedSide={selectedSide} setSelectedSide={setSelectedSide} />
-                    <Transactions market={market} />
                 </>
             ) : (
                 <SimpleLoader />
@@ -61,12 +59,9 @@ const Market: React.FC<MarketProps> = (props) => {
 };
 
 const Container = styled(FlexDivColumn)`
-    width: 60%;
     position: relative;
     align-items: center;
-    @media (max-width: 1440px) {
-        width: 100%;
-    }
+    width: 100%;
 `;
 
 export default Market;

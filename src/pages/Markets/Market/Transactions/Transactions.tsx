@@ -102,11 +102,11 @@ const Transactions: React.FC<TransactionsProps> = ({ market }) => {
 const Title = styled.span`
     font-style: normal;
     font-weight: bold;
-    font-size: 25px;
+    font-size: 22px;
     line-height: 100%;
     text-align: center;
     color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 `;
 
 const Container = styled(FlexDivColumn)`
@@ -114,7 +114,7 @@ const Container = styled(FlexDivColumn)`
     border-radius: 15px;
     font-style: normal;
     font-weight: normal;
-    padding: 20px 20px 20px 20px;
+    padding: 20px 0px 20px 0px;
     color: ${(props) => props.theme.textColor.primary};
     position: relative;
     width: 100%;

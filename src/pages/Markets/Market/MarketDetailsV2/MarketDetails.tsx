@@ -12,11 +12,12 @@ import useAvailablePerSideQuery from 'queries/markets/useAvailablePerSideQuery';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected } from 'redux/modules/wallet';
-import AMM from './components/AMM';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import styled from 'styled-components';
 import { buildHref } from 'utils/routes';
 import ROUTES from 'constants/routes';
+import Parlay from 'pages/Markets/Home/Parlay';
+import Transactions from '../Transactions';
 
 type MarketDetailsPropType = {
     market: MarketData;
@@ -55,53 +56,69 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
 
     const showAMM = !market.resolved && !market.cancelled && !market.gameStarted;
     return (
-        <Wrapper>
-            <HeaderWrapper>
-                <BackToLink
-                    link={buildHref(ROUTES.Markets.Home)}
-                    text={t('market.back')}
-                    customStylingContainer={{ position: 'absolute', left: '5px', marginTop: '0px' }}
-                />
-                {showAMM && (
-                    <Toggle
-                        label={{
-                            firstLabel: t('common.buy-side'),
-                            secondLabel: t('common.sell-side'),
-                            fontSize: '18px',
-                        }}
-                        active={selectedSide === Side.SELL}
-                        dotSize="18px"
-                        dotBackground="#303656"
-                        dotBorder="3px solid #3FD1FF"
-                        handleClick={() => {
-                            setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
-                        }}
+        <RowContainer>
+            <MainContainer>
+                <HeaderWrapper>
+                    <BackToLink
+                        link={buildHref(ROUTES.Markets.Home)}
+                        text={t('market.back')}
+                        customStylingContainer={{ position: 'absolute', left: '5px', marginTop: '0px' }}
                     />
-                )}
-            </HeaderWrapper>
-            <MatchInfo market={market} />
-            <Positions
-                market={market}
-                selectedSide={selectedSide}
-                availablePerSide={availablePerSide}
-                selectedPosition={selectedPosition}
-                setSelectedPosition={setSelectedPosition}
-            />
-            {showAMM && (
-                <AMM
+                    {showAMM && (
+                        <Toggle
+                            label={{
+                                firstLabel: t('common.buy-side'),
+                                secondLabel: t('common.sell-side'),
+                                fontSize: '18px',
+                            }}
+                            active={selectedSide === Side.SELL}
+                            dotSize="18px"
+                            dotBackground="#303656"
+                            dotBorder="3px solid #3FD1FF"
+                            handleClick={() => {
+                                setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
+                            }}
+                        />
+                    )}
+                </HeaderWrapper>
+                <MatchInfo market={market} />
+                <Positions
                     market={market}
                     selectedSide={selectedSide}
-                    selectedPosition={selectedPosition}
                     availablePerSide={availablePerSide}
+                    selectedPosition={selectedPosition}
+                    setSelectedPosition={setSelectedPosition}
                 />
+                <Transactions market={market} />
+            </MainContainer>
+            {showAMM && (
+                <SidebarContainer>
+                    <Parlay />
+                </SidebarContainer>
             )}
-        </Wrapper>
+        </RowContainer>
     );
 };
 
-const Wrapper = styled(FlexDivColumn)`
+const RowContainer = styled(FlexDivRow)`
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+`;
+
+const MainContainer = styled(FlexDivColumn)`
     margin-top: 30px;
     width: 100%;
+    max-width: 800px;
+    margin-right: 20px;
+`;
+
+const SidebarContainer = styled(FlexDivColumn)`
+    padding-top: 25px;
+    max-width: 300px;
+    @media (max-width: 950px) {
+        display: none;
+    }
 `;
 
 const HeaderWrapper = styled(FlexDivRow)`

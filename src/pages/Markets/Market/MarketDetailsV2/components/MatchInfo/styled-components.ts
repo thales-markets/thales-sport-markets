@@ -16,16 +16,6 @@ export const Wrapper = styled.div`
     }
 `;
 
-export const InnerWrapper = styled.div`
-    width: 33%;
-    display: flex;
-    justify-content: center;
-    @media (max-width: 500px) {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-`;
-
 export const Container = styled(FlexDiv)`
     flex-direction: row;
     justify-content: center;
@@ -128,20 +118,6 @@ export const MatchTime = styled.span`
     font-weight: bold;
     font-size: 1em;
     line-height: 110%;
-`;
-
-export const Question = styled.span`
-    font-size: 17px;
-    font-weight: 400;
-    text-align: center;
-    max-width: 250px;
-`;
-
-export const MarketNotice = styled.span`
-    font-weight: 500;
-    text-align: center;
-    margin-bottom: 15px;
-    margin-top: -5px;
 `;
 
 export const MobileContainer = styled(FlexDiv)`
