@@ -6,9 +6,13 @@ import { useTranslation } from 'react-i18next';
 import { FlexDiv, FlexDivCentered } from 'styles/common';
 import { SortDirection } from 'constants/markets';
 
+type CSSPropertiesWithMedia = { cssProperties: CSSProperties } & { mediaMaxWidth: string };
+
 type ColumnWithSorting<D extends Record<string, unknown>> = Column<D> & {
     sortType?: string | ((rowA: any, rowB: any, columnId?: string, desc?: boolean) => number);
     sortable?: boolean;
+    headStyle?: CSSPropertiesWithMedia;
+    headTitleStyle?: CSSPropertiesWithMedia;
 };
 
 type TableProps = {
@@ -99,6 +103,7 @@ const Table: React.FC<TableProps> = ({
                     {headerGroup.headers.map((column: any, headerIndex: any) => (
                         <TableCellHead
                             {...column.getHeaderProps(column.sortable ? column.getSortByToggleProps() : undefined)}
+                            cssProp={column.headStyle}
                             key={headerIndex}
                             style={
                                 column.sortable
@@ -108,7 +113,7 @@ const Table: React.FC<TableProps> = ({
                             width={column.width}
                             id={column.id}
                         >
-                            <HeaderTitle>{column.render('Header')}</HeaderTitle>
+                            <HeaderTitle cssProp={column.headTitleStyle}>{column.render('Header')}</HeaderTitle>
                             {column.sortable && (
                                 <SortIconContainer>
                                     {column.isSorted ? (
@@ -274,12 +279,15 @@ const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string 
     }
 `;
 
-const TableCellHead = styled(TableCell)`
+const TableCellHead = styled(TableCell)<{ cssProp?: CSSPropertiesWithMedia }>`
     font-weight: 600;
     font-size: 15px;
     letter-spacing: 0.5px;
     @media (max-width: 767px) {
         font-size: 13px;
+    }
+    @media (max-width: ${(props) => (props.cssProp ? props.cssProp.mediaMaxWidth : '600px')}) {
+        ${(props) => (props.cssProp ? { ...props.cssProp.cssProperties } : '')}
     }
     @media (max-width: 512px) {
         font-size: 10px;
@@ -287,8 +295,11 @@ const TableCellHead = styled(TableCell)`
     user-select: none;
 `;
 
-const HeaderTitle = styled.span`
+const HeaderTitle = styled.span<{ cssProp?: CSSPropertiesWithMedia }>`
     text-transform: uppercase;
+    @media (max-width: ${(props) => (props.cssProp ? props.cssProp.mediaMaxWidth : '600px')}) {
+        ${(props) => (props.cssProp ? { ...props.cssProp.cssProperties } : '')}
+    }
 `;
 
 const SortIconContainer = styled.span`
@@ -323,6 +334,9 @@ const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`
                     ? "'\\0047'"
                     : "'\\0045'"
                 : "'\\0045'"};
+    }
+    @media (max-width: 512px) {
+        font-size: ${(props) => (props.selected && props.sortDirection !== SortDirection.NONE ? 17 : 14)}px;
     }
 `;
 

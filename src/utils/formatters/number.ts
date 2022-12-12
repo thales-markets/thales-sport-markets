@@ -35,7 +35,7 @@ export const formatCurrencyWithKey = (
     value: NumericValue,
     decimals?: number,
     trimDecimals?: boolean
-) => `${formatCurrency(value, decimals || getPrecision(value), trimDecimals)} ${currencyKey}`;
+) => `${formatCurrency(value, decimals === undefined ? getPrecision(value) : decimals, trimDecimals)} ${currencyKey}`;
 
 export const formatPercentage = (value: NumericValue, decimals = DEFAULT_CURRENCY_DECIMALS) => {
     let percentageValue = value;

@@ -87,7 +87,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                     return;
                 }
 
-                const IOS_DOWNLOAD_DELAY = 15 * 1000; // 15 seconds
+                const IOS_DOWNLOAD_DELAY = 10 * 1000; // 10 seconds
                 const MOBILE_TWITTER_TOAST_AUTO_CLOSE = 15 * 1000; // 15 seconds
                 try {
                     const base64Image = await toPng(ref.current);
@@ -101,10 +101,15 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                         setTimeout(
                             () => {
                                 link.click();
+                            },
+                            isIos() ? IOS_DOWNLOAD_DELAY : 0 // fix for iOS
+                        );
+                        setTimeout(
+                            () => {
                                 // Cleanup the DOM
                                 document.body.removeChild(link);
                             },
-                            isIos() ? IOS_DOWNLOAD_DELAY : 0 // fix for iOS
+                            isIos() ? 3 * IOS_DOWNLOAD_DELAY : 0 // fix for iOS
                         );
                     } else {
                         // Save to clipboard

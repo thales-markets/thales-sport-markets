@@ -410,6 +410,7 @@
             "wallet-address": "Wallet address",
             "pnl": "Losses",
             "percentage": "Percentage",
+            "percent": "Percent",
             "reward-amount": "Reward",
             "no-data-available": "No data available",
             "volume": "Volume",
