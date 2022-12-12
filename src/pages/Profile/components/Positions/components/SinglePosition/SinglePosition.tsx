@@ -21,11 +21,11 @@ import {
     ExternalLinkArrow,
     ExternalLinkContainer,
     Label,
+    ClaimButton,
 } from '../ParlayPosition/styled-components';
 import { useTranslation } from 'react-i18next';
 import { USD_SIGN } from 'constants/currency';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
-import { ClaimButton } from 'pages/Markets/Market/MarketDetailsV2/components/Positions/styled-components';
 import networkConnector from 'utils/networkConnector';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ethers } from 'ethers';

@@ -40,7 +40,7 @@ export const ParticipantLogoContainer = styled.div<{ awayTeam?: boolean; isWinne
     ${(props) => (props?.awayTeam ? 'margin-left: -1vw;' : '')}
     background-color: ${MAIN_COLORS.DARK_GRAY};
     border-color: ${(props) =>
-        props?.isWinner ? `${MAIN_COLORS.BORDERS.WINNER} !important` : MAIN_COLORS.BORDERS.GRAY};
+        props?.isWinner ? `${MAIN_COLORS.BORDERS.LIGHT_BLUE} !important` : MAIN_COLORS.BORDERS.GRAY};
     ${(props) => (props?.isWinner || props?.isDraw ? `box-shadow: ${MAIN_COLORS.SHADOWS.WINNER};` : '')}
     ${(props) => (props?.isWinner ? `z-index: 1;` : '')}
     width: 100px;
@@ -149,12 +149,13 @@ export const TeamNamesWrapper = styled(FlexDivRow)`
 `;
 
 export const TeamName = styled.span<{ isHomeTeam?: boolean }>`
-    padding: 10px;
+    padding: 0 10px 10px 10px;
     text-transform: uppercase;
     width: 300px;
     text-align: ${(props) => (props.isHomeTeam ? 'end' : 'start')};
 `;
 
 export const Versus = styled.span`
+    padding: 0 0 10px 0;
     text-transform: uppercase;
 `;

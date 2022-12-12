@@ -3,7 +3,6 @@ import { USD_SIGN } from 'constants/currency';
 import { MAX_GAS_LIMIT } from 'constants/network';
 import { Position } from 'constants/options';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
-import { ClaimButton } from 'pages/Markets/Market/MarketDetailsV2/components/Positions/styled-components';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -50,6 +49,7 @@ import {
     Value,
     WinLabel,
     WinValue,
+    ClaimButton,
 } from './styled-components';
 
 type ParlayPosition = {

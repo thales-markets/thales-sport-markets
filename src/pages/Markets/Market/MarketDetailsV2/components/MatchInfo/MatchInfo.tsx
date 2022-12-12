@@ -54,8 +54,6 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
     const isResolved = market?.resolved;
     const matchStartsLabel = t('market.match-time');
 
-    const showMatchParticipantsBelow = true;
-
     return (
         <>
             <Wrapper>
@@ -139,13 +137,11 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                         </MatchTimeContainerMobile>
                     </Container>
                 )}
-                {showMatchParticipantsBelow && (
-                    <TeamNamesWrapper>
-                        <TeamName isHomeTeam={true}>{fixLongTeamNameString(market.homeTeam)}</TeamName>
-                        <Versus>{' vs '}</Versus>
-                        <TeamName isHomeTeam={false}>{fixLongTeamNameString(market.awayTeam)}</TeamName>
-                    </TeamNamesWrapper>
-                )}
+                <TeamNamesWrapper>
+                    <TeamName isHomeTeam={true}>{fixLongTeamNameString(market.homeTeam)}</TeamName>
+                    <Versus>{' vs '}</Versus>
+                    <TeamName isHomeTeam={false}>{fixLongTeamNameString(market.awayTeam)}</TeamName>
+                </TeamNamesWrapper>
             </Wrapper>
         </>
     );

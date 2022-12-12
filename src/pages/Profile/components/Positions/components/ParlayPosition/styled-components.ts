@@ -1,6 +1,7 @@
 import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivColumnNative, FlexDivRow } from 'styles/common';
+import Button from 'components/Button';
 
 export const Container = styled(FlexDivColumnNative)`
     align-items: center;
@@ -191,3 +192,23 @@ export const ExternalLink = styled.a``;
 export const TotalQuoteContainer = styled(FlexDivRow)``;
 
 export const ProfitContainer = styled(FlexDivRow)``;
+
+export const ClaimButton = styled(Button)<{ claimable?: boolean }>`
+    background: ${(props) => props.theme.background.quaternary};
+    color: ${(props) => props.theme.textColor.tertiary};
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 5px;
+    position: absolute;
+    right: 10px;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.025em;
+    visibility: ${(props) => (!props.claimable ? 'hidden' : '')};
+    @media (max-width: 768px) {
+        position: initial;
+        font-size: 9px;
+        padding: 2px 5px;
+        min-height: 12px;
+    }
+`;

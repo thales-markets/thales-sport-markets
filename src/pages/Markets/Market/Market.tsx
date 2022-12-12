@@ -1,8 +1,6 @@
 import SimpleLoader from 'components/SimpleLoader';
-// import ROUTES from 'constants/routes';
 import useMarketQuery from 'queries/markets/useMarketQuery';
 import React, { useEffect, useState } from 'react';
-// import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { getIsAppReady } from 'redux/modules/app';
@@ -10,8 +8,6 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { MarketData } from 'types/markets';
-// import { buildHref } from 'utils/routes';
-// import BackToLink from '../components/BackToLink';
 import { Side } from '../../../constants/options';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import MarketDetailsV2 from './MarketDetailsV2';
@@ -21,7 +17,6 @@ type MarketProps = RouteComponentProps<{
 }>;
 
 const Market: React.FC<MarketProps> = (props) => {
-    // const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const [market, setMarket] = useState<MarketData | undefined>(undefined);
     const [selectedSide, setSelectedSide] = useState<Side>(Side.BUY);
@@ -47,10 +42,7 @@ const Market: React.FC<MarketProps> = (props) => {
     return (
         <Container>
             {market ? (
-                <>
-                    {/* <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} /> */}
-                    <MarketDetailsV2 market={market} selectedSide={selectedSide} setSelectedSide={setSelectedSide} />
-                </>
+                <MarketDetailsV2 market={market} selectedSide={selectedSide} setSelectedSide={setSelectedSide} />
             ) : (
                 <SimpleLoader />
             )}

@@ -54,7 +54,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
                   },
               };
 
-    const showAMM = !market.resolved && !market.cancelled && !market.gameStarted;
+    const showAMM = !market.resolved && !market.cancelled && !market.gameStarted && !market.paused;
     return (
         <RowContainer>
             <MainContainer showAMM={showAMM}>

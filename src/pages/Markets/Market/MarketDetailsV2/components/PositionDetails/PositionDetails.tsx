@@ -7,7 +7,7 @@ import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay'
 import { getOddsType } from 'redux/modules/ui';
 import { AvailablePerSide, MarketData, ParlaysMarketPosition } from 'types/markets';
 import { isDiscounted, formatMarketOdds } from 'utils/markets';
-import { Discount, TeamOptionContainer, Value } from './styled-components';
+import { Discount, Container, Value } from './styled-components';
 
 type PositionDetailsProps = {
     market: MarketData;
@@ -47,7 +47,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
         : 0;
 
     return (
-        <TeamOptionContainer
+        <Container
             disabled={disabledPosition}
             selected={selectedPosition == position}
             onClick={() => {
@@ -94,7 +94,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                     top={0}
                 />
             )}
-        </TeamOptionContainer>
+        </Container>
     );
 };
 
