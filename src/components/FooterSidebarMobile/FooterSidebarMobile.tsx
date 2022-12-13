@@ -48,7 +48,10 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({
     const animate = () => {
         setPulse(true);
 
-        setTimeout(() => setPulse(false), parlayMarkets.length * 1000);
+        setTimeout(
+            () => setPulse(false),
+            parlayMarkets.length == 1 ? (parlayMarkets.length + 1) * 1000 : parlayMarkets.length * 1000
+        );
     };
 
     useEffect(() => {

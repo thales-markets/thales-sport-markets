@@ -25,7 +25,12 @@ export const ItemIcon = styled.i<{ parlay?: boolean; iteration?: number }>`
 
     &.pulse {
         animation: pulsing 1s ease-in;
-        animation-iteration-count: ${(props) => (props.iteration ? props.iteration + ';' : '')};
+        animation-iteration-count: ${(props) =>
+            props.iteration && props.iteration > 0
+                ? props.iteration == 1
+                    ? props.iteration + 1 + ';'
+                    : props.iteration + ';'
+                : ''};
 
         @keyframes pulsing {
             0% {
