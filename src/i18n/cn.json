@@ -211,6 +211,9 @@
             "all": "所有",
             "datepicker": {
                 "games": "{{numberOfGames}} 场比赛"
+            },
+            "mobile-tags": {
+                "search": "搜索"
             }
         },
         "back-to-markets": "查看其他比赛",

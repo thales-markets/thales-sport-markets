@@ -211,6 +211,9 @@
             "all": "All",
             "datepicker": {
                 "games": "{{numberOfGames}} игр"
+            },
+            "mobile-tags": {
+                "search": "Поиск"
             }
         },
         "back-to-markets": "Back to markets",
