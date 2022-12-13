@@ -235,7 +235,6 @@ export const getIsIndividualCompetition = (tag: number) => PERSON_COMPETITIONS.i
 export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
     const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved);
     const claimablePositions = parlayMarket.positions.filter((position) => position.claimable);
-    const canceledMarkets = parlayMarket.sportMarkets.filter((market) => market.isCanceled);
 
     const lastGameStartsPlusExpirationPeriod = addDaysToEnteredTimestamp(
         EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS,
@@ -248,7 +247,7 @@ export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
 
     if (
         resolvedMarkets?.length == claimablePositions?.length &&
-        resolvedMarkets?.length + canceledMarkets?.length == parlayMarket.sportMarkets.length &&
+        resolvedMarkets?.length == parlayMarket.sportMarkets.length &&
         !parlayMarket.claimed
     ) {
         return true;
