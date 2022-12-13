@@ -67,7 +67,11 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                 }
             }}
         >
-            <Value>{position}</Value>
+            <Value>
+                {position == 0 && '1'}
+                {position == 1 && '2'}
+                {position == 2 && 'X'}
+            </Value>
             <Value>{formatMarketOdds(selectedOddsType, market.positions[position].sides[selectedSide].odd)}</Value>
             {showPositionDiscount && (
                 <Tooltip
