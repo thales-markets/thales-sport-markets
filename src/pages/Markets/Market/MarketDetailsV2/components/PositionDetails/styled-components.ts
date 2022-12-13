@@ -21,10 +21,17 @@ export const Container = styled(FlexDivRow)<{ disabled: boolean; selected: boole
         border: ${(props) => (props.disabled ? undefined : `1px solid ${MAIN_COLORS.LIGHT_BLUE}`)};
     }
     :not(:last-child) {
-        margin-right: 15px;
+        margin-right: 10px;
     }
-    @media (max-width: 768px) {
+    margin-bottom: 3px;
+    @media (max-width: 575px) {
+        font-size: 12px;
+        line-height: 14px;
         padding: 0px 10px;
+        margin-bottom: 1px;
+        :not(:last-child) {
+            margin-right: 6px;
+        }
     }
 `;
 
@@ -33,10 +40,17 @@ export const Value = styled.span``;
 export const Discount = styled(FlexDivCentered)`
     color: #5fc694;
     position: absolute;
-    top: -12px;
-    right: -12px;
+    top: -9px;
+    right: -10px;
     font-size: 12px;
     font-weight: 700;
-    padding: 4px 2px 4px 4px;
+    padding: 2px 2px 2px 4px;
     background-color: ${MAIN_COLORS.LIGHT_GRAY};
+    border-radius: 60%;
+    @media (max-width: 575px) {
+        right: -7px;
+        top: -9px;
+        padding: 2px;
+        font-size: 11px;
+    }
 `;

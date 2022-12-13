@@ -83,19 +83,18 @@
     padding: 0 9px 0 5px;
 }
 .rc-tooltip-inner {
-    padding: 15px 15px;
-    color: #303656;
+    padding: 8px 8px;
+    color: #ffffff;
     font-weight: 400;
-    font-size: 15px;
-    line-height: 100%;
+    font-size: 11px;
+    line-height: 12px;
     text-align: start;
     text-decoration: none;
-    background-color: #f6f6fe;
-    border-radius: 15px;
+    background-color: #5f6180;
+    border-radius: 0px;
     box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.5);
-    min-height: 34px;
     max-width: 300px;
-    min-width: 100px;
+    min-width: 50px;
     word-break: break-word;
 }
 .rc-tooltip-arrow {
@@ -111,7 +110,7 @@
     bottom: 4px;
     margin-left: -5px;
     border-width: 5px 5px 0;
-    border-top-color: #f6f6fe;
+    border-top-color: #5f6180;
 }
 .rc-tooltip-placement-top .rc-tooltip-arrow {
     left: 50%;

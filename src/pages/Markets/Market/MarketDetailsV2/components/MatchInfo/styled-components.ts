@@ -1,48 +1,38 @@
 import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivRow } from 'styles/common';
+import { FlexDivRow, FlexDivColumn, FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 
-export const Wrapper = styled.div`
+export const Wrapper = styled(FlexDivColumn)`
     width: 100%;
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    @media (max-width: 500px) {
-        width: 100%;
-        background-color: ${MAIN_COLORS.LIGHT_GRAY};
+    @media (max-width: 575px) {
         border-radius: 15px;
-        margin-bottom: 9px;
-        margin-top: 9px;
     }
 `;
 
-export const Container = styled(FlexDiv)`
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+export const Container = styled(FlexDivCentered)`
     margin-top: 30px;
-    margin-bottom: 20px;
-    @media (max-width: 500px) {
+    margin-bottom: 10px;
+    @media (max-width: 575px) {
+        width: 100%;
         flex-direction: column;
-        justify-content: center;
+        margin-top: 0px;
     }
 `;
 
-export const ParticipantsContainer = styled(FlexDiv)`
-    flex-direction: row;
-    @media (max-width: 500px) {
-        margin-bottom: 13px;
-        margin-left: 20px;
+export const ParticipantsContainer = styled(FlexDivRow)`
+    @media (max-width: 575px) {
+        margin-bottom: 10px;
     }
 `;
 
-export const ParticipantLogoContainer = styled.div<{ awayTeam?: boolean; isWinner?: boolean; isDraw?: boolean }>`
-    ${(props) => (props?.awayTeam ? 'margin-left: -1vw;' : '')}
+export const ParticipantLogoContainer = styled.div<{ awayTeam?: boolean; isWinner: boolean; isDraw: boolean }>`
+    border: 2.5px solid #5f6180;
+    margin-left: ${(props) => (props.awayTeam ? '-1vw' : '0')};
     background-color: ${MAIN_COLORS.DARK_GRAY};
-    border-color: ${(props) =>
-        props?.isWinner ? `${MAIN_COLORS.BORDERS.LIGHT_BLUE} !important` : MAIN_COLORS.BORDERS.GRAY};
-    ${(props) => (props?.isWinner || props?.isDraw ? `box-shadow: ${MAIN_COLORS.SHADOWS.WINNER};` : '')}
-    ${(props) => (props?.isWinner ? `z-index: 1;` : '')}
+    border-color: ${(props) => (props.isWinner ? MAIN_COLORS.BORDERS.LIGHT_BLUE : MAIN_COLORS.BORDERS.GRAY)};
+    box-shadow: ${(props) => (props.isWinner || props.isDraw ? MAIN_COLORS.SHADOWS.WINNER : '')};
+    z-index: ${(props) => (props.isWinner ? '1' : '')};
     width: 100px;
     height: 100px;
     padding: 5px;
@@ -50,11 +40,8 @@ export const ParticipantLogoContainer = styled.div<{ awayTeam?: boolean; isWinne
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2.5px solid #5f6180;
-    @media (max-width: 500px) {
-        ${(props) => (props?.awayTeam ? 'margin-left: -3vw;' : '')}
-        margin-right: 0px;
-        background-color: ${MAIN_COLORS.LIGHT_GRAY};
+    @media (max-width: 575px) {
+        margin-left: ${(props) => (props.awayTeam ? '-3vw' : '0')};
     }
 `;
 
@@ -63,20 +50,15 @@ export const ParticipantLogo = styled.img<{ isFlag?: boolean }>`
     height: ${(props) => (props?.isFlag ? '40' : '65')}px;
 `;
 
-export const LeagueLogoContainer = styled(FlexDiv)`
-    width: 70px;
-    height: 70px;
+export const LeagueLogoContainer = styled(FlexDivCentered)`
     margin-right: 15px;
     padding: 5px;
-    justify-content: center;
-    align-items: center;
-    @media (min-width: 950px) {
+    @media (min-width: 768px) {
         width: 200px;
         text-align: end;
     }
-    @media (max-width: 500px) {
-        margin-right: 20px;
-        margin-bottom: 13px;
+    @media (max-width: 575px) {
+        margin-right: 0px;
     }
 `;
 
@@ -85,77 +67,64 @@ export const LeagueLogo = styled.i`
     height: 100%;
     font-size: 70px;
     object-fit: contain;
-    @media (max-width: 500px) {
-        font-size: 80px;
+    @media (max-width: 575px) {
+        font-size: 60px;
     }
 `;
 
-export const MatchTimeContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+export const MatchTimeContainer = styled(FlexDivColumnCentered)`
     text-align: center;
     justify-content: center;
     margin-left: 15px;
-    @media (min-width: 950px) {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    @media (min-width: 768px) {
         width: 200px;
         align-items: start;
     }
-    @media (max-width: 500px) {
+    @media (max-width: 575px) {
         margin-left: 0px;
-        margin-bottom: 13px;
+        margin-bottom: 10px;
     }
 `;
 
-export const MatchTimeLabel = styled.span`
-    font-weight: 300;
-    font-size: 1em;
-    line-height: 110%;
-    margin-right: 5px;
-`;
+export const MatchTimeLabel = styled.span``;
 
 export const MatchTime = styled.span`
     font-weight: bold;
-    font-size: 1em;
-    line-height: 110%;
 `;
 
-export const MobileContainer = styled(FlexDiv)`
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-`;
-
-export const MatchTimeContainerMobile = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    margin-left: 15px;
-    @media (max-width: 500px) {
-        margin-left: 0px;
-        margin-top: 10px;
-        margin-bottom: 13px;
-    }
-`;
-
-export const TeamNamesWrapper = styled(FlexDivRow)`
-    align-items: center;
-    justify-content: center;
+export const TeamNamesWrapper = styled(FlexDivCentered)<{ hideOnMobile: boolean }>`
+    display: ${(props) => (props.hideOnMobile ? 'flex' : 'none')};
     font-weight: 700;
     font-size: 14px;
     width: 100%;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    @media (max-width: 575px) {
+        display: ${(props) => (props.hideOnMobile ? 'none' : 'flex')};
+        margin-bottom: 10px;
+    }
 `;
 
 export const TeamName = styled.span<{ isHomeTeam?: boolean }>`
-    padding: 0 10px 10px 10px;
-    text-transform: uppercase;
     width: 300px;
     text-align: ${(props) => (props.isHomeTeam ? 'end' : 'start')};
+    padding-right: ${(props) => (props.isHomeTeam ? 10 : 0)}px;
+    padding-left: ${(props) => (props.isHomeTeam ? 0 : 10)}px;
 `;
 
-export const Versus = styled.span`
-    padding: 0 0 10px 0;
-    text-transform: uppercase;
+export const Versus = styled.span``;
+
+export const TeamNames = styled(FlexDivCentered)<{ hideOnMobile: boolean }>`
+    display: ${(props) => (props.hideOnMobile ? 'flex' : 'none')};
+    font-weight: 700;
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: 20px;
+    @media (max-width: 575px) {
+        display: ${(props) => (props.hideOnMobile ? 'none' : 'flex')};
+        margin-bottom: 10px;
+    }
 `;

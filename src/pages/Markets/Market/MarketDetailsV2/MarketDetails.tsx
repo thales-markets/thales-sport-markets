@@ -111,6 +111,9 @@ const MainContainer = styled(FlexDivColumn)<{ showAMM: boolean }>`
     width: 100%;
     max-width: 800px;
     margin-right: ${(props) => (props.showAMM ? 20 : 0)}px;
+    @media (max-width: 575px) {
+        margin-right: 0;
+    }
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`

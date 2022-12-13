@@ -1,11 +1,11 @@
 import { Position, Side } from 'constants/options';
 import { MAIN_COLORS } from 'constants/ui';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AvailablePerSide, MarketData } from 'types/markets';
 import { getVisibilityOfDrawOptionByTagId } from 'utils/markets';
 import PositionDetails from '../PositionDetails';
-import { Container, Header, Status, Title, ContentContianer } from './styled-components';
+import { Container, Header, Status, Title, ContentContianer, Arrow } from './styled-components';
 
 type PositionsProps = {
     market: MarketData;
@@ -23,6 +23,7 @@ const Positions: React.FC<PositionsProps> = ({
     setSelectedPosition,
 }) => {
     const { t } = useTranslation();
+    const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
     const showDrawOdds = getVisibilityOfDrawOptionByTagId(market.tags);
 
@@ -37,36 +38,42 @@ const Positions: React.FC<PositionsProps> = ({
             {showPositions ? (
                 <Container>
                     <Header>
-                        <Title>WINNER</Title>
+                        <Title isExpanded={isExpanded}>WINNER</Title>
                     </Header>
-                    <ContentContianer>
-                        <PositionDetails
-                            market={market}
-                            selectedSide={selectedSide}
-                            availablePerSide={availablePerSide}
-                            selectedPosition={selectedPosition}
-                            setSelectedPosition={setSelectedPosition}
-                            position={Position.HOME}
-                        />
-                        {showDrawOdds && (
+                    <Arrow
+                        className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
+                        onClick={() => setIsExpanded(!isExpanded)}
+                    />
+                    {isExpanded && (
+                        <ContentContianer>
                             <PositionDetails
                                 market={market}
                                 selectedSide={selectedSide}
                                 availablePerSide={availablePerSide}
                                 selectedPosition={selectedPosition}
                                 setSelectedPosition={setSelectedPosition}
-                                position={Position.DRAW}
+                                position={Position.HOME}
                             />
-                        )}
-                        <PositionDetails
-                            market={market}
-                            selectedSide={selectedSide}
-                            availablePerSide={availablePerSide}
-                            selectedPosition={selectedPosition}
-                            setSelectedPosition={setSelectedPosition}
-                            position={Position.AWAY}
-                        />
-                    </ContentContianer>
+                            {showDrawOdds && (
+                                <PositionDetails
+                                    market={market}
+                                    selectedSide={selectedSide}
+                                    availablePerSide={availablePerSide}
+                                    selectedPosition={selectedPosition}
+                                    setSelectedPosition={setSelectedPosition}
+                                    position={Position.DRAW}
+                                />
+                            )}
+                            <PositionDetails
+                                market={market}
+                                selectedSide={selectedSide}
+                                availablePerSide={availablePerSide}
+                                selectedPosition={selectedPosition}
+                                setSelectedPosition={setSelectedPosition}
+                                position={Position.AWAY}
+                            />
+                        </ContentContianer>
+                    )}
                 </Container>
             ) : (
                 <Status backgroundColor={isGameCancelled ? MAIN_COLORS.BACKGROUNDS.RED : MAIN_COLORS.LIGHT_GRAY}>
