@@ -288,7 +288,8 @@
             "available": "Доступный",
             "amount-to-buy": "Сумма покупки",
             "discount": "Скидка",
-            "positions": "Позиции"
+            "positions": "Позиции",
+            "odds": "Шансы"
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
         "parlay": {
@@ -380,7 +381,8 @@
             "no-data-available": "No data available",
             "volume": "Объем",
             "rebates": "Скидки",
-            "safebox": "Плата за сейфы"
+            "safebox": "Плата за сейфы",
+            "percent": "Процент"
         },
         "periods": {
             "period-3": "Четвертый период",
@@ -525,7 +527,8 @@
             "total-amount": "Итого",
             "total-quote": "Общая котировка"
         },
-        "winnings-are-forfeit": "*Выигрыши, не запрошенные в течение {{amount}} дней после решения рынка, аннулируются."
+        "winnings-are-forfeit": "*Выигрыши, не запрошенные в течение {{amount}} дней после решения рынка, аннулируются.",
+        "search-field": "Поиск кошелька"
     },
     "mint-world-cup-nft": {
         "zebro-campaign": "Кампания Зебра ФИФА",

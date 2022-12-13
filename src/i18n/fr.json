@@ -386,7 +386,8 @@
             "discount": "Remise",
             "available": "Disponible",
             "amount-to-buy": "Montant à acheter",
-            "positions": "Postes"
+            "positions": "Postes",
+            "odds": "Chances"
         },
         "zero-odds-tooltip": "Le Sport AMM ne propose des liquidités que dans la fourchette de prix de 0,05 $ à 0,95 $. Cela signifie que si les cotes d'une position sont inférieures à 5 % ou supérieures à 95 %, cette position n'aura pas de liquidité.",
         "parlay": {
@@ -474,7 +475,8 @@
             "wallet-address": "Adresse du portefeuille",
             "safebox": "Frais SafeBox",
             "rebates": "Réduction",
-            "volume": "Volume"
+            "volume": "Volume",
+            "percent": "Pour cent"
         },
         "header": "Récompenses",
         "op-rewards-banner-message": "Les récompenses OP ont commencé, vérifiez comment vous pouvez les obtenir via <bold>la page des récompenses OP</bold>",
@@ -620,7 +622,8 @@
             "total-quote": "Devis total",
             "total-amount": "Montant total"
         },
-        "winnings-are-forfeit": "*Les gains non réclamés dans les {{amount}} jours suivant la résolution d'un marché sont annulés."
+        "winnings-are-forfeit": "*Les gains non réclamés dans les {{amount}} jours suivant la résolution d'un marché sont annulés.",
+        "search-field": "Portefeuille de recherche"
     },
     "mint-world-cup-nft": {
         "no": "Non",

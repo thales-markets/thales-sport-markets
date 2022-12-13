@@ -255,7 +255,7 @@ export const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: bo
     justify-content: 'space-around';
     align-items: ${(props) => (props.isMobile ? 'flex-start' : 'center')};
     flex-direction: ${(props) => (props.isMobile && !props.timeFilters ? 'column' : 'row')};
-    margin-bottom: ${(props) => (props.isMobile && props.timeFilters ? '80px' : '')};
+    height: ${(props) => (props.isMobile && props.timeFilters ? '120px' : '')};
 `;
 
 export const GlobalFilter = styled.span<{ selected?: boolean; isMobile?: boolean; cancelled?: boolean }>`
