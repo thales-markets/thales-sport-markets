@@ -211,6 +211,9 @@
             "all": "所有",
             "datepicker": {
                 "games": "{{numberOfGames}} 场比赛"
+            },
+            "mobile-tags": {
+                "search": "搜索"
             }
         },
         "back-to-markets": "查看其他比赛",
@@ -285,7 +288,8 @@
             "available": "可用的",
             "amount-to-buy": "购买金额",
             "discount": "折扣",
-            "positions": "职位"
+            "positions": "职位",
+            "odds": "赔率"
         },
         "zero-odds-tooltip": "Sports AMM 仅提供0.05美元至0.95美元价格范围内的流动性，这意味着，如果一个投注选择的赔率低于5%或者高于95%，该选择就不会有流动性。",
         "parlay": {
@@ -378,7 +382,8 @@
             "no-data-available": "无法获取数据",
             "rebates": "回扣",
             "volume": "体积",
-            "safebox": "保险箱费用"
+            "safebox": "保险箱费用",
+            "percent": "百分"
         },
         "periods": {
             "period-0": "第一节课",
@@ -519,7 +524,8 @@
             "total-amount": "总金额",
             "total-quote": "总报价"
         },
-        "winnings-are-forfeit": "*在盘口解决后的 {{amount}} 天内未领取的奖金将被没收。"
+        "winnings-are-forfeit": "*在盘口解决后的 {{amount}} 天内未领取的奖金将被没收。",
+        "search-field": "搜索钱包"
     },
     "mint-world-cup-nft": {
         "get-thales": "获得泰雷兹",

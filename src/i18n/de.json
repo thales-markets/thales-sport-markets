@@ -211,6 +211,9 @@
             "all": "Alle",
             "datepicker": {
                 "games": "{{numberOfGames}} Spiele"
+            },
+            "mobile-tags": {
+                "search": "Suche"
             }
         },
         "back-to-markets": "Zurück zu den Märkten",
@@ -282,7 +285,8 @@
             "available": "Verfügbar",
             "amount-to-buy": "Betrag zu kaufen",
             "discount": "Rabatt",
-            "positions": "Positionen"
+            "positions": "Positionen",
+            "odds": "Chancen"
         },
         "zero-odds-tooltip": "Sports AMM bietet nur Liquidität in der Preisspanne von $0,05 bis $0,95. Dies bedeutet, dass wenn die Quoten für eine Position weniger als 5% oder mehr als 95% betragen, diese Position keine Liquidität hat.",
         "parlay": {
@@ -374,7 +378,8 @@
             "no-data-available": "Keine Daten verfügbar",
             "volume": "Volumen",
             "safebox": "SafeBox-Gebühren",
-            "rebates": "Rabatte"
+            "rebates": "Rabatte",
+            "percent": "Prozent"
         },
         "periods": {
             "period-0": "Zweite Periode",
@@ -516,7 +521,8 @@
             "total-amount": "Gesamtsumme",
             "total-quote": "Gesamtangebot"
         },
-        "winnings-are-forfeit": "*Gewinne, die nicht innerhalb von {{amount}} Tagen nach Auflösung eines Marktes beansprucht werden, verfallen."
+        "winnings-are-forfeit": "*Gewinne, die nicht innerhalb von {{amount}} Tagen nach Auflösung eines Marktes beansprucht werden, verfallen.",
+        "search-field": "Brieftasche suchen"
     },
     "mint-world-cup-nft": {
         "eligible-text-2": "Prägen Sie ein Zebro Ihrer Lieblingsnationalmannschaft und qualifizieren Sie sich für 50.000 OP & 30.000 THALES-Bonusprämien!",

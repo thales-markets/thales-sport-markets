@@ -1,6 +1,7 @@
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
 import { PositionName, POSITION_MAP } from 'constants/options';
+import { ethers } from 'ethers';
 import useUserTransactionsQuery from 'queries/markets/useUserTransactionsQuery';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,17 +14,23 @@ import { formatTxTimestamp } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
 import { convertFinalResultToResultType, convertPositionNameToPosition } from 'utils/markets';
 
-const TransactionsHistory: React.FC = () => {
+const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const { t } = useTranslation();
 
-    const txQuery = useUserTransactionsQuery(walletAddress.toLowerCase(), networkId, {
-        enabled: isWalletConnected,
-        refetchInterval: false,
-    });
+    const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
+
+    const txQuery = useUserTransactionsQuery(
+        isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
+        networkId,
+        {
+            enabled: isWalletConnected,
+            refetchInterval: false,
+        }
+    );
     const transactions = txQuery.isSuccess ? txQuery.data : [];
 
     return (

@@ -211,6 +211,9 @@
             "all": "Todo",
             "datepicker": {
                 "games": "{{numberOfGames}} juegos"
+            },
+            "mobile-tags": {
+                "search": "Búsqueda"
             }
         },
         "back-to-markets": "Volver a los mercados",
@@ -285,7 +288,8 @@
             "available": "Disponible",
             "amount-to-buy": "cantidad a comprar",
             "discount": "Descuento",
-            "positions": "Posiciones"
+            "positions": "Posiciones",
+            "odds": "Posibilidades"
         },
         "zero-odds-tooltip": "El AMM de deportes sólo ofrece liquidez si el rango de precios ofrecido es entre 0.05 y 0.95 USD. Esto significa que si las probabilidades de una posición son menores a 5% o mayores a 95%, esa posición no tendrá liquidez.",
         "parlay": {
@@ -377,7 +381,8 @@
             "no-data-available": "No hay datos disponibles",
             "volume": "Volumen",
             "rebates": "Reembolsos",
-            "safebox": "Tarifas de SafeBox"
+            "safebox": "Tarifas de SafeBox",
+            "percent": "Por ciento"
         },
         "periods": {
             "period-0": "Primer periodo",
@@ -519,7 +524,8 @@
             "total-amount": "Cantidad total",
             "total-quote": "Cotización total"
         },
-        "winnings-are-forfeit": "*Las ganancias no reclamadas dentro de {{amount}} días de la resolución de un mercado se perderán."
+        "winnings-are-forfeit": "*Las ganancias no reclamadas dentro de {{amount}} días de la resolución de un mercado se perderán.",
+        "search-field": "Buscar billetera"
     },
     "mint-world-cup-nft": {
         "mint-nft-button": "Mint esta cebra!",

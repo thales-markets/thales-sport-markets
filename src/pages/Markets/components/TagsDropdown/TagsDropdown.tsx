@@ -2,7 +2,9 @@ import { TAGS_FLAGS } from 'constants/tags';
 import React from 'react';
 import Flag from 'react-flagpack';
 import { useDispatch, useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
@@ -18,6 +20,7 @@ type TagsDropdownProps = {
 const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, setTagFilter, setTagParam }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const tagFilterIds = tagFilter.map((tag) => tag.id);
 
     return (
@@ -41,6 +44,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, setT
                     return (
                         <TagContainer key={tag.id}>
                             <StarIcon
+                                isMobile={isMobile}
                                 onClick={() => {
                                     const newFavourites = favouriteLeagues.map((league: TagInfo) => {
                                         if (league.id == tag.id) {
@@ -164,9 +168,9 @@ const Label = styled.div`
     user-select: none;
 `;
 
-const StarIcon = styled.i`
+const StarIcon = styled.i<{ isMobile: boolean }>`
     font-size: 15px;
-    margin-left: 25px;
+    margin-left: ${(props) => (props.isMobile ? '55px' : '25px')};
     &.selected,
     &:hover {
         color: #fac439;

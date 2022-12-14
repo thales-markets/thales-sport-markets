@@ -7,14 +7,15 @@ type SportFilterProps = {
     disabled?: boolean;
     selected?: boolean;
     sport: string;
+    isMobile?: boolean;
     onClick: () => void;
 };
 
-const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, onClick, children }) => {
+const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, isMobile, onClick, children }) => {
     const { t } = useTranslation();
 
     return (
-        <Container>
+        <Container isMobile={isMobile}>
             <LabelContainer
                 className={`${disabled ? 'disabled' : ''} ${selected ? 'selected' : ''}`}
                 onClick={() => (!disabled ? onClick() : '')}
@@ -38,16 +39,16 @@ const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, on
     );
 };
 
-const Container = styled(FlexDivRowCentered)`
+const Container = styled(FlexDivRowCentered)<{ isMobile?: boolean }>`
     font-style: normal;
     font-weight: 600;
-    font-size: 12px;
-    line-height: 13px;
+    font-size: ${(props) => (props.isMobile ? '17px' : '12px')};
+    line-height: ${(props) => (props.isMobile ? '17px' : '13px')};
     letter-spacing: 0.035em;
     text-transform: uppercase;
     cursor: pointer;
     height: 36px;
-    margin-left: 20px;
+    margin-left: ${(props) => (props.isMobile ? '50px' : '20px')};
     position: relative;
     color: ${(props) => props.theme.textColor.secondary};
     margin-bottom: 5px;

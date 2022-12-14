@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOddsType, setOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { addHoursToCurrentDate } from 'utils/formatters/date';
 import { getQueryStringVal } from 'utils/useQueryParams';
 
@@ -116,6 +116,12 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                                 }}
                                 key={filterItem}
                             >
+                                <FilterIcon
+                                    isMobile={isMobile}
+                                    className={`icon icon--${
+                                        filterItem.toLowerCase() == 'openmarkets' ? 'logo' : filterItem.toLowerCase()
+                                    }`}
+                                />
                                 {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
                             </GlobalFilter>
                         );
@@ -130,7 +136,8 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                         </DropdownContrainer>
                     )}
                 </FilterTypeContainer>
-                <FilterTypeContainer isMobile={isMobile}>
+                <Separator isMobile={isMobile} />
+                <FilterTypeContainer isMobile={isMobile} timeFilters={true}>
                     <TimeFilterContainer
                         selected={selectedPeriod == 3}
                         isMobile={isMobile}
@@ -149,7 +156,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                         data-matomo-category="filters"
                         data-matomo-action="time-filter-3h"
                     >
-                        <Circle />
+                        <Circle isMobile={isMobile} />
                         <Label>3h</Label>
                     </TimeFilterContainer>
                     <TimeFilterContainer
@@ -170,7 +177,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                         data-matomo-category="filters"
                         data-matomo-action="time-filter-12h"
                     >
-                        <Circle />
+                        <Circle isMobile={isMobile} />
                         <Label>12h</Label>
                     </TimeFilterContainer>
                     <TimeFilterContainer
@@ -191,7 +198,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                         data-matomo-category="filters"
                         data-matomo-action="time-filter-3d"
                     >
-                        <Circle />
+                        <Circle isMobile={isMobile} />
                         <Label>3d</Label>
                     </TimeFilterContainer>
                     {!isMobile && (
@@ -222,23 +229,24 @@ export const Filters = styled(FlexDiv)<{ isMobile?: boolean }>`
     border-radius: 5px;
     font-style: normal;
     font-weight: 600;
-    font-size: 12px;
-    line-height: 14px;
+    font-size: ${(props) => (props.isMobile ? '17px' : '12px')};
+    line-height: ${(props) => (props.isMobile ? '17px' : '14px')};
     align-items: center;
     letter-spacing: 0.01em;
-    margin: 0px 10px;
-    padding: 0px 10px;
+    margin: ${(props) => (props.isMobile ? '0px 50px' : '0px 10px')};
+    padding: ${(props) => (props.isMobile ? '0px' : '0px 10px')};
 `;
 
 export const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: boolean; isMobile?: boolean }>`
-    width: ${(props) => (props.isMobile ? '100%' : props.timeFilters ? '30%' : '70%')};
-    justify-content: ${(props) => (props.isMobile ? '' : props.timeFilters ? 'space-evenly' : 'space-around')};
+    width: ${(props) => (props.isMobile ? '100%' : '70%')};
+    justify-content: 'space-around';
     align-items: ${(props) => (props.isMobile ? 'flex-start' : 'center')};
-    flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
+    flex-direction: ${(props) => (props.isMobile && !props.timeFilters ? 'column' : 'row')};
+    height: ${(props) => (props.isMobile && props.timeFilters ? '120px' : '')};
 `;
 
 export const GlobalFilter = styled.span<{ selected?: boolean; isMobile?: boolean; cancelled?: boolean }>`
-    margin: 0px 2px;
+    margin: ${(props) => (props.isMobile ? '2px 0px' : '0px 2px')};
     text-transform: uppercase;
     white-space: nowrap;
     width: ${(props) => (props.cancelled ? 'max-content' : '')};
@@ -253,7 +261,6 @@ export const GlobalFilter = styled.span<{ selected?: boolean; isMobile?: boolean
 export const TimeFilterContainer = styled(FlexDivRow)<{ selected: boolean; isMobile?: boolean }>`
     margin: 0px 2px;
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
-    height: ${(props) => (props.isMobile ? '36px' : '')};
     & > div {
         background-color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
     }
@@ -270,13 +277,13 @@ export const TimeFilterContainer = styled(FlexDivRow)<{ selected: boolean; isMob
     }
 `;
 
-export const Circle = styled.div`
-    height: 9px;
-    width: 9px;
+export const Circle = styled.div<{ isMobile: boolean }>`
+    height: ${(props) => (props.isMobile ? '23px' : '9px')};
+    width: ${(props) => (props.isMobile ? '23px' : '9px')};
     border-radius: 50px;
     background-color: ${(props) => props.theme.textColor.secondary};
     cursor: pointer;
-    margin-top: 2px;
+    margin-top: ${(props) => (props.isMobile ? '0px' : '2px')};
     margin-right: 3px;
 `;
 
@@ -287,6 +294,26 @@ export const Label = styled.label`
     -o-user-select: none;
     user-select: none;
     white-space: nowrap;
+    align-self: center;
+`;
+
+const FilterIcon = styled.i<{ isMobile: boolean }>`
+    display: ${(props) => (props.isMobile ? '' : 'none')};
+    font-size: 25px;
+    margin-right: 15px;
+`;
+
+const Separator = styled(FlexDivColumn)<{ isMobile: boolean }>`
+    display: ${(props) => (props.isMobile ? '' : 'none')};
+    height: fit-content;
+    width: 100%;
+    &:before {
+        content: '';
+        height: 3px;
+        background: ${(props) => props.theme.borderColor.primary};
+        border-radius: 10px 10px 10px 10px;
+        margin-bottom: 20px;
+    }
 `;
 
 export default GlobalFilters;

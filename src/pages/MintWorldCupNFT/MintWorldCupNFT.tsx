@@ -61,7 +61,7 @@ const MintWorldCupNFT: React.FC = () => {
                 return <AlreadyMinted />;
             }
         } else {
-            return <Leaderboard favoriteTeamNumber={favoriteTeamData?.favoriteTeam} />;
+            return <Leaderboard />;
         }
     }, [favoriteTeamData?.favoriteTeam, favoriteTeamData?.isEligible, handleChooseNFT, isChooseNFTOpen, selectedTab]);
 

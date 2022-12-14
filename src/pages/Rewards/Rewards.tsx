@@ -29,9 +29,11 @@ import useRewardsDataQuery from 'queries/rewards/useRewardsDataQuery';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getIsAppReady } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import Search from 'components/Search';
 import { getEtherscanAddressLink } from 'utils/etherscan';
+import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
+import { USD_SIGN } from 'constants/currency';
 
 type RewardsType = {
     address: string;
@@ -52,6 +54,8 @@ const Rewards: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isMobile = useSelector(getIsMobile);
+
     const [searchText, setSearchText] = useState<string>('');
     const PERIOD_DURATION_IN_DAYS = 14;
     const START_DATE = new Date(Date.UTC(2022, 8, 26, 0, 0, 0));
@@ -166,7 +170,7 @@ const Rewards: React.FC = () => {
                                             target="_blank"
                                             rel="noreferrer"
                                         >
-                                            {truncateAddress(cellProps.cell.value, 5)}
+                                            {truncateAddress(cellProps.cell.value, isMobile ? 3 : 5)}
                                         </AddressLink>
                                     ),
                                     sortable: false,
@@ -175,45 +179,69 @@ const Rewards: React.FC = () => {
                                     Header: <>{t('rewards.table.volume')}</>,
                                     accessor: 'volume',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['volume']>) => (
-                                        <ColumnValue>{`${Number(cellProps.cell.value).toFixed(2)} $`}</ColumnValue>
+                                        <ColumnValue>
+                                            {isMobile
+                                                ? formatCurrencyWithKey(USD_SIGN, Number(cellProps.cell.value), 0)
+                                                : formatCurrencyWithKey(USD_SIGN, Number(cellProps.cell.value))}
+                                        </ColumnValue>
                                     ),
                                     sortType: volumeSort(),
                                     sortable: true,
+                                    headStyle: {
+                                        mediaMaxWidth: '600px',
+                                        cssProperties: { textAlign: 'right' },
+                                    },
+                                    headTitleStyle: { mediaMaxWidth: '600px', cssProperties: { width: '100%' } },
                                 },
                                 {
                                     Header: <>{t('rewards.table.rebates')}</>,
                                     accessor: 'rebates',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['rebates']>) => (
-                                        <ColumnValue>{`${Number(cellProps.cell.value).toFixed(2)} $`}</ColumnValue>
+                                        <ColumnValue>
+                                            {formatCurrencyWithKey(USD_SIGN, Number(cellProps.cell.value))}
+                                        </ColumnValue>
                                     ),
                                     sortType: volumeSort(),
                                     sortable: true,
+                                    headStyle: {
+                                        mediaMaxWidth: '600px',
+                                        cssProperties: { textAlign: 'right' },
+                                    },
+                                    headTitleStyle: { mediaMaxWidth: '600px', cssProperties: { width: '100%' } },
                                 },
                                 {
-                                    Header: <>{t('rewards.table.percentage')}</>,
+                                    Header: (
+                                        <>{isMobile ? t('rewards.table.percent') : t('rewards.table.percentage')}</>
+                                    ),
                                     accessor: 'percentage',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['percentage']>) => (
-                                        <ColumnValue padding={'0 5px 0 0'}>{`${Number(cellProps.cell.value).toFixed(
-                                            2
-                                        )} %`}</ColumnValue>
+                                        <ColumnValue padding={'0 5px 0 0'}>
+                                            {formatCurrencyWithKey(USD_SIGN, Number(cellProps.cell.value))}
+                                        </ColumnValue>
                                     ),
                                     sortType: percentageSort(),
                                     sortable: true,
+                                    headStyle: {
+                                        mediaMaxWidth: '600px',
+                                        cssProperties: { textAlign: 'right' },
+                                    },
+                                    headTitleStyle: { mediaMaxWidth: '600px', cssProperties: { width: '100%' } },
                                 },
                                 {
                                     Header: <>{t('rewards.table.reward-amount')}</>,
                                     accessor: 'rewards',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['rewards']>) => (
-                                        <ColumnValue padding={'5px 0'}>{`${Number(cellProps.cell.value?.op).toFixed(
-                                            2
-                                        )} OP + ${Number(cellProps.cell.value?.thales).toFixed(
-                                            2
-                                        )} THALES`}</ColumnValue>
+                                        <ColumnValue padding={'5px 0'}>{`${formatCurrency(
+                                            cellProps.cell.value?.op
+                                        )} OP + ${formatCurrency(cellProps.cell.value?.thales)} THALES`}</ColumnValue>
                                     ),
                                     sortType: rewardsSort(),
                                     sortable: true,
-                                    headStyle: { mediaMaxWidth: '600px', minWidth: '80px', textAlign: 'right' },
-                                    headTitleStyle: { mediaMaxWidth: '600px', width: '100%' },
+                                    headStyle: {
+                                        mediaMaxWidth: '600px',
+                                        cssProperties: { textAlign: 'right' },
+                                    },
+                                    headTitleStyle: { mediaMaxWidth: '600px', cssProperties: { width: '100%' } },
                                 },
                             ]}
                             initialState={{

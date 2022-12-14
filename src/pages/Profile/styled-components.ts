@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivColumn } from 'styles/common';
+import { FlexDivColumn, FlexDivRow } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
     min-width: 600px;
@@ -8,3 +8,5 @@ export const Container = styled(FlexDivColumn)`
         min-width: auto;
     }
 `;
+
+export const NavigationWrapper = styled(FlexDivRow)``;
