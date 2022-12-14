@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -33,7 +33,10 @@ import ShareTicketModal, {
 } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import { ethers } from 'ethers';
 
-const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
+const Positions: React.FC<{ searchText?: string; setOpenPositionsValue: (value: number) => void }> = ({
+    searchText,
+    setOpenPositionsValue,
+}) => {
     const { t } = useTranslation();
 
     const [openClaimable, setClaimableState] = useState<boolean>(true);
@@ -159,6 +162,18 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
         }
         return data;
     }, [parlayMarkets, searchText]);
+
+    useEffect(() => {
+        let openPositionsValueSum = 0;
+        parlayMarketsByStatus.open.forEach((market) => {
+            openPositionsValueSum += market.sUSDPaid;
+        });
+        accountPositionsByStatus.open.forEach((position) => {
+            // @ts-ignore
+            openPositionsValueSum += position.amount * position.market[position.side + 'Odds'];
+        });
+        setOpenPositionsValue(openPositionsValueSum);
+    }, [parlayMarketsByStatus, accountPositionsByStatus, setOpenPositionsValue]);
 
     const isLoading = parlayMarketsQuery.isLoading || accountMarketsQuery.isLoading;
 
