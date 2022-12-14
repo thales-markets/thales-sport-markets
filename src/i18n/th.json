@@ -134,7 +134,8 @@
         "top5": "TOP 5",
         "top10": "TOP 10",
         "yes": "YES",
-        "no": "NO"
+        "no": "NO",
+        "fifa-tooltip": "ผลการแข่งขันในตลาด FIFA World Cup อิงตามผลการควบคุม หากเกินเวลา ผลการควบคุมจะเป็นผลที่ตลาดจะแก้ไข"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -143,7 +144,8 @@
         "docs": "เอกสาร",
         "medium": "Medium",
         "twitter": "Twitter",
-        "discord": "Discord"
+        "discord": "Discord",
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own."
     },
     "market": {
         "question-label": "คำถาม",
@@ -158,7 +160,7 @@
         "grid-view": "กริด",
         "list-view": "รายการ",
         "skew-tooltip": "Skew Impact คือจำนวนพรีเมี่ยมที่ถูกเพิ่มในราคาโดยพิจารณาจากความเสี่ยงใน AMM ที่เกิดขึ้น ณ ปัจจุบันจากตลาดนี้",
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "ธุรกรรมที่รอดำเนินการ",
             "swap-success": "แลกเปลี่ยนสำเร็จแล้ว {{ currencyKey }}",
             "approve-success": "อนุมัติเรียบร้อย",
@@ -167,7 +169,16 @@
             "claim-winnings-success": "รับรางวัลเรียบร้อยแล้ว",
             "claim-refund-success": "รับเงินคืนเรียบร้อยแล้ว",
             "withdraw-success": "ถอนสำเร็จ",
-            "get-usd-success": "{{amount}} ถูกมิ้นต์เรียบร้อย"
+            "get-usd-success": "{{amount}} ถูกมิ้นต์เรียบร้อย",
+            "image-in-clipboard": "รูปภาพอยู่ในคลิปบอร์ด!",
+            "save-image-error": "บันทึกภาพไม่สำเร็จ! ลองอีกครั้ง",
+            "click-open-twitter": "คลิกที่นี่เพื่อเปิด Twitter",
+            "open-twitter": "เปิดทวิตเตอร์...",
+            "metamask-not-supported": "เบราว์เซอร์ Metamask ไม่รองรับการดาวน์โหลดรูปภาพ! โปรดใช้เบราว์เซอร์อื่นเพื่อแบ่งปันภาพ",
+            "ios-not-supported": "ไม่รองรับการแชร์รูปภาพบนอุปกรณ์ iOS หากคุณต้องการแชร์รูปภาพ โปรดใช้เวอร์ชันเดสก์ท็อป",
+            "save-image-cancel": "ยกเลิกการบันทึกภาพแล้ว!",
+            "save-image": "บันทึกภาพไปยังคลิปบอร์ด โปรดรอ...",
+            "download-image": "กำลังดาวน์โหลดรูปภาพ โปรดรอ..."
         },
         "filter-label": {
             "global": {
@@ -200,7 +211,10 @@
             "datepicker": {
                 "games": "{{numberOfGames}} เกม"
             },
-            "all": "ทั้งหมด"
+            "all": "ทั้งหมด",
+            "mobile-tags": {
+                "search": "ค้นหา"
+            }
         },
         "back-to-markets": "กลับไปที่ตลาด",
         "back-to-market": "กลับไปที่ตลาด",
@@ -271,7 +285,8 @@
             "discount": "การลดราคา",
             "amount-to-buy": "จำนวนเงินที่จะซื้อ",
             "available": "มีอยู่",
-            "positions": "ตำแหน่ง"
+            "positions": "ตำแหน่ง",
+            "odds": "อัตราต่อรอง"
         },
         "zero-odds-tooltip": "Sports AMM จะเสนอสภาพคล่องในช่วงราคา $0.05 ถึง $0.95 เท่านั้น หมายความว่าหากอัตราต่อรองสำหรับโพสิชั่นนั้นน้อยกว่า 5% หรือมากกว่า 95% โพสิชั่นนั้นจะไม่มีสภาพคล่อง",
         "discounted-per": "ลดราคาตาม",
@@ -311,7 +326,24 @@
                 "min-quote": "รองรับ TOTAL QUOTE ที่น้อยที่สุดคือ {{value}}",
                 "max-quote": "รองรับ TOTAL QUOTE สูงสุดคือ {{value}}"
             },
-            "show-parlay": "โชว์พาร์เลย์"
+            "show-parlay": "โชว์พาร์เลย์",
+            "share-ticket": {
+                "options": {
+                    "title": "ตัวเลือกการแสดงผล",
+                    "view-details": "รายละเอียด",
+                    "usd-amount": "จำนวนเงิน USD",
+                    "view-simple": "เรียบง่าย"
+                },
+                "share": "แบ่งปัน",
+                "potential-payout": "การจ่ายเงินที่อาจเกิดขึ้น",
+                "header": "เว็บ 3 ตลาดกีฬาบน",
+                "loser": "ผู้แพ้",
+                "parlay": "พาร์เลย์",
+                "total-quote": "ใบเสนอราคาทั้งหมด",
+                "referral": "ลิงค์อ้างอิง",
+                "winner": "ผู้ชนะ"
+            },
+            "buy-in": "ซื้อใน"
         },
         "nav-menu": {
             "items": {
@@ -321,7 +353,10 @@
                 "become-affiliate": "ร่วมเป็นพันธมิตร",
                 "profile": "ประวัติโดยย่อ",
                 "leaderboard": "ลีดเดอร์บอร์ด",
-                "onboarding-wizard": "วิซาร์ดการเริ่มต้นใช้งาน"
+                "onboarding-wizard": "วิซาร์ดการเริ่มต้นใช้งาน",
+                "fee-rebates": "ส่วนลดค่าธรรมเนียม",
+                "fifa-campaign": "แคมเปญ Zebro FIFA",
+                "vaults": "ห้องใต้ดิน"
             },
             "buttons": {
                 "switch": "สวิตช์",
@@ -332,7 +367,7 @@
     "rewards": {
         "header": "รางวัล",
         "search-placeholder": "ค้นหาที่อยู่กระเป๋าเงิน",
-        "description": "<0><0>8,000 OP </0> และ <0>8,000 Thales</0> จะถูกแจกจ่ายตั้งแต่ 24 ตุลาคม ถึง 7 พฤศจิกายน เวลา 00:00 UTC เพื่อชดเชยค่าธรรมเนียมที่จ่ายให้กับสัญญา Safebox</0 <0>Leaderboard จะคำนวณรางวัลเป็นเงินคืน 90% ของค่าธรรมเนียม SafeBox ซึ่งเท่ากับ 3% ของจำนวนเงินทั้งหมดที่ชำระเป็น sUSD </0> มูลค่าของ OP และ THALES ในหน่วย $ จะคำนวณโดยใช้ 7 วัน TWAP ตั้งแต่เริ่มต้นรอบเวลานั้นๆ หากเมื่อสิ้นสุดระยะเวลาสองสัปดาห์ เงินคืนทั้งหมดจบลงมากกว่ามูลค่า twap เริ่มต้นของโทเค็น OP และ THALES เงินคืนจะลดลงตามสัดส่วนสำหรับเทรดเดอร์ทุกราย",
+        "description": "<0><0>8,000 OP</0> และ <0>8,000 Thales</0> จะถูกแจกจ่ายทุกสองสัปดาห์อย่างต่อเนื่องตามที่ระบุไว้ใน TIP-96 เพื่อเป็นการชดเชยค่าธรรมเนียมที่จ่ายให้กับ safebox contracts.</0> <0>ลีดเดอร์บอร์ดจะคำนวณรางวัลเป็นเงินคืน 90% ของค่าธรรมเนียม SafeBox ซึ่งเท่ากับ 3% ของยอดรวมที่จ่ายในสกุลเงิน sUSD</0> มูลค่า $ ของ OP และ THALES จะถูกคำนวณโดยใช้ twap 7 วันเมื่อเริ่มต้นรอบ หากเมื่อสิ้นสุดระยะเวลาสองสัปดาห์ การคืนเงินทั้งหมดจบลงที่มากกว่ามูลค่า twap เริ่มต้นของโทเค็น OP และ THALES การคืนเงินจะลดลงตามสัดส่วนสำหรับเทรดเดอร์ทุกราย",
         "total-negative-pnl": "สูญเสียรวม",
         "op-rewards-banner-message": "การแจกรางวัล OP ได้เริ่มขึ้นแล้ว ตรวจสอบว่าคุณจะสามารถรับ OP ได้อย่างไรที่ <bold>หน้ารางวัล OP</bold>",
         "table": {
@@ -343,7 +378,8 @@
             "no-data-available": "ไม่พบข้อมูล",
             "rebates": "ส่วนลด",
             "safebox": "ค่าธรรมเนียม SafeBox",
-            "volume": "ปริมาณ"
+            "volume": "ปริมาณ",
+            "percent": "เปอร์เซ็นต์"
         },
         "periods": {
             "second-period": "ช่วงที่สอง",
@@ -355,7 +391,12 @@
             "period-4": "ช่วงที่ห้า",
             "period-3": "ช่วงที่สี่",
             "period-2": "ช่วงที่สาม",
-            "period-1": "ช่วงที่สอง"
+            "period-1": "ช่วงที่สอง",
+            "period-9": "งวดที่สิบ",
+            "period-7": "งวดที่แปด",
+            "period-8": "สมัยที่เก้า",
+            "period-5": "งวดที่หก",
+            "period-6": "สมัยที่เจ็ด"
         },
         "your-score": "คะแนนของคุณ",
         "twap": "หนึ่งสัปดาห์ TWAP",
@@ -470,7 +511,8 @@
         "messages": {
             "no-open": "คุณไม่มีตำแหน่งที่เปิดอยู่",
             "no-claimable": "คุณไม่มีตำแหน่งที่อ้างสิทธิ์ได้",
-            "no-transactions": "คุณไม่มีการซื้อขายใด ๆ"
+            "no-transactions": "คุณไม่มีการซื้อขายใด ๆ",
+            "ticket-subtitle": "เพิ่มตำแหน่ง เลือกตลาด และทำการเลือกของคุณ"
         },
         "table": {
             "games": "เกม",
@@ -478,12 +520,17 @@
             "amount": "จำนวน",
             "paid": "จ่าย",
             "time": "เวลา",
-            "id": "ไอดี"
-        }
+            "id": "ไอดี",
+            "status": "สถานะ",
+            "total-quote": "ใบเสนอราคาทั้งหมด",
+            "total-amount": "จำนวนเงินทั้งหมด"
+        },
+        "winnings-are-forfeit": "*การชนะที่ไม่ได้อ้างสิทธิ์ภายใน {{amount}} วันของตลาดที่ได้รับการแก้ไขจะถือว่าสละสิทธิ์",
+        "search-field": "ค้นหากระเป๋าสตางค์"
     },
     "mint-world-cup-nft": {
         "incentives": "สิ่งจูงใจ",
-        "zebro-campaign": "แคมเปญ Zebra FIFA",
+        "zebro-campaign": "Zebro FIFA",
         "yes-mint": "ใช่ มิ้นท์ NFT",
         "no": "ไม่",
         "eligible-text-1": "คอลเลกชัน Zebro NFT ใช้เป็นรายการสำหรับแคมเปญล่วงเวลา FIFA World Cup",
@@ -516,7 +563,17 @@
             "home-country-multiplier": "บ้าน ประเทศ ตัวคูณ NFT:",
             "three-game-parlay": "+15% หากเป็นพาร์เลย์ 3 เกม",
             "home-country-multiplier-text": "หากการแข่งขันฟุตบอลโลกของคุณเกี่ยวข้องกับทีมชาติเดียวกันกับ Zebro คุณจะได้รับรางวัลเพิ่มขึ้น +10%",
-            "underdog-multiplier-text": "หากตำแหน่งการแข่งขันฟุตบอลโลกของคุณมีราคาต่ำกว่า 0.3 (อัตราต่อรองสูงกว่า 1:3.33) คุณจะได้รับรางวัลเพิ่มขึ้น 10%"
+            "underdog-multiplier-text": "หากตำแหน่งการแข่งขันฟุตบอลโลกของคุณมีราคาต่ำกว่า 0.3 (อัตราต่อรองสูงกว่า 1:3.33) คุณจะได้รับรางวัลเพิ่มขึ้น 10%",
+            "country": "ประเทศ",
+            "owner": "เจ้าของ",
+            "search-placeholder": "ค้นหาที่อยู่กระเป๋าเงิน",
+            "nft": "NFT",
+            "bonus-volume": "โบนัส",
+            "volume": "ปริมาณ",
+            "rewards": "รางวัล",
+            "base-volume": "ฐาน",
+            "player": "ผู้เล่น",
+            "wash-trading": "*ทีมงานล่วงเวลามีสิทธิ์ตัดสิทธิ์ผู้ค้าล้างจากแคมเปญ"
         },
         "zebro-wct-collection": "คอลเลกชัน Zebro WC NFT",
         "zebro-wct-collection-text": "เป็นส่วนหนึ่งของแคมเปญที่จูงใจให้เป็นตัวแทนประเทศที่คุณชื่นชอบในระหว่างการแข่งขันฟุตบอลโลกและมีสิทธิ์ได้รับส่วนแบ่ง 50,000 โทเค็น OP และ 30,000 โทเค็น THALES พร้อมกับตัวคูณพิเศษสำหรับพาร์เลย์และการแข่งขันแบบเดี่ยว",
@@ -525,18 +582,133 @@
         "get-your-nft": "มิ้นท์ เพจ"
     },
     "referral": {
+        "generate-link": "สร้างลิงค์",
+        "copy-link": "คัดลอกลิงค์",
+        "trades": "เทรด",
+        "total-volume": "วอลลุ่มทั้งหมด",
+        "total-earned": "ที่ได้รับทั้งหมด",
+        "total-trading-fees": "ค่าธรรมเนียมการเทรดทั้งหมด",
+        "affiliate-leaderboard-table": {
+            "address": "ที่อยู่",
+            "number-of-trades": "จำนวนการเทรด",
+            "total-volume": "วอลลุ่มทั้งหมด",
+            "first-transaction": "ธุรกรรมครั้งแรก",
+            "total-earned": "ที่ได้รับทั้งหมด",
+            "amount": "ปริมาณ",
+            "volume": "วอลลุ่ม",
+            "type": "Type",
+            "timestamp": "วัน/เวลา"
+        },
+        "no-result": "ไม่มีผลลัพธ์สำหรับตารางนี้",
+        "earned": "ได้รับ",
+        "header": "สร้าง Referral links",
+        "paragraph": "<bold>Overtime Referrals Program เป็นการสร้างแรงจูงใจบน on-chain เพื่อเพิ่มยอดผู้ใช้งาน และ เป็นอุปการ์สำหรับการสอนการใช้งาน</bold>โปรแกรมนี้อนุญาตให้ใครก็ตามสามารถ<bold>สร้าง Referral Link</bold> ได้และแชร์ให้กับผู้ใช้งานรายอื่นที่อยากให้มาลองใช้งาน Overtime Market<br /><br /> คุณจะได้รับ<bold>0.5% จากยอดวอลลุ่ม sUSD จากผู้ใช้ลิงค์อ้างอิงของคุณ!</bold> ไม่จำเป็นต้องกดรับ sUSD มันจะถูกส่งเข้ากระเป๋าเงินของคุณโดยอัตโนมัติ",
         "nav-items": {
             "all-transactions": "ธุรกรรมทั้งหมด",
-            "affiliate-leaderboard": "กระดานผู้นำพันธมิตร",
-            "see-result-by-trader": "เห็นผลโดยเทรดเดอร์"
+            "see-result-by-trader": "ดูผลลัพธ์โดยเทรดเดอร์",
+            "affiliate-leaderboard": "กระดานผู้นำ"
+        }
+    },
+    "vaults": {
+        "title": "Sport Vaults",
+        "strategy-label": "กลยุทธ์ของ Vault",
+        "risks-label": "ความเสี่ยงของ Vault"
+    },
+    "vault": {
+        "discount-vault": {
+            "title": "Discount Vault",
+            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และมีส่วนลดมากกว่า {{discount}}.</p>การฝากใน Vault จะถูกนับในส่วนของปริมาณการซื้อขายของ gamified staking ด้วย</p>",
+            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
         },
-        "trades": "การค้า",
-        "copy-link": "คัดลอกลิงค์",
-        "header": "สร้างลิงค์อ้างอิง",
-        "total-volume": "ปริมาณรวม",
-        "earned": "ได้รับ",
-        "total-trading-fees": "ค่าธรรมเนียมการซื้อขายทั้งหมด",
-        "paragraph": "สิ่งสำคัญคือต้องดูแลผู้ป่วย ตามด้วยแพทย์ แต่เป็นช่วงเวลาแห่งความเจ็บปวดและความทุกข์ทรมานอย่างยิ่ง ลาคัส ลัคตัส นำมาทาทับเป็นชั้นๆ สองคอในชุดกว่าการ์ตูนของหมอกับลูกศร Mus mauris vitae ultricies leo ทั้งหมด คาดว่าตอนนี้ หรือ ไม่มี diam diam amet nislus suscip adipiscing เลย ไม่จำเป็นต้องมีร่างกาย แม้แต่ diam ที่มีศักดิ์ศรีสำหรับใครก็ตาม Pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna สำหรับเด็ก ศักดิ์ศรีมีพิษมาก ว่ากันว่าเมาเป็นเตียงเบียร์ แต่เป็นกาสิโนหรือเครื่องสั่น ความหิวโหยที่เป็นอันตรายและความยากจนที่น่าเกลียด แต่ความต้องการคือความต้องการสำหรับ fringilla phasellus faucibus scelerisque eleifend จนถึง หรือหุบเขาตั้งแต่พรุ่งนี้เลยทีเดียว องค์ประกอบใดที่หมอนไม่เท่ากัน แต่ตอนนี้มุ่งเป้าไปที่การ์ตูนโฆษณาชวนเชื่อในทะเลสาบ ถนนบอกว่าทุกคนควรมีวันหยุดสุดสัปดาห์ที่ดีกับลูกศร<br><br> จึงไม่จำเป็นต้องมีเครื่องเล่นคีย์บอร์ดฟรี พวกเขาอยู่ในวัยชราและโรคภัยไข้เจ็บ กล่าวเสียงหัวเราะของ Feugiat ต่อหน้าความกลัว ไม่มีเวลาที่ง่ายในการกำหนดเป้าหมายโรคนี้ เขาอยากมีสมาชิกอย่างฟุตบอล ตอนนี้แมวต้องการรสชาติที่บริสุทธิ์ในแป้ง เป็นที่ชัดเจนว่าสิ่งนี้ตามด้วยลูกศร Lobortis element nibh tellus molestie ตอนนี้ ไม่มีสิ่งที่เรียกว่าดินแดนมฤตยูในความหวาดกลัว ต้องใช้ความพยายามอย่างมากในการกำหนดเป้าหมายฟุตบอล เพื่อไม่ให้เป็นห้องโถงแบบไม่มีเฟส จนถึงพรีเทียมวัลปูเตเซเปียนหรือซาจิติส อะลิควัม มาเลซูดา บิเบนดัม อาร์คู ตามจริงแล้วไม่มีสายการบินใดที่ทำเช่นนั้น บอกได้เลยว่าแค่นั้นเอง Condimentum mattis pellentesque id nibh tortor id. Massa tincidunt ตอนนี้ pulvinar sapien และ ligula ullamcorper malesuada เครื่องสำอางตั้งครรภ์ Hendret ทุกคนไม่ใช่แพทย์ในพื้นที่และเป็นผู้เขียนโฆษณา นอกจากนี้ยังเป็นองค์ประกอบที่สำคัญมากของกลยุทธ์ฟุตบอลทางคลินิก สำหรับตอนนี้คอของเด็กจะได้รับการดูแล สมาชิกอาจจะเป็นแฟนพันธุ์แท้ของเพียวอินซอฟต์อยู่แล้ว",
-        "generate-link": "สร้างลิงค์"
+        "degen-discount-vault": {
+            "title": "Degen Discount Vault",
+            "description": "<p>ซื้อโพสิชั่นที่ odds ใดๆ ที่มีส่วนลดมากกว่า {{discount}}</p><p>การฝากใน Vault จะถูกนับในส่วนของปริมาณการซื้อขายของ gamified staking ด้วย</p>",
+            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอด {{utilizationRate}} จะมีเพียงมากที่สุด {{allocationLimitsPerMarketPerRound}} เท่านั้นที่สามารถใช้กับเกมการแข่งขั้นหนึ่งเกม</p>"
+        },
+        "safu-discount-vault": {
+            "title": "Safu Discount Vault",
+            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และ มีส่วนลดใดๆ </p><p>การฝากใน Vault จะถูกนับในส่วนของปริมาณการซื้อขายของ gamified staking ด้วย</p>",
+            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
+        },
+        "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
+        "back-to-vaults": "กลับไปที่ Vaults",
+        "vault-not-started-message": "Vault ยังไม่เริ่ม",
+        "vault-paused-message": "Vault ถูกหยุดทำงาน",
+        "round-allocation-label": "ยอดการฝากทั้งหมด",
+        "spent-trading-label": "ยอดที่ถูกนำไปเทรด",
+        "available-trading-label": "ยอดฝากที่สามารถนำไปเทรดได้",
+        "round-end-label": "รอบนี้จะจบใน",
+        "your-round-allocation-label": "เงินฝากของคุณในรอบนี้: <bold>{{amount}}</bold>",
+        "your-next-round-allocation-label": "เงินฝากของคุณในรอบถัดไป: <bold>{{amount}}</bold>",
+        "estimated-amount-tooltip": "จำนวนนี้เป็นเพียงการประมาณ จำนวนที่แท้จริงจะถูกคำนวณหลังจากจบรอบโดยจะนำ PnL มาคิด",
+        "next-round-start-label": "รอบต่อไปจะเริ่มใน: <counter />",
+        "users-in-vault-label": "จำนวนผู้ใช้งานใน Vault : {{number}} / {{max}}",
+        "vault-filled-label": "จำนวนเงินฝากใน Vault: {{amount}} / {{max}}",
+        "deposit-message": "ฝากเงินเข้าสู่ Vault เพื่อเข้าร่วมรอบต่อไป",
+        "deposit-amount-label": "จำนวนเงินฝาก",
+        "deposit-amount-placeholder": "ระบุจำนวน",
+        "available-to-withdraw-label": "จำนวนเงินฝากที่สามารถถอนได้: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "ไม่มีสิ่งที่จะสามารถถอนได้",
+        "withdrawal-message": "คุณสามารถขอถอนเงินและเงินของคุณจะถูกส่งถึงคุณโดยอัตโนมัติเมื่อสิ้นสุดรอบเมื่อรอบปิด",
+        "withdraw-round-end-label": "รอบนี้จะสิ้นสุดใน: <counter />",
+        "withdrawal-requested-message": "คุณขอถอนเงินเป็นจำนวน <bold>{{amount}}</bold><tooltip />. เงินของคุณจะถูกส่งถึงคุณโดยอัตโนมัติเมื่อสิ้นสุดรอบเมื่อปิดรอบ",
+        "withdrawal-request-label": "ขอถอน: <bold>{{amount}}</bold>",
+        "first-deposit-withdrawal-message": "คุณฝากเงินในรอบถัดไป และคุณสามารถถอนเงินเหล่านี้ได้เมื่อสิ้นสุดรอบถัดไป",
+        "round-ended-label": "จบรอบ",
+        "deposit-withdrawal-warning": "มีการร้องขอการถอน คุณไม่สามารถฝากได้",
+        "deposit-max-amount-of-users-warning": "ถึงจำนวนผู้ใช้สูงสุดของ Vault แล้ว คุณไม่สามารถฝากเงินได้",
+        "deposit-vault-cap-reached-warning": "ถึงจำนวนฝากสูงสุดของ Vault แล้ว คุณไม่สามารถฝากเงินได้",
+        "deposit-vault-cap-error": "จำนวนเงินฝากเกินขีดจำกัดของ Vault",
+        "deposit-min-amount-error": "จำนวนเงินขั้นต่ำสำหรับการฝากคือ {{amount}}",
+        "withdrawal-deposit-warning": "คุณไม่สามารถถอนได้เนื่องจากคุณฝากไว้แล้วสำหรับรอบถัดไป",
+        "tabs": {
+            "deposit": "ฝาก",
+            "claim": "รับ",
+            "withdraw": "ถอน"
+        },
+        "button": {
+            "deposit-label": "ฝาก",
+            "deposit-progress-label": "กำลังทำการฝาก...",
+            "deposit-confirmation-message": "การฝากสำเร็จ",
+            "request-withdrawal-label": "ขอถอนเงิน",
+            "request-withdrawal-progress-label": "กำลังทำคำร้อง...",
+            "request-withdrawal-confirmation-message": "ส่งคำขอถอนสำเร็จแล้ว",
+            "withdraw-label": "ถอน",
+            "withdraw-progress-label": "กำลังดำเนินการถอนเงิน…",
+            "withdraw-confirmation-message": "ถอนเงินสำเร็จ",
+            "close-round-label": "ปิดรอบ",
+            "close-round-progress-label": "กำลังดำเนินการปิดรอบ…",
+            "close-round-confirmation-message": "ปิดรอบสำเร็จ"
+        },
+        "trades-history": {
+            "title": "ประวัติการเทรดของ Vault",
+            "no-trades": "ไม่มีการเทรดที่เกี่ยวข้องกับ Vault นี้ในรอบที่เลือก",
+            "round-label": "รอบ"
+        },
+        "pnl": {
+            "title": "PnL ต่อรอบ",
+            "no-data": "ไม่มีข้อมูล PnL สำหรับรอบก่อนหน้า",
+            "lifetime-pnl": "Lifetime PnL"
+        },
+        "user-transactions": {
+            "type": {
+                "deposit": "เงินฝาก",
+                "claim": "การเรียกร้องการถอน",
+                "withdrawalRequest": "คำขอถอนเงิน"
+            },
+            "title": "การทำธุรกรรมของผู้ใช้",
+            "no-transactions": "ไม่มีธุรกรรมของผู้ใช้ที่เกี่ยวข้องกับห้องนิรภัยนี้ในรอบที่เลือก"
+        }
+    },
+    "parlay-leaderboard": {
+        "title": "ลีดเดอร์บอร์ดสิ่งจูงใจ Parlay",
+        "description": "จะมีการแจกจ่าย OP ทั้งหมด 10,000 ให้กับ parlay ที่ดีที่สุดของเดือนซึ่ง parley จะได้รับการจัดอันดับตามอัตราต่อรองสูงสุด และตามด้วยปริมาณในกรณีที่เสมอกัน",
+        "distribution-note": "รางวัลจะถูกแจกจ่ายให้กับพาร์เลย์ 20 อันดับแรกของเดือนธันวาคม!",
+        "no-parlays": "No winning parlays registered in the period yet",
+        "info": "หากหลายพาร์เลย์มีราคาที่เหมือนกัน จะใช้สิ่งต่อไปนี้เป็นไทเบรกตามลำดับ:",
+        "info2": "- จำนวนเงินที่จ่าย",
+        "info1": "- จำนวนตำแหน่งในพาร์เลย์",
+        "warning": "*ทีมงานล่วงเวลามีสิทธิ์ตัดสิทธิ์กระเป๋าเงินที่เราสงสัยว่าเล่นเกมระบบ",
+        "info3": "- ราคารวมจริง (ได้จากการคูณตำแหน่งทีละรายการ)"
     }
 }

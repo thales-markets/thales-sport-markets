@@ -6,7 +6,9 @@ export const QUERY_KEYS = {
     Rewards: (networkId: NetworkId, period: number) => ['rewards', networkId, period],
     Markets: (networkId: NetworkId) => ['markets', networkId],
     ParlayMarkets: (networkId: NetworkId, account: string) => ['parlayMarkets', networkId, account],
+    ParlayLeaderboard: (networkId: NetworkId) => ['parlayLeaderboard', networkId],
     SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
+    SportMarketsNew: (networkId: NetworkId) => ['sportMarketsNew', networkId],
     ParlayAmmData: (networkId: NetworkId) => ['parlayAmmData', networkId],
     OpenSportMarkets: (networkId: NetworkId) => ['openSportMarkets', networkId],
     CanceledSportMarkets: (networkId: NetworkId) => ['canceledSportMarkets', networkId],
@@ -28,12 +30,14 @@ export const QUERY_KEYS = {
         balances,
     ],
     AvailablePerSide: (marketAddress: string, side: Side) => ['availablePerSide', marketAddress, side],
-    MarketTransactions: (marketAddress: string, networkId: NetworkId) => [
+    MarketTransactions: (marketAddress: string, networkId: NetworkId, walletAddress?: string) => [
         'market',
         'transactions',
         marketAddress,
         networkId,
+        walletAddress,
     ],
+    MarketDuration: (networkId: NetworkId) => ['marketDuration', networkId],
     UserTransactions: (walletAddress: string, networkId: NetworkId) => [
         'user',
         'transactions',
@@ -127,7 +131,19 @@ export const QUERY_KEYS = {
         Tweet: () => ['quiz', 'tweet'],
     },
     FavoriteTeam: (walletAddress: string, networkId: NetworkId) => ['favoriteTeam', walletAddress, networkId],
-    Zebro: (walletAddress: string, networkId: NetworkId) => ['zebro', walletAddress, networkId],
+    Zebro: (networkId: NetworkId) => ['zebro', networkId],
+    Vault: {
+        Data: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'data', networkId],
+        UserData: (vaultAddress: string, walletAddress: string, networkId: NetworkId) => [
+            vaultAddress,
+            'data',
+            walletAddress,
+            networkId,
+        ],
+        Trades: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'trades', networkId],
+        PnL: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'pnl', networkId],
+        UserTransactions: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'userTransactions', networkId],
+    },
 };
 
 export default QUERY_KEYS;

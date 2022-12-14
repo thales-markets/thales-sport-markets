@@ -1,14 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 
 const BannerCarousel: React.FC = () => {
     const [urlMap, setUrlMap] = useState<Record<number, string>>({});
+    const [imageCount, setImageCount] = useState<number>(0);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`https://api.thalesmarket.io/banner-image-count`);
+                if (response) {
+                    const json = await response.json();
+                    setImageCount(json.count);
+                }
+            } catch (e) {}
+        };
+        fetchData();
+    }, []);
+
     useEffect(() => {
         const map = {} as Record<number, string>;
         const fetchData = async () => {
-            for (let i = 1; i <= 5; i++) {
+            for (let i = 1; i <= imageCount; i++) {
                 try {
                     const response = await fetch(`https://api.thalesmarket.io/banner-json/${i}`);
                     if (response) {
@@ -20,31 +35,37 @@ const BannerCarousel: React.FC = () => {
             setUrlMap(map);
         };
         fetchData();
-    }, []);
+    }, [imageCount]);
+
+    const getStyledDivs = useCallback(() => {
+        const divList = [];
+        for (let i = 1; i <= imageCount; i++) {
+            divList.push(<StyledDiv key={i} hasHref={!!urlMap[i]} index={i} />);
+        }
+        return divList;
+    }, [imageCount, urlMap]);
 
     return (
         <Container>
-            <Carousel
-                transitionTime={1000}
-                interval={5000}
-                showStatus={false}
-                showArrows={false}
-                showThumbs={false}
-                infiniteLoop={true}
-                dynamicHeight={true}
-                autoPlay={true}
-                onClickItem={(index) => {
-                    if (urlMap[index + 1]) {
-                        window.open(urlMap[index + 1]);
-                    }
-                }}
-            >
-                <StyledDiv hasHref={!!urlMap[1]} index={1} />
-                <StyledDiv hasHref={!!urlMap[2]} index={2} />
-                <StyledDiv hasHref={!!urlMap[3]} index={3} />
-                <StyledDiv hasHref={!!urlMap[3]} index={4} />
-                <StyledDiv hasHref={!!urlMap[3]} index={5} />
-            </Carousel>
+            {!!imageCount && (
+                <Carousel
+                    transitionTime={1000}
+                    interval={10000}
+                    showStatus={false}
+                    showArrows={false}
+                    showThumbs={false}
+                    infiniteLoop={true}
+                    dynamicHeight={true}
+                    autoPlay={true}
+                    onClickItem={(index) => {
+                        if (urlMap[index + 1]) {
+                            window.open(urlMap[index + 1]);
+                        }
+                    }}
+                >
+                    {getStyledDivs()}
+                </Carousel>
+            )}
         </Container>
     );
 };

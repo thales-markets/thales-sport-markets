@@ -23,6 +23,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { t } from 'i18next';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getPositionColor } from 'utils/ui';
+import { Position } from 'constants/options';
 
 const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | undefined; quote: number }> = ({
     market,
@@ -39,10 +40,10 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
         setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
     }, [market.homeTeam, market.awayTeam, market.tags]);
 
-    const isHomeWinner = market.isResolved && market.finalResult == 1 ? true : undefined;
-    const isAwayWinner = market.isResolved && market.finalResult == 2 ? true : undefined;
-
     const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
+
+    const isHomeWinner = market.isResolved ? market.finalResult == 1 : positionEnum === Position.HOME;
+    const isAwayWinner = market.isResolved ? market.finalResult == 2 : positionEnum === Position.AWAY;
 
     const parlayItemQuote = market.isCanceled ? 1 : quote ? quote : 0;
     const parlayStatus = getParlayItemStatus(market);
@@ -54,7 +55,8 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                     <ClubLogo
                         alt={market.homeTeam}
                         src={homeLogoSrc}
-                        losingTeam={isAwayWinner == true ? true : undefined}
+                        isFlag={market.tags[0] == 9018}
+                        losingTeam={isAwayWinner}
                         onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                         customMobileSize={'35px'}
                     />
@@ -62,7 +64,8 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                         awayTeam={true}
                         alt={market.awayTeam}
                         src={awayLogoSrc}
-                        losingTeam={isHomeWinner == true ? true : undefined}
+                        isFlag={market.tags[0] == 9018}
+                        losingTeam={isHomeWinner}
                         onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                         customMobileSize={'35px'}
                     />

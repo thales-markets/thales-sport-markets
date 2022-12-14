@@ -51,7 +51,7 @@ export const CollateralIcon = styled.div<{ active?: boolean }>`
     height: 40px;
     border-radius: 50%;
     margin-left: 10px;
-    box-shadow: ${(_props) => (_props?.active ? 'var(--shadow)' : '')};
+    box-shadow: ${(props) => (props?.active ? 'var(--shadow)' : '')};
     cursor: pointer;
 `;
 

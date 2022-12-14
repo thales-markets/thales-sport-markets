@@ -61,7 +61,8 @@ const DappLayout: React.FC = ({ children }) => {
         }
 
         trackPageView({ customDimensions });
-    }, [networkId, trackPageView]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [networkId, i18n.language]);
 
     useEffect(() => {
         if (location.pathname !== ROUTES.MintWorldCupNFT) {

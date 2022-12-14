@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
+import { removeAll, setPayment } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -23,7 +24,6 @@ import { getAmountForApproval } from 'utils/amm';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import {
     countDecimals,
-    formatCurrency,
     formatCurrencyWithSign,
     formatPercentage,
     roundNumberToDecimals,
@@ -34,24 +34,27 @@ import networkConnector from 'utils/networkConnector';
 import { getParlayAMMTransaction, getParlayMarketsAMMQuoteMethod } from 'utils/parlayAmm';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
+import Payment from '../Payment';
+import ShareTicketModal from '../ShareTicketModal';
+import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import {
     AmountToBuyContainer,
     AmountToBuyInput,
-    ValidationTooltip,
     InfoContainer,
     InfoLabel,
+    InfoTooltip,
     InfoValue,
     InfoWrapper,
     InputContainer,
     RowSummary,
+    ShareWrapper,
     SubmitButton,
     SummaryLabel,
     SummaryValue,
+    TwitterIcon,
+    ValidationTooltip,
     XButton,
-    InfoTooltip,
 } from '../styled-components';
-import Payment from '../Payment';
-import { removeAll, setPayment } from 'redux/modules/parlay';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -93,6 +96,14 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState<string>('');
     const [hasAllowance, setHasAllowance] = useState<boolean>(false);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
+    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
+    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
+        markets: [],
+        totalQuote: 0,
+        paid: 0,
+        payout: 0,
+        onClose: () => {},
+    });
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -252,7 +263,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         const { parlayMarketsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (parlayMarketsAMMContract && signer) {
             setIsAllowing(true);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 let collateralContractWithSigner: ethers.Contract | undefined;
 
@@ -272,7 +283,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
                 if (txResult && txResult.transactionHash) {
                     setIsAllowing(false);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.approve-success')));
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -289,7 +300,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
             const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
 
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
 
             try {
                 const referralId =
@@ -315,21 +326,25 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     susdPaid,
                     expectedPayout,
                     referralId,
-                    additionalSlippage
+                    additionalSlippage,
+                    {
+                        gasLimit: MAX_GAS_LIMIT,
+                    }
                 );
 
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
                     refetchBalances(walletAddress, networkId);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')));
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
                     setIsBuying(false);
                     setUsdAmount('');
+                    dispatch(removeAll());
 
                     trackEvent({
-                        category: 'AMM',
+                        category: 'parlay',
                         action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
-                        value: Number(formatCurrency(totalQuote, 3, true)),
+                        value: Number(usdAmountValue),
                     });
                 }
             } catch (e) {
@@ -515,6 +530,33 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
               });
     };
 
+    const hidePayout =
+        Number(usdAmountValue) <= 0 ||
+        totalBuyAmount === 0 ||
+        // hide when validation tooltip exists except in case of invalid profit and not enough funds
+        (tooltipTextUsdAmount && !isValidProfit && usdAmountValue <= paymentTokenBalance) ||
+        isFetching;
+
+    const profitPercentage = (totalBuyAmount - Number(usdAmountValue)) / Number(usdAmountValue);
+
+    const onModalClose = useCallback(() => {
+        setShowShareTicketModal(false);
+    }, []);
+
+    const twitterShareDisabled = submitDisabled || !hasAllowance;
+    const onTwitterIconClick = () => {
+        // create data copy to avoid modal re-render while opened
+        const modalData: ShareTicketModalProps = {
+            markets: [...markets],
+            totalQuote,
+            paid: Number(usdAmountValue),
+            payout: totalBuyAmount,
+            onClose: onModalClose,
+        };
+        setShareTicketModalData(modalData);
+        setShowShareTicketModal(!twitterShareDisabled);
+    };
+
     return (
         <>
             <RowSummary>
@@ -541,7 +583,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 setIsVoucherSelectedProp={setIsVoucherSelected}
             />
             <RowSummary>
-                <SummaryLabel>{t('markets.parlay.buy-amount')}:</SummaryLabel>
+                <SummaryLabel>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>
             <InputContainer ref={inputRef}>
                 <ValidationTooltip
@@ -590,30 +632,34 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.payout')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>
-                    {Number(usdAmountValue) <= 0 ||
-                    totalBuyAmount === 0 ||
-                    (tooltipTextUsdAmount && !isValidProfit) ||
-                    isFetching
-                        ? '-'
-                        : formatCurrencyWithSign(USD_SIGN, totalBuyAmount, 2)}
+                    {hidePayout ? '-' : formatCurrencyWithSign(USD_SIGN, totalBuyAmount, 2)}
                 </SummaryValue>
             </RowSummary>
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.potential-profit')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>
-                    {Number(usdAmountValue) <= 0 ||
-                    totalBuyAmount === 0 ||
-                    (tooltipTextUsdAmount && !isValidProfit) ||
-                    isFetching
+                    {hidePayout
                         ? '-'
                         : `${formatCurrencyWithSign(
                               USD_SIGN,
                               totalBuyAmount - Number(usdAmountValue),
                               2
-                          )} (${formatPercentage((totalBuyAmount - Number(usdAmountValue)) / Number(usdAmountValue))})`}
+                          )} (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
+            <ShareWrapper>
+                <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />
+            </ShareWrapper>
+            {showShareTicketModal && (
+                <ShareTicketModal
+                    markets={shareTicketModalData.markets}
+                    totalQuote={shareTicketModalData.totalQuote}
+                    paid={shareTicketModalData.paid}
+                    payout={shareTicketModalData.payout}
+                    onClose={onModalClose}
+                />
+            )}
             {openApprovalModal && (
                 <ApprovalModal
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS

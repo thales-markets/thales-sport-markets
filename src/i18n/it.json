@@ -134,7 +134,8 @@
         "top10": "TOP 10",
         "yes": "YES",
         "no": "NO",
-        "mls-tooltip": "I risultati dei mercati MLS si basano sui risultati della regolamentazione, se dovessero andare agli straordinari il risultato della regolamentazione è quello in cui il mercato deciderà."
+        "mls-tooltip": "I risultati dei mercati MLS si basano sui risultati della regolamentazione, se dovessero andare agli straordinari il risultato della regolamentazione è quello in cui il mercato deciderà.",
+        "fifa-tooltip": "I risultati dei mercati della Coppa del Mondo FIFA si basano sui risultati regolamentari, se dovessero andare ai tempi supplementari il risultato regolamentare è quello in base al quale si risolverà il mercato."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -143,7 +144,8 @@
         "twitter": "Twitter",
         "docs": "documenti",
         "tutorial": "Esercitazione",
-        "github": "GitHub"
+        "github": "GitHub",
+        "disclaimer": "Questo frontend è ospitato in modo decentralizzato su IPFS (InterPlanetary File System). Serve per visualizzare i dati blockchain e aiutare gli utenti a interagire con i contratti Overtime che appartengono a Thales DAO. In questo modo aiuta gli utenti a comprendere i rischi dell'utilizzo di tali contratti intelligenti e cosa comportano le interazioni specifiche. Il frontend non facilita nient'altro oltre all'interazione con quei contratti in modo visivamente completo. In tal modo, non è diverso dalla funzionalità fornita da Etherscan o RPC (Remote Procedure Calls). Il frontend stesso non appartiene a Thales DAO oa nessun individuo. Non memorizza dati utente e non ha back-end o database dedicati. Tutto il codice viene caricato staticamente direttamente nell'IPFS. Proprio come la blockchain non fa geo-fencing e nessun KYC, nemmeno questo frontend può farlo. Tuttavia, interagendo con i contratti Thales DAO, ti impegni a leggere, comprendere e accettare i <disclaimer>termini di utilizzo di Thales DAO</disclaimer> e ti assumi la piena responsabilità nel caso in cui tu non abbia aderito a tali termini. Thales DAO utilizza il token sUSD decentralizzato come garanzia per tutte le sue transazioni. Così facendo eredita tutte le regole di utilizzo da Synthetix DAO per quanto riguarda le garanzie e non ne introduce di proprie."
     },
     "market": {
         "question-label": "Question",
@@ -158,7 +160,7 @@
         "grid-view": "Grid",
         "list-view": "List",
         "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "Transaction pending",
             "swap-success": "Successfully swapped {{ currencyKey }}",
             "approve-success": "Successfully approved",
@@ -167,7 +169,16 @@
             "claim-winnings-success": "Winnings successfully claimed",
             "claim-refund-success": "Refund successfully claimed",
             "withdraw-success": "Successfuly withdrawn",
-            "get-usd-success": "{{amount}} successfully minted"
+            "get-usd-success": "{{amount}} successfully minted",
+            "ios-not-supported": "Condivisione di immagini non supportata su dispositivi iOS. Se vuoi condividere l'immagine usa la versione desktop",
+            "download-image": "Download dell'immagine. Attendere prego...",
+            "metamask-not-supported": "Il browser Metamask non supporta il download di immagini! Si prega di utilizzare un altro browser per condividere l'immagine",
+            "open-twitter": "Apertura di Twitter...",
+            "click-open-twitter": "Clicca qui per aprire Twitter",
+            "save-image": "Salvataggio dell'immagine negli appunti. Attendere prego...",
+            "image-in-clipboard": "L'immagine è negli appunti!",
+            "save-image-error": "Impossibile salvare l'immagine! Riprova",
+            "save-image-cancel": "Salvataggio dell'immagine annullato!"
         },
         "filter-label": {
             "global": {
@@ -200,6 +211,9 @@
             "all": "All",
             "datepicker": {
                 "games": "{{numberOfGames}} giochi"
+            },
+            "mobile-tags": {
+                "search": "Ricerca"
             }
         },
         "back-to-markets": "Back to markets",
@@ -274,7 +288,8 @@
             "available": "A disposizione",
             "amount-to-buy": "Importo da acquistare",
             "discount": "Sconto",
-            "positions": "Posizioni"
+            "positions": "Posizioni",
+            "odds": "Probabilità"
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
         "parlay": {
@@ -314,7 +329,24 @@
                 "min-quote": "Il PREVENTIVO TOTALE minimo supportato è {{value}}",
                 "max-quote": "Il PREVENTIVO TOTALE massimo supportato è {{value}}"
             },
-            "show-parlay": "Mostra Parlay"
+            "show-parlay": "Mostra Parlay",
+            "share-ticket": {
+                "options": {
+                    "title": "Opzioni di visualizzazione",
+                    "view-simple": "Semplice",
+                    "view-details": "Dettagliato",
+                    "usd-amount": "Importo USD"
+                },
+                "header": "Web 3 Sport sui mercati",
+                "parlay": "parlay",
+                "share": "Condividere",
+                "winner": "Vincitore",
+                "total-quote": "Citazione totale",
+                "potential-payout": "Potenziale pagamento",
+                "loser": "Perdente",
+                "referral": "Link di riferimento"
+            },
+            "buy-in": "Consenso"
         },
         "discounted-per": "Scontato come da",
         "nav-menu": {
@@ -325,7 +357,10 @@
                 "onboarding-wizard": "Procedura guidata di inserimento",
                 "sports-trivia": "Curiosità sullo sport",
                 "markets": "Mercati",
-                "become-affiliate": "Diventa affiliato"
+                "become-affiliate": "Diventa affiliato",
+                "fifa-campaign": "Campagna Zebro FIFA",
+                "fee-rebates": "Riduzioni sulle commissioni",
+                "vaults": "Volte"
             },
             "buttons": {
                 "switch": "Interruttore",
@@ -346,14 +381,20 @@
             "no-data-available": "No data available",
             "safebox": "Commissioni SafeBox",
             "rebates": "Sconti",
-            "volume": "Volume"
+            "volume": "Volume",
+            "percent": "Per cento"
         },
         "periods": {
             "period-1": "Secondo periodo",
             "period-2": "Terzo periodo",
             "period-0": "Primo periodo",
             "period-4": "Quinto periodo",
-            "period-3": "Quarto periodo"
+            "period-3": "Quarto periodo",
+            "period-5": "Sesto periodo",
+            "period-8": "Nono periodo",
+            "period-9": "Decimo periodo",
+            "period-6": "Settimo periodo",
+            "period-7": "Ottavo periodo"
         },
         "your-score": "Il tuo punteggio",
         "total-negative-pnl": "Perdite totali",
@@ -472,7 +513,8 @@
         "messages": {
             "no-claimable": "Non hai posizioni rivendicabili",
             "no-open": "Non hai nessuna posizione aperta",
-            "no-transactions": "Non hai scambi"
+            "no-transactions": "Non hai scambi",
+            "ticket-subtitle": "Aggiungi posizione, scegli un mercato ed effettua la tua selezione."
         },
         "table": {
             "id": "Id",
@@ -480,8 +522,13 @@
             "games": "Giochi",
             "time": "Volta",
             "paid": "Pagato",
-            "position": "Posizione"
-        }
+            "position": "Posizione",
+            "status": "Stato",
+            "total-amount": "Importo totale",
+            "total-quote": "Citazione totale"
+        },
+        "winnings-are-forfeit": "*Le vincite non riscosse entro {{amount}} giorni dalla risoluzione di un mercato vengono annullate.",
+        "search-field": "Cerca portafoglio"
     },
     "mint-world-cup-nft": {
         "second-option": "La seconda opzione per metterti nella lista consentita è completare i seguenti passaggi:",
@@ -498,7 +545,7 @@
         "retweet": "Ritwitta questo tweet",
         "mint-nft-button": "Menta questa Zebra!",
         "stake-10-thales": "Per poter coniare uno Zebro NFT, devi avere almeno 10 THALES puntati.",
-        "zebro-campaign": "Campagna Zebra FIFA",
+        "zebro-campaign": "Zebro FIFA",
         "eligible-text-2": "Conia uno Zebro della tua squadra nazionale preferita e avrai diritto a 50.000 OP e 30.000 premi bonus THALES!",
         "incentives": "INCENTIVI",
         "yes-mint": "Sì, NFT nuovo",
@@ -518,7 +565,17 @@
             "parlay-boost-text": "Se la tua partita della Coppa del Mondo è in un biglietto Parlay, otterrai una spinta di:",
             "underdog-multiplier": "Moltiplicatore perdente:",
             "home-country-multiplier": "Moltiplicatore NFT del Paese di origine:",
-            "reward-calculations": "I calcoli delle ricompense verranno calcolati proporzionalmente in base al volume con un aumento del volume massimo del 40% aggiuntivo se vengono soddisfatte le seguenti condizioni:"
+            "reward-calculations": "I calcoli delle ricompense verranno calcolati proporzionalmente in base al volume con un aumento del volume massimo del 40% aggiuntivo se vengono soddisfatte le seguenti condizioni:",
+            "nft": "NFT",
+            "country": "Paese",
+            "owner": "Proprietario",
+            "search-placeholder": "CERCA INDIRIZZO PORTAFOGLIO",
+            "rewards": "Ricompense",
+            "volume": "Volume",
+            "base-volume": "Base",
+            "bonus-volume": "Bonus",
+            "player": "Giocatore",
+            "wash-trading": "*La squadra degli straordinari si riserva il diritto di squalificare i commercianti di lavaggio dalla campagna"
         },
         "zebro-wct-collection": "La collezione Zebro WC NFT",
         "zebro-wct-collection-text": "fa parte di una campagna incentivata per rappresentare il tuo paese preferito durante la Coppa del Mondo e avere diritto a una quota di 50.000 token OP e 30.000 token THALES, insieme a moltiplicatori esclusivi per parlay e partite individuali.",
@@ -539,6 +596,121 @@
         "earned": "Guadagnato",
         "total-volume": "Volume totale",
         "header": "Crea link di riferimento",
-        "paragraph": "È importante prendersi cura del paziente, essere seguiti dal medico, ma è un momento di grande dolore e sofferenza. Lacus luctus per mettere uno strato sopra. Due gole in un vestito che un cartone animato di un dottore con le frecce. Mus mauris vitae ultricies leo intero previsto ora o Non c&#39;è faretra diam amet nislus suscip adipiscing. Non c&#39;è bisogno di un caporale, nemmeno di un dignissim diam, per nessuno. Pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna Per i bambini, il dignissim è molto veleno. Si dice che sia ubriaco come un letto di birra, ma un casinò o una faretra. Fame maligna e brutta povertà. Ma il bisogno è il bisogno del fringilla phasellus faucibus scelerisque eleifend tilll. Né la valle da domani mai. Quale elemento il cuscino non è nemmeno. Ma ora è rivolto al fumetto di propaganda del lago. La strada diceva che tutti dovrebbero passare un buon fine settimana con le frecce.<br><br> Di conseguenza, non richiede un tastierista libero. Vivono nella vecchiaia e nella malattia. Si diceva la risata di Feugiat davanti alla paura. Non c&#39;è un momento facile per prendere di mira questa malattia. Vorrebbe avere membri come il calcio. Il gatto ora ha bisogno di un po&#39; di sapore puro nell&#39;impasto. È chiaro che questo è seguito da frecce. Lobortis element nibh tellus molestie ora. Non esiste una terra mortale nella paura. Serve un grande sforzo per prendere di mira il calcio, non per essere un vestibolo senza fasi. Fino al pretium vulputate sapien né sagittis aliquam malesuada bibendum arcu. In effetti, nemmeno la massa delle compagnie aeree lo fa. Diciamo che è proprio questo. Condimentum mattis pellentesque id nibh tortor id. Massa tincidunt ora pulvinar sapien e ligula ullamcorper malesuada. Trucco incinta Hendret, tutti non sono un medico locale e l&#39;autore dell&#39;annuncio. È anche un elemento molto importante della strategia clinica del calcio. Per ora ci si occuperà della gola dei bambini. I membri possono anche essere fan di pure in the soft ora."
+        "affiliate-leaderboard-table": {
+            "amount": "Quantità",
+            "address": "Indirizzo",
+            "first-transaction": "Prima transazione",
+            "total-volume": "Volume totale",
+            "timestamp": "Appuntamento",
+            "type": "Tipo",
+            "volume": "Volume",
+            "number-of-trades": "Commerci",
+            "total-earned": "Totale guadagnato"
+        },
+        "no-result": "Non ci sono risultati per questa tabella",
+        "total-earned": "Totale guadagnato",
+        "paragraph": "<bold>Overtime Referral Program è uno strumento di onboarding e acquisizione di utenti incentivato sulla catena.</bold> Il programma permette a chiunque di<bold> generare un link di riferimento</bold> e condividerlo con gli utenti che stanno tentando di integrare.<br /><br /> Quando condividi il tuo Referral Link personale, guadagni<bold> 0,5% di tutto il volume sUSD prodotto dai tuoi utenti segnalati!</bold> Non sono necessarie richieste manuali, sUSD si accumula automaticamente nel tuo portafoglio sotto forma di semplici trasferimenti sUSD."
+    },
+    "vaults": {
+        "title": "Volte sportive",
+        "risks-label": "Rischi di voltaggio",
+        "strategy-label": "Strategia del caveau"
+    },
+    "vault": {
+        "discount-vault": {
+            "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato, diversificando così il rischio in più mercati che hanno quote superiori a {{odds}}.</p>",
+            "title": "Cassaforte scontata",
+            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con uno sconto maggiore di {{discount}}.</p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>"
+        },
+        "degen-discount-vault": {
+            "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato.</p>",
+            "description": "<p>Acquista posizioni a qualsiasi quota disponibile per uno sconto superiore a {{discount}}.</p><p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
+            "title": "Degen Discount Vault"
+        },
+        "safu-discount-vault": {
+            "title": "Colonna Sconto Vault",
+            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con qualsiasi sconto.</p><p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
+            "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato, diversificando così il rischio in più mercati che hanno quote superiori a {{odds}}.</p>"
+        },
+        "tabs": {
+            "withdraw": "Ritirare",
+            "claim": "Reclamo",
+            "deposit": "Depositare"
+        },
+        "button": {
+            "request-withdrawal-confirmation-message": "Richiesta di prelievo inviata con successo",
+            "withdraw-confirmation-message": "Fondi prelevati con successo",
+            "close-round-confirmation-message": "Turno chiuso con successo",
+            "withdraw-label": "Ritirare",
+            "deposit-label": "Depositare",
+            "deposit-progress-label": "Deposito in corso...",
+            "close-round-label": "Chiudi in tondo",
+            "close-round-progress-label": "Turno di chiusura in corso...",
+            "deposit-confirmation-message": "Deposito effettuato con successo",
+            "request-withdrawal-progress-label": "Richiesta in corso...",
+            "request-withdrawal-label": "Richiedi il ritiro",
+            "withdraw-progress-label": "Ritiro in corso..."
+        },
+        "trades-history": {
+            "no-trades": "Nessuna operazione associata a questo caveau nel round selezionato.",
+            "round-label": "Girare",
+            "title": "Cronologia degli scambi di Vault"
+        },
+        "pnl": {
+            "title": "PnL per round",
+            "lifetime-pnl": "PnL a vita",
+            "no-data": "Nessun dato PnL per i turni precedenti."
+        },
+        "deposit-min-amount-error": "L'importo minimo per il deposito è {{amount}}",
+        "withdrawal-request-label": "Richiesta di prelievo: <bold>{{amount}}</bold>",
+        "available-to-withdraw-label": "Disponibile per il prelievo: <bold>{{amount}}</bold>",
+        "deposit-vault-cap-error": "L'importo del deposito supera il limite del caveau",
+        "deposit-max-amount-of-users-warning": "Raggiunto il numero massimo di utenti nel caveau, non è possibile depositare.",
+        "withdrawal-requested-message": "Hai richiesto di prelevare <bold>{{amount}}</bold><tooltip />. I tuoi fondi ti verranno inviati automaticamente alla fine del round quando il round si chiude.",
+        "withdrawal-message": "Puoi richiedere un prelievo e i tuoi fondi ti verranno inviati automaticamente alla fine del round quando il round si chiude.",
+        "deposit-withdrawal-warning": "È richiesto il prelievo, non è possibile depositare.",
+        "withdrawal-deposit-warning": "Non puoi prelevare poiché hai già depositato per il round successivo.",
+        "round-ended-label": "Turno terminato",
+        "deposit-amount-placeholder": "Inserire l'importo",
+        "withdraw-round-end-label": "Il round termina tra: <counter />",
+        "nothing-to-withdraw-label": "Niente da ritirare.",
+        "deposit-amount-label": "Importo del deposito",
+        "deposit-vault-cap-reached-warning": "Il limite del caveau è stato raggiunto, non puoi depositare.",
+        "available-trading-label": "Disponibile per il commercio",
+        "round-end-label": "Il giro finisce tra",
+        "vault-not-started-message": "Il caveau non è stato avviato",
+        "back-to-vaults": "Torniamo ai caveau",
+        "spent-trading-label": "Speso per il trading",
+        "next-round-start-label": "Il prossimo round inizia tra: <counter />",
+        "your-next-round-allocation-label": "La tua allocazione per il round successivo: <bold>{{amount}}</bold>",
+        "your-round-allocation-label": "La tua allocazione per il round: <bold>{{amount}}</bold>",
+        "estimated-amount-tooltip": "Questo è un importo stimato. L'importo effettivo verrà calcolato alla chiusura del round corrente in base al round PnL.",
+        "vault-filled-label": "Cassaforte piena: {{amount}} / {{max}}",
+        "round-allocation-label": "Deposito tondo totale",
+        "deposit-message": "Deposita i fondi nel caveau per il round successivo.",
+        "variables": "<p>Variabili:</p><ul><li> Tasso di utilizzo: {{utilizationRate}}</li><li> Limite inferiore del prezzo: {{priceLowerLimit}}</li><li> Limite massimo del prezzo: {{priceUpperLimit}}</li><li> Impatto Max Skew: {{skewImpactLimit}}</li><li> Allocazione massima su un singolo mercato: {{allocationLimitsPerMarketPerRound}}</li><li> Deposito totale massimo: {{maxAllowedDeposit}}</li><li> Numero massimo di utenti nel vault: {{maxAllowedUsers}}</li><li> Importo minimo su una singola operazione: {{minTradeAmount}}</li><li> Deposito minimo: {{minDepositAmount}}</li></ul>",
+        "vault-paused-message": "Il caveau è in pausa",
+        "users-in-vault-label": "Utenti nel caveau: {{number}} / {{max}}",
+        "first-deposit-withdrawal-message": "Hai depositato per il round successivo e puoi prelevare questi fondi alla fine del round successivo.",
+        "user-transactions": {
+            "type": {
+                "deposit": "Depositare",
+                "withdrawalRequest": "Richiesta di prelievo",
+                "claim": "Richiesta di recesso"
+            },
+            "title": "Transazioni utente",
+            "no-transactions": "Nessuna transazione utente associata a questo vault nel round selezionato."
+        }
+    },
+    "parlay-leaderboard": {
+        "title": "Classifica degli incentivi Parlay",
+        "description": "Un totale di 10.000 OP sarà distribuito ai migliori parlay del mese. I biglietti saranno classificati in base alle quote più alte, seguite dal volume in caso di pareggio.",
+        "distribution-note": "I premi saranno distribuiti ai primi 20 parlay per il mese di dicembre!",
+        "info1": "- Numero di posizioni sul parlay",
+        "no-parlays": "Nessun parlay vincente registrato nel periodo ancora.",
+        "info3": "- Quota totale effettiva (ottenuta moltiplicando le singole posizioni)",
+        "info": "Se più parlay hanno la stessa quotazione, quanto segue verrà utilizzato come spareggio nel rispettivo ordine:",
+        "warning": "*Il team degli straordinari detiene il diritto di squalificare i portafogli che sospettiamo giochino con il sistema.",
+        "info2": "- L'importo pagato"
     }
 }

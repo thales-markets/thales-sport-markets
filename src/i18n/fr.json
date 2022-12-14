@@ -154,7 +154,8 @@
         "top5": "TOP 5",
         "top10": "TOP 10",
         "yes": "OUI",
-        "no": "NON"
+        "no": "NON",
+        "fifa-tooltip": "Les résultats des marchés de la Coupe du Monde de la FIFA sont basés sur les résultats de la réglementation, s'ils vont en prolongation, le résultat de la réglementation est celui auquel le marché se résoudra."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime - TOUS DROITS RÉSERVÉS.",
@@ -163,7 +164,8 @@
         "docs": "Documents",
         "medium": "Medium",
         "twitter": "Twitter",
-        "discord": "Discord"
+        "discord": "Discord",
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own."
     },
     "market": {
         "question-label": "Question",
@@ -234,7 +236,7 @@
             "distribute-bonds-label": "Distribuer les dépôts de garantie",
             "distribute-progress-label": "Distribution en cours..."
         },
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "Transaction en cours",
             "swap-success": "Échange réussi {{ currencyKey }}",
             "approve-success": "Autorisation réussi",
@@ -247,7 +249,16 @@
             "ticket-bid-success": "Offre réussie",
             "change-position-success": "Changement de position réussi",
             "withdraw-success": "Retrait réussi",
-            "get-usd-success": "{{amount}} créés avec succès"
+            "get-usd-success": "{{amount}} créés avec succès",
+            "save-image-cancel": "Enregistrement d'image annulé !",
+            "open-twitter": "Ouverture de Twitter...",
+            "save-image": "Enregistrement de l'image dans le presse-papiers. S'il vous plaît, attendez...",
+            "click-open-twitter": "Cliquez ici pour ouvrir Twitter",
+            "download-image": "Téléchargement de l'image. S'il vous plaît, attendez...",
+            "image-in-clipboard": "L'image est dans le presse-papier !",
+            "save-image-error": "Échec de l'enregistrement de l'image ! Réessayer",
+            "metamask-not-supported": "Le navigateur Metamask ne prend pas en charge le téléchargement d'images ! Veuillez utiliser un autre navigateur pour partager l'image",
+            "ios-not-supported": "Le partage d'images n'est pas pris en charge sur les appareils iOS. Si vous souhaitez partager l'image, veuillez utiliser la version de bureau"
         },
         "filter-label": {
             "global": {
@@ -280,6 +291,9 @@
             "all": "Tous",
             "datepicker": {
                 "games": "{{numberOfGames}} marchés"
+            },
+            "mobile-tags": {
+                "search": "Chercher"
             }
         },
         "back-to-markets": "Retour aux marchés",
@@ -372,7 +386,8 @@
             "discount": "Remise",
             "available": "Disponible",
             "amount-to-buy": "Montant à acheter",
-            "positions": "Postes"
+            "positions": "Postes",
+            "odds": "Chances"
         },
         "zero-odds-tooltip": "Le Sport AMM ne propose des liquidités que dans la fourchette de prix de 0,05 $ à 0,95 $. Cela signifie que si les cotes d'une position sont inférieures à 5 % ou supérieures à 95 %, cette position n'aura pas de liquidité.",
         "parlay": {
@@ -412,7 +427,24 @@
                 "max-quote": "Le DEVIS TOTAL maximal pris en charge est de {{value}}",
                 "min-quote": "Le DEVIS TOTAL minimal pris en charge est de {{value}}"
             },
-            "show-parlay": "Afficher Parlay"
+            "show-parlay": "Afficher Parlay",
+            "share-ticket": {
+                "options": {
+                    "view-simple": "Simple",
+                    "title": "option d'affichage",
+                    "view-details": "Détaillé",
+                    "usd-amount": "Montant en USD"
+                },
+                "loser": "Perdant",
+                "share": "Partager",
+                "winner": "Gagnant",
+                "parlay": "parlementer",
+                "total-quote": "Devis total",
+                "potential-payout": "Paiement potentiel",
+                "referral": "Lien de référence",
+                "header": "Web 3 Sport commercialise sur"
+            },
+            "buy-in": "Adhésion"
         },
         "discounted-per": "Remise selon",
         "nav-menu": {
@@ -423,7 +455,10 @@
                 "sports-trivia": "Anecdotes sportives",
                 "become-affiliate": "Devenir affilié",
                 "onboarding-wizard": "Assistant d'intégration",
-                "history": "Histoire"
+                "history": "Histoire",
+                "fee-rebates": "Remises sur les frais",
+                "fifa-campaign": "Campagne Zebro FIFA",
+                "vaults": "coffres"
             },
             "buttons": {
                 "disconnect": "Déconnecter",
@@ -440,19 +475,25 @@
             "wallet-address": "Adresse du portefeuille",
             "safebox": "Frais SafeBox",
             "rebates": "Réduction",
-            "volume": "Volume"
+            "volume": "Volume",
+            "percent": "Pour cent"
         },
         "header": "Récompenses",
         "op-rewards-banner-message": "Les récompenses OP ont commencé, vérifiez comment vous pouvez les obtenir via <bold>la page des récompenses OP</bold>",
         "search-placeholder": "Rechercher l'adresse du portefeuille",
-        "description": "<0>Un total de <0>8,000 OP</0> et  <0>8,000 Thales</0> seront distribués du 24 octobre au 7 novembre 00:00 UTC pour compenser les frais payés aux contrats SafeBox.</0> <0>Le classement calculera les récompenses comme une remise de 90 % sur les frais SafeBox, soit 2 % du montant total payé en sUSD.</0> <0> La valeur en $ de OP et THALES sera calculée en utilisant un twap de 7 jours au début de la période.</0> <0>  Si à la fin de la période de deux semaines, le total des remises est supérieur à la valeur de twap initiale des jetons OP et THALES, la remise sera réduite proportionnellement pour chaque utilisateur.</0>",
+        "description": "<div>Un total de <bold>8000 OP</bold> et <bold>8000 Thales</bold> sera distribué sur une base continuetoutes les deux semaines selon le <tipLink>TIP-96</tipLink> pour compenser les frais payés au contrat safebox.</div> <div>Le classement calculera les récompenses comme une remise de 90% sur les frais SafeBox, soit 3% du montant total payé en sUSD.</div> <div>La valeur en $ de OP et THALES sera calculée en utilisant un twap de 7 jours au début de la période. Si à la fin de la période de deux semaines, le total des remises est supérieur à la valeur de twap initiale des jetons OP et THALES, la remise sera réduite proportionnellement pour chaque utilisateur.</div>",
         "total-negative-pnl": "Pertes totales",
         "periods": {
             "period-0": "Première période",
             "period-1": "Seconde période",
             "period-2": "Troisième période",
             "period-3": "Quatrième période",
-            "period-4": "Cinquième période"
+            "period-4": "Cinquième période",
+            "period-6": "Septième période",
+            "period-7": "Huitième période",
+            "period-5": "Sixième période",
+            "period-8": "Neuvième période",
+            "period-9": "Dixième période"
         },
         "your-score": "Ton score",
         "total-global-rebates": "Remises totales à payer",
@@ -567,7 +608,8 @@
         "messages": {
             "no-claimable": "Vous n'avez pas de poste réclamable",
             "no-open": "Vous n'avez pas de poste ouvert",
-            "no-transactions": "Vous n'avez aucun métier"
+            "no-transactions": "Vous n'avez aucun métier",
+            "ticket-subtitle": "Ajoutez une position, choisissez un marché et faites votre sélection."
         },
         "table": {
             "paid": "Payé",
@@ -575,13 +617,18 @@
             "id": "Identifiant",
             "position": "Position",
             "time": "Temps",
-            "amount": "montant"
-        }
+            "amount": "montant",
+            "status": "Statut",
+            "total-quote": "Devis total",
+            "total-amount": "Montant total"
+        },
+        "winnings-are-forfeit": "*Les gains non réclamés dans les {{amount}} jours suivant la résolution d'un marché sont annulés.",
+        "search-field": "Portefeuille de recherche"
     },
     "mint-world-cup-nft": {
         "no": "Non",
         "are-you-sure": "Êtes-vous sûr de vouloir frapper ce NFT ? Vous pouvez frapper UN SEUL NFT par portefeuille.",
-        "zebro-campaign": "Campagne Zebra FIFA",
+        "zebro-campaign": "Zebro FIFA",
         "retweet": "Retweetez ce tweet",
         "success-mint": "Frappé avec succès",
         "yes-mint": "Oui, menthe NFT",
@@ -613,7 +660,17 @@
             "underdog-multiplier-text": "Si votre position dans les matchs de la Coupe du monde est évaluée à moins de 0,3 (les cotes sont supérieures à 1: 3,33), vous obtiendrez une augmentation de 10 % des récompenses.",
             "home-country-multiplier": "Multiplicateur NFT du pays d'origine :",
             "home-country-multiplier-text": "Si votre match de Coupe du monde implique la même équipe nationale que votre Zebro, vous recevrez +10 % de bonus de récompenses",
-            "parlay-boost-text": "Si votre match de Coupe du monde est dans un ticket Parlay, vous obtiendrez un bonus de :"
+            "parlay-boost-text": "Si votre match de Coupe du monde est dans un ticket Parlay, vous obtiendrez un bonus de :",
+            "owner": "Propriétaire",
+            "nft": "NFT",
+            "country": "Pays",
+            "search-placeholder": "RECHERCHER L'ADRESSE DU PORTEFEUILLE",
+            "base-volume": "Base",
+            "volume": "Le volume",
+            "bonus-volume": "Prime",
+            "rewards": "Récompenses",
+            "player": "Joueur",
+            "wash-trading": "* L'équipe des heures supplémentaires a le droit de disqualifier les commerçants de lavage de la campagne"
         },
         "zebro-wct-collection": "La collection Zebro WC NFT",
         "zebro-wct-collection-text": "fait partie d'une campagne incitative pour représenter votre pays préféré pendant la Coupe du monde et être éligible pour une part de 50 000 jetons OP et 30 000 jetons THALES, ainsi que des multiplicateurs exclusifs pour les parlays et les matchs individuels.",
@@ -622,18 +679,133 @@
         "get-your-nft": "Page de menthe"
     },
     "referral": {
-        "nav-items": {
-            "see-result-by-trader": "Voir le résultat par commerçant",
-            "affiliate-leaderboard": "Classement des affiliés",
-            "all-transactions": "Toutes transactions"
-        },
-        "trades": "Métiers",
-        "earned": "Gagné",
         "generate-link": "Générer un lien",
-        "total-volume": "Volume total",
         "copy-link": "Copier le lien",
-        "total-trading-fees": "Total des frais de négociation",
+        "trades": "Transactions",
+        "total-volume": "Volume total",
+        "total-earned": "Total gagné",
+        "total-trading-fees": "Total commissions",
+        "affiliate-leaderboard-table": {
+            "address": "Adresse",
+            "number-of-trades": "Transactions",
+            "total-volume": "Volume total",
+            "first-transaction": "Première transaction",
+            "total-earned": "Total gagné",
+            "amount": "Montant",
+            "volume": "Volume",
+            "type": "Type",
+            "timestamp": "Date"
+        },
+        "no-result": "Aucun résultat",
+        "earned": "Gagné",
         "header": "Créer des liens de parrainage",
-        "paragraph": "Il est important de prendre soin du patient, d&#39;être suivi par le médecin, mais c&#39;est un moment de grande douleur et de souffrance. Lacus luctus pour mettre une couche sur le dessus. Deux gorges dans une robe qu&#39;un dessin animé d&#39;un médecin avec des flèches. Mus mauris vitae ultricies leo entier attendu maintenant ou Il n&#39;y a pas de carquois diam amet nislus suscip adipiscing. Il n&#39;y a besoin d&#39;un caporal, même dignissim diam, pour personne. Pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna Pour les enfants, le dignissim est beaucoup de poison. On dit qu&#39;elle se boit comme un lit de bière, mais un casino ou un carquois. La faim malveillante et l&#39;horrible pauvreté. Mais le besoin est le besoin du fringilla phasellus faucibus scelerisque eleifend jusqu&#39;à. Ni la vallée de demain jamais. Quel élément l&#39;oreiller n&#39;est même pas. Mais maintenant, il vise le dessin animé du lac de propagande. La rue a dit que tout le monde devrait passer un bon week-end avec des flèches.<br><br> Par conséquent, il ne nécessite pas de clavier gratuit. Ils vivent dans la vieillesse et la maladie. Le rire de Feugiat devant la peur était dit. Il n&#39;y a pas de moment facile pour cibler cette maladie. Il aimerait avoir des membres comme le football. Le chat a maintenant besoin d&#39;un peu de saveur pure dans la pâte. Il est clair que cela est suivi de flèches. Lobortis élément nibh tellus molestie maintenant. Il n&#39;y a pas de terre mortelle dans la peur. Il faut un gros effort pour cibler le football, pas pour être un vestibule sans phase. Jusqu&#39;au pretium vulputate sapien ni sagittis aliquam malesuada bibendum arcu. En fait, aucune masse aérienne ne fait cela non plus. Qu&#39;on se le dise, ce n&#39;est que cela. Condimentum mattis pellentesque id nibh tortor id. Massa tincidunt maintenant pulvinar sapien et ligula ullamcorper malesuada. Maquillage enceinte Hendret, tout le monde n&#39;est pas un médecin local et l&#39;auteur de la publicité. C&#39;est aussi un élément très important de la stratégie du football clinique. Pour l&#39;instant la gorge des enfants sera prise en charge. Les membres peuvent aussi être fans de pure in the soft now."
+        "paragraph": "<bold>Le programme de parrainage d'Overtime est un outil d'acquisition et d'intégration d'utilisateurs incitatifs sur chaîne.</bold>Le programme permet à tous de<bold>générer un lien de parrainage</bold> et de le partager avec ceux que vous voulez inviter sur la plateforme.<br /><br /> En partageant votre lien, vous gagnez <bold>0.5% de tout le volume de sUSD que vos utilisateurs parrainés génèrent!</bold> Aucune réclamation manuelle n'est nécessaire, les sUSD s'accumulent automatiquement dans votre portefeuille.",
+        "nav-items": {
+            "all-transactions": "Toutes les transactions",
+            "see-result-by-trader": "Voir le résultat par utilisateur",
+            "affiliate-leaderboard": "Classement des parrains"
+        }
+    },
+    "vaults": {
+        "title": "Coffres de sport",
+        "strategy-label": "Stratégie du coffre",
+        "risks-label": "Risques du coffre"
+    },
+    "vault": {
+        "discount-vault": {
+            "title": "Discount Vault",
+            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec une remise supérieure à {{discount}}.</p>Tous les dépôts qui entrent dans un tour comptent pour le volume de staking gamifié.</p>",
+            "risks": "<p>Le coffre a un taux d'utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôts par tour soient utilisés. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
+        },
+        "degen-discount-vault": {
+            "title": "Degen Discount Vault",
+            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec un rabais supérieur à {{discount}}.</p>Tous les dépôts qui entrent dans un tour comptent pour le volume de staking gamifié.</p>",
+            "risks": "<p>Le coffre a un taux d'utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôt par tour soient utilisés. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
+        },
+        "safu-discount-vault": {
+            "title": "Safu Discount Vault",
+            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec un rabais supérieur à {{discount}}.</p>Tous les dépôts qui entrent dans un tour comptent pour le volume de staking gamifié.</p>",
+            "risks": "<p>Le coffre a un taux d'utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôt par tour soient utilisés. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
+        },
+        "variables": "<p>Variables:</p><ul><li>Taux d’utilisation: {{utilizationRate}}</li><li>Limite inférieure de prix: {{priceLowerLimit}}</li><li>Limite supérieure de prix: {{priceUpperLimit}}</li><li>Impact d'inclinaison maximum: {{skewImpactLimit}}</li><li>Allocation maximale sur un seul marché: {{allocationLimitsPerMarketPerRound}}</li><li>Dépôt total maximum: {{maxAllowedDeposit}}</li><li>Nombre maximal d'utilisateurs dans le coffre: {{maxAllowedUsers}}</li><li>Montant minimum par transaction: {{minTradeAmount}}</li><li>Dépôt minimal: {{minDepositAmount}}</li><li>Durée du tour: {{roundLength}} jours</li></ul>",
+        "back-to-vaults": "Retour aux coffres",
+        "vault-not-started-message": "Le coffre n'a pas démarré",
+        "vault-paused-message": "Le coffre est en pause",
+        "round-allocation-label": "Dépôt total du tour",
+        "spent-trading-label": "Dépensé",
+        "available-trading-label": "Disponible",
+        "round-end-label": "Le tour se termine dans",
+        "your-round-allocation-label": "Votre allocation pour le tour: <bold>{{amount}}</bold>",
+        "your-next-round-allocation-label": "Votre allocation pour le prochain tour: <bold>{{amount}}</bold>",
+        "estimated-amount-tooltip": "Il s'agit d'un montant estimé. Le montant réel sera calculé à la clôture du tour en cours sur la base du PnL.",
+        "next-round-start-label": "Le prochain tour commence dans: <counter />",
+        "users-in-vault-label": "Utilisateurs dans le coffre {{number}} / {{max}}",
+        "vault-filled-label": "Coffre remplit: {{amount}} / {{max}}",
+        "deposit-message": "Déposez des fonds dans le coffre pour le tour suivant.",
+        "deposit-amount-label": "Montant du dépôt",
+        "deposit-amount-placeholder": "Saisir le montant",
+        "available-to-withdraw-label": "Disponible pour retirer: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "Rien à retirer.",
+        "withdrawal-message": "Vous pouvez demander un retrait et vos fonds vous seront automatiquement disponibles à la cloture du tour.",
+        "withdraw-round-end-label": "Le tour se termine dans: <counter />",
+        "withdrawal-requested-message": "Vous avez demandé le retrait de <bold>{{amount}}</bold><tooltip />. Vos fonds vous seront envoyés automatiquement à la cloture du tour.",
+        "withdrawal-request-label": "Demande de retrait: <bold>{{amount}}</bold>",
+        "first-deposit-withdrawal-message": "Vous avez déposé pour le tour suivant et vous pouvez retirer ces fonds à la fin du tour suivant.",
+        "round-ended-label": "Tour terminé",
+        "deposit-withdrawal-warning": "Un retrait est demandé, vous ne pouvez pas déposer.",
+        "deposit-max-amount-of-users-warning": "Le nombre maximum d'utilisateurs dans le coffre est atteint, vous ne pouvez pas effectuer de dépôt.",
+        "deposit-vault-cap-reached-warning": "Le plafond du coffre est atteint, vous ne pouvez pas effectuer de dépôt.",
+        "deposit-vault-cap-error": "Le montant du dépôt dépasse le plafond du coffre.",
+        "deposit-min-amount-error": "Le montant minimum pour le dépôt est de {{amount}}.",
+        "withdrawal-deposit-warning": "Vous ne pouvez pas retirer car vous avez déjà déposé pour le tour suivant.",
+        "tabs": {
+            "deposit": "Dépôt",
+            "claim": "Réclamer",
+            "withdraw": "Retirer"
+        },
+        "button": {
+            "deposit-label": "Déposer",
+            "deposit-progress-label": "Dépôt en cours…",
+            "deposit-confirmation-message": "Dépôt effectué avec succès",
+            "request-withdrawal-label": "Demande de retrait",
+            "request-withdrawal-progress-label": "Demande en cours...",
+            "request-withdrawal-confirmation-message": "Demande de retrait envoyée avec succès",
+            "withdraw-label": "Retirer",
+            "withdraw-progress-label": "Retrait en cours...",
+            "withdraw-confirmation-message": "Fonds retirés avec succès",
+            "close-round-label": "Fermer le tour",
+            "close-round-progress-label": "Fermeture du tour en cours...",
+            "close-round-confirmation-message": "Tour clôturé avec succès"
+        },
+        "trades-history": {
+            "title": "Historique des transactions du coffre",
+            "no-trades": "Aucune transaction associée à ce coffre dans le tour sélectionné.",
+            "round-label": "Tour"
+        },
+        "pnl": {
+            "title": "PnL par tour",
+            "no-data": "Pas de données PnL pour les tours précédents.",
+            "lifetime-pnl": "PnL à vie"
+        },
+        "user-transactions": {
+            "type": {
+                "deposit": "Verser",
+                "claim": "Demande de retrait",
+                "withdrawalRequest": "Demande de retrait"
+            },
+            "title": "Opérations utilisateur",
+            "no-transactions": "Aucune transaction utilisateur associée à ce coffre dans le tour sélectionné."
+        }
+    },
+    "parlay-leaderboard": {
+        "distribution-note": "Les récompenses seront distribuées aux 20 meilleurs parlays du mois de décembre!",
+        "title": "Classement Parlay Incentives",
+        "description": "Au total, 10 000 OP seront distribués aux meilleurs parlays du mois. Les billets seront classés en fonction des cotes les plus élevées, suivies du volume en cas d'égalité.",
+        "no-parlays": "Aucun parlay gagnant enregistré pour l'instant.",
+        "info3": "- Devis total réel (obtenu en multipliant les positions individuellement)",
+        "info2": "- Le montant payé",
+        "info": "Si plusieurs parlays ont la même citation, ce qui suit sera utilisé comme bris d'égalité dans l'ordre respectif :",
+        "warning": "* L'équipe des heures supplémentaires se réserve le droit de disqualifier les portefeuilles que nous soupçonnons de jouer avec le système.",
+        "info1": "- Nombre de positions sur le parlay"
     }
 }

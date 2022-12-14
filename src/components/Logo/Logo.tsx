@@ -6,7 +6,7 @@ import SPAAnchor from 'components/SPAAnchor';
 import { buildHref } from 'utils/routes';
 
 const Logo: React.FC = () => (
-    <Container>
+    <Container data-matomo-category="dapp-header" data-matomo-action="overtime-logo">
         <SPAAnchor href={buildHref(ROUTES.Markets.Home)} state={RESET_STATE}>
             <StyledLogo />
         </SPAAnchor>
@@ -14,6 +14,7 @@ const Logo: React.FC = () => (
 );
 
 const Container = styled.div`
+    z-index: 1;
     @media (max-width: 767px) {
         margin-top: 25px;
         margin-bottom: 10px;

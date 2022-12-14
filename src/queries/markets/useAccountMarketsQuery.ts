@@ -45,10 +45,10 @@ const useAccountMarketsQuery = (
                             ...position.position.market,
                             homeTeam: position.position.market.isApex
                                 ? fixApexName(position.position.market.homeTeam)
-                                : fixLongTeamNameString(fixDuplicatedTeamName(position.position.market.homeTeam)),
+                                : fixLongTeamNameString(fixDuplicatedTeamName(position.position.market?.homeTeam)),
                             awayTeam: position.position.market.isApex
                                 ? fixApexName(position.position.market.awayTeam)
-                                : fixLongTeamNameString(fixDuplicatedTeamName(position.position.market.awayTeam)),
+                                : fixLongTeamNameString(fixDuplicatedTeamName(position.position.market?.awayTeam)),
                         },
                         side: position.position.side,
                     };

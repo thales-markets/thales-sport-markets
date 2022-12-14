@@ -1,9 +1,13 @@
 import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
 import { Position } from 'constants/options';
-import { MLS_TAG, PERSON_COMPETITIONS, TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
+import { FIFA_WC_TAG, MLS_TAG, PERSON_COMPETITIONS, TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
 import ordinal from 'ordinal';
+import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import { AccountPosition, MarketData, MarketInfo, ParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
+import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
+
+const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 35;
 
 export const getRoi = (ticketPrice: number, potentialWinnings: number, showRoi: boolean) =>
     showRoi ? (potentialWinnings - ticketPrice) / ticketPrice : 0;
@@ -45,6 +49,7 @@ export const getMarketStatus = (market: MarketInfo) => {
 };
 
 export const getMarketStatusFromMarketData = (market: MarketData) => {
+    if (market.gameStarted && !market.resolved) return MarketStatus.ResolvePending;
     if (market.paused) return MarketStatus.Paused;
     if (market.resolved) return MarketStatus.ResolvedConfirmed;
     if (market.cancelled) return MarketStatus.CancelledConfirmed;
@@ -125,8 +130,24 @@ export const convertPositionNameToPositionType = (positionName: string) => {
     if (positionName?.toUpperCase() == 'HOME') return Position.HOME;
     if (positionName?.toUpperCase() == 'AWAY') return Position.AWAY;
     if (positionName?.toUpperCase() == 'DRAW') return Position.DRAW;
-    console.log('ULAZI OVDE');
     return Position.HOME;
+};
+
+export const convertPositionToPositionName = (position: number): 'home' | 'away' | 'draw' => {
+    if (position == 0) return 'home';
+    if (position == 1) return 'away';
+    if (position == 2) return 'draw';
+    return 'home';
+};
+
+export const getCanceledGameClaimAmount = (position: AccountPositionProfile) => {
+    const positionType = convertPositionNameToPositionType(position.side);
+
+    if (positionType == Position.HOME) return formatCurrency(position.market.homeOdds * position.amount, 2);
+    if (positionType == Position.AWAY) return formatCurrency(position.market.awayOdds * position.amount, 2);
+    if (positionType == Position.DRAW)
+        return position.market.drawOdds ? formatCurrency(position.market.drawOdds * position.amount, 2) : 0;
+    return 0;
 };
 
 export const isApexGame = (tag: number) => tag >= APEX_GAME_MIN_TAG;
@@ -207,20 +228,85 @@ export const isDiscounted = (priceImpact: number | undefined) => {
 
 export const isMlsGame = (tag: number) => Number(tag) === MLS_TAG;
 
+export const isFifaWCGame = (tag: number) => Number(tag) === FIFA_WC_TAG;
+
 export const getIsIndividualCompetition = (tag: number) => PERSON_COMPETITIONS.includes(tag);
 
 export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
-    const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved);
+    const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved || market?.isCanceled);
     const claimablePositions = parlayMarket.positions.filter((position) => position.claimable);
-    const canceledMarkets = parlayMarket.sportMarkets.filter((market) => market.isCanceled);
+
+    const lastGameStartsPlusExpirationPeriod = addDaysToEnteredTimestamp(
+        EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS,
+        parlayMarket.lastGameStarts
+    );
+
+    if (lastGameStartsPlusExpirationPeriod < new Date().getTime()) {
+        return false;
+    }
 
     if (
         resolvedMarkets?.length == claimablePositions?.length &&
-        resolvedMarkets?.length + canceledMarkets?.length == parlayMarket.sportMarkets.length &&
+        resolvedMarkets?.length == parlayMarket.sportMarkets.length &&
         !parlayMarket.claimed
     ) {
         return true;
     }
 
     return false;
+};
+
+export const isParlayOpen = (parlayMarket: ParlayMarket) => {
+    const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved);
+    const resolvedAndClaimable = parlayMarket.positions.filter(
+        (position) => position.claimable && (position.market.isResolved || position.market.isCanceled)
+    );
+
+    if (resolvedMarkets?.length == 0) return true;
+
+    if (resolvedMarkets?.length !== resolvedAndClaimable?.length) return false;
+    return true;
+};
+
+export const isSportMarketExpired = (sportMarket: SportMarketInfo) => {
+    const maturyDatePlusExpirationPeriod = addDaysToEnteredTimestamp(
+        EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS,
+        new Date(sportMarket.maturityDate).getTime()
+    );
+
+    if (maturyDatePlusExpirationPeriod < new Date().getTime()) {
+        return true;
+    }
+
+    return false;
+};
+
+export const convertMarketDataTypeToSportMarketInfoType = (marketData: MarketData): SportMarketInfo => {
+    return {
+        id: marketData.address,
+        address: marketData.address,
+        maturityDate: new Date(marketData.maturityDate),
+        tags: marketData.tags,
+        isOpen: !marketData.resolved && !marketData.cancelled && !marketData.gameStarted ? true : false,
+        isResolved: marketData.resolved,
+        isCanceled: marketData.cancelled,
+        finalResult: marketData.finalResult,
+        poolSize: 0,
+        numberOfParticipants: 0,
+        homeTeam: marketData.homeTeam,
+        awayTeam: marketData.awayTeam,
+        homeOdds: marketData.positions[0].sides.BUY.odd ? marketData.positions[0].sides.BUY.odd : 0,
+        awayOdds: marketData.positions[1].sides.BUY.odd ? marketData.positions[1].sides.BUY.odd : 0,
+        drawOdds: marketData.positions[2].sides.BUY.odd,
+        homeScore: marketData.homeScore ? marketData.homeScore : 0,
+        awayScore: marketData.awayScore ? marketData.awayScore : 0,
+        sport: '',
+        isApex: marketData.isApex,
+        resultDetails: '',
+        isPaused: marketData.paused,
+        arePostQualifyingOddsFetched: false,
+        betType: marketData.betType,
+        homePriceImpact: 0,
+        awayPriceImpact: 0,
+    };
 };

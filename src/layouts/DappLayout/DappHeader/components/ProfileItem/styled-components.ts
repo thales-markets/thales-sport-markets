@@ -9,7 +9,7 @@ export const ProfileContainer = styled(FlexDivRow)`
 export const ProfileLabel = styled.span`
     font-weight: 600;
     font-size: 12px;
-    color: ${MAIN_COLORS.TEXT.DARK_GRAY};
+    color: ${MAIN_COLORS.TEXT.WHITE};
     text-transform: uppercase;
     margin-right: 15px;
 `;
@@ -19,8 +19,8 @@ export const ProfileIconContainer = styled.div`
     margin-right: 5px;
 `;
 
-export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile' })`
-    font-size: 20px;
+export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile' })<{ avatarSize?: number }>`
+    font-size: ${(props) => (props.avatarSize ? props.avatarSize : '20')}px;
     color: ${MAIN_COLORS.TEXT.DARK_GRAY};
 `;
 
@@ -43,4 +43,10 @@ export const Count = styled.span`
     color: ${MAIN_COLORS.DARK_GRAY};
     font-weight: 800;
     font-size: 10px;
+`;
+
+export const TeamImage = styled.img<{ avatarSize?: number }>`
+    width: ${(props) => (props.avatarSize ? props.avatarSize : '20')}px;
+    height: ${(props) => (props.avatarSize ? props.avatarSize : '20')}px;
+    border-radius: 50%;
 `;

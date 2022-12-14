@@ -1,6 +1,7 @@
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
 import { PositionName, POSITION_MAP } from 'constants/options';
+import { ethers } from 'ethers';
 import useUserTransactionsQuery from 'queries/markets/useUserTransactionsQuery';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,20 +9,28 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
+import { getEtherscanTxLink } from 'utils/etherscan';
 import { formatTxTimestamp } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
+import { convertFinalResultToResultType, convertPositionNameToPosition } from 'utils/markets';
 
-const TransactionsHistory: React.FC = () => {
+const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const { t } = useTranslation();
 
-    const txQuery = useUserTransactionsQuery(walletAddress.toLowerCase(), networkId, {
-        enabled: isWalletConnected,
-        refetchInterval: false,
-    });
+    const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
+
+    const txQuery = useUserTransactionsQuery(
+        isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
+        networkId,
+        {
+            enabled: isWalletConnected,
+            refetchInterval: false,
+        }
+    );
     const transactions = txQuery.isSuccess ? txQuery.data : [];
 
     return (
@@ -29,6 +38,9 @@ const TransactionsHistory: React.FC = () => {
             <Table
                 tableHeadCellStyles={TableHeaderStyle}
                 tableRowCellStyles={TableRowStyle}
+                onTableRowClick={(data: any) => {
+                    open(getEtherscanTxLink(networkId, data.original.hash));
+                }}
                 columns={[
                     {
                         id: 'time',
@@ -58,7 +70,6 @@ const TransactionsHistory: React.FC = () => {
                         accessor: 'position',
                         sortable: false,
                         Cell: (cellProps: any) => {
-                            console.log(cellProps);
                             return (
                                 <FlexCenter>
                                     <TableText>
@@ -93,6 +104,12 @@ const TransactionsHistory: React.FC = () => {
                             return <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>;
                         },
                     },
+                    {
+                        id: 'status',
+                        Header: <>{t('profile.table.status')}</>,
+                        sortable: false,
+                        Cell: (cellProps: any) => getPositionStatus(cellProps.row.original),
+                    },
                 ]}
                 initialState={{
                     sortBy: [
@@ -110,6 +127,24 @@ const TransactionsHistory: React.FC = () => {
     );
 };
 
+const getPositionStatus = (position: any) => {
+    if (position.wholeMarket.isCanceled) {
+        return <StatusWrapper color="#808080">CANCELED</StatusWrapper>;
+    }
+    if (position.wholeMarket.isResolved) {
+        if (
+            convertPositionNameToPosition(position.position) ===
+            convertFinalResultToResultType(position.wholeMarket.finalResult)
+        ) {
+            return <StatusWrapper color="#5FC694">WON </StatusWrapper>;
+        } else {
+            return <StatusWrapper color="#E26A78">LOSS</StatusWrapper>;
+        }
+    } else {
+        return <StatusWrapper color="#FFFFFF">OPEN</StatusWrapper>;
+    }
+};
+
 const TableText = styled.span`
     font-family: 'Roboto';
     font-style: normal;
@@ -119,6 +154,25 @@ const TableText = styled.span`
     @media (max-width: 600px) {
         font-size: 10px;
     }
+`;
+
+const StatusWrapper = styled.div`
+    width: auto;
+    height: 25px;
+    border: 2px solid ${(props) => props.color || 'white'};
+    border-radius: 5px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: justify;
+    text-transform: uppercase;
+    text-align: center;
+    color: ${(props) => props.color || 'white'};
+    padding-top: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
 `;
 
 const TableHeaderStyle: React.CSSProperties = {
@@ -150,9 +204,9 @@ const CircleNumber = styled.span`
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
-    color: #5fc694;
+    color: #ffffff;
     background: #1a1c2b;
-    border: 2px solid #5fc694;
+    border: 2px solid #ffffff;
     border-radius: 50%;
     width: 23px;
     height: 23px;

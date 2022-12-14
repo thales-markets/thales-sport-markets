@@ -68,7 +68,7 @@ export const Section = styled(FlexDivColumn)`
         }
     }
     &.sixth {
-        margin-bottom: 200px;
+        margin-bottom: 150px;
         @media (max-width: 960px) {
             margin-top: 100px;
         }
@@ -77,7 +77,7 @@ export const Section = styled(FlexDivColumn)`
         }
         @media (max-width: 450px) {
             margin-top: 50px;
-            margin-bottom: 150px;
+            margin-bottom: 50px;
         }
     }
 `;
@@ -251,29 +251,26 @@ export const Zebro = styled.img`
         }
     }
     &.racing {
-        top: -130px;
+        top: -48px;
         right: -60px;
-        height: 40em;
         width: 40em;
+        z-index: 0;
         @media (max-width: 960px) {
-            height: 38em;
             width: 38em;
-            top: -220px;
+            top: -100px;
         }
 
         @media (max-width: 750px) {
             right: -125px;
-            height: 35em;
             width: 35em;
         }
 
         @media (max-width: 600px) {
             right: -100px;
-            top: -190px;
+            top: -125px;
         }
 
         @media (max-width: 500px) {
-            height: 30em;
             width: 30em;
             right: -195px;
             top: -135px;

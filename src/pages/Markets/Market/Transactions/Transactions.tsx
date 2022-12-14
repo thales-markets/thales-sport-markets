@@ -28,7 +28,7 @@ const Transactions: React.FC<TransactionsProps> = ({ market }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const marketTransactionsQuery = useMarketTransactionsQuery(market.address, networkId, {
+    const marketTransactionsQuery = useMarketTransactionsQuery(market.address, networkId, undefined, {
         enabled: isAppReady,
     });
 
@@ -49,7 +49,7 @@ const Transactions: React.FC<TransactionsProps> = ({ market }) => {
                     amount: claimTx.amount,
                     position: convertFinalResultToWinnerName(claimTx.market.finalResult, market),
                     market: claimTx?.market?.address,
-                    paid: claimTx.amount,
+                    paid: 0,
                     blockNumber: 0,
                 });
             });

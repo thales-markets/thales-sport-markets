@@ -3,7 +3,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ParlayMarket, PositionBalance } from 'types/markets';
 import thalesData from 'thales-data';
 import { NetworkId } from 'types/network';
-import { isParlayClaimable } from 'utils/markets';
+import { isParlayClaimable, isSportMarketExpired } from 'utils/markets';
 
 const useClaimablePositionCountQuery = (
     walletAddress: string,
@@ -30,7 +30,8 @@ const useClaimablePositionCountQuery = (
                 const [positionBalanceData, parlayMarketsData] = await Promise.all([positionBalances, parlayMarkets]);
 
                 const onlyNonZeroPositions: PositionBalance[] = positionBalanceData.filter(
-                    (positionBalance) => positionBalance.amount > 0
+                    (positionBalance) =>
+                        positionBalance.amount > 0 && !isSportMarketExpired(positionBalance.position.market)
                 );
 
                 const onlyClaimableParlays = parlayMarketsData.filter((parlayMarket: ParlayMarket) => {
@@ -46,6 +47,7 @@ const useClaimablePositionCountQuery = (
             }
         },
         {
+            refetchInterval: 5000,
             ...options,
         }
     );

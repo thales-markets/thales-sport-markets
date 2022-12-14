@@ -5,6 +5,27 @@
     font-size: 20px;
 }
 
+.icon--hide:before {
+    content: '\0030';
+}
+
+.icon--wrong:before {
+    content: '\0031';
+}
+
+.icon--toggle-right:before {
+    content: '\0032';
+}
+
+.icon--toggle-left:before {
+    content: '\0033';
+}
+
+.icon--correct:before {
+    content: '\0034';
+}
+
+
 .icon--overtime:before {
     content: '\0041';
 }
@@ -163,4 +184,84 @@
 
 .icon--claimable-flag::before {
     content: '\006F';
+}
+
+.icon--fee-rebates::before {
+    content: '\0075';
+}
+
+.icon--fifa-world-cup::before {
+    content: '\0076';
+}
+
+.icon--discount-vault::before {
+    content: '\0070';
+}
+
+.icon--degen-discount-vault::before {
+    content: '\0072';
+}
+
+.icon--safu-discount-vault::before {
+    content: '\0073';
+}
+
+.icon--strategy::before {
+    content: '\0074';
+}
+
+.icon--risks::before {
+    content: '\0071';
+}
+
+.icon--vaults::before {
+    content: '\0077';
+}
+
+.icon--lost::before {
+    content: '\0078';
+}
+
+.icon--win::before {
+    content: '\0079';
+}
+
+.icon--open::before {
+    content: '\007A';
+}
+
+.icon--odds::before {
+    content: '\0037';
+}
+
+.icon--filters::before {
+    content: '\0038';
+}
+
+.icon--pendingmarkets::before {
+    content: '\0039';
+}
+
+.icon--resolvedmarkets::before {
+    content: '\003A';
+}
+
+.icon--canceled::before {
+    content: '\003B';
+}
+
+.icon--wallet-connected::before {
+    content: '\0035';
+}
+
+.icon--wallet-disconnected::before {
+    content: '\0036';
+}
+
+.icon--parlay::before {
+    content: '\007B';
+}
+
+.icon--competition::before {
+    content: '\007C';
 }

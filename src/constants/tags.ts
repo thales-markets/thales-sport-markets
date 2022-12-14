@@ -94,7 +94,13 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--ucl',
         favourite: false,
     },
-    { id: 9018, label: 'FIFA World Cup', logo: ``, logoClass: '', favourite: false },
+    {
+        id: 9018,
+        label: 'FIFA World Cup',
+        logo: ``,
+        logoClass: 'icon-league icon-league--fifa-world-cup',
+        favourite: false,
+    },
     {
         id: 9100,
         label: 'Formula 1',
@@ -165,5 +171,6 @@ export enum TAGS_FLAGS {
 }
 
 export const MLS_TAG = 9010;
+export const FIFA_WC_TAG = 9018;
 
 export const PERSON_COMPETITIONS = [9007, 9100, 9101];

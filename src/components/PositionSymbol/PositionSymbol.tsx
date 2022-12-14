@@ -1,3 +1,4 @@
+import { useMatomo } from '@datapunt/matomo-tracker-react';
 import Tooltip from 'components/Tooltip';
 import { Position } from 'constants/options';
 import React, { CSSProperties } from 'react';
@@ -49,6 +50,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const { trackEvent } = useMatomo();
     const parlay = useSelector(getParlay);
     const addedToParlay = parlay.filter((game: any) => game.sportMarketId == marketId)[0];
 
@@ -56,6 +58,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
         <Wrapper
             disabled={showTooltip}
             isMobile={isMobile}
+            notClickable={!marketId}
             onClick={() => {
                 if (!showTooltip) {
                     if (marketId) {
@@ -63,6 +66,11 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                             dispatch(removeFromParlay(marketId));
                         } else {
                             if (type !== undefined) {
+                                trackEvent({
+                                    category: 'position',
+                                    action: discount == null ? 'non-discount' : 'discount',
+                                    value: discount == null ? 0 : Math.ceil(Math.abs(discount)),
+                                });
                                 const parlayMarket: ParlaysMarketPosition = {
                                     sportMarketId: marketId,
                                     position: Position.HOME,
@@ -99,6 +107,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                 color={symbolColor}
                 style={additionalStyle}
                 addedToParlay={addedToParlay && addedToParlay.position == type}
+                notClickable={!marketId}
             >
                 <Symbol
                     color={symbolColor}
@@ -147,15 +156,15 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     );
 };
 
-const Wrapper = styled.div<{ disabled?: boolean; isMobile?: boolean }>`
+const Wrapper = styled.div<{ disabled?: boolean; isMobile?: boolean; notClickable?: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: ${(_props) => (_props?.isMobile ? 'column' : 'row')};
-    cursor: ${(_props) => (_props?.disabled ? 'not-allowed' : 'pointer')};
+    flex-direction: ${(props) => (props?.isMobile ? 'column' : 'row')};
+    cursor: ${(props) => (props?.disabled ? 'not-allowed' : props.notClickable ? 'default' : 'pointer')};
 `;
 
-const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: boolean }>`
+const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: boolean; notClickable?: boolean }>`
     width: 30px;
     height: 30px;
     border-radius: 60%;
@@ -165,9 +174,19 @@ const Container = styled.div<{ glow?: boolean; color?: string; addedToParlay?: b
     justify-content: center;
     flex-direction: row;
     font-size: 14px;
-    border: ${(_props) =>
-        _props?.glow ? '3px solid ' + _props.color : _props.addedToParlay ? '3px solid #64D9FE' : '3px solid #5f6180'};
-    box-shadow: ${(_props) => (_props?.glow ? '0 0 6px 2px ' + _props.color : '')};
+    border: ${(props) =>
+        props?.glow ? '3px solid ' + props.color : props.addedToParlay ? '3px solid #64D9FE' : '3px solid #5f6180'};
+    box-shadow: ${(props) => (props?.glow ? '0 0 6px 2px ' + props.color : '')};
+
+    @media (hover: hover) {
+        &:hover {
+            ${(props) => (props.notClickable ? '' : 'border: 3px solid #64d9fe;')}
+            & > span {
+                ${(props) => (props.notClickable ? '' : 'color: #64d9fe !important;')}
+            }
+        }
+    }
+
     @media (max-width: 500px) {
         width: 25px;
         height: 25px;
@@ -186,15 +205,15 @@ const AdditionalText = styled.span`
 `;
 
 const Symbol = styled.span<{ color?: string; addedToParlay?: boolean; size?: string }>`
-    color: ${(_props) => (_props.addedToParlay ? '#64D9FE' : _props?.color ? _props.color : '')};
-    font-size: ${(_props) => (_props.size ? _props.size : '12px')};
+    color: ${(props) => (props.addedToParlay ? '#64D9FE' : props?.color ? props.color : '')};
+    font-size: ${(props) => (props.size ? props.size : '12px')};
 `;
 
 const Discount = styled(FlexDivCentered)<{ color?: string; noDiscount?: boolean }>`
-    color: ${(_props) => (_props?.color ? _props.color : '')};
+    color: ${(props) => (props?.color ? props.color : '')};
     font-size: 12px;
     margin-left: 2px;
-    visibility: ${(_props) => (_props?.noDiscount ? 'hidden' : '')};
+    visibility: ${(props) => (props?.noDiscount ? 'hidden' : '')};
 `;
 
 export default PositionSymbol;

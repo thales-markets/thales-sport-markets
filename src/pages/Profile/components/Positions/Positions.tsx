@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
 import useAccountMarketsQuery, { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
@@ -11,42 +11,74 @@ import { ParlayMarket } from 'types/markets';
 import {
     Arrow,
     CategoryContainer,
+    CategoryDisclaimer,
     CategoryIcon,
     CategoryLabel,
     Container,
     EmptyContainer,
+    EmptySubtitle,
+    EmptyTitle,
     ListContainer,
 } from './styled-components';
-import { isParlayClaimable } from 'utils/markets';
+import { isParlayClaimable, isParlayOpen, isSportMarketExpired } from 'utils/markets';
 import ParlayPosition from './components/ParlayPosition';
 import SimpleLoader from 'components/SimpleLoader';
 import { LoaderContainer } from 'pages/Markets/Home/Home';
 import SinglePosition from './components/SinglePosition';
+import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
+import { ReactComponent as OvertimeTicket } from 'assets/images/parlay-empty.svg';
+import { FlexDivCentered } from 'styles/common';
+import ShareTicketModal, {
+    ShareTicketModalProps,
+} from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
+import { ethers } from 'ethers';
 
-const Positions: React.FC = () => {
+const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
 
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
+    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
+    const [shareTicketData, setShareTicketData] = useState<ShareTicketModalProps>({
+        markets: [],
+        totalQuote: 0,
+        paid: 0,
+        payout: 0,
+        onClose: () => {},
+    });
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    // const walletAddress = useSelector((state: RootState) => getWalletAddress(state))
-    //     ? '0xf12c220b631125425f4c69823d6187FE3C8d0999'
-    //     : '0xf12c220b631125425f4c69823d6187FE3C8d0999';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const parlayMarketsQuery = useParlayMarketsQuery(walletAddress, networkId, undefined, undefined, {
-        enabled: isWalletConnected,
-    });
+    const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
 
-    const accountMarketsQuery = useAccountMarketsQuery(walletAddress, networkId, {
-        enabled: isWalletConnected,
-    });
+    const parlayMarketsQuery = useParlayMarketsQuery(
+        isSearchTextWalletAddress ? searchText : walletAddress,
+        networkId,
+        undefined,
+        undefined,
+        {
+            enabled: isWalletConnected,
+        }
+    );
+
+    const accountMarketsQuery = useAccountMarketsQuery(
+        isSearchTextWalletAddress ? searchText : walletAddress,
+        networkId,
+        {
+            enabled: isWalletConnected,
+        }
+    );
+
+    const marketDurationQuery = useMarketDurationQuery(networkId);
 
     const parlayMarkets = parlayMarketsQuery.isSuccess && parlayMarketsQuery.data ? parlayMarketsQuery.data : null;
     const accountPositions =
         accountMarketsQuery.isSuccess && accountMarketsQuery.data ? accountMarketsQuery.data : null;
+
+    const marketDuration =
+        marketDurationQuery.isSuccess && marketDurationQuery.data ? Math.floor(marketDurationQuery.data) : 30;
 
     const accountPositionsByStatus = useMemo(() => {
         const data = {
@@ -59,12 +91,31 @@ const Positions: React.FC = () => {
                     data.open.push(market);
                 }
                 if (market.claimable) {
-                    data.claimable.push(market);
+                    if (!isSportMarketExpired(market.market)) {
+                        data.claimable.push(market);
+                    }
                 }
             });
         }
+
+        if (searchText && !ethers.utils.isAddress(searchText)) {
+            data.open = data.open.filter((item) => {
+                if (
+                    item.market.homeTeam.toLowerCase().includes(searchText.toLowerCase()) ||
+                    item.market.awayTeam.toLowerCase().includes(searchText.toLowerCase())
+                )
+                    return item;
+            });
+            data.claimable = data.claimable.filter((item) => {
+                if (
+                    item.market.homeTeam.toLowerCase().includes(searchText.toLowerCase()) ||
+                    item.market.awayTeam.toLowerCase().includes(searchText.toLowerCase())
+                )
+                    return item;
+            });
+        }
         return data;
-    }, [accountPositions]);
+    }, [accountPositions, searchText]);
 
     const parlayMarketsByStatus = useMemo(() => {
         const data = {
@@ -84,20 +135,44 @@ const Positions: React.FC = () => {
                 );
 
                 if (resolvedOrCanceledMarkets?.length !== parlayMarket.sportMarkets.length)
-                    data.open.push(parlayMarket);
+                    if (isParlayOpen(parlayMarket)) data.open.push(parlayMarket);
+            });
+        }
+
+        if (searchText && !ethers.utils.isAddress(searchText)) {
+            data.open = data.open.filter((item) => {
+                const itemWithSearchText = item.sportMarkets.find(
+                    (item) =>
+                        item.homeTeam.includes(searchText.toLowerCase()) ||
+                        item.awayTeam.includes(searchText.toLowerCase())
+                );
+                if (itemWithSearchText) return item;
+            });
+            data.claimable = data.claimable.filter((item) => {
+                const itemWithSearchText = item.sportMarkets.find(
+                    (item) =>
+                        item.homeTeam.includes(searchText.toLowerCase()) ||
+                        item.awayTeam.includes(searchText.toLowerCase())
+                );
+                if (itemWithSearchText) return item;
             });
         }
         return data;
-    }, [parlayMarkets]);
+    }, [parlayMarkets, searchText]);
 
     const isLoading = parlayMarketsQuery.isLoading || accountMarketsQuery.isLoading;
 
     return (
         <Container>
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
-                <CategoryIcon className="icon icon--claimable-flag" />
-                <CategoryLabel>{t('profile.categories.claimable')}</CategoryLabel>
-                <Arrow className={openClaimable ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
+                <FlexDivCentered>
+                    <CategoryIcon className="icon icon--claimable-flag" />
+                    <CategoryLabel>{t('profile.categories.claimable')}</CategoryLabel>
+                    <Arrow className={openClaimable ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
+                </FlexDivCentered>
+                <CategoryDisclaimer>
+                    <Trans i18nKey="profile.winnings-are-forfeit" values={{ amount: marketDuration }} />
+                </CategoryDisclaimer>
             </CategoryContainer>
             {openClaimable && (
                 <ListContainer>
@@ -110,23 +185,43 @@ const Positions: React.FC = () => {
                             {parlayMarketsByStatus.claimable.length || accountPositionsByStatus.claimable.length ? (
                                 <>
                                     {accountPositionsByStatus.claimable.map((singleMarket, index) => {
-                                        return <SinglePosition position={singleMarket} key={`s-${index}`} />;
+                                        return (
+                                            <SinglePosition
+                                                position={singleMarket}
+                                                key={`s-${index}`}
+                                                setShareTicketModalData={setShareTicketData}
+                                                setShowShareTicketModal={setShowShareTicketModal}
+                                            />
+                                        );
                                     })}
                                     {parlayMarketsByStatus.claimable.map((parlayMarket, index) => {
-                                        return <ParlayPosition parlayMarket={parlayMarket} key={index} />;
+                                        return (
+                                            <ParlayPosition
+                                                parlayMarket={parlayMarket}
+                                                key={index}
+                                                setShareTicketModalData={setShareTicketData}
+                                                setShowShareTicketModal={setShowShareTicketModal}
+                                            />
+                                        );
                                     })}
                                 </>
                             ) : (
-                                <EmptyContainer>{t('profile.messages.no-claimable')}</EmptyContainer>
+                                <EmptyContainer>
+                                    <EmptyTitle>{t('profile.messages.no-claimable')}</EmptyTitle>
+                                    <OvertimeTicket />
+                                    <EmptySubtitle>{t('profile.messages.ticket-subtitle')}</EmptySubtitle>
+                                </EmptyContainer>
                             )}
                         </>
                     )}
                 </ListContainer>
             )}
             <CategoryContainer onClick={() => setOpenState(!openOpenPositions)}>
-                <CategoryIcon className="icon icon--logo" />
-                <CategoryLabel>{t('profile.categories.open')}</CategoryLabel>
-                <Arrow className={openOpenPositions ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
+                <FlexDivCentered>
+                    <CategoryIcon className="icon icon--logo" />
+                    <CategoryLabel>{t('profile.categories.open')}</CategoryLabel>
+                    <Arrow className={openOpenPositions ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
+                </FlexDivCentered>
             </CategoryContainer>
             {openOpenPositions && (
                 <ListContainer>
@@ -146,11 +241,24 @@ const Positions: React.FC = () => {
                                     })}
                                 </>
                             ) : (
-                                <EmptyContainer>{t('profile.messages.no-open')}</EmptyContainer>
+                                <EmptyContainer>
+                                    <EmptyTitle>{t('profile.messages.no-open')}</EmptyTitle>
+                                    <OvertimeTicket />
+                                    <EmptySubtitle>{t('profile.messages.ticket-subtitle')}</EmptySubtitle>
+                                </EmptyContainer>
                             )}
                         </>
                     )}
                 </ListContainer>
+            )}
+            {showShareTicketModal && (
+                <ShareTicketModal
+                    markets={shareTicketData.markets}
+                    totalQuote={shareTicketData.totalQuote}
+                    paid={shareTicketData.paid}
+                    payout={shareTicketData.payout}
+                    onClose={shareTicketData.onClose}
+                />
             )}
         </Container>
     );

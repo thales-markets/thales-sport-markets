@@ -29,14 +29,12 @@ import {
 } from './styled-components';
 import { toast } from 'react-toastify';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useMarketBalancesQuery from 'queries/markets/useMarketBalancesQuery';
 import usePositionPriceDetailsQuery from 'queries/markets/usePositionPriceDetailsQuery';
 import { refetchBalances } from 'utils/queryConnector';
-
-import { MAX_L2_GAS_LIMIT, Position, Side } from 'constants/options';
+import { Position, Side } from 'constants/options';
 import { AMMPosition, AvailablePerSide, Balances, MarketData, PositionType } from 'types/markets';
 import {
     countDecimals,
@@ -292,6 +290,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
 
                     if (X > availablePerSide.positions[selectedPosition].available) {
                         setTokenAmount(0);
+                        setTooltipTextUsdAmount(t('market.tooltip.amount-exceeded'));
                         return;
                     }
                     const roundedAmount = floorNumberToDecimals(X);
@@ -309,7 +308,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         };
 
         fetchData().catch((e) => console.log(e));
-    }, [usdAmountValue, selectedStableIndex]);
+    }, [usdAmountValue, selectedStableIndex, selectedPosition]);
 
     useEffect(() => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
@@ -368,7 +367,8 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                     !Number(tokenAmount) ||
                     Number(tokenAmount) < 1 ||
                     isBuying ||
-                    isAllowing
+                    isAllowing ||
+                    positionPriceDetailsQuery.isLoading
                 ) {
                     setSubmitDisabled(true);
                     return;
@@ -391,7 +391,17 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
             }
         };
         checkDisabled();
-    }, [tokenAmount, usdAmountValue, isBuying, isAllowing, hasAllowance, selectedSide, paymentTokenBalance, maxAmount]);
+    }, [
+        tokenAmount,
+        usdAmountValue,
+        isBuying,
+        isAllowing,
+        hasAllowance,
+        selectedSide,
+        paymentTokenBalance,
+        maxAmount,
+        positionPriceDetailsQuery.isLoading,
+    ]);
 
     useEffect(() => {
         const getMaxAmount = async () => {
@@ -497,7 +507,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                 const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
                 const ammQuote = await fetchAmmQuote(+Number(tokenAmount).toFixed(2) || 1);
                 const parsedAmount = ethers.utils.parseEther(Number(tokenAmount).toFixed(2));
-                const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+                const id = toast.loading(t('market.toast-message.transaction-pending'));
 
                 try {
                     const tx = await getAMMSportsTransaction(
@@ -514,7 +524,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                         ammQuote,
                         referralId,
                         ethers.utils.parseEther('0.02'),
-                        { gasLimit: MAX_L2_GAS_LIMIT }
+                        { gasLimit: MAX_GAS_LIMIT }
                     );
 
                     const txResult = await tx.wait();
@@ -522,8 +532,8 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                     if (txResult && txResult.transactionHash) {
                         refetchBalances(walletAddress, networkId);
                         selectedSide === Side.BUY
-                            ? toast.update(id, getSuccessToastOptions(t('market.toast-messsage.buy-success')))
-                            : toast.update(id, getSuccessToastOptions(t('market.toast-messsage.sell-success')));
+                            ? toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')))
+                            : toast.update(id, getSuccessToastOptions(t('market.toast-message.sell-success')));
                         setIsBuying(false);
                         setTokenAmount(0);
                         setUsdAmount(0);
@@ -555,7 +565,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMContract && signer) {
             setIsAllowing(true);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 let collateralContractWithSigner: ethers.Contract | undefined;
 
@@ -575,7 +585,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
 
                 if (txResult && txResult.transactionHash) {
                     setIsAllowing(false);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.approve-success')));
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -623,14 +633,17 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
     };
 
     const isBuy = selectedSide == Side.BUY;
-    const showPotentialProfit = !Number(tokenAmount) || positionPriceDetailsQuery.isLoading || !!tooltipTextUsdAmount;
+    const hidePotentialProfit =
+        !Number(tokenAmount) ||
+        positionPriceDetailsQuery.isLoading ||
+        (!!tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
     const liquidityInfo = floorNumberToDecimals(availablePerSide.positions[selectedPosition].available);
     const showCollateralSelector = selectedSide == Side.BUY && !market.gameStarted;
     const skew = positionPriceDetailsQuery.isLoading
         ? '-'
         : formatPercentage(ammPosition.sides[selectedSide].priceImpact);
 
-    const totalToReceive = showPotentialProfit ? '-' : formatCurrencyWithSign(USD_SIGN, tokenAmount);
+    const totalToReceive = hidePotentialProfit ? '-' : formatCurrencyWithSign(USD_SIGN, tokenAmount);
     const balancesObjectKeys = Object.keys(balances ? balances : {});
     const showPositionInfo =
         !balanceValueQuery.isLoading && balances && (balances.home > 0 || balances.draw > 0 || balances.away > 0);
@@ -736,7 +749,7 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                             <PotentialProfitContainer>
                                 <PrimaryLabel>{t('markets.market-details.potential-profit')}</PrimaryLabel>
                                 <PotentialProfit>
-                                    {showPotentialProfit
+                                    {hidePotentialProfit
                                         ? '-'
                                         : `$ ${formatCurrency(
                                               Number(tokenAmount) - ammPosition.sides[selectedSide].quote

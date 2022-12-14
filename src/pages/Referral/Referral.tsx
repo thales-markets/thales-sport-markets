@@ -1,10 +1,11 @@
+import ReferralButton from 'components/ReferralButton';
 import { USD_SIGN } from 'constants/currency';
 import useReferralTransactionsQuery from 'queries/referral/useReferralTransactionsQuery';
 import useReferredTradersQuery from 'queries/referral/useReferredTradersQuery';
 import useReferrerOverviewQuery from 'queries/referral/useReferrerOverviewQuery';
 import useReferrersQuery from 'queries/referral/useReferrersQuery';
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -14,8 +15,6 @@ import ReferralTransactionsTable from './components/ReferralTransactionsTable';
 import TradersTable from './components/TradersTable';
 import {
     ButtonContainer,
-    CopyLink,
-    GenerateLink,
     InfoContainer,
     KeyValueContainer,
     Label,
@@ -48,11 +47,11 @@ const NavigationItems = [
 const Referral: React.FC = () => {
     const { t } = useTranslation();
 
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state))?.toLowerCase() || '';
     // const walletAddress =
-    //     useSelector((state: RootState) => getWalletAddress(state)) || ''
-    //         ? '0xe21b80181304e3641424cdfb8376e73574ab4794'
-    //         : '0xe21b80181304e3641424cdfb8376e73574ab4794';
+    //     useSelector((state: RootState) => getWalletAddress(state))?.toLowerCase() || ''
+    //         ? '0xe966c59c15566A994391f6226fee5bc0ef70f87a'.toLowerCase()
+    //         : '0xe966c59c15566A994391f6226fee5bc0ef70f87a'.toLowerCase();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
 
@@ -88,8 +87,7 @@ const Referral: React.FC = () => {
         <Wrapper>
             <MainInfoContainer>
                 <ButtonContainer>
-                    <GenerateLink>{t('referral.generate-link')}</GenerateLink>
-                    <CopyLink>{t('referral.copy-link')}</CopyLink>
+                    <ReferralButton />
                 </ButtonContainer>
                 <InfoContainer>
                     <KeyValueContainer>
@@ -110,7 +108,14 @@ const Referral: React.FC = () => {
             </MainInfoContainer>
             <ParagraphContainer>
                 <ParagraphHeader>{t('referral.header')}</ParagraphHeader>
-                <Paragraph>{t('referral.paragraph')}</Paragraph>
+                <Paragraph>
+                    <Trans
+                        i18nKey={'referral.paragraph'}
+                        components={{
+                            bold: <strong style={{ fontWeight: '900' }} />,
+                        }}
+                    />
+                </Paragraph>
             </ParagraphContainer>
             <TabsContainer>
                 {NavigationItems.map((item, index) => {

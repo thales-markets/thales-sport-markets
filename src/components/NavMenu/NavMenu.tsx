@@ -1,13 +1,17 @@
+import LanguageSelector from 'components/LanguageSelector';
 import SPAAnchor from 'components/SPAAnchor';
+import WalletInfo from 'components/WalletInfo';
 import { NAV_MENU } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { useLocation } from 'react-router-dom';
+import { getIsMobile } from 'redux/modules/app';
+import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { truncateAddress } from 'utils/formatters/string';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
+import { buildHref } from 'utils/routes';
 import {
     CloseIcon,
     FooterContainer,
@@ -19,64 +23,51 @@ import {
     Network,
     NetworkIcon,
     NetworkName,
-    WalletAddress,
-    WalletAddressContainer,
-    WalletIcon,
     Wrapper,
 } from './styled-components';
-import { useAccountModal } from '@rainbow-me/rainbowkit';
-import { buildHref } from 'utils/routes';
-import LanguageSelector from 'components/LanguageSelector';
 
 type NavMenuProps = {
     visibility?: boolean | null;
-    hideVisibilityFunction: (value: boolean | null) => void;
+    setNavMenuVisibility: (value: boolean | null) => void;
 };
 
-const NavMenu: React.FC<NavMenuProps> = ({ visibility, hideVisibilityFunction }) => {
+const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) => {
     const { t } = useTranslation();
+    const location = useLocation();
+
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
 
-    const { openAccountModal } = useAccountModal();
-    // const { openConnectModal } = useConnectModal();
-
     return (
-        <OutsideClickHandler onOutsideClick={() => visibility == true && hideVisibilityFunction(false)}>
+        <OutsideClickHandler onOutsideClick={() => visibility == true && setNavMenuVisibility(false)}>
             <Wrapper show={visibility}>
                 <HeaderContainer>
                     <Network>
                         <NetworkIcon className={getNetworkIconClassNameByNetworkId(networkId)} />
                         <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
                     </Network>
-                    <CloseIcon onClick={() => hideVisibilityFunction(false)} />
+                    <CloseIcon onClick={() => setNavMenuVisibility(false)} />
                     <LanguageSelector />
                 </HeaderContainer>
                 <ItemsContainer>
                     {NAV_MENU.map((item, index) => {
+                        if (item.name == 'profile' && !isWalletConnected) return;
                         return (
-                            <SPAAnchor
-                                key={index}
-                                href={buildHref(item.route)}
-                                onClick={() => hideVisibilityFunction(null)}
-                            >
-                                <ItemContainer key={index}>
-                                    <NavIcon className={item.iconClass} />
+                            <SPAAnchor key={index} href={buildHref(item.route)}>
+                                <ItemContainer
+                                    key={index}
+                                    active={location.pathname === item.route}
+                                    onClick={() => setNavMenuVisibility(null)}
+                                >
+                                    <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
                                 </ItemContainer>
                             </SPAAnchor>
                         );
                     })}
                 </ItemsContainer>
-                <FooterContainer>
-                    {isWalletConnected && (
-                        <WalletAddressContainer onClick={() => openAccountModal?.()}>
-                            <WalletIcon />
-                            <WalletAddress>{truncateAddress(walletAddress)}</WalletAddress>
-                        </WalletAddressContainer>
-                    )}
-                </FooterContainer>
+                <FooterContainer>{isMobile && <WalletInfo />}</FooterContainer>
             </Wrapper>
         </OutsideClickHandler>
     );

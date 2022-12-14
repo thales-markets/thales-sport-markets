@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import { ClubLogo, ClubName } from '../ParlayPosition/components/ParlayItem/styled-components';
@@ -32,20 +32,45 @@ import { ethers } from 'ethers';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { toast } from 'react-toastify';
 import PositionSymbol from 'components/PositionSymbol';
-import { convertPositionNameToPositionType, convertPositionToSymbolType, getIsApexTopGame } from 'utils/markets';
+import {
+    convertPositionNameToPosition,
+    convertPositionNameToPositionType,
+    convertPositionToSymbolType,
+    getCanceledGameClaimAmount,
+    getIsApexTopGame,
+} from 'utils/markets';
 import { getPositionColor } from 'utils/ui';
 import { formatDateWithTime } from 'utils/formatters/date';
-import { getEtherscanTxLink } from 'utils/etherscan';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getNetworkId } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { getIsMobile } from 'redux/modules/app';
 import { FlexDivRow } from 'styles/common';
+import { refetchAfterClaim } from 'utils/queryConnector';
+import { buildMarketLink } from 'utils/routes';
+import i18n from 'i18n';
+import { MAX_GAS_LIMIT } from 'constants/network';
+import useMarketTransactionsQuery from 'queries/markets/useMarketTransactionsQuery';
+import { ParlaysMarket } from 'types/markets';
+import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 
-const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ position }) => {
+type SinglePositionProps = {
+    position: AccountPositionProfile;
+    setShareTicketModalData?: (shareTicketData: ShareTicketModalProps) => void;
+    setShowShareTicketModal?: (show: boolean) => void;
+};
+
+const SinglePosition: React.FC<SinglePositionProps> = ({
+    position,
+    setShareTicketModalData,
+    setShowShareTicketModal,
+}) => {
+    const language = i18n.language;
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isWalletConnect = useSelector((state: RootState) => getIsWalletConnected(state));
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(
         getTeamImageSource(position.market.homeTeam, position.market.tags[0])
@@ -53,6 +78,25 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
     const [awayLogoSrc, setAwayLogoSrc] = useState(
         getTeamImageSource(position.market.awayTeam, position.market.tags[0])
     );
+
+    const marketTransactionsQuery = useMarketTransactionsQuery(position.market.address, networkId, position.account, {
+        enabled: isWalletConnect,
+    });
+
+    const sumOfTransactionPaidAmount = useMemo(() => {
+        let sum = 0;
+
+        if (marketTransactionsQuery.data) {
+            marketTransactionsQuery.data.forEach((transaction) => {
+                if (transaction.position == position.market.finalResult - 1) {
+                    if (transaction.type == 'sell') sum -= transaction.paid;
+                    if (transaction.type == 'buy') sum += transaction.paid;
+                }
+            });
+        }
+
+        return sum;
+    }, [marketTransactionsQuery.data, position.market.finalResult]);
 
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(position.market.homeTeam, position.market.tags[0]));
@@ -64,13 +108,19 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
         if (signer) {
             const contract = new ethers.Contract(position.market.address, sportsMarketContract.abi, signer);
             contract.connect(signer);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
-                const tx = await contract.exerciseOptions();
+                const tx = await contract.exerciseOptions({
+                    gasLimit: MAX_GAS_LIMIT,
+                });
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    toast.update(id, getSuccessToastOptions(t('market.toast-messsage.claim-winnings-success')));
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
+                    if (setShareTicketModalData && setShowShareTicketModal) {
+                        setShareTicketModalData(shareTicketData);
+                        setShowShareTicketModal(true);
+                    }
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -80,7 +130,33 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
     };
 
     const isClaimable = position.claimable;
+    const isCanceled = position.market.isCanceled;
     const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
+    const claimCanceledGame = isClaimable && isCanceled;
+
+    const claimAmountForCanceledGame = claimCanceledGame ? getCanceledGameClaimAmount(position) : 0;
+
+    const claimAmount = claimCanceledGame ? claimAmountForCanceledGame : position.amount;
+
+    const shareTicketData: ShareTicketModalProps = {
+        markets: [
+            {
+                ...position.market,
+                homeOdds: sumOfTransactionPaidAmount / position.amount,
+                awayOdds: sumOfTransactionPaidAmount / position.amount,
+                drawOdds: sumOfTransactionPaidAmount / position.amount,
+                winning: position.claimable,
+                position: convertPositionNameToPosition(position?.side ? position?.side : ''),
+            } as ParlaysMarket,
+        ],
+        totalQuote: sumOfTransactionPaidAmount / position.amount,
+        paid: sumOfTransactionPaidAmount,
+        payout: position.amount,
+        onClose: () => {
+            refetchAfterClaim(walletAddress, networkId);
+            setShowShareTicketModal ? setShowShareTicketModal(false) : null;
+        },
+    };
 
     return (
         <Wrapper>
@@ -90,6 +166,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                         style={{ marginRight: '5px' }}
                         alt={position.market.homeTeam}
                         src={homeLogoSrc}
+                        isFlag={position.market.tags[0] == 9018}
                         onError={getOnImageError(setHomeLogoSrc, position.market.tags[0])}
                     />
                     <ClubName>{position.market.homeTeam}</ClubName>
@@ -100,6 +177,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                         style={{ marginRight: '5px' }}
                         alt={position.market.awayTeam}
                         src={awayLogoSrc}
+                        isFlag={position.market.tags[0] == 9018}
                         onError={getOnImageError(setAwayLogoSrc, position.market.tags[0])}
                     />
                     <ClubName>{position.market.awayTeam}</ClubName>
@@ -108,13 +186,22 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
             {isClaimable && (
                 <>
                     <ResultContainer>
-                        <Label>{t('profile.card.result')}</Label>
-                        <BoldValue>{`${position.market.homeScore} : ${position.market.awayScore}`}</BoldValue>
+                        {!isCanceled && (
+                            <>
+                                <Label>{t('profile.card.result')}</Label>
+                                <BoldValue>{`${position.market.homeScore} : ${position.market.awayScore}`}</BoldValue>
+                            </>
+                        )}
+                        {isCanceled && (
+                            <>
+                                <Label canceled={true}>{t('profile.card.canceled')}</Label>
+                            </>
+                        )}
                     </ResultContainer>
                     {isMobile ? (
                         <ClaimContainer>
                             <FlexDivRow>
-                                <ClaimValue>{formatCurrencyWithSign(USD_SIGN, position.amount, 2)}</ClaimValue>
+                                <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
                             </FlexDivRow>
                             <ClaimButton
                                 claimable={true}
@@ -131,7 +218,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                         <>
                             <ClaimInfoContainer>
                                 <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
-                                <ClaimValue>{formatCurrencyWithSign(USD_SIGN, position.amount, 2)}</ClaimValue>
+                                <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
                             </ClaimInfoContainer>
                             <ClaimButton
                                 claimable={true}
@@ -166,7 +253,7 @@ const SinglePosition: React.FC<{ position: AccountPositionProfile }> = ({ positi
                         <Label>{t('profile.card.starts')}</Label>
                         <BoldValue>{formatDateWithTime(position.market.maturityDate)}</BoldValue>
                     </ColumnDirectionInfo>
-                    <ExternalLink href={getEtherscanTxLink(networkId, position.market.id)} target={'_blank'}>
+                    <ExternalLink href={buildMarketLink(position.market.address, language)} target={'_blank'}>
                         <ExternalLinkContainer>
                             <ExternalLinkArrow />
                         </ExternalLinkContainer>

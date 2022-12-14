@@ -46,16 +46,16 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     height: 100%;
     position: fixed;
     top: 0;
-    ${(_props) => (_props?.show == true ? 'right: 0;' : '')}
-    ${(_props) => (_props?.show == false || _props?.show == null ? 'right: -255px;' : '')}
-    ${(_props) => _props?.show === true && animationOpen};
+    ${(props) => (props?.show == true ? 'right: 0;' : '')}
+    ${(props) => (props?.show == false || props?.show == null ? 'right: -255px;' : '')}
+    ${(props) => props?.show === true && animationOpen};
     ${({ show }) => show === false && animationClose};
     background-color: ${(props) => props.theme.nav.background};
     justify-content: space-between;
     z-index: 3;
-    ${(_props) => (_props?.show == true ? `-webkit-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
-    ${(_props) => (_props?.show == true ? `-moz-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
-    ${(_props) => (_props?.show == true ? `${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
+    ${(props) => (props?.show == true ? `-webkit-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
+    ${(props) => (props?.show == true ? `-moz-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
+    ${(props) => (props?.show == true ? `${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
     padding: 20px 10px;
 `;
 
@@ -66,12 +66,13 @@ export const ItemsContainer = styled.div`
     margin-right: auto;
 `;
 
-export const ItemContainer = styled.div`
+export const ItemContainer = styled.div<{ active?: boolean }>`
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-top: 15px;
     cursor: pointer;
+    ${(props) => (props.active ? `color: ${props.theme.nav.text.primary};` : '')}
     :hover {
         i {
             color: ${(props) => props.theme.nav.text.primary}!important;
@@ -82,7 +83,7 @@ export const ItemContainer = styled.div`
 
 export const NavLabel = styled.span<{ active?: boolean }>`
     font-size: 16px;
-    font-weight: ${(_props) => (_props?.active ? '600' : '400')};
+    font-weight: ${(props) => (props?.active ? '600' : '400')};
     line-height: 120%;
     text-transform: uppercase;
 `;
@@ -90,7 +91,7 @@ export const NavLabel = styled.span<{ active?: boolean }>`
 export const NavIcon = styled.i<{ active?: boolean }>`
     font-size: 25px;
     margin-right: 10px;
-    color: ${(_props) => (_props?.active ? `${_props.theme.nav.text.primary}` : `${_props.theme.nav.text.secondary}`)};
+    color: ${(props) => (props?.active ? `${props.theme.nav.text.primary}` : `${props.theme.nav.text.secondary}`)};
 `;
 
 export const ButtonsContainer = styled.div`

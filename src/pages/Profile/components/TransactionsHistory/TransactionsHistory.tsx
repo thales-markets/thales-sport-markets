@@ -6,7 +6,11 @@ import { CategoryContainer, CategoryIcon, CategoryLabel } from '../Positions/sty
 import ParlayTransactions from './components/ParlayTransactions';
 import SingleTransactions from './components/SingleTransactions';
 
-const TransactionsHistory: React.FC = () => {
+type TransactionHistoryProps = {
+    searchText?: string;
+};
+
+const TransactionsHistory: React.FC<TransactionHistoryProps> = ({ searchText }) => {
     const [showSingles, setShow] = useState<boolean>(false);
     const { t } = useTranslation();
 
@@ -22,8 +26,8 @@ const TransactionsHistory: React.FC = () => {
                     <Label>{t('profile.categories.parlay')}</Label>
                 </Wrapper>
             </Container>
-            {showSingles && <SingleTransactions />}
-            {!showSingles && <ParlayTransactions />}
+            {showSingles && <SingleTransactions searchText={searchText} />}
+            {!showSingles && <ParlayTransactions searchText={searchText} />}
         </>
     );
 };
@@ -46,6 +50,9 @@ const Label = styled(CategoryLabel)`
 `;
 
 const Wrapper = styled(CategoryContainer)<{ active: boolean }>`
+    flex-direction: row;
+    align-items: center;
+    margin: 10px 0 !important;
     ${Icon},
     ${Label} {
         color: ${(props) => (props.active ? 'white' : '#5f6180')};

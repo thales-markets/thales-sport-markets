@@ -5,7 +5,7 @@ import { t } from 'i18next';
 import React from 'react';
 import { AccountPosition, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime, formatShortDateWithTime } from 'utils/formatters/date';
-import { getIsApexTopGame, isApexGame } from 'utils/markets';
+import { getIsApexTopGame, isApexGame, isFifaWCGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import MatchStatus from '../components/MatchStatus';
 import Odds from '../components/Odds';
@@ -35,7 +35,12 @@ const MarketListCardMobile: React.FC<MarketRowCardProps> = ({ market, accountPos
             isMobile={true}
         >
             <MatchInfoMobile>
-                <MatchInfoLabelMobile>{formatShortDateWithTime(market.maturityDate)}</MatchInfoLabelMobile>
+                <MatchInfoLabelMobile>
+                    {formatShortDateWithTime(market.maturityDate)}{' '}
+                    {isFifaWCGame(market.tags[0]) && (
+                        <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={10} marginLeft={2} />
+                    )}
+                </MatchInfoLabelMobile>
                 <MatchInfoLabelMobile home={true}>{market.homeTeam}</MatchInfoLabelMobile>
                 {isApexGame(market.tags[0]) && (
                     <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={10} marginLeft={2} />
@@ -94,7 +99,7 @@ const MarketListCardMobile: React.FC<MarketRowCardProps> = ({ market, accountPos
                 )}
                 <LinkWrapper>
                     <SPAAnchor href={buildMarketLink(market.address, language)}>
-                        <LinkIcon isMobile={true} className={`icon-exotic icon-exotic--link`} />
+                        <LinkIcon isMobile={true} className={`icon icon--arrow-external`} />
                     </SPAAnchor>
                 </LinkWrapper>
             </OddsWrapperMobile>

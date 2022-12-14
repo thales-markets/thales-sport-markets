@@ -11,6 +11,7 @@ import { Team } from 'pages/MintWorldCupNFT/groups';
 import { StyledButton } from 'pages/MintWorldCupNFT/styled-components';
 import networkConnector from 'utils/networkConnector';
 import { useSelector } from 'react-redux';
+import { MAX_GAS_LIMIT } from 'constants/network';
 
 type ConfirmationDialogProps = {
     closeDialog: VoidFunction;
@@ -30,9 +31,11 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ closeDialog, se
         setIsMinting(true);
         if (favoriteTeamContract && signer) {
             const favoriteTeamContractWithSigner = favoriteTeamContract.connect(signer);
-            const id = toast.loading(t('market.toast-messsage.transaction-pending'));
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
-                const tx = await favoriteTeamContractWithSigner.mint(walletAddress, selectedTeam?.number);
+                const tx = await favoriteTeamContractWithSigner.mint(walletAddress, selectedTeam?.number, {
+                    gasLimit: MAX_GAS_LIMIT,
+                });
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {

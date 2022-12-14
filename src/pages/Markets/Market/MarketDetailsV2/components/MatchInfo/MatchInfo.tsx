@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -19,18 +19,20 @@ import {
     MatchTimeContainerMobile,
     TeamNamesWrapper,
     TeamName,
+    Versus,
 } from './styled-components';
 import Tooltip from 'components/Tooltip';
 
 import { MarketData } from 'types/markets';
 
-import { getErrorImage, getLeagueLogoClass, getTeamImageSource } from 'utils/images';
+import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatDateWithTime } from 'utils/formatters/date';
 import {
     convertFinalResultToResultType,
     getIsApexTopGame,
     getMarketStatusFromMarketData,
     isApexGame,
+    isFifaWCGame,
 } from 'utils/markets';
 import { ApexBetTypeKeyMapping, MarketStatus } from 'constants/markets';
 import { getIsMobile } from 'redux/modules/app';
@@ -46,15 +48,26 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
     const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
-    const homeLogoSrc = getTeamImageSource(market.homeTeam, market.tags[0])
-        ? getTeamImageSource(market.homeTeam, market.tags[0])
-        : getErrorImage(market.tags[0]);
-    const awayLogoSrc = getTeamImageSource(market.awayTeam, market.tags[0]);
+    const [homeLogoSrc, setHomeLogoSrc] = useState(
+        getTeamImageSource(market.homeTeam, market.tags[0])
+            ? getTeamImageSource(market.homeTeam, market.tags[0])
+            : getErrorImage(market.tags[0])
+    );
+    const [awayLogoSrc, setAwayLogoSrc] = useState(
+        getTeamImageSource(market.awayTeam, market.tags[0])
+            ? getTeamImageSource(market.awayTeam, market.tags[0])
+            : getErrorImage(market.tags[0])
+    );
+
     const leagueLogo = getLeagueLogoClass(market.tags[0]);
     const isApexTopGame = getIsApexTopGame(market.isApex, market.betType);
 
     const isResolved = market?.resolved;
     const matchStartsLabel = isApexGame(market.tags[0]) ? t('market.race-starts') : t('market.match-time');
+
+    const showMatchParticipantsBelow =
+        getMarketStatusFromMarketData(market) !== MarketStatus.Open ||
+        getMarketStatusFromMarketData(market) == MarketStatus.ResolvePending;
 
     return (
         <>
@@ -72,7 +85,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                         </InnerWrapper>
                         <InnerWrapper>
                             <ParticipantLogoContainer>
-                                <ParticipantLogo src={homeLogoSrc} />
+                                <ParticipantLogo src={homeLogoSrc} isFlag={market.tags[0] == 9018} />
                             </ParticipantLogoContainer>
                         </InnerWrapper>
                         <InnerWrapper>
@@ -96,14 +109,22 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                     isWinner={isResolved && convertFinalResultToResultType(market?.finalResult) == 0}
                                     isDraw={isResolved && convertFinalResultToResultType(market?.finalResult) == 2}
                                 >
-                                    <ParticipantLogo src={homeLogoSrc ? homeLogoSrc : getErrorImage(market.tags[0])} />
+                                    <ParticipantLogo
+                                        src={homeLogoSrc ? homeLogoSrc : getErrorImage(market.tags[0])}
+                                        isFlag={market.tags[0] == 9018}
+                                        onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
+                                    />
                                 </ParticipantLogoContainer>
                                 <ParticipantLogoContainer
                                     isWinner={isResolved && convertFinalResultToResultType(market?.finalResult) == 1}
                                     isDraw={isResolved && convertFinalResultToResultType(market?.finalResult) == 2}
                                     awayTeam={true}
                                 >
-                                    <ParticipantLogo src={awayLogoSrc ? awayLogoSrc : getErrorImage(market.tags[0])} />
+                                    <ParticipantLogo
+                                        src={awayLogoSrc ? awayLogoSrc : getErrorImage(market.tags[0])}
+                                        isFlag={market.tags[0] == 9018}
+                                        onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
+                                    />
                                 </ParticipantLogoContainer>
                             </ParticipantsContainer>
                             <MatchTimeContainer>
@@ -111,6 +132,9 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                     {matchStartsLabel}:
                                     {isApexGame(market.tags[0]) && (
                                         <Tooltip overlay={t(`common.h2h-tooltip`)} iconFontSize={15} marginLeft={2} />
+                                    )}
+                                    {isFifaWCGame(market.tags[0]) && (
+                                        <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={15} marginLeft={2} />
                                     )}
                                 </MatchTimeLabel>
                                 <MatchTime>{formatDateWithTime(market.maturityDate)}</MatchTime>
@@ -132,6 +156,8 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                     >
                                         <ParticipantLogo
                                             src={homeLogoSrc ? homeLogoSrc : getErrorImage(market.tags[0])}
+                                            isFlag={market.tags[0] == 9018}
+                                            onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                                         />
                                     </ParticipantLogoContainer>
                                     <ParticipantLogoContainer
@@ -143,6 +169,8 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                     >
                                         <ParticipantLogo
                                             src={awayLogoSrc ? awayLogoSrc : getErrorImage(market.tags[0])}
+                                            isFlag={market.tags[0] == 9018}
+                                            onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                                         />
                                     </ParticipantLogoContainer>
                                 </ParticipantsContainer>
@@ -158,10 +186,11 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                             </MatchTimeContainerMobile>
                         </Container>
                     )}
-                    {getMarketStatusFromMarketData(market) !== MarketStatus.Open && (
+                    {showMatchParticipantsBelow && (
                         <TeamNamesWrapper>
-                            <TeamName>{fixLongTeamNameString(market.homeTeam)}</TeamName>
-                            <TeamName>{fixLongTeamNameString(market.awayTeam)}</TeamName>
+                            <TeamName isHomeTeam={true}>{fixLongTeamNameString(market.homeTeam)}</TeamName>
+                            <Versus>{' vs '}</Versus>
+                            <TeamName isHomeTeam={false}>{fixLongTeamNameString(market.awayTeam)}</TeamName>
                         </TeamNamesWrapper>
                     )}
                     {isApexGame(market.tags[0]) && <MarketNotice>{market.leagueRaceName}</MarketNotice>}

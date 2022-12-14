@@ -1,26 +1,24 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery } from 'react-query';
 import { NetworkId } from 'types/network';
-import thalesData from 'thales-data';
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 
-type Zebro = {
-    id: string;
-    owner: string;
-    tokenId: number;
-    countryName: string;
+export type User = {
+    rank: number;
+    address: string;
     url: string;
-    country: number;
+    baseVolume: number;
+    volume: number;
+    bonusVolume: number;
+    rewards: { op: number; thales: number };
 };
 
-const useZebroQuery = (walletAddress: string, networkId: NetworkId) => {
-    return useQuery<[Zebro]>(QUERY_KEYS.Zebro(walletAddress, networkId), async () => {
-        const zebros = await thalesData.sportMarkets.zebros({
-            account: walletAddress,
-            network: networkId,
-        });
-
-        return zebros;
+const useLeaderboardQuery = (networkId: NetworkId) => {
+    return useQuery<{ globalVolume: number; leaderboard: [User] }>(QUERY_KEYS.Zebro(networkId), async () => {
+        const response = await axios.get(`${generalConfig.API_URL}/fifa-rewards/${networkId}`);
+        return response.data;
     });
 };
 
-export default useZebroQuery;
+export default useLeaderboardQuery;

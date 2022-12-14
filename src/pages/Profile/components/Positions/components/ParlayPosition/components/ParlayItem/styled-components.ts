@@ -30,15 +30,22 @@ export const MatchLogo = styled.div`
     }
 `;
 
-export const ClubLogo = styled.img<{ awayTeam?: boolean; losingTeam?: boolean; customMobileSize?: string }>`
+export const ClubLogo = styled.img<{
+    awayTeam?: boolean;
+    losingTeam?: boolean;
+    customMobileSize?: string;
+    isFlag?: boolean;
+}>`
+    ${(props) => (props?.isFlag ? 'object-fit: cover;' : '')}
+    ${(props) => (props?.isFlag ? 'border-radius: 50%;' : '')}
     height: 45px;
     width: 45px;
-    opacity: ${(_props) => (_props?.losingTeam == true ? `0.4` : '1')};
-    z-index: ${(_props) => (_props?.losingTeam == true ? '1' : '2')};
-    ${(_props) => (_props?.awayTeam ? 'margin-left: -15px;' : '')}
+    opacity: ${(props) => (props?.losingTeam ? `0.4` : '1')};
+    z-index: ${(props) => (props?.losingTeam ? '1' : '2')};
+    ${(props) => (props?.awayTeam ? 'margin-left: -15px;' : '')}
     @media (max-width: 768px) {
-        height: ${(_props) => (_props?.customMobileSize ? _props.customMobileSize : '30px')};
-        width: ${(_props) => (_props?.customMobileSize ? _props.customMobileSize : '30px')};
+        height: ${(props) => (props?.customMobileSize ? props.customMobileSize : '30px')};
+        width: ${(props) => (props?.customMobileSize ? props.customMobileSize : '30px')};
     }
 `;
 
