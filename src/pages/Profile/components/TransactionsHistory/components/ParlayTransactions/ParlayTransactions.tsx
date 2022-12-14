@@ -60,7 +60,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
     );
     let parlayTx = parlaysTxQuery.isSuccess ? parlaysTxQuery.data : [];
 
-    if (searchText) {
+    if (searchText && !isSearchTextWalletAddress) {
         parlayTx = parlayTx?.filter((item) => {
             const marketWithSearchTextIncluded = item.sportMarkets.find(
                 (item) =>
