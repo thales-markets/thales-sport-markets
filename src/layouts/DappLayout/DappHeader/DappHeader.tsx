@@ -60,7 +60,7 @@ const DappHeader: React.FC = () => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
-    const [navMenuVisibility, setNavMenuVisibility] = useState<boolean>(false);
+    const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
     const [showSearcHModal, setShowSearchModal] = useState<boolean>(false);
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
 
@@ -108,7 +108,7 @@ const DappHeader: React.FC = () => {
                         />
                         <NavMenu
                             visibility={navMenuVisibility}
-                            setNavMenuVisibility={(value: boolean) => setNavMenuVisibility(value)}
+                            setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
                         />
                     </RightContainer>
                 </Container>
@@ -150,7 +150,7 @@ const DappHeader: React.FC = () => {
                             )}
                             <NavMenuMobile
                                 visibility={navMenuVisibility}
-                                setNavMenuVisibility={(value: boolean) => setNavMenuVisibility(value)}
+                                setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
                             />
                         </MenuIconContainer>
                     </WrapperMobile>
