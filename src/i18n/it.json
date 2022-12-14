@@ -288,7 +288,8 @@
             "available": "A disposizione",
             "amount-to-buy": "Importo da acquistare",
             "discount": "Sconto",
-            "positions": "Posizioni"
+            "positions": "Posizioni",
+            "odds": "Probabilità"
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
         "parlay": {
@@ -380,7 +381,8 @@
             "no-data-available": "No data available",
             "safebox": "Commissioni SafeBox",
             "rebates": "Sconti",
-            "volume": "Volume"
+            "volume": "Volume",
+            "percent": "Per cento"
         },
         "periods": {
             "period-1": "Secondo periodo",
@@ -512,7 +514,8 @@
             "no-claimable": "Non hai posizioni rivendicabili",
             "no-open": "Non hai nessuna posizione aperta",
             "no-transactions": "Non hai scambi",
-            "ticket-subtitle": "Aggiungi posizione, scegli un mercato ed effettua la tua selezione."
+            "ticket-subtitle": "Aggiungi posizione, scegli un mercato ed effettua la tua selezione.",
+            "canceled-tooltip": "I mercati annullati possono essere rivendicati 2 ore dopo la risoluzione del mercato."
         },
         "table": {
             "id": "Id",
@@ -525,7 +528,8 @@
             "total-amount": "Importo totale",
             "total-quote": "Citazione totale"
         },
-        "winnings-are-forfeit": "*Le vincite non riscosse entro {{amount}} giorni dalla risoluzione di un mercato vengono annullate."
+        "winnings-are-forfeit": "*Le vincite non riscosse entro {{amount}} giorni dalla risoluzione di un mercato vengono annullate.",
+        "search-field": "Cerca portafoglio"
     },
     "mint-world-cup-nft": {
         "second-option": "La seconda opzione per metterti nella lista consentita è completare i seguenti passaggi:",
