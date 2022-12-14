@@ -97,7 +97,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             awayOdds: market.awayOdds,
                             drawOdds: market.drawOdds,
                         }}
-                        marketId={market.id}
+                        marketAddress={market.address}
                         homeTeam={market.homeTeam}
                         awayTeam={market.awayTeam}
                         awayPriceImpact={market.awayPriceImpact}
@@ -116,7 +116,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         awayOdds: market.awayOdds,
                         drawOdds: market.drawOdds,
                     }}
-                    marketId={market.id}
+                    marketAddress={market.address}
                     homeTeam={market.homeTeam}
                     awayTeam={market.awayTeam}
                     accountPositions={accountPositions}
@@ -137,7 +137,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         awayOdds: market.awayOdds,
                         drawOdds: market.drawOdds,
                     }}
-                    marketId={market.id}
+                    marketAddress={market.address}
                     homeTeam={market.homeTeam}
                     awayTeam={market.awayTeam}
                     accountPositions={accountPositions}

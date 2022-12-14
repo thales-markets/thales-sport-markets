@@ -6,8 +6,7 @@ import thalesData from 'thales-data';
 import { SportMarkets } from 'types/markets';
 import { NetworkId } from 'types/network';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
-import { fixApexName, fixDuplicatedTeamName, fixLongTeamName } from 'utils/formatters/string';
-import { appplyLogicForApexGame } from 'utils/markets';
+import { fixDuplicatedTeamName, fixLongTeamName } from 'utils/formatters/string';
 import networkConnector from 'utils/networkConnector';
 
 const marketsCache = {
@@ -15,41 +14,28 @@ const marketsCache = {
     [GlobalFiltersEnum.Canceled]: [] as SportMarkets,
     [GlobalFiltersEnum.ResolvedMarkets]: [] as SportMarkets,
     [GlobalFiltersEnum.PendingMarkets]: [] as SportMarkets,
-    [GlobalFiltersEnum.All]: [] as SportMarkets,
-    [GlobalFiltersEnum.YourPositions]: [] as SportMarkets,
-    [GlobalFiltersEnum.Claim]: [] as SportMarkets,
-    [GlobalFiltersEnum.History]: [] as SportMarkets,
 };
 
-const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolean) => {
+const mapMarkets = async (
+    allMarkets: SportMarkets,
+    mapOnlyOpenedMarkets: boolean,
+    oddsFromContract: undefined | Array<any>
+) => {
     const openMarkets = [] as SportMarkets;
     const canceledMarkets = [] as SportMarkets;
     const resolvedMarkets = [] as SportMarkets;
     const pendingMarkets = [] as SportMarkets;
 
-    const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
-    let oddsFromContract: undefined | Array<any>;
-
-    try {
-        oddsFromContract = await sportPositionalMarketDataContract?.getOddsForAllActiveMarkets();
-    } catch (e) {
-        console.log('Could not get oods from chain', e);
-    }
-
     allMarkets.forEach((market) => {
         market.maturityDate = new Date(market.maturityDate);
-        market.homeTeam = market.isApex ? fixApexName(market.homeTeam) : fixDuplicatedTeamName(market.homeTeam);
-        market.awayTeam = market.isApex ? fixApexName(market.awayTeam) : fixDuplicatedTeamName(market.awayTeam);
-        if (market.isApex) {
-            market = appplyLogicForApexGame(market);
-        } else {
-            market = fixLongTeamName(market);
-        }
+        market.homeTeam = fixDuplicatedTeamName(market.homeTeam);
+        market.awayTeam = fixDuplicatedTeamName(market.awayTeam);
+        market = fixLongTeamName(market);
         market.sport = SPORTS_MAP[market.tags[0]];
 
         if (market.isOpen && oddsFromContract) {
             oddsFromContract
-                .filter((obj: any) => obj[0] === market.id)
+                .filter((obj: any) => obj[0] === market.address)
                 .map((obj: any) => {
                     market.homeOdds = bigNumberFormatter(obj.odds[0]);
                     market.awayOdds = bigNumberFormatter(obj.odds[1]);
@@ -102,18 +88,6 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
     if (pendingMarkets.length > 0) {
         marketsCache[GlobalFiltersEnum.PendingMarkets] = pendingMarkets;
     }
-
-    const allMarketsInOne = [
-        ...marketsCache[GlobalFiltersEnum.OpenMarkets],
-        ...marketsCache[GlobalFiltersEnum.ResolvedMarkets],
-        ...marketsCache[GlobalFiltersEnum.Canceled],
-        ...marketsCache[GlobalFiltersEnum.PendingMarkets],
-    ];
-
-    marketsCache[GlobalFiltersEnum.All] = allMarketsInOne;
-    marketsCache[GlobalFiltersEnum.Claim] = allMarketsInOne;
-    marketsCache[GlobalFiltersEnum.YourPositions] = allMarketsInOne;
-    marketsCache[GlobalFiltersEnum.History] = allMarketsInOne;
 };
 
 const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions<typeof marketsCache>) => {
@@ -121,13 +95,23 @@ const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions
         QUERY_KEYS.SportMarketsNew(networkId),
         async () => {
             try {
+                const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
+                let oddsFromContract: undefined | Array<any>;
+
+                try {
+                    oddsFromContract = await sportPositionalMarketDataContract?.getOddsForAllActiveMarkets();
+                } catch (e) {
+                    console.log('Could not get oods from chain', e);
+                }
+
                 // mapping open markets first
                 await mapMarkets(
                     await thalesData.sportMarkets.markets({
                         isOpen: true,
                         network: networkId,
                     }),
-                    true
+                    true,
+                    oddsFromContract
                 );
 
                 // fetch and map markets in the background that are not opened
@@ -136,7 +120,7 @@ const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions
                         network: networkId,
                     })
                     .then(async (result: any) => {
-                        mapMarkets(result, false);
+                        mapMarkets(result, false, oddsFromContract);
                     });
 
                 return marketsCache;

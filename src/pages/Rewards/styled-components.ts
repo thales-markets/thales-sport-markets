@@ -1,6 +1,19 @@
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 
+export const MarketContainer = styled(FlexDivColumn)`
+    margin-top: 20px;
+    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.35);
+    border-radius: 25px;
+    width: 100%;
+    padding: 0 60px 30px 60px;
+    background: ${(props) => props.theme.background.secondary};
+    flex: initial;
+    @media (max-width: 768px) {
+        padding: 10px 10px 20px 10px;
+    }
+`;
+
 export const Container = styled(FlexDivColumn)`
     width: 80%;
     position: relative;

@@ -5,10 +5,6 @@ export enum GlobalFiltersEnum {
     PendingMarkets = 'PendingMarkets',
     ResolvedMarkets = 'ResolvedMarkets',
     Canceled = 'Canceled',
-    All = 'AllMarkets',
-    YourPositions = 'YourPositions',
-    Claim = 'Claim',
-    History = 'History',
 }
 
 export enum SortDirection {

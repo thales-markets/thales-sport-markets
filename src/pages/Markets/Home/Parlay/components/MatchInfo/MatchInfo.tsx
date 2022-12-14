@@ -68,7 +68,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
             ) : (
                 <XButton
                     onClick={() => {
-                        dispatch(removeFromParlay(market.id));
+                        dispatch(removeFromParlay(market.address));
                     }}
                     className={`icon icon--cross-button`}
                 />

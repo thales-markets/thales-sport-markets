@@ -32,7 +32,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     const selectedOddsType = useSelector(getOddsType);
 
     const parlay = useSelector(getParlay);
-    const addedToParlay = parlay.filter((game: any) => game.sportMarketId == market.gameDetails.gameId)[0];
+    const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
     // ------------
 
     // @ts-ignore
@@ -54,10 +54,10 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                 if (!disabledPosition) {
                     setSelectedPosition(position);
                     if (addedToParlay && addedToParlay.position == position) {
-                        dispatch(removeFromParlay(market.gameDetails.gameId));
+                        dispatch(removeFromParlay(market.address));
                     } else {
                         const parlayMarket: ParlaysMarketPosition = {
-                            sportMarketId: market.gameDetails.gameId,
+                            sportMarketAddress: market.address,
                             position: position,
                             homeTeam: market.homeTeam || '',
                             awayTeam: market.awayTeam || '',

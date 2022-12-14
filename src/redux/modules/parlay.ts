@@ -46,7 +46,7 @@ export const parlaySlice = createSlice({
     initialState,
     reducers: {
         updateParlay: (state, action: PayloadAction<ParlaysMarketPosition>) => {
-            const index = state.parlay.findIndex((el) => el.sportMarketId === action.payload.sportMarketId);
+            const index = state.parlay.findIndex((el) => el.sportMarketAddress === action.payload.sportMarketAddress);
             if (index === -1) {
                 // ADD new market
                 if (state.parlay.length < state.parlaySize) {
@@ -79,7 +79,7 @@ export const parlaySlice = createSlice({
             state.parlaySize = action.payload;
         },
         removeFromParlay: (state, action: PayloadAction<string>) => {
-            state.parlay = state.parlay.filter((market) => market.sportMarketId !== action.payload);
+            state.parlay = state.parlay.filter((market) => market.sportMarketAddress !== action.payload);
             if (state.parlay.length === 0) {
                 state.payment.amountToBuy = getDefaultPayment().amountToBuy;
             }

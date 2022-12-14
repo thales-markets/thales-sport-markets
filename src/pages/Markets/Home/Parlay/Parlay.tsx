@@ -59,12 +59,12 @@ const Parlay: React.FC = () => {
             const parlayMarkets: ParlaysMarket[] = parlay
                 .filter((parlayMarket) => {
                     return sportOpenMarkets.some((market: SportMarketInfo) => {
-                        return market.id === parlayMarket.sportMarketId;
+                        return market.address === parlayMarket.sportMarketAddress;
                     });
                 })
                 .map((parlayMarket) => {
                     const openMarket: SportMarketInfo = sportOpenMarkets.filter(
-                        (market: SportMarketInfo) => market.id === parlayMarket.sportMarketId
+                        (market: SportMarketInfo) => market.address === parlayMarket.sportMarketAddress
                     )[0];
                     return {
                         ...openMarket,
@@ -75,10 +75,10 @@ const Parlay: React.FC = () => {
             if (parlay.length > parlayMarkets.length) {
                 const notOpenedMarkets = parlay.filter((parlayMarket) => {
                     return sportOpenMarkets.some((market: SportMarketInfo) => {
-                        return market.id !== parlayMarket.sportMarketId;
+                        return market.address !== parlayMarket.sportMarketAddress;
                     });
                 });
-                notOpenedMarkets.forEach((market) => dispatch(removeFromParlay(market.sportMarketId)));
+                notOpenedMarkets.forEach((market) => dispatch(removeFromParlay(market.sportMarketAddress)));
             }
 
             setParlayMarkets(parlayMarkets);

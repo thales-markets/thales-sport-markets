@@ -13,7 +13,7 @@ type OddsProps = {
     title?: string;
     noOdds?: boolean;
     isLive?: boolean;
-    marketId: string;
+    marketAddress: string;
     homeTeam: string;
     awayTeam: string;
     odds: {
@@ -30,7 +30,7 @@ type OddsProps = {
 const Odds: React.FC<OddsProps> = ({
     title,
     noOdds,
-    marketId,
+    marketAddress,
     homeTeam,
     awayTeam,
     odds,
@@ -50,7 +50,7 @@ const Odds: React.FC<OddsProps> = ({
             ) : (
                 <OddsContainer>
                     <PositionSymbol
-                        marketId={marketId}
+                        marketAddress={marketAddress}
                         homeTeam={homeTeam}
                         awayTeam={awayTeam}
                         type={0}
@@ -66,7 +66,7 @@ const Odds: React.FC<OddsProps> = ({
                     />
                     {typeof odds?.drawOdds !== 'undefined' && (
                         <PositionSymbol
-                            marketId={marketId}
+                            marketAddress={marketAddress}
                             homeTeam={homeTeam}
                             awayTeam={awayTeam}
                             type={2}
@@ -82,7 +82,7 @@ const Odds: React.FC<OddsProps> = ({
                         />
                     )}
                     <PositionSymbol
-                        marketId={marketId}
+                        marketAddress={marketAddress}
                         homeTeam={homeTeam}
                         awayTeam={awayTeam}
                         type={1}

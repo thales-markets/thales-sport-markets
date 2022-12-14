@@ -56,10 +56,6 @@ type AllMarkets = {
     Canceled: SportMarkets;
     ResolvedMarkets: SportMarkets;
     PendingMarkets: SportMarkets;
-    AllMarkets: SportMarkets;
-    YourPositions: SportMarkets;
-    Claim: SportMarkets;
-    History: SportMarkets;
 };
 
 const Home: React.FC = () => {
@@ -175,10 +171,6 @@ const Home: React.FC = () => {
         Canceled: [],
         ResolvedMarkets: [],
         PendingMarkets: [],
-        AllMarkets: [],
-        YourPositions: [],
-        Claim: [],
-        History: [],
     });
 
     const sportMarketsQueryNew = useSportMarketsQueryNew(networkId, { enabled: isAppReady });

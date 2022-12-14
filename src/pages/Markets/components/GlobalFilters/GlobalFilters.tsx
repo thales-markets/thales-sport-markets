@@ -94,43 +94,32 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
         <Container>
             <Filters isMobile={isMobile}>
                 <FilterTypeContainer isMobile={isMobile}>
-                    {Object.values(GlobalFiltersEnum)
-                        .filter(
-                            (filterItem) =>
-                                filterItem != GlobalFiltersEnum.All &&
-                                filterItem != GlobalFiltersEnum.Claim &&
-                                filterItem != GlobalFiltersEnum.History &&
-                                filterItem != GlobalFiltersEnum.YourPositions
-                        )
-                        .map((filterItem) => {
-                            return (
-                                <GlobalFilter
-                                    data-matomo-category="filters"
-                                    data-matomo-action={`status-${filterItem.toLowerCase()}`}
-                                    selected={globalFilter === filterItem}
-                                    isMobile={isMobile}
-                                    cancelled={filterItem == GlobalFiltersEnum.Canceled}
-                                    onClick={() => {
-                                        if (
-                                            filterItem === GlobalFiltersEnum.OpenMarkets ||
-                                            filterItem === GlobalFiltersEnum.YourPositions
-                                        ) {
-                                            setDateFilter(0);
-                                            setDateParam('');
-                                            setTagFilter([]);
-                                            setTagParam('');
-                                            setSportFilter(SportFilterEnum.All);
-                                            setSportParam(SportFilterEnum.All);
-                                        }
-                                        setGlobalFilter(filterItem);
-                                        setGlobalFilterParam(filterItem);
-                                    }}
-                                    key={filterItem}
-                                >
-                                    {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
-                                </GlobalFilter>
-                            );
-                        })}
+                    {Object.values(GlobalFiltersEnum).map((filterItem) => {
+                        return (
+                            <GlobalFilter
+                                data-matomo-category="filters"
+                                data-matomo-action={`status-${filterItem.toLowerCase()}`}
+                                selected={globalFilter === filterItem}
+                                isMobile={isMobile}
+                                cancelled={filterItem == GlobalFiltersEnum.Canceled}
+                                onClick={() => {
+                                    if (filterItem === GlobalFiltersEnum.OpenMarkets) {
+                                        setDateFilter(0);
+                                        setDateParam('');
+                                        setTagFilter([]);
+                                        setTagParam('');
+                                        setSportFilter(SportFilterEnum.All);
+                                        setSportParam(SportFilterEnum.All);
+                                    }
+                                    setGlobalFilter(filterItem);
+                                    setGlobalFilterParam(filterItem);
+                                }}
+                                key={filterItem}
+                            >
+                                {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
+                            </GlobalFilter>
+                        );
+                    })}
                     {!isMobile && (
                         <DropdownContrainer data-matomo-category="filters" data-matomo-action="odds-selector">
                             <Dropdown<OddsType>

@@ -296,7 +296,7 @@ export type Odds = {
 };
 
 export type ParlaysMarketPosition = {
-    sportMarketId: string;
+    sportMarketAddress: string;
     position: Position;
     homeTeam: string;
     awayTeam: string;

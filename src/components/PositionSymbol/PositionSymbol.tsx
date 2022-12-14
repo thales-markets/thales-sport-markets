@@ -22,7 +22,7 @@ type SymbolProps = {
     children?: any;
     showTooltip?: boolean;
     glow?: boolean;
-    marketId?: string;
+    marketAddress?: string;
     homeTeam?: string;
     awayTeam?: string;
     discount?: number;
@@ -38,7 +38,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     additionalText,
     showTooltip,
     additionalStyle,
-    marketId,
+    marketAddress,
     homeTeam,
     awayTeam,
     children,
@@ -49,18 +49,18 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     const dispatch = useDispatch();
     const { trackEvent } = useMatomo();
     const parlay = useSelector(getParlay);
-    const addedToParlay = parlay.filter((game: any) => game.sportMarketId == marketId)[0];
+    const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == marketAddress)[0];
 
     return (
         <Wrapper
             disabled={showTooltip}
             flexDirection={flexDirection}
-            notClickable={!marketId}
+            notClickable={!marketAddress}
             onClick={() => {
                 if (!showTooltip) {
-                    if (marketId) {
+                    if (marketAddress) {
                         if (addedToParlay && addedToParlay.position == type) {
-                            dispatch(removeFromParlay(marketId));
+                            dispatch(removeFromParlay(marketAddress));
                         } else {
                             if (type !== undefined) {
                                 trackEvent({
@@ -69,7 +69,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                                     value: discount == null ? 0 : Math.ceil(Math.abs(discount)),
                                 });
                                 const parlayMarket: ParlaysMarketPosition = {
-                                    sportMarketId: marketId,
+                                    sportMarketAddress: marketAddress,
                                     position: Position.HOME,
                                     homeTeam: homeTeam || '',
                                     awayTeam: awayTeam || '',
@@ -97,7 +97,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                 color={symbolColor}
                 style={additionalStyle}
                 addedToParlay={addedToParlay && addedToParlay.position == type}
-                notClickable={!marketId}
+                notClickable={!marketAddress}
                 flexDirection={flexDirection}
             >
                 <Symbol
