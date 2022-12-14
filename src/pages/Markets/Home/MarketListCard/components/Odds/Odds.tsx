@@ -4,93 +4,74 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Colors } from 'styles/common';
-import { formatMarketOdds, isDiscounted } from 'utils/markets';
+import { SportMarketInfo } from 'types/markets';
+import { formatMarketOdds, getVisibilityOfDrawOptionByTagId, isDiscounted } from 'utils/markets';
 import { getOddsType } from '../../../../../../redux/modules/ui';
 import { Status } from '../MatchStatus/MatchStatus';
 import { Container, OddsContainer, Title } from './styled-components';
 
 type OddsProps = {
-    title?: string;
-    noOdds?: boolean;
-    isLive?: boolean;
-    marketAddress: string;
-    homeTeam: string;
-    awayTeam: string;
-    odds: {
-        homeOdds: number;
-        awayOdds: number;
-        drawOdds?: number;
-    };
-    awayPriceImpact: number;
-    homePriceImpact: number;
-    drawPriceImpact: number | undefined;
-    showDrawOdds: boolean;
+    market: SportMarketInfo;
 };
 
-const Odds: React.FC<OddsProps> = ({
-    title,
-    noOdds,
-    marketAddress,
-    homeTeam,
-    awayTeam,
-    odds,
-    awayPriceImpact,
-    homePriceImpact,
-    drawPriceImpact,
-    showDrawOdds,
-}) => {
+const Odds: React.FC<OddsProps> = ({ market }) => {
     const { t } = useTranslation();
     const selectedOddsType = useSelector(getOddsType);
 
+    const isLive = market.maturityDate < new Date();
+    const isGameResolved = market.isResolved || market.isCanceled;
+    const noOdds = market.awayOdds == 0 && market.homeOdds == 0 && !isLive && !isGameResolved && !market.isPaused;
+    const showDrawOdds = getVisibilityOfDrawOptionByTagId(market.tags);
+
     return (
         <Container>
-            <Title>{title}</Title>
+            <Title>{market.betType === 10001 ? 'Spread' : market.betType === 10002 ? 'TOTAL' : 'WINNER'}</Title>
             {noOdds ? (
                 <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>
             ) : (
                 <OddsContainer>
                     <PositionSymbol
-                        marketAddress={marketAddress}
-                        homeTeam={homeTeam}
-                        awayTeam={awayTeam}
+                        marketAddress={market.address}
+                        homeTeam={market.homeTeam}
+                        awayTeam={market.awayTeam}
                         type={0}
                         symbolColor={Colors.WHITE}
                         additionalText={{
-                            firstText: formatMarketOdds(selectedOddsType, odds?.homeOdds),
+                            firstText: formatMarketOdds(selectedOddsType, market.homeOdds),
                             firstTextStyle: { color: Colors.WHITE },
                         }}
-                        showTooltip={odds?.homeOdds == 0}
-                        discount={isDiscounted(homePriceImpact) ? homePriceImpact : undefined}
+                        showTooltip={market.homeOdds == 0}
+                        discount={isDiscounted(market.homePriceImpact) ? market.homePriceImpact : undefined}
                         flexDirection="column"
                     />
                     {showDrawOdds && (
                         <PositionSymbol
-                            marketAddress={marketAddress}
-                            homeTeam={homeTeam}
-                            awayTeam={awayTeam}
+                            marketAddress={market.address}
+                            homeTeam={market.homeTeam}
+                            awayTeam={market.awayTeam}
                             type={2}
                             symbolColor={Colors.WHITE}
                             additionalText={{
-                                firstText: formatMarketOdds(selectedOddsType, odds?.drawOdds),
+                                firstText: formatMarketOdds(selectedOddsType, market.drawOdds),
                                 firstTextStyle: { color: Colors.WHITE },
                             }}
-                            discount={isDiscounted(drawPriceImpact) ? drawPriceImpact : undefined}
-                            showTooltip={odds?.drawOdds == 0}
+                            discount={isDiscounted(market.drawPriceImpact) ? market.drawPriceImpact : undefined}
+                            showTooltip={market.drawOdds == 0}
                             flexDirection="column"
                         />
                     )}
                     <PositionSymbol
-                        marketAddress={marketAddress}
-                        homeTeam={homeTeam}
-                        awayTeam={awayTeam}
+                        marketAddress={market.address}
+                        homeTeam={market.homeTeam}
+                        awayTeam={market.awayTeam}
                         type={1}
                         symbolColor={Colors.WHITE}
                         additionalText={{
-                            firstText: formatMarketOdds(selectedOddsType, odds?.awayOdds),
+                            firstText: formatMarketOdds(selectedOddsType, market.awayOdds),
                             firstTextStyle: { color: Colors.WHITE },
                         }}
-                        showTooltip={odds?.awayOdds == 0}
-                        discount={isDiscounted(awayPriceImpact) ? awayPriceImpact : undefined}
+                        showTooltip={market.awayOdds == 0}
+                        discount={isDiscounted(market.awayPriceImpact) ? market.awayPriceImpact : undefined}
                         flexDirection="column"
                     />
                 </OddsContainer>

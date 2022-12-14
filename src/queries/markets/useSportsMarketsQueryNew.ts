@@ -1,9 +1,10 @@
 import { GlobalFiltersEnum } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { SPORTS_MAP } from 'constants/tags';
+import { groupBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
-import { SportMarkets } from 'types/markets';
+import { SportMarketInfo, SportMarkets } from 'types/markets';
 import { NetworkId } from 'types/network';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import { fixDuplicatedTeamName, fixLongTeamName } from 'utils/formatters/string';
@@ -14,6 +15,18 @@ const marketsCache = {
     [GlobalFiltersEnum.Canceled]: [] as SportMarkets,
     [GlobalFiltersEnum.ResolvedMarkets]: [] as SportMarkets,
     [GlobalFiltersEnum.PendingMarkets]: [] as SportMarkets,
+};
+
+const childrenOf = (parentMarket: string, groupedMarkets: any) => {
+    return (groupedMarkets[parentMarket] || []).map((market: SportMarketInfo) => ({
+        ...market,
+        childMarkets: childrenOf(market.address, groupedMarkets),
+    }));
+};
+
+const groupMarkets = (allMarkets: SportMarkets) => {
+    const groupedMarkets = groupBy(allMarkets, (market) => market.parentMarket);
+    return childrenOf('null', groupedMarkets);
 };
 
 const mapMarkets = async (
@@ -35,7 +48,7 @@ const mapMarkets = async (
 
         if (market.isOpen && oddsFromContract) {
             oddsFromContract
-                .filter((obj: any) => obj[0] === market.address)
+                .filter((obj: any) => obj[0].toString().toLowerCase() === market.address.toLowerCase())
                 .map((obj: any) => {
                     market.homeOdds = bigNumberFormatter(obj.odds[0]);
                     market.awayOdds = bigNumberFormatter(obj.odds[1]);
@@ -74,19 +87,19 @@ const mapMarkets = async (
     });
 
     if (openMarkets.length > 0) {
-        marketsCache[GlobalFiltersEnum.OpenMarkets] = openMarkets;
+        marketsCache[GlobalFiltersEnum.OpenMarkets] = groupMarkets(openMarkets);
     }
 
     if (resolvedMarkets.length > 0) {
-        marketsCache[GlobalFiltersEnum.ResolvedMarkets] = resolvedMarkets;
+        marketsCache[GlobalFiltersEnum.ResolvedMarkets] = groupMarkets(resolvedMarkets);
     }
 
     if (canceledMarkets.length > 0) {
-        marketsCache[GlobalFiltersEnum.Canceled] = canceledMarkets;
+        marketsCache[GlobalFiltersEnum.Canceled] = groupMarkets(canceledMarkets);
     }
 
     if (pendingMarkets.length > 0) {
-        marketsCache[GlobalFiltersEnum.PendingMarkets] = pendingMarkets;
+        marketsCache[GlobalFiltersEnum.PendingMarkets] = groupMarkets(pendingMarkets);
     }
 };
 

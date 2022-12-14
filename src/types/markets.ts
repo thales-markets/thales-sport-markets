@@ -63,10 +63,12 @@ export type SportMarketInfo = {
     leagueRaceName?: string;
     qualifyingStartTime?: number;
     arePostQualifyingOddsFetched: boolean;
-    betType: ApexBetType;
+    betType: number;
     homePriceImpact: number;
     awayPriceImpact: number;
     drawPriceImpact?: number;
+    parentMarket: SportMarketInfo;
+    childMarkets: SportMarketInfo[];
 };
 
 export type FixedMarketData = {

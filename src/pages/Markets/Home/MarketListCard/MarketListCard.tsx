@@ -8,7 +8,7 @@ import { RootState } from 'redux/rootReducer';
 import { SportMarketInfo } from 'types/markets';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { getVisibilityOfDrawOptionByTagId, isFifaWCGame } from 'utils/markets';
+import { isFifaWCGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
@@ -47,9 +47,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameResolved = market.isResolved || market.isCanceled;
     const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
     const isPendingResolution = isLive && !isGameResolved;
-    const noOdds = market.awayOdds == 0 && market.homeOdds == 0 && !isLive && !isGameResolved && !market.isPaused;
     const showOdds = !isPendingResolution && !isGameResolved && !market.isPaused;
-    const showDrawOdds = getVisibilityOfDrawOptionByTagId(market.tags);
 
     return (
         <Container isResolved={isGameRegularlyResolved}>
@@ -90,22 +88,12 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             </MatchInfoConatiner>
             <OddsWrapper>
                 {showOdds && (
-                    <Odds
-                        title="WINNER"
-                        noOdds={noOdds}
-                        odds={{
-                            homeOdds: market.homeOdds,
-                            awayOdds: market.awayOdds,
-                            drawOdds: market.drawOdds,
-                        }}
-                        marketAddress={market.address}
-                        homeTeam={market.homeTeam}
-                        awayTeam={market.awayTeam}
-                        awayPriceImpact={market.awayPriceImpact}
-                        homePriceImpact={market.homePriceImpact}
-                        drawPriceImpact={market.drawPriceImpact}
-                        showDrawOdds={showDrawOdds}
-                    />
+                    <>
+                        <Odds market={market} />
+                        {market.childMarkets.map((childMarket) => (
+                            <Odds market={childMarket} key={childMarket.address} />
+                        ))}
+                    </>
                 )}
             </OddsWrapper>
             {isGameRegularlyResolved ? (
