@@ -46,7 +46,7 @@ export const sportPositionalMarketDataContract = {
             outputs: [
                 {
                     components: [
-                        { internalType: 'bytes32', name: 'market', type: 'bytes32' },
+                        { internalType: 'address', name: 'market', type: 'address' },
                         { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
                     ],
                     internalType: 'struct SportPositionalMarketData.ActiveMarketsOdds[]',

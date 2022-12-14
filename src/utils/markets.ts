@@ -214,7 +214,7 @@ export const getPositionOddsFromSportMarket = (market: SportMarketInfo, position
 };
 
 export const getVisibilityOfDrawOptionByTagId = (tags: Array<number>) => {
-    const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(element));
+    const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(Number(element)));
     if (tag) return false;
     return true;
 };

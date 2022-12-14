@@ -24,7 +24,7 @@ type OddsProps = {
     awayPriceImpact: number;
     homePriceImpact: number;
     drawPriceImpact: number | undefined;
-    isMobile?: boolean;
+    showDrawOdds: boolean;
 };
 
 const Odds: React.FC<OddsProps> = ({
@@ -37,7 +37,7 @@ const Odds: React.FC<OddsProps> = ({
     awayPriceImpact,
     homePriceImpact,
     drawPriceImpact,
-    isMobile,
+    showDrawOdds,
 }) => {
     const { t } = useTranslation();
     const selectedOddsType = useSelector(getOddsType);
@@ -61,10 +61,9 @@ const Odds: React.FC<OddsProps> = ({
                         }}
                         showTooltip={odds?.homeOdds == 0}
                         discount={isDiscounted(homePriceImpact) ? homePriceImpact : undefined}
-                        isMobile={isMobile}
                         flexDirection="column"
                     />
-                    {typeof odds?.drawOdds !== 'undefined' && (
+                    {showDrawOdds && (
                         <PositionSymbol
                             marketAddress={marketAddress}
                             homeTeam={homeTeam}
@@ -77,7 +76,6 @@ const Odds: React.FC<OddsProps> = ({
                             }}
                             discount={isDiscounted(drawPriceImpact) ? drawPriceImpact : undefined}
                             showTooltip={odds?.drawOdds == 0}
-                            isMobile={isMobile}
                             flexDirection="column"
                         />
                     )}
@@ -93,7 +91,6 @@ const Odds: React.FC<OddsProps> = ({
                         }}
                         showTooltip={odds?.awayOdds == 0}
                         discount={isDiscounted(awayPriceImpact) ? awayPriceImpact : undefined}
-                        isMobile={isMobile}
                         flexDirection="column"
                     />
                 </OddsContainer>

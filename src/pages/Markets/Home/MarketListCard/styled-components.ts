@@ -11,6 +11,9 @@ export const Container = styled.div<{
     border-radius: 5px;
     margin-bottom: 8px;
     background-color: ${(props) => (props.isResolved ? 'rgb(36,41,64, 0.5)' : 'rgba(48, 54, 86, 0.5)')};
+    @media (max-width: 575px) {
+        margin-bottom: 5px;
+    }
 `;
 
 export const MatchInfoConatiner = styled(FlexDivColumn)`
@@ -44,6 +47,9 @@ export const VSLabel = styled.span`
 
 export const TeamNamesConatiner = styled(FlexDivColumn)`
     margin-left: 6px;
+    @media (max-width: 575px) {
+        margin-left: 0px;
+    }
 `;
 
 export const TeamNameLabel = styled.span`

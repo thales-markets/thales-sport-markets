@@ -26,7 +26,6 @@ type SymbolProps = {
     homeTeam?: string;
     awayTeam?: string;
     discount?: number;
-    isMobile?: boolean;
     flexDirection?: string;
 };
 
@@ -99,6 +98,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                 addedToParlay={addedToParlay && addedToParlay.position == type}
                 notClickable={!marketAddress}
                 flexDirection={flexDirection}
+                disabled={showTooltip}
             >
                 <Symbol
                     color={symbolColor}
@@ -123,15 +123,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                     <AdditionalText style={additionalText?.firstTextStyle} flexDirection={flexDirection}>
                         {additionalText?.firstText}
                         {showTooltip && (
-                            <Tooltip
-                                overlay={<>{t('markets.zero-odds-tooltip')}</>}
-                                iconFontSize={10}
-                                customIconStyling={{
-                                    marginTop: '2px',
-                                    display: 'flex',
-                                    marginLeft: '3px',
-                                }}
-                            />
+                            <Tooltip overlay={<>{t('markets.zero-odds-tooltip')}</>} iconFontSize={11} marginLeft={3} />
                         )}
                     </AdditionalText>
                 )}
@@ -141,7 +133,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
 };
 
 const Wrapper = styled(FlexDivColumn)<{ disabled?: boolean; flexDirection?: string; notClickable?: boolean }>`
-    cursor: ${(props) => (props?.disabled ? 'not-allowed' : props.notClickable ? 'default' : 'pointer')};
+    cursor: ${(props) => (props.disabled || props.notClickable ? 'default' : 'pointer')};
     align-items: center;
     flex-direction: ${(props) => (props.flexDirection ? props.flexDirection : 'row')};
 `;
@@ -150,6 +142,7 @@ const Container = styled.div<{
     glow?: boolean;
     color?: string;
     addedToParlay?: boolean;
+    disabled?: boolean;
     notClickable?: boolean;
     flexDirection?: string;
 }>`
@@ -163,16 +156,14 @@ const Container = styled.div<{
     justify-content: center;
     flex-direction: row;
     font-size: 13px;
+    opacity: ${(props) => (props.disabled ? 0.4 : 1)};
     border: ${(props) =>
         props?.glow ? '3px solid ' + props.color : props.addedToParlay ? '3px solid #64D9FE' : '3px solid #5f6180'};
     box-shadow: ${(props) => (props?.glow ? '0 0 6px 2px ' + props.color : '')};
-
-    @media (hover: hover) {
-        &:hover {
-            ${(props) => (props.notClickable ? '' : 'border: 3px solid #64d9fe;')}
-            & > span {
-                ${(props) => (props.notClickable ? '' : 'color: #64d9fe !important;')}
-            }
+    :hover {
+        ${(props) => (props.disabled || props.notClickable ? '' : 'border: 3px solid #64d9fe;')}
+        & > span {
+            ${(props) => (props.disabled || props.notClickable ? '' : 'color: #64d9fe !important;')}
         }
     }
 

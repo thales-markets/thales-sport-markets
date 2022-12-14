@@ -8,7 +8,7 @@ import { RootState } from 'redux/rootReducer';
 import { SportMarketInfo } from 'types/markets';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isFifaWCGame } from 'utils/markets';
+import { getVisibilityOfDrawOptionByTagId, isFifaWCGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
@@ -49,6 +49,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isPendingResolution = isLive && !isGameResolved;
     const noOdds = market.awayOdds == 0 && market.homeOdds == 0 && !isLive && !isGameResolved && !market.isPaused;
     const showOdds = !isPendingResolution && !isGameResolved && !market.isPaused;
+    const showDrawOdds = getVisibilityOfDrawOptionByTagId(market.tags);
 
     return (
         <Container isResolved={isGameRegularlyResolved}>
@@ -103,50 +104,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         awayPriceImpact={market.awayPriceImpact}
                         homePriceImpact={market.homePriceImpact}
                         drawPriceImpact={market.drawPriceImpact}
+                        showDrawOdds={showDrawOdds}
                     />
                 )}
-                {/* <Odds
-                    title="DOUBLE CHANCE"
-                    isResolved={market.isResolved && !market.isCanceled}
-                    finalResult={market.finalResult}
-                    isLive={market.maturityDate < new Date()}
-                    isCancelled={market.isCanceled}
-                    odds={{
-                        homeOdds: market.homeOdds,
-                        awayOdds: market.awayOdds,
-                        drawOdds: market.drawOdds,
-                    }}
-                    marketAddress={market.address}
-                    homeTeam={market.homeTeam}
-                    awayTeam={market.awayTeam}
-                    accountPositions={accountPositions}
-                    isPaused={market.isPaused}
-                    isApexTopGame={false}
-                    awayPriceImpact={market.awayPriceImpact}
-                    homePriceImpact={market.homePriceImpact}
-                    drawPriceImpact={market.drawPriceImpact}
-                />
-                <Odds
-                    title="TOTAL"
-                    isResolved={market.isResolved && !market.isCanceled}
-                    finalResult={market.finalResult}
-                    isLive={market.maturityDate < new Date()}
-                    isCancelled={market.isCanceled}
-                    odds={{
-                        homeOdds: market.homeOdds,
-                        awayOdds: market.awayOdds,
-                        drawOdds: market.drawOdds,
-                    }}
-                    marketAddress={market.address}
-                    homeTeam={market.homeTeam}
-                    awayTeam={market.awayTeam}
-                    accountPositions={accountPositions}
-                    isPaused={market.isPaused}
-                    isApexTopGame={false}
-                    awayPriceImpact={market.awayPriceImpact}
-                    homePriceImpact={market.homePriceImpact}
-                    drawPriceImpact={market.drawPriceImpact}
-                /> */}
             </OddsWrapper>
             {isGameRegularlyResolved ? (
                 <ResultWrapper>

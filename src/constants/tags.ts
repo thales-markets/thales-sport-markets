@@ -138,7 +138,7 @@ export const SPORTS_MAP: SportsMap = {
     9101: 'Motosport',
 };
 
-export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [9002, 9003, 9004, 9005, 9006, 9008, 9007, 9100, 9101];
+export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [9001, 9002, 9003, 9004, 9005, 9006, 9008, 9007, 9100, 9101];
 
 export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Football: [9001, 9002],
