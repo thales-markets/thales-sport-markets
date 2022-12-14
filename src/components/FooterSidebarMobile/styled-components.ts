@@ -19,9 +19,34 @@ export const ItemContainer = styled(FlexDiv)`
     align-self: center;
 `;
 
-export const ItemIcon = styled.i`
+export const ItemIcon = styled.i<{ parlay?: boolean; iteration?: number }>`
     font-size: 33px;
     color: ${(props) => props.theme.background.primary};
+
+    &.pulse {
+        animation: pulsing 1s ease-in;
+        animation-iteration-count: ${(props) =>
+            props.iteration && props.iteration > 0
+                ? props.iteration == 1
+                    ? props.iteration + 1 + ';'
+                    : props.iteration + ';'
+                : ''};
+
+        @keyframes pulsing {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    }
 `;
 
 export const ParlayButton = styled.button`

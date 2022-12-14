@@ -233,7 +233,7 @@ export const isFifaWCGame = (tag: number) => Number(tag) === FIFA_WC_TAG;
 export const getIsIndividualCompetition = (tag: number) => PERSON_COMPETITIONS.includes(tag);
 
 export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
-    const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved);
+    const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved || market?.isCanceled);
     const claimablePositions = parlayMarket.positions.filter((position) => position.claimable);
 
     const lastGameStartsPlusExpirationPeriod = addDaysToEnteredTimestamp(
@@ -259,7 +259,7 @@ export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
 export const isParlayOpen = (parlayMarket: ParlayMarket) => {
     const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved);
     const resolvedAndClaimable = parlayMarket.positions.filter(
-        (position) => position.claimable && position.market.isResolved
+        (position) => position.claimable && (position.market.isResolved || position.market.isCanceled)
     );
 
     if (resolvedMarkets?.length == 0) return true;

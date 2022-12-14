@@ -1,6 +1,6 @@
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { buildHref } from 'utils/routes';
 import {
     Container,
@@ -36,12 +36,28 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({
 
     const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
 
+    const [pulse, setPulse] = useState(false);
+
     const setSelectedOddsType = useCallback(
         (oddsType: OddsType) => {
             return dispatch(setOddsType(oddsType));
         },
         [dispatch]
     );
+
+    const animate = () => {
+        setPulse(true);
+
+        setTimeout(
+            () => setPulse(false),
+            parlayMarkets.length == 1 ? (parlayMarkets.length + 1) * 1000 : parlayMarkets.length * 1000
+        );
+    };
+
+    useEffect(() => {
+        animate();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [parlayMarkets.length]);
 
     return (
         <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
@@ -80,8 +96,11 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({
                     </SPAAnchor>
                 </ItemContainer>
                 <ItemContainer onClick={() => setParlayMobileVisibility(true)}>
-                    <ItemIcon className="icon icon--parlay" />
-                    <ParlayNumber>{parlayMarkets.length}</ParlayNumber>
+                    <ItemIcon
+                        iteration={parlayMarkets.length}
+                        className={`icon icon--parlay ${pulse ? 'pulse' : ''}`}
+                    />
+                    <ParlayNumber>{parlayMarkets.length > 0 ? parlayMarkets.length : ''}</ParlayNumber>
                 </ItemContainer>
                 <ItemContainer>
                     <ItemIcon

@@ -20,6 +20,7 @@ import {
     convertPositionToSymbolType,
     formatMarketOdds,
     getIsApexTopGame,
+    isParlayClaimable,
     isParlayOpen,
 } from 'utils/markets';
 import { t } from 'i18next';
@@ -28,13 +29,16 @@ import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-compone
 import ShareTicketModal from 'pages/Markets/Home/Parlay/components/ShareTicketModal';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import { Position } from 'constants/options';
+import { ethers } from 'ethers';
 
-const ParlayTransactions: React.FC = () => {
+const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
     const selectedOddsType = useSelector(getOddsType);
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+
+    const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
 
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
@@ -45,11 +49,29 @@ const ParlayTransactions: React.FC = () => {
         onClose: () => {},
     });
 
-    const parlaysTxQuery = useParlayMarketsQuery(walletAddress.toLowerCase(), networkId, undefined, undefined, {
-        enabled: isWalletConnected,
-        refetchInterval: false,
-    });
-    const parlayTx = parlaysTxQuery.isSuccess ? parlaysTxQuery.data : [];
+    const parlaysTxQuery = useParlayMarketsQuery(
+        isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
+        networkId,
+        undefined,
+        undefined,
+        {
+            enabled: isWalletConnected,
+            refetchInterval: false,
+        }
+    );
+    let parlayTx = parlaysTxQuery.isSuccess ? parlaysTxQuery.data : [];
+
+    if (searchText && !isSearchTextWalletAddress) {
+        parlayTx = parlayTx?.filter((item) => {
+            const marketWithSearchTextIncluded = item.sportMarkets.find(
+                (item) =>
+                    item.homeTeam?.toLowerCase().includes(searchText.toLowerCase()) ||
+                    item.awayTeam?.toLowerCase().includes(searchText.toLowerCase())
+            );
+
+            if (marketWithSearchTextIncluded) return item;
+        });
+    }
 
     const onTwitterIconClick = (data: any) => {
         const sportMarkets: SportMarketInfo[] = data.sportMarkets;
@@ -169,7 +191,7 @@ const ParlayTransactions: React.FC = () => {
                         Header: <>{t('profile.table.status')}</>,
                         sortable: false,
                         Cell: (cellProps: any) => {
-                            if (cellProps.row.original.won) {
+                            if (cellProps.row.original.won || isParlayClaimable(cellProps.row.original)) {
                                 return <StatusWrapper color="#5FC694">WON </StatusWrapper>;
                             } else {
                                 return isParlayOpen(cellProps.row.original) ? (
