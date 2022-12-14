@@ -709,7 +709,7 @@ const BurgerFiltersContainer = styled(FlexDivColumn)`
     top: 0;
     left: 0;
     width: 100%;
-    height: 95vh;
+    height: 100%;
     overflow: auto;
     background: #303656;
     display: flex;
