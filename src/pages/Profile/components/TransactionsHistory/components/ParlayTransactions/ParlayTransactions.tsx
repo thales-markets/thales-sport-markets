@@ -20,6 +20,7 @@ import {
     convertPositionToSymbolType,
     formatMarketOdds,
     getIsApexTopGame,
+    isParlayClaimable,
     isParlayOpen,
 } from 'utils/markets';
 import { t } from 'i18next';
@@ -190,7 +191,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         Header: <>{t('profile.table.status')}</>,
                         sortable: false,
                         Cell: (cellProps: any) => {
-                            if (cellProps.row.original.won) {
+                            if (cellProps.row.original.won || isParlayClaimable(cellProps.row.original)) {
                                 return <StatusWrapper color="#5FC694">WON </StatusWrapper>;
                             } else {
                                 return isParlayOpen(cellProps.row.original) ? (
