@@ -56,6 +56,7 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({
 
     useEffect(() => {
         animate();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [parlayMarkets.length]);
 
     return (
