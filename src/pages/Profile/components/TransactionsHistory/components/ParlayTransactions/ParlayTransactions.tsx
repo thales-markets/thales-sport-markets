@@ -219,8 +219,16 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         const position = row.original.positions.find(
                             (position: any) => position.market.address == address
                         );
-
+                        const market = row.original.sportMarkets.find(
+                            (market: SportMarketInfo) => market.address == address
+                        );
                         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
+
+                        const quote = market?.isCanceled
+                            ? 1
+                            : row.original.marketQuotes
+                            ? row.original.marketQuotes[index]
+                            : 0;
                         return (
                             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
                                 <ParlayRowText>
@@ -237,10 +245,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                                     symbolColor={'white'}
                                     symbolSize={'10'}
                                     additionalText={{
-                                        firstText: formatMarketOdds(
-                                            selectedOddsType,
-                                            row.original.marketQuotes ? row.original.marketQuotes[index] : 0
-                                        ),
+                                        firstText: formatMarketOdds(selectedOddsType, quote),
                                         firstTextStyle: {
                                             fontSize: '10.5px',
                                             color: 'white',
