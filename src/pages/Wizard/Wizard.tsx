@@ -5,7 +5,7 @@ import { getIsWalletConnected } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivStart } from 'styles/common';
-import Step from './components/Step';
+import Step from './components/Step/Step';
 
 export enum WizardStep {
     CONNECT_METAMASK,

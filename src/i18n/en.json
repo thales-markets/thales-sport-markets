@@ -599,7 +599,7 @@
         }
     },
     "wizard": {
-        "title": "Overtime Onboarding",
+        "title": "Get Started!",
         "steps": {
             "title": {
                 "connect-wallet": "Connect Wallet",
@@ -615,10 +615,17 @@
             },
             "action": {
                 "connect-wallet": "Connect Wallet",
+                "connected": "Connected",
                 "fund": "Fund",
-                "exchange": "Exchange to sUSD",
+                "exchange": "Exchange to USD",
                 "trade": "Trade on Overtime"
             }
+        },
+        "buy-modal": {
+            "title": "Buy, Bridge & Send",
+            "buy": "Fund with card",
+            "bridge": "Bridge to optimism  ",
+            "exchange": "Fund from exchange"
         }
     },
     "vaults": {
