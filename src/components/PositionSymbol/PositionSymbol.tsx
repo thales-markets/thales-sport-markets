@@ -23,6 +23,7 @@ type SymbolProps = {
     showTooltip?: boolean;
     glow?: boolean;
     marketAddress?: string;
+    parentMarket?: string;
     homeTeam?: string;
     awayTeam?: string;
     discount?: number;
@@ -38,6 +39,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     showTooltip,
     additionalStyle,
     marketAddress,
+    parentMarket,
     homeTeam,
     awayTeam,
     children,
@@ -57,7 +59,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
             notClickable={!marketAddress}
             onClick={() => {
                 if (!showTooltip) {
-                    if (marketAddress) {
+                    if (marketAddress && parentMarket) {
                         if (addedToParlay && addedToParlay.position == type) {
                             dispatch(removeFromParlay(marketAddress));
                         } else {
@@ -68,6 +70,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                                     value: discount == null ? 0 : Math.ceil(Math.abs(discount)),
                                 });
                                 const parlayMarket: ParlaysMarketPosition = {
+                                    parentMarket: parentMarket,
                                     sportMarketAddress: marketAddress,
                                     position: Position.HOME,
                                     homeTeam: homeTeam || '',

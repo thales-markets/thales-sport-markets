@@ -89,10 +89,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             <OddsWrapper>
                 {showOdds && (
                     <>
-                        <Odds market={market} />
                         {market.childMarkets.map((childMarket) => (
                             <Odds market={childMarket} key={childMarket.address} />
                         ))}
+                        <Odds market={market} />
                     </>
                 )}
             </OddsWrapper>

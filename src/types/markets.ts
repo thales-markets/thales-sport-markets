@@ -67,8 +67,10 @@ export type SportMarketInfo = {
     homePriceImpact: number;
     awayPriceImpact: number;
     drawPriceImpact?: number;
-    parentMarket: SportMarketInfo;
+    parentMarket: string;
     childMarkets: SportMarketInfo[];
+    spread: number;
+    total: number;
 };
 
 export type FixedMarketData = {
@@ -298,6 +300,7 @@ export type Odds = {
 };
 
 export type ParlaysMarketPosition = {
+    parentMarket: string;
     sportMarketAddress: string;
     position: Position;
     homeTeam: string;

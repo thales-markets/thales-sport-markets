@@ -55,7 +55,17 @@ const Parlay: React.FC = () => {
 
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            const sportOpenMarkets = sportMarketsQuery.data[GlobalFiltersEnum.OpenMarkets];
+            const sportOpenMarkets = sportMarketsQuery.data[GlobalFiltersEnum.OpenMarkets].reduce(
+                (acc: SportMarketInfo[], market) => {
+                    acc.push(market);
+                    market.childMarkets.forEach((childMarket) => {
+                        acc.push(childMarket);
+                    });
+                    return acc;
+                },
+                []
+            );
+
             const parlayMarkets: ParlaysMarket[] = parlay
                 .filter((parlayMarket) => {
                     return sportOpenMarkets.some((market: SportMarketInfo) => {

@@ -1,7 +1,7 @@
 import { GlobalFiltersEnum } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { SPORTS_MAP } from 'constants/tags';
-import { groupBy } from 'lodash';
+import { groupBy, orderBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { SportMarketInfo, SportMarkets } from 'types/markets';
@@ -20,7 +20,7 @@ const marketsCache = {
 const childrenOf = (parentMarket: string, groupedMarkets: any) => {
     return (groupedMarkets[parentMarket] || []).map((market: SportMarketInfo) => ({
         ...market,
-        childMarkets: childrenOf(market.address, groupedMarkets),
+        childMarkets: orderBy(childrenOf(market.address, groupedMarkets), ['betType'], ['desc']),
     }));
 };
 

@@ -57,6 +57,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                         dispatch(removeFromParlay(market.address));
                     } else {
                         const parlayMarket: ParlaysMarketPosition = {
+                            parentMarket: market.address,
                             sportMarketAddress: market.address,
                             position: position,
                             homeTeam: market.homeTeam || '',

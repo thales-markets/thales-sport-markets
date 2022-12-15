@@ -25,13 +25,20 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
 
     return (
         <Container>
-            <Title>{market.betType === 10001 ? 'Spread' : market.betType === 10002 ? 'TOTAL' : 'WINNER'}</Title>
+            <Title>
+                {market.betType === 10001
+                    ? `HANDICAP ${market.spread}`
+                    : market.betType === 10002
+                    ? `TOTAL ${market.total}`
+                    : 'WINNER'}
+            </Title>
             {noOdds ? (
                 <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>
             ) : (
                 <OddsContainer>
                     <PositionSymbol
                         marketAddress={market.address}
+                        parentMarket={market.parentMarket !== null ? market.parentMarket : market.address}
                         homeTeam={market.homeTeam}
                         awayTeam={market.awayTeam}
                         type={0}
@@ -47,6 +54,7 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
                     {showDrawOdds && (
                         <PositionSymbol
                             marketAddress={market.address}
+                            parentMarket={market.parentMarket !== null ? market.parentMarket : market.address}
                             homeTeam={market.homeTeam}
                             awayTeam={market.awayTeam}
                             type={2}
@@ -62,6 +70,7 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
                     )}
                     <PositionSymbol
                         marketAddress={market.address}
+                        parentMarket={market.parentMarket !== null ? market.parentMarket : market.address}
                         homeTeam={market.homeTeam}
                         awayTeam={market.awayTeam}
                         type={1}

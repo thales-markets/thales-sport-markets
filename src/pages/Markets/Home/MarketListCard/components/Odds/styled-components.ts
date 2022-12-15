@@ -6,10 +6,10 @@ export const Container = styled(FlexDivColumn)`
         border-right: 3px solid #5f6180;
         padding: 0 10px;
     }
-    :last-child {
+    :last-child(:not(:first-child)) {
         padding: 0 0 0 10px;
     }
-    :first-child {
+    :first-child(:not(:last-child)) {
         padding: 0 10px 0 0;
     }
 `;
