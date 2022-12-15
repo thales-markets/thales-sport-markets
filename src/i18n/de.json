@@ -508,7 +508,8 @@
             "no-open": "Sie haben keine offene Stelle",
             "no-claimable": "Sie haben keine beanspruchbaren Positionen",
             "no-transactions": "Sie haben keine Trades",
-            "ticket-subtitle": "Position hinzufügen, Markt auswählen und Auswahl treffen."
+            "ticket-subtitle": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
+            "canceled-tooltip": "Abgebrochene Märkte können 2 Stunden nach Auflösung des Marktes beansprucht werden."
         },
         "table": {
             "games": "Spiele",

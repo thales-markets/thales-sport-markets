@@ -511,7 +511,8 @@
             "no-open": "No tienes ninguna posición abierta",
             "no-claimable": "No tienes ninguna posición reclamable",
             "no-transactions": "no tienes cambios",
-            "ticket-subtitle": "Agregue una posición, elija un mercado y haga su selección."
+            "ticket-subtitle": "Agregue una posición, elija un mercado y haga su selección.",
+            "canceled-tooltip": "Los mercados cancelados son reclamables 2 horas después de que se resuelva el mercado."
         },
         "table": {
             "paid": "Pagado",
