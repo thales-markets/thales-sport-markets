@@ -1,23 +1,23 @@
 import Tooltip from 'components/Tooltip';
-import { Position, Side } from 'constants/options';
+import { Position } from 'constants/options';
 import { BetType } from 'constants/tags';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
-import { AvailablePerSide, MarketData, ParlaysMarketPosition } from 'types/markets';
+import { AvailablePerPosition, MarketData, ParlaysMarketPosition } from 'types/markets';
 import { isDiscounted, formatMarketOdds } from 'utils/markets';
 import { Discount, Container, Value } from './styled-components';
 
 type PositionDetailsProps = {
     market: MarketData;
-    selectedSide: Side;
-    availablePerSide: AvailablePerSide;
+    odd?: number;
+    availablePerPosition: AvailablePerPosition;
     position: Position;
 };
 
-const PositionDetails: React.FC<PositionDetailsProps> = ({ market, selectedSide, availablePerSide, position }) => {
+const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availablePerPosition, position }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     // Redux states
@@ -28,14 +28,13 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, selectedSide,
     // ------------
 
     // @ts-ignore
-    const disabledPosition = !(market.positions[position].sides[selectedSide].odd > 0);
+    const disabledPosition = !(odd > 0);
 
     const showPositionDiscount =
-        !!availablePerSide.positions[position].buyImpactPrice &&
-        isDiscounted(availablePerSide.positions[position].buyImpactPrice);
+        !!availablePerPosition.buyImpactPrice && isDiscounted(availablePerPosition.buyImpactPrice);
 
     const positionDiscount = showPositionDiscount
-        ? Math.ceil(Math.abs(Number(availablePerSide.positions[position].buyImpactPrice) * 100))
+        ? Math.ceil(Math.abs(Number(availablePerPosition.buyImpactPrice) * 100))
         : 0;
 
     const isGameCancelled = market.cancelled || (!market.gameStarted && market.resolved);
@@ -76,7 +75,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, selectedSide,
                     ? `- ${t('markets.market-card.canceled')} -`
                     : isGamePaused
                     ? `- ${t('markets.market-card.paused')} -`
-                    : formatMarketOdds(selectedOddsType, market.positions[position].sides[selectedSide].odd)}
+                    : formatMarketOdds(selectedOddsType, odd)}
             </Value>
             {showDiscount && (
                 <Tooltip

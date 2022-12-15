@@ -47,22 +47,22 @@ const MarketPositions: React.FC<MarketPositionsProps> = ({ market, selectedSide 
         <>
             <PositionDetails
                 market={market}
-                selectedSide={selectedSide}
-                availablePerSide={availablePerSide}
+                odd={market.positions[Position.HOME].sides[selectedSide].odd}
+                availablePerPosition={availablePerSide.positions[Position.HOME]}
                 position={Position.HOME}
             />
             {showDrawOdds && (
                 <PositionDetails
                     market={market}
-                    selectedSide={selectedSide}
-                    availablePerSide={availablePerSide}
+                    odd={market.positions[Position.DRAW].sides[selectedSide].odd}
+                    availablePerPosition={availablePerSide.positions[Position.DRAW]}
                     position={Position.DRAW}
                 />
             )}
             <PositionDetails
                 market={market}
-                selectedSide={selectedSide}
-                availablePerSide={availablePerSide}
+                odd={market.positions[Position.AWAY].sides[selectedSide].odd}
+                availablePerPosition={availablePerSide.positions[Position.AWAY]}
                 position={Position.AWAY}
             />
         </>
