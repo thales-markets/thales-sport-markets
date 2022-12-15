@@ -8,7 +8,6 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { MarketData } from 'types/markets';
-import { Side } from '../../../constants/options';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import MarketDetailsV2 from './MarketDetailsV2';
 
@@ -19,13 +18,12 @@ type MarketProps = RouteComponentProps<{
 const Market: React.FC<MarketProps> = (props) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const [market, setMarket] = useState<MarketData | undefined>(undefined);
-    const [selectedSide, setSelectedSide] = useState<Side>(Side.BUY);
     const { trackPageView } = useMatomo();
 
     const { params } = props.match;
     const marketAddress = params && params.marketAddress ? params.marketAddress : '';
 
-    const marketQuery = useMarketQuery(marketAddress, selectedSide === Side.SELL, {
+    const marketQuery = useMarketQuery(marketAddress, {
         enabled: isAppReady,
     });
 
@@ -39,15 +37,7 @@ const Market: React.FC<MarketProps> = (props) => {
         trackPageView({});
     }, [trackPageView]);
 
-    return (
-        <Container>
-            {market ? (
-                <MarketDetailsV2 market={market} selectedSide={selectedSide} setSelectedSide={setSelectedSide} />
-            ) : (
-                <SimpleLoader />
-            )}
-        </Container>
-    );
+    return <Container>{market ? <MarketDetailsV2 market={market} /> : <SimpleLoader />}</Container>;
 };
 
 const Container = styled(FlexDivColumn)`

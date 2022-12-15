@@ -9,6 +9,9 @@ import { NetworkId } from 'types/network';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import { fixDuplicatedTeamName, fixLongTeamName } from 'utils/formatters/string';
 import networkConnector from 'utils/networkConnector';
+import { generalConfig } from 'config/general';
+
+type DiscountMap = Map<string, { homePriceImpact: number; awayPriceImpact: number; drawPriceImpact: number }>;
 
 const marketsCache = {
     [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,
@@ -29,15 +32,30 @@ const groupMarkets = (allMarkets: SportMarkets) => {
     return childrenOf('null', groupedMarkets);
 };
 
-const mapMarkets = async (
-    allMarkets: SportMarkets,
-    mapOnlyOpenedMarkets: boolean,
-    oddsFromContract: undefined | Array<any>
-) => {
+const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolean, networkId: NetworkId) => {
     const openMarkets = [] as SportMarkets;
     const canceledMarkets = [] as SportMarkets;
     const resolvedMarkets = [] as SportMarkets;
     const pendingMarkets = [] as SportMarkets;
+
+    let oddsFromContract: undefined | Array<any>;
+    let discountMap: DiscountMap;
+
+    if (mapOnlyOpenedMarkets) {
+        try {
+            const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
+            const [oddsForAllActive, discountsResponse] = await Promise.all([
+                sportPositionalMarketDataContract?.getOddsForAllActiveMarkets(),
+                fetch(`${generalConfig.API_URL}/overtimeDiscounts/${networkId}`),
+            ]);
+
+            oddsFromContract = oddsForAllActive;
+            const json = await discountsResponse.json();
+            discountMap = new Map(json) as DiscountMap;
+        } catch (e) {
+            console.log('Could not get oods from chain', e);
+        }
+    }
 
     allMarkets.forEach((market) => {
         market.maturityDate = new Date(market.maturityDate);
@@ -46,43 +64,49 @@ const mapMarkets = async (
         market = fixLongTeamName(market);
         market.sport = SPORTS_MAP[market.tags[0]];
 
-        if (market.isOpen && oddsFromContract) {
-            oddsFromContract
-                .filter((obj: any) => obj[0].toString().toLowerCase() === market.address.toLowerCase())
-                .map((obj: any) => {
-                    market.homeOdds = bigNumberFormatter(obj.odds[0]);
-                    market.awayOdds = bigNumberFormatter(obj.odds[1]);
-                    market.drawOdds = obj.odds[2] ? bigNumberFormatter(obj.odds[2]) : undefined;
-                });
-        }
+        if (mapOnlyOpenedMarkets) {
+            const marketDiscount = discountMap?.get(market.address);
+            market = {
+                ...market,
+                ...marketDiscount,
+            };
 
-        if (
-            market.isOpen &&
-            !market.isCanceled &&
-            (market.homeOdds !== 0 || market.awayOdds !== 0 || (market.drawOdds || 0) !== 0) &&
-            market.maturityDate.getTime() > new Date().getTime() &&
-            mapOnlyOpenedMarkets
-        ) {
-            openMarkets.push(market);
-        }
-        if (
-            market.isResolved &&
-            !market.isCanceled &&
-            market.maturityDate.getTime() + 7 * 24 * 60 * 60 * 1000 > new Date().getTime() &&
-            !mapOnlyOpenedMarkets
-        ) {
-            resolvedMarkets.push(market);
-        }
-        if (
-            (market.isCanceled || market.isPaused) &&
-            !market.isResolved &&
-            market.maturityDate.getTime() + 30 * 24 * 60 * 60 * 1000 > new Date().getTime() &&
-            !mapOnlyOpenedMarkets
-        ) {
-            canceledMarkets.push(market);
-        }
-        if (market.maturityDate.getTime() < new Date().getTime() && !market.isResolved && !market.isCanceled) {
-            pendingMarkets.push(market);
+            if (market.isOpen && oddsFromContract) {
+                oddsFromContract
+                    .filter((obj: any) => obj[0].toString().toLowerCase() === market.address.toLowerCase())
+                    .map((obj: any) => {
+                        market.homeOdds = bigNumberFormatter(obj.odds[0]);
+                        market.awayOdds = bigNumberFormatter(obj.odds[1]);
+                        market.drawOdds = obj.odds[2] ? bigNumberFormatter(obj.odds[2]) : undefined;
+                    });
+            }
+
+            if (
+                market.isOpen &&
+                !market.isCanceled &&
+                (market.homeOdds !== 0 || market.awayOdds !== 0 || (market.drawOdds || 0) !== 0) &&
+                market.maturityDate.getTime() > new Date().getTime()
+            ) {
+                openMarkets.push(market);
+            }
+        } else {
+            if (
+                market.isResolved &&
+                !market.isCanceled &&
+                market.maturityDate.getTime() + 7 * 24 * 60 * 60 * 1000 > new Date().getTime()
+            ) {
+                resolvedMarkets.push(market);
+            }
+            if (
+                (market.isCanceled || market.isPaused) &&
+                !market.isResolved &&
+                market.maturityDate.getTime() + 30 * 24 * 60 * 60 * 1000 > new Date().getTime()
+            ) {
+                canceledMarkets.push(market);
+            }
+            if (market.maturityDate.getTime() < new Date().getTime() && !market.isResolved && !market.isCanceled) {
+                pendingMarkets.push(market);
+            }
         }
     });
 
@@ -108,15 +132,6 @@ const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions
         QUERY_KEYS.SportMarketsNew(networkId),
         async () => {
             try {
-                const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
-                let oddsFromContract: undefined | Array<any>;
-
-                try {
-                    oddsFromContract = await sportPositionalMarketDataContract?.getOddsForAllActiveMarkets();
-                } catch (e) {
-                    console.log('Could not get oods from chain', e);
-                }
-
                 // mapping open markets first
                 await mapMarkets(
                     await thalesData.sportMarkets.markets({
@@ -124,7 +139,7 @@ const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions
                         network: networkId,
                     }),
                     true,
-                    oddsFromContract
+                    networkId
                 );
 
                 // fetch and map markets in the background that are not opened
@@ -133,7 +148,7 @@ const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions
                         network: networkId,
                     })
                     .then(async (result: any) => {
-                        mapMarkets(result, false, oddsFromContract);
+                        mapMarkets(result, false, networkId);
                     });
 
                 return marketsCache;

@@ -13,7 +13,6 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
-import useDiscountMarkets from 'queries/markets/useDiscountMarkets';
 import useSportMarketsQueryNew from 'queries/markets/useSportsMarketsQueryNew';
 import React, { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -21,7 +20,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
-import { getParlay } from 'redux/modules/parlay';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -79,7 +77,6 @@ const Home: React.FC = () => {
     const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SPORT, SportFilterEnum.All);
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
-    const parlayMarkets = useSelector(getParlay);
 
     const tagsList = TAGS_LIST.map((tag) => {
         return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite };
@@ -101,11 +98,6 @@ const Home: React.FC = () => {
     const [dateParam, setDateParam] = useQueryParam('date', '');
     const [tagParam, setTagParam] = useQueryParam('tag', '');
     const [selectedLanguage, setSelectedLanguage] = useQueryParam('lang', '');
-
-    const discountQuery = useDiscountMarkets(networkId, { enabled: true });
-    const discountsMap = useMemo(() => {
-        return discountQuery.isSuccess ? discountQuery.data : new Map();
-    }, [discountQuery.isSuccess, discountQuery.data]);
 
     const calculateDate = (hours: number, endOfDay?: boolean) => {
         const calculatedDate = addHoursToCurrentDate(hours, endOfDay);
@@ -193,58 +185,53 @@ const Home: React.FC = () => {
     }, [sportMarketsQueryNew.isSuccess, sportMarketsQueryNew.data, lastValidMarkets]);
 
     const finalMarkets = useMemo(() => {
-        const filteredMarkets = newMarkets[globalFilter]
-            .filter((market: SportMarketInfo) => {
-                if (marketSearch) {
+        const filteredMarkets = newMarkets[globalFilter].filter((market: SportMarketInfo) => {
+            if (marketSearch) {
+                if (
+                    !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
+                    !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
+                ) {
+                    return false;
+                }
+            }
+
+            if (tagFilter.length > 0) {
+                if (!tagFilter.map((tag) => tag.id).includes(market.tags.map((tag) => Number(tag))[0])) {
+                    return false;
+                }
+            }
+
+            if (dateFilter !== 0) {
+                if (typeof dateFilter === 'number') {
+                    if (market.maturityDate.getTime() > dateFilter) {
+                        return false;
+                    }
+                } else {
+                    const dateToCompare = new Date(dateFilter);
+                    if (market.maturityDate.toDateString() != dateToCompare.toDateString()) {
+                        return false;
+                    }
+                }
+            }
+
+            if (sportFilter !== SportFilterEnum.All) {
+                if (sportFilter != SportFilterEnum.Favourites) {
+                    if (market.sport !== sportFilter) {
+                        return false;
+                    }
+                } else {
                     if (
-                        !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
-                        !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
-                    ) {
+                        !favouriteLeagues
+                            .filter((league) => league.favourite)
+                            .map((league) => league.id)
+                            .includes(market.tags.map((tag) => Number(tag))[0])
+                    )
                         return false;
-                    }
                 }
+            }
 
-                if (tagFilter.length > 0) {
-                    if (!tagFilter.map((tag) => tag.id).includes(market.tags.map((tag) => Number(tag))[0])) {
-                        return false;
-                    }
-                }
-
-                if (dateFilter !== 0) {
-                    if (typeof dateFilter === 'number') {
-                        if (market.maturityDate.getTime() > dateFilter) {
-                            return false;
-                        }
-                    } else {
-                        const dateToCompare = new Date(dateFilter);
-                        if (market.maturityDate.toDateString() != dateToCompare.toDateString()) {
-                            return false;
-                        }
-                    }
-                }
-
-                if (sportFilter !== SportFilterEnum.All) {
-                    if (sportFilter != SportFilterEnum.Favourites) {
-                        if (market.sport !== sportFilter) {
-                            return false;
-                        }
-                    } else {
-                        if (
-                            !favouriteLeagues
-                                .filter((league) => league.favourite)
-                                .map((league) => league.id)
-                                .includes(market.tags.map((tag) => Number(tag))[0])
-                        )
-                            return false;
-                    }
-                }
-
-                return true;
-            })
-            .map((sportMarket: SportMarketInfo) => {
-                const marketDiscount = discountsMap?.get(sportMarket.address);
-                return { ...sportMarket, ...marketDiscount };
-            });
+            return true;
+        });
 
         const sortedFilteredMarkets = filteredMarkets.sort((a, b) => {
             switch (globalFilter) {
@@ -259,7 +246,7 @@ const Home: React.FC = () => {
         return globalFilter === GlobalFiltersEnum.OpenMarkets
             ? groupBySortedMarkets(sortedFilteredMarkets)
             : sortedFilteredMarkets;
-    }, [marketSearch, tagFilter, dateFilter, sportFilter, newMarkets, discountsMap, globalFilter, favouriteLeagues]);
+    }, [marketSearch, tagFilter, dateFilter, sportFilter, newMarkets, globalFilter, favouriteLeagues]);
 
     useEffect(() => {
         if (sportFilter == SportFilterEnum.Favourites) {
@@ -555,7 +542,6 @@ const Home: React.FC = () => {
                     <FooterSidebarMobile
                         setParlayMobileVisibility={setshowParlayMobileModal}
                         setShowBurger={setShowBurger}
-                        parlayMarkets={parlayMarkets}
                     />
                 </Suspense>
             )}

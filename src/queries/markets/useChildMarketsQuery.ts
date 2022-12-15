@@ -9,9 +9,9 @@ import { Position, Side } from '../../constants/options';
 import { groupBy, orderBy } from 'lodash';
 import { BetType } from 'constants/tags';
 
-const useChildMarketsQuery = (parentMarket: MarketData, isSell: boolean, options?: UseQueryOptions<ChildMarkets>) => {
+const useChildMarketsQuery = (parentMarket: MarketData, options?: UseQueryOptions<ChildMarkets>) => {
     return useQuery<ChildMarkets>(
-        QUERY_KEYS.ChildMarkets(parentMarket.address, isSell),
+        QUERY_KEYS.ChildMarkets(parentMarket.address),
         async () => {
             try {
                 const childMarkets = await Promise.all(
@@ -32,7 +32,8 @@ const useChildMarketsQuery = (parentMarket: MarketData, isSell: boolean, options
                             finalResult,
                             cancelled,
                             paused,
-                            marketDefaultOdds,
+                            buyMarketDefaultOdds,
+                            sellMarketDefaultOdds,
                             spread,
                             total,
                         ] = await Promise.all([
@@ -42,16 +43,11 @@ const useChildMarketsQuery = (parentMarket: MarketData, isSell: boolean, options
                             contract?.finalResult(),
                             contract?.cancelled(),
                             contract?.paused(),
-                            sportsAMMContract?.getMarketDefaultOdds(childMarketAddress, isSell),
+                            sportsAMMContract?.getMarketDefaultOdds(childMarketAddress, false),
+                            sportsAMMContract?.getMarketDefaultOdds(childMarketAddress, true),
                             gamesOddsObtainerContract?.childMarketSread(childMarketAddress),
                             gamesOddsObtainerContract?.childMarketTotal(childMarketAddress),
                         ]);
-
-                        const homeOdds = bigNumberFormatter(marketDefaultOdds[0]);
-                        const awayOdds = bigNumberFormatter(marketDefaultOdds[1]);
-                        const drawOdds = marketDefaultOdds[2]
-                            ? bigNumberFormatter(marketDefaultOdds[2] || 0)
-                            : undefined;
 
                         const market: MarketData = {
                             address: childMarketAddress.toLowerCase(),
@@ -60,30 +56,34 @@ const useChildMarketsQuery = (parentMarket: MarketData, isSell: boolean, options
                                 [Position.HOME]: {
                                     sides: {
                                         [Side.BUY]: {
-                                            odd: homeOdds,
+                                            odd: bigNumberFormatter(buyMarketDefaultOdds[0]),
                                         },
                                         [Side.SELL]: {
-                                            odd: homeOdds,
+                                            odd: bigNumberFormatter(sellMarketDefaultOdds[0]),
                                         },
                                     },
                                 },
                                 [Position.AWAY]: {
                                     sides: {
                                         [Side.BUY]: {
-                                            odd: awayOdds,
+                                            odd: bigNumberFormatter(buyMarketDefaultOdds[1]),
                                         },
                                         [Side.SELL]: {
-                                            odd: awayOdds,
+                                            odd: bigNumberFormatter(sellMarketDefaultOdds[1]),
                                         },
                                     },
                                 },
                                 [Position.DRAW]: {
                                     sides: {
                                         [Side.BUY]: {
-                                            odd: drawOdds,
+                                            odd: buyMarketDefaultOdds[2]
+                                                ? bigNumberFormatter(buyMarketDefaultOdds[2] || 0)
+                                                : undefined,
                                         },
                                         [Side.SELL]: {
-                                            odd: drawOdds,
+                                            odd: sellMarketDefaultOdds[2]
+                                                ? bigNumberFormatter(sellMarketDefaultOdds[2] || 0)
+                                                : undefined,
                                         },
                                     },
                                 },

@@ -1,48 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import Toggle from 'components/Toggle/Toggle';
 import MatchInfo from './components/MatchInfo';
 import BackToLink from 'pages/Markets/components/BackToLink';
-
-import { Position, Side } from 'constants/options';
+import { Side } from 'constants/options';
 import { ChildMarkets, MarketData } from 'types/markets';
 import Positions from './components/Positions';
-import useAvailablePerSideQuery from 'queries/markets/useAvailablePerSideQuery';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getIsWalletConnected } from 'redux/modules/wallet';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import styled from 'styled-components';
 import { buildHref } from 'utils/routes';
 import ROUTES from 'constants/routes';
 import Parlay from 'pages/Markets/Home/Parlay';
 import Transactions from '../Transactions';
-import { getIsAppReady } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import useChildMarketsQuery from 'queries/markets/useChildMarketsQuery';
 import { MAIN_COLORS } from 'constants/ui';
 import { BetType } from 'constants/tags';
+import FooterSidebarMobile from 'components/FooterSidebarMobile';
+import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
 
 type MarketDetailsPropType = {
     market: MarketData;
-    selectedSide: Side;
-    setSelectedSide: (side: Side) => void;
 };
 
-const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, setSelectedSide }) => {
+const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const { t } = useTranslation();
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const [showParlayMobileModal, setShowParlayMobileModal] = useState<boolean>(false);
+
+    const [selectedSide, setSelectedSide] = useState<Side>(Side.BUY);
     const [childMarkets, setChildMarkets] = useState<ChildMarkets>({
         spreadMarkets: [],
         totalMarkets: [],
     });
 
-    const availablePerSideQuery = useAvailablePerSideQuery(market.address, selectedSide, {
-        enabled: isWalletConnected,
-    });
-
-    const childMarketsQuery = useChildMarketsQuery(market, selectedSide === Side.SELL, {
+    const childMarketsQuery = useChildMarketsQuery(market, {
         enabled: isAppReady,
     });
 
@@ -51,26 +46,6 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
             setChildMarkets(childMarketsQuery.data);
         }
     }, [childMarketsQuery.isSuccess, childMarketsQuery.data]);
-
-    const availablePerSide =
-        availablePerSideQuery.isSuccess && availablePerSideQuery.data
-            ? availablePerSideQuery.data
-            : {
-                  positions: {
-                      [Position.HOME]: {
-                          available: 0,
-                          buyImpactPrice: 0,
-                      },
-                      [Position.AWAY]: {
-                          available: 0,
-                          buyImpactPrice: 0,
-                      },
-                      [Position.DRAW]: {
-                          available: 0,
-                          buyImpactPrice: 0,
-                      },
-                  },
-              };
 
     const showAMM = !market.resolved && !market.cancelled && !market.gameStarted && !market.paused;
 
@@ -109,24 +84,21 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
                 <MatchInfo market={market} />
                 {showPositions ? (
                     <>
-                        <Positions
-                            markets={[market]}
-                            betType={BetType.WINNER}
-                            selectedSide={selectedSide}
-                            availablePerSide={availablePerSide}
-                        />
-                        <Positions
-                            markets={childMarkets.spreadMarkets}
-                            betType={BetType.SPREAD}
-                            selectedSide={selectedSide}
-                            availablePerSide={availablePerSide}
-                        />
-                        <Positions
-                            markets={childMarkets.totalMarkets}
-                            betType={BetType.TOTAL}
-                            selectedSide={selectedSide}
-                            availablePerSide={availablePerSide}
-                        />
+                        <Positions markets={[market]} betType={BetType.WINNER} selectedSide={selectedSide} />
+                        {childMarkets.spreadMarkets.length > 0 && (
+                            <Positions
+                                markets={childMarkets.spreadMarkets}
+                                betType={BetType.SPREAD}
+                                selectedSide={selectedSide}
+                            />
+                        )}
+                        {childMarkets.totalMarkets.length > 0 && (
+                            <Positions
+                                markets={childMarkets.totalMarkets}
+                                betType={BetType.TOTAL}
+                                selectedSide={selectedSide}
+                            />
+                        )}
                     </>
                 ) : (
                     <Status backgroundColor={isGameCancelled ? MAIN_COLORS.BACKGROUNDS.RED : MAIN_COLORS.LIGHT_GRAY}>
@@ -146,6 +118,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
                     <Parlay />
                 </SidebarContainer>
             )}
+            {isMobile && showParlayMobileModal && <ParlayMobileModal onClose={() => setShowParlayMobileModal(false)} />}
+            {isMobile && <FooterSidebarMobile setParlayMobileVisibility={setShowParlayMobileModal} />}
         </RowContainer>
     );
 };

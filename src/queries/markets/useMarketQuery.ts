@@ -8,9 +8,9 @@ import { bigNumberFormatter } from '../../utils/formatters/ethers';
 import { fixDuplicatedTeamName, fixLongTeamNameString } from '../../utils/formatters/string';
 import { Position, Side } from '../../constants/options';
 
-const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQueryOptions<MarketData | undefined>) => {
+const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketData | undefined>) => {
     return useQuery<MarketData | undefined>(
-        QUERY_KEYS.Market(marketAddress, isSell),
+        QUERY_KEYS.Market(marketAddress),
         async () => {
             try {
                 const contract = new ethers.Contract(marketAddress, marketContract.abi, networkConnector.provider);
@@ -27,7 +27,8 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                     finalResult,
                     cancelled,
                     paused,
-                    marketDefaultOdds,
+                    buyMarketDefaultOdds,
+                    sellMarketDefaultOdds,
                     childMarketsAddresses,
                 ] = await Promise.all([
                     contract?.getGameDetails(),
@@ -37,13 +38,10 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                     contract?.finalResult(),
                     contract?.cancelled(),
                     contract?.paused(),
-                    sportsAMMContract?.getMarketDefaultOdds(marketAddress, isSell),
+                    sportsAMMContract?.getMarketDefaultOdds(marketAddress, false),
+                    sportsAMMContract?.getMarketDefaultOdds(marketAddress, true),
                     gamesOddsObtainerContract?.getAllChildMarketsFromParent(marketAddress),
                 ]);
-
-                const homeOdds = bigNumberFormatter(marketDefaultOdds[0]);
-                const awayOdds = bigNumberFormatter(marketDefaultOdds[1]);
-                const drawOdds = marketDefaultOdds[2] ? bigNumberFormatter(marketDefaultOdds[2] || 0) : undefined;
 
                 const gameStarted = cancelled ? false : Date.now() > Number(times.maturity) * 1000;
                 let result;
@@ -62,30 +60,34 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                         [Position.HOME]: {
                             sides: {
                                 [Side.BUY]: {
-                                    odd: homeOdds,
+                                    odd: bigNumberFormatter(buyMarketDefaultOdds[0]),
                                 },
                                 [Side.SELL]: {
-                                    odd: homeOdds,
+                                    odd: bigNumberFormatter(sellMarketDefaultOdds[0]),
                                 },
                             },
                         },
                         [Position.AWAY]: {
                             sides: {
                                 [Side.BUY]: {
-                                    odd: awayOdds,
+                                    odd: bigNumberFormatter(buyMarketDefaultOdds[1]),
                                 },
                                 [Side.SELL]: {
-                                    odd: awayOdds,
+                                    odd: bigNumberFormatter(sellMarketDefaultOdds[1]),
                                 },
                             },
                         },
                         [Position.DRAW]: {
                             sides: {
                                 [Side.BUY]: {
-                                    odd: drawOdds,
+                                    odd: buyMarketDefaultOdds[2]
+                                        ? bigNumberFormatter(buyMarketDefaultOdds[2] || 0)
+                                        : undefined,
                                 },
                                 [Side.SELL]: {
-                                    odd: drawOdds,
+                                    odd: sellMarketDefaultOdds[2]
+                                        ? bigNumberFormatter(sellMarketDefaultOdds[2] || 0)
+                                        : undefined,
                                 },
                             },
                         },

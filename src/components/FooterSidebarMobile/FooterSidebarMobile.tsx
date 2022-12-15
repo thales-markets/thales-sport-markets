@@ -13,29 +13,23 @@ import {
     ParlayNumber,
 } from './styled-components';
 import ConnectWalletButtonMobile from 'components/ConnectWalletButtonMobile';
-import { ParlaysMarketPosition } from 'types/markets';
 import { t } from 'i18next';
 import { FlexDivCentered } from 'styles/common';
 import { OddsType, ODDS_TYPES } from 'constants/markets';
 import { setOddsType } from 'redux/modules/ui';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { getParlay } from 'redux/modules/parlay';
 
 type FooterSidebarMobileProps = {
     setParlayMobileVisibility: (value: boolean) => void;
-    setShowBurger: (value: boolean) => void;
-    parlayMarkets: ParlaysMarketPosition[];
+    setShowBurger?: (value: boolean) => void;
 };
 
-const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({
-    setParlayMobileVisibility,
-    setShowBurger,
-    parlayMarkets,
-}) => {
+const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobileVisibility, setShowBurger }) => {
     const dispatch = useDispatch();
-
+    const parlayMarkets = useSelector(getParlay);
     const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
-
     const [pulse, setPulse] = useState(false);
 
     const setSelectedOddsType = useCallback(
@@ -102,14 +96,16 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({
                     />
                     <ParlayNumber>{parlayMarkets.length > 0 ? parlayMarkets.length : ''}</ParlayNumber>
                 </ItemContainer>
-                <ItemContainer>
-                    <ItemIcon
-                        className="icon icon--filters"
-                        onClick={() => {
-                            setShowBurger(true);
-                        }}
-                    />
-                </ItemContainer>
+                {setShowBurger && (
+                    <ItemContainer>
+                        <ItemIcon
+                            className="icon icon--filters"
+                            onClick={() => {
+                                setShowBurger(true);
+                            }}
+                        />
+                    </ItemContainer>
+                )}
                 <ItemContainer>
                     <ConnectWalletButtonMobile />
                 </ItemContainer>
