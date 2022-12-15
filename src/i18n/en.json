@@ -603,7 +603,7 @@
         "steps": {
             "title": {
                 "connect-wallet": "Connect Wallet",
-                "fund": "Fund",
+                "fund": "Fund with ETH",
                 "exchange": "Get Crypto USD",
                 "trade": "Overtime Markets"
             },

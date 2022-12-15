@@ -8,14 +8,15 @@ import { t } from 'i18next';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
+import { buildHref } from 'utils/routes';
 
 type BuyBridgeSendModalProps = {
     onClose: () => void;
 };
 
 enum Provider {
-    BANXA = 'https://thalesmarket.banxa.com/iframe?code=x68QxHYZ2hQU0rccKDgDSeUO7QonDXsY&coinType=ETH&fiatType=EUR&blockchain=OPTIMISM', // TODO: whitelist
-    MT_PELERIN = 'https://widget.mtpelerin.com/?type=popup&lang=en&primary=%2304045a&mylogo=https://thalesmarket.io/THALES_LOGOTIP.svg', // TODO: overtime logo
+    BANXA = 'https://thalesmarket.banxa.com/iframe?code=x68QxHYZ2hQU0rccKDgDSeUO7QonDXsY&coinType=ETH&fiatType=EUR&blockchain=OPTIMISM',
+    MT_PELERIN = 'https://widget.mtpelerin.com/?type=popup&lang=en&primary=%235F6180&net=optimism_mainnet&bsc=EUR&bdc=ETH&crys=ETH',
     BUNGEE = '',
     LAYER_SWAP = 'https://www.layerswap.io/?destNetwork=optimism_mainnet&lockNetwork=true&sourceExchangeName=binance&asset=usdc',
 }
@@ -23,6 +24,7 @@ enum Provider {
 const BuyBridgeSendModal: React.FC<BuyBridgeSendModalProps> = ({ onClose }) => {
     const [iframe, setIframe] = useState('');
     const [iframeLoader, setIframeLoader] = useState(false);
+    const [showBungeeWidget, setShowBungeeWidget] = useState(false);
 
     const onBuyBanxaClickHandler = () => {
         setIframe(Provider.BANXA.toString());
@@ -30,12 +32,14 @@ const BuyBridgeSendModal: React.FC<BuyBridgeSendModalProps> = ({ onClose }) => {
     };
 
     const onBuyMtPelerinClickHandler = () => {
-        const queryParams = '&net=optimism_mainnet&bsc=EUR&bdc=ETH&crys=ETH';
-        setIframe(Provider.MT_PELERIN.toString() + queryParams);
+        const queryParamMyLogo = `&mylogo=${window.location.origin + buildHref('/overtime-logo-black.svg')}`;
+        setIframe(Provider.MT_PELERIN.toString() + queryParamMyLogo);
         setIframeLoader(true);
     };
 
-    const onBridgeClickHandler = () => {};
+    const onBridgeClickHandler = () => {
+        setShowBungeeWidget(true);
+    };
 
     return (
         <>
@@ -95,6 +99,7 @@ const BuyBridgeSendModal: React.FC<BuyBridgeSendModalProps> = ({ onClose }) => {
                     </IFrameWrapper>
                 </Modal>
             )}
+            {showBungeeWidget && <></>}
         </>
     );
 };

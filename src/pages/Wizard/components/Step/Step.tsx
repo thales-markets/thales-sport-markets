@@ -126,18 +126,16 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
         }
     };
 
+    const changeCurrentStep = () => (isDisabled ? null : setCurrentStep(stepType));
+
     return (
         <Container>
-            <StepNumberSection
-                isActive={isActive}
-                isDisabled={isDisabled}
-                onClick={() => (isDisabled ? null : setCurrentStep(stepType))}
-            >
-                <StepNumberWrapper isActive={isActive}>
+            <StepNumberSection>
+                <StepNumberWrapper isActive={isActive} isDisabled={isDisabled} onClick={changeCurrentStep}>
                     <StepNumber isActive={isActive}>{stepNumber}</StepNumber>
                 </StepNumberWrapper>
             </StepNumberSection>
-            <StepDescriptionSection isActive={isActive}>
+            <StepDescriptionSection isActive={isActive} isDisabled={isDisabled} onClick={changeCurrentStep}>
                 <StepTitle>{stepTitle}</StepTitle>
                 <StepDescription>{stepDescription}</StepDescription>
             </StepDescriptionSection>
@@ -156,14 +154,14 @@ const Container = styled.div`
     margin-bottom: 20px;
 `;
 
-const StepNumberSection = styled(FlexDivCentered)<{ isActive: boolean; isDisabled?: boolean }>`
+const StepNumberSection = styled(FlexDivCentered)`
     width: 10%;
-    cursor: ${(props) => (props.isDisabled ? 'not-allowed' : props.isActive ? 'default' : 'pointer')};
 `;
 
-const StepDescriptionSection = styled(FlexDivColumn)<{ isActive: boolean }>`
+const StepDescriptionSection = styled(FlexDivColumn)<{ isActive: boolean; isDisabled?: boolean }>`
     width: 60%;
     color: ${(props) => (props.isActive ? '#ffffff' : '#5F6180')};
+    cursor: ${(props) => (props.isDisabled ? 'not-allowed' : props.isActive ? 'default' : 'pointer')};
 `;
 
 const StepActionSection = styled(FlexDivCentered)<{ isActive: boolean; isDisabled?: boolean }>`
@@ -187,7 +185,7 @@ const StepDescription = styled.p`
     text-align: justify;
 `;
 
-const StepNumberWrapper = styled.div<{ isActive: boolean }>`
+const StepNumberWrapper = styled.div<{ isActive: boolean; isDisabled?: boolean }>`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -196,6 +194,7 @@ const StepNumberWrapper = styled.div<{ isActive: boolean }>`
     border-radius: 50%;
     ${(props) => (props.isActive ? 'border: 2px solid #3FD1FF;' : '')}
     ${(props) => (props.isActive ? '' : 'background: #5f6180;')}
+    cursor: ${(props) => (props.isDisabled ? 'not-allowed' : props.isActive ? 'default' : 'pointer')};
 `;
 
 const StepNumber = styled.span<{ isActive: boolean }>`
