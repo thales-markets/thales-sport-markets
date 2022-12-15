@@ -62,6 +62,8 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                     ) : (
                         <Wrong className={`icon icon--wrong`} />
                     )
+                ) : market?.isCanceled ? (
+                    <Correct className={`icon icon--correct`} />
                 ) : (
                     <></>
                 )
