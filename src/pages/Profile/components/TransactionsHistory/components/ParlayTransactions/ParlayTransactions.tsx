@@ -88,15 +88,21 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                     ...sportMarket,
                     homeOdds:
                         position === Position.HOME
-                            ? data.marketQuotes[sportMarketFromContractIndex]
+                            ? sportMarket.isCanceled
+                                ? 1
+                                : data.marketQuotes[sportMarketFromContractIndex]
                             : sportMarket.homeOdds,
                     drawOdds:
                         position === Position.DRAW
-                            ? data.marketQuotes[sportMarketFromContractIndex]
+                            ? sportMarket.isCanceled
+                                ? 1
+                                : data.marketQuotes[sportMarketFromContractIndex]
                             : sportMarket.drawOdds,
                     awayOdds:
                         position === Position.AWAY
-                            ? data.marketQuotes[sportMarketFromContractIndex]
+                            ? sportMarket.isCanceled
+                                ? 1
+                                : data.marketQuotes[sportMarketFromContractIndex]
                             : sportMarket.awayOdds,
                 };
 
