@@ -1,11 +1,10 @@
 import PositionSymbol from 'components/PositionSymbol';
-import { Position } from 'constants/options';
-import { ODDS_COLOR } from 'constants/ui';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
+import { Colors } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
 import { convertPositionToSymbolType, formatMarketOdds, getIsApexTopGame, getPositionOdds } from 'utils/markets';
 import MatchLogos from '../MatchLogos';
@@ -22,16 +21,6 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
     const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
 
-    const getPositionColor = (position: Position): string => {
-        return customStyle?.positionColor
-            ? customStyle?.positionColor
-            : position === Position.HOME
-            ? ODDS_COLOR.HOME
-            : position === Position.AWAY
-            ? ODDS_COLOR.AWAY
-            : ODDS_COLOR.DRAW;
-    };
-
     return (
         <>
             <MatchLogos market={market} width={'120px'} padding={'0 0 0 4px'} isHighlighted={isHighlighted} />
@@ -45,12 +34,12 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
             </MatchLabel>
             <PositionSymbol
                 type={convertPositionToSymbolType(market.position, getIsApexTopGame(market.isApex, market.betType))}
-                symbolColor={getPositionColor(market.position)}
+                symbolColor={Colors.WHITE}
                 additionalText={{
                     firstText: formatMarketOdds(selectedOddsType, getPositionOdds(market)),
                     firstTextStyle: {
                         fontSize: customStyle?.fontSize ? customStyle?.fontSize : '11px',
-                        color: getPositionColor(market.position),
+                        color: Colors.WHITE,
                         marginLeft: '5px',
                     },
                 }}

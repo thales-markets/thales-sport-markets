@@ -14,6 +14,7 @@ export const QUERY_KEYS = {
     CanceledSportMarkets: (networkId: NetworkId) => ['canceledSportMarkets', networkId],
     ResolvedSportMarkets: (networkId: NetworkId) => ['resolvedSportMarkets', networkId],
     Market: (marketAddress: string, isSell: boolean) => ['market', marketAddress, isSell],
+    ChildMarkets: (marketAddress: string, isSell: boolean) => ['childMarkets', marketAddress, isSell],
     MarketBalances: (marketAddress: string, walletAddress: string) => ['marketBalances', marketAddress, walletAddress],
     MarketCancellationOdds: (marketAddress: string) => ['marketCancellationOdds', marketAddress],
     PositionDetails: (

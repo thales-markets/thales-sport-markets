@@ -1,5 +1,5 @@
 import { COLLATERALS_INDEX } from 'constants/currency';
-import { ApexBetType, MarketStatus } from 'constants/markets';
+import { MarketStatus } from 'constants/markets';
 import { Position, PositionName, Side } from '../constants/options';
 
 export type MarketInfo = {
@@ -113,8 +113,18 @@ export type MarketData = {
     awayScore?: number;
     leagueRaceName?: string;
     paused: boolean;
-    betType: ApexBetType;
+    betType: number;
     isApex: boolean;
+    parentMarket: string;
+    childMarketsAddresses: string[];
+    childMarkets: MarketData[];
+    spread: number;
+    total: number;
+};
+
+export type ChildMarkets = {
+    spreadMarkets: MarketData[];
+    totalMarkets: MarketData[];
 };
 
 export type ParlayMarket = {

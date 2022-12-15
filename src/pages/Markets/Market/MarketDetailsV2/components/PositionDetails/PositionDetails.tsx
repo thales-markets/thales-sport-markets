@@ -1,5 +1,6 @@
 import Tooltip from 'components/Tooltip';
 import { Position, Side } from 'constants/options';
+import { BetType } from 'constants/tags';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,18 +15,9 @@ type PositionDetailsProps = {
     selectedSide: Side;
     availablePerSide: AvailablePerSide;
     position: Position;
-    selectedPosition: Position;
-    setSelectedPosition: (index: number) => void;
 };
 
-const PositionDetails: React.FC<PositionDetailsProps> = ({
-    market,
-    selectedSide,
-    availablePerSide,
-    selectedPosition,
-    setSelectedPosition,
-    position,
-}) => {
+const PositionDetails: React.FC<PositionDetailsProps> = ({ market, selectedSide, availablePerSide, position }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     // Redux states
@@ -46,18 +38,22 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
         ? Math.ceil(Math.abs(Number(availablePerSide.positions[position].buyImpactPrice) * 100))
         : 0;
 
+    const isGameCancelled = market.cancelled || (!market.gameStarted && market.resolved);
+    const isGameResolved = market.gameStarted && market.resolved;
+    const isGamePaused = market.paused && !isGameResolved && !isGameCancelled;
+    const showDiscount = showPositionDiscount && !market.resolved && !market.cancelled && !market.paused;
+
     return (
         <Container
             disabled={disabledPosition}
-            selected={selectedPosition == position}
+            selected={addedToParlay && addedToParlay.position == position}
             onClick={() => {
                 if (!disabledPosition) {
-                    setSelectedPosition(position);
                     if (addedToParlay && addedToParlay.position == position) {
                         dispatch(removeFromParlay(market.address));
                     } else {
                         const parlayMarket: ParlaysMarketPosition = {
-                            parentMarket: market.address,
+                            parentMarket: market.parentMarket !== '' ? market.parentMarket : market.address,
                             sportMarketAddress: market.address,
                             position: position,
                             homeTeam: market.homeTeam || '',
@@ -72,9 +68,17 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                 {position == 0 && '1'}
                 {position == 1 && '2'}
                 {position == 2 && 'X'}
+                {market.betType == BetType.SPREAD && ` (${market.spread})`}
+                {market.betType == BetType.TOTAL && ` (${market.total})`}
             </Value>
-            <Value>{formatMarketOdds(selectedOddsType, market.positions[position].sides[selectedSide].odd)}</Value>
-            {showPositionDiscount && (
+            <Value>
+                {isGameCancelled
+                    ? `- ${t('markets.market-card.canceled')} -`
+                    : isGamePaused
+                    ? `- ${t('markets.market-card.paused')} -`
+                    : formatMarketOdds(selectedOddsType, market.positions[position].sides[selectedSide].odd)}
+            </Value>
+            {showDiscount && (
                 <Tooltip
                     overlay={
                         <span>

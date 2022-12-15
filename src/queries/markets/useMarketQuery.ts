@@ -17,8 +17,19 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
 
                 const rundownConsumerContract = networkConnector.theRundownConsumerContract;
                 const sportsAMMContract = networkConnector.sportsAMMContract;
-                // const { marketDataContract, marketManagerContract, thalesBondsContract } = networkConnector;
-                const [gameDetails, tags, times, resolved, finalResult, cancelled, paused] = await Promise.all([
+                const gamesOddsObtainerContract = networkConnector.gamesOddsObtainerContract;
+
+                const [
+                    gameDetails,
+                    tags,
+                    times,
+                    resolved,
+                    finalResult,
+                    cancelled,
+                    paused,
+                    marketDefaultOdds,
+                    childMarketsAddresses,
+                ] = await Promise.all([
                     contract?.getGameDetails(),
                     contract?.tags(0),
                     contract?.times(),
@@ -26,10 +37,8 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                     contract?.finalResult(),
                     contract?.cancelled(),
                     contract?.paused(),
-                ]);
-
-                const [marketDefaultOdds] = await Promise.all([
-                    await sportsAMMContract?.getMarketDefaultOdds(marketAddress, isSell),
+                    sportsAMMContract?.getMarketDefaultOdds(marketAddress, isSell),
+                    gamesOddsObtainerContract?.getAllChildMarketsFromParent(marketAddress),
                 ]);
 
                 const homeOdds = bigNumberFormatter(marketDefaultOdds[0]);
@@ -47,7 +56,7 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                 const awayScore = result ? result.awayScore : undefined;
 
                 const market: MarketData = {
-                    address: marketAddress,
+                    address: marketAddress.toLowerCase(),
                     gameDetails,
                     positions: {
                         [Position.HOME]: {
@@ -95,6 +104,11 @@ const useMarketQuery = (marketAddress: string, isSell: boolean, options?: UseQue
                     paused,
                     betType: 0,
                     isApex: false,
+                    parentMarket: '',
+                    childMarketsAddresses,
+                    childMarkets: [],
+                    spread: 0,
+                    total: 0,
                 };
                 return market;
             } catch (e) {

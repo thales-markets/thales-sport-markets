@@ -35,7 +35,9 @@ export const Container = styled(FlexDivRow)<{ disabled: boolean; selected: boole
     }
 `;
 
-export const Value = styled.span``;
+export const Value = styled.span`
+    text-transform: uppercase;
+`;
 
 export const Discount = styled(FlexDivCentered)`
     color: #5fc694;

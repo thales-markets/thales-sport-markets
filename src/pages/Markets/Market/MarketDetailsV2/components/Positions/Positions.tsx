@@ -1,92 +1,66 @@
 import { Position, Side } from 'constants/options';
-import { MAIN_COLORS } from 'constants/ui';
+import { BetType } from 'constants/tags';
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import { AvailablePerSide, MarketData } from 'types/markets';
 import { getVisibilityOfDrawOptionByTagId } from 'utils/markets';
 import PositionDetails from '../PositionDetails';
-import { Container, Header, Status, Title, ContentContianer, Arrow } from './styled-components';
+import { Container, Header, Title, ContentContianer, Arrow, ContentRow } from './styled-components';
 
 type PositionsProps = {
-    market: MarketData;
+    markets: MarketData[];
+    betType: BetType;
     selectedSide: Side;
     availablePerSide: AvailablePerSide;
-    selectedPosition: Position;
-    setSelectedPosition: (index: number) => void;
 };
 
-const Positions: React.FC<PositionsProps> = ({
-    market,
-    selectedSide,
-    availablePerSide,
-    selectedPosition,
-    setSelectedPosition,
-}) => {
-    const { t } = useTranslation();
+const Positions: React.FC<PositionsProps> = ({ markets, betType, selectedSide, availablePerSide }) => {
+    // const { t } = useTranslation();
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
-    const showDrawOdds = getVisibilityOfDrawOptionByTagId(market.tags);
-
-    const isGameCancelled = market.cancelled || (!market.gameStarted && market.resolved);
-    const isGameResolved = market.gameStarted && market.resolved;
-    const isPendingResolution = market.gameStarted && !market.resolved;
-    const isGamePaused = market.paused && !isGameResolved && !isGameCancelled;
-    const showPositions = !market.resolved && !market.cancelled && !market.gameStarted && !market.paused;
-
     return (
-        <>
-            {showPositions ? (
-                <Container>
-                    <Header>
-                        <Title isExpanded={isExpanded}>WINNER</Title>
-                    </Header>
-                    <Arrow
-                        className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
-                        onClick={() => setIsExpanded(!isExpanded)}
-                    />
-                    {isExpanded && (
-                        <ContentContianer>
-                            <PositionDetails
-                                market={market}
-                                selectedSide={selectedSide}
-                                availablePerSide={availablePerSide}
-                                selectedPosition={selectedPosition}
-                                setSelectedPosition={setSelectedPosition}
-                                position={Position.HOME}
-                            />
-                            {showDrawOdds && (
+        <Container>
+            <Header>
+                <Title isExpanded={isExpanded}>
+                    {betType === BetType.WINNER ? 'WINNER' : betType === BetType.SPREAD ? 'HANDICAP' : 'TOTAL'}
+                </Title>
+            </Header>
+            <Arrow
+                className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
+                onClick={() => setIsExpanded(!isExpanded)}
+            />
+            {isExpanded && (
+                <ContentContianer>
+                    {markets.map((market) => {
+                        const showDrawOdds = getVisibilityOfDrawOptionByTagId(market.tags);
+                        return (
+                            <ContentRow key={market.address}>
                                 <PositionDetails
                                     market={market}
                                     selectedSide={selectedSide}
                                     availablePerSide={availablePerSide}
-                                    selectedPosition={selectedPosition}
-                                    setSelectedPosition={setSelectedPosition}
-                                    position={Position.DRAW}
+                                    position={Position.HOME}
                                 />
-                            )}
-                            <PositionDetails
-                                market={market}
-                                selectedSide={selectedSide}
-                                availablePerSide={availablePerSide}
-                                selectedPosition={selectedPosition}
-                                setSelectedPosition={setSelectedPosition}
-                                position={Position.AWAY}
-                            />
-                        </ContentContianer>
-                    )}
-                </Container>
-            ) : (
-                <Status backgroundColor={isGameCancelled ? MAIN_COLORS.BACKGROUNDS.RED : MAIN_COLORS.LIGHT_GRAY}>
-                    {isPendingResolution
-                        ? t('markets.market-card.pending-resolution')
-                        : isGameCancelled
-                        ? t('markets.market-card.canceled')
-                        : isGamePaused
-                        ? t('markets.market-card.paused')
-                        : `${t('markets.market-card.result')}: ${market.homeScore} - ${market.awayScore}`}
-                </Status>
+                                {showDrawOdds && (
+                                    <PositionDetails
+                                        market={market}
+                                        selectedSide={selectedSide}
+                                        availablePerSide={availablePerSide}
+                                        position={Position.DRAW}
+                                    />
+                                )}
+                                <PositionDetails
+                                    market={market}
+                                    selectedSide={selectedSide}
+                                    availablePerSide={availablePerSide}
+                                    position={Position.AWAY}
+                                />
+                            </ContentRow>
+                        );
+                    })}
+                </ContentContianer>
             )}
-        </>
+        </Container>
     );
 };
 

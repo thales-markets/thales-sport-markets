@@ -1,6 +1,6 @@
 import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDivColumn, FlexDivRow } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
     position: relative;
@@ -10,6 +10,7 @@ export const Container = styled(FlexDivColumn)`
     @media (max-width: 575px) {
         padding: 5px 6px;
     }
+    margin-bottom: 5px;
 `;
 
 export const Header = styled(FlexDivRow)`
@@ -24,19 +25,12 @@ export const Title = styled.span<{ isExpanded: boolean }>`
     margin-left: 2px;
 `;
 
-export const ContentContianer = styled(FlexDivRow)``;
+export const ContentContianer = styled(FlexDivColumn)``;
 
-export const Status = styled(FlexDivCentered)<{ backgroundColor?: string }>`
-    width: 100%;
-    border-radius: 15px;
-    background-color: ${(props) => props.backgroundColor || MAIN_COLORS.LIGHT_GRAY};
-    padding: 10px 50px;
-    margin-bottom: 7px;
-    font-weight: 600;
-    font-size: 21px;
-    line-height: 110%;
-    text-transform: uppercase;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+export const ContentRow = styled(FlexDivRow)`
+    :not(:last-child) {
+        margin-bottom: 3px;
+    }
 `;
 
 export const Arrow = styled.i`
