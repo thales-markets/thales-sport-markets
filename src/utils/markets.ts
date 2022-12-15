@@ -294,7 +294,6 @@ export const updateTotalQuoteAndAmountFromContract = (parlayMarkets: ParlayMarke
         if ((isParlayOpen(parlay) || isParlayClaimable(parlay)) && isCanceledMarketInParlay(parlay)) {
             const canceledQuotes = getCanceledGamesPreviousQuotes(parlay);
             let totalQuote = parlay.totalQuote;
-            console.log('canceledQuotes ', canceledQuotes);
             canceledQuotes.forEach((quote) => {
                 totalQuote /= quote;
             });
