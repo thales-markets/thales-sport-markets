@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { buildHref } from 'utils/routes';
 import { WizardStep } from '../../Wizard';
-import BuyBridgeSendModal from '../BuyBridgeSendModal';
+import FundModal from '../FundModal';
 
 type StepProps = {
     stepNumber: number;
@@ -142,7 +142,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
             <StepActionSection isActive={isActive} isDisabled={isDisabled}>
                 {getStepAction()}
             </StepActionSection>
-            {showBuyModal && <BuyBridgeSendModal onClose={() => setShowBuyModal(false)} />}
+            {showBuyModal && <FundModal onClose={() => setShowBuyModal(false)} />}
             {showSwapModal && <SwapModal onClose={() => setShowSwapModal(false)} />}
         </Container>
     );
@@ -207,7 +207,7 @@ const StepNumber = styled.span<{ isActive: boolean }>`
 
 const StepActionIcon = styled.i<{ isDisabled?: boolean }>`
     font-size: 35px;
-    margin-bottom: 15px;
+    padding-bottom: 15px;
     cursor: ${(props) => (props.isDisabled ? 'not-allowed' : 'pointer')};
 `;
 

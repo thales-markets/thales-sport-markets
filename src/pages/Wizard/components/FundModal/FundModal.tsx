@@ -6,12 +6,17 @@ import BungeePlugin from 'components/BungeePlugin';
 import Modal from 'components/Modal';
 import SimpleLoader from 'components/SimpleLoader';
 import { t } from 'i18next';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import QRCode from 'react-qr-code';
+import { useSelector } from 'react-redux';
+import { getWalletAddress } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivColumnCentered } from 'styles/common';
+import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import { generateReferralLink } from 'utils/referral';
 import { buildHref } from 'utils/routes';
 
-type BuyBridgeSendModalProps = {
+type FundModalProps = {
     onClose: () => void;
 };
 
@@ -40,10 +45,13 @@ const getProviderUrl = (provider: Provider | undefined) => {
     }
 };
 
-const BuyBridgeSendModal: React.FC<BuyBridgeSendModalProps> = ({ onClose }) => {
+const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+
     const [iframeProvider, setIframeProvider] = useState<Provider | undefined>(undefined);
     const [iframeLoader, setIframeLoader] = useState(false);
     const [showBungeePlugin, setShowBungeePlugin] = useState(false);
+    const [addressCoppied, setAddressCoppied] = useState(false);
 
     const onBuyBanxaClickHandler = () => {
         setIframeProvider(Provider.BANXA);
@@ -55,57 +63,55 @@ const BuyBridgeSendModal: React.FC<BuyBridgeSendModalProps> = ({ onClose }) => {
         setIframeLoader(true);
     };
 
-    const onBridgeClickHandler = () => {
-        setShowBungeePlugin(true);
+    const onBridgeClickHandler = () => setShowBungeePlugin(true);
+
+    const referralLink = useMemo(() => generateReferralLink(walletAddress), [walletAddress]);
+
+    const onCopyAddressClickHandler = () => {
+        navigator.clipboard.writeText(referralLink);
+        setAddressCoppied(true);
     };
 
     return (
         <>
-            <Modal title={t('wizard.buy-modal.title')} onClose={onClose} shouldCloseOnOverlayClick={false}>
+            <Modal title={t('wizard.fund-modal.title')} onClose={onClose} shouldCloseOnOverlayClick={false}>
                 <Container>
                     <Row>
                         <ButtonWrapper>
-                            <ButtonDiv
-                                onClick={() => {
-                                    onBuyBanxaClickHandler();
-                                }}
-                            >
-                                {t('wizard.buy-modal.buy')}
-                            </ButtonDiv>
+                            <ButtonDiv onClick={onBuyBanxaClickHandler}>{t('wizard.fund-modal.buy')}</ButtonDiv>
                         </ButtonWrapper>
                         <Logo logoType={Provider.BANXA} />
                     </Row>
                     <Row>
                         <ButtonWrapper>
-                            <ButtonDiv
-                                onClick={() => {
-                                    onBuyMtPelerinClickHandler();
-                                }}
-                            >
-                                {t('wizard.buy-modal.buy')}
-                            </ButtonDiv>
+                            <ButtonDiv onClick={onBuyMtPelerinClickHandler}>{t('wizard.fund-modal.buy')}</ButtonDiv>
                         </ButtonWrapper>
                         <Logo logoType={Provider.MT_PELERIN} />
                     </Row>
                     <Row>
                         <ButtonWrapper>
-                            <ButtonDiv
-                                onClick={() => {
-                                    onBridgeClickHandler();
-                                }}
-                            >
-                                {t('wizard.buy-modal.bridge')}
-                            </ButtonDiv>
+                            <ButtonDiv onClick={onBridgeClickHandler}>{t('wizard.fund-modal.bridge')}</ButtonDiv>
                         </ButtonWrapper>
                         <Logo logoType={Provider.BUNGEE} />
                     </Row>
                     <Row>
                         <ButtonWrapper>
                             <Link target="_blank" rel="noreferrer" href={getProviderUrl(Provider.LAYER_SWAP)}>
-                                <ButtonDiv>{t('wizard.buy-modal.exchange')}</ButtonDiv>
+                                <ButtonDiv>{t('wizard.fund-modal.exchange')}</ButtonDiv>
                             </Link>
                         </ButtonWrapper>
                         <Logo logoType={Provider.LAYER_SWAP} />
+                    </Row>
+                    <Row>
+                        <ButtonWrapper>
+                            <ButtonDiv onClick={onCopyAddressClickHandler}>
+                                {addressCoppied ? t('wizard.fund-modal.coppied') : t('wizard.fund-modal.copy-address')}
+                            </ButtonDiv>
+                        </ButtonWrapper>
+                        <Logo>
+                            <QRCode size={60} value={referralLink} />
+                            <LogoLabel>{t('wizard.fund-modal.address')}</LogoLabel>
+                        </Logo>
                     </Row>
                 </Container>
             </Modal>
@@ -113,9 +119,9 @@ const BuyBridgeSendModal: React.FC<BuyBridgeSendModalProps> = ({ onClose }) => {
                 <Modal
                     title={
                         iframeProvider === Provider.BANXA
-                            ? t('wizard.buy-modal.buy-banxa')
+                            ? t('wizard.fund-modal.buy-banxa')
                             : iframeProvider === Provider.MT_PELERIN
-                            ? t('wizard.buy-modal.buy-mt-pelerin')
+                            ? t('wizard.fund-modal.buy-mt-pelerin')
                             : ''
                     }
                     onClose={() => setIframeProvider(undefined)}
@@ -129,7 +135,7 @@ const BuyBridgeSendModal: React.FC<BuyBridgeSendModalProps> = ({ onClose }) => {
             )}
             {showBungeePlugin && (
                 <Modal
-                    title={t('wizard.buy-modal.bridge')}
+                    title={t('wizard.fund-modal.bridge')}
                     onClose={() => setShowBungeePlugin(false)}
                     shouldCloseOnOverlayClick={false}
                 >
@@ -142,8 +148,8 @@ const BuyBridgeSendModal: React.FC<BuyBridgeSendModalProps> = ({ onClose }) => {
 
 const Container = styled(FlexDivColumnCentered)``;
 
-const Row = styled.div`
-    display: flex;
+const Row = styled(FlexDivRowCentered)`
+    justify-content: start;
 `;
 
 const ButtonWrapper = styled.div`
@@ -189,9 +195,17 @@ const handleLogoType = (logoType: Provider) => {
     }
 };
 
-const Logo = styled.div<{ logoType: Provider }>`
-    content: url(${(props) => handleLogoType(props.logoType)});
+const Logo = styled(FlexDivRowCentered)<{ logoType?: Provider }>`
+    ${(props) => (props.logoType !== undefined ? `content: url(${handleLogoType(props.logoType)});` : '')}
     margin-left: 20px;
+`;
+
+const LogoLabel = styled.span`
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18px;
+    color: #ffffff;
+    margin-left: 10px;
 `;
 
 const Link = styled.a``;
@@ -211,4 +225,4 @@ const IFrame = styled.iframe`
     height: 100%;
 `;
 
-export default BuyBridgeSendModal;
+export default FundModal;

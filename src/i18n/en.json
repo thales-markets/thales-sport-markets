@@ -621,13 +621,16 @@
                 "trade": "Trade on Overtime"
             }
         },
-        "buy-modal": {
+        "fund-modal": {
             "title": "Fund, Bridge & Send",
             "buy": "Fund with card",
             "buy-banxa": "Fund with Banxa",
             "buy-mt-pelerin": "Fund with Mt Pelerin",
             "bridge": "Bridge to optimism  ",
-            "exchange": "Send from exchange"
+            "exchange": "Send from exchange",
+            "copy-address": "Copy address",
+            "coppied": "Coppied!",
+            "address": "Your address"
         }
     },
     "vaults": {
