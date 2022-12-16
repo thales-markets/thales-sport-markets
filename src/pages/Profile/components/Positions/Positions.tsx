@@ -175,7 +175,7 @@ const Positions: React.FC<{ searchText?: string; setOpenPositionsValue: (value: 
     }, [parlayMarketsByStatus, accountPositionsByStatus, setOpenPositionsValue]);
 
     const isLoading = parlayMarketsQuery.isLoading || accountMarketsQuery.isLoading;
-    console.log(accountPositionsByStatus);
+
     return (
         <Container>
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
