@@ -2,13 +2,7 @@ import PositionSymbol from 'components/PositionSymbol';
 import React, { useEffect, useState } from 'react';
 import { PositionData, SportMarketInfo } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import {
-    convertPositionNameToPositionType,
-    convertPositionToSymbolType,
-    formatMarketOdds,
-    getIsApexTopGame,
-    getSymbolText,
-} from 'utils/markets';
+import { convertPositionNameToPositionType, formatMarketOdds, getSymbolText } from 'utils/markets';
 import {
     ClubLogo,
     ClubName,
@@ -78,7 +72,6 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
             </MatchInfo>
             <ParlayItemStatusContainer>
                 <PositionSymbol
-                    type={convertPositionToSymbolType(positionEnum, getIsApexTopGame(market.isApex, market.betType))}
                     symbolBottomText={{
                         text: formatMarketOdds(selectedOddsType, parlayItemQuote),
                         textStyle: {

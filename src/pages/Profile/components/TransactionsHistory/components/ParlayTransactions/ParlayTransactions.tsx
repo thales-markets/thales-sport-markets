@@ -17,9 +17,7 @@ import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
-    convertPositionToSymbolType,
     formatMarketOdds,
-    getIsApexTopGame,
     getSymbolText,
     isParlayClaimable,
     isParlayOpen,
@@ -245,10 +243,6 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                                     </ParlayRowTeam>
                                 </ParlayRowText>
                                 <PositionSymbol
-                                    type={convertPositionToSymbolType(
-                                        positionEnum,
-                                        getIsApexTopGame(position.market.isApex, position.market.betType)
-                                    )}
                                     symbolFontSize={10}
                                     symbolBottomText={{
                                         text: formatMarketOdds(selectedOddsType, quote),

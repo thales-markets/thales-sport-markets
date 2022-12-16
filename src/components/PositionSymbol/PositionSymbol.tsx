@@ -1,16 +1,10 @@
-import { useMatomo } from '@datapunt/matomo-tracker-react';
 import Tooltip from 'components/Tooltip';
 import { MAIN_COLORS } from 'constants/ui';
 import React, { CSSProperties } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { ParlaysMarketPosition } from 'types/markets';
 
 type SymbolProps = {
-    type: number;
     symbolText: string;
     symbolColor?: string;
     symbolFontSize?: number;
@@ -19,90 +13,61 @@ type SymbolProps = {
         tooltip?: string;
         textStyle?: CSSProperties;
     };
+    selected?: boolean;
     disabled?: boolean;
     additionalStyle?: CSSProperties;
     glow?: boolean;
-    marketAddress?: string;
-    parentMarket?: string;
-    homeTeam?: string;
-    awayTeam?: string;
     discount?: number;
     flexDirection?: string;
+    onClick?: () => void;
 };
 
 const PositionSymbol: React.FC<SymbolProps> = ({
-    type,
     symbolText,
     symbolColor,
     symbolFontSize,
     symbolBottomText,
+    selected,
     disabled,
     additionalStyle,
     glow,
-    marketAddress,
-    parentMarket,
-    homeTeam,
-    awayTeam,
     discount,
     flexDirection,
+    onClick,
 }) => {
-    const { t } = useTranslation();
-    const dispatch = useDispatch();
-    const { trackEvent } = useMatomo();
-    const parlay = useSelector(getParlay);
-    const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == marketAddress)[0];
-    const isAddedToParlay = addedToParlay && addedToParlay.position == type;
+    const notClickable = !onClick;
 
     return (
         <Wrapper
             disabled={disabled}
             flexDirection={flexDirection}
-            notClickable={!marketAddress}
+            notClickable={notClickable}
             onClick={() => {
-                if (!disabled && marketAddress && parentMarket) {
-                    if (isAddedToParlay) {
-                        dispatch(removeFromParlay(marketAddress));
-                    } else {
-                        trackEvent({
-                            category: 'position',
-                            action: discount == null ? 'non-discount' : 'discount',
-                            value: discount == null ? 0 : Math.ceil(Math.abs(discount)),
-                        });
-                        const parlayMarket: ParlaysMarketPosition = {
-                            parentMarket: parentMarket,
-                            sportMarketAddress: marketAddress,
-                            position: type,
-                            homeTeam: homeTeam || '',
-                            awayTeam: awayTeam || '',
-                        };
-                        dispatch(updateParlay(parlayMarket));
-                    }
-                }
+                onClick && onClick();
             }}
         >
-            <Container
+            <Symbol
                 glow={glow}
                 color={symbolColor}
                 style={additionalStyle}
-                selected={isAddedToParlay}
-                notClickable={!marketAddress}
+                selected={selected}
+                notClickable={notClickable}
                 flexDirection={flexDirection}
                 disabled={disabled}
+                fontSize={symbolFontSize}
             >
-                <Symbol color={symbolColor} fontSize={symbolFontSize} selected={isAddedToParlay}>
-                    {symbolText}
-                </Symbol>
+                {symbolText}
                 {discount && (
                     <Discount>
                         <span>+{Math.ceil(Math.abs(discount))}%</span>
                     </Discount>
                 )}
-            </Container>
+            </Symbol>
             {symbolBottomText && (
                 <BottomText style={symbolBottomText.textStyle} flexDirection={flexDirection}>
                     {symbolBottomText.text}
                     {symbolBottomText.tooltip && (
-                        <Tooltip overlay={<>{t('markets.zero-odds-tooltip')}</>} iconFontSize={11} marginLeft={3} />
+                        <Tooltip overlay={<>{symbolBottomText.tooltip}</>} iconFontSize={11} marginLeft={3} />
                     )}
                 </BottomText>
             )}
@@ -116,40 +81,40 @@ const Wrapper = styled(FlexDivColumn)<{ disabled?: boolean; flexDirection?: stri
     flex-direction: ${(props) => (props.flexDirection ? props.flexDirection : 'row')};
 `;
 
-const Container = styled.div<{
+const Symbol = styled(FlexDivCentered)<{
     glow?: boolean;
     color?: string;
     selected?: boolean;
     disabled?: boolean;
     notClickable?: boolean;
     flexDirection?: string;
+    fontSize?: number;
 }>`
     position: relative;
     width: 30px;
     height: 30px;
     border-radius: 60%;
-    border: 3px solid #5f6180;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    font-size: 13px;
+    color: ${(props) => (props.selected ? MAIN_COLORS.TEXT.BLUE : props.color || MAIN_COLORS.TEXT.WHITE)};
+    font-size: ${(props) => props.fontSize || 12}px;
     opacity: ${(props) => (props.disabled ? 0.4 : 1)};
     border: ${(props) =>
-        props?.glow ? '3px solid ' + props.color : props.selected ? '3px solid #64D9FE' : '3px solid #5f6180'};
-    box-shadow: ${(props) => (props.glow ? '0 0 6px 2px ' + props.color : '')};
+        `3px solid ${
+            props.glow
+                ? props.color || MAIN_COLORS.BORDERS.WHITE
+                : props.selected
+                ? MAIN_COLORS.BORDERS.BLUE
+                : MAIN_COLORS.BORDERS.GRAY
+        }`};
+    box-shadow: ${(props) => (props.glow ? `0 0 6px 2px ${props.color || MAIN_COLORS.BORDERS.WHITE}` : '')};
+    margin: ${(props) => (props.flexDirection === 'column' ? '0 10px' : '0 0')};
     :hover {
-        ${(props) => (props.disabled || props.notClickable ? '' : 'border: 3px solid #64d9fe;')}
-        & > span {
-            ${(props) => (props.disabled || props.notClickable ? '' : 'color: #64d9fe !important;')}
-        }
+        border: ${(props) => (props.disabled || props.notClickable ? '' : `3px solid ${MAIN_COLORS.BORDERS.BLUE}`)};
+        color: ${(props) => (props.disabled || props.notClickable ? '' : MAIN_COLORS.BORDERS.BLUE)};
     }
-
-    @media (max-width: 500px) {
+    @media (max-width: 575px) {
         width: 25px;
         height: 25px;
     }
-    margin: ${(props) => (props.flexDirection === 'column' ? '0 10px' : '0 0')};
 `;
 
 const BottomText = styled.span<{
@@ -158,14 +123,9 @@ const BottomText = styled.span<{
     font-size: 13px;
     margin-top: ${(props) => (props.flexDirection === 'column' ? 2 : 0)}px;
     margin-right: ${(props) => (props.flexDirection === 'column' ? 0 : 10)}px;
-    @media (max-width: 380px) {
+    @media (max-width: 575px) {
         font-size: 12px;
     }
-`;
-
-const Symbol = styled.span<{ color?: string; selected?: boolean; fontSize?: number }>`
-    color: ${(props) => (props.selected ? MAIN_COLORS.TEXT.BLUE : props.color || MAIN_COLORS.TEXT.WHITE)};
-    font-size: ${(props) => props.fontSize || 12}px;
 `;
 
 const Discount = styled(FlexDivCentered)`

@@ -26,9 +26,7 @@ import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
-    convertPositionToSymbolType,
     formatMarketOdds,
-    getIsApexTopGame,
     getSymbolText,
 } from 'utils/markets';
 
@@ -205,10 +203,6 @@ const ParlayLeaderboard: React.FC = () => {
                                     </ParlayRowTeam>
                                 </ParlayRowText>
                                 <PositionSymbol
-                                    type={convertPositionToSymbolType(
-                                        positionEnum,
-                                        getIsApexTopGame(position.market.isApex, position.market.betType)
-                                    )}
                                     symbolFontSize={10}
                                     symbolBottomText={{
                                         text: formatMarketOdds(
@@ -295,10 +289,6 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
                     </ParlayRowTeam>
                 </ParlayRowText>
                 <PositionSymbol
-                    type={convertPositionToSymbolType(
-                        positionEnum,
-                        getIsApexTopGame(position.market.isApex, position.market.betType)
-                    )}
                     symbolFontSize={10}
                     symbolBottomText={{
                         text: formatMarketOdds(OddsType.Decimal, parlay.marketQuotes ? parlay.marketQuotes[index] : 0),

@@ -46,6 +46,8 @@ export const MAIN_COLORS = {
     BORDERS: {
         GRAY: '#5f6180',
         LIGHT_BLUE: '#3FD1FF',
+        BLUE: '#64D9FE',
+        WHITE: '#FFFFFF',
     },
     SHADOWS: {
         WINNER: '0px 0px 33px -7px rgba(63,209,255,1)',

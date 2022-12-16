@@ -35,9 +35,7 @@ import PositionSymbol from 'components/PositionSymbol';
 import {
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
-    convertPositionToSymbolType,
     getCanceledGameClaimAmount,
-    getIsApexTopGame,
     getSymbolText,
 } from 'utils/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
@@ -243,13 +241,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
             {!isClaimable && (
                 <>
                     <PositionContainer>
-                        <PositionSymbol
-                            type={convertPositionToSymbolType(
-                                positionEnum,
-                                getIsApexTopGame(position.market.isApex, position.market.betType)
-                            )}
-                            symbolText={getSymbolText(positionEnum, position.market.betType)}
-                        />
+                        <PositionSymbol symbolText={getSymbolText(positionEnum, position.market.betType)} />
                     </PositionContainer>
                     <ColumnDirectionInfo>
                         <Label>{t('profile.card.position-size')}:</Label>

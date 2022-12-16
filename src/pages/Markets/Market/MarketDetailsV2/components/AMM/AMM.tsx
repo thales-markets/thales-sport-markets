@@ -64,7 +64,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { USD_SIGN } from 'constants/currency';
 import usePositionSellPriceQuery from 'queries/markets/usePositionSellPriceQuery';
 import PositionSymbol from 'components/PositionSymbol';
-import { convertPositionNameToPosition, getSymbolText, convertPositionNameToPositionType } from 'utils/markets';
+import { getSymbolText, convertPositionNameToPositionType } from 'utils/markets';
 
 type AMMProps = {
     market: MarketData;
@@ -779,7 +779,6 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                                                             width: '30px',
                                                             height: '30px',
                                                         }}
-                                                        type={convertPositionNameToPosition(item)}
                                                         symbolText={getSymbolText(
                                                             convertPositionNameToPositionType(item),
                                                             market.betType

@@ -5,13 +5,7 @@ import { removeFromParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { ParlaysMarket } from 'types/markets';
-import {
-    convertPositionToSymbolType,
-    formatMarketOdds,
-    getIsApexTopGame,
-    getPositionOdds,
-    getSymbolText,
-} from 'utils/markets';
+import { formatMarketOdds, getPositionOdds, getSymbolText } from 'utils/markets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
 
@@ -38,7 +32,6 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                 </ClubName>
             </MatchLabel>
             <PositionSymbol
-                type={convertPositionToSymbolType(market.position, getIsApexTopGame(market.isApex, market.betType))}
                 symbolBottomText={{
                     text: formatMarketOdds(selectedOddsType, getPositionOdds(market)),
                     textStyle: {
