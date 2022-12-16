@@ -2,6 +2,7 @@ import banxa from 'assets/images/wizard/logo-banxa.svg';
 import bungee from 'assets/images/wizard/logo-bungee.svg';
 import layerSwap from 'assets/images/wizard/logo-layerswap.svg';
 import mtPelerin from 'assets/images/wizard/logo-mt-pelerin.svg';
+import BungeePlugin from 'components/BungeePlugin';
 import Modal from 'components/Modal';
 import SimpleLoader from 'components/SimpleLoader';
 import { t } from 'i18next';
@@ -15,30 +16,47 @@ type BuyBridgeSendModalProps = {
 };
 
 enum Provider {
-    BANXA = 'https://thalesmarket.banxa.com/iframe?code=x68QxHYZ2hQU0rccKDgDSeUO7QonDXsY&coinType=ETH&fiatType=EUR&blockchain=OPTIMISM',
-    MT_PELERIN = 'https://widget.mtpelerin.com/?type=popup&lang=en&primary=%235F6180&net=optimism_mainnet&bsc=EUR&bdc=ETH&crys=ETH',
-    BUNGEE = '',
-    LAYER_SWAP = 'https://www.layerswap.io/?destNetwork=optimism_mainnet&lockNetwork=true&sourceExchangeName=binance&asset=usdc',
+    BANXA,
+    MT_PELERIN,
+    BUNGEE,
+    LAYER_SWAP,
 }
 
+const getProviderUrl = (provider: Provider | undefined) => {
+    switch (provider) {
+        case Provider.BANXA:
+            return 'https://thalesmarket.banxa.com/iframe?code=x68QxHYZ2hQU0rccKDgDSeUO7QonDXsY&coinType=ETH&fiatType=EUR&blockchain=OPTIMISM';
+        case Provider.MT_PELERIN:
+            const baseUrl = 'https://widget.mtpelerin.com/';
+            const queryParams = '?type=popup&lang=en&primary=%235F6180&net=optimism_mainnet&bsc=EUR&bdc=ETH&crys=ETH';
+            const queryParamMyLogo = `&mylogo=${window.location.origin + buildHref('/overtime-logo-black.svg')}`;
+            return baseUrl + queryParams + queryParamMyLogo;
+        case Provider.BUNGEE:
+            return '';
+        case Provider.LAYER_SWAP:
+            return 'https://www.layerswap.io/?destNetwork=optimism_mainnet&lockNetwork=true&sourceExchangeName=binance&asset=usdc';
+        default:
+            return '';
+    }
+};
+
 const BuyBridgeSendModal: React.FC<BuyBridgeSendModalProps> = ({ onClose }) => {
-    const [iframe, setIframe] = useState('');
+    const [iframeProvider, setIframeProvider] = useState<Provider | undefined>(undefined);
     const [iframeLoader, setIframeLoader] = useState(false);
-    const [showBungeeWidget, setShowBungeeWidget] = useState(false);
+    const [showBungeePlugin, setShowBungeePlugin] = useState(false);
 
     const onBuyBanxaClickHandler = () => {
-        setIframe(Provider.BANXA.toString());
+        setIframeProvider(Provider.BANXA);
         setIframeLoader(true);
     };
 
     const onBuyMtPelerinClickHandler = () => {
-        const queryParamMyLogo = `&mylogo=${window.location.origin + buildHref('/overtime-logo-black.svg')}`;
-        setIframe(Provider.MT_PELERIN.toString() + queryParamMyLogo);
+        setIframeProvider(Provider.MT_PELERIN);
         setIframeLoader(true);
     };
 
     const onBridgeClickHandler = () => {
-        setShowBungeeWidget(true);
+        setShowBungeePlugin(true);
     };
 
     return (
@@ -83,7 +101,7 @@ const BuyBridgeSendModal: React.FC<BuyBridgeSendModalProps> = ({ onClose }) => {
                     </Row>
                     <Row>
                         <ButtonWrapper>
-                            <Link target="_blank" rel="noreferrer" href={Provider.LAYER_SWAP}>
+                            <Link target="_blank" rel="noreferrer" href={getProviderUrl(Provider.LAYER_SWAP)}>
                                 <ButtonDiv>{t('wizard.buy-modal.exchange')}</ButtonDiv>
                             </Link>
                         </ButtonWrapper>
@@ -91,15 +109,33 @@ const BuyBridgeSendModal: React.FC<BuyBridgeSendModalProps> = ({ onClose }) => {
                     </Row>
                 </Container>
             </Modal>
-            {iframe && (
-                <Modal title={''} onClose={() => setIframe('')} shouldCloseOnOverlayClick={false}>
-                    <IFrameWrapper>
+            {iframeProvider !== undefined && (
+                <Modal
+                    title={
+                        iframeProvider === Provider.BANXA
+                            ? t('wizard.buy-modal.buy-banxa')
+                            : iframeProvider === Provider.MT_PELERIN
+                            ? t('wizard.buy-modal.buy-mt-pelerin')
+                            : ''
+                    }
+                    onClose={() => setIframeProvider(undefined)}
+                    shouldCloseOnOverlayClick={false}
+                >
+                    <IFrameWrapper height={iframeProvider === Provider.MT_PELERIN ? 588 : 635}>
                         {iframeLoader && <SimpleLoader />}
-                        <IFrame src={iframe} onLoad={() => setIframeLoader(false)} />
+                        <IFrame src={getProviderUrl(iframeProvider)} onLoad={() => setIframeLoader(false)} />
                     </IFrameWrapper>
                 </Modal>
             )}
-            {showBungeeWidget && <></>}
+            {showBungeePlugin && (
+                <Modal
+                    title={t('wizard.buy-modal.bridge')}
+                    onClose={() => setShowBungeePlugin(false)}
+                    shouldCloseOnOverlayClick={false}
+                >
+                    <BungeePlugin />
+                </Modal>
+            )}
         </>
     );
 };
@@ -160,9 +196,9 @@ const Logo = styled.div<{ logoType: Provider }>`
 
 const Link = styled.a``;
 
-const IFrameWrapper = styled.div`
+const IFrameWrapper = styled.div<{ height?: number }>`
     width: 530px;
-    height: 635px;
+    height: ${(props) => (props.height ? props.height : '635')}px;
     margin: auto;
     background: white;
     margin-top: 10px;
@@ -174,16 +210,5 @@ const IFrame = styled.iframe`
     width: 100%;
     height: 100%;
 `;
-
-// const CloseIcon = styled.i`
-//     font-size: 16px;
-//     margin-top: 1px;
-//     cursor: pointer;
-//     &:before {
-//         font-family: ExoticIcons !important;
-//         content: '\\004F';
-//         color: ${(props) => props.theme.textColor.primary};
-//     }
-// `;
 
 export default BuyBridgeSendModal;

@@ -616,16 +616,18 @@
             "action": {
                 "connect-wallet": "Connect Wallet",
                 "connected": "Connected",
-                "fund": "Fund",
+                "fund": "Fund with ETH",
                 "exchange": "Exchange to USD",
                 "trade": "Trade on Overtime"
             }
         },
         "buy-modal": {
-            "title": "Buy, Bridge & Send",
+            "title": "Fund, Bridge & Send",
             "buy": "Fund with card",
+            "buy-banxa": "Fund with Banxa",
+            "buy-mt-pelerin": "Fund with Mt Pelerin",
             "bridge": "Bridge to optimism  ",
-            "exchange": "Fund from exchange"
+            "exchange": "Send from exchange"
         }
     },
     "vaults": {
