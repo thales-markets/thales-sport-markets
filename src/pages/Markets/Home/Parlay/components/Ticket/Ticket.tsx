@@ -28,7 +28,7 @@ import {
     formatPercentage,
     roundNumberToDecimals,
 } from 'utils/formatters/number';
-import { formatMarketOdds } from 'utils/markets';
+import { formatMarketOdds, isDiscounted } from 'utils/markets';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { getParlayAMMTransaction, getParlayMarketsAMMQuoteMethod } from 'utils/parlayAmm';
@@ -46,6 +46,7 @@ import {
     InfoValue,
     InfoWrapper,
     InputContainer,
+    RowContainer,
     RowSummary,
     ShareWrapper,
     SubmitButton,
@@ -86,6 +87,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [totalQuote, setTotalQuote] = useState(0);
+    const [totalBonus, setTotalBonus] = useState(0);
     const [finalQuotes, setFinalQuotes] = useState<number[]>([]);
     const [skew, setSkew] = useState(0);
     const [totalBuyAmount, setTotalBuyAmount] = useState(0);
@@ -163,6 +165,28 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         // Used for transition between Ticket and Single to save payment selection and amount
         dispatch(setPayment({ selectedStableIndex, isVoucherSelected, amountToBuy: usdAmountValue }));
     }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
+
+    useEffect(() => {
+        let bonus = 0;
+        markets.forEach((market) => {
+            switch (market.position) {
+                case 0:
+                    isDiscounted(market.homePriceImpact) ? (bonus += Math.ceil(Math.abs(market.homePriceImpact))) : '';
+                    break;
+                case 1:
+                    isDiscounted(market.awayPriceImpact) ? (bonus += Math.ceil(Math.abs(market.awayPriceImpact))) : '';
+                    break;
+                case 2:
+                    isDiscounted(market.drawPriceImpact) && market.drawPriceImpact
+                        ? (bonus += Math.ceil(Math.abs(market.drawPriceImpact)))
+                        : '';
+                    break;
+                default:
+                    break;
+            }
+        });
+        setTotalBonus(bonus);
+    }, [markets]);
 
     // Clear Parlay when network is changed
     const isMounted = useRef(false);
@@ -559,22 +583,28 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
     return (
         <>
-            <RowSummary>
-                <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
-                <InfoTooltip
-                    open={inputRefVisible && totalQuote === parlayAmmData?.maxSupportedOdds}
-                    title={getQuoteTooltipText()}
-                    placement={'top'}
-                    arrow={true}
-                >
-                    <SummaryValue>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
-                </InfoTooltip>
-                <SummaryLabel alignRight={true}>{t('markets.parlay.clear')}:</SummaryLabel>
-                <XButton
-                    margin={'0 0 4px 5px'}
-                    onClick={() => dispatch(removeAll())}
-                    className={`icon icon--cross-button-arrow`}
-                />
+            <RowSummary columnDirection={true}>
+                <RowContainer>
+                    <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
+                    <InfoTooltip
+                        open={inputRefVisible && totalQuote === parlayAmmData?.maxSupportedOdds}
+                        title={getQuoteTooltipText()}
+                        placement={'top'}
+                        arrow={true}
+                    >
+                        <SummaryValue>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
+                    </InfoTooltip>
+                    <SummaryLabel alignRight={true}>{t('markets.parlay.clear')}:</SummaryLabel>
+                    <XButton
+                        margin={'0 0 4px 5px'}
+                        onClick={() => dispatch(removeAll())}
+                        className={`icon icon--cross-button-arrow`}
+                    />
+                </RowContainer>
+                <RowContainer>
+                    <SummaryLabel>{t('markets.parlay.total-bonus')}:</SummaryLabel>
+                    <SummaryValue>{totalBonus}%</SummaryValue>
+                </RowContainer>
             </RowSummary>
             <Payment
                 defaultSelectedStableIndex={selectedStableIndex}

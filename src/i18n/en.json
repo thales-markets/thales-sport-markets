@@ -350,6 +350,7 @@
         },
         "parlay": {
             "total-quote": "Total quote",
+            "total-bonus": "Total bonus",
             "clear": "Clear all",
             "buy-in": "Buy-in",
             "parlay-fee": "Parlay fee",

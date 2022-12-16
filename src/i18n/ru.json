@@ -346,7 +346,8 @@
                 "referral": "Реферальная ссылка",
                 "potential-payout": "Возможная выплата"
             },
-            "buy-in": "Купить в"
+            "buy-in": "Купить в",
+            "total-bonus": "Общий бонус"
         },
         "discounted-per": "Со скидкой согласно",
         "nav-menu": {

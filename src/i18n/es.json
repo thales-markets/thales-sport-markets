@@ -346,7 +346,8 @@
                 "loser": "Perdedor",
                 "potential-payout": "Pago potencial"
             },
-            "buy-in": "Aceptacion"
+            "buy-in": "Aceptacion",
+            "total-bonus": "bono total"
         },
         "discounted-per": "Con descuento según",
         "nav-menu": {

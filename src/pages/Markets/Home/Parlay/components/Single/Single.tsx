@@ -32,7 +32,7 @@ import {
     formatPercentage,
     roundNumberToDecimals,
 } from 'utils/formatters/number';
-import { formatMarketOdds, getPositionOdds } from 'utils/markets';
+import { formatMarketOdds, getPositionOdds, isDiscounted } from 'utils/markets';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
@@ -54,6 +54,7 @@ import {
     SummaryValue,
     ShareWrapper,
     TwitterIcon,
+    RowContainer,
 } from '../styled-components';
 import Payment from '../Payment';
 import { removeAll, setPayment } from 'redux/modules/parlay';
@@ -87,6 +88,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     );
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [tokenAmount, setTokenAmount] = useState<number>(0);
+    const [bonus, setBonus] = useState(0);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [maxUsdAmount, setMaxUsdAmount] = useState<number>(0);
     const [availableUsdAmount, setAvailableUsdAmount] = useState<number>(0);
@@ -177,6 +179,24 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         // Used for transition between Ticket and Single to save payment selection and amount
         dispatch(setPayment({ selectedStableIndex, isVoucherSelected, amountToBuy: usdAmountValue }));
     }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
+
+    useEffect(() => {
+        switch (market.position) {
+            case 0:
+                isDiscounted(market.homePriceImpact) ? setBonus(Math.ceil(Math.abs(market.homePriceImpact))) : '';
+                break;
+            case 1:
+                isDiscounted(market.awayPriceImpact) ? setBonus(Math.ceil(Math.abs(market.awayPriceImpact))) : '';
+                break;
+            case 2:
+                isDiscounted(market.drawPriceImpact) && market.drawPriceImpact
+                    ? setBonus(Math.ceil(Math.abs(market.drawPriceImpact)))
+                    : '';
+                break;
+            default:
+                break;
+        }
+    }, [market]);
 
     // Clear Parlay when network is changed
     const isMounted = useRef(false);
@@ -599,9 +619,15 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
 
     return (
         <>
-            <RowSummary>
-                <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
-                <SummaryValue>{formatMarketOdds(selectedOddsType, getPositionOdds(market))}</SummaryValue>
+            <RowSummary columnDirection={true}>
+                <RowContainer>
+                    <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
+                    <SummaryValue>{formatMarketOdds(selectedOddsType, getPositionOdds(market))}</SummaryValue>
+                </RowContainer>
+                <RowContainer>
+                    <SummaryLabel>{t('markets.parlay.total-bonus')}:</SummaryLabel>
+                    <SummaryValue>{bonus}%</SummaryValue>
+                </RowContainer>
             </RowSummary>
             <Payment
                 defaultSelectedStableIndex={selectedStableIndex}

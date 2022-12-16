@@ -2,9 +2,15 @@ import styled from 'styled-components';
 import { Tooltip, withStyles } from '@material-ui/core';
 import { FlexDiv, FlexDivCentered } from 'styles/common';
 
-export const RowSummary = styled.div`
+export const RowSummary = styled.div<{ columnDirection?: boolean }>`
     display: flex;
     align-items: center;
+    ${(props) => (props.columnDirection ? `flex-direction: column;` : '')}
+`;
+
+export const RowContainer = styled(FlexDiv)`
+    align-items: center;
+    width: 100%;
 `;
 
 export const SummaryLabel = styled.span<{ alignRight?: boolean }>`

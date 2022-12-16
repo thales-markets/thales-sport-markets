@@ -346,7 +346,8 @@
                 "potential-payout": "潜在支出",
                 "total-quote": "总报价"
             },
-            "buy-in": "买入"
+            "buy-in": "买入",
+            "total-bonus": "总奖金"
         },
         "discounted-per": "折扣按",
         "nav-menu": {

@@ -343,7 +343,8 @@
                 "referral": "ลิงค์อ้างอิง",
                 "winner": "ผู้ชนะ"
             },
-            "buy-in": "ซื้อใน"
+            "buy-in": "ซื้อใน",
+            "total-bonus": "โบนัสรวม"
         },
         "nav-menu": {
             "items": {
