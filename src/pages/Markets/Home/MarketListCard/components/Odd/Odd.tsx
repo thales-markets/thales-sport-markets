@@ -8,6 +8,7 @@ import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
 import { formatMarketOdds, getSymbolText, isDiscounted } from 'utils/markets';
 import { getOddsType } from '../../../../../../redux/modules/ui';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
+import { MAIN_COLORS } from 'constants/ui';
 
 type OddProps = {
     market: SportMarketInfo;
@@ -24,7 +25,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
     const parlay = useSelector(getParlay);
     const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
     const isAddedToParlay = addedToParlay && addedToParlay.position == position;
-    const discount = isDiscounted(priceImpact) ? priceImpact : undefined;
+    const discount = isDiscounted(priceImpact) && priceImpact ? Math.ceil(Math.abs(priceImpact)) : undefined;
 
     const onClick = () => {
         if (isAddedToParlay) {
@@ -33,7 +34,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
             trackEvent({
                 category: 'position',
                 action: discount ? 'discount' : 'non-discount',
-                value: discount ? Math.ceil(Math.abs(discount)) : 0,
+                value: discount ? discount : 0,
             });
             const parlayMarket: ParlaysMarketPosition = {
                 parentMarket: market.parentMarket !== null ? market.parentMarket : market.address,
@@ -52,8 +53,17 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
                 text: formatMarketOdds(selectedOddsType, odd),
                 tooltip: odd == 0 ? t('markets.zero-odds-tooltip') : undefined,
             }}
+            symbolUpperText={
+                discount
+                    ? {
+                          text: `+${discount}%`,
+                          textStyle: {
+                              color: MAIN_COLORS.BONUS,
+                          },
+                      }
+                    : undefined
+            }
             disabled={odd == 0}
-            discount={discount}
             flexDirection="column"
             symbolText={getSymbolText(0, market.betType)}
             onClick={onClick}

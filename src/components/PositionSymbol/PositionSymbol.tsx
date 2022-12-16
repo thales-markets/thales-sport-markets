@@ -13,11 +13,15 @@ type SymbolProps = {
         tooltip?: string;
         textStyle?: CSSProperties;
     };
+    symbolUpperText?: {
+        text?: string;
+        tooltip?: string;
+        textStyle?: CSSProperties;
+    };
     selected?: boolean;
     disabled?: boolean;
     additionalStyle?: CSSProperties;
     glow?: boolean;
-    discount?: number;
     flexDirection?: string;
     onClick?: () => void;
 };
@@ -27,11 +31,11 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     symbolColor,
     symbolFontSize,
     symbolBottomText,
+    symbolUpperText,
     selected,
     disabled,
     additionalStyle,
     glow,
-    discount,
     flexDirection,
     onClick,
 }) => {
@@ -57,10 +61,10 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                 fontSize={symbolFontSize}
             >
                 {symbolText}
-                {discount && (
-                    <Discount>
-                        <span>+{Math.ceil(Math.abs(discount))}%</span>
-                    </Discount>
+                {symbolUpperText && (
+                    <UpperText style={symbolUpperText.textStyle}>
+                        <span>{symbolUpperText.text}</span>
+                    </UpperText>
                 )}
             </Symbol>
             {symbolBottomText && (
@@ -128,12 +132,12 @@ const BottomText = styled.span<{
     }
 `;
 
-const Discount = styled(FlexDivCentered)`
+const UpperText = styled(FlexDivCentered)`
     position: absolute;
     top: -7px;
     right: -18px;
     font-size: 12px;
-    color: #5fc694;
+    color: ${MAIN_COLORS.TEXT.WHITE};
     border-radius: 60%;
     font-weight: 700;
     background: #252940;

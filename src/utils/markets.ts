@@ -85,12 +85,7 @@ export const convertPositionToSymbolType = (position: Position, isApexTopGame: b
     return 0;
 };
 
-export const getSymbolText = (
-    position: Position,
-    betType: BetType
-    // spread: number,
-    // total: number
-) => {
+export const getSymbolText = (position: Position, betType: BetType) => {
     switch (position) {
         case Position.HOME:
             switch (Number(betType)) {
@@ -114,6 +109,17 @@ export const getSymbolText = (
             return 'X';
         default:
             return '';
+    }
+};
+
+export const getSpredTotalText = (betType: BetType, spread: number, total: number) => {
+    switch (Number(betType)) {
+        case BetType.SPREAD:
+            return spread.toString();
+        case BetType.TOTAL:
+            return total.toString();
+        default:
+            return undefined;
     }
 };
 
