@@ -53,6 +53,8 @@ import { MAX_GAS_LIMIT } from 'constants/network';
 import useMarketTransactionsQuery from 'queries/markets/useMarketTransactionsQuery';
 import { ParlaysMarket } from 'types/markets';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
+import Tooltip from 'components/Tooltip';
+import { MAIN_COLORS } from 'constants/ui';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;
@@ -195,6 +197,10 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                         {isCanceled && (
                             <>
                                 <Label canceled={true}>{t('profile.card.canceled')}</Label>
+                                <Tooltip
+                                    iconColor={MAIN_COLORS.TEXT.CANCELED}
+                                    overlay={t('profile.messages.canceled-tooltip')}
+                                />
                             </>
                         )}
                     </ResultContainer>

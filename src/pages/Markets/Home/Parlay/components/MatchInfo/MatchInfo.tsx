@@ -51,6 +51,8 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                     ) : (
                         <Wrong className={`icon icon--wrong`} />
                     )
+                ) : market?.isCanceled ? (
+                    <Canceled className={`icon icon--open`} />
                 ) : (
                     <></>
                 )
@@ -90,6 +92,10 @@ const Correct = styled.i`
 const Wrong = styled.i`
     font-size: 12px;
     color: #ca4c53;
+`;
+const Canceled = styled.i`
+    font-size: 12px;
+    color: #ffffff;
 `;
 
 export default MatchInfo;

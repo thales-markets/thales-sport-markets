@@ -20,6 +20,7 @@ import {
     convertPositionToSymbolType,
     formatMarketOdds,
     getIsApexTopGame,
+    isParlayClaimable,
     isParlayOpen,
 } from 'utils/markets';
 import { t } from 'i18next';
@@ -87,15 +88,21 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                     ...sportMarket,
                     homeOdds:
                         position === Position.HOME
-                            ? data.marketQuotes[sportMarketFromContractIndex]
+                            ? sportMarket.isCanceled
+                                ? 1
+                                : data.marketQuotes[sportMarketFromContractIndex]
                             : sportMarket.homeOdds,
                     drawOdds:
                         position === Position.DRAW
-                            ? data.marketQuotes[sportMarketFromContractIndex]
+                            ? sportMarket.isCanceled
+                                ? 1
+                                : data.marketQuotes[sportMarketFromContractIndex]
                             : sportMarket.drawOdds,
                     awayOdds:
                         position === Position.AWAY
-                            ? data.marketQuotes[sportMarketFromContractIndex]
+                            ? sportMarket.isCanceled
+                                ? 1
+                                : data.marketQuotes[sportMarketFromContractIndex]
                             : sportMarket.awayOdds,
                 };
 
@@ -190,7 +197,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         Header: <>{t('profile.table.status')}</>,
                         sortable: false,
                         Cell: (cellProps: any) => {
-                            if (cellProps.row.original.won) {
+                            if (cellProps.row.original.won || isParlayClaimable(cellProps.row.original)) {
                                 return <StatusWrapper color="#5FC694">WON </StatusWrapper>;
                             } else {
                                 return isParlayOpen(cellProps.row.original) ? (
@@ -218,8 +225,16 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         const position = row.original.positions.find(
                             (position: any) => position.market.address == address
                         );
-
+                        const market = row.original.sportMarkets.find(
+                            (market: SportMarketInfo) => market.address == address
+                        );
                         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
+
+                        const quote = market?.isCanceled
+                            ? 1
+                            : row.original.marketQuotes
+                            ? row.original.marketQuotes[index]
+                            : 0;
                         return (
                             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
                                 <ParlayRowText>
@@ -236,10 +251,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                                     symbolColor={'white'}
                                     symbolSize={'10'}
                                     additionalText={{
-                                        firstText: formatMarketOdds(
-                                            selectedOddsType,
-                                            row.original.marketQuotes ? row.original.marketQuotes[index] : 0
-                                        ),
+                                        firstText: formatMarketOdds(selectedOddsType, quote),
                                         firstTextStyle: {
                                             fontSize: '10.5px',
                                             color: 'white',

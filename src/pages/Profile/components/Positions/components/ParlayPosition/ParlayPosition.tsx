@@ -111,13 +111,13 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
             return {
                 ...sportMarket,
                 ...(convertPositionNameToPositionType(position?.side ? position?.side : '') == Position.HOME && {
-                    homeOdds: parlayMarket.marketQuotes[index],
+                    homeOdds: sportMarket?.isCanceled ? 1 : parlayMarket.marketQuotes[index],
                 }),
                 ...(convertPositionNameToPositionType(position?.side ? position?.side : '') == Position.AWAY && {
-                    awayOdds: parlayMarket.marketQuotes[index],
+                    awayOdds: sportMarket?.isCanceled ? 1 : parlayMarket.marketQuotes[index],
                 }),
                 ...(convertPositionNameToPositionType(position?.side ? position?.side : '') == Position.DRAW && {
-                    drawOdds: parlayMarket.marketQuotes[index],
+                    drawOdds: sportMarket?.isCanceled ? 1 : parlayMarket.marketQuotes[index],
                 }),
                 position: convertPositionNameToPosition(position?.side ? position?.side : ''),
                 winning: isParlayClaimable(parlayMarket),

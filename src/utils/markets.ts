@@ -236,6 +236,8 @@ export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
     const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved || market?.isCanceled);
     const claimablePositions = parlayMarket.positions.filter((position) => position.claimable);
 
+    if (parlayMarket.claimed) return false;
+
     const lastGameStartsPlusExpirationPeriod = addDaysToEnteredTimestamp(
         EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS,
         parlayMarket.lastGameStarts
@@ -268,6 +270,12 @@ export const isParlayOpen = (parlayMarket: ParlayMarket) => {
     return true;
 };
 
+export const isCanceledMarketInParlay = (parlayMarket: ParlayMarket) => {
+    const canceledMarket = parlayMarket.sportMarkets.filter((market) => market?.isCanceled);
+    if (canceledMarket) return true;
+    return false;
+};
+
 export const isSportMarketExpired = (sportMarket: SportMarketInfo) => {
     const maturyDatePlusExpirationPeriod = addDaysToEnteredTimestamp(
         EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS,
@@ -280,3 +288,34 @@ export const isSportMarketExpired = (sportMarket: SportMarketInfo) => {
 
     return false;
 };
+
+export const updateTotalQuoteAndAmountFromContract = (parlayMarkets: ParlayMarket[]): ParlayMarket[] => {
+    const modifiedParlays = parlayMarkets.map((parlay) => {
+        if ((isParlayOpen(parlay) || isParlayClaimable(parlay)) && isCanceledMarketInParlay(parlay)) {
+            const canceledQuotes = getCanceledGamesPreviousQuotes(parlay);
+            let totalQuote = parlay.totalQuote;
+            canceledQuotes.forEach((quote) => {
+                totalQuote /= quote;
+            });
+            return {
+                ...parlay,
+                totalQuote,
+                totalAmount: parlay.sUSDAfterFees / totalQuote,
+            };
+        } else {
+            return parlay;
+        }
+    });
+    return modifiedParlays;
+};
+
+export const getCanceledGamesPreviousQuotes = (parlay: ParlayMarket): number[] => {
+    const quotes: number[] = [];
+    parlay.sportMarketsFromContract.forEach((marketAddress, index) => {
+        const market = parlay.sportMarkets.find((market) => market.address == marketAddress);
+        if (market?.isCanceled) quotes.push(parlay.marketQuotes[index]);
+    });
+
+    return quotes;
+};
+

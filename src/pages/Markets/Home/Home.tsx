@@ -16,6 +16,7 @@ import i18n from 'i18n';
 import useSportMarketsQueryNew from 'queries/markets/useSportsMarketsQueryNew';
 import React, { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
@@ -300,89 +301,99 @@ const Home: React.FC = () => {
                     }}
                 />
             </Info>
-
-            <BurgerFiltersContainer show={showBurger && isMobile}>
-                <LogoContainer>
-                    <Logo />
-                </LogoContainer>
-                <SportFiltersContainer>
-                    {Object.values(SportFilterEnum).map((filterItem: any, index) => {
-                        return (
-                            <React.Fragment key={index}>
-                                <SportFilter
-                                    selected={sportFilter === filterItem}
-                                    sport={filterItem}
-                                    onClick={() => {
-                                        if (filterItem !== sportFilter) {
-                                            setSportFilter(filterItem);
-                                            setSportParam(filterItem);
-                                            setTagFilter([]);
-                                            setTagParam('');
-                                            setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
-                                            setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
-                                            if (filterItem === SportFilterEnum.All) {
-                                                setDateFilter(0);
-                                                setDateParam('');
+            <ReactModal
+                isOpen={showBurger && isMobile}
+                onRequestClose={() => {
+                    setShowBurger(false);
+                }}
+                shouldCloseOnOverlayClick={false}
+                style={customModalStyles}
+            >
+                <BurgerFiltersContainer>
+                    <LogoContainer>
+                        <Logo />
+                    </LogoContainer>
+                    <SportFiltersContainer>
+                        {Object.values(SportFilterEnum).map((filterItem: any, index) => {
+                            return (
+                                <React.Fragment key={index}>
+                                    <SportFilter
+                                        selected={sportFilter === filterItem}
+                                        sport={filterItem}
+                                        onClick={() => {
+                                            if (filterItem !== sportFilter) {
+                                                setSportFilter(filterItem);
+                                                setSportParam(filterItem);
+                                                setTagFilter([]);
+                                                setTagParam('');
+                                                setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
+                                                setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
+                                                if (filterItem === SportFilterEnum.All) {
+                                                    setDateFilter(0);
+                                                    setDateParam('');
+                                                    setAvailableTags(
+                                                        tagsList.sort((a, b) => a.label.localeCompare(b.label))
+                                                    );
+                                                } else {
+                                                    const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
+                                                    if (tagsPerSport) {
+                                                        const filteredTags = tagsList.filter((tag: TagInfo) =>
+                                                            tagsPerSport.includes(tag.id)
+                                                        );
+                                                        setAvailableTags(filteredTags);
+                                                    } else {
+                                                        setAvailableTags([]);
+                                                    }
+                                                }
+                                            } else {
+                                                setSportFilter(SportFilterEnum.All);
+                                                setSportParam(SportFilterEnum.All);
+                                                setTagFilter([]);
+                                                setTagParam('');
                                                 setAvailableTags(
                                                     tagsList.sort((a, b) => a.label.localeCompare(b.label))
                                                 );
-                                            } else {
-                                                const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
-                                                if (tagsPerSport) {
-                                                    const filteredTags = tagsList.filter((tag: TagInfo) =>
-                                                        tagsPerSport.includes(tag.id)
-                                                    );
-                                                    setAvailableTags(filteredTags);
-                                                } else {
-                                                    setAvailableTags([]);
-                                                }
                                             }
-                                        } else {
-                                            setSportFilter(SportFilterEnum.All);
-                                            setSportParam(SportFilterEnum.All);
-                                            setTagFilter([]);
-                                            setTagParam('');
-                                            setAvailableTags(tagsList.sort((a, b) => a.label.localeCompare(b.label)));
-                                        }
-                                    }}
-                                    key={filterItem}
-                                    isMobile={isMobile}
-                                >
-                                    {t(`market.filter-label.sport.${filterItem.toLowerCase()}`)}
-                                </SportFilter>
-                                <TagsDropdown
-                                    open={filterItem == sportFilter && filterItem !== SportFilterEnum.All}
-                                    key={filterItem + '1'}
-                                    tags={availableTags}
-                                    tagFilter={tagFilter}
-                                    setTagFilter={setTagFilter}
-                                    setTagParam={setTagParam}
-                                ></TagsDropdown>
-                            </React.Fragment>
-                        );
-                    })}
-                </SportFiltersContainer>
-                <GlobalFiltersContainer>
-                    <GlobalFilters
-                        setDateFilter={setDateFilter}
-                        setDateParam={setDateParam}
-                        setGlobalFilter={setGlobalFilter}
-                        setGlobalFilterParam={setGlobalFilterParam}
-                        setTagFilter={setTagFilter}
-                        setTagParam={setTagParam}
-                        setSportFilter={setSportFilter}
-                        setSportParam={setSportParam}
-                        globalFilter={globalFilter}
-                        dateFilter={dateFilter}
-                        sportFilter={sportFilter}
-                        isMobile={isMobile}
-                    />
-                </GlobalFiltersContainer>
-                <ApplyFiltersButton onClick={() => setShowBurger(false)}>
-                    {t('market.apply-filters')}
-                    <ArrowIcon className={`icon icon--arrow-up`} />
-                </ApplyFiltersButton>
-            </BurgerFiltersContainer>
+                                        }}
+                                        key={filterItem}
+                                        isMobile={isMobile}
+                                    >
+                                        {t(`market.filter-label.sport.${filterItem.toLowerCase()}`)}
+                                    </SportFilter>
+                                    <TagsDropdown
+                                        open={filterItem == sportFilter && filterItem !== SportFilterEnum.All}
+                                        key={filterItem + '1'}
+                                        tags={availableTags}
+                                        tagFilter={tagFilter}
+                                        setTagFilter={setTagFilter}
+                                        setTagParam={setTagParam}
+                                    ></TagsDropdown>
+                                </React.Fragment>
+                            );
+                        })}
+                    </SportFiltersContainer>
+                    <GlobalFiltersContainer>
+                        <GlobalFilters
+                            setDateFilter={setDateFilter}
+                            setDateParam={setDateParam}
+                            setGlobalFilter={setGlobalFilter}
+                            setGlobalFilterParam={setGlobalFilterParam}
+                            setTagFilter={setTagFilter}
+                            setTagParam={setTagParam}
+                            setSportFilter={setSportFilter}
+                            setSportParam={setSportParam}
+                            globalFilter={globalFilter}
+                            dateFilter={dateFilter}
+                            sportFilter={sportFilter}
+                            isMobile={isMobile}
+                        />
+                    </GlobalFiltersContainer>
+                    <ApplyFiltersButton onClick={() => setShowBurger(false)}>
+                        {t('market.apply-filters')}
+                        <ArrowIcon className={`icon icon--arrow-up`} />
+                    </ApplyFiltersButton>
+                </BurgerFiltersContainer>
+            </ReactModal>
 
             <RowContainer>
                 {/* LEFT FILTERS */}
@@ -661,15 +672,15 @@ export const LoaderContainer = styled(FlexDivColumn)`
     min-height: 300px;
 `;
 
-const BurgerFiltersContainer = styled(FlexDivColumn)<{ show: boolean }>`
+const BurgerFiltersContainer = styled(FlexDivColumn)`
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     overflow: auto;
     background: #303656;
-    display: ${(props) => (props.show ? 'flex' : 'none')};
+    display: flex;
     z-index: 1000;
     @media (max-width: 1300px) {
         margin: 0;
@@ -740,5 +751,25 @@ const ArrowIcon = styled.i`
     text-transform: none;
     writing-mode: vertical-lr;
 `;
+
+const customModalStyles = {
+    content: {
+        top: '0',
+        overflow: 'auto',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        padding: '0px',
+        background: 'transparent',
+        border: 'none',
+        width: '100%',
+        height: '100vh',
+    },
+    overlay: {
+        backgroundColor: '#303656',
+        zIndex: '1000',
+    },
+};
 
 export default Home;
