@@ -36,7 +36,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
         isGameOpen && !!availablePerPosition.buyImpactPrice && isDiscounted(availablePerPosition.buyImpactPrice);
     const positionDiscount = showDiscount ? Math.ceil(Math.abs(Number(availablePerPosition.buyImpactPrice) * 100)) : 0;
 
-    const disabledPosition = !(odd || 0 > 0) || isGameOpen;
+    const disabledPosition = !(odd || 0 > 0) || !isGameOpen;
 
     return (
         <Container
