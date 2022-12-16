@@ -49,6 +49,8 @@ const useAccountMarketsQuery = (
                             awayTeam: position.position.market.isApex
                                 ? fixApexName(position.position.market.awayTeam)
                                 : fixLongTeamNameString(fixDuplicatedTeamName(position.position.market?.awayTeam)),
+                            spread: Number(position.position.market.spread) / 100,
+                            total: Number(position.position.market.total) / 100,
                         },
                         side: position.position.side,
                     };

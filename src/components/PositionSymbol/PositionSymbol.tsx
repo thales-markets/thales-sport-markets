@@ -68,7 +68,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                 )}
             </Symbol>
             {symbolBottomText && (
-                <BottomText style={symbolBottomText.textStyle} flexDirection={flexDirection}>
+                <BottomText style={symbolBottomText.textStyle} flexDirection={flexDirection} color={symbolColor}>
                     {symbolBottomText.text}
                     {symbolBottomText.tooltip && (
                         <Tooltip overlay={<>{symbolBottomText.tooltip}</>} iconFontSize={11} marginLeft={3} />
@@ -115,27 +115,26 @@ const Symbol = styled(FlexDivCentered)<{
         border: ${(props) => (props.disabled || props.notClickable ? '' : `3px solid ${MAIN_COLORS.BORDERS.BLUE}`)};
         color: ${(props) => (props.disabled || props.notClickable ? '' : MAIN_COLORS.BORDERS.BLUE)};
     }
-    @media (max-width: 575px) {
-        width: 25px;
-        height: 25px;
-    }
+    // @media (max-width: 575px) {
+    //     width: 25px;
+    //     height: 25px;
+    // }
 `;
 
 const BottomText = styled.span<{
     flexDirection?: string;
+    color?: string;
 }>`
-    font-size: 13px;
+    font-size: 12px;
     margin-top: ${(props) => (props.flexDirection === 'column' ? 2 : 0)}px;
     margin-right: ${(props) => (props.flexDirection === 'column' ? 0 : 10)}px;
-    @media (max-width: 575px) {
-        font-size: 12px;
-    }
+    color: ${(props) => props.color || MAIN_COLORS.TEXT.WHITE};
 `;
 
 const UpperText = styled(FlexDivCentered)`
     position: absolute;
     top: -7px;
-    right: -18px;
+    left: 15px;
     font-size: 12px;
     color: ${MAIN_COLORS.TEXT.WHITE};
     border-radius: 60%;

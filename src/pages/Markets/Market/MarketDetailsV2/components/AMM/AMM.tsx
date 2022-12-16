@@ -64,7 +64,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { USD_SIGN } from 'constants/currency';
 import usePositionSellPriceQuery from 'queries/markets/usePositionSellPriceQuery';
 import PositionSymbol from 'components/PositionSymbol';
-import { getSymbolText, convertPositionNameToPositionType } from 'utils/markets';
+import { getSymbolText, convertPositionNameToPositionType, getSpreadTotalText } from 'utils/markets';
 
 type AMMProps = {
     market: MarketData;
@@ -767,6 +767,15 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                             <PositionsContainer>
                                 {balancesObjectKeys &&
                                     balancesObjectKeys.map((item, index) => {
+                                        const symbolText = getSymbolText(
+                                            convertPositionNameToPositionType(item),
+                                            market.betType
+                                        );
+                                        const spreadTotalText = getSpreadTotalText(
+                                            market.betType,
+                                            market.spread,
+                                            market.total
+                                        );
                                         if (
                                             balances &&
                                             balances[item as PositionType] &&
@@ -775,14 +784,19 @@ const AMM: React.FC<AMMProps> = ({ market, selectedSide, selectedPosition, avail
                                             return (
                                                 <PositionValueContainer key={index}>
                                                     <PositionSymbol
-                                                        additionalStyle={{
-                                                            width: '30px',
-                                                            height: '30px',
-                                                        }}
-                                                        symbolText={getSymbolText(
-                                                            convertPositionNameToPositionType(item),
-                                                            market.betType
-                                                        )}
+                                                        symbolText={symbolText}
+                                                        symbolUpperText={
+                                                            spreadTotalText
+                                                                ? {
+                                                                      text: spreadTotalText,
+                                                                      textStyle: {
+                                                                          backgroundColor: '#2f3454',
+                                                                          fontSize: '11px',
+                                                                          top: '-8px',
+                                                                      },
+                                                                  }
+                                                                : undefined
+                                                        }
                                                     />
                                                     <PositionValue>
                                                         {balanceValue

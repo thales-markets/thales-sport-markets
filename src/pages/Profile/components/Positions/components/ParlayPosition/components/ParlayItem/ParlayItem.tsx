@@ -2,7 +2,7 @@ import PositionSymbol from 'components/PositionSymbol';
 import React, { useEffect, useState } from 'react';
 import { PositionData, SportMarketInfo } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { convertPositionNameToPositionType, formatMarketOdds, getSymbolText } from 'utils/markets';
+import { convertPositionNameToPositionType, formatMarketOdds, getSpreadTotalText, getSymbolText } from 'utils/markets';
 import {
     ClubLogo,
     ClubName,
@@ -42,6 +42,10 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
     const parlayItemQuote = market.isCanceled ? 1 : quote ? quote : 0;
     const parlayStatus = getParlayItemStatus(market);
 
+    console.log(market);
+    const symbolText = getSymbolText(positionEnum, market.betType);
+    const spreadTotalText = getSpreadTotalText(market.betType, market.spread, market.total);
+
     return (
         <Wrapper>
             <MatchInfo>
@@ -76,10 +80,22 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                         text: formatMarketOdds(selectedOddsType, parlayItemQuote),
                         textStyle: {
                             fontSize: '12px',
-                            marginLeft: '5px',
+                            marginLeft: '10px',
                         },
                     }}
-                    symbolText={getSymbolText(positionEnum, market.betType)}
+                    symbolText={symbolText}
+                    symbolUpperText={
+                        spreadTotalText
+                            ? {
+                                  text: spreadTotalText,
+                                  textStyle: {
+                                      backgroundColor: '#2f3454',
+                                      fontSize: '11px',
+                                      top: '-8px',
+                                  },
+                              }
+                            : undefined
+                    }
                 />
                 <ParlayStatus>{parlayStatus}</ParlayStatus>
             </ParlayItemStatusContainer>

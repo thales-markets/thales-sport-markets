@@ -36,6 +36,7 @@ import {
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
     getCanceledGameClaimAmount,
+    getSpreadTotalText,
     getSymbolText,
 } from 'utils/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
@@ -158,6 +159,9 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
         },
     };
 
+    const symbolText = getSymbolText(positionEnum, position.market.betType);
+    const spreadTotalText = getSpreadTotalText(position.market.betType, position.market.spread, position.market.total);
+
     return (
         <Wrapper>
             <GameParticipantsWrapper>
@@ -241,7 +245,21 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
             {!isClaimable && (
                 <>
                     <PositionContainer>
-                        <PositionSymbol symbolText={getSymbolText(positionEnum, position.market.betType)} />
+                        <PositionSymbol
+                            symbolText={symbolText}
+                            symbolUpperText={
+                                spreadTotalText
+                                    ? {
+                                          text: spreadTotalText,
+                                          textStyle: {
+                                              backgroundColor: '#2f3454',
+                                              fontSize: '11px',
+                                              top: '-8px',
+                                          },
+                                      }
+                                    : undefined
+                            }
+                        />
                     </PositionContainer>
                     <ColumnDirectionInfo>
                         <Label>{t('profile.card.position-size')}:</Label>

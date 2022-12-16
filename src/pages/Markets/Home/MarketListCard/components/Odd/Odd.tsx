@@ -65,7 +65,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
             }
             disabled={odd == 0}
             flexDirection="column"
-            symbolText={getSymbolText(0, market.betType)}
+            symbolText={getSymbolText(position, market.betType)}
             onClick={onClick}
             selected={isAddedToParlay}
         />

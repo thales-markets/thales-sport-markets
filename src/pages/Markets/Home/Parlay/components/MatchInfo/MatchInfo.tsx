@@ -5,7 +5,7 @@ import { removeFromParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { ParlaysMarket } from 'types/markets';
-import { formatMarketOdds, getPositionOdds, getSymbolText } from 'utils/markets';
+import { formatMarketOdds, getPositionOdds, getSpreadTotalText, getSymbolText } from 'utils/markets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
 
@@ -19,6 +19,9 @@ type MatchInfoProps = {
 const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, customStyle }) => {
     const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
+
+    const symbolText = getSymbolText(market.position, market.betType);
+    const spreadTotalText = getSpreadTotalText(market.betType, market.spread, market.total);
 
     return (
         <>
@@ -35,11 +38,23 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                 symbolBottomText={{
                     text: formatMarketOdds(selectedOddsType, getPositionOdds(market)),
                     textStyle: {
-                        fontSize: customStyle?.fontSize ? customStyle?.fontSize : '11px',
-                        marginLeft: '5px',
+                        fontSize: customStyle?.fontSize ? customStyle?.fontSize : '12px',
+                        marginLeft: '10px',
                     },
                 }}
-                symbolText={getSymbolText(market.position, market.betType)}
+                symbolText={symbolText}
+                symbolUpperText={
+                    spreadTotalText
+                        ? {
+                              text: spreadTotalText,
+                              textStyle: {
+                                  backgroundColor: '#2f3454',
+                                  fontSize: '11px',
+                                  top: '-8px',
+                              },
+                          }
+                        : undefined
+                }
             />
             {readOnly ? (
                 market?.isResolved ? (
