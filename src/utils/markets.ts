@@ -318,4 +318,3 @@ export const getCanceledGamesPreviousQuotes = (parlay: ParlayMarket): number[] =
 
     return quotes;
 };
-
