@@ -223,6 +223,7 @@ export type PositionBalance = {
     account: string;
     amount: number;
     position: AccountPositionGraph;
+    sUSDPaid: number;
 };
 
 export type AccountPosition = AccountPositionGraph & {
