@@ -20,6 +20,7 @@ import {
     convertPositionToSymbolType,
     formatMarketOdds,
     getIsApexTopGame,
+    getSymbolText,
     isParlayClaimable,
     isParlayOpen,
 } from 'utils/markets';
@@ -248,8 +249,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                                         positionEnum,
                                         getIsApexTopGame(position.market.isApex, position.market.betType)
                                     )}
-                                    symbolColor={'white'}
-                                    symbolSize={'10'}
+                                    symbolFontSize={10}
                                     additionalText={{
                                         firstText: formatMarketOdds(selectedOddsType, quote),
                                         firstTextStyle: {
@@ -259,6 +259,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                                         },
                                     }}
                                     additionalStyle={{ width: 21, height: 21, fontSize: 10 }}
+                                    symbolText={getSymbolText(positionEnum, position.market.betType)}
                                 />
                                 <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
                             </ParlayRow>

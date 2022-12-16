@@ -29,6 +29,7 @@ import {
     convertPositionToSymbolType,
     formatMarketOdds,
     getIsApexTopGame,
+    getSymbolText,
 } from 'utils/markets';
 
 const Rewards = [2000, 1500, 1000, 800, 750, 700, 600, 500, 300, 250, 225, 210, 200, 185, 170, 145, 130, 125, 110, 100];
@@ -208,8 +209,7 @@ const ParlayLeaderboard: React.FC = () => {
                                         positionEnum,
                                         getIsApexTopGame(position.market.isApex, position.market.betType)
                                     )}
-                                    symbolColor={'white'}
-                                    symbolSize={'10'}
+                                    symbolFontSize={10}
                                     additionalText={{
                                         firstText: formatMarketOdds(
                                             OddsType.Decimal,
@@ -222,6 +222,7 @@ const ParlayLeaderboard: React.FC = () => {
                                         },
                                     }}
                                     additionalStyle={{ width: 21, height: 21, fontSize: 10 }}
+                                    symbolText={getSymbolText(positionEnum, position.market.betType)}
                                 />
                                 <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
                             </ParlayRow>
@@ -299,8 +300,7 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
                         positionEnum,
                         getIsApexTopGame(position.market.isApex, position.market.betType)
                     )}
-                    symbolColor={'white'}
-                    symbolSize={'10'}
+                    symbolFontSize={10}
                     additionalText={{
                         firstText: formatMarketOdds(
                             OddsType.Decimal,
@@ -313,6 +313,7 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
                         },
                     }}
                     additionalStyle={{ width: 21, height: 21, fontSize: 10 }}
+                    symbolText={getSymbolText(positionEnum, position.market.betType)}
                 />
                 <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
             </ParlayRow>

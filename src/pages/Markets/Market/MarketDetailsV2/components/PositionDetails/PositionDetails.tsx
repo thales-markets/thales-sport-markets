@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { AvailablePerPosition, MarketData, ParlaysMarketPosition } from 'types/markets';
-import { isDiscounted, formatMarketOdds } from 'utils/markets';
+import { isDiscounted, formatMarketOdds, getSymbolText } from 'utils/markets';
 import { Discount, Container, Value } from './styled-components';
 
 type PositionDetailsProps = {
@@ -64,9 +64,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
             }}
         >
             <Value>
-                {position == 0 && '1'}
-                {position == 1 && '2'}
-                {position == 2 && 'X'}
+                {getSymbolText(position, market.betType)}
                 {market.betType == BetType.SPREAD && ` (${market.spread})`}
                 {market.betType == BetType.TOTAL && ` (${market.total})`}
             </Value>

@@ -1,6 +1,5 @@
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
-import { PositionName, POSITION_MAP } from 'constants/options';
 import { ethers } from 'ethers';
 import useUserTransactionsQuery from 'queries/markets/useUserTransactionsQuery';
 import React from 'react';
@@ -12,7 +11,12 @@ import styled from 'styled-components';
 import { getEtherscanTxLink } from 'utils/etherscan';
 import { formatTxTimestamp } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
-import { convertFinalResultToResultType, convertPositionNameToPosition } from 'utils/markets';
+import {
+    convertFinalResultToResultType,
+    convertPositionNameToPosition,
+    convertPositionNameToPositionType,
+    getSymbolText,
+} from 'utils/markets';
 
 const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -72,16 +76,13 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                         Cell: (cellProps: any) => {
                             return (
                                 <FlexCenter>
-                                    <TableText>
-                                        {
-                                            /* {   {convertPositionToTeamName(
-                                        convertPositionNameToPosition() as number,
-                                        cellProps.cell.row.original.wholeMarket
-                                    )}} */ cellProps
-                                                .cell.value
-                                        }
-                                    </TableText>
-                                    <CircleNumber>{POSITION_MAP[cellProps.cell.value as PositionName]}</CircleNumber>
+                                    <TableText>{cellProps.cell.value}</TableText>
+                                    <CircleNumber>
+                                        {getSymbolText(
+                                            convertPositionNameToPositionType(cellProps.cell.value),
+                                            cellProps.cell.row.original.wholeMarket.betType
+                                        )}
+                                    </CircleNumber>
                                 </FlexCenter>
                             );
                         },

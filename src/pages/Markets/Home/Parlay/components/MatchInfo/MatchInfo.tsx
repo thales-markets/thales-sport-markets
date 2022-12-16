@@ -6,7 +6,13 @@ import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { Colors } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
-import { convertPositionToSymbolType, formatMarketOdds, getIsApexTopGame, getPositionOdds } from 'utils/markets';
+import {
+    convertPositionToSymbolType,
+    formatMarketOdds,
+    getIsApexTopGame,
+    getPositionOdds,
+    getSymbolText,
+} from 'utils/markets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
 
@@ -34,7 +40,6 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
             </MatchLabel>
             <PositionSymbol
                 type={convertPositionToSymbolType(market.position, getIsApexTopGame(market.isApex, market.betType))}
-                symbolColor={Colors.WHITE}
                 additionalText={{
                     firstText: formatMarketOdds(selectedOddsType, getPositionOdds(market)),
                     firstTextStyle: {
@@ -43,6 +48,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                         marginLeft: '5px',
                     },
                 }}
+                symbolText={getSymbolText(market.position, market.betType)}
             />
             {readOnly ? (
                 market?.isResolved ? (

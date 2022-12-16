@@ -1,6 +1,7 @@
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import Tooltip from 'components/Tooltip';
 import { Position } from 'constants/options';
+import { MAIN_COLORS } from 'constants/ui';
 import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,15 +12,14 @@ import { ParlaysMarketPosition } from 'types/markets';
 
 type SymbolProps = {
     type?: number;
-    hideSymbol?: boolean;
+    symbolText: string;
     symbolColor?: string;
-    symbolSize?: string;
+    symbolFontSize?: number;
     additionalText?: {
         firstText?: string;
         firstTextStyle?: CSSProperties;
     };
     additionalStyle?: CSSProperties;
-    children?: any;
     showTooltip?: boolean;
     glow?: boolean;
     marketAddress?: string;
@@ -33,8 +33,9 @@ type SymbolProps = {
 const PositionSymbol: React.FC<SymbolProps> = ({
     glow,
     type,
+    symbolText,
     symbolColor,
-    symbolSize,
+    symbolFontSize,
     additionalText,
     showTooltip,
     additionalStyle,
@@ -42,7 +43,6 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     parentMarket,
     homeTeam,
     awayTeam,
-    children,
     discount,
     flexDirection,
 }) => {
@@ -105,15 +105,10 @@ const PositionSymbol: React.FC<SymbolProps> = ({
             >
                 <Symbol
                     color={symbolColor}
-                    size={symbolSize}
+                    fontSize={symbolFontSize}
                     addedToParlay={addedToParlay && addedToParlay.position == type}
                 >
-                    {type == 0 && '1'}
-                    {type == 1 && '2'}
-                    {type == 2 && 'X'}
-                    {type == 3 && t('common.yes')}
-                    {type == 4 && t('common.no')}
-                    {type == undefined && children}
+                    {symbolText}
                 </Symbol>
                 {discount && (
                     <Discount>
@@ -188,9 +183,9 @@ const AdditionalText = styled.span<{
     }
 `;
 
-const Symbol = styled.span<{ color?: string; addedToParlay?: boolean; size?: string }>`
-    color: ${(props) => (props.addedToParlay ? '#64D9FE' : props?.color ? props.color : '')};
-    font-size: ${(props) => (props.size ? props.size : '12px')};
+const Symbol = styled.span<{ color?: string; addedToParlay?: boolean; fontSize?: number }>`
+    color: ${(props) => (props.addedToParlay ? MAIN_COLORS.TEXT.BLUE : props.color || MAIN_COLORS.TEXT.WHITE)};
+    font-size: ${(props) => props.fontSize || 12}px;
 `;
 
 const Discount = styled(FlexDivCentered)`

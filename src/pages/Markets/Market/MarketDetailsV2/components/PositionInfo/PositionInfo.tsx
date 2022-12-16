@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { Balances, MarketData, PositionType } from 'types/markets';
-import { convertPositionNameToPosition } from 'utils/markets';
+import { convertPositionNameToPosition, convertPositionNameToPositionType, getSymbolText } from 'utils/markets';
 import { Label, PositionItemContainer, Wrapper } from './styled-components';
 
 type PositionInfoPropsType = {
@@ -42,7 +42,13 @@ const PositionInfo: React.FC<PositionInfoPropsType> = ({ market }) => {
                         if (balances && balances[item as PositionType] && balances[item as PositionType] > 0) {
                             return (
                                 <PositionItemContainer key={index}>
-                                    <PositionSymbol type={convertPositionNameToPosition(item)} symbolColor={item} />
+                                    <PositionSymbol
+                                        type={convertPositionNameToPosition(item)}
+                                        symbolText={getSymbolText(
+                                            convertPositionNameToPositionType(item),
+                                            market.betType
+                                        )}
+                                    />
                                 </PositionItemContainer>
                             );
                         }

@@ -7,6 +7,7 @@ import {
     convertPositionToSymbolType,
     formatMarketOdds,
     getIsApexTopGame,
+    getSymbolText,
 } from 'utils/markets';
 import {
     ClubLogo,
@@ -22,7 +23,6 @@ import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
 import { t } from 'i18next';
 import { formatDateWithTime } from 'utils/formatters/date';
-import { getPositionColor } from 'utils/ui';
 import { Position } from 'constants/options';
 
 const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | undefined; quote: number }> = ({
@@ -79,15 +79,14 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
             <ParlayItemStatusContainer>
                 <PositionSymbol
                     type={convertPositionToSymbolType(positionEnum, getIsApexTopGame(market.isApex, market.betType))}
-                    symbolColor={getPositionColor(positionEnum)}
                     additionalText={{
                         firstText: formatMarketOdds(selectedOddsType, parlayItemQuote),
                         firstTextStyle: {
                             fontSize: '12px',
-                            color: getPositionColor(positionEnum),
                             marginLeft: '5px',
                         },
                     }}
+                    symbolText={getSymbolText(positionEnum, market.betType)}
                 />
                 <ParlayStatus>{parlayStatus}</ParlayStatus>
             </ParlayItemStatusContainer>

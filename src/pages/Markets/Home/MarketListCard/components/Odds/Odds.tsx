@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Colors } from 'styles/common';
 import { SportMarketInfo } from 'types/markets';
-import { formatMarketOdds, getVisibilityOfDrawOptionByTagId, isDiscounted } from 'utils/markets';
+import { formatMarketOdds, getSymbolText, getVisibilityOfDrawOptionByTagId, isDiscounted } from 'utils/markets';
 import { getOddsType } from '../../../../../../redux/modules/ui';
 import { Status } from '../MatchStatus/MatchStatus';
 import { Container, OddsContainer, Title } from './styled-components';
@@ -42,7 +42,6 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
                         homeTeam={market.homeTeam}
                         awayTeam={market.awayTeam}
                         type={0}
-                        symbolColor={Colors.WHITE}
                         additionalText={{
                             firstText: formatMarketOdds(selectedOddsType, market.homeOdds),
                             firstTextStyle: { color: Colors.WHITE },
@@ -50,6 +49,7 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
                         showTooltip={market.homeOdds == 0}
                         discount={isDiscounted(market.homePriceImpact) ? market.homePriceImpact : undefined}
                         flexDirection="column"
+                        symbolText={getSymbolText(0, market.betType)}
                     />
                     {showDrawOdds && (
                         <PositionSymbol
@@ -58,7 +58,6 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
                             homeTeam={market.homeTeam}
                             awayTeam={market.awayTeam}
                             type={2}
-                            symbolColor={Colors.WHITE}
                             additionalText={{
                                 firstText: formatMarketOdds(selectedOddsType, market.drawOdds),
                                 firstTextStyle: { color: Colors.WHITE },
@@ -66,6 +65,7 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
                             discount={isDiscounted(market.drawPriceImpact) ? market.drawPriceImpact : undefined}
                             showTooltip={market.drawOdds == 0}
                             flexDirection="column"
+                            symbolText={getSymbolText(2, market.betType)}
                         />
                     )}
                     <PositionSymbol
@@ -74,7 +74,6 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
                         homeTeam={market.homeTeam}
                         awayTeam={market.awayTeam}
                         type={1}
-                        symbolColor={Colors.WHITE}
                         additionalText={{
                             firstText: formatMarketOdds(selectedOddsType, market.awayOdds),
                             firstTextStyle: { color: Colors.WHITE },
@@ -82,6 +81,7 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
                         showTooltip={market.awayOdds == 0}
                         discount={isDiscounted(market.awayPriceImpact) ? market.awayPriceImpact : undefined}
                         flexDirection="column"
+                        symbolText={getSymbolText(1, market.betType)}
                     />
                 </OddsContainer>
             )}

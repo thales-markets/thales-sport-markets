@@ -1,6 +1,6 @@
 import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
 import { Position } from 'constants/options';
-import { FIFA_WC_TAG, MLS_TAG, PERSON_COMPETITIONS, TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
+import { BetType, FIFA_WC_TAG, MLS_TAG, PERSON_COMPETITIONS, TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
 import ordinal from 'ordinal';
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import { AccountPosition, MarketData, MarketInfo, ParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
@@ -82,6 +82,38 @@ export const convertPositionToSymbolType = (position: Position, isApexTopGame: b
     if (position == Position.HOME) return 0;
     if (position == Position.AWAY) return 1;
     if (position == Position.DRAW) return 2;
+};
+
+export const getSymbolText = (
+    position: Position,
+    betType: BetType
+    // spread: number,
+    // total: number
+) => {
+    switch (position) {
+        case Position.HOME:
+            switch (Number(betType)) {
+                case BetType.SPREAD:
+                    return 'H1';
+                case BetType.TOTAL:
+                    return 'U';
+                default:
+                    return '1';
+            }
+        case Position.AWAY:
+            switch (Number(betType)) {
+                case BetType.SPREAD:
+                    return 'H2';
+                case BetType.TOTAL:
+                    return 'O';
+                default:
+                    return '2';
+            }
+        case Position.DRAW:
+            return 'X';
+        default:
+            return '';
+    }
 };
 
 export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) => {

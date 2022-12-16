@@ -38,8 +38,8 @@ import {
     convertPositionToSymbolType,
     getCanceledGameClaimAmount,
     getIsApexTopGame,
+    getSymbolText,
 } from 'utils/markets';
-import { getPositionColor } from 'utils/ui';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -248,7 +248,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                 positionEnum,
                                 getIsApexTopGame(position.market.isApex, position.market.betType)
                             )}
-                            symbolColor={getPositionColor(positionEnum)}
+                            symbolText={getSymbolText(positionEnum, position.market.betType)}
                         />
                     </PositionContainer>
                     <ColumnDirectionInfo>
