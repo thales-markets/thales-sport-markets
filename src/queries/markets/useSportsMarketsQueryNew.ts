@@ -81,6 +81,7 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
                     });
             }
 
+            console.log(market, market.isOpen, oddsFromContract);
             if (
                 market.isOpen &&
                 !market.isCanceled &&

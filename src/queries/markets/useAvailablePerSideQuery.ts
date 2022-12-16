@@ -21,12 +21,12 @@ const useAvailablePerSideQuery = (marketAddress: string, side: Side, options?: U
                     awayPositionPriceImpact,
                     drawPositionPriceImpact,
                 ] = await Promise.all([
-                    await sportsAMMContract?.availableToBuyFromAMM(marketAddress, Position.HOME),
-                    await sportsAMMContract?.availableToBuyFromAMM(marketAddress, Position.AWAY),
-                    await sportsAMMContract?.availableToBuyFromAMM(marketAddress, Position.DRAW),
-                    await sportsAMMContract?.buyPriceImpact(marketAddress, Position.HOME, ethers.utils.parseEther('1')),
-                    await sportsAMMContract?.buyPriceImpact(marketAddress, Position.AWAY, ethers.utils.parseEther('1')),
-                    await sportsAMMContract?.buyPriceImpact(marketAddress, Position.DRAW, ethers.utils.parseEther('1')),
+                    sportsAMMContract?.availableToBuyFromAMM(marketAddress, Position.HOME),
+                    sportsAMMContract?.availableToBuyFromAMM(marketAddress, Position.AWAY),
+                    sportsAMMContract?.availableToBuyFromAMM(marketAddress, Position.DRAW),
+                    sportsAMMContract?.buyPriceImpact(marketAddress, Position.HOME, ethers.utils.parseEther('1')),
+                    sportsAMMContract?.buyPriceImpact(marketAddress, Position.AWAY, ethers.utils.parseEther('1')),
+                    sportsAMMContract?.buyPriceImpact(marketAddress, Position.DRAW, ethers.utils.parseEther('1')),
                 ]);
                 return {
                     positions: {
@@ -46,9 +46,9 @@ const useAvailablePerSideQuery = (marketAddress: string, side: Side, options?: U
                 };
             } else {
                 const [availableToBSellHome, availableToBSellAway, availableToBSellDraw] = await Promise.all([
-                    await sportsAMMContract?.availableToSellToAMM(marketAddress, Position.HOME),
-                    await sportsAMMContract?.availableToSellToAMM(marketAddress, Position.AWAY),
-                    await sportsAMMContract?.availableToSellToAMM(marketAddress, Position.DRAW),
+                    sportsAMMContract?.availableToSellToAMM(marketAddress, Position.HOME),
+                    sportsAMMContract?.availableToSellToAMM(marketAddress, Position.AWAY),
+                    sportsAMMContract?.availableToSellToAMM(marketAddress, Position.DRAW),
                 ]);
                 return {
                     positions: {
