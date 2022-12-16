@@ -82,6 +82,7 @@ export const convertPositionToSymbolType = (position: Position, isApexTopGame: b
     if (position == Position.HOME) return 0;
     if (position == Position.AWAY) return 1;
     if (position == Position.DRAW) return 2;
+    return 0;
 };
 
 export const getSymbolText = (
@@ -156,6 +157,7 @@ export const convertPositionNameToPosition = (positionName: string) => {
     if (positionName?.toUpperCase() == 'HOME') return 0;
     if (positionName?.toUpperCase() == 'AWAY') return 1;
     if (positionName?.toUpperCase() == 'DRAW') return 2;
+    return 1;
 };
 
 export const convertPositionNameToPositionType = (positionName: string) => {

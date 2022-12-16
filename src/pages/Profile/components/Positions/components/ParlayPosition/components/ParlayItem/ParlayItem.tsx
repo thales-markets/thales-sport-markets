@@ -79,9 +79,9 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
             <ParlayItemStatusContainer>
                 <PositionSymbol
                     type={convertPositionToSymbolType(positionEnum, getIsApexTopGame(market.isApex, market.betType))}
-                    additionalText={{
-                        firstText: formatMarketOdds(selectedOddsType, parlayItemQuote),
-                        firstTextStyle: {
+                    symbolBottomText={{
+                        text: formatMarketOdds(selectedOddsType, parlayItemQuote),
+                        textStyle: {
                             fontSize: '12px',
                             marginLeft: '5px',
                         },

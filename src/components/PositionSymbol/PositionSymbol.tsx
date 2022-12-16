@@ -1,6 +1,5 @@
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import Tooltip from 'components/Tooltip';
-import { Position } from 'constants/options';
 import { MAIN_COLORS } from 'constants/ui';
 import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,16 +10,17 @@ import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { ParlaysMarketPosition } from 'types/markets';
 
 type SymbolProps = {
-    type?: number;
+    type: number;
     symbolText: string;
     symbolColor?: string;
     symbolFontSize?: number;
-    additionalText?: {
-        firstText?: string;
-        firstTextStyle?: CSSProperties;
+    symbolBottomText?: {
+        text?: string;
+        tooltip?: string;
+        textStyle?: CSSProperties;
     };
+    disabled?: boolean;
     additionalStyle?: CSSProperties;
-    showTooltip?: boolean;
     glow?: boolean;
     marketAddress?: string;
     parentMarket?: string;
@@ -31,14 +31,14 @@ type SymbolProps = {
 };
 
 const PositionSymbol: React.FC<SymbolProps> = ({
-    glow,
     type,
     symbolText,
     symbolColor,
     symbolFontSize,
-    additionalText,
-    showTooltip,
+    symbolBottomText,
+    disabled,
     additionalStyle,
+    glow,
     marketAddress,
     parentMarket,
     homeTeam,
@@ -51,45 +51,31 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     const { trackEvent } = useMatomo();
     const parlay = useSelector(getParlay);
     const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == marketAddress)[0];
+    const isAddedToParlay = addedToParlay && addedToParlay.position == type;
 
     return (
         <Wrapper
-            disabled={showTooltip}
+            disabled={disabled}
             flexDirection={flexDirection}
             notClickable={!marketAddress}
             onClick={() => {
-                if (!showTooltip) {
-                    if (marketAddress && parentMarket) {
-                        if (addedToParlay && addedToParlay.position == type) {
-                            dispatch(removeFromParlay(marketAddress));
-                        } else {
-                            if (type !== undefined) {
-                                trackEvent({
-                                    category: 'position',
-                                    action: discount == null ? 'non-discount' : 'discount',
-                                    value: discount == null ? 0 : Math.ceil(Math.abs(discount)),
-                                });
-                                const parlayMarket: ParlaysMarketPosition = {
-                                    parentMarket: parentMarket,
-                                    sportMarketAddress: marketAddress,
-                                    position: Position.HOME,
-                                    homeTeam: homeTeam || '',
-                                    awayTeam: awayTeam || '',
-                                };
-                                switch (type) {
-                                    case 3:
-                                        parlayMarket.position = Position.HOME;
-                                        break;
-                                    case 4:
-                                        parlayMarket.position = Position.AWAY;
-                                        break;
-                                    default:
-                                        parlayMarket.position = type;
-                                        break;
-                                }
-                                dispatch(updateParlay(parlayMarket));
-                            }
-                        }
+                if (!disabled && marketAddress && parentMarket) {
+                    if (isAddedToParlay) {
+                        dispatch(removeFromParlay(marketAddress));
+                    } else {
+                        trackEvent({
+                            category: 'position',
+                            action: discount == null ? 'non-discount' : 'discount',
+                            value: discount == null ? 0 : Math.ceil(Math.abs(discount)),
+                        });
+                        const parlayMarket: ParlaysMarketPosition = {
+                            parentMarket: parentMarket,
+                            sportMarketAddress: marketAddress,
+                            position: type,
+                            homeTeam: homeTeam || '',
+                            awayTeam: awayTeam || '',
+                        };
+                        dispatch(updateParlay(parlayMarket));
                     }
                 }
             }}
@@ -98,16 +84,12 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                 glow={glow}
                 color={symbolColor}
                 style={additionalStyle}
-                addedToParlay={addedToParlay && addedToParlay.position == type}
+                selected={isAddedToParlay}
                 notClickable={!marketAddress}
                 flexDirection={flexDirection}
-                disabled={showTooltip}
+                disabled={disabled}
             >
-                <Symbol
-                    color={symbolColor}
-                    fontSize={symbolFontSize}
-                    addedToParlay={addedToParlay && addedToParlay.position == type}
-                >
+                <Symbol color={symbolColor} fontSize={symbolFontSize} selected={isAddedToParlay}>
                     {symbolText}
                 </Symbol>
                 {discount && (
@@ -116,16 +98,14 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                     </Discount>
                 )}
             </Container>
-            <FlexDivColumn>
-                {additionalText?.firstText && (
-                    <AdditionalText style={additionalText?.firstTextStyle} flexDirection={flexDirection}>
-                        {additionalText?.firstText}
-                        {showTooltip && (
-                            <Tooltip overlay={<>{t('markets.zero-odds-tooltip')}</>} iconFontSize={11} marginLeft={3} />
-                        )}
-                    </AdditionalText>
-                )}
-            </FlexDivColumn>
+            {symbolBottomText && (
+                <BottomText style={symbolBottomText.textStyle} flexDirection={flexDirection}>
+                    {symbolBottomText.text}
+                    {symbolBottomText.tooltip && (
+                        <Tooltip overlay={<>{t('markets.zero-odds-tooltip')}</>} iconFontSize={11} marginLeft={3} />
+                    )}
+                </BottomText>
+            )}
         </Wrapper>
     );
 };
@@ -139,7 +119,7 @@ const Wrapper = styled(FlexDivColumn)<{ disabled?: boolean; flexDirection?: stri
 const Container = styled.div<{
     glow?: boolean;
     color?: string;
-    addedToParlay?: boolean;
+    selected?: boolean;
     disabled?: boolean;
     notClickable?: boolean;
     flexDirection?: string;
@@ -156,8 +136,8 @@ const Container = styled.div<{
     font-size: 13px;
     opacity: ${(props) => (props.disabled ? 0.4 : 1)};
     border: ${(props) =>
-        props?.glow ? '3px solid ' + props.color : props.addedToParlay ? '3px solid #64D9FE' : '3px solid #5f6180'};
-    box-shadow: ${(props) => (props?.glow ? '0 0 6px 2px ' + props.color : '')};
+        props?.glow ? '3px solid ' + props.color : props.selected ? '3px solid #64D9FE' : '3px solid #5f6180'};
+    box-shadow: ${(props) => (props.glow ? '0 0 6px 2px ' + props.color : '')};
     :hover {
         ${(props) => (props.disabled || props.notClickable ? '' : 'border: 3px solid #64d9fe;')}
         & > span {
@@ -172,7 +152,7 @@ const Container = styled.div<{
     margin: ${(props) => (props.flexDirection === 'column' ? '0 10px' : '0 0')};
 `;
 
-const AdditionalText = styled.span<{
+const BottomText = styled.span<{
     flexDirection?: string;
 }>`
     font-size: 13px;
@@ -183,8 +163,8 @@ const AdditionalText = styled.span<{
     }
 `;
 
-const Symbol = styled.span<{ color?: string; addedToParlay?: boolean; fontSize?: number }>`
-    color: ${(props) => (props.addedToParlay ? MAIN_COLORS.TEXT.BLUE : props.color || MAIN_COLORS.TEXT.WHITE)};
+const Symbol = styled.span<{ color?: string; selected?: boolean; fontSize?: number }>`
+    color: ${(props) => (props.selected ? MAIN_COLORS.TEXT.BLUE : props.color || MAIN_COLORS.TEXT.WHITE)};
     font-size: ${(props) => props.fontSize || 12}px;
 `;
 

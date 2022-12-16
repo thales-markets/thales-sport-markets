@@ -250,11 +250,10 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                                         getIsApexTopGame(position.market.isApex, position.market.betType)
                                     )}
                                     symbolFontSize={10}
-                                    additionalText={{
-                                        firstText: formatMarketOdds(selectedOddsType, quote),
-                                        firstTextStyle: {
+                                    symbolBottomText={{
+                                        text: formatMarketOdds(selectedOddsType, quote),
+                                        textStyle: {
                                             fontSize: '10.5px',
-                                            color: 'white',
                                             marginLeft: '5px',
                                         },
                                     }}

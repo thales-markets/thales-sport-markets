@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { removeFromParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
-import { Colors } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
 import {
     convertPositionToSymbolType,
@@ -40,11 +39,10 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
             </MatchLabel>
             <PositionSymbol
                 type={convertPositionToSymbolType(market.position, getIsApexTopGame(market.isApex, market.betType))}
-                additionalText={{
-                    firstText: formatMarketOdds(selectedOddsType, getPositionOdds(market)),
-                    firstTextStyle: {
+                symbolBottomText={{
+                    text: formatMarketOdds(selectedOddsType, getPositionOdds(market)),
+                    textStyle: {
                         fontSize: customStyle?.fontSize ? customStyle?.fontSize : '11px',
-                        color: Colors.WHITE,
                         marginLeft: '5px',
                     },
                 }}

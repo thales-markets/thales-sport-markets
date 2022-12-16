@@ -210,14 +210,13 @@ const ParlayLeaderboard: React.FC = () => {
                                         getIsApexTopGame(position.market.isApex, position.market.betType)
                                     )}
                                     symbolFontSize={10}
-                                    additionalText={{
-                                        firstText: formatMarketOdds(
+                                    symbolBottomText={{
+                                        text: formatMarketOdds(
                                             OddsType.Decimal,
                                             row.original.marketQuotes ? row.original.marketQuotes[index] : 0
                                         ),
-                                        firstTextStyle: {
+                                        textStyle: {
                                             fontSize: '10.5px',
-                                            color: 'white',
                                             marginLeft: '5px',
                                         },
                                     }}
@@ -301,14 +300,10 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
                         getIsApexTopGame(position.market.isApex, position.market.betType)
                     )}
                     symbolFontSize={10}
-                    additionalText={{
-                        firstText: formatMarketOdds(
-                            OddsType.Decimal,
-                            parlay.marketQuotes ? parlay.marketQuotes[index] : 0
-                        ),
-                        firstTextStyle: {
+                    symbolBottomText={{
+                        text: formatMarketOdds(OddsType.Decimal, parlay.marketQuotes ? parlay.marketQuotes[index] : 0),
+                        textStyle: {
                             fontSize: '10.5px',
-                            color: 'white',
                             marginLeft: '5px',
                         },
                     }}
