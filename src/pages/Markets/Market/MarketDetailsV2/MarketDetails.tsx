@@ -53,7 +53,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const isGameResolved = market.gameStarted && market.resolved;
     const isPendingResolution = market.gameStarted && !market.resolved;
     const isGamePaused = market.paused && !isGameResolved && !isGameCancelled;
-    const showPositions = !market.resolved && !market.cancelled && !market.gameStarted && !market.paused;
+    const showStatus = market.resolved || market.cancelled || market.gameStarted || market.paused;
 
     return (
         <RowContainer>
@@ -82,25 +82,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                     )}
                 </HeaderWrapper>
                 <MatchInfo market={market} />
-                {showPositions ? (
-                    <>
-                        <Positions markets={[market]} betType={BetType.WINNER} selectedSide={selectedSide} />
-                        {childMarkets.spreadMarkets.length > 0 && (
-                            <Positions
-                                markets={childMarkets.spreadMarkets}
-                                betType={BetType.SPREAD}
-                                selectedSide={selectedSide}
-                            />
-                        )}
-                        {childMarkets.totalMarkets.length > 0 && (
-                            <Positions
-                                markets={childMarkets.totalMarkets}
-                                betType={BetType.TOTAL}
-                                selectedSide={selectedSide}
-                            />
-                        )}
-                    </>
-                ) : (
+                {showStatus && (
                     <Status backgroundColor={isGameCancelled ? MAIN_COLORS.BACKGROUNDS.RED : MAIN_COLORS.LIGHT_GRAY}>
                         {isPendingResolution
                             ? t('markets.market-card.pending-resolution')
@@ -111,6 +93,23 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             : `${t('markets.market-card.result')}: ${market.homeScore} - ${market.awayScore}`}
                     </Status>
                 )}
+                <>
+                    <Positions markets={[market]} betType={BetType.WINNER} selectedSide={selectedSide} />
+                    {childMarkets.spreadMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.spreadMarkets}
+                            betType={BetType.SPREAD}
+                            selectedSide={selectedSide}
+                        />
+                    )}
+                    {childMarkets.totalMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.totalMarkets}
+                            betType={BetType.TOTAL}
+                            selectedSide={selectedSide}
+                        />
+                    )}
+                </>
                 <Transactions market={market} />
             </MainContainer>
             {showAMM && (

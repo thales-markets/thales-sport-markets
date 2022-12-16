@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { AvailablePerPosition, MarketData, ParlaysMarketPosition } from 'types/markets';
-import { isDiscounted, formatMarketOdds, getSymbolText } from 'utils/markets';
+import { isDiscounted, formatMarketOdds, getSymbolText, convertFinalResultToResultType } from 'utils/markets';
 import { Discount, Container, Value } from './styled-components';
 
 type PositionDetailsProps = {
@@ -27,25 +27,22 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
     const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
     // ------------
 
-    // @ts-ignore
-    const disabledPosition = !(odd > 0);
-
-    const showPositionDiscount =
-        !!availablePerPosition.buyImpactPrice && isDiscounted(availablePerPosition.buyImpactPrice);
-
-    const positionDiscount = showPositionDiscount
-        ? Math.ceil(Math.abs(Number(availablePerPosition.buyImpactPrice) * 100))
-        : 0;
-
     const isGameCancelled = market.cancelled || (!market.gameStarted && market.resolved);
     const isGameResolved = market.gameStarted && market.resolved;
     const isGamePaused = market.paused && !isGameResolved && !isGameCancelled;
-    const showDiscount = showPositionDiscount && !market.resolved && !market.cancelled && !market.paused;
+    const isGameOpen = !market.resolved && !market.cancelled && !market.paused && !market.gameStarted;
+
+    const showDiscount =
+        isGameOpen && !!availablePerPosition.buyImpactPrice && isDiscounted(availablePerPosition.buyImpactPrice);
+    const positionDiscount = showDiscount ? Math.ceil(Math.abs(Number(availablePerPosition.buyImpactPrice) * 100)) : 0;
+
+    const disabledPosition = !(odd || 0 > 0) || isGameOpen;
 
     return (
         <Container
             disabled={disabledPosition}
             selected={addedToParlay && addedToParlay.position == position}
+            isWinner={isGameResolved && convertFinalResultToResultType(market.finalResult) == position}
             onClick={() => {
                 if (!disabledPosition) {
                     if (addedToParlay && addedToParlay.position == position) {
@@ -68,13 +65,15 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                 {market.betType == BetType.SPREAD && ` (${market.spread})`}
                 {market.betType == BetType.TOTAL && ` (${market.total})`}
             </Value>
-            <Value>
-                {isGameCancelled
-                    ? `- ${t('markets.market-card.canceled')} -`
-                    : isGamePaused
-                    ? `- ${t('markets.market-card.paused')} -`
-                    : formatMarketOdds(selectedOddsType, odd)}
-            </Value>
+            {!isGameResolved && (
+                <Value>
+                    {isGameCancelled
+                        ? `- ${t('markets.market-card.canceled')} -`
+                        : isGamePaused
+                        ? `- ${t('markets.market-card.paused')} -`
+                        : formatMarketOdds(selectedOddsType, odd)}
+                </Value>
+            )}
             {showDiscount && (
                 <Tooltip
                     overlay={

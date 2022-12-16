@@ -2,7 +2,12 @@ import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 
-export const Container = styled(FlexDivRow)<{ disabled: boolean; selected: boolean; isResolved?: boolean }>`
+export const Container = styled(FlexDivRow)<{
+    disabled: boolean;
+    selected: boolean;
+    isResolved?: boolean;
+    isWinner: boolean;
+}>`
     position: relative;
     align-items: center;
     border-radius: 5px;
@@ -14,8 +19,10 @@ export const Container = styled(FlexDivRow)<{ disabled: boolean; selected: boole
     font-size: 14px;
     line-height: 16px;
     background: linear-gradient(180deg, #303656 41.5%, #1a1c2b 100%);
-    border: 1px solid ${(props) => (props.selected ? MAIN_COLORS.BORDERS.LIGHT_BLUE : MAIN_COLORS.BORDERS.GRAY)};
-    opacity: ${(props) => (props.disabled ? '0.4' : '1')};
+    border: 1px solid
+        ${(props) => (props.selected || props.isWinner ? MAIN_COLORS.BORDERS.LIGHT_BLUE : MAIN_COLORS.BORDERS.GRAY)};
+    box-shadow: ${(props) => (props.isWinner ? MAIN_COLORS.SHADOWS.POSITION_WINNER : '')};
+    opacity: ${(props) => (props.disabled && !props.isWinner ? '0.4' : '1')};
     cursor: ${(props) => (props.disabled ? '' : 'pointer')};
     :hover {
         border: ${(props) => (props.disabled ? undefined : `1px solid ${MAIN_COLORS.LIGHT_BLUE}`)};

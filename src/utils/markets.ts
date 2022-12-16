@@ -96,7 +96,7 @@ export const getSymbolText = (
                 case BetType.SPREAD:
                     return 'H1';
                 case BetType.TOTAL:
-                    return 'U';
+                    return 'O';
                 default:
                     return '1';
             }
@@ -105,7 +105,7 @@ export const getSymbolText = (
                 case BetType.SPREAD:
                     return 'H2';
                 case BetType.TOTAL:
-                    return 'O';
+                    return 'U';
                 default:
                     return '2';
             }

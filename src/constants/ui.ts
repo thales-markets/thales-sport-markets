@@ -49,6 +49,7 @@ export const MAIN_COLORS = {
     },
     SHADOWS: {
         WINNER: '0px 0px 33px -7px rgba(63,209,255,1)',
+        POSITION_WINNER: '0px 0px 15px -7px rgba(63,209,255,1)',
         DRAW: '0px 0px 33px -7px rgba(63,209,255,1)',
         POSITION_HOVER: '0px 0px 39px -16px rgba(64,210,255,1)',
         NAV_BAR: '-64px 0px 38px 3px rgba(0,0,0,0.41)',
