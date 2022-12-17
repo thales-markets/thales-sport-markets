@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import networkConnector from 'utils/networkConnector';
 import marketContract from 'utils/contracts/sportsMarketContract';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
-import { Position, Side } from '../../constants/options';
+import { Position } from '../../constants/options';
 import { groupBy, orderBy } from 'lodash';
 import { BetType } from 'constants/tags';
 
@@ -33,7 +33,6 @@ const useChildMarketsQuery = (parentMarket: MarketData, options?: UseQueryOption
                             cancelled,
                             paused,
                             buyMarketDefaultOdds,
-                            sellMarketDefaultOdds,
                             spread,
                             total,
                         ] = await Promise.all([
@@ -44,7 +43,6 @@ const useChildMarketsQuery = (parentMarket: MarketData, options?: UseQueryOption
                             contract?.cancelled(),
                             contract?.paused(),
                             sportsAMMContract?.getMarketDefaultOdds(childMarketAddress, false),
-                            sportsAMMContract?.getMarketDefaultOdds(childMarketAddress, true),
                             gamesOddsObtainerContract?.childMarketSread(childMarketAddress),
                             gamesOddsObtainerContract?.childMarketTotal(childMarketAddress),
                         ]);
@@ -54,38 +52,15 @@ const useChildMarketsQuery = (parentMarket: MarketData, options?: UseQueryOption
                             gameDetails: parentMarket.gameDetails,
                             positions: {
                                 [Position.HOME]: {
-                                    sides: {
-                                        [Side.BUY]: {
-                                            odd: bigNumberFormatter(buyMarketDefaultOdds[0]),
-                                        },
-                                        [Side.SELL]: {
-                                            odd: bigNumberFormatter(sellMarketDefaultOdds[0]),
-                                        },
-                                    },
+                                    odd: bigNumberFormatter(buyMarketDefaultOdds[0]),
                                 },
                                 [Position.AWAY]: {
-                                    sides: {
-                                        [Side.BUY]: {
-                                            odd: bigNumberFormatter(buyMarketDefaultOdds[1]),
-                                        },
-                                        [Side.SELL]: {
-                                            odd: bigNumberFormatter(sellMarketDefaultOdds[1]),
-                                        },
-                                    },
+                                    odd: bigNumberFormatter(buyMarketDefaultOdds[1]),
                                 },
                                 [Position.DRAW]: {
-                                    sides: {
-                                        [Side.BUY]: {
-                                            odd: buyMarketDefaultOdds[2]
-                                                ? bigNumberFormatter(buyMarketDefaultOdds[2] || 0)
-                                                : undefined,
-                                        },
-                                        [Side.SELL]: {
-                                            odd: sellMarketDefaultOdds[2]
-                                                ? bigNumberFormatter(sellMarketDefaultOdds[2] || 0)
-                                                : undefined,
-                                        },
-                                    },
+                                    odd: buyMarketDefaultOdds[2]
+                                        ? bigNumberFormatter(buyMarketDefaultOdds[2] || 0)
+                                        : undefined,
                                 },
                             },
                             tags: [Number(ethers.utils.formatUnits(tags, 0))],

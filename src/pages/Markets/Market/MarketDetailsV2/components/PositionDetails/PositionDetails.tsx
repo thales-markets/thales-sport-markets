@@ -6,14 +6,14 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
-import { AvailablePerPosition, MarketData, ParlaysMarketPosition } from 'types/markets';
+import { MarketData, ParlaysMarketPosition } from 'types/markets';
 import { isDiscounted, formatMarketOdds, getSymbolText, convertFinalResultToResultType } from 'utils/markets';
 import { Discount, Container, Value } from './styled-components';
 
 type PositionDetailsProps = {
     market: MarketData;
     odd?: number;
-    availablePerPosition: AvailablePerPosition;
+    availablePerPosition: { available: number; buyImpactPrice?: number };
     position: Position;
 };
 

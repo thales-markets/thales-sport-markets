@@ -6,7 +6,7 @@ import networkConnector from 'utils/networkConnector';
 import marketContract from 'utils/contracts/sportsMarketContract';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
 import { fixDuplicatedTeamName, fixLongTeamNameString } from '../../utils/formatters/string';
-import { Position, Side } from '../../constants/options';
+import { Position } from '../../constants/options';
 
 const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketData | undefined>) => {
     return useQuery<MarketData | undefined>(
@@ -28,7 +28,6 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     cancelled,
                     paused,
                     buyMarketDefaultOdds,
-                    sellMarketDefaultOdds,
                     childMarketsAddresses,
                 ] = await Promise.all([
                     contract?.getGameDetails(),
@@ -39,7 +38,6 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     contract?.cancelled(),
                     contract?.paused(),
                     sportsAMMContract?.getMarketDefaultOdds(marketAddress, false),
-                    sportsAMMContract?.getMarketDefaultOdds(marketAddress, true),
                     gamesOddsObtainerContract?.getAllChildMarketsFromParent(marketAddress),
                 ]);
 
@@ -58,38 +56,13 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     gameDetails,
                     positions: {
                         [Position.HOME]: {
-                            sides: {
-                                [Side.BUY]: {
-                                    odd: bigNumberFormatter(buyMarketDefaultOdds[0]),
-                                },
-                                [Side.SELL]: {
-                                    odd: bigNumberFormatter(sellMarketDefaultOdds[0]),
-                                },
-                            },
+                            odd: bigNumberFormatter(buyMarketDefaultOdds[0]),
                         },
                         [Position.AWAY]: {
-                            sides: {
-                                [Side.BUY]: {
-                                    odd: bigNumberFormatter(buyMarketDefaultOdds[1]),
-                                },
-                                [Side.SELL]: {
-                                    odd: bigNumberFormatter(sellMarketDefaultOdds[1]),
-                                },
-                            },
+                            odd: bigNumberFormatter(buyMarketDefaultOdds[1]),
                         },
                         [Position.DRAW]: {
-                            sides: {
-                                [Side.BUY]: {
-                                    odd: buyMarketDefaultOdds[2]
-                                        ? bigNumberFormatter(buyMarketDefaultOdds[2] || 0)
-                                        : undefined,
-                                },
-                                [Side.SELL]: {
-                                    odd: sellMarketDefaultOdds[2]
-                                        ? bigNumberFormatter(sellMarketDefaultOdds[2] || 0)
-                                        : undefined,
-                                },
-                            },
+                            odd: buyMarketDefaultOdds[2] ? bigNumberFormatter(buyMarketDefaultOdds[2] || 0) : undefined,
                         },
                     },
                     tags: [Number(ethers.utils.formatUnits(tags, 0))],

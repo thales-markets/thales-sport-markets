@@ -1,6 +1,6 @@
 import { SportMarketInfo } from 'types/markets';
 import { NetworkId } from 'types/network';
-import { Position, Side } from './options';
+import { Position } from './options';
 
 export const QUERY_KEYS = {
     Rewards: (networkId: NetworkId, period: number) => ['rewards', networkId, period],
@@ -30,7 +30,7 @@ export const QUERY_KEYS = {
         networkId,
         balances,
     ],
-    AvailablePerSide: (marketAddress: string, side: Side) => ['availablePerSide', marketAddress, side],
+    AvailablePerPosition: (marketAddress: string) => ['availablePerPosition', marketAddress],
     MarketTransactions: (marketAddress: string, networkId: NetworkId, walletAddress?: string) => [
         'market',
         'transactions',

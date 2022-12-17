@@ -7,7 +7,7 @@ import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE } from 'constants/market
 import { MAX_GAS_LIMIT } from 'constants/network';
 import { Position, Side } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
-import useAvailablePerSideQuery from 'queries/markets/useAvailablePerSideQuery';
+import useAvailablePerPositionQuery from 'queries/markets/useAvailablePerPositionQuery';
 import useMarketBalancesQuery from 'queries/markets/useMarketBalancesQuery';
 import usePositionPriceDetailsQuery from 'queries/markets/usePositionPriceDetailsQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -21,7 +21,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
-import { AMMPosition, AvailablePerSide, Balances, ParlayPayment, ParlaysMarket } from 'types/markets';
+import { AMMPosition, AvailablePerPosition, Balances, ParlayPayment, ParlaysMarket } from 'types/markets';
 import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
@@ -96,17 +96,15 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     const [isAllowing, setIsAllowing] = useState<boolean>(false);
     const [isBuying, setIsBuying] = useState<boolean>(false);
     const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState<string>('');
-    const [availablePerSide, setAvailablePerSide] = useState<AvailablePerSide>({
-        positions: {
-            [Position.HOME]: {
-                available: 0,
-            },
-            [Position.AWAY]: {
-                available: 0,
-            },
-            [Position.DRAW]: {
-                available: 0,
-            },
+    const [availablePerPosition, setAvailablePerPosition] = useState<AvailablePerPosition>({
+        [Position.HOME]: {
+            available: 0,
+        },
+        [Position.AWAY]: {
+            available: 0,
+        },
+        [Position.DRAW]: {
+            available: 0,
         },
     });
     const [balances, setBalances] = useState<Balances | undefined>(undefined);
@@ -238,7 +236,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             setIsFetching(true);
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract) {
-                const roundedMaxAmount = floorNumberToDecimals(availablePerSide.positions[market.position].available);
+                const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available);
                 const divider =
                     selectedStableIndex === COLLATERALS_INDEX.sUSD || selectedStableIndex == COLLATERALS_INDEX.DAI
                         ? 1e18
@@ -272,7 +270,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         selectedStableIndex,
         market.address,
         market.position,
-        availablePerSide.positions,
+        availablePerPosition,
         fetchAmmQuote,
     ]);
 
@@ -283,7 +281,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             if (signer && sportsAMMContract) {
                 const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
                 contract.connect(signer);
-                const roundedMaxAmount = floorNumberToDecimals(availablePerSide.positions[market.position].available);
+                const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available);
                 if (roundedMaxAmount) {
                     const [sUSDToSpendForMaxAmount, ammBalances] = await Promise.all([
                         fetchAmmQuote(roundedMaxAmount),
@@ -297,10 +295,10 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                             Number(usdAmountValue),
                             getPositionOdds(market),
                             sUSDToSpendForMaxAmount / divider,
-                            availablePerSide.positions[market.position].available,
+                            availablePerPosition[market.position].available,
                             ammBalanceForSelectedPosition / divider
                         ) || 0;
-                    if (amountOfTokens > availablePerSide.positions[market.position].available) {
+                    if (amountOfTokens > availablePerPosition[market.position].available) {
                         setTokenAmount(0);
                         return;
                     }
@@ -324,7 +322,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         };
 
         fetchData().catch((e) => console.log(e));
-    }, [usdAmountValue, selectedStableIndex, fetchAmmQuote, availablePerSide.positions, market]);
+    }, [usdAmountValue, selectedStableIndex, fetchAmmQuote, availablePerPosition, market]);
 
     const marketBalancesQuery = useMarketBalancesQuery(market.address, walletAddress, {
         enabled: !!market.address && isWalletConnected,
@@ -353,15 +351,15 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         }
     }, [positionPriceDetailsQuery.isSuccess, positionPriceDetailsQuery.data]);
 
-    const availablePerSideQuery = useAvailablePerSideQuery(market.address, Side.BUY, {
+    const availablePerPositionQuery = useAvailablePerPositionQuery(market.address, {
         enabled: isAppReady,
     });
 
     useEffect(() => {
-        if (availablePerSideQuery.isSuccess && availablePerSideQuery.data) {
-            setAvailablePerSide(availablePerSideQuery.data);
+        if (availablePerPositionQuery.isSuccess && availablePerPositionQuery.data) {
+            setAvailablePerPosition(availablePerPositionQuery.data);
         }
-    }, [availablePerSideQuery.isSuccess, availablePerSideQuery.data]);
+    }, [availablePerPositionQuery.isSuccess, availablePerPositionQuery.data]);
 
     useEffect(() => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;

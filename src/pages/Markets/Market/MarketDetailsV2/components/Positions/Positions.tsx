@@ -1,4 +1,3 @@
-import { Side } from 'constants/options';
 import { BetType } from 'constants/tags';
 import React, { useState } from 'react';
 import { MarketData } from 'types/markets';
@@ -9,10 +8,9 @@ import { Container, Header, Title, ContentContianer, Arrow, ContentRow } from '.
 type PositionsProps = {
     markets: MarketData[];
     betType: BetType;
-    selectedSide: Side;
 };
 
-const Positions: React.FC<PositionsProps> = ({ markets, betType, selectedSide }) => {
+const Positions: React.FC<PositionsProps> = ({ markets, betType }) => {
     // const { t } = useTranslation();
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
@@ -32,7 +30,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, selectedSide })
                     {markets.map((market) => {
                         return (
                             <ContentRow key={market.address}>
-                                <MarketPositions market={market} selectedSide={selectedSide} />
+                                <MarketPositions market={market} />
                             </ContentRow>
                         );
                     })}

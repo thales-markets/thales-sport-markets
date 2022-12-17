@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Toggle from 'components/Toggle/Toggle';
 import MatchInfo from './components/MatchInfo';
 import BackToLink from 'pages/Markets/components/BackToLink';
-import { Side } from 'constants/options';
 import { ChildMarkets, MarketData } from 'types/markets';
 import Positions from './components/Positions';
 import { useSelector } from 'react-redux';
@@ -31,7 +29,6 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const [showParlayMobileModal, setShowParlayMobileModal] = useState<boolean>(false);
 
-    const [selectedSide, setSelectedSide] = useState<Side>(Side.BUY);
     const [childMarkets, setChildMarkets] = useState<ChildMarkets>({
         spreadMarkets: [],
         totalMarkets: [],
@@ -64,22 +61,6 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         text={t('market.back')}
                         customStylingContainer={{ position: 'absolute', left: '5px', marginTop: '0px' }}
                     />
-                    {showAMM && (
-                        <Toggle
-                            label={{
-                                firstLabel: t('common.buy-side'),
-                                secondLabel: t('common.sell-side'),
-                                fontSize: '18px',
-                            }}
-                            active={selectedSide === Side.SELL}
-                            dotSize="18px"
-                            dotBackground="#303656"
-                            dotBorder="3px solid #3FD1FF"
-                            handleClick={() => {
-                                setSelectedSide(selectedSide === Side.BUY ? Side.SELL : Side.BUY);
-                            }}
-                        />
-                    )}
                 </HeaderWrapper>
                 <MatchInfo market={market} />
                 {showStatus && (
@@ -94,20 +75,12 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                     </Status>
                 )}
                 <>
-                    <Positions markets={[market]} betType={BetType.WINNER} selectedSide={selectedSide} />
+                    <Positions markets={[market]} betType={BetType.WINNER} />
                     {childMarkets.spreadMarkets.length > 0 && (
-                        <Positions
-                            markets={childMarkets.spreadMarkets}
-                            betType={BetType.SPREAD}
-                            selectedSide={selectedSide}
-                        />
+                        <Positions markets={childMarkets.spreadMarkets} betType={BetType.SPREAD} />
                     )}
                     {childMarkets.totalMarkets.length > 0 && (
-                        <Positions
-                            markets={childMarkets.totalMarkets}
-                            betType={BetType.TOTAL}
-                            selectedSide={selectedSide}
-                        />
+                        <Positions markets={childMarkets.totalMarkets} betType={BetType.TOTAL} />
                     )}
                 </>
                 <Transactions market={market} />
