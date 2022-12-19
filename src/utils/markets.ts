@@ -323,7 +323,7 @@ export const convertMarketDataTypeToSportMarketInfoType = (marketData: MarketDat
     return {
         id: marketData.address,
         address: marketData.address,
-        gameId: marketData.gameId,
+        gameId: marketData.gameDetails.gameId,
         maturityDate: new Date(marketData.maturityDate),
         tags: marketData.tags,
         isOpen: !marketData.resolved && !marketData.cancelled && !marketData.gameStarted ? true : false,

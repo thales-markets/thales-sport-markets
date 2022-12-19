@@ -96,7 +96,6 @@ export type AvailablePerSide = {
 
 export type MarketData = {
     address: string;
-    gameId: string;
     gameDetails: GameDetails;
     positions: Record<Position, { sides: Record<Side, { odd: number | undefined }> }>;
     tags: number[];
