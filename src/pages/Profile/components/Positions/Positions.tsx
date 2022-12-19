@@ -169,8 +169,7 @@ const Positions: React.FC<{ searchText?: string; setOpenPositionsValue: (value: 
             openPositionsValueSum += market.sUSDPaid;
         });
         accountPositionsByStatus.open.forEach((position) => {
-            // @ts-ignore
-            openPositionsValueSum += position.amount * position.market[position.side + 'Odds'];
+            openPositionsValueSum += position.sUSDPaid;
         });
         setOpenPositionsValue(openPositionsValueSum);
     }, [parlayMarketsByStatus, accountPositionsByStatus, setOpenPositionsValue]);

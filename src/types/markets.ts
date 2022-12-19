@@ -41,6 +41,7 @@ export type MarketInfo = {
 export type SportMarketInfo = {
     id: string;
     address: string;
+    gameId: string;
     maturityDate: Date;
     tags: number[];
     isOpen: boolean;
@@ -235,6 +236,7 @@ export type PositionBalance = {
     account: string;
     amount: number;
     position: AccountPositionGraph;
+    sUSDPaid: number;
 };
 
 export type AccountPosition = AccountPositionGraph & {
