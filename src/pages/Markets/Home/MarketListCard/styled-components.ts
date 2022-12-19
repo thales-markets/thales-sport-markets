@@ -1,19 +1,31 @@
+import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
-export const Container = styled.div<{
-    isResolved?: boolean;
+export const Wrapper = styled(FlexDivColumn)<{
+    isResolved: boolean;
 }>`
-    display: flex;
-    flex-direction: row;
     width: 100%;
-    padding: 6px 8px 4px 8px;
     border-radius: 5px;
     margin-bottom: 8px;
-    background-color: ${(props) => (props.isResolved ? 'rgb(36,41,64, 0.5)' : 'rgba(48, 54, 86, 0.5)')};
+    background-color: ${(props) => (props.isResolved ? 'rgb(36,41,64, 0.5)' : MAIN_COLORS.LIGHT_GRAY)};
     @media (max-width: 575px) {
         margin-bottom: 5px;
     }
+`;
+
+export const MainContainer = styled(FlexDivRow)`
+    width: 100%;
+    padding: 6px 8px 4px 8px;
+    @media (max-width: 950px) {
+        padding-right: 15px;
+    }
+`;
+
+export const ChildContainer = styled(MainContainer)`
+    background-color: ${MAIN_COLORS.GRAY};
+    justify-content: flex-end;
+    border-radius: 0 0 5px 5px;
 `;
 
 export const MatchInfoConatiner = styled(FlexDivColumn)`
@@ -32,6 +44,9 @@ export const TeamsInfoConatiner = styled(FlexDivRow)`
 
 export const TeamLogosConatiner = styled(FlexDivRow)`
     align-items: center;
+    @media (max-width: 575px) {
+        display: none;
+    }
 `;
 
 export const ClubLogo = styled.img<{ width?: string; height?: string }>`
@@ -75,4 +90,14 @@ export const ResultLabel = styled.span`
     text-transform: uppercase;
 `;
 
-export const OddsWrapper = styled(FlexDivRow)``;
+export const Arrow = styled.i`
+    font-size: 14px;
+    position: absolute;
+    bottom: 0px;
+    right: -8px;
+    cursor: pointer;
+`;
+
+export const OddsWrapper = styled(FlexDivRow)`
+    position: relative;
+`;

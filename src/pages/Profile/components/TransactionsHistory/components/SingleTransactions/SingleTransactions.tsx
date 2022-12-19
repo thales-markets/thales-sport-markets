@@ -98,7 +98,7 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                                                       textStyle: {
                                                           backgroundColor: '#1A1C2B',
                                                           fontSize: '11px',
-                                                          top: '-8px',
+                                                          top: '-9px',
                                                       },
                                                   }
                                                 : undefined

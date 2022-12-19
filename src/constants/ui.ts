@@ -35,6 +35,7 @@ export const STATUS_COLOR = {
 
 export const MAIN_COLORS = {
     LIGHT_GRAY: '#303656',
+    GRAY: '#242842',
     DARK_GRAY: '#1A1C2B',
     DISABLED_GRAY: '#303656',
     LIGHT_BLUE: '#3FD1FF',

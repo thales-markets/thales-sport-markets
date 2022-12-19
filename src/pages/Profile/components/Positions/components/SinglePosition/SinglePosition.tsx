@@ -252,9 +252,8 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                     ? {
                                           text: spreadTotalText,
                                           textStyle: {
-                                              backgroundColor: '#2f3454',
                                               fontSize: '11px',
-                                              top: '-8px',
+                                              top: '-9px',
                                           },
                                       }
                                     : undefined

@@ -135,7 +135,7 @@ const UpperText = styled(FlexDivCentered)`
     color: ${MAIN_COLORS.TEXT.WHITE};
     border-radius: 60%;
     font-weight: 700;
-    background: #252940;
+    background: ${MAIN_COLORS.LIGHT_GRAY};
     padding: 2px;
 `;
 

@@ -9,6 +9,8 @@ import { formatMarketOdds, getSymbolText, isDiscounted } from 'utils/markets';
 import { getOddsType } from '../../../../../../redux/modules/ui';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { MAIN_COLORS } from 'constants/ui';
+import { getIsMobile } from 'redux/modules/app';
+import { BetType } from 'constants/tags';
 
 type OddProps = {
     market: SportMarketInfo;
@@ -22,11 +24,13 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
     const dispatch = useDispatch();
     const { trackEvent } = useMatomo();
     const selectedOddsType = useSelector(getOddsType);
+    const isMobile = useSelector(getIsMobile);
     const parlay = useSelector(getParlay);
     const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
     const isAddedToParlay = addedToParlay && addedToParlay.position == position;
     const discount = isDiscounted(priceImpact) && priceImpact ? Math.ceil(Math.abs(priceImpact)) : undefined;
     const disabled = odd == 0;
+    const isMainMarket = market.betType === BetType.WINNER;
 
     const onClick = () => {
         if (disabled) return;
@@ -61,6 +65,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
                           text: `+${discount}%`,
                           textStyle: {
                               color: MAIN_COLORS.BONUS,
+                              backgroundColor: isMobile && !isMainMarket ? MAIN_COLORS.GRAY : MAIN_COLORS.LIGHT_GRAY,
                           },
                       }
                     : undefined

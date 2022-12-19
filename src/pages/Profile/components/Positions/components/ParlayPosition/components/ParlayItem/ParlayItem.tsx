@@ -78,7 +78,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                     symbolBottomText={{
                         text: formatMarketOdds(selectedOddsType, parlayItemQuote),
                         textStyle: {
-                            marginLeft: '10px',
+                            marginLeft: '5px',
                         },
                     }}
                     symbolText={symbolText}
@@ -87,9 +87,8 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                             ? {
                                   text: spreadTotalText,
                                   textStyle: {
-                                      backgroundColor: '#2f3454',
                                       fontSize: '11px',
-                                      top: '-8px',
+                                      top: '-9px',
                                   },
                               }
                             : undefined

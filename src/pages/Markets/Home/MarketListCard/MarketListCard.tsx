@@ -15,7 +15,8 @@ import Odds from './components/Odds';
 import {
     TeamNameLabel,
     MatchInfoConatiner,
-    Container,
+    MainContainer,
+    ChildContainer,
     OddsWrapper,
     ResultWrapper,
     Result,
@@ -26,6 +27,8 @@ import {
     ClubLogo,
     VSLabel,
     TeamNamesConatiner,
+    Arrow,
+    Wrapper,
 } from './styled-components';
 
 type MarketRowCardProps = {
@@ -35,6 +38,7 @@ type MarketRowCardProps = {
 
 const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
 
@@ -48,19 +52,20 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
     const isPendingResolution = isLive && !isGameResolved;
     const showOdds = !isPendingResolution && !isGameResolved && !market.isPaused;
+    const hasChildMarkets = market.childMarkets.length > 0;
 
     return (
-        <Container isResolved={isGameRegularlyResolved}>
-            <MatchInfoConatiner data-matomo-category="market-list-card" data-matomo-action="click-market-details">
-                <SPAAnchor href={buildMarketLink(market.address, language)}>
-                    <MatchTimeLabel>
-                        {formatShortDateWithTime(market.maturityDate)}{' '}
-                        {isFifaWCGame(market.tags[0]) && (
-                            <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
-                        )}
-                    </MatchTimeLabel>
-                    <TeamsInfoConatiner>
-                        {!isMobile && (
+        <Wrapper isResolved={isGameRegularlyResolved}>
+            <MainContainer>
+                <MatchInfoConatiner data-matomo-category="market-list-card" data-matomo-action="click-market-details">
+                    <SPAAnchor href={buildMarketLink(market.address, language)}>
+                        <MatchTimeLabel>
+                            {formatShortDateWithTime(market.maturityDate)}{' '}
+                            {isFifaWCGame(market.tags[0]) && (
+                                <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
+                            )}
+                        </MatchTimeLabel>
+                        <TeamsInfoConatiner>
                             <TeamLogosConatiner>
                                 <ClubLogo
                                     height={market.tags[0] == 9018 ? '17px' : ''}
@@ -78,37 +83,56 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                                 />
                             </TeamLogosConatiner>
-                        )}
-                        <TeamNamesConatiner>
-                            <TeamNameLabel>{market.homeTeam}</TeamNameLabel>
-                            <TeamNameLabel>{market.awayTeam}</TeamNameLabel>
-                        </TeamNamesConatiner>
-                    </TeamsInfoConatiner>
-                </SPAAnchor>
-            </MatchInfoConatiner>
-            <OddsWrapper>
-                {showOdds && (
-                    <>
+                            <TeamNamesConatiner>
+                                <TeamNameLabel>{market.homeTeam}</TeamNameLabel>
+                                <TeamNameLabel>{market.awayTeam}</TeamNameLabel>
+                            </TeamNamesConatiner>
+                        </TeamsInfoConatiner>
+                    </SPAAnchor>
+                </MatchInfoConatiner>
+                <OddsWrapper>
+                    {showOdds && (
+                        <>
+                            {!isMobile && (
+                                <>
+                                    {market.childMarkets.map((childMarket) => (
+                                        <Odds market={childMarket} key={childMarket.address} />
+                                    ))}
+                                </>
+                            )}
+                            <Odds market={market} />
+                            {isMobile && hasChildMarkets && (
+                                <Arrow
+                                    className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
+                                    onClick={() => setIsExpanded(!isExpanded)}
+                                />
+                            )}
+                        </>
+                    )}
+                </OddsWrapper>
+                {isGameRegularlyResolved ? (
+                    <ResultWrapper>
+                        <ResultLabel>{t('markets.market-card.result')}:</ResultLabel>
+                        <Result>{`${market.homeScore}:${market.awayScore}`}</Result>
+                    </ResultWrapper>
+                ) : (
+                    <MatchStatus
+                        isPendingResolution={isPendingResolution}
+                        isCanceled={market.isCanceled}
+                        isPaused={market.isPaused}
+                    />
+                )}
+            </MainContainer>
+            {isMobile && showOdds && isExpanded && (
+                <ChildContainer>
+                    <OddsWrapper>
                         {market.childMarkets.map((childMarket) => (
                             <Odds market={childMarket} key={childMarket.address} />
                         ))}
-                        <Odds market={market} />
-                    </>
-                )}
-            </OddsWrapper>
-            {isGameRegularlyResolved ? (
-                <ResultWrapper>
-                    <ResultLabel>{t('markets.market-card.result')}:</ResultLabel>
-                    <Result>{`${market.homeScore}:${market.awayScore}`}</Result>
-                </ResultWrapper>
-            ) : (
-                <MatchStatus
-                    isPendingResolution={isPendingResolution}
-                    isCanceled={market.isCanceled}
-                    isPaused={market.isPaused}
-                />
+                    </OddsWrapper>
+                </ChildContainer>
             )}
-        </Container>
+        </Wrapper>
     );
 };
 
