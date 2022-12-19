@@ -40,14 +40,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     const notClickable = !onClick;
 
     return (
-        <Wrapper
-            disabled={disabled}
-            flexDirection={flexDirection}
-            notClickable={notClickable}
-            onClick={() => {
-                onClick && onClick();
-            }}
-        >
+        <Wrapper flexDirection={flexDirection}>
             <Symbol
                 glow={glow}
                 color={symbolColor}
@@ -56,6 +49,9 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                 notClickable={notClickable}
                 flexDirection={flexDirection}
                 disabled={disabled}
+                onClick={() => {
+                    onClick && onClick();
+                }}
             >
                 {symbolText}
                 {symbolUpperText && <UpperText style={symbolUpperText.textStyle}>{symbolUpperText.text}</UpperText>}
@@ -72,10 +68,12 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     );
 };
 
-const Wrapper = styled(FlexDivColumn)<{ disabled?: boolean; flexDirection?: string; notClickable?: boolean }>`
-    cursor: ${(props) => (props.disabled || props.notClickable ? 'default' : 'pointer')};
+const Wrapper = styled(FlexDivColumn)<{ flexDirection?: string }>`
     align-items: center;
     flex-direction: ${(props) => (props.flexDirection ? props.flexDirection : 'row')};
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 100%;
 `;
 
 const Symbol = styled(FlexDivCentered)<{
@@ -91,9 +89,7 @@ const Symbol = styled(FlexDivCentered)<{
     height: 30px;
     border-radius: 60%;
     color: ${(props) => (props.selected ? MAIN_COLORS.TEXT.BLUE : props.color || MAIN_COLORS.TEXT.WHITE)};
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 100%;
+    cursor: ${(props) => (props.disabled || props.notClickable ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? 0.4 : 1)};
     border: ${(props) =>
         `3px solid ${
@@ -111,17 +107,12 @@ const Symbol = styled(FlexDivCentered)<{
             color: ${(props) => (props.disabled || props.notClickable ? '' : MAIN_COLORS.BORDERS.BLUE)};
         }
     }
-    // @media (max-width: 575px) {
-    //     width: 25px;
-    //     height: 25px;
-    // }
 `;
 
 const BottomText = styled.span<{
     flexDirection?: string;
     color?: string;
 }>`
-    font-size: 12px;
     margin-top: ${(props) => (props.flexDirection === 'column' ? 2 : 0)}px;
     margin-right: ${(props) => (props.flexDirection === 'column' ? 0 : 10)}px;
     color: ${(props) => props.color || MAIN_COLORS.TEXT.WHITE};
@@ -131,7 +122,6 @@ const UpperText = styled(FlexDivCentered)`
     position: absolute;
     top: -7px;
     left: 15px;
-    font-size: 12px;
     color: ${MAIN_COLORS.TEXT.WHITE};
     border-radius: 60%;
     font-weight: 700;

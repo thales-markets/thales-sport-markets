@@ -123,7 +123,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                     />
                 )}
             </MainContainer>
-            {isMobile && showOdds && isExpanded && (
+            {isMobile && showOdds && isExpanded && hasChildMarkets && (
                 <ChildContainer>
                     <OddsWrapper>
                         {market.childMarkets.map((childMarket) => (
