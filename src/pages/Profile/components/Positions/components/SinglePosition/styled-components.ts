@@ -14,7 +14,7 @@ export const Wrapper = styled(FlexDivRow)`
     position: relative;
     @media (max-width: 768px) {
         justify-content: space-between;
-        padding: 3px 5px;
+        padding: 7px 5px;
     }
 `;
 
