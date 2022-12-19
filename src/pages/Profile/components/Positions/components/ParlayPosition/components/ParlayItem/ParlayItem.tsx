@@ -17,7 +17,6 @@ import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
 import { t } from 'i18next';
 import { formatDateWithTime } from 'utils/formatters/date';
-import { Position } from 'constants/options';
 
 const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | undefined; quote: number }> = ({
     market,
@@ -36,9 +35,6 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
 
     const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
 
-    const isHomeWinner = market.isResolved ? market.finalResult == 1 : positionEnum === Position.HOME;
-    const isAwayWinner = market.isResolved ? market.finalResult == 2 : positionEnum === Position.AWAY;
-
     const parlayItemQuote = market.isCanceled ? 1 : quote ? quote : 0;
     const parlayStatus = getParlayItemStatus(market);
 
@@ -53,7 +49,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                         alt={market.homeTeam}
                         src={homeLogoSrc}
                         isFlag={market.tags[0] == 9018}
-                        losingTeam={isAwayWinner}
+                        losingTeam={false}
                         onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                         customMobileSize={'35px'}
                     />
@@ -62,7 +58,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                         alt={market.awayTeam}
                         src={awayLogoSrc}
                         isFlag={market.tags[0] == 9018}
-                        losingTeam={isHomeWinner}
+                        losingTeam={false}
                         onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                         customMobileSize={'35px'}
                     />

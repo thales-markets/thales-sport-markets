@@ -268,7 +268,15 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                         <Label>{t('profile.card.starts')}</Label>
                         <BoldValue>{formatDateWithTime(position.market.maturityDate)}</BoldValue>
                     </ColumnDirectionInfo>
-                    <ExternalLink href={buildMarketLink(position.market.address, language)} target={'_blank'}>
+                    <ExternalLink
+                        href={buildMarketLink(
+                            position.market.parentMarket !== null
+                                ? position.market.parentMarket
+                                : position.market.address,
+                            language
+                        )}
+                        target={'_blank'}
+                    >
                         <ExternalLinkContainer>
                             <ExternalLinkArrow />
                         </ExternalLinkContainer>

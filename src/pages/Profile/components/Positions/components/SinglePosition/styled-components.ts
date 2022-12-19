@@ -14,6 +14,7 @@ export const Wrapper = styled(FlexDivRow)`
     position: relative;
     @media (max-width: 768px) {
         justify-content: space-between;
+        padding: 3px 5px;
     }
 `;
 
@@ -54,7 +55,7 @@ export const PositionContainer = styled(FlexDivRow)`
     margin-left: 15px;
     justify-content: flex-start;
     @media (max-width: 768px) {
-        margin-left: 5;
+        margin-left: 5px;
         flex-direction: column;
         min-width: 20px;
     }
@@ -74,9 +75,11 @@ export const ClaimInfoContainer = styled(ResultContainer)`
 `;
 
 export const ColumnDirectionInfo = styled(FlexDivColumnNative)`
-    margin-left: 20px;
+    margin-left: 25px;
+    :last-of-type {
+        margin-left: 10px;
+    }
     @media (max-width: 768px) {
         min-width: 40px;
-        margin-left: 15px;
     }
 `;
