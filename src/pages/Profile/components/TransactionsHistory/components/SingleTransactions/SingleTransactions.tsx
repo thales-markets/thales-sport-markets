@@ -99,6 +99,7 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                                                           backgroundColor: '#1A1C2B',
                                                           fontSize: '11px',
                                                           top: '-9px',
+                                                          lineHeight: '100%',
                                                       },
                                                   }
                                                 : undefined

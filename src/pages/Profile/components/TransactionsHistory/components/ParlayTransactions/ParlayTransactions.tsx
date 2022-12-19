@@ -256,7 +256,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                                         text: formatMarketOdds(selectedOddsType, quote),
                                         textStyle: {
                                             fontSize: '10.5px',
-                                            marginLeft: '5px',
+                                            marginLeft: '10px',
                                         },
                                     }}
                                     additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}

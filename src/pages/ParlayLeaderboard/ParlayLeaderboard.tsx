@@ -219,7 +219,7 @@ const ParlayLeaderboard: React.FC = () => {
                                         ),
                                         textStyle: {
                                             fontSize: '10.5px',
-                                            marginLeft: '5px',
+                                            marginLeft: '10px',
                                         },
                                     }}
                                     additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
@@ -322,7 +322,7 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
                         text: formatMarketOdds(OddsType.Decimal, parlay.marketQuotes ? parlay.marketQuotes[index] : 0),
                         textStyle: {
                             fontSize: '10.5px',
-                            marginLeft: '5px',
+                            marginLeft: '10px',
                         },
                     }}
                     additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}

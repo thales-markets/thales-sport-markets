@@ -72,8 +72,6 @@ const Wrapper = styled(FlexDivColumn)<{ flexDirection?: string }>`
     align-items: center;
     flex-direction: ${(props) => (props.flexDirection ? props.flexDirection : 'row')};
     font-size: 12px;
-    font-weight: 400;
-    line-height: 100%;
 `;
 
 const Symbol = styled(FlexDivCentered)<{
