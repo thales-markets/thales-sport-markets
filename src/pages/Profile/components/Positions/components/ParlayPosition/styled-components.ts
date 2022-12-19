@@ -204,6 +204,7 @@ export const ClaimButton = styled(Button)<{ claimable?: boolean }>`
     font-weight: 700;
     font-size: 15px;
     letter-spacing: 0.025em;
+    padding: 1px 15px 1px 15px;
     visibility: ${(props) => (!props.claimable ? 'hidden' : '')};
     @media (max-width: 768px) {
         position: initial;
