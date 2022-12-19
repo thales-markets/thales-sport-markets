@@ -26,8 +26,10 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
     const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
     const isAddedToParlay = addedToParlay && addedToParlay.position == position;
     const discount = isDiscounted(priceImpact) && priceImpact ? Math.ceil(Math.abs(priceImpact)) : undefined;
+    const disabled = odd == 0;
 
     const onClick = () => {
+        if (disabled) return;
         if (isAddedToParlay) {
             dispatch(removeFromParlay(market.address));
         } else {
@@ -63,7 +65,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
                       }
                     : undefined
             }
-            disabled={odd == 0}
+            disabled={disabled}
             flexDirection="column"
             symbolText={getSymbolText(position, market.betType)}
             onClick={onClick}

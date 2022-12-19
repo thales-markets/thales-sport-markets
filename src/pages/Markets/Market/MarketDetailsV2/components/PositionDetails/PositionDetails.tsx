@@ -1,13 +1,18 @@
 import Tooltip from 'components/Tooltip';
 import { Position } from 'constants/options';
-import { BetType } from 'constants/tags';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { MarketData, ParlaysMarketPosition } from 'types/markets';
-import { isDiscounted, formatMarketOdds, getSymbolText, convertFinalResultToResultType } from 'utils/markets';
+import {
+    isDiscounted,
+    formatMarketOdds,
+    getSymbolText,
+    convertFinalResultToResultType,
+    getSpreadTotalText,
+} from 'utils/markets';
 import { Discount, Container, Value } from './styled-components';
 
 type PositionDetailsProps = {
@@ -25,6 +30,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
 
     const parlay = useSelector(getParlay);
     const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
+    const isAddedToParlay = addedToParlay && addedToParlay.position == position;
     // ------------
 
     const isGameCancelled = market.cancelled || (!market.gameStarted && market.resolved);
@@ -38,32 +44,33 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
 
     const disabledPosition = !(odd || 0 > 0) || !isGameOpen;
 
+    const symbolText = getSymbolText(position, market.betType);
+    const spreadTotalText = getSpreadTotalText(market.betType, market.spread, market.total);
+
     return (
         <Container
             disabled={disabledPosition}
-            selected={addedToParlay && addedToParlay.position == position}
+            selected={isAddedToParlay}
             isWinner={isGameResolved && convertFinalResultToResultType(market.finalResult) == position}
             onClick={() => {
-                if (!disabledPosition) {
-                    if (addedToParlay && addedToParlay.position == position) {
-                        dispatch(removeFromParlay(market.address));
-                    } else {
-                        const parlayMarket: ParlaysMarketPosition = {
-                            parentMarket: market.parentMarket !== '' ? market.parentMarket : market.address,
-                            sportMarketAddress: market.address,
-                            position: position,
-                            homeTeam: market.homeTeam || '',
-                            awayTeam: market.awayTeam || '',
-                        };
-                        dispatch(updateParlay(parlayMarket));
-                    }
+                if (disabledPosition) return;
+                if (isGameResolved) {
+                    dispatch(removeFromParlay(market.address));
+                } else {
+                    const parlayMarket: ParlaysMarketPosition = {
+                        parentMarket: market.parentMarket !== '' ? market.parentMarket : market.address,
+                        sportMarketAddress: market.address,
+                        position: position,
+                        homeTeam: market.homeTeam || '',
+                        awayTeam: market.awayTeam || '',
+                    };
+                    dispatch(updateParlay(parlayMarket));
                 }
             }}
         >
             <Value>
-                {getSymbolText(position, market.betType)}
-                {market.betType == BetType.SPREAD && ` (${market.spread})`}
-                {market.betType == BetType.TOTAL && ` (${market.total})`}
+                {symbolText}
+                {spreadTotalText && ` (${spreadTotalText})`}
             </Value>
             {!isGameResolved && (
                 <Value>
@@ -89,11 +96,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                             </a>
                         </span>
                     }
-                    component={
-                        <Discount>
-                            <span>+{positionDiscount}%</span>
-                        </Discount>
-                    }
+                    component={<Discount>+{positionDiscount}%</Discount>}
                     iconFontSize={23}
                     marginLeft={2}
                     top={0}

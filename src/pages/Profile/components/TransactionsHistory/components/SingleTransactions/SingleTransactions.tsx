@@ -1,3 +1,4 @@
+import PositionSymbol from 'components/PositionSymbol';
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
 import { ethers } from 'ethers';
@@ -15,6 +16,7 @@ import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
+    getSpreadTotalText,
     getSymbolText,
 } from 'utils/markets';
 
@@ -74,15 +76,34 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                         accessor: 'position',
                         sortable: false,
                         Cell: (cellProps: any) => {
+                            const symbolText = getSymbolText(
+                                convertPositionNameToPositionType(cellProps.cell.value),
+                                cellProps.cell.row.original.wholeMarket.betType
+                            );
+
+                            const spreadTotalText = getSpreadTotalText(
+                                cellProps.cell.row.original.wholeMarket.betType,
+                                cellProps.cell.row.original.wholeMarket.spread,
+                                cellProps.cell.row.original.wholeMarket.total
+                            );
+
                             return (
                                 <FlexCenter>
-                                    <TableText>{cellProps.cell.value}</TableText>
-                                    <CircleNumber>
-                                        {getSymbolText(
-                                            convertPositionNameToPositionType(cellProps.cell.value),
-                                            cellProps.cell.row.original.wholeMarket.betType
-                                        )}
-                                    </CircleNumber>
+                                    <PositionSymbol
+                                        symbolText={symbolText}
+                                        symbolUpperText={
+                                            spreadTotalText
+                                                ? {
+                                                      text: spreadTotalText,
+                                                      textStyle: {
+                                                          backgroundColor: '#1A1C2B',
+                                                          fontSize: '11px',
+                                                          top: '-8px',
+                                                      },
+                                                  }
+                                                : undefined
+                                        }
+                                    />
                                 </FlexCenter>
                             );
                         },
@@ -197,28 +218,6 @@ const FlexCenter = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-`;
-
-const CircleNumber = styled.span`
-    display: flex;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    color: #ffffff;
-    background: #1a1c2b;
-    border: 2px solid #ffffff;
-    border-radius: 50%;
-    width: 23px;
-    height: 23px;
-    align-items: center;
-    justify-content: center;
-    margin-left: 4px;
-    @media (max-width: 600px) {
-        font-size: 10px;
-        width: 18px;
-        height: 18px;
-    }
 `;
 
 export default TransactionsHistory;

@@ -80,8 +80,8 @@ const useChildMarketsQuery = (parentMarket: MarketData, options?: UseQueryOption
                             parentMarket: parentMarket.address,
                             childMarketsAddresses: [],
                             childMarkets: [],
-                            spread: Number(spread) / 100,
-                            total: Number(total) / 100,
+                            spread: Number(spread),
+                            total: Number(total),
                         };
 
                         return market;

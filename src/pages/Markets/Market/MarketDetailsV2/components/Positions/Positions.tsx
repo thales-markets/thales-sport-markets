@@ -1,8 +1,8 @@
-import { BetType } from 'constants/tags';
+import { BetType, BetTypeNameMap } from 'constants/tags';
 import React, { useState } from 'react';
 import { MarketData } from 'types/markets';
 import MarketPositions from '../MarketPositions';
-// import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Container, Header, Title, ContentContianer, Arrow, ContentRow } from './styled-components';
 
 type PositionsProps = {
@@ -11,15 +11,13 @@ type PositionsProps = {
 };
 
 const Positions: React.FC<PositionsProps> = ({ markets, betType }) => {
-    // const { t } = useTranslation();
+    const { t } = useTranslation();
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
     return (
         <Container>
             <Header>
-                <Title isExpanded={isExpanded}>
-                    {betType === BetType.WINNER ? 'WINNER' : betType === BetType.SPREAD ? 'HANDICAP' : 'TOTAL'}
-                </Title>
+                <Title isExpanded={isExpanded}>{t(`markets.market-card.bet-type.${BetTypeNameMap[betType]}`)}</Title>
             </Header>
             <Arrow
                 className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}

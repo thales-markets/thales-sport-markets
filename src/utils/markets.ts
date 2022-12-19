@@ -115,9 +115,9 @@ export const getSymbolText = (position: Position, betType: BetType) => {
 export const getSpreadTotalText = (betType: BetType, spread: number, total: number) => {
     switch (Number(betType)) {
         case BetType.SPREAD:
-            return spread.toString();
+            return (Number(spread) / 100).toString();
         case BetType.TOTAL:
-            return total.toString();
+            return (Number(total) / 100).toString();
         default:
             return undefined;
     }

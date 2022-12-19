@@ -27,6 +27,7 @@ import {
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
     formatMarketOdds,
+    getSpreadTotalText,
     getSymbolText,
 } from 'utils/markets';
 
@@ -194,6 +195,14 @@ const ParlayLeaderboard: React.FC = () => {
                         );
 
                         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
+
+                        const symbolText = getSymbolText(positionEnum, position.market.betType);
+                        const spreadTotalText = getSpreadTotalText(
+                            position.market.betType,
+                            position.market.spread,
+                            position.market.total
+                        );
+
                         return (
                             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
                                 <ParlayRowText>
@@ -203,7 +212,6 @@ const ParlayLeaderboard: React.FC = () => {
                                     </ParlayRowTeam>
                                 </ParlayRowText>
                                 <PositionSymbol
-                                    symbolFontSize={10}
                                     symbolBottomText={{
                                         text: formatMarketOdds(
                                             OddsType.Decimal,
@@ -214,8 +222,21 @@ const ParlayLeaderboard: React.FC = () => {
                                             marginLeft: '5px',
                                         },
                                     }}
-                                    additionalStyle={{ width: 21, height: 21, fontSize: 10 }}
-                                    symbolText={getSymbolText(positionEnum, position.market.betType)}
+                                    additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
+                                    symbolText={symbolText}
+                                    symbolUpperText={
+                                        spreadTotalText
+                                            ? {
+                                                  text: spreadTotalText,
+                                                  textStyle: {
+                                                      backgroundColor: '#1A1C2B',
+                                                      fontSize: '10px',
+                                                      top: '-9px',
+                                                      left: '10px',
+                                                  },
+                                              }
+                                            : undefined
+                                    }
                                 />
                                 <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
                             </ParlayRow>
@@ -280,6 +301,14 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
         if (!position) return;
 
         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
+
+        const symbolText = getSymbolText(positionEnum, position.market.betType);
+        const spreadTotalText = getSpreadTotalText(
+            position.market.betType,
+            position.market.spread,
+            position.market.total
+        );
+
         return (
             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
                 <ParlayRowText>
@@ -289,7 +318,6 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
                     </ParlayRowTeam>
                 </ParlayRowText>
                 <PositionSymbol
-                    symbolFontSize={10}
                     symbolBottomText={{
                         text: formatMarketOdds(OddsType.Decimal, parlay.marketQuotes ? parlay.marketQuotes[index] : 0),
                         textStyle: {
@@ -297,8 +325,21 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
                             marginLeft: '5px',
                         },
                     }}
-                    additionalStyle={{ width: 21, height: 21, fontSize: 10 }}
-                    symbolText={getSymbolText(positionEnum, position.market.betType)}
+                    additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
+                    symbolText={symbolText}
+                    symbolUpperText={
+                        spreadTotalText
+                            ? {
+                                  text: spreadTotalText,
+                                  textStyle: {
+                                      backgroundColor: '#1A1C2B',
+                                      fontSize: '10px',
+                                      top: '-9px',
+                                      left: '10px',
+                                  },
+                              }
+                            : undefined
+                    }
                 />
                 <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
             </ParlayRow>

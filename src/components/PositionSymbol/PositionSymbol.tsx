@@ -7,7 +7,6 @@ import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 type SymbolProps = {
     symbolText: string;
     symbolColor?: string;
-    symbolFontSize?: number;
     symbolBottomText?: {
         text?: string;
         tooltip?: string;
@@ -29,7 +28,6 @@ type SymbolProps = {
 const PositionSymbol: React.FC<SymbolProps> = ({
     symbolText,
     symbolColor,
-    symbolFontSize,
     symbolBottomText,
     symbolUpperText,
     selected,
@@ -58,14 +56,9 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                 notClickable={notClickable}
                 flexDirection={flexDirection}
                 disabled={disabled}
-                fontSize={symbolFontSize}
             >
                 {symbolText}
-                {symbolUpperText && (
-                    <UpperText style={symbolUpperText.textStyle}>
-                        <span>{symbolUpperText.text}</span>
-                    </UpperText>
-                )}
+                {symbolUpperText && <UpperText style={symbolUpperText.textStyle}>{symbolUpperText.text}</UpperText>}
             </Symbol>
             {symbolBottomText && (
                 <BottomText style={symbolBottomText.textStyle} flexDirection={flexDirection} color={symbolColor}>
@@ -92,14 +85,15 @@ const Symbol = styled(FlexDivCentered)<{
     disabled?: boolean;
     notClickable?: boolean;
     flexDirection?: string;
-    fontSize?: number;
 }>`
     position: relative;
     width: 30px;
     height: 30px;
     border-radius: 60%;
     color: ${(props) => (props.selected ? MAIN_COLORS.TEXT.BLUE : props.color || MAIN_COLORS.TEXT.WHITE)};
-    font-size: ${(props) => props.fontSize || 12}px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 100%;
     opacity: ${(props) => (props.disabled ? 0.4 : 1)};
     border: ${(props) =>
         `3px solid ${
@@ -111,9 +105,11 @@ const Symbol = styled(FlexDivCentered)<{
         }`};
     box-shadow: ${(props) => (props.glow ? `0 0 6px 2px ${props.color || MAIN_COLORS.BORDERS.WHITE}` : '')};
     margin: ${(props) => (props.flexDirection === 'column' ? '0 10px' : '0 0')};
-    :hover {
-        border: ${(props) => (props.disabled || props.notClickable ? '' : `3px solid ${MAIN_COLORS.BORDERS.BLUE}`)};
-        color: ${(props) => (props.disabled || props.notClickable ? '' : MAIN_COLORS.BORDERS.BLUE)};
+    @media (hover: hover) {
+        :hover {
+            border-color: ${(props) => (props.disabled || props.notClickable ? '' : MAIN_COLORS.BORDERS.BLUE)};
+            color: ${(props) => (props.disabled || props.notClickable ? '' : MAIN_COLORS.BORDERS.BLUE)};
+        }
     }
     // @media (max-width: 575px) {
     //     width: 25px;

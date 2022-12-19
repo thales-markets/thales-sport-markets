@@ -13,7 +13,7 @@ type MatchInfoProps = {
     market: ParlaysMarket;
     readOnly?: boolean;
     isHighlighted?: boolean;
-    customStyle?: { fontSize?: string; lineHeight?: string; positionColor?: string };
+    customStyle?: { fontSize?: string; lineHeight?: string };
 };
 
 const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, customStyle }) => {
@@ -38,8 +38,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                 symbolBottomText={{
                     text: formatMarketOdds(selectedOddsType, getPositionOdds(market)),
                     textStyle: {
-                        fontSize: customStyle?.fontSize ? customStyle?.fontSize : '12px',
-                        marginLeft: '10px',
+                        marginLeft: '5px',
                     },
                 }}
                 symbolText={symbolText}
@@ -48,7 +47,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                         ? {
                               text: spreadTotalText,
                               textStyle: {
-                                  backgroundColor: '#2f3454',
+                                  backgroundColor: customStyle ? '#23273e' : '#2f3454',
                                   fontSize: '11px',
                                   top: '-8px',
                               },

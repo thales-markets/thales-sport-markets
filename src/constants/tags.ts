@@ -180,3 +180,9 @@ export enum BetType {
     SPREAD = 10001,
     TOTAL = 10002,
 }
+
+export const BetTypeNameMap: Record<BetType, string> = {
+    [BetType.WINNER]: 'winner',
+    [BetType.SPREAD]: 'spread',
+    [BetType.TOTAL]: 'total',
+};

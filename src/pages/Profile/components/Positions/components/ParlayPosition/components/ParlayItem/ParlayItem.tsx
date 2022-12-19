@@ -42,7 +42,6 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
     const parlayItemQuote = market.isCanceled ? 1 : quote ? quote : 0;
     const parlayStatus = getParlayItemStatus(market);
 
-    console.log(market);
     const symbolText = getSymbolText(positionEnum, market.betType);
     const spreadTotalText = getSpreadTotalText(market.betType, market.spread, market.total);
 
@@ -79,7 +78,6 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                     symbolBottomText={{
                         text: formatMarketOdds(selectedOddsType, parlayItemQuote),
                         textStyle: {
-                            fontSize: '12px',
                             marginLeft: '10px',
                         },
                     }}
