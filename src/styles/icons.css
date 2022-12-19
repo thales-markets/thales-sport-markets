@@ -265,3 +265,11 @@
 .icon--competition::before {
     content: '\007C';
 }
+
+.icon--exchange::before {
+    content: '\007D';
+}
+
+.icon--card::before {
+    content: '\007E';
+}

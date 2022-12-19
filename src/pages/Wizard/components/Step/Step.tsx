@@ -75,11 +75,11 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                 transKey += isWalletConnected ? '.connected' : '.connect-wallet';
                 break;
             case WizardStep.FUND:
-                className = 'icon--wallet-connected'; // TODO:
+                className = 'icon--card';
                 transKey += '.fund';
                 break;
             case WizardStep.EXCHANGE:
-                className = 'icon--wallet-connected'; // TODO:
+                className = 'icon--exchange';
                 transKey += '.exchange';
                 break;
             case WizardStep.TRADE:
