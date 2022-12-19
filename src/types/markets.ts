@@ -41,6 +41,7 @@ export type MarketInfo = {
 export type SportMarketInfo = {
     id: string;
     address: string;
+    gameId: string;
     maturityDate: Date;
     tags: number[];
     isOpen: boolean;
@@ -95,6 +96,7 @@ export type AvailablePerSide = {
 
 export type MarketData = {
     address: string;
+    gameId: string;
     gameDetails: GameDetails;
     positions: Record<Position, { sides: Record<Side, { odd: number | undefined }> }>;
     tags: number[];
