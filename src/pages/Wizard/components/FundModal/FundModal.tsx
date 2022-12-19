@@ -6,14 +6,13 @@ import BungeePlugin from 'components/BungeePlugin';
 import Modal from 'components/Modal';
 import SimpleLoader from 'components/SimpleLoader';
 import { t } from 'i18next';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import QRCode from 'react-qr-code';
 import { useSelector } from 'react-redux';
 import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { generateReferralLink } from 'utils/referral';
 import { buildHref } from 'utils/routes';
 
 type FundModalProps = {
@@ -65,10 +64,8 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
 
     const onBridgeClickHandler = () => setShowBungeePlugin(true);
 
-    const referralLink = useMemo(() => generateReferralLink(walletAddress), [walletAddress]);
-
     const onCopyAddressClickHandler = () => {
-        navigator.clipboard.writeText(referralLink);
+        navigator.clipboard.writeText(walletAddress);
         setAddressCoppied(true);
     };
 
@@ -109,7 +106,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             </ButtonDiv>
                         </ButtonWrapper>
                         <Logo>
-                            <QRCode size={60} value={referralLink} />
+                            <QRCode size={60} value={walletAddress} />
                             <LogoLabel>{t('wizard.fund-modal.address')}</LogoLabel>
                         </Logo>
                     </Row>

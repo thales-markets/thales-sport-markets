@@ -23,6 +23,7 @@ const customStyles = {
         padding: '0px',
         background: 'transparent',
         border: 'none',
+        overflow: 'none',
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -56,12 +57,10 @@ const Container = styled.div`
     border: 1px solid ${(props) => props.theme.borderColor.primary};
     background: ${(props) => props.theme.background.primary};
     padding: 25px 30px 35px 30px;
-    overflow: auto;
     border-radius: 23px;
     @media (max-width: 575px) {
         padding: 25px 20px 35px 20px;
     }
-    overflow-y: auto;
     max-height: 100vh;
     height: fit-content;
 `;

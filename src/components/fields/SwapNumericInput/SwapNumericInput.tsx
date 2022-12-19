@@ -20,6 +20,7 @@ type SwapNumericInputProps = {
     validationMessage?: string;
     readOnly?: boolean;
     isGettingQuote?: boolean;
+    autoFocus?: boolean;
 };
 
 const INVALID_CHARS = ['-', '+', 'e'];

@@ -10,9 +10,16 @@ type StatusDropdownProps = {
     onSelect: any;
     readOnly?: boolean;
     disabled?: boolean;
+    isParentInputEnabled?: boolean;
 };
 
-export const TokenDropdown: React.FC<StatusDropdownProps> = ({ selectedToken, onSelect, readOnly, disabled }) => {
+export const TokenDropdown: React.FC<StatusDropdownProps> = ({
+    selectedToken,
+    onSelect,
+    readOnly,
+    disabled,
+    isParentInputEnabled,
+}) => {
     const [tokenDropdownIsOpen, setTokenDropdownIsOpen] = useState(false);
     const setDropdownIsOpen = (isOpen: boolean) => {
         if (!isOpen && !tokenDropdownIsOpen) {
@@ -33,6 +40,7 @@ export const TokenDropdown: React.FC<StatusDropdownProps> = ({ selectedToken, on
                         }}
                         readOnly={readOnly}
                         className={disabled ? 'disabled' : ''}
+                        isParentInputEnabled={isParentInputEnabled}
                     >
                         <FlexDiv>
                             <TokenIcon src={selectedToken.logoURI} />
@@ -72,17 +80,22 @@ const Container = styled(FlexDivColumnCentered)<{ readOnly?: boolean }>`
     width: 140px;
     position: absolute;
     top: 28px;
-    left: 5px;
+    left: 7px;
     z-index: ${(props) => (props.readOnly ? 1 : 2)};
 `;
 
-const TokenButton = styled.button<{ readOnly?: boolean }>`
+const TokenButton = styled.button<{ readOnly?: boolean; isParentInputEnabled?: boolean }>`
     position: relative;
     width: 140px;
     height: 34px;
     border: none;
     background: ${(props) => (props.readOnly ? 'transparent' : props.theme.input.background.primary)};
-    color: ${(props) => (props.readOnly ? props.theme.textColor.primary : props.theme.input.textColor.primary)};
+    color: ${(props) =>
+        props.readOnly
+            ? props.isParentInputEnabled
+                ? props.theme.input.textColor.primary
+                : props.theme.textColor.primary
+            : props.theme.input.textColor.primary};
     border-radius: 10px;
     font-size: 18px;
     line-height: 25px;
@@ -129,7 +142,6 @@ const TokenName = styled.div`
     line-height: 20px;
     color: ${(props) => props.theme.input.textColor.primary};
     display: block;
-    text-transform: capitalize;
 `;
 
 const TokenIcon = styled.img`

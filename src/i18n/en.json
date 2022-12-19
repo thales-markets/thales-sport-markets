@@ -57,7 +57,7 @@
             }
         },
         "swap": {
-            "title": "Get {{currencyKey}}",
+            "title": "Get USD",
             "from-label": "From",
             "to-label": "To",
             "balance-label": "Balance: {{amount}}",
@@ -176,7 +176,7 @@
             "save-image-error": "Failed to save image! Try again",
             "save-image-cancel": "Image saving canceled!",
             "image-in-clipboard": "Image is in clipboard!",
-            "open-twitter": "Openning Twitter...",
+            "open-twitter": "Opening Twitter...",
             "click-open-twitter": "Click here to open Twitter",
             "metamask-not-supported": "Metamask browser doesn't support image download! Please use another browser to share image",
             "ios-not-supported": "Sharing images not supported on iOS devices. If you want to share the image please use desktop version"
