@@ -10,16 +10,9 @@ type StatusDropdownProps = {
     onSelect: any;
     readOnly?: boolean;
     disabled?: boolean;
-    isParentInputEnabled?: boolean;
 };
 
-export const TokenDropdown: React.FC<StatusDropdownProps> = ({
-    selectedToken,
-    onSelect,
-    readOnly,
-    disabled,
-    isParentInputEnabled,
-}) => {
+export const TokenDropdown: React.FC<StatusDropdownProps> = ({ selectedToken, onSelect, readOnly, disabled }) => {
     const [tokenDropdownIsOpen, setTokenDropdownIsOpen] = useState(false);
     const setDropdownIsOpen = (isOpen: boolean) => {
         if (!isOpen && !tokenDropdownIsOpen) {
@@ -40,13 +33,12 @@ export const TokenDropdown: React.FC<StatusDropdownProps> = ({
                         }}
                         readOnly={readOnly}
                         className={disabled ? 'disabled' : ''}
-                        isParentInputEnabled={isParentInputEnabled}
                     >
-                        <FlexDiv>
+                        <ButtonContent>
                             <TokenIcon src={selectedToken.logoURI} />
                             {selectedToken.symbol}
                             {!readOnly && <ArrowDownIcon />}
-                        </FlexDiv>
+                        </ButtonContent>
                     </TokenButton>
                     {tokenDropdownIsOpen && (
                         <DropdownContainer>
@@ -84,31 +76,30 @@ const Container = styled(FlexDivColumnCentered)<{ readOnly?: boolean }>`
     z-index: ${(props) => (props.readOnly ? 1 : 2)};
 `;
 
-const TokenButton = styled.button<{ readOnly?: boolean; isParentInputEnabled?: boolean }>`
+const TokenButton = styled.button<{ readOnly?: boolean }>`
     position: relative;
     width: 140px;
     height: 34px;
-    border: none;
-    background: ${(props) => (props.readOnly ? 'transparent' : props.theme.input.background.primary)};
-    color: ${(props) =>
-        props.readOnly
-            ? props.isParentInputEnabled
-                ? props.theme.input.textColor.primary
-                : props.theme.textColor.primary
-            : props.theme.input.textColor.primary};
+    border: ${(props) => (props.readOnly ? 'none' : `1px solid ${props.theme.button.borderColor.primary}`)};
+    background: ${(props) => (props.readOnly ? 'transparent' : props.theme.button.background.tertiary)};
+    color: ${(props) => (props.readOnly ? props.theme.button.textColor.secondary : props.theme.textColor.primary)};
     border-radius: 10px;
     font-size: 18px;
     line-height: 25px;
     padding-left: 15px;
     &:hover:not(.disabled) {
         cursor: ${(props) => (props.readOnly ? 'default' : 'pointer')};
-        background: ${(props) => (props.readOnly ? 'transparent' : '#96e6ff')};
+        background: ${(props) => (props.readOnly ? 'transparent' : '#51546f')};
     }
     &.disabled {
         opacity: ${(props) => (props.readOnly ? 1 : 0.4)};
         cursor: default;
         background: transparent;
     }
+`;
+
+const ButtonContent = styled(FlexDiv)`
+    line-height: 24px;
 `;
 
 const DropdownContainer = styled.div`
@@ -118,7 +109,7 @@ const DropdownContainer = styled.div`
 
 const DropDown = styled(FlexDivColumn)`
     border: 1px solid ${(props) => props.theme.input.borderColor.secondary};
-    background: ${(props) => props.theme.input.background.primary};
+    background: ${(props) => props.theme.button.background.tertiary};
     color: ${(props) => props.theme.input.textColor.primary};
     border-radius: 10px;
     position: absolute;
@@ -131,7 +122,7 @@ const DropDownItem = styled(FlexDiv)`
     padding: 7px 10px 9px 10px;
     cursor: pointer;
     &:hover {
-        background: #96e6ff;
+        background: #51546f;
         border-radius: 12px;
     }
 `;
@@ -140,7 +131,7 @@ const TokenName = styled.div`
     font-weight: 500;
     font-size: 18px;
     line-height: 20px;
-    color: ${(props) => props.theme.input.textColor.primary};
+    color: ${(props) => props.theme.textColor.primary};
     display: block;
 `;
 
@@ -160,7 +151,7 @@ const ArrowDownIcon = styled.i`
     &:before {
         font-family: ExoticIcons !important;
         content: '\\004D';
-        color: ${(props) => props.theme.input.textColor.primary};
+        color: ${(props) => props.theme.textColor.primary};
     }
 `;
 

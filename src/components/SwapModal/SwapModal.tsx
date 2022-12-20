@@ -166,13 +166,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
         <Modal title={t('common.swap.title')} onClose={onClose} shouldCloseOnOverlayClick={false}>
             <Container>
                 <InputContainer>
-                    <TokenDropdown
-                        selectedToken={sourceToken}
-                        onSelect={() => {}}
-                        readOnly
-                        disabled
-                        isParentInputEnabled
-                    />
+                    <TokenDropdown selectedToken={sourceToken} onSelect={() => {}} readOnly disabled />
                     <SwapNumericInput
                         value={amount}
                         label={t('common.swap.from-label')}
@@ -185,12 +179,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
                     />
                 </InputContainer>
                 <InputContainer>
-                    <TokenDropdown
-                        selectedToken={selectedToken}
-                        disabled={isSubmitting}
-                        onSelect={setSelectedToken}
-                        readOnly={isSubmitting}
-                    />
+                    <TokenDropdown selectedToken={selectedToken} disabled={isSubmitting} onSelect={setSelectedToken} />
                     <SwapNumericInput
                         value={outputAmount}
                         label={t('common.swap.to-label')}
