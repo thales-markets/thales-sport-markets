@@ -273,7 +273,8 @@
                 "total": "Общее количество",
                 "winner": "Победитель",
                 "spread": "Гандикап"
-            }
+            },
+            "pending": "В ожидании"
         },
         "market-details": {
             "price": "Price",

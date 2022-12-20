@@ -87,7 +87,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [totalQuote, setTotalQuote] = useState(0);
-    const [totalBonus, setTotalBonus] = useState(0);
+    const [totalBonus, setTotalBonus] = useState('');
     const [finalQuotes, setFinalQuotes] = useState<number[]>([]);
     const [skew, setSkew] = useState(0);
     const [totalBuyAmount, setTotalBuyAmount] = useState(0);
@@ -167,11 +167,12 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
 
     useEffect(() => {
-        let bonus = 0;
+        let bonus = 1;
         markets.forEach((market) => {
-            bonus += getBonus(market);
+            const bonusDecimal = getBonus(market) / 100 + 1;
+            bonus *= bonusDecimal;
         });
-        setTotalBonus(bonus);
+        setTotalBonus(((bonus - 1) * 100).toFixed(2));
     }, [markets]);
 
     // Clear Parlay when network is changed

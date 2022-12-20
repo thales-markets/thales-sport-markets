@@ -371,7 +371,8 @@
                 "winner": "Gagnant",
                 "spread": "Handicap",
                 "total": "Total"
-            }
+            },
+            "pending": "En attente"
         },
         "market-details": {
             "wallet-info": {
