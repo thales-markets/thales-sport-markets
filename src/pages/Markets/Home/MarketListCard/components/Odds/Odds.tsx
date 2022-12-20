@@ -4,7 +4,7 @@ import { STATUS_COLOR } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SportMarketInfo } from 'types/markets';
-import { getSpreadTotalText, getVisibilityOfDrawOptionByTagId } from 'utils/markets';
+import { getSpreadTotalText, getVisibilityOfDrawOption } from 'utils/markets';
 import { Status } from '../MatchStatus/MatchStatus';
 import Odd from '../Odd/Odd';
 import { Container, OddsContainer, Title } from './styled-components';
@@ -19,7 +19,7 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
     const isLive = market.maturityDate < new Date();
     const isGameResolved = market.isResolved || market.isCanceled;
     const noOdds = market.awayOdds == 0 && market.homeOdds == 0 && !isLive && !isGameResolved && !market.isPaused;
-    const showDrawOdds = getVisibilityOfDrawOptionByTagId(market.tags);
+    const showDrawOdds = getVisibilityOfDrawOption(market.tags, market.betType);
     const spreadTotalText = getSpreadTotalText(market.betType, market.spread, market.total);
 
     return (

@@ -6,7 +6,7 @@ import { getIsWalletConnected } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 // import { useTranslation } from 'react-i18next';
 import { MarketData } from 'types/markets';
-import { getVisibilityOfDrawOptionByTagId } from 'utils/markets';
+import { getVisibilityOfDrawOption } from 'utils/markets';
 import PositionDetails from '../PositionDetails';
 
 type MarketPositionsProps = {
@@ -38,7 +38,7 @@ const MarketPositions: React.FC<MarketPositionsProps> = ({ market }) => {
                   },
               };
 
-    const showDrawOdds = getVisibilityOfDrawOptionByTagId(market.tags);
+    const showDrawOdds = getVisibilityOfDrawOption(market.tags, market.betType);
 
     return (
         <>

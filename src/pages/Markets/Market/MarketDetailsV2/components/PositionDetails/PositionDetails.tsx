@@ -34,15 +34,18 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
     // ------------
 
     const isGameCancelled = market.cancelled || (!market.gameStarted && market.resolved);
-    const isGameResolved = market.gameStarted && market.resolved;
-    const isGamePaused = market.paused && !isGameResolved && !isGameCancelled;
+    const isGameResolved = market.resolved || market.cancelled;
+    const isGameRegularlyResolved = market.resolved && !market.cancelled;
+    const isPendingResolution = market.gameStarted && !isGameResolved;
+    const isGamePaused = market.paused && !isGameResolved;
     const isGameOpen = !market.resolved && !market.cancelled && !market.paused && !market.gameStarted;
 
     const showDiscount =
         isGameOpen && !!availablePerPosition.buyImpactPrice && isDiscounted(availablePerPosition.buyImpactPrice);
     const positionDiscount = showDiscount ? Math.ceil(Math.abs(Number(availablePerPosition.buyImpactPrice) * 100)) : 0;
 
-    const disabledPosition = !(odd || 0 > 0) || !isGameOpen;
+    const noOdd = !odd || odd == 0;
+    const disabledPosition = noOdd || !isGameOpen;
 
     const symbolText = getSymbolText(position, market.betType);
     const spreadTotalText = getSpreadTotalText(market.betType, market.spread, market.total);
@@ -51,10 +54,10 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
         <Container
             disabled={disabledPosition}
             selected={isAddedToParlay}
-            isWinner={isGameResolved && convertFinalResultToResultType(market.finalResult) == position}
+            isWinner={isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == position}
             onClick={() => {
                 if (disabledPosition) return;
-                if (isGameResolved) {
+                if (isAddedToParlay) {
                     dispatch(removeFromParlay(market.address));
                 } else {
                     const parlayMarket: ParlaysMarketPosition = {
@@ -72,36 +75,21 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                 {symbolText}
                 {spreadTotalText && ` (${spreadTotalText})`}
             </Value>
-            {!isGameResolved && (
+            {!isGameRegularlyResolved && (
                 <Value>
-                    {isGameCancelled
+                    {isPendingResolution
+                        ? `- ${t('markets.market-card.pending')} -`
+                        : isGameCancelled
                         ? `- ${t('markets.market-card.canceled')} -`
                         : isGamePaused
                         ? `- ${t('markets.market-card.paused')} -`
                         : formatMarketOdds(selectedOddsType, odd)}
+                    {noOdd && (
+                        <Tooltip overlay={<>{t('markets.zero-odds-tooltip')}</>} iconFontSize={13} marginLeft={3} />
+                    )}
                 </Value>
             )}
-            {showDiscount && (
-                <Tooltip
-                    overlay={
-                        <span>
-                            {t(`markets.discounted-per`)}{' '}
-                            <a
-                                href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
-                                target="_blank"
-                                rel="noreferrer"
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                TIP-95
-                            </a>
-                        </span>
-                    }
-                    component={<Discount>+{positionDiscount}%</Discount>}
-                    iconFontSize={23}
-                    marginLeft={2}
-                    top={0}
-                />
-            )}
+            {showDiscount && <Discount>+{positionDiscount}%</Discount>}
         </Container>
     );
 };

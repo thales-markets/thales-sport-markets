@@ -113,11 +113,12 @@ export const getSymbolText = (position: Position, betType: BetType) => {
 };
 
 export const getSpreadTotalText = (betType: BetType, spread: number, total: number) => {
+    console.log(Number(spread));
     switch (Number(betType)) {
         case BetType.SPREAD:
-            return (Number(spread) / 100).toString();
+            return `${Number(spread) > 0 ? '+' : ''}${Number(spread) / 100}`;
         case BetType.TOTAL:
-            return (Number(total) / 100).toString();
+            return `${Number(total) / 100}`;
         default:
             return undefined;
     }
@@ -253,9 +254,9 @@ export const getPositionOddsFromSportMarket = (market: SportMarketInfo, position
         : 0;
 };
 
-export const getVisibilityOfDrawOptionByTagId = (tags: Array<number>) => {
+export const getVisibilityOfDrawOption = (tags: Array<number>, betType: BetType) => {
     const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(Number(element)));
-    if (tag) return false;
+    if (tag || betType !== BetType.WINNER) return false;
     return true;
 };
 

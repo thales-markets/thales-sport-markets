@@ -18,7 +18,7 @@ export const MainContainer = styled(FlexDivRow)`
     width: 100%;
     padding: 6px 8px 4px 8px;
     @media (max-width: 950px) {
-        padding-right: 15px;
+        padding-right: 18px;
     }
 `;
 
@@ -94,7 +94,7 @@ export const Arrow = styled.i`
     font-size: 14px;
     position: absolute;
     bottom: 0px;
-    right: -8px;
+    right: -11px;
     cursor: pointer;
 `;
 

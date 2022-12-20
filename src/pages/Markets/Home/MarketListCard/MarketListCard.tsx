@@ -47,10 +47,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
     }, [market.homeTeam, market.awayTeam, market.tags]);
 
-    const isLive = market.maturityDate < new Date();
+    const isGameStarted = market.maturityDate < new Date();
     const isGameResolved = market.isResolved || market.isCanceled;
     const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
-    const isPendingResolution = isLive && !isGameResolved;
+    const isPendingResolution = isGameStarted && !isGameResolved;
     const showOdds = !isPendingResolution && !isGameResolved && !market.isPaused;
     const hasChildMarkets = market.childMarkets.length > 0;
 

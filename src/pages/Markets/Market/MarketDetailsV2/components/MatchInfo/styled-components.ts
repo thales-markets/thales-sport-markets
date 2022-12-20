@@ -11,7 +11,7 @@ export const Wrapper = styled(FlexDivColumn)`
 `;
 
 export const Container = styled(FlexDivCentered)`
-    margin-top: 30px;
+    margin-top: 20px;
     margin-bottom: 10px;
     @media (max-width: 575px) {
         width: 100%;

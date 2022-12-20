@@ -308,6 +308,7 @@
             "vs": "VS",
             "draw": "Draw",
             "paused": "Paused",
+            "pending": "Pending",
             "bet-type": {
                 "winner": "Winner",
                 "spread": "Handicap",

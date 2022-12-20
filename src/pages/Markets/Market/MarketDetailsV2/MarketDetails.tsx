@@ -47,9 +47,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const showAMM = !market.resolved && !market.cancelled && !market.gameStarted && !market.paused;
 
     const isGameCancelled = market.cancelled || (!market.gameStarted && market.resolved);
-    const isGameResolved = market.gameStarted && market.resolved;
-    const isPendingResolution = market.gameStarted && !market.resolved;
-    const isGamePaused = market.paused && !isGameResolved && !isGameCancelled;
+    const isGameResolved = market.resolved || market.cancelled;
+    const isPendingResolution = market.gameStarted && !isGameResolved;
+    const isGamePaused = market.paused && !isGameResolved;
     const showStatus = market.resolved || market.cancelled || market.gameStarted || market.paused;
 
     return (

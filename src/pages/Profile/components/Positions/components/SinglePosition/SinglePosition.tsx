@@ -265,7 +265,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                         <BoldValue>{formatCurrencyWithSign(USD_SIGN, position.amount)}</BoldValue>
                     </ColumnDirectionInfo>
                     <ColumnDirectionInfo>
-                        <Label>{t('profile.card.starts')}</Label>
+                        <Label>{t('profile.card.starts')}:</Label>
                         <BoldValue>{formatDateWithTime(position.market.maturityDate)}</BoldValue>
                     </ColumnDirectionInfo>
                     <ExternalLink
