@@ -156,12 +156,11 @@ const Parlay: React.FC = () => {
 };
 
 const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?: boolean }>`
-    ${(props) => (!props.isMobile ? `margin-top: ${props.isWalletConnected ? '20px' : '44px'};` : '')}
-    max-width: 300px;
+    max-width: 320px;
     padding: 15px;
     flex: none;
     background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
-    border-radius: 10px;
+    border-radius: 7px;
 `;
 
 const ListContainer = styled(FlexDivColumn)``;

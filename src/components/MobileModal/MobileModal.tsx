@@ -21,7 +21,7 @@ const customStyles = {
         padding: '0px',
         background: 'transparent',
         border: 'none',
-        width: '300px',
+        width: '320px',
         height: '100%',
         overflow: 'visible',
     },

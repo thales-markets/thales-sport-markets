@@ -536,7 +536,7 @@ const Home: React.FC = () => {
                     </MainContainer>
                 )}
                 {/* RIGHT PART */}
-                <SidebarContainer maxWidth={300}>
+                <SidebarContainer maxWidth={320}>
                     {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
                     <Suspense fallback={<Loader />}>
                         <Parlay />
@@ -613,14 +613,12 @@ const RowContainer = styled(FlexDivRow)`
 `;
 
 const MainContainer = styled(FlexDivColumn)`
-    padding-top: 25px;
     width: 100%;
     max-width: 800px;
     flex-grow: 1;
 `;
 
 const SidebarContainer = styled(FlexDivColumn)<{ maxWidth: number }>`
-    padding-top: 25px;
     max-width: ${(props) => props.maxWidth}px;
     flex-grow: 1;
     @media (max-width: 950px) {
@@ -646,7 +644,7 @@ const SportFiltersContainer = styled(FlexDivColumn)`
     height: fit-content;
     flex: 0;
     margin-bottom: 10px;
-    padding-top: 20px;
+    padding-top: 15px;
 `;
 
 const NoMarketsContainer = styled(FlexDivColumnCentered)`
