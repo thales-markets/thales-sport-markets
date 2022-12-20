@@ -77,15 +77,23 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
             </Value>
             {!isGameRegularlyResolved && (
                 <Value>
-                    {isPendingResolution
-                        ? `- ${t('markets.market-card.pending')} -`
-                        : isGameCancelled
-                        ? `- ${t('markets.market-card.canceled')} -`
-                        : isGamePaused
-                        ? `- ${t('markets.market-card.paused')} -`
-                        : formatMarketOdds(selectedOddsType, odd)}
-                    {noOdd && (
-                        <Tooltip overlay={<>{t('markets.zero-odds-tooltip')}</>} iconFontSize={13} marginLeft={3} />
+                    {isPendingResolution ? (
+                        `- ${t('markets.market-card.pending')} -`
+                    ) : isGameCancelled ? (
+                        `- ${t('markets.market-card.canceled')} -`
+                    ) : isGamePaused ? (
+                        `- ${t('markets.market-card.paused')} -`
+                    ) : (
+                        <>
+                            {formatMarketOdds(selectedOddsType, odd)}
+                            {noOdd && (
+                                <Tooltip
+                                    overlay={<>{t('markets.zero-odds-tooltip')}</>}
+                                    iconFontSize={13}
+                                    marginLeft={3}
+                                />
+                            )}
+                        </>
                     )}
                 </Value>
             )}

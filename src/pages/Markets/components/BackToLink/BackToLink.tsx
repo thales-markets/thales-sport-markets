@@ -30,7 +30,7 @@ const Container = styled(FlexDivCentered)`
 const Link = styled(FlexDivCentered)`
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 16px;
     line-height: 102.6%;
     letter-spacing: 0.035em;
     color: ${(props) => props.theme.textColor.primary};
@@ -40,7 +40,7 @@ const Link = styled(FlexDivCentered)`
 `;
 
 const LeftIcon = styled.i`
-    font-size: 25px;
+    font-size: 20px;
     margin-right: 4px;
     margin-top: -2px;
     &:before {

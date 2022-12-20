@@ -59,7 +59,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                     <BackToLink
                         link={buildHref(ROUTES.Markets.Home)}
                         text={t('market.back')}
-                        customStylingContainer={{ position: 'absolute', left: '5px', marginTop: '0px' }}
+                        customStylingContainer={{ position: 'absolute', left: 0, top: 0, marginTop: 0 }}
                     />
                 </HeaderWrapper>
                 <MatchInfo market={market} />
@@ -97,13 +97,16 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
 };
 
 const RowContainer = styled(FlexDivRow)`
+    margin-top: 40px;
     width: 100%;
     flex-direction: row;
     justify-content: center;
+    @media (max-width: 575px) {
+        margin-top: 30px;
+    }
 `;
 
 const MainContainer = styled(FlexDivColumn)<{ showAMM: boolean }>`
-    margin-top: 30px;
     width: 100%;
     max-width: 800px;
     margin-right: ${(props) => (props.showAMM ? 10 : 0)}px;
@@ -113,7 +116,6 @@ const MainContainer = styled(FlexDivColumn)<{ showAMM: boolean }>`
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`
-    margin-top: 215px;
     max-width: 320px;
     @media (max-width: 950px) {
         display: none;
@@ -124,7 +126,6 @@ const HeaderWrapper = styled(FlexDivRow)`
     width: 100%;
     position: relative;
     align-items: center;
-    margin-bottom: 20px;
 `;
 
 export const Status = styled(FlexDivCentered)<{ backgroundColor?: string }>`
