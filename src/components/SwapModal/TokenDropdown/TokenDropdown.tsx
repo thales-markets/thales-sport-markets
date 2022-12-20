@@ -69,7 +69,6 @@ export const TokenDropdown: React.FC<StatusDropdownProps> = ({ selectedToken, on
 };
 
 const Container = styled(FlexDivColumnCentered)<{ readOnly?: boolean }>`
-    width: 140px;
     position: absolute;
     top: 28px;
     left: 7px;
@@ -86,7 +85,7 @@ const TokenButton = styled.button<{ readOnly?: boolean }>`
     border-radius: 10px;
     font-size: 18px;
     line-height: 25px;
-    padding-left: 15px;
+    padding-left: 12px;
     &:hover:not(.disabled) {
         cursor: ${(props) => (props.readOnly ? 'default' : 'pointer')};
         background: ${(props) => (props.readOnly ? 'transparent' : '#51546f')};
@@ -95,6 +94,9 @@ const TokenButton = styled.button<{ readOnly?: boolean }>`
         opacity: ${(props) => (props.readOnly ? 1 : 0.4)};
         cursor: default;
         background: transparent;
+    }
+    @media (max-width: 950px) {
+        width: 125px;
     }
 `;
 
@@ -144,7 +146,6 @@ const TokenIcon = styled.img`
 
 const ArrowDownIcon = styled.i`
     font-size: 18px;
-    margin-left: 20px;
     position: absolute;
     top: 8px;
     right: 15px;
@@ -152,6 +153,9 @@ const ArrowDownIcon = styled.i`
         font-family: ExoticIcons !important;
         content: '\\004D';
         color: ${(props) => props.theme.textColor.primary};
+    }
+    @media (max-width: 950px) {
+        right: 10px;
     }
 `;
 

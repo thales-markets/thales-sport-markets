@@ -1,6 +1,7 @@
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsWalletConnected } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -16,6 +17,7 @@ export enum WizardStep {
 
 const Wizard: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const steps: WizardStep[] = [WizardStep.CONNECT_METAMASK, WizardStep.FUND, WizardStep.EXCHANGE, WizardStep.TRADE];
     const [currentStep, setCurrentStep] = useState(isWalletConnected ? WizardStep.FUND : WizardStep.CONNECT_METAMASK);
@@ -41,7 +43,7 @@ const Wizard: React.FC = () => {
                             currentStep={currentStep}
                             setCurrentStep={setCurrentStep}
                         />
-                        {stepNumber !== steps.length && <HorizontalLine />}
+                        {!isMobile && stepNumber !== steps.length && <HorizontalLine />}
                     </React.Fragment>
                 );
             })}
@@ -62,6 +64,9 @@ const WizardTitle = styled(FlexDivStart)`
     margin-top: 20px;
     margin-bottom: 40px;
     margin-left: 10%;
+    @media (max-width: 950px) {
+        margin: 20px auto;
+    }
 `;
 
 const HorizontalLine = styled.hr`

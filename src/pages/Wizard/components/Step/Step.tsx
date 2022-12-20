@@ -4,6 +4,7 @@ import ROUTES from 'constants/routes';
 import { t } from 'i18next';
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsWalletConnected } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -24,8 +25,9 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
     const { openAccountModal } = useAccountModal();
 
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
-    const [showBuyModal, setShowBuyModal] = useState(false);
+    const [showFundModal, setShowFundModal] = useState(false);
     const [showSwapModal, setShowSwapModal] = useState(false);
 
     const stepTitle = useMemo(() => {
@@ -88,17 +90,19 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                 break;
         }
         return (
-            <div>
-                <StepActionIcon
-                    className={`icon ${className}`}
-                    isDisabled={isDisabled}
-                    onClick={onStepActionClickHandler}
-                />
+            <StepAction>
+                <StepActionIconWrapper isActive={isActive}>
+                    <StepActionIcon
+                        className={`icon ${className}`}
+                        isDisabled={isDisabled}
+                        onClick={onStepActionClickHandler}
+                    />
+                </StepActionIconWrapper>
                 <StepActionLabel isDisabled={isDisabled} onClick={onStepActionClickHandler}>
                     <StepActionName>{t(transKey)}</StepActionName>
-                    <LinkIcon className={`icon icon--arrow-external`} />
+                    {!isMobile && <LinkIcon className={`icon icon--arrow-external`} />}
                 </StepActionLabel>
-            </div>
+            </StepAction>
         );
     };
 
@@ -115,7 +119,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                 isWalletConnected ? openAccountModal?.() : openConnectModal?.();
                 break;
             case WizardStep.FUND:
-                setShowBuyModal(true);
+                setShowFundModal(true);
                 break;
             case WizardStep.EXCHANGE:
                 setShowSwapModal(true);
@@ -130,19 +134,27 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
 
     return (
         <Container>
-            <StepNumberSection>
-                <StepNumberWrapper isActive={isActive} isDisabled={isDisabled} onClick={changeCurrentStep}>
-                    <StepNumber isActive={isActive}>{stepNumber}</StepNumber>
-                </StepNumberWrapper>
-            </StepNumberSection>
-            <StepDescriptionSection isActive={isActive} isDisabled={isDisabled} onClick={changeCurrentStep}>
-                <StepTitle>{stepTitle}</StepTitle>
-                <StepDescription>{stepDescription}</StepDescription>
-            </StepDescriptionSection>
-            <StepActionSection isActive={isActive} isDisabled={isDisabled}>
-                {getStepAction()}
-            </StepActionSection>
-            {showBuyModal && <FundModal onClose={() => setShowBuyModal(false)} />}
+            {isMobile ? (
+                <StepActionSection isActive={isActive} isDisabled={isDisabled}>
+                    {getStepAction()}
+                </StepActionSection>
+            ) : (
+                <>
+                    <StepNumberSection>
+                        <StepNumberWrapper isActive={isActive} isDisabled={isDisabled} onClick={changeCurrentStep}>
+                            <StepNumber isActive={isActive}>{stepNumber}</StepNumber>
+                        </StepNumberWrapper>
+                    </StepNumberSection>
+                    <StepDescriptionSection isActive={isActive} isDisabled={isDisabled} onClick={changeCurrentStep}>
+                        <StepTitle>{stepTitle}</StepTitle>
+                        <StepDescription>{stepDescription}</StepDescription>
+                    </StepDescriptionSection>
+                    <StepActionSection isActive={isActive} isDisabled={isDisabled}>
+                        {getStepAction()}
+                    </StepActionSection>
+                </>
+            )}
+            {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
             {showSwapModal && <SwapModal onClose={() => setShowSwapModal(false)} />}
         </Container>
     );
@@ -152,6 +164,10 @@ const Container = styled.div`
     display: flex;
     margin-top: 20px;
     margin-bottom: 20px;
+    @media (max-width: 950px) {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
 `;
 
 const StepNumberSection = styled(FlexDivCentered)`
@@ -168,6 +184,17 @@ const StepActionSection = styled(FlexDivCentered)<{ isActive: boolean; isDisable
     width: 30%;
     text-align: center;
     color: ${(props) => (props.isActive ? '#3FD1FF' : '#5f6180')};
+    @media (max-width: 950px) {
+        width: 100%;
+        text-align: start;
+        justify-content: start;
+    }
+`;
+
+const StepAction = styled.div`
+    @media (max-width: 950px) {
+        display: flex;
+    }
 `;
 
 const StepTitle = styled.span`
@@ -205,20 +232,47 @@ const StepNumber = styled.span<{ isActive: boolean }>`
     color: ${(props) => (props.isActive ? '#ffffff' : '#1a1c2b')};
 `;
 
+const StepActionIconWrapper = styled.div<{ isActive: boolean }>`
+    @media (max-width: 950px) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        ${(props) => (props.isActive ? 'border: 2px solid #3FD1FF;' : '')}
+        ${(props) => (props.isActive ? '' : 'background: #5f6180;')}
+    }
+`;
+
 const StepActionIcon = styled.i<{ isDisabled?: boolean }>`
     font-size: 35px;
     padding-bottom: 15px;
     cursor: ${(props) => (props.isDisabled ? 'not-allowed' : 'pointer')};
+    @media (max-width: 950px) {
+        padding-bottom: 0;
+        color: #ffffff;
+        font-size: 30px;
+    }
 `;
 
 const StepActionLabel = styled.div<{ isDisabled?: boolean }>`
     cursor: ${(props) => (props.isDisabled ? 'not-allowed' : 'pointer')};
+    @media (max-width: 950px) {
+        display: flex;
+        align-items: center;
+        margin-left: 20px;
+    }
 `;
 
 const StepActionName = styled.span`
     font-weight: 600;
     font-size: 14px;
     line-height: 16px;
+    @media (max-width: 950px) {
+        font-size: 20px;
+        line-height: 27px;
+    }
 `;
 
 const LinkIcon = styled.i`
