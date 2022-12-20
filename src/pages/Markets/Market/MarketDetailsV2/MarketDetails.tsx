@@ -102,7 +102,7 @@ const RowContainer = styled(FlexDivRow)`
     flex-direction: row;
     justify-content: center;
     @media (max-width: 575px) {
-        margin-top: 30px;
+        margin-top: 20px;
     }
 `;
 

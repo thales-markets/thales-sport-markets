@@ -603,6 +603,9 @@ const groupBySortedMarkets = (markets: SportMarkets) => {
 
 const Container = styled(FlexDivColumnCentered)`
     width: 100%;
+    @media (max-width: 768px) {
+        margin-top: 20px;
+    }
 `;
 
 const RowContainer = styled(FlexDivRow)`
