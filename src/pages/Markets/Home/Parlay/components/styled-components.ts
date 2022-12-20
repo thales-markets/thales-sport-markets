@@ -65,7 +65,7 @@ export const InputContainer = styled(FlexDiv)``;
 export const ValidationTooltip = withStyles(() => ({
     tooltip: {
         minWidth: '100%',
-        width: '270px',
+        width: '296px',
         marginBottom: '7px',
         backgroundColor: '#23273D',
         color: '#E26A78',
@@ -116,7 +116,7 @@ export const AmountToBuyContainer = styled.div`
 `;
 
 export const AmountToBuyInput = styled.input`
-    width: 270px;
+    width: 296px;
     margin-bottom: 5px;
     border: 3px solid #3accfa;
     border-radius: 5px;
