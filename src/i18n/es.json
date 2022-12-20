@@ -273,7 +273,8 @@
                 "total": "Total",
                 "winner": "Ganador",
                 "spread": "Desventaja"
-            }
+            },
+            "pending": "Pendiente"
         },
         "market-details": {
             "price": "Precio",

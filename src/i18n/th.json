@@ -270,7 +270,8 @@
                 "total": "ทั้งหมด",
                 "spread": "แฮนดิแคป",
                 "winner": "ผู้ชนะ"
-            }
+            },
+            "pending": "รอดำเนินการ"
         },
         "market-details": {
             "price": "ราคา",

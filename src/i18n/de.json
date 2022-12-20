@@ -270,7 +270,8 @@
                 "total": "Gesamt",
                 "winner": "Gewinner",
                 "spread": "Behinderung"
-            }
+            },
+            "pending": "Ausstehend"
         },
         "market-details": {
             "price": "Preis",

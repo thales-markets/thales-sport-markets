@@ -273,7 +273,8 @@
                 "spread": "差点",
                 "total": "全部的",
                 "winner": "优胜者"
-            }
+            },
+            "pending": "待办的"
         },
         "market-details": {
             "price": "价格",
