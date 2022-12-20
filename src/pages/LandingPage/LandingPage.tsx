@@ -204,7 +204,7 @@ const LandingPage: React.FC = () => {
                 <Zebro className="hockey" src={ZebraHockey} alt="Zebro Hockey" />
                 <LargeText className="fourth in-front">{t('landing-page.learn-more')}</LargeText>
                 <CallToAction className="fourth">
-                    <DocsLink href={buildHref(LINKS.Footer.Docs)}>
+                    <DocsLink href={LINKS.Footer.Docs}>
                         {t('landing-page.read-now')} <ArrowIcon className={`icon icon--arrow`} />
                     </DocsLink>
                 </CallToAction>
