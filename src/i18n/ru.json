@@ -268,7 +268,12 @@
             "coming-soon": "Coming soon",
             "vs": "VS",
             "draw": "Draw",
-            "paused": "Paused"
+            "paused": "Paused",
+            "bet-type": {
+                "total": "Общее количество",
+                "winner": "Победитель",
+                "spread": "Гандикап"
+            }
         },
         "market-details": {
             "price": "Price",

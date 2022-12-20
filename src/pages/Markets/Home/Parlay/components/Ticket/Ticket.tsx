@@ -28,7 +28,7 @@ import {
     formatPercentage,
     roundNumberToDecimals,
 } from 'utils/formatters/number';
-import { formatMarketOdds, isDiscounted } from 'utils/markets';
+import { formatMarketOdds, getBonus } from 'utils/markets';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { getParlayAMMTransaction, getParlayMarketsAMMQuoteMethod } from 'utils/parlayAmm';
@@ -169,21 +169,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     useEffect(() => {
         let bonus = 0;
         markets.forEach((market) => {
-            switch (market.position) {
-                case 0:
-                    isDiscounted(market.homePriceImpact) ? (bonus += Math.ceil(Math.abs(market.homePriceImpact))) : '';
-                    break;
-                case 1:
-                    isDiscounted(market.awayPriceImpact) ? (bonus += Math.ceil(Math.abs(market.awayPriceImpact))) : '';
-                    break;
-                case 2:
-                    isDiscounted(market.drawPriceImpact) && market.drawPriceImpact
-                        ? (bonus += Math.ceil(Math.abs(market.drawPriceImpact)))
-                        : '';
-                    break;
-                default:
-                    break;
-            }
+            bonus += getBonus(market);
         });
         setTotalBonus(bonus);
     }, [markets]);

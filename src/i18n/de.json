@@ -265,7 +265,12 @@
             "coming-soon": "Bald",
             "vs": "VS",
             "draw": "X",
-            "paused": "Pausiert"
+            "paused": "Pausiert",
+            "bet-type": {
+                "total": "Gesamt",
+                "winner": "Gewinner",
+                "spread": "Behinderung"
+            }
         },
         "market-details": {
             "price": "Preis",

@@ -172,7 +172,7 @@ const RowMarket = styled.div<{ outOfLiquidity: boolean }>`
     height: 45px;
     align-items: center;
     text-align: center;
-    padding: ${(props) => (props.outOfLiquidity ? '5px' : '5px 7px')};
+    padding: ${(props) => (props.outOfLiquidity ? '5px' : '5px 0px')};
     ${(props) => (props.outOfLiquidity ? 'background: rgba(26, 28, 43, 0.5);' : '')}
     ${(props) => (props.outOfLiquidity ? 'border: 2px solid #e26a78;' : '')}
     ${(props) => (props.outOfLiquidity ? 'border-radius: 2px;' : '')}

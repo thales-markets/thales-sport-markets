@@ -359,3 +359,23 @@ export const getCanceledGamesPreviousQuotes = (parlay: ParlayMarket): number[] =
 
     return quotes;
 };
+
+export const getBonus = (market: ParlaysMarket): number => {
+    let bonus = 0;
+    switch (market.position) {
+        case 0:
+            isDiscounted(market.homePriceImpact) ? (bonus = Math.ceil(Math.abs(market.homePriceImpact))) : '';
+            break;
+        case 1:
+            isDiscounted(market.awayPriceImpact) ? (bonus = Math.ceil(Math.abs(market.awayPriceImpact))) : '';
+            break;
+        case 2:
+            isDiscounted(market.drawPriceImpact) && market.drawPriceImpact
+                ? (bonus = Math.ceil(Math.abs(market.drawPriceImpact)))
+                : '';
+            break;
+        default:
+            break;
+    }
+    return bonus;
+};

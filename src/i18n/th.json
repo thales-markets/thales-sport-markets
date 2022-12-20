@@ -265,7 +265,12 @@
             "coming-soon": "เร็วๆ นี้",
             "vs": "VS",
             "draw": "เสมอ",
-            "paused": "หยุดชั่วคราว"
+            "paused": "หยุดชั่วคราว",
+            "bet-type": {
+                "total": "ทั้งหมด",
+                "spread": "แฮนดิแคป",
+                "winner": "ผู้ชนะ"
+            }
         },
         "market-details": {
             "price": "ราคา",

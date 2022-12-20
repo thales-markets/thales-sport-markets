@@ -268,7 +268,12 @@
             "coming-soon": "即将开始",
             "vs": "对决",
             "draw": "平手",
-            "paused": "暂停"
+            "paused": "暂停",
+            "bet-type": {
+                "spread": "差点",
+                "total": "全部的",
+                "winner": "优胜者"
+            }
         },
         "market-details": {
             "price": "价格",

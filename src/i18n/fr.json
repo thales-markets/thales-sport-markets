@@ -366,7 +366,12 @@
             "claimable": "Réclamable",
             "result": "Résultat",
             "coming-soon": "Bientôt disponible",
-            "paused": "En pause"
+            "paused": "En pause",
+            "bet-type": {
+                "winner": "Gagnant",
+                "spread": "Handicap",
+                "total": "Total"
+            }
         },
         "market-details": {
             "wallet-info": {

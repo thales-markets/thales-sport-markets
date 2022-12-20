@@ -5,7 +5,7 @@ import { removeFromParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { ParlaysMarket } from 'types/markets';
-import { formatMarketOdds, getPositionOdds, getSpreadTotalText, getSymbolText } from 'utils/markets';
+import { formatMarketOdds, getBonus, getPositionOdds, getSpreadTotalText, getSymbolText } from 'utils/markets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
 
@@ -23,6 +23,8 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
     const symbolText = getSymbolText(market.position, market.betType);
     const spreadTotalText = getSpreadTotalText(market.betType, market.spread, market.total);
 
+    const bonus = getBonus(market);
+
     return (
         <>
             <MatchLogos market={market} width={'120px'} padding={'0 0 0 4px'} isHighlighted={isHighlighted} />
@@ -38,7 +40,8 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                 symbolBottomText={{
                     text: formatMarketOdds(selectedOddsType, getPositionOdds(market)),
                     textStyle: {
-                        marginLeft: '10px',
+                        marginLeft: '4px',
+                        marginRight: bonus > 0 ? '4px' : '30.5px',
                     },
                 }}
                 symbolText={symbolText}
@@ -55,6 +58,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                         : undefined
                 }
             />
+            {bonus > 0 ? <DiscountLabel>+{bonus}%</DiscountLabel> : ''}
             {readOnly ? (
                 market?.isResolved ? (
                     market?.winning ? (
@@ -94,6 +98,13 @@ const ClubName = styled.span<{ fontSize?: string; lineHeight?: string }>`
     line-height: ${(props) => (props.lineHeight ? props.lineHeight : '11px')};
     text-transform: uppercase;
     color: #ffffff;
+`;
+
+const DiscountLabel = styled.div`
+    font-size: 12px;
+    font-weight: 600;
+    color: #5fc694;
+    margin-right: 4px;
 `;
 
 const Correct = styled.i`

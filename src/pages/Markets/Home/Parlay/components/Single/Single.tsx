@@ -7,6 +7,7 @@ import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE } from 'constants/market
 import { MAX_GAS_LIMIT } from 'constants/network';
 import { Position, Side } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
+import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useAvailablePerPositionQuery from 'queries/markets/useAvailablePerPositionQuery';
 import useMarketBalancesQuery from 'queries/markets/useMarketBalancesQuery';
 import usePositionPriceDetailsQuery from 'queries/markets/usePositionPriceDetailsQuery';
@@ -17,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
+import { removeAll, setPayment } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -32,35 +34,33 @@ import {
     formatPercentage,
     roundNumberToDecimals,
 } from 'utils/formatters/number';
-import { formatMarketOdds, getPositionOdds, isDiscounted } from 'utils/markets';
+import { formatMarketOdds, getBonus, getPositionOdds } from 'utils/markets';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
+import Payment from '../Payment';
+import ShareTicketModal from '../ShareTicketModal';
+import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import {
     AmountToBuyContainer,
     AmountToBuyInput,
-    ValidationTooltip,
     InfoContainer,
     InfoLabel,
     InfoValue,
     InfoWrapper,
     InputContainer,
     MaxButton,
+    RowContainer,
     RowSummary,
+    ShareWrapper,
     SubmitButton,
     SummaryLabel,
     SummaryValue,
-    ShareWrapper,
     TwitterIcon,
-    RowContainer,
+    ValidationTooltip,
 } from '../styled-components';
-import Payment from '../Payment';
-import { removeAll, setPayment } from 'redux/modules/parlay';
-import useDebouncedEffect from 'hooks/useDebouncedEffect';
-import ShareTicketModal from '../ShareTicketModal';
-import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -179,21 +179,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
 
     useEffect(() => {
-        switch (market.position) {
-            case 0:
-                isDiscounted(market.homePriceImpact) ? setBonus(Math.ceil(Math.abs(market.homePriceImpact))) : '';
-                break;
-            case 1:
-                isDiscounted(market.awayPriceImpact) ? setBonus(Math.ceil(Math.abs(market.awayPriceImpact))) : '';
-                break;
-            case 2:
-                isDiscounted(market.drawPriceImpact) && market.drawPriceImpact
-                    ? setBonus(Math.ceil(Math.abs(market.drawPriceImpact)))
-                    : '';
-                break;
-            default:
-                break;
-        }
+        setBonus(getBonus(market));
     }, [market]);
 
     // Clear Parlay when network is changed
