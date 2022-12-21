@@ -90,7 +90,13 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 const IOS_DOWNLOAD_DELAY = 10 * 1000; // 10 seconds
                 const MOBILE_TWITTER_TOAST_AUTO_CLOSE = 15 * 1000; // 15 seconds
                 try {
-                    const base64Image = await toPng(ref.current);
+                    // In order to improve image quality enlarge image by 2.
+                    // Twitter is trying to fit into 504 x 510 with the same aspect ratio, so when image is smaller than 504 x 510, there is quality loss.
+                    const aspectRatio = 2;
+                    const canvasWidth = ref.current.clientWidth * aspectRatio;
+                    const canvasHeight = ref.current.clientHeight * aspectRatio;
+
+                    const base64Image = await toPng(ref.current, { canvasWidth, canvasHeight });
 
                     if (useDownloadImage) {
                         // Download image
