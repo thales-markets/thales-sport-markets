@@ -123,6 +123,9 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     }
                     onClose={() => setIframeProvider(undefined)}
                     shouldCloseOnOverlayClick={false}
+                    mobileStyle={{
+                        container: { paddingLeft: '10px', paddingRight: '10px' },
+                    }}
                 >
                     <IFrameWrapper height={iframeProvider === Provider.MT_PELERIN ? 588 : 635}>
                         {iframeLoader && <SimpleLoader />}
@@ -135,6 +138,10 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     title={t('wizard.fund-modal.bridge')}
                     onClose={() => setShowBungeePlugin(false)}
                     shouldCloseOnOverlayClick={false}
+                    mobileStyle={{
+                        container: { paddingLeft: 0, paddingRight: 0 },
+                        header: { paddingLeft: '15px', paddingRight: '15px' },
+                    }}
                 >
                     <BungeePlugin />
                 </Modal>
@@ -215,6 +222,10 @@ const IFrameWrapper = styled.div<{ height?: number }>`
     margin-top: 10px;
     border-radius: 15px;
     outline: none;
+    @media (max-width: 950px) {
+        width: 340px;
+        height: 470px;
+    }
 `;
 
 const IFrame = styled.iframe`

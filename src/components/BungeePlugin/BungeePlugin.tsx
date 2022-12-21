@@ -2,7 +2,7 @@ import { Bridge } from '@socket.tech/plugin';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { Network } from 'utils/network';
@@ -27,6 +27,7 @@ type CustomizationProps = {
 
 const BungeePlugin: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const apiKey = process.env.REACT_APP_BUNGEE_API_KEY || '';
     if (!apiKey) {
@@ -46,8 +47,9 @@ const BungeePlugin: React.FC = () => {
         (token) => token.chainId === Network['Mainnet-Ovm'] && token.symbol === CRYPTO_CURRENCY_MAP.sUSD
     )[0].address;
 
+    // All colors should stricktly be in RGB format
     const customize: CustomizationProps = {
-        width: 386,
+        width: isMobile ? 360 : 386, // 360 is min-width
         responsiveWidth: false,
         accent: 'rgb(95,97,128)', // button
         onAccent: 'rgb(255,255,255)', // button text
@@ -86,6 +88,9 @@ const BungeeWrapper = styled.div`
     background: #1a1c2b;
     border-radius: 15px;
     outline: none;
+    @media (max-width: 950px) {
+        width: 360px;
+    }
 `;
 
 export default BungeePlugin;
