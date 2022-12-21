@@ -12,6 +12,7 @@ import {
     getSymbolText,
     convertFinalResultToResultType,
     getSpreadTotalText,
+    getParentMarketAddress,
 } from 'utils/markets';
 import { Discount, Container, Value } from './styled-components';
 
@@ -61,7 +62,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                     dispatch(removeFromParlay(market.address));
                 } else {
                     const parlayMarket: ParlaysMarketPosition = {
-                        parentMarket: market.parentMarket !== '' ? market.parentMarket : market.address,
+                        parentMarket: getParentMarketAddress(market.parentMarket, market.address),
                         sportMarketAddress: market.address,
                         position: position,
                         homeTeam: market.homeTeam || '',

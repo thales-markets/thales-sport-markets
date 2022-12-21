@@ -36,6 +36,7 @@ import {
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
     getCanceledGameClaimAmount,
+    getParentMarketAddress,
     getSpreadTotalText,
     getSymbolText,
 } from 'utils/markets';
@@ -270,9 +271,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                     </ColumnDirectionInfo>
                     <ExternalLink
                         href={buildMarketLink(
-                            position.market.parentMarket !== null
-                                ? position.market.parentMarket
-                                : position.market.address,
+                            getParentMarketAddress(position.market.parentMarket, position.market.address),
                             language
                         )}
                         target={'_blank'}

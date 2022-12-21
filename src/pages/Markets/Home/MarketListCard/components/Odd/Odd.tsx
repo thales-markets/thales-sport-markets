@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
-import { formatMarketOdds, getSymbolText, isDiscounted } from 'utils/markets';
+import { formatMarketOdds, getParentMarketAddress, getSymbolText, isDiscounted } from 'utils/markets';
 import { getOddsType } from '../../../../../../redux/modules/ui';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { MAIN_COLORS } from 'constants/ui';
@@ -43,7 +43,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
                 value: discount ? discount : 0,
             });
             const parlayMarket: ParlaysMarketPosition = {
-                parentMarket: market.parentMarket !== null ? market.parentMarket : market.address,
+                parentMarket: getParentMarketAddress(market.parentMarket, market.address),
                 sportMarketAddress: market.address,
                 position: position,
                 homeTeam: market.homeTeam || '',

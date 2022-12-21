@@ -15,7 +15,7 @@ import { VaultTrade, VaultTrades } from 'types/vault';
 import { VaultTradeStatus } from 'constants/vault';
 import { Colors } from 'styles/common';
 import PositionSymbol from 'components/PositionSymbol';
-import { getSpreadTotalText, getSymbolText } from 'utils/markets';
+import { getParentMarketAddress, getSpreadTotalText, getSymbolText } from 'utils/markets';
 
 type TradesTableProps = {
     transactions: VaultTrades;
@@ -49,9 +49,10 @@ export const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResults
                                 className="hover-underline"
                                 onClick={(e) => e.stopPropagation()}
                                 href={buildMarketLink(
-                                    cellProps.row.original.wholeMarket.parentMarket !== null
-                                        ? cellProps.row.original.wholeMarket.parentMarket
-                                        : cellProps.row.original.wholeMarket.address,
+                                    getParentMarketAddress(
+                                        cellProps.row.original.wholeMarket.parentMarket,
+                                        cellProps.row.original.wholeMarket.address
+                                    ),
                                     language
                                 )}
                             >

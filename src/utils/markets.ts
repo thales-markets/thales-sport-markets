@@ -379,3 +379,6 @@ export const getBonus = (market: ParlaysMarket): number => {
     }
     return bonus;
 };
+
+export const getParentMarketAddress = (parentMarketAddress: string, marketAddress: string) =>
+    parentMarketAddress !== null && parentMarketAddress !== '' ? parentMarketAddress : marketAddress;
