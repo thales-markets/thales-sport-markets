@@ -9,6 +9,8 @@ import { formatCurrency } from 'utils/formatters/number';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
+import { getSpreadTotalText, getSymbolText } from 'utils/markets';
+import PositionSymbol from 'components/PositionSymbol';
 
 type TransactionsTableProps = {
     transactions: MarketTransactions;
@@ -45,9 +47,38 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                     {
                         Header: <>{t('market.table.position-col')}</>,
                         accessor: 'position',
-                        Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['position']>) => (
-                            <p>{cellProps.cell.value?.toUpperCase()}</p>
-                        ),
+                        Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['position']>) => {
+                            const symbolText = getSymbolText(
+                                cellProps.cell.value,
+                                cellProps.cell.row.original.wholeMarket.betType
+                            );
+
+                            const spreadTotalText = getSpreadTotalText(
+                                cellProps.cell.row.original.wholeMarket.betType,
+                                cellProps.cell.row.original.wholeMarket.spread,
+                                cellProps.cell.row.original.wholeMarket.total
+                            );
+                            return (
+                                <PositionSymbol
+                                    symbolText={symbolText}
+                                    additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
+                                    symbolUpperText={
+                                        spreadTotalText
+                                            ? {
+                                                  text: spreadTotalText,
+                                                  textStyle: {
+                                                      backgroundColor: '#1A1C2B',
+                                                      fontSize: '10px',
+                                                      top: '-8px',
+                                                      left: '13px',
+                                                      lineHeight: '100%',
+                                                  },
+                                              }
+                                            : undefined
+                                    }
+                                />
+                            );
+                        },
                         width: 150,
                         sortable: true,
                     },
@@ -84,6 +115,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                 isLoading={isLoading}
                 noResultsMessage={noResultsMessage}
                 tableHeadCellStyles={isMobile ? TableHeaderStyleMobile : TableHeaderStyle}
+                tableRowStyles={{ fontSize: '12px' }}
             />
         </>
     );

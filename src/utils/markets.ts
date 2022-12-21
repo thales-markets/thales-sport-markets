@@ -74,6 +74,7 @@ export const convertFinalResultToResultType = (result: number, isApexTopGame?: b
     if (result == 1) return 0;
     if (result == 2) return 1;
     if (result == 3) return 2;
+    return -1;
 };
 
 export const convertPositionToSymbolType = (position: Position, isApexTopGame: boolean) => {
@@ -113,7 +114,6 @@ export const getSymbolText = (position: Position, betType: BetType) => {
 };
 
 export const getSpreadTotalText = (betType: BetType, spread: number, total: number) => {
-    console.log(Number(spread));
     switch (Number(betType)) {
         case BetType.SPREAD:
             return `${Number(spread) > 0 ? '+' : ''}${Number(spread) / 100}`;
@@ -174,11 +174,11 @@ export const convertPositionNameToPositionType = (positionName: string) => {
     return Position.HOME;
 };
 
-export const convertPositionToPositionName = (position: number): 'home' | 'away' | 'draw' => {
-    if (position == 0) return 'home';
-    if (position == 1) return 'away';
-    if (position == 2) return 'draw';
-    return 'home';
+export const convertPositionToPositionName = (position: number): 'HOME' | 'AWAY' | 'DRAW' => {
+    if (position == 0) return 'HOME';
+    if (position == 1) return 'AWAY';
+    if (position == 2) return 'DRAW';
+    return 'HOME';
 };
 
 export const getCanceledGameClaimAmount = (position: AccountPositionProfile) => {

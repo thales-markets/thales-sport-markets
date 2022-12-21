@@ -259,6 +259,7 @@ export type MarketTransaction = {
     position: any;
     market: string;
     paid: number;
+    wholeMarket: SportMarketInfo;
 };
 
 export type MarketTransactions = MarketTransaction[];
@@ -269,7 +270,7 @@ export type ClaimTransaction = {
     amount: number;
     timestamp: number;
     caller: string;
-    market: MarketData;
+    market: SportMarketInfo;
 };
 
 export type ClaimTransactions = ClaimTransaction[];
