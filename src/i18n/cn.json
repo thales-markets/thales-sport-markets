@@ -399,7 +399,8 @@
         },
         "your-score": "你的分数",
         "twap": "一周TWAP",
-        "total-global-rebates": "要支付的总回扣"
+        "total-global-rebates": "要支付的总回扣",
+        "parlay-link": "<div>对于 OP 月度 parlay 比赛<parlayLink>点击这里</ parlayLink>.</div>"
     },
     "quiz": {
         "title": "体育百科竞赛",

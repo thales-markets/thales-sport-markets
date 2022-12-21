@@ -4,14 +4,12 @@ import MintVoucher from 'components/MintVoucher';
 import NavMenu from 'components/NavMenu';
 import NavMenuMobile from 'components/NavMenuMobile';
 import Search from 'components/Search';
-import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import { MAIN_COLORS } from 'constants/ui';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -21,8 +19,7 @@ import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import { buildHref } from 'utils/routes';
+import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import ProfileItem from './components/ProfileItem';
 
 const PULSING_COUNT = 10;
@@ -48,7 +45,6 @@ const customModalStyles = {
 };
 
 const DappHeader: React.FC = () => {
-    const { t } = useTranslation();
     const dispatch = useDispatch();
     const location = useLocation();
 
@@ -88,16 +84,6 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <Logo />
                     <RightContainer>
-                        {location.pathname !== ROUTES.MintWorldCupNFT && (
-                            <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>
-                                <StyledButton style={{ marginRight: '10px' }} disabled={!isWalletConnected}>
-                                    <FlexDiv>
-                                        <FifaIcon className="icon icon--fifa-world-cup" />
-                                        {t('mint-world-cup-nft.zebro-campaign')}
-                                    </FlexDiv>
-                                </StyledButton>
-                            </SPAAnchor>
-                        )}
                         {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />}
                         <WalletInfo />
                         {isWalletConnected && <ProfileItem />}
@@ -154,18 +140,6 @@ const DappHeader: React.FC = () => {
                             />
                         </MenuIconContainer>
                     </WrapperMobile>
-                    {location.pathname !== ROUTES.MintWorldCupNFT && (
-                        <div style={{ width: '100%' }}>
-                            <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>
-                                <StyledButton style={{ width: '100%', padding: '5px' }} disabled={!isWalletConnected}>
-                                    <FlexDivCentered>
-                                        <FifaIcon className="icon icon--fifa-world-cup" />
-                                        {t('mint-world-cup-nft.zebro-campaign')}
-                                    </FlexDivCentered>
-                                </StyledButton>
-                            </SPAAnchor>
-                        </div>
-                    )}
                     {location.pathname !== ROUTES.MintWorldCupNFT && (
                         <MintVoucher
                             buttonStyle={{ padding: '7px', background: '#303656' }}
@@ -249,38 +223,6 @@ const LogoContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
-`;
-
-const StyledButton = styled.button<{ disabled?: boolean }>`
-    background: #891538;
-    border: 2px solid #891538;
-    color: white;
-    border-radius: 5px;
-    padding: 0 60px 0 75px;
-    font-weight: 800;
-    font-size: 15px;
-    line-height: 18px;
-    text-transform: uppercase;
-    text-align: center;
-    outline: none;
-    cursor: pointer;
-    min-height: 28px;
-    width: fit-content;
-    white-space: nowrap;
-    position: relative;
-    opacity: ${(props) => (props.disabled ? '0.4' : '1')};
-    &:hover {
-        cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-        opacity: ${(props) => (props.disabled ? '0.4' : '0.8')};
-    }
-`;
-
-const FifaIcon = styled.i`
-    color: ${(props) => props.theme.textColor.primary};
-    font-size: 35px;
-    margin-right: 10px;
-    font-weight: 400;
-    text-transform: none;
 `;
 
 const IconWrapper = styled.div`

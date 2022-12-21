@@ -399,7 +399,8 @@
         "your-score": "Il tuo punteggio",
         "total-negative-pnl": "Perdite totali",
         "twap": "TWAP di una settimana",
-        "total-global-rebates": "Sconti totali da pagare"
+        "total-global-rebates": "Sconti totali da pagare",
+        "parlay-link": "<div>Per la competizione parlay mensile OP<parlayLink> clicca qui</ parlayLink> .</div>"
     },
     "quiz": {
         "title": "Sports Trivia competition",

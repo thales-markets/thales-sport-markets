@@ -497,7 +497,8 @@
         },
         "your-score": "Ton score",
         "total-global-rebates": "Remises totales à payer",
-        "twap": "TWAP d'une semaine"
+        "twap": "TWAP d'une semaine",
+        "parlay-link": "<div>Pour le concours de parlay mensuel OP<parlayLink> Cliquez ici</ parlayLink> .</div>"
     },
     "quiz": {
         "button": {

@@ -399,7 +399,8 @@
         "your-score": "Твой счет",
         "total-negative-pnl": "Общие потери",
         "twap": "TWAP на неделю",
-        "total-global-rebates": "Всего скидок к оплате"
+        "total-global-rebates": "Всего скидок к оплате",
+        "parlay-link": "<div>Для ежемесячного конкурса OP<parlayLink> кликните сюда</ parlayLink> .</div>"
     },
     "quiz": {
         "title": "Sports Trivia competition",

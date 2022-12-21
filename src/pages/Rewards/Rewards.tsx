@@ -129,6 +129,19 @@ const Rewards: React.FC = () => {
                                     ),
                                 }}
                             />
+                            <Trans
+                                i18nKey="rewards.parlay-link"
+                                components={{
+                                    div: <div />,
+                                    parlayLink: (
+                                        <TipLink
+                                            href={buildHref(ROUTES.Leaderboard)}
+                                            rel="noreferrer"
+                                            target="_blank"
+                                        />
+                                    ),
+                                }}
+                            />
                         </Description>
                         <Search
                             text={searchText}
