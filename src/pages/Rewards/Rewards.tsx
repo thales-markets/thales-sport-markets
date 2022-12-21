@@ -120,6 +120,13 @@ const Rewards: React.FC = () => {
                                     div: <div />,
                                     bold: <BoldText />,
                                     tipLink: <TipLink href={TIP_96} rel="noreferrer" target="_blank" />,
+                                    parlayLink: (
+                                        <TipLink
+                                            href={buildHref(ROUTES.Leaderboard)}
+                                            rel="noreferrer"
+                                            target="_blank"
+                                        />
+                                    ),
                                 }}
                             />
                         </Description>
