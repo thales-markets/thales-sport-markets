@@ -83,6 +83,7 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
 
             if (
                 market.isOpen &&
+                !market.isPaused &&
                 !market.isCanceled &&
                 (market.homeOdds !== 0 || market.awayOdds !== 0 || (market.drawOdds || 0) !== 0) &&
                 market.maturityDate.getTime() > new Date().getTime()
