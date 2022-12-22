@@ -249,7 +249,8 @@
             "amount-exceeded": "Amount exceeded the amount available on AMM",
             "minimal-amount": "Minimal amount is {{min}}",
             "no-funds": "Please ensure your wallet has enough funds"
-        }
+        },
+        "incentivized-market": "INCENTIVIZED MARKET"
     },
     "profile": {
         "open-claimable": "Open/Claimable",

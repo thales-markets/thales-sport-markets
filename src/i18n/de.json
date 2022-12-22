@@ -250,7 +250,8 @@
         "match-time": "Spielzeit",
         "race-starts": "Rennen beginnt",
         "back": "Der Rücken",
-        "apply-filters": "Filter anwenden"
+        "apply-filters": "Filter anwenden",
+        "incentivized-market": "INCENTIVISIERTER MARKT"
     },
     "markets": {
         "market-card": {

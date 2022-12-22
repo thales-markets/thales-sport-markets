@@ -253,7 +253,8 @@
         "match-time": "Tempo di partita",
         "race-starts": "La corsa inizia",
         "back": "Di ritorno",
-        "apply-filters": "Applicare filtri"
+        "apply-filters": "Applicare filtri",
+        "incentivized-market": "MERCATO INCENTIVATO"
     },
     "markets": {
         "market-card": {

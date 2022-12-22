@@ -253,7 +253,8 @@
         "match-time": "比赛时间",
         "race-starts": "比赛开始",
         "back": "后退",
-        "apply-filters": "应用过滤器"
+        "apply-filters": "应用过滤器",
+        "incentivized-market": "激励市场"
     },
     "markets": {
         "market-card": {

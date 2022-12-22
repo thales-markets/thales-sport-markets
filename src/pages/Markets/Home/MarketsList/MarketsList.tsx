@@ -12,18 +12,13 @@ import MarketListCardMobile from '../MarketListCard/MarketListCardMobile';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import Tooltip from 'components/Tooltip';
 import { Trans, useTranslation } from 'react-i18next';
+import { OP_INCENTIVIZED_LEAGUE } from 'constants/markets';
 
 type MarketsList = {
     markets: SportMarkets;
     league: number;
     language: string;
     accountPositions: AccountPositionsMap;
-};
-
-const INCENTIVIZED_LEAGUE = {
-    id: 9011,
-    startDate: new Date(Date.UTC(2022, 11, 22, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2023, 0, 6, 0, 0, 0)),
 };
 
 const MarketsList: React.FC<MarketsList> = ({ markets, league, language, accountPositions }) => {
@@ -55,9 +50,9 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language, account
                         <ArrowIcon down={true} className={`icon-exotic icon-exotic--down`} />
                     )}
                 </LeagueInfo>
-                {INCENTIVIZED_LEAGUE.id == league &&
-                    new Date() > INCENTIVIZED_LEAGUE.startDate &&
-                    new Date() < INCENTIVIZED_LEAGUE.endDate && (
+                {OP_INCENTIVIZED_LEAGUE.id == league &&
+                    new Date() > OP_INCENTIVIZED_LEAGUE.startDate &&
+                    new Date() < OP_INCENTIVIZED_LEAGUE.endDate && (
                         <Tooltip
                             overlay={
                                 <Trans

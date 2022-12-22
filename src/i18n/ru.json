@@ -253,7 +253,8 @@
         "match-time": "Время матча",
         "race-starts": "Старт гонки",
         "back": "Назад",
-        "apply-filters": "Применить фильтры"
+        "apply-filters": "Применить фильтры",
+        "incentivized-market": "СТИМУЛИРОВАННЫЙ РЫНОК"
     },
     "markets": {
         "market-card": {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import Toggle from 'components/Toggle/Toggle';
 import MatchInfo from './components/MatchInfo';
@@ -17,6 +17,9 @@ import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import styled from 'styled-components';
 import { buildHref } from 'utils/routes';
 import ROUTES from 'constants/routes';
+import { OP_INCENTIVIZED_LEAGUE } from 'constants/markets';
+import Tooltip from 'components/Tooltip';
+import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 
 type MarketDetailsPropType = {
     market: MarketData;
@@ -54,6 +57,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
               };
 
     const showAMM = !market.resolved && !market.cancelled && !market.gameStarted;
+
     return (
         <Wrapper>
             <HeaderWrapper>
@@ -78,6 +82,32 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
                         }}
                     />
                 )}
+                {OP_INCENTIVIZED_LEAGUE.id == market.tags[0] &&
+                    new Date(market.maturityDate) > OP_INCENTIVIZED_LEAGUE.startDate &&
+                    new Date(market.maturityDate) < OP_INCENTIVIZED_LEAGUE.endDate && (
+                        <Tooltip
+                            overlay={
+                                <Trans
+                                    i18nKey="markets.op-incentivized-tooltip"
+                                    components={{
+                                        duneLink: (
+                                            <a
+                                                href="https://dune.com/leifu/overtime-epl-rewards-leaderboard"
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            />
+                                        ),
+                                    }}
+                                />
+                            }
+                            component={
+                                <IncentivizedLeague>
+                                    <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
+                                    <OPLogo width={25} height={25} />
+                                </IncentivizedLeague>
+                            }
+                        ></Tooltip>
+                    )}
             </HeaderWrapper>
             <MatchInfo market={market} />
             <Positions
@@ -109,6 +139,22 @@ const HeaderWrapper = styled(FlexDivRow)`
     position: relative;
     align-items: center;
     margin-bottom: 20px;
+`;
+
+const IncentivizedLeague = styled.div`
+    position: absolute;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    right: 0;
+    @media (max-width: 768px) {
+        display: none;
+    }
+`;
+
+const IncentivizedTitle = styled.span`
+    font-size: 15px;
+    padding-right: 5px;
 `;
 
 export default MarketDetails;

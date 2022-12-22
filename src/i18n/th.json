@@ -250,7 +250,8 @@
         "match-time": "เวลาการแข่งขัน",
         "race-starts": "เริ่มการแข่งขัน",
         "back": "กลับ",
-        "apply-filters": "ใช้ตัวกรอง"
+        "apply-filters": "ใช้ตัวกรอง",
+        "incentivized-market": "ตลาดที่มีแรงจูงใจ"
     },
     "markets": {
         "market-card": {
