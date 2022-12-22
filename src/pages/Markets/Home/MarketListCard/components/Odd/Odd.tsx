@@ -5,7 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
-import { formatMarketOdds, getParentMarketAddress, getSymbolText, isDiscounted } from 'utils/markets';
+import {
+    formatMarketOdds,
+    getParentMarketAddress,
+    getSpreadTotalText,
+    getSymbolText,
+    isDiscounted,
+} from 'utils/markets';
 import { getOddsType } from '../../../../../../redux/modules/ui';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { MAIN_COLORS } from 'constants/ui';
@@ -53,6 +59,72 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
         }
     };
 
+    const getTooltipText = (
+        position: Position,
+        betType: BetType,
+        total: number,
+        spread: number,
+        homeTeam: string,
+        awayTeam: string
+    ) => {
+        const spreadTotalText = getSpreadTotalText(betType, spread, total);
+
+        switch (position) {
+            case Position.HOME:
+                switch (Number(betType)) {
+                    case BetType.SPREAD:
+                        if (Number(spread) < 0) {
+                            return t('markets.market-card.odd-tooltip.spread.minus', {
+                                team: homeTeam,
+                                spread: -Number(spreadTotalText),
+                            });
+                        }
+                        return t('markets.market-card.odd-tooltip.spread.plus', {
+                            team: homeTeam,
+                            spread: spreadTotalText,
+                        });
+                    case BetType.TOTAL:
+                        return t('markets.market-card.odd-tooltip.total.over', {
+                            team: homeTeam,
+                            total: spreadTotalText,
+                        });
+                    default:
+                        return t('markets.market-card.odd-tooltip.winner', {
+                            team: homeTeam,
+                            spread: spreadTotalText,
+                        });
+                }
+            case Position.AWAY:
+                switch (Number(betType)) {
+                    case BetType.SPREAD:
+                        if (Number(spread) < 0) {
+                            return t('markets.market-card.odd-tooltip.spread.plus', {
+                                team: awayTeam,
+                                spread: -Number(spreadTotalText),
+                            });
+                        }
+                        return t('markets.market-card.odd-tooltip.spread.minus', {
+                            team: awayTeam,
+                            spread: spreadTotalText,
+                        });
+                    case BetType.TOTAL:
+                        return t('markets.market-card.odd-tooltip.total.under', {
+                            team: awayTeam,
+                            total: spreadTotalText,
+                        });
+                    default:
+                        return t('markets.market-card.odd-tooltip.winner', {
+                            team: awayTeam,
+                            spread: spreadTotalText,
+                        });
+                }
+            case Position.DRAW:
+                return t('markets.market-card.odd-tooltip.draw');
+            default:
+                return '';
+        }
+    };
+
     return (
         <PositionSymbol
             symbolAdditionalText={{
@@ -75,6 +147,18 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
             symbolText={getSymbolText(position, market.betType)}
             onClick={onClick}
             selected={isAddedToParlay}
+            tooltip={
+                <>
+                    {getTooltipText(
+                        position,
+                        market.betType,
+                        market.total,
+                        market.spread,
+                        market.homeTeam,
+                        market.awayTeam
+                    )}
+                </>
+            }
         />
     );
 };

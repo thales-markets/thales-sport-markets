@@ -7,6 +7,7 @@ import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 type SymbolProps = {
     symbolText: string;
     symbolColor?: string;
+    tooltip?: (() => React.ReactNode) | React.ReactNode;
     symbolAdditionalText?: {
         text?: string;
         tooltip?: string;
@@ -27,6 +28,7 @@ type SymbolProps = {
 
 const PositionSymbol: React.FC<SymbolProps> = ({
     symbolText,
+    tooltip,
     symbolColor,
     symbolAdditionalText,
     symbolUpperText,
@@ -39,23 +41,27 @@ const PositionSymbol: React.FC<SymbolProps> = ({
 }) => {
     const notClickable = !onClick;
 
+    const getSymbol = () => (
+        <Symbol
+            glow={glow}
+            color={symbolColor}
+            style={additionalStyle}
+            selected={selected}
+            notClickable={notClickable}
+            flexDirection={flexDirection}
+            disabled={disabled}
+            onClick={() => {
+                onClick && onClick();
+            }}
+        >
+            {symbolText}
+            {symbolUpperText && <UpperText style={symbolUpperText.textStyle}>{symbolUpperText.text}</UpperText>}
+        </Symbol>
+    );
+
     return (
         <Wrapper flexDirection={flexDirection}>
-            <Symbol
-                glow={glow}
-                color={symbolColor}
-                style={additionalStyle}
-                selected={selected}
-                notClickable={notClickable}
-                flexDirection={flexDirection}
-                disabled={disabled}
-                onClick={() => {
-                    onClick && onClick();
-                }}
-            >
-                {symbolText}
-                {symbolUpperText && <UpperText style={symbolUpperText.textStyle}>{symbolUpperText.text}</UpperText>}
-            </Symbol>
+            {tooltip ? <Tooltip overlay={tooltip} component={getSymbol()} /> : getSymbol()}
             {symbolAdditionalText && (
                 <BottomText style={symbolAdditionalText.textStyle} flexDirection={flexDirection} color={symbolColor}>
                     {symbolAdditionalText.text}

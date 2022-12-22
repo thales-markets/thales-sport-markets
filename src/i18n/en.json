@@ -314,6 +314,18 @@
                 "winner": "Winner",
                 "spread": "Handicap",
                 "total": "Total"
+            },
+            "odd-tooltip": {
+                "winner": "{{team}} wins the match.",
+                "draw": "The match will end in a draw.",
+                "total": {
+                    "over": "The total number of points in the match will be more than {{total}}, including extra time.",
+                    "under": "The total number of points in the match will be less than {{total}}, including extra time."
+                },
+                "spread": {
+                    "minus": "{{team}} wins the match with a difference of more than {{spread}} points.",
+                    "plus": "{{team}} wins the match or loses by less than {{spread}} points."
+                }
             }
         },
         "market-details": {
