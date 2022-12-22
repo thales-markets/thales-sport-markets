@@ -1,6 +1,6 @@
 import SimpleLoader from 'components/SimpleLoader';
 import useMarketQuery from 'queries/markets/useMarketQuery';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { getIsAppReady } from 'redux/modules/app';
@@ -17,7 +17,7 @@ type MarketProps = RouteComponentProps<{
 
 const Market: React.FC<MarketProps> = (props) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const [market, setMarket] = useState<MarketData | undefined>(undefined);
+    const [lastValidMarket, setLastValidMarket] = useState<MarketData | undefined>(undefined);
     const { trackPageView } = useMatomo();
 
     const { params } = props.match;
@@ -29,9 +29,16 @@ const Market: React.FC<MarketProps> = (props) => {
 
     useEffect(() => {
         if (marketQuery.isSuccess && marketQuery.data) {
-            setMarket(marketQuery.data);
+            setLastValidMarket(marketQuery.data);
         }
     }, [marketQuery.isSuccess, marketQuery.data]);
+
+    const market: MarketData | undefined = useMemo(() => {
+        if (marketQuery.isSuccess && marketQuery.data) {
+            return marketQuery.data;
+        }
+        return lastValidMarket;
+    }, [marketQuery.isSuccess, marketQuery.data, lastValidMarket]);
 
     useEffect(() => {
         trackPageView({});

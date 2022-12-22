@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import MatchInfo from './components/MatchInfo';
 import BackToLink from 'pages/Markets/components/BackToLink';
@@ -29,7 +29,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const [showParlayMobileModal, setShowParlayMobileModal] = useState<boolean>(false);
 
-    const [childMarkets, setChildMarkets] = useState<ChildMarkets>({
+    const [lastValidChildMarkets, setLastValidChildMarkets] = useState<ChildMarkets>({
         spreadMarkets: [],
         totalMarkets: [],
     });
@@ -40,9 +40,16 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
 
     useEffect(() => {
         if (childMarketsQuery.isSuccess && childMarketsQuery.data) {
-            setChildMarkets(childMarketsQuery.data);
+            setLastValidChildMarkets(childMarketsQuery.data);
         }
     }, [childMarketsQuery.isSuccess, childMarketsQuery.data]);
+
+    const childMarkets: ChildMarkets = useMemo(() => {
+        if (childMarketsQuery.isSuccess && childMarketsQuery.data) {
+            return childMarketsQuery.data;
+        }
+        return lastValidChildMarkets;
+    }, [childMarketsQuery.isSuccess, childMarketsQuery.data, lastValidChildMarkets]);
 
     const showAMM = !market.resolved && !market.cancelled && !market.gameStarted && !market.paused;
 

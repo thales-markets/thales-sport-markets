@@ -9,8 +9,8 @@ import { Position } from '../../constants/options';
 import { groupBy, orderBy } from 'lodash';
 import { BetType } from 'constants/tags';
 
-const useChildMarketsQuery = (parentMarket: MarketData, options?: UseQueryOptions<ChildMarkets>) => {
-    return useQuery<ChildMarkets>(
+const useChildMarketsQuery = (parentMarket: MarketData, options?: UseQueryOptions<ChildMarkets | undefined>) => {
+    return useQuery<ChildMarkets | undefined>(
         QUERY_KEYS.ChildMarkets(parentMarket.address),
         async () => {
             try {
@@ -98,10 +98,7 @@ const useChildMarketsQuery = (parentMarket: MarketData, options?: UseQueryOption
                 };
             } catch (e) {
                 console.log(e);
-                return {
-                    spreadMarkets: [],
-                    totalMarkets: [],
-                };
+                return undefined;
             }
         },
         {
