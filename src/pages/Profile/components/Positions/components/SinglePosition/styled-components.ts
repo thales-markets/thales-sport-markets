@@ -1,6 +1,6 @@
 import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
-import { FlexDivColumnNative, FlexDivRow } from 'styles/common';
+import { FlexDivCentered, FlexDivColumnNative, FlexDivRow, FlexDivStart } from 'styles/common';
 import { Value } from '../ParlayPosition/styled-components';
 
 export const Wrapper = styled(FlexDivRow)`
@@ -16,26 +16,20 @@ export const Wrapper = styled(FlexDivRow)`
     }
 `;
 
-export const ResultContainer = styled(FlexDivRow)`
-    align-items: center;
+export const PositionContainer = styled(FlexDivCentered)`
     margin-left: 15px;
-    min-width: 100px;
-    justify-content: flex-start;
     @media (max-width: 768px) {
-        margin-left: 5;
-        flex-direction: column;
-        min-width: 40px;
+        margin-left: 5px;
     }
 `;
 
-export const PositionContainer = styled(FlexDivRow)`
+export const ResultContainer = styled(FlexDivStart)`
     align-items: center;
     margin-left: 15px;
-    justify-content: flex-start;
+    min-width: 100px;
     @media (max-width: 768px) {
-        margin-left: 5px;
-        flex-direction: column;
-        min-width: 20px;
+        margin-left: 5;
+        min-width: 60px;
     }
 `;
 
@@ -50,6 +44,6 @@ export const ColumnDirectionInfo = styled(FlexDivColumnNative)`
         margin-left: 10px;
     }
     @media (max-width: 768px) {
-        min-width: 40px;
+        min-width: 60px;
     }
 `;

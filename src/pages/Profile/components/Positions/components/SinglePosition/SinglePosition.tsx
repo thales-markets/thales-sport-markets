@@ -8,10 +8,6 @@ import {
     MatchLabel,
     MatchLogo,
     StatusContainer,
-} from '../ParlayPosition/components/ParlayItem/styled-components';
-import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { BoldValue, ColumnDirectionInfo, PositionContainer, ResultContainer, Wrapper } from './styled-components';
-import {
     ClaimContainer,
     ClaimLabel,
     ClaimValue,
@@ -20,7 +16,9 @@ import {
     ExternalLinkContainer,
     Label,
     ClaimButton,
-} from '../ParlayPosition/styled-components';
+} from '../../styled-components';
+import { getOnImageError, getTeamImageSource } from 'utils/images';
+import { BoldValue, ColumnDirectionInfo, PositionContainer, ResultContainer, Wrapper } from './styled-components';
 import { useTranslation } from 'react-i18next';
 import { USD_SIGN } from 'constants/currency';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
@@ -43,7 +41,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { getIsMobile } from 'redux/modules/app';
-import { FlexDivRow } from 'styles/common';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import { buildMarketLink } from 'utils/routes';
 import i18n from 'i18n';
@@ -207,28 +204,24 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                 </PositionContainer>
                 {isClaimable && (
                     <>
-                        <ResultContainer>
-                            {!isCanceled && (
-                                <ColumnDirectionInfo>
-                                    <Label>{t('profile.card.result')}:</Label>
-                                    <BoldValue>{`${position.market.homeScore} : ${position.market.awayScore}`}</BoldValue>
-                                </ColumnDirectionInfo>
-                            )}
-                            {isCanceled && (
-                                <>
-                                    <Label canceled={true}>{t('profile.card.canceled')}</Label>
-                                    <Tooltip
-                                        iconColor={MAIN_COLORS.TEXT.CANCELED}
-                                        overlay={t('profile.messages.canceled-tooltip')}
-                                    />
-                                </>
-                            )}
-                        </ResultContainer>
+                        {isCanceled ? (
+                            <ResultContainer>
+                                <Label canceled={true}>{t('profile.card.canceled')}</Label>
+                                <Tooltip
+                                    iconColor={MAIN_COLORS.TEXT.CANCELED}
+                                    overlay={t('profile.messages.canceled-tooltip')}
+                                    iconFontSize={14}
+                                />
+                            </ResultContainer>
+                        ) : (
+                            <ColumnDirectionInfo>
+                                <Label>{t('profile.card.result')}:</Label>
+                                <BoldValue>{`${position.market.homeScore} : ${position.market.awayScore}`}</BoldValue>
+                            </ColumnDirectionInfo>
+                        )}
                         {isMobile ? (
                             <ClaimContainer>
-                                <FlexDivRow>
-                                    <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
-                                </FlexDivRow>
+                                <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
                                 <ClaimButton
                                     claimable={true}
                                     onClick={(e: any) => {

@@ -3,16 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { PositionData, SportMarketInfo } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { convertPositionNameToPositionType, formatMarketOdds, getSpreadTotalText, getSymbolText } from 'utils/markets';
-import {
-    ClubLogo,
-    ClubName,
-    MatchInfo,
-    MatchLabel,
-    MatchLogo,
-    ParlayStatus,
-    Wrapper,
-    StatusContainer,
-} from './styled-components';
+import { ClubLogo, ClubName, MatchInfo, MatchLabel, MatchLogo, StatusContainer } from '../../../../styled-components';
+import { Wrapper, ParlayStatus } from './styled-components';
 import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
 import { t } from 'i18next';

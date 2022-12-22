@@ -1,7 +1,7 @@
 import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivColumnNative, FlexDivRow } from 'styles/common';
-import Button from 'components/Button';
+import { Label } from '../../styled-components';
 
 export const Container = styled(FlexDivColumnNative)`
     align-items: center;
@@ -11,12 +11,12 @@ export const Container = styled(FlexDivColumnNative)`
     width: 100%;
     margin-bottom: 5px;
     @media (max-width: 768px) {
-        padding: 12px 5px;
+        padding: 7px 5px;
     }
 `;
 
 export const OverviewContainer = styled(FlexDivRow)`
-    justify-content: flex-start;
+    justify-content: space-between;
     width: 100%;
     align-items: center;
     height: 35px;
@@ -47,33 +47,11 @@ export const TicketIdContainer = styled(FlexDivRow)`
 `;
 
 export const InfoContainerColumn = styled(FlexDivColumnNative)`
-    min-width: 100px;
+    min-width: 95px;
     justify-content: flex-start;
     @media (max-width: 768px) {
         min-width: auto;
         flex-direction: column;
-    }
-`;
-
-export const ClaimContainer = styled(FlexDivColumnNative)`
-    min-width: 100px;
-    justify-content: flex-start;
-    @media (max-width: 768px) {
-        min-width: 60px;
-        flex-direction: column;
-        align-items: flex-end;
-    }
-`;
-
-export const Label = styled.span<{ canceled?: boolean }>`
-    font-weight: 400;
-    font-size: 12px;
-    color: ${(props) => (props?.canceled ? `${MAIN_COLORS.TEXT.CANCELED}` : `${MAIN_COLORS.TEXT.WHITE}`)};
-    text-transform: uppercase;
-    margin-right: 3px;
-    @media (max-width: 768px) {
-        font-size: 10px;
-        margin-bottom: 3px;
     }
 `;
 
@@ -92,19 +70,6 @@ export const Value = styled(TicketId)`
 
 export const NumberOfGames = styled(Label)`
     font-weight: 700;
-    text-transform: none;
-`;
-
-export const ClaimLabel = styled(Label)`
-    font-weight: 900;
-    color: ${MAIN_COLORS.TEXT.BLUE};
-    text-transform: uppercase;
-    @media (max-width: 768px) {
-        font-size: 10px;
-    }
-`;
-
-export const ClaimValue = styled(ClaimLabel)`
     text-transform: none;
 `;
 
@@ -151,7 +116,7 @@ export const Divider = styled.div`
     border: none;
     background-color: ${MAIN_COLORS.DIVIDER_COLOR};
     color: ${MAIN_COLORS.DIVIDER_COLOR};
-    width: 95%;
+    width: 100%;
     margin-top: 8px;
     margin-bottom: 10px;
 `;
@@ -169,46 +134,6 @@ export const CollapseFooterContainer = styled(FlexDivRow)`
     margin-top: 11px;
 `;
 
-export const ExternalLinkContainer = styled.div`
-    height: 20px;
-    width: 20px;
-    display: block;
-    cursor: pointer;
-    margin-left: 20px;
-    @media (max-width: 768px) {
-        display: none;
-    }
-`;
-
-export const ExternalLinkArrow = styled.i.attrs({ className: 'icon icon--arrow-external' })`
-    font-size: 20px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
-    position: absolute;
-    right: 15px;
-    cursor: pointer;
-`;
-
-export const ExternalLink = styled.a``;
-
 export const TotalQuoteContainer = styled(FlexDivRow)``;
 
 export const ProfitContainer = styled(FlexDivRow)``;
-
-export const ClaimButton = styled(Button)<{ claimable?: boolean }>`
-    background: ${(props) => props.theme.background.quaternary};
-    color: ${(props) => props.theme.textColor.tertiary};
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: 0.025em;
-    padding: 1px 15px 1px 15px;
-    visibility: ${(props) => (!props.claimable ? 'hidden' : '')};
-    @media (max-width: 768px) {
-        position: initial;
-        font-size: 9px;
-        padding: 2px 5px;
-        min-height: 12px;
-    }
-`;

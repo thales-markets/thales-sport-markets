@@ -11,7 +11,6 @@ import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { FlexDivRow } from 'styles/common';
 import { ParlayMarket, ParlaysMarket } from 'types/markets';
 import { getEtherscanTxLink } from 'utils/etherscan';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
@@ -27,19 +26,12 @@ import { refetchAfterClaim } from 'utils/queryConnector';
 import ParlayItem from './components/ParlayItem';
 import {
     ArrowIcon,
-    ClaimContainer,
-    ClaimLabel,
-    ClaimValue,
     CollapsableContainer,
     CollapseFooterContainer,
     Container,
     Divider,
-    ExternalLink,
-    ExternalLinkArrow,
-    ExternalLinkContainer,
     InfoContainer,
     InfoContainerColumn,
-    Label,
     OverviewContainer,
     ParlayDetailContainer,
     ProfitContainer,
@@ -49,8 +41,17 @@ import {
     Value,
     WinLabel,
     WinValue,
-    ClaimButton,
 } from './styled-components';
+import {
+    ClaimContainer,
+    ClaimLabel,
+    ClaimValue,
+    ExternalLink,
+    ExternalLinkArrow,
+    ExternalLinkContainer,
+    Label,
+    ClaimButton,
+} from '../../styled-components';
 
 type ParlayPosition = {
     parlayMarket: ParlayMarket;
@@ -170,9 +171,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
                 )}
                 {isMobile && isClaimable && (
                     <ClaimContainer>
-                        <FlexDivRow>
-                            <ClaimValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</ClaimValue>
-                        </FlexDivRow>
+                        <ClaimValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</ClaimValue>
                         <ClaimButton
                             claimable={true}
                             onClick={(e: any) => {
