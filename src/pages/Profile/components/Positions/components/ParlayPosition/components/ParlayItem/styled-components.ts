@@ -1,6 +1,6 @@
 import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
-import { FlexDivRow } from 'styles/common';
+import { FlexDivColumn, FlexDivRow } from 'styles/common';
 
 export const Wrapper = styled(FlexDivRow)`
     width: 100%;
@@ -17,7 +17,7 @@ export const MatchInfo = styled(FlexDivRow)`
     justify-content: flex-start;
     align-items: center;
     @media (max-width: 768px) {
-        max-width: 60%;
+        max-width: 50%;
     }
 `;
 
@@ -38,8 +38,8 @@ export const ClubLogo = styled.img<{
 }>`
     ${(props) => (props?.isFlag ? 'object-fit: cover;' : '')}
     ${(props) => (props?.isFlag ? 'border-radius: 50%;' : '')}
-    height: 45px;
-    width: 45px;
+    height: 40px;
+    width: 40px;
     opacity: ${(props) => (props?.losingTeam ? `0.4` : '1')};
     z-index: ${(props) => (props?.losingTeam ? '1' : '2')};
     ${(props) => (props?.awayTeam ? 'margin-left: -15px;' : '')}
@@ -49,7 +49,7 @@ export const ClubLogo = styled.img<{
     }
 `;
 
-export const MatchLabel = styled(FlexDivRow)`
+export const MatchLabel = styled(FlexDivColumn)`
     margin-right: 5px;
     @media (max-width: 768px) {
         font-size: 10px;
@@ -67,20 +67,21 @@ export const ClubName = styled.span`
     color: ${MAIN_COLORS.TEXT.WHITE};
     margin-right: 5px;
     word-wrap: normal;
+    :last-child {
+        margin-top: 5px;
+    }
     @media (max-width: 768px) {
         font-size: 10px;
-        height: 15px;
-        margin-top: 3px;
+        :last-child {
+            margin-top: 3px;
+        }
     }
 `;
 
-export const ParlayItemStatusContainer = styled(FlexDivRow)`
-    width: 35%;
+export const StatusContainer = styled(FlexDivRow)`
+    width: 50%;
     align-items: center;
-    justify-content: flex-start;
-    @media (max-width: 768px) {
-        width: 40%;
-    }
+    justify-content: flex-end;
 `;
 
 export const ParlayStatus = styled.span`

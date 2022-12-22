@@ -11,7 +11,7 @@ import {
     MatchLogo,
     ParlayStatus,
     Wrapper,
-    ParlayItemStatusContainer,
+    StatusContainer,
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
@@ -51,7 +51,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                         isFlag={market.tags[0] == 9018}
                         losingTeam={false}
                         onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
-                        customMobileSize={'35px'}
+                        customMobileSize={'30px'}
                     />
                     <ClubLogo
                         awayTeam={true}
@@ -60,16 +60,15 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                         isFlag={market.tags[0] == 9018}
                         losingTeam={false}
                         onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
-                        customMobileSize={'35px'}
+                        customMobileSize={'30px'}
                     />
                 </MatchLogo>
                 <MatchLabel>
                     <ClubName>{market.homeTeam}</ClubName>
-                    <ClubName>{' VS '}</ClubName>
                     <ClubName>{market.awayTeam}</ClubName>
                 </MatchLabel>
             </MatchInfo>
-            <ParlayItemStatusContainer>
+            <StatusContainer>
                 <PositionSymbol
                     symbolBottomText={{
                         text: formatMarketOdds(selectedOddsType, parlayItemQuote),
@@ -91,7 +90,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                     }
                 />
                 <ParlayStatus>{parlayStatus}</ParlayStatus>
-            </ParlayItemStatusContainer>
+            </StatusContainer>
         </Wrapper>
     );
 };

@@ -59,7 +59,7 @@ export const ClaimContainer = styled(FlexDivColumnNative)`
     min-width: 100px;
     justify-content: flex-start;
     @media (max-width: 768px) {
-        min-width: auto;
+        min-width: 60px;
         flex-direction: column;
         align-items: flex-end;
     }
@@ -174,6 +174,7 @@ export const ExternalLinkContainer = styled.div`
     width: 20px;
     display: block;
     cursor: pointer;
+    margin-left: 20px;
     @media (max-width: 768px) {
         display: none;
     }
@@ -199,8 +200,6 @@ export const ClaimButton = styled(Button)<{ claimable?: boolean }>`
     text-transform: uppercase;
     cursor: pointer;
     border-radius: 5px;
-    position: absolute;
-    right: 10px;
     font-weight: 700;
     font-size: 15px;
     letter-spacing: 0.025em;
