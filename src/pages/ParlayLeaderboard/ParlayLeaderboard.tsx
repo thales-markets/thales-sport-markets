@@ -212,7 +212,7 @@ const ParlayLeaderboard: React.FC = () => {
                                     </ParlayRowTeam>
                                 </ParlayRowText>
                                 <PositionSymbol
-                                    symbolBottomText={{
+                                    symbolAdditionalText={{
                                         text: formatMarketOdds(
                                             OddsType.Decimal,
                                             row.original.marketQuotes ? row.original.marketQuotes[index] : 0
@@ -318,7 +318,7 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
                     </ParlayRowTeam>
                 </ParlayRowText>
                 <PositionSymbol
-                    symbolBottomText={{
+                    symbolAdditionalText={{
                         text: formatMarketOdds(OddsType.Decimal, parlay.marketQuotes ? parlay.marketQuotes[index] : 0),
                         textStyle: {
                             fontSize: '10.5px',

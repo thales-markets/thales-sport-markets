@@ -7,7 +7,7 @@ import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 type SymbolProps = {
     symbolText: string;
     symbolColor?: string;
-    symbolBottomText?: {
+    symbolAdditionalText?: {
         text?: string;
         tooltip?: string;
         textStyle?: CSSProperties;
@@ -28,7 +28,7 @@ type SymbolProps = {
 const PositionSymbol: React.FC<SymbolProps> = ({
     symbolText,
     symbolColor,
-    symbolBottomText,
+    symbolAdditionalText,
     symbolUpperText,
     selected,
     disabled,
@@ -56,11 +56,11 @@ const PositionSymbol: React.FC<SymbolProps> = ({
                 {symbolText}
                 {symbolUpperText && <UpperText style={symbolUpperText.textStyle}>{symbolUpperText.text}</UpperText>}
             </Symbol>
-            {symbolBottomText && (
-                <BottomText style={symbolBottomText.textStyle} flexDirection={flexDirection} color={symbolColor}>
-                    {symbolBottomText.text}
-                    {symbolBottomText.tooltip && (
-                        <Tooltip overlay={<>{symbolBottomText.tooltip}</>} iconFontSize={11} marginLeft={3} />
+            {symbolAdditionalText && (
+                <BottomText style={symbolAdditionalText.textStyle} flexDirection={flexDirection} color={symbolColor}>
+                    {symbolAdditionalText.text}
+                    {symbolAdditionalText.tooltip && (
+                        <Tooltip overlay={<>{symbolAdditionalText.tooltip}</>} iconFontSize={11} marginLeft={3} />
                     )}
                 </BottomText>
             )}

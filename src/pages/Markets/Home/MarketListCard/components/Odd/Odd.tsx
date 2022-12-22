@@ -55,7 +55,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
 
     return (
         <PositionSymbol
-            symbolBottomText={{
+            symbolAdditionalText={{
                 text: formatMarketOdds(selectedOddsType, odd),
                 tooltip: noOdd ? t('markets.zero-odds-tooltip') : undefined,
             }}

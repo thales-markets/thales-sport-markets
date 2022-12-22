@@ -252,7 +252,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                                     </ParlayRowTeam>
                                 </ParlayRowText>
                                 <PositionSymbol
-                                    symbolBottomText={{
+                                    symbolAdditionalText={{
                                         text: formatMarketOdds(selectedOddsType, quote),
                                         textStyle: {
                                             fontSize: '10.5px',
