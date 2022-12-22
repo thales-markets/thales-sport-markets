@@ -366,7 +366,9 @@
                 "switch": "Interruttore",
                 "disconnect": "Disconnetti"
             }
-        }
+        },
+        "incentivized-markets": "MERCATI INCENTIVATI",
+        "op-incentivized-tooltip": "I mercati EPL sono incentivati con 5.000 OP dalle partite del 26 dicembre alle partite del 6 gennaio in base al volume proporzionale. Dai un'occhiata alla classifica <duneLink>qui</ duneLink>."
     },
     "rewards": {
         "header": "Rewards",

@@ -366,7 +366,9 @@
                 "disconnect": "断开",
                 "switch": "转变"
             }
-        }
+        },
+        "incentivized-markets": "激励市场",
+        "op-incentivized-tooltip": "从 12 月 26 日的比赛到 1 月 6 日的比赛，根据按比例分配的数量，EPL 市场受到 5,000 OP 的激励。在<duneLink>此处</duneLink>查看排行榜。"
     },
     "rewards": {
         "header": "奖励",

@@ -363,7 +363,9 @@
                 "switch": "Schalter",
                 "disconnect": "Trennen"
             }
-        }
+        },
+        "incentivized-markets": "ANREIZMÄRKTE",
+        "op-incentivized-tooltip": "EPL-Märkte werden mit 5.000 OP von den Spielen vom 26. Dezember bis zum 6. Januar basierend auf dem anteiligen Volumen gefördert. Sehen Sie sich die Bestenliste <duneLink>hier</ duneLink> an."
     },
     "rewards": {
         "header": "Preise",

@@ -366,7 +366,9 @@
                 "disconnect": "Отключить",
                 "switch": "Выключатель"
             }
-        }
+        },
+        "op-incentivized-tooltip": "Рынки EPL стимулируются 5000 OP с 26 декабря по 6 января в зависимости от пропорционального объема. Ознакомьтесь с таблицей лидеров <duneLink>здесь</ duneLink>.",
+        "incentivized-markets": "СТИМУЛИРОВАННЫЕ РЫНКИ"
     },
     "rewards": {
         "header": "Rewards",
