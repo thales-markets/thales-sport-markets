@@ -403,7 +403,8 @@
         "your-score": "Ihr Ergebnis",
         "total-negative-pnl": "Totalverluste",
         "twap": "Eine Woche TWAP",
-        "total-global-rebates": "Gesamtrabatte zu zahlen"
+        "total-global-rebates": "Gesamtrabatte zu zahlen",
+        "parlay-link": "<div>Für den monatlichen Parlay-Wettbewerb des OP<parlayLink> klicken Sie hier</ parlayLink> .</div>"
     },
     "quiz": {
         "title": "Sport Trivia Wettbewerb",

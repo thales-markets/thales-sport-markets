@@ -406,7 +406,8 @@
         "your-score": "Tu puntuación",
         "total-negative-pnl": "pérdidas totales",
         "twap": "TWAP de una semana",
-        "total-global-rebates": "Reembolsos totales a pagar"
+        "total-global-rebates": "Reembolsos totales a pagar",
+        "parlay-link": "<div>Para la competencia parlay mensual OP<parlayLink> haga clic aquí</ parlayLink> .</div>"
     },
     "quiz": {
         "title": "Competencia de trivia sobre deportes (en ingles)",

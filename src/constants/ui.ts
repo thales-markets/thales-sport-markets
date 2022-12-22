@@ -88,12 +88,6 @@ export const NAV_MENU: NavMenuItem[] = [
         route: ROUTES.Profile,
     },
     {
-        i18label: 'markets.nav-menu.items.fifa-campaign',
-        iconClass: 'icon icon--fifa-world-cup',
-        name: 'fifa-campaign',
-        route: ROUTES.MintWorldCupNFT,
-    },
-    {
         i18label: 'markets.nav-menu.items.leaderboard',
         iconClass: 'icon icon--competition',
         name: 'parlay-competition',

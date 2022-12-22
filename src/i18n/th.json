@@ -407,7 +407,8 @@
         },
         "your-score": "คะแนนของคุณ",
         "twap": "หนึ่งสัปดาห์ TWAP",
-        "total-global-rebates": "รวมเงินคืนที่ต้องจ่าย"
+        "total-global-rebates": "รวมเงินคืนที่ต้องจ่าย",
+        "parlay-link": "<div>สำหรับการแข่งขันพาร์เลย์ OP ประจำเดือน<parlayLink> คลิกที่นี่</ parlayLink> .</div>"
     },
     "quiz": {
         "title": "การแข่งขันเกร็ดความรู้ด้านกีฬา",
