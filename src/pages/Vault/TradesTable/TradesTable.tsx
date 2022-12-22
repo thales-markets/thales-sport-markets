@@ -15,7 +15,7 @@ import { VaultTrade, VaultTrades } from 'types/vault';
 import { VaultTradeStatus } from 'constants/vault';
 import { Colors } from 'styles/common';
 import PositionSymbol from 'components/PositionSymbol';
-import { getParentMarketAddress, getSpreadTotalText, getSymbolText } from 'utils/markets';
+import { getOddTooltipText, getParentMarketAddress, getSpreadTotalText, getSymbolText } from 'utils/markets';
 
 type TradesTableProps = {
     transactions: VaultTrades;
@@ -72,11 +72,7 @@ export const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResults
                                 cellProps.cell.row.original.wholeMarket.betType
                             );
 
-                            const spreadTotalText = getSpreadTotalText(
-                                cellProps.cell.row.original.wholeMarket.betType,
-                                cellProps.cell.row.original.wholeMarket.spread,
-                                cellProps.cell.row.original.wholeMarket.total
-                            );
+                            const spreadTotalText = getSpreadTotalText(cellProps.cell.row.original.wholeMarket);
                             return (
                                 <PositionSymbol
                                     symbolText={symbolText}
@@ -90,6 +86,14 @@ export const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResults
                                                   },
                                               }
                                             : undefined
+                                    }
+                                    tooltip={
+                                        <>
+                                            {getOddTooltipText(
+                                                cellProps.cell.value,
+                                                cellProps.cell.row.original.wholeMarket
+                                            )}
+                                        </>
                                     }
                                 />
                             );

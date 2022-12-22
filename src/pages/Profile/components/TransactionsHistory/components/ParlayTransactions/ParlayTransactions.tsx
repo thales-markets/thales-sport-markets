@@ -18,6 +18,7 @@ import {
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
     formatMarketOdds,
+    getOddTooltipText,
     getSpreadTotalText,
     getSymbolText,
     isParlayClaimable,
@@ -237,11 +238,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                             : 0;
 
                         const symbolText = getSymbolText(positionEnum, position.market.betType);
-                        const spreadTotalText = getSpreadTotalText(
-                            position.market.betType,
-                            position.market.spread,
-                            position.market.total
-                        );
+                        const spreadTotalText = getSpreadTotalText(position.market);
 
                         return (
                             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
@@ -274,6 +271,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                                               }
                                             : undefined
                                     }
+                                    tooltip={<>{getOddTooltipText(positionEnum, position.market)}</>}
                                 />
                                 <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
                             </ParlayRow>

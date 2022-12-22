@@ -9,7 +9,7 @@ import { formatCurrency } from 'utils/formatters/number';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
-import { getSpreadTotalText, getSymbolText } from 'utils/markets';
+import { getOddTooltipText, getSpreadTotalText, getSymbolText } from 'utils/markets';
 import PositionSymbol from 'components/PositionSymbol';
 
 type TransactionsTableProps = {
@@ -53,11 +53,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                                 cellProps.cell.row.original.wholeMarket.betType
                             );
 
-                            const spreadTotalText = getSpreadTotalText(
-                                cellProps.cell.row.original.wholeMarket.betType,
-                                cellProps.cell.row.original.wholeMarket.spread,
-                                cellProps.cell.row.original.wholeMarket.total
-                            );
+                            const spreadTotalText = getSpreadTotalText(cellProps.cell.row.original.wholeMarket);
                             return (
                                 <PositionSymbol
                                     symbolText={symbolText}
@@ -75,6 +71,14 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                                                   },
                                               }
                                             : undefined
+                                    }
+                                    tooltip={
+                                        <>
+                                            {getOddTooltipText(
+                                                cellProps.cell.value,
+                                                cellProps.cell.row.original.wholeMarket
+                                            )}
+                                        </>
                                     }
                                 />
                             );

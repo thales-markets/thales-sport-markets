@@ -16,6 +16,7 @@ import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
+    getOddTooltipText,
     getSpreadTotalText,
     getSymbolText,
 } from 'utils/markets';
@@ -81,28 +82,34 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                                 cellProps.cell.row.original.wholeMarket.betType
                             );
 
-                            const spreadTotalText = getSpreadTotalText(
-                                cellProps.cell.row.original.wholeMarket.betType,
-                                cellProps.cell.row.original.wholeMarket.spread,
-                                cellProps.cell.row.original.wholeMarket.total
-                            );
+                            const spreadTotalText = getSpreadTotalText(cellProps.cell.row.original.wholeMarket);
 
                             return (
                                 <FlexCenter>
                                     <PositionSymbol
                                         symbolText={symbolText}
+                                        additionalStyle={{ width: 25, height: 25, fontSize: 11, borderWidth: 2 }}
                                         symbolUpperText={
                                             spreadTotalText
                                                 ? {
                                                       text: spreadTotalText,
                                                       textStyle: {
                                                           backgroundColor: '#1A1C2B',
-                                                          fontSize: '11px',
-                                                          top: '-9px',
+                                                          fontSize: '10px',
+                                                          top: '-7px',
+                                                          left: '13px',
                                                           lineHeight: '100%',
                                                       },
                                                   }
                                                 : undefined
+                                        }
+                                        tooltip={
+                                            <>
+                                                {getOddTooltipText(
+                                                    convertPositionNameToPositionType(cellProps.cell.value),
+                                                    cellProps.cell.row.original.wholeMarket
+                                                )}
+                                            </>
                                         }
                                     />
                                 </FlexCenter>

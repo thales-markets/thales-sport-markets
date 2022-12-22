@@ -2,7 +2,13 @@ import PositionSymbol from 'components/PositionSymbol';
 import React, { useEffect, useState } from 'react';
 import { PositionData, SportMarketInfo } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { convertPositionNameToPositionType, formatMarketOdds, getSpreadTotalText, getSymbolText } from 'utils/markets';
+import {
+    convertPositionNameToPositionType,
+    formatMarketOdds,
+    getOddTooltipText,
+    getSpreadTotalText,
+    getSymbolText,
+} from 'utils/markets';
 import { ClubLogo, ClubName, MatchInfo, MatchLabel, MatchLogo, StatusContainer } from '../../../../styled-components';
 import { Wrapper, ParlayStatus } from './styled-components';
 import { useSelector } from 'react-redux';
@@ -31,7 +37,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
     const parlayStatus = getParlayItemStatus(market);
 
     const symbolText = getSymbolText(positionEnum, market.betType);
-    const spreadTotalText = getSpreadTotalText(market.betType, market.spread, market.total);
+    const spreadTotalText = getSpreadTotalText(market);
 
     return (
         <Wrapper>
@@ -80,6 +86,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                               }
                             : undefined
                     }
+                    tooltip={<>{getOddTooltipText(positionEnum, market)}</>}
                 />
                 <ParlayStatus>{parlayStatus}</ParlayStatus>
             </StatusContainer>

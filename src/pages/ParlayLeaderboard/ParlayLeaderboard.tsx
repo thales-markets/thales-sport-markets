@@ -27,6 +27,7 @@ import {
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
     formatMarketOdds,
+    getOddTooltipText,
     getSpreadTotalText,
     getSymbolText,
 } from 'utils/markets';
@@ -197,11 +198,7 @@ const ParlayLeaderboard: React.FC = () => {
                         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
 
                         const symbolText = getSymbolText(positionEnum, position.market.betType);
-                        const spreadTotalText = getSpreadTotalText(
-                            position.market.betType,
-                            position.market.spread,
-                            position.market.total
-                        );
+                        const spreadTotalText = getSpreadTotalText(position.market);
 
                         return (
                             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
@@ -237,6 +234,7 @@ const ParlayLeaderboard: React.FC = () => {
                                               }
                                             : undefined
                                     }
+                                    tooltip={<>{getOddTooltipText(positionEnum, position.market)}</>}
                                 />
                                 <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
                             </ParlayRow>
@@ -303,11 +301,7 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
 
         const symbolText = getSymbolText(positionEnum, position.market.betType);
-        const spreadTotalText = getSpreadTotalText(
-            position.market.betType,
-            position.market.spread,
-            position.market.total
-        );
+        const spreadTotalText = getSpreadTotalText(position.market);
 
         return (
             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
@@ -340,6 +334,7 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
                               }
                             : undefined
                     }
+                    tooltip={<>{getOddTooltipText(positionEnum, position.market)}</>}
                 />
                 <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
             </ParlayRow>

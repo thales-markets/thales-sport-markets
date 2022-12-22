@@ -5,7 +5,14 @@ import { removeFromParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { ParlaysMarket } from 'types/markets';
-import { formatMarketOdds, getBonus, getPositionOdds, getSpreadTotalText, getSymbolText } from 'utils/markets';
+import {
+    formatMarketOdds,
+    getBonus,
+    getOddTooltipText,
+    getPositionOdds,
+    getSpreadTotalText,
+    getSymbolText,
+} from 'utils/markets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
 
@@ -21,7 +28,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
     const selectedOddsType = useSelector(getOddsType);
 
     const symbolText = getSymbolText(market.position, market.betType);
-    const spreadTotalText = getSpreadTotalText(market.betType, market.spread, market.total);
+    const spreadTotalText = getSpreadTotalText(market);
 
     const bonus = getBonus(market);
 
@@ -57,6 +64,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                           }
                         : undefined
                 }
+                tooltip={<>{getOddTooltipText(market.position, market)}</>}
             />
             {bonus > 0 ? <DiscountLabel>+{bonus}%</DiscountLabel> : ''}
             {readOnly ? (

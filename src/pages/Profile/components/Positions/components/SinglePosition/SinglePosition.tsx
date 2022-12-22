@@ -32,6 +32,7 @@ import {
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
     getCanceledGameClaimAmount,
+    getOddTooltipText,
     getParentMarketAddress,
     getSpreadTotalText,
     getSymbolText,
@@ -156,7 +157,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     };
 
     const symbolText = getSymbolText(positionEnum, position.market.betType);
-    const spreadTotalText = getSpreadTotalText(position.market.betType, position.market.spread, position.market.total);
+    const spreadTotalText = getSpreadTotalText(position.market);
 
     return (
         <Wrapper>
@@ -200,6 +201,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                   }
                                 : undefined
                         }
+                        tooltip={<>{getOddTooltipText(positionEnum, position.market)}</>}
                     />
                 </PositionContainer>
                 {isClaimable && (

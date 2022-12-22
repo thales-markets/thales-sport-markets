@@ -6,6 +6,7 @@ import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import { AccountPosition, MarketData, MarketInfo, ParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
 import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
+import i18n from 'i18n';
 
 const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 35;
 
@@ -113,12 +114,12 @@ export const getSymbolText = (position: Position, betType: BetType) => {
     }
 };
 
-export const getSpreadTotalText = (betType: BetType, spread: number, total: number) => {
-    switch (Number(betType)) {
+export const getSpreadTotalText = (market: SportMarketInfo | MarketData) => {
+    switch (Number(market.betType)) {
         case BetType.SPREAD:
-            return `${Number(spread) > 0 ? '+' : ''}${Number(spread) / 100}`;
+            return `${Number(market.spread) > 0 ? '+' : ''}${Number(market.spread) / 100}`;
         case BetType.TOTAL:
-            return `${Number(total) / 100}`;
+            return `${Number(market.total) / 100}`;
         default:
             return undefined;
     }
@@ -382,3 +383,41 @@ export const getBonus = (market: ParlaysMarket): number => {
 
 export const getParentMarketAddress = (parentMarketAddress: string, marketAddress: string) =>
     parentMarketAddress !== null && parentMarketAddress !== '' ? parentMarketAddress : marketAddress;
+
+export const getOddTooltipText = (position: Position, market: SportMarketInfo | MarketData) => {
+    const spread = Math.abs(Number(market.spread) / 100);
+    const total = Number(market.total) / 100;
+    const team = position === Position.HOME ? market.homeTeam : market.awayTeam;
+    let translationKey = '';
+
+    switch (position) {
+        case Position.HOME:
+            switch (Number(market.betType)) {
+                case BetType.SPREAD:
+                    translationKey = Number(market.spread) < 0 ? 'spread.minus' : 'spread.plus';
+                    break;
+                case BetType.TOTAL:
+                    translationKey = 'total.over';
+                    break;
+                default:
+                    translationKey = 'winner';
+            }
+            break;
+        case Position.AWAY:
+            switch (Number(market.betType)) {
+                case BetType.SPREAD:
+                    translationKey = Number(market.spread) < 0 ? 'spread.plus' : 'spread.minus';
+                    break;
+                case BetType.TOTAL:
+                    translationKey = 'total.under';
+                    break;
+                default:
+                    translationKey = 'winner';
+            }
+            break;
+        case Position.DRAW:
+            translationKey = 'draw';
+            break;
+    }
+    return i18n.t(`markets.market-card.odd-tooltip.${translationKey}`, { team, spread, total });
+};

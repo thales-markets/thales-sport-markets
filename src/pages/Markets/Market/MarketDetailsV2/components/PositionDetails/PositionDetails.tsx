@@ -53,7 +53,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
     const disabledPosition = noOdd || noLiquidity || !isGameOpen;
 
     const symbolText = getSymbolText(position, market.betType);
-    const spreadTotalText = getSpreadTotalText(market.betType, market.spread, market.total);
+    const spreadTotalText = getSpreadTotalText(market);
 
     return (
         <Container
