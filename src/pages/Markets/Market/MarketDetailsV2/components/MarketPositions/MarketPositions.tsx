@@ -11,16 +11,16 @@ import PositionDetails from '../PositionDetails';
 
 const defaultAvailablePerPosition: AvailablePerPosition = {
     [Position.HOME]: {
-        available: 0,
-        buyImpactPrice: 0,
+        available: undefined,
+        buyImpactPrice: undefined,
     },
     [Position.AWAY]: {
-        available: 0,
-        buyImpactPrice: 0,
+        available: undefined,
+        buyImpactPrice: undefined,
     },
     [Position.DRAW]: {
-        available: 0,
-        buyImpactPrice: 0,
+        available: undefined,
+        buyImpactPrice: undefined,
     },
 };
 

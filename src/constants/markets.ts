@@ -103,3 +103,5 @@ export enum ParlayErrorCode {
     MAX_MATCHES = 1,
     SAME_TEAM_TWICE = 2,
 }
+
+export const MIN_LIQUIDITY = 10;

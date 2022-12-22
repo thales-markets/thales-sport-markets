@@ -1,4 +1,5 @@
 import Tooltip from 'components/Tooltip';
+import { MIN_LIQUIDITY } from 'constants/markets';
 import { Position } from 'constants/options';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,12 +15,12 @@ import {
     getSpreadTotalText,
     getParentMarketAddress,
 } from 'utils/markets';
-import { Discount, Container, Value } from './styled-components';
+import { Discount, Container, Text, Status } from './styled-components';
 
 type PositionDetailsProps = {
     market: MarketData;
     odd?: number;
-    availablePerPosition: { available: number; buyImpactPrice?: number };
+    availablePerPosition: { available?: number; buyImpactPrice?: number };
     position: Position;
 };
 
@@ -44,9 +45,12 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
     const showDiscount =
         isGameOpen && !!availablePerPosition.buyImpactPrice && isDiscounted(availablePerPosition.buyImpactPrice);
     const positionDiscount = showDiscount ? Math.ceil(Math.abs(Number(availablePerPosition.buyImpactPrice) * 100)) : 0;
+    const noLiquidity = !!availablePerPosition.available && availablePerPosition.available < MIN_LIQUIDITY;
+
+    const showOdd = isGameOpen && !noLiquidity;
 
     const noOdd = !odd || odd == 0;
-    const disabledPosition = noOdd || !isGameOpen;
+    const disabledPosition = noOdd || noLiquidity || !isGameOpen;
 
     const symbolText = getSymbolText(position, market.betType);
     const spreadTotalText = getSpreadTotalText(market.betType, market.spread, market.total);
@@ -72,31 +76,29 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                 }
             }}
         >
-            <Value>
+            <Text>
                 {symbolText}
                 {spreadTotalText && ` (${spreadTotalText})`}
-            </Value>
-            {!isGameRegularlyResolved && (
-                <Value>
-                    {isPendingResolution ? (
-                        `- ${t('markets.market-card.pending')} -`
-                    ) : isGameCancelled ? (
-                        `- ${t('markets.market-card.canceled')} -`
-                    ) : isGamePaused ? (
-                        `- ${t('markets.market-card.paused')} -`
-                    ) : (
-                        <>
-                            {formatMarketOdds(selectedOddsType, odd)}
-                            {noOdd && (
-                                <Tooltip
-                                    overlay={<>{t('markets.zero-odds-tooltip')}</>}
-                                    iconFontSize={13}
-                                    marginLeft={3}
-                                />
-                            )}
-                        </>
+            </Text>
+            {showOdd ? (
+                <Text>
+                    {formatMarketOdds(selectedOddsType, odd)}
+                    {noOdd && (
+                        <Tooltip overlay={<>{t('markets.zero-odds-tooltip')}</>} iconFontSize={13} marginLeft={3} />
                     )}
-                </Value>
+                </Text>
+            ) : (
+                <Status>
+                    {isPendingResolution
+                        ? `- ${t('markets.market-card.pending')} -`
+                        : isGameCancelled
+                        ? `- ${t('markets.market-card.canceled')} -`
+                        : isGamePaused
+                        ? `- ${t('markets.market-card.paused')} -`
+                        : noLiquidity
+                        ? `${t('markets.market-card.no-liquidity')}`
+                        : null}
+                </Status>
             )}
             {showDiscount && <Discount>+{positionDiscount}%</Discount>}
         </Container>

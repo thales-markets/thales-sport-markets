@@ -222,7 +222,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             setIsFetching(true);
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract) {
-                const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available);
+                const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
                 const divider =
                     selectedStableIndex === COLLATERALS_INDEX.sUSD || selectedStableIndex == COLLATERALS_INDEX.DAI
                         ? 1e18
@@ -267,7 +267,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             if (signer && sportsAMMContract) {
                 const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
                 contract.connect(signer);
-                const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available);
+                const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
                 if (roundedMaxAmount) {
                     const [sUSDToSpendForMaxAmount, ammBalances] = await Promise.all([
                         fetchAmmQuote(roundedMaxAmount),
@@ -281,10 +281,10 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                             Number(usdAmountValue),
                             getPositionOdds(market),
                             sUSDToSpendForMaxAmount / divider,
-                            availablePerPosition[market.position].available,
+                            availablePerPosition[market.position].available || 0,
                             ammBalanceForSelectedPosition / divider
                         ) || 0;
-                    if (amountOfTokens > availablePerPosition[market.position].available) {
+                    if (amountOfTokens > (availablePerPosition[market.position].available || 0)) {
                         setTokenAmount(0);
                         return;
                     }

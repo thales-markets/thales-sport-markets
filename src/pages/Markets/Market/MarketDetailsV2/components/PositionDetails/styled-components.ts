@@ -42,8 +42,15 @@ export const Container = styled(FlexDivRow)<{
     }
 `;
 
-export const Value = styled.span`
+export const Text = styled.span`
     text-transform: uppercase;
+`;
+
+export const Status = styled(Text)`
+    @media (max-width: 575px) {
+        font-size: 11px;
+        margin-top: 1px;
+    }
 `;
 
 export const Discount = styled(FlexDivCentered)`

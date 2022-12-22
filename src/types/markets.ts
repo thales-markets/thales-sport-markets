@@ -94,7 +94,7 @@ export type AMMPosition = {
     sides: Record<Side, AMMSide>;
 };
 
-export type AvailablePerPosition = Record<Position, { available: number; buyImpactPrice?: number }>;
+export type AvailablePerPosition = Record<Position, { available?: number; buyImpactPrice?: number }>;
 
 export type MarketData = {
     address: string;
