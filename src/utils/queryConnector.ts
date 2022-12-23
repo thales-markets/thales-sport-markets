@@ -16,9 +16,8 @@ const queryConnector: QueryConnector = {
     },
 };
 
-export const refetchMarketData = (marketAddress: string, walletAddress: string, isSell?: boolean) => {
+export const refetchMarketData = (marketAddress: string, isSell?: boolean) => {
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Market(marketAddress, !!isSell));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.AccountMarketTicketData(marketAddress, walletAddress));
 };
 
 export const refetchMarkets = (networkId: NetworkId) => {

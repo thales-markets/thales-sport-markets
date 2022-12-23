@@ -127,15 +127,12 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
     );
 };
 
-const getPositionStatus = (position: any) => {
-    if (position.wholeMarket.isCanceled) {
+const getPositionStatus = (tx: any) => {
+    if (tx.wholeMarket.isCanceled) {
         return <StatusWrapper color="#808080">CANCELED</StatusWrapper>;
     }
-    if (position.wholeMarket.isResolved) {
-        if (
-            convertPositionNameToPosition(position.position) ===
-            convertFinalResultToResultType(position.wholeMarket.finalResult)
-        ) {
+    if (tx.wholeMarket.isResolved) {
+        if (convertPositionNameToPosition(tx.position) === convertFinalResultToResultType(tx.wholeMarket.finalResult)) {
             return <StatusWrapper color="#5FC694">WON </StatusWrapper>;
         } else {
             return <StatusWrapper color="#E26A78">LOSS</StatusWrapper>;
