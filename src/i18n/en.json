@@ -316,15 +316,23 @@
                 "total": "Total"
             },
             "odd-tooltip": {
-                "winner": "{{team}} will win the match",
-                "draw": "The match will end in a draw",
+                "scoring": {
+                    "goals": "goals",
+                    "points": "points"
+                },
+                "match-resolve": {
+                    "regular": "in regular time",
+                    "overtime": "including possible overtime"
+                },
+                "winner": "{{team}} will win the match {{matchResolve}}.",
+                "draw": "The match will end in a draw {{matchResolve}}.",
                 "total": {
-                    "over": "The total number of points in the match will be more than {{total}}, including overtime",
-                    "under": "The total number of points in the match will be less than {{total}}, including overtime"
+                    "over": "The total number of {{scoring}} in the match will be more than {{total}} {{matchResolve}}.",
+                    "under": "The total number of {{scoring}} in the match will be less than {{total}} {{matchResolve}}."
                 },
                 "spread": {
-                    "minus": "{{team}} will win the match with a difference of more than {{spread}} points",
-                    "plus": "{{team}} will win the match or lose by less than {{spread}} points"
+                    "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
+                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 }
             }
         },

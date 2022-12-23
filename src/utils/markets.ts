@@ -1,6 +1,14 @@
 import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
 import { Position } from 'constants/options';
-import { BetType, FIFA_WC_TAG, MLS_TAG, PERSON_COMPETITIONS, TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
+import {
+    BetType,
+    FIFA_WC_TAG,
+    MATCH_RESOLVE_MAP,
+    MLS_TAG,
+    PERSON_COMPETITIONS,
+    SCORING_MAP,
+    TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
+} from 'constants/tags';
 import ordinal from 'ordinal';
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import { AccountPosition, MarketData, MarketInfo, ParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
@@ -388,6 +396,8 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
     const spread = Math.abs(Number(market.spread) / 100);
     const total = Number(market.total) / 100;
     const team = position === Position.HOME ? market.homeTeam : market.awayTeam;
+    const scoring = i18n.t(`markets.market-card.odd-tooltip.scoring.${SCORING_MAP[market.tags[0]]}`);
+    const matchResolve = i18n.t(`markets.market-card.odd-tooltip.match-resolve.${MATCH_RESOLVE_MAP[market.tags[0]]}`);
     let translationKey = '';
 
     switch (position) {
@@ -419,5 +429,5 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
             translationKey = 'draw';
             break;
     }
-    return i18n.t(`markets.market-card.odd-tooltip.${translationKey}`, { team, spread, total });
+    return i18n.t(`markets.market-card.odd-tooltip.${translationKey}`, { team, spread, total, scoring, matchResolve });
 };
