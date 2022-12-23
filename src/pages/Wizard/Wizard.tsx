@@ -6,6 +6,7 @@ import { getIsWalletConnected } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivStart } from 'styles/common';
+import YouTubeVideo from '../../components/YouTubeVideo';
 import Step from './components/Step/Step';
 
 export enum WizardStep {
@@ -47,6 +48,12 @@ const Wizard: React.FC = () => {
                     </React.Fragment>
                 );
             })}
+            <VideoContainer>
+                <YouTubeVideo
+                    source="https://www.youtube.com/embed/udYpsNueZp4"
+                    title="What are Overtime Markets and how to participate?  *UPDATED* Overtime Markets video walk through"
+                />
+            </VideoContainer>
         </Container>
     );
 };
@@ -74,6 +81,10 @@ const HorizontalLine = styled.hr`
     border: 1.5px solid #5f6180;
     background: #5f6180;
     border-radius: 3px;
+`;
+
+const VideoContainer = styled.div`
+    margin-top: 50px;
 `;
 
 export default Wizard;

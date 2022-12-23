@@ -105,10 +105,10 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                                 {addressCoppied ? t('wizard.fund-modal.coppied') : t('wizard.fund-modal.copy-address')}
                             </ButtonDiv>
                         </ButtonWrapper>
-                        <Logo>
-                            <QRCode size={60} value={walletAddress} />
-                            <LogoLabel>{t('wizard.fund-modal.address')}</LogoLabel>
-                        </Logo>
+                        <YourAddress>
+                            <QRCode size={70} value={walletAddress} />
+                            <YourAddressLabel>{t('wizard.fund-modal.address')}</YourAddressLabel>
+                        </YourAddress>
                     </Row>
                 </Container>
             </Modal>
@@ -204,12 +204,18 @@ const Logo = styled(FlexDivRowCentered)<{ logoType?: Provider }>`
     margin-left: 20px;
 `;
 
-const LogoLabel = styled.span`
+const YourAddress = styled(FlexDivColumnCentered)`
+    align-items: center;
+    margin-left: 20px;
+`;
+
+const YourAddressLabel = styled.span`
     font-weight: 400;
     font-size: 15px;
     line-height: 18px;
     color: #ffffff;
-    margin-left: 10px;
+    text-transform: capitalize;
+    margin-top: 3px;
 `;
 
 const Link = styled.a``;

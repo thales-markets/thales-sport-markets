@@ -83,6 +83,12 @@ export const NAV_MENU: NavMenuItem[] = [
         route: ROUTES.Profile,
     },
     {
+        i18label: 'markets.nav-menu.items.onboarding-wizard',
+        iconClass: 'icon icon--wizard',
+        name: 'onboarding-wizard',
+        route: ROUTES.Wizard,
+    },
+    {
         i18label: 'markets.nav-menu.items.leaderboard',
         iconClass: 'icon icon--competition',
         name: 'parlay-competition',
@@ -96,12 +102,6 @@ export const NAV_MENU: NavMenuItem[] = [
         route: ROUTES.Rewards,
     },
     {
-        i18label: 'markets.nav-menu.items.onboarding-wizard',
-        iconClass: 'icon icon--wizard',
-        name: 'onboarding-wizard',
-        route: ROUTES.Wizard,
-    },
-    {
         i18label: 'markets.nav-menu.items.become-affiliate',
         iconClass: 'icon icon--affiliate',
         name: 'become-affiliate',
@@ -113,10 +113,4 @@ export const NAV_MENU: NavMenuItem[] = [
         name: 'sports-trivia',
         route: ROUTES.Quiz,
     },
-    // {
-    //     i18label: 'markets.nav-menu.items.onboarding-wizard',
-    //     iconClass: 'icon icon--wizard',
-    //     name: 'onboarding-wizard',
-    //     route: ROUTES.Markets.Home,
-    // },
 ];

@@ -335,7 +335,7 @@
             "items": {
                 "markets": "Markets",
                 "profile": "Profile",
-                "onboarding-wizard": "Onboarding wizard",
+                "onboarding-wizard": "Get started",
                 "history": "History",
                 "fifa-campaign": "Zebro FIFA campaign",
                 "sports-trivia": "Sports trivia",
@@ -635,7 +635,7 @@
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
             "coppied": "Coppied!",
-            "address": "Your address"
+            "address": "Your address QR code"
         }
     },
     "vaults": {
