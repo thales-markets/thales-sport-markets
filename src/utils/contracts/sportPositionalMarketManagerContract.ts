@@ -8,8 +8,37 @@ export const sportPositionalMarketManagerContract = {
     abi: [
         {
             anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'address', name: '_whitelistAddress', type: 'address' },
+                { indexed: false, internalType: 'bool', name: '_flag', type: 'bool' },
+            ],
+            name: 'AddedIntoWhitelist',
+            type: 'event',
+        },
+        {
+            anonymous: false,
             inputs: [{ indexed: false, internalType: 'uint256', name: 'value', type: 'uint256' }],
             name: 'CreatorCapitalRequirementUpdated',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'address', name: '_market', type: 'address' },
+                { indexed: false, internalType: 'uint256', name: '_newStartTime', type: 'uint256' },
+                { indexed: false, internalType: 'uint256', name: '_expiry', type: 'uint256' },
+            ],
+            name: 'DatesUpdatedForMarket',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'address', name: '_parentMarket', type: 'address' },
+                { indexed: false, internalType: 'address', name: '_doubleChanceMarket', type: 'address' },
+                { indexed: false, internalType: 'uint256', name: 'tag', type: 'uint256' },
+            ],
+            name: 'DoubleChanceMarketCreated',
             type: 'event',
         },
         {
@@ -24,7 +53,6 @@ export const sportPositionalMarketManagerContract = {
                 { indexed: false, internalType: 'address', name: 'market', type: 'address' },
                 { indexed: true, internalType: 'address', name: 'creator', type: 'address' },
                 { indexed: true, internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
-                { indexed: false, internalType: 'string', name: 'gameLabel', type: 'string' },
                 { indexed: false, internalType: 'uint256', name: 'maturityDate', type: 'uint256' },
                 { indexed: false, internalType: 'uint256', name: 'expiryDate', type: 'uint256' },
                 { indexed: false, internalType: 'address', name: 'up', type: 'address' },
@@ -44,6 +72,15 @@ export const sportPositionalMarketManagerContract = {
             anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: 'market', type: 'address' }],
             name: 'MarketExpired',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'address', name: 'market', type: 'address' },
+                { indexed: false, internalType: 'string', name: 'gameLabel', type: 'string' },
+            ],
+            name: 'MarketLabel',
             type: 'event',
         },
         {
@@ -124,8 +161,20 @@ export const sportPositionalMarketManagerContract = {
         },
         {
             anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: 'apexConsumer', type: 'address' }],
+            name: 'SetApexConsumer',
+            type: 'event',
+        },
+        {
+            anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: 'migratingManager', type: 'address' }],
             name: 'SetMigratingManager',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: '_obratiner', type: 'address' }],
+            name: 'SetObtainerAddress',
             type: 'event',
         },
         {
@@ -160,6 +209,20 @@ export const sportPositionalMarketManagerContract = {
             type: 'function',
         },
         {
+            inputs: [],
+            name: 'apexConsumer',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'cancelTimeout',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [
                 { internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
                 { internalType: 'string', name: 'gameLabel', type: 'string' },
@@ -167,6 +230,8 @@ export const sportPositionalMarketManagerContract = {
                 { internalType: 'uint256', name: 'initialMint', type: 'uint256' },
                 { internalType: 'uint256', name: 'positionCount', type: 'uint256' },
                 { internalType: 'uint256[]', name: 'tags', type: 'uint256[]' },
+                { internalType: 'bool', name: 'isChild', type: 'bool' },
+                { internalType: 'address', name: 'parentMarket', type: 'address' },
             ],
             name: 'createMarket',
             outputs: [{ internalType: 'contract ISportPositionalMarket', name: '', type: 'address' }],
@@ -185,6 +250,13 @@ export const sportPositionalMarketManagerContract = {
             name: 'decrementTotalDeposited',
             outputs: [],
             stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '', type: 'address' }],
+            name: 'doubleChanceMarkets',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
             type: 'function',
         },
         {
@@ -233,6 +305,20 @@ export const sportPositionalMarketManagerContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'address', name: '', type: 'address' }],
+            name: 'isDoubleChance',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: 'candidate', type: 'address' }],
+            name: 'isDoubleChanceMarket',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'address', name: 'candidate', type: 'address' }],
             name: 'isKnownMarket',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
@@ -242,6 +328,13 @@ export const sportPositionalMarketManagerContract = {
         {
             inputs: [{ internalType: 'address', name: '_market', type: 'address' }],
             name: 'isMarketPaused',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '_address', type: 'address' }],
+            name: 'isWhitelistedAddress',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
             type: 'function',
@@ -307,6 +400,13 @@ export const sportPositionalMarketManagerContract = {
         },
         {
             inputs: [],
+            name: 'oddsObtainer',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
             name: 'owner',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
             stateMutability: 'view',
@@ -325,6 +425,19 @@ export const sportPositionalMarketManagerContract = {
                 { internalType: 'uint256', name: '_outcome', type: 'uint256' },
             ],
             name: 'resolveMarket',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'address', name: '_market', type: 'address' },
+                { internalType: 'uint256', name: '_outcome', type: 'uint256' },
+                { internalType: 'uint8', name: '_homeScore', type: 'uint8' },
+                { internalType: 'uint8', name: '_awayScore', type: 'uint8' },
+                { internalType: 'address', name: '_consumer', type: 'address' },
+            ],
+            name: 'resolveMarketWithResult',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -356,6 +469,20 @@ export const sportPositionalMarketManagerContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'address', name: '_apexConsumer', type: 'address' }],
+            name: 'setApexConsumer',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'uint256', name: '_cancelTimeout', type: 'uint256' }],
+            name: 'setCancelTimeout',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'uint256', name: '_expiryDuration', type: 'uint256' }],
             name: 'setExpiryDuration',
             outputs: [],
@@ -375,6 +502,13 @@ export const sportPositionalMarketManagerContract = {
                 { internalType: 'bool', name: '_paused', type: 'bool' },
             ],
             name: 'setMarketPaused',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '_oddsObtainer', type: 'address' }],
+            name: 'setOddsObtainer',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -403,6 +537,17 @@ export const sportPositionalMarketManagerContract = {
         {
             inputs: [{ internalType: 'address', name: '_theRundownConsumer', type: 'address' }],
             name: 'setTherundownConsumer',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'address[]', name: '_whitelistedAddresses', type: 'address[]' },
+                { internalType: 'bool', name: '_flag', type: 'bool' },
+                { internalType: 'uint8', name: '_group', type: 'uint8' },
+            ],
+            name: 'setWhitelistedAddresses',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -457,6 +602,30 @@ export const sportPositionalMarketManagerContract = {
             inputs: [{ internalType: 'uint256', name: 'value', type: 'uint256' }],
             name: 'transformCollateral',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'address', name: '_market', type: 'address' },
+                { internalType: 'uint256', name: '_newStartTime', type: 'uint256' },
+            ],
+            name: 'updateDatesForMarket',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '', type: 'address' }],
+            name: 'whitelistedAddresses',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '', type: 'address' }],
+            name: 'whitelistedCancelAddresses',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
             type: 'function',
         },

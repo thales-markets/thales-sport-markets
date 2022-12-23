@@ -313,7 +313,8 @@
             "bet-type": {
                 "winner": "Winner",
                 "spread": "Handicap",
-                "total": "Total"
+                "total": "Total",
+                "double-chance": "Double chance"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -332,7 +333,11 @@
                 },
                 "spread": {
                     "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
-                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                    "plus": "{{team}} will win the match {{matchResolve}} or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                },
+                "double-chance": {
+                    "1x2": "{{team}} will win the match {{matchResolve}} or the match will end in a draw {{matchResolve}}.",
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
                 }
             }
         },

@@ -103,6 +103,8 @@ export const getSymbolText = (position: Position, betType: BetType) => {
                     return 'H1';
                 case BetType.TOTAL:
                     return 'O';
+                case BetType.DOUBLE_CHANCE:
+                    return '1X';
                 default:
                     return '1';
             }
@@ -112,11 +114,18 @@ export const getSymbolText = (position: Position, betType: BetType) => {
                     return 'H2';
                 case BetType.TOTAL:
                     return 'U';
+                case BetType.DOUBLE_CHANCE:
+                    return 'X2';
                 default:
                     return '2';
             }
         case Position.DRAW:
-            return 'X';
+            switch (Number(betType)) {
+                case BetType.DOUBLE_CHANCE:
+                    return '12';
+                default:
+                    return 'X';
+            }
         default:
             return '';
     }
@@ -265,7 +274,7 @@ export const getPositionOddsFromSportMarket = (market: SportMarketInfo, position
 
 export const getVisibilityOfDrawOption = (tags: Array<number>, betType: BetType) => {
     const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(Number(element)));
-    if (tag || betType !== BetType.WINNER) return false;
+    if (tag || betType === BetType.TOTAL || betType === BetType.SPREAD) return false;
     return true;
 };
 
@@ -395,7 +404,8 @@ export const getParentMarketAddress = (parentMarketAddress: string, marketAddres
 export const getOddTooltipText = (position: Position, market: SportMarketInfo | MarketData) => {
     const spread = Math.abs(Number(market.spread) / 100);
     const total = Number(market.total) / 100;
-    const team = position === Position.HOME ? market.homeTeam : market.awayTeam;
+    const team = position === Position.AWAY ? market.awayTeam : market.homeTeam;
+    const team2 = market.awayTeam;
     const scoring = i18n.t(`markets.market-card.odd-tooltip.scoring.${SCORING_MAP[market.tags[0]]}`);
     const matchResolve = i18n.t(`markets.market-card.odd-tooltip.match-resolve.${MATCH_RESOLVE_MAP[market.tags[0]]}`);
     let translationKey = '';
@@ -409,6 +419,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.TOTAL:
                     translationKey = 'total.over';
                     break;
+                case BetType.DOUBLE_CHANCE:
+                    translationKey = 'double-chance.1x2';
+                    break;
                 default:
                     translationKey = 'winner';
             }
@@ -421,13 +434,30 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.TOTAL:
                     translationKey = 'total.under';
                     break;
+                case BetType.DOUBLE_CHANCE:
+                    translationKey = 'double-chance.1x2';
+                    break;
                 default:
                     translationKey = 'winner';
             }
             break;
         case Position.DRAW:
-            translationKey = 'draw';
+            switch (Number(market.betType)) {
+                case BetType.DOUBLE_CHANCE:
+                    translationKey = 'double-chance.12';
+                    break;
+                default:
+                    translationKey = 'draw';
+            }
+            break;
             break;
     }
-    return i18n.t(`markets.market-card.odd-tooltip.${translationKey}`, { team, spread, total, scoring, matchResolve });
+    return i18n.t(`markets.market-card.odd-tooltip.${translationKey}`, {
+        team,
+        team2,
+        spread,
+        total,
+        scoring,
+        matchResolve,
+    });
 };

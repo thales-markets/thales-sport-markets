@@ -179,12 +179,14 @@ export enum BetType {
     WINNER = 0,
     SPREAD = 10001,
     TOTAL = 10002,
+    DOUBLE_CHANCE = 10003,
 }
 
 export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.WINNER]: 'winner',
     [BetType.SPREAD]: 'spread',
     [BetType.TOTAL]: 'total',
+    [BetType.DOUBLE_CHANCE]: 'double-chance',
 };
 
 export const SCORING_MAP: SportsMap = {
