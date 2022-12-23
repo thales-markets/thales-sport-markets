@@ -93,8 +93,9 @@ const useChildMarketsQuery = (parentMarket: MarketData, options?: UseQueryOption
                     (market: MarketData) => market.betType
                 );
                 return {
-                    spreadMarkets: groupedChildMarkets[BetType.SPREAD] || [],
                     totalMarkets: groupedChildMarkets[BetType.TOTAL] || [],
+                    spreadMarkets: groupedChildMarkets[BetType.SPREAD] || [],
+                    doubleChanceMarkets: groupedChildMarkets[BetType.DOUBLE_CHANCE] || [],
                 };
             } catch (e) {
                 console.log(e);

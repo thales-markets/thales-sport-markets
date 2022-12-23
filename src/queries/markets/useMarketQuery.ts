@@ -7,6 +7,7 @@ import marketContract from 'utils/contracts/sportsMarketContract';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
 import { fixDuplicatedTeamName, fixLongTeamNameString } from '../../utils/formatters/string';
 import { Position } from '../../constants/options';
+import { ZERO_ADDRESS } from 'constants/network';
 
 const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketData | undefined>) => {
     return useQuery<MarketData | undefined>(
@@ -15,9 +16,12 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
             try {
                 const contract = new ethers.Contract(marketAddress, marketContract.abi, networkConnector.provider);
 
-                const rundownConsumerContract = networkConnector.theRundownConsumerContract;
-                const sportsAMMContract = networkConnector.sportsAMMContract;
-                const gamesOddsObtainerContract = networkConnector.gamesOddsObtainerContract;
+                const {
+                    theRundownConsumerContract,
+                    sportsAMMContract,
+                    gamesOddsObtainerContract,
+                    sportMarketManagerContract,
+                } = networkConnector;
 
                 const [
                     gameDetails,
@@ -29,6 +33,7 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     paused,
                     buyMarketDefaultOdds,
                     childMarketsAddresses,
+                    doubleChanceMarket,
                 ] = await Promise.all([
                     contract?.getGameDetails(),
                     contract?.tags(0),
@@ -39,13 +44,14 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     contract?.paused(),
                     sportsAMMContract?.getMarketDefaultOdds(marketAddress, false),
                     gamesOddsObtainerContract?.getAllChildMarketsFromParent(marketAddress),
+                    sportMarketManagerContract?.doubleChanceMarkets(marketAddress),
                 ]);
 
                 const gameStarted = cancelled ? false : Date.now() > Number(times.maturity) * 1000;
                 let result;
 
                 if (resolved) {
-                    result = await rundownConsumerContract?.gameResolved(gameDetails.gameId);
+                    result = await theRundownConsumerContract?.gameResolved(gameDetails.gameId);
                 }
 
                 const homeScore = result ? result.homeScore : undefined;
@@ -80,7 +86,10 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     betType: 0,
                     isApex: false,
                     parentMarket: '',
-                    childMarketsAddresses,
+                    childMarketsAddresses:
+                        doubleChanceMarket !== ZERO_ADDRESS
+                            ? [doubleChanceMarket, ...childMarketsAddresses]
+                            : childMarketsAddresses,
                     childMarkets: [],
                     spread: 0,
                     total: 0,

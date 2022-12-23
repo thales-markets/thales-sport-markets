@@ -32,6 +32,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const [lastValidChildMarkets, setLastValidChildMarkets] = useState<ChildMarkets>({
         spreadMarkets: [],
         totalMarkets: [],
+        doubleChanceMarkets: [],
     });
 
     const childMarketsQuery = useChildMarketsQuery(market, {
@@ -83,6 +84,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                 )}
                 <>
                     <Positions markets={[market]} betType={BetType.WINNER} />
+                    {childMarkets.doubleChanceMarkets.length > 0 && (
+                        <Positions markets={childMarkets.doubleChanceMarkets} betType={BetType.DOUBLE_CHANCE} />
+                    )}
                     {childMarkets.spreadMarkets.length > 0 && (
                         <Positions markets={childMarkets.spreadMarkets} betType={BetType.SPREAD} />
                     )}

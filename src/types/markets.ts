@@ -124,6 +124,7 @@ export type MarketData = {
 export type ChildMarkets = {
     spreadMarkets: MarketData[];
     totalMarkets: MarketData[];
+    doubleChanceMarkets: MarketData[];
 };
 
 export type ParlayMarket = {
