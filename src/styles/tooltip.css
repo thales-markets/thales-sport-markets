@@ -65,22 +65,22 @@
 .rc-tooltip-placement-top,
 .rc-tooltip-placement-topLeft,
 .rc-tooltip-placement-topRight {
-    padding: 5px 0 9px 0;
+    padding: 5px 0 3px 0;
 }
 .rc-tooltip-placement-right,
 .rc-tooltip-placement-rightTop,
 .rc-tooltip-placement-rightBottom {
-    padding: 0 5px 0 9px;
+    padding: 0 5px 0 3px;
 }
 .rc-tooltip-placement-bottom,
 .rc-tooltip-placement-bottomLeft,
 .rc-tooltip-placement-bottomRight {
-    padding: 9px 0 5px 0;
+    padding: 3px 0 5px 0;
 }
 .rc-tooltip-placement-left,
 .rc-tooltip-placement-leftTop,
 .rc-tooltip-placement-leftBottom {
-    padding: 0 9px 0 5px;
+    padding: 0 3px 0 5px;
 }
 .rc-tooltip-inner {
     padding: 8px 8px;
@@ -107,7 +107,7 @@
 .rc-tooltip-placement-top .rc-tooltip-arrow,
 .rc-tooltip-placement-topLeft .rc-tooltip-arrow,
 .rc-tooltip-placement-topRight .rc-tooltip-arrow {
-    bottom: 4px;
+    bottom: -2px;
     margin-left: -5px;
     border-width: 5px 5px 0;
     border-top-color: #5f6180;
@@ -125,7 +125,7 @@
 .rc-tooltip-placement-rightTop .rc-tooltip-arrow,
 .rc-tooltip-placement-rightBottom .rc-tooltip-arrow {
     left: 4px;
-    margin-top: -5px;
+    margin-top: -2;
     border-width: 5px 5px 5px 0;
     border-right-color: #f6f6fe;
 }
@@ -143,7 +143,7 @@
 .rc-tooltip-placement-leftTop .rc-tooltip-arrow,
 .rc-tooltip-placement-leftBottom .rc-tooltip-arrow {
     right: 4px;
-    margin-top: -5px;
+    margin-top: -2;
     border-width: 5px 0 5px 5px;
     border-left-color: #f6f6fe;
 }
@@ -161,7 +161,7 @@
 .rc-tooltip-placement-bottomLeft .rc-tooltip-arrow,
 .rc-tooltip-placement-bottomRight .rc-tooltip-arrow {
     top: 4px;
-    margin-left: -5px;
+    margin-left: -2;
     border-width: 0 5px 5px;
     border-bottom-color: #f6f6fe;
 }
@@ -173,6 +173,32 @@
 }
 .rc-tooltip-placement-bottomRight .rc-tooltip-arrow {
     right: 15%;
+}
+
+@media (max-width: 575px) {
+    .rc-tooltip-placement-top,
+    .rc-tooltip-placement-topLeft,
+    .rc-tooltip-placement-topRight {
+        padding: 5px 0 1px 0;
+    }
+    .rc-tooltip-placement-right,
+    .rc-tooltip-placement-rightTop,
+    .rc-tooltip-placement-rightBottom {
+        padding: 0 5px 0 1px;
+    }
+    .rc-tooltip-placement-bottom,
+    .rc-tooltip-placement-bottomLeft,
+    .rc-tooltip-placement-bottomRight {
+        padding: 1px 0 5px 0;
+    }
+    .rc-tooltip-placement-left,
+    .rc-tooltip-placement-leftTop,
+    .rc-tooltip-placement-leftBottom {
+        padding: 0 1px 0 5px;
+    }
+    .rc-tooltip-arrow {
+        display: none;
+    }
 }
 
 .overtime-voucher-overlay .rc-tooltip-inner {
