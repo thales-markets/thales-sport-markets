@@ -327,8 +327,8 @@
                 "winner": "{{team}} will win the match {{matchResolve}}.",
                 "draw": "The match will end in a draw {{matchResolve}}.",
                 "total": {
-                    "over": "The total number of {{scoring}} in the match will be more than {{total}} {{matchResolve}}.",
-                    "under": "The total number of {{scoring}} in the match will be less than {{total}} {{matchResolve}}."
+                    "over": "The total number of {{scoring}} in the match {{matchResolve}} will be more than {{total}}.",
+                    "under": "The total number of {{scoring}} in the match {{matchResolve}} will be less than {{total}}."
                 },
                 "spread": {
                     "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
