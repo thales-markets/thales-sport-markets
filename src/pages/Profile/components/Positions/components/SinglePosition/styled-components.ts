@@ -25,11 +25,11 @@ export const PositionContainer = styled(FlexDivCentered)`
 
 export const ResultContainer = styled(FlexDivStart)`
     align-items: center;
-    margin-left: 15px;
+    margin-left: 25px;
     min-width: 100px;
     @media (max-width: 768px) {
-        margin-left: 5;
-        min-width: 60px;
+        margin-left: 15px;
+        min-width: 70px;
     }
 `;
 
