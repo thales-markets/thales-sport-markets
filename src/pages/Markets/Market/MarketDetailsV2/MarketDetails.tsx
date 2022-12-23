@@ -20,6 +20,7 @@ import ROUTES from 'constants/routes';
 import { OP_INCENTIVIZED_LEAGUE } from 'constants/markets';
 import Tooltip from 'components/Tooltip';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
+import { isMobile } from 'utils/device';
 
 type MarketDetailsPropType = {
     market: MarketData;
@@ -64,7 +65,11 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market, selectedSide, 
                 <BackToLink
                     link={buildHref(ROUTES.Markets.Home)}
                     text={t('market.back')}
-                    customStylingContainer={{ position: 'absolute', left: '5px', marginTop: '0px' }}
+                    customStylingContainer={{
+                        position: 'absolute',
+                        left: '5px',
+                        marginTop: isMobile() ? '2px' : '0px',
+                    }}
                 />
                 {showAMM && (
                     <Toggle
@@ -139,7 +144,7 @@ const HeaderWrapper = styled(FlexDivRow)`
     position: relative;
     align-items: center;
     margin-bottom: 20px;
-    @media (max-width: 768px) {
+    @media (max-width: 950px) {
         flex-direction: column;
     }
 `;
@@ -150,7 +155,7 @@ const IncentivizedLeague = styled.div`
     align-items: center;
     cursor: pointer;
     right: 0;
-    @media (max-width: 768px) {
+    @media (max-width: 950px) {
         position: static;
         margin-top: 20px;
     }
