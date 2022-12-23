@@ -139,6 +139,9 @@ const HeaderWrapper = styled(FlexDivRow)`
     position: relative;
     align-items: center;
     margin-bottom: 20px;
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
 `;
 
 const IncentivizedLeague = styled.div`
@@ -148,7 +151,8 @@ const IncentivizedLeague = styled.div`
     cursor: pointer;
     right: 0;
     @media (max-width: 768px) {
-        display: none;
+        position: static;
+        margin-top: 20px;
     }
 `;
 
