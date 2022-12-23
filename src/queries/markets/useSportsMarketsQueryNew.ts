@@ -58,6 +58,7 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
     }
 
     allMarkets.forEach((market) => {
+        if (Number(market.tags[0]) === 0) return;
         market.maturityDate = new Date(market.maturityDate);
         market.homeTeam = fixDuplicatedTeamName(market.homeTeam);
         market.awayTeam = fixDuplicatedTeamName(market.awayTeam);
