@@ -1,9 +1,12 @@
 import Tooltip from 'components/Tooltip';
+import { oddToastOptions } from 'config/toast';
 import { MIN_LIQUIDITY } from 'constants/markets';
 import { Position } from 'constants/options';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { getIsMobile } from 'redux/modules/app';
 import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { MarketData, ParlaysMarketPosition } from 'types/markets';
@@ -42,6 +45,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
     const dispatch = useDispatch();
     // Redux states
     const selectedOddsType = useSelector(getOddsType);
+    const isMobile = useSelector(getIsMobile);
 
     const parlay = useSelector(getParlay);
     const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
@@ -68,7 +72,9 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
     const symbolText = getSymbolText(position, market.betType);
     const spreadTotalText = getSpreadTotalText(market);
 
-    const showTooltip = showOdd;
+    const showTooltip = showOdd && !isMobile;
+
+    const oddTooltipText = getOddTooltipText(position, market);
 
     const getDetails = () => (
         <Container
@@ -88,6 +94,9 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                         awayTeam: market.awayTeam || '',
                     };
                     dispatch(updateParlay(parlayMarket));
+                    if (isMobile) {
+                        toast(oddTooltipText, oddToastOptions);
+                    }
                 }
             }}
         >
@@ -121,8 +130,8 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
 
     const getTooltip = () => (
         <TooltipContainer>
-            <TooltipText>{getOddTooltipText(position, market)}</TooltipText>
-            {isGameOpen && (
+            <TooltipText>{oddTooltipText}</TooltipText>
+            {isGameOpen && !isMobile && (
                 <TooltipFooter>
                     <TooltipFooterInfoContianer>
                         <TooltipFooterInfoLabel>{t('markets.market-details.odds')}:</TooltipFooterInfoLabel>

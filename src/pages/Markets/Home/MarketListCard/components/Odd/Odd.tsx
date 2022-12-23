@@ -17,6 +17,8 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { MAIN_COLORS } from 'constants/ui';
 import { getIsMobile } from 'redux/modules/app';
 import { BetType } from 'constants/tags';
+import { toast } from 'react-toastify';
+import { oddToastOptions } from 'config/toast';
 
 type OddProps = {
     market: SportMarketInfo;
@@ -38,6 +40,8 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
     const noOdd = !odd || odd == 0;
     const isMainMarket = market.betType === BetType.WINNER;
 
+    const oddTooltipText = getOddTooltipText(position, market);
+
     const onClick = () => {
         if (noOdd) return;
         if (isAddedToParlay) {
@@ -56,6 +60,9 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
                 awayTeam: market.awayTeam || '',
             };
             dispatch(updateParlay(parlayMarket));
+            if (isMobile) {
+                toast(oddTooltipText, oddToastOptions);
+            }
         }
     };
 
@@ -81,7 +88,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
             symbolText={getSymbolText(position, market.betType)}
             onClick={onClick}
             selected={isAddedToParlay}
-            tooltip={<>{getOddTooltipText(position, market)}</>}
+            tooltip={!isMobile && <>{oddTooltipText}</>}
         />
     );
 };

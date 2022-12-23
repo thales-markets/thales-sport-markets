@@ -25,3 +25,10 @@ export const getErrorToastOptions = (message: string | React.ReactNode, options?
         type: 'error' as TypeOptions,
     };
 };
+
+export const oddToastOptions = {
+    ...defaultToastOptions,
+    autoClose: 3000,
+    bodyClassName: 'odd-toast-body',
+    className: 'odd-toast',
+};
