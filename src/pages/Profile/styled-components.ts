@@ -9,4 +9,8 @@ export const Container = styled(FlexDivColumn)`
     }
 `;
 
-export const NavigationWrapper = styled(FlexDivRow)``;
+export const NavigationWrapper = styled(FlexDivRow)`
+    @media (max-width: 600px) {
+        flex-direction: column;
+    }
+`;

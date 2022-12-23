@@ -340,7 +340,8 @@
         "match-time": "Temps de match",
         "race-starts": "La course commence",
         "back": "Retour",
-        "apply-filters": "Appliquer des filtres"
+        "apply-filters": "Appliquer des filtres",
+        "incentivized-market": "MARCHÉ INCITATIF"
     },
     "markets": {
         "market-card-list": {
@@ -471,7 +472,9 @@
                 "disconnect": "Déconnecter",
                 "switch": "Changer"
             }
-        }
+        },
+        "op-incentivized-tooltip": "Les marchés EPL sont incités avec 5 000 OP des jeux du 26 décembre aux jeux du 6 janvier en fonction du volume au prorata. Consultez le classement <duneLink>ici</duneLink>.",
+        "incentivized-markets": "MARCHÉS INCITATIFS"
     },
     "rewards": {
         "table": {
@@ -632,7 +635,14 @@
             "total-amount": "Montant total"
         },
         "winnings-are-forfeit": "*Les gains non réclamés dans les {{amount}} jours suivant la résolution d'un marché sont annulés.",
-        "search-field": "Portefeuille de recherche"
+        "search-field": "Portefeuille de recherche",
+        "stats": {
+            "trades": "Métiers",
+            "lifetime-wins": "Victoires à vie",
+            "in-vaults": "Dans les voûtes",
+            "highest-win": "Victoire la plus élevée",
+            "total-volume": "Volume total"
+        }
     },
     "mint-world-cup-nft": {
         "no": "Non",

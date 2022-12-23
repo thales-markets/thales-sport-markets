@@ -250,7 +250,8 @@
         "match-time": "เวลาการแข่งขัน",
         "race-starts": "เริ่มการแข่งขัน",
         "back": "กลับ",
-        "apply-filters": "ใช้ตัวกรอง"
+        "apply-filters": "ใช้ตัวกรอง",
+        "incentivized-market": "ตลาดที่มีแรงจูงใจ"
     },
     "markets": {
         "market-card": {
@@ -369,7 +370,9 @@
                 "switch": "สวิตช์",
                 "disconnect": "ตัดการเชื่อมต่อ"
             }
-        }
+        },
+        "op-incentivized-tooltip": "ตลาด EPL ได้รับแรงจูงใจด้วย 5,000 OP จากเกมวันที่ 26 ธันวาคมถึงเกมที่ 6 มกราคม โดยพิจารณาจากปริมาณตามสัดส่วน ดูลีดเดอร์บอร์ด <duneLink>ที่นี่</ duneLink>",
+        "incentivized-markets": "ตลาดที่สร้างแรงจูงใจ"
     },
     "rewards": {
         "header": "รางวัล",
@@ -535,7 +538,14 @@
             "total-amount": "จำนวนเงินทั้งหมด"
         },
         "winnings-are-forfeit": "*การชนะที่ไม่ได้อ้างสิทธิ์ภายใน {{amount}} วันของตลาดที่ได้รับการแก้ไขจะถือว่าสละสิทธิ์",
-        "search-field": "ค้นหากระเป๋าสตางค์"
+        "search-field": "ค้นหากระเป๋าสตางค์",
+        "stats": {
+            "trades": "การค้า",
+            "total-volume": "ปริมาณรวม",
+            "highest-win": "ชนะสูงสุด",
+            "lifetime-wins": "ชัยชนะตลอดชีพ",
+            "in-vaults": "ในห้องใต้ดิน"
+        }
     },
     "mint-world-cup-nft": {
         "incentives": "สิ่งจูงใจ",

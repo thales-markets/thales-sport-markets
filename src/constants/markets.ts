@@ -104,4 +104,10 @@ export enum ParlayErrorCode {
     SAME_TEAM_TWICE = 2,
 }
 
+export const OP_INCENTIVIZED_LEAGUE = {
+    id: 9011,
+    startDate: new Date(Date.UTC(2022, 11, 22, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2023, 0, 6, 0, 0, 0)),
+};
+
 export const MIN_LIQUIDITY = 10;

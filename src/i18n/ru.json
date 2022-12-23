@@ -253,7 +253,8 @@
         "match-time": "Время матча",
         "race-starts": "Старт гонки",
         "back": "Назад",
-        "apply-filters": "Применить фильтры"
+        "apply-filters": "Применить фильтры",
+        "incentivized-market": "СТИМУЛИРОВАННЫЙ РЫНОК"
     },
     "markets": {
         "market-card": {
@@ -373,7 +374,9 @@
                 "disconnect": "Отключить",
                 "switch": "Выключатель"
             }
-        }
+        },
+        "op-incentivized-tooltip": "Рынки EPL стимулируются 5000 OP с 26 декабря по 6 января в зависимости от пропорционального объема. Ознакомьтесь с таблицей лидеров <duneLink>здесь</ duneLink>.",
+        "incentivized-markets": "СТИМУЛИРОВАННЫЕ РЫНКИ"
     },
     "rewards": {
         "header": "Rewards",
@@ -537,7 +540,14 @@
             "total-quote": "Общая котировка"
         },
         "winnings-are-forfeit": "*Выигрыши, не запрошенные в течение {{amount}} дней после решения рынка, аннулируются.",
-        "search-field": "Поиск кошелька"
+        "search-field": "Поиск кошелька",
+        "stats": {
+            "highest-win": "Самая высокая победа",
+            "in-vaults": "В хранилищах",
+            "total-volume": "Общий объем",
+            "trades": "Сделки",
+            "lifetime-wins": "Пожизненные победы"
+        }
     },
     "mint-world-cup-nft": {
         "zebro-campaign": "Кампания Зебра ФИФА",

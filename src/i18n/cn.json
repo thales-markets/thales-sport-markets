@@ -253,7 +253,8 @@
         "match-time": "比赛时间",
         "race-starts": "比赛开始",
         "back": "后退",
-        "apply-filters": "应用过滤器"
+        "apply-filters": "应用过滤器",
+        "incentivized-market": "激励市场"
     },
     "markets": {
         "market-card": {
@@ -373,7 +374,9 @@
                 "disconnect": "断开",
                 "switch": "转变"
             }
-        }
+        },
+        "incentivized-markets": "激励市场",
+        "op-incentivized-tooltip": "从 12 月 26 日的比赛到 1 月 6 日的比赛，根据按比例分配的数量，EPL 市场受到 5,000 OP 的激励。在<duneLink>此处</duneLink>查看排行榜。"
     },
     "rewards": {
         "header": "奖励",
@@ -534,7 +537,14 @@
             "total-quote": "总报价"
         },
         "winnings-are-forfeit": "*在盘口解决后的 {{amount}} 天内未领取的奖金将被没收。",
-        "search-field": "搜索钱包"
+        "search-field": "搜索钱包",
+        "stats": {
+            "trades": "行业",
+            "total-volume": "总容积",
+            "highest-win": "最高获胜",
+            "lifetime-wins": "终身胜利",
+            "in-vaults": "在保险库中"
+        }
     },
     "mint-world-cup-nft": {
         "get-thales": "获得泰雷兹",
