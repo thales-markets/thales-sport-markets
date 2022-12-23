@@ -6,7 +6,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { formatCurrencyWithKey } from 'utils/formatters/number';
 
-const UserStats: React.FC = () => {
+const UserStats: React.FC<{ openPositionsValue: number }> = ({ openPositionsValue }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -22,7 +22,7 @@ const UserStats: React.FC = () => {
                 </Section>
                 <Section>
                     <Label>P&L:</Label>
-                    <Value>{!user ? 0 : formatCurrencyWithKey('USD', user.pnl, 2)}</Value>
+                    <Value>{!user ? 0 : formatCurrencyWithKey('USD', user.pnl + openPositionsValue, 2)}</Value>
                 </Section>
             </SectionWrapper>
             <SectionWrapper>

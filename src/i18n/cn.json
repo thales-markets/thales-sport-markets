@@ -511,7 +511,8 @@
             "no-claimable": "您没有任何可申请的职位",
             "no-open": "您没有任何空缺职位",
             "no-transactions": "您没有任何交易",
-            "ticket-subtitle": "添加头寸，选择市场并做出选择。"
+            "ticket-subtitle": "添加头寸，选择市场并做出选择。",
+            "canceled-tooltip": "已取消的盘口可在盘口解决后 2 小时内提出索赔。"
         },
         "table": {
             "position": "位置",

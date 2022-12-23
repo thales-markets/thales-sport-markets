@@ -609,7 +609,8 @@
             "no-claimable": "Vous n'avez pas de poste réclamable",
             "no-open": "Vous n'avez pas de poste ouvert",
             "no-transactions": "Vous n'avez aucun métier",
-            "ticket-subtitle": "Ajoutez une position, choisissez un marché et faites votre sélection."
+            "ticket-subtitle": "Ajoutez une position, choisissez un marché et faites votre sélection.",
+            "canceled-tooltip": "Les marchés annulés sont réclamables 2 heures après la résolution du marché."
         },
         "table": {
             "paid": "Payé",

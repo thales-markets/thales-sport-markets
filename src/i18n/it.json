@@ -514,7 +514,8 @@
             "no-claimable": "Non hai posizioni rivendicabili",
             "no-open": "Non hai nessuna posizione aperta",
             "no-transactions": "Non hai scambi",
-            "ticket-subtitle": "Aggiungi posizione, scegli un mercato ed effettua la tua selezione."
+            "ticket-subtitle": "Aggiungi posizione, scegli un mercato ed effettua la tua selezione.",
+            "canceled-tooltip": "I mercati annullati possono essere rivendicati 2 ore dopo la risoluzione del mercato."
         },
         "table": {
             "id": "Id",
