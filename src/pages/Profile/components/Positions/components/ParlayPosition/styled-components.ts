@@ -28,7 +28,7 @@ export const OverviewContainer = styled(FlexDivRow)`
 `;
 
 export const InfoContainer = styled(FlexDivRow)`
-    min-width: 150px;
+    min-width: 160px;
     justify-content: flex-start;
     @media (max-width: 768px) {
         min-width: auto;
@@ -37,7 +37,7 @@ export const InfoContainer = styled(FlexDivRow)`
 `;
 
 export const TicketIdContainer = styled(FlexDivRow)`
-    min-width: 150px;
+    min-width: 162px;
     justify-content: flex-start;
     margin-right: 20px;
     @media (max-width: 768px) {
@@ -47,11 +47,13 @@ export const TicketIdContainer = styled(FlexDivRow)`
 `;
 
 export const InfoContainerColumn = styled(FlexDivColumnNative)`
-    min-width: 95px;
+    min-width: 100px;
+    margin-left: 10px;
     justify-content: flex-start;
     @media (max-width: 768px) {
         min-width: auto;
         flex-direction: column;
+        margin-left: 0px;
     }
 `;
 
