@@ -1,6 +1,6 @@
 import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivRow } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 
 export const Container = styled(FlexDivRow)<{
     disabled: boolean;
@@ -69,4 +69,24 @@ export const Discount = styled(FlexDivCentered)`
         padding: 2px;
         font-size: 11px;
     }
+`;
+
+export const TooltipContainer = styled(FlexDivColumn)``;
+
+export const TooltipText = styled.span``;
+
+export const TooltipFooter = styled(FlexDivRow)`
+    border-top: 1px solid ${MAIN_COLORS.GRAY};
+    margin-top: 8px;
+    padding-top: 8px;
+`;
+
+export const TooltipFooterInfoContianer = styled(FlexDiv)``;
+
+export const TooltipFooterInfoLabel = styled(TooltipText)`
+    margin-right: 2px;
+`;
+
+export const TooltipFooterInfo = styled(TooltipText)`
+    font-weight: 600;
 `;

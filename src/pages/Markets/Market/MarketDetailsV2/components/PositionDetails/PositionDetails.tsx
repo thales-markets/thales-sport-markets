@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { MarketData, ParlaysMarketPosition } from 'types/markets';
+import { floorNumberToDecimals } from 'utils/formatters/number';
 import {
     isDiscounted,
     formatMarketOdds,
@@ -14,8 +15,20 @@ import {
     convertFinalResultToResultType,
     getSpreadTotalText,
     getParentMarketAddress,
+    getOddTooltipText,
 } from 'utils/markets';
-import { Discount, Container, Text, Status } from './styled-components';
+import {
+    Discount,
+    Container,
+    Text,
+    Status,
+    TooltipContainer,
+    TooltipText,
+    TooltipFooter,
+    TooltipFooterInfo,
+    TooltipFooterInfoContianer,
+    TooltipFooterInfoLabel,
+} from './styled-components';
 
 type PositionDetailsProps = {
     market: MarketData;
@@ -55,7 +68,9 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
     const symbolText = getSymbolText(position, market.betType);
     const spreadTotalText = getSpreadTotalText(market);
 
-    return (
+    const showTooltip = showOdd;
+
+    const getDetails = () => (
         <Container
             disabled={disabledPosition}
             selected={isAddedToParlay}
@@ -103,6 +118,28 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
             {showDiscount && <Discount>+{positionDiscount}%</Discount>}
         </Container>
     );
+
+    const getTooltip = () => (
+        <TooltipContainer>
+            <TooltipText>{getOddTooltipText(position, market)}</TooltipText>
+            {isGameOpen && (
+                <TooltipFooter>
+                    <TooltipFooterInfoContianer>
+                        <TooltipFooterInfoLabel>{t('markets.market-details.odds')}:</TooltipFooterInfoLabel>
+                        <TooltipFooterInfo>{formatMarketOdds(selectedOddsType, odd)}</TooltipFooterInfo>
+                    </TooltipFooterInfoContianer>
+                    <TooltipFooterInfoContianer>
+                        <TooltipFooterInfoLabel>{t('markets.market-details.liquidity')}:</TooltipFooterInfoLabel>
+                        <TooltipFooterInfo>
+                            {floorNumberToDecimals(availablePerPosition.available || 0)}
+                        </TooltipFooterInfo>
+                    </TooltipFooterInfoContianer>
+                </TooltipFooter>
+            )}
+        </TooltipContainer>
+    );
+
+    return <>{showTooltip ? <Tooltip overlay={getTooltip()} component={getDetails()} /> : getDetails()}</>;
 };
 
 export default PositionDetails;
