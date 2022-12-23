@@ -530,7 +530,14 @@
             "total-quote": "Cotización total"
         },
         "winnings-are-forfeit": "*Las ganancias no reclamadas dentro de {{amount}} días de la resolución de un mercado se perderán.",
-        "search-field": "Buscar billetera"
+        "search-field": "Buscar billetera",
+        "stats": {
+            "trades": "Vientos alisios",
+            "in-vaults": "en bóvedas",
+            "highest-win": "victoria más alta",
+            "lifetime-wins": "Victorias de por vida",
+            "total-volume": "Volumen total"
+        }
     },
     "mint-world-cup-nft": {
         "mint-nft-button": "Mint esta cebra!",

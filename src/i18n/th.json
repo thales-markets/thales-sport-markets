@@ -531,7 +531,14 @@
             "total-amount": "จำนวนเงินทั้งหมด"
         },
         "winnings-are-forfeit": "*การชนะที่ไม่ได้อ้างสิทธิ์ภายใน {{amount}} วันของตลาดที่ได้รับการแก้ไขจะถือว่าสละสิทธิ์",
-        "search-field": "ค้นหากระเป๋าสตางค์"
+        "search-field": "ค้นหากระเป๋าสตางค์",
+        "stats": {
+            "trades": "การค้า",
+            "total-volume": "ปริมาณรวม",
+            "highest-win": "ชนะสูงสุด",
+            "lifetime-wins": "ชัยชนะตลอดชีพ",
+            "in-vaults": "ในห้องใต้ดิน"
+        }
     },
     "mint-world-cup-nft": {
         "incentives": "สิ่งจูงใจ",

@@ -530,7 +530,14 @@
             "total-quote": "总报价"
         },
         "winnings-are-forfeit": "*在盘口解决后的 {{amount}} 天内未领取的奖金将被没收。",
-        "search-field": "搜索钱包"
+        "search-field": "搜索钱包",
+        "stats": {
+            "trades": "行业",
+            "total-volume": "总容积",
+            "highest-win": "最高获胜",
+            "lifetime-wins": "终身胜利",
+            "in-vaults": "在保险库中"
+        }
     },
     "mint-world-cup-nft": {
         "get-thales": "获得泰雷兹",

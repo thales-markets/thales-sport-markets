@@ -2,6 +2,7 @@ import useWinningInfoQuery from 'queries/markets/useWinningInfoQuery';
 import useUserVaultsDataQuery from 'queries/vault/useUserVaultsDataQuery';
 import useUsersStatsQuery from 'queries/wallet/useUsersStatsQuery';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -10,6 +11,7 @@ import { WinningInfo } from 'types/markets';
 import { UserVaultsData } from 'types/vault';
 
 const UserStats: React.FC<{ openPositionsValue: number }> = ({ openPositionsValue }) => {
+    const { t } = useTranslation();
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -34,29 +36,29 @@ const UserStats: React.FC<{ openPositionsValue: number }> = ({ openPositionsValu
         <Wrapper>
             <SectionWrapper>
                 <Section>
-                    <Label>Total Volume</Label>
+                    <Label>{t('profile.stats.total-volume')}</Label>
                     <Value>{!user ? 0 : user.volume.toFixed(2)}</Value>
                     <CurrencyLabel>USD</CurrencyLabel>
                 </Section>
                 <Separator />
                 <Section>
-                    <Label>Trades</Label>
+                    <Label>{t('profile.stats.trades')}</Label>
                     <Value>{!user ? 0 : user.trades}</Value>
                 </Section>
                 <Separator />
                 <Section>
-                    <Label>Highest win</Label>
+                    <Label>{t('profile.stats.highest-win')}</Label>
                     <Value>{!user ? 0 : winningInfo.highestWin.toFixed(2)}</Value>
                     <CurrencyLabel>USD</CurrencyLabel>
                 </Section>
                 <Separator className="mobile-hide" />
                 <Section>
-                    <Label>Lifetime wins</Label>
+                    <Label>{t('profile.stats.lifetime-wins')}</Label>
                     <Value>{!user ? 0 : winningInfo.lifetimeWins}</Value>
                 </Section>
                 <Separator />
                 <Section>
-                    <Label>In Vaults</Label>
+                    <Label>{t('profile.stats.in-vaults')}</Label>
                     <Value>{!user ? 0 : vaultsData.balanceTotal.toFixed(2)}</Value>
                     <CurrencyLabel>USD</CurrencyLabel>
                 </Section>

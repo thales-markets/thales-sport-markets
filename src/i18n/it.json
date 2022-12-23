@@ -533,7 +533,14 @@
             "total-quote": "Citazione totale"
         },
         "winnings-are-forfeit": "*Le vincite non riscosse entro {{amount}} giorni dalla risoluzione di un mercato vengono annullate.",
-        "search-field": "Cerca portafoglio"
+        "search-field": "Cerca portafoglio",
+        "stats": {
+            "total-volume": "Volume totale",
+            "highest-win": "Vittoria più alta",
+            "trades": "Mestieri",
+            "lifetime-wins": "Vince a vita",
+            "in-vaults": "Nei caveau"
+        }
     },
     "mint-world-cup-nft": {
         "second-option": "La seconda opzione per metterti nella lista consentita è completare i seguenti passaggi:",
