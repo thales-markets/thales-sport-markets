@@ -49,7 +49,7 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
 
         if (market.isOpen && oddsFromContract) {
             oddsFromContract
-                .filter((obj: any) => obj[0] === market.id)
+                .filter((obj: any) => obj[0] === market.gameId)
                 .map((obj: any) => {
                     market.homeOdds = bigNumberFormatter(obj.odds[0]);
                     market.awayOdds = bigNumberFormatter(obj.odds[1]);

@@ -7,6 +7,7 @@ import { bigNumberFormatter } from 'utils/formatters/ethers';
 import { fixApexName, fixDuplicatedTeamName, fixLongTeamNameString } from 'utils/formatters/string';
 
 export type AccountPositionProfile = {
+    sUSDPaid: number;
     id: string;
     account: string;
     amount: number;
@@ -51,6 +52,7 @@ const useAccountMarketsQuery = (
                                 : fixLongTeamNameString(fixDuplicatedTeamName(position.position.market?.awayTeam)),
                         },
                         side: position.position.side,
+                        sUSDPaid: position.sUSDPaid,
                     };
                 });
 

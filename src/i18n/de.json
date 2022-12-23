@@ -250,7 +250,8 @@
         "match-time": "Spielzeit",
         "race-starts": "Rennen beginnt",
         "back": "Der Rücken",
-        "apply-filters": "Filter anwenden"
+        "apply-filters": "Filter anwenden",
+        "incentivized-market": "INCENTIVISIERTER MARKT"
     },
     "markets": {
         "market-card": {
@@ -363,7 +364,9 @@
                 "switch": "Schalter",
                 "disconnect": "Trennen"
             }
-        }
+        },
+        "incentivized-markets": "ANREIZMÄRKTE",
+        "op-incentivized-tooltip": "EPL-Märkte werden mit 5.000 OP von den Spielen vom 26. Dezember bis zum 6. Januar basierend auf dem anteiligen Volumen gefördert. Sehen Sie sich die Bestenliste <duneLink>hier</ duneLink> an."
     },
     "rewards": {
         "header": "Preise",
@@ -396,7 +399,8 @@
         "your-score": "Ihr Ergebnis",
         "total-negative-pnl": "Totalverluste",
         "twap": "Eine Woche TWAP",
-        "total-global-rebates": "Gesamtrabatte zu zahlen"
+        "total-global-rebates": "Gesamtrabatte zu zahlen",
+        "parlay-link": "<div>Für den monatlichen Parlay-Wettbewerb des OP<parlayLink> klicken Sie hier</ parlayLink> .</div>"
     },
     "quiz": {
         "title": "Sport Trivia Wettbewerb",

@@ -253,7 +253,8 @@
         "match-time": "Время матча",
         "race-starts": "Старт гонки",
         "back": "Назад",
-        "apply-filters": "Применить фильтры"
+        "apply-filters": "Применить фильтры",
+        "incentivized-market": "СТИМУЛИРОВАННЫЙ РЫНОК"
     },
     "markets": {
         "market-card": {
@@ -366,7 +367,9 @@
                 "disconnect": "Отключить",
                 "switch": "Выключатель"
             }
-        }
+        },
+        "op-incentivized-tooltip": "Рынки EPL стимулируются 5000 OP с 26 декабря по 6 января в зависимости от пропорционального объема. Ознакомьтесь с таблицей лидеров <duneLink>здесь</ duneLink>.",
+        "incentivized-markets": "СТИМУЛИРОВАННЫЕ РЫНКИ"
     },
     "rewards": {
         "header": "Rewards",
@@ -399,7 +402,8 @@
         "your-score": "Твой счет",
         "total-negative-pnl": "Общие потери",
         "twap": "TWAP на неделю",
-        "total-global-rebates": "Всего скидок к оплате"
+        "total-global-rebates": "Всего скидок к оплате",
+        "parlay-link": "<div>Для ежемесячного конкурса OP<parlayLink> кликните сюда</ parlayLink> .</div>"
     },
     "quiz": {
         "title": "Sports Trivia competition",

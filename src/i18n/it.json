@@ -253,7 +253,8 @@
         "match-time": "Tempo di partita",
         "race-starts": "La corsa inizia",
         "back": "Di ritorno",
-        "apply-filters": "Applicare filtri"
+        "apply-filters": "Applicare filtri",
+        "incentivized-market": "MERCATO INCENTIVATO"
     },
     "markets": {
         "market-card": {
@@ -366,7 +367,9 @@
                 "switch": "Interruttore",
                 "disconnect": "Disconnetti"
             }
-        }
+        },
+        "incentivized-markets": "MERCATI INCENTIVATI",
+        "op-incentivized-tooltip": "I mercati EPL sono incentivati con 5.000 OP dalle partite del 26 dicembre alle partite del 6 gennaio in base al volume proporzionale. Dai un'occhiata alla classifica <duneLink>qui</ duneLink>."
     },
     "rewards": {
         "header": "Rewards",
@@ -399,7 +402,8 @@
         "your-score": "Il tuo punteggio",
         "total-negative-pnl": "Perdite totali",
         "twap": "TWAP di una settimana",
-        "total-global-rebates": "Sconti totali da pagare"
+        "total-global-rebates": "Sconti totali da pagare",
+        "parlay-link": "<div>Per la competizione parlay mensile OP<parlayLink> clicca qui</ parlayLink> .</div>"
     },
     "quiz": {
         "title": "Sports Trivia competition",

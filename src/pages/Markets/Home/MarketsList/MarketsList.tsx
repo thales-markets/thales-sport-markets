@@ -9,6 +9,10 @@ import styled from 'styled-components';
 import { AccountPositionsMap, SportMarkets, TagInfo } from 'types/markets';
 import MarketListCard from '../MarketListCard';
 import MarketListCardMobile from '../MarketListCard/MarketListCardMobile';
+import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
+import Tooltip from 'components/Tooltip';
+import { Trans, useTranslation } from 'react-i18next';
+import { OP_INCENTIVIZED_LEAGUE } from 'constants/markets';
 
 type MarketsList = {
     markets: SportMarkets;
@@ -18,6 +22,7 @@ type MarketsList = {
 };
 
 const MarketsList: React.FC<MarketsList> = ({ markets, league, language, accountPositions }) => {
+    const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const [hideLeague, setHideLeague] = useState<boolean>(false);
     const leagueName = TAGS_LIST.find((t: TagInfo) => t.id == league)?.label;
@@ -45,6 +50,32 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language, account
                         <ArrowIcon down={true} className={`icon-exotic icon-exotic--down`} />
                     )}
                 </LeagueInfo>
+                {OP_INCENTIVIZED_LEAGUE.id == league &&
+                    new Date() > OP_INCENTIVIZED_LEAGUE.startDate &&
+                    new Date() < OP_INCENTIVIZED_LEAGUE.endDate && (
+                        <Tooltip
+                            overlay={
+                                <Trans
+                                    i18nKey="markets.op-incentivized-tooltip"
+                                    components={{
+                                        duneLink: (
+                                            <a
+                                                href="https://dune.com/leifu/overtime-epl-rewards-leaderboard"
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            />
+                                        ),
+                                    }}
+                                />
+                            }
+                            component={
+                                <IncentivizedLeague>
+                                    <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
+                                    <OPLogo />
+                                </IncentivizedLeague>
+                            }
+                        ></Tooltip>
+                    )}
                 <StarIcon
                     onClick={() => {
                         const newFavourites = favouriteLeagues.map((favourite: TagInfo) => {
@@ -130,6 +161,8 @@ const LeagueCard = styled.div`
     border-radius: 5px;
     align-items: center;
     background-color: ${(props) => props.theme.background.primary};
+    justify-content: space-between;
+    padding-right: 40px;
 `;
 
 const LeagueInfo = styled.div`
@@ -194,6 +227,17 @@ const StarIcon = styled.i`
     &:hover {
         color: #fac439;
     }
+`;
+
+const IncentivizedLeague = styled.div`
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+`;
+
+const IncentivizedTitle = styled.span`
+    font-size: 13px;
+    padding-right: 5px;
 `;
 
 export default MarketsList;
