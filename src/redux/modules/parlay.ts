@@ -113,6 +113,7 @@ export const {
 
 export const getParlayState = (state: RootState) => state[sliceName];
 export const getParlay = (state: RootState) => getParlayState(state).parlay;
+export const getParlaySize = (state: RootState) => getParlayState(state).parlaySize;
 export const getParlayPayment = (state: RootState) => getParlayState(state).payment;
 export const getParlayError = (state: RootState) => getParlayState(state).error;
 export const getHasParlayError = createSelector(getParlayError, (error) => error.code != ParlayErrorCode.NO_ERROS);

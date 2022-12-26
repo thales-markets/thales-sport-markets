@@ -10,6 +10,7 @@ export const ROUTES = {
     Quiz: '/trivia',
     QuizLeaderboard: '/trivia/leaderboard',
     MintWorldCupNFT: '/mint-world-cup-nft',
+    Wizard: '/wizard',
     Vaults: '/vaults',
     Vault: '/vaults/:vaultId',
     Leaderboard: '/parlay-leaderboard',
