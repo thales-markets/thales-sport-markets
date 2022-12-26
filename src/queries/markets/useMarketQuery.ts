@@ -7,7 +7,7 @@ import marketContract from 'utils/contracts/sportsMarketContract';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
 import { fixDuplicatedTeamName, fixLongTeamNameString } from '../../utils/formatters/string';
 import { Position } from '../../constants/options';
-import { ZERO_ADDRESS } from 'constants/network';
+// import { ZERO_ADDRESS } from 'constants/network';
 
 const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketData | undefined>) => {
     return useQuery<MarketData | undefined>(
@@ -20,7 +20,7 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     theRundownConsumerContract,
                     sportsAMMContract,
                     gamesOddsObtainerContract,
-                    sportMarketManagerContract,
+                    // sportMarketManagerContract,
                 } = networkConnector;
 
                 const [
