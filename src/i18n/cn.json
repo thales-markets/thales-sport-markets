@@ -721,5 +721,40 @@
         "no-parlays": "在此期间还没有注册获胜的过关彩。",
         "info3": "- 实际总报价（通过单独乘以头寸获得）",
         "info": "如果多个 parlays 有相同的报价，以下将按各自的顺序用作决胜局："
+    },
+    "wizard": {
+        "steps": {
+            "title": {
+                "connect-wallet": "连接钱包",
+                "exchange": "获取加密美元",
+                "trade": "加班市场",
+                "fund": "用 ETH 入金"
+            },
+            "description": {
+                "exchange": "Overtime 使用流行的稳定币（Crypto USD）来执行交易。通过单击兑换成 sUSD 按钮，将 ETH 无缝兑换成所需数量的稳定币。",
+                "trade": "现在您已获得资金并准备好使用 Overtime Markets。祝你好运！",
+                "fund": "在您可以使用 Overtime 之前，首先您需要在您的 Optimism 连接钱包中获取 ETH。单击“资金”按钮后，选择可用选项之一继续。",
+                "connect-wallet": "如果您没有安装 Optimism connected Wallet，您将被引导安装一个选择的钱包，然后才能连接它。"
+            },
+            "action": {
+                "connected": "连接的",
+                "fund": "用 ETH 入金",
+                "connect-wallet": "连接钱包",
+                "exchange": "兑换美元",
+                "trade": "超时交易"
+            }
+        },
+        "fund-modal": {
+            "address": "您的地址二维码",
+            "copy-address": "复制地址",
+            "coppied": "复制了！",
+            "title": "资金、桥梁和发送",
+            "exchange": "从交易所发送",
+            "buy-banxa": "与 Banxa 共同基金",
+            "bridge": "通往乐观的桥梁",
+            "buy-mt-pelerin": "与 Mt Pelerin 建立基金",
+            "buy": "卡存入金"
+        },
+        "title": "开始吧！"
     }
 }

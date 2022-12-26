@@ -724,5 +724,40 @@
         "info": "Se più parlay hanno la stessa quotazione, quanto segue verrà utilizzato come spareggio nel rispettivo ordine:",
         "warning": "*Il team degli straordinari detiene il diritto di squalificare i portafogli che sospettiamo giochino con il sistema.",
         "info2": "- L'importo pagato"
+    },
+    "wizard": {
+        "steps": {
+            "title": {
+                "fund": "Fondo con ETH",
+                "trade": "Mercati straordinari",
+                "exchange": "Ottieni criptovalute USD",
+                "connect-wallet": "Connetti Portafoglio"
+            },
+            "description": {
+                "fund": "Prima di poter utilizzare Overtime, devi prima ottenere ETH sul tuo portafoglio connesso Optimism. Dopo aver fatto clic sul pulsante Fondo, scegli una delle opzioni disponibili per continuare.",
+                "connect-wallet": "Se non hai installato Optimism Connected Wallet, verrai indirizzato a installare un portafoglio di tua scelta prima di poterlo connettere.",
+                "trade": "Ora sei finanziato e pronto per utilizzare i mercati straordinari. Buona fortuna!",
+                "exchange": "Overtime utilizza le popolari stablecoin (Crypto USD) per eseguire operazioni. Facendo clic sul pulsante Scambia con sUSD, scambia senza problemi ETH con la quantità desiderata di stablecoin."
+            },
+            "action": {
+                "trade": "Fai trading sugli straordinari",
+                "fund": "Fondo con ETH",
+                "exchange": "Cambio in USD",
+                "connected": "Collegato",
+                "connect-wallet": "Connetti Portafoglio"
+            }
+        },
+        "fund-modal": {
+            "coppied": "In coppia!",
+            "buy-banxa": "Fondo con Banxa",
+            "address": "Il codice QR del tuo indirizzo",
+            "copy-address": "Copia indirizzo",
+            "exchange": "Invia dallo scambio",
+            "title": "Finanzia, collega e invia",
+            "buy": "Fondo con carta",
+            "buy-mt-pelerin": "Fondo con Mt Pelerin",
+            "bridge": "Un ponte verso l'ottimismo"
+        },
+        "title": "Iniziare!"
     }
 }

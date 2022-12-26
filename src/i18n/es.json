@@ -721,5 +721,40 @@
         "info2": "- La cantidad pagada",
         "info3": "- Cotización total real (obtenida al multiplicar posiciones individualmente)",
         "warning": "*El equipo de tiempo extra se reserva el derecho de descalificar monederos que sospechemos que manipulan el sistema."
+    },
+    "wizard": {
+        "steps": {
+            "title": {
+                "trade": "Mercados de tiempo extra",
+                "connect-wallet": "Conectar billetera",
+                "exchange": "Obtener CriptoUSD",
+                "fund": "Financiar con ETH"
+            },
+            "description": {
+                "exchange": "Overtime utiliza monedas estables populares (Crypto USD) para ejecutar operaciones. Al hacer clic en el botón Intercambiar a sUSD, cambie sin problemas ETH a la cantidad deseada de monedas estables.",
+                "fund": "Antes de que pueda usar Overtime, primero debe obtener ETH en su billetera conectada Optimism. Después de hacer clic en el botón Fondo, elija una de las opciones disponibles para continuar.",
+                "trade": "Ahora tiene fondos y está listo para usar Overtime Markets. ¡Buena suerte!",
+                "connect-wallet": "Si no tiene Optimism Connected Wallet instalado, se le indicará que instale una billetera de su elección antes de poder conectarla."
+            },
+            "action": {
+                "fund": "Financiar con ETH",
+                "connect-wallet": "Conectar billetera",
+                "trade": "Comercio en horas extras",
+                "exchange": "Cambio a USD",
+                "connected": "Conectado"
+            }
+        },
+        "fund-modal": {
+            "copy-address": "Copiar dirección",
+            "buy-banxa": "Fondo con Banxa",
+            "coppied": "¡Copiado!",
+            "title": "Financiar, puentear y enviar",
+            "buy": "Fondo con tarjeta",
+            "exchange": "Enviar desde el intercambio",
+            "address": "Código QR de tu dirección",
+            "buy-mt-pelerin": "Fondo con Mt Pelerin",
+            "bridge": "Puente al optimismo"
+        },
+        "title": "¡Empezar!"
     }
 }

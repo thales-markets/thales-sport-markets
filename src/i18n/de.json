@@ -718,5 +718,40 @@
         "info3": "- Tatsächliche Gesamtquote (erhalten durch Multiplizieren der Positionen einzeln)",
         "info2": "- Der gezahlte Betrag",
         "info1": "- Anzahl der Positionen im Parlay"
+    },
+    "wizard": {
+        "steps": {
+            "title": {
+                "fund": "Fonds mit der ETH",
+                "connect-wallet": "Brieftasche verbinden",
+                "trade": "Überstundenmärkte",
+                "exchange": "Holen Sie sich Crypto USD"
+            },
+            "description": {
+                "trade": "Jetzt sind Sie finanziert und bereit, Overtime Markets zu nutzen. Viel Glück!",
+                "exchange": "Overtime verwendet beliebte Stablecoins (Crypto USD), um Trades auszuführen. Durch Klicken auf die Schaltfläche Exchange to sUSD tauschen Sie ETH nahtlos gegen eine gewünschte Menge an Stablecoins.",
+                "connect-wallet": "Wenn Sie Optimism Connected Wallet nicht installiert haben, werden Sie weitergeleitet, um ein Wallet Ihrer Wahl zu installieren, bevor Sie es verbinden können.",
+                "fund": "Bevor Sie Overtime nutzen können, müssen Sie zuerst ETH auf Ihre Optimism Connected Wallet bekommen. Nachdem Sie auf die Schaltfläche „Fonds“ geklickt haben, wählen Sie eine der verfügbaren Optionen, um fortzufahren."
+            },
+            "action": {
+                "fund": "Fonds mit der ETH",
+                "connect-wallet": "Brieftasche verbinden",
+                "exchange": "Umtausch in USD",
+                "connected": "In Verbindung gebracht",
+                "trade": "Handel mit Überstunden"
+            }
+        },
+        "fund-modal": {
+            "buy": "Mit Karte finanzieren",
+            "buy-banxa": "Fonds mit Banxa",
+            "copy-address": "Adresse kopieren",
+            "title": "Fund, Bridge & Send",
+            "exchange": "Von Austausch senden",
+            "buy-mt-pelerin": "Fonds mit Mt. Pelerin",
+            "bridge": "Brücke zum Optimismus",
+            "address": "QR-Code Ihrer Adresse",
+            "coppied": "Kopiert!"
+        },
+        "title": "Loslegen!"
     }
 }

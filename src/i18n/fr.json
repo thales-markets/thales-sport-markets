@@ -819,5 +819,40 @@
         "info": "Si plusieurs parlays ont la même citation, ce qui suit sera utilisé comme bris d'égalité dans l'ordre respectif :",
         "warning": "* L'équipe des heures supplémentaires se réserve le droit de disqualifier les portefeuilles que nous soupçonnons de jouer avec le système.",
         "info1": "- Nombre de positions sur le parlay"
+    },
+    "wizard": {
+        "steps": {
+            "title": {
+                "exchange": "Obtenez des crypto-USD",
+                "trade": "Marchés des heures supplémentaires",
+                "connect-wallet": "Connecter le portefeuille",
+                "fund": "Financer avec ETH"
+            },
+            "description": {
+                "fund": "Avant de pouvoir utiliser les heures supplémentaires, vous devez d'abord obtenir des ETH sur votre portefeuille connecté Optimism. Après avoir cliqué sur le bouton Financer, choisissez l'une des options disponibles pour continuer.",
+                "trade": "Vous êtes maintenant financé et prêt à utiliser les marchés des heures supplémentaires. Bonne chance!",
+                "connect-wallet": "Si vous n'avez pas installé le portefeuille connecté Optimism, vous serez redirigé pour installer un portefeuille de votre choix avant de pouvoir le connecter.",
+                "exchange": "Les heures supplémentaires utilisent des stablecoins populaires (Crypto USD) pour exécuter des transactions. En cliquant sur le bouton Exchange to sUSD, échangez de manière transparente ETH contre une quantité souhaitée de stablecoins."
+            },
+            "action": {
+                "fund": "Financer avec ETH",
+                "connected": "Connecté",
+                "exchange": "Échange en USD",
+                "connect-wallet": "Connecter le portefeuille",
+                "trade": "Échange sur les heures supplémentaires"
+            }
+        },
+        "fund-modal": {
+            "exchange": "Envoyer depuis l'échange",
+            "title": "Financer, relier et envoyer",
+            "buy-banxa": "Fonds avec Banxa",
+            "buy-mt-pelerin": "Fonds avec Mt Pelerin",
+            "coppied": "Copié !",
+            "buy": "Fonds avec carte",
+            "address": "Votre adresse QR code",
+            "bridge": "Pont vers l'optimisme",
+            "copy-address": "Copier l'adresse"
+        },
+        "title": "Commencer!"
     }
 }
