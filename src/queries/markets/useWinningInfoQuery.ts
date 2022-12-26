@@ -26,7 +26,6 @@ const useWinningInfoQuery = (walletAddress: string, networkId: NetworkId, option
                     network: networkId,
                 });
 
-
                 const allSinglesWinningAmounts = marketTransactions
                     .map((tx: MarketTransaction) => ({
                         ...tx,
