@@ -33,7 +33,7 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     paused,
                     buyMarketDefaultOdds,
                     childMarketsAddresses,
-                    doubleChanceMarket,
+                    // doubleChanceMarket,
                 ] = await Promise.all([
                     contract?.getGameDetails(),
                     contract?.tags(0),
@@ -44,7 +44,7 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     contract?.paused(),
                     sportsAMMContract?.getMarketDefaultOdds(marketAddress, false),
                     gamesOddsObtainerContract?.getAllChildMarketsFromParent(marketAddress),
-                    sportMarketManagerContract?.doubleChanceMarkets(marketAddress),
+                    // sportMarketManagerContract?.doubleChanceMarkets(marketAddress),
                 ]);
 
                 const gameStarted = cancelled ? false : Date.now() > Number(times.maturity) * 1000;
@@ -86,10 +86,11 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     betType: 0,
                     isApex: false,
                     parentMarket: '',
-                    childMarketsAddresses:
-                        doubleChanceMarket !== ZERO_ADDRESS
-                            ? [doubleChanceMarket, ...childMarketsAddresses]
-                            : childMarketsAddresses,
+                    childMarketsAddresses,
+                    // childMarketsAddresses:
+                    //     doubleChanceMarket !== ZERO_ADDRESS
+                    //         ? [doubleChanceMarket, ...childMarketsAddresses]
+                    //         : childMarketsAddresses,
                     childMarkets: [],
                     spread: 0,
                     total: 0,
