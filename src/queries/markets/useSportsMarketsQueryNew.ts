@@ -23,7 +23,7 @@ const marketsCache = {
 const childrenOf = (parentMarket: string, groupedMarkets: any) => {
     return (groupedMarkets[parentMarket] || []).map((market: SportMarketInfo) => ({
         ...market,
-        childMarkets: orderBy(childrenOf(market.address, groupedMarkets), ['betType'], ['desc']),
+        childMarkets: orderBy(childrenOf(market.address, groupedMarkets), ['betType'], ['asc']),
     }));
 };
 

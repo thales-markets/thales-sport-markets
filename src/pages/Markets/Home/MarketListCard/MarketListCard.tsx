@@ -93,6 +93,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 <OddsWrapper>
                     {showOdds && (
                         <>
+                            <Odds market={market} />
                             {!isMobile && (
                                 <>
                                     {market.childMarkets.map((childMarket) => (
@@ -100,7 +101,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     ))}
                                 </>
                             )}
-                            <Odds market={market} />
                             {isMobile && hasChildMarkets && (
                                 <Arrow
                                     className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
