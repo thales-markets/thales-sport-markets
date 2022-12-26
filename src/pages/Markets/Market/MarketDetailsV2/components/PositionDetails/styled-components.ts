@@ -83,7 +83,7 @@ export const TooltipBonusText = styled(TooltipText)`
 
 export const TooltipFooter = styled(FlexDivRow)`
     border-top: 1px solid ${MAIN_COLORS.GRAY};
-    margin-top: 8px;
+    margin-top: 10px;
     padding-top: 8px;
 `;
 
