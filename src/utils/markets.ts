@@ -278,13 +278,6 @@ export const getVisibilityOfDrawOption = (tags: Array<number>, betType: BetType)
     return true;
 };
 
-export const isDiscounted = (priceImpact: number | undefined) => {
-    if (priceImpact) {
-        return Number(priceImpact) < 0;
-    }
-    return false;
-};
-
 export const hasBonus = (bonus: number | undefined) => Number(bonus) > 0;
 
 export const getFormattedBonus = (bonus: number | undefined) => `+${Math.ceil(Number(bonus))}%`;

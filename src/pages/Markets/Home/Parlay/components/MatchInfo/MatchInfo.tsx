@@ -67,7 +67,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                 }
                 tooltip={<>{getOddTooltipText(market.position, market)}</>}
             />
-            {bonus > 0 ? <DiscountLabel>{getFormattedBonus(bonus)}</DiscountLabel> : ''}
+            {bonus > 0 ? <Bonus>{getFormattedBonus(bonus)}</Bonus> : ''}
             {readOnly ? (
                 market?.isResolved ? (
                     market?.winning ? (
@@ -109,7 +109,7 @@ const ClubName = styled.span<{ fontSize?: string; lineHeight?: string }>`
     color: #ffffff;
 `;
 
-const DiscountLabel = styled.div`
+const Bonus = styled.div`
     font-size: 12px;
     font-weight: 600;
     color: #5fc694;

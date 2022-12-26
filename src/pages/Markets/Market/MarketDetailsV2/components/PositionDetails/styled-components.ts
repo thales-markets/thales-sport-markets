@@ -53,7 +53,7 @@ export const Status = styled(Text)`
     }
 `;
 
-export const Discount = styled(FlexDivCentered)`
+export const Bonus = styled(FlexDivCentered)`
     color: #5fc694;
     position: absolute;
     top: -9px;

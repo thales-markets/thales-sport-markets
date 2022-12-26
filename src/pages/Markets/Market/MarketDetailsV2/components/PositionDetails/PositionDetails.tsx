@@ -22,7 +22,7 @@ import {
     getFormattedBonus,
 } from 'utils/markets';
 import {
-    Discount,
+    Bonus,
     Container,
     Text,
     Status,
@@ -124,7 +124,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                         : null}
                 </Status>
             )}
-            {showBonus && <Discount>{positionBonus}</Discount>}
+            {showBonus && <Bonus>{positionBonus}</Bonus>}
         </Container>
     );
 
