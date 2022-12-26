@@ -533,7 +533,14 @@
             "total-quote": "Общая котировка"
         },
         "winnings-are-forfeit": "*Выигрыши, не запрошенные в течение {{amount}} дней после решения рынка, аннулируются.",
-        "search-field": "Поиск кошелька"
+        "search-field": "Поиск кошелька",
+        "stats": {
+            "highest-win": "Самая высокая победа",
+            "in-vaults": "В хранилищах",
+            "total-volume": "Общий объем",
+            "trades": "Сделки",
+            "lifetime-wins": "Пожизненные победы"
+        }
     },
     "mint-world-cup-nft": {
         "zebro-campaign": "Кампания Зебра ФИФА",

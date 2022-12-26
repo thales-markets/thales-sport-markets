@@ -628,7 +628,14 @@
             "total-amount": "Montant total"
         },
         "winnings-are-forfeit": "*Les gains non réclamés dans les {{amount}} jours suivant la résolution d'un marché sont annulés.",
-        "search-field": "Portefeuille de recherche"
+        "search-field": "Portefeuille de recherche",
+        "stats": {
+            "trades": "Métiers",
+            "lifetime-wins": "Victoires à vie",
+            "in-vaults": "Dans les voûtes",
+            "highest-win": "Victoire la plus élevée",
+            "total-volume": "Volume total"
+        }
     },
     "mint-world-cup-nft": {
         "no": "Non",

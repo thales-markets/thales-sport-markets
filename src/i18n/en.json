@@ -253,6 +253,13 @@
         "incentivized-market": "INCENTIVIZED MARKET"
     },
     "profile": {
+        "stats": {
+            "total-volume": "Total volume",
+            "trades": "Trades",
+            "highest-win": "Highest win",
+            "lifetime-wins": "Lifetime wins",
+            "in-vaults": "In vaults"
+        },
         "open-claimable": "Open/Claimable",
         "transaction-history": "Transaction history",
         "messages": {

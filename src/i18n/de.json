@@ -527,7 +527,14 @@
             "total-quote": "Gesamtangebot"
         },
         "winnings-are-forfeit": "*Gewinne, die nicht innerhalb von {{amount}} Tagen nach Auflösung eines Marktes beansprucht werden, verfallen.",
-        "search-field": "Brieftasche suchen"
+        "search-field": "Brieftasche suchen",
+        "stats": {
+            "trades": "Handel",
+            "lifetime-wins": "Lebenszeit gewinnt",
+            "total-volume": "Volle Lautstärke",
+            "in-vaults": "In Gewölben",
+            "highest-win": "Höchster Gewinn"
+        }
     },
     "mint-world-cup-nft": {
         "eligible-text-2": "Prägen Sie ein Zebro Ihrer Lieblingsnationalmannschaft und qualifizieren Sie sich für 50.000 OP & 30.000 THALES-Bonusprämien!",

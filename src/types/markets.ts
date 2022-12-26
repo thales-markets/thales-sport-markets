@@ -156,14 +156,6 @@ export type AccountMarketData = {
     userAlreadyClaimedAmount: number;
 };
 
-export type AccountMarketTicketData = AccountMarketData & {
-    position: number;
-};
-
-export type AccountMarketOpenBidData = AccountMarketData & {
-    userPositions: number[];
-};
-
 export type SortOptionType = {
     id: number;
     title: string;
@@ -322,4 +314,9 @@ export type ParlayPayment = {
     selectedStableIndex: COLLATERALS_INDEX;
     isVoucherSelected: boolean | undefined;
     amountToBuy: number | string;
+};
+
+export type WinningInfo = {
+    highestWin: number;
+    lifetimeWins: number;
 };
