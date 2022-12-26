@@ -26,6 +26,7 @@ const useWinningInfoQuery = (walletAddress: string, networkId: NetworkId, option
                     network: networkId,
                 });
 
+
                 const allSinglesWinningAmounts = marketTransactions
                     .map((tx: MarketTransaction) => ({
                         ...tx,
@@ -34,7 +35,7 @@ const useWinningInfoQuery = (walletAddress: string, networkId: NetworkId, option
                     .filter(
                         (tx: any) =>
                             convertPositionNameToPosition(tx.position) ===
-                            convertFinalResultToResultType(tx.wholeMarket.finalResult)
+                                convertFinalResultToResultType(tx.wholeMarket.finalResult) && tx.type === 'buy'
                     )
                     .map((tx: MarketTransaction) => tx.amount);
                 const highestWinningSingle = Math.max(...allSinglesWinningAmounts);
