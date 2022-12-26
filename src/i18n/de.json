@@ -296,7 +296,8 @@
                     "1x2": "{{team}} gewinnt das Match oder das Match endet unentschieden {{matchResolve}}."
                 },
                 "winner": "{{team}} gewinnt das Match {{matchResolve}}.",
-                "draw": "Das Match endet unentschieden {{matchResolve}}."
+                "draw": "Das Match endet unentschieden {{matchResolve}}.",
+                "bonus": "{{bonus}} zusätzlicher Bonus bei Gewinn!"
             },
             "no-liquidity": "Keine Liquidität"
         },

@@ -3,7 +3,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
-import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE } from 'constants/markets';
+import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE, OddsType } from 'constants/markets';
 import { MAX_GAS_LIMIT } from 'constants/network';
 import { Position } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
@@ -292,6 +292,16 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                             ? flooredAmountOfTokens
                             : recalculatedTokenAmount;
                     setTokenAmount(maxAvailableTokenAmount);
+
+                    if (Number(usdAmountValue) > 0 && maxAvailableTokenAmount > 0) {
+                        const newQuote = maxAvailableTokenAmount / Number(usdAmountValue);
+                        const calculatedReducedBonus =
+                            (newQuote * Number(bonus)) /
+                            Number(formatMarketOdds(OddsType.Decimal, getPositionOdds(market)));
+                        setBonus(calculatedReducedBonus.toFixed(2));
+                    } else {
+                        setBonus(getBonus(market).toFixed(2));
+                    }
                 }
             }
         };

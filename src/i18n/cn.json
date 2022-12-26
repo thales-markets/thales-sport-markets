@@ -299,7 +299,8 @@
                     "1x2": "{{team}} 将赢得比赛，否则比赛将以平局 {{matchResolve}} 结束。"
                 },
                 "winner": "{{team}} 将赢得比赛 {{matchResolve}}。",
-                "draw": "比赛将以平局 {{matchResolve}} 结束。"
+                "draw": "比赛将以平局 {{matchResolve}} 结束。",
+                "bonus": "{{bonus}} 获胜时获得额外奖励！"
             },
             "no-liquidity": "无流动性"
         },

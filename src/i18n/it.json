@@ -299,7 +299,8 @@
                     "1x2": "{{team}} vincerà la partita o la partita finirà in parità {{matchResolve}}."
                 },
                 "winner": "{{team}} vincerà la partita {{matchResolve}}.",
-                "draw": "La partita finirà in parità {{matchResolve}}."
+                "draw": "La partita finirà in parità {{matchResolve}}.",
+                "bonus": "{{bonus}} bonus aggiunto alla vincita!"
             },
             "no-liquidity": "Nessuna liquidità"
         },

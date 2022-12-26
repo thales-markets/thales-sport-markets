@@ -397,7 +397,8 @@
                     "1x2": "{{team}} gagnera le match ou le match se terminera par un match nul {{matchResolve}}."
                 },
                 "winner": "{{team}} remportera le match {{matchResolve}}.",
-                "draw": "Le match se terminera par un match nul {{matchResolve}}."
+                "draw": "Le match se terminera par un match nul {{matchResolve}}.",
+                "bonus": "{{bonus}} bonus supplémentaire en cas de victoire !"
             },
             "no-liquidity": "Pas de liquidité"
         },

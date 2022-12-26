@@ -296,7 +296,8 @@
                     "1x2": "{{team}} จะชนะการแข่งขันหรือการแข่งขันจะจบลงด้วยผลเสมอ {{matchResolve}}"
                 },
                 "draw": "การแข่งขันจะจบลงด้วยผลเสมอ {{matchResolve}}",
-                "winner": "{{team}} จะชนะการแข่งขัน {{matchResolve}}"
+                "winner": "{{team}} จะชนะการแข่งขัน {{matchResolve}}",
+                "bonus": "{{bonus}} เพิ่มโบนัสเมื่อชนะ!"
             },
             "no-liquidity": "ไม่มีสภาพคล่อง"
         },
