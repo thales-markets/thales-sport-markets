@@ -87,7 +87,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     );
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [tokenAmount, setTokenAmount] = useState<number>(0);
-    const [bonus, setBonus] = useState(0);
+    const [bonus, setBonus] = useState('');
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [maxUsdAmount, setMaxUsdAmount] = useState<number>(0);
     const [availableUsdAmount, setAvailableUsdAmount] = useState<number>(0);
@@ -170,7 +170,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
 
     useEffect(() => {
-        setBonus(getBonus(market));
+        setBonus(getBonus(market).toFixed(2));
     }, [market]);
 
     // Clear Parlay when network is changed
