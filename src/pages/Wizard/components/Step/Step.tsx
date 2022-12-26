@@ -91,7 +91,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
         }
         return (
             <StepAction>
-                <StepActionIconWrapper isActive={isActive}>
+                <StepActionIconWrapper isActive={isActive} pulsate={!isMobile}>
                     <StepActionIcon
                         className={`icon ${className}`}
                         isDisabled={isDisabled}
@@ -100,7 +100,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                 </StepActionIconWrapper>
                 <StepActionLabel isDisabled={isDisabled} onClick={onStepActionClickHandler}>
                     <StepActionName>{t(transKey)}</StepActionName>
-                    {!isMobile && <LinkIcon className={`icon icon--arrow-external`} />}
+                    {!isMobile && <LinkIcon className={`icon icon--arrow-external`} isActive={isActive} />}
                 </StepActionLabel>
             </StepAction>
         );
@@ -232,7 +232,10 @@ const StepNumber = styled.span<{ isActive: boolean }>`
     color: ${(props) => (props.isActive ? '#ffffff' : '#1a1c2b')};
 `;
 
-const StepActionIconWrapper = styled.div<{ isActive: boolean }>`
+const StepActionIconWrapper = styled.div<{ isActive: boolean; pulsate?: boolean }>`
+    animation: ${(props) => (props.pulsate && props.isActive ? 'pulsing 1s ease-in' : '')};
+    animation-iteration-count: ${(props) => (props.pulsate && props.isActive ? 'infinite;' : '')};
+
     @media (max-width: 950px) {
         display: flex;
         justify-content: center;
@@ -242,6 +245,21 @@ const StepActionIconWrapper = styled.div<{ isActive: boolean }>`
         border-radius: 50%;
         ${(props) => (props.isActive ? 'border: 2px solid #3FD1FF;' : '')}
         ${(props) => (props.isActive ? '' : 'background: #5f6180;')}
+    }
+
+    @keyframes pulsing {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.3);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
     }
 `;
 
@@ -275,9 +293,11 @@ const StepActionName = styled.span`
     }
 `;
 
-const LinkIcon = styled.i`
+const LinkIcon = styled.i<{ isActive: boolean }>`
     font-size: 14px;
     margin-left: 10px;
+    animation: ${(props) => (props.isActive ? 'pulsing 1s ease-in' : '')};
+    animation-iteration-count: ${(props) => (props.isActive ? 'infinite;' : '')};
 `;
 
 export default Step;

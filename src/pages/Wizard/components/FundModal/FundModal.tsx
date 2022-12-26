@@ -102,7 +102,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     <Row>
                         <ButtonWrapper>
                             <ButtonDiv onClick={onCopyAddressClickHandler}>
-                                {addressCoppied ? t('wizard.fund-modal.coppied') : t('wizard.fund-modal.copy-address')}
+                                {addressCoppied ? t('wizard.fund-modal.copied') : t('wizard.fund-modal.copy-address')}
                             </ButtonDiv>
                         </ButtonWrapper>
                         <YourAddress>
