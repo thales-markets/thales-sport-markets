@@ -211,6 +211,9 @@
             "all": "Todo",
             "datepicker": {
                 "games": "{{numberOfGames}} juegos"
+            },
+            "mobile-tags": {
+                "search": "Búsqueda"
             }
         },
         "back-to-markets": "Volver a los mercados",
@@ -250,7 +253,8 @@
         "match-time": "tiempo de partido",
         "race-starts": "Comienza la carrera",
         "back": "atrás",
-        "apply-filters": "Aplicar filtros"
+        "apply-filters": "Aplicar filtros",
+        "incentivized-market": "MERCADO INCENTIVIZADO"
     },
     "markets": {
         "market-card": {
@@ -285,7 +289,8 @@
             "available": "Disponible",
             "amount-to-buy": "cantidad a comprar",
             "discount": "Descuento",
-            "positions": "Posiciones"
+            "positions": "Posiciones",
+            "odds": "Posibilidades"
         },
         "zero-odds-tooltip": "El AMM de deportes sólo ofrece liquidez si el rango de precios ofrecido es entre 0.05 y 0.95 USD. Esto significa que si las probabilidades de una posición son menores a 5% o mayores a 95%, esa posición no tendrá liquidez.",
         "parlay": {
@@ -362,7 +367,9 @@
                 "disconnect": "Desconectar",
                 "switch": "Cambiar"
             }
-        }
+        },
+        "incentivized-markets": "MERCADOS INCENTIVIZADOS",
+        "op-incentivized-tooltip": "Los mercados de EPL están incentivados con 5,000 OP desde los juegos del 26 de diciembre hasta los juegos del 6 de enero según el volumen prorrateado. Consulte la tabla de clasificación <duneLink>aquí</ duneLink>."
     },
     "rewards": {
         "header": "Recompensas",
@@ -377,7 +384,8 @@
             "no-data-available": "No hay datos disponibles",
             "volume": "Volumen",
             "rebates": "Reembolsos",
-            "safebox": "Tarifas de SafeBox"
+            "safebox": "Tarifas de SafeBox",
+            "percent": "Por ciento"
         },
         "periods": {
             "period-0": "Primer periodo",
@@ -394,7 +402,8 @@
         "your-score": "Tu puntuación",
         "total-negative-pnl": "pérdidas totales",
         "twap": "TWAP de una semana",
-        "total-global-rebates": "Reembolsos totales a pagar"
+        "total-global-rebates": "Reembolsos totales a pagar",
+        "parlay-link": "<div>Para la competencia parlay mensual OP<parlayLink> haga clic aquí</ parlayLink> .</div>"
     },
     "quiz": {
         "title": "Competencia de trivia sobre deportes (en ingles)",
@@ -506,7 +515,8 @@
             "no-open": "No tienes ninguna posición abierta",
             "no-claimable": "No tienes ninguna posición reclamable",
             "no-transactions": "no tienes cambios",
-            "ticket-subtitle": "Agregue una posición, elija un mercado y haga su selección."
+            "ticket-subtitle": "Agregue una posición, elija un mercado y haga su selección.",
+            "canceled-tooltip": "Los mercados cancelados son reclamables 2 horas después de que se resuelva el mercado."
         },
         "table": {
             "paid": "Pagado",
@@ -519,7 +529,15 @@
             "total-amount": "Cantidad total",
             "total-quote": "Cotización total"
         },
-        "winnings-are-forfeit": "*Las ganancias no reclamadas dentro de {{amount}} días de la resolución de un mercado se perderán."
+        "winnings-are-forfeit": "*Las ganancias no reclamadas dentro de {{amount}} días de la resolución de un mercado se perderán.",
+        "search-field": "Buscar billetera",
+        "stats": {
+            "trades": "Vientos alisios",
+            "in-vaults": "en bóvedas",
+            "highest-win": "victoria más alta",
+            "lifetime-wins": "Victorias de por vida",
+            "total-volume": "Volumen total"
+        }
     },
     "mint-world-cup-nft": {
         "mint-nft-button": "Mint esta cebra!",

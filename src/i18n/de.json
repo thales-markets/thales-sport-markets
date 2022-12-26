@@ -211,6 +211,9 @@
             "all": "Alle",
             "datepicker": {
                 "games": "{{numberOfGames}} Spiele"
+            },
+            "mobile-tags": {
+                "search": "Suche"
             }
         },
         "back-to-markets": "Zurück zu den Märkten",
@@ -247,7 +250,8 @@
         "match-time": "Spielzeit",
         "race-starts": "Rennen beginnt",
         "back": "Der Rücken",
-        "apply-filters": "Filter anwenden"
+        "apply-filters": "Filter anwenden",
+        "incentivized-market": "INCENTIVISIERTER MARKT"
     },
     "markets": {
         "market-card": {
@@ -282,7 +286,8 @@
             "available": "Verfügbar",
             "amount-to-buy": "Betrag zu kaufen",
             "discount": "Rabatt",
-            "positions": "Positionen"
+            "positions": "Positionen",
+            "odds": "Chancen"
         },
         "zero-odds-tooltip": "Sports AMM bietet nur Liquidität in der Preisspanne von $0,05 bis $0,95. Dies bedeutet, dass wenn die Quoten für eine Position weniger als 5% oder mehr als 95% betragen, diese Position keine Liquidität hat.",
         "parlay": {
@@ -359,7 +364,9 @@
                 "switch": "Schalter",
                 "disconnect": "Trennen"
             }
-        }
+        },
+        "incentivized-markets": "ANREIZMÄRKTE",
+        "op-incentivized-tooltip": "EPL-Märkte werden mit 5.000 OP von den Spielen vom 26. Dezember bis zum 6. Januar basierend auf dem anteiligen Volumen gefördert. Sehen Sie sich die Bestenliste <duneLink>hier</ duneLink> an."
     },
     "rewards": {
         "header": "Preise",
@@ -374,7 +381,8 @@
             "no-data-available": "Keine Daten verfügbar",
             "volume": "Volumen",
             "safebox": "SafeBox-Gebühren",
-            "rebates": "Rabatte"
+            "rebates": "Rabatte",
+            "percent": "Prozent"
         },
         "periods": {
             "period-0": "Zweite Periode",
@@ -391,7 +399,8 @@
         "your-score": "Ihr Ergebnis",
         "total-negative-pnl": "Totalverluste",
         "twap": "Eine Woche TWAP",
-        "total-global-rebates": "Gesamtrabatte zu zahlen"
+        "total-global-rebates": "Gesamtrabatte zu zahlen",
+        "parlay-link": "<div>Für den monatlichen Parlay-Wettbewerb des OP<parlayLink> klicken Sie hier</ parlayLink> .</div>"
     },
     "quiz": {
         "title": "Sport Trivia Wettbewerb",
@@ -503,7 +512,8 @@
             "no-open": "Sie haben keine offene Stelle",
             "no-claimable": "Sie haben keine beanspruchbaren Positionen",
             "no-transactions": "Sie haben keine Trades",
-            "ticket-subtitle": "Position hinzufügen, Markt auswählen und Auswahl treffen."
+            "ticket-subtitle": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
+            "canceled-tooltip": "Abgebrochene Märkte können 2 Stunden nach Auflösung des Marktes beansprucht werden."
         },
         "table": {
             "games": "Spiele",
@@ -516,7 +526,15 @@
             "total-amount": "Gesamtsumme",
             "total-quote": "Gesamtangebot"
         },
-        "winnings-are-forfeit": "*Gewinne, die nicht innerhalb von {{amount}} Tagen nach Auflösung eines Marktes beansprucht werden, verfallen."
+        "winnings-are-forfeit": "*Gewinne, die nicht innerhalb von {{amount}} Tagen nach Auflösung eines Marktes beansprucht werden, verfallen.",
+        "search-field": "Brieftasche suchen",
+        "stats": {
+            "trades": "Handel",
+            "lifetime-wins": "Lebenszeit gewinnt",
+            "total-volume": "Volle Lautstärke",
+            "in-vaults": "In Gewölben",
+            "highest-win": "Höchster Gewinn"
+        }
     },
     "mint-world-cup-nft": {
         "eligible-text-2": "Prägen Sie ein Zebro Ihrer Lieblingsnationalmannschaft und qualifizieren Sie sich für 50.000 OP & 30.000 THALES-Bonusprämien!",

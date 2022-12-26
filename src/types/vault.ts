@@ -38,6 +38,10 @@ export type UserVaultData = {
     hasDepositForNextRound: boolean;
 };
 
+export type UserVaultsData = {
+    balanceTotal: number;
+};
+
 export type VaultTrade = {
     hash: string;
     timestamp: number;

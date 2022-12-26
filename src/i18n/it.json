@@ -211,6 +211,9 @@
             "all": "All",
             "datepicker": {
                 "games": "{{numberOfGames}} giochi"
+            },
+            "mobile-tags": {
+                "search": "Ricerca"
             }
         },
         "back-to-markets": "Back to markets",
@@ -250,7 +253,8 @@
         "match-time": "Tempo di partita",
         "race-starts": "La corsa inizia",
         "back": "Di ritorno",
-        "apply-filters": "Applicare filtri"
+        "apply-filters": "Applicare filtri",
+        "incentivized-market": "MERCATO INCENTIVATO"
     },
     "markets": {
         "market-card": {
@@ -285,7 +289,8 @@
             "available": "A disposizione",
             "amount-to-buy": "Importo da acquistare",
             "discount": "Sconto",
-            "positions": "Posizioni"
+            "positions": "Posizioni",
+            "odds": "Probabilità"
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
         "parlay": {
@@ -362,7 +367,9 @@
                 "switch": "Interruttore",
                 "disconnect": "Disconnetti"
             }
-        }
+        },
+        "incentivized-markets": "MERCATI INCENTIVATI",
+        "op-incentivized-tooltip": "I mercati EPL sono incentivati con 5.000 OP dalle partite del 26 dicembre alle partite del 6 gennaio in base al volume proporzionale. Dai un'occhiata alla classifica <duneLink>qui</ duneLink>."
     },
     "rewards": {
         "header": "Rewards",
@@ -377,7 +384,8 @@
             "no-data-available": "No data available",
             "safebox": "Commissioni SafeBox",
             "rebates": "Sconti",
-            "volume": "Volume"
+            "volume": "Volume",
+            "percent": "Per cento"
         },
         "periods": {
             "period-1": "Secondo periodo",
@@ -394,7 +402,8 @@
         "your-score": "Il tuo punteggio",
         "total-negative-pnl": "Perdite totali",
         "twap": "TWAP di una settimana",
-        "total-global-rebates": "Sconti totali da pagare"
+        "total-global-rebates": "Sconti totali da pagare",
+        "parlay-link": "<div>Per la competizione parlay mensile OP<parlayLink> clicca qui</ parlayLink> .</div>"
     },
     "quiz": {
         "title": "Sports Trivia competition",
@@ -509,7 +518,8 @@
             "no-claimable": "Non hai posizioni rivendicabili",
             "no-open": "Non hai nessuna posizione aperta",
             "no-transactions": "Non hai scambi",
-            "ticket-subtitle": "Aggiungi posizione, scegli un mercato ed effettua la tua selezione."
+            "ticket-subtitle": "Aggiungi posizione, scegli un mercato ed effettua la tua selezione.",
+            "canceled-tooltip": "I mercati annullati possono essere rivendicati 2 ore dopo la risoluzione del mercato."
         },
         "table": {
             "id": "Id",
@@ -522,7 +532,15 @@
             "total-amount": "Importo totale",
             "total-quote": "Citazione totale"
         },
-        "winnings-are-forfeit": "*Le vincite non riscosse entro {{amount}} giorni dalla risoluzione di un mercato vengono annullate."
+        "winnings-are-forfeit": "*Le vincite non riscosse entro {{amount}} giorni dalla risoluzione di un mercato vengono annullate.",
+        "search-field": "Cerca portafoglio",
+        "stats": {
+            "total-volume": "Volume totale",
+            "highest-win": "Vittoria più alta",
+            "trades": "Mestieri",
+            "lifetime-wins": "Vince a vita",
+            "in-vaults": "Nei caveau"
+        }
     },
     "mint-world-cup-nft": {
         "second-option": "La seconda opzione per metterti nella lista consentita è completare i seguenti passaggi:",

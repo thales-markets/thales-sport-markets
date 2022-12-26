@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -31,8 +31,12 @@ import { FlexDivCentered } from 'styles/common';
 import ShareTicketModal, {
     ShareTicketModalProps,
 } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
+import { ethers } from 'ethers';
 
-const Positions: React.FC = () => {
+const Positions: React.FC<{ searchText?: string; setOpenPositionsValue: (value: number) => void }> = ({
+    searchText,
+    setOpenPositionsValue,
+}) => {
     const { t } = useTranslation();
 
     const [openClaimable, setClaimableState] = useState<boolean>(true);
@@ -50,13 +54,25 @@ const Positions: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const parlayMarketsQuery = useParlayMarketsQuery(walletAddress, networkId, undefined, undefined, {
-        enabled: isWalletConnected,
-    });
+    const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
 
-    const accountMarketsQuery = useAccountMarketsQuery(walletAddress, networkId, {
-        enabled: isWalletConnected,
-    });
+    const parlayMarketsQuery = useParlayMarketsQuery(
+        isSearchTextWalletAddress ? searchText : walletAddress,
+        networkId,
+        undefined,
+        undefined,
+        {
+            enabled: isWalletConnected,
+        }
+    );
+
+    const accountMarketsQuery = useAccountMarketsQuery(
+        isSearchTextWalletAddress ? searchText : walletAddress,
+        networkId,
+        {
+            enabled: isWalletConnected,
+        }
+    );
 
     const marketDurationQuery = useMarketDurationQuery(networkId);
 
@@ -84,8 +100,25 @@ const Positions: React.FC = () => {
                 }
             });
         }
+
+        if (searchText && !ethers.utils.isAddress(searchText)) {
+            data.open = data.open.filter((item) => {
+                if (
+                    item.market.homeTeam.toLowerCase().includes(searchText.toLowerCase()) ||
+                    item.market.awayTeam.toLowerCase().includes(searchText.toLowerCase())
+                )
+                    return item;
+            });
+            data.claimable = data.claimable.filter((item) => {
+                if (
+                    item.market.homeTeam.toLowerCase().includes(searchText.toLowerCase()) ||
+                    item.market.awayTeam.toLowerCase().includes(searchText.toLowerCase())
+                )
+                    return item;
+            });
+        }
         return data;
-    }, [accountPositions]);
+    }, [accountPositions, searchText]);
 
     const parlayMarketsByStatus = useMemo(() => {
         const data = {
@@ -108,8 +141,38 @@ const Positions: React.FC = () => {
                     if (isParlayOpen(parlayMarket)) data.open.push(parlayMarket);
             });
         }
+
+        if (searchText && !ethers.utils.isAddress(searchText)) {
+            data.open = data.open.filter((item) => {
+                const itemWithSearchText = item.sportMarkets.find(
+                    (item) =>
+                        item.homeTeam.includes(searchText.toLowerCase()) ||
+                        item.awayTeam.includes(searchText.toLowerCase())
+                );
+                if (itemWithSearchText) return item;
+            });
+            data.claimable = data.claimable.filter((item) => {
+                const itemWithSearchText = item.sportMarkets.find(
+                    (item) =>
+                        item.homeTeam.includes(searchText.toLowerCase()) ||
+                        item.awayTeam.includes(searchText.toLowerCase())
+                );
+                if (itemWithSearchText) return item;
+            });
+        }
         return data;
-    }, [parlayMarkets]);
+    }, [parlayMarkets, searchText]);
+
+    useEffect(() => {
+        let openPositionsValueSum = 0;
+        parlayMarketsByStatus.open.forEach((market) => {
+            openPositionsValueSum += market.sUSDPaid;
+        });
+        accountPositionsByStatus.open.forEach((position) => {
+            openPositionsValueSum += position.sUSDPaid;
+        });
+        setOpenPositionsValue(openPositionsValueSum);
+    }, [parlayMarketsByStatus, accountPositionsByStatus, setOpenPositionsValue]);
 
     const isLoading = parlayMarketsQuery.isLoading || accountMarketsQuery.isLoading;
 

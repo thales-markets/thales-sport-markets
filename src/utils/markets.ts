@@ -233,9 +233,10 @@ export const isFifaWCGame = (tag: number) => Number(tag) === FIFA_WC_TAG;
 export const getIsIndividualCompetition = (tag: number) => PERSON_COMPETITIONS.includes(tag);
 
 export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
-    const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved);
+    const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved || market?.isCanceled);
     const claimablePositions = parlayMarket.positions.filter((position) => position.claimable);
-    const canceledMarkets = parlayMarket.sportMarkets.filter((market) => market.isCanceled);
+
+    if (parlayMarket.claimed) return false;
 
     const lastGameStartsPlusExpirationPeriod = addDaysToEnteredTimestamp(
         EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS,
@@ -248,7 +249,7 @@ export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
 
     if (
         resolvedMarkets?.length == claimablePositions?.length &&
-        resolvedMarkets?.length + canceledMarkets?.length == parlayMarket.sportMarkets.length &&
+        resolvedMarkets?.length == parlayMarket.sportMarkets.length &&
         !parlayMarket.claimed
     ) {
         return true;
@@ -260,13 +261,19 @@ export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
 export const isParlayOpen = (parlayMarket: ParlayMarket) => {
     const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved);
     const resolvedAndClaimable = parlayMarket.positions.filter(
-        (position) => position.claimable && position.market.isResolved
+        (position) => position.claimable && (position.market.isResolved || position.market.isCanceled)
     );
 
     if (resolvedMarkets?.length == 0) return true;
 
     if (resolvedMarkets?.length !== resolvedAndClaimable?.length) return false;
     return true;
+};
+
+export const isCanceledMarketInParlay = (parlayMarket: ParlayMarket) => {
+    const canceledMarket = parlayMarket.sportMarkets.filter((market) => market?.isCanceled);
+    if (canceledMarket) return true;
+    return false;
 };
 
 export const isSportMarketExpired = (sportMarket: SportMarketInfo) => {
@@ -282,10 +289,41 @@ export const isSportMarketExpired = (sportMarket: SportMarketInfo) => {
     return false;
 };
 
+export const updateTotalQuoteAndAmountFromContract = (parlayMarkets: ParlayMarket[]): ParlayMarket[] => {
+    const modifiedParlays = parlayMarkets.map((parlay) => {
+        if ((isParlayOpen(parlay) || isParlayClaimable(parlay)) && isCanceledMarketInParlay(parlay)) {
+            const canceledQuotes = getCanceledGamesPreviousQuotes(parlay);
+            let totalQuote = parlay.totalQuote;
+            canceledQuotes.forEach((quote) => {
+                totalQuote /= quote;
+            });
+            return {
+                ...parlay,
+                totalQuote,
+                totalAmount: parlay.sUSDAfterFees / totalQuote,
+            };
+        } else {
+            return parlay;
+        }
+    });
+    return modifiedParlays;
+};
+
+export const getCanceledGamesPreviousQuotes = (parlay: ParlayMarket): number[] => {
+    const quotes: number[] = [];
+    parlay.sportMarketsFromContract.forEach((marketAddress, index) => {
+        const market = parlay.sportMarkets.find((market) => market.address == marketAddress);
+        if (market?.isCanceled) quotes.push(parlay.marketQuotes[index]);
+    });
+
+    return quotes;
+};
+
 export const convertMarketDataTypeToSportMarketInfoType = (marketData: MarketData): SportMarketInfo => {
     return {
         id: marketData.address,
         address: marketData.address,
+        gameId: marketData.gameDetails.gameId,
         maturityDate: new Date(marketData.maturityDate),
         tags: marketData.tags,
         isOpen: !marketData.resolved && !marketData.cancelled && !marketData.gameStarted ? true : false,

@@ -211,6 +211,9 @@
             "all": "All",
             "datepicker": {
                 "games": "{{numberOfGames}} игр"
+            },
+            "mobile-tags": {
+                "search": "Поиск"
             }
         },
         "back-to-markets": "Back to markets",
@@ -250,7 +253,8 @@
         "match-time": "Время матча",
         "race-starts": "Старт гонки",
         "back": "Назад",
-        "apply-filters": "Применить фильтры"
+        "apply-filters": "Применить фильтры",
+        "incentivized-market": "СТИМУЛИРОВАННЫЙ РЫНОК"
     },
     "markets": {
         "market-card": {
@@ -285,7 +289,8 @@
             "available": "Доступный",
             "amount-to-buy": "Сумма покупки",
             "discount": "Скидка",
-            "positions": "Позиции"
+            "positions": "Позиции",
+            "odds": "Шансы"
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
         "parlay": {
@@ -362,7 +367,9 @@
                 "disconnect": "Отключить",
                 "switch": "Выключатель"
             }
-        }
+        },
+        "op-incentivized-tooltip": "Рынки EPL стимулируются 5000 OP с 26 декабря по 6 января в зависимости от пропорционального объема. Ознакомьтесь с таблицей лидеров <duneLink>здесь</ duneLink>.",
+        "incentivized-markets": "СТИМУЛИРОВАННЫЕ РЫНКИ"
     },
     "rewards": {
         "header": "Rewards",
@@ -377,7 +384,8 @@
             "no-data-available": "No data available",
             "volume": "Объем",
             "rebates": "Скидки",
-            "safebox": "Плата за сейфы"
+            "safebox": "Плата за сейфы",
+            "percent": "Процент"
         },
         "periods": {
             "period-3": "Четвертый период",
@@ -394,7 +402,8 @@
         "your-score": "Твой счет",
         "total-negative-pnl": "Общие потери",
         "twap": "TWAP на неделю",
-        "total-global-rebates": "Всего скидок к оплате"
+        "total-global-rebates": "Всего скидок к оплате",
+        "parlay-link": "<div>Для ежемесячного конкурса OP<parlayLink> кликните сюда</ parlayLink> .</div>"
     },
     "quiz": {
         "title": "Sports Trivia competition",
@@ -509,7 +518,8 @@
             "no-claimable": "У вас нет требуемых должностей",
             "no-open": "У вас нет открытой позиции",
             "no-transactions": "У вас нет сделок",
-            "ticket-subtitle": "Добавьте позицию, выберите рынок и сделайте свой выбор."
+            "ticket-subtitle": "Добавьте позицию, выберите рынок и сделайте свой выбор.",
+            "canceled-tooltip": "Отмененные рынки можно запросить через 2 часа после разрешения рынка."
         },
         "table": {
             "games": "Игры",
@@ -522,7 +532,15 @@
             "total-amount": "Итого",
             "total-quote": "Общая котировка"
         },
-        "winnings-are-forfeit": "*Выигрыши, не запрошенные в течение {{amount}} дней после решения рынка, аннулируются."
+        "winnings-are-forfeit": "*Выигрыши, не запрошенные в течение {{amount}} дней после решения рынка, аннулируются.",
+        "search-field": "Поиск кошелька",
+        "stats": {
+            "highest-win": "Самая высокая победа",
+            "in-vaults": "В хранилищах",
+            "total-volume": "Общий объем",
+            "trades": "Сделки",
+            "lifetime-wins": "Пожизненные победы"
+        }
     },
     "mint-world-cup-nft": {
         "zebro-campaign": "Кампания Зебра ФИФА",

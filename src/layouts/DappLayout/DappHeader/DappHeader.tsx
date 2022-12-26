@@ -1,30 +1,55 @@
-import { useLocation } from 'react-router-dom';
+import burger from 'assets/images/burger.svg';
 import Logo from 'components/Logo';
+import MintVoucher from 'components/MintVoucher';
+import NavMenu from 'components/NavMenu';
+import NavMenuMobile from 'components/NavMenuMobile';
+import Search from 'components/Search';
 import WalletInfo from 'components/WalletInfo';
+import ROUTES from 'constants/routes';
+import { MAIN_COLORS } from 'constants/ui';
+import useInterval from 'hooks/useInterval';
+import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
 import React, { useState } from 'react';
+import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { getIsMobile } from 'redux/modules/app';
+import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
+import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
-import { FlexDiv, FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import { getIsWalletConnected } from 'redux/modules/wallet';
-import { buildHref } from 'utils/routes';
-import SPAAnchor from 'components/SPAAnchor';
-import ROUTES from 'constants/routes';
-import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
-import useInterval from 'hooks/useInterval';
-import burger from 'assets/images/burger.svg';
-import NavMenu from 'components/NavMenu';
+import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import ProfileItem from './components/ProfileItem';
-import { getIsMobile } from 'redux/modules/app';
-import MintVoucher from 'components/MintVoucher';
 
 const PULSING_COUNT = 10;
 
+const customModalStyles = {
+    content: {
+        top: '85px',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        padding: '0px',
+        background: 'transparent',
+        border: 'none',
+        width: '100%',
+        height: '40px',
+    },
+    overlay: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: '5',
+    },
+};
+
 const DappHeader: React.FC = () => {
-    const { t } = useTranslation();
     const dispatch = useDispatch();
     const location = useLocation();
+
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
@@ -32,6 +57,17 @@ const DappHeader: React.FC = () => {
 
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
+    const [showSearcHModal, setShowSearchModal] = useState<boolean>(false);
+    const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
+
+    const claimablePositionsCountQuery = useClaimablePositionCountQuery(walletAddress, networkId, {
+        enabled: isWalletConnected,
+    });
+
+    const claimablePositionCount =
+        claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
+            ? claimablePositionsCountQuery.data
+            : null;
 
     useInterval(async () => {
         if (!stopPulsing) {
@@ -48,16 +84,6 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <Logo />
                     <RightContainer>
-                        {location.pathname !== ROUTES.MintWorldCupNFT && (
-                            <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>
-                                <StyledButton style={{ marginRight: '10px' }} disabled={!isWalletConnected}>
-                                    <FlexDiv>
-                                        <FifaIcon className="icon icon--fifa-world-cup" />
-                                        {t('mint-world-cup-nft.zebro-campaign')}
-                                    </FlexDiv>
-                                </StyledButton>
-                            </SPAAnchor>
-                        )}
                         {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />}
                         <WalletInfo />
                         {isWalletConnected && <ProfileItem />}
@@ -79,31 +105,41 @@ const DappHeader: React.FC = () => {
                         <LogoContainer>
                             <Logo />
                         </LogoContainer>
+                        <SearchIconContainer>
+                            <IconWrapper>
+                                <SearchIcon onClick={() => setShowSearchModal(true)} />
+                            </IconWrapper>
+                            <ReactModal
+                                isOpen={showSearcHModal}
+                                onRequestClose={() => {
+                                    setShowSearchModal(false);
+                                }}
+                                shouldCloseOnOverlayClick={true}
+                                style={customModalStyles}
+                            >
+                                <SearchContainer>
+                                    <Search
+                                        text={marketSearch}
+                                        handleChange={(value) => {
+                                            dispatch(setMarketSearch(value));
+                                        }}
+                                    />
+                                </SearchContainer>
+                            </ReactModal>
+                        </SearchIconContainer>
                         <MenuIconContainer>
                             <MenuIcon onClick={() => setNavMenuVisibility(true)} />
-                            <NavMenu
+                            {claimablePositionCount && (
+                                <NotificationCount>
+                                    <Count>{claimablePositionCount}</Count>
+                                </NotificationCount>
+                            )}
+                            <NavMenuMobile
                                 visibility={navMenuVisibility}
                                 setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
                             />
                         </MenuIconContainer>
-                        {isWalletConnected && (
-                            <MobileProfileContainer>
-                                <ProfileItem avatarSize={30} labelHidden={true} />
-                            </MobileProfileContainer>
-                        )}
                     </WrapperMobile>
-                    {location.pathname !== ROUTES.MintWorldCupNFT && (
-                        <div style={{ width: '100%' }}>
-                            <SPAAnchor href={buildHref(ROUTES.MintWorldCupNFT)}>
-                                <StyledButton style={{ width: '100%', padding: '5px' }} disabled={!isWalletConnected}>
-                                    <FlexDivCentered>
-                                        <FifaIcon className="icon icon--fifa-world-cup" />
-                                        {t('mint-world-cup-nft.zebro-campaign')}
-                                    </FlexDivCentered>
-                                </StyledButton>
-                            </SPAAnchor>
-                        </div>
-                    )}
                     {location.pathname !== ROUTES.MintWorldCupNFT && (
                         <MintVoucher
                             buttonStyle={{ padding: '7px', background: '#303656' }}
@@ -153,21 +189,11 @@ const RightContainer = styled(FlexDivRowCentered)`
     }
 `;
 
-// const StyledSportTriviaIcon = styled.img<{ stopPulsing: boolean }>`
-//     margin: 0 20px;
-//     cursor: pointer;
-//     height: 36px;
-//     margin-bottom: -4px;
-//     @media (max-width: 767px) {
-//         margin-bottom: 5px;
-//         margin-right: 0px;
-//     }
-//     animation: ${(props) => (props.stopPulsing ? 'none' : 'pulsing 1s ease-in')};
-//     animation-iteration-count: 10;
-// `;
-
 const MenuIcon = styled.img.attrs({ src: burger })`
     cursor: pointer;
+    height: 25px;
+    width: 35px;
+    filter: invert(39%) sepia(9%) saturate(1318%) hue-rotate(199deg) brightness(71%) contrast(88%);
 `;
 
 const WrapperMobile = styled(FlexDivRow)`
@@ -176,16 +202,15 @@ const WrapperMobile = styled(FlexDivRow)`
     justify-content: center;
 `;
 
-const MenuIconContainer = styled.div`
+const SearchIconContainer = styled.div`
     width: 50%;
     display: flex;
     justify-content: end;
     position: absolute;
     right: 12px;
-    margin-top: 10px;
 `;
 
-const MobileProfileContainer = styled.div`
+const MenuIconContainer = styled.div`
     width: 50%;
     display: flex;
     justify-content: start;
@@ -200,36 +225,54 @@ const LogoContainer = styled.div`
     justify-content: center;
 `;
 
-const StyledButton = styled.button<{ disabled?: boolean }>`
-    background: #891538;
-    border: 2px solid #891538;
-    color: white;
-    border-radius: 5px;
-    padding: 0 60px 0 75px;
-    font-weight: 800;
-    font-size: 15px;
-    line-height: 18px;
-    text-transform: uppercase;
-    text-align: center;
-    outline: none;
+const IconWrapper = styled.div`
+    border-radius: 30px;
+    background: ${(props) => props.theme.background.tertiary};
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    top: -10px;
+`;
+
+const SearchIcon = styled.i`
+    font-size: 40px;
     cursor: pointer;
-    min-height: 28px;
-    width: fit-content;
-    white-space: nowrap;
-    position: relative;
-    opacity: ${(props) => (props.disabled ? '0.4' : '1')};
-    &:hover {
-        cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-        opacity: ${(props) => (props.disabled ? '0.4' : '0.8')};
+    margin-bottom: 3px;
+    position: absolute;
+    top: -7px;
+    left: -6px;
+    &:before {
+        font-family: ExoticIcons !important;
+        content: '\\0042';
+        color: ${(props) => props.theme.background.primary};
     }
 `;
 
-const FifaIcon = styled.i`
-    color: ${(props) => props.theme.textColor.primary};
-    font-size: 35px;
-    margin-right: 10px;
-    font-weight: 400;
-    text-transform: none;
+const SearchContainer = styled.div`
+    background: ${(props) => props.theme.background.secondary};
+    height: 100%;
+    text-align: center;
+`;
+
+const NotificationCount = styled.div`
+    position: absolute;
+    border-radius: 50%;
+    bottom: -8px;
+    left: 24px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    height: 16px;
+    width: 16px;
+    background-color: ${MAIN_COLORS.BACKGROUNDS.BLUE};
+    box-shadow: ${MAIN_COLORS.SHADOWS.NOTIFICATION};
+`;
+
+const Count = styled.span`
+    color: ${MAIN_COLORS.DARK_GRAY};
+    font-weight: 800;
+    font-size: 12px;
 `;
 
 export default DappHeader;

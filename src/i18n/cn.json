@@ -211,6 +211,9 @@
             "all": "所有",
             "datepicker": {
                 "games": "{{numberOfGames}} 场比赛"
+            },
+            "mobile-tags": {
+                "search": "搜索"
             }
         },
         "back-to-markets": "查看其他比赛",
@@ -250,7 +253,8 @@
         "match-time": "比赛时间",
         "race-starts": "比赛开始",
         "back": "后退",
-        "apply-filters": "应用过滤器"
+        "apply-filters": "应用过滤器",
+        "incentivized-market": "激励市场"
     },
     "markets": {
         "market-card": {
@@ -285,7 +289,8 @@
             "available": "可用的",
             "amount-to-buy": "购买金额",
             "discount": "折扣",
-            "positions": "职位"
+            "positions": "职位",
+            "odds": "赔率"
         },
         "zero-odds-tooltip": "Sports AMM 仅提供0.05美元至0.95美元价格范围内的流动性，这意味着，如果一个投注选择的赔率低于5%或者高于95%，该选择就不会有流动性。",
         "parlay": {
@@ -362,7 +367,9 @@
                 "disconnect": "断开",
                 "switch": "转变"
             }
-        }
+        },
+        "incentivized-markets": "激励市场",
+        "op-incentivized-tooltip": "从 12 月 26 日的比赛到 1 月 6 日的比赛，根据按比例分配的数量，EPL 市场受到 5,000 OP 的激励。在<duneLink>此处</duneLink>查看排行榜。"
     },
     "rewards": {
         "header": "奖励",
@@ -378,7 +385,8 @@
             "no-data-available": "无法获取数据",
             "rebates": "回扣",
             "volume": "体积",
-            "safebox": "保险箱费用"
+            "safebox": "保险箱费用",
+            "percent": "百分"
         },
         "periods": {
             "period-0": "第一节课",
@@ -394,7 +402,8 @@
         },
         "your-score": "你的分数",
         "twap": "一周TWAP",
-        "total-global-rebates": "要支付的总回扣"
+        "total-global-rebates": "要支付的总回扣",
+        "parlay-link": "<div>对于 OP 月度 parlay 比赛<parlayLink>点击这里</ parlayLink>.</div>"
     },
     "quiz": {
         "title": "体育百科竞赛",
@@ -506,7 +515,8 @@
             "no-claimable": "您没有任何可申请的职位",
             "no-open": "您没有任何空缺职位",
             "no-transactions": "您没有任何交易",
-            "ticket-subtitle": "添加头寸，选择市场并做出选择。"
+            "ticket-subtitle": "添加头寸，选择市场并做出选择。",
+            "canceled-tooltip": "已取消的盘口可在盘口解决后 2 小时内提出索赔。"
         },
         "table": {
             "position": "位置",
@@ -519,7 +529,15 @@
             "total-amount": "总金额",
             "total-quote": "总报价"
         },
-        "winnings-are-forfeit": "*在盘口解决后的 {{amount}} 天内未领取的奖金将被没收。"
+        "winnings-are-forfeit": "*在盘口解决后的 {{amount}} 天内未领取的奖金将被没收。",
+        "search-field": "搜索钱包",
+        "stats": {
+            "trades": "行业",
+            "total-volume": "总容积",
+            "highest-win": "最高获胜",
+            "lifetime-wins": "终身胜利",
+            "in-vaults": "在保险库中"
+        }
     },
     "mint-world-cup-nft": {
         "get-thales": "获得泰雷兹",

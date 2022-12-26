@@ -14,13 +14,13 @@ export const Container = styled.div<{
     width: 100%;
     padding: 10px 10px;
     border-radius: 5px;
-    margin-bottom: 15px;
-    /* background-color: ${(props) => (props?.backgroundColor ? props.backgroundColor : '')}; */
-    background-color: ${(props) =>
-        props.isResolved && !props.claimBorder ? 'rgb(36,41,64, 0.5)' : 'rgba(48, 54, 86, 0.5)'};
-    border: ${(props) => (props?.claimBorder ? '3px solid #3FD1FF' : '')};
-    height: ${(props) => (props?.isMobile ? '70px' : '60px')};
-    flex-grow: ${(props) => (props?.isMobile ? '1' : '')};
+    margin-bottom: ${(_props) => (_props?.isMobile ? '5px' : '15px')};
+    /* background-color: ${(_props) => (_props?.backgroundColor ? _props.backgroundColor : '')}; */
+    background-color: ${(_props) =>
+        _props.isResolved && !_props.claimBorder ? 'rgb(36,41,64, 0.5)' : 'rgba(48, 54, 86, 0.5)'};
+    border: ${(_props) => (_props?.claimBorder ? '3px solid #3FD1FF' : '')};
+    height: ${(_props) => (_props?.isMobile ? '70px' : '60px')};
+    flex-grow: ${(_props) => (_props?.isMobile ? '1' : '')};
 `;
 
 export const ClubNameLabel = styled.span`
