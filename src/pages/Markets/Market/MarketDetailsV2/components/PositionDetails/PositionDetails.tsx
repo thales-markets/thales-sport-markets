@@ -32,6 +32,7 @@ import {
     TooltipFooterInfo,
     TooltipFooterInfoContianer,
     TooltipFooterInfoLabel,
+    TooltipBonusText,
 } from './styled-components';
 
 type PositionDetailsProps = {
@@ -132,18 +133,25 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
         <TooltipContainer>
             <TooltipText>{oddTooltipText}</TooltipText>
             {isGameOpen && !isMobile && (
-                <TooltipFooter>
-                    <TooltipFooterInfoContianer>
-                        <TooltipFooterInfoLabel>{t('markets.market-details.odds')}:</TooltipFooterInfoLabel>
-                        <TooltipFooterInfo>{formatMarketOdds(selectedOddsType, odd)}</TooltipFooterInfo>
-                    </TooltipFooterInfoContianer>
-                    <TooltipFooterInfoContianer>
-                        <TooltipFooterInfoLabel>{t('markets.market-details.liquidity')}:</TooltipFooterInfoLabel>
-                        <TooltipFooterInfo>
-                            {floorNumberToDecimals(availablePerPosition.available || 0)}
-                        </TooltipFooterInfo>
-                    </TooltipFooterInfoContianer>
-                </TooltipFooter>
+                <>
+                    {showBonus && (
+                        <TooltipBonusText>
+                            {t('markets.market-card.odd-tooltip.bonus', { bonus: positionBonus })}
+                        </TooltipBonusText>
+                    )}
+                    <TooltipFooter>
+                        <TooltipFooterInfoContianer>
+                            <TooltipFooterInfoLabel>{t('markets.market-details.odds')}:</TooltipFooterInfoLabel>
+                            <TooltipFooterInfo>{formatMarketOdds(selectedOddsType, odd)}</TooltipFooterInfo>
+                        </TooltipFooterInfoContianer>
+                        <TooltipFooterInfoContianer>
+                            <TooltipFooterInfoLabel>{t('markets.market-details.liquidity')}:</TooltipFooterInfoLabel>
+                            <TooltipFooterInfo>
+                                {floorNumberToDecimals(availablePerPosition.available || 0)}
+                            </TooltipFooterInfo>
+                        </TooltipFooterInfoContianer>
+                    </TooltipFooter>
+                </>
             )}
         </TooltipContainer>
     );

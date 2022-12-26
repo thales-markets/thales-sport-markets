@@ -346,7 +346,8 @@
                 "double-chance": {
                     "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}.",
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
-                }
+                },
+                "bonus": "{{bonus}} added bonus on win!"
             }
         },
         "market-details": {

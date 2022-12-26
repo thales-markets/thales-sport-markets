@@ -75,6 +75,12 @@ export const TooltipContainer = styled(FlexDivColumn)``;
 
 export const TooltipText = styled.span``;
 
+export const TooltipBonusText = styled(TooltipText)`
+    font-weight: 700;
+    margin-top: 8px;
+    color: #5fc694;
+`;
+
 export const TooltipFooter = styled(FlexDivRow)`
     border-top: 1px solid ${MAIN_COLORS.GRAY};
     margin-top: 8px;
