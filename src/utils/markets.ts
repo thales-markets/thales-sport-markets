@@ -406,8 +406,14 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
     const total = Number(market.total) / 100;
     const team = position === Position.AWAY ? market.awayTeam : market.homeTeam;
     const team2 = market.awayTeam;
-    const scoring = i18n.t(`markets.market-card.odd-tooltip.scoring.${SCORING_MAP[market.tags[0]]}`);
-    const matchResolve = i18n.t(`markets.market-card.odd-tooltip.match-resolve.${MATCH_RESOLVE_MAP[market.tags[0]]}`);
+    const scoring =
+        SCORING_MAP[market.tags[0]] !== ''
+            ? i18n.t(`markets.market-card.odd-tooltip.scoring.${SCORING_MAP[market.tags[0]]}`)
+            : '';
+    const matchResolve =
+        MATCH_RESOLVE_MAP[market.tags[0]] !== ''
+            ? i18n.t(`markets.market-card.odd-tooltip.match-resolve.${MATCH_RESOLVE_MAP[market.tags[0]]}`)
+            : '';
     let translationKey = '';
 
     switch (position) {
