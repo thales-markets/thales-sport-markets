@@ -5,11 +5,10 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE } from 'constants/markets';
 import { MAX_GAS_LIMIT } from 'constants/network';
-import { Position, Side } from 'constants/options';
+import { Position } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useAvailablePerPositionQuery from 'queries/markets/useAvailablePerPositionQuery';
-import useMarketBalancesQuery from 'queries/markets/useMarketBalancesQuery';
 import usePositionPriceDetailsQuery from 'queries/markets/usePositionPriceDetailsQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
@@ -23,7 +22,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
-import { AMMPosition, AvailablePerPosition, Balances, ParlayPayment, ParlaysMarket } from 'types/markets';
+import { AMMPosition, AvailablePerPosition, ParlayPayment, ParlaysMarket } from 'types/markets';
 import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
@@ -107,18 +106,10 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             available: 0,
         },
     });
-    const [balances, setBalances] = useState<Balances | undefined>(undefined);
     const [ammPosition, setAmmPosition] = useState<AMMPosition>({
-        sides: {
-            [Side.BUY]: {
-                quote: 0,
-                priceImpact: 0,
-            },
-            [Side.SELL]: {
-                quote: 0,
-                priceImpact: 0,
-            },
-        },
+        available: 0,
+        quote: 0,
+        priceImpact: 0,
     });
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
@@ -199,7 +190,6 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             if (sportsAMMContract && amountForQuote) {
                 const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(amountForQuote).toString());
                 const ammQuote = await getSportsAMMQuoteMethod(
-                    true,
                     selectedStableIndex,
                     networkId,
                     sportsAMMContract,
@@ -251,7 +241,6 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         getMaxUsdAmount();
     }, [
         usdAmountValue,
-        balances,
         paymentTokenBalance,
         selectedStableIndex,
         market.address,
@@ -309,16 +298,6 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
 
         fetchData().catch((e) => console.log(e));
     }, [usdAmountValue, selectedStableIndex, fetchAmmQuote, availablePerPosition, market]);
-
-    const marketBalancesQuery = useMarketBalancesQuery(market.address, walletAddress, {
-        enabled: !!market.address && isWalletConnected,
-    });
-
-    useEffect(() => {
-        if (marketBalancesQuery.isSuccess && marketBalancesQuery.data) {
-            setBalances(marketBalancesQuery.data);
-        }
-    }, [marketBalancesQuery.isSuccess, marketBalancesQuery.data]);
 
     const positionPriceDetailsQuery = usePositionPriceDetailsQuery(
         market.address,
@@ -440,7 +419,6 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                         ? getReferralId()
                         : null;
                 const tx = await getAMMSportsTransaction(
-                    true,
                     isVoucherSelected,
                     overtimeVoucher ? overtimeVoucher.id : 0,
                     selectedStableIndex,
@@ -469,7 +447,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     trackEvent({
                         category: 'parlay-single',
                         action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
-                        value: Number(formatCurrency(ammPosition.sides[Side.BUY].quote, 3, true)),
+                        value: Number(formatCurrency(ammPosition.quote, 3, true)),
                     });
                 }
             } catch (e) {
@@ -575,13 +553,13 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         // hide when validation tooltip exists except in case of not enough funds
         (tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
     const hideProfit =
-        ammPosition.sides[Side.BUY].quote <= 0 ||
+        ammPosition.quote <= 0 ||
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
         (tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
 
-    const profitPercentage = (tokenAmount - ammPosition.sides[Side.BUY].quote) / ammPosition.sides[Side.BUY].quote;
+    const profitPercentage = (tokenAmount - ammPosition.quote) / ammPosition.quote;
 
     const onModalClose = useCallback(() => {
         setShowShareTicketModal(false);
@@ -655,9 +633,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 <InfoWrapper>
                     <InfoLabel>{t('markets.parlay.skew')}:</InfoLabel>
                     <InfoValue>
-                        {positionPriceDetailsQuery.isLoading
-                            ? '-'
-                            : formatPercentage(ammPosition.sides[Side.BUY].priceImpact)}
+                        {positionPriceDetailsQuery.isLoading ? '-' : formatPercentage(ammPosition.priceImpact)}
                     </InfoValue>
                 </InfoWrapper>
             </InfoContainer>
@@ -672,11 +648,9 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 <SummaryValue isInfo={true}>
                     {hideProfit
                         ? '-'
-                        : `${formatCurrencyWithSign(
-                              USD_SIGN,
-                              tokenAmount - ammPosition.sides[Side.BUY].quote,
-                              2
-                          )} (${formatPercentage(profitPercentage)})`}
+                        : `${formatCurrencyWithSign(USD_SIGN, tokenAmount - ammPosition.quote, 2)} (${formatPercentage(
+                              profitPercentage
+                          )})`}
                 </SummaryValue>
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>

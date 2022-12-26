@@ -1,6 +1,6 @@
 import { COLLATERALS_INDEX } from 'constants/currency';
 import { MarketStatus } from 'constants/markets';
-import { Position, PositionName, Side } from '../constants/options';
+import { Position, PositionName } from '../constants/options';
 
 export type MarketInfo = {
     address: string;
@@ -85,13 +85,10 @@ export type GameDetails = {
     gameLabel: string;
 };
 
-export type AMMSide = {
+export type AMMPosition = {
+    available: number;
     quote: number;
     priceImpact: number;
-};
-
-export type AMMPosition = {
-    sides: Record<Side, AMMSide>;
 };
 
 export type AvailablePerPosition = Record<Position, { available?: number; buyImpactPrice?: number }>;

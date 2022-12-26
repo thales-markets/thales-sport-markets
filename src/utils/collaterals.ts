@@ -7,17 +7,12 @@ export type StablecoinKey = 'sUSD' | 'USDC' | 'USDT' | 'DAI';
 
 export const getStableIcon = (currencyKey: StablecoinKey) => currencyKeyToAssetIconMap[currencyKey];
 
-export const getCollateralAddress = (
-    isBuy: boolean,
-    isNonsUSDCollateral: boolean,
-    networkId: NetworkId,
-    stableIndex?: number
-) => {
+export const getCollateralAddress = (isNonsUSDCollateral: boolean, networkId: NetworkId, stableIndex?: number) => {
     const collateralKey = COLLATERALS[stableIndex ? stableIndex : 0]
         ? COLLATERALS[stableIndex ? stableIndex : 0]
         : 'sUSD';
 
-    if (isBuy && isNonsUSDCollateral) {
+    if (isNonsUSDCollateral) {
         return multipleCollateral
             ? multipleCollateral[collateralKey as StablecoinKey]?.addresses[networkId]
             : undefined;

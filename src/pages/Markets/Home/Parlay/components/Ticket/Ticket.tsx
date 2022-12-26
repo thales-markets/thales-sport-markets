@@ -200,7 +200,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
                 try {
                     const parlayAmmQuote = await getParlayMarketsAMMQuoteMethod(
-                        true,
                         selectedStableIndex,
                         networkId,
                         parlayMarketsAMMContract,
@@ -325,7 +324,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 const additionalSlippage = ethers.utils.parseEther('0.02');
 
                 const tx = await getParlayAMMTransaction(
-                    true,
                     isVoucherSelected,
                     overtimeVoucher ? overtimeVoucher.id : 0,
                     selectedStableIndex,

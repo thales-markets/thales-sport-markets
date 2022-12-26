@@ -6,11 +6,6 @@ export enum Position {
     DRAW = 2,
 }
 
-export enum Side {
-    BUY = 'BUY',
-    SELL = 'SELL',
-}
-
 export const POSITION_MAP: Record<PositionName, string> = {
     HOME: '1',
     DRAW: 'X',
