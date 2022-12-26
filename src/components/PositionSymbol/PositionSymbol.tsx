@@ -131,6 +131,7 @@ const UpperText = styled(FlexDivCentered)`
     font-weight: 700;
     background: ${MAIN_COLORS.LIGHT_GRAY};
     padding: 2px;
+    font-size: 11px;
 `;
 
 export default PositionSymbol;
