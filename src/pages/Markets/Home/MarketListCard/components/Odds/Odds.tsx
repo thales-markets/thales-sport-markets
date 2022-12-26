@@ -32,26 +32,11 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
                 <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>
             ) : (
                 <OddsContainer>
-                    <Odd
-                        market={market}
-                        position={Position.HOME}
-                        odd={market.homeOdds}
-                        priceImpact={market.homePriceImpact}
-                    />
+                    <Odd market={market} position={Position.HOME} odd={market.homeOdds} bonus={market.homeBonus} />
                     {showDrawOdds && (
-                        <Odd
-                            market={market}
-                            position={Position.DRAW}
-                            odd={market.drawOdds}
-                            priceImpact={market.drawPriceImpact}
-                        />
+                        <Odd market={market} position={Position.DRAW} odd={market.drawOdds} bonus={market.drawBonus} />
                     )}
-                    <Odd
-                        market={market}
-                        position={Position.AWAY}
-                        odd={market.awayOdds}
-                        priceImpact={market.awayPriceImpact}
-                    />
+                    <Odd market={market} position={Position.AWAY} odd={market.awayOdds} bonus={market.awayBonus} />
                 </OddsContainer>
             )}
         </Container>

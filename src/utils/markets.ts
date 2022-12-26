@@ -285,6 +285,10 @@ export const isDiscounted = (priceImpact: number | undefined) => {
     return false;
 };
 
+export const hasBonus = (bonus: number | undefined) => Number(bonus) > 0;
+
+export const getFormattedBonus = (bonus: number | undefined) => `+${Math.ceil(Number(bonus))}%`;
+
 export const isMlsGame = (tag: number) => Number(tag) === MLS_TAG;
 
 export const isFifaWCGame = (tag: number) => Number(tag) === FIFA_WC_TAG;
@@ -379,23 +383,16 @@ export const getCanceledGamesPreviousQuotes = (parlay: ParlayMarket): number[] =
 };
 
 export const getBonus = (market: ParlaysMarket): number => {
-    let bonus = 0;
     switch (market.position) {
-        case 0:
-            isDiscounted(market.homePriceImpact) ? (bonus = Math.ceil(Math.abs(market.homePriceImpact))) : '';
-            break;
-        case 1:
-            isDiscounted(market.awayPriceImpact) ? (bonus = Math.ceil(Math.abs(market.awayPriceImpact))) : '';
-            break;
-        case 2:
-            isDiscounted(market.drawPriceImpact) && market.drawPriceImpact
-                ? (bonus = Math.ceil(Math.abs(market.drawPriceImpact)))
-                : '';
-            break;
+        case Position.HOME:
+            return hasBonus(market.homeBonus) ? Number(market.homeBonus) : 0;
+        case Position.AWAY:
+            return hasBonus(market.awayBonus) ? Number(market.awayBonus) : 0;
+        case Position.DRAW:
+            return hasBonus(market.drawBonus) ? Number(market.drawBonus) : 0;
         default:
-            break;
+            return 0;
     }
-    return bonus;
 };
 
 export const getParentMarketAddress = (parentMarketAddress: string, marketAddress: string) =>

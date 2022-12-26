@@ -8,6 +8,7 @@ import { ParlaysMarket } from 'types/markets';
 import {
     formatMarketOdds,
     getBonus,
+    getFormattedBonus,
     getOddTooltipText,
     getPositionOdds,
     getSpreadTotalText,
@@ -66,7 +67,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                 }
                 tooltip={<>{getOddTooltipText(market.position, market)}</>}
             />
-            {bonus > 0 ? <DiscountLabel>+{bonus}%</DiscountLabel> : ''}
+            {bonus > 0 ? <DiscountLabel>{getFormattedBonus(bonus)}</DiscountLabel> : ''}
             {readOnly ? (
                 market?.isResolved ? (
                     market?.winning ? (

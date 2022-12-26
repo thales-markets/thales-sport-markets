@@ -31,18 +31,31 @@ const useAvailablePerPositionQuery = (
                     sportsAMMContract?.buyPriceImpact(marketAddress, Position.AWAY, ethers.utils.parseEther('1')),
                     sportsAMMContract?.buyPriceImpact(marketAddress, Position.DRAW, ethers.utils.parseEther('1')),
                 ]);
+
                 return {
                     [Position.HOME]: {
                         available: bigNumberFormatter(availableToBuyHome),
-                        buyImpactPrice: bigNumberFormatter(homePositionPriceImpact),
+                        buyBonus: -(
+                            (bigNumberFormatter(homePositionPriceImpact) /
+                                (1 + bigNumberFormatter(homePositionPriceImpact))) *
+                            100
+                        ),
                     },
                     [Position.AWAY]: {
                         available: bigNumberFormatter(availableToBuyAway),
-                        buyImpactPrice: bigNumberFormatter(awayPositionPriceImpact),
+                        buyBonus: -(
+                            (bigNumberFormatter(awayPositionPriceImpact) /
+                                (1 + bigNumberFormatter(awayPositionPriceImpact))) *
+                            100
+                        ),
                     },
                     [Position.DRAW]: {
                         available: bigNumberFormatter(availableToBuyDraw),
-                        buyImpactPrice: bigNumberFormatter(drawPositionPriceImpact),
+                        buyBonus: -(
+                            (bigNumberFormatter(drawPositionPriceImpact) /
+                                (1 + bigNumberFormatter(drawPositionPriceImpact))) *
+                            100
+                        ),
                     },
                 };
             } catch (e) {

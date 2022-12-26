@@ -7,10 +7,11 @@ import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay'
 import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
 import {
     formatMarketOdds,
+    getFormattedBonus,
     getOddTooltipText,
     getParentMarketAddress,
     getSymbolText,
-    isDiscounted,
+    hasBonus,
 } from 'utils/markets';
 import { getOddsType } from '../../../../../../redux/modules/ui';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
@@ -24,10 +25,10 @@ type OddProps = {
     market: SportMarketInfo;
     position: Position;
     odd: number | undefined;
-    priceImpact: number | undefined;
+    bonus: number | undefined;
 };
 
-const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
+const Odd: React.FC<OddProps> = ({ market, position, odd, bonus }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const { trackEvent } = useMatomo();
@@ -36,7 +37,8 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
     const parlay = useSelector(getParlay);
     const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
     const isAddedToParlay = addedToParlay && addedToParlay.position == position;
-    const discount = isDiscounted(priceImpact) && priceImpact ? Math.ceil(Math.abs(priceImpact)) : undefined;
+
+    const showBonus = hasBonus(bonus);
     const noOdd = !odd || odd == 0;
     const isMainMarket = market.betType === BetType.WINNER;
 
@@ -49,8 +51,8 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
         } else {
             trackEvent({
                 category: 'position',
-                action: discount ? 'discount' : 'non-discount',
-                value: discount ? discount : 0,
+                action: showBonus ? 'discount' : 'non-discount',
+                value: showBonus ? Number(bonus) : 0,
             });
             const parlayMarket: ParlaysMarketPosition = {
                 parentMarket: getParentMarketAddress(market.parentMarket, market.address),
@@ -73,9 +75,9 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, priceImpact }) => {
                 tooltip: noOdd ? t('markets.zero-odds-tooltip') : undefined,
             }}
             symbolUpperText={
-                discount
+                showBonus
                     ? {
-                          text: `+${discount}%`,
+                          text: getFormattedBonus(bonus),
                           textStyle: {
                               color: MAIN_COLORS.BONUS,
                               backgroundColor: isMobile && !isMainMarket ? MAIN_COLORS.GRAY : MAIN_COLORS.LIGHT_GRAY,

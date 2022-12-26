@@ -12,13 +12,14 @@ import { getOddsType } from 'redux/modules/ui';
 import { MarketData, ParlaysMarketPosition } from 'types/markets';
 import { floorNumberToDecimals } from 'utils/formatters/number';
 import {
-    isDiscounted,
+    hasBonus,
     formatMarketOdds,
     getSymbolText,
     convertFinalResultToResultType,
     getSpreadTotalText,
     getParentMarketAddress,
     getOddTooltipText,
+    getFormattedBonus,
 } from 'utils/markets';
 import {
     Discount,
@@ -36,7 +37,7 @@ import {
 type PositionDetailsProps = {
     market: MarketData;
     odd?: number;
-    availablePerPosition: { available?: number; buyImpactPrice?: number };
+    availablePerPosition: { available?: number; buyBonus?: number };
     position: Position;
 };
 
@@ -59,9 +60,8 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
     const isGamePaused = market.paused && !isGameResolved;
     const isGameOpen = !market.resolved && !market.cancelled && !market.paused && !market.gameStarted;
 
-    const showDiscount =
-        isGameOpen && !!availablePerPosition.buyImpactPrice && isDiscounted(availablePerPosition.buyImpactPrice);
-    const positionDiscount = showDiscount ? Math.ceil(Math.abs(Number(availablePerPosition.buyImpactPrice) * 100)) : 0;
+    const showBonus = isGameOpen && hasBonus(availablePerPosition.buyBonus);
+    const positionBonus = showBonus ? getFormattedBonus(availablePerPosition.buyBonus) : '0';
     const noLiquidity = !!availablePerPosition.available && availablePerPosition.available < MIN_LIQUIDITY;
 
     const showOdd = isGameOpen && !noLiquidity;
@@ -124,7 +124,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                         : null}
                 </Status>
             )}
-            {showDiscount && <Discount>+{positionDiscount}%</Discount>}
+            {showBonus && <Discount>{positionBonus}</Discount>}
         </Container>
     );
 

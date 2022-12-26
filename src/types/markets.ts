@@ -65,9 +65,9 @@ export type SportMarketInfo = {
     qualifyingStartTime?: number;
     arePostQualifyingOddsFetched: boolean;
     betType: number;
-    homePriceImpact: number;
-    awayPriceImpact: number;
-    drawPriceImpact?: number;
+    homeBonus: number;
+    awayBonus: number;
+    drawBonus?: number;
     parentMarket: string;
     childMarkets: SportMarketInfo[];
     spread: number;
@@ -91,7 +91,7 @@ export type AMMPosition = {
     priceImpact: number;
 };
 
-export type AvailablePerPosition = Record<Position, { available?: number; buyImpactPrice?: number }>;
+export type AvailablePerPosition = Record<Position, { available?: number; buyBonus?: number }>;
 
 export type MarketData = {
     address: string;

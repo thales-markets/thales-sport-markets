@@ -11,7 +11,7 @@ import { fixDuplicatedTeamName, fixLongTeamName } from 'utils/formatters/string'
 import networkConnector from 'utils/networkConnector';
 import { generalConfig } from 'config/general';
 
-type DiscountMap = Map<string, { homePriceImpact: number; awayPriceImpact: number; drawPriceImpact: number }>;
+type DiscountMap = Map<string, { homeBonus: number; awayBonus: number; drawBonus: number }>;
 
 const marketsCache = {
     [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,
