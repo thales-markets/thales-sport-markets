@@ -270,9 +270,35 @@
             "bet-type": {
                 "total": "Gesamt",
                 "winner": "Gewinner",
-                "spread": "Behinderung"
+                "spread": "Behinderung",
+                "double-chance": "Doppelte Chance"
             },
-            "pending": "Ausstehend"
+            "pending": "Ausstehend",
+            "odd-tooltip": {
+                "scoring": {
+                    "points": "Punkte",
+                    "goals": "Tore"
+                },
+                "match-resolve": {
+                    "overtime": "einschließlich möglicher Überstunden",
+                    "regular": "in der regulären Zeit"
+                },
+                "total": {
+                    "over": "Die Gesamtzahl von {{scoring}} im Match {{matchResolve}} wird mehr als {{total}} sein.",
+                    "under": "Die Gesamtzahl von {{scoring}} im Spiel {{matchResolve}} ist kleiner als {{total}}."
+                },
+                "spread": {
+                    "plus": "{{team}} wird das Spiel gewinnen oder mit weniger als {{spread}} {{scoring}} {{matchResolve}} verlieren.",
+                    "minus": "{{team}} gewinnt das Match mit einer Differenz von mehr als {{spread}} {{scoring}} {{matchResolve}}."
+                },
+                "double-chance": {
+                    "12": "{{team}} oder {{team2}} gewinnt das Match {{matchResolve}}.",
+                    "1x2": "{{team}} gewinnt das Match oder das Match endet unentschieden {{matchResolve}}."
+                },
+                "winner": "{{team}} gewinnt das Match {{matchResolve}}.",
+                "draw": "Das Match endet unentschieden {{matchResolve}}."
+            },
+            "no-liquidity": "Keine Liquidität"
         },
         "market-details": {
             "price": "Preis",
@@ -725,5 +751,40 @@
         "info3": "- Tatsächliche Gesamtquote (erhalten durch Multiplizieren der Positionen einzeln)",
         "info2": "- Der gezahlte Betrag",
         "info1": "- Anzahl der Positionen im Parlay"
+    },
+    "wizard": {
+        "steps": {
+            "title": {
+                "exchange": "Holen Sie sich Crypto USD",
+                "connect-wallet": "Brieftasche verbinden",
+                "trade": "Überstundenmärkte",
+                "fund": "Fonds mit der ETH"
+            },
+            "description": {
+                "fund": "Bevor Sie Overtime nutzen können, müssen Sie zuerst ETH auf Ihre Optimism Connected Wallet bekommen. Nachdem Sie auf die Schaltfläche „Fonds“ geklickt haben, wählen Sie eine der verfügbaren Optionen, um fortzufahren.",
+                "connect-wallet": "Wenn Sie Optimism Connected Wallet nicht installiert haben, werden Sie weitergeleitet, um ein Wallet Ihrer Wahl zu installieren, bevor Sie es verbinden können.",
+                "exchange": "Overtime verwendet beliebte Stablecoins (Crypto USD), um Trades auszuführen. Durch Klicken auf die Schaltfläche Exchange to sUSD tauschen Sie ETH nahtlos gegen eine gewünschte Menge an Stablecoins.",
+                "trade": "Jetzt sind Sie finanziert und bereit, Overtime Markets zu nutzen. Viel Glück!"
+            },
+            "action": {
+                "connected": "In Verbindung gebracht",
+                "connect-wallet": "Brieftasche verbinden",
+                "exchange": "Umtausch in USD",
+                "fund": "Fonds mit der ETH",
+                "trade": "Handel mit Überstunden"
+            }
+        },
+        "fund-modal": {
+            "title": "Fund, Bridge & Send",
+            "exchange": "Von Austausch senden",
+            "coppied": "Kopiert!",
+            "buy-mt-pelerin": "Fonds mit Mt. Pelerin",
+            "buy": "Mit Karte finanzieren",
+            "address": "QR-Code Ihrer Adresse",
+            "buy-banxa": "Fonds mit Banxa",
+            "copy-address": "Adresse kopieren",
+            "bridge": "Brücke zum Optimismus"
+        },
+        "title": "Loslegen!"
     }
 }

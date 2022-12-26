@@ -273,9 +273,35 @@
             "bet-type": {
                 "total": "Total",
                 "winner": "Ganador",
-                "spread": "Desventaja"
+                "spread": "Desventaja",
+                "double-chance": "Doble oportunidad"
             },
-            "pending": "Pendiente"
+            "pending": "Pendiente",
+            "odd-tooltip": {
+                "scoring": {
+                    "goals": "objetivos",
+                    "points": "puntos"
+                },
+                "match-resolve": {
+                    "overtime": "incluyendo posibles horas extras",
+                    "regular": "en tiempo regular"
+                },
+                "total": {
+                    "over": "El número total de {{scoring}} en el partido {{matchResolve}} será mayor que {{total}}.",
+                    "under": "El número total de {{scoring}} en el partido {{matchResolve}} será menor que {{total}}."
+                },
+                "spread": {
+                    "minus": "{{team}} ganará el partido con una diferencia de más de {{spread}} {{scoring}} {{matchResolve}}.",
+                    "plus": "{{team}} ganará el partido o perderá por menos de {{spread}} {{scoring}} {{matchResolve}}."
+                },
+                "double-chance": {
+                    "12": "{{team}} o {{team2}} ganará el partido {{matchResolve}}.",
+                    "1x2": "{{team}} ganará el partido o el partido terminará en empate {{matchResolve}}."
+                },
+                "winner": "{{team}} ganará el partido {{matchResolve}}.",
+                "draw": "El partido terminará en empate {{matchResolve}}."
+            },
+            "no-liquidity": "sin liquidez"
         },
         "market-details": {
             "price": "Precio",
@@ -728,5 +754,40 @@
         "info2": "- La cantidad pagada",
         "info3": "- Cotización total real (obtenida al multiplicar posiciones individualmente)",
         "warning": "*El equipo de tiempo extra se reserva el derecho de descalificar monederos que sospechemos que manipulan el sistema."
+    },
+    "wizard": {
+        "steps": {
+            "title": {
+                "connect-wallet": "Conectar billetera",
+                "fund": "Financiar con ETH",
+                "exchange": "Obtener CriptoUSD",
+                "trade": "Mercados de tiempo extra"
+            },
+            "description": {
+                "connect-wallet": "Si no tiene Optimism Connected Wallet instalado, se le indicará que instale una billetera de su elección antes de poder conectarla.",
+                "exchange": "Overtime utiliza monedas estables populares (Crypto USD) para ejecutar operaciones. Al hacer clic en el botón Intercambiar a sUSD, cambie sin problemas ETH a la cantidad deseada de monedas estables.",
+                "fund": "Antes de que pueda usar Overtime, primero debe obtener ETH en su billetera conectada Optimism. Después de hacer clic en el botón Fondo, elija una de las opciones disponibles para continuar.",
+                "trade": "Ahora tiene fondos y está listo para usar Overtime Markets. ¡Buena suerte!"
+            },
+            "action": {
+                "exchange": "Cambio a USD",
+                "connect-wallet": "Conectar billetera",
+                "connected": "Conectado",
+                "fund": "Financiar con ETH",
+                "trade": "Comercio en horas extras"
+            }
+        },
+        "fund-modal": {
+            "coppied": "¡Copiado!",
+            "address": "Código QR de tu dirección",
+            "buy": "Fondo con tarjeta",
+            "copy-address": "Copiar dirección",
+            "buy-banxa": "Fondo con Banxa",
+            "title": "Financiar, puentear y enviar",
+            "bridge": "Puente al optimismo",
+            "buy-mt-pelerin": "Fondo con Mt Pelerin",
+            "exchange": "Enviar desde el intercambio"
+        },
+        "title": "¡Empezar!"
     }
 }

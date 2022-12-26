@@ -273,9 +273,35 @@
             "bet-type": {
                 "spread": "差点",
                 "total": "全部的",
-                "winner": "优胜者"
+                "winner": "优胜者",
+                "double-chance": "双倍机会"
             },
-            "pending": "待办的"
+            "pending": "待办的",
+            "odd-tooltip": {
+                "scoring": {
+                    "points": "积分",
+                    "goals": "目标"
+                },
+                "match-resolve": {
+                    "regular": "在固定时间",
+                    "overtime": "包括可能的加班"
+                },
+                "total": {
+                    "under": "比赛 {{matchResolve}} 中的 {{scoring}} 总数将少于 {{total}}。",
+                    "over": "比赛 {{matchResolve}} 中的 {{scoring}} 总数将超过 {{total}}。"
+                },
+                "spread": {
+                    "minus": "{{team}} 将以超过 {{spread}} {{scoring}} {{matchResolve}} 的差距赢得比赛。",
+                    "plus": "{{team}} 将赢得比赛或输掉小于 {{spread}} {{scoring}} {{matchResolve}}。"
+                },
+                "double-chance": {
+                    "12": "{{team}} 或 {{team2}} 将赢得比赛 {{matchResolve}}。",
+                    "1x2": "{{team}} 将赢得比赛，否则比赛将以平局 {{matchResolve}} 结束。"
+                },
+                "winner": "{{team}} 将赢得比赛 {{matchResolve}}。",
+                "draw": "比赛将以平局 {{matchResolve}} 结束。"
+            },
+            "no-liquidity": "无流动性"
         },
         "market-details": {
             "price": "价格",
@@ -728,5 +754,40 @@
         "no-parlays": "在此期间还没有注册获胜的过关彩。",
         "info3": "- 实际总报价（通过单独乘以头寸获得）",
         "info": "如果多个 parlays 有相同的报价，以下将按各自的顺序用作决胜局："
+    },
+    "wizard": {
+        "steps": {
+            "title": {
+                "fund": "用 ETH 入金",
+                "connect-wallet": "连接钱包",
+                "trade": "加班市场",
+                "exchange": "获取加密美元"
+            },
+            "description": {
+                "fund": "在您可以使用 Overtime 之前，首先您需要在您的 Optimism 连接钱包中获取 ETH。单击“资金”按钮后，选择可用选项之一继续。",
+                "exchange": "Overtime 使用流行的稳定币（Crypto USD）来执行交易。通过单击兑换成 sUSD 按钮，将 ETH 无缝兑换成所需数量的稳定币。",
+                "connect-wallet": "如果您没有安装 Optimism connected Wallet，您将被引导安装一个选择的钱包，然后才能连接它。",
+                "trade": "现在您已获得资金并准备好使用 Overtime Markets。祝你好运！"
+            },
+            "action": {
+                "exchange": "兑换美元",
+                "connect-wallet": "连接钱包",
+                "connected": "连接的",
+                "trade": "超时交易",
+                "fund": "用 ETH 入金"
+            }
+        },
+        "fund-modal": {
+            "title": "资金、桥梁和发送",
+            "buy-banxa": "与 Banxa 共同基金",
+            "bridge": "通往乐观的桥梁",
+            "coppied": "复制了！",
+            "copy-address": "复制地址",
+            "buy": "卡存入金",
+            "address": "您的地址二维码",
+            "buy-mt-pelerin": "与 Mt Pelerin 建立基金",
+            "exchange": "从交易所发送"
+        },
+        "title": "开始吧！"
     }
 }

@@ -371,9 +371,35 @@
             "bet-type": {
                 "winner": "Gagnant",
                 "spread": "Handicap",
-                "total": "Total"
+                "total": "Total",
+                "double-chance": "Double chance"
             },
-            "pending": "En attente"
+            "pending": "En attente",
+            "odd-tooltip": {
+                "scoring": {
+                    "points": "points",
+                    "goals": "objectifs"
+                },
+                "match-resolve": {
+                    "overtime": "y compris les éventuelles heures supplémentaires",
+                    "regular": "en temps régulier"
+                },
+                "total": {
+                    "over": "Le nombre total de {{scoring}} dans le match {{matchResolve}} sera supérieur à {{total}}.",
+                    "under": "Le nombre total de {{scoring}} dans le match {{matchResolve}} sera inférieur à {{total}}."
+                },
+                "spread": {
+                    "minus": "{{team}} remportera le match avec une différence de plus de {{spread}} {{scoring}} {{matchResolve}}.",
+                    "plus": "{{team}} gagnera le match ou perdra par moins de {{spread}} {{scoring}} {{matchResolve}}."
+                },
+                "double-chance": {
+                    "12": "{{team}} ou {{team2}} remporteront le match {{matchResolve}}.",
+                    "1x2": "{{team}} gagnera le match ou le match se terminera par un match nul {{matchResolve}}."
+                },
+                "winner": "{{team}} remportera le match {{matchResolve}}.",
+                "draw": "Le match se terminera par un match nul {{matchResolve}}."
+            },
+            "no-liquidity": "Pas de liquidité"
         },
         "market-details": {
             "wallet-info": {
@@ -826,5 +852,40 @@
         "info": "Si plusieurs parlays ont la même citation, ce qui suit sera utilisé comme bris d'égalité dans l'ordre respectif :",
         "warning": "* L'équipe des heures supplémentaires se réserve le droit de disqualifier les portefeuilles que nous soupçonnons de jouer avec le système.",
         "info1": "- Nombre de positions sur le parlay"
+    },
+    "wizard": {
+        "steps": {
+            "title": {
+                "connect-wallet": "Connecter le portefeuille",
+                "exchange": "Obtenez des crypto-USD",
+                "fund": "Financer avec ETH",
+                "trade": "Marchés des heures supplémentaires"
+            },
+            "description": {
+                "exchange": "Les heures supplémentaires utilisent des stablecoins populaires (Crypto USD) pour exécuter des transactions. En cliquant sur le bouton Exchange to sUSD, échangez de manière transparente ETH contre une quantité souhaitée de stablecoins.",
+                "fund": "Avant de pouvoir utiliser les heures supplémentaires, vous devez d'abord obtenir des ETH sur votre portefeuille connecté Optimism. Après avoir cliqué sur le bouton Financer, choisissez l'une des options disponibles pour continuer.",
+                "trade": "Vous êtes maintenant financé et prêt à utiliser les marchés des heures supplémentaires. Bonne chance!",
+                "connect-wallet": "Si vous n'avez pas installé le portefeuille connecté Optimism, vous serez redirigé pour installer un portefeuille de votre choix avant de pouvoir le connecter."
+            },
+            "action": {
+                "exchange": "Échange en USD",
+                "connect-wallet": "Connecter le portefeuille",
+                "fund": "Financer avec ETH",
+                "connected": "Connecté",
+                "trade": "Échange sur les heures supplémentaires"
+            }
+        },
+        "fund-modal": {
+            "bridge": "Pont vers l'optimisme",
+            "buy-mt-pelerin": "Fonds avec Mt Pelerin",
+            "exchange": "Envoyer depuis l'échange",
+            "buy": "Fonds avec carte",
+            "buy-banxa": "Fonds avec Banxa",
+            "copy-address": "Copier l'adresse",
+            "title": "Financer, relier et envoyer",
+            "coppied": "Copié !",
+            "address": "Votre adresse QR code"
+        },
+        "title": "Commencer!"
     }
 }

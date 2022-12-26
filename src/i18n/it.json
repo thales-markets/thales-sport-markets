@@ -273,9 +273,35 @@
             "bet-type": {
                 "total": "Totale",
                 "winner": "Vincitore",
-                "spread": "Handicap"
+                "spread": "Handicap",
+                "double-chance": "Doppia possibilità"
             },
-            "pending": "In attesa di"
+            "pending": "In attesa di",
+            "odd-tooltip": {
+                "scoring": {
+                    "goals": "obiettivi",
+                    "points": "punti"
+                },
+                "match-resolve": {
+                    "regular": "in orario regolare",
+                    "overtime": "compresi gli eventuali straordinari"
+                },
+                "total": {
+                    "over": "Il numero totale di {{scoring}} nella partita {{matchResolve}} sarà superiore a {{total}}.",
+                    "under": "Il numero totale di {{scoring}} nella partita {{matchResolve}} sarà inferiore a {{total}}."
+                },
+                "spread": {
+                    "minus": "{{team}} vincerà la partita con uno scarto superiore a {{spread}} {{scoring}} {{matchResolve}}.",
+                    "plus": "{{team}} vincerà o perderà la partita con meno di {{spread}} {{scoring}} {{matchResolve}}."
+                },
+                "double-chance": {
+                    "12": "{{team}} o {{team2}} vinceranno la partita {{matchResolve}}.",
+                    "1x2": "{{team}} vincerà la partita o la partita finirà in parità {{matchResolve}}."
+                },
+                "winner": "{{team}} vincerà la partita {{matchResolve}}.",
+                "draw": "La partita finirà in parità {{matchResolve}}."
+            },
+            "no-liquidity": "Nessuna liquidità"
         },
         "market-details": {
             "price": "Price",
@@ -731,5 +757,40 @@
         "info": "Se più parlay hanno la stessa quotazione, quanto segue verrà utilizzato come spareggio nel rispettivo ordine:",
         "warning": "*Il team degli straordinari detiene il diritto di squalificare i portafogli che sospettiamo giochino con il sistema.",
         "info2": "- L'importo pagato"
+    },
+    "wizard": {
+        "steps": {
+            "title": {
+                "fund": "Fondo con ETH",
+                "exchange": "Ottieni criptovalute USD",
+                "trade": "Mercati straordinari",
+                "connect-wallet": "Connetti Portafoglio"
+            },
+            "description": {
+                "trade": "Ora sei finanziato e pronto per utilizzare i mercati straordinari. Buona fortuna!",
+                "exchange": "Overtime utilizza le popolari stablecoin (Crypto USD) per eseguire operazioni. Facendo clic sul pulsante Scambia con sUSD, scambia senza problemi ETH con la quantità desiderata di stablecoin.",
+                "connect-wallet": "Se non hai installato Optimism Connected Wallet, verrai indirizzato a installare un portafoglio di tua scelta prima di poterlo connettere.",
+                "fund": "Prima di poter utilizzare Overtime, devi prima ottenere ETH sul tuo portafoglio connesso Optimism. Dopo aver fatto clic sul pulsante Fondo, scegli una delle opzioni disponibili per continuare."
+            },
+            "action": {
+                "fund": "Fondo con ETH",
+                "exchange": "Cambio in USD",
+                "connect-wallet": "Connetti Portafoglio",
+                "connected": "Collegato",
+                "trade": "Fai trading sugli straordinari"
+            }
+        },
+        "fund-modal": {
+            "coppied": "In coppia!",
+            "copy-address": "Copia indirizzo",
+            "buy-mt-pelerin": "Fondo con Mt Pelerin",
+            "title": "Finanzia, collega e invia",
+            "bridge": "Un ponte verso l'ottimismo",
+            "buy": "Fondo con carta",
+            "buy-banxa": "Fondo con Banxa",
+            "exchange": "Invia dallo scambio",
+            "address": "Il codice QR del tuo indirizzo"
+        },
+        "title": "Iniziare!"
     }
 }
