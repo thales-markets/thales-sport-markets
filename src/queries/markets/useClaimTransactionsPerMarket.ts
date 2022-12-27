@@ -15,13 +15,19 @@ const useClaimTransactionsPerMarket = (
         QUERY_KEYS.ClaimTx(marketAddress, networkId),
         async () => {
             try {
-                const claimTransactions = await thalesData.sportMarkets.claimTxes({
-                    market: marketAddress,
-                    network: networkId,
-                });
+                const [claimTransactions, childClaimTransactions] = await Promise.all([
+                    thalesData.sportMarkets.claimTxes({
+                        market: marketAddress,
+                        network: networkId,
+                    }),
+                    thalesData.sportMarkets.claimTxes({
+                        parentMarket: marketAddress,
+                        network: networkId,
+                    }),
+                ]);
 
                 // Filter keeper bot transactions
-                const data = claimTransactions?.filter(
+                const data = [...claimTransactions, ...childClaimTransactions].filter(
                     (tx: ClaimTransaction) => tx?.caller?.toLowerCase() !== KEEPER_BOT_CALLER_ADDRESS
                 );
 
