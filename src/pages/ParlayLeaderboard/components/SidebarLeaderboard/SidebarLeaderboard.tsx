@@ -39,9 +39,10 @@ import {
 import { getIsAppReady } from 'redux/modules/app';
 import {
     convertPositionNameToPositionType,
-    convertPositionToSymbolType,
     formatMarketOdds,
-    getIsApexTopGame,
+    getOddTooltipText,
+    getSpreadTotalText,
+    getSymbolText,
 } from 'utils/markets';
 import { SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
 import { PositionData } from 'types/markets';
@@ -130,6 +131,11 @@ const SidebarLeaderboard: React.FC = () => {
                                                 position ? position.side : ''
                                             );
 
+                                            const symbolText = position
+                                                ? getSymbolText(positionEnum, position.market.betType)
+                                                : '';
+                                            const spreadTotalText = position ? getSpreadTotalText(position.market) : '';
+
                                             return (
                                                 position && (
                                                     <ParlayRow
@@ -151,29 +157,41 @@ const SidebarLeaderboard: React.FC = () => {
                                                             </ParlayRowTeam>
                                                         </ParlayRowMatch>
                                                         <PositionSymbol
-                                                            type={convertPositionToSymbolType(
-                                                                positionEnum,
-                                                                getIsApexTopGame(
-                                                                    position.market.isApex,
-                                                                    position.market.betType
-                                                                )
-                                                            )}
-                                                            symbolColor={'white'}
-                                                            symbolSize={'10'}
-                                                            additionalText={{
-                                                                firstText: formatMarketOdds(
+                                                            symbolAdditionalText={{
+                                                                text: formatMarketOdds(
                                                                     selectedOddsType,
                                                                     parlay.marketQuotes
                                                                         ? parlay.marketQuotes[marketIndex]
                                                                         : 0
                                                                 ),
-                                                                firstTextStyle: {
+                                                                textStyle: {
                                                                     fontSize: '10.5px',
-                                                                    color: 'white',
                                                                     marginLeft: '5px',
                                                                 },
                                                             }}
-                                                            additionalStyle={{ width: 21, height: 21, fontSize: 10 }}
+                                                            additionalStyle={{
+                                                                width: 23,
+                                                                height: 23,
+                                                                fontSize: 10.5,
+                                                                borderWidth: 2,
+                                                            }}
+                                                            symbolText={symbolText}
+                                                            symbolUpperText={
+                                                                spreadTotalText
+                                                                    ? {
+                                                                          text: spreadTotalText,
+                                                                          textStyle: {
+                                                                              backgroundColor: '#2c3250',
+                                                                              fontSize: '10px',
+                                                                              top: '-9px',
+                                                                              left: '10px',
+                                                                          },
+                                                                      }
+                                                                    : undefined
+                                                            }
+                                                            tooltip={
+                                                                <>{getOddTooltipText(positionEnum, position.market)}</>
+                                                            }
                                                         />
                                                         <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
                                                     </ParlayRow>
