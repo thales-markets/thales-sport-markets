@@ -32,7 +32,28 @@ import {
     getSymbolText,
 } from 'utils/markets';
 
-const Rewards = [2000, 1500, 1000, 800, 750, 700, 600, 500, 300, 250, 225, 210, 200, 185, 170, 145, 130, 125, 110, 100];
+export const REWARDS = [
+    2000,
+    1500,
+    1000,
+    800,
+    750,
+    700,
+    600,
+    500,
+    300,
+    250,
+    225,
+    210,
+    200,
+    185,
+    170,
+    145,
+    130,
+    125,
+    110,
+    100,
+];
 export const START_DATE = new Date(2022, 11, 1, 0, 0, 0);
 export const END_DATE = new Date(2022, 11, 31, 24, 0, 0);
 
@@ -67,7 +88,7 @@ const ParlayLeaderboard: React.FC = () => {
                     <StickyCell>
                         {data.rank <= 20 ? (
                             <Tooltip
-                                overlay={<>{Rewards[data.rank - 1]} OP</>}
+                                overlay={<>{REWARDS[data.rank - 1]} OP</>}
                                 component={
                                     <FlexDivRowCentered style={{ position: 'relative', width: 14 }}>
                                         <StatusIcon
@@ -131,7 +152,7 @@ const ParlayLeaderboard: React.FC = () => {
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['rank']>) => {
                             return cellProps.cell.value <= 20 ? (
                                 <Tooltip
-                                    overlay={<>{Rewards[cellProps.cell.value - 1]} OP</>}
+                                    overlay={<>{REWARDS[cellProps.cell.value - 1]} OP</>}
                                     component={
                                         <FlexDivRowCentered style={{ position: 'relative', width: 14 }}>
                                             <StatusIcon

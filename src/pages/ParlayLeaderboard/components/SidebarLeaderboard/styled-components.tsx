@@ -1,3 +1,4 @@
+import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import styled from 'styled-components';
 import {
     FlexDiv,
@@ -39,7 +40,8 @@ export const TitleLabel = styled.span<{ isBold?: boolean }>`
     font-weight: ${(props) => (props.isBold ? '700' : '300')};
     font-size: 16px;
     line-height: 18px;
-    letter-spacing: ${(props) => (props.isBold ? '1px' : '7px')};
+    letter-spacing: ${(props) => (props.isBold ? '1px' : '11px')};
+    padding-left: ${(props) => (props.isBold ? '0' : '5px')};
     text-transform: uppercase;
 `;
 
@@ -51,7 +53,7 @@ export const HeaderRow = styled(FlexDivRow)`
 `;
 
 export const LeaderboardRow = styled(FlexDivRow)`
-    height: 44px;
+    height: 36px;
     align-items: center;
     cursor: pointer;
     &.first {
@@ -67,7 +69,7 @@ export const Rank = styled(FlexDivCentered)`
     width: 15px;
 `;
 
-export const DataLabel = styled(FlexDivColumn)`
+export const DataLabel = styled(FlexDivRowCentered)`
     font-weight: 400;
     font-size: 12px;
     line-height: 103.19%;
@@ -130,4 +132,10 @@ export const ParlayRowTeam = styled.span`
     width: 165px;
     overflow: hidden;
     text-overflow: ellipsis;
+`;
+
+export const OPLogoWrapper = styled(OPLogo)`
+    width: 15px;
+    height: 15px;
+    margin-left: 5px;
 `;

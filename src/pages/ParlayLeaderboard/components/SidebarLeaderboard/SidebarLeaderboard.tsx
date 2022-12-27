@@ -1,13 +1,34 @@
+import PositionSymbol from 'components/PositionSymbol';
 import SPAAnchor from 'components/SPAAnchor';
 import { USD_SIGN } from 'constants/currency';
+import { SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
 import ROUTES from 'constants/routes';
+import {
+    END_DATE,
+    getOpacity,
+    getParlayItemStatus,
+    getPositionStatus,
+    REWARDS,
+    START_DATE,
+} from 'pages/ParlayLeaderboard/ParlayLeaderboard';
+import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { getIsAppReady } from 'redux/modules/app';
+import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { formatCurrencyWithSign } from 'utils/formatters/number';
+import { PositionData } from 'types/markets';
+import { formatCurrency, formatCurrencyWithSign } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
+import {
+    convertPositionNameToPositionType,
+    formatMarketOdds,
+    getOddTooltipText,
+    getSpreadTotalText,
+    getSymbolText,
+} from 'utils/markets';
 import { buildHref } from 'utils/routes';
 import {
     ArrowIcon,
@@ -20,34 +41,15 @@ import {
     LeaderboardContainer,
     LeaderboardRow,
     LeaderboardWrapper,
+    OPLogoWrapper,
     ParlayRow,
-    ParlayRowTeam,
     ParlayRowMatch,
+    ParlayRowResult,
+    ParlayRowTeam,
     Rank,
     Title,
     TitleLabel,
-    ParlayRowResult,
 } from './styled-components';
-import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
-import {
-    START_DATE,
-    END_DATE,
-    getPositionStatus,
-    getOpacity,
-    getParlayItemStatus,
-} from 'pages/ParlayLeaderboard/ParlayLeaderboard';
-import { getIsAppReady } from 'redux/modules/app';
-import {
-    convertPositionNameToPositionType,
-    formatMarketOdds,
-    getOddTooltipText,
-    getSpreadTotalText,
-    getSymbolText,
-} from 'utils/markets';
-import { SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
-import { PositionData } from 'types/markets';
-import PositionSymbol from 'components/PositionSymbol';
-import { getOddsType } from 'redux/modules/ui';
 
 const SidebarLeaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -79,8 +81,8 @@ const SidebarLeaderboard: React.FC = () => {
                 </SPAAnchor>
                 <LeaderboardContainer>
                     <HeaderRow>
-                        <ColumnWrapper padding={'0 0 0 15px'}>
-                            <ColumnLabel>{t('parlay-leaderboard.sidebar.player')}</ColumnLabel>
+                        <ColumnWrapper padding={'0 0 0 20px'}>
+                            <ColumnLabel>{t('parlay-leaderboard.sidebar.wallet')}</ColumnLabel>
                         </ColumnWrapper>
                         <ColumnWrapper>
                             <ColumnLabel>{t('parlay-leaderboard.sidebar.quote')}</ColumnLabel>
@@ -89,7 +91,7 @@ const SidebarLeaderboard: React.FC = () => {
                             <ColumnLabel>{t('parlay-leaderboard.sidebar.paid')}</ColumnLabel>
                         </ColumnWrapper>
                         <ColumnWrapper>
-                            <ColumnLabel>{t('parlay-leaderboard.sidebar.won')}</ColumnLabel>
+                            <ColumnLabel>{t('parlay-leaderboard.sidebar.reward')}</ColumnLabel>
                         </ColumnWrapper>
                     </HeaderRow>
                     {parlaysData.map((parlay, index) => {
@@ -100,7 +102,7 @@ const SidebarLeaderboard: React.FC = () => {
                                     onClick={() => setExpandedRowIndex(expandedRowIndex !== index ? index : -1)}
                                 >
                                     <ColumnWrapper>
-                                        <Rank>{index + 1}</Rank>
+                                        <Rank>{parlay.rank}</Rank>
                                         <DataLabel title={parlay.account}>
                                             {truncateAddress(parlay.account, 3, 3)}
                                         </DataLabel>
@@ -112,7 +114,10 @@ const SidebarLeaderboard: React.FC = () => {
                                         <DataLabel>{formatCurrencyWithSign(USD_SIGN, parlay.sUSDPaid, 2)}</DataLabel>
                                     </ColumnWrapper>
                                     <ColumnWrapper>
-                                        <DataLabel>{formatCurrencyWithSign(USD_SIGN, parlay.totalAmount, 2)}</DataLabel>
+                                        <DataLabel>
+                                            {formatCurrency(REWARDS[parlay.rank - 1], 0)}
+                                            <OPLogoWrapper />
+                                        </DataLabel>
                                     </ColumnWrapper>
                                     <ArrowIcon
                                         className={

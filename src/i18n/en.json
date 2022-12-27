@@ -783,10 +783,11 @@
         "sidebar": {
             "title-parlay": "Parlay",
             "title-leaderboard": "Leaderboard",
-            "player": "Player",
+            "wallet": "Wallet",
             "quote": "Quote",
             "paid": "Paid",
             "won": "Won",
+            "reward": "Reward",
             "total-quote": "Total Quote",
             "total-amount": "Total Amount"
         }
