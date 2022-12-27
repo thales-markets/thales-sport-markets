@@ -1,132 +1,103 @@
-import { ODDS_COLOR } from 'constants/ui';
+import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
-export const Container = styled.div<{
-    backgroundColor?: string;
-    claimBorder?: boolean;
-    isCanceled?: boolean;
-    isResolved?: boolean;
-    isMobile?: boolean;
+export const Wrapper = styled(FlexDivColumn)<{
+    isResolved: boolean;
 }>`
-    display: flex;
-    flex-direction: row;
     width: 100%;
-    padding: 10px 10px;
     border-radius: 5px;
-    margin-bottom: ${(_props) => (_props?.isMobile ? '5px' : '15px')};
-    /* background-color: ${(_props) => (_props?.backgroundColor ? _props.backgroundColor : '')}; */
-    background-color: ${(_props) =>
-        _props.isResolved && !_props.claimBorder ? 'rgb(36,41,64, 0.5)' : 'rgba(48, 54, 86, 0.5)'};
-    border: ${(_props) => (_props?.claimBorder ? '3px solid #3FD1FF' : '')};
-    height: ${(_props) => (_props?.isMobile ? '70px' : '60px')};
-    flex-grow: ${(_props) => (_props?.isMobile ? '1' : '')};
+    margin-bottom: 8px;
+    background-color: ${(props) => (props.isResolved ? 'rgb(36,41,64, 0.5)' : MAIN_COLORS.LIGHT_GRAY)};
+    @media (max-width: 575px) {
+        margin-bottom: 5px;
+    }
 `;
 
-export const ClubNameLabel = styled.span`
-    font-weight: 400;
-    font-size: 12px;
+export const MainContainer = styled(FlexDivRow)`
+    width: 100%;
+    padding: 6px 8px 4px 8px;
+    @media (max-width: 950px) {
+        padding-right: 18px;
+    }
+`;
+
+export const ChildContainer = styled(MainContainer)`
+    background-color: ${MAIN_COLORS.GRAY};
+    justify-content: flex-end;
+    border-radius: 0 0 5px 5px;
+`;
+
+export const MatchInfoConatiner = styled(FlexDivColumn)`
+    cursor: pointer;
+`;
+
+export const MatchTimeLabel = styled.label`
+    font-size: 11px;
     text-transform: uppercase;
-    margin-left: 5px;
-    width: 90px;
 `;
 
-export const ClubContainer = styled.div<{ away?: boolean }>`
-    display: flex;
-    flex-direction: row;
+export const TeamsInfoConatiner = styled(FlexDivRow)`
     align-items: center;
-    ${(props) => (props?.away ? `justify-content: end;` : '')};
+    margin-top: 6px;
 `;
 
-export const BetTypeContainer = styled.div`
-    display: flex;
-    flex-direction: row;
+export const TeamLogosConatiner = styled(FlexDivRow)`
     align-items: center;
-    justify-content: end;
-    font-weight: bold;
-`;
-
-export const ClubVsClubContainer = styled.div<{ isMobile?: boolean }>`
-    display: flex;
-    flex-direction: ${(props) => (props?.isMobile ? 'column' : 'row')};
-    justify-content: ${(props) => (props?.isMobile ? 'space-evenly' : 'space-between')};
-    align-items: ${(props) => (props?.isMobile ? 'baseline' : 'center')};
-    flex-grow: ${(props) => (props?.isMobile ? '1' : '')};
-`;
-
-export const VSLabel = styled.span`
-    margin: 0 10px;
-    font-weight: 400;
-    font-size: 12px;
+    @media (max-width: 575px) {
+        display: none;
+    }
 `;
 
 export const ClubLogo = styled.img<{ width?: string; height?: string }>`
-    height: ${(props) => (props?.height ? props.height : '30px')};
-    width: ${(props) => (props?.width ? props.width : '30px')};
+    height: ${(props) => (props?.height ? props.height : '27px')};
+    width: ${(props) => (props?.width ? props.width : '27px')};
 `;
 
-export const LinkIcon = styled.i<{ isMobile?: boolean }>`
-    font-size: 16px;
-    margin-left: ${(props) => (props?.isMobile ? '' : '10px')};
-    margin-top: ${(props) => (props?.isMobile ? '' : '12px')};
-    color: ${(props) => props.theme.textColor.secondary};
-    &:hover {
-        cursor: pointer;
-        color: ${(props) => props.theme.textColor.quaternary};
+export const VSLabel = styled.span`
+    margin: 0 4px;
+    font-weight: 400;
+    font-size: 11px;
+`;
+
+export const TeamNamesConatiner = styled(FlexDivColumn)`
+    margin-left: 6px;
+    @media (max-width: 575px) {
+        margin-left: 0px;
     }
 `;
 
-export const MatchInfoMobile = styled(FlexDivColumn)`
-    width: fit-content;
-    justify-content: space-between;
+export const TeamNameLabel = styled.span`
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    text-transform: uppercase;
+    white-space: nowrap;
 `;
 
-export const MatchInfoLabelMobile = styled.label<{ home?: boolean; away?: boolean }>`
-    font-size: 11px;
-    color: ${(props) =>
-        props?.home ? ODDS_COLOR.HOME : props?.away ? ODDS_COLOR.AWAY : props.theme.textColor.primary};
+export const ResultWrapper = styled(FlexDivRowCentered)``;
+
+export const Result = styled.span`
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+`;
+
+export const ResultLabel = styled.span`
+    font-weight: 300;
+    font-size: 12px;
+    margin-right: 6px;
     text-transform: uppercase;
 `;
 
-export const VSLabelMobile = styled.span`
-    margin: 0 5px;
-    font-size: 11px;
-`;
-
-export const LinkWrapper = styled(FlexDivRow)`
-    flex-grow: 0.25;
-    justify-content: end;
-    align-items: center;
-    align-self: auto;
-`;
-
-export const MatchNamesContainerMobile = styled(FlexDivRow)`
-    width: 77%;
-    justify-content: space-between;
-    > :first-child {
-        width: 45%;
-        text-align: end;
-    }
-    > :last-child {
-        width: 45%;
-    }
-    @media (max-width: 500px) {
-        width: 50%;
-    }
+export const Arrow = styled.i`
+    font-size: 14px;
+    position: absolute;
+    bottom: 0px;
+    right: -11px;
+    cursor: pointer;
 `;
 
 export const OddsWrapper = styled(FlexDivRow)`
-    flex-grow: 1;
-`;
-
-export const OddsWrapperMobile = styled(FlexDivRow)<{ closedMarket?: boolean }>`
-    flex: 1;
-    align-self: ${(props) => (props?.closedMarket ? 'end' : '')};
-`;
-
-export const ResultWrapper = styled(FlexDivRowCentered)`
-    margin-left: 15px;
-    min-width: 90px;
-    margin-right: 5px;
-    justify-content: flex-start;
+    position: relative;
 `;

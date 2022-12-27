@@ -117,6 +117,7 @@ const GetUsd: React.FC = () => {
 
 const Container = styled(FlexDivCentered)`
     position: relative;
+    margin-bottom: 20px;
     height: ${isMobile() ? '28px' : '24px'};
     button {
         padding: 0 20px;

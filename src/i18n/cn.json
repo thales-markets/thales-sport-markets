@@ -269,7 +269,40 @@
             "coming-soon": "即将开始",
             "vs": "对决",
             "draw": "平手",
-            "paused": "暂停"
+            "paused": "暂停",
+            "pending": "Pending",
+            "no-liquidity": "No liquidity",
+            "bet-type": {
+                "winner": "Winner",
+                "spread": "Handicap",
+                "total": "Total",
+                "double-chance": "Double chance"
+            },
+            "odd-tooltip": {
+                "scoring": {
+                    "goals": "goals",
+                    "points": "points"
+                },
+                "match-resolve": {
+                    "regular": "in regular time",
+                    "overtime": "including possible overtime"
+                },
+                "winner": "{{team}} will win the match {{matchResolve}}.",
+                "draw": "The match will end in a draw {{matchResolve}}.",
+                "total": {
+                    "over": "The total number of {{scoring}} in the match {{matchResolve}} will be more than {{total}}.",
+                    "under": "The total number of {{scoring}} in the match {{matchResolve}} will be less than {{total}}."
+                },
+                "spread": {
+                    "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
+                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                },
+                "double-chance": {
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}.",
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
+                },
+                "bonus": "{{bonus}} added bonus on win!"
+            }
         },
         "market-details": {
             "price": "价格",
@@ -347,7 +380,8 @@
                 "potential-payout": "潜在支出",
                 "total-quote": "总报价"
             },
-            "buy-in": "买入"
+            "buy-in": "买入",
+            "total-bonus": "总奖金"
         },
         "discounted-per": "折扣按",
         "nav-menu": {
@@ -532,11 +566,11 @@
         "winnings-are-forfeit": "*在盘口解决后的 {{amount}} 天内未领取的奖金将被没收。",
         "search-field": "搜索钱包",
         "stats": {
-            "trades": "行业",
-            "total-volume": "总容积",
-            "highest-win": "最高获胜",
-            "lifetime-wins": "终身胜利",
-            "in-vaults": "在保险库中"
+            "total-volume": "Total volume",
+            "trades": "Trades",
+            "highest-win": "Highest win",
+            "lifetime-wins": "Lifetime wins",
+            "in-vaults": "In vaults"
         }
     },
     "mint-world-cup-nft": {
@@ -723,38 +757,38 @@
         "info": "如果多个 parlays 有相同的报价，以下将按各自的顺序用作决胜局："
     },
     "wizard": {
+        "title": "Get Started!",
         "steps": {
             "title": {
-                "connect-wallet": "连接钱包",
-                "exchange": "获取加密美元",
-                "trade": "加班市场",
-                "fund": "用 ETH 入金"
+                "connect-wallet": "Connect Wallet",
+                "fund": "Fund with ETH",
+                "exchange": "Get Crypto USD",
+                "trade": "Overtime Markets"
             },
             "description": {
-                "exchange": "Overtime 使用流行的稳定币（Crypto USD）来执行交易。通过单击兑换成 sUSD 按钮，将 ETH 无缝兑换成所需数量的稳定币。",
-                "trade": "现在您已获得资金并准备好使用 Overtime Markets。祝你好运！",
-                "fund": "在您可以使用 Overtime 之前，首先您需要在您的 Optimism 连接钱包中获取 ETH。单击“资金”按钮后，选择可用选项之一继续。",
-                "connect-wallet": "如果您没有安装 Optimism connected Wallet，您将被引导安装一个选择的钱包，然后才能连接它。"
+                "connect-wallet": "If you don't have Optimism connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
+                "fund": "Before you can use Overtime, first you need to get ETH on your Optimism connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
+                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to sUSD button, seamlessly swap ETH to a desired amount of stablecoins.",
+                "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
             },
             "action": {
-                "connected": "连接的",
-                "fund": "用 ETH 入金",
-                "connect-wallet": "连接钱包",
-                "exchange": "兑换美元",
-                "trade": "超时交易"
+                "connect-wallet": "Connect Wallet",
+                "connected": "Connected",
+                "fund": "Fund with ETH",
+                "exchange": "Exchange to USD",
+                "trade": "Trade on Overtime"
             }
         },
         "fund-modal": {
-            "address": "您的地址二维码",
-            "copy-address": "复制地址",
-            "coppied": "复制了！",
-            "title": "资金、桥梁和发送",
-            "exchange": "从交易所发送",
-            "buy-banxa": "与 Banxa 共同基金",
-            "bridge": "通往乐观的桥梁",
-            "buy-mt-pelerin": "与 Mt Pelerin 建立基金",
-            "buy": "卡存入金"
-        },
-        "title": "开始吧！"
+            "title": "Fund, Bridge & Send",
+            "buy": "Fund with card",
+            "buy-banxa": "Fund with Banxa",
+            "buy-mt-pelerin": "Fund with Mt Pelerin",
+            "bridge": "Bridge to optimism  ",
+            "exchange": "Send from exchange",
+            "copy-address": "Copy address",
+            "coppied": "Coppied!",
+            "address": "Your address QR code"
+        }
     }
 }

@@ -1,37 +1,29 @@
 import styled from 'styled-components';
-import { FlexDiv } from 'styles/common';
+import { FlexDivRow, FlexDivColumn } from 'styles/common';
 
-export const Container = styled.div<{ resolved?: boolean; isMobile?: boolean; noOdds?: boolean }>`
-    display: flex;
-    flex-direction: ${(props) => (props?.resolved && props?.isMobile ? 'column' : 'row')};
-    align-items: center;
-    justify-content: ${(props) => (props?.resolved ? 'center' : props?.noOdds ? 'space-evenly' : '')};
-    margin-left: ${(props) => (props?.resolved && !props.isMobile ? '30px' : props?.isMobile ? '' : '10px')};
-    height: ${(props) => (props?.isMobile ? '40px' : '')};
-    flex-grow: 1;
-    align-self: ${(props) => (props?.noOdds ? 'center' : '')};
-`;
-
-export const WinnerLabel = styled.span`
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 14px;
-    line-height: 120%;
-    color: #3fd1ff;
-    margin-left: 5px;
-    @media (max-width: 950px) {
-        margin-left: 0;
+export const Container = styled(FlexDivColumn)`
+    padding: 0 10px;
+    :not(:last-of-type) {
+        border-right: 3px solid #5f6180;
+    }
+    :last-of-type {
+        padding: 0;
+    }
+    :last-of-type:not(:first-child) {
+        padding: 0 0 0 10px;
+    }
+    :first-child:not(:last-of-type) {
+        padding: 0 10px 0 0;
     }
 `;
 
-export const OddsContainer = styled.div<{ isMobile?: boolean; twoPositionalSport?: boolean }>`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: ${(props) =>
-        props?.isMobile ? 'space-around' : props?.twoPositionalSport ? 'flex-end' : 'space-between'};
-    width: 100%;
-    margin-top: ${(props) => (props?.isMobile ? '10px' : '')};
+export const Title = styled.span`
+    font-size: 10px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    text-align: center;
 `;
 
-export const WinnerContainer = styled(FlexDiv)``;
+export const OddsContainer = styled(FlexDivRow)`
+    align-items: center;
+`;

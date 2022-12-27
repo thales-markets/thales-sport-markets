@@ -101,7 +101,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
     );
 };
 
-const matchInfoStyle = { fontSize: '11px', lineHeight: '13px', positionColor: '#ffffff' };
+const matchInfoStyle = { fontSize: '11px', lineHeight: '13px' };
 
 const Container = styled(FlexDivColumnCentered)`
     align-items: center;

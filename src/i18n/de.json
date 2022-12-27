@@ -266,7 +266,40 @@
             "coming-soon": "Bald",
             "vs": "VS",
             "draw": "X",
-            "paused": "Pausiert"
+            "paused": "Pausiert",
+            "pending": "Pending",
+            "no-liquidity": "No liquidity",
+            "bet-type": {
+                "winner": "Winner",
+                "spread": "Handicap",
+                "total": "Total",
+                "double-chance": "Double chance"
+            },
+            "odd-tooltip": {
+                "scoring": {
+                    "goals": "goals",
+                    "points": "points"
+                },
+                "match-resolve": {
+                    "regular": "in regular time",
+                    "overtime": "including possible overtime"
+                },
+                "winner": "{{team}} will win the match {{matchResolve}}.",
+                "draw": "The match will end in a draw {{matchResolve}}.",
+                "total": {
+                    "over": "The total number of {{scoring}} in the match {{matchResolve}} will be more than {{total}}.",
+                    "under": "The total number of {{scoring}} in the match {{matchResolve}} will be less than {{total}}."
+                },
+                "spread": {
+                    "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
+                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                },
+                "double-chance": {
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}.",
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
+                },
+                "bonus": "{{bonus}} added bonus on win!"
+            }
         },
         "market-details": {
             "price": "Preis",
@@ -344,7 +377,8 @@
                 "header": "Web 3 Sportmärkte auf",
                 "potential-payout": "Mögliche Auszahlung"
             },
-            "buy-in": "Kaufen"
+            "buy-in": "Kaufen",
+            "total-bonus": "Gesamtbonus"
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {
@@ -529,11 +563,11 @@
         "winnings-are-forfeit": "*Gewinne, die nicht innerhalb von {{amount}} Tagen nach Auflösung eines Marktes beansprucht werden, verfallen.",
         "search-field": "Brieftasche suchen",
         "stats": {
-            "trades": "Handel",
-            "lifetime-wins": "Lebenszeit gewinnt",
-            "total-volume": "Volle Lautstärke",
-            "in-vaults": "In Gewölben",
-            "highest-win": "Höchster Gewinn"
+            "total-volume": "Total volume",
+            "trades": "Trades",
+            "highest-win": "Highest win",
+            "lifetime-wins": "Lifetime wins",
+            "in-vaults": "In vaults"
         }
     },
     "mint-world-cup-nft": {
@@ -720,38 +754,38 @@
         "info1": "- Anzahl der Positionen im Parlay"
     },
     "wizard": {
+        "title": "Get Started!",
         "steps": {
             "title": {
-                "fund": "Fonds mit der ETH",
-                "connect-wallet": "Brieftasche verbinden",
-                "trade": "Überstundenmärkte",
-                "exchange": "Holen Sie sich Crypto USD"
+                "connect-wallet": "Connect Wallet",
+                "fund": "Fund with ETH",
+                "exchange": "Get Crypto USD",
+                "trade": "Overtime Markets"
             },
             "description": {
-                "trade": "Jetzt sind Sie finanziert und bereit, Overtime Markets zu nutzen. Viel Glück!",
-                "exchange": "Overtime verwendet beliebte Stablecoins (Crypto USD), um Trades auszuführen. Durch Klicken auf die Schaltfläche Exchange to sUSD tauschen Sie ETH nahtlos gegen eine gewünschte Menge an Stablecoins.",
-                "connect-wallet": "Wenn Sie Optimism Connected Wallet nicht installiert haben, werden Sie weitergeleitet, um ein Wallet Ihrer Wahl zu installieren, bevor Sie es verbinden können.",
-                "fund": "Bevor Sie Overtime nutzen können, müssen Sie zuerst ETH auf Ihre Optimism Connected Wallet bekommen. Nachdem Sie auf die Schaltfläche „Fonds“ geklickt haben, wählen Sie eine der verfügbaren Optionen, um fortzufahren."
+                "connect-wallet": "If you don't have Optimism connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
+                "fund": "Before you can use Overtime, first you need to get ETH on your Optimism connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
+                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to sUSD button, seamlessly swap ETH to a desired amount of stablecoins.",
+                "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
             },
             "action": {
-                "fund": "Fonds mit der ETH",
-                "connect-wallet": "Brieftasche verbinden",
-                "exchange": "Umtausch in USD",
-                "connected": "In Verbindung gebracht",
-                "trade": "Handel mit Überstunden"
+                "connect-wallet": "Connect Wallet",
+                "connected": "Connected",
+                "fund": "Fund with ETH",
+                "exchange": "Exchange to USD",
+                "trade": "Trade on Overtime"
             }
         },
         "fund-modal": {
-            "buy": "Mit Karte finanzieren",
-            "buy-banxa": "Fonds mit Banxa",
-            "copy-address": "Adresse kopieren",
             "title": "Fund, Bridge & Send",
-            "exchange": "Von Austausch senden",
-            "buy-mt-pelerin": "Fonds mit Mt. Pelerin",
-            "bridge": "Brücke zum Optimismus",
-            "address": "QR-Code Ihrer Adresse",
-            "coppied": "Kopiert!"
-        },
-        "title": "Loslegen!"
+            "buy": "Fund with card",
+            "buy-banxa": "Fund with Banxa",
+            "buy-mt-pelerin": "Fund with Mt Pelerin",
+            "bridge": "Bridge to optimism  ",
+            "exchange": "Send from exchange",
+            "copy-address": "Copy address",
+            "coppied": "Coppied!",
+            "address": "Your address QR code"
+        }
     }
 }

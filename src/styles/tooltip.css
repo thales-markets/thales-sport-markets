@@ -65,37 +65,36 @@
 .rc-tooltip-placement-top,
 .rc-tooltip-placement-topLeft,
 .rc-tooltip-placement-topRight {
-    padding: 5px 0 9px 0;
+    padding: 5px 0 5px 0;
 }
 .rc-tooltip-placement-right,
 .rc-tooltip-placement-rightTop,
 .rc-tooltip-placement-rightBottom {
-    padding: 0 5px 0 9px;
+    padding: 0 5px 0 5px;
 }
 .rc-tooltip-placement-bottom,
 .rc-tooltip-placement-bottomLeft,
 .rc-tooltip-placement-bottomRight {
-    padding: 9px 0 5px 0;
+    padding: 3px 0 5px 0;
 }
 .rc-tooltip-placement-left,
 .rc-tooltip-placement-leftTop,
 .rc-tooltip-placement-leftBottom {
-    padding: 0 9px 0 5px;
+    padding: 0 3px 0 5px;
 }
 .rc-tooltip-inner {
-    padding: 15px 15px;
-    color: #303656;
+    padding: 8px 8px;
+    color: #ffffff;
     font-weight: 400;
-    font-size: 15px;
-    line-height: 100%;
+    font-size: 11px;
+    line-height: 13px;
     text-align: start;
     text-decoration: none;
-    background-color: #f6f6fe;
-    border-radius: 15px;
-    box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.5);
-    min-height: 34px;
+    background-color: #5f6180;
+    border-radius: 0px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
     max-width: 300px;
-    min-width: 100px;
+    min-width: 50px;
     word-break: break-word;
 }
 .rc-tooltip-arrow {
@@ -108,10 +107,10 @@
 .rc-tooltip-placement-top .rc-tooltip-arrow,
 .rc-tooltip-placement-topLeft .rc-tooltip-arrow,
 .rc-tooltip-placement-topRight .rc-tooltip-arrow {
-    bottom: 4px;
+    bottom: 0px;
     margin-left: -5px;
     border-width: 5px 5px 0;
-    border-top-color: #f6f6fe;
+    border-top-color: #5f6180;
 }
 .rc-tooltip-placement-top .rc-tooltip-arrow {
     left: 50%;
@@ -126,7 +125,7 @@
 .rc-tooltip-placement-rightTop .rc-tooltip-arrow,
 .rc-tooltip-placement-rightBottom .rc-tooltip-arrow {
     left: 4px;
-    margin-top: -5px;
+    margin-top: 0px;
     border-width: 5px 5px 5px 0;
     border-right-color: #f6f6fe;
 }
@@ -144,7 +143,7 @@
 .rc-tooltip-placement-leftTop .rc-tooltip-arrow,
 .rc-tooltip-placement-leftBottom .rc-tooltip-arrow {
     right: 4px;
-    margin-top: -5px;
+    margin-top: 0px;
     border-width: 5px 0 5px 5px;
     border-left-color: #f6f6fe;
 }
@@ -162,7 +161,7 @@
 .rc-tooltip-placement-bottomLeft .rc-tooltip-arrow,
 .rc-tooltip-placement-bottomRight .rc-tooltip-arrow {
     top: 4px;
-    margin-left: -5px;
+    margin-left: 0px;
     border-width: 0 5px 5px;
     border-bottom-color: #f6f6fe;
 }
@@ -174,6 +173,32 @@
 }
 .rc-tooltip-placement-bottomRight .rc-tooltip-arrow {
     right: 15%;
+}
+
+@media (max-width: 575px) {
+    .rc-tooltip-placement-top,
+    .rc-tooltip-placement-topLeft,
+    .rc-tooltip-placement-topRight {
+        padding: 5px 0 3px 0;
+    }
+    .rc-tooltip-placement-right,
+    .rc-tooltip-placement-rightTop,
+    .rc-tooltip-placement-rightBottom {
+        padding: 0 5px 0 3px;
+    }
+    .rc-tooltip-placement-bottom,
+    .rc-tooltip-placement-bottomLeft,
+    .rc-tooltip-placement-bottomRight {
+        padding: 1px 0 3px 0;
+    }
+    .rc-tooltip-placement-left,
+    .rc-tooltip-placement-leftTop,
+    .rc-tooltip-placement-leftBottom {
+        padding: 0 1px 0 3px;
+    }
+    .rc-tooltip-arrow {
+        display: none;
+    }
 }
 
 .overtime-voucher-overlay .rc-tooltip-inner {

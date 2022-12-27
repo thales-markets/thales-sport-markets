@@ -1,8 +1,6 @@
 import SimpleLoader from 'components/SimpleLoader';
-// import ROUTES from 'constants/routes';
 import useMarketQuery from 'queries/markets/useMarketQuery';
-import React, { useEffect, useState } from 'react';
-// import { useTranslation } from 'react-i18next';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { getIsAppReady } from 'redux/modules/app';
@@ -10,36 +8,42 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { MarketData } from 'types/markets';
-// import { buildHref } from 'utils/routes';
-// import BackToLink from '../components/BackToLink';
-import Transactions from './Transactions';
-import { Side } from '../../../constants/options';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import MarketDetailsV2 from './MarketDetailsV2';
+import SPAAnchor from 'components/SPAAnchor';
+import { buildHref } from 'utils/routes';
+import ROUTES from 'constants/routes';
+import { Trans } from 'react-i18next';
+import { Info } from '../Home/Home';
 
 type MarketProps = RouteComponentProps<{
     marketAddress: string;
 }>;
 
 const Market: React.FC<MarketProps> = (props) => {
-    // const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const [market, setMarket] = useState<MarketData | undefined>(undefined);
-    const [selectedSide, setSelectedSide] = useState<Side>(Side.BUY);
+    const [lastValidMarket, setLastValidMarket] = useState<MarketData | undefined>(undefined);
     const { trackPageView } = useMatomo();
 
     const { params } = props.match;
     const marketAddress = params && params.marketAddress ? params.marketAddress : '';
 
-    const marketQuery = useMarketQuery(marketAddress, selectedSide === Side.SELL, {
+    const marketQuery = useMarketQuery(marketAddress, {
         enabled: isAppReady,
     });
 
     useEffect(() => {
         if (marketQuery.isSuccess && marketQuery.data) {
-            setMarket(marketQuery.data);
+            setLastValidMarket(marketQuery.data);
         }
     }, [marketQuery.isSuccess, marketQuery.data]);
+
+    const market: MarketData | undefined = useMemo(() => {
+        if (marketQuery.isSuccess && marketQuery.data) {
+            return marketQuery.data;
+        }
+        return lastValidMarket;
+    }, [marketQuery.isSuccess, marketQuery.data, lastValidMarket]);
 
     useEffect(() => {
         trackPageView({});
@@ -47,26 +51,22 @@ const Market: React.FC<MarketProps> = (props) => {
 
     return (
         <Container>
-            {market ? (
-                <>
-                    {/* <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} /> */}
-                    <MarketDetailsV2 market={market} selectedSide={selectedSide} setSelectedSide={setSelectedSide} />
-                    <Transactions market={market} />
-                </>
-            ) : (
-                <SimpleLoader />
-            )}
+            <Info>
+                <Trans
+                    i18nKey="rewards.op-rewards-banner-message"
+                    components={{
+                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                    }}
+                />
+            </Info>
+            {market ? <MarketDetailsV2 market={market} /> : <SimpleLoader />}
         </Container>
     );
 };
 
 const Container = styled(FlexDivColumn)`
-    width: 60%;
-    position: relative;
     align-items: center;
-    @media (max-width: 1440px) {
-        width: 100%;
-    }
+    width: 100%;
 `;
 
 export default Market;

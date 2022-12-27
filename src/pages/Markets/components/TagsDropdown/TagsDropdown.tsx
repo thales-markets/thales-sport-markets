@@ -140,7 +140,7 @@ const TagContainer = styled(FlexDivRowCentered)`
 `;
 
 const LabelContainer = styled(FlexDivRowCentered)`
-    margin-left: 20px;
+    margin-left: 10px;
     width: 100%;
     justify-content: flex-start;
     &.selected,
@@ -170,7 +170,7 @@ const Label = styled.div`
 
 const StarIcon = styled.i<{ isMobile: boolean }>`
     font-size: 15px;
-    margin-left: ${(props) => (props.isMobile ? '55px' : '25px')};
+    margin-left: ${(props) => (props.isMobile ? '55px' : '20px')};
     &.selected,
     &:hover {
         color: #fac439;

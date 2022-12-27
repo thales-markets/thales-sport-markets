@@ -367,7 +367,40 @@
             "claimable": "Réclamable",
             "result": "Résultat",
             "coming-soon": "Bientôt disponible",
-            "paused": "En pause"
+            "paused": "En pause",
+            "pending": "Pending",
+            "no-liquidity": "No liquidity",
+            "bet-type": {
+                "winner": "Winner",
+                "spread": "Handicap",
+                "total": "Total",
+                "double-chance": "Double chance"
+            },
+            "odd-tooltip": {
+                "scoring": {
+                    "goals": "goals",
+                    "points": "points"
+                },
+                "match-resolve": {
+                    "regular": "in regular time",
+                    "overtime": "including possible overtime"
+                },
+                "winner": "{{team}} will win the match {{matchResolve}}.",
+                "draw": "The match will end in a draw {{matchResolve}}.",
+                "total": {
+                    "over": "The total number of {{scoring}} in the match {{matchResolve}} will be more than {{total}}.",
+                    "under": "The total number of {{scoring}} in the match {{matchResolve}} will be less than {{total}}."
+                },
+                "spread": {
+                    "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
+                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                },
+                "double-chance": {
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}.",
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
+                },
+                "bonus": "{{bonus}} added bonus on win!"
+            }
         },
         "market-details": {
             "wallet-info": {
@@ -445,7 +478,8 @@
                 "referral": "Lien de référence",
                 "header": "Web 3 Sport commercialise sur"
             },
-            "buy-in": "Adhésion"
+            "buy-in": "Adhésion",
+            "total-bonus": "Prime totale"
         },
         "discounted-per": "Remise selon",
         "nav-menu": {
@@ -630,11 +664,11 @@
         "winnings-are-forfeit": "*Les gains non réclamés dans les {{amount}} jours suivant la résolution d'un marché sont annulés.",
         "search-field": "Portefeuille de recherche",
         "stats": {
-            "trades": "Métiers",
-            "lifetime-wins": "Victoires à vie",
-            "in-vaults": "Dans les voûtes",
-            "highest-win": "Victoire la plus élevée",
-            "total-volume": "Volume total"
+            "total-volume": "Total volume",
+            "trades": "Trades",
+            "highest-win": "Highest win",
+            "lifetime-wins": "Lifetime wins",
+            "in-vaults": "In vaults"
         }
     },
     "mint-world-cup-nft": {
@@ -821,38 +855,38 @@
         "info1": "- Nombre de positions sur le parlay"
     },
     "wizard": {
+        "title": "Get Started!",
         "steps": {
             "title": {
-                "exchange": "Obtenez des crypto-USD",
-                "trade": "Marchés des heures supplémentaires",
-                "connect-wallet": "Connecter le portefeuille",
-                "fund": "Financer avec ETH"
+                "connect-wallet": "Connect Wallet",
+                "fund": "Fund with ETH",
+                "exchange": "Get Crypto USD",
+                "trade": "Overtime Markets"
             },
             "description": {
-                "fund": "Avant de pouvoir utiliser les heures supplémentaires, vous devez d'abord obtenir des ETH sur votre portefeuille connecté Optimism. Après avoir cliqué sur le bouton Financer, choisissez l'une des options disponibles pour continuer.",
-                "trade": "Vous êtes maintenant financé et prêt à utiliser les marchés des heures supplémentaires. Bonne chance!",
-                "connect-wallet": "Si vous n'avez pas installé le portefeuille connecté Optimism, vous serez redirigé pour installer un portefeuille de votre choix avant de pouvoir le connecter.",
-                "exchange": "Les heures supplémentaires utilisent des stablecoins populaires (Crypto USD) pour exécuter des transactions. En cliquant sur le bouton Exchange to sUSD, échangez de manière transparente ETH contre une quantité souhaitée de stablecoins."
+                "connect-wallet": "If you don't have Optimism connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
+                "fund": "Before you can use Overtime, first you need to get ETH on your Optimism connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
+                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to sUSD button, seamlessly swap ETH to a desired amount of stablecoins.",
+                "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
             },
             "action": {
-                "fund": "Financer avec ETH",
-                "connected": "Connecté",
-                "exchange": "Échange en USD",
-                "connect-wallet": "Connecter le portefeuille",
-                "trade": "Échange sur les heures supplémentaires"
+                "connect-wallet": "Connect Wallet",
+                "connected": "Connected",
+                "fund": "Fund with ETH",
+                "exchange": "Exchange to USD",
+                "trade": "Trade on Overtime"
             }
         },
         "fund-modal": {
-            "exchange": "Envoyer depuis l'échange",
-            "title": "Financer, relier et envoyer",
-            "buy-banxa": "Fonds avec Banxa",
-            "buy-mt-pelerin": "Fonds avec Mt Pelerin",
-            "coppied": "Copié !",
-            "buy": "Fonds avec carte",
-            "address": "Votre adresse QR code",
-            "bridge": "Pont vers l'optimisme",
-            "copy-address": "Copier l'adresse"
-        },
-        "title": "Commencer!"
+            "title": "Fund, Bridge & Send",
+            "buy": "Fund with card",
+            "buy-banxa": "Fund with Banxa",
+            "buy-mt-pelerin": "Fund with Mt Pelerin",
+            "bridge": "Bridge to optimism  ",
+            "exchange": "Send from exchange",
+            "copy-address": "Copy address",
+            "coppied": "Coppied!",
+            "address": "Your address QR code"
+        }
     }
 }

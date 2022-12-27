@@ -35,20 +35,25 @@ export const STATUS_COLOR = {
 
 export const MAIN_COLORS = {
     LIGHT_GRAY: '#303656',
+    GRAY: '#242842',
     DARK_GRAY: '#1A1C2B',
     DISABLED_GRAY: '#303656',
-    LIGHT_BLUE: 'rgba(63,209,255,1)',
+    LIGHT_BLUE: '#3FD1FF',
     DIVIDER_COLOR: '#5F6180',
+    BONUS: '#5FC694',
     BACKGROUNDS: {
         RED: '#BC515E',
         BLUE: '#3FD1FF',
     },
     BORDERS: {
         GRAY: '#5f6180',
-        WINNER: '#3FD1FF',
+        LIGHT_BLUE: '#3FD1FF',
+        BLUE: '#64D9FE',
+        WHITE: '#FFFFFF',
     },
     SHADOWS: {
         WINNER: '0px 0px 33px -7px rgba(63,209,255,1)',
+        POSITION_WINNER: '0px 0px 15px -7px rgba(63,209,255,1)',
         DRAW: '0px 0px 33px -7px rgba(63,209,255,1)',
         POSITION_HOVER: '0px 0px 39px -16px rgba(64,210,255,1)',
         NAV_BAR: '-64px 0px 38px 3px rgba(0,0,0,0.41)',

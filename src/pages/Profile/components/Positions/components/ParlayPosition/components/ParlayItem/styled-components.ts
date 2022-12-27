@@ -1,4 +1,3 @@
-import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivRow } from 'styles/common';
 
@@ -10,76 +9,6 @@ export const Wrapper = styled(FlexDivRow)`
     padding: 5px 10px;
     @media (max-width: 768px) {
         padding: 5px 5px;
-    }
-`;
-
-export const MatchInfo = styled(FlexDivRow)`
-    justify-content: flex-start;
-    align-items: center;
-    @media (max-width: 768px) {
-        max-width: 60%;
-    }
-`;
-
-export const MatchLogo = styled.div`
-    display: flex;
-    align-items: center;
-    margin-right: 15px;
-    @media (max-width: 768px) {
-        margin-right: 7px;
-    }
-`;
-
-export const ClubLogo = styled.img<{
-    awayTeam?: boolean;
-    losingTeam?: boolean;
-    customMobileSize?: string;
-    isFlag?: boolean;
-}>`
-    ${(props) => (props?.isFlag ? 'object-fit: cover;' : '')}
-    ${(props) => (props?.isFlag ? 'border-radius: 50%;' : '')}
-    height: 45px;
-    width: 45px;
-    opacity: ${(props) => (props?.losingTeam ? `0.4` : '1')};
-    z-index: ${(props) => (props?.losingTeam ? '1' : '2')};
-    ${(props) => (props?.awayTeam ? 'margin-left: -15px;' : '')}
-    @media (max-width: 768px) {
-        height: ${(props) => (props?.customMobileSize ? props.customMobileSize : '30px')};
-        width: ${(props) => (props?.customMobileSize ? props.customMobileSize : '30px')};
-    }
-`;
-
-export const MatchLabel = styled(FlexDivRow)`
-    margin-right: 5px;
-    @media (max-width: 768px) {
-        font-size: 10px;
-        flex-direction: column;
-        justify-content: center;
-        word-wrap: unset;
-    }
-`;
-
-export const ClubName = styled.span`
-    font-style: normal;
-    font-weight: 300;
-    font-size: 12px;
-    text-transform: uppercase;
-    color: ${MAIN_COLORS.TEXT.WHITE};
-    margin-right: 5px;
-    word-wrap: normal;
-    @media (max-width: 768px) {
-        font-size: 10px;
-        height: 15px;
-        margin-top: 3px;
-    }
-`;
-
-export const ParlayItemStatusContainer = styled(FlexDivRow)`
-    width: 35%;
-    align-items: center;
-    justify-content: flex-start;
-    @media (max-width: 768px) {
-        width: 40%;
     }
 `;
 

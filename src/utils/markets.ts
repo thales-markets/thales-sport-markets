@@ -1,11 +1,20 @@
 import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
 import { Position } from 'constants/options';
-import { FIFA_WC_TAG, MLS_TAG, PERSON_COMPETITIONS, TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS } from 'constants/tags';
+import {
+    BetType,
+    FIFA_WC_TAG,
+    MATCH_RESOLVE_MAP,
+    MLS_TAG,
+    PERSON_COMPETITIONS,
+    SCORING_MAP,
+    TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
+} from 'constants/tags';
 import ordinal from 'ordinal';
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import { AccountPosition, MarketData, MarketInfo, ParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
 import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
+import i18n from 'i18n';
 
 const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 35;
 
@@ -74,6 +83,7 @@ export const convertFinalResultToResultType = (result: number, isApexTopGame?: b
     if (result == 1) return 0;
     if (result == 2) return 1;
     if (result == 3) return 2;
+    return -1;
 };
 
 export const convertPositionToSymbolType = (position: Position, isApexTopGame: boolean) => {
@@ -82,6 +92,54 @@ export const convertPositionToSymbolType = (position: Position, isApexTopGame: b
     if (position == Position.HOME) return 0;
     if (position == Position.AWAY) return 1;
     if (position == Position.DRAW) return 2;
+    return 0;
+};
+
+export const getSymbolText = (position: Position, betType: BetType) => {
+    switch (position) {
+        case Position.HOME:
+            switch (Number(betType)) {
+                case BetType.SPREAD:
+                    return 'H1';
+                case BetType.TOTAL:
+                    return 'O';
+                case BetType.DOUBLE_CHANCE:
+                    return '1X';
+                default:
+                    return '1';
+            }
+        case Position.AWAY:
+            switch (Number(betType)) {
+                case BetType.SPREAD:
+                    return 'H2';
+                case BetType.TOTAL:
+                    return 'U';
+                case BetType.DOUBLE_CHANCE:
+                    return 'X2';
+                default:
+                    return '2';
+            }
+        case Position.DRAW:
+            switch (Number(betType)) {
+                case BetType.DOUBLE_CHANCE:
+                    return '12';
+                default:
+                    return 'X';
+            }
+        default:
+            return '';
+    }
+};
+
+export const getSpreadTotalText = (market: SportMarketInfo | MarketData) => {
+    switch (Number(market.betType)) {
+        case BetType.SPREAD:
+            return `${Number(market.spread) > 0 ? '+' : ''}${Number(market.spread) / 100}`;
+        case BetType.TOTAL:
+            return `${Number(market.total) / 100}`;
+        default:
+            return undefined;
+    }
 };
 
 export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) => {
@@ -124,6 +182,7 @@ export const convertPositionNameToPosition = (positionName: string) => {
     if (positionName?.toUpperCase() == 'HOME') return 0;
     if (positionName?.toUpperCase() == 'AWAY') return 1;
     if (positionName?.toUpperCase() == 'DRAW') return 2;
+    return 1;
 };
 
 export const convertPositionNameToPositionType = (positionName: string) => {
@@ -133,11 +192,11 @@ export const convertPositionNameToPositionType = (positionName: string) => {
     return Position.HOME;
 };
 
-export const convertPositionToPositionName = (position: number): 'home' | 'away' | 'draw' => {
-    if (position == 0) return 'home';
-    if (position == 1) return 'away';
-    if (position == 2) return 'draw';
-    return 'home';
+export const convertPositionToPositionName = (position: number): 'HOME' | 'AWAY' | 'DRAW' => {
+    if (position == 0) return 'HOME';
+    if (position == 1) return 'AWAY';
+    if (position == 2) return 'DRAW';
+    return 'HOME';
 };
 
 export const getCanceledGameClaimAmount = (position: AccountPositionProfile) => {
@@ -213,18 +272,15 @@ export const getPositionOddsFromSportMarket = (market: SportMarketInfo, position
         : 0;
 };
 
-export const getVisibilityOfDrawOptionByTagId = (tags: Array<number>) => {
-    const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(element));
-    if (tag) return false;
+export const getVisibilityOfDrawOption = (tags: Array<number>, betType: BetType) => {
+    const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(Number(element)));
+    if (tag || betType === BetType.TOTAL || betType === BetType.SPREAD) return false;
     return true;
 };
 
-export const isDiscounted = (priceImpact: number | undefined) => {
-    if (priceImpact) {
-        return Number(priceImpact) < 0;
-    }
-    return false;
-};
+export const hasBonus = (bonus: number | undefined) => Number(bonus) > 0;
+
+export const getFormattedBonus = (bonus: number | undefined) => `+${Math.ceil(Number(bonus))}%`;
 
 export const isMlsGame = (tag: number) => Number(tag) === MLS_TAG;
 
@@ -319,33 +375,85 @@ export const getCanceledGamesPreviousQuotes = (parlay: ParlayMarket): number[] =
     return quotes;
 };
 
-export const convertMarketDataTypeToSportMarketInfoType = (marketData: MarketData): SportMarketInfo => {
-    return {
-        id: marketData.address,
-        address: marketData.address,
-        gameId: marketData.gameDetails.gameId,
-        maturityDate: new Date(marketData.maturityDate),
-        tags: marketData.tags,
-        isOpen: !marketData.resolved && !marketData.cancelled && !marketData.gameStarted ? true : false,
-        isResolved: marketData.resolved,
-        isCanceled: marketData.cancelled,
-        finalResult: marketData.finalResult,
-        poolSize: 0,
-        numberOfParticipants: 0,
-        homeTeam: marketData.homeTeam,
-        awayTeam: marketData.awayTeam,
-        homeOdds: marketData.positions[0].sides.BUY.odd ? marketData.positions[0].sides.BUY.odd : 0,
-        awayOdds: marketData.positions[1].sides.BUY.odd ? marketData.positions[1].sides.BUY.odd : 0,
-        drawOdds: marketData.positions[2].sides.BUY.odd,
-        homeScore: marketData.homeScore ? marketData.homeScore : 0,
-        awayScore: marketData.awayScore ? marketData.awayScore : 0,
-        sport: '',
-        isApex: marketData.isApex,
-        resultDetails: '',
-        isPaused: marketData.paused,
-        arePostQualifyingOddsFetched: false,
-        betType: marketData.betType,
-        homePriceImpact: 0,
-        awayPriceImpact: 0,
-    };
+export const getBonus = (market: ParlaysMarket): number => {
+    switch (market.position) {
+        case Position.HOME:
+            return hasBonus(market.homeBonus) ? Number(market.homeBonus) : 0;
+        case Position.AWAY:
+            return hasBonus(market.awayBonus) ? Number(market.awayBonus) : 0;
+        case Position.DRAW:
+            return hasBonus(market.drawBonus) ? Number(market.drawBonus) : 0;
+        default:
+            return 0;
+    }
+};
+
+export const getParentMarketAddress = (parentMarketAddress: string, marketAddress: string) =>
+    parentMarketAddress !== null && parentMarketAddress !== '' ? parentMarketAddress : marketAddress;
+
+export const getOddTooltipText = (position: Position, market: SportMarketInfo | MarketData) => {
+    const spread = Math.abs(Number(market.spread) / 100);
+    const total = Number(market.total) / 100;
+    const team = position === Position.AWAY ? market.awayTeam : market.homeTeam;
+    const team2 = market.awayTeam;
+    const scoring =
+        SCORING_MAP[market.tags[0]] !== ''
+            ? i18n.t(`markets.market-card.odd-tooltip.scoring.${SCORING_MAP[market.tags[0]]}`)
+            : '';
+    const matchResolve =
+        MATCH_RESOLVE_MAP[market.tags[0]] !== ''
+            ? i18n.t(`markets.market-card.odd-tooltip.match-resolve.${MATCH_RESOLVE_MAP[market.tags[0]]}`)
+            : '';
+    let translationKey = '';
+
+    switch (position) {
+        case Position.HOME:
+            switch (Number(market.betType)) {
+                case BetType.SPREAD:
+                    translationKey = Number(market.spread) < 0 ? 'spread.minus' : 'spread.plus';
+                    break;
+                case BetType.TOTAL:
+                    translationKey = 'total.over';
+                    break;
+                case BetType.DOUBLE_CHANCE:
+                    translationKey = 'double-chance.1x2';
+                    break;
+                default:
+                    translationKey = 'winner';
+            }
+            break;
+        case Position.AWAY:
+            switch (Number(market.betType)) {
+                case BetType.SPREAD:
+                    translationKey = Number(market.spread) < 0 ? 'spread.plus' : 'spread.minus';
+                    break;
+                case BetType.TOTAL:
+                    translationKey = 'total.under';
+                    break;
+                case BetType.DOUBLE_CHANCE:
+                    translationKey = 'double-chance.1x2';
+                    break;
+                default:
+                    translationKey = 'winner';
+            }
+            break;
+        case Position.DRAW:
+            switch (Number(market.betType)) {
+                case BetType.DOUBLE_CHANCE:
+                    translationKey = 'double-chance.12';
+                    break;
+                default:
+                    translationKey = 'draw';
+            }
+            break;
+            break;
+    }
+    return i18n.t(`markets.market-card.odd-tooltip.${translationKey}`, {
+        team,
+        team2,
+        spread,
+        total,
+        scoring,
+        matchResolve,
+    });
 };

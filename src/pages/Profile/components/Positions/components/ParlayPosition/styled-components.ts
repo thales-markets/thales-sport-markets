@@ -1,6 +1,7 @@
 import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivColumnNative, FlexDivRow } from 'styles/common';
+import { Label } from '../../styled-components';
 
 export const Container = styled(FlexDivColumnNative)`
     align-items: center;
@@ -10,12 +11,12 @@ export const Container = styled(FlexDivColumnNative)`
     width: 100%;
     margin-bottom: 5px;
     @media (max-width: 768px) {
-        padding: 12px 5px;
+        padding: 7px 5px;
     }
 `;
 
 export const OverviewContainer = styled(FlexDivRow)`
-    justify-content: flex-start;
+    justify-content: space-between;
     width: 100%;
     align-items: center;
     height: 35px;
@@ -27,7 +28,7 @@ export const OverviewContainer = styled(FlexDivRow)`
 `;
 
 export const InfoContainer = styled(FlexDivRow)`
-    min-width: 150px;
+    min-width: 160px;
     justify-content: flex-start;
     @media (max-width: 768px) {
         min-width: auto;
@@ -36,7 +37,7 @@ export const InfoContainer = styled(FlexDivRow)`
 `;
 
 export const TicketIdContainer = styled(FlexDivRow)`
-    min-width: 150px;
+    min-width: 162px;
     justify-content: flex-start;
     margin-right: 20px;
     @media (max-width: 768px) {
@@ -47,32 +48,12 @@ export const TicketIdContainer = styled(FlexDivRow)`
 
 export const InfoContainerColumn = styled(FlexDivColumnNative)`
     min-width: 100px;
+    margin-left: 10px;
     justify-content: flex-start;
     @media (max-width: 768px) {
         min-width: auto;
         flex-direction: column;
-    }
-`;
-
-export const ClaimContainer = styled(FlexDivColumnNative)`
-    min-width: 100px;
-    justify-content: flex-start;
-    @media (max-width: 768px) {
-        min-width: auto;
-        flex-direction: column;
-        align-items: flex-end;
-    }
-`;
-
-export const Label = styled.span<{ canceled?: boolean }>`
-    font-weight: 400;
-    font-size: 12px;
-    color: ${(props) => (props?.canceled ? `${MAIN_COLORS.TEXT.CANCELED}` : `${MAIN_COLORS.TEXT.WHITE}`)};
-    text-transform: uppercase;
-    margin-right: 3px;
-    @media (max-width: 768px) {
-        font-size: 10px;
-        margin-bottom: 3px;
+        margin-left: 0px;
     }
 `;
 
@@ -91,19 +72,6 @@ export const Value = styled(TicketId)`
 
 export const NumberOfGames = styled(Label)`
     font-weight: 700;
-    text-transform: none;
-`;
-
-export const ClaimLabel = styled(Label)`
-    font-weight: 900;
-    color: ${MAIN_COLORS.TEXT.BLUE};
-    text-transform: uppercase;
-    @media (max-width: 768px) {
-        font-size: 10px;
-    }
-`;
-
-export const ClaimValue = styled(ClaimLabel)`
     text-transform: none;
 `;
 
@@ -150,7 +118,7 @@ export const Divider = styled.div`
     border: none;
     background-color: ${MAIN_COLORS.DIVIDER_COLOR};
     color: ${MAIN_COLORS.DIVIDER_COLOR};
-    width: 95%;
+    width: 100%;
     margin-top: 8px;
     margin-bottom: 10px;
 `;
@@ -167,26 +135,6 @@ export const CollapseFooterContainer = styled(FlexDivRow)`
     margin-bottom: 11px;
     margin-top: 11px;
 `;
-
-export const ExternalLinkContainer = styled.div`
-    height: 20px;
-    width: 20px;
-    display: block;
-    cursor: pointer;
-    @media (max-width: 768px) {
-        display: none;
-    }
-`;
-
-export const ExternalLinkArrow = styled.i.attrs({ className: 'icon icon--arrow-external' })`
-    font-size: 20px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
-    position: absolute;
-    right: 15px;
-    cursor: pointer;
-`;
-
-export const ExternalLink = styled.a``;
 
 export const TotalQuoteContainer = styled(FlexDivRow)``;
 

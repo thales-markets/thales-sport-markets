@@ -1,6 +1,6 @@
 import { COLLATERALS_INDEX } from 'constants/currency';
-import { ApexBetType, MarketStatus } from 'constants/markets';
-import { Position, PositionName, Side } from '../constants/options';
+import { MarketStatus } from 'constants/markets';
+import { Position, PositionName } from '../constants/options';
 
 export type MarketInfo = {
     address: string;
@@ -64,10 +64,14 @@ export type SportMarketInfo = {
     leagueRaceName?: string;
     qualifyingStartTime?: number;
     arePostQualifyingOddsFetched: boolean;
-    betType: ApexBetType;
-    homePriceImpact: number;
-    awayPriceImpact: number;
-    drawPriceImpact?: number;
+    betType: number;
+    homeBonus: number;
+    awayBonus: number;
+    drawBonus?: number;
+    parentMarket: string;
+    childMarkets: SportMarketInfo[];
+    spread: number;
+    total: number;
 };
 
 export type FixedMarketData = {
@@ -81,23 +85,18 @@ export type GameDetails = {
     gameLabel: string;
 };
 
-export type AMMSide = {
+export type AMMPosition = {
+    available: number;
     quote: number;
     priceImpact: number;
 };
 
-export type AMMPosition = {
-    sides: Record<Side, AMMSide>;
-};
-
-export type AvailablePerSide = {
-    positions: Record<Position, { available: number; buyImpactPrice?: number }>;
-};
+export type AvailablePerPosition = Record<Position, { available?: number; buyBonus?: number }>;
 
 export type MarketData = {
     address: string;
     gameDetails: GameDetails;
-    positions: Record<Position, { sides: Record<Side, { odd: number | undefined }> }>;
+    positions: Record<Position, { odd: number | undefined }>;
     tags: number[];
     homeTeam: string;
     awayTeam: string;
@@ -110,8 +109,19 @@ export type MarketData = {
     awayScore?: number;
     leagueRaceName?: string;
     paused: boolean;
-    betType: ApexBetType;
+    betType: number;
     isApex: boolean;
+    parentMarket: string;
+    childMarketsAddresses: string[];
+    childMarkets: MarketData[];
+    spread: number;
+    total: number;
+};
+
+export type ChildMarkets = {
+    spreadMarkets: MarketData[];
+    totalMarkets: MarketData[];
+    doubleChanceMarkets: MarketData[];
 };
 
 export type ParlayMarket = {
@@ -239,6 +249,7 @@ export type MarketTransaction = {
     position: any;
     market: string;
     paid: number;
+    wholeMarket: SportMarketInfo;
 };
 
 export type MarketTransactions = MarketTransaction[];
@@ -249,7 +260,7 @@ export type ClaimTransaction = {
     amount: number;
     timestamp: number;
     caller: string;
-    market: MarketData;
+    market: SportMarketInfo;
 };
 
 export type ClaimTransactions = ClaimTransaction[];
@@ -290,7 +301,8 @@ export type Odds = {
 };
 
 export type ParlaysMarketPosition = {
-    sportMarketId: string;
+    parentMarket: string;
+    sportMarketAddress: string;
     position: Position;
     homeTeam: string;
     awayTeam: string;

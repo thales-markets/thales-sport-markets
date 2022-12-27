@@ -2,11 +2,10 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
 import { NetworkId } from 'types/network';
-import { Position, PositionName } from 'constants/options';
 import { VaultTrades, VaultTrade } from 'types/vault';
 import { getEtherscanTxLink } from 'utils/etherscan';
-import i18n from 'i18n';
 import { VaultTradeStatus } from 'constants/vault';
+import { convertFinalResultToResultType } from 'utils/markets';
 
 const useVaultTradesQuery = (vaultAddress: string, networkId: NetworkId, options?: UseQueryOptions<VaultTrades>) => {
     return useQuery<VaultTrades>(
@@ -17,19 +16,16 @@ const useVaultTradesQuery = (vaultAddress: string, networkId: NetworkId, options
                     network: networkId,
                     vault: vaultAddress,
                 });
+
                 return vaultTrades.map((trade: VaultTrade) => {
                     const game = `${trade.wholeMarket.homeTeam} - ${trade.wholeMarket.awayTeam}`;
-                    const position = Position[trade.position];
-                    const positionTeam =
-                        // @ts-ignore
-                        trade.wholeMarket[`${position.toLowerCase()}Team`] || i18n.t('markets.market-card.draw');
-                    const result = Position[trade.wholeMarket.finalResult - 1] as PositionName;
+                    const position = trade.position;
+                    const result = convertFinalResultToResultType(trade.wholeMarket.finalResult);
                     const link = getEtherscanTxLink(networkId, trade.hash);
                     const status =
                         Number(trade.wholeMarket.finalResult) === 0
                             ? VaultTradeStatus.IN_PROGRESS
-                            : // @ts-ignore
-                            (position as PositionName) === result
+                            : position === result
                             ? VaultTradeStatus.WIN
                             : VaultTradeStatus.LOSE;
 
@@ -37,7 +33,6 @@ const useVaultTradesQuery = (vaultAddress: string, networkId: NetworkId, options
                         ...trade,
                         game,
                         position,
-                        positionTeam,
                         result,
                         link,
                         status,

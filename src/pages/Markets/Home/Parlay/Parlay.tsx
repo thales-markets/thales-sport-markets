@@ -55,16 +55,26 @@ const Parlay: React.FC = () => {
 
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            const sportOpenMarkets = sportMarketsQuery.data[GlobalFiltersEnum.OpenMarkets];
+            const sportOpenMarkets = sportMarketsQuery.data[GlobalFiltersEnum.OpenMarkets].reduce(
+                (acc: SportMarketInfo[], market) => {
+                    acc.push(market);
+                    market.childMarkets.forEach((childMarket) => {
+                        acc.push(childMarket);
+                    });
+                    return acc;
+                },
+                []
+            );
+
             const parlayMarkets: ParlaysMarket[] = parlay
                 .filter((parlayMarket) => {
                     return sportOpenMarkets.some((market: SportMarketInfo) => {
-                        return market.id === parlayMarket.sportMarketId;
+                        return market.address === parlayMarket.sportMarketAddress;
                     });
                 })
                 .map((parlayMarket) => {
                     const openMarket: SportMarketInfo = sportOpenMarkets.filter(
-                        (market: SportMarketInfo) => market.id === parlayMarket.sportMarketId
+                        (market: SportMarketInfo) => market.address === parlayMarket.sportMarketAddress
                     )[0];
                     return {
                         ...openMarket,
@@ -75,10 +85,10 @@ const Parlay: React.FC = () => {
             if (parlay.length > parlayMarkets.length) {
                 const notOpenedMarkets = parlay.filter((parlayMarket) => {
                     return sportOpenMarkets.some((market: SportMarketInfo) => {
-                        return market.id !== parlayMarket.sportMarketId;
+                        return market.address !== parlayMarket.sportMarketAddress;
                     });
                 });
-                notOpenedMarkets.forEach((market) => dispatch(removeFromParlay(market.sportMarketId)));
+                notOpenedMarkets.forEach((market) => dispatch(removeFromParlay(market.sportMarketAddress)));
             }
 
             setParlayMarkets(parlayMarkets);
@@ -94,7 +104,7 @@ const Parlay: React.FC = () => {
                             const outOfLiquidity = outOfLiquidityMarkets.includes(index);
                             return (
                                 <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
-                                    <MatchInfo market={market} />
+                                    <MatchInfo market={market} isHighlighted={true} />
                                 </RowMarket>
                             );
                         })}
@@ -146,12 +156,11 @@ const Parlay: React.FC = () => {
 };
 
 const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?: boolean }>`
-    ${(props) => (!props.isMobile ? `margin-top: ${props.isWalletConnected ? '20px' : '44px'};` : '')}
-    max-width: 300px;
-    padding: 15px;
+    max-width: 320px;
+    padding: 12px;
     flex: none;
     background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
-    border-radius: 10px;
+    border-radius: 7px;
 `;
 
 const ListContainer = styled(FlexDivColumn)``;
@@ -163,7 +172,7 @@ const RowMarket = styled.div<{ outOfLiquidity: boolean }>`
     height: 45px;
     align-items: center;
     text-align: center;
-    padding: ${(props) => (props.outOfLiquidity ? '5px' : '5px 7px')};
+    padding: ${(props) => (props.outOfLiquidity ? '5px' : '5px 0px')};
     ${(props) => (props.outOfLiquidity ? 'background: rgba(26, 28, 43, 0.5);' : '')}
     ${(props) => (props.outOfLiquidity ? 'border: 2px solid #e26a78;' : '')}
     ${(props) => (props.outOfLiquidity ? 'border-radius: 2px;' : '')}
