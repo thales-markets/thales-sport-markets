@@ -270,39 +270,39 @@
             "vs": "VS",
             "draw": "Empate",
             "paused": "En pausa",
+            "pending": "Pending",
+            "no-liquidity": "No liquidity",
             "bet-type": {
+                "winner": "Winner",
+                "spread": "Handicap",
                 "total": "Total",
-                "winner": "Ganador",
-                "spread": "Desventaja",
-                "double-chance": "Doble oportunidad"
+                "double-chance": "Double chance"
             },
-            "pending": "Pendiente",
             "odd-tooltip": {
                 "scoring": {
-                    "goals": "objetivos",
-                    "points": "puntos"
+                    "goals": "goals",
+                    "points": "points"
                 },
                 "match-resolve": {
-                    "overtime": "incluyendo posibles horas extras",
-                    "regular": "en tiempo regular"
+                    "regular": "in regular time",
+                    "overtime": "including possible overtime"
                 },
+                "winner": "{{team}} will win the match {{matchResolve}}.",
+                "draw": "The match will end in a draw {{matchResolve}}.",
                 "total": {
-                    "over": "El número total de {{scoring}} en el partido {{matchResolve}} será mayor que {{total}}.",
-                    "under": "El número total de {{scoring}} en el partido {{matchResolve}} será menor que {{total}}."
+                    "over": "The total number of {{scoring}} in the match {{matchResolve}} will be more than {{total}}.",
+                    "under": "The total number of {{scoring}} in the match {{matchResolve}} will be less than {{total}}."
                 },
                 "spread": {
-                    "minus": "{{team}} ganará el partido con una diferencia de más de {{spread}} {{scoring}} {{matchResolve}}.",
-                    "plus": "{{team}} ganará el partido o perderá por menos de {{spread}} {{scoring}} {{matchResolve}}."
+                    "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
+                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
-                    "12": "{{team}} o {{team2}} ganará el partido {{matchResolve}}.",
-                    "1x2": "{{team}} ganará el partido o el partido terminará en empate {{matchResolve}}."
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}.",
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
                 },
-                "winner": "{{team}} ganará el partido {{matchResolve}}.",
-                "draw": "El partido terminará en empate {{matchResolve}}.",
-                "bonus": "¡{{bonus}} bonificación adicional al ganar!"
-            },
-            "no-liquidity": "sin liquidez"
+                "bonus": "{{bonus}} added bonus on win!"
+            }
         },
         "market-details": {
             "price": "Precio",
@@ -566,11 +566,11 @@
         "winnings-are-forfeit": "*Las ganancias no reclamadas dentro de {{amount}} días de la resolución de un mercado se perderán.",
         "search-field": "Buscar billetera",
         "stats": {
-            "trades": "Vientos alisios",
-            "in-vaults": "en bóvedas",
-            "highest-win": "victoria más alta",
-            "lifetime-wins": "Victorias de por vida",
-            "total-volume": "Volumen total"
+            "total-volume": "Total volume",
+            "trades": "Trades",
+            "highest-win": "Highest win",
+            "lifetime-wins": "Lifetime wins",
+            "in-vaults": "In vaults"
         }
     },
     "mint-world-cup-nft": {
@@ -757,38 +757,38 @@
         "warning": "*El equipo de tiempo extra se reserva el derecho de descalificar monederos que sospechemos que manipulan el sistema."
     },
     "wizard": {
+        "title": "Get Started!",
         "steps": {
             "title": {
-                "connect-wallet": "Conectar billetera",
-                "fund": "Financiar con ETH",
-                "exchange": "Obtener CriptoUSD",
-                "trade": "Mercados de tiempo extra"
+                "connect-wallet": "Connect Wallet",
+                "fund": "Fund with ETH",
+                "exchange": "Get Crypto USD",
+                "trade": "Overtime Markets"
             },
             "description": {
-                "connect-wallet": "Si no tiene Optimism Connected Wallet instalado, se le indicará que instale una billetera de su elección antes de poder conectarla.",
-                "exchange": "Overtime utiliza monedas estables populares (Crypto USD) para ejecutar operaciones. Al hacer clic en el botón Intercambiar a sUSD, cambie sin problemas ETH a la cantidad deseada de monedas estables.",
-                "fund": "Antes de que pueda usar Overtime, primero debe obtener ETH en su billetera conectada Optimism. Después de hacer clic en el botón Fondo, elija una de las opciones disponibles para continuar.",
-                "trade": "Ahora tiene fondos y está listo para usar Overtime Markets. ¡Buena suerte!"
+                "connect-wallet": "If you don't have Optimism connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
+                "fund": "Before you can use Overtime, first you need to get ETH on your Optimism connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
+                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to sUSD button, seamlessly swap ETH to a desired amount of stablecoins.",
+                "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
             },
             "action": {
-                "exchange": "Cambio a USD",
-                "connect-wallet": "Conectar billetera",
-                "connected": "Conectado",
-                "fund": "Financiar con ETH",
-                "trade": "Comercio en horas extras"
+                "connect-wallet": "Connect Wallet",
+                "connected": "Connected",
+                "fund": "Fund with ETH",
+                "exchange": "Exchange to USD",
+                "trade": "Trade on Overtime"
             }
         },
         "fund-modal": {
-            "coppied": "¡Copiado!",
-            "address": "Código QR de tu dirección",
-            "buy": "Fondo con tarjeta",
-            "copy-address": "Copiar dirección",
-            "buy-banxa": "Fondo con Banxa",
-            "title": "Financiar, puentear y enviar",
-            "bridge": "Puente al optimismo",
-            "buy-mt-pelerin": "Fondo con Mt Pelerin",
-            "exchange": "Enviar desde el intercambio"
-        },
-        "title": "¡Empezar!"
+            "title": "Fund, Bridge & Send",
+            "buy": "Fund with card",
+            "buy-banxa": "Fund with Banxa",
+            "buy-mt-pelerin": "Fund with Mt Pelerin",
+            "bridge": "Bridge to optimism  ",
+            "exchange": "Send from exchange",
+            "copy-address": "Copy address",
+            "coppied": "Coppied!",
+            "address": "Your address QR code"
+        }
     }
 }

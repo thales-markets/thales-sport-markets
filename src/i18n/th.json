@@ -267,39 +267,39 @@
             "vs": "VS",
             "draw": "เสมอ",
             "paused": "หยุดชั่วคราว",
+            "pending": "Pending",
+            "no-liquidity": "No liquidity",
             "bet-type": {
-                "total": "ทั้งหมด",
-                "spread": "แฮนดิแคป",
-                "winner": "ผู้ชนะ",
-                "double-chance": "โอกาสสองเท่า"
+                "winner": "Winner",
+                "spread": "Handicap",
+                "total": "Total",
+                "double-chance": "Double chance"
             },
-            "pending": "รอดำเนินการ",
             "odd-tooltip": {
                 "scoring": {
-                    "points": "คะแนน",
-                    "goals": "เป้าหมาย"
+                    "goals": "goals",
+                    "points": "points"
                 },
                 "match-resolve": {
-                    "regular": "ในเวลาปกติ",
-                    "overtime": "รวมถึงการทำงานล่วงเวลาที่เป็นไปได้"
+                    "regular": "in regular time",
+                    "overtime": "including possible overtime"
                 },
+                "winner": "{{team}} will win the match {{matchResolve}}.",
+                "draw": "The match will end in a draw {{matchResolve}}.",
                 "total": {
-                    "over": "จำนวนรวมของ {{scoring}} ในการแข่งขัน {{matchResolve}} จะมากกว่า {{total}}",
-                    "under": "จำนวนรวมของ {{scoring}} ในการแข่งขัน {{matchResolve}} จะน้อยกว่า {{total}}"
+                    "over": "The total number of {{scoring}} in the match {{matchResolve}} will be more than {{total}}.",
+                    "under": "The total number of {{scoring}} in the match {{matchResolve}} will be less than {{total}}."
                 },
                 "spread": {
-                    "plus": "{{team}} จะชนะการแข่งขันหรือแพ้น้อยกว่า {{spread}} {{scoring}} {{matchResolve}}",
-                    "minus": "{{team}} จะชนะการแข่งขันโดยมีผลต่างมากกว่า {{spread}} {{scoring}} {{matchResolve}}"
+                    "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
+                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
-                    "12": "{{team}} หรือ {{team2}} จะชนะการแข่งขัน {{matchResolve}}",
-                    "1x2": "{{team}} จะชนะการแข่งขันหรือการแข่งขันจะจบลงด้วยผลเสมอ {{matchResolve}}"
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}.",
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
                 },
-                "draw": "การแข่งขันจะจบลงด้วยผลเสมอ {{matchResolve}}",
-                "winner": "{{team}} จะชนะการแข่งขัน {{matchResolve}}",
-                "bonus": "{{bonus}} เพิ่มโบนัสเมื่อชนะ!"
-            },
-            "no-liquidity": "ไม่มีสภาพคล่อง"
+                "bonus": "{{bonus}} added bonus on win!"
+            }
         },
         "market-details": {
             "price": "ราคา",
@@ -567,11 +567,11 @@
         "winnings-are-forfeit": "*การชนะที่ไม่ได้อ้างสิทธิ์ภายใน {{amount}} วันของตลาดที่ได้รับการแก้ไขจะถือว่าสละสิทธิ์",
         "search-field": "ค้นหากระเป๋าสตางค์",
         "stats": {
-            "trades": "การค้า",
-            "total-volume": "ปริมาณรวม",
-            "highest-win": "ชนะสูงสุด",
-            "lifetime-wins": "ชัยชนะตลอดชีพ",
-            "in-vaults": "ในห้องใต้ดิน"
+            "total-volume": "Total volume",
+            "trades": "Trades",
+            "highest-win": "Highest win",
+            "lifetime-wins": "Lifetime wins",
+            "in-vaults": "In vaults"
         }
     },
     "mint-world-cup-nft": {
@@ -758,38 +758,38 @@
         "info3": "- ราคารวมจริง (ได้จากการคูณตำแหน่งทีละรายการ)"
     },
     "wizard": {
+        "title": "Get Started!",
         "steps": {
             "title": {
-                "connect-wallet": "เชื่อมต่อ Wallet",
-                "trade": "ตลาดล่วงเวลา",
-                "fund": "กองทุนกับ ETH",
-                "exchange": "รับ Crypto USD"
+                "connect-wallet": "Connect Wallet",
+                "fund": "Fund with ETH",
+                "exchange": "Get Crypto USD",
+                "trade": "Overtime Markets"
             },
             "description": {
-                "exchange": "การทำงานล่วงเวลาใช้ Stablecoins ยอดนิยม (Crypto USD) เพื่อดำเนินการซื้อขาย เมื่อคลิกที่ปุ่มแลกเปลี่ยนเป็น sUSD แลกเปลี่ยน ETH เป็นจำนวน Stablecoin ที่ต้องการได้อย่างราบรื่น",
-                "trade": "ตอนนี้คุณได้รับเงินทุนและพร้อมที่จะใช้ Overtime Markets แล้ว ขอให้โชคดี!",
-                "connect-wallet": "หากคุณไม่ได้ติดตั้ง Wallet ที่เชื่อมต่อกับ Optimism คุณจะถูกกำหนดเส้นทางให้ติดตั้ง Wallet ที่เลือกก่อนที่จะสามารถเชื่อมต่อได้",
-                "fund": "ก่อนที่คุณจะสามารถใช้การทำงานล่วงเวลาได้ ก่อนอื่นคุณต้องได้รับ ETH ในกระเป๋าเงินที่เชื่อมต่อ Optimism ของคุณ หลังจากคลิกที่ปุ่มกองทุน ให้เลือกหนึ่งในตัวเลือกที่มีอยู่เพื่อดำเนินการต่อ"
+                "connect-wallet": "If you don't have Optimism connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
+                "fund": "Before you can use Overtime, first you need to get ETH on your Optimism connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
+                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to sUSD button, seamlessly swap ETH to a desired amount of stablecoins.",
+                "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
             },
             "action": {
-                "connected": "เชื่อมต่อแล้ว",
-                "fund": "กองทุนกับ ETH",
-                "exchange": "แลกเปลี่ยนเป็น USD",
-                "connect-wallet": "เชื่อมต่อ Wallet",
-                "trade": "ซื้อขายล่วงเวลา"
+                "connect-wallet": "Connect Wallet",
+                "connected": "Connected",
+                "fund": "Fund with ETH",
+                "exchange": "Exchange to USD",
+                "trade": "Trade on Overtime"
             }
         },
         "fund-modal": {
-            "exchange": "ส่งจากการแลกเปลี่ยน",
-            "coppied": "คัดลอก!",
-            "address": "รหัส QR ที่อยู่ของคุณ",
-            "copy-address": "คัดลอกที่อยู่",
-            "bridge": "สะพานสู่การมองโลกในแง่ดี",
-            "buy-mt-pelerin": "กองทุนกับ Mt Pelerin",
-            "buy": "กองทุนด้วยบัตร",
-            "title": "กองทุนสะพานและส่ง",
-            "buy-banxa": "กองทุนกับ Banxa"
-        },
-        "title": "เริ่ม!"
+            "title": "Fund, Bridge & Send",
+            "buy": "Fund with card",
+            "buy-banxa": "Fund with Banxa",
+            "buy-mt-pelerin": "Fund with Mt Pelerin",
+            "bridge": "Bridge to optimism  ",
+            "exchange": "Send from exchange",
+            "copy-address": "Copy address",
+            "coppied": "Coppied!",
+            "address": "Your address QR code"
+        }
     }
 }

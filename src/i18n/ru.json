@@ -270,39 +270,39 @@
             "vs": "VS",
             "draw": "Draw",
             "paused": "Paused",
+            "pending": "Pending",
+            "no-liquidity": "No liquidity",
             "bet-type": {
-                "total": "Общее количество",
-                "winner": "Победитель",
-                "spread": "Гандикап",
-                "double-chance": "Двойной шанс"
+                "winner": "Winner",
+                "spread": "Handicap",
+                "total": "Total",
+                "double-chance": "Double chance"
             },
-            "pending": "В ожидании",
             "odd-tooltip": {
                 "scoring": {
-                    "goals": "цели",
-                    "points": "точки"
+                    "goals": "goals",
+                    "points": "points"
                 },
                 "match-resolve": {
-                    "regular": "в основное время",
-                    "overtime": "включая возможные сверхурочные"
+                    "regular": "in regular time",
+                    "overtime": "including possible overtime"
                 },
+                "winner": "{{team}} will win the match {{matchResolve}}.",
+                "draw": "The match will end in a draw {{matchResolve}}.",
                 "total": {
-                    "over": "Общее количество {{scoring}} в матче {{matchResolve}} будет больше, чем {{total}}.",
-                    "under": "Общее количество {{scoring}} в матче {{matchResolve}} будет меньше {{total}}."
+                    "over": "The total number of {{scoring}} in the match {{matchResolve}} will be more than {{total}}.",
+                    "under": "The total number of {{scoring}} in the match {{matchResolve}} will be less than {{total}}."
                 },
                 "spread": {
-                    "plus": "{{team}} выиграет матч или проиграет с разницей менее чем в {{spread}} {{scoring}} {{matchResolve}}.",
-                    "minus": "{{team}} выиграет матч с разницей более {{spread}} {{scoring}} {{matchResolve}}."
+                    "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
+                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
-                    "12": "{{team}} или {{team2}} выиграют матч {{matchResolve}}.",
-                    "1x2": "{{team}} выиграет матч, либо матч закончится ничьей {{matchResolve}}."
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}.",
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
                 },
-                "winner": "{{team}} выиграет матч {{matchResolve}}.",
-                "draw": "Матч завершится ничьей {{matchResolve}}.",
-                "bonus": "{{bonus}} дополнительный бонус при победе!"
-            },
-            "no-liquidity": "Нет ликвидности"
+                "bonus": "{{bonus}} added bonus on win!"
+            }
         },
         "market-details": {
             "price": "Price",
@@ -569,11 +569,11 @@
         "winnings-are-forfeit": "*Выигрыши, не запрошенные в течение {{amount}} дней после решения рынка, аннулируются.",
         "search-field": "Поиск кошелька",
         "stats": {
-            "highest-win": "Самая высокая победа",
-            "in-vaults": "В хранилищах",
-            "total-volume": "Общий объем",
-            "trades": "Сделки",
-            "lifetime-wins": "Пожизненные победы"
+            "total-volume": "Total volume",
+            "trades": "Trades",
+            "highest-win": "Highest win",
+            "lifetime-wins": "Lifetime wins",
+            "in-vaults": "In vaults"
         }
     },
     "mint-world-cup-nft": {
@@ -760,38 +760,38 @@
         "info2": "- Выплаченная сумма"
     },
     "wizard": {
+        "title": "Get Started!",
         "steps": {
             "title": {
-                "connect-wallet": "Подключить кошелек",
-                "trade": "Рынки сверхурочной работы",
-                "exchange": "Получить криптовалюту USD",
-                "fund": "Фонд с ETH"
+                "connect-wallet": "Connect Wallet",
+                "fund": "Fund with ETH",
+                "exchange": "Get Crypto USD",
+                "trade": "Overtime Markets"
             },
             "description": {
-                "fund": "Прежде чем вы сможете использовать Overtime, сначала вам нужно получить ETH в подключенном кошельке Optimism. После нажатия на кнопку «Пополнить» выберите один из доступных вариантов, чтобы продолжить.",
-                "connect-wallet": "Если у вас не установлен подключенный кошелек Optimism, вам будет предложено установить выбранный кошелек, прежде чем вы сможете его подключить.",
-                "trade": "Теперь у вас есть средства и вы готовы использовать Overtime Markets. Удачи!",
-                "exchange": "Overtime использует популярные стейблкоины (Crypto USD) для совершения сделок. Нажав кнопку «Обмен на sUSD», вы можете легко обменять ETH на желаемое количество стейблкоинов."
+                "connect-wallet": "If you don't have Optimism connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
+                "fund": "Before you can use Overtime, first you need to get ETH on your Optimism connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
+                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to sUSD button, seamlessly swap ETH to a desired amount of stablecoins.",
+                "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
             },
             "action": {
-                "connected": "Связанный",
-                "exchange": "Обмен на доллары",
-                "fund": "Фонд с ETH",
-                "trade": "Торговля сверхурочной работой",
-                "connect-wallet": "Подключить кошелек"
+                "connect-wallet": "Connect Wallet",
+                "connected": "Connected",
+                "fund": "Fund with ETH",
+                "exchange": "Exchange to USD",
+                "trade": "Trade on Overtime"
             }
         },
         "fund-modal": {
-            "copy-address": "Скопировать адрес",
-            "exchange": "Отправить с биржи",
-            "buy-banxa": "Фонд с Banxa",
-            "buy": "Фонд с картой",
-            "bridge": "Мост к оптимизму",
-            "coppied": "Скопировано!",
-            "title": "Фонд, Мост и Отправить",
-            "address": "Ваш адрес QR-код",
-            "buy-mt-pelerin": "Фонд с горой Пелерин"
-        },
-        "title": "Начать!"
+            "title": "Fund, Bridge & Send",
+            "buy": "Fund with card",
+            "buy-banxa": "Fund with Banxa",
+            "buy-mt-pelerin": "Fund with Mt Pelerin",
+            "bridge": "Bridge to optimism  ",
+            "exchange": "Send from exchange",
+            "copy-address": "Copy address",
+            "coppied": "Coppied!",
+            "address": "Your address QR code"
+        }
     }
 }
