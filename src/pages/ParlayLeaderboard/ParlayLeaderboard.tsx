@@ -6,13 +6,13 @@ import { USD_SIGN } from 'constants/currency';
 import { OddsType } from 'constants/markets';
 import { t } from 'i18next';
 import { AddressLink } from 'pages/Rewards/styled-components';
-
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { CellProps } from 'react-table';
 import { getIsAppReady } from 'redux/modules/app';
+import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -41,6 +41,7 @@ const ParlayLeaderboard: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const selectedOddsType = useSelector(getOddsType);
     const [searchText, setSearchText] = useState<string>('');
     const [expandStickyRow, setExpandStickyRowState] = useState<boolean>(false);
     const query = useParlayLeaderboardQuery(
@@ -83,7 +84,7 @@ const ParlayLeaderboard: React.FC = () => {
                         )}
                     </StickyCell>
                     <StickyCell>{truncateAddress(data.account, 5)}</StickyCell>
-                    <StickyCell>{formatMarketOdds(OddsType.Decimal, data.totalQuote)}</StickyCell>
+                    <StickyCell>{formatMarketOdds(selectedOddsType, data.totalQuote)}</StickyCell>
                     <StickyCell>{formatCurrencyWithSign(USD_SIGN, data.sUSDPaid, 2)}</StickyCell>
                     <StickyCell>{formatCurrencyWithSign(USD_SIGN, data.totalAmount, 2)}</StickyCell>
                     <ExpandStickyRowIcon
@@ -91,10 +92,10 @@ const ParlayLeaderboard: React.FC = () => {
                         onClick={() => setExpandStickyRowState(!expandStickyRow)}
                     />
                 </StickyContrainer>
-                <ExpandedContainer hide={!expandStickyRow}>{getExpandedRow(data)}</ExpandedContainer>
+                <ExpandedContainer hide={!expandStickyRow}>{getExpandedRow(data, selectedOddsType)}</ExpandedContainer>
             </StickyRow>
         );
-    }, [expandStickyRow, parlays, walletAddress]);
+    }, [expandStickyRow, parlays, walletAddress, selectedOddsType]);
 
     return (
         <Container>
@@ -165,7 +166,7 @@ const ParlayLeaderboard: React.FC = () => {
                         accessor: 'totalQuote',
                         Header: <>{t('parlay-leaderboard.sidebar.quote')}</>,
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['totalQuote']>) => (
-                            <TableText>{formatMarketOdds(OddsType.Decimal, cellProps.cell.value)}</TableText>
+                            <TableText>{formatMarketOdds(selectedOddsType, cellProps.cell.value)}</TableText>
                         ),
                         sortable: true,
                         sortType: quoteSort(),
@@ -211,7 +212,7 @@ const ParlayLeaderboard: React.FC = () => {
                                 <PositionSymbol
                                     symbolAdditionalText={{
                                         text: formatMarketOdds(
-                                            OddsType.Decimal,
+                                            selectedOddsType,
                                             row.original.marketQuotes ? row.original.marketQuotes[index] : 0
                                         ),
                                         textStyle: {
@@ -247,7 +248,7 @@ const ParlayLeaderboard: React.FC = () => {
                             <LastExpandedSection style={{ gap: 20 }}>
                                 <QuoteWrapper>
                                     <QuoteLabel>{t('parlay-leaderboard.sidebar.total-quote')}:</QuoteLabel>
-                                    <QuoteText>{formatMarketOdds(OddsType.Decimal, row.original.totalQuote)}</QuoteText>
+                                    <QuoteText>{formatMarketOdds(selectedOddsType, row.original.totalQuote)}</QuoteText>
                                 </QuoteWrapper>
 
                                 <QuoteWrapper>
@@ -293,7 +294,7 @@ export const getOpacity = (position: PositionData) => {
     }
 };
 
-const getExpandedRow = (parlay: ParlayMarketWithRank) => {
+const getExpandedRow = (parlay: ParlayMarketWithRank, selectedOddsType: OddsType) => {
     const gameList = parlay.sportMarketsFromContract.map((address: string, index: number) => {
         const position = parlay.positions.find((position: any) => position.market.address == address);
         if (!position) return;
@@ -313,7 +314,7 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
                 </ParlayRowText>
                 <PositionSymbol
                     symbolAdditionalText={{
-                        text: formatMarketOdds(OddsType.Decimal, parlay.marketQuotes ? parlay.marketQuotes[index] : 0),
+                        text: formatMarketOdds(selectedOddsType, parlay.marketQuotes ? parlay.marketQuotes[index] : 0),
                         textStyle: {
                             fontSize: '10.5px',
                             marginLeft: '10px',
@@ -347,7 +348,7 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
             <LastExpandedSection style={{ gap: 20 }}>
                 <QuoteWrapper>
                     <QuoteLabel>{t('parlay-leaderboard.sidebar.total-quote')}:</QuoteLabel>
-                    <QuoteText>{formatMarketOdds(OddsType.Decimal, parlay.totalQuote)}</QuoteText>
+                    <QuoteText>{formatMarketOdds(selectedOddsType, parlay.totalQuote)}</QuoteText>
                 </QuoteWrapper>
 
                 <QuoteWrapper>
