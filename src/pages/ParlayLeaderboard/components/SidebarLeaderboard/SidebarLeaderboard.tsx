@@ -23,10 +23,10 @@ import {
     ParlayRow,
     ParlayRowTeam,
     ParlayRowMatch,
-    QuoteText,
     Rank,
     Title,
     TitleLabel,
+    ParlayRowResult,
 } from './styled-components';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import {
@@ -193,7 +193,9 @@ const SidebarLeaderboard: React.FC = () => {
                                                                 <>{getOddTooltipText(positionEnum, position.market)}</>
                                                             }
                                                         />
-                                                        <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
+                                                        <ParlayRowResult>
+                                                            {getParlayItemStatus(position.market)}
+                                                        </ParlayRowResult>
                                                     </ParlayRow>
                                                 )
                                             );

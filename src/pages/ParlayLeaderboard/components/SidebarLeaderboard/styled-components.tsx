@@ -103,7 +103,6 @@ export const ExpandedRow = styled(FlexDivColumnCentered)``;
 
 export const ParlayRow = styled(FlexDivRowCentered)`
     margin-top: 5px;
-    justify-content: start;
     &:last-child {
         margin-bottom: 10px;
     }
@@ -118,13 +117,17 @@ export const QuoteText = styled.span`
 `;
 
 export const ParlayRowMatch = styled(QuoteText)`
-    max-width: 190px;
+    max-width: 165px;
     padding-left: 7px;
+`;
+
+export const ParlayRowResult = styled(QuoteText)`
+    padding-right: 7px;
 `;
 
 export const ParlayRowTeam = styled.span`
     white-space: nowrap;
-    width: 190px;
+    width: 165px;
     overflow: hidden;
     text-overflow: ellipsis;
 `;
