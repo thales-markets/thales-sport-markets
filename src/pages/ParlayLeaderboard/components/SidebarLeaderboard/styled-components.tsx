@@ -102,7 +102,7 @@ export const ArrowIcon = styled.i`
 export const ExpandedRow = styled(FlexDivColumnCentered)``;
 
 export const ParlayRow = styled(FlexDivRowCentered)`
-    margin-top: 5px;
+    margin-top: 8px;
     &:last-child {
         margin-bottom: 10px;
     }
