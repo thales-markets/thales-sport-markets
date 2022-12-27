@@ -233,12 +233,12 @@ const ParlayLeaderboard: React.FC = () => {
                             <FirstSection>{toRender}</FirstSection>
                             <LastExpandedSection style={{ gap: 20 }}>
                                 <QuoteWrapper>
-                                    <QuoteLabel>Total Quote:</QuoteLabel>
+                                    <QuoteLabel>{t('parlay-leaderboard.sidebar.total-quote')}:</QuoteLabel>
                                     <QuoteText>{formatMarketOdds(OddsType.Decimal, row.original.totalQuote)}</QuoteText>
                                 </QuoteWrapper>
 
                                 <QuoteWrapper>
-                                    <QuoteLabel>Total Amount:</QuoteLabel>
+                                    <QuoteLabel>{t('parlay-leaderboard.sidebar.total-amount')}:</QuoteLabel>
                                     <QuoteText>
                                         {formatCurrencyWithKey(USD_SIGN, row.original.totalAmount, 2)}
                                     </QuoteText>

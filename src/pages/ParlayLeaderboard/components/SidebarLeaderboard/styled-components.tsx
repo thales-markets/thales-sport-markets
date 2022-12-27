@@ -128,20 +128,3 @@ export const ParlayRowTeam = styled.span`
     overflow: hidden;
     text-overflow: ellipsis;
 `;
-
-export const ParlayRowSummary = styled(FlexDivCentered)`
-    margin-top: 15px;
-    margin-bottom: 5px;
-`;
-
-export const QuoteWrapper = styled(FlexDivCentered)`
-    margin: 0 5px;
-`;
-
-export const QuoteLabel = styled.span`
-    font-weight: 400;
-    font-size: 12px;
-    letter-spacing: 0.025em;
-    text-transform: uppercase;
-    margin-right: 5px;
-`;

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
+import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
 import { buildHref } from 'utils/routes';
 import {
@@ -27,9 +27,6 @@ import {
     Rank,
     Title,
     TitleLabel,
-    ParlayRowSummary,
-    QuoteWrapper,
-    QuoteLabel,
 } from './styled-components';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import {
@@ -67,13 +64,7 @@ const SidebarLeaderboard: React.FC = () => {
     );
 
     const parlaysData = useMemo(() => {
-        return query.isSuccess
-            ? query.data
-                  .sort((a, b) => {
-                      return b.totalAmount - a.totalAmount;
-                  })
-                  .slice(0, SIDEBAR_NUMBER_OF_TOP_USERS)
-            : [];
+        return query.isSuccess ? query.data.slice(0, SIDEBAR_NUMBER_OF_TOP_USERS) : [];
     }, [query.isSuccess, query.data]);
 
     return (
@@ -189,20 +180,6 @@ const SidebarLeaderboard: React.FC = () => {
                                                 )
                                             );
                                         })}
-                                        <ParlayRowSummary>
-                                            <QuoteWrapper>
-                                                <QuoteLabel>{t('parlay-leaderboard.sidebar.total-quote')}:</QuoteLabel>
-                                                <QuoteText>
-                                                    {formatMarketOdds(selectedOddsType, parlay.totalQuote)}
-                                                </QuoteText>
-                                            </QuoteWrapper>
-                                            <QuoteWrapper>
-                                                <QuoteLabel>{t('parlay-leaderboard.sidebar.total-amount')}:</QuoteLabel>
-                                                <QuoteText>
-                                                    {formatCurrencyWithKey(USD_SIGN, parlay.totalAmount, 2)}
-                                                </QuoteText>
-                                            </QuoteWrapper>
-                                        </ParlayRowSummary>
                                     </ExpandedRow>
                                 )}
                             </React.Fragment>
