@@ -27,7 +27,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
     const selectedOddsType = useSelector(getOddsType);
 
     const isTicketLost = markets.some((market) => market.isResolved && !market.winning);
-    const isTicketResolved = markets.every((market) => market.isResolved);
+    const isTicketResolved = markets.every((market) => market.isResolved || market.isCanceled) || isTicketLost;
     const isParlay = markets.length > 1;
 
     return (

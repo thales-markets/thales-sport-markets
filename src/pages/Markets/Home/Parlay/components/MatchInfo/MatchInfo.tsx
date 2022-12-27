@@ -78,7 +78,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                 ) : market?.isCanceled ? (
                     <Canceled className={`icon icon--open`} />
                 ) : (
-                    <></>
+                    <Empty className={`icon icon--open`} />
                 )
             ) : (
                 <XButton
@@ -116,17 +116,20 @@ const Bonus = styled.div`
     margin-right: 4px;
 `;
 
-const Correct = styled.i`
+const Icon = styled.i`
     font-size: 12px;
+`;
+const Correct = styled(Icon)`
     color: #339d6a;
 `;
-const Wrong = styled.i`
-    font-size: 12px;
+const Wrong = styled(Icon)`
     color: #ca4c53;
 `;
-const Canceled = styled.i`
-    font-size: 12px;
+const Canceled = styled(Icon)`
     color: #ffffff;
+`;
+const Empty = styled(Icon)`
+    visibility: hidden;
 `;
 
 export default MatchInfo;
