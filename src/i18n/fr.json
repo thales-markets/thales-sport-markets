@@ -854,14 +854,14 @@
         "warning": "* L'équipe des heures supplémentaires se réserve le droit de disqualifier les portefeuilles que nous soupçonnons de jouer avec le système.",
         "info1": "- Nombre de positions sur le parlay",
         "sidebar": {
-            "paid": "Payé",
-            "total-amount": "Montant total",
-            "title-parlay": "Parler",
-            "quote": "Devis",
-            "player": "Joueur",
-            "won": "A gagné",
-            "total-quote": "Devis total",
-            "title-leaderboard": "Classement"
+            "title-parlay": "Parlay",
+            "title-leaderboard": "Leaderboard",
+            "player": "Player",
+            "quote": "Quote",
+            "paid": "Paid",
+            "won": "Won",
+            "total-quote": "Total Quote",
+            "total-amount": "Total Amount"
         }
     },
     "wizard": {

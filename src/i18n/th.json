@@ -757,14 +757,14 @@
         "warning": "*ทีมงานล่วงเวลามีสิทธิ์ตัดสิทธิ์กระเป๋าเงินที่เราสงสัยว่าเล่นเกมระบบ",
         "info3": "- ราคารวมจริง (ได้จากการคูณตำแหน่งทีละรายการ)",
         "sidebar": {
-            "quote": "อ้าง",
-            "won": "วอน",
-            "total-amount": "จำนวนเงินทั้งหมด",
-            "total-quote": "ใบเสนอราคาทั้งหมด",
-            "player": "ผู้เล่น",
-            "title-parlay": "พาร์เลย์",
-            "paid": "จ่าย",
-            "title-leaderboard": "กระดานผู้นำ"
+            "title-parlay": "Parlay",
+            "title-leaderboard": "Leaderboard",
+            "player": "Player",
+            "quote": "Quote",
+            "paid": "Paid",
+            "won": "Won",
+            "total-quote": "Total Quote",
+            "total-amount": "Total Amount"
         }
     },
     "wizard": {

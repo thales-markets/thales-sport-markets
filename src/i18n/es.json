@@ -756,14 +756,14 @@
         "info3": "- Cotización total real (obtenida al multiplicar posiciones individualmente)",
         "warning": "*El equipo de tiempo extra se reserva el derecho de descalificar monederos que sospechemos que manipulan el sistema.",
         "sidebar": {
-            "won": "Ganado",
-            "total-amount": "Cantidad total",
-            "player": "Jugador",
-            "title-parlay": "Incrementar dinero en apuestas",
-            "paid": "Pagado",
-            "quote": "Cita",
-            "title-leaderboard": "Tabla de clasificación",
-            "total-quote": "Cotización total"
+            "title-parlay": "Parlay",
+            "title-leaderboard": "Leaderboard",
+            "player": "Player",
+            "quote": "Quote",
+            "paid": "Paid",
+            "won": "Won",
+            "total-quote": "Total Quote",
+            "total-amount": "Total Amount"
         }
     },
     "wizard": {

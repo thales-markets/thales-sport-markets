@@ -756,14 +756,14 @@
         "info3": "- 实际总报价（通过单独乘以头寸获得）",
         "info": "如果多个 parlays 有相同的报价，以下将按各自的顺序用作决胜局：",
         "sidebar": {
-            "won": "韩元",
-            "paid": "有薪酬的",
-            "total-amount": "总金额",
-            "quote": "引用",
-            "player": "播放器",
-            "title-parlay": "过关",
-            "title-leaderboard": "排行榜",
-            "total-quote": "总报价"
+            "title-parlay": "Parlay",
+            "title-leaderboard": "Leaderboard",
+            "player": "Player",
+            "quote": "Quote",
+            "paid": "Paid",
+            "won": "Won",
+            "total-quote": "Total Quote",
+            "total-amount": "Total Amount"
         }
     },
     "wizard": {

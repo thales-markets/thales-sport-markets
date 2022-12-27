@@ -753,14 +753,14 @@
         "info2": "- Der gezahlte Betrag",
         "info1": "- Anzahl der Positionen im Parlay",
         "sidebar": {
-            "paid": "Bezahlt",
-            "player": "Spieler",
-            "total-amount": "Gesamtmenge",
-            "won": "Gewonnen",
-            "quote": "Zitieren",
-            "title-parlay": "Spielen",
-            "total-quote": "Gesamtangebot",
-            "title-leaderboard": "Bestenliste"
+            "title-parlay": "Parlay",
+            "title-leaderboard": "Leaderboard",
+            "player": "Player",
+            "quote": "Quote",
+            "paid": "Paid",
+            "won": "Won",
+            "total-quote": "Total Quote",
+            "total-amount": "Total Amount"
         }
     },
     "wizard": {
