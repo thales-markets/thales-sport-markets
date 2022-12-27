@@ -81,14 +81,12 @@ export const ColumnLabel = styled.span`
     width: 100%;
 `;
 
-export const ColumnWrapper = styled(FlexDiv)`
+export const ColumnWrapper = styled(FlexDiv)<{ padding?: string }>`
     width: 32%;
     align-items: center;
     justify-content: center;
     text-align: center;
-    &:first-child {
-        width: 36%;
-    }
+    ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
     &:last-child {
         margin-right: 5px;
     }

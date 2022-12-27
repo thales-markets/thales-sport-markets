@@ -87,7 +87,7 @@ const SidebarLeaderboard: React.FC = () => {
                 </SPAAnchor>
                 <LeaderboardContainer>
                     <HeaderRow>
-                        <ColumnWrapper>
+                        <ColumnWrapper padding={'0 0 0 15px'}>
                             <ColumnLabel>{t('parlay-leaderboard.sidebar.player')}</ColumnLabel>
                         </ColumnWrapper>
                         <ColumnWrapper>
@@ -109,7 +109,9 @@ const SidebarLeaderboard: React.FC = () => {
                                 >
                                     <ColumnWrapper>
                                         <Rank>{index + 1}</Rank>
-                                        <DataLabel>{truncateAddress(parlay.account, 3, 3)}</DataLabel>
+                                        <DataLabel title={parlay.account}>
+                                            {truncateAddress(parlay.account, 3, 3)}
+                                        </DataLabel>
                                     </ColumnWrapper>
                                     <ColumnWrapper>
                                         <DataLabel>{formatMarketOdds(selectedOddsType, parlay.totalQuote)}</DataLabel>
