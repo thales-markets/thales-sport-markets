@@ -74,7 +74,8 @@ const DappLayout: React.FC = ({ children }) => {
     return (
         <>
             {isAppReady ? (
-                networkId && !isNetworkSupported(networkId) ? (
+                // Exclude Wizard page because of Bridge functionality
+                networkId && !isNetworkSupported(networkId) && location.pathname !== ROUTES.Wizard ? (
                     <UnsupportedNetwork />
                 ) : (
                     <Background>

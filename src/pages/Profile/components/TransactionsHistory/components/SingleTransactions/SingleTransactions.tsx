@@ -158,6 +158,9 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
 };
 
 const getPositionStatus = (tx: any) => {
+    if (tx.type !== 'buy') {
+        return <StatusWrapper color="#808080">SOLD</StatusWrapper>;
+    }
     if (tx.wholeMarket.isCanceled) {
         return <StatusWrapper color="#808080">CANCELED</StatusWrapper>;
     }

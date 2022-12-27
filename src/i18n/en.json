@@ -675,7 +675,7 @@
             "bridge": "Bridge to optimism  ",
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
-            "coppied": "Coppied!",
+            "copied": "Copied!",
             "address": "Your address QR code"
         }
     },
@@ -779,6 +779,16 @@
         "info": "If multiple parlays have the same quote the following will be used as tie-breakers in respective order:",
         "info1": "- Number of positions on the parlay",
         "info2": "- The amount paid",
-        "info3": "- Actual total quote (gotten by multiplying positions individually)"
+        "info3": "- Actual total quote (gotten by multiplying positions individually)",
+        "sidebar": {
+            "title-parlay": "Parlay",
+            "title-leaderboard": "Leaderboard",
+            "player": "Player",
+            "quote": "Quote",
+            "paid": "Paid",
+            "won": "Won",
+            "total-quote": "Total Quote",
+            "total-amount": "Total Amount"
+        }
     }
 }

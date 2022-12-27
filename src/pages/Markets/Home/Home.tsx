@@ -38,6 +38,10 @@ import SportFilter from '../components/SportFilter';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import TagsDropdown from '../components/TagsDropdown';
 
+const SidebarLeaderboard = lazy(
+    () => import(/* webpackChunkName: "SidebarLeaderboard" */ 'pages/ParlayLeaderboard/components/SidebarLeaderboard')
+);
+
 const Parlay = lazy(() => import(/* webpackChunkName: "Parlay" */ './Parlay'));
 
 const ParlayMobileModal = lazy(
@@ -460,6 +464,9 @@ const Home: React.FC = () => {
                             );
                         })}
                     </SportFiltersContainer>
+                    <Suspense fallback={<Loader />}>
+                        <SidebarLeaderboard />
+                    </Suspense>
                 </SidebarContainer>
                 {/* MAIN PART */}
                 {sportMarketsQueryNew.isLoading ? (
