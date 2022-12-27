@@ -298,8 +298,8 @@
                     "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
-                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}.",
-                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             }
@@ -754,7 +754,17 @@
         "info": "Si varios parlays tienen la misma cotización, se usará lo siguiente como desempate en el orden respectivo:",
         "info2": "- La cantidad pagada",
         "info3": "- Cotización total real (obtenida al multiplicar posiciones individualmente)",
-        "warning": "*El equipo de tiempo extra se reserva el derecho de descalificar monederos que sospechemos que manipulan el sistema."
+        "warning": "*El equipo de tiempo extra se reserva el derecho de descalificar monederos que sospechemos que manipulan el sistema.",
+        "sidebar": {
+            "won": "Ganado",
+            "total-amount": "Cantidad total",
+            "player": "Jugador",
+            "title-parlay": "Incrementar dinero en apuestas",
+            "paid": "Pagado",
+            "quote": "Cita",
+            "title-leaderboard": "Tabla de clasificación",
+            "total-quote": "Cotización total"
+        }
     },
     "wizard": {
         "title": "Get Started!",
@@ -788,7 +798,8 @@
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
             "coppied": "Coppied!",
-            "address": "Your address QR code"
+            "address": "Your address QR code",
+            "copied": "¡Copiado!"
         }
     }
 }

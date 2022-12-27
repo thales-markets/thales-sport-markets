@@ -295,8 +295,8 @@
                     "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
-                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}.",
-                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             }
@@ -755,7 +755,17 @@
         "info2": "- จำนวนเงินที่จ่าย",
         "info1": "- จำนวนตำแหน่งในพาร์เลย์",
         "warning": "*ทีมงานล่วงเวลามีสิทธิ์ตัดสิทธิ์กระเป๋าเงินที่เราสงสัยว่าเล่นเกมระบบ",
-        "info3": "- ราคารวมจริง (ได้จากการคูณตำแหน่งทีละรายการ)"
+        "info3": "- ราคารวมจริง (ได้จากการคูณตำแหน่งทีละรายการ)",
+        "sidebar": {
+            "quote": "อ้าง",
+            "won": "วอน",
+            "total-amount": "จำนวนเงินทั้งหมด",
+            "total-quote": "ใบเสนอราคาทั้งหมด",
+            "player": "ผู้เล่น",
+            "title-parlay": "พาร์เลย์",
+            "paid": "จ่าย",
+            "title-leaderboard": "กระดานผู้นำ"
+        }
     },
     "wizard": {
         "title": "Get Started!",
@@ -789,7 +799,8 @@
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
             "coppied": "Coppied!",
-            "address": "Your address QR code"
+            "address": "Your address QR code",
+            "copied": "คัดลอก!"
         }
     }
 }

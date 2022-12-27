@@ -87,7 +87,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [totalQuote, setTotalQuote] = useState(0);
-    const [totalBonus, setTotalBonus] = useState<string>('');
+    const [totalBonusPercentage, setTotalBonusPercentage] = useState<string>('');
+    const [totalBonusCurrency, setTotalBonusCurrency] = useState<string>('');
     const [finalQuotes, setFinalQuotes] = useState<number[]>([]);
     const [skew, setSkew] = useState(0);
     const [totalBuyAmount, setTotalBuyAmount] = useState(0);
@@ -172,7 +173,13 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             const bonusDecimal = getBonus(market) / 100 + 1;
             bonus *= bonusDecimal;
         });
-        setTotalBonus(((bonus - 1) * 100).toFixed(2));
+        setTotalBonusPercentage(((bonus - 1) * 100).toFixed(2));
+
+        if (totalBuyAmount > 0) {
+            const calculatedBonusCurrency = (totalBuyAmount * (100 - (100 - (bonus - 1) * 100))) / 100;
+            setTotalBonusCurrency((totalBuyAmount - calculatedBonusCurrency).toFixed(2));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [markets]);
 
     // Clear Parlay when network is changed
@@ -482,9 +489,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     if (!parlayAmmQuote.error) {
                         const oldTotalQuote = totalQuote;
                         const newTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
+                        const newTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
                         setTotalQuote(newTotalQuote);
                         setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
-                        setTotalBuyAmount(bigNumberFormatter(parlayAmmQuote['totalBuyAmount']));
+                        setTotalBuyAmount(newTotalBuyAmount);
 
                         const fetchedFinalQuotes: number[] = (
                             parlayAmmQuote['finalQuotes'] || []
@@ -498,16 +506,23 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
                         if (oldTotalQuote > 0 && usdAmountValue > 0) {
                             const calculatedReducedTotalBonus =
-                                (Number(formatMarketOdds(OddsType.Decimal, newTotalQuote)) * Number(totalBonus)) /
+                                (Number(formatMarketOdds(OddsType.Decimal, newTotalQuote)) *
+                                    Number(totalBonusPercentage)) /
                                 Number(formatMarketOdds(OddsType.Decimal, oldTotalQuote));
-                            setTotalBonus(calculatedReducedTotalBonus.toFixed(2));
+                            setTotalBonusPercentage(calculatedReducedTotalBonus.toFixed(2));
+                            if (newTotalBuyAmount > 0) {
+                                const calculatedBonusCurrency =
+                                    (newTotalBuyAmount * (100 - calculatedReducedTotalBonus)) / 100;
+                                setTotalBonusCurrency((newTotalBuyAmount - calculatedBonusCurrency).toFixed(2));
+                            }
                         } else {
                             let bonus = 1;
                             markets.forEach((market) => {
                                 const bonusDecimal = getBonus(market) / 100 + 1;
                                 bonus *= bonusDecimal;
                             });
-                            setTotalBonus(((bonus - 1) * 100).toFixed(2));
+                            setTotalBonusPercentage(((bonus - 1) * 100).toFixed(2));
+                            setTotalBonusCurrency('');
                         }
 
                         setTooltipTextMessageUsdAmount(usdAmountValue, fetchedFinalQuotes);
@@ -608,7 +623,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 </RowContainer>
                 <RowContainer>
                     <SummaryLabel>{t('markets.parlay.total-bonus')}:</SummaryLabel>
-                    <SummaryValue>{totalBonus}%</SummaryValue>
+                    <SummaryValue>{totalBonusPercentage}%</SummaryValue>
+                    <SummaryValue isCurrency={true} isVisible={usdAmountValue == 0}>
+                        = +{totalBonusCurrency} USD
+                    </SummaryValue>
                 </RowContainer>
             </RowSummary>
             <Payment

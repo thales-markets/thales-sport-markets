@@ -298,8 +298,8 @@
                     "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
-                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}.",
-                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             }
@@ -757,7 +757,17 @@
         "no-parlays": "За этот период еще не зарегистрировано ни одного выигрышного экспресса.",
         "warning": "*Команда Overtime имеет право дисквалифицировать кошельки, которые мы подозреваем в использовании системы.",
         "info3": "- Фактическая общая котировка (полученная путем умножения позиций по отдельности)",
-        "info2": "- Выплаченная сумма"
+        "info2": "- Выплаченная сумма",
+        "sidebar": {
+            "total-amount": "Общее количество",
+            "player": "Игрок",
+            "won": "Выиграл",
+            "paid": "Оплаченный",
+            "total-quote": "Общая котировка",
+            "quote": "Цитировать",
+            "title-leaderboard": "Таблица лидеров",
+            "title-parlay": "экспресс"
+        }
     },
     "wizard": {
         "title": "Get Started!",
@@ -791,7 +801,8 @@
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
             "coppied": "Coppied!",
-            "address": "Your address QR code"
+            "address": "Your address QR code",
+            "copied": "Скопировано!"
         }
     }
 }

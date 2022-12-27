@@ -298,8 +298,8 @@
                     "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
-                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}.",
-                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             }
@@ -757,7 +757,17 @@
         "info3": "- Quota totale effettiva (ottenuta moltiplicando le singole posizioni)",
         "info": "Se più parlay hanno la stessa quotazione, quanto segue verrà utilizzato come spareggio nel rispettivo ordine:",
         "warning": "*Il team degli straordinari detiene il diritto di squalificare i portafogli che sospettiamo giochino con il sistema.",
-        "info2": "- L'importo pagato"
+        "info2": "- L'importo pagato",
+        "sidebar": {
+            "paid": "Pagato",
+            "won": "Ha vinto",
+            "quote": "Citazione",
+            "player": "Giocatore",
+            "total-quote": "Citazione totale",
+            "title-leaderboard": "Classifica",
+            "total-amount": "Importo totale",
+            "title-parlay": "Parla"
+        }
     },
     "wizard": {
         "title": "Get Started!",
@@ -791,7 +801,8 @@
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
             "coppied": "Coppied!",
-            "address": "Your address QR code"
+            "address": "Your address QR code",
+            "copied": "Copiato!"
         }
     }
 }

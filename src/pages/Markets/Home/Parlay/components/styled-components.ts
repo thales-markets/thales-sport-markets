@@ -26,12 +26,13 @@ export const SummaryLabel = styled.span<{ alignRight?: boolean }>`
     }
 `;
 
-export const SummaryValue = styled.span<{ isInfo?: boolean }>`
+export const SummaryValue = styled.span<{ isInfo?: boolean; isCurrency?: boolean; isVisible?: boolean }>`
     font-weight: 700;
     font-size: 11px;
     line-height: 12px;
     letter-spacing: 0.025em;
-    color: ${(props) => (props.isInfo ? '#5fc694' : '#ffffff')};
+    display: ${(props) => (props.isVisible ? 'none' : '')};
+    color: ${(props) => (props.isInfo || props.isCurrency ? '#5fc694' : '#ffffff')};
     margin-left: ${(props) => (props.isInfo ? 'auto' : '5px')};
 `;
 
