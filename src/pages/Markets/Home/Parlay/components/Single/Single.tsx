@@ -87,7 +87,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     );
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [tokenAmount, setTokenAmount] = useState<number>(0);
-    const [bonus, setBonus] = useState('');
+    const [bonusPercentage, setBonusPercentage] = useState('');
+    const [bonusCurrency, setBonusCurrency] = useState('');
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [maxUsdAmount, setMaxUsdAmount] = useState<number>(0);
     const [availableUsdAmount, setAvailableUsdAmount] = useState<number>(0);
@@ -170,7 +171,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
 
     useEffect(() => {
-        setBonus(getBonus(market).toFixed(2));
+        setBonusPercentage(getBonus(market).toFixed(2));
     }, [market]);
 
     // Clear Parlay when network is changed
@@ -296,11 +297,18 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     if (Number(usdAmountValue) > 0 && maxAvailableTokenAmount > 0) {
                         const newQuote = maxAvailableTokenAmount / Number(usdAmountValue);
                         const calculatedReducedBonus =
-                            (newQuote * Number(bonus)) /
+                            (newQuote * Number(bonusPercentage)) /
                             Number(formatMarketOdds(OddsType.Decimal, getPositionOdds(market)));
-                        setBonus(calculatedReducedBonus.toFixed(2));
+                        setBonusPercentage(calculatedReducedBonus.toFixed(2));
+
+                        if (maxAvailableTokenAmount > 0) {
+                            const calculatedBonusCurrency =
+                                (maxAvailableTokenAmount * (100 - calculatedReducedBonus)) / 100;
+                            setBonusCurrency((maxAvailableTokenAmount - calculatedBonusCurrency).toFixed(2));
+                        }
                     } else {
-                        setBonus(getBonus(market).toFixed(2));
+                        setBonusPercentage(getBonus(market).toFixed(2));
+                        setBonusCurrency('');
                     }
                 }
             }
@@ -598,7 +606,10 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 </RowContainer>
                 <RowContainer>
                     <SummaryLabel>{t('markets.parlay.total-bonus')}:</SummaryLabel>
-                    <SummaryValue>{bonus}%</SummaryValue>
+                    <SummaryValue>{bonusPercentage}%</SummaryValue>
+                    <SummaryValue isCurrency={true} isVisible={usdAmountValue == 0}>
+                        = +{bonusCurrency} USD
+                    </SummaryValue>
                 </RowContainer>
             </RowSummary>
             <Payment

@@ -20,7 +20,7 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
     const isGameResolved = market.isResolved || market.isCanceled;
     const noOdds = market.awayOdds == 0 && market.homeOdds == 0 && !isLive && !isGameResolved && !market.isPaused;
     const showDrawOdds = getVisibilityOfDrawOption(market.tags, market.betType);
-    const spreadTotalText = getSpreadTotalText(market);
+    const spreadTotalText = getSpreadTotalText(market, Position.HOME);
 
     return (
         <Container>

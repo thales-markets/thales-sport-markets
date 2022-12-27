@@ -295,8 +295,8 @@
                     "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
-                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}.",
-                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             }
@@ -751,7 +751,17 @@
         "info": "Wenn mehrere Parlays dieselbe Quote haben, wird Folgendes als Tie-Breaker in der jeweiligen Reihenfolge verwendet:",
         "info3": "- Tatsächliche Gesamtquote (erhalten durch Multiplizieren der Positionen einzeln)",
         "info2": "- Der gezahlte Betrag",
-        "info1": "- Anzahl der Positionen im Parlay"
+        "info1": "- Anzahl der Positionen im Parlay",
+        "sidebar": {
+            "title-parlay": "Parlay",
+            "title-leaderboard": "Leaderboard",
+            "player": "Player",
+            "quote": "Quote",
+            "paid": "Paid",
+            "won": "Won",
+            "total-quote": "Total Quote",
+            "total-amount": "Total Amount"
+        }
     },
     "wizard": {
         "title": "Get Started!",
@@ -785,7 +795,8 @@
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
             "coppied": "Coppied!",
-            "address": "Your address QR code"
+            "address": "Your address QR code",
+            "copied": "Kopiert!"
         }
     }
 }

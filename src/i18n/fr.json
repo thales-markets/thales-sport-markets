@@ -396,8 +396,8 @@
                     "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
-                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}.",
-                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             }
@@ -852,7 +852,17 @@
         "info2": "- Le montant payé",
         "info": "Si plusieurs parlays ont la même citation, ce qui suit sera utilisé comme bris d'égalité dans l'ordre respectif :",
         "warning": "* L'équipe des heures supplémentaires se réserve le droit de disqualifier les portefeuilles que nous soupçonnons de jouer avec le système.",
-        "info1": "- Nombre de positions sur le parlay"
+        "info1": "- Nombre de positions sur le parlay",
+        "sidebar": {
+            "title-parlay": "Parlay",
+            "title-leaderboard": "Leaderboard",
+            "player": "Player",
+            "quote": "Quote",
+            "paid": "Paid",
+            "won": "Won",
+            "total-quote": "Total Quote",
+            "total-amount": "Total Amount"
+        }
     },
     "wizard": {
         "title": "Get Started!",
@@ -886,7 +896,8 @@
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
             "coppied": "Coppied!",
-            "address": "Your address QR code"
+            "address": "Your address QR code",
+            "copied": "Copié !"
         }
     }
 }

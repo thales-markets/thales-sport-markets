@@ -37,7 +37,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
     const parlayStatus = getParlayItemStatus(market);
 
     const symbolText = getSymbolText(positionEnum, market.betType);
-    const spreadTotalText = getSpreadTotalText(market);
+    const spreadTotalText = getSpreadTotalText(market, positionEnum);
 
     return (
         <Wrapper>

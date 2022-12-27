@@ -53,7 +53,10 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                                 cellProps.cell.row.original.wholeMarket.betType
                             );
 
-                            const spreadTotalText = getSpreadTotalText(cellProps.cell.row.original.wholeMarket);
+                            const spreadTotalText = getSpreadTotalText(
+                                cellProps.cell.row.original.wholeMarket,
+                                cellProps.cell.value
+                            );
                             return (
                                 <PositionSymbol
                                     symbolText={symbolText}
