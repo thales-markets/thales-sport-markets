@@ -131,10 +131,12 @@ export const getSymbolText = (position: Position, betType: BetType) => {
     }
 };
 
-export const getSpreadTotalText = (market: SportMarketInfo | MarketData) => {
+export const getSpreadTotalText = (market: SportMarketInfo | MarketData, position: Position) => {
     switch (Number(market.betType)) {
         case BetType.SPREAD:
-            return `${Number(market.spread) > 0 ? '+' : ''}${Number(market.spread) / 100}`;
+            return position === Position.HOME
+                ? `${Number(market.spread) > 0 ? '+' : '-'}${Math.abs(Number(market.spread)) / 100}`
+                : `${Number(market.spread) > 0 ? '-' : '+'}${Math.abs(Number(market.spread)) / 100}`;
         case BetType.TOTAL:
             return `${Number(market.total) / 100}`;
         default:

@@ -82,7 +82,10 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                                 cellProps.cell.row.original.wholeMarket.betType
                             );
 
-                            const spreadTotalText = getSpreadTotalText(cellProps.cell.row.original.wholeMarket);
+                            const spreadTotalText = getSpreadTotalText(
+                                cellProps.cell.row.original.wholeMarket,
+                                convertPositionNameToPositionType(cellProps.cell.value)
+                            );
 
                             return (
                                 <FlexCenter>

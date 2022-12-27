@@ -238,7 +238,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                             : 0;
 
                         const symbolText = getSymbolText(positionEnum, position.market.betType);
-                        const spreadTotalText = getSpreadTotalText(position.market);
+                        const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
 
                         return (
                             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
