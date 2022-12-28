@@ -48,8 +48,9 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                 symbolAdditionalText={{
                     text: formatMarketOdds(selectedOddsType, getPositionOdds(market)),
                     textStyle: {
-                        marginLeft: '10px',
-                        marginRight: '4px',
+                        width: '34px',
+                        marginRight: '3px',
+                        textAlign: 'right',
                     },
                 }}
                 symbolText={symbolText}

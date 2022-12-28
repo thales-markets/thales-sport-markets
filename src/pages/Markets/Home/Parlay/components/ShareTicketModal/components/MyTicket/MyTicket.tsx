@@ -101,7 +101,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
                     <InfoLabel>{t('markets.parlay.share-ticket.total-quote')}:</InfoLabel>
                     <InfoValue>{formatMarketOdds(selectedOddsType, totalQuote)}</InfoValue>
                 </InfoDiv>
-                <InfoDiv end={true}>
+                <InfoDiv>
                     <InfoLabel>{t('markets.parlay.buy-in')}:</InfoLabel>
                     <InfoValue>{formatCurrencyWithSign(USD_SIGN, paid, 2)}</InfoValue>
                 </InfoDiv>
@@ -207,9 +207,8 @@ const InfoWrapper = styled(FlexDivRow)`
     padding: 5px 5px 0 5px;
 `;
 
-const InfoDiv = styled(FlexDiv)<{ end?: boolean }>`
-    ${(props) => (props.end ? 'justify-content: end;' : '')}
-`;
+const InfoDiv = styled(FlexDiv)``;
+
 const InfoLabel = styled.span`
     font-weight: 600;
 `;
