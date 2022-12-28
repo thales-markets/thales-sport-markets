@@ -8,7 +8,7 @@ import { RootState } from '../rootReducer';
 
 const sliceName = 'parlay';
 
-const DEFAULT_MAX_NUMBER_OF_MATCHES = 4;
+const DEFAULT_MAX_NUMBER_OF_MATCHES = 6;
 
 const getDefaultParlay = (): ParlaysMarketPosition[] => {
     const lsParlay = localStore.get(LOCAL_STORAGE_KEYS.PARLAY);

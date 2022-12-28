@@ -3,7 +3,7 @@ import { GlobalFiltersEnum } from 'constants/markets';
 import { t } from 'i18next';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
 import useSportMarketsQueryNew from 'queries/markets/useSportsMarketsQueryNew';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
@@ -95,6 +95,8 @@ const Parlay: React.FC = () => {
         }
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay, dispatch]);
 
+    const onCloaseValidationModal = useCallback(() => dispatch(resetParlayError()), [dispatch]);
+
     return (
         <Container isMobile={isMobile} isWalletConnected={isWalletConnected}>
             {parlayMarkets.length > 0 ? (
@@ -150,7 +152,7 @@ const Parlay: React.FC = () => {
                     )}
                 </>
             )}
-            {hasParlayError && <ValidationModal onClose={() => dispatch(resetParlayError())} />}
+            {hasParlayError && <ValidationModal onClose={onCloaseValidationModal} />}
         </Container>
     );
 };
