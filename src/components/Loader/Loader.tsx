@@ -19,9 +19,8 @@ const Loader: React.FC = () => {
 };
 
 const Wrapper = styled(FlexDivCentered)`
-    position: fixed;
-    height: 100%;
-    width: 100%;
+    position: relative;
+    height: 100vh;
     background: ${(props) => props.theme.background.primary};
 `;
 
