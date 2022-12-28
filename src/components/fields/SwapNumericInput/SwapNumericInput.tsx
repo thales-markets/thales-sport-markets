@@ -20,6 +20,7 @@ type SwapNumericInputProps = {
     validationMessage?: string;
     readOnly?: boolean;
     isGettingQuote?: boolean;
+    autoFocus?: boolean;
 };
 
 const INVALID_CHARS = ['-', '+', 'e'];
@@ -57,7 +58,7 @@ const SwapNumericInput: React.FC<SwapNumericInputProps> = ({
     return (
         <StyledFieldContainer className="field-container">
             {readOnly ? (
-                <StyledOutput>
+                <StyledOutput disabled={disabled}>
                     {isGettingQuote ? (
                         <LoaderContainer>
                             <SimpleLoader />
@@ -85,8 +86,12 @@ const SwapNumericInput: React.FC<SwapNumericInputProps> = ({
                     step={step || 'any'}
                 />
             )}
-            <Label readOnly={readOnly}>{label}:</Label>
-            <BalanceLabel readOnly={readOnly}>{balanceLabel}</BalanceLabel>
+            <Label readOnly={readOnly} disabled={disabled}>
+                {label}:
+            </Label>
+            <BalanceLabel readOnly={readOnly} disabled={disabled}>
+                {balanceLabel}
+            </BalanceLabel>
             <FieldValidationMessage showValidation={showValidation} message={validationMessage} />
             {note && <FieldNote>{note}</FieldNote>}
         </StyledFieldContainer>
@@ -104,7 +109,7 @@ const StyledInput = styled(Input)`
     font-size: 20px;
 `;
 
-const StyledOutput = styled.div`
+const StyledOutput = styled.div<{ disabled?: boolean }>`
     text-align: end;
     height: 70px;
     padding: 32px 20px 15px 20px;
@@ -115,9 +120,10 @@ const StyledOutput = styled.div`
     line-height: 20px;
     color: ${(props) => props.theme.textColor.primary};
     border: 2px solid ${(props) => props.theme.borderColor.primary};
+    opacity: ${(props) => (props.disabled ? 0.4 : 1)};
 `;
 
-export const Label = styled.label<{ readOnly?: boolean }>`
+const Label = styled.label<{ readOnly?: boolean; disabled?: boolean }>`
     font-style: normal;
     font-weight: normal;
     font-size: 13px;
@@ -128,17 +134,15 @@ export const Label = styled.label<{ readOnly?: boolean }>`
     position: absolute;
     left: 0;
     top: 0;
-    &.disabled {
-        opacity: 0.4;
-        cursor: default;
-    }
+    opacity: ${(props) => (props.disabled && props.readOnly ? 0.4 : 1)};
 `;
 
-export const BalanceLabel = styled(Label)<{ readOnly?: boolean }>`
+const BalanceLabel = styled(Label)<{ readOnly?: boolean; disabled?: boolean }>`
     padding: 10px 20px 0 0;
     left: auto;
     right: 0;
     color: ${(props) => (props.readOnly ? props.theme.textColor.primary : props.theme.input.textColor.primary)};
+    opacity: ${(props) => (props.disabled && props.readOnly ? 0.4 : 1)};
 `;
 
 const LoaderContainer = styled(FlexDivColumn)`

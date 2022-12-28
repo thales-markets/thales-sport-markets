@@ -17,9 +17,10 @@ import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
-    convertPositionToSymbolType,
     formatMarketOdds,
-    getIsApexTopGame,
+    getOddTooltipText,
+    getSpreadTotalText,
+    getSymbolText,
     isParlayClaimable,
     isParlayOpen,
 } from 'utils/markets';
@@ -235,6 +236,10 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                             : row.original.marketQuotes
                             ? row.original.marketQuotes[index]
                             : 0;
+
+                        const symbolText = getSymbolText(positionEnum, position.market.betType);
+                        const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
+
                         return (
                             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
                                 <ParlayRowText>
@@ -244,21 +249,29 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                                     </ParlayRowTeam>
                                 </ParlayRowText>
                                 <PositionSymbol
-                                    type={convertPositionToSymbolType(
-                                        positionEnum,
-                                        getIsApexTopGame(position.market.isApex, position.market.betType)
-                                    )}
-                                    symbolColor={'white'}
-                                    symbolSize={'10'}
-                                    additionalText={{
-                                        firstText: formatMarketOdds(selectedOddsType, quote),
-                                        firstTextStyle: {
+                                    symbolAdditionalText={{
+                                        text: formatMarketOdds(selectedOddsType, quote),
+                                        textStyle: {
                                             fontSize: '10.5px',
-                                            color: 'white',
-                                            marginLeft: '5px',
+                                            marginLeft: '10px',
                                         },
                                     }}
-                                    additionalStyle={{ width: 21, height: 21, fontSize: 10 }}
+                                    additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
+                                    symbolText={symbolText}
+                                    symbolUpperText={
+                                        spreadTotalText
+                                            ? {
+                                                  text: spreadTotalText,
+                                                  textStyle: {
+                                                      backgroundColor: '#1A1C2B',
+                                                      fontSize: '10px',
+                                                      top: '-9px',
+                                                      left: '10px',
+                                                  },
+                                              }
+                                            : undefined
+                                    }
+                                    tooltip={<>{getOddTooltipText(positionEnum, position.market)}</>}
                                 />
                                 <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
                             </ParlayRow>

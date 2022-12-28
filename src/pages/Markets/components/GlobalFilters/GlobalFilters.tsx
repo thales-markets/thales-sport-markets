@@ -94,51 +94,38 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
         <Container>
             <Filters isMobile={isMobile}>
                 <FilterTypeContainer isMobile={isMobile}>
-                    {Object.values(GlobalFiltersEnum)
-                        .filter(
-                            (filterItem) =>
-                                filterItem != GlobalFiltersEnum.All &&
-                                filterItem != GlobalFiltersEnum.Claim &&
-                                filterItem != GlobalFiltersEnum.History &&
-                                filterItem != GlobalFiltersEnum.YourPositions
-                        )
-                        .map((filterItem) => {
-                            return (
-                                <GlobalFilter
-                                    data-matomo-category="filters"
-                                    data-matomo-action={`status-${filterItem.toLowerCase()}`}
-                                    selected={globalFilter === filterItem}
+                    {Object.values(GlobalFiltersEnum).map((filterItem) => {
+                        return (
+                            <GlobalFilter
+                                data-matomo-category="filters"
+                                data-matomo-action={`status-${filterItem.toLowerCase()}`}
+                                selected={globalFilter === filterItem}
+                                isMobile={isMobile}
+                                cancelled={filterItem == GlobalFiltersEnum.Canceled}
+                                onClick={() => {
+                                    if (filterItem === GlobalFiltersEnum.OpenMarkets) {
+                                        setDateFilter(0);
+                                        setDateParam('');
+                                        setTagFilter([]);
+                                        setTagParam('');
+                                        setSportFilter(SportFilterEnum.All);
+                                        setSportParam(SportFilterEnum.All);
+                                    }
+                                    setGlobalFilter(filterItem);
+                                    setGlobalFilterParam(filterItem);
+                                }}
+                                key={filterItem}
+                            >
+                                <FilterIcon
                                     isMobile={isMobile}
-                                    cancelled={filterItem == GlobalFiltersEnum.Canceled}
-                                    onClick={() => {
-                                        if (
-                                            filterItem === GlobalFiltersEnum.OpenMarkets ||
-                                            filterItem === GlobalFiltersEnum.YourPositions
-                                        ) {
-                                            setDateFilter(0);
-                                            setDateParam('');
-                                            setTagFilter([]);
-                                            setTagParam('');
-                                            setSportFilter(SportFilterEnum.All);
-                                            setSportParam(SportFilterEnum.All);
-                                        }
-                                        setGlobalFilter(filterItem);
-                                        setGlobalFilterParam(filterItem);
-                                    }}
-                                    key={filterItem}
-                                >
-                                    <FilterIcon
-                                        isMobile={isMobile}
-                                        className={`icon icon--${
-                                            filterItem.toLowerCase() == 'openmarkets'
-                                                ? 'logo'
-                                                : filterItem.toLowerCase()
-                                        }`}
-                                    />
-                                    {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
-                                </GlobalFilter>
-                            );
-                        })}
+                                    className={`icon icon--${
+                                        filterItem.toLowerCase() == 'openmarkets' ? 'logo' : filterItem.toLowerCase()
+                                    }`}
+                                />
+                                {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
+                            </GlobalFilter>
+                        );
+                    })}
                     {!isMobile && (
                         <DropdownContrainer data-matomo-category="filters" data-matomo-action="odds-selector">
                             <Dropdown<OddsType>
@@ -225,7 +212,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
 
 const Container = styled(FlexDiv)`
     width: 100%;
-    max-width: 750px;
+    max-width: 800px;
 `;
 
 const DropdownContrainer = styled.div`
@@ -246,7 +233,7 @@ export const Filters = styled(FlexDiv)<{ isMobile?: boolean }>`
     line-height: ${(props) => (props.isMobile ? '17px' : '14px')};
     align-items: center;
     letter-spacing: 0.01em;
-    margin: ${(props) => (props.isMobile ? '0px 50px' : '0px 20px')};
+    margin: ${(props) => (props.isMobile ? '0px 50px' : '0px 10px')};
     padding: ${(props) => (props.isMobile ? '0px' : '0px 10px')};
 `;
 

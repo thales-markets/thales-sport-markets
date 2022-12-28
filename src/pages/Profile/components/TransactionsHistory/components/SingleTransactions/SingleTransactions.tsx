@@ -1,6 +1,6 @@
+import PositionSymbol from 'components/PositionSymbol';
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
-import { PositionName, POSITION_MAP } from 'constants/options';
 import { ethers } from 'ethers';
 import useUserTransactionsQuery from 'queries/markets/useUserTransactionsQuery';
 import React from 'react';
@@ -12,7 +12,14 @@ import styled from 'styled-components';
 import { getEtherscanTxLink } from 'utils/etherscan';
 import { formatTxTimestamp } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
-import { convertFinalResultToResultType, convertPositionNameToPosition } from 'utils/markets';
+import {
+    convertFinalResultToResultType,
+    convertPositionNameToPosition,
+    convertPositionNameToPositionType,
+    getOddTooltipText,
+    getSpreadTotalText,
+    getSymbolText,
+} from 'utils/markets';
 
 const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -70,18 +77,44 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                         accessor: 'position',
                         sortable: false,
                         Cell: (cellProps: any) => {
+                            const symbolText = getSymbolText(
+                                convertPositionNameToPositionType(cellProps.cell.value),
+                                cellProps.cell.row.original.wholeMarket.betType
+                            );
+
+                            const spreadTotalText = getSpreadTotalText(
+                                cellProps.cell.row.original.wholeMarket,
+                                convertPositionNameToPositionType(cellProps.cell.value)
+                            );
+
                             return (
                                 <FlexCenter>
-                                    <TableText>
-                                        {
-                                            /* {   {convertPositionToTeamName(
-                                        convertPositionNameToPosition() as number,
-                                        cellProps.cell.row.original.wholeMarket
-                                    )}} */ cellProps
-                                                .cell.value
+                                    <PositionSymbol
+                                        symbolText={symbolText}
+                                        additionalStyle={{ width: 25, height: 25, fontSize: 11, borderWidth: 2 }}
+                                        symbolUpperText={
+                                            spreadTotalText
+                                                ? {
+                                                      text: spreadTotalText,
+                                                      textStyle: {
+                                                          backgroundColor: '#1A1C2B',
+                                                          fontSize: '10px',
+                                                          top: '-7px',
+                                                          left: '13px',
+                                                          lineHeight: '100%',
+                                                      },
+                                                  }
+                                                : undefined
                                         }
-                                    </TableText>
-                                    <CircleNumber>{POSITION_MAP[cellProps.cell.value as PositionName]}</CircleNumber>
+                                        tooltip={
+                                            <>
+                                                {getOddTooltipText(
+                                                    convertPositionNameToPositionType(cellProps.cell.value),
+                                                    cellProps.cell.row.original.wholeMarket
+                                                )}
+                                            </>
+                                        }
+                                    />
                                 </FlexCenter>
                             );
                         },
@@ -128,6 +161,9 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
 };
 
 const getPositionStatus = (tx: any) => {
+    if (tx.type !== 'buy') {
+        return <StatusWrapper color="#808080">SOLD</StatusWrapper>;
+    }
     if (tx.wholeMarket.isCanceled) {
         return <StatusWrapper color="#808080">CANCELED</StatusWrapper>;
     }
@@ -193,28 +229,6 @@ const FlexCenter = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-`;
-
-const CircleNumber = styled.span`
-    display: flex;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    color: #ffffff;
-    background: #1a1c2b;
-    border: 2px solid #ffffff;
-    border-radius: 50%;
-    width: 23px;
-    height: 23px;
-    align-items: center;
-    justify-content: center;
-    margin-left: 4px;
-    @media (max-width: 600px) {
-        font-size: 10px;
-        width: 18px;
-        height: 18px;
-    }
 `;
 
 export default TransactionsHistory;

@@ -48,7 +48,7 @@ const Container = styled(FlexDivRowCentered)<{ isMobile?: boolean }>`
     text-transform: uppercase;
     cursor: pointer;
     height: 36px;
-    margin-left: ${(props) => (props.isMobile ? '50px' : '20px')};
+    margin-left: ${(props) => (props.isMobile ? '50px' : '10px')};
     position: relative;
     color: ${(props) => props.theme.textColor.secondary};
     margin-bottom: 5px;

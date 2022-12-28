@@ -367,7 +367,40 @@
             "claimable": "Réclamable",
             "result": "Résultat",
             "coming-soon": "Bientôt disponible",
-            "paused": "En pause"
+            "paused": "En pause",
+            "pending": "Pending",
+            "no-liquidity": "No liquidity",
+            "bet-type": {
+                "winner": "Winner",
+                "spread": "Handicap",
+                "total": "Total",
+                "double-chance": "Double chance"
+            },
+            "odd-tooltip": {
+                "scoring": {
+                    "goals": "goals",
+                    "points": "points"
+                },
+                "match-resolve": {
+                    "regular": "in regular time",
+                    "overtime": "including possible overtime"
+                },
+                "winner": "{{team}} will win the match {{matchResolve}}.",
+                "draw": "The match will end in a draw {{matchResolve}}.",
+                "total": {
+                    "over": "The total number of {{scoring}} in the match {{matchResolve}} will be more than {{total}}.",
+                    "under": "The total number of {{scoring}} in the match {{matchResolve}} will be less than {{total}}."
+                },
+                "spread": {
+                    "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
+                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                },
+                "double-chance": {
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
+                },
+                "bonus": "{{bonus}} added bonus on win!"
+            }
         },
         "market-details": {
             "wallet-info": {
@@ -445,7 +478,8 @@
                 "referral": "Lien de référence",
                 "header": "Web 3 Sport commercialise sur"
             },
-            "buy-in": "Adhésion"
+            "buy-in": "Adhésion",
+            "total-bonus": "Prime totale"
         },
         "discounted-per": "Remise selon",
         "nav-menu": {
@@ -630,11 +664,11 @@
         "winnings-are-forfeit": "*Les gains non réclamés dans les {{amount}} jours suivant la résolution d'un marché sont annulés.",
         "search-field": "Portefeuille de recherche",
         "stats": {
-            "trades": "Métiers",
-            "lifetime-wins": "Victoires à vie",
-            "in-vaults": "Dans les voûtes",
-            "highest-win": "Victoire la plus élevée",
-            "total-volume": "Volume total"
+            "total-volume": "Total volume",
+            "trades": "Trades",
+            "highest-win": "Highest win",
+            "lifetime-wins": "Lifetime wins",
+            "in-vaults": "In vaults"
         }
     },
     "mint-world-cup-nft": {
@@ -818,6 +852,52 @@
         "info2": "- Le montant payé",
         "info": "Si plusieurs parlays ont la même citation, ce qui suit sera utilisé comme bris d'égalité dans l'ordre respectif :",
         "warning": "* L'équipe des heures supplémentaires se réserve le droit de disqualifier les portefeuilles que nous soupçonnons de jouer avec le système.",
-        "info1": "- Nombre de positions sur le parlay"
+        "info1": "- Nombre de positions sur le parlay",
+        "sidebar": {
+            "title-parlay": "Parlay",
+            "title-leaderboard": "Leaderboard",
+            "player": "Player",
+            "quote": "Quote",
+            "paid": "Paid",
+            "won": "Won",
+            "total-quote": "Total Quote",
+            "total-amount": "Total Amount"
+        }
+    },
+    "wizard": {
+        "title": "Get Started!",
+        "steps": {
+            "title": {
+                "connect-wallet": "Connect Wallet",
+                "fund": "Fund with ETH",
+                "exchange": "Get Crypto USD",
+                "trade": "Overtime Markets"
+            },
+            "description": {
+                "connect-wallet": "If you don't have Optimism connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
+                "fund": "Before you can use Overtime, first you need to get ETH on your Optimism connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
+                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to sUSD button, seamlessly swap ETH to a desired amount of stablecoins.",
+                "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
+            },
+            "action": {
+                "connect-wallet": "Connect Wallet",
+                "connected": "Connected",
+                "fund": "Fund with ETH",
+                "exchange": "Exchange to USD",
+                "trade": "Trade on Overtime"
+            }
+        },
+        "fund-modal": {
+            "title": "Fund, Bridge & Send",
+            "buy": "Fund with card",
+            "buy-banxa": "Fund with Banxa",
+            "buy-mt-pelerin": "Fund with Mt Pelerin",
+            "bridge": "Bridge to optimism  ",
+            "exchange": "Send from exchange",
+            "copy-address": "Copy address",
+            "coppied": "Coppied!",
+            "address": "Your address QR code",
+            "copied": "Copié !"
+        }
     }
 }

@@ -4,26 +4,17 @@ import { PositionData, SportMarketInfo } from 'types/markets';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import {
     convertPositionNameToPositionType,
-    convertPositionToSymbolType,
     formatMarketOdds,
-    getIsApexTopGame,
+    getOddTooltipText,
+    getSpreadTotalText,
+    getSymbolText,
 } from 'utils/markets';
-import {
-    ClubLogo,
-    ClubName,
-    MatchInfo,
-    MatchLabel,
-    MatchLogo,
-    ParlayStatus,
-    Wrapper,
-    ParlayItemStatusContainer,
-} from './styled-components';
+import { ClubLogo, ClubName, MatchInfo, MatchLabel, MatchLogo, StatusContainer } from '../../../../styled-components';
+import { Wrapper, ParlayStatus } from './styled-components';
 import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
 import { t } from 'i18next';
 import { formatDateWithTime } from 'utils/formatters/date';
-import { getPositionColor } from 'utils/ui';
-import { Position } from 'constants/options';
 
 const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | undefined; quote: number }> = ({
     market,
@@ -42,11 +33,11 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
 
     const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
 
-    const isHomeWinner = market.isResolved ? market.finalResult == 1 : positionEnum === Position.HOME;
-    const isAwayWinner = market.isResolved ? market.finalResult == 2 : positionEnum === Position.AWAY;
-
     const parlayItemQuote = market.isCanceled ? 1 : quote ? quote : 0;
     const parlayStatus = getParlayItemStatus(market);
+
+    const symbolText = getSymbolText(positionEnum, market.betType);
+    const spreadTotalText = getSpreadTotalText(market, positionEnum);
 
     return (
         <Wrapper>
@@ -56,41 +47,49 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                         alt={market.homeTeam}
                         src={homeLogoSrc}
                         isFlag={market.tags[0] == 9018}
-                        losingTeam={isAwayWinner}
+                        losingTeam={false}
                         onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
-                        customMobileSize={'35px'}
+                        customMobileSize={'30px'}
                     />
                     <ClubLogo
                         awayTeam={true}
                         alt={market.awayTeam}
                         src={awayLogoSrc}
                         isFlag={market.tags[0] == 9018}
-                        losingTeam={isHomeWinner}
+                        losingTeam={false}
                         onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
-                        customMobileSize={'35px'}
+                        customMobileSize={'30px'}
                     />
                 </MatchLogo>
                 <MatchLabel>
                     <ClubName>{market.homeTeam}</ClubName>
-                    <ClubName>{' VS '}</ClubName>
                     <ClubName>{market.awayTeam}</ClubName>
                 </MatchLabel>
             </MatchInfo>
-            <ParlayItemStatusContainer>
+            <StatusContainer>
                 <PositionSymbol
-                    type={convertPositionToSymbolType(positionEnum, getIsApexTopGame(market.isApex, market.betType))}
-                    symbolColor={getPositionColor(positionEnum)}
-                    additionalText={{
-                        firstText: formatMarketOdds(selectedOddsType, parlayItemQuote),
-                        firstTextStyle: {
-                            fontSize: '12px',
-                            color: getPositionColor(positionEnum),
-                            marginLeft: '5px',
+                    symbolAdditionalText={{
+                        text: formatMarketOdds(selectedOddsType, parlayItemQuote),
+                        textStyle: {
+                            marginLeft: '10px',
                         },
                     }}
+                    symbolText={symbolText}
+                    symbolUpperText={
+                        spreadTotalText
+                            ? {
+                                  text: spreadTotalText,
+                                  textStyle: {
+                                      fontSize: '11px',
+                                      top: '-9px',
+                                  },
+                              }
+                            : undefined
+                    }
+                    tooltip={<>{getOddTooltipText(positionEnum, market)}</>}
                 />
                 <ParlayStatus>{parlayStatus}</ParlayStatus>
-            </ParlayItemStatusContainer>
+            </StatusContainer>
         </Wrapper>
     );
 };

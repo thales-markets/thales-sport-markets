@@ -1,19 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
-import { ClubLogo, ClubName } from '../ParlayPosition/components/ParlayItem/styled-components';
-import { getOnImageError, getTeamImageSource } from 'utils/images';
 import {
-    BoldValue,
-    ClaimInfoContainer,
-    ColumnDirectionInfo,
-    GameParticipantsWrapper,
-    PositionContainer,
-    ResultContainer,
-    TeamContainer,
-    Wrapper,
-} from './styled-components';
-import {
+    ClubLogo,
+    ClubName,
+    MatchInfo,
+    MatchLabel,
+    MatchLogo,
+    StatusContainer,
     ClaimContainer,
     ClaimLabel,
     ClaimValue,
@@ -21,11 +15,13 @@ import {
     ExternalLinkArrow,
     ExternalLinkContainer,
     Label,
-} from '../ParlayPosition/styled-components';
+    ClaimButton,
+} from '../../styled-components';
+import { getOnImageError, getTeamImageSource } from 'utils/images';
+import { BoldValue, ColumnDirectionInfo, PositionContainer, ResultContainer, Wrapper } from './styled-components';
 import { useTranslation } from 'react-i18next';
 import { USD_SIGN } from 'constants/currency';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
-import { ClaimButton } from 'pages/Markets/Market/MarketDetailsV2/components/Positions/styled-components';
 import networkConnector from 'utils/networkConnector';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ethers } from 'ethers';
@@ -35,17 +31,17 @@ import PositionSymbol from 'components/PositionSymbol';
 import {
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
-    convertPositionToSymbolType,
     getCanceledGameClaimAmount,
-    getIsApexTopGame,
+    getOddTooltipText,
+    getParentMarketAddress,
+    getSpreadTotalText,
+    getSymbolText,
 } from 'utils/markets';
-import { getPositionColor } from 'utils/ui';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { getIsMobile } from 'redux/modules/app';
-import { FlexDivRow } from 'styles/common';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import { buildMarketLink } from 'utils/routes';
 import i18n from 'i18n';
@@ -160,112 +156,129 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
         },
     };
 
+    const symbolText = getSymbolText(positionEnum, position.market.betType);
+    const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
+
     return (
         <Wrapper>
-            <GameParticipantsWrapper>
-                <TeamContainer>
+            <MatchInfo>
+                <MatchLogo>
                     <ClubLogo
-                        style={{ marginRight: '5px' }}
                         alt={position.market.homeTeam}
                         src={homeLogoSrc}
                         isFlag={position.market.tags[0] == 9018}
+                        losingTeam={false}
                         onError={getOnImageError(setHomeLogoSrc, position.market.tags[0])}
+                        customMobileSize={'30px'}
                     />
-                    <ClubName>{position.market.homeTeam}</ClubName>
-                </TeamContainer>
-                <ClubName>{' VS '}</ClubName>
-                <TeamContainer>
                     <ClubLogo
-                        style={{ marginRight: '5px' }}
+                        awayTeam={true}
                         alt={position.market.awayTeam}
                         src={awayLogoSrc}
                         isFlag={position.market.tags[0] == 9018}
+                        losingTeam={false}
                         onError={getOnImageError(setAwayLogoSrc, position.market.tags[0])}
+                        customMobileSize={'30px'}
                     />
+                </MatchLogo>
+                <MatchLabel>
+                    <ClubName>{position.market.homeTeam}</ClubName>
                     <ClubName>{position.market.awayTeam}</ClubName>
-                </TeamContainer>
-            </GameParticipantsWrapper>
-            {isClaimable && (
-                <>
-                    <ResultContainer>
-                        {!isCanceled && (
-                            <>
-                                <Label>{t('profile.card.result')}</Label>
-                                <BoldValue>{`${position.market.homeScore} : ${position.market.awayScore}`}</BoldValue>
-                            </>
-                        )}
-                        {isCanceled && (
-                            <>
+                </MatchLabel>
+            </MatchInfo>
+            <StatusContainer>
+                <PositionContainer>
+                    <PositionSymbol
+                        symbolText={symbolText}
+                        symbolUpperText={
+                            spreadTotalText
+                                ? {
+                                      text: spreadTotalText,
+                                      textStyle: {
+                                          fontSize: '11px',
+                                          top: '-9px',
+                                      },
+                                  }
+                                : undefined
+                        }
+                        tooltip={<>{getOddTooltipText(positionEnum, position.market)}</>}
+                    />
+                </PositionContainer>
+                {isClaimable && (
+                    <>
+                        {isCanceled ? (
+                            <ResultContainer>
                                 <Label canceled={true}>{t('profile.card.canceled')}</Label>
                                 <Tooltip
                                     iconColor={MAIN_COLORS.TEXT.CANCELED}
                                     overlay={t('profile.messages.canceled-tooltip')}
+                                    iconFontSize={14}
                                 />
+                            </ResultContainer>
+                        ) : (
+                            <ColumnDirectionInfo>
+                                <Label>{t('profile.card.result')}:</Label>
+                                <BoldValue>{`${position.market.homeScore} : ${position.market.awayScore}`}</BoldValue>
+                            </ColumnDirectionInfo>
+                        )}
+                        {isMobile ? (
+                            <ClaimContainer>
+                                <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
+                                <ClaimButton
+                                    claimable={true}
+                                    onClick={(e: any) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        claimReward();
+                                    }}
+                                >
+                                    {t('profile.card.claim')}
+                                </ClaimButton>
+                            </ClaimContainer>
+                        ) : (
+                            <>
+                                <ColumnDirectionInfo>
+                                    <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
+                                    <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
+                                </ColumnDirectionInfo>
+                                <ClaimButton
+                                    claimable={true}
+                                    onClick={(e: any) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        claimReward();
+                                    }}
+                                >
+                                    {t('profile.card.claim')}
+                                </ClaimButton>
                             </>
                         )}
-                    </ResultContainer>
-                    {isMobile ? (
-                        <ClaimContainer>
-                            <FlexDivRow>
-                                <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
-                            </FlexDivRow>
-                            <ClaimButton
-                                claimable={true}
-                                onClick={(e: any) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    claimReward();
-                                }}
-                            >
-                                {t('profile.card.claim')}
-                            </ClaimButton>
-                        </ClaimContainer>
-                    ) : (
-                        <>
-                            <ClaimInfoContainer>
-                                <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
-                                <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
-                            </ClaimInfoContainer>
-                            <ClaimButton
-                                claimable={true}
-                                onClick={(e: any) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    claimReward();
-                                }}
-                            >
-                                {t('profile.card.claim')}
-                            </ClaimButton>
-                        </>
-                    )}
-                </>
-            )}
-            {!isClaimable && (
-                <>
-                    <PositionContainer>
-                        <PositionSymbol
-                            type={convertPositionToSymbolType(
-                                positionEnum,
-                                getIsApexTopGame(position.market.isApex, position.market.betType)
+                    </>
+                )}
+                {!isClaimable && (
+                    <>
+                        <ColumnDirectionInfo>
+                            <Label>{t('profile.card.position-size')}:</Label>
+                            <BoldValue>{formatCurrencyWithSign(USD_SIGN, position.amount)}</BoldValue>
+                        </ColumnDirectionInfo>
+                        <ColumnDirectionInfo>
+                            <Label>{t('profile.card.starts')}:</Label>
+                            <BoldValue>{formatDateWithTime(position.market.maturityDate)}</BoldValue>
+                        </ColumnDirectionInfo>
+                        <ExternalLink
+                            href={buildMarketLink(
+                                getParentMarketAddress(position.market.parentMarket, position.market.address),
+                                language
                             )}
-                            symbolColor={getPositionColor(positionEnum)}
-                        />
-                    </PositionContainer>
-                    <ColumnDirectionInfo>
-                        <Label>{t('profile.card.position-size')}:</Label>
-                        <BoldValue>{formatCurrencyWithSign(USD_SIGN, position.amount)}</BoldValue>
-                    </ColumnDirectionInfo>
-                    <ColumnDirectionInfo>
-                        <Label>{t('profile.card.starts')}</Label>
-                        <BoldValue>{formatDateWithTime(position.market.maturityDate)}</BoldValue>
-                    </ColumnDirectionInfo>
-                    <ExternalLink href={buildMarketLink(position.market.address, language)} target={'_blank'}>
-                        <ExternalLinkContainer>
-                            <ExternalLinkArrow />
-                        </ExternalLinkContainer>
-                    </ExternalLink>
-                </>
-            )}
+                            target={'_blank'}
+                        >
+                            <ExternalLinkContainer>
+                                <ExternalLinkArrow />
+                            </ExternalLinkContainer>
+                        </ExternalLink>
+                    </>
+                )}
+            </StatusContainer>
         </Wrapper>
     );
 };

@@ -269,7 +269,40 @@
             "coming-soon": "Coming soon",
             "vs": "VS",
             "draw": "Draw",
-            "paused": "Paused"
+            "paused": "Paused",
+            "pending": "Pending",
+            "no-liquidity": "No liquidity",
+            "bet-type": {
+                "winner": "Winner",
+                "spread": "Handicap",
+                "total": "Total",
+                "double-chance": "Double chance"
+            },
+            "odd-tooltip": {
+                "scoring": {
+                    "goals": "goals",
+                    "points": "points"
+                },
+                "match-resolve": {
+                    "regular": "in regular time",
+                    "overtime": "including possible overtime"
+                },
+                "winner": "{{team}} will win the match {{matchResolve}}.",
+                "draw": "The match will end in a draw {{matchResolve}}.",
+                "total": {
+                    "over": "The total number of {{scoring}} in the match {{matchResolve}} will be more than {{total}}.",
+                    "under": "The total number of {{scoring}} in the match {{matchResolve}} will be less than {{total}}."
+                },
+                "spread": {
+                    "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
+                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                },
+                "double-chance": {
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
+                },
+                "bonus": "{{bonus}} added bonus on win!"
+            }
         },
         "market-details": {
             "price": "Price",
@@ -347,7 +380,8 @@
                 "referral": "Реферальная ссылка",
                 "potential-payout": "Возможная выплата"
             },
-            "buy-in": "Купить в"
+            "buy-in": "Купить в",
+            "total-bonus": "Общий бонус"
         },
         "discounted-per": "Со скидкой согласно",
         "nav-menu": {
@@ -535,11 +569,11 @@
         "winnings-are-forfeit": "*Выигрыши, не запрошенные в течение {{amount}} дней после решения рынка, аннулируются.",
         "search-field": "Поиск кошелька",
         "stats": {
-            "highest-win": "Самая высокая победа",
-            "in-vaults": "В хранилищах",
-            "total-volume": "Общий объем",
-            "trades": "Сделки",
-            "lifetime-wins": "Пожизненные победы"
+            "total-volume": "Total volume",
+            "trades": "Trades",
+            "highest-win": "Highest win",
+            "lifetime-wins": "Lifetime wins",
+            "in-vaults": "In vaults"
         }
     },
     "mint-world-cup-nft": {
@@ -723,6 +757,52 @@
         "no-parlays": "За этот период еще не зарегистрировано ни одного выигрышного экспресса.",
         "warning": "*Команда Overtime имеет право дисквалифицировать кошельки, которые мы подозреваем в использовании системы.",
         "info3": "- Фактическая общая котировка (полученная путем умножения позиций по отдельности)",
-        "info2": "- Выплаченная сумма"
+        "info2": "- Выплаченная сумма",
+        "sidebar": {
+            "total-amount": "Общее количество",
+            "player": "Игрок",
+            "won": "Выиграл",
+            "paid": "Оплаченный",
+            "total-quote": "Общая котировка",
+            "quote": "Цитировать",
+            "title-leaderboard": "Таблица лидеров",
+            "title-parlay": "экспресс"
+        }
+    },
+    "wizard": {
+        "title": "Get Started!",
+        "steps": {
+            "title": {
+                "connect-wallet": "Connect Wallet",
+                "fund": "Fund with ETH",
+                "exchange": "Get Crypto USD",
+                "trade": "Overtime Markets"
+            },
+            "description": {
+                "connect-wallet": "If you don't have Optimism connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
+                "fund": "Before you can use Overtime, first you need to get ETH on your Optimism connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
+                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to sUSD button, seamlessly swap ETH to a desired amount of stablecoins.",
+                "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
+            },
+            "action": {
+                "connect-wallet": "Connect Wallet",
+                "connected": "Connected",
+                "fund": "Fund with ETH",
+                "exchange": "Exchange to USD",
+                "trade": "Trade on Overtime"
+            }
+        },
+        "fund-modal": {
+            "title": "Fund, Bridge & Send",
+            "buy": "Fund with card",
+            "buy-banxa": "Fund with Banxa",
+            "buy-mt-pelerin": "Fund with Mt Pelerin",
+            "bridge": "Bridge to optimism  ",
+            "exchange": "Send from exchange",
+            "copy-address": "Copy address",
+            "coppied": "Coppied!",
+            "address": "Your address QR code",
+            "copied": "Скопировано!"
+        }
     }
 }

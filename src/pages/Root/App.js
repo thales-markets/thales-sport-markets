@@ -20,6 +20,7 @@ import { ethers } from 'ethers';
 import BannerCarousel from 'components/BannerCarousel';
 import { isMobile } from 'utils/device';
 import Profile from 'pages/Profile';
+import Wizard from 'pages/Wizard';
 import Referral from 'pages/Referral';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
@@ -179,6 +180,11 @@ const App = () => {
                             <Route exact path={ROUTES.Referral}>
                                 <DappLayout>
                                     <Referral />
+                                </DappLayout>
+                            </Route>
+                            <Route exact path={ROUTES.Wizard}>
+                                <DappLayout>
+                                    <Wizard />
                                 </DappLayout>
                             </Route>
                             <Route exact path={ROUTES.Quiz}>

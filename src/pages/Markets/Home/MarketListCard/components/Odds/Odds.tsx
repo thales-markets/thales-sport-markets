@@ -1,141 +1,42 @@
-import PositionSymbol from 'components/PositionSymbol';
-import { ODDS_COLOR, STATUS_COLOR } from 'constants/ui';
+import { Position } from 'constants/options';
+import { BetType, BetTypeNameMap } from 'constants/tags';
+import { STATUS_COLOR } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { convertFinalResultToResultType, formatMarketOdds, isDiscounted } from 'utils/markets';
-import { getOddsType } from '../../../../../../redux/modules/ui';
-import { AccountPosition, PositionType } from '../../../../../../types/markets';
+import { SportMarketInfo } from 'types/markets';
+import { getSpreadTotalText, getVisibilityOfDrawOption } from 'utils/markets';
 import { Status } from '../MatchStatus/MatchStatus';
-import { Container, OddsContainer, WinnerLabel } from './styled-components';
+import Odd from '../Odd/Odd';
+import { Container, OddsContainer, Title } from './styled-components';
 
 type OddsProps = {
-    isResolved?: boolean;
-    finalResult?: number;
-    isLive?: boolean;
-    isCancelled?: boolean;
-    marketId: string;
-    homeTeam: string;
-    awayTeam: string;
-    odds?: {
-        homeOdds: number;
-        awayOdds: number;
-        drawOdds?: number;
-    };
-    accountPositions?: AccountPosition[];
-    isPaused: boolean;
-    isApexTopGame: boolean;
-    awayPriceImpact: number;
-    homePriceImpact: number;
-    drawPriceImpact: number | undefined;
-    isMobile?: boolean;
+    market: SportMarketInfo;
 };
 
-const Odds: React.FC<OddsProps> = ({
-    isResolved,
-    finalResult,
-    isLive,
-    isCancelled,
-    marketId,
-    homeTeam,
-    awayTeam,
-    odds,
-    accountPositions,
-    isPaused,
-    isApexTopGame,
-    awayPriceImpact,
-    homePriceImpact,
-    drawPriceImpact,
-    isMobile,
-}) => {
+const Odds: React.FC<OddsProps> = ({ market }) => {
     const { t } = useTranslation();
 
-    const pendingResolution = odds?.awayOdds == 0 && odds?.homeOdds == 0 && isLive && !isResolved;
-    const noOddsFlag =
-        odds?.awayOdds == 0 && odds?.homeOdds == 0 && !isLive && !isResolved && !isCancelled && !isPaused;
-    const resolvedGameFlag = isResolved && finalResult;
-    const twoPositionalSport = typeof odds?.drawOdds == 'undefined' && odds?.awayOdds != 0 && odds?.homeOdds != 0;
-    const showOdds = !pendingResolution && !noOddsFlag && !resolvedGameFlag && !isCancelled && !isPaused;
-    const selectedOddsType = useSelector(getOddsType);
+    const isLive = market.maturityDate < new Date();
+    const isGameResolved = market.isResolved || market.isCanceled;
+    const noOdds = market.awayOdds == 0 && market.homeOdds == 0 && !isLive && !isGameResolved && !market.isPaused;
+    const showDrawOdds = getVisibilityOfDrawOption(market.tags, market.betType);
+    const spreadTotalText = getSpreadTotalText(market, Position.HOME);
 
     return (
-        <Container resolved={!!resolvedGameFlag} isMobile={isMobile} noOdds={noOddsFlag}>
-            {noOddsFlag && <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>}
-            {resolvedGameFlag && (
-                <>
-                    <PositionSymbol
-                        type={convertFinalResultToResultType(finalResult, isApexTopGame)}
-                        symbolColor={
-                            convertFinalResultToResultType(finalResult, isApexTopGame) == 0
-                                ? ODDS_COLOR.HOME
-                                : convertFinalResultToResultType(finalResult, isApexTopGame) == 1
-                                ? ODDS_COLOR.AWAY
-                                : ODDS_COLOR.DRAW
-                        }
-                        isMobile={isMobile}
-                        winningSymbol={true}
-                    />
-                    <WinnerLabel>{t('common.winner')}</WinnerLabel>
-                </>
-            )}
-            {showOdds && (
-                <OddsContainer isMobile={isMobile} twoPositionalSport={twoPositionalSport}>
-                    <PositionSymbol
-                        marketId={marketId}
-                        homeTeam={homeTeam}
-                        awayTeam={awayTeam}
-                        type={isApexTopGame ? 3 : 0}
-                        symbolColor={ODDS_COLOR.HOME}
-                        additionalText={{
-                            firstText: formatMarketOdds(selectedOddsType, odds?.homeOdds),
-                            firstTextStyle: { color: ODDS_COLOR.HOME, marginLeft: '7px' },
-                        }}
-                        showTooltip={odds?.homeOdds == 0}
-                        glow={
-                            accountPositions &&
-                            !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.home)
-                        }
-                        discount={isDiscounted(homePriceImpact) ? homePriceImpact : undefined}
-                        isMobile={isMobile}
-                    />
-                    {typeof odds?.drawOdds !== 'undefined' && (
-                        <PositionSymbol
-                            marketId={marketId}
-                            homeTeam={homeTeam}
-                            awayTeam={awayTeam}
-                            type={2}
-                            symbolColor={ODDS_COLOR.DRAW}
-                            additionalText={{
-                                firstText: formatMarketOdds(selectedOddsType, odds?.drawOdds),
-                                firstTextStyle: { color: ODDS_COLOR.DRAW, marginLeft: '7px' },
-                            }}
-                            glow={
-                                accountPositions &&
-                                !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.draw)
-                            }
-                            discount={isDiscounted(drawPriceImpact) ? drawPriceImpact : undefined}
-                            showTooltip={odds?.drawOdds == 0}
-                            isMobile={isMobile}
-                        />
+        <Container>
+            <Title>
+                {t(`markets.market-card.bet-type.${BetTypeNameMap[market.betType as BetType]}`)}
+                {spreadTotalText && ` ${spreadTotalText}`}
+            </Title>
+            {noOdds ? (
+                <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>
+            ) : (
+                <OddsContainer>
+                    <Odd market={market} position={Position.HOME} odd={market.homeOdds} bonus={market.homeBonus} />
+                    {showDrawOdds && (
+                        <Odd market={market} position={Position.DRAW} odd={market.drawOdds} bonus={market.drawBonus} />
                     )}
-                    <PositionSymbol
-                        marketId={marketId}
-                        homeTeam={homeTeam}
-                        awayTeam={awayTeam}
-                        type={isApexTopGame ? 4 : 1}
-                        symbolColor={ODDS_COLOR.AWAY}
-                        additionalText={{
-                            firstText: formatMarketOdds(selectedOddsType, odds?.awayOdds),
-                            firstTextStyle: { color: ODDS_COLOR.AWAY, marginLeft: '7px' },
-                        }}
-                        showTooltip={odds?.awayOdds == 0}
-                        glow={
-                            accountPositions &&
-                            !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.away)
-                        }
-                        discount={isDiscounted(awayPriceImpact) ? awayPriceImpact : undefined}
-                        isMobile={isMobile}
-                    />
+                    <Odd market={market} position={Position.AWAY} odd={market.awayOdds} bonus={market.awayBonus} />
                 </OddsContainer>
             )}
         </Container>

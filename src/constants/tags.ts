@@ -138,7 +138,7 @@ export const SPORTS_MAP: SportsMap = {
     9101: 'Motosport',
 };
 
-export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [9002, 9003, 9004, 9005, 9006, 9008, 9007, 9100, 9101];
+export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [9001, 9002, 9003, 9004, 9005, 9006, 9008, 9007, 9100, 9101];
 
 export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Football: [9001, 9002],
@@ -174,3 +174,59 @@ export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
 
 export const PERSON_COMPETITIONS = [9007, 9100, 9101];
+
+export enum BetType {
+    WINNER = 0,
+    SPREAD = 10001,
+    TOTAL = 10002,
+    DOUBLE_CHANCE = 10003,
+}
+
+export const BetTypeNameMap: Record<BetType, string> = {
+    [BetType.WINNER]: 'winner',
+    [BetType.SPREAD]: 'spread',
+    [BetType.TOTAL]: 'total',
+    [BetType.DOUBLE_CHANCE]: 'double-chance',
+};
+
+export const SCORING_MAP: SportsMap = {
+    9001: 'points',
+    9002: 'points',
+    9003: 'points',
+    9004: 'points',
+    9005: 'points',
+    9006: 'goals',
+    9007: '',
+    9008: 'points',
+    9010: 'goals',
+    9011: 'goals',
+    9012: 'goals',
+    9013: 'goals',
+    9014: 'goals',
+    9015: 'goals',
+    9016: 'goals',
+    9018: 'goals',
+    9100: '',
+    9101: '',
+};
+
+export const MATCH_RESOLVE_MAP: SportsMap = {
+    9001: 'overtime',
+    9002: 'overtime',
+    9003: 'overtime',
+    9004: 'overtime',
+    9005: 'overtime',
+    9006: 'overtime',
+    9007: '',
+    9008: 'overtime',
+    9010: 'regular',
+    9011: 'regular',
+    9012: 'regular',
+    9013: 'regular',
+    9014: 'regular',
+    9015: 'regular',
+    9016: 'regular',
+    9018: 'regular',
+    9100: '',
+    9101: '',
+};

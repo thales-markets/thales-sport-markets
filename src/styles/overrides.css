@@ -32,3 +32,13 @@
         margin: 10px !important;
     }
 }
+
+.odd-toast {
+    color: #ffffff !important;
+    background-color: #5f6180 !important;
+}
+
+.odd-toast-body {
+    color: #ffffff !important;
+    background-color: #5f6180 !important;
+}

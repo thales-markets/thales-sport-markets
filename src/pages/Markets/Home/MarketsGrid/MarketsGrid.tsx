@@ -6,15 +6,14 @@ import { useSelector } from 'react-redux';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { AccountPositionsMap, SportMarkets, TagInfo } from 'types/markets';
+import { SportMarkets, TagInfo } from 'types/markets';
 import MarketsList from '../MarketsList';
 
 type MarketsGridProps = {
     markets: SportMarkets;
-    accountPositions: AccountPositionsMap;
 };
 
-const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) => {
+const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const language = i18n.language;
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const marketsMap = new Map();
@@ -52,7 +51,6 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) 
                                 league={leagueId}
                                 markets={marketsMap.get(leagueId)}
                                 language={language}
-                                accountPositions={accountPositions}
                             />
                         );
                     })}
@@ -62,9 +60,9 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, accountPositions }) 
 };
 
 const Container = styled(FlexDiv)`
-    margin: 20px 20px 0 0;
+    margin: 10px 10px 0 0;
     flex-wrap: wrap;
-    max-width: 750px;
+    max-width: 800px;
     justify-content: center;
     flex-grow: 2;
     > div {
@@ -95,7 +93,7 @@ const Container = styled(FlexDiv)`
 const ListContainer = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 0 20px 20px 20px;
+    padding: 0 10px 20px 10px;
     @media (max-width: 950px) {
         padding: 0 5px 20px 5px;
     }

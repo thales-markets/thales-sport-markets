@@ -1,6 +1,5 @@
-import { SportMarketInfo } from 'types/markets';
 import { NetworkId } from 'types/network';
-import { Position, Side } from './options';
+import { Position } from './options';
 
 export const QUERY_KEYS = {
     Rewards: (networkId: NetworkId, period: number) => ['rewards', networkId, period],
@@ -10,12 +9,8 @@ export const QUERY_KEYS = {
     SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
     SportMarketsNew: (networkId: NetworkId) => ['sportMarketsNew', networkId],
     ParlayAmmData: (networkId: NetworkId) => ['parlayAmmData', networkId],
-    OpenSportMarkets: (networkId: NetworkId) => ['openSportMarkets', networkId],
-    CanceledSportMarkets: (networkId: NetworkId) => ['canceledSportMarkets', networkId],
-    ResolvedSportMarkets: (networkId: NetworkId) => ['resolvedSportMarkets', networkId],
-    Market: (marketAddress: string, isSell: boolean) => ['market', marketAddress, isSell],
-    MarketBalances: (marketAddress: string, walletAddress: string) => ['marketBalances', marketAddress, walletAddress],
-    MarketCancellationOdds: (marketAddress: string) => ['marketCancellationOdds', marketAddress],
+    Market: (marketAddress: string) => ['market', marketAddress],
+    ChildMarkets: (marketAddress: string) => ['childMarkets', marketAddress],
     PositionDetails: (
         marketAddress: string,
         position: Position,
@@ -23,13 +18,7 @@ export const QUERY_KEYS = {
         stableIndex: number,
         networkId: NetworkId
     ) => ['positionDetails', marketAddress, position, amount, stableIndex, networkId],
-    PositionSellPrice: (marketAddress: string, networkId: NetworkId, balances: any) => [
-        'positionSellPrice',
-        marketAddress,
-        networkId,
-        balances,
-    ],
-    AvailablePerSide: (marketAddress: string, side: Side) => ['availablePerSide', marketAddress, side],
+    AvailablePerPosition: (marketAddress: string) => ['availablePerPosition', marketAddress],
     MarketTransactions: (marketAddress: string, networkId: NetworkId, walletAddress?: string) => [
         'market',
         'transactions',
@@ -53,17 +42,6 @@ export const QUERY_KEYS = {
         walletAddress,
         networkId,
     ],
-    UserTransactionsPerMarket: (walletAddress: string, marketAddress: string, networkId: NetworkId) => [
-        'user',
-        'market',
-        'transactions',
-        walletAddress,
-        marketAddress,
-        networkId,
-    ],
-    MarketsParameters: (networkId: NetworkId) => ['markets', 'parameters', networkId],
-    Tags: (networkId: NetworkId) => ['tags', networkId],
-    NormalizedOdds: (sportMarket: SportMarketInfo, networkId: NetworkId) => ['normalizedOdds', sportMarket, networkId],
     AccountPositions: (walletAddress: string, networkId: NetworkId) => ['positions', walletAddress, networkId],
     AccountPositionsProfile: (walletAddress: string, networkId: NetworkId) => [
         'accountPosition',
@@ -78,14 +56,7 @@ export const QUERY_KEYS = {
     Referrers: (networkId: NetworkId) => ['referrers', networkId],
     ReferredTraders: (walletAddress: string, networkId: NetworkId) => ['referredTraders', walletAddress, networkId],
     ReferralOverview: (walletAddress: string, networkId: NetworkId) => ['referralOverview', walletAddress, networkId],
-    DiscountMarkets: (networkId: NetworkId) => ['discountMarkets', networkId],
     Wallet: {
-        PaymentTokenBalance: (walletAddress: string, networkId: NetworkId) => [
-            'wallet',
-            'paymentTokenBalance',
-            walletAddress,
-            networkId,
-        ],
         GetsUSDWalletBalance: (walletAddress: string, networkId: NetworkId) => [
             'sUsd',
             'balance',
@@ -104,7 +75,6 @@ export const QUERY_KEYS = {
             walletAddress,
             networkId,
         ],
-        SwapApproveSpender: (networkId: NetworkId) => ['wallet', 'swap', 'approveSpender', networkId],
         GetUsdDefaultAmount: (networkId: NetworkId) => ['wallet', 'getUsdDefaultAmount', networkId],
         OvertimeVoucher: (walletAddress: string, networkId: NetworkId) => [
             'wallet',
@@ -132,6 +102,9 @@ export const QUERY_KEYS = {
         Trades: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'trades', networkId],
         PnL: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'pnl', networkId],
         UserTransactions: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'userTransactions', networkId],
+    },
+    Bungee: {
+        Tokens: () => ['bungee', 'tokens'],
     },
 };
 

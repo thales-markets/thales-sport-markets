@@ -3,7 +3,6 @@ import { USD_SIGN } from 'constants/currency';
 import { MAX_GAS_LIMIT } from 'constants/network';
 import { Position } from 'constants/options';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
-import { ClaimButton } from 'pages/Markets/Market/MarketDetailsV2/components/Positions/styled-components';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -12,7 +11,6 @@ import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { FlexDivRow } from 'styles/common';
 import { ParlayMarket, ParlaysMarket } from 'types/markets';
 import { getEtherscanTxLink } from 'utils/etherscan';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
@@ -28,19 +26,12 @@ import { refetchAfterClaim } from 'utils/queryConnector';
 import ParlayItem from './components/ParlayItem';
 import {
     ArrowIcon,
-    ClaimContainer,
-    ClaimLabel,
-    ClaimValue,
     CollapsableContainer,
     CollapseFooterContainer,
     Container,
     Divider,
-    ExternalLink,
-    ExternalLinkArrow,
-    ExternalLinkContainer,
     InfoContainer,
     InfoContainerColumn,
-    Label,
     OverviewContainer,
     ParlayDetailContainer,
     ProfitContainer,
@@ -51,6 +42,16 @@ import {
     WinLabel,
     WinValue,
 } from './styled-components';
+import {
+    ClaimContainer,
+    ClaimLabel,
+    ClaimValue,
+    ExternalLink,
+    ExternalLinkArrow,
+    ExternalLinkContainer,
+    Label,
+    ClaimButton,
+} from '../../styled-components';
 
 type ParlayPosition = {
     parlayMarket: ParlayMarket;
@@ -170,9 +171,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
                 )}
                 {isMobile && isClaimable && (
                     <ClaimContainer>
-                        <FlexDivRow>
-                            <ClaimValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</ClaimValue>
-                        </FlexDivRow>
+                        <ClaimValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</ClaimValue>
                         <ClaimButton
                             claimable={true}
                             onClick={(e: any) => {

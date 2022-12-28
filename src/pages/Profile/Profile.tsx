@@ -7,6 +7,11 @@ import TransactionsHistory from './components/TransactionsHistory';
 import UserStats from './components/UserStats';
 import { getQueryStringVal } from 'utils/useQueryParams';
 import SearchField from './components/SearchField';
+import { Info } from 'pages/Markets/Home/Home';
+import { Trans } from 'react-i18next';
+import SPAAnchor from 'components/SPAAnchor';
+import { buildHref } from 'utils/routes';
+import ROUTES from 'constants/routes';
 
 const Profile: React.FC = () => {
     const navItemFromQuery = getQueryStringVal('nav-item');
@@ -16,6 +21,14 @@ const Profile: React.FC = () => {
 
     return (
         <Container>
+            <Info>
+                <Trans
+                    i18nKey="rewards.op-rewards-banner-message"
+                    components={{
+                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                    }}
+                />
+            </Info>
             <UserStats openPositionsValue={openPositionsValue} />
             <NavigationWrapper>
                 <NavigationBar itemSelected={navItem} onSelectItem={(index) => setNavItem(index)} />

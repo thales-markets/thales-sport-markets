@@ -38,7 +38,7 @@ export const OP_USDT = {
     logoURI: 'https://tokens.1inch.io/0xdac17f958d2ee523a2206206994597c13d831ec7.png',
 };
 
-export const AVAILABLE_TOKENS = [OP_ETH, OP_DAI, OP_USDC, OP_USDT];
+export const AVAILABLE_TOKENS = [OP_SUSD, OP_DAI, OP_USDC, OP_USDT];
 
 export const ONE_INCH_EXCHANGE_URL = 'https://api.1inch.exchange/v4.0/';
 export const APPROVE_SPENDER_SUFFIX = '/approve/spender';

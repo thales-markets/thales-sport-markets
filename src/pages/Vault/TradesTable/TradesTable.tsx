@@ -4,8 +4,7 @@ import { CellProps } from 'react-table';
 import { formatTxTimestamp } from 'utils/formatters/date';
 import Table from 'components/Table';
 import styled from 'styled-components';
-import { ODDS_COLOR } from 'constants/ui';
-import { Position, POSITION_MAP, PositionName } from 'constants/options';
+import { Position, PositionName } from 'constants/options';
 import { buildMarketLink } from 'utils/routes';
 import ViewEtherscanLink from 'components/ViewEtherscanLink';
 import './style.css';
@@ -15,6 +14,8 @@ import SPAAnchor from 'components/SPAAnchor';
 import { VaultTrade, VaultTrades } from 'types/vault';
 import { VaultTradeStatus } from 'constants/vault';
 import { Colors } from 'styles/common';
+import PositionSymbol from 'components/PositionSymbol';
+import { getOddTooltipText, getParentMarketAddress, getSpreadTotalText, getSymbolText } from 'utils/markets';
 
 type TradesTableProps = {
     transactions: VaultTrades;
@@ -47,7 +48,13 @@ export const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResults
                             <SPAAnchor
                                 className="hover-underline"
                                 onClick={(e) => e.stopPropagation()}
-                                href={buildMarketLink(cellProps.row.original.market, language)}
+                                href={buildMarketLink(
+                                    getParentMarketAddress(
+                                        cellProps.row.original.wholeMarket.parentMarket,
+                                        cellProps.row.original.wholeMarket.address
+                                    ),
+                                    language
+                                )}
                             >
                                 {cellProps.cell.value}
                             </SPAAnchor>
@@ -57,11 +64,43 @@ export const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResults
                     },
                     {
                         Header: <>{t('market.table.position-col')}</>,
-                        accessor: 'positionTeam',
+                        accessor: 'position',
                         sortType: 'alphanumeric',
-                        Cell: (cellProps: CellProps<VaultTrade, VaultTrade['positionTeam']>) => (
-                            <p>{cellProps.cell.value}</p>
-                        ),
+                        Cell: (cellProps: CellProps<VaultTrade, VaultTrade['position']>) => {
+                            const symbolText = getSymbolText(
+                                cellProps.cell.value,
+                                cellProps.cell.row.original.wholeMarket.betType
+                            );
+
+                            const spreadTotalText = getSpreadTotalText(
+                                cellProps.cell.row.original.wholeMarket,
+                                cellProps.cell.value
+                            );
+                            return (
+                                <PositionSymbol
+                                    symbolText={symbolText}
+                                    symbolUpperText={
+                                        spreadTotalText
+                                            ? {
+                                                  text: spreadTotalText,
+                                                  textStyle: {
+                                                      fontSize: '11px',
+                                                      top: '-9px',
+                                                  },
+                                              }
+                                            : undefined
+                                    }
+                                    tooltip={
+                                        <>
+                                            {getOddTooltipText(
+                                                cellProps.cell.value,
+                                                cellProps.cell.row.original.wholeMarket
+                                            )}
+                                        </>
+                                    }
+                                />
+                            );
+                        },
                         width: 150,
                         sortable: true,
                     },
@@ -70,12 +109,7 @@ export const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResults
                         sortType: 'basic',
                         accessor: 'amount',
                         Cell: (cellProps: CellProps<VaultTrade, VaultTrade['amount']>) => (
-                            <>
-                                <PositionCircle color={ODDS_COLOR[cellProps.row.original.position]}>
-                                    {POSITION_MAP[cellProps.row.original.position]}
-                                </PositionCircle>
-                                <p>{formatCurrency(cellProps.cell.value)}</p>
-                            </>
+                            <p>{formatCurrency(cellProps.cell.value)}</p>
                         ),
                         width: 150,
                         sortable: true,
@@ -95,11 +129,6 @@ export const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResults
                         accessor: 'result',
                         Cell: (cellProps: CellProps<VaultTrade, VaultTrade['result']>) => (
                             <>
-                                {cellProps.cell.value && (
-                                    <PositionCircle color="#3FD1FF">
-                                        {POSITION_MAP[cellProps.cell.value]}
-                                    </PositionCircle>
-                                )}
                                 {cellProps.row.original.status !== VaultTradeStatus.IN_PROGRESS && (
                                     <Status
                                         color={
@@ -144,20 +173,6 @@ export const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResults
         </>
     );
 });
-
-const PositionCircle = styled.span<{ color: string }>`
-    width: 20px;
-    height: 20px;
-    border-radius: 100%;
-    display: inline-block;
-    text-align: center;
-    font-weight: bold;
-    margin-right: 10px;
-    line-height: 21px;
-    padding-left: 1px;
-    background-color: ${(props) => props.color};
-    color: #1a1c2b;
-`;
 
 const Status = styled.span<{ color: string }>`
     color: ${(props) => props.color};

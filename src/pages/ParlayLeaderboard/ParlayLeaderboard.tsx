@@ -6,13 +6,13 @@ import { USD_SIGN } from 'constants/currency';
 import { OddsType } from 'constants/markets';
 import { t } from 'i18next';
 import { AddressLink } from 'pages/Rewards/styled-components';
-
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { CellProps } from 'react-table';
 import { getIsAppReady } from 'redux/modules/app';
+import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -26,20 +26,43 @@ import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
-    convertPositionToSymbolType,
     formatMarketOdds,
-    getIsApexTopGame,
+    getOddTooltipText,
+    getSpreadTotalText,
+    getSymbolText,
 } from 'utils/markets';
 
-const Rewards = [2000, 1500, 1000, 800, 750, 700, 600, 500, 300, 250, 225, 210, 200, 185, 170, 145, 130, 125, 110, 100];
-const START_DATE = new Date(2022, 11, 1, 0, 0, 0);
-const END_DATE = new Date(2022, 11, 31, 24, 0, 0);
+export const REWARDS = [
+    2000,
+    1500,
+    1000,
+    800,
+    750,
+    700,
+    600,
+    500,
+    300,
+    250,
+    225,
+    210,
+    200,
+    185,
+    170,
+    145,
+    130,
+    125,
+    110,
+    100,
+];
+export const START_DATE = new Date(2022, 11, 1, 0, 0, 0);
+export const END_DATE = new Date(2022, 11, 31, 24, 0, 0);
 
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const selectedOddsType = useSelector(getOddsType);
     const [searchText, setSearchText] = useState<string>('');
     const [expandStickyRow, setExpandStickyRowState] = useState<boolean>(false);
     const query = useParlayLeaderboardQuery(
@@ -65,7 +88,7 @@ const ParlayLeaderboard: React.FC = () => {
                     <StickyCell>
                         {data.rank <= 20 ? (
                             <Tooltip
-                                overlay={<>{Rewards[data.rank - 1]} OP</>}
+                                overlay={<>{REWARDS[data.rank - 1]} OP</>}
                                 component={
                                     <FlexDivRowCentered style={{ position: 'relative', width: 14 }}>
                                         <StatusIcon
@@ -82,7 +105,7 @@ const ParlayLeaderboard: React.FC = () => {
                         )}
                     </StickyCell>
                     <StickyCell>{truncateAddress(data.account, 5)}</StickyCell>
-                    <StickyCell>{formatMarketOdds(OddsType.Decimal, data.totalQuote)}</StickyCell>
+                    <StickyCell>{formatMarketOdds(selectedOddsType, data.totalQuote)}</StickyCell>
                     <StickyCell>{formatCurrencyWithSign(USD_SIGN, data.sUSDPaid, 2)}</StickyCell>
                     <StickyCell>{formatCurrencyWithSign(USD_SIGN, data.totalAmount, 2)}</StickyCell>
                     <ExpandStickyRowIcon
@@ -90,10 +113,10 @@ const ParlayLeaderboard: React.FC = () => {
                         onClick={() => setExpandStickyRowState(!expandStickyRow)}
                     />
                 </StickyContrainer>
-                <ExpandedContainer hide={!expandStickyRow}>{getExpandedRow(data)}</ExpandedContainer>
+                <ExpandedContainer hide={!expandStickyRow}>{getExpandedRow(data, selectedOddsType)}</ExpandedContainer>
             </StickyRow>
         );
-    }, [expandStickyRow, parlays, walletAddress]);
+    }, [expandStickyRow, parlays, walletAddress, selectedOddsType]);
 
     return (
         <Container>
@@ -129,7 +152,7 @@ const ParlayLeaderboard: React.FC = () => {
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['rank']>) => {
                             return cellProps.cell.value <= 20 ? (
                                 <Tooltip
-                                    overlay={<>{Rewards[cellProps.cell.value - 1]} OP</>}
+                                    overlay={<>{REWARDS[cellProps.cell.value - 1]} OP</>}
                                     component={
                                         <FlexDivRowCentered style={{ position: 'relative', width: 14 }}>
                                             <StatusIcon
@@ -162,16 +185,16 @@ const ParlayLeaderboard: React.FC = () => {
                     },
                     {
                         accessor: 'totalQuote',
-                        Header: <>Quote</>,
+                        Header: <>{t('parlay-leaderboard.sidebar.quote')}</>,
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['totalQuote']>) => (
-                            <TableText>{formatMarketOdds(OddsType.Decimal, cellProps.cell.value)}</TableText>
+                            <TableText>{formatMarketOdds(selectedOddsType, cellProps.cell.value)}</TableText>
                         ),
                         sortable: true,
                         sortType: quoteSort(),
                     },
                     {
                         accessor: 'sUSDPaid',
-                        Header: <>Paid</>,
+                        Header: <>{t('parlay-leaderboard.sidebar.paid')}</>,
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['sUSDAfterFees']>) => (
                             <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>
                         ),
@@ -179,7 +202,7 @@ const ParlayLeaderboard: React.FC = () => {
                     },
                     {
                         accessor: 'totalAmount',
-                        Header: <>Won</>,
+                        Header: <>{t('parlay-leaderboard.sidebar.won')}</>,
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['totalAmount']>) => (
                             <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>
                         ),
@@ -195,6 +218,10 @@ const ParlayLeaderboard: React.FC = () => {
                         );
 
                         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
+
+                        const symbolText = getSymbolText(positionEnum, position.market.betType);
+                        const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
+
                         return (
                             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
                                 <ParlayRowText>
@@ -204,24 +231,32 @@ const ParlayLeaderboard: React.FC = () => {
                                     </ParlayRowTeam>
                                 </ParlayRowText>
                                 <PositionSymbol
-                                    type={convertPositionToSymbolType(
-                                        positionEnum,
-                                        getIsApexTopGame(position.market.isApex, position.market.betType)
-                                    )}
-                                    symbolColor={'white'}
-                                    symbolSize={'10'}
-                                    additionalText={{
-                                        firstText: formatMarketOdds(
-                                            OddsType.Decimal,
+                                    symbolAdditionalText={{
+                                        text: formatMarketOdds(
+                                            selectedOddsType,
                                             row.original.marketQuotes ? row.original.marketQuotes[index] : 0
                                         ),
-                                        firstTextStyle: {
+                                        textStyle: {
                                             fontSize: '10.5px',
-                                            color: 'white',
-                                            marginLeft: '5px',
+                                            marginLeft: '10px',
                                         },
                                     }}
-                                    additionalStyle={{ width: 21, height: 21, fontSize: 10 }}
+                                    additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
+                                    symbolText={symbolText}
+                                    symbolUpperText={
+                                        spreadTotalText
+                                            ? {
+                                                  text: spreadTotalText,
+                                                  textStyle: {
+                                                      backgroundColor: '#1A1C2B',
+                                                      fontSize: '10px',
+                                                      top: '-9px',
+                                                      left: '10px',
+                                                  },
+                                              }
+                                            : undefined
+                                    }
+                                    tooltip={<>{getOddTooltipText(positionEnum, position.market)}</>}
                                 />
                                 <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
                             </ParlayRow>
@@ -233,12 +268,12 @@ const ParlayLeaderboard: React.FC = () => {
                             <FirstSection>{toRender}</FirstSection>
                             <LastExpandedSection style={{ gap: 20 }}>
                                 <QuoteWrapper>
-                                    <QuoteLabel>Total Quote:</QuoteLabel>
-                                    <QuoteText>{formatMarketOdds(OddsType.Decimal, row.original.totalQuote)}</QuoteText>
+                                    <QuoteLabel>{t('parlay-leaderboard.sidebar.total-quote')}:</QuoteLabel>
+                                    <QuoteText>{formatMarketOdds(selectedOddsType, row.original.totalQuote)}</QuoteText>
                                 </QuoteWrapper>
 
                                 <QuoteWrapper>
-                                    <QuoteLabel>Total Amount:</QuoteLabel>
+                                    <QuoteLabel>{t('parlay-leaderboard.sidebar.total-amount')}:</QuoteLabel>
                                     <QuoteText>
                                         {formatCurrencyWithKey(USD_SIGN, row.original.totalAmount, 2)}
                                     </QuoteText>
@@ -252,7 +287,7 @@ const ParlayLeaderboard: React.FC = () => {
     );
 };
 
-const getPositionStatus = (position: PositionData) => {
+export const getPositionStatus = (position: PositionData) => {
     if (position.market.isResolved) {
         if (
             convertPositionNameToPosition(position.side) === convertFinalResultToResultType(position.market.finalResult)
@@ -266,7 +301,7 @@ const getPositionStatus = (position: PositionData) => {
     }
 };
 
-const getOpacity = (position: PositionData) => {
+export const getOpacity = (position: PositionData) => {
     if (position.market.isResolved) {
         if (
             convertPositionNameToPosition(position.side) === convertFinalResultToResultType(position.market.finalResult)
@@ -280,12 +315,16 @@ const getOpacity = (position: PositionData) => {
     }
 };
 
-const getExpandedRow = (parlay: ParlayMarketWithRank) => {
+const getExpandedRow = (parlay: ParlayMarketWithRank, selectedOddsType: OddsType) => {
     const gameList = parlay.sportMarketsFromContract.map((address: string, index: number) => {
         const position = parlay.positions.find((position: any) => position.market.address == address);
         if (!position) return;
 
         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
+
+        const symbolText = getSymbolText(positionEnum, position.market.betType);
+        const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
+
         return (
             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
                 <ParlayRowText>
@@ -295,24 +334,29 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
                     </ParlayRowTeam>
                 </ParlayRowText>
                 <PositionSymbol
-                    type={convertPositionToSymbolType(
-                        positionEnum,
-                        getIsApexTopGame(position.market.isApex, position.market.betType)
-                    )}
-                    symbolColor={'white'}
-                    symbolSize={'10'}
-                    additionalText={{
-                        firstText: formatMarketOdds(
-                            OddsType.Decimal,
-                            parlay.marketQuotes ? parlay.marketQuotes[index] : 0
-                        ),
-                        firstTextStyle: {
+                    symbolAdditionalText={{
+                        text: formatMarketOdds(selectedOddsType, parlay.marketQuotes ? parlay.marketQuotes[index] : 0),
+                        textStyle: {
                             fontSize: '10.5px',
-                            color: 'white',
-                            marginLeft: '5px',
+                            marginLeft: '10px',
                         },
                     }}
-                    additionalStyle={{ width: 21, height: 21, fontSize: 10 }}
+                    additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
+                    symbolText={symbolText}
+                    symbolUpperText={
+                        spreadTotalText
+                            ? {
+                                  text: spreadTotalText,
+                                  textStyle: {
+                                      backgroundColor: '#1A1C2B',
+                                      fontSize: '10px',
+                                      top: '-9px',
+                                      left: '10px',
+                                  },
+                              }
+                            : undefined
+                    }
+                    tooltip={<>{getOddTooltipText(positionEnum, position.market)}</>}
                 />
                 <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
             </ParlayRow>
@@ -324,12 +368,12 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
             <FirstSection>{gameList}</FirstSection>
             <LastExpandedSection style={{ gap: 20 }}>
                 <QuoteWrapper>
-                    <QuoteLabel>Total Quote:</QuoteLabel>
-                    <QuoteText>{formatMarketOdds(OddsType.Decimal, parlay.totalQuote)}</QuoteText>
+                    <QuoteLabel>{t('parlay-leaderboard.sidebar.total-quote')}:</QuoteLabel>
+                    <QuoteText>{formatMarketOdds(selectedOddsType, parlay.totalQuote)}</QuoteText>
                 </QuoteWrapper>
 
                 <QuoteWrapper>
-                    <QuoteLabel>Total Amount:</QuoteLabel>
+                    <QuoteLabel>{t('parlay-leaderboard.sidebar.total-amount')}:</QuoteLabel>
                     <QuoteText>{formatCurrencyWithKey(USD_SIGN, parlay.totalAmount, 2)}</QuoteText>
                 </QuoteWrapper>
             </LastExpandedSection>
@@ -337,7 +381,7 @@ const getExpandedRow = (parlay: ParlayMarketWithRank) => {
     );
 };
 
-const getParlayItemStatus = (market: SportMarketInfo) => {
+export const getParlayItemStatus = (market: SportMarketInfo) => {
     if (market.isCanceled) return t('profile.card.canceled');
     if (market.isResolved) return `${market.homeScore} : ${market.awayScore}`;
     return formatDateWithTime(Number(market.maturityDate) * 1000);
@@ -410,8 +454,9 @@ const quoteSort = () => (rowA: any, rowB: any) => {
     return rowA.original.totalQuote - rowB.original.totalQuote;
 };
 
-const StatusIcon = styled.i`
+export const StatusIcon = styled.i`
     font-size: 12px;
+    font-weight: 700;
     margin-right: 4px;
     &::before {
         color: ${(props) => props.color || 'white'};
@@ -492,7 +537,6 @@ const ParlayRow = styled(FlexDivRowCentered)`
 
 const ParlayRowText = styled(QuoteText)`
     max-width: 220px;
-    width: 300px;
 `;
 
 const ParlayRowTeam = styled.span`

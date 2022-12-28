@@ -34,11 +34,11 @@ export const TokenDropdown: React.FC<StatusDropdownProps> = ({ selectedToken, on
                         readOnly={readOnly}
                         className={disabled ? 'disabled' : ''}
                     >
-                        <FlexDiv>
+                        <ButtonContent>
                             <TokenIcon src={selectedToken.logoURI} />
                             {selectedToken.symbol}
                             {!readOnly && <ArrowDownIcon />}
-                        </FlexDiv>
+                        </ButtonContent>
                     </TokenButton>
                     {tokenDropdownIsOpen && (
                         <DropdownContainer>
@@ -69,10 +69,9 @@ export const TokenDropdown: React.FC<StatusDropdownProps> = ({ selectedToken, on
 };
 
 const Container = styled(FlexDivColumnCentered)<{ readOnly?: boolean }>`
-    width: 140px;
     position: absolute;
     top: 28px;
-    left: 5px;
+    left: 7px;
     z-index: ${(props) => (props.readOnly ? 1 : 2)};
 `;
 
@@ -80,22 +79,29 @@ const TokenButton = styled.button<{ readOnly?: boolean }>`
     position: relative;
     width: 140px;
     height: 34px;
-    border: none;
-    background: ${(props) => (props.readOnly ? 'transparent' : props.theme.input.background.primary)};
-    color: ${(props) => (props.readOnly ? props.theme.textColor.primary : props.theme.input.textColor.primary)};
+    border: ${(props) => (props.readOnly ? 'none' : `1px solid ${props.theme.button.borderColor.primary}`)};
+    background: ${(props) => (props.readOnly ? 'transparent' : props.theme.button.background.tertiary)};
+    color: ${(props) => (props.readOnly ? props.theme.button.textColor.secondary : props.theme.textColor.primary)};
     border-radius: 10px;
     font-size: 18px;
     line-height: 25px;
-    padding-left: 15px;
+    padding-left: 12px;
     &:hover:not(.disabled) {
         cursor: ${(props) => (props.readOnly ? 'default' : 'pointer')};
-        background: ${(props) => (props.readOnly ? 'transparent' : '#96e6ff')};
+        background: ${(props) => (props.readOnly ? 'transparent' : '#51546f')};
     }
     &.disabled {
         opacity: ${(props) => (props.readOnly ? 1 : 0.4)};
         cursor: default;
         background: transparent;
     }
+    @media (max-width: 950px) {
+        width: 125px;
+    }
+`;
+
+const ButtonContent = styled(FlexDiv)`
+    line-height: 24px;
 `;
 
 const DropdownContainer = styled.div`
@@ -105,7 +111,7 @@ const DropdownContainer = styled.div`
 
 const DropDown = styled(FlexDivColumn)`
     border: 1px solid ${(props) => props.theme.input.borderColor.secondary};
-    background: ${(props) => props.theme.input.background.primary};
+    background: ${(props) => props.theme.button.background.tertiary};
     color: ${(props) => props.theme.input.textColor.primary};
     border-radius: 10px;
     position: absolute;
@@ -118,7 +124,7 @@ const DropDownItem = styled(FlexDiv)`
     padding: 7px 10px 9px 10px;
     cursor: pointer;
     &:hover {
-        background: #96e6ff;
+        background: #51546f;
         border-radius: 12px;
     }
 `;
@@ -127,9 +133,8 @@ const TokenName = styled.div`
     font-weight: 500;
     font-size: 18px;
     line-height: 20px;
-    color: ${(props) => props.theme.input.textColor.primary};
+    color: ${(props) => props.theme.textColor.primary};
     display: block;
-    text-transform: capitalize;
 `;
 
 const TokenIcon = styled.img`
@@ -141,14 +146,16 @@ const TokenIcon = styled.img`
 
 const ArrowDownIcon = styled.i`
     font-size: 18px;
-    margin-left: 20px;
     position: absolute;
     top: 8px;
     right: 15px;
     &:before {
         font-family: ExoticIcons !important;
         content: '\\004D';
-        color: ${(props) => props.theme.input.textColor.primary};
+        color: ${(props) => props.theme.textColor.primary};
+    }
+    @media (max-width: 950px) {
+        right: 10px;
     }
 `;
 

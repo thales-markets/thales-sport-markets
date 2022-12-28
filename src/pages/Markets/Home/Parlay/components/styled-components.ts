@@ -2,9 +2,15 @@ import styled from 'styled-components';
 import { Tooltip, withStyles } from '@material-ui/core';
 import { FlexDiv, FlexDivCentered } from 'styles/common';
 
-export const RowSummary = styled.div`
+export const RowSummary = styled.div<{ columnDirection?: boolean }>`
     display: flex;
     align-items: center;
+    ${(props) => (props.columnDirection ? `flex-direction: column;` : '')}
+`;
+
+export const RowContainer = styled(FlexDiv)`
+    align-items: center;
+    width: 100%;
 `;
 
 export const SummaryLabel = styled.span<{ alignRight?: boolean }>`
@@ -20,12 +26,13 @@ export const SummaryLabel = styled.span<{ alignRight?: boolean }>`
     }
 `;
 
-export const SummaryValue = styled.span<{ isInfo?: boolean }>`
+export const SummaryValue = styled.span<{ isInfo?: boolean; isCurrency?: boolean; isVisible?: boolean }>`
     font-weight: 700;
     font-size: 11px;
     line-height: 12px;
     letter-spacing: 0.025em;
-    color: ${(props) => (props.isInfo ? '#5fc694' : '#ffffff')};
+    display: ${(props) => (props.isVisible ? 'none' : '')};
+    color: ${(props) => (props.isInfo || props.isCurrency ? '#5fc694' : '#ffffff')};
     margin-left: ${(props) => (props.isInfo ? 'auto' : '5px')};
 `;
 
@@ -59,7 +66,7 @@ export const InputContainer = styled(FlexDiv)``;
 export const ValidationTooltip = withStyles(() => ({
     tooltip: {
         minWidth: '100%',
-        width: '270px',
+        width: '296px',
         marginBottom: '7px',
         backgroundColor: '#23273D',
         color: '#E26A78',
@@ -110,7 +117,7 @@ export const AmountToBuyContainer = styled.div`
 `;
 
 export const AmountToBuyInput = styled.input`
-    width: 270px;
+    width: 296px;
     margin-bottom: 5px;
     border: 3px solid #3accfa;
     border-radius: 5px;

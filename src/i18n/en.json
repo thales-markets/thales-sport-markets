@@ -57,7 +57,7 @@
             }
         },
         "swap": {
-            "title": "Get {{currencyKey}}",
+            "title": "Get USD",
             "from-label": "From",
             "to-label": "To",
             "balance-label": "Balance: {{amount}}",
@@ -176,7 +176,7 @@
             "save-image-error": "Failed to save image! Try again",
             "save-image-cancel": "Image saving canceled!",
             "image-in-clipboard": "Image is in clipboard!",
-            "open-twitter": "Openning Twitter...",
+            "open-twitter": "Opening Twitter...",
             "click-open-twitter": "Click here to open Twitter",
             "metamask-not-supported": "Metamask browser doesn't support image download! Please use another browser to share image",
             "ios-not-supported": "Sharing images not supported on iOS devices. If you want to share the image please use desktop version"
@@ -315,7 +315,40 @@
             "coming-soon": "Coming soon",
             "vs": "VS",
             "draw": "Draw",
-            "paused": "Paused"
+            "paused": "Paused",
+            "pending": "Pending",
+            "no-liquidity": "No liquidity",
+            "bet-type": {
+                "winner": "Winner",
+                "spread": "Handicap",
+                "total": "Total",
+                "double-chance": "Double chance"
+            },
+            "odd-tooltip": {
+                "scoring": {
+                    "goals": "goals",
+                    "points": "points"
+                },
+                "match-resolve": {
+                    "regular": "in regular time",
+                    "overtime": "including possible overtime"
+                },
+                "winner": "{{team}} will win the match {{matchResolve}}.",
+                "draw": "The match will end in a draw {{matchResolve}}.",
+                "total": {
+                    "over": "The total number of {{scoring}} in the match {{matchResolve}} will be more than {{total}}.",
+                    "under": "The total number of {{scoring}} in the match {{matchResolve}} will be less than {{total}}."
+                },
+                "spread": {
+                    "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
+                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                },
+                "double-chance": {
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}.",
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
+                },
+                "bonus": "{{bonus}} added bonus on win!"
+            }
         },
         "market-details": {
             "price": "Price",
@@ -342,7 +375,7 @@
             "items": {
                 "markets": "Markets",
                 "profile": "Profile",
-                "onboarding-wizard": "Onboarding wizard",
+                "onboarding-wizard": "Get started",
                 "history": "History",
                 "fifa-campaign": "Zebro FIFA campaign",
                 "sports-trivia": "Sports trivia",
@@ -358,6 +391,7 @@
         },
         "parlay": {
             "total-quote": "Total quote",
+            "total-bonus": "Total bonus",
             "clear": "Clear all",
             "buy-in": "Buy-in",
             "parlay-fee": "Parlay fee",
@@ -610,6 +644,41 @@
             "affiliate-leaderboard": "Affiliate Leaderboard"
         }
     },
+    "wizard": {
+        "title": "Get Started!",
+        "steps": {
+            "title": {
+                "connect-wallet": "Connect Wallet",
+                "fund": "Fund with ETH",
+                "exchange": "Get Crypto USD",
+                "trade": "Overtime Markets"
+            },
+            "description": {
+                "connect-wallet": "If you don't have Optimism connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
+                "fund": "Before you can use Overtime, first you need to get ETH on your Optimism connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
+                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to sUSD button, seamlessly swap ETH to a desired amount of stablecoins.",
+                "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
+            },
+            "action": {
+                "connect-wallet": "Connect Wallet",
+                "connected": "Connected",
+                "fund": "Fund with ETH",
+                "exchange": "Exchange to USD",
+                "trade": "Trade on Overtime"
+            }
+        },
+        "fund-modal": {
+            "title": "Fund, Bridge & Send",
+            "buy": "Fund with card",
+            "buy-banxa": "Fund with Banxa",
+            "buy-mt-pelerin": "Fund with Mt Pelerin",
+            "bridge": "Bridge to optimism  ",
+            "exchange": "Send from exchange",
+            "copy-address": "Copy address",
+            "copied": "Copied!",
+            "address": "Your address QR code"
+        }
+    },
     "vaults": {
         "title": "Sport Vaults",
         "strategy-label": "Vault strategy",
@@ -710,6 +779,17 @@
         "info": "If multiple parlays have the same quote the following will be used as tie-breakers in respective order:",
         "info1": "- Number of positions on the parlay",
         "info2": "- The amount paid",
-        "info3": "- Actual total quote (gotten by multiplying positions individually)"
+        "info3": "- Actual total quote (gotten by multiplying positions individually)",
+        "sidebar": {
+            "title-parlay": "Parlay",
+            "title-leaderboard": "Leaderboard",
+            "wallet": "Wallet",
+            "quote": "Quote",
+            "paid": "Paid",
+            "won": "Won",
+            "reward": "Reward",
+            "total-quote": "Total Quote",
+            "total-amount": "Total Amount"
+        }
     }
 }

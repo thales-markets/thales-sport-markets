@@ -1,13 +1,19 @@
 import PositionSymbol from 'components/PositionSymbol';
-import { Position } from 'constants/options';
-import { ODDS_COLOR } from 'constants/ui';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { ParlaysMarket } from 'types/markets';
-import { convertPositionToSymbolType, formatMarketOdds, getIsApexTopGame, getPositionOdds } from 'utils/markets';
+import {
+    formatMarketOdds,
+    getBonus,
+    getFormattedBonus,
+    getOddTooltipText,
+    getPositionOdds,
+    getSpreadTotalText,
+    getSymbolText,
+} from 'utils/markets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
 
@@ -15,22 +21,17 @@ type MatchInfoProps = {
     market: ParlaysMarket;
     readOnly?: boolean;
     isHighlighted?: boolean;
-    customStyle?: { fontSize?: string; lineHeight?: string; positionColor?: string };
+    customStyle?: { fontSize?: string; lineHeight?: string };
 };
 
 const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, customStyle }) => {
     const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
 
-    const getPositionColor = (position: Position): string => {
-        return customStyle?.positionColor
-            ? customStyle?.positionColor
-            : position === Position.HOME
-            ? ODDS_COLOR.HOME
-            : position === Position.AWAY
-            ? ODDS_COLOR.AWAY
-            : ODDS_COLOR.DRAW;
-    };
+    const symbolText = getSymbolText(market.position, market.betType);
+    const spreadTotalText = getSpreadTotalText(market, market.position);
+
+    const bonus = getBonus(market);
 
     return (
         <>
@@ -44,17 +45,29 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                 </ClubName>
             </MatchLabel>
             <PositionSymbol
-                type={convertPositionToSymbolType(market.position, getIsApexTopGame(market.isApex, market.betType))}
-                symbolColor={getPositionColor(market.position)}
-                additionalText={{
-                    firstText: formatMarketOdds(selectedOddsType, getPositionOdds(market)),
-                    firstTextStyle: {
-                        fontSize: customStyle?.fontSize ? customStyle?.fontSize : '11px',
-                        color: getPositionColor(market.position),
-                        marginLeft: '5px',
+                symbolAdditionalText={{
+                    text: formatMarketOdds(selectedOddsType, getPositionOdds(market)),
+                    textStyle: {
+                        marginLeft: '10px',
+                        marginRight: bonus > 0 ? '4px' : '30.5px',
                     },
                 }}
+                symbolText={symbolText}
+                symbolUpperText={
+                    spreadTotalText
+                        ? {
+                              text: spreadTotalText,
+                              textStyle: {
+                                  backgroundColor: customStyle ? '#23273e' : '#2f3454',
+                                  fontSize: '11px',
+                                  top: '-9px',
+                              },
+                          }
+                        : undefined
+                }
+                tooltip={<>{getOddTooltipText(market.position, market)}</>}
             />
+            {bonus > 0 ? <Bonus>{getFormattedBonus(bonus)}</Bonus> : ''}
             {readOnly ? (
                 market?.isResolved ? (
                     market?.winning ? (
@@ -65,12 +78,12 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                 ) : market?.isCanceled ? (
                     <Canceled className={`icon icon--open`} />
                 ) : (
-                    <></>
+                    <Empty className={`icon icon--open`} />
                 )
             ) : (
                 <XButton
                     onClick={() => {
-                        dispatch(removeFromParlay(market.id));
+                        dispatch(removeFromParlay(market.address));
                     }}
                     className={`icon icon--cross-button`}
                 />
@@ -96,17 +109,27 @@ const ClubName = styled.span<{ fontSize?: string; lineHeight?: string }>`
     color: #ffffff;
 `;
 
-const Correct = styled.i`
+const Bonus = styled.div`
     font-size: 12px;
+    font-weight: 600;
+    color: #5fc694;
+    margin-right: 4px;
+`;
+
+const Icon = styled.i`
+    font-size: 12px;
+`;
+const Correct = styled(Icon)`
     color: #339d6a;
 `;
-const Wrong = styled.i`
-    font-size: 12px;
+const Wrong = styled(Icon)`
     color: #ca4c53;
 `;
-const Canceled = styled.i`
-    font-size: 12px;
+const Canceled = styled(Icon)`
     color: #ffffff;
+`;
+const Empty = styled(Icon)`
+    visibility: hidden;
 `;
 
 export default MatchInfo;

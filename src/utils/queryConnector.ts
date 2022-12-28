@@ -16,8 +16,8 @@ const queryConnector: QueryConnector = {
     },
 };
 
-export const refetchMarketData = (marketAddress: string, isSell?: boolean) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Market(marketAddress, !!isSell));
+export const refetchMarketData = (marketAddress: string) => {
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Market(marketAddress));
 };
 
 export const refetchMarkets = (networkId: NetworkId) => {
@@ -25,7 +25,6 @@ export const refetchMarkets = (networkId: NetworkId) => {
 };
 
 export const refetchBalances = (walletAddress: string, networkId: NetworkId) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.PaymentTokenBalance(walletAddress, networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.GetsUSDWalletBalance(walletAddress, networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId));
 };
