@@ -50,16 +50,16 @@ const MySimpleTicket: React.FC<MySimpleTicketProps> = ({ markets, payout }) => {
                     <PayoutRow>
                         <PayoutValue isLost={isTicketLost}>{formatCurrencyWithSign(USD_SIGN, payout)}</PayoutValue>
                     </PayoutRow>
-                    <ContentRow height={'35px'} margin={isMobile ? '5px 0 0 0' : '10px 0 0 0'} justify={'space-around'}>
-                        {markets.map((market, index) => (
-                            <MatchLogos key={index} market={market} width={'50px'} isHighlighted={true} />
-                        ))}
-                    </ContentRow>
                 </ContentColumn>
                 <ReferralWrapper>
-                    <QRCode size={isMobile ? 80 : 100} value={generateReferralLink(walletAddress)} />
+                    <QRCode size={isMobile ? 70 : 80} value={generateReferralLink(walletAddress)} />
                     <ReferralLabel>{t('markets.parlay.share-ticket.referral')}</ReferralLabel>
                 </ReferralWrapper>
+            </ContentRow>
+            <ContentRow height={'35px'} margin={isMobile ? '5px 0 0 0' : '10px 0 0 0'} justify={'space-around'}>
+                {markets.map((market, index) => (
+                    <MatchLogos key={index} market={market} width={'50px'} isHighlighted={true} />
+                ))}
             </ContentRow>
         </Container>
     );
@@ -156,9 +156,8 @@ const ReferralWrapper = styled(FlexDivColumnCentered)``;
 
 const ReferralLabel = styled.span`
     font-weight: 600;
-    font-size: 13px;
-    line-height: 16px;
-    letter-spacing: 0.02em;
+    font-size: 11px;
+    line-height: 13px;
     text-transform: uppercase;
     color: #ffffff;
     margin-top: 5px;
@@ -167,7 +166,7 @@ const ReferralLabel = styled.span`
     @media (max-width: 950px) {
         font-size: 10px;
         line-height: 12px;
-        letter-spacing: 0.03em;
+        margin-top: 3px;
     }
 `;
 

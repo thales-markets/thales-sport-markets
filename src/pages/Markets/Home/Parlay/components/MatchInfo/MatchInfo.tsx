@@ -49,7 +49,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                     text: formatMarketOdds(selectedOddsType, getPositionOdds(market)),
                     textStyle: {
                         marginLeft: '10px',
-                        marginRight: bonus > 0 ? '4px' : '30.5px',
+                        marginRight: '4px',
                     },
                 }}
                 symbolText={symbolText}
@@ -67,7 +67,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                 }
                 tooltip={<>{getOddTooltipText(market.position, market)}</>}
             />
-            {bonus > 0 ? <Bonus>{getFormattedBonus(bonus)}</Bonus> : ''}
+            {!readOnly && <Bonus>{bonus > 0 ? getFormattedBonus(bonus) : ''}</Bonus>}
             {readOnly ? (
                 market?.isResolved ? (
                     market?.winning ? (
@@ -110,6 +110,7 @@ const ClubName = styled.span<{ fontSize?: string; lineHeight?: string }>`
 `;
 
 const Bonus = styled.div`
+    min-width: 28px;
     font-size: 12px;
     font-weight: 600;
     color: #5fc694;

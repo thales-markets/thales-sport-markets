@@ -274,7 +274,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
 const Container = styled(FlexDivColumnCentered)<{ isSimpleView: boolean }>`
     width: ${(props) => (props.isSimpleView ? '400' : '324')}px;
     ${(props) => (props.isSimpleView ? 'height: 200px;' : '')}
-    ${(props) => (!props.isSimpleView ? 'max-height: 432px;' : '')}
+    ${(props) => (props.isSimpleView ? '' : 'max-height: 432px;')}
     padding: 15px;
     flex: none;
     background: ${(props) =>

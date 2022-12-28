@@ -625,7 +625,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     <SummaryLabel>{t('markets.parlay.total-bonus')}:</SummaryLabel>
                     <SummaryValue>{totalBonusPercentage}%</SummaryValue>
                     <SummaryValue isCurrency={true} isVisible={usdAmountValue == 0 || tooltipTextUsdAmount != ''}>
-                        = + $ {totalBonusCurrency}
+                        ({formatCurrencyWithSign('+ ' + USD_SIGN, totalBonusCurrency)})
                     </SummaryValue>
                 </RowContainer>
             </RowSummary>

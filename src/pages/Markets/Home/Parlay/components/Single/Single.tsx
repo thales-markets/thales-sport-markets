@@ -608,7 +608,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     <SummaryLabel>{t('markets.parlay.total-bonus')}:</SummaryLabel>
                     <SummaryValue>{bonusPercentage}%</SummaryValue>
                     <SummaryValue isCurrency={true} isVisible={usdAmountValue == 0 || tooltipTextUsdAmount != ''}>
-                        = + $ {bonusCurrency}
+                        ({formatCurrencyWithSign('+ ' + USD_SIGN, bonusCurrency)})
                     </SummaryValue>
                 </RowContainer>
             </RowSummary>
