@@ -766,7 +766,9 @@
             "total-quote": "Общая котировка",
             "quote": "Цитировать",
             "title-leaderboard": "Таблица лидеров",
-            "title-parlay": "экспресс"
+            "title-parlay": "экспресс",
+            "wallet": "Бумажник",
+            "reward": "Вознаграждение"
         }
     },
     "wizard": {

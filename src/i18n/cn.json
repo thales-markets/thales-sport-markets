@@ -763,7 +763,9 @@
             "paid": "Paid",
             "won": "Won",
             "total-quote": "Total Quote",
-            "total-amount": "Total Amount"
+            "total-amount": "Total Amount",
+            "wallet": "钱包",
+            "reward": "报酬"
         }
     },
     "wizard": {
