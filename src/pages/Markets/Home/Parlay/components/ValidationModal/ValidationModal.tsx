@@ -15,7 +15,7 @@ type ValidationModalProps = {
     onClose: () => void;
 };
 
-const DELAY_ANIMATION_PLAY = 400;
+const DELAY_ANIMATION_PLAY = 200;
 const ANIMATION_TIME = 1200;
 
 export const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => {

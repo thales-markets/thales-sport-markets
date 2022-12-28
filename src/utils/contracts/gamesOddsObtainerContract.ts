@@ -1,7 +1,7 @@
 export const gamesOddsObtainerContract = {
     addresses: {
         5: 'TBD',
-        10: 'TBD',
+        10: '0x3ff20410003767ede94c06c5df56968d90abae6c',
         42: 'TBD',
         69: 'TBD',
         420: '0x00d23ce013094f7100b681426c046023d1c02858',
