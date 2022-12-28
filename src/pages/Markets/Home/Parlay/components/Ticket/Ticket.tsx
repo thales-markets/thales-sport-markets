@@ -495,8 +495,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                             bonus *= bonusDecimal;
                         });
                         const calculatedBonusPercentage = ((bonus - 1) * 100).toFixed(2);
-
-                        if (usdAmountValue > 0) {
+                        if (oldTotalQuote > 0 && usdAmountValue > 0) {
                             const calculatedReducedTotalBonus =
                                 (Number(formatMarketOdds(OddsType.Decimal, newTotalQuote)) *
                                     Number(calculatedBonusPercentage)) /
