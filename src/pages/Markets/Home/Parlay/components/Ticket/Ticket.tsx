@@ -167,21 +167,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         dispatch(setPayment({ selectedStableIndex, isVoucherSelected, amountToBuy: usdAmountValue }));
     }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
 
-    useEffect(() => {
-        let bonus = 1;
-        markets.forEach((market) => {
-            const bonusDecimal = getBonus(market) / 100 + 1;
-            bonus *= bonusDecimal;
-        });
-        setTotalBonusPercentage(((bonus - 1) * 100).toFixed(2));
-
-        if (totalBuyAmount > 0) {
-            const calculatedBonusCurrency = (totalBuyAmount * (100 - (100 - (bonus - 1) * 100))) / 100;
-            setTotalBonusCurrency((totalBuyAmount - calculatedBonusCurrency).toFixed(2));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [markets]);
-
     // Clear Parlay when network is changed
     const isMounted = useRef(false);
     useEffect(() => {
@@ -504,10 +489,17 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         setMarketsOutOfLiquidity(marketsOutOfLiquidity);
                         setFinalQuotes(fetchedFinalQuotes);
 
-                        if (oldTotalQuote > 0 && usdAmountValue > 0) {
+                        let bonus = 1;
+                        markets.forEach((market) => {
+                            const bonusDecimal = getBonus(market) / 100 + 1;
+                            bonus *= bonusDecimal;
+                        });
+                        const calculatedBonusPercentage = ((bonus - 1) * 100).toFixed(2);
+
+                        if (usdAmountValue > 0) {
                             const calculatedReducedTotalBonus =
-                                (Number(formatMarketOdds(OddsType.Decimal, newTotalQuote)) *
-                                    Number(totalBonusPercentage)) /
+                                (Number(formatMarketOdds(OddsType.Decimal, totalQuote)) *
+                                    Number(calculatedBonusPercentage)) /
                                 Number(formatMarketOdds(OddsType.Decimal, oldTotalQuote));
                             setTotalBonusPercentage(calculatedReducedTotalBonus.toFixed(2));
                             if (newTotalBuyAmount > 0) {
@@ -516,12 +508,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                                 setTotalBonusCurrency((newTotalBuyAmount - calculatedBonusCurrency).toFixed(2));
                             }
                         } else {
-                            let bonus = 1;
-                            markets.forEach((market) => {
-                                const bonusDecimal = getBonus(market) / 100 + 1;
-                                bonus *= bonusDecimal;
-                            });
-                            setTotalBonusPercentage(((bonus - 1) * 100).toFixed(2));
+                            setTotalBonusPercentage(calculatedBonusPercentage);
                             setTotalBonusCurrency('');
                         }
 
@@ -624,7 +611,12 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 <RowContainer>
                     <SummaryLabel>{t('markets.parlay.total-bonus')}:</SummaryLabel>
                     <SummaryValue>{totalBonusPercentage}%</SummaryValue>
-                    <SummaryValue isCurrency={true} isVisible={usdAmountValue == 0 || tooltipTextUsdAmount != ''}>
+                    <SummaryValue
+                        isCurrency={true}
+                        isHidden={
+                            usdAmountValue == 0 || tooltipTextUsdAmount != '' || Number(totalBonusPercentage) == 0
+                        }
+                    >
                         ({formatCurrencyWithSign('+ ' + USD_SIGN, totalBonusCurrency)})
                     </SummaryValue>
                 </RowContainer>
