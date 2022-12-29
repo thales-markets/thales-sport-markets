@@ -139,3 +139,15 @@ export const OPLogoWrapper = styled(OPLogo)`
     height: 15px;
     margin-left: 5px;
 `;
+
+export const LoaderContainer = styled(FlexDivCentered)`
+    position: relative;
+    min-height: 200px;
+    width: 100%;
+`;
+
+export const NoResultContainer = styled(FlexDivCentered)`
+    font-size: 12px;
+    min-height: 50px;
+    text-align: center;
+`;

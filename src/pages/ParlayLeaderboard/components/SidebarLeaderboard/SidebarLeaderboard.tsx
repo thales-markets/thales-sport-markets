@@ -1,4 +1,5 @@
 import PositionSymbol from 'components/PositionSymbol';
+import SimpleLoader from 'components/SimpleLoader';
 import SPAAnchor from 'components/SPAAnchor';
 import { USD_SIGN } from 'constants/currency';
 import { PARLAY_LEADERBOARD_START_DATE, TODAYS_DATE } from 'constants/markets';
@@ -36,6 +37,8 @@ import {
     LeaderboardContainer,
     LeaderboardRow,
     LeaderboardWrapper,
+    LoaderContainer,
+    NoResultContainer,
     OPLogoWrapper,
     ParlayRow,
     ParlayRowMatch,
@@ -85,124 +88,143 @@ const SidebarLeaderboard: React.FC = () => {
                             <ColumnLabel>{t('parlay-leaderboard.sidebar.reward')}</ColumnLabel>
                         </ColumnWrapper>
                     </HeaderRow>
-                    {parlaysData.map((parlay, index) => {
-                        return (
-                            <React.Fragment key={index}>
-                                <LeaderboardRow
-                                    className={index == 0 ? 'first' : ''}
-                                    onClick={() => setExpandedRowIndex(expandedRowIndex !== index ? index : -1)}
-                                >
-                                    <ColumnWrapper>
-                                        <Rank>{parlay.rank}</Rank>
-                                        <DataLabel title={parlay.account}>
-                                            {truncateAddress(parlay.account, 3, 3)}
-                                        </DataLabel>
-                                    </ColumnWrapper>
-                                    <ColumnWrapper>
-                                        <DataLabel>{formatMarketOdds(selectedOddsType, parlay.totalQuote)}</DataLabel>
-                                    </ColumnWrapper>
-                                    <ColumnWrapper>
-                                        <DataLabel>{formatCurrencyWithSign(USD_SIGN, parlay.sUSDPaid, 2)}</DataLabel>
-                                    </ColumnWrapper>
-                                    <ColumnWrapper>
-                                        <DataLabel>
-                                            {formatCurrency(REWARDS[parlay.rank - 1], 0)}
-                                            <OPLogoWrapper />
-                                        </DataLabel>
-                                    </ColumnWrapper>
-                                    <ArrowIcon
-                                        className={
-                                            expandedRowIndex === index ? 'icon icon--arrow-up' : 'icon icon--arrow-down'
-                                        }
-                                    />
-                                </LeaderboardRow>
-                                {expandedRowIndex === index && (
-                                    <ExpandedRow>
-                                        {parlay.sportMarketsFromContract.map((market, marketIndex) => {
-                                            const position = parlay.positions.find(
-                                                (position: PositionData) => position.market.address == market
-                                            );
+                    {query.isLoading ? (
+                        <LoaderContainer>
+                            <SimpleLoader />
+                        </LoaderContainer>
+                    ) : parlaysData.length === 0 ? (
+                        <NoResultContainer>{t('parlay-leaderboard.no-parlays')}</NoResultContainer>
+                    ) : (
+                        parlaysData.map((parlay, index) => {
+                            return (
+                                <React.Fragment key={index}>
+                                    <LeaderboardRow
+                                        className={index == 0 ? 'first' : ''}
+                                        onClick={() => setExpandedRowIndex(expandedRowIndex !== index ? index : -1)}
+                                    >
+                                        <ColumnWrapper>
+                                            <Rank>{parlay.rank}</Rank>
+                                            <DataLabel title={parlay.account}>
+                                                {truncateAddress(parlay.account, 3, 3)}
+                                            </DataLabel>
+                                        </ColumnWrapper>
+                                        <ColumnWrapper>
+                                            <DataLabel>
+                                                {formatMarketOdds(selectedOddsType, parlay.totalQuote)}
+                                            </DataLabel>
+                                        </ColumnWrapper>
+                                        <ColumnWrapper>
+                                            <DataLabel>
+                                                {formatCurrencyWithSign(USD_SIGN, parlay.sUSDPaid, 2)}
+                                            </DataLabel>
+                                        </ColumnWrapper>
+                                        <ColumnWrapper>
+                                            <DataLabel>
+                                                {formatCurrency(REWARDS[parlay.rank - 1], 0)}
+                                                <OPLogoWrapper />
+                                            </DataLabel>
+                                        </ColumnWrapper>
+                                        <ArrowIcon
+                                            className={
+                                                expandedRowIndex === index
+                                                    ? 'icon icon--arrow-up'
+                                                    : 'icon icon--arrow-down'
+                                            }
+                                        />
+                                    </LeaderboardRow>
+                                    {expandedRowIndex === index && (
+                                        <ExpandedRow>
+                                            {parlay.sportMarketsFromContract.map((market, marketIndex) => {
+                                                const position = parlay.positions.find(
+                                                    (position: PositionData) => position.market.address == market
+                                                );
 
-                                            const positionEnum = convertPositionNameToPositionType(
-                                                position ? position.side : ''
-                                            );
+                                                const positionEnum = convertPositionNameToPositionType(
+                                                    position ? position.side : ''
+                                                );
 
-                                            const symbolText = position
-                                                ? getSymbolText(positionEnum, position.market.betType)
-                                                : '';
-                                            const spreadTotalText = position
-                                                ? getSpreadTotalText(position.market, positionEnum)
-                                                : '';
+                                                const symbolText = position
+                                                    ? getSymbolText(positionEnum, position.market.betType)
+                                                    : '';
+                                                const spreadTotalText = position
+                                                    ? getSpreadTotalText(position.market, positionEnum)
+                                                    : '';
 
-                                            return (
-                                                position && (
-                                                    <ParlayRow
-                                                        style={{ opacity: getOpacity(position) }}
-                                                        key={'ExpandedRow' + marketIndex}
-                                                    >
-                                                        <ParlayRowMatch>
-                                                            {getPositionStatus(position)}
-                                                            <ParlayRowTeam
-                                                                title={
-                                                                    position.market.homeTeam +
-                                                                    ' vs ' +
-                                                                    position.market.awayTeam
+                                                return (
+                                                    position && (
+                                                        <ParlayRow
+                                                            style={{ opacity: getOpacity(position) }}
+                                                            key={'ExpandedRow' + marketIndex}
+                                                        >
+                                                            <ParlayRowMatch>
+                                                                {getPositionStatus(position)}
+                                                                <ParlayRowTeam
+                                                                    title={
+                                                                        position.market.homeTeam +
+                                                                        ' vs ' +
+                                                                        position.market.awayTeam
+                                                                    }
+                                                                >
+                                                                    {position.market.homeTeam +
+                                                                        ' vs ' +
+                                                                        position.market.awayTeam}
+                                                                </ParlayRowTeam>
+                                                            </ParlayRowMatch>
+                                                            <PositionSymbol
+                                                                symbolAdditionalText={{
+                                                                    text: formatMarketOdds(
+                                                                        selectedOddsType,
+                                                                        parlay.marketQuotes
+                                                                            ? parlay.marketQuotes[marketIndex]
+                                                                            : 0
+                                                                    ),
+                                                                    textStyle: {
+                                                                        fontSize: '10.5px',
+                                                                        marginLeft: '5px',
+                                                                    },
+                                                                }}
+                                                                additionalStyle={{
+                                                                    width: 23,
+                                                                    height: 23,
+                                                                    fontSize: 10.5,
+                                                                    borderWidth: 2,
+                                                                }}
+                                                                symbolText={symbolText}
+                                                                symbolUpperText={
+                                                                    spreadTotalText
+                                                                        ? {
+                                                                              text: spreadTotalText,
+                                                                              textStyle: {
+                                                                                  backgroundColor: '#2c3250',
+                                                                                  fontSize: '10px',
+                                                                                  top: '-9px',
+                                                                                  left: '10px',
+                                                                              },
+                                                                          }
+                                                                        : undefined
                                                                 }
-                                                            >
-                                                                {position.market.homeTeam +
-                                                                    ' vs ' +
-                                                                    position.market.awayTeam}
-                                                            </ParlayRowTeam>
-                                                        </ParlayRowMatch>
-                                                        <PositionSymbol
-                                                            symbolAdditionalText={{
-                                                                text: formatMarketOdds(
-                                                                    selectedOddsType,
-                                                                    parlay.marketQuotes
-                                                                        ? parlay.marketQuotes[marketIndex]
-                                                                        : 0
-                                                                ),
-                                                                textStyle: {
-                                                                    fontSize: '10.5px',
-                                                                    marginLeft: '5px',
-                                                                },
-                                                            }}
-                                                            additionalStyle={{
-                                                                width: 23,
-                                                                height: 23,
-                                                                fontSize: 10.5,
-                                                                borderWidth: 2,
-                                                            }}
-                                                            symbolText={symbolText}
-                                                            symbolUpperText={
-                                                                spreadTotalText
-                                                                    ? {
-                                                                          text: spreadTotalText,
-                                                                          textStyle: {
-                                                                              backgroundColor: '#2c3250',
-                                                                              fontSize: '10px',
-                                                                              top: '-9px',
-                                                                              left: '10px',
-                                                                          },
-                                                                      }
-                                                                    : undefined
-                                                            }
-                                                            tooltip={
-                                                                <>{getOddTooltipText(positionEnum, position.market)}</>
-                                                            }
-                                                        />
-                                                        <ParlayRowResult>
-                                                            {getParlayItemStatus(position.market)}
-                                                        </ParlayRowResult>
-                                                    </ParlayRow>
-                                                )
-                                            );
-                                        })}
-                                    </ExpandedRow>
-                                )}
-                            </React.Fragment>
-                        );
-                    })}
+                                                                tooltip={
+                                                                    <>
+                                                                        {getOddTooltipText(
+                                                                            positionEnum,
+                                                                            position.market
+                                                                        )}
+                                                                    </>
+                                                                }
+                                                            />
+                                                            <ParlayRowResult>
+                                                                {getParlayItemStatus(position.market)}
+                                                            </ParlayRowResult>
+                                                        </ParlayRow>
+                                                    )
+                                                );
+                                            })}
+                                        </ExpandedRow>
+                                    )}
+                                </React.Fragment>
+                            );
+                        })
+                    )}
                 </LeaderboardContainer>
             </Container>
         </LeaderboardWrapper>
