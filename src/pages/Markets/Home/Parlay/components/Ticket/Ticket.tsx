@@ -68,6 +68,8 @@ const TicketErrorMessage = {
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
 };
 
+const MIN_USD_AMOUNT = 10;
+
 const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOfLiquidity }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
@@ -467,7 +469,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 setIsFetching(true);
                 const { parlayMarketsAMMContract } = networkConnector;
                 if (parlayMarketsAMMContract && Number(usdAmountValue) >= 0 && parlayAmmData?.minUsdAmount) {
-                    const parlayAmmQuote = await fetchParlayAmmQuote(Number(usdAmountValue));
+                    // Fetching for 10$ amount in order to calculate total bonus difference
+                    const [parlayAmmMinimumUSDAmountQuote, parlayAmmQuote] = await Promise.all([
+                        fetchParlayAmmQuote(MIN_USD_AMOUNT),
+                        fetchParlayAmmQuote(Number(usdAmountValue)),
+                    ]);
 
                     if (!mountedRef.current || !isSubscribed) return null;
 
@@ -495,27 +501,27 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                             bonus *= bonusDecimal;
                         });
                         const calculatedBonusPercentage = ((bonus - 1) * 100).toFixed(2);
-                        if (oldTotalQuote == 0) {
+
+                        if (oldTotalQuote == 0 && newTotalBuyAmount > 0) {
                             setTotalBonusPercentage(calculatedBonusPercentage);
-                            if (newTotalBuyAmount > 0) {
-                                const calculatedBonusCurrency =
-                                    (newTotalBuyAmount * (100 - Number(calculatedBonusPercentage))) / 100;
-                                setTotalBonusCurrency((newTotalBuyAmount - calculatedBonusCurrency).toFixed(2));
-                            } else {
-                                setTotalBonusPercentage(calculatedBonusPercentage);
-                                setTotalBonusCurrency('');
-                            }
-                        } else if (oldTotalQuote > 0 && usdAmountValue > 0) {
+                            const calculatedBonusCurrency =
+                                (newTotalBuyAmount * (100 - Number(calculatedBonusPercentage))) / 100;
+                            setTotalBonusCurrency((newTotalBuyAmount - calculatedBonusCurrency).toFixed(2));
+                        } else if (
+                            oldTotalQuote > 0 &&
+                            newTotalBuyAmount > 0 &&
+                            !parlayAmmMinimumUSDAmountQuote.error
+                        ) {
+                            const baseQuote = bigNumberFormatter(parlayAmmMinimumUSDAmountQuote['totalQuote']);
                             const calculatedReducedTotalBonus =
                                 (Number(formatMarketOdds(OddsType.Decimal, newTotalQuote)) *
                                     Number(calculatedBonusPercentage)) /
-                                Number(formatMarketOdds(OddsType.Decimal, oldTotalQuote));
+                                Number(formatMarketOdds(OddsType.Decimal, baseQuote));
                             setTotalBonusPercentage(calculatedReducedTotalBonus.toFixed(2));
-                            if (newTotalBuyAmount > 0) {
-                                const calculatedBonusCurrency =
-                                    (newTotalBuyAmount * (100 - calculatedReducedTotalBonus)) / 100;
-                                setTotalBonusCurrency((newTotalBuyAmount - calculatedBonusCurrency).toFixed(2));
-                            }
+
+                            const calculatedBonusCurrency =
+                                (newTotalBuyAmount * (100 - calculatedReducedTotalBonus)) / 100;
+                            setTotalBonusCurrency((newTotalBuyAmount - calculatedBonusCurrency).toFixed(2));
                         } else {
                             setTotalBonusPercentage(calculatedBonusPercentage);
                             setTotalBonusCurrency('');

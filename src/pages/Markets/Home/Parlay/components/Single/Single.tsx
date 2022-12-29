@@ -301,11 +301,9 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                             Number(formatMarketOdds(OddsType.Decimal, getPositionOdds(market)));
                         setBonusPercentage(calculatedReducedBonus.toFixed(2));
 
-                        if (maxAvailableTokenAmount > 0) {
-                            const calculatedBonusCurrency =
-                                (maxAvailableTokenAmount * (100 - calculatedReducedBonus)) / 100;
-                            setBonusCurrency((maxAvailableTokenAmount - calculatedBonusCurrency).toFixed(2));
-                        }
+                        const calculatedBonusCurrency =
+                            (maxAvailableTokenAmount * (100 - calculatedReducedBonus)) / 100;
+                        setBonusCurrency((maxAvailableTokenAmount - calculatedBonusCurrency).toFixed(2));
                     } else {
                         setBonusPercentage(getBonus(market).toFixed(2));
                         setBonusCurrency('');
