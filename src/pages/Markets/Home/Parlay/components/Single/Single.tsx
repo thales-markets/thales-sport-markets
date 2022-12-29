@@ -87,7 +87,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     );
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [tokenAmount, setTokenAmount] = useState(0);
-    const [bonusPercentage, setBonusPercentage] = useState(0);
+    const [bonusPercentageDec, setBonusPercentageDec] = useState(0);
     const [bonusCurrency, setBonusCurrency] = useState(0);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [maxUsdAmount, setMaxUsdAmount] = useState(0);
@@ -297,12 +297,12 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                         const calculatedReducedBonus =
                             (calculatedBonusPercentageDec * newQuote) /
                             Number(formatMarketOdds(OddsType.Decimal, getPositionOdds(market)));
-                        setBonusPercentage(calculatedReducedBonus);
+                        setBonusPercentageDec(calculatedReducedBonus);
 
                         const calculatedBonusCurrency = maxAvailableTokenAmount * calculatedReducedBonus;
                         setBonusCurrency(calculatedBonusCurrency);
                     } else {
-                        setBonusPercentage(calculatedBonusPercentageDec);
+                        setBonusPercentageDec(calculatedBonusPercentageDec);
                         setBonusCurrency(0);
                     }
                 }
@@ -601,7 +601,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 </RowContainer>
                 <RowContainer>
                     <SummaryLabel>{t('markets.parlay.total-bonus')}:</SummaryLabel>
-                    <SummaryValue>{formatPercentage(bonusPercentage)}</SummaryValue>
+                    <SummaryValue>{formatPercentage(bonusPercentageDec)}</SummaryValue>
                     <SummaryValue isCurrency={true} isHidden={bonusCurrency === 0 || hidePayout}>
                         ({formatCurrencyWithSign('+ ' + USD_SIGN, bonusCurrency)})
                     </SummaryValue>
