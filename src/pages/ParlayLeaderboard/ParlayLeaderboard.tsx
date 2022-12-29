@@ -226,7 +226,7 @@ const ParlayLeaderboard: React.FC = () => {
                             <TableText>{formatMarketOdds(selectedOddsType, cellProps.cell.value)}</TableText>
                         ),
                         sortable: true,
-                        sortType: quoteSort(),
+                        sortType: quoteSort(selectedOddsType),
                     },
                     {
                         accessor: 'sUSDPaid',
@@ -499,8 +499,10 @@ const TableText = styled.p`
     }
 `;
 
-const quoteSort = () => (rowA: any, rowB: any) => {
-    return rowA.original.totalQuote - rowB.original.totalQuote;
+const quoteSort = (oddsType: OddsType) => (rowA: any, rowB: any) => {
+    return oddsType === OddsType.AMM
+        ? rowA.original.totalQuote - rowB.original.totalQuote
+        : rowB.original.totalQuote - rowA.original.totalQuote;
 };
 
 export const StatusIcon = styled.i`
