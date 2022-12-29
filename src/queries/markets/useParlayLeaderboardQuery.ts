@@ -44,7 +44,10 @@ export const useParlayLeaderboardQuery = (
                 });
 
                 const parlayMarketsModified = parlayMarkets
-                    .filter((market: ParlayMarket) => market.sportMarkets.length >= PARLAY_LEADERBOARD_MINIMUM_GAMES)
+                    .filter(
+                        (market: ParlayMarket) =>
+                            market.sportMarkets.length >= PARLAY_LEADERBOARD_MINIMUM_GAMES || period === 0
+                    )
                     .sort((a: ParlayMarket, b: ParlayMarket) =>
                         a.totalQuote !== b.totalQuote
                             ? a.totalQuote - b.totalQuote
