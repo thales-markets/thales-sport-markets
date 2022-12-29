@@ -1,13 +1,16 @@
 import PositionSymbol from 'components/PositionSymbol';
 import Search from 'components/Search';
+import SelectInput from 'components/SelectInput';
 import Table from 'components/Table';
 import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
-import { OddsType } from 'constants/markets';
+import { OddsType, PARLAY_LEADERBOARD_START_DATE, TODAYS_DATE } from 'constants/markets';
 import { t } from 'i18next';
+import { addMonths, differenceInCalendarMonths } from 'date-fns';
+import { PaginationWrapper } from 'pages/Quiz/styled-components';
 import { AddressLink } from 'pages/Rewards/styled-components';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { CellProps } from 'react-table';
@@ -16,7 +19,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivRowCentered } from 'styles/common';
+import { FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { ParlayMarketWithRank, PositionData, SportMarketInfo } from 'types/markets';
 import { getEtherscanAddressLink } from 'utils/etherscan';
 import { formatDateWithTime } from 'utils/formatters/date';
@@ -54,8 +57,6 @@ export const REWARDS = [
     110,
     100,
 ];
-export const START_DATE = new Date(2022, 11, 1, 0, 0, 0);
-export const END_DATE = new Date(2022, 11, 31, 24, 0, 0);
 
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -65,14 +66,27 @@ const ParlayLeaderboard: React.FC = () => {
     const selectedOddsType = useSelector(getOddsType);
     const [searchText, setSearchText] = useState<string>('');
     const [expandStickyRow, setExpandStickyRowState] = useState<boolean>(false);
-    const query = useParlayLeaderboardQuery(
-        networkId,
-        parseInt(START_DATE.getTime() / 1000 + ''),
-        parseInt(END_DATE.getTime() / 1000 + ''),
-        { enabled: isAppReady }
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const parlays = query.isSuccess ? query.data : [];
+
+    const monthOptions: Array<{ value: number; label: string }> = [];
+    const latestPeriod = differenceInCalendarMonths(TODAYS_DATE, PARLAY_LEADERBOARD_START_DATE);
+
+    for (let index = 0; index <= latestPeriod; index++) {
+        const periodDate = addMonths(PARLAY_LEADERBOARD_START_DATE, index);
+        const periodYear = periodDate.getUTCFullYear();
+        const periodMonth = periodDate.getUTCMonth() + 1;
+        monthOptions.push({
+            value: index,
+            label: `${t(`parlay-leaderboard.periods.period-${periodMonth % 12}`)} ${periodYear}`,
+        });
+    }
+
+    const [month, setMonth] = useState<number>(latestPeriod);
+
+    const parlayLeaderboardQuery = useParlayLeaderboardQuery(networkId, month, { enabled: isAppReady });
+
+    const parlays = useMemo(() => {
+        return parlayLeaderboardQuery.isSuccess && parlayLeaderboardQuery.data ? parlayLeaderboardQuery.data : [];
+    }, [parlayLeaderboardQuery.isSuccess, parlayLeaderboardQuery.data]);
 
     const parlaysData = useMemo(() => {
         if (!searchText) return parlays;
@@ -118,6 +132,19 @@ const ParlayLeaderboard: React.FC = () => {
         );
     }, [expandStickyRow, parlays, walletAddress, selectedOddsType]);
 
+    const [page, setPage] = useState(0);
+    const handleChangePage = (_event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const [rowsPerPage, setRowsPerPage] = useState(20);
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(Number(event.target.value));
+        setPage(0);
+    };
+
+    useEffect(() => setPage(0), [searchText, month]);
+
     return (
         <Container>
             <TextContainer>
@@ -131,14 +158,23 @@ const ParlayLeaderboard: React.FC = () => {
                     <Description>{t('parlay-leaderboard.info3')}</Description>
                 </ul>
                 <Warning>{t('parlay-leaderboard.warning')}</Warning>
-
-                <Search
-                    text={searchText}
-                    customPlaceholder={t('rewards.search-placeholder')}
-                    handleChange={(e) => setSearchText(e)}
-                    customStyle={{ border: '1px solid #fffff' }}
-                    width={300}
-                />
+                <LeaderboardHeader>
+                    <SelectContainer>
+                        <SelectInput
+                            options={monthOptions}
+                            handleChange={(value) => setMonth(Number(value))}
+                            defaultValue={month}
+                            width={230}
+                        />
+                    </SelectContainer>
+                    <Search
+                        text={searchText}
+                        customPlaceholder={t('rewards.search-placeholder')}
+                        handleChange={(e) => setSearchText(e)}
+                        customStyle={{ border: '1px solid #fffff' }}
+                        width={300}
+                    />
+                </LeaderboardHeader>
             </TextContainer>
             <Table
                 data={parlaysData}
@@ -282,7 +318,20 @@ const ParlayLeaderboard: React.FC = () => {
                         </ExpandedRowWrapper>
                     );
                 }}
+                onSortByChanged={() => setPage(0)}
+                currentPage={page}
+                rowsPerPage={rowsPerPage}
+                isLoading={parlayLeaderboardQuery.isLoading}
             ></Table>
+            <PaginationWrapper
+                rowsPerPageOptions={[10, 20, 50, 100]}
+                count={parlaysData.length ? parlaysData.length : 0}
+                labelRowsPerPage={t(`common.pagination.rows-per-page`)}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
         </Container>
     );
 };
@@ -590,6 +639,22 @@ const ExpandStickyRowIcon = styled.i`
 const ExpandedContainer = styled.div<{ hide?: boolean }>`
     display: ${(_props) => (_props?.hide ? 'none' : 'flex')};
     flex-direction: column;
+`;
+
+const LeaderboardHeader = styled(FlexDivRow)`
+    align-items: center;
+    margin-bottom: 10px;
+    @media screen and (max-width: 767px) {
+        flex-direction: column;
+    }
+`;
+
+const SelectContainer = styled.div`
+    margin-left: 1px;
+    width: 230px;
+    @media screen and (max-width: 767px) {
+        margin-bottom: 10px;
+    }
 `;
 
 export default ParlayLeaderboard;

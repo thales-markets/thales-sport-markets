@@ -766,7 +766,9 @@
             "total-quote": "Citazione totale",
             "title-leaderboard": "Classifica",
             "total-amount": "Importo totale",
-            "title-parlay": "Parla"
+            "title-parlay": "Parla",
+            "wallet": "Portafoglio",
+            "reward": "Ricompensa"
         }
     },
     "wizard": {

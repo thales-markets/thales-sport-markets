@@ -760,7 +760,9 @@
             "paid": "Paid",
             "won": "Won",
             "total-quote": "Total Quote",
-            "total-amount": "Total Amount"
+            "total-amount": "Total Amount",
+            "wallet": "Geldbörse",
+            "reward": "Belohnen"
         }
     },
     "wizard": {

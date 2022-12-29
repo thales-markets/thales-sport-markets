@@ -8,7 +8,14 @@ import { getOddsType } from 'redux/modules/ui';
 import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import {
+    FlexDiv,
+    FlexDivCentered,
+    FlexDivColumn,
+    FlexDivColumnCentered,
+    FlexDivRow,
+    FlexDivRowCentered,
+} from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { formatMarketOdds } from 'utils/markets';
@@ -48,9 +55,9 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
                     <BoldContent>{' overtimemarkets.xyz'}</BoldContent>
                 </Header>
             )}
-            <ContentRow margin={'5px 0 10px 0'}>
+            <ContentRow margin={'3px 0'}>
                 <ReferralWrapper>
-                    <QRCode size={90} value={generateReferralLink(walletAddress)} />
+                    <QRCode size={70} value={generateReferralLink(walletAddress)} />
                     <ReferralLabel>{t('markets.parlay.share-ticket.referral')}</ReferralLabel>
                 </ReferralWrapper>
                 <PayoutWrapper>
@@ -89,14 +96,16 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
                 })}
             </MarketsContainer>
             <HorizontalLine />
-            <InfoRow margin={'8px 0 0 0'}>
-                <InfoLabel>{t('markets.parlay.share-ticket.total-quote')}:</InfoLabel>
-                <InfoValue>{formatMarketOdds(selectedOddsType, totalQuote)}</InfoValue>
-            </InfoRow>
-            <InfoRow>
-                <InfoLabel>{t('markets.parlay.buy-in')}:</InfoLabel>
-                <InfoValue>{formatCurrencyWithSign(USD_SIGN, paid, 2)}</InfoValue>
-            </InfoRow>
+            <InfoWrapper>
+                <InfoDiv>
+                    <InfoLabel>{t('markets.parlay.share-ticket.total-quote')}:</InfoLabel>
+                    <InfoValue>{formatMarketOdds(selectedOddsType, totalQuote)}</InfoValue>
+                </InfoDiv>
+                <InfoDiv>
+                    <InfoLabel>{t('markets.parlay.buy-in')}:</InfoLabel>
+                    <InfoValue>{formatCurrencyWithSign(USD_SIGN, paid, 2)}</InfoValue>
+                </InfoDiv>
+            </InfoWrapper>
         </Container>
     );
 };
@@ -125,7 +134,7 @@ const Header = styled.span<{ isParlay: boolean }>`
     letter-spacing: 0.045em;
     color: #ffffff;
     ${(props) => (props.isParlay ? 'white-space: nowrap;' : '')};
-    ${(props) => (props.isParlay ? 'margin-top: 5px' : '')};
+    ${(props) => (props.isParlay ? 'margin-top: 3px' : '')};
 `;
 
 const BoldContent = styled.span`
@@ -182,40 +191,41 @@ const PayoutValue = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
 const RowMarket = styled.div`
     display: flex;
     position: relative;
-    height: 45px;
+    height: 39px;
     align-items: center;
     text-align: center;
-    padding: 5px 7px;
+    padding: 2px 7px;
 `;
 
-const InfoRow = styled(FlexDiv)<{ margin?: string }>`
+const InfoWrapper = styled(FlexDivRow)`
     font-size: 12px;
     line-height: 18px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
     color: #ffffff;
     width: 100%;
-    padding: 0 15px;
-    ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
+    padding: 5px 5px 0 5px;
 `;
+
+const InfoDiv = styled(FlexDiv)``;
+
 const InfoLabel = styled.span`
     font-weight: 600;
 `;
 const InfoValue = styled.span`
     font-weight: 700;
-    margin-left: auto;
+    margin-left: 5px;
 `;
 
 const ReferralWrapper = styled(FlexDivColumnCentered)``;
 
 const ReferralLabel = styled.span`
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 14px;
-    letter-spacing: 0.02em;
+    font-weight: 300;
+    font-size: 10px;
+    line-height: 12px;
     text-transform: uppercase;
     color: #ffffff;
-    margin-top: 5px;
+    margin-top: 3px;
     white-space: nowrap;
 `;
 

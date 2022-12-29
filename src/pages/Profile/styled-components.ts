@@ -10,7 +10,7 @@ export const Container = styled(FlexDivColumn)`
 `;
 
 export const NavigationWrapper = styled(FlexDivRow)`
-    @media (max-width: 600px) {
+    @media (max-width: 575px) {
         flex-direction: column;
     }
 `;

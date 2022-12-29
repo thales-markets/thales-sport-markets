@@ -123,6 +123,7 @@ const DappHeader: React.FC = () => {
                                         handleChange={(value) => {
                                             dispatch(setMarketSearch(value));
                                         }}
+                                        isModal
                                     />
                                 </SearchContainer>
                             </ReactModal>
@@ -252,6 +253,7 @@ const SearchContainer = styled.div`
     background: ${(props) => props.theme.background.secondary};
     height: 100%;
     text-align: center;
+    margin-right: 2px;
 `;
 
 const NotificationCount = styled.div`

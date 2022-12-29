@@ -54,9 +54,9 @@ const ClubLogo = styled.img<{ isFlag?: boolean; awayTeam?: boolean; isHighlighte
     position: absolute;
     ${(props) => (props.isFlag ? 'object-fit: cover;' : '')}
     ${(props) => (props.isFlag ? 'border-radius: 50%;' : '')}
-    height: ${(props) => (props.isFlag ? '25px' : '35px')};
-    width: ${(props) => (props.isFlag ? '25px' : '35px')};
-    ${(props) => (props.awayTeam ? `margin-left: ${props.isFlag ? '23' : '20'}px;` : '')}
+    height: ${(props) => (props.isFlag ? '25px' : '27px')};
+    width: ${(props) => (props.isFlag ? '25px' : '27px')};
+    ${(props) => (props.awayTeam ? `margin-left: ${props.isFlag ? '23' : '16'}px;` : '')}
     z-index: ${(props) => (props.awayTeam ? '1' : '2')};
     opacity: ${(props) => (props.isHighlighted ? '1' : '0.4')};
 `;

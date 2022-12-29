@@ -170,7 +170,6 @@ const ListContainer = styled(FlexDivColumn)``;
 const RowMarket = styled.div<{ outOfLiquidity: boolean }>`
     display: flex;
     position: relative;
-    margin: 5px 0;
     height: 45px;
     align-items: center;
     text-align: center;

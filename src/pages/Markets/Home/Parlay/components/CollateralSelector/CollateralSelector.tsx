@@ -136,11 +136,10 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
 export const Container = styled.div`
     display: flex;
     flex-direction: row;
-    margin: 13px 0px;
+    margin-bottom: 5px;
     align-items: center;
     @media (max-width: 950px) {
         justify-content: center;
-        margin: 5px 0px;
         flex-direction: column;
     }
 `;
@@ -156,7 +155,7 @@ const CollateralName = styled.span<{ selected?: boolean; uppercase?: boolean }>`
     font-weight: 700;
     font-size: 10px;
     line-height: 150%;
-    margin-bottom: 7px;
+    margin-bottom: 5px;
     color: white;
     ${(props) => (props?.selected ? `opacity: 1;` : `opacity: 0.5`)};
     ${(props) => (props?.uppercase ? `text-transform: uppercase;` : '')};
@@ -168,7 +167,7 @@ const CollateralIcon = styled.div<{ active?: boolean }>`
     border-radius: 50%;
     box-shadow: ${(props) => (props?.active ? 'var(--shadow)' : '')};
     cursor: pointer;
-    margin-bottom: 7px;
+    margin-bottom: 5px;
 `;
 
 const CollateralContainer = styled.div`
