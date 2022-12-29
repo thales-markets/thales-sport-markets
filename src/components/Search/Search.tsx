@@ -13,9 +13,18 @@ type SearchProps = {
     handleChange: (event: any) => void;
     width?: number;
     marginBottom?: number;
+    isModal?: boolean;
 };
 
-const Search: React.FC<SearchProps> = ({ text, customPlaceholder, customStyle, handleChange, width, marginBottom }) => {
+const Search: React.FC<SearchProps> = ({
+    text,
+    customPlaceholder,
+    customStyle,
+    handleChange,
+    width,
+    marginBottom,
+    isModal,
+}) => {
     const { t } = useTranslation();
 
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -32,12 +41,12 @@ const Search: React.FC<SearchProps> = ({ text, customPlaceholder, customStyle, h
                 isMobile={isMobile}
                 autoFocus={isMobile ? true : false}
             />
-            <IconWrapper isMobile={isMobile}>
-                <SearchIcon isMobile={isMobile} />
+            <IconWrapper isMobile={isMobile} isModal={isModal}>
+                <SearchIcon isMobile={isMobile} isModal={isModal} />
             </IconWrapper>
             {text !== '' && (
-                <ClearButton isMobile={isMobile} onClick={() => handleChange('')}>
-                    X
+                <ClearButton isMobile={isMobile} isModal={isModal} onClick={() => handleChange('')}>
+                    x
                 </ClearButton>
             )}
         </Wrapper>
@@ -55,7 +64,7 @@ const Input = styled.input<{ width?: number; isMobile: boolean }>`
     background: ${(props) => props.theme.background.primary};
     border-radius: 5px;
     border: 1px solid ${(props) => props.theme.borderColor.quaternary};
-    color: ${(props) => props.theme.textColor.secondary};
+    color: ${(props) => props.theme.textColor.quaternary};
     width: ${(props) => (props.isMobile ? '100%' : props.width + 'px' || 250 + 'px')};
     height: ${(props) => (props.isMobile ? '100%' : '24px')};
     padding-left: 32px;
@@ -66,27 +75,27 @@ const Input = styled.input<{ width?: number; isMobile: boolean }>`
     text-align: ${(props) => (props.isMobile ? 'center' : '')};
     outline: none;
     &::placeholder {
-        color: ${(props) => (props.isMobile ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
+        color: ${(props) => props.theme.textColor.secondary};
     }
     &:focus {
         border: 1px solid #3fd1ff !important;
     }
 `;
 
-const IconWrapper = styled.div<{ isMobile: boolean }>`
+const IconWrapper = styled.div<{ isMobile: boolean; isModal?: boolean }>`
     border-radius: 30px;
     background: ${(props) => (props.isMobile ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
     position: absolute;
-    width: ${(props) => (props.isMobile ? '25px' : '15px')};
-    height: ${(props) => (props.isMobile ? '25px' : '15px')};
-    top: ${(props) => (props.isMobile ? '8px' : '5px')};
+    width: ${(props) => (props.isMobile ? (props.isModal ? '25px' : '22px') : '15px')};
+    height: ${(props) => (props.isMobile ? (props.isModal ? '25px' : '22px') : '15px')};
+    top: ${(props) => (props.isMobile ? (props.isModal ? '8px' : '3px') : '5px')};
     left: 6px;
 `;
 
-const SearchIcon = styled.i<{ isMobile: boolean }>`
-    font-size: ${(props) => (props.isMobile ? '32px' : '20px')};
+const SearchIcon = styled.i<{ isMobile: boolean; isModal?: boolean }>`
+    font-size: ${(props) => (props.isMobile ? (props.isModal ? '32px' : '28px') : '20px')};
     position: absolute;
-    top: ${(props) => (props.isMobile ? '-6px' : '-4px')};
+    top: ${(props) => (props.isMobile ? (props.isModal ? '-6px' : '-5px') : '-4px')};
     left: ${(props) => (props.isMobile ? '-4px' : '-3px')};
     &:before {
         font-family: ExoticIcons !important;
@@ -95,16 +104,18 @@ const SearchIcon = styled.i<{ isMobile: boolean }>`
     }
 `;
 
-const ClearButton = styled.button<{ isMobile: boolean }>`
-    font-size: ${(props) => (props.isMobile ? '20px' : '12px')};
+const ClearButton = styled.button<{ isMobile: boolean; isModal?: boolean }>`
+    font-size: ${(props) => (props.isMobile ? (props.isModal ? '22px' : '18px') : '14px')};
     position: absolute;
-    top: ${(props) => (props.isMobile ? '2px' : '')};
+    top: ${(props) => (props.isMobile ? (props.isModal ? '2px' : '-1px') : '')};
     right: 5px;
     background: ${(props) => props.theme.background.primary};
     color: ${(props) => props.theme.textColor.secondary};
     cursor: pointer;
     border: none;
-    margin-top: 5px;
+    margin-top: 2px;
+    padding-right: 5px;
+    padding-left: 5px;
 `;
 
 export default Search;

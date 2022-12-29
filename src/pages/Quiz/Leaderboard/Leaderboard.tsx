@@ -145,7 +145,6 @@ const Leaderboard: React.FC = () => {
                             text={searchText}
                             customPlaceholder={t('quiz.leaderboard.search-placeholder')}
                             handleChange={(e) => setSearchText(e)}
-                            customStyle={{ border: '1px solid #1A1C2B' }}
                             width={230}
                         />
                     </LeaderboardHeader>

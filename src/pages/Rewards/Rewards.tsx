@@ -147,7 +147,6 @@ const Rewards: React.FC = () => {
                             text={searchText}
                             customPlaceholder={t('rewards.search-placeholder')}
                             handleChange={(e) => setSearchText(e)}
-                            customStyle={{ border: '1px solid #1A1C2B' }}
                             width={300}
                         />
                         <Row>

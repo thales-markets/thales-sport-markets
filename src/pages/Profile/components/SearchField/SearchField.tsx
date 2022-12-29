@@ -31,6 +31,10 @@ const Wrapper = styled.div`
     margin: 10px 0px 10px 5px;
     flex-direction: row;
     position: relative;
+    @media (max-width: 575px) {
+        margin: 0px;
+        width: 100%;
+    }
 `;
 
 const Input = styled.input`
@@ -39,11 +43,15 @@ const Input = styled.input`
     padding: 5px 50px 5px 30px;
     color: ${MAIN_COLORS.TEXT.WHITE};
     background: ${MAIN_COLORS.DARK_GRAY};
+    outline: none;
     &::placeholder {
         color: ${MAIN_COLORS.LIGHT_GRAY};
     }
     &:focus {
         border: 1px solid ${MAIN_COLORS.LIGHT_BLUE} !important;
+    }
+    @media (max-width: 575px) {
+        width: 100%;
     }
 `;
 
@@ -53,7 +61,7 @@ const IconWrapper = styled.div`
     position: absolute;
     width: 15px;
     height: 15px;
-    top: 5px;
+    top: 7px;
     left: 6px;
 `;
 

@@ -790,6 +790,20 @@
             "reward": "Reward",
             "total-quote": "Total Quote",
             "total-amount": "Total Amount"
+        },
+        "periods": {
+            "period-0": "December",
+            "period-1": "January",
+            "period-2": "February",
+            "period-3": "March",
+            "period-4": "April",
+            "period-5": "May",
+            "period-6": "June",
+            "period-7": "July",
+            "period-8": "August",
+            "period-9": "September",
+            "period-10": "October",
+            "period-11": "November"
         }
     }
 }

@@ -111,3 +111,6 @@ export const OP_INCENTIVIZED_LEAGUE = {
 };
 
 export const MIN_LIQUIDITY = 10;
+
+export const PARLAY_LEADERBOARD_START_DATE = new Date(Date.UTC(2022, 11, 1, 0, 0, 0));
+export const PARLAY_LEADERBOARD_MINIMUM_GAMES = 2;

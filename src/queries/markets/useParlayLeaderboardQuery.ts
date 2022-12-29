@@ -4,6 +4,8 @@ import { ParlayMarket, ParlayMarketWithRank } from 'types/markets';
 import { NetworkId } from 'types/network';
 import thalesData from 'thales-data';
 import { fixApexName, fixDuplicatedTeamName, fixLongTeamNameString } from 'utils/formatters/string';
+import { endOfMonth, startOfMonth, addMonths } from 'date-fns';
+import { PARLAY_LEADERBOARD_MINIMUM_GAMES, PARLAY_LEADERBOARD_START_DATE } from 'constants/markets';
 
 const sortByTotalQuote = (a: ParlayMarket, b: ParlayMarket) => {
     let firstQuote = 1;
@@ -20,14 +22,20 @@ const sortByTotalQuote = (a: ParlayMarket, b: ParlayMarket) => {
 
 export const useParlayLeaderboardQuery = (
     networkId: NetworkId,
-    startPeriod?: number,
-    endPeriod?: number,
+    period: number,
     options?: UseQueryOptions<ParlayMarketWithRank[]>
 ) => {
     return useQuery<ParlayMarketWithRank[]>(
-        QUERY_KEYS.ParlayLeaderboard(networkId),
+        QUERY_KEYS.ParlayLeaderboard(networkId, period),
         async () => {
             try {
+                const startPeriod = Math.trunc(
+                    startOfMonth(addMonths(PARLAY_LEADERBOARD_START_DATE, period)).getTime() / 1000
+                );
+                const endPeriod = Math.trunc(
+                    endOfMonth(addMonths(PARLAY_LEADERBOARD_START_DATE, period)).getTime() / 1000
+                );
+
                 const parlayMarkets = await thalesData.sportMarkets.parlayMarkets({
                     network: networkId,
                     startPeriod,
@@ -36,6 +44,7 @@ export const useParlayLeaderboardQuery = (
                 });
 
                 const parlayMarketsModified = parlayMarkets
+                    .filter((market: ParlayMarket) => market.sportMarkets.length >= PARLAY_LEADERBOARD_MINIMUM_GAMES)
                     .sort((a: ParlayMarket, b: ParlayMarket) =>
                         a.totalQuote !== b.totalQuote
                             ? a.totalQuote - b.totalQuote
