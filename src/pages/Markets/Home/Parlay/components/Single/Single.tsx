@@ -79,23 +79,23 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
 
-    const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
-    const [hasAllowance, setHasAllowance] = useState<boolean>(false);
-    const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
+    const [submitDisabled, setSubmitDisabled] = useState(false);
+    const [hasAllowance, setHasAllowance] = useState(false);
+    const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
         parlayPayment.selectedStableIndex
     );
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
-    const [tokenAmount, setTokenAmount] = useState<number>(0);
-    const [bonusPercentage, setBonusPercentage] = useState('');
-    const [bonusCurrency, setBonusCurrency] = useState('');
+    const [tokenAmount, setTokenAmount] = useState(0);
+    const [bonusPercentage, setBonusPercentage] = useState(0);
+    const [bonusCurrency, setBonusCurrency] = useState(0);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
-    const [maxUsdAmount, setMaxUsdAmount] = useState<number>(0);
-    const [availableUsdAmount, setAvailableUsdAmount] = useState<number>(0);
-    const [isFetching, setIsFetching] = useState<boolean>(false);
-    const [isAllowing, setIsAllowing] = useState<boolean>(false);
-    const [isBuying, setIsBuying] = useState<boolean>(false);
-    const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState<string>('');
+    const [maxUsdAmount, setMaxUsdAmount] = useState(0);
+    const [availableUsdAmount, setAvailableUsdAmount] = useState(0);
+    const [isFetching, setIsFetching] = useState(false);
+    const [isAllowing, setIsAllowing] = useState(false);
+    const [isBuying, setIsBuying] = useState(false);
+    const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState('');
     const [availablePerPosition, setAvailablePerPosition] = useState<AvailablePerPosition>({
         [Position.HOME]: {
             available: 0,
@@ -169,10 +169,6 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         // Used for transition between Ticket and Single to save payment selection and amount
         dispatch(setPayment({ selectedStableIndex, isVoucherSelected, amountToBuy: usdAmountValue }));
     }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
-
-    useEffect(() => {
-        setBonusPercentage(getBonus(market).toFixed(2));
-    }, [market]);
 
     // Clear Parlay when network is changed
     const isMounted = useRef(false);
@@ -250,6 +246,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         fetchAmmQuote,
     ]);
 
+    const calculatedBonusPercentageDec = useMemo(() => getBonus(market) / 100, [market]);
+
     useDebouncedEffect(() => {
         const fetchData = async () => {
             const divider = selectedStableIndex == 0 || selectedStableIndex == 1 ? 1e18 : 1e6;
@@ -294,19 +292,18 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                             : recalculatedTokenAmount;
                     setTokenAmount(maxAvailableTokenAmount);
 
-                    if (Number(usdAmountValue) > 0 && maxAvailableTokenAmount > 0) {
+                    if (Number(usdAmountValue) > 0) {
                         const newQuote = maxAvailableTokenAmount / Number(usdAmountValue);
                         const calculatedReducedBonus =
-                            (newQuote * Number(bonusPercentage)) /
+                            (calculatedBonusPercentageDec * newQuote) /
                             Number(formatMarketOdds(OddsType.Decimal, getPositionOdds(market)));
-                        setBonusPercentage(calculatedReducedBonus.toFixed(2));
+                        setBonusPercentage(calculatedReducedBonus);
 
-                        const calculatedBonusCurrency =
-                            (maxAvailableTokenAmount * (100 - calculatedReducedBonus)) / 100;
-                        setBonusCurrency((maxAvailableTokenAmount - calculatedBonusCurrency).toFixed(2));
+                        const calculatedBonusCurrency = maxAvailableTokenAmount * calculatedReducedBonus;
+                        setBonusCurrency(calculatedBonusCurrency);
                     } else {
-                        setBonusPercentage(getBonus(market).toFixed(2));
-                        setBonusCurrency('');
+                        setBonusPercentage(calculatedBonusPercentageDec);
+                        setBonusCurrency(0);
                     }
                 }
             }
@@ -567,13 +564,13 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
-        (tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
+        (!!tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
     const hideProfit =
         ammPosition.quote <= 0 ||
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
-        (tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
+        (!!tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
 
     const profitPercentage = (tokenAmount - ammPosition.quote) / ammPosition.quote;
 
@@ -604,11 +601,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 </RowContainer>
                 <RowContainer>
                     <SummaryLabel>{t('markets.parlay.total-bonus')}:</SummaryLabel>
-                    <SummaryValue>{bonusPercentage}%</SummaryValue>
-                    <SummaryValue
-                        isCurrency={true}
-                        isHidden={usdAmountValue == 0 || tooltipTextUsdAmount != '' || Number(bonusPercentage) == 0}
-                    >
+                    <SummaryValue>{formatPercentage(bonusPercentage)}</SummaryValue>
+                    <SummaryValue isCurrency={true} isHidden={bonusCurrency === 0 || hidePayout}>
                         ({formatCurrencyWithSign('+ ' + USD_SIGN, bonusCurrency)})
                     </SummaryValue>
                 </RowContainer>

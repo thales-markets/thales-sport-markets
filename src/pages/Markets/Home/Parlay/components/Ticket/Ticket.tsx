@@ -68,8 +68,6 @@ const TicketErrorMessage = {
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
 };
 
-const MIN_USD_AMOUNT = 10;
-
 const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOfLiquidity }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
@@ -89,18 +87,18 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [totalQuote, setTotalQuote] = useState(0);
-    const [totalBonusPercentage, setTotalBonusPercentage] = useState<string>('');
-    const [totalBonusCurrency, setTotalBonusCurrency] = useState<string>('');
+    const [totalBonusPercentage, setTotalBonusPercentage] = useState(0);
+    const [totalBonusCurrency, setTotalBonusCurrency] = useState(0);
     const [finalQuotes, setFinalQuotes] = useState<number[]>([]);
     const [skew, setSkew] = useState(0);
     const [totalBuyAmount, setTotalBuyAmount] = useState(0);
-    const [isFetching, setIsFetching] = useState<boolean>(false);
-    const [isAllowing, setIsAllowing] = useState<boolean>(false);
-    const [isBuying, setIsBuying] = useState<boolean>(false);
-    const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
+    const [isFetching, setIsFetching] = useState(false);
+    const [isAllowing, setIsAllowing] = useState(false);
+    const [isBuying, setIsBuying] = useState(false);
+    const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState<string>('');
-    const [hasAllowance, setHasAllowance] = useState<boolean>(false);
-    const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
+    const [hasAllowance, setHasAllowance] = useState(false);
+    const [submitDisabled, setSubmitDisabled] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
         markets: [],
@@ -461,98 +459,85 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         [parlayAmmData?.maxSupportedAmount, parlayAmmData?.minUsdAmount, t, paymentTokenBalance, isValidProfit]
     );
 
-    useEffect(
-        () => {
-            let isSubscribed = true; // Use for race condition
+    const calculatedBonusPercentageDec = useMemo(() => {
+        let totalBonusDec = 1;
+        markets.forEach((market) => {
+            const bonusDecimal = getBonus(market) / 100 + 1;
+            totalBonusDec *= bonusDecimal;
+        });
+        return totalBonusDec - 1;
+    }, [markets]);
 
-            const fetchData = async () => {
-                setIsFetching(true);
-                const { parlayMarketsAMMContract } = networkConnector;
-                if (parlayMarketsAMMContract && Number(usdAmountValue) >= 0 && parlayAmmData?.minUsdAmount) {
-                    // Fetching for 10$ amount in order to calculate total bonus difference
-                    const [parlayAmmMinimumUSDAmountQuote, parlayAmmQuote] = await Promise.all([
-                        fetchParlayAmmQuote(MIN_USD_AMOUNT),
-                        fetchParlayAmmQuote(Number(usdAmountValue)),
-                    ]);
+    useEffect(() => {
+        let isSubscribed = true; // Use for race condition
 
-                    if (!mountedRef.current || !isSubscribed) return null;
+        const fetchData = async () => {
+            setIsFetching(true);
+            const { parlayMarketsAMMContract } = networkConnector;
+            if (parlayMarketsAMMContract && Number(usdAmountValue) >= 0 && parlayAmmData?.minUsdAmount) {
+                // Fetching for min usd amount in order to calculate total bonus difference
+                const [parlayAmmMinimumUSDAmountQuote, parlayAmmQuote] = await Promise.all([
+                    fetchParlayAmmQuote(parlayAmmData.minUsdAmount),
+                    fetchParlayAmmQuote(Number(usdAmountValue)),
+                ]);
 
-                    if (!parlayAmmQuote.error) {
-                        const oldTotalQuote = totalQuote;
-                        const newTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
-                        const newTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
-                        setTotalQuote(newTotalQuote);
-                        setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
-                        setTotalBuyAmount(newTotalBuyAmount);
+                if (!mountedRef.current || !isSubscribed) return null;
 
-                        const fetchedFinalQuotes: number[] = (
-                            parlayAmmQuote['finalQuotes'] || []
-                        ).map((quote: BigNumber) => bigNumberFormatter(quote));
-                        // Update markets (using order index) which are out of liquidity
-                        const marketsOutOfLiquidity = fetchedFinalQuotes
-                            .map((finalQuote, index) => (finalQuote === 0 ? index : -1))
-                            .filter((index) => index !== -1);
-                        setMarketsOutOfLiquidity(marketsOutOfLiquidity);
-                        setFinalQuotes(fetchedFinalQuotes);
+                if (!parlayAmmQuote.error) {
+                    const newTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
+                    const newTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
+                    setTotalQuote(newTotalQuote);
+                    setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
+                    setTotalBuyAmount(newTotalBuyAmount);
 
-                        let bonus = 1;
-                        markets.forEach((market) => {
-                            const bonusDecimal = getBonus(market) / 100 + 1;
-                            bonus *= bonusDecimal;
-                        });
-                        const calculatedBonusPercentage = ((bonus - 1) * 100).toFixed(2);
+                    const fetchedFinalQuotes: number[] = (parlayAmmQuote['finalQuotes'] || []).map((quote: BigNumber) =>
+                        bigNumberFormatter(quote)
+                    );
+                    // Update markets (using order index) which are out of liquidity
+                    const marketsOutOfLiquidity = fetchedFinalQuotes
+                        .map((finalQuote, index) => (finalQuote === 0 ? index : -1))
+                        .filter((index) => index !== -1);
+                    setMarketsOutOfLiquidity(marketsOutOfLiquidity);
+                    setFinalQuotes(fetchedFinalQuotes);
 
-                        if (oldTotalQuote == 0 && newTotalBuyAmount > 0) {
-                            setTotalBonusPercentage(calculatedBonusPercentage);
-                            const calculatedBonusCurrency =
-                                (newTotalBuyAmount * (100 - Number(calculatedBonusPercentage))) / 100;
-                            setTotalBonusCurrency((newTotalBuyAmount - calculatedBonusCurrency).toFixed(2));
-                        } else if (
-                            oldTotalQuote > 0 &&
-                            newTotalBuyAmount > 0 &&
-                            !parlayAmmMinimumUSDAmountQuote.error
-                        ) {
-                            const baseQuote = bigNumberFormatter(parlayAmmMinimumUSDAmountQuote['totalQuote']);
-                            const calculatedReducedTotalBonus =
-                                (Number(formatMarketOdds(OddsType.Decimal, newTotalQuote)) *
-                                    Number(calculatedBonusPercentage)) /
-                                Number(formatMarketOdds(OddsType.Decimal, baseQuote));
-                            setTotalBonusPercentage(calculatedReducedTotalBonus.toFixed(2));
+                    if (!parlayAmmMinimumUSDAmountQuote.error) {
+                        const baseQuote = bigNumberFormatter(parlayAmmMinimumUSDAmountQuote['totalQuote']);
+                        const calculatedReducedTotalBonus =
+                            (calculatedBonusPercentageDec * Number(formatMarketOdds(OddsType.Decimal, newTotalQuote))) /
+                            Number(formatMarketOdds(OddsType.Decimal, baseQuote));
+                        setTotalBonusPercentage(calculatedReducedTotalBonus);
 
-                            const calculatedBonusCurrency =
-                                (newTotalBuyAmount * (100 - calculatedReducedTotalBonus)) / 100;
-                            setTotalBonusCurrency((newTotalBuyAmount - calculatedBonusCurrency).toFixed(2));
-                        } else {
-                            setTotalBonusPercentage(calculatedBonusPercentage);
-                            setTotalBonusCurrency('');
-                        }
-
-                        setTooltipTextMessageUsdAmount(usdAmountValue, fetchedFinalQuotes);
+                        const calculatedBonusCurrency = newTotalBuyAmount * calculatedReducedTotalBonus;
+                        setTotalBonusCurrency(calculatedBonusCurrency);
                     } else {
-                        setMarketsOutOfLiquidity([]);
-                        setTotalQuote(0);
-                        setSkew(0);
-                        setTotalBuyAmount(0);
-                        setTooltipTextMessageUsdAmount(0, [], parlayAmmQuote.error);
+                        setTotalBonusPercentage(calculatedBonusPercentageDec);
+                        setTotalBonusCurrency(0);
                     }
-                }
-                setIsFetching(false);
-            };
-            fetchData().catch((e) => console.log(e));
 
-            return () => {
-                isSubscribed = false;
-            };
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [
-            usdAmountValue,
-            fetchParlayAmmQuote,
-            setTooltipTextMessageUsdAmount,
-            parlayAmmData?.minUsdAmount,
-            setMarketsOutOfLiquidity,
-        ]
-    );
+                    setTooltipTextMessageUsdAmount(usdAmountValue, fetchedFinalQuotes);
+                } else {
+                    setMarketsOutOfLiquidity([]);
+                    setTotalQuote(0);
+                    setSkew(0);
+                    setTotalBuyAmount(0);
+                    setTooltipTextMessageUsdAmount(0, [], parlayAmmQuote.error);
+                }
+            }
+            setIsFetching(false);
+        };
+        fetchData().catch((e) => console.log(e));
+
+        return () => {
+            isSubscribed = false;
+        };
+    }, [
+        usdAmountValue,
+        fetchParlayAmmQuote,
+        setTooltipTextMessageUsdAmount,
+        parlayAmmData?.minUsdAmount,
+        setMarketsOutOfLiquidity,
+        calculatedBonusPercentageDec,
+    ]);
 
     useEffect(() => {
         setTooltipTextMessageUsdAmount(usdAmountValue, finalQuotes);
@@ -625,13 +610,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 </RowContainer>
                 <RowContainer>
                     <SummaryLabel>{t('markets.parlay.total-bonus')}:</SummaryLabel>
-                    <SummaryValue>{totalBonusPercentage}%</SummaryValue>
-                    <SummaryValue
-                        isCurrency={true}
-                        isHidden={
-                            usdAmountValue == 0 || tooltipTextUsdAmount != '' || Number(totalBonusPercentage) == 0
-                        }
-                    >
+                    <SummaryValue>{formatPercentage(totalBonusPercentage)}</SummaryValue>
+                    <SummaryValue isCurrency={true} isHidden={totalBonusCurrency === 0 || hidePayout}>
                         ({formatCurrencyWithSign('+ ' + USD_SIGN, totalBonusCurrency)})
                     </SummaryValue>
                 </RowContainer>
