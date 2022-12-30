@@ -72,8 +72,8 @@ const ParlayLeaderboard: React.FC = () => {
 
     for (let index = 0; index <= latestPeriod; index++) {
         const periodDate = addMonths(PARLAY_LEADERBOARD_START_DATE, index);
-        const periodYear = periodDate.getUTCFullYear();
-        const periodMonth = periodDate.getUTCMonth() + 1;
+        const periodYear = periodDate.getFullYear();
+        const periodMonth = periodDate.getMonth() + 1;
         monthOptions.push({
             value: index,
             label: `${t(`parlay-leaderboard.periods.period-${periodMonth % 12}`)} ${periodYear}`,
