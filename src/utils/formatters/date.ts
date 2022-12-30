@@ -117,3 +117,15 @@ export const addHoursToCurrentDate = (numberOfHours: number, setToEOD?: boolean)
 export const addDaysToEnteredTimestamp = (numberOfDays: number, timestamp: number) => {
     return new Date().setTime(new Date(timestamp).getTime() + numberOfDays * 24 * 60 * 60 * 1000);
 };
+
+export const addMonthsToUTCDate = (date: Date, months: number) => {
+    return new Date(
+        Date.UTC(
+            date.getUTCFullYear(),
+            date.getUTCMonth() + months,
+            date.getUTCDate(),
+            date.getUTCHours(),
+            date.getUTCMinutes()
+        )
+    );
+};
