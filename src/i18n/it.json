@@ -751,7 +751,7 @@
     "parlay-leaderboard": {
         "title": "Classifica degli incentivi Parlay",
         "description": "Un totale di 10.000 OP sarà distribuito ai migliori parlay del mese. I biglietti saranno classificati in base alle quote più alte, seguite dal volume in caso di pareggio.",
-        "distribution-note": "I premi saranno distribuiti ai primi 20 parlay per il mese di dicembre!",
+        "distribution-note": "Rewards will be distributed to the top 20 parlays for the month! Only parlays with at least 4 positions are eligible for the competition.",
         "info1": "- Numero di posizioni sul parlay",
         "no-parlays": "Nessun parlay vincente registrato nel periodo ancora.",
         "info3": "- Quota totale effettiva (ottenuta moltiplicando le singole posizioni)",
