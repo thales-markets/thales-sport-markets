@@ -844,15 +844,14 @@
         }
     },
     "parlay-leaderboard": {
-        "distribution-note": "Rewards will be distributed to the top 20 parlays for the month! Only parlays with at least 4 positions are eligible for the competition.",
         "title": "Classement Parlay Incentives",
-        "description": "Au total, 10 000 OP seront distribués aux meilleurs parlays du mois. Les billets seront classés en fonction des cotes les plus élevées, suivies du volume en cas d'égalité.",
-        "no-parlays": "Aucun parlay gagnant enregistré pour l'instant.",
-        "info3": "- Devis total réel (obtenu en multipliant les positions individuellement)",
-        "info2": "- Le montant payé",
-        "info": "Si plusieurs parlays ont la même citation, ce qui suit sera utilisé comme bris d'égalité dans l'ordre respectif :",
-        "warning": "* L'équipe des heures supplémentaires se réserve le droit de disqualifier les portefeuilles que nous soupçonnons de jouer avec le système.",
-        "info1": "- Nombre de positions sur le parlay",
+        "description": "A total of 10,000 OP will be distributed to the best parlays of the month. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
+        "distribution-note": "Rewards will be distributed to the top 20 parlays for the month!",
+        "no-parlays": "No winning parlays registered in the period yet.",
+        "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
+        "info": "If multiple parlays have the same number of positions and total quote the following will be used as tie-breakers in respective order:",
+        "info1": "- The amount paid",
+        "info2": "- Actual total quote (gotten by multiplying positions individually)",
         "sidebar": {
             "title-parlay": "Parlay",
             "title-leaderboard": "Leaderboard",
@@ -863,7 +862,8 @@
             "total-quote": "Total Quote",
             "total-amount": "Total Amount",
             "reward": "Récompense",
-            "wallet": "Portefeuille"
+            "wallet": "Portefeuille",
+            "positions": "Postes"
         }
     },
     "wizard": {
