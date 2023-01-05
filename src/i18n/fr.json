@@ -862,7 +862,8 @@
             "total-quote": "Total Quote",
             "total-amount": "Total Amount",
             "reward": "Récompense",
-            "wallet": "Portefeuille"
+            "wallet": "Portefeuille",
+            "positions": "Postes"
         }
     },
     "wizard": {

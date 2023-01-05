@@ -761,7 +761,8 @@
             "total-quote": "Total Quote",
             "total-amount": "Total Amount",
             "wallet": "Geldbörse",
-            "reward": "Belohnen"
+            "reward": "Belohnen",
+            "positions": "Positionen"
         }
     },
     "wizard": {

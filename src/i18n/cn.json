@@ -764,7 +764,8 @@
             "total-quote": "Total Quote",
             "total-amount": "Total Amount",
             "wallet": "钱包",
-            "reward": "报酬"
+            "reward": "报酬",
+            "positions": "职位"
         }
     },
     "wizard": {

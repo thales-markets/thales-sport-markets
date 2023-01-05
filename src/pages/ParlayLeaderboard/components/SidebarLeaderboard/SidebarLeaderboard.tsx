@@ -1,7 +1,6 @@
 import PositionSymbol from 'components/PositionSymbol';
 import SimpleLoader from 'components/SimpleLoader';
 import SPAAnchor from 'components/SPAAnchor';
-import { USD_SIGN } from 'constants/currency';
 import { PARLAY_LEADERBOARD_START_DATE, TODAYS_DATE } from 'constants/markets';
 import { SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
 import ROUTES from 'constants/routes';
@@ -16,7 +15,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { PositionData } from 'types/markets';
-import { formatCurrency, formatCurrencyWithSign } from 'utils/formatters/number';
+import { formatCurrency } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
 import {
     convertPositionNameToPositionType,
@@ -79,10 +78,10 @@ const SidebarLeaderboard: React.FC = () => {
                             <ColumnLabel>{t('parlay-leaderboard.sidebar.wallet')}</ColumnLabel>
                         </ColumnWrapper>
                         <ColumnWrapper>
-                            <ColumnLabel>{t('parlay-leaderboard.sidebar.quote')}</ColumnLabel>
+                            <ColumnLabel>{t('parlay-leaderboard.sidebar.positions')}</ColumnLabel>
                         </ColumnWrapper>
                         <ColumnWrapper>
-                            <ColumnLabel>{t('parlay-leaderboard.sidebar.paid')}</ColumnLabel>
+                            <ColumnLabel>{t('parlay-leaderboard.sidebar.quote')}</ColumnLabel>
                         </ColumnWrapper>
                         <ColumnWrapper>
                             <ColumnLabel>{t('parlay-leaderboard.sidebar.reward')}</ColumnLabel>
@@ -109,13 +108,11 @@ const SidebarLeaderboard: React.FC = () => {
                                             </DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>
-                                            <DataLabel>
-                                                {formatMarketOdds(selectedOddsType, parlay.totalQuote)}
-                                            </DataLabel>
+                                            <DataLabel>{parlay.sportMarkets.length}</DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>
                                             <DataLabel>
-                                                {formatCurrencyWithSign(USD_SIGN, parlay.sUSDPaid, 2)}
+                                                {formatMarketOdds(selectedOddsType, parlay.totalQuote)}
                                             </DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>

@@ -765,7 +765,8 @@
             "total-quote": "Total Quote",
             "total-amount": "Total Amount",
             "reward": "รางวัล",
-            "wallet": "กระเป๋าสตางค์"
+            "wallet": "กระเป๋าสตางค์",
+            "positions": "ตำแหน่ง"
         }
     },
     "wizard": {

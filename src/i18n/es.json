@@ -764,7 +764,8 @@
             "total-quote": "Total Quote",
             "total-amount": "Total Amount",
             "reward": "Premio",
-            "wallet": "Billetera"
+            "wallet": "Billetera",
+            "positions": "Posiciones"
         }
     },
     "wizard": {

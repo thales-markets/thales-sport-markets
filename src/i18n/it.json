@@ -767,7 +767,8 @@
             "total-amount": "Importo totale",
             "title-parlay": "Parla",
             "wallet": "Portafoglio",
-            "reward": "Ricompensa"
+            "reward": "Ricompensa",
+            "positions": "Posizioni"
         }
     },
     "wizard": {

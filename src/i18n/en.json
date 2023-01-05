@@ -788,7 +788,8 @@
             "won": "Won",
             "reward": "Reward",
             "total-quote": "Total Quote",
-            "total-amount": "Total Amount"
+            "total-amount": "Total Amount",
+            "positions": "Positions"
         },
         "periods": {
             "period-0": "December",
