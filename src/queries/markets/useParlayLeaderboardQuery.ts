@@ -7,6 +7,7 @@ import { fixApexName, fixDuplicatedTeamName, fixLongTeamNameString } from 'utils
 import { subMilliseconds } from 'date-fns';
 import { PARLAY_LEADERBOARD_MINIMUM_GAMES, PARLAY_LEADERBOARD_START_DATE_UTC } from 'constants/markets';
 import { addMonthsToUTCDate } from 'utils/formatters/date';
+import { uniqBy } from 'lodash';
 
 const MAXIMUM_QUOTE = 0.033;
 const MAXIMUM_QUOTE_PERIOD_ZERO = 0.05;
@@ -56,8 +57,8 @@ export const useParlayLeaderboardQuery = (
 
                     const parlayMarketsPreviosPeriod = await thalesData.sportMarkets.parlayMarkets({
                         network: networkId,
-                        startPreviousPeriod,
-                        endPreviousPeriod,
+                        startPeriod: startPreviousPeriod,
+                        endPeriod: endPreviousPeriod,
                         won: 'true',
                     });
 
@@ -67,13 +68,13 @@ export const useParlayLeaderboardQuery = (
                             market.sportMarkets.length > PARLAY_LEADERBOARD_MINIMUM_GAMES
                     );
 
-                    parlayMarkets = [...parlayMarkets, ...parlayMarketsPreviosPeriodModified];
+                    parlayMarkets = uniqBy([...parlayMarkets, ...parlayMarketsPreviosPeriodModified], 'id');
                 }
 
                 const parlayMarketsModified = parlayMarkets
                     .filter(
                         (market: ParlayMarket) =>
-                            (market.sportMarkets.length >= PARLAY_LEADERBOARD_MINIMUM_GAMES && period > 0) ||
+                            period > 0 ||
                             (period === 0 &&
                                 market.totalQuote >= MAXIMUM_QUOTE_PERIOD_ZERO &&
                                 market.sportMarkets.length <= PARLAY_LEADERBOARD_MINIMUM_GAMES)
@@ -115,10 +116,10 @@ export const useParlayLeaderboardQuery = (
                         };
                     })
                     .sort((a: ParlayMarket, b: ParlayMarket) =>
-                        a.totalQuote !== b.totalQuote
-                            ? a.totalQuote - b.totalQuote
-                            : a.positions.length !== b.positions.length
+                        a.positions.length !== b.positions.length
                             ? b.positions.length - a.positions.length
+                            : a.totalQuote !== b.totalQuote
+                            ? a.totalQuote - b.totalQuote
                             : a.sUSDPaid !== b.sUSDPaid
                             ? b.sUSDPaid - a.sUSDPaid
                             : sortByTotalQuote(a, b)

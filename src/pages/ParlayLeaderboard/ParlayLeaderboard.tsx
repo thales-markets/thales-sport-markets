@@ -155,7 +155,6 @@ const ParlayLeaderboard: React.FC = () => {
                 <ul style={{ paddingLeft: 10 }}>
                     <Description>{t('parlay-leaderboard.info1')}</Description>
                     <Description>{t('parlay-leaderboard.info2')}</Description>
-                    <Description>{t('parlay-leaderboard.info3')}</Description>
                 </ul>
                 <Warning>{t('parlay-leaderboard.warning')}</Warning>
                 <LeaderboardHeader>
