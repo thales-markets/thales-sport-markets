@@ -78,7 +78,9 @@ const SidebarLeaderboard: React.FC = () => {
                             <ColumnLabel>{t('parlay-leaderboard.sidebar.wallet')}</ColumnLabel>
                         </ColumnWrapper>
                         <ColumnWrapper>
-                            <ColumnLabel>{t('parlay-leaderboard.sidebar.positions')}</ColumnLabel>
+                            <ColumnLabel style={{ paddingLeft: 5 }}>
+                                {t('parlay-leaderboard.sidebar.positions')}
+                            </ColumnLabel>
                         </ColumnWrapper>
                         <ColumnWrapper>
                             <ColumnLabel>{t('parlay-leaderboard.sidebar.quote')}</ColumnLabel>
@@ -103,7 +105,7 @@ const SidebarLeaderboard: React.FC = () => {
                                     >
                                         <ColumnWrapper>
                                             <Rank>{parlay.rank}</Rank>
-                                            <DataLabel title={parlay.account}>
+                                            <DataLabel title={parlay.account} style={{ width: 55 }}>
                                                 {truncateAddress(parlay.account, 3, 3)}
                                             </DataLabel>
                                         </ColumnWrapper>
