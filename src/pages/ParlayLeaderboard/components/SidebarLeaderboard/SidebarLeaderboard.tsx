@@ -110,7 +110,7 @@ const SidebarLeaderboard: React.FC = () => {
                                             </DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>
-                                            <DataLabel>{parlay.sportMarkets.length}</DataLabel>
+                                            <DataLabel>{parlay.numberOfPositions}</DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>
                                             <DataLabel>

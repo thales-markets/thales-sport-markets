@@ -221,10 +221,10 @@ const ParlayLeaderboard: React.FC = () => {
                         ),
                     },
                     {
-                        accessor: 'sportMarkets',
+                        accessor: 'numberOfPositions',
                         Header: <>{t('parlay-leaderboard.sidebar.positions')}</>,
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['sportMarkets']>) => (
-                            <TableText>{cellProps.cell.value.length}</TableText>
+                            <TableText>{cellProps.cell.value}</TableText>
                         ),
                         sortable: true,
                     },

@@ -81,6 +81,7 @@ export const useParlayLeaderboardQuery = (
                     )
                     .map((parlayMarket: ParlayMarket) => {
                         let totalQuote = parlayMarket.totalQuote;
+                        let numberOfPositions = parlayMarket.sportMarkets.length;
                         const sportMarkets = parlayMarket.sportMarkets.map((market) => {
                             if (market.isCanceled) {
                                 let realQuote = 1;
@@ -95,6 +96,7 @@ export const useParlayLeaderboardQuery = (
                                     realQuote = realQuote / parlayMarket.marketQuotes[marketIndex];
                                     const maximumQuote = period === 0 ? MAXIMUM_QUOTE_PERIOD_ZERO : MAXIMUM_QUOTE;
                                     totalQuote = realQuote < maximumQuote ? maximumQuote : realQuote;
+                                    numberOfPositions = numberOfPositions - 1;
                                 }
                             }
 
@@ -112,22 +114,23 @@ export const useParlayLeaderboardQuery = (
                         return {
                             ...parlayMarket,
                             totalQuote,
+                            numberOfPositions,
                             sportMarkets,
                         };
                     })
-                    .sort((a: ParlayMarket, b: ParlayMarket) =>
-                        a.positions.length !== b.positions.length
-                            ? b.positions.length - a.positions.length
+                    .sort((a: ParlayMarketWithRank, b: ParlayMarketWithRank) =>
+                        a.numberOfPositions !== b.numberOfPositions
+                            ? b.numberOfPositions - a.numberOfPositions
                             : a.totalQuote !== b.totalQuote
                             ? a.totalQuote - b.totalQuote
                             : a.sUSDPaid !== b.sUSDPaid
                             ? b.sUSDPaid - a.sUSDPaid
                             : sortByTotalQuote(a, b)
                     )
-                    .map((parlayMarket: ParlayMarket, index: number) => {
+                    .map((parlayMarket: ParlayMarketWithRank, index: number) => {
                         return {
-                            rank: index + 1,
                             ...parlayMarket,
+                            rank: index + 1,
                         };
                     });
                 return parlayMarketsModified;
