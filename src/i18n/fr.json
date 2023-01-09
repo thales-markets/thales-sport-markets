@@ -864,6 +864,20 @@
             "reward": "Récompense",
             "wallet": "Portefeuille",
             "positions": "Postes"
+        },
+        "periods": {
+            "period-6": "Juin",
+            "period-1": "Janvier",
+            "period-5": "Peut",
+            "period-7": "Juillet",
+            "period-8": "Août",
+            "period-4": "Avril",
+            "period-10": "Octobre",
+            "period-3": "Mars",
+            "period-2": "Février",
+            "period-11": "Novembre",
+            "period-0": "Décembre",
+            "period-9": "Septembre"
         }
     },
     "wizard": {
