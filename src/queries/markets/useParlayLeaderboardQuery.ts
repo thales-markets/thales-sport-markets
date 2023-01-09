@@ -8,7 +8,6 @@ import { subMilliseconds } from 'date-fns';
 import { PARLAY_LEADERBOARD_MINIMUM_GAMES, PARLAY_LEADERBOARD_START_DATE_UTC } from 'constants/markets';
 import { addMonthsToUTCDate } from 'utils/formatters/date';
 import { uniqBy } from 'lodash';
-import { convertFinalResultToResultType, convertPositionNameToPosition } from 'utils/markets';
 
 const MAXIMUM_QUOTE = 0.033;
 const MAXIMUM_QUOTE_PERIOD_ZERO = 0.05;
@@ -47,6 +46,7 @@ export const useParlayLeaderboardQuery = (
                     network: networkId,
                     startPeriod,
                     endPeriod,
+                    won: 'true',
                 });
 
                 if (period === 1) {
@@ -59,6 +59,7 @@ export const useParlayLeaderboardQuery = (
                         network: networkId,
                         startPeriod: startPreviousPeriod,
                         endPeriod: endPreviousPeriod,
+                        won: 'true',
                     });
 
                     const parlayMarketsPreviosPeriodModified = parlayMarketsPreviosPeriod.filter(
@@ -73,16 +74,10 @@ export const useParlayLeaderboardQuery = (
                 const parlayMarketsModified = parlayMarkets
                     .filter(
                         (market: ParlayMarket) =>
-                            (period > 0 ||
-                                (period === 0 &&
-                                    market.totalQuote >= MAXIMUM_QUOTE_PERIOD_ZERO &&
-                                    market.sportMarkets.length <= PARLAY_LEADERBOARD_MINIMUM_GAMES)) &&
-                            market.positions.every(
-                                (position) =>
-                                    convertPositionNameToPosition(position.side) ===
-                                        convertFinalResultToResultType(position.market.finalResult) ||
-                                    position.market.isCanceled
-                            )
+                            period > 0 ||
+                            (period === 0 &&
+                                market.totalQuote >= MAXIMUM_QUOTE_PERIOD_ZERO &&
+                                market.sportMarkets.length <= PARLAY_LEADERBOARD_MINIMUM_GAMES)
                     )
                     .map((parlayMarket: ParlayMarket) => {
                         let totalQuote = parlayMarket.totalQuote;
