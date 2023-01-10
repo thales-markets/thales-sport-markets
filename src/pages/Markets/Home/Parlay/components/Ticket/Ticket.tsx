@@ -380,6 +380,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         }
         // Not enough funds
         setSubmitDisabled(!paymentTokenBalance || usdAmountValue > paymentTokenBalance);
+        return;
     }, [
         usdAmountValue,
         isBuying,

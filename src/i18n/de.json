@@ -397,10 +397,6 @@
             "buttons": {
                 "switch": "Schalter",
                 "disconnect": "Trennen"
-            },
-            "labels": {
-                "language": "Sprache",
-                "get-started": "Loslegen"
             }
         },
         "incentivized-markets": "ANREIZMÄRKTE",
@@ -767,20 +763,6 @@
             "wallet": "Geldbörse",
             "reward": "Belohnen",
             "positions": "Positionen"
-        },
-        "periods": {
-            "period-7": "Juli",
-            "period-10": "Oktober",
-            "period-9": "September",
-            "period-0": "Dezember",
-            "period-8": "August",
-            "period-1": "Januar",
-            "period-3": "Marsch",
-            "period-11": "November",
-            "period-4": "April",
-            "period-2": "Februar",
-            "period-6": "Juni",
-            "period-5": "Dürfen"
         }
     },
     "wizard": {

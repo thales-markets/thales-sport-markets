@@ -68,16 +68,7 @@ export const MAIN_COLORS = {
     },
 };
 
-export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
-    {
-        i18label: 'markets.nav-menu.items.profile',
-        iconClass: 'icon icon--profile',
-        name: 'profile',
-        route: ROUTES.Profile,
-    },
-];
-
-export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
+export const NAV_MENU: NavMenuItem[] = [
     {
         i18label: 'markets.nav-menu.items.markets',
         iconClass: 'icon icon--logo',
@@ -90,9 +81,18 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         name: 'vaults',
         route: ROUTES.Vaults,
     },
-];
-
-export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
+    {
+        i18label: 'markets.nav-menu.items.profile',
+        iconClass: 'icon icon--profile',
+        name: 'profile',
+        route: ROUTES.Profile,
+    },
+    {
+        i18label: 'markets.nav-menu.items.onboarding-wizard',
+        iconClass: 'icon icon--wizard',
+        name: 'onboarding-wizard',
+        route: ROUTES.Wizard,
+    },
     {
         i18label: 'markets.nav-menu.items.leaderboard',
         iconClass: 'icon icon--competition',
@@ -112,9 +112,6 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         name: 'become-affiliate',
         route: ROUTES.Referral,
     },
-];
-
-export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
     {
         i18label: 'markets.nav-menu.items.sports-trivia',
         iconClass: 'icon icon--trivia',

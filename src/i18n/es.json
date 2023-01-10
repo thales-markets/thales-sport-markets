@@ -400,10 +400,6 @@
             "buttons": {
                 "disconnect": "Desconectar",
                 "switch": "Cambiar"
-            },
-            "labels": {
-                "language": "Idioma",
-                "get-started": "Empezar"
             }
         },
         "incentivized-markets": "MERCADOS INCENTIVIZADOS",
@@ -770,20 +766,6 @@
             "reward": "Premio",
             "wallet": "Billetera",
             "positions": "Posiciones"
-        },
-        "periods": {
-            "period-11": "Noviembre",
-            "period-10": "Octubre",
-            "period-9": "Septiembre",
-            "period-2": "Febrero",
-            "period-3": "Marzo",
-            "period-6": "Junio",
-            "period-1": "enero",
-            "period-4": "Abril",
-            "period-0": "Diciembre",
-            "period-8": "Agosto",
-            "period-7": "Julio",
-            "period-5": "Puede"
         }
     },
     "wizard": {

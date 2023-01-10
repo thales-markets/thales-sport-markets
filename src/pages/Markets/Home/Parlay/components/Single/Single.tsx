@@ -233,6 +233,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 setMaxUsdAmount(floorNumberToDecimals(paymentTokenBalance * MAX_USD_SLIPPAGE));
             }
             setIsFetching(false);
+            return;
         };
         getMaxUsdAmount();
     }, [
@@ -492,6 +493,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         }
 
         setSubmitDisabled(!paymentTokenBalance || usdAmountValue > paymentTokenBalance);
+        return;
     }, [
         usdAmountValue,
         isBuying,

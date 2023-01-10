@@ -66,54 +66,12 @@ export const ItemsContainer = styled.div`
     margin-right: auto;
 `;
 
-export const GetStarted = styled.div`
-    display: flex;
-    width: 100%;
-    height: 28px;
-    justify-content: center;
-    align-items: center;
-    background: ${(props) => props.theme.background.secondary};
-    border: 1.5px solid ${(props) => props.theme.borderColor.quaternary};
-    border-radius: 3px;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 16px;
-    color: ${(props) => props.theme.textColor.quaternary};
-    cursor: pointer;
-    @media (max-width: 767px) {
-        width: 220px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-`;
-
-export const LanguageLabel = styled.label`
-    font-family: 'Nunito' !important;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 20px;
-    text-transform: uppercase;
-    margin: 20px auto 5px auto;
-    color: ${(props) => props.theme.textColor.quaternary};
-`;
-
-export const Separator = styled.div`
-    height: 3px;
-    margin-top: 20px;
-    margin-bottom: 5px;
-    background: ${(props) => props.theme.background.tertiary};
-    border-radius: 5px;
-`;
-
 export const ItemContainer = styled.div<{ active?: boolean }>`
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-top: 15px;
     cursor: pointer;
-    padding: 0px 5px;
     ${(props) => (props.active ? `color: ${props.theme.nav.text.primary};` : '')}
     :hover {
         i {

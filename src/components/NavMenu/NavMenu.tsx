@@ -1,13 +1,7 @@
 import LanguageSelector from 'components/LanguageSelector';
 import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
-import { ROUTES } from 'constants/routes';
-import {
-    NAV_MENU_FIRST_SECTION,
-    NAV_MENU_FOURTH_SECTION,
-    NAV_MENU_SECOND_SECTION,
-    NAV_MENU_THIRD_SECTION,
-} from 'constants/ui';
+import { NAV_MENU } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -21,17 +15,14 @@ import { buildHref } from 'utils/routes';
 import {
     CloseIcon,
     FooterContainer,
-    GetStarted,
     HeaderContainer,
     ItemContainer,
     ItemsContainer,
-    LanguageLabel,
     NavIcon,
     NavLabel,
     Network,
     NetworkIcon,
     NetworkName,
-    Separator,
     Wrapper,
 } from './styled-components';
 
@@ -57,64 +48,11 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                         <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
                     </Network>
                     <CloseIcon onClick={() => setNavMenuVisibility(false)} />
-                    <LanguageLabel>{t('markets.nav-menu.labels.language')}:</LanguageLabel>
                     <LanguageSelector />
-                    <SPAAnchor
-                        style={{ marginTop: 20 }}
-                        href={buildHref(ROUTES.Wizard)}
-                        onClick={() => setNavMenuVisibility(null)}
-                    >
-                        <GetStarted>{t('markets.nav-menu.labels.get-started')}</GetStarted>
-                    </SPAAnchor>
                 </HeaderContainer>
                 <ItemsContainer>
-                    {NAV_MENU_FIRST_SECTION.map((item, index) => {
+                    {NAV_MENU.map((item, index) => {
                         if (item.name == 'profile' && !isWalletConnected) return;
-                        return (
-                            <SPAAnchor key={index} href={buildHref(item.route)}>
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(null)}
-                                >
-                                    <NavIcon className={item.iconClass} active={location.pathname === item.route} />
-                                    <NavLabel>{t(item.i18label)}</NavLabel>
-                                </ItemContainer>
-                            </SPAAnchor>
-                        );
-                    })}
-                    <Separator />
-                    {NAV_MENU_SECOND_SECTION.map((item, index) => {
-                        return (
-                            <SPAAnchor key={index} href={buildHref(item.route)}>
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(null)}
-                                >
-                                    <NavIcon className={item.iconClass} active={location.pathname === item.route} />
-                                    <NavLabel>{t(item.i18label)}</NavLabel>
-                                </ItemContainer>
-                            </SPAAnchor>
-                        );
-                    })}
-                    <Separator />
-                    {NAV_MENU_THIRD_SECTION.map((item, index) => {
-                        return (
-                            <SPAAnchor key={index} href={buildHref(item.route)}>
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(null)}
-                                >
-                                    <NavIcon className={item.iconClass} active={location.pathname === item.route} />
-                                    <NavLabel>{t(item.i18label)}</NavLabel>
-                                </ItemContainer>
-                            </SPAAnchor>
-                        );
-                    })}
-                    <Separator />
-                    {NAV_MENU_FOURTH_SECTION.map((item, index) => {
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
                                 <ItemContainer
