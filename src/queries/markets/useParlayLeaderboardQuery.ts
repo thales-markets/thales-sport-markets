@@ -81,6 +81,7 @@ export const useParlayLeaderboardQuery = (
                     )
                     .map((parlayMarket: ParlayMarket) => {
                         let totalQuote = parlayMarket.totalQuote;
+                        let totalAmount = parlayMarket.totalAmount;
                         let numberOfPositions = parlayMarket.sportMarkets.length;
                         const sportMarkets = parlayMarket.sportMarkets.map((market) => {
                             if (market.isCanceled) {
@@ -97,6 +98,7 @@ export const useParlayLeaderboardQuery = (
                                     const maximumQuote = period === 0 ? MAXIMUM_QUOTE_PERIOD_ZERO : MAXIMUM_QUOTE;
                                     totalQuote = realQuote < maximumQuote ? maximumQuote : realQuote;
                                     numberOfPositions = numberOfPositions - 1;
+                                    totalAmount = totalAmount * parlayMarket.marketQuotes[marketIndex];
                                 }
                             }
 
@@ -114,6 +116,7 @@ export const useParlayLeaderboardQuery = (
                         return {
                             ...parlayMarket,
                             totalQuote,
+                            totalAmount,
                             numberOfPositions,
                             sportMarkets,
                         };
