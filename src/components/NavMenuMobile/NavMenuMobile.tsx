@@ -1,21 +1,14 @@
 import LanguageSelector from 'components/LanguageSelector';
 import Logo from 'components/Logo';
-import { GetStarted, Separator } from 'components/NavMenu/styled-components';
 import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
-import ROUTES from 'constants/routes';
-import {
-    NAV_MENU_FIRST_SECTION,
-    NAV_MENU_FOURTH_SECTION,
-    NAV_MENU_SECOND_SECTION,
-    NAV_MENU_THIRD_SECTION,
-} from 'constants/ui';
+import { NAV_MENU } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
+import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
@@ -32,8 +25,8 @@ import {
     Network,
     NetworkIcon,
     NetworkName,
-    WalletWrapper,
     Wrapper,
+    WalletWrapper,
 } from './styled-components';
 
 type NavMenuMobileProps = {
@@ -44,7 +37,7 @@ type NavMenuMobileProps = {
 const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVisibility }) => {
     const { t } = useTranslation();
     const location = useLocation();
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     return (
@@ -61,62 +54,9 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                     <WalletWrapper>
                         <WalletInfo />
                     </WalletWrapper>
-                    <SPAAnchor
-                        style={{ width: 220, margin: '20px auto 10px auto' }}
-                        href={buildHref(ROUTES.Wizard)}
-                        onClick={() => setNavMenuVisibility(false)}
-                    >
-                        <GetStarted>{t('markets.nav-menu.labels.get-started')}</GetStarted>
-                    </SPAAnchor>
                 </HeaderContainer>
                 <ItemsContainer>
-                    {NAV_MENU_FIRST_SECTION.map((item, index) => {
-                        if (item.name == 'profile' && !isWalletConnected) return;
-                        return (
-                            <SPAAnchor key={index} href={buildHref(item.route)}>
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(false)}
-                                >
-                                    <NavIcon className={item.iconClass} active={location.pathname === item.route} />
-                                    <NavLabel>{t(item.i18label)}</NavLabel>
-                                </ItemContainer>
-                            </SPAAnchor>
-                        );
-                    })}
-                    <Separator />
-                    {NAV_MENU_SECOND_SECTION.map((item, index) => {
-                        return (
-                            <SPAAnchor key={index} href={buildHref(item.route)}>
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(false)}
-                                >
-                                    <NavIcon className={item.iconClass} active={location.pathname === item.route} />
-                                    <NavLabel>{t(item.i18label)}</NavLabel>
-                                </ItemContainer>
-                            </SPAAnchor>
-                        );
-                    })}
-                    <Separator />
-                    {NAV_MENU_THIRD_SECTION.map((item, index) => {
-                        return (
-                            <SPAAnchor key={index} href={buildHref(item.route)}>
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(false)}
-                                >
-                                    <NavIcon className={item.iconClass} active={location.pathname === item.route} />
-                                    <NavLabel>{t(item.i18label)}</NavLabel>
-                                </ItemContainer>
-                            </SPAAnchor>
-                        );
-                    })}
-                    <Separator />
-                    {NAV_MENU_FOURTH_SECTION.map((item, index) => {
+                    {NAV_MENU.map((item, index) => {
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
                                 <ItemContainer

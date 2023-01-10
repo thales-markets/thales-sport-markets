@@ -102,7 +102,7 @@ const LanguageButton = styled.button`
 `;
 
 const DropDown = styled(FlexDivColumn)`
-    background: ${(props) => props.theme.background.tertiary};
+    background: ${(props) => props.theme.background.secondary};
     box-shadow: 0px 20px 30px rgba(0 0 0 / 0.4);
     border-radius: 7px;
     position: absolute;
