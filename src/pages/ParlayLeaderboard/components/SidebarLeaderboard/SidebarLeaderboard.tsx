@@ -57,7 +57,7 @@ const SidebarLeaderboard: React.FC = () => {
     const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
 
     const latestPeriod = differenceInCalendarMonths(TODAYS_DATE, PARLAY_LEADERBOARD_START_DATE);
-    const query = useParlayLeaderboardQuery(networkId, latestPeriod, { enabled: isAppReady });
+    const query = useParlayLeaderboardQuery(networkId, latestPeriod + 1, { enabled: isAppReady });
 
     const parlaysData = useMemo(() => {
         return query.isSuccess ? query.data.slice(0, SIDEBAR_NUMBER_OF_TOP_USERS) : [];
@@ -110,7 +110,7 @@ const SidebarLeaderboard: React.FC = () => {
                                             </DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>
-                                            <DataLabel>{parlay.sportMarkets.length}</DataLabel>
+                                            <DataLabel>{parlay.numberOfPositions}</DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>
                                             <DataLabel>
