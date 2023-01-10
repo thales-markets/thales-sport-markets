@@ -400,6 +400,10 @@
             "buttons": {
                 "switch": "Interruttore",
                 "disconnect": "Disconnetti"
+            },
+            "labels": {
+                "language": "Lingua",
+                "get-started": "Iniziare"
             }
         },
         "incentivized-markets": "MERCATI INCENTIVATI",

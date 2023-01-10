@@ -397,6 +397,10 @@
             "buttons": {
                 "switch": "Schalter",
                 "disconnect": "Trennen"
+            },
+            "labels": {
+                "language": "Sprache",
+                "get-started": "Loslegen"
             }
         },
         "incentivized-markets": "ANREIZMÄRKTE",

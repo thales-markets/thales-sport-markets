@@ -400,6 +400,10 @@
             "buttons": {
                 "disconnect": "断开",
                 "switch": "转变"
+            },
+            "labels": {
+                "language": "语言",
+                "get-started": "开始吧"
             }
         },
         "incentivized-markets": "激励市场",

@@ -498,6 +498,10 @@
             "buttons": {
                 "disconnect": "Déconnecter",
                 "switch": "Changer"
+            },
+            "labels": {
+                "get-started": "Commencer",
+                "language": "Langue"
             }
         },
         "op-incentivized-tooltip": "Les marchés EPL sont incités avec 5 000 OP des jeux du 26 décembre aux jeux du 6 janvier en fonction du volume au prorata. Consultez le classement <duneLink>ici</duneLink>.",
