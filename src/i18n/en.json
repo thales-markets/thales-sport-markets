@@ -387,6 +387,10 @@
             "buttons": {
                 "switch": "Switch",
                 "disconnect": "Disconnect"
+            },
+            "labels": {
+                "language": "Language",
+                "get-started": "Get started"
             }
         },
         "parlay": {

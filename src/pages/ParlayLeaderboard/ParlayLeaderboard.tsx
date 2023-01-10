@@ -74,15 +74,13 @@ const ParlayLeaderboard: React.FC = () => {
         const periodDate = addMonths(PARLAY_LEADERBOARD_START_DATE, index);
         const periodYear = periodDate.getFullYear();
         const periodMonth = periodDate.getMonth() + 1;
-        if (index !== 0) {
-            monthOptions.push({
-                value: index,
-                label: `${t(`parlay-leaderboard.periods.period-${periodMonth % 12}`)} ${periodYear}`,
-            });
-        }
+        monthOptions.push({
+            value: index,
+            label: `${t(`parlay-leaderboard.periods.period-${periodMonth % 12}`)} ${periodYear}`,
+        });
     }
 
-    const [month, setMonth] = useState<number>(latestPeriod - 1);
+    const [month, setMonth] = useState<number>(latestPeriod);
 
     const parlayLeaderboardQuery = useParlayLeaderboardQuery(networkId, month + 1, { enabled: isAppReady });
 
@@ -221,10 +219,10 @@ const ParlayLeaderboard: React.FC = () => {
                         ),
                     },
                     {
-                        accessor: 'sportMarkets',
+                        accessor: 'numberOfPositions',
                         Header: <>{t('parlay-leaderboard.sidebar.positions')}</>,
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['sportMarkets']>) => (
-                            <TableText>{cellProps.cell.value.length}</TableText>
+                            <TableText>{cellProps.cell.value}</TableText>
                         ),
                         sortable: true,
                     },

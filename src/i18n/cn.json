@@ -400,6 +400,10 @@
             "buttons": {
                 "disconnect": "断开",
                 "switch": "转变"
+            },
+            "labels": {
+                "language": "语言",
+                "get-started": "开始吧"
             }
         },
         "incentivized-markets": "激励市场",
@@ -766,6 +770,20 @@
             "wallet": "钱包",
             "reward": "报酬",
             "positions": "职位"
+        },
+        "periods": {
+            "period-4": "四月",
+            "period-7": "七月",
+            "period-8": "八月",
+            "period-2": "二月",
+            "period-5": "可能",
+            "period-0": "十二月",
+            "period-6": "六月",
+            "period-1": "一月",
+            "period-9": "九月",
+            "period-10": "十月",
+            "period-11": "十一月",
+            "period-3": "行进"
         }
     },
     "wizard": {
