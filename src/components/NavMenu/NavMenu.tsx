@@ -1,4 +1,5 @@
 import LanguageSelector from 'components/LanguageSelector';
+import MintVoucher from 'components/MintVoucher';
 import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
 import { ROUTES } from 'constants/routes';
@@ -8,6 +9,7 @@ import {
     NAV_MENU_SECOND_SECTION,
     NAV_MENU_THIRD_SECTION,
 } from 'constants/ui';
+import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -77,7 +79,11 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(null)}
                                 >
-                                    <NavIcon className={item.iconClass} active={location.pathname === item.route} />
+                                    {isWalletConnected ? (
+                                        <ProfileIconWidget avatarSize={25} />
+                                    ) : (
+                                        <NavIcon className={item.iconClass} active={location.pathname === item.route} />
+                                    )}
                                     <NavLabel>{t(item.i18label)}</NavLabel>
                                 </ItemContainer>
                             </SPAAnchor>
@@ -129,7 +135,21 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                         );
                     })}
                 </ItemsContainer>
-                <FooterContainer>{isMobile && <WalletInfo />}</FooterContainer>
+                <FooterContainer>
+                    <MintVoucher
+                        style={{ width: '100%' }}
+                        buttonStyle={{
+                            width: '100%',
+                            background: '#303656',
+                            borderRadius: 3,
+                            border: `1.5px solid #3FD1FF`,
+                            color: '#3FD1FF',
+                            fontSize: 14,
+                            lineHeight: '16px',
+                        }}
+                    />
+                    {isMobile && <WalletInfo />}
+                </FooterContainer>
             </Wrapper>
         </OutsideClickHandler>
     );
