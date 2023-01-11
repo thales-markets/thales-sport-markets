@@ -107,6 +107,7 @@ const WalletContainer = styled(FlexDivRowCentered)<{ hasVoucher: boolean }>`
         }
         .wallet-info-hover {
             display: inline;
+            width: fit-content;
         }
     }
     border-radius: ${(props) => (props.hasVoucher ? '5px 5px 0px 0px' : '5px')};
@@ -115,7 +116,7 @@ const WalletContainer = styled(FlexDivRowCentered)<{ hasVoucher: boolean }>`
 
 const Wallet = styled(FlexDivRowCentered)`
     padding-right: 10px;
-    width: 95px;
+    min-width: 95px;
     text-align: center;
 `;
 
