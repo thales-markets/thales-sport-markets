@@ -22,6 +22,7 @@ import {
 type ProfileItemProperties = {
     labelHidden?: boolean;
     avatarSize?: number;
+    iconColor?: string;
 };
 
 const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize }) => {
@@ -36,7 +37,7 @@ const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize 
     );
 };
 
-export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize }) => {
+export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize, iconColor }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -66,7 +67,7 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize 
                             .join('_')}.png`}
                     />
                 ) : (
-                    <ProfileIcon avatarSize={avatarSize} />
+                    <ProfileIcon avatarSize={avatarSize} iconColor={iconColor} />
                 )}
 
                 {claimablePositionCount && (

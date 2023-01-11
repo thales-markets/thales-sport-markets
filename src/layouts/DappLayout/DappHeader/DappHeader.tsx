@@ -1,7 +1,6 @@
 import burger from 'assets/images/burger.svg';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
-import MintVoucher from 'components/MintVoucher';
 import NavMenu from 'components/NavMenu';
 import NavMenuMobile from 'components/NavMenuMobile';
 import Search from 'components/Search';
@@ -90,11 +89,7 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <Logo />
                     <RightContainer>
-                        <SPAAnchor
-                            style={{ marginRight: 20 }}
-                            href={buildHref(ROUTES.Wizard)}
-                            onClick={() => setNavMenuVisibility(null)}
-                        >
+                        <SPAAnchor style={{ marginRight: 20 }} href={buildHref(ROUTES.Wizard)}>
                             <Button type="primary" fontSize={12.5}>
                                 {t('markets.nav-menu.labels.get-started')}
                             </Button>
@@ -156,10 +151,15 @@ const DappHeader: React.FC = () => {
                         </MenuIconContainer>
                     </WrapperMobile>
                     {location.pathname !== ROUTES.MintWorldCupNFT && (
-                        <MintVoucher
-                            buttonStyle={{ padding: '7px', background: '#303656' }}
-                            style={{ marginTop: '10px' }}
-                        />
+                        <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Wizard)}>
+                            <Button
+                                type="primary"
+                                style={{ width: '100%', marginTop: '10px', padding: '7px', background: '#303656' }}
+                                fontSize={14}
+                            >
+                                {t('markets.nav-menu.labels.get-started')}
+                            </Button>
+                        </SPAAnchor>
                     )}
                 </>
             )}

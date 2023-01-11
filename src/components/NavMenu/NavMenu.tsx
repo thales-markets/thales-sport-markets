@@ -2,7 +2,6 @@ import LanguageSelector from 'components/LanguageSelector';
 import MintVoucher from 'components/MintVoucher';
 import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
-import { ROUTES } from 'constants/routes';
 import {
     NAV_MENU_FIRST_SECTION,
     NAV_MENU_FOURTH_SECTION,
@@ -23,7 +22,6 @@ import { buildHref } from 'utils/routes';
 import {
     CloseIcon,
     FooterContainer,
-    GetStarted,
     HeaderContainer,
     ItemContainer,
     ItemsContainer,
@@ -61,13 +59,6 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                     <CloseIcon onClick={() => setNavMenuVisibility(false)} />
                     <LanguageLabel>{t('markets.nav-menu.labels.language')}:</LanguageLabel>
                     <LanguageSelector />
-                    <SPAAnchor
-                        style={{ marginTop: 20 }}
-                        href={buildHref(ROUTES.Wizard)}
-                        onClick={() => setNavMenuVisibility(null)}
-                    >
-                        <GetStarted>{t('markets.nav-menu.labels.get-started')}</GetStarted>
-                    </SPAAnchor>
                 </HeaderContainer>
                 <ItemsContainer>
                     {NAV_MENU_FIRST_SECTION.map((item, index) => {
@@ -80,7 +71,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                                     onClick={() => setNavMenuVisibility(null)}
                                 >
                                     {isWalletConnected ? (
-                                        <ProfileIconWidget avatarSize={25} />
+                                        <ProfileIconWidget avatarSize={25} iconColor={'#FFFFFF'} />
                                     ) : (
                                         <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     )}

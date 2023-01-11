@@ -66,28 +66,6 @@ export const ItemsContainer = styled.div`
     margin-right: auto;
 `;
 
-export const GetStarted = styled.div`
-    display: flex;
-    width: 100%;
-    height: 28px;
-    justify-content: center;
-    align-items: center;
-    background: ${(props) => props.theme.background.secondary};
-    border: 1.5px solid ${(props) => props.theme.borderColor.quaternary};
-    border-radius: 3px;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 16px;
-    color: ${(props) => props.theme.textColor.quaternary};
-    cursor: pointer;
-    @media (max-width: 767px) {
-        width: 220px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-`;
-
 export const LanguageLabel = styled.label`
     font-family: 'Nunito' !important;
     font-style: normal;
