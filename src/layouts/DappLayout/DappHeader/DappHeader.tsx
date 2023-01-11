@@ -150,7 +150,7 @@ const DappHeader: React.FC = () => {
                             />
                         </MenuIconContainer>
                     </WrapperMobile>
-                    {location.pathname !== ROUTES.MintWorldCupNFT && (
+                    {location.pathname !== ROUTES.Wizard && (
                         <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Wizard)}>
                             <Button
                                 type="primary"
