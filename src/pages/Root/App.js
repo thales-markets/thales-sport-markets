@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setAppReady, setMobileState } from 'redux/modules/app';
 import { getNetworkId, updateNetworkSettings, updateWallet, getIsWalletConnected } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import networkConnector from 'utils/networkConnector';
@@ -39,7 +38,7 @@ const App = () => {
     const dispatch = useDispatch();
     const { trackPageView, trackEvent } = useMatomo();
     const networkId = useSelector((state) => getNetworkId(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isWalletConnected = useSelector((state) => getIsWalletConnected(state));
     const provider = useProvider({ chainId: networkId });
     const { address } = useAccount();
     const { data: signer } = useSigner();
