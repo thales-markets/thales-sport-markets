@@ -1,4 +1,5 @@
 import SPAAnchor from 'components/SPAAnchor';
+import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
@@ -59,12 +60,22 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             <MainContainer>
                 <MatchInfoConatiner data-matomo-category="market-list-card" data-matomo-action="click-market-details">
                     <SPAAnchor href={buildMarketLink(market.address, language)}>
-                        <MatchTimeLabel>
-                            {formatShortDateWithTime(market.maturityDate)}{' '}
-                            {isFifaWCGame(market.tags[0]) && (
-                                <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
-                            )}
-                        </MatchTimeLabel>
+                        <Tooltip
+                            overlay={
+                                <>
+                                    {t(`markets.market-card.starts-in`)}:{' '}
+                                    <TimeRemaining end={market.maturityDate} fontSize={11} />
+                                </>
+                            }
+                            component={
+                                <MatchTimeLabel>
+                                    {formatShortDateWithTime(market.maturityDate)}{' '}
+                                    {isFifaWCGame(market.tags[0]) && (
+                                        <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
+                                    )}
+                                </MatchTimeLabel>
+                            }
+                        />
                         <TeamsInfoConatiner>
                             <TeamLogosConatiner>
                                 <ClubLogo

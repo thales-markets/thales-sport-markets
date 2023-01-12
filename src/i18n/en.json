@@ -305,6 +305,7 @@
     "markets": {
         "market-card": {
             "starts": "starts",
+            "starts-in": "Starts in",
             "claimable": "Claimable",
             "finished": "Finished",
             "result": "Result",
