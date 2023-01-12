@@ -115,14 +115,11 @@ const Home: React.FC = () => {
                 if (dateParam.includes('hour')) {
                     const timeFilter = dateParam.split('h')[0];
                     switch (timeFilter) {
-                        case '1':
-                            calculateDate(1);
-                            break;
-                        case '3':
-                            calculateDate(3);
-                            break;
                         case '12':
                             calculateDate(12);
+                            break;
+                        case '24':
+                            calculateDate(24);
                             break;
                         case '72':
                             calculateDate(72, true);
