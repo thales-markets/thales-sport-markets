@@ -12,7 +12,7 @@ const UnsupportedNetwork: React.FC = () => {
     const { switchNetwork } = useSwitchNetwork();
 
     const switchOrAddOptimismNetwork = async () => {
-        const optimismNetworkParms = OPTIMISM_NETWORKS[10];
+        const optimismNetworkParms = OPTIMISM_NETWORKS[DEFAULT_NETWORK_ID];
 
         if (typeof window.ethereum !== 'undefined') {
             try {
