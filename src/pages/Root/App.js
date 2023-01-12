@@ -81,7 +81,7 @@ const App = () => {
 
     useEffect(() => {
         const init = async () => {
-            const providerNetworkId = await getDefaultNetworkId();
+            const providerNetworkId = client.lastUsedChainId || DEFAULT_NETWORK_ID;
             try {
                 dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
                 networkConnector.setNetworkSettings({
@@ -101,7 +101,7 @@ const App = () => {
             }
         };
         init();
-    }, [dispatch, networkId, provider, signer]);
+    }, [dispatch, networkId, provider, signer, client.lastUsedChainId]);
 
     useEffect(() => {
         dispatch(updateWallet({ walletAddress: address }));
