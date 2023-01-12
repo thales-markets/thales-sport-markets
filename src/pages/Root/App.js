@@ -141,7 +141,6 @@ const App = () => {
         if (window.ethereum) {
             window.ethereum.on('chainChanged', () => {
                 if (window.ethereum.isMetaMask && !isWalletConnected) {
-                    console.log('autoConnect');
                     autoConnect();
                 }
             });
