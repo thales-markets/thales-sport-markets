@@ -118,7 +118,7 @@
         "guidelines": "Richtlinien",
         "built-on": "Ein Angebot von",
         "odds": {
-            "american-odds": "Amerikanische Quoten",
+            "american-odds": "USA Quoten",
             "normalized-implied-odds": "Normalisierte implizite Quoten",
             "decimal-odds": "Dezimalquoten"
         },
