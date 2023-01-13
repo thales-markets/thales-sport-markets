@@ -1,6 +1,8 @@
+import Tooltip from 'components/Tooltip';
 import { TAGS_FLAGS } from 'constants/tags';
 import React from 'react';
 import Flag from 'react-flagpack';
+import { Trans } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
@@ -8,6 +10,8 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
+import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
+import { OP_INCENTIVIZED_LEAGUE } from 'constants/markets';
 
 type TagsDropdownProps = {
     open: boolean;
@@ -79,6 +83,31 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, setT
                             >
                                 {LeagueFlag(tag.id)}
                                 <Label>{tag.label}</Label>
+                                {OP_INCENTIVIZED_LEAGUE.id == tag.id &&
+                                    new Date() > OP_INCENTIVIZED_LEAGUE.startDate &&
+                                    new Date() < OP_INCENTIVIZED_LEAGUE.endDate && (
+                                        <Tooltip
+                                            overlay={
+                                                <Trans
+                                                    i18nKey="markets.op-incentivized-tooltip"
+                                                    components={{
+                                                        duneLink: (
+                                                            <a
+                                                                href="https://dune.com/leifu/overtime-npl-playoff-rewards-leaderboard"
+                                                                target="_blank"
+                                                                rel="noreferrer"
+                                                            />
+                                                        ),
+                                                    }}
+                                                />
+                                            }
+                                            component={
+                                                <IncentivizedLeague>
+                                                    <OPLogo />
+                                                </IncentivizedLeague>
+                                            }
+                                        ></Tooltip>
+                                    )}
                             </LabelContainer>
                         </TagContainer>
                     );
@@ -181,6 +210,16 @@ const FlagWorld = styled.img`
     width: 20px;
     height: 15px;
     border-radius: 1.5px;
+`;
+
+const IncentivizedLeague = styled.div`
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-left: 10px;
+    svg {
+        width: 18px;
+    }
 `;
 
 export default TagsDropdown;

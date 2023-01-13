@@ -408,7 +408,7 @@
             }
         },
         "incentivized-markets": "激励市场",
-        "op-incentivized-tooltip": "从 12 月 26 日的比赛到 1 月 6 日的比赛，根据按比例分配的数量，EPL 市场受到 5,000 OP 的激励。在<duneLink>此处</duneLink>查看排行榜。"
+        "op-incentivized-tooltip": "NFL markets are incentivized with 10,000 OP from Jan 14th games to Feb 12th games based on pro-rata volume. Check out the leaderboard <duneLink>here</ duneLink>."
     },
     "rewards": {
         "header": "奖励",

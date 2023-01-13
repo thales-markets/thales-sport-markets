@@ -447,7 +447,7 @@
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
         "discounted-per": "Discounted as per",
-        "op-incentivized-tooltip": "EPL markets are incentivized with 5,000 OP from Dec 26th games to Jan 6th games based on pro-rata volume. Check out the leaderboard <duneLink>here</ duneLink>.",
+        "op-incentivized-tooltip": "NFL markets are incentivized with 10,000 OP from Jan 14th games to Feb 12th games based on pro-rata volume. Check out the leaderboard <duneLink>here</ duneLink>.",
         "incentivized-markets": "INCENTIVIZED MARKETS"
     },
     "rewards": {
