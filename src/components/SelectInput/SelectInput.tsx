@@ -65,6 +65,7 @@ const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaul
 
     return (
         <Select
+            value={defaultOption}
             options={options}
             styles={customStyled}
             onChange={(props) => {

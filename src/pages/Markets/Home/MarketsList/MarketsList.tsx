@@ -55,7 +55,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                     components={{
                                         duneLink: (
                                             <a
-                                                href="https://dune.com/leifu/overtime-epl-rewards-leaderboard"
+                                                href="https://dune.com/leifu/overtime-npl-playoff-rewards-leaderboard"
                                                 target="_blank"
                                                 rel="noreferrer"
                                             />

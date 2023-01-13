@@ -1,15 +1,17 @@
 import burger from 'assets/images/burger.svg';
+import Button from 'components/Button';
 import Logo from 'components/Logo';
-import MintVoucher from 'components/MintVoucher';
 import NavMenu from 'components/NavMenu';
 import NavMenuMobile from 'components/NavMenuMobile';
 import Search from 'components/Search';
+import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import { MAIN_COLORS } from 'constants/ui';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -20,6 +22,7 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
 
 const PULSING_COUNT = 10;
@@ -45,6 +48,8 @@ const customModalStyles = {
 };
 
 const DappHeader: React.FC = () => {
+    const { t } = useTranslation();
+
     const dispatch = useDispatch();
     const location = useLocation();
 
@@ -84,7 +89,11 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <Logo />
                     <RightContainer>
-                        {location.pathname !== ROUTES.MintWorldCupNFT && <MintVoucher />}
+                        <SPAAnchor style={{ marginRight: 20 }} href={buildHref(ROUTES.Wizard)}>
+                            <Button type="primary" fontSize={12.5}>
+                                {t('markets.nav-menu.labels.get-started')}
+                            </Button>
+                        </SPAAnchor>
                         <WalletInfo />
                         {isWalletConnected && <ProfileItem />}
                         <MenuIcon
@@ -141,11 +150,16 @@ const DappHeader: React.FC = () => {
                             />
                         </MenuIconContainer>
                     </WrapperMobile>
-                    {location.pathname !== ROUTES.MintWorldCupNFT && (
-                        <MintVoucher
-                            buttonStyle={{ padding: '7px', background: '#303656' }}
-                            style={{ marginTop: '10px' }}
-                        />
+                    {location.pathname !== ROUTES.Wizard && (
+                        <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Wizard)}>
+                            <Button
+                                type="primary"
+                                style={{ width: '100%', marginTop: '10px', padding: '7px', background: '#303656' }}
+                                fontSize={14}
+                            >
+                                {t('markets.nav-menu.labels.get-started')}
+                            </Button>
+                        </SPAAnchor>
                     )}
                 </>
             )}

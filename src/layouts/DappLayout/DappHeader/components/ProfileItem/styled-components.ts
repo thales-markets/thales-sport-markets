@@ -19,9 +19,12 @@ export const ProfileIconContainer = styled.div`
     margin-right: 5px;
 `;
 
-export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile' })<{ avatarSize?: number }>`
+export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile' })<{
+    avatarSize?: number;
+    iconColor?: string;
+}>`
     font-size: ${(props) => (props.avatarSize ? props.avatarSize : '20')}px;
-    color: ${MAIN_COLORS.TEXT.DARK_GRAY};
+    color: ${(props) => (props.iconColor ? props.iconColor : MAIN_COLORS.TEXT.DARK_GRAY)};
 `;
 
 export const NotificationCount = styled.div`

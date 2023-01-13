@@ -1,6 +1,6 @@
 import { MAIN_COLORS } from 'constants/ui';
 import styled, { css, keyframes } from 'styled-components';
-import { FlexDivColumnNative, FlexDivRow, FlexDiv } from 'styles/common';
+import { FlexDivColumnNative, FlexDivRow, FlexDiv, FlexDivColumn } from 'styles/common';
 
 export const WrapperAnimation = keyframes`
     0% {
@@ -112,7 +112,7 @@ export const Button = styled.button`
     cursor: pointer;
 `;
 
-export const FooterContainer = styled(FlexDivRow)`
+export const FooterContainer = styled(FlexDivColumn)`
     align-items: center;
     justify-content: center;
 `;

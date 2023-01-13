@@ -299,7 +299,8 @@
                     "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
                 "bonus": "{{bonus}} added bonus on win!"
-            }
+            },
+            "starts-in": "เริ่มเข้า"
         },
         "market-details": {
             "price": "ราคา",

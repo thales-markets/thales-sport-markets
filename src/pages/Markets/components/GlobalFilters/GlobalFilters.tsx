@@ -73,14 +73,11 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
             const dateParam = getQueryStringVal('date');
             const timeFilter = dateParam?.split('h')[0];
             switch (timeFilter) {
-                case '1':
-                    setSelectedPeriod(1);
-                    break;
-                case '3':
-                    setSelectedPeriod(3);
-                    break;
                 case '12':
                     setSelectedPeriod(12);
+                    break;
+                case '24':
+                    setSelectedPeriod(24);
                     break;
                 case '72':
                     setSelectedPeriod(72);
@@ -139,27 +136,6 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                 <Separator isMobile={isMobile} />
                 <FilterTypeContainer isMobile={isMobile} timeFilters={true}>
                     <TimeFilterContainer
-                        selected={selectedPeriod == 3}
-                        isMobile={isMobile}
-                        onClick={() => {
-                            if (selectedPeriod == 3) {
-                                setDateFilter(0);
-                                setDateParam('');
-                                setSelectedPeriod(0);
-                            } else {
-                                const calculatedDate = addHoursToCurrentDate(3);
-                                setDateFilter(calculatedDate.getTime());
-                                setDateParam('3hours');
-                                setSelectedPeriod(3);
-                            }
-                        }}
-                        data-matomo-category="filters"
-                        data-matomo-action="time-filter-3h"
-                    >
-                        <Circle isMobile={isMobile} />
-                        <Label>3h</Label>
-                    </TimeFilterContainer>
-                    <TimeFilterContainer
                         selected={selectedPeriod == 12}
                         isMobile={isMobile}
                         onClick={() => {
@@ -179,6 +155,27 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                     >
                         <Circle isMobile={isMobile} />
                         <Label>12h</Label>
+                    </TimeFilterContainer>
+                    <TimeFilterContainer
+                        selected={selectedPeriod == 24}
+                        isMobile={isMobile}
+                        onClick={() => {
+                            if (selectedPeriod == 24) {
+                                setDateFilter(0);
+                                setDateParam('');
+                                setSelectedPeriod(0);
+                            } else {
+                                const calculatedDate = addHoursToCurrentDate(24);
+                                setDateFilter(calculatedDate.getTime());
+                                setDateParam('24hours');
+                                setSelectedPeriod(24);
+                            }
+                        }}
+                        data-matomo-category="filters"
+                        data-matomo-action="time-filter-24h"
+                    >
+                        <Circle isMobile={isMobile} />
+                        <Label>24h</Label>
                     </TimeFilterContainer>
                     <TimeFilterContainer
                         selected={selectedPeriod == 72}

@@ -32,7 +32,7 @@ import { RootState } from 'redux/rootReducer';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import Search from 'components/Search';
 import { getEtherscanAddressLink } from 'utils/etherscan';
-import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
+import { formatCurrency, formatCurrencyWithSign } from 'utils/formatters/number';
 import { USD_SIGN } from 'constants/currency';
 
 type RewardsType = {
@@ -158,24 +158,32 @@ const Rewards: React.FC = () => {
                                     width={300}
                                 />
                             </SelectContainer>
-                            <TotalPnl>{`${t('rewards.twap')} is ${Math.abs(
-                                Number(rewardsDataQuery?.data?.twapForPeriod)
-                            ).toFixed(2)} $`}</TotalPnl>
-                            <TotalPnl>{`${t('rewards.total-global-rebates')} is ${Math.abs(
-                                Number(rewardsDataQuery?.data?.rebatesToPay)
-                            ).toFixed(2)} $`}</TotalPnl>
+                            <TotalPnl>{`${t('rewards.twap')} is ${formatCurrencyWithSign(
+                                USD_SIGN,
+                                Math.abs(Number(rewardsDataQuery?.data?.twapForPeriod)),
+                                2
+                            )}`}</TotalPnl>
+                            <TotalPnl>{`${t('rewards.total-global-rebates')} is ${formatCurrencyWithSign(
+                                USD_SIGN,
+                                Math.abs(Number(rewardsDataQuery?.data?.rebatesToPay)),
+                                2
+                            )}`}</TotalPnl>
                         </Row>
                         {userRewardData && (
                             <HighlightRow>
                                 <HighlightColumn>{t('rewards.your-score')}</HighlightColumn>
-                                <HighlightColumn>{`${Number(userRewardData?.volume).toFixed(2)} $`}</HighlightColumn>
-                                <HighlightColumn>{`${Number(userRewardData?.rebates).toFixed(2)} $`}</HighlightColumn>
+                                <HighlightColumn>
+                                    {formatCurrencyWithSign(USD_SIGN, userRewardData?.volume, 2)}
+                                </HighlightColumn>
+                                <HighlightColumn>
+                                    {formatCurrencyWithSign(USD_SIGN, userRewardData?.rebates, 2)}
+                                </HighlightColumn>
                                 <HighlightColumn>{`${Number(userRewardData?.percentage).toFixed(
                                     2
                                 )} %`}</HighlightColumn>
-                                <HighlightColumn>{`${Number(userRewardData?.rewards?.op).toFixed(2)} OP + ${Number(
+                                <HighlightColumn>{`${formatCurrency(userRewardData?.rewards?.op)} OP + ${formatCurrency(
                                     userRewardData?.rewards?.thales
-                                ).toFixed(2)} THALES`}</HighlightColumn>
+                                )} THALES`}</HighlightColumn>
                             </HighlightRow>
                         )}
                         <Table
@@ -200,8 +208,8 @@ const Rewards: React.FC = () => {
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['volume']>) => (
                                         <ColumnValue>
                                             {isMobile
-                                                ? formatCurrencyWithKey(USD_SIGN, Number(cellProps.cell.value), 0)
-                                                : formatCurrencyWithKey(USD_SIGN, Number(cellProps.cell.value))}
+                                                ? formatCurrencyWithSign(USD_SIGN, Number(cellProps.cell.value), 0)
+                                                : formatCurrencyWithSign(USD_SIGN, Number(cellProps.cell.value))}
                                         </ColumnValue>
                                     ),
                                     sortType: volumeSort(),
@@ -217,7 +225,7 @@ const Rewards: React.FC = () => {
                                     accessor: 'rebates',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['rebates']>) => (
                                         <ColumnValue>
-                                            {formatCurrencyWithKey(USD_SIGN, Number(cellProps.cell.value))}
+                                            {formatCurrencyWithSign(USD_SIGN, Number(cellProps.cell.value))}
                                         </ColumnValue>
                                     ),
                                     sortType: volumeSort(),
@@ -235,7 +243,7 @@ const Rewards: React.FC = () => {
                                     accessor: 'percentage',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['percentage']>) => (
                                         <ColumnValue padding={'0 5px 0 0'}>
-                                            {formatCurrencyWithKey(USD_SIGN, Number(cellProps.cell.value))}
+                                            {`${Number(cellProps.cell.value).toFixed(2)} %`}
                                         </ColumnValue>
                                     ),
                                     sortType: percentageSort(),

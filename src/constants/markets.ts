@@ -105,9 +105,9 @@ export enum ParlayErrorCode {
 }
 
 export const OP_INCENTIVIZED_LEAGUE = {
-    id: 9011,
-    startDate: new Date(Date.UTC(2022, 11, 22, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2023, 0, 6, 0, 0, 0)),
+    id: 9002,
+    startDate: new Date(Date.UTC(2023, 0, 13, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2023, 1, 12, 23, 59, 59)),
 };
 
 export const MIN_LIQUIDITY = 10;

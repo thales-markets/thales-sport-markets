@@ -115,14 +115,11 @@ const Home: React.FC = () => {
                 if (dateParam.includes('hour')) {
                     const timeFilter = dateParam.split('h')[0];
                     switch (timeFilter) {
-                        case '1':
-                            calculateDate(1);
-                            break;
-                        case '3':
-                            calculateDate(3);
-                            break;
                         case '12':
                             calculateDate(12);
+                            break;
+                        case '24':
+                            calculateDate(24);
                             break;
                         case '72':
                             calculateDate(72, true);
@@ -163,30 +160,20 @@ const Home: React.FC = () => {
         []
     );
 
-    const [lastValidMarkets, setLastValidMarkets] = useState<AllMarkets>({
-        OpenMarkets: [],
-        Canceled: [],
-        ResolvedMarkets: [],
-        PendingMarkets: [],
-    });
-
     const sportMarketsQueryNew = useSportMarketsQueryNew(networkId, { enabled: isAppReady });
 
-    useEffect(() => {
-        if (sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data) {
-            setLastValidMarkets(sportMarketsQueryNew.data);
-        }
-    }, [sportMarketsQueryNew.isSuccess, sportMarketsQueryNew.data]);
-
-    const newMarkets = useMemo(() => {
-        if (sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data) {
-            return sportMarketsQueryNew.data;
-        }
-        return lastValidMarkets;
-    }, [sportMarketsQueryNew.isSuccess, sportMarketsQueryNew.data, lastValidMarkets]);
-
     const finalMarkets = useMemo(() => {
-        const filteredMarkets = newMarkets[globalFilter].filter((market: SportMarketInfo) => {
+        const allMarkets: AllMarkets =
+            sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data
+                ? sportMarketsQueryNew.data
+                : {
+                      OpenMarkets: [],
+                      Canceled: [],
+                      ResolvedMarkets: [],
+                      PendingMarkets: [],
+                  };
+
+        const filteredMarkets = allMarkets[globalFilter].filter((market: SportMarketInfo) => {
             if (marketSearch) {
                 if (
                     !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
@@ -247,7 +234,7 @@ const Home: React.FC = () => {
         return globalFilter === GlobalFiltersEnum.OpenMarkets
             ? groupBySortedMarkets(sortedFilteredMarkets)
             : sortedFilteredMarkets;
-    }, [marketSearch, tagFilter, dateFilter, sportFilter, newMarkets, globalFilter, favouriteLeagues]);
+    }, [marketSearch, tagFilter, dateFilter, sportFilter, globalFilter, favouriteLeagues, sportMarketsQueryNew]);
 
     useEffect(() => {
         if (sportFilter == SportFilterEnum.Favourites) {

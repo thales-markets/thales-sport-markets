@@ -5,8 +5,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setAppReady, setMobileState } from 'redux/modules/app';
-import { getNetworkId, updateNetworkSettings, updateWallet } from 'redux/modules/wallet';
-import { getDefaultNetworkId } from 'utils/network';
+import { getNetworkId, updateNetworkSettings, updateWallet, getIsWalletConnected } from 'redux/modules/wallet';
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import networkConnector from 'utils/networkConnector';
@@ -14,7 +13,7 @@ import ROUTES from 'constants/routes';
 import Theme from 'layouts/Theme';
 import DappLayout from 'layouts/DappLayout';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useAccount, useProvider, useSigner, useClient } from 'wagmi';
 import LandingPageLayout from 'layouts/LandingPageLayout';
 import { ethers } from 'ethers';
 import BannerCarousel from 'components/BannerCarousel';
@@ -22,6 +21,7 @@ import { isMobile } from 'utils/device';
 import Profile from 'pages/Profile';
 import Wizard from 'pages/Wizard';
 import Referral from 'pages/Referral';
+import { DEFAULT_NETWORK_ID } from 'constants/defaults';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -38,9 +38,11 @@ const App = () => {
     const dispatch = useDispatch();
     const { trackPageView, trackEvent } = useMatomo();
     const networkId = useSelector((state) => getNetworkId(state));
+    const isWalletConnected = useSelector((state) => getIsWalletConnected(state));
     const provider = useProvider({ chainId: networkId });
     const { address } = useAccount();
     const { data: signer } = useSigner();
+    const client = useClient();
 
     queryConnector.setQueryClient();
 
@@ -81,7 +83,7 @@ const App = () => {
 
     useEffect(() => {
         const init = async () => {
-            const providerNetworkId = await getDefaultNetworkId();
+            const providerNetworkId = client.lastUsedChainId || DEFAULT_NETWORK_ID;
             try {
                 dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
                 networkConnector.setNetworkSettings({
@@ -101,7 +103,7 @@ const App = () => {
             }
         };
         init();
-    }, [dispatch, networkId, provider, signer]);
+    }, [dispatch, provider, signer, client.lastUsedChainId]);
 
     useEffect(() => {
         dispatch(updateWallet({ walletAddress: address }));
@@ -130,12 +132,20 @@ const App = () => {
     }, [dispatch]);
 
     useEffect(() => {
+        const autoConnect = async () => {
+            // TD-1083: There is a known issue with MetaMask extension, where a "disconnect" event is emitted
+            // when you switch from MetaMask's default networks to custom networks.
+            await client.autoConnect();
+        };
+
         if (window.ethereum) {
-            window.ethereum.on('chainChanged', (chainId) => {
-                dispatch(updateNetworkSettings({ networkId: parseInt(chainId, 16) }));
+            window.ethereum.on('chainChanged', () => {
+                if (window.ethereum.isMetaMask && !isWalletConnected) {
+                    autoConnect();
+                }
             });
         }
-    }, [dispatch]);
+    }, [client, isWalletConnected]);
 
     useEffect(() => {
         trackPageView();
