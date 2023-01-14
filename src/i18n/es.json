@@ -126,6 +126,11 @@
             "page": "Página",
             "rows-per-page": "Filas por página:"
         },
+        "filter": {
+            "date": {
+                "choose": "Choose date"
+            }
+        },
         "coming-soon": "Pronto!",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
         "mls-tooltip": "MLS markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
@@ -424,7 +429,8 @@
             "volume": "Volumen",
             "rebates": "Reembolsos",
             "safebox": "Tarifas de SafeBox",
-            "percent": "Por ciento"
+            "percent": "Por ciento",
+            "rank": "Rank"
         },
         "periods": {
             "period-0": "Primer periodo",

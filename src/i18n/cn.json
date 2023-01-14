@@ -126,6 +126,11 @@
             "rows-per-page": "每页行数：",
             "page": "页"
         },
+        "filter": {
+            "date": {
+                "choose": "Choose date"
+            }
+        },
         "coming-soon": "快来了！",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
         "mls-tooltip": "MLS markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
@@ -425,7 +430,8 @@
             "rebates": "回扣",
             "volume": "体积",
             "safebox": "保险箱费用",
-            "percent": "百分"
+            "percent": "百分",
+            "rank": "Rank"
         },
         "periods": {
             "period-0": "第一节课",
