@@ -3,6 +3,7 @@ import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
 import { formatShortDate } from 'utils/formatters/date';
+import { useTranslation } from 'react-i18next';
 
 type CalendarDatepickerProps = {
     date: Date | number;
@@ -12,10 +13,12 @@ type CalendarDatepickerProps = {
 
 const CalendarDatepicker: React.FC<CalendarDatepickerProps> = ({ date, setDate, setDateParam }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const { t } = useTranslation();
+
     return (
         <DatePickerContainer data-matomo-category="filters" data-matomo-action="time-filter-custome">
             <DatepickerButton className={`${typeof date != 'number' ? 'blue' : ''}`} onClick={() => setIsOpen(!isOpen)}>
-                {typeof date != 'number' ? convertAndFormat(date) : 'Choose date'}
+                {typeof date != 'number' ? convertAndFormat(date) : t('common.filter.date.choose')}
             </DatepickerButton>
             {isOpen && (
                 <ReactDatePicker

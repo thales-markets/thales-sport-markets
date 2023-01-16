@@ -16,6 +16,11 @@
             "page": "Page",
             "rows-per-page": "Rows per page:"
         },
+        "filter": {
+            "date": {
+                "choose": "Choose date"
+            }
+        },
         "wallet": {
             "connect-your-wallet": "Connect wallet",
             "switch-wallet": "Switch wallet",
@@ -469,7 +474,8 @@
             "no-data-available": "No data available",
             "volume": "Volume",
             "safebox": "SafeBox fees",
-            "rebates": "Rebates"
+            "rebates": "Rebates",
+            "rank": "Rank"
         },
         "periods": {
             "period-0": "First period",

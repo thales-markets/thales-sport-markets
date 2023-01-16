@@ -183,7 +183,7 @@ const ParlayLeaderboard: React.FC = () => {
                 columns={[
                     {
                         accessor: 'rank',
-                        Header: <>Rank</>,
+                        Header: <>{t('rewards.table.rank')}</>,
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['rank']>) => {
                             return cellProps.cell.value <= 20 ? (
                                 <Tooltip
