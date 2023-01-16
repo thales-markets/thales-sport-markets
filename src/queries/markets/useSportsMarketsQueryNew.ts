@@ -40,7 +40,6 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
 
     let oddsFromContract: undefined | Array<any>;
     let discountMap: DiscountMap;
-
     if (mapOnlyOpenedMarkets) {
         try {
             const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
@@ -63,7 +62,6 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
         market.homeTeam = fixDuplicatedTeamName(market.homeTeam);
         market.awayTeam = fixDuplicatedTeamName(market.awayTeam);
         market.sport = SPORTS_MAP[market.tags[0]];
-
         if (mapOnlyOpenedMarkets) {
             const marketDiscount = discountMap?.get(market.address);
             market = {
@@ -133,6 +131,10 @@ const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions
         QUERY_KEYS.SportMarketsNew(networkId),
         async () => {
             try {
+                const today = new Date();
+                // thales-data takes timestamp argument in seconds
+                const priorDate = Math.round(new Date(new Date().setDate(today.getDate() - 30)).getTime() / 1000);
+
                 // mapping open markets first
                 await mapMarkets(
                     await thalesData.sportMarkets.markets({
@@ -147,6 +149,7 @@ const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions
                 thalesData.sportMarkets
                     .markets({
                         network: networkId,
+                        minTimestamp: priorDate,
                     })
                     .then(async (result: any) => {
                         mapMarkets(result, false, networkId);
