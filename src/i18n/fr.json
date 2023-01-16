@@ -268,10 +268,10 @@
                 "allmarkets": "Tous les marchés",
                 "tooltip": "Les marchés ont été résolus il y a plus de 7 jours",
                 "archivedmarkets": "Marchés archivés",
-                "pendingmarkets": "En attente",
                 "resolvedmarkets": "Achevé",
                 "openmarkets": "Tout",
-                "canceled": "En pause / Annulé"
+                "canceled": "En pause / Annulé",
+                "pendingmarkets": "En cours"
             },
             "sport": {
                 "all": "Tous les sports",

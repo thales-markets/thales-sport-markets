@@ -187,11 +187,11 @@
                 "history": "Deine Transactions",
                 "archivedmarkets": "Archivierte Märkte",
                 "tooltip": "Märkte aufgelöst vor mehr als 7 Tagen",
-                "pendingmarkets": "Ausstehend",
                 "resolvedmarkets": "Fertig",
                 "allmarkets": "Alle",
                 "openmarkets": "Alle",
-                "canceled": "Angehalten / Abgebrochen"
+                "canceled": "Angehalten / Abgebrochen",
+                "pendingmarkets": "Laufend"
             },
             "sport": {
                 "all": "alle Sportarten",

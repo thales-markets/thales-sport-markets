@@ -191,7 +191,7 @@
                 "canceled": "ถูกยกเลิก",
                 "archivedmarkets": "ตลาดที่ถูกซ่อน",
                 "tooltip": "ตลาดสิ้นสุดมามากกว่า 7 วันแล้ว",
-                "pendingmarkets": "รอดำเนินการ"
+                "pendingmarkets": "กำลังดำเนินการ"
             },
             "sport": {
                 "all": "กีฬาทั้งหมด",
