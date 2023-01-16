@@ -20,7 +20,6 @@ import { MarketData } from 'types/markets';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { convertFinalResultToResultType, isFifaWCGame } from 'utils/markets';
-import { fixLongTeamNameString } from 'utils/formatters/string';
 
 type MatchInfoPropsType = {
     market: MarketData;
@@ -45,9 +44,9 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
 
     const getTeamsNames = (hideOnMobile: boolean) => (
         <TeamNamesWrapper hideOnMobile={hideOnMobile}>
-            <TeamName isHomeTeam={true}>{fixLongTeamNameString(market.homeTeam)}</TeamName>
+            <TeamName isHomeTeam={true}>{market.homeTeam}</TeamName>
             <Versus>{' vs '}</Versus>
-            <TeamName isHomeTeam={false}>{fixLongTeamNameString(market.awayTeam)}</TeamName>
+            <TeamName isHomeTeam={false}>{market.awayTeam}</TeamName>
         </TeamNamesWrapper>
     );
 

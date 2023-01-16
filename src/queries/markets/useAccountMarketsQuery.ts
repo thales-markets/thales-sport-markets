@@ -4,7 +4,7 @@ import { PositionBalance, PositionType, SportMarketInfo } from 'types/markets';
 import thalesData from 'thales-data';
 import { NetworkId } from 'types/network';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
-import { fixApexName, fixDuplicatedTeamName, fixLongTeamNameString } from 'utils/formatters/string';
+import { fixApexName, fixDuplicatedTeamName } from 'utils/formatters/string';
 
 export type AccountPositionProfile = {
     sUSDPaid: number;
@@ -46,10 +46,10 @@ const useAccountMarketsQuery = (
                             ...position.position.market,
                             homeTeam: position.position.market.isApex
                                 ? fixApexName(position.position.market.homeTeam)
-                                : fixLongTeamNameString(fixDuplicatedTeamName(position.position.market?.homeTeam)),
+                                : fixDuplicatedTeamName(position.position.market?.homeTeam),
                             awayTeam: position.position.market.isApex
                                 ? fixApexName(position.position.market.awayTeam)
-                                : fixLongTeamNameString(fixDuplicatedTeamName(position.position.market?.awayTeam)),
+                                : fixDuplicatedTeamName(position.position.market?.awayTeam),
                             spread: Number(position.position.market.spread),
                             total: Number(position.position.market.total),
                         },

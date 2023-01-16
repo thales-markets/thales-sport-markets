@@ -7,7 +7,7 @@ import thalesData from 'thales-data';
 import { SportMarketInfo, SportMarkets } from 'types/markets';
 import { NetworkId } from 'types/network';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
-import { fixDuplicatedTeamName, fixLongTeamName } from 'utils/formatters/string';
+import { fixDuplicatedTeamName } from 'utils/formatters/string';
 import networkConnector from 'utils/networkConnector';
 import { generalConfig } from 'config/general';
 
@@ -62,7 +62,6 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
         market.maturityDate = new Date(market.maturityDate);
         market.homeTeam = fixDuplicatedTeamName(market.homeTeam);
         market.awayTeam = fixDuplicatedTeamName(market.awayTeam);
-        market = fixLongTeamName(market);
         market.sport = SPORTS_MAP[market.tags[0]];
 
         if (mapOnlyOpenedMarkets) {
