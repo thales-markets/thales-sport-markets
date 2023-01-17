@@ -195,7 +195,6 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                 ? {
                                       text: spreadTotalText,
                                       textStyle: {
-                                          fontSize: '11px',
                                           top: '-9px',
                                       },
                                   }

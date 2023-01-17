@@ -58,6 +58,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const doubleChanceMarkets = market.childMarkets.filter((market) => market.betType === BetType.DOUBLE_CHANCE);
     const spreadTotalMarkets = market.childMarkets.filter((market) => market.betType !== BetType.DOUBLE_CHANCE);
     const hasChildMarkets = doubleChanceMarkets.length > 0 || spreadTotalMarkets.length > 0;
+    const numberOfChildMarkets = market.childMarkets.length;
 
     return (
         <Wrapper isResolved={isGameRegularlyResolved}>
@@ -145,7 +146,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 )}
             </MainContainer>
             {isMobile && showOdds && isExpanded && hasChildMarkets && (
-                <ChildContainer>
+                <ChildContainer mobilePaddingRight={numberOfChildMarkets === 5 ? 4 : 20}>
                     <OddsWrapper>
                         {doubleChanceMarkets.length > 0 && (
                             <Odds market={doubleChanceMarkets[0]} doubleChanceMarkets={doubleChanceMarkets} />

@@ -84,7 +84,6 @@ export const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResults
                                             ? {
                                                   text: spreadTotalText,
                                                   textStyle: {
-                                                      fontSize: '11px',
                                                       top: '-9px',
                                                   },
                                               }

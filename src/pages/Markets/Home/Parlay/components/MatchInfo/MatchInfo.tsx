@@ -60,7 +60,6 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                               text: spreadTotalText,
                               textStyle: {
                                   backgroundColor: customStyle ? '#23273e' : '#2f3454',
-                                  fontSize: '11px',
                                   top: '-9px',
                               },
                           }

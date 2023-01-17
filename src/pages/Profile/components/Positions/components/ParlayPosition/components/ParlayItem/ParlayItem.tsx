@@ -80,7 +80,6 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                             ? {
                                   text: spreadTotalText,
                                   textStyle: {
-                                      fontSize: '11px',
                                       top: '-9px',
                                   },
                               }
