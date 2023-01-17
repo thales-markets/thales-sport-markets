@@ -31,13 +31,13 @@ export enum SupportedLanguages {
 
 export const LanguageNameMap = {
     [SupportedLanguages.ENGLISH]: 'English',
-    [SupportedLanguages.CHINESE]: 'Chinese',
-    [SupportedLanguages.FRENCH]: 'French',
-    [SupportedLanguages.GERMAN]: 'German',
-    // [SupportedLanguages.ITALIAN]: 'Italian',
-    // [SupportedLanguages.RUSSIAN]: 'Russian',
-    [SupportedLanguages.SPANISH]: 'Spanish',
-    [SupportedLanguages.THAI]: 'Thai',
+    [SupportedLanguages.CHINESE]: '中国语文',
+    [SupportedLanguages.FRENCH]: 'Français',
+    [SupportedLanguages.GERMAN]: 'Deutsch',
+    // [SupportedLanguages.ITALIAN]: 'Italiano',
+    // [SupportedLanguages.RUSSIAN]: 'русский',
+    [SupportedLanguages.SPANISH]: 'Español',
+    [SupportedLanguages.THAI]: 'ภาษาไทย',
 };
 
 export const DEFAULT_LANGUAGE = SupportedLanguages.ENGLISH;

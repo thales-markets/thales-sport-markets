@@ -126,6 +126,11 @@
             "rows-per-page": "Zeilen pro Seite:",
             "page": "Seite"
         },
+        "filter": {
+            "date": {
+                "choose": "Choose date"
+            }
+        },
         "coming-soon": "Demnächst!",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
         "mls-tooltip": "MLS markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
@@ -187,11 +192,11 @@
                 "history": "Deine Transactions",
                 "archivedmarkets": "Archivierte Märkte",
                 "tooltip": "Märkte aufgelöst vor mehr als 7 Tagen",
-                "pendingmarkets": "Ausstehend",
                 "resolvedmarkets": "Fertig",
                 "allmarkets": "Alle",
                 "openmarkets": "Alle",
-                "canceled": "Angehalten / Abgebrochen"
+                "canceled": "Angehalten / Abgebrochen",
+                "pendingmarkets": "Laufend"
             },
             "sport": {
                 "all": "alle Sportarten",
@@ -421,7 +426,8 @@
             "volume": "Volumen",
             "safebox": "SafeBox-Gebühren",
             "rebates": "Rabatte",
-            "percent": "Prozent"
+            "percent": "Prozent",
+            "rank": "Rank"
         },
         "periods": {
             "period-0": "Zweite Periode",
