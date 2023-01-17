@@ -111,6 +111,9 @@ const Symbol = styled(FlexDivCentered)<{
             color: ${(props) => (props.disabled || props.notClickable ? '' : MAIN_COLORS.BORDERS.BLUE)};
         }
     }
+    @media (max-width: 575px) {
+        margin: ${(props) => (props.flexDirection === 'column' ? '0 8px' : '0 0')};
+    }
 `;
 
 const BottomText = styled.span<{
@@ -132,6 +135,9 @@ const UpperText = styled(FlexDivCentered)`
     background: ${MAIN_COLORS.LIGHT_GRAY};
     padding: 2px;
     font-size: 11px;
+    @media (max-width: 575px) {
+        font-size: 10px;
+    }
 `;
 
 export default PositionSymbol;

@@ -15,6 +15,18 @@ export const Container = styled(FlexDivColumn)`
     :first-child:not(:last-of-type) {
         padding: 0 10px 0 0;
     }
+    @media (max-width: 575px) {
+        padding: 0 4px;
+        :last-of-type {
+            padding: 0;
+        }
+        :last-of-type:not(:first-child) {
+            padding: 0 0 0 4px;
+        }
+        :first-child:not(:last-of-type) {
+            padding: 0 4px 0 0;
+        }
+    }
 `;
 
 export const Title = styled.span`

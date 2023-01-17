@@ -18,7 +18,7 @@ export const MainContainer = styled(FlexDivRow)`
     width: 100%;
     padding: 6px 8px 4px 8px;
     @media (max-width: 950px) {
-        padding-right: 18px;
+        padding-right: 20px;
     }
 `;
 
@@ -26,6 +26,10 @@ export const ChildContainer = styled(MainContainer)`
     background-color: ${MAIN_COLORS.GRAY};
     justify-content: flex-end;
     border-radius: 0 0 5px 5px;
+    @media (max-width: 950px) {
+        padding-left: 4px;
+        padding-right: 4px;
+    }
 `;
 
 export const MatchInfoConatiner = styled(FlexDivColumn)`
@@ -94,7 +98,7 @@ export const Arrow = styled.i`
     font-size: 14px;
     position: absolute;
     bottom: 0px;
-    right: -11px;
+    right: -13px;
     cursor: pointer;
 `;
 
