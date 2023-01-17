@@ -262,7 +262,7 @@ const ParlayLeaderboard: React.FC = () => {
 
                         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
 
-                        const symbolText = getSymbolText(positionEnum, position.market.betType);
+                        const symbolText = getSymbolText(positionEnum, position.market);
                         const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
 
                         return (
@@ -378,7 +378,7 @@ const getExpandedRow = (parlay: ParlayMarketWithRank, selectedOddsType: OddsType
 
         const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
 
-        const symbolText = getSymbolText(positionEnum, position.market.betType);
+        const symbolText = getSymbolText(positionEnum, position.market);
         const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
 
         return (

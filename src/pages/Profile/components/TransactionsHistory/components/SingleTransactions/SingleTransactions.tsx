@@ -79,7 +79,7 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                         Cell: (cellProps: any) => {
                             const symbolText = getSymbolText(
                                 convertPositionNameToPositionType(cellProps.cell.value),
-                                cellProps.cell.row.original.wholeMarket.betType
+                                cellProps.cell.row.original.wholeMarket
                             );
 
                             const spreadTotalText = getSpreadTotalText(

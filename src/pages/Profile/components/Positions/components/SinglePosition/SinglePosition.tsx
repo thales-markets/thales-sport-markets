@@ -156,7 +156,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
         },
     };
 
-    const symbolText = getSymbolText(positionEnum, position.market.betType);
+    const symbolText = getSymbolText(positionEnum, position.market);
     const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
 
     return (

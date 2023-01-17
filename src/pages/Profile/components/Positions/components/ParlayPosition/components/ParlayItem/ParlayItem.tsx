@@ -36,7 +36,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
     const parlayItemQuote = market.isCanceled ? 1 : quote ? quote : 0;
     const parlayStatus = getParlayItemStatus(market);
 
-    const symbolText = getSymbolText(positionEnum, market.betType);
+    const symbolText = getSymbolText(positionEnum, market);
     const spreadTotalText = getSpreadTotalText(market, positionEnum);
 
     return (

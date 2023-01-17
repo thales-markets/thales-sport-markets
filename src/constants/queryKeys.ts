@@ -19,6 +19,7 @@ export const QUERY_KEYS = {
         networkId: NetworkId
     ) => ['positionDetails', marketAddress, position, amount, stableIndex, networkId],
     AvailablePerPosition: (marketAddress: string) => ['availablePerPosition', marketAddress],
+    AvailablePerDoubleChancePosition: (marketAddress: string) => ['availablePerDoubleChancePosition', marketAddress],
     MarketTransactions: (marketAddress: string, networkId: NetworkId, walletAddress?: string) => [
         'market',
         'transactions',

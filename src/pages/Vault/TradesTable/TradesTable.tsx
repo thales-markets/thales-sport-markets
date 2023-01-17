@@ -69,7 +69,7 @@ export const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResults
                         Cell: (cellProps: CellProps<VaultTrade, VaultTrade['position']>) => {
                             const symbolText = getSymbolText(
                                 cellProps.cell.value,
-                                cellProps.cell.row.original.wholeMarket.betType
+                                cellProps.cell.row.original.wholeMarket
                             );
 
                             const spreadTotalText = getSpreadTotalText(

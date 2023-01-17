@@ -143,7 +143,7 @@ const SidebarLeaderboard: React.FC = () => {
                                                 );
 
                                                 const symbolText = position
-                                                    ? getSymbolText(positionEnum, position.market.betType)
+                                                    ? getSymbolText(positionEnum, position.market)
                                                     : '';
                                                 const spreadTotalText = position
                                                     ? getSpreadTotalText(position.market, positionEnum)

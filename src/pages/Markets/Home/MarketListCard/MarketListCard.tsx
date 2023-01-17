@@ -1,6 +1,7 @@
 import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
+import { BetType } from 'constants/tags';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -53,7 +54,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
     const isPendingResolution = isGameStarted && !isGameResolved;
     const showOdds = !isPendingResolution && !isGameResolved && !market.isPaused;
-    const hasChildMarkets = market.childMarkets.length > 0;
+
+    const doubleChanceMarkets = market.childMarkets.filter((market) => market.betType === BetType.DOUBLE_CHANCE);
+    const spreadTotalMarkets = market.childMarkets.filter((market) => market.betType !== BetType.DOUBLE_CHANCE);
+    const hasChildMarkets = doubleChanceMarkets.length > 0 || spreadTotalMarkets.length > 0;
 
     return (
         <Wrapper isResolved={isGameRegularlyResolved}>
@@ -107,7 +111,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             <Odds market={market} />
                             {!isMobile && (
                                 <>
-                                    {market.childMarkets.map((childMarket) => (
+                                    {doubleChanceMarkets.length > 0 && (
+                                        <Odds
+                                            market={doubleChanceMarkets[0]}
+                                            doubleChanceMarkets={doubleChanceMarkets}
+                                        />
+                                    )}
+                                    {spreadTotalMarkets.map((childMarket) => (
                                         <Odds market={childMarket} key={childMarket.address} />
                                     ))}
                                 </>
@@ -137,7 +147,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             {isMobile && showOdds && isExpanded && hasChildMarkets && (
                 <ChildContainer>
                     <OddsWrapper>
-                        {market.childMarkets.map((childMarket) => (
+                        {doubleChanceMarkets.length > 0 && (
+                            <Odds market={doubleChanceMarkets[0]} doubleChanceMarkets={doubleChanceMarkets} />
+                        )}
+                        {spreadTotalMarkets.map((childMarket) => (
                             <Odds market={childMarket} key={childMarket.address} />
                         ))}
                     </OddsWrapper>

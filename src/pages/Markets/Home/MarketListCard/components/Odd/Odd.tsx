@@ -36,7 +36,10 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus }) => {
     const isMobile = useSelector(getIsMobile);
     const parlay = useSelector(getParlay);
     const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
-    const isAddedToParlay = addedToParlay && addedToParlay.position == position;
+    const isAddedToParlay =
+        addedToParlay &&
+        addedToParlay.position == position &&
+        addedToParlay.doubleChanceMarketType === market.doubleChanceMarketType;
 
     const showBonus = hasBonus(bonus);
     const noOdd = !odd || odd == 0;
@@ -60,6 +63,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus }) => {
                 position: position,
                 homeTeam: market.homeTeam || '',
                 awayTeam: market.awayTeam || '',
+                doubleChanceMarketType: market.doubleChanceMarketType,
             };
             dispatch(updateParlay(parlayMarket));
             if (isMobile) {
@@ -87,7 +91,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus }) => {
             }
             disabled={noOdd}
             flexDirection="column"
-            symbolText={getSymbolText(position, market.betType)}
+            symbolText={getSymbolText(position, market)}
             onClick={onClick}
             selected={isAddedToParlay}
             tooltip={!isMobile && <>{oddTooltipText}</>}
