@@ -22,7 +22,7 @@ export const MainContainer = styled(FlexDivRow)`
     }
 `;
 
-export const ChildContainer = styled(MainContainer)<{ mobilePaddingRight: number }>`
+export const SecondRowContainer = styled(MainContainer)<{ mobilePaddingRight: number }>`
     background-color: ${MAIN_COLORS.GRAY};
     justify-content: flex-end;
     border-radius: 0 0 5px 5px;
