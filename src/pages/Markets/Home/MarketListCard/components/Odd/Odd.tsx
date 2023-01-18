@@ -41,8 +41,8 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus }) => {
         addedToParlay.position == position &&
         addedToParlay.doubleChanceMarketType === market.doubleChanceMarketType;
 
-    const showBonus = hasBonus(bonus);
     const noOdd = !odd || odd == 0;
+    const showBonus = hasBonus(bonus) && !noOdd;
     const isMainMarket = market.betType === BetType.WINNER;
 
     const oddTooltipText = getOddTooltipText(position, market);

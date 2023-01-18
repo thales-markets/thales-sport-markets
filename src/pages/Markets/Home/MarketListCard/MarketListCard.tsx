@@ -67,9 +67,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const doubleChanceMarkets = market.childMarkets.filter((market) => market.betType === BetType.DOUBLE_CHANCE);
     const spreadTotalMarkets = market.childMarkets.filter((market) => market.betType !== BetType.DOUBLE_CHANCE);
     const hasChildMarkets = doubleChanceMarkets.length > 0 || spreadTotalMarkets.length > 0;
-    const numberOfChildMarkets = market.childMarkets.length;
-    const isMaxNumberOfChildMarkets = numberOfChildMarkets === MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT;
+    const isMaxNumberOfChildMarkets = market.childMarkets.length === MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT;
     const showSecondRowOnDesktop = !isMobile && isMaxNumberOfChildMarkets;
+    const showSecondRowOnMobile = isMobile && hasChildMarkets;
 
     return (
         <Wrapper isResolved={isGameRegularlyResolved}>
@@ -135,7 +135,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         ))}
                                 </>
                             )}
-                            {isMobile && hasChildMarkets && (
+                            {showSecondRowOnMobile && (
                                 <Arrow
                                     className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
                                     onClick={() => setIsExpanded(!isExpanded)}
@@ -167,7 +167,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                     />
                 )}
             </MainContainer>
-            {((isMobile && hasChildMarkets) || showSecondRowOnDesktop) && showOdds && isExpanded && (
+            {(showSecondRowOnMobile || showSecondRowOnDesktop) && showOdds && isExpanded && (
                 <ChildContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
                     <OddsWrapper>
                         {isMobile && doubleChanceMarkets.length > 0 && (

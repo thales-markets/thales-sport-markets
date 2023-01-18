@@ -62,19 +62,18 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
     const isGamePaused = market.paused && !isGameResolved;
     const isGameOpen = !market.resolved && !market.cancelled && !market.paused && !market.gameStarted;
 
-    const showBonus = isGameOpen && hasBonus(availablePerPosition.buyBonus);
-    const positionBonus = showBonus ? getFormattedBonus(availablePerPosition.buyBonus) : '0';
     const noLiquidity = !!availablePerPosition.available && availablePerPosition.available < MIN_LIQUIDITY;
-
-    const showOdd = isGameOpen && !noLiquidity;
-
     const noOdd = !odd || odd == 0;
     const disabledPosition = noOdd || noLiquidity || !isGameOpen;
 
+    const showBonus = isGameOpen && hasBonus(availablePerPosition.buyBonus) && !noOdd;
+    const positionBonus = showBonus ? getFormattedBonus(availablePerPosition.buyBonus) : '0';
+
+    const showOdd = isGameOpen && !noLiquidity;
+    const showTooltip = showOdd && !isMobile;
+
     const symbolText = getSymbolText(position, market);
     const spreadTotalText = getSpreadTotalText(market, position);
-
-    const showTooltip = showOdd && !isMobile;
 
     const oddTooltipText = getOddTooltipText(position, market);
 
