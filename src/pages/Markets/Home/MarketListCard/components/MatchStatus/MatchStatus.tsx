@@ -92,7 +92,7 @@ const MatchPeriodLabel = styled.span`
     white-space: nowrap;
     &.blink {
         color: #e26a78;
-        animation: blinker 1s step-start infinite;
+        animation: blinker 1.5s step-start infinite;
         font-weight: 700;
         margin-left: 3px;
     }
