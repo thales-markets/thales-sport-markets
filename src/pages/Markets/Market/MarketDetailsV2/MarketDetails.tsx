@@ -316,7 +316,6 @@ const InfoLabel = styled.label`
         color: #e26a78;
         font-weight: 700;
         animation: blinker 1.5s step-start infinite;
-        margin-left: 3px;
     }
 
     @keyframes blinker {

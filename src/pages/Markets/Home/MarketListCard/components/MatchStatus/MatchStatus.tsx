@@ -99,7 +99,6 @@ const MatchPeriodLabel = styled.span`
         color: #e26a78;
         animation: blinker 1.5s step-start infinite;
         font-weight: 700;
-        margin-left: 3px;
     }
 
     @keyframes blinker {
