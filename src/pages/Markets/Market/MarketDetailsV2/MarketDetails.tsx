@@ -119,7 +119,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         {isPendingResolution ? (
                             <ResultContainer>
                                 <ResultLabel>
-                                    {market.homeScore} - {market.awayScore}{' '}
+                                    {liveResultInfo?.homeScore + ' - ' + liveResultInfo?.awayScore}{' '}
                                     {liveResultInfo?.sportId &&
                                         liveResultInfo?.sportId >= 10 &&
                                         liveResultInfo.period == 2 && (
