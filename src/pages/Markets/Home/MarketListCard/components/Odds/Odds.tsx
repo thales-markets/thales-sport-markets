@@ -32,7 +32,6 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets }) => {
           ) as DoubleChanceMarketsInfo)
         : undefined;
 
-    console.log(mappedDoubleChanceMarkets);
     return (
         <Container>
             <Title>

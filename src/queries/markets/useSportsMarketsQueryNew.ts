@@ -101,7 +101,6 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
             }
             if (
                 (market.isCanceled || market.isPaused) &&
-                !market.isResolved &&
                 market.maturityDate.getTime() + 30 * 24 * 60 * 60 * 1000 > new Date().getTime()
             ) {
                 canceledMarkets.push(market);
