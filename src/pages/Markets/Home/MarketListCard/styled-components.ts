@@ -118,7 +118,7 @@ export const TotalMarketsLabel = styled.span`
 export const TotalMarkets = styled.span`
     width: 25px;
     height: 25px;
-    font-size: 16px;
+    font-size: 13px;
     display: flex;
     text-align: center;
     align-items: center;
