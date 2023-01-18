@@ -207,10 +207,9 @@ export const convertPositionToPositionName = (position: number): 'HOME' | 'AWAY'
 export const getCanceledGameClaimAmount = (position: AccountPositionProfile) => {
     const positionType = convertPositionNameToPositionType(position.side);
 
-    if (positionType == Position.HOME) return formatCurrency(position.market.homeOdds * position.amount, 2);
-    if (positionType == Position.AWAY) return formatCurrency(position.market.awayOdds * position.amount, 2);
-    if (positionType == Position.DRAW)
-        return position.market.drawOdds ? formatCurrency(position.market.drawOdds * position.amount, 2) : 0;
+    if (positionType == Position.HOME) return position.market.homeOdds * position.amount;
+    if (positionType == Position.AWAY) return position.market.awayOdds * position.amount;
+    if (positionType == Position.DRAW) return position.market.drawOdds ? position.market.drawOdds * position.amount : 0;
     return 0;
 };
 
