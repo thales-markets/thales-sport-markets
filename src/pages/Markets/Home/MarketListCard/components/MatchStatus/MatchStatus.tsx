@@ -15,6 +15,8 @@ type MatchStatusProps = {
 const MatchStatus: React.FC<MatchStatusProps> = ({ isPendingResolution, isCanceled, isPaused, liveResultInfo }) => {
     const { t } = useTranslation();
 
+    const displayClockTime = liveResultInfo?.displayClock.substring(0, liveResultInfo?.displayClock.length - 1);
+
     return (
         <Container bottomAlign={isPendingResolution}>
             {isPendingResolution ? (
@@ -25,7 +27,10 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ isPendingResolution, isCancel
                                 liveResultInfo?.period
                             }`}</MatchPeriodLabel>
                             <FlexDivCentered>
-                                <MatchPeriodLabel className="blink">{liveResultInfo?.displayClock}</MatchPeriodLabel>
+                                <MatchPeriodLabel className="red">
+                                    {displayClockTime}
+                                    <MatchPeriodLabel className="blink">&prime;</MatchPeriodLabel>
+                                </MatchPeriodLabel>
                             </FlexDivCentered>
                         </MatchPeriodContainer>
                     )}
@@ -101,6 +106,10 @@ const MatchPeriodLabel = styled.span`
         50% {
             opacity: 0;
         }
+    }
+
+    &.red {
+        color: #e26a78;
     }
 `;
 

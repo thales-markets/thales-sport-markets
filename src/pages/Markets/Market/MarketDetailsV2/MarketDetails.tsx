@@ -138,7 +138,13 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                             <InfoLabel>{`${t('markets.market-card.period')}: ${
                                                 liveResultInfo?.period
                                             }`}</InfoLabel>
-                                            <InfoLabel className="blink">{liveResultInfo?.displayClock}</InfoLabel>
+                                            <InfoLabel className="red">
+                                                {liveResultInfo?.displayClock.substring(
+                                                    0,
+                                                    liveResultInfo?.displayClock.length - 1
+                                                )}
+                                                <InfoLabel className="blink">&prime;</InfoLabel>
+                                            </InfoLabel>
                                         </PeriodsContainer>
                                     )}
                                 {liveResultInfo?.sportId && liveResultInfo?.sportId < 10 && (
@@ -313,6 +319,7 @@ const InfoLabel = styled.label`
         color: #e26a78;
         font-weight: 700;
         animation: blinker 1.5s step-start infinite;
+        margin-left: 3px;
     }
 
     @keyframes blinker {
