@@ -16,7 +16,7 @@ export const Wrapper = styled(FlexDivColumn)<{
 
 export const MainContainer = styled(FlexDivRow)`
     width: 100%;
-    padding: 6px 8px 4px 8px;
+    padding: 6px 20px 4px 8px;
     @media (max-width: 950px) {
         padding-right: 20px;
     }

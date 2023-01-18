@@ -59,6 +59,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const spreadTotalMarkets = market.childMarkets.filter((market) => market.betType !== BetType.DOUBLE_CHANCE);
     const hasChildMarkets = doubleChanceMarkets.length > 0 || spreadTotalMarkets.length > 0;
     const numberOfChildMarkets = market.childMarkets.length;
+    const showSecondRowOnDesktop = numberOfChildMarkets === 5;
 
     return (
         <Wrapper isResolved={isGameRegularlyResolved}>
@@ -118,12 +119,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                             doubleChanceMarkets={doubleChanceMarkets}
                                         />
                                     )}
-                                    {spreadTotalMarkets.map((childMarket) => (
-                                        <Odds market={childMarket} key={childMarket.address} />
-                                    ))}
+                                    {!showSecondRowOnDesktop &&
+                                        spreadTotalMarkets.map((childMarket) => (
+                                            <Odds market={childMarket} key={childMarket.address} />
+                                        ))}
                                 </>
                             )}
-                            {isMobile && hasChildMarkets && (
+                            {((isMobile && hasChildMarkets) || showSecondRowOnDesktop) && (
                                 <Arrow
                                     className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
                                     onClick={() => setIsExpanded(!isExpanded)}
@@ -145,10 +147,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                     />
                 )}
             </MainContainer>
-            {isMobile && showOdds && isExpanded && hasChildMarkets && (
+            {((isMobile && hasChildMarkets) || showSecondRowOnDesktop) && showOdds && isExpanded && (
                 <ChildContainer mobilePaddingRight={numberOfChildMarkets === 5 ? 4 : 20}>
                     <OddsWrapper>
-                        {doubleChanceMarkets.length > 0 && (
+                        {doubleChanceMarkets.length > 0 && isMobile && (
                             <Odds market={doubleChanceMarkets[0]} doubleChanceMarkets={doubleChanceMarkets} />
                         )}
                         {spreadTotalMarkets.map((childMarket) => (
