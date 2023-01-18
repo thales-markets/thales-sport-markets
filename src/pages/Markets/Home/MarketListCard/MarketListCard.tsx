@@ -174,11 +174,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             <Odds
                                 market={doubleChanceMarkets[0]}
                                 doubleChanceMarkets={doubleChanceMarkets}
-                                isSecondRowDisplay
+                                isShownInSecondRow
                             />
                         )}
                         {spreadTotalMarkets.map((childMarket) => (
-                            <Odds market={childMarket} key={childMarket.address} isSecondRowDisplay />
+                            <Odds market={childMarket} key={childMarket.address} isShownInSecondRow />
                         ))}
                     </OddsWrapper>
                 </SecondRowContainer>

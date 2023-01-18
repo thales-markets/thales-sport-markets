@@ -25,10 +25,10 @@ type OddProps = {
     position: Position;
     odd: number | undefined;
     bonus: number | undefined;
-    isSecondRowDisplay?: boolean;
+    isShownInSecondRow?: boolean;
 };
 
-const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isSecondRowDisplay }) => {
+const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecondRow }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const { trackEvent } = useMatomo();
@@ -83,7 +83,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isSecondRowDisp
                           text: getFormattedBonus(bonus),
                           textStyle: {
                               color: MAIN_COLORS.BONUS,
-                              backgroundColor: isSecondRowDisplay ? MAIN_COLORS.GRAY : MAIN_COLORS.LIGHT_GRAY,
+                              backgroundColor: isShownInSecondRow ? MAIN_COLORS.GRAY : MAIN_COLORS.LIGHT_GRAY,
                           },
                       }
                     : undefined

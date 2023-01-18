@@ -12,10 +12,10 @@ import { Container, OddsContainer, Title } from './styled-components';
 type OddsProps = {
     market: SportMarketInfo;
     doubleChanceMarkets?: SportMarketInfo[];
-    isSecondRowDisplay?: boolean;
+    isShownInSecondRow?: boolean;
 };
 
-const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isSecondRowDisplay }) => {
+const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecondRow }) => {
     const { t } = useTranslation();
 
     const isLive = market.maturityDate < new Date();
@@ -52,14 +52,14 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isSecondRowDis
                                 bonus={
                                     mappedDoubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE].homeBonus
                                 }
-                                isSecondRowDisplay={isSecondRowDisplay}
+                                isShownInSecondRow={isShownInSecondRow}
                             />
                             <Odd
                                 market={mappedDoubleChanceMarkets[DoubleChanceMarketType.NO_DRAW]}
                                 position={Position.HOME}
                                 odd={mappedDoubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeOdds}
                                 bonus={mappedDoubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeBonus}
-                                isSecondRowDisplay={isSecondRowDisplay}
+                                isShownInSecondRow={isShownInSecondRow}
                             />
                             <Odd
                                 market={mappedDoubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE]}
@@ -68,7 +68,7 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isSecondRowDis
                                 bonus={
                                     mappedDoubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE].homeBonus
                                 }
-                                isSecondRowDisplay={isSecondRowDisplay}
+                                isShownInSecondRow={isShownInSecondRow}
                             />
                         </>
                     ) : (
@@ -78,7 +78,7 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isSecondRowDis
                                 position={Position.HOME}
                                 odd={market.homeOdds}
                                 bonus={market.homeBonus}
-                                isSecondRowDisplay={isSecondRowDisplay}
+                                isShownInSecondRow={isShownInSecondRow}
                             />
                             {showDrawOdds && (
                                 <Odd
@@ -86,7 +86,7 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isSecondRowDis
                                     position={Position.DRAW}
                                     odd={market.drawOdds}
                                     bonus={market.drawBonus}
-                                    isSecondRowDisplay={isSecondRowDisplay}
+                                    isShownInSecondRow={isShownInSecondRow}
                                 />
                             )}
                             <Odd
@@ -94,7 +94,7 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isSecondRowDis
                                 position={Position.AWAY}
                                 odd={market.awayOdds}
                                 bonus={market.awayBonus}
-                                isSecondRowDisplay={isSecondRowDisplay}
+                                isShownInSecondRow={isShownInSecondRow}
                             />
                         </>
                     )}
