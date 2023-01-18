@@ -2,33 +2,35 @@ import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { t } from 'i18next';
+import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
-import { SportMarketInfo } from 'types/markets';
+import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
+import Web3 from 'web3';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
 import {
-    TeamNameLabel,
-    MatchInfoConatiner,
-    MainContainer,
+    Arrow,
     ChildContainer,
+    ClubLogo,
+    MainContainer,
+    MatchInfoConatiner,
+    MatchTimeLabel,
     OddsWrapper,
-    ResultWrapper,
     Result,
     ResultLabel,
-    MatchTimeLabel,
-    TeamsInfoConatiner,
+    ResultWrapper,
     TeamLogosConatiner,
-    ClubLogo,
-    VSLabel,
+    TeamNameLabel,
     TeamNamesConatiner,
-    Arrow,
+    TeamsInfoConatiner,
+    VSLabel,
     Wrapper,
 } from './styled-components';
 
@@ -38,10 +40,13 @@ type MarketRowCardProps = {
 };
 
 const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+
+    const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
 
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
@@ -54,6 +59,17 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isPendingResolution = isGameStarted && !isGameResolved;
     const showOdds = !isPendingResolution && !isGameResolved && !market.isPaused;
     const hasChildMarkets = market.childMarkets.length > 0;
+    const gameIdString = Web3.utils.toAscii(market.gameId);
+
+    const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
+        enabled: isAppReady && isPendingResolution,
+    });
+
+    useEffect(() => {
+        if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
+            setLiveResultInfo(useLiveResultQuery.data);
+        }
+    }, [useLiveResultQuery, useLiveResultQuery.data]);
 
     return (
         <Wrapper isResolved={isGameRegularlyResolved}>
@@ -129,6 +145,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 ) : (
                     <MatchStatus
                         isPendingResolution={isPendingResolution}
+                        liveResultInfo={liveResultInfo}
                         isCanceled={market.isCanceled}
                         isPaused={market.isPaused}
                     />

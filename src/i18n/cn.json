@@ -308,7 +308,8 @@
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             },
-            "starts-in": "开始于"
+            "starts-in": "开始于",
+            "period": "时期"
         },
         "market-details": {
             "price": "价格",

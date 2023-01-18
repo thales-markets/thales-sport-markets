@@ -33,6 +33,11 @@ export const STATUS_COLOR = {
     PAUSED: '#E26A78',
 };
 
+export const GAME_STATUS = {
+    FINAL: 'STATUS_FINAL',
+    FULL_TIME: 'STATUS_FULL_TIME',
+};
+
 export const MAIN_COLORS = {
     LIGHT_GRAY: '#303656',
     GRAY: '#242842',

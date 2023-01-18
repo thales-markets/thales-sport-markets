@@ -305,7 +305,8 @@
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             },
-            "starts-in": "เริ่มเข้า"
+            "starts-in": "เริ่มเข้า",
+            "period": "ระยะเวลา"
         },
         "market-details": {
             "price": "ราคา",

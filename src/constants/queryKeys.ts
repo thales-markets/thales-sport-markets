@@ -10,6 +10,7 @@ export const QUERY_KEYS = {
     SportMarketsNew: (networkId: NetworkId) => ['sportMarketsNew', networkId],
     ParlayAmmData: (networkId: NetworkId) => ['parlayAmmData', networkId],
     Market: (marketAddress: string) => ['market', marketAddress],
+    LiveResult: (marketId: string) => ['liveResult', marketId],
     ChildMarkets: (marketAddress: string) => ['childMarkets', marketAddress],
     PositionDetails: (
         marketAddress: string,

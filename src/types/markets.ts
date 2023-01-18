@@ -330,3 +330,14 @@ export type WinningInfo = {
     highestWin: number;
     lifetimeWins: number;
 };
+
+export type SportMarketLiveResult = {
+    homeScore: number;
+    awayScore: number;
+    period: number;
+    status: string;
+    scoreHomeByPeriod: number[];
+    scoreAwayByPeriod: number[];
+    displayClock: string;
+    sportId: number;
+};

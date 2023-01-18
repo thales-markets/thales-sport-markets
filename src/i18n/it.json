@@ -308,7 +308,8 @@
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             },
-            "starts-in": "Inizia tra"
+            "starts-in": "Inizia tra",
+            "period": "Periodo"
         },
         "market-details": {
             "price": "Price",

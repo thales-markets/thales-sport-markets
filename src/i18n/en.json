@@ -324,6 +324,7 @@
             "paused": "Paused",
             "pending": "Pending",
             "no-liquidity": "No liquidity",
+            "period": "Period",
             "bet-type": {
                 "winner": "Winner",
                 "spread": "Handicap",
