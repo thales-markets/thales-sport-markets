@@ -139,10 +139,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                                 liveResultInfo?.period
                                             }`}</InfoLabel>
                                             <InfoLabel className="red">
-                                                {liveResultInfo?.displayClock.substring(
-                                                    0,
-                                                    liveResultInfo?.displayClock.length - 1
-                                                )}
+                                                {liveResultInfo?.displayClock.replaceAll("'", '')}
                                                 <InfoLabel className="blink">&prime;</InfoLabel>
                                             </InfoLabel>
                                         </PeriodsContainer>

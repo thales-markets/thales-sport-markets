@@ -15,7 +15,7 @@ type MatchStatusProps = {
 const MatchStatus: React.FC<MatchStatusProps> = ({ isPendingResolution, isCanceled, isPaused, liveResultInfo }) => {
     const { t } = useTranslation();
 
-    const displayClockTime = liveResultInfo?.displayClock.substring(0, liveResultInfo?.displayClock.length - 1);
+    const displayClockTime = liveResultInfo?.displayClock.replaceAll("'", '');
 
     return (
         <Container bottomAlign={isPendingResolution}>
