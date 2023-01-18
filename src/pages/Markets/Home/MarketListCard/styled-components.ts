@@ -16,7 +16,7 @@ export const Wrapper = styled(FlexDivColumn)<{
 
 export const MainContainer = styled(FlexDivRow)`
     width: 100%;
-    padding: 6px 20px 4px 8px;
+    padding: 6px 9px 4px 8px;
     @media (max-width: 950px) {
         padding-right: 20px;
     }
@@ -26,6 +26,7 @@ export const ChildContainer = styled(MainContainer)<{ mobilePaddingRight: number
     background-color: ${MAIN_COLORS.GRAY};
     justify-content: flex-end;
     border-radius: 0 0 5px 5px;
+    padding-right: 174px;
     @media (max-width: 950px) {
         padding-left: 4px;
         padding-right: ${(props) => props.mobilePaddingRight}px;
@@ -92,6 +93,44 @@ export const ResultLabel = styled.span`
     font-size: 12px;
     margin-right: 6px;
     text-transform: uppercase;
+`;
+
+export const TotalMarketsContainer = styled.span`
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 117px;
+    padding-left: 9px;
+`;
+
+export const TotalMarketsLabel = styled.span`
+    width: min-content;
+    font-size: 10px;
+    line-height: 105%;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    text-transform: uppercase;
+    white-space: pre-line;
+    margin-right: 5px;
+`;
+
+export const TotalMarkets = styled.span`
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    background: #5f6180;
+    border-radius: 50%;
+    margin-right: 6px;
+`;
+
+export const TotalMarketsArrow = styled.i`
+    font-size: 18px;
+    cursor: pointer;
 `;
 
 export const Arrow = styled.i`

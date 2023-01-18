@@ -104,7 +104,7 @@ const Symbol = styled(FlexDivCentered)<{
                 : MAIN_COLORS.BORDERS.GRAY
         }`};
     box-shadow: ${(props) => (props.glow ? `0 0 6px 2px ${props.color || MAIN_COLORS.BORDERS.WHITE}` : '')};
-    margin: ${(props) => (props.flexDirection === 'column' ? '0 10px' : '0 0')};
+    margin: ${(props) => (props.flexDirection === 'column' ? '0 9px' : '0 0')};
     @media (hover: hover) {
         :hover {
             border-color: ${(props) => (props.disabled || props.notClickable ? '' : MAIN_COLORS.BORDERS.BLUE)};

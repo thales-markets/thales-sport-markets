@@ -308,6 +308,7 @@
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             },
+            "total-markets": "Total markets",
             "starts-in": "Начинается через"
         },
         "market-details": {

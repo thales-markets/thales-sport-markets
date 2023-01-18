@@ -31,7 +31,16 @@ import {
     TeamNamesConatiner,
     Arrow,
     Wrapper,
+    TotalMarketsContainer,
+    TotalMarketsLabel,
+    TotalMarkets,
+    TotalMarketsArrow,
 } from './styled-components';
+
+// 3 for double chance, 1 for spread, 1 for total
+const MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT = 5;
+// 1 for winner, 1 for double chance, 1 for spread, 1 for total
+const MAX_NUMBER_OF_MARKETS = 4;
 
 type MarketRowCardProps = {
     market: SportMarketInfo;
@@ -59,7 +68,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const spreadTotalMarkets = market.childMarkets.filter((market) => market.betType !== BetType.DOUBLE_CHANCE);
     const hasChildMarkets = doubleChanceMarkets.length > 0 || spreadTotalMarkets.length > 0;
     const numberOfChildMarkets = market.childMarkets.length;
-    const showSecondRowOnDesktop = numberOfChildMarkets === 5;
+    const isMaxNumberOfChildMarkets = numberOfChildMarkets === MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT;
+    const showSecondRowOnDesktop = !isMobile && isMaxNumberOfChildMarkets;
 
     return (
         <Wrapper isResolved={isGameRegularlyResolved}>
@@ -125,11 +135,21 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         ))}
                                 </>
                             )}
-                            {((isMobile && hasChildMarkets) || showSecondRowOnDesktop) && (
+                            {isMobile && hasChildMarkets && (
                                 <Arrow
                                     className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
                                     onClick={() => setIsExpanded(!isExpanded)}
                                 />
+                            )}
+                            {showSecondRowOnDesktop && (
+                                <TotalMarketsContainer>
+                                    <TotalMarketsLabel>{t('markets.market-card.total-markets')}</TotalMarketsLabel>
+                                    <TotalMarkets>{MAX_NUMBER_OF_MARKETS}</TotalMarkets>
+                                    <TotalMarketsArrow
+                                        className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
+                                        onClick={() => setIsExpanded(!isExpanded)}
+                                    />
+                                </TotalMarketsContainer>
                             )}
                         </>
                     )}
@@ -148,9 +168,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 )}
             </MainContainer>
             {((isMobile && hasChildMarkets) || showSecondRowOnDesktop) && showOdds && isExpanded && (
-                <ChildContainer mobilePaddingRight={numberOfChildMarkets === 5 ? 4 : 20}>
+                <ChildContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
                     <OddsWrapper>
-                        {doubleChanceMarkets.length > 0 && isMobile && (
+                        {isMobile && doubleChanceMarkets.length > 0 && (
                             <Odds market={doubleChanceMarkets[0]} doubleChanceMarkets={doubleChanceMarkets} />
                         )}
                         {spreadTotalMarkets.map((childMarket) => (

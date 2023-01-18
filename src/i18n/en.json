@@ -354,7 +354,8 @@
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}."
                 },
                 "bonus": "{{bonus}} added bonus on win!"
-            }
+            },
+            "total-markets": "Total markets"
         },
         "market-details": {
             "price": "Price",
