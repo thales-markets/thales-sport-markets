@@ -18,7 +18,7 @@ import {
     TeamNameLabel,
     MatchInfoConatiner,
     MainContainer,
-    ChildContainer,
+    SecondRowContainer,
     OddsWrapper,
     ResultWrapper,
     Result,
@@ -168,16 +168,20 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 )}
             </MainContainer>
             {(showSecondRowOnMobile || showSecondRowOnDesktop) && showOdds && isExpanded && (
-                <ChildContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
+                <SecondRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
                     <OddsWrapper>
                         {isMobile && doubleChanceMarkets.length > 0 && (
-                            <Odds market={doubleChanceMarkets[0]} doubleChanceMarkets={doubleChanceMarkets} />
+                            <Odds
+                                market={doubleChanceMarkets[0]}
+                                doubleChanceMarkets={doubleChanceMarkets}
+                                isSecondRowDisplay
+                            />
                         )}
                         {spreadTotalMarkets.map((childMarket) => (
-                            <Odds market={childMarket} key={childMarket.address} />
+                            <Odds market={childMarket} key={childMarket.address} isSecondRowDisplay />
                         ))}
                     </OddsWrapper>
-                </ChildContainer>
+                </SecondRowContainer>
             )}
         </Wrapper>
     );

@@ -17,7 +17,6 @@ import { getOddsType } from '../../../../../../redux/modules/ui';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { MAIN_COLORS } from 'constants/ui';
 import { getIsMobile } from 'redux/modules/app';
-import { BetType } from 'constants/tags';
 import { toast } from 'react-toastify';
 import { oddToastOptions } from 'config/toast';
 
@@ -26,9 +25,10 @@ type OddProps = {
     position: Position;
     odd: number | undefined;
     bonus: number | undefined;
+    isSecondRowDisplay?: boolean;
 };
 
-const Odd: React.FC<OddProps> = ({ market, position, odd, bonus }) => {
+const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isSecondRowDisplay }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const { trackEvent } = useMatomo();
@@ -43,7 +43,6 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus }) => {
 
     const noOdd = !odd || odd == 0;
     const showBonus = hasBonus(bonus) && !noOdd;
-    const isMainMarket = market.betType === BetType.WINNER;
 
     const oddTooltipText = getOddTooltipText(position, market);
 
@@ -84,7 +83,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus }) => {
                           text: getFormattedBonus(bonus),
                           textStyle: {
                               color: MAIN_COLORS.BONUS,
-                              backgroundColor: isMobile && !isMainMarket ? MAIN_COLORS.GRAY : MAIN_COLORS.LIGHT_GRAY,
+                              backgroundColor: isSecondRowDisplay ? MAIN_COLORS.GRAY : MAIN_COLORS.LIGHT_GRAY,
                           },
                       }
                     : undefined
