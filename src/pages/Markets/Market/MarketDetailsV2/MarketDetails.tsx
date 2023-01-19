@@ -57,7 +57,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     useEffect(() => {
         // skip first render
         if (isMounted.current) {
-            navigateTo(buildHref(ROUTES.Markets.Home));
+            navigateTo(ROUTES.Markets.Home);
         } else {
             isMounted.current = true;
         }
