@@ -9,6 +9,7 @@ import { getNetworkId, updateNetworkSettings, updateWallet, getIsWalletConnected
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import networkConnector from 'utils/networkConnector';
+import { getDefaultNetworkId } from 'utils/network';
 import ROUTES from 'constants/routes';
 import Theme from 'layouts/Theme';
 import DappLayout from 'layouts/DappLayout';
@@ -21,7 +22,6 @@ import { isMobile } from 'utils/device';
 import Profile from 'pages/Profile';
 import Wizard from 'pages/Wizard';
 import Referral from 'pages/Referral';
-import { DEFAULT_NETWORK_ID } from 'constants/defaults';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -83,7 +83,7 @@ const App = () => {
 
     useEffect(() => {
         const init = async () => {
-            const providerNetworkId = client.lastUsedChainId || DEFAULT_NETWORK_ID;
+            const providerNetworkId = client.lastUsedChainId || (await getDefaultNetworkId());
             try {
                 dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
                 networkConnector.setNetworkSettings({
@@ -103,7 +103,7 @@ const App = () => {
             }
         };
         init();
-    }, [dispatch, provider, signer, client.lastUsedChainId]);
+    }, [dispatch, provider, signer, client.lastUsedChainId, networkId]);
 
     useEffect(() => {
         dispatch(updateWallet({ walletAddress: address }));
@@ -139,13 +139,14 @@ const App = () => {
         };
 
         if (window.ethereum) {
-            window.ethereum.on('chainChanged', () => {
+            window.ethereum.on('chainChanged', (chainId) => {
                 if (window.ethereum.isMetaMask && !isWalletConnected) {
                     autoConnect();
+                    dispatch(updateNetworkSettings({ networkId: parseInt(chainId, 16) }));
                 }
             });
         }
-    }, [client, isWalletConnected]);
+    }, [client, isWalletConnected, dispatch]);
 
     useEffect(() => {
         trackPageView();
