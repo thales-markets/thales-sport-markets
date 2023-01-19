@@ -140,9 +140,9 @@ const App = () => {
 
         if (window.ethereum) {
             window.ethereum.on('chainChanged', (chainId) => {
+                dispatch(updateNetworkSettings({ networkId: parseInt(chainId, 16) }));
                 if (window.ethereum.isMetaMask && !isWalletConnected) {
                     autoConnect();
-                    dispatch(updateNetworkSettings({ networkId: parseInt(chainId, 16) }));
                 }
             });
         }
