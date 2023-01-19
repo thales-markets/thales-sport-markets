@@ -18,11 +18,12 @@ import Transactions from '../Transactions';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import useChildMarketsQuery from 'queries/markets/useChildMarketsQuery';
 import { GAME_STATUS, MAIN_COLORS } from 'constants/ui';
-import { BetType } from 'constants/tags';
+import { BetType, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import Web3 from 'web3';
+import { getOrdinalNumberLabel } from 'utils/ui';
 
 type MarketDetailsPropType = {
     market: MarketData;
@@ -120,9 +121,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             <ResultContainer>
                                 <ResultLabel>
                                     {liveResultInfo?.homeScore + ' - ' + liveResultInfo?.awayScore}{' '}
-                                    {liveResultInfo?.sportId &&
-                                        liveResultInfo?.sportId >= 10 &&
-                                        liveResultInfo.period == 2 && (
+                                    {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
+                                        liveResultInfo?.period == 2 && (
                                             <InfoLabel className="football">
                                                 {'(' +
                                                     liveResultInfo?.scoreHomeByPeriod[0] +
@@ -134,17 +134,28 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 </ResultLabel>
                                 {liveResultInfo?.status != GAME_STATUS.FINAL &&
                                     liveResultInfo?.status != GAME_STATUS.FULL_TIME && (
-                                        <PeriodsContainer className="column">
-                                            <InfoLabel>{`${t('markets.market-card.period')}: ${
-                                                liveResultInfo?.period
-                                            }`}</InfoLabel>
-                                            <InfoLabel className="red">
-                                                {liveResultInfo?.displayClock.replaceAll("'", '')}
-                                                <InfoLabel className="blink">&prime;</InfoLabel>
-                                            </InfoLabel>
+                                        <PeriodsContainer>
+                                            {liveResultInfo?.status == GAME_STATUS.HALF_TIME && (
+                                                <InfoLabel>{t('markets.market-card.half-time')}</InfoLabel>
+                                            )}
+                                            {liveResultInfo?.status != GAME_STATUS.HALF_TIME && (
+                                                <>
+                                                    <InfoLabel>
+                                                        {` ${getOrdinalNumberLabel(Number(liveResultInfo?.period))} ${t(
+                                                            `markets.market-card.${
+                                                                SPORT_PERIODS_MAP[Number(liveResultInfo?.sportId)]
+                                                            }`
+                                                        )}`}
+                                                    </InfoLabel>
+                                                    <InfoLabel className="red">
+                                                        {liveResultInfo?.displayClock.replaceAll("'", '')}
+                                                        <InfoLabel className="blink">&prime;</InfoLabel>
+                                                    </InfoLabel>
+                                                </>
+                                            )}
                                         </PeriodsContainer>
                                     )}
-                                {liveResultInfo?.sportId && liveResultInfo?.sportId < 10 && (
+                                {!SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) && (
                                     <FlexDivRow>
                                         {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
                                             return (
@@ -166,9 +177,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             <ResultContainer>
                                 <ResultLabel>
                                     {market.homeScore} - {market.awayScore}{' '}
-                                    {liveResultInfo?.sportId &&
-                                        liveResultInfo?.sportId >= 10 &&
-                                        liveResultInfo.period == 2 && (
+                                    {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
+                                        liveResultInfo?.period == 2 && (
                                             <InfoLabel className="football">
                                                 {'(' +
                                                     liveResultInfo?.scoreHomeByPeriod[0] +
@@ -178,7 +188,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                             </InfoLabel>
                                         )}
                                 </ResultLabel>
-                                {liveResultInfo?.sportId && liveResultInfo?.sportId < 10 && (
+                                {!SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) && (
                                     <PeriodsContainer directionRow={true}>
                                         {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
                                             return (
@@ -298,6 +308,7 @@ const ResultContainer = styled(FlexDivColumnCentered)`
 const InfoLabel = styled.label`
     text-align: center;
     font-size: 18px;
+    text-transform: uppercase;
     &.gray {
         color: ${(props) => props.theme.textColor.secondary};
     }

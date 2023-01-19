@@ -36,6 +36,7 @@ export const STATUS_COLOR = {
 export const GAME_STATUS = {
     FINAL: 'STATUS_FINAL',
     FULL_TIME: 'STATUS_FULL_TIME',
+    HALF_TIME: 'STATUS_HALFTIME',
 };
 
 export const MAIN_COLORS = {

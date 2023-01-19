@@ -407,7 +407,12 @@
                 "bonus": "{{bonus}} bonus supplémentaire sur la victoire !"
             },
             "starts-in": "Commence dans",
-            "period": "Période"
+            "period": "Période",
+            "quarter": "Trimestre",
+            "half": "Moitié",
+            "round": "Rond",
+            "half-time": "Mi-temps",
+            "inning": "Tour de batte"
         },
         "market-details": {
             "wallet-info": {

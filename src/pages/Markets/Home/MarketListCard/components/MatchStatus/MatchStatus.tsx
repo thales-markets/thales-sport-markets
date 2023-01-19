@@ -1,9 +1,11 @@
+import { SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS, STATUS_COLOR } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarketLiveResult } from 'types/markets';
+import { getOrdinalNumberLabel } from 'utils/ui';
 
 type MatchStatusProps = {
     isPendingResolution: boolean;
@@ -23,9 +25,9 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ isPendingResolution, isCancel
                 <FlexDivRow>
                     {liveResultInfo?.status != GAME_STATUS.FINAL && liveResultInfo?.status != GAME_STATUS.FULL_TIME && (
                         <MatchPeriodContainer>
-                            <MatchPeriodLabel>{`${t('markets.market-card.period')}: ${
-                                liveResultInfo?.period
-                            }`}</MatchPeriodLabel>
+                            <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveResultInfo?.period))} ${t(
+                                `markets.market-card.${SPORT_PERIODS_MAP[Number(liveResultInfo?.sportId)]}`
+                            )}`}</MatchPeriodLabel>
                             <FlexDivCentered>
                                 <MatchPeriodLabel className="red">
                                     {displayClockTime}
@@ -38,7 +40,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ isPendingResolution, isCancel
                         <TeamScoreLabel>{liveResultInfo?.homeScore}</TeamScoreLabel>
                         <TeamScoreLabel>{liveResultInfo?.awayScore}</TeamScoreLabel>
                     </ScoreContainer>
-                    {liveResultInfo?.sportId && liveResultInfo?.sportId >= 10
+                    {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId))
                         ? liveResultInfo?.period == 2 && (
                               <ScoreContainer>
                                   <TeamScoreLabel className="period">

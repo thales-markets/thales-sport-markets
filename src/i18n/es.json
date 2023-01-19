@@ -309,7 +309,12 @@
                 "bonus": "{{bonus}} added bonus on win!"
             },
             "starts-in": "Empieza en",
-            "period": "Período"
+            "period": "Período",
+            "round": "Ronda",
+            "half": "Mitad",
+            "quarter": "Cuarta parte",
+            "half-time": "Medio tiempo",
+            "inning": "Inning"
         },
         "market-details": {
             "price": "Precio",
