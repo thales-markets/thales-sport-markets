@@ -126,6 +126,11 @@
             "page": "หน้า",
             "rows-per-page": "แถวต่อหน้า:"
         },
+        "filter": {
+            "date": {
+                "choose": "Choose date"
+            }
+        },
         "coming-soon": "เร็วๆ นี้!",
         "h2h-tooltip": "นี่คือตลาดแบบ head-to-head ผู้ชนะจะเป็นผู้ที่จบในอันดับที่ดีกว่าในการแข่งขันหลัก",
         "mls-tooltip": "MLS markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
@@ -191,7 +196,7 @@
                 "canceled": "ถูกยกเลิก",
                 "archivedmarkets": "ตลาดที่ถูกซ่อน",
                 "tooltip": "ตลาดสิ้นสุดมามากกว่า 7 วันแล้ว",
-                "pendingmarkets": "รอดำเนินการ"
+                "pendingmarkets": "กำลังดำเนินการ"
             },
             "sport": {
                 "all": "กีฬาทั้งหมด",
@@ -421,7 +426,8 @@
             "rebates": "ส่วนลด",
             "safebox": "ค่าธรรมเนียม SafeBox",
             "volume": "ปริมาณ",
-            "percent": "เปอร์เซ็นต์"
+            "percent": "เปอร์เซ็นต์",
+            "rank": "Rank"
         },
         "periods": {
             "second-period": "ช่วงที่สอง",

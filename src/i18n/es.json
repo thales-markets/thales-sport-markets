@@ -118,13 +118,18 @@
         "guidelines": "guias",
         "built-on": "Desarrollado sobre",
         "odds": {
-            "american-odds": "Odds americanas",
+            "american-odds": "Odds USA",
             "decimal-odds": "Probabilidades decimales",
             "normalized-implied-odds": "Odds implícitas normalizadas"
         },
         "pagination": {
             "page": "Página",
             "rows-per-page": "Filas por página:"
+        },
+        "filter": {
+            "date": {
+                "choose": "Choose date"
+            }
         },
         "coming-soon": "Pronto!",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
@@ -187,11 +192,11 @@
                 "history": "Tus transacciones",
                 "archivedmarkets": "Mercados archivados",
                 "tooltip": "Mercados resueltos hace más de 7 días",
-                "pendingmarkets": "Pendiente",
                 "openmarkets": "Todos",
                 "resolvedmarkets": "Acabado",
                 "allmarkets": "Todos",
-                "canceled": "En pausa / Cancelado"
+                "canceled": "En pausa / Cancelado",
+                "pendingmarkets": "En curso"
             },
             "sport": {
                 "all": "Todos los deportes",
@@ -408,7 +413,7 @@
             }
         },
         "incentivized-markets": "MERCADOS INCENTIVIZADOS",
-        "op-incentivized-tooltip": "NFL markets are incentivized with 10,000 OP from Jan 14th games to Feb 12th games based on pro-rata volume. Check out the leaderboard <duneLink>here</ duneLink>."
+        "op-incentivized-tooltip": "Los mercados de EPL están incentivados con 5,000 OP desde los juegos del 26 de diciembre hasta los juegos del 6 de enero según el volumen prorrateado. Consulte la tabla de clasificación <duneLink>aquí</ duneLink>."
     },
     "rewards": {
         "header": "Recompensas",
@@ -424,7 +429,8 @@
             "volume": "Volumen",
             "rebates": "Reembolsos",
             "safebox": "Tarifas de SafeBox",
-            "percent": "Por ciento"
+            "percent": "Por ciento",
+            "rank": "Rank"
         },
         "periods": {
             "period-0": "Primer periodo",

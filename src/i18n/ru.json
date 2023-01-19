@@ -126,6 +126,11 @@
             "page": "Страница",
             "rows-per-page": "Рядов на странице:"
         },
+        "filter": {
+            "date": {
+                "choose": "Choose date"
+            }
+        },
         "coming-soon": "Вскоре!",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
         "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
@@ -191,7 +196,7 @@
                 "canceled": "Cancelled",
                 "archivedmarkets": "Archived markets",
                 "tooltip": "Markets resolved more than 7 days ago",
-                "pendingmarkets": "В ожидании"
+                "pendingmarkets": "Непрерывный"
             },
             "sport": {
                 "all": "All sports",
@@ -424,7 +429,8 @@
             "volume": "Объем",
             "rebates": "Скидки",
             "safebox": "Плата за сейфы",
-            "percent": "Процент"
+            "percent": "Процент",
+            "rank": "Rank"
         },
         "periods": {
             "period-3": "Четвертый период",

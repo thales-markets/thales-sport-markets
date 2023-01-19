@@ -126,6 +126,11 @@
             "rows-per-page": "Righe per pagina:",
             "page": "Pagina"
         },
+        "filter": {
+            "date": {
+                "choose": "Choose date"
+            }
+        },
         "coming-soon": "Prossimamente!",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
         "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
@@ -191,7 +196,7 @@
                 "canceled": "Cancelled",
                 "archivedmarkets": "Archived markets",
                 "tooltip": "Markets resolved more than 7 days ago",
-                "pendingmarkets": "In attesa di"
+                "pendingmarkets": "In corso"
             },
             "sport": {
                 "all": "All sports",
@@ -424,7 +429,8 @@
             "safebox": "Commissioni SafeBox",
             "rebates": "Sconti",
             "volume": "Volume",
-            "percent": "Per cento"
+            "percent": "Per cento",
+            "rank": "Rank"
         },
         "periods": {
             "period-1": "Secondo periodo",

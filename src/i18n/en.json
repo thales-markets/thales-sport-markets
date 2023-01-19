@@ -16,6 +16,11 @@
             "page": "Page",
             "rows-per-page": "Rows per page:"
         },
+        "filter": {
+            "date": {
+                "choose": "Choose date"
+            }
+        },
         "wallet": {
             "connect-your-wallet": "Connect wallet",
             "switch-wallet": "Switch wallet",
@@ -186,7 +191,7 @@
                 "allmarkets": "All",
                 "openmarkets": "All",
                 "resolvedmarkets": "Finished",
-                "pendingmarkets": "Pending",
+                "pendingmarkets": "Ongoing",
                 "yourpositions": "Your positions",
                 "claim": "Claimable",
                 "history": "Your transactions",
@@ -469,7 +474,8 @@
             "no-data-available": "No data available",
             "volume": "Volume",
             "safebox": "SafeBox fees",
-            "rebates": "Rebates"
+            "rebates": "Rebates",
+            "rank": "Rank"
         },
         "periods": {
             "period-0": "First period",
@@ -480,7 +486,7 @@
             "period-5": "Sixth period",
             "period-6": "Seventh period",
             "period-7": "Eighth period",
-            "period-8": "Nineth period",
+            "period-8": "Ninth period",
             "period-9": "Tenth period"
         }
     },

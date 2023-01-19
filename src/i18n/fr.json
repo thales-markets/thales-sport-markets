@@ -47,7 +47,7 @@
             "custom-amount-label": "Autoriser un montant de"
         },
         "unsupported-network": {
-            "title": "Oops! Vous êtes sur le mauvais réseau!",
+            "title": "Oops ! Vous êtes sur le mauvais réseau !",
             "description": "Vous avez sélectionné le mauvais réseau dans votre portefeuille. Pour continuer, veuillez changer votre réseau pour Optimism Mainnet.",
             "button": {
                 "optimism": "Changer pour Optimism"
@@ -138,13 +138,18 @@
             "voucher": "Coupon"
         },
         "odds": {
-            "normalized-implied-odds": "Cotes implicites normalisées",
+            "normalized-implied-odds": "Cotes implicites",
             "decimal-odds": "Cotes décimales",
             "american-odds": "Cotes américaines"
         },
         "pagination": {
             "rows-per-page": "Lignes par page :",
             "page": "Page"
+        },
+        "filter": {
+            "date": {
+                "choose": "Choisir une date"
+            }
         },
         "coming-soon": "Bientôt disponible !",
         "h2h-tooltip": "Il s'agit d'un marché face à face. Le vainqueur sera le conducteur qui terminera à la meilleure place lors de la course principale.",
@@ -165,7 +170,7 @@
         "medium": "Medium",
         "twitter": "Twitter",
         "discord": "Discord",
-        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own."
+        "disclaimer": "Ce site est hébergé de manière décentralisée sur IPFS (InterPlanetary File System). Il sert à visualiser les données de la blockchain et à aider les utilisateurs à interagir avec les contrats Overtime qui appartiennent à la DAO de Thales. Ce faisant, il aide les utilisateurs à comprendre les risques liés à l'utilisation de ces contrats intelligents et ce que les interactions spécifiques impliquent. Le site ne fait que faciliter l'interaction avec ces contrats d'une manière visuelle. Il n'est ainsi aucunement différent de la fonctionnalité fournie par Etherscan ou les RPC (Remote Procedure Calls). Le site lui-même n'appartient pas à Thales DAO ou à un individu. Il ne stocke aucune donnée utilisateur et n'a pas de backend ou de base de données dédiée. Tout le code est téléchargé de manière statique directement sur l'IPFS. De la même manière que la blockchain ne fait pas de geo-fencing ni de KYC, ce frontend ne peut pas non plus le faire. Cependant, en interagissant avec les contrats Thales DAO, vous vous engagez à avoir lu, compris et accepté <disclaimer>les conditions d'utilisation de Thales DAO</disclaimer> et vous prenez l'entière responsabilité en cas de non-respect de ces conditions. Thales DAO utilise le jeton décentralisé sUSD comme garantie pour toutes ses transactions. Ce faisant, il hérite de toutes les règles d'utilisation de Synthetix DAO en matière de garantie et n'introduit pas les siennes."
     },
     "market": {
         "question-label": "Question",
@@ -267,11 +272,11 @@
                 "history": "Vos transactions",
                 "allmarkets": "Tous les marchés",
                 "tooltip": "Les marchés ont été résolus il y a plus de 7 jours",
-                "archivedmarkets": "Marchés archivés",
-                "pendingmarkets": "En attente",
-                "resolvedmarkets": "Achevé",
+                "archivedmarkets": "Archivés",
+                "resolvedmarkets": "Terminés",
                 "openmarkets": "Tout",
-                "canceled": "En pause / Annulé"
+                "canceled": "En pause / Annulés",
+                "pendingmarkets": "En cours"
             },
             "sport": {
                 "all": "Tous les sports",
@@ -283,7 +288,7 @@
                 "baseball": "Baseball",
                 "formula1": "Formule 1",
                 "motogp": "MotoGP",
-                "soon": "Plus de sports à venir!",
+                "soon": "Plus de sports à venir !",
                 "ufc": "MMA",
                 "motosport": "Sport automobile",
                 "favourites": "Favoris"
@@ -368,38 +373,38 @@
             "result": "Résultat",
             "coming-soon": "Bientôt disponible",
             "paused": "En pause",
-            "pending": "Pending",
-            "no-liquidity": "No liquidity",
+            "pending": "En attente",
+            "no-liquidity": "Aucune liquidité",
             "bet-type": {
-                "winner": "Winner",
+                "winner": "Gagnant",
                 "spread": "Handicap",
                 "total": "Total",
                 "double-chance": "Double chance"
             },
             "odd-tooltip": {
                 "scoring": {
-                    "goals": "goals",
+                    "goals": "buts",
                     "points": "points"
                 },
                 "match-resolve": {
-                    "regular": "in regular time",
-                    "overtime": "including possible overtime"
+                    "regular": "dans le temps régulier",
+                    "overtime": "prolongations incluses"
                 },
-                "winner": "{{team}} will win the match {{matchResolve}}.",
-                "draw": "The match will end in a draw {{matchResolve}}.",
+                "winner": "{{team}} va gagner le match, {{matchResolve}}.",
+                "draw": "Le match se terminera sur un score de parité, {{matchResolve}}.",
                 "total": {
-                    "over": "The total number of {{scoring}} in the match {{matchResolve}} will be more than {{total}}.",
-                    "under": "The total number of {{scoring}} in the match {{matchResolve}} will be less than {{total}}."
+                    "over": "Le nombre total de {{scoring}} dans le match, {{matchResolve}}, sera de plus de {{total}}.",
+                    "under": "Le nombre total de {{scoring}} dans le match, {{matchResolve}}, sera de moins de {{total}}."
                 },
                 "spread": {
-                    "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
-                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                    "minus": "{{team}} va gagner le match avec une différence de plus de {{spread}} {{scoring}}, {{matchResolve}}.",
+                    "plus": "{{team}} va gagner le match avec une différence de moins de {{spread}} {{scoring}}, {{matchResolve}}."
                 },
                 "double-chance": {
-                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
-                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
+                    "12": "{{team}} ou {{team2}} va gagner le match, {{matchResolve}}.",
+                    "1x2": "{{team}} va gagner le match ou alors se terminera sur un score de parité, {{matchResolve}}."
                 },
-                "bonus": "{{bonus}} added bonus on win!"
+                "bonus": "{{bonus}} bonus supplémentaire sur la victoire !"
             },
             "starts-in": "Commence dans"
         },
@@ -451,7 +456,7 @@
                 "max-profit": "Le profit maximal pris en charge est de {{max}}"
             },
             "payout": "Total reçu",
-            "empty-title": "Aucun poste",
+            "empty-title": "Aucune position",
             "empty-description": "Ajoutez une position, choisissez un marché et faites votre sélection.",
             "fee": "Montant total",
             "safebox-fee": "Frais SafeBox",
@@ -505,8 +510,8 @@
                 "language": "Langue"
             }
         },
-        "op-incentivized-tooltip": "NFL markets are incentivized with 10,000 OP from Jan 14th games to Feb 12th games based on pro-rata volume. Check out the leaderboard <duneLink>here</ duneLink>.",
-        "incentivized-markets": "MARCHÉS INCITATIFS"
+        "op-incentivized-tooltip": "Les marchés NFL sont récompensés par 10.000 OP entre les matchs du 14 janvier au 12 février, en fonction du volume proportionnel. Consultez le classement <duneLink>ici</ duneLink>.",
+        "incentivized-markets": "MARCHÉS RÉCOMPENSÉS"
     },
     "rewards": {
         "table": {
@@ -518,10 +523,11 @@
             "safebox": "Frais SafeBox",
             "rebates": "Réduction",
             "volume": "Volume",
-            "percent": "Pour cent"
+            "percent": "Pourcentage",
+            "rank": "Classement"
         },
         "header": "Récompenses",
-        "op-rewards-banner-message": "Les récompenses OP ont commencé, vérifiez comment vous pouvez les obtenir via <bold>la page des récompenses OP</bold>",
+        "op-rewards-banner-message": "Les récompenses OP sont lancées, vérifiez comment vous pouvez les obtenir via <bold>la page des récompenses OP</bold>",
         "search-placeholder": "Rechercher l'adresse du portefeuille",
         "description": "<div>Un total de <bold>8000 OP</bold> et <bold>8000 Thales</bold> sera distribué sur une base continuetoutes les deux semaines selon le <tipLink>TIP-96</tipLink> pour compenser les frais payés au contrat safebox.</div> <div>Le classement calculera les récompenses comme une remise de 90% sur les frais SafeBox, soit 3% du montant total payé en sUSD.</div> <div>La valeur en $ de OP et THALES sera calculée en utilisant un twap de 7 jours au début de la période. Si à la fin de la période de deux semaines, le total des remises est supérieur à la valeur de twap initiale des jetons OP et THALES, la remise sera réduite proportionnellement pour chaque utilisateur.</div>",
         "total-negative-pnl": "Pertes totales",
@@ -612,10 +618,10 @@
         "info-text-title-3": "Marchés non verrouillés",
         "info-text-title-4": "Données fournies par Chainlink",
         "info-text-title-5": "Transactions rapides et économiques",
-        "info-text-1": "Vous n'avez pas besoin de créer un compte utilisateur. Nous ne recueillons aucune information personnelle.",
+        "info-text-1": "Vous n'avez pas besoin de créer un compte utilisateur. Nous ne recueillons aucune donnée personnelle.",
         "info-text-2": "Lorsque les entités centralisées s'écroulent, la transparence est essentielle. Tous nos contrats sont publics.",
         "info-text-3": "Personne ne détient vos fonds. Vos clés, vos jetons.",
-        "info-text-4": "Leader de l'industrie avec des cotes démentielles et des résultats de d'évènements sportifs de manière décentralisée.",
+        "info-text-4": "Leader de l'industrie avec des cotes démentielles et des résultats d'évènements sportifs de manière décentralisée.",
         "info-text-5": "Chaque interaction avec Overtime sports AMM se fait sur le réseau robuste d'Optimism.",
         "browse-markets": "Consulter les marchés sportifs",
         "web3-positioning": "Positionnement sportif web3",
@@ -678,40 +684,40 @@
     },
     "mint-world-cup-nft": {
         "no": "Non",
-        "are-you-sure": "Êtes-vous sûr de vouloir frapper ce NFT ? Vous pouvez frapper UN SEUL NFT par portefeuille.",
+        "are-you-sure": "Êtes-vous sûr de vouloir générer ce NFT ? Vous pouvez générer UN SEUL NFT par portefeuille.",
         "zebro-campaign": "Zebro FIFA",
         "retweet": "Retweetez ce tweet",
-        "success-mint": "Frappé avec succès",
-        "yes-mint": "Oui, menthe NFT",
-        "already-minted": "Vous avez déjà frappé votre NFT",
-        "mint-nft-button": "Frappez ce zèbre !",
-        "stake-thales": "Pieu THALES",
+        "success-mint": "Généré avec succès",
+        "yes-mint": "Oui, généré ce NFT",
+        "already-minted": "Vous avez déjà généré votre NFT",
+        "mint-nft-button": "Générez ce zèbro",
+        "stake-thales": "Staker THALES",
         "incentives": "DES INCITATIONS",
         "follow": "Suivez les marchés des heures supplémentaires sur Twitter",
         "go-to-twitter": "Aller sur Twitter",
-        "choose-nft": "Frappez votre Zebro NFT",
+        "choose-nft": "Générez votre Zebro NFT",
         "get-thales": "Obtenez THALES",
         "eligible-text-1": "La collection Zebro NFT est utilisée comme entrée pour la campagne Overtime FIFA World Cup.",
-        "stake-10-thales": "Pour pouvoir frapper un Zebro NFT, vous devez avoir au moins 10 THALES jalonnés.",
-        "eligible-text-2": "Frappez un zèbre de votre équipe nationale préférée et soyez éligible à 50 000 OP et 30 000 bonus THALES !",
+        "stake-10-thales": "Pour pouvoir générer un Zebro NFT, vous devez avoir au moins 10 THALES stakés.",
+        "eligible-text-2": "Générez un zèbre de votre équipe nationale préférée et soyez éligible à 50 000 OP et 30 000 THALES bonus!",
         "tag-3-friends": "Sur le même tweet, commentez votre adresse ETH & taguez 3 amis",
-        "eligible-text": "Hé, vous pouvez maintenant créer votre équipe préférée Zebro NFT.",
+        "eligible-text": "Hé, vous pouvez maintenant générer le NFT Zebro de votre équipe préférée.",
         "second-option": "La deuxième option pour vous inscrire sur la liste d'autorisation consiste à suivre les étapes suivantes :",
-        "not-eligible-text": "Votre portefeuille n'est pas encore éligible pour frapper un Zebro NFT !",
-        "minting-is-free": "La frappe est gratuite, vous ne pouvez frapper qu'un seul NFT par portefeuille. Ce NFT est incessible.",
-        "mint-this-zebro": "Frappez ce zèbre !",
+        "not-eligible-text": "Votre portefeuille n'est pas encore éligible pour générer un Zebro NFT !",
+        "minting-is-free": "La génération est gratuite, vous ne pouvez générer qu'un seul NFT par portefeuille. Ce NFT est incessible.",
+        "mint-this-zebro": "Générer ce zèbro",
         "leaderboard-title": "Classement",
         "leaderboard": {
-            "parlay-boost": "Boost Parlay :",
-            "four-game-parlay": "+20 % s'il s'agit d'un pari de 4 matchs",
-            "reward-calculations": "Les calculs de récompense seront basés sur le volume au prorata avec une augmentation de volume supplémentaire maximale de 40 % si les conditions suivantes sont remplies :",
+            "parlay-boost": "Boost combinés :",
+            "four-game-parlay": "+20 % s'il s'agit d'un combiné de 4 matchs",
+            "reward-calculations": "Les calculs de récompense seront basés sur le volume au prorata avec une augmentation de volume supplémentaire maximale de 40 % si les conditions suivantes sont remplies :",
             "underdog-multiplier": "Multiplicateur d'outsider :",
-            "two-game-parlay": "+10 % s'il s'agit d'un pari de 2 matchs",
-            "three-game-parlay": "+15 % s'il s'agit d'un pari de 3 matchs",
-            "underdog-multiplier-text": "Si votre position dans les matchs de la Coupe du monde est évaluée à moins de 0,3 (les cotes sont supérieures à 1: 3,33), vous obtiendrez une augmentation de 10 % des récompenses.",
+            "two-game-parlay": "+10 % s'il s'agit d'un combiné de 2 matchs",
+            "three-game-parlay": "+15 % s'il s'agit d'un combiné de 3 matchs",
+            "underdog-multiplier-text": "Si votre position dans les matchs de la Coupe du monde est évaluée à moins de 0.3 (les cotes sont supérieures à 1: 3.33), vous obtiendrez une augmentation de 10 % des récompenses.",
             "home-country-multiplier": "Multiplicateur NFT du pays d'origine :",
             "home-country-multiplier-text": "Si votre match de Coupe du monde implique la même équipe nationale que votre Zebro, vous recevrez +10 % de bonus de récompenses",
-            "parlay-boost-text": "Si votre match de Coupe du monde est dans un ticket Parlay, vous obtiendrez un bonus de :",
+            "parlay-boost-text": "Si votre match de Coupe du monde est dans un ticket combiné, vous obtiendrez un bonus de :",
             "owner": "Propriétaire",
             "nft": "NFT",
             "country": "Pays",
@@ -721,13 +727,13 @@
             "bonus-volume": "Prime",
             "rewards": "Récompenses",
             "player": "Joueur",
-            "wash-trading": "* L'équipe des heures supplémentaires a le droit de disqualifier les commerçants de lavage de la campagne"
+            "wash-trading": "* L'équipe d'Overtime a le droit de disqualifier les manipulateurs de marchés"
         },
         "zebro-wct-collection": "La collection Zebro WC NFT",
-        "zebro-wct-collection-text": "fait partie d'une campagne incitative pour représenter votre pays préféré pendant la Coupe du monde et être éligible pour une part de 50 000 jetons OP et 30 000 jetons THALES, ainsi que des multiplicateurs exclusifs pour les parlays et les matchs individuels.",
-        "congrats": "Félicitations! Vous avez frappé avec succès le Zebro NFT !",
+        "zebro-wct-collection-text": "fait partie d'une campagne incitative pour représenter votre pays préféré pendant la Coupe du monde et être éligible à une part de 50 000 jetons OP et 30 000 jetons THALES, ainsi que des multiplicateurs exclusifs pour les combinés et les matchs individuels.",
+        "congrats": "Félicitations! Vous avez généré avec succès le Zebro NFT !",
         "go-to-leaderboard": "Aller au classement",
-        "get-your-nft": "Page de menthe"
+        "get-your-nft": "Page de génération"
     },
     "referral": {
         "generate-link": "Générer un lien",
@@ -791,7 +797,7 @@
         "estimated-amount-tooltip": "Il s'agit d'un montant estimé. Le montant réel sera calculé à la clôture du tour en cours sur la base du PnL.",
         "next-round-start-label": "Le prochain tour commence dans: <counter />",
         "users-in-vault-label": "Utilisateurs dans le coffre {{number}} / {{max}}",
-        "vault-filled-label": "Coffre remplit: {{amount}} / {{max}}",
+        "vault-filled-label": "Remplissage du coffre : {{amount}} / {{max}}",
         "deposit-message": "Déposez des fonds dans le coffre pour le tour suivant.",
         "deposit-amount-label": "Montant du dépôt",
         "deposit-amount-placeholder": "Saisir le montant",
@@ -812,7 +818,7 @@
         "tabs": {
             "deposit": "Dépôt",
             "claim": "Réclamer",
-            "withdraw": "Retirer"
+            "withdraw": "Retrait"
         },
         "button": {
             "deposit-label": "Déposer",
@@ -836,7 +842,7 @@
         "pnl": {
             "title": "PnL par tour",
             "no-data": "Pas de données PnL pour les tours précédents.",
-            "lifetime-pnl": "PnL à vie"
+            "lifetime-pnl": "PnL depuis la création"
         },
         "user-transactions": {
             "type": {
@@ -849,31 +855,31 @@
         }
     },
     "parlay-leaderboard": {
-        "title": "Classement Parlay Incentives",
-        "description": "A total of 10,000 OP will be distributed to the best parlays of the month. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
-        "distribution-note": "Rewards will be distributed to the top 20 parlays for the month!",
-        "no-parlays": "No winning parlays registered in the period yet.",
-        "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
-        "info": "If multiple parlays have the same number of positions and total quote the following will be used as tie-breakers in respective order:",
-        "info1": "- The amount paid",
-        "info2": "- Actual total quote (gotten by multiplying positions individually)",
+        "title": "Classement des récompenses de combinés",
+        "description": "Un total de 10 000 OP sera distribué aux meilleurs combinés du mois. Les tickets seront classés en fonction du nombre de positions sur les combinés, puis de la cote totale.",
+        "distribution-note": "Les récompenses seront distribuées aux 20 meilleurs combinés du mois !",
+        "no-parlays": "Aucun combiné gagnant n'a encore été enregistré pour cette période.",
+        "warning": "* L'équipe Overtime se réserve le droit de disqualifier les portefeuilles qu'elle soupçonne de jouer avec le système.",
+        "info": "Si plusieurs combinés ont le même nombre de positions et la même cote totale, les éléments suivants seront utilisés pour départager les ex-aequo dans l'ordre respectif :",
+        "info1": "- Le montant payé",
+        "info2": "- Cote totale réelle (obtenue en multipliant les positions individuellement)",
         "sidebar": {
-            "title-parlay": "Parlay",
-            "title-leaderboard": "Leaderboard",
-            "player": "Player",
-            "quote": "Quote",
-            "paid": "Paid",
-            "won": "Won",
-            "total-quote": "Total Quote",
-            "total-amount": "Total Amount",
+            "title-parlay": "Combiné",
+            "title-leaderboard": "Classement",
+            "player": "Joueur",
+            "quote": "Cote",
+            "paid": "Payé",
+            "won": "Gagné",
+            "total-quote": "Cote totale",
+            "total-amount": "Montant total",
             "reward": "Récompense",
             "wallet": "Portefeuille",
-            "positions": "Postes"
+            "positions": "Positions"
         },
         "periods": {
             "period-6": "Juin",
             "period-1": "Janvier",
-            "period-5": "Peut",
+            "period-5": "Mai",
             "period-7": "Juillet",
             "period-8": "Août",
             "period-4": "Avril",
@@ -886,38 +892,38 @@
         }
     },
     "wizard": {
-        "title": "Get Started!",
+        "title": "C'est parti !",
         "steps": {
             "title": {
-                "connect-wallet": "Connect Wallet",
-                "fund": "Fund with ETH",
-                "exchange": "Get Crypto USD",
-                "trade": "Overtime Markets"
+                "connect-wallet": "Connectez votre portefeuille",
+                "fund": "Déposez des ETH",
+                "exchange": "Échangez des Crypto USD",
+                "trade": "Utilisez Overtime"
             },
             "description": {
-                "connect-wallet": "If you don't have Optimism connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
-                "fund": "Before you can use Overtime, first you need to get ETH on your Optimism connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
-                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to sUSD button, seamlessly swap ETH to a desired amount of stablecoins.",
-                "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
+                "connect-wallet": "Si vous n'avez pas de portefeuille connecté sous Optimism, vous serez invité à en installer un de votre choix avant de pouvoir le connecter.",
+                "fund": "Avant de pouvoir utiliser Overtime, vous devez d'abord obtenir des ETH sur votre portefeuille connecté sous Optimism. Après avoir cliqué sur le bouton Déposer, choisissez l'une des options disponibles pour continuer.",
+                "exchange": "Overtime utilise des stablecoins (Crypto USD) populaires pour exécuter les transactions. En cliquant sur le bouton Échanger des sUSD, vous pouvez échanger de manière transparente des ETH contre le montant souhaité de stablecoins.",
+                "trade": "Maintenant, vous êtes financé et prêt à utiliser Overtime Markets. Bonne chance !"
             },
             "action": {
-                "connect-wallet": "Connect Wallet",
-                "connected": "Connected",
-                "fund": "Fund with ETH",
-                "exchange": "Exchange to USD",
-                "trade": "Trade on Overtime"
+                "connect-wallet": "Connecter un portefeuille",
+                "connected": "Connecté",
+                "fund": "Déposer des ETH",
+                "exchange": "Échanger des USD",
+                "trade": "Utiliser Overtime"
             }
         },
         "fund-modal": {
-            "title": "Fund, Bridge & Send",
-            "buy": "Fund with card",
-            "buy-banxa": "Fund with Banxa",
-            "buy-mt-pelerin": "Fund with Mt Pelerin",
-            "bridge": "Bridge to optimism  ",
-            "exchange": "Send from exchange",
-            "copy-address": "Copy address",
-            "coppied": "Coppied!",
-            "address": "Your address QR code",
+            "title": "Déposer, Convertir et Envoyer",
+            "buy": "Déposer par carte",
+            "buy-banxa": "Déposer via Banxa",
+            "buy-mt-pelerin": "Déposer via Mt Pelerin",
+            "bridge": "Envoyer vers Optimism",
+            "exchange": "Envoyer depuis un échange",
+            "copy-address": "Copier l'adresse",
+            "coppied": "Copié !",
+            "address": "QR code de votre adfesse",
             "copied": "Copié !"
         }
     }
