@@ -25,7 +25,6 @@ import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveRes
 import Web3 from 'web3';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import { getNetworkId } from 'redux/modules/wallet';
-import { getNetworkId } from 'redux/modules/wallet';
 
 type MarketDetailsPropType = {
     market: MarketData;
