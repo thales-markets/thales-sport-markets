@@ -1,10 +1,6 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { SportMarketLiveResult } from 'types/markets';
-// import { ZERO_ADDRESS } from 'constants/network';
-
-const baseUrl = ' https://therundown.io/api/v2/events/';
-const queryParamRundownKey = '?key=';
 
 const useSportMarketLiveResultQuery = (
     marketId: string,
@@ -14,15 +10,7 @@ const useSportMarketLiveResultQuery = (
         QUERY_KEYS.LiveResult(marketId),
         async () => {
             try {
-                const apiKey = process.env.REACT_APP_RUNDOWN_API_KEY || '';
-                if (!apiKey) {
-                    console.error('Rundown API_KEY not found!');
-                    return undefined;
-                }
-
-                const rundownUrl = baseUrl + marketId + queryParamRundownKey + apiKey;
-
-                const response = await fetch(rundownUrl);
+                const response = await fetch(`https://api.thalesmarket.io/live-result/${marketId}`);
                 const resultData = JSON.parse(await response.text());
 
                 const homeScore = resultData.events[0].score.score_home;
