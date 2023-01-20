@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import MatchInfo from './components/MatchInfo';
 import BackToLink from 'pages/Markets/components/BackToLink';
@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import styled from 'styled-components';
-import { buildHref } from 'utils/routes';
+import { buildHref, navigateTo } from 'utils/routes';
 import ROUTES from 'constants/routes';
 import { OP_INCENTIVIZED_LEAGUE } from 'constants/markets';
 import Tooltip from 'components/Tooltip';
@@ -21,6 +21,7 @@ import { MAIN_COLORS } from 'constants/ui';
 import { BetType } from 'constants/tags';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
+import { getNetworkId } from 'redux/modules/wallet';
 
 type MarketDetailsPropType = {
     market: MarketData;
@@ -30,8 +31,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const [showParlayMobileModal, setShowParlayMobileModal] = useState<boolean>(false);
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
+    const [showParlayMobileModal, setShowParlayMobileModal] = useState(false);
     const [lastValidChildMarkets, setLastValidChildMarkets] = useState<ChildMarkets>({
         spreadMarkets: [],
         totalMarkets: [],
@@ -47,6 +49,16 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
             setLastValidChildMarkets(childMarketsQuery.data);
         }
     }, [childMarketsQuery.isSuccess, childMarketsQuery.data]);
+
+    const isMounted = useRef(false);
+    useEffect(() => {
+        // skip first render
+        if (isMounted.current) {
+            navigateTo(ROUTES.Markets.Home);
+        } else {
+            isMounted.current = true;
+        }
+    }, [networkId]);
 
     const childMarkets: ChildMarkets = useMemo(() => {
         if (childMarketsQuery.isSuccess && childMarketsQuery.data) {
