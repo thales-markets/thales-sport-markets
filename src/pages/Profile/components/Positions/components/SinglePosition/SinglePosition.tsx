@@ -99,6 +99,15 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
         setAwayLogoSrc(getTeamImageSource(position.market.awayTeam, position.market.tags[0]));
     }, [position.market.homeTeam, position.market.awayTeam, position.market.tags]);
 
+    const isClaimable = position.claimable;
+    const isCanceled = position.market.isCanceled;
+    const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
+    const claimCanceledGame = isClaimable && isCanceled;
+
+    const claimAmountForCanceledGame = claimCanceledGame ? getCanceledGameClaimAmount(position) : 0;
+
+    const claimAmount = claimCanceledGame ? claimAmountForCanceledGame : position.amount;
+
     const claimReward = async () => {
         const { signer } = networkConnector;
         if (signer) {
@@ -113,7 +122,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
 
                 if (txResult && txResult.transactionHash) {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
-                    if (setShareTicketModalData && setShowShareTicketModal) {
+                    if (setShareTicketModalData && setShowShareTicketModal && !isCanceled) {
                         setShareTicketModalData(shareTicketData);
                         setShowShareTicketModal(true);
                     }
@@ -124,15 +133,6 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
             }
         }
     };
-
-    const isClaimable = position.claimable;
-    const isCanceled = position.market.isCanceled;
-    const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
-    const claimCanceledGame = isClaimable && isCanceled;
-
-    const claimAmountForCanceledGame = claimCanceledGame ? getCanceledGameClaimAmount(position) : 0;
-
-    const claimAmount = claimCanceledGame ? claimAmountForCanceledGame : position.amount;
 
     const shareTicketData: ShareTicketModalProps = {
         markets: [
