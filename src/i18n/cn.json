@@ -308,8 +308,14 @@
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             },
-            "total-markets": "Total markets",
-            "starts-in": "开始于"
+            "starts-in": "开始于",
+            "period": "时期",
+            "quarter": "四分之一",
+            "round": "圆形的",
+            "half": "一半",
+            "inning": "局",
+            "half-time": "半场",
+            "total-markets": "Total markets"
         },
         "market-details": {
             "price": "价格",

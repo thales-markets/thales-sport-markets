@@ -3,33 +3,35 @@ import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { BetType } from 'constants/tags';
 import { t } from 'i18next';
+import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
-import { SportMarketInfo } from 'types/markets';
+import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
+import Web3 from 'web3';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
 import {
-    TeamNameLabel,
+    Arrow,
+    ClubLogo,
     MatchInfoConatiner,
+    MatchTimeLabel,
     MainContainer,
     SecondRowContainer,
     OddsWrapper,
-    ResultWrapper,
     Result,
     ResultLabel,
-    MatchTimeLabel,
-    TeamsInfoConatiner,
+    ResultWrapper,
     TeamLogosConatiner,
-    ClubLogo,
-    VSLabel,
+    TeamNameLabel,
     TeamNamesConatiner,
-    Arrow,
+    TeamsInfoConatiner,
+    VSLabel,
     Wrapper,
     TotalMarketsContainer,
     TotalMarketsLabel,
@@ -48,10 +50,13 @@ type MarketRowCardProps = {
 };
 
 const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
+
+    const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
 
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
@@ -63,6 +68,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
     const isPendingResolution = isGameStarted && !isGameResolved;
     const showOdds = !isPendingResolution && !isGameResolved && !market.isPaused;
+    const gameIdString = Web3.utils.toAscii(market.gameId);
 
     const doubleChanceMarkets = market.childMarkets.filter((market) => market.betType === BetType.DOUBLE_CHANCE);
     const spreadTotalMarkets = market.childMarkets.filter((market) => market.betType !== BetType.DOUBLE_CHANCE);
@@ -70,6 +76,16 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isMaxNumberOfChildMarkets = market.childMarkets.length === MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT;
     const showSecondRowOnDesktop = !isMobile && isMaxNumberOfChildMarkets;
     const showSecondRowOnMobile = isMobile && hasChildMarkets;
+
+    const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
+        enabled: isAppReady && isPendingResolution,
+    });
+
+    useEffect(() => {
+        if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
+            setLiveResultInfo(useLiveResultQuery.data);
+        }
+    }, [useLiveResultQuery, useLiveResultQuery.data]);
 
     return (
         <Wrapper isResolved={isGameRegularlyResolved}>
@@ -162,6 +178,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 ) : (
                     <MatchStatus
                         isPendingResolution={isPendingResolution}
+                        liveResultInfo={liveResultInfo}
                         isCanceled={market.isCanceled}
                         isPaused={market.isPaused}
                     />

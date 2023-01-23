@@ -217,6 +217,8 @@ export type SportsMap = Record<number, string>;
 
 export type SportsTagsMap = Record<string, number[]>;
 
+export type SportsPeriodsMap = Record<number, string>;
+
 export enum PositionType {
     home = 'home',
     away = 'away',
@@ -342,4 +344,15 @@ export type ParlayPayment = {
 export type WinningInfo = {
     highestWin: number;
     lifetimeWins: number;
+};
+
+export type SportMarketLiveResult = {
+    homeScore: number;
+    awayScore: number;
+    period: number;
+    status: string;
+    scoreHomeByPeriod: number[];
+    scoreAwayByPeriod: number[];
+    displayClock: string;
+    sportId: number;
 };

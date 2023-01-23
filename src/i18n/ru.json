@@ -308,8 +308,14 @@
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             },
-            "total-markets": "Total markets",
-            "starts-in": "Начинается через"
+            "starts-in": "Начинается через",
+            "period": "Период",
+            "round": "Круглый",
+            "half": "Половина",
+            "inning": "Иннинг",
+            "half-time": "Перерыв",
+            "quarter": "Четверть",
+            "total-markets": "Total markets"
         },
         "market-details": {
             "price": "Price",

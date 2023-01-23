@@ -308,8 +308,14 @@
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             },
-            "total-markets": "Total markets",
-            "starts-in": "Inizia tra"
+            "starts-in": "Inizia tra",
+            "period": "Periodo",
+            "half": "Metà",
+            "inning": "Inning",
+            "quarter": "Trimestre",
+            "round": "Girare",
+            "half-time": "Metà tempo",
+            "total-markets": "Total markets"
         },
         "market-details": {
             "price": "Price",
