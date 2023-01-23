@@ -40,7 +40,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
     const spreadTotalText = getSpreadTotalText(market, positionEnum);
 
     return (
-        <Wrapper>
+        <Wrapper style={{ opacity: market.isCanceled ? 0.5 : 1 }}>
             <MatchInfo>
                 <MatchLogo>
                     <ClubLogo
