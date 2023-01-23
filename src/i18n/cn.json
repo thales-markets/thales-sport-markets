@@ -314,7 +314,8 @@
             "round": "圆形的",
             "half": "一半",
             "inning": "局",
-            "half-time": "半场"
+            "half-time": "半场",
+            "total-markets": "Total markets"
         },
         "market-details": {
             "price": "价格",

@@ -2,6 +2,7 @@ import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constant
 import { Position } from 'constants/options';
 import {
     BetType,
+    DoubleChanceMarketType,
     FIFA_WC_TAG,
     MATCH_RESOLVE_MAP,
     MLS_TAG,
@@ -95,37 +96,39 @@ export const convertPositionToSymbolType = (position: Position, isApexTopGame: b
     return 0;
 };
 
-export const getSymbolText = (position: Position, betType: BetType) => {
+export const getSymbolText = (position: Position, market: SportMarketInfo | MarketData) => {
     switch (position) {
         case Position.HOME:
-            switch (Number(betType)) {
+            switch (Number(market.betType)) {
                 case BetType.SPREAD:
                     return 'H1';
                 case BetType.TOTAL:
                     return 'O';
                 case BetType.DOUBLE_CHANCE:
-                    return '1X';
+                    switch (market.doubleChanceMarketType) {
+                        case DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE:
+                            return '1X';
+                        case DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE:
+                            return 'X2';
+                        case DoubleChanceMarketType.NO_DRAW:
+                            return '12';
+                        default:
+                            return '';
+                    }
                 default:
                     return '1';
             }
         case Position.AWAY:
-            switch (Number(betType)) {
+            switch (Number(market.betType)) {
                 case BetType.SPREAD:
                     return 'H2';
                 case BetType.TOTAL:
                     return 'U';
-                case BetType.DOUBLE_CHANCE:
-                    return 'X2';
                 default:
                     return '2';
             }
         case Position.DRAW:
-            switch (Number(betType)) {
-                case BetType.DOUBLE_CHANCE:
-                    return '12';
-                default:
-                    return 'X';
-            }
+            return 'X';
         default:
             return '';
     }
@@ -204,10 +207,9 @@ export const convertPositionToPositionName = (position: number): 'HOME' | 'AWAY'
 export const getCanceledGameClaimAmount = (position: AccountPositionProfile) => {
     const positionType = convertPositionNameToPositionType(position.side);
 
-    if (positionType == Position.HOME) return formatCurrency(position.market.homeOdds * position.amount, 2);
-    if (positionType == Position.AWAY) return formatCurrency(position.market.awayOdds * position.amount, 2);
-    if (positionType == Position.DRAW)
-        return position.market.drawOdds ? formatCurrency(position.market.drawOdds * position.amount, 2) : 0;
+    if (positionType == Position.HOME) return position.market.homeOdds * position.amount;
+    if (positionType == Position.AWAY) return position.market.awayOdds * position.amount;
+    if (positionType == Position.DRAW) return position.market.drawOdds ? position.market.drawOdds * position.amount : 0;
     return 0;
 };
 
@@ -396,7 +398,10 @@ export const getParentMarketAddress = (parentMarketAddress: string, marketAddres
 export const getOddTooltipText = (position: Position, market: SportMarketInfo | MarketData) => {
     const spread = Math.abs(Number(market.spread) / 100);
     const total = Number(market.total) / 100;
-    const team = position === Position.AWAY ? market.awayTeam : market.homeTeam;
+    const team =
+        position === Position.AWAY || market.doubleChanceMarketType === DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE
+            ? market.awayTeam
+            : market.homeTeam;
     const team2 = market.awayTeam;
     const scoring =
         SCORING_MAP[market.tags[0]] !== ''
@@ -418,7 +423,19 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     translationKey = 'total.over';
                     break;
                 case BetType.DOUBLE_CHANCE:
-                    translationKey = 'double-chance.1x2';
+                    switch (market.doubleChanceMarketType) {
+                        case DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE:
+                            translationKey = 'double-chance.1x2';
+                            break;
+                        case DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE:
+                            translationKey = 'double-chance.1x2';
+                            break;
+                        case DoubleChanceMarketType.NO_DRAW:
+                            translationKey = 'double-chance.12';
+                            break;
+                        default:
+                            translationKey = '';
+                    }
                     break;
                 default:
                     translationKey = 'winner';
@@ -429,25 +446,12 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.SPREAD:
                     translationKey = Number(market.spread) < 0 ? 'spread.plus' : 'spread.minus';
                     break;
-                case BetType.TOTAL:
-                    translationKey = 'total.under';
-                    break;
-                case BetType.DOUBLE_CHANCE:
-                    translationKey = 'double-chance.1x2';
-                    break;
                 default:
                     translationKey = 'winner';
             }
             break;
         case Position.DRAW:
-            switch (Number(market.betType)) {
-                case BetType.DOUBLE_CHANCE:
-                    translationKey = 'double-chance.12';
-                    break;
-                default:
-                    translationKey = 'draw';
-            }
-            break;
+            translationKey = 'draw';
             break;
     }
     return i18n.t(`markets.market-card.odd-tooltip.${translationKey}`, {

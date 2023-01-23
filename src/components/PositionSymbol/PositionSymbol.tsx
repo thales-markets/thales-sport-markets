@@ -104,12 +104,15 @@ const Symbol = styled(FlexDivCentered)<{
                 : MAIN_COLORS.BORDERS.GRAY
         }`};
     box-shadow: ${(props) => (props.glow ? `0 0 6px 2px ${props.color || MAIN_COLORS.BORDERS.WHITE}` : '')};
-    margin: ${(props) => (props.flexDirection === 'column' ? '0 10px' : '0 0')};
+    margin: ${(props) => (props.flexDirection === 'column' ? '0 9px' : '0 0')};
     @media (hover: hover) {
         :hover {
             border-color: ${(props) => (props.disabled || props.notClickable ? '' : MAIN_COLORS.BORDERS.BLUE)};
             color: ${(props) => (props.disabled || props.notClickable ? '' : MAIN_COLORS.BORDERS.BLUE)};
         }
+    }
+    @media (max-width: 575px) {
+        margin: ${(props) => (props.flexDirection === 'column' ? '0 8px' : '0 0')};
     }
 `;
 
@@ -132,6 +135,9 @@ const UpperText = styled(FlexDivCentered)`
     background: ${MAIN_COLORS.LIGHT_GRAY};
     padding: 2px;
     font-size: 11px;
+    @media (max-width: 575px) {
+        font-size: 10px;
+    }
 `;
 
 export default PositionSymbol;

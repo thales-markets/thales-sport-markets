@@ -154,7 +154,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
         },
     };
 
-    const symbolText = getSymbolText(positionEnum, position.market.betType);
+    const symbolText = getSymbolText(positionEnum, position.market);
     const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
 
     return (
@@ -193,7 +193,6 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                 ? {
                                       text: spreadTotalText,
                                       textStyle: {
-                                          fontSize: '11px',
                                           top: '-9px',
                                       },
                                   }

@@ -26,6 +26,7 @@ const useChildMarketsQuery = (parentMarket: MarketData, options?: UseQueryOption
                         const gamesOddsObtainerContract = networkConnector.gamesOddsObtainerContract;
 
                         const [
+                            gameDetails,
                             tags,
                             betType,
                             resolved,
@@ -36,6 +37,7 @@ const useChildMarketsQuery = (parentMarket: MarketData, options?: UseQueryOption
                             spread,
                             total,
                         ] = await Promise.all([
+                            contract?.getGameDetails(),
                             contract?.tags(0),
                             contract?.tags(1),
                             contract?.resolved(),
@@ -63,7 +65,7 @@ const useChildMarketsQuery = (parentMarket: MarketData, options?: UseQueryOption
                                         : undefined,
                                 },
                             },
-                            tags: [Number(ethers.utils.formatUnits(tags, 0))],
+                            tags: [Number(tags)],
                             homeTeam: parentMarket.homeTeam,
                             awayTeam: parentMarket.awayTeam,
                             maturityDate: parentMarket.maturityDate,
@@ -82,6 +84,8 @@ const useChildMarketsQuery = (parentMarket: MarketData, options?: UseQueryOption
                             childMarkets: [],
                             spread: Number(spread),
                             total: Number(total),
+                            doubleChanceMarketType:
+                                Number(betType) === BetType.DOUBLE_CHANCE ? gameDetails.gameLabel : null,
                         };
 
                         return market;

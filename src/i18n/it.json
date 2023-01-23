@@ -314,7 +314,8 @@
             "inning": "Inning",
             "quarter": "Trimestre",
             "round": "Girare",
-            "half-time": "Metà tempo"
+            "half-time": "Metà tempo",
+            "total-markets": "Total markets"
         },
         "market-details": {
             "price": "Price",

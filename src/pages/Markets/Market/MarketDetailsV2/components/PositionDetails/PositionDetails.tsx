@@ -45,14 +45,15 @@ type PositionDetailsProps = {
 const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availablePerPosition, position }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    // Redux states
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector(getIsMobile);
-
     const parlay = useSelector(getParlay);
     const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
-    const isAddedToParlay = addedToParlay && addedToParlay.position == position;
-    // ------------
+
+    const isAddedToParlay =
+        addedToParlay &&
+        addedToParlay.position == position &&
+        addedToParlay.doubleChanceMarketType === market.doubleChanceMarketType;
 
     const isGameCancelled = market.cancelled || (!market.gameStarted && market.resolved);
     const isGameResolved = market.resolved || market.cancelled;
@@ -61,19 +62,18 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
     const isGamePaused = market.paused && !isGameResolved;
     const isGameOpen = !market.resolved && !market.cancelled && !market.paused && !market.gameStarted;
 
-    const showBonus = isGameOpen && hasBonus(availablePerPosition.buyBonus);
-    const positionBonus = showBonus ? getFormattedBonus(availablePerPosition.buyBonus) : '0';
     const noLiquidity = !!availablePerPosition.available && availablePerPosition.available < MIN_LIQUIDITY;
-
-    const showOdd = isGameOpen && !noLiquidity;
-
     const noOdd = !odd || odd == 0;
     const disabledPosition = noOdd || noLiquidity || !isGameOpen;
 
-    const symbolText = getSymbolText(position, market.betType);
-    const spreadTotalText = getSpreadTotalText(market, position);
+    const showBonus = isGameOpen && hasBonus(availablePerPosition.buyBonus) && !noOdd;
+    const positionBonus = showBonus ? getFormattedBonus(availablePerPosition.buyBonus) : '0';
 
+    const showOdd = isGameOpen && !noLiquidity;
     const showTooltip = showOdd && !isMobile;
+
+    const symbolText = getSymbolText(position, market);
+    const spreadTotalText = getSpreadTotalText(market, position);
 
     const oddTooltipText = getOddTooltipText(position, market);
 
@@ -93,6 +93,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                         position: position,
                         homeTeam: market.homeTeam || '',
                         awayTeam: market.awayTeam || '',
+                        doubleChanceMarketType: market.doubleChanceMarketType,
                     };
                     dispatch(updateParlay(parlayMarket));
                     if (isMobile) {

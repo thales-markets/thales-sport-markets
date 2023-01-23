@@ -314,7 +314,8 @@
             "half": "Mitad",
             "quarter": "Cuarta parte",
             "half-time": "Medio tiempo",
-            "inning": "Inning"
+            "inning": "Inning",
+            "total-markets": "Total markets"
         },
         "market-details": {
             "price": "Precio",

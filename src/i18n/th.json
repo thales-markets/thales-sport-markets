@@ -311,7 +311,8 @@
             "half-time": "ครึ่งแรก",
             "quarter": "หนึ่งในสี่",
             "round": "กลม",
-            "inning": "โอกาส"
+            "inning": "โอกาส",
+            "total-markets": "Total markets"
         },
         "market-details": {
             "price": "ราคา",

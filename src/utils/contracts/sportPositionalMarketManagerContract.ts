@@ -37,8 +37,15 @@ export const sportPositionalMarketManagerContract = {
                 { indexed: false, internalType: 'address', name: '_parentMarket', type: 'address' },
                 { indexed: false, internalType: 'address', name: '_doubleChanceMarket', type: 'address' },
                 { indexed: false, internalType: 'uint256', name: 'tag', type: 'uint256' },
+                { indexed: false, internalType: 'string', name: 'label', type: 'string' },
             ],
             name: 'DoubleChanceMarketCreated',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'bool', name: '_isDoubleChanceSupported', type: 'bool' }],
+            name: 'DoubleChanceSupportChanged',
             type: 'event',
         },
         {
@@ -161,12 +168,6 @@ export const sportPositionalMarketManagerContract = {
         },
         {
             anonymous: false,
-            inputs: [{ indexed: false, internalType: 'address', name: 'apexConsumer', type: 'address' }],
-            name: 'SetApexConsumer',
-            type: 'event',
-        },
-        {
-            anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: 'migratingManager', type: 'address' }],
             name: 'SetMigratingManager',
             type: 'event',
@@ -223,6 +224,13 @@ export const sportPositionalMarketManagerContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'address', name: 'market', type: 'address' }],
+            name: 'createDoubleChanceMarketsForParent',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [
                 { internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
                 { internalType: 'string', name: 'gameLabel', type: 'string' },
@@ -260,6 +268,16 @@ export const sportPositionalMarketManagerContract = {
             type: 'function',
         },
         {
+            inputs: [
+                { internalType: 'address', name: '', type: 'address' },
+                { internalType: 'uint256', name: '', type: 'uint256' },
+            ],
+            name: 'doubleChanceMarketsByParent',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'address[]', name: 'markets', type: 'address[]' }],
             name: 'expireMarkets',
             outputs: [],
@@ -277,6 +295,13 @@ export const sportPositionalMarketManagerContract = {
             inputs: [{ internalType: 'uint256', name: '_index', type: 'uint256' }],
             name: 'getActiveMarketAddress',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: 'market', type: 'address' }],
+            name: 'getDoubleChanceMarketsByParentMarket',
+            outputs: [{ internalType: 'address[]', name: '', type: 'address[]' }],
             stateMutability: 'view',
             type: 'function',
         },
@@ -314,6 +339,13 @@ export const sportPositionalMarketManagerContract = {
         {
             inputs: [{ internalType: 'address', name: 'candidate', type: 'address' }],
             name: 'isDoubleChanceMarket',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'isDoubleChanceSupported',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
             type: 'function',
@@ -469,13 +501,6 @@ export const sportPositionalMarketManagerContract = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'address', name: '_apexConsumer', type: 'address' }],
-            name: 'setApexConsumer',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
             inputs: [{ internalType: 'uint256', name: '_cancelTimeout', type: 'uint256' }],
             name: 'setCancelTimeout',
             outputs: [],
@@ -485,6 +510,13 @@ export const sportPositionalMarketManagerContract = {
         {
             inputs: [{ internalType: 'uint256', name: '_expiryDuration', type: 'uint256' }],
             name: 'setExpiryDuration',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'bool', name: '_isDoubleChanceSupported', type: 'bool' }],
+            name: 'setIsDoubleChanceSupported',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',

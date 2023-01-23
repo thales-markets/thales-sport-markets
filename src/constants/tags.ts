@@ -189,6 +189,12 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.DOUBLE_CHANCE]: 'double-chance',
 };
 
+export enum DoubleChanceMarketType {
+    HOME_TEAM_NOT_TO_LOSE = 'HomeTeamNotToLose',
+    NO_DRAW = 'NoDraw',
+    AWAY_TEAM_NOT_TO_LOSE = 'AwayTeamNotToLose',
+}
+
 export const SCORING_MAP: SportsMap = {
     9001: 'points',
     9002: 'points',

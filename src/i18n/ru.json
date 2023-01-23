@@ -314,7 +314,8 @@
             "half": "Половина",
             "inning": "Иннинг",
             "half-time": "Перерыв",
-            "quarter": "Четверть"
+            "quarter": "Четверть",
+            "total-markets": "Total markets"
         },
         "market-details": {
             "price": "Price",

@@ -7,7 +7,6 @@ import marketContract from 'utils/contracts/sportsMarketContract';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
 import { fixDuplicatedTeamName } from '../../utils/formatters/string';
 import { Position } from '../../constants/options';
-// import { ZERO_ADDRESS } from 'constants/network';
 
 const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketData | undefined>) => {
     return useQuery<MarketData | undefined>(
@@ -20,7 +19,7 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     theRundownConsumerContract,
                     sportsAMMContract,
                     gamesOddsObtainerContract,
-                    // sportMarketManagerContract,
+                    sportMarketManagerContract,
                 } = networkConnector;
 
                 const [
@@ -33,7 +32,7 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     paused,
                     buyMarketDefaultOdds,
                     childMarketsAddresses,
-                    // doubleChanceMarket,
+                    doubleChanceMarkets,
                 ] = await Promise.all([
                     contract?.getGameDetails(),
                     contract?.tags(0),
@@ -44,7 +43,7 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     contract?.paused(),
                     sportsAMMContract?.getMarketDefaultOdds(marketAddress, false),
                     gamesOddsObtainerContract?.getAllChildMarketsFromParent(marketAddress),
-                    // sportMarketManagerContract?.doubleChanceMarkets(marketAddress),
+                    sportMarketManagerContract?.getDoubleChanceMarketsByParentMarket(marketAddress),
                 ]);
 
                 const gameStarted = cancelled ? false : Date.now() > Number(times.maturity) * 1000;
@@ -71,7 +70,7 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                             odd: buyMarketDefaultOdds[2] ? bigNumberFormatter(buyMarketDefaultOdds[2] || 0) : undefined,
                         },
                     },
-                    tags: [Number(ethers.utils.formatUnits(tags, 0))],
+                    tags: [Number(tags)],
                     homeTeam: fixDuplicatedTeamName(gameDetails.gameLabel.split('vs')[0].trim()),
                     awayTeam: fixDuplicatedTeamName(gameDetails.gameLabel.split('vs')[1].trim()),
                     maturityDate: Number(times.maturity) * 1000,
@@ -86,14 +85,11 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     betType: 0,
                     isApex: false,
                     parentMarket: '',
-                    childMarketsAddresses,
-                    // childMarketsAddresses:
-                    //     doubleChanceMarket !== ZERO_ADDRESS
-                    //         ? [doubleChanceMarket, ...childMarketsAddresses]
-                    //         : childMarketsAddresses,
+                    childMarketsAddresses: [...doubleChanceMarkets, ...childMarketsAddresses],
                     childMarkets: [],
                     spread: 0,
                     total: 0,
+                    doubleChanceMarketType: null,
                 };
                 return market;
             } catch (e) {

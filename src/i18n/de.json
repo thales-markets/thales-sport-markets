@@ -311,7 +311,8 @@
             "half-time": "Halbzeit",
             "half": "Halb",
             "quarter": "Quartal",
-            "inning": "Inning"
+            "inning": "Inning",
+            "total-markets": "Total markets"
         },
         "market-details": {
             "price": "Preis",
