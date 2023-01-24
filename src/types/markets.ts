@@ -1,5 +1,6 @@
 import { COLLATERALS_INDEX } from 'constants/currency';
 import { MarketStatus } from 'constants/markets';
+import { DoubleChanceMarketType } from 'constants/tags';
 import { Position, PositionName } from '../constants/options';
 
 export type MarketInfo = {
@@ -72,6 +73,7 @@ export type SportMarketInfo = {
     childMarkets: SportMarketInfo[];
     spread: number;
     total: number;
+    doubleChanceMarketType: DoubleChanceMarketType | null;
 };
 
 export type FixedMarketData = {
@@ -92,6 +94,15 @@ export type AMMPosition = {
 };
 
 export type AvailablePerPosition = Record<Position, { available?: number; buyBonus?: number }>;
+
+export type AvailablePerDoubleChancePosition = Record<
+    DoubleChanceMarketType,
+    { available?: number; buyBonus?: number }
+>;
+
+export type DoubleChanceMarkets = Record<DoubleChanceMarketType, MarketData>;
+
+export type DoubleChanceMarketsInfo = Record<DoubleChanceMarketType, SportMarketInfo>;
 
 export type MarketData = {
     address: string;
@@ -116,6 +127,7 @@ export type MarketData = {
     childMarkets: MarketData[];
     spread: number;
     total: number;
+    doubleChanceMarketType: DoubleChanceMarketType | null;
 };
 
 export type ChildMarkets = {
@@ -204,6 +216,8 @@ export type Tags = TagInfo[];
 export type SportsMap = Record<number, string>;
 
 export type SportsTagsMap = Record<string, number[]>;
+
+export type SportsPeriodsMap = Record<number, string>;
 
 export enum PositionType {
     home = 'home',
@@ -304,6 +318,7 @@ export type ParlaysMarketPosition = {
     position: Position;
     homeTeam: string;
     awayTeam: string;
+    doubleChanceMarketType: DoubleChanceMarketType | null;
 };
 
 export type ParlaysMarket = SportMarketInfo & {
@@ -329,4 +344,15 @@ export type ParlayPayment = {
 export type WinningInfo = {
     highestWin: number;
     lifetimeWins: number;
+};
+
+export type SportMarketLiveResult = {
+    homeScore: number;
+    awayScore: number;
+    period: number;
+    status: string;
+    scoreHomeByPeriod: number[];
+    scoreAwayByPeriod: number[];
+    displayClock: string;
+    sportId: number;
 };

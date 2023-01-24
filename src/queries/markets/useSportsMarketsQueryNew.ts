@@ -1,6 +1,6 @@
 import { GlobalFiltersEnum } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
-import { SPORTS_MAP } from 'constants/tags';
+import { BetType, SPORTS_MAP } from 'constants/tags';
 import { groupBy, orderBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
@@ -83,7 +83,10 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
                 market.isOpen &&
                 !market.isPaused &&
                 !market.isCanceled &&
-                (market.homeOdds !== 0 || market.awayOdds !== 0 || (market.drawOdds || 0) !== 0) &&
+                (market.homeOdds !== 0 ||
+                    market.awayOdds !== 0 ||
+                    (market.drawOdds || 0) !== 0 ||
+                    market.betType === BetType.DOUBLE_CHANCE) &&
                 market.maturityDate.getTime() > new Date().getTime()
             ) {
                 openMarkets.push(market);
@@ -98,7 +101,6 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
             }
             if (
                 (market.isCanceled || market.isPaused) &&
-                !market.isResolved &&
                 market.maturityDate.getTime() + 30 * 24 * 60 * 60 * 1000 > new Date().getTime()
             ) {
                 canceledMarkets.push(market);

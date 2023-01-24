@@ -36,11 +36,11 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
     const parlayItemQuote = market.isCanceled ? 1 : quote ? quote : 0;
     const parlayStatus = getParlayItemStatus(market);
 
-    const symbolText = getSymbolText(positionEnum, market.betType);
+    const symbolText = getSymbolText(positionEnum, market);
     const spreadTotalText = getSpreadTotalText(market, positionEnum);
 
     return (
-        <Wrapper>
+        <Wrapper style={{ opacity: market.isCanceled ? 0.5 : 1 }}>
             <MatchInfo>
                 <MatchLogo>
                     <ClubLogo
@@ -80,7 +80,6 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                             ? {
                                   text: spreadTotalText,
                                   textStyle: {
-                                      fontSize: '11px',
                                       top: '-9px',
                                   },
                               }

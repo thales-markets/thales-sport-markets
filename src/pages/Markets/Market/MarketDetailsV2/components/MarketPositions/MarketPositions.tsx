@@ -2,9 +2,8 @@ import { Position } from 'constants/options';
 import useAvailablePerPositionQuery from 'queries/markets/useAvailablePerPositionQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsWalletConnected } from 'redux/modules/wallet';
+import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
-// import { useTranslation } from 'react-i18next';
 import { AvailablePerPosition, MarketData } from 'types/markets';
 import { getVisibilityOfDrawOption } from 'utils/markets';
 import PositionDetails from '../PositionDetails';
@@ -29,13 +28,13 @@ type MarketPositionsProps = {
 };
 
 const MarketPositions: React.FC<MarketPositionsProps> = ({ market }) => {
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const [lastValidAvailablePerPosition, setLastValidAvailablePerPosition] = useState<AvailablePerPosition>(
         defaultAvailablePerPosition
     );
 
     const availablePerPositionQuery = useAvailablePerPositionQuery(market.address, {
-        enabled: isWalletConnected,
+        enabled: isAppReady,
     });
 
     useEffect(() => {

@@ -189,6 +189,12 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.DOUBLE_CHANCE]: 'double-chance',
 };
 
+export enum DoubleChanceMarketType {
+    HOME_TEAM_NOT_TO_LOSE = 'HomeTeamNotToLose',
+    NO_DRAW = 'NoDraw',
+    AWAY_TEAM_NOT_TO_LOSE = 'AwayTeamNotToLose',
+}
+
 export const SCORING_MAP: SportsMap = {
     9001: 'points',
     9002: 'points',
@@ -229,4 +235,23 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9018: 'regular',
     9100: '',
     9101: '',
+};
+
+export const SPORT_PERIODS_MAP: SportsMap = {
+    9001: 'quarter',
+    9002: 'quarter',
+    9003: 'inning',
+    9004: 'quarter',
+    9005: 'quarter',
+    9006: 'period',
+    9007: 'round',
+    9008: 'quarter',
+    9010: 'half',
+    9011: 'half',
+    9012: 'half',
+    9013: 'half',
+    9014: 'half',
+    9015: 'half',
+    9016: 'half',
+    9018: 'half',
 };

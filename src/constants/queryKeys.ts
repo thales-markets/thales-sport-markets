@@ -10,6 +10,7 @@ export const QUERY_KEYS = {
     SportMarketsNew: (networkId: NetworkId) => ['sportMarketsNew', networkId],
     ParlayAmmData: (networkId: NetworkId) => ['parlayAmmData', networkId],
     Market: (marketAddress: string) => ['market', marketAddress],
+    LiveResult: (marketId: string) => ['liveResult', marketId],
     ChildMarkets: (marketAddress: string) => ['childMarkets', marketAddress],
     PositionDetails: (
         marketAddress: string,
@@ -19,6 +20,7 @@ export const QUERY_KEYS = {
         networkId: NetworkId
     ) => ['positionDetails', marketAddress, position, amount, stableIndex, networkId],
     AvailablePerPosition: (marketAddress: string) => ['availablePerPosition', marketAddress],
+    AvailablePerDoubleChancePosition: (marketAddress: string) => ['availablePerDoubleChancePosition', marketAddress],
     MarketTransactions: (marketAddress: string, networkId: NetworkId, walletAddress?: string) => [
         'market',
         'transactions',

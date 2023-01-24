@@ -71,6 +71,7 @@ export const parlaySlice = createSlice({
                 const parlayCopy = [...state.parlay];
                 parlayCopy[index].sportMarketAddress = action.payload.sportMarketAddress;
                 parlayCopy[index].position = action.payload.position;
+                parlayCopy[index].doubleChanceMarketType = action.payload.doubleChanceMarketType;
                 state.parlay = [...parlayCopy];
             }
 

@@ -237,7 +237,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                             ? row.original.marketQuotes[index]
                             : 0;
 
-                        const symbolText = getSymbolText(positionEnum, position.market.betType);
+                        const symbolText = getSymbolText(positionEnum, position.market);
                         const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
 
                         return (

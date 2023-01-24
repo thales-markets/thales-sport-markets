@@ -305,7 +305,14 @@
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             },
-            "starts-in": "เริ่มเข้า"
+            "starts-in": "เริ่มเข้า",
+            "period": "ระยะเวลา",
+            "half": "ครึ่ง",
+            "half-time": "ครึ่งแรก",
+            "quarter": "หนึ่งในสี่",
+            "round": "กลม",
+            "inning": "โอกาส",
+            "total-markets": "Total markets"
         },
         "market-details": {
             "price": "ราคา",
