@@ -5,6 +5,7 @@ import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
 import { ethers } from 'ethers';
+import { convertPriceImpactToBonus } from 'utils/markets';
 
 const useAvailablePerPositionQuery = (
     marketAddress: string,
@@ -35,27 +36,15 @@ const useAvailablePerPositionQuery = (
                 return {
                     [Position.HOME]: {
                         available: bigNumberFormatter(availableToBuyHome),
-                        buyBonus: -(
-                            (bigNumberFormatter(homePositionPriceImpact) /
-                                (1 + bigNumberFormatter(homePositionPriceImpact))) *
-                            100
-                        ),
+                        buyBonus: convertPriceImpactToBonus(bigNumberFormatter(homePositionPriceImpact)),
                     },
                     [Position.AWAY]: {
                         available: bigNumberFormatter(availableToBuyAway),
-                        buyBonus: -(
-                            (bigNumberFormatter(awayPositionPriceImpact) /
-                                (1 + bigNumberFormatter(awayPositionPriceImpact))) *
-                            100
-                        ),
+                        buyBonus: convertPriceImpactToBonus(bigNumberFormatter(awayPositionPriceImpact)),
                     },
                     [Position.DRAW]: {
                         available: bigNumberFormatter(availableToBuyDraw),
-                        buyBonus: -(
-                            (bigNumberFormatter(drawPositionPriceImpact) /
-                                (1 + bigNumberFormatter(drawPositionPriceImpact))) *
-                            100
-                        ),
+                        buyBonus: convertPriceImpactToBonus(bigNumberFormatter(drawPositionPriceImpact)),
                     },
                 };
             } catch (e) {

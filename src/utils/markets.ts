@@ -466,3 +466,5 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
         matchResolve,
     });
 };
+
+export const convertPriceImpactToBonus = (priceImpact: number): number => -((priceImpact / (1 + priceImpact)) * 100);
