@@ -446,6 +446,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.SPREAD:
                     translationKey = Number(market.spread) < 0 ? 'spread.plus' : 'spread.minus';
                     break;
+                case BetType.TOTAL:
+                    translationKey = 'total.under';
+                    break;
                 default:
                     translationKey = 'winner';
             }
@@ -463,3 +466,5 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
         matchResolve,
     });
 };
+
+export const convertPriceImpactToBonus = (priceImpact: number): number => -((priceImpact / (1 + priceImpact)) * 100);
