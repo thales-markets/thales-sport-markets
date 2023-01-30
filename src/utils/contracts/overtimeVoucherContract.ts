@@ -1,13 +1,15 @@
 export const overtimeVoucherContract = {
     addresses: {
         5: '0xef4e90b909C0a5919AE049Ea18C997FdA09Ab66c',
-        10: '0xF29Ba1A2F947D3c416382Dd853a1831e0d31DE9A',
+        10: '0x4393F1470317Da64e277b29D96e5bf203f28eFbE',
         420: '0x9483eFf448042c366a4297dB465FaE108d2e6ea6',
     },
     abi: [
         {
             inputs: [
                 { internalType: 'address', name: '_sUSD', type: 'address' },
+                { internalType: 'string', name: '_tokenURIFive', type: 'string' },
+                { internalType: 'string', name: '_tokenURITen', type: 'string' },
                 { internalType: 'string', name: '_tokenURITwenty', type: 'string' },
                 { internalType: 'string', name: '_tokenURIFifty', type: 'string' },
                 { internalType: 'string', name: '_tokenURIHundred', type: 'string' },
@@ -270,7 +272,7 @@ export const overtimeVoucherContract = {
                 { internalType: 'address', name: 'from', type: 'address' },
                 { internalType: 'address', name: 'to', type: 'address' },
                 { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
-                { internalType: 'bytes', name: '_data', type: 'bytes' },
+                { internalType: 'bytes', name: 'data', type: 'bytes' },
             ],
             name: 'safeTransferFrom',
             outputs: [],
@@ -310,6 +312,8 @@ export const overtimeVoucherContract = {
         },
         {
             inputs: [
+                { internalType: 'string', name: '_tokenURIFive', type: 'string' },
+                { internalType: 'string', name: '_tokenURITen', type: 'string' },
                 { internalType: 'string', name: '_tokenURITwenty', type: 'string' },
                 { internalType: 'string', name: '_tokenURIFifty', type: 'string' },
                 { internalType: 'string', name: '_tokenURIHundred', type: 'string' },
@@ -359,6 +363,13 @@ export const overtimeVoucherContract = {
         },
         {
             inputs: [],
+            name: 'tokenURIFive',
+            outputs: [{ internalType: 'string', name: '', type: 'string' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
             name: 'tokenURIFiveHundred',
             outputs: [{ internalType: 'string', name: '', type: 'string' }],
             stateMutability: 'view',
@@ -367,6 +378,13 @@ export const overtimeVoucherContract = {
         {
             inputs: [],
             name: 'tokenURIHundred',
+            outputs: [{ internalType: 'string', name: '', type: 'string' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'tokenURITen',
             outputs: [{ internalType: 'string', name: '', type: 'string' }],
             stateMutability: 'view',
             type: 'function',
