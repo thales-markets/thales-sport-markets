@@ -29,6 +29,8 @@ type MintVoucherModalProps = {
 };
 
 const VOUCHER_OPTIONS: Array<{ value: number; label: string }> = [
+    { value: 5, label: '5 sUSD' },
+    { value: 10, label: '10 sUSD' },
     { value: 20, label: '20 sUSD' },
     { value: 50, label: '50 sUSD' },
     { value: 100, label: '100 sUSD' },
@@ -232,7 +234,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
                         <SelectInput
                             options={VOUCHER_OPTIONS}
                             handleChange={(value) => setAmount(Number(value))}
-                            defaultValue={amount}
+                            defaultValue={VOUCHER_OPTIONS.findIndex((item) => item.value === amount)}
                             width={200}
                             isDisabled={isAllowing || isSubmitting}
                         />
