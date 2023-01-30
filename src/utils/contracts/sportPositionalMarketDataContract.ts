@@ -58,23 +58,6 @@ export const sportPositionalMarketDataContract = {
             type: 'function',
         },
         {
-            inputs: [],
-            name: 'getPriceImpactForAllActiveMarkets',
-            outputs: [
-                {
-                    components: [
-                        { internalType: 'address', name: 'market', type: 'address' },
-                        { internalType: 'int256[]', name: 'priceImpact', type: 'int256[]' },
-                    ],
-                    internalType: 'struct SportPositionalMarketData.ActiveMarketsPriceImpact[]',
-                    name: '',
-                    type: 'tuple[]',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
             inputs: [{ internalType: 'address', name: '_owner', type: 'address' }],
             name: 'initialize',
             outputs: [],

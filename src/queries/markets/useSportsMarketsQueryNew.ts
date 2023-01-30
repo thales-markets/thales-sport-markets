@@ -9,7 +9,9 @@ import { NetworkId } from 'types/network';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import { fixDuplicatedTeamName } from 'utils/formatters/string';
 import networkConnector from 'utils/networkConnector';
-import { convertPriceImpactToBonus } from 'utils/markets';
+import { generalConfig } from 'config/general';
+
+type DiscountMap = Map<string, { homeBonus: number; awayBonus: number; drawBonus: number }>;
 
 const marketsCache = {
     [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,
@@ -30,24 +32,25 @@ const groupMarkets = (allMarkets: SportMarkets) => {
     return childrenOf('null', groupedMarkets);
 };
 
-const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolean) => {
+const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolean, networkId: NetworkId) => {
     const openMarkets = [] as SportMarkets;
     const canceledMarkets = [] as SportMarkets;
     const resolvedMarkets = [] as SportMarkets;
     const pendingMarkets = [] as SportMarkets;
 
     let oddsFromContract: undefined | Array<any>;
-    let priceImpactFromContract: undefined | Array<any>;
+    let discountMap: DiscountMap;
     if (mapOnlyOpenedMarkets) {
         try {
             const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
-            const [oddsForAllActive, priceImpactForAllActiveMarkets] = await Promise.all([
+            const [oddsForAllActive, discountsResponse] = await Promise.all([
                 sportPositionalMarketDataContract?.getOddsForAllActiveMarkets(),
-                sportPositionalMarketDataContract?.getPriceImpactForAllActiveMarkets(),
+                fetch(`${generalConfig.API_URL}/overtimeDiscounts/${networkId}`),
             ]);
 
             oddsFromContract = oddsForAllActive;
-            priceImpactFromContract = priceImpactForAllActiveMarkets;
+            const json = await discountsResponse.json();
+            discountMap = new Map(json) as DiscountMap;
         } catch (e) {
             console.log('Could not get oods from chain', e);
         }
@@ -60,27 +63,20 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
         market.awayTeam = fixDuplicatedTeamName(market.awayTeam);
         market.sport = SPORTS_MAP[market.tags[0]];
         if (mapOnlyOpenedMarkets) {
-            if (oddsFromContract) {
-                const oddsItem = oddsFromContract.find(
-                    (obj: any) => obj[0].toString().toLowerCase() === market.address.toLowerCase()
-                );
-                if (oddsItem) {
-                    market.homeOdds = bigNumberFormatter(oddsItem.odds[0]);
-                    market.awayOdds = bigNumberFormatter(oddsItem.odds[1]);
-                    market.drawOdds = oddsItem.odds[2] ? bigNumberFormatter(oddsItem.odds[2]) : undefined;
-                }
-            }
-            if (priceImpactFromContract) {
-                const priceImpactItem = priceImpactFromContract.find(
-                    (obj: any) => obj[0].toString().toLowerCase() === market.address.toLowerCase()
-                );
-                if (priceImpactItem) {
-                    market.homeBonus = convertPriceImpactToBonus(bigNumberFormatter(priceImpactItem.priceImpact[0]));
-                    market.awayBonus = convertPriceImpactToBonus(bigNumberFormatter(priceImpactItem.priceImpact[1]));
-                    market.drawBonus = priceImpactItem.priceImpact[2]
-                        ? convertPriceImpactToBonus(bigNumberFormatter(priceImpactItem.priceImpact[2]))
-                        : undefined;
-                }
+            const marketDiscount = discountMap?.get(market.address);
+            market = {
+                ...market,
+                ...marketDiscount,
+            };
+
+            if (market.isOpen && oddsFromContract) {
+                oddsFromContract
+                    .filter((obj: any) => obj[0].toString().toLowerCase() === market.address.toLowerCase())
+                    .map((obj: any) => {
+                        market.homeOdds = bigNumberFormatter(obj.odds[0]);
+                        market.awayOdds = bigNumberFormatter(obj.odds[1]);
+                        market.drawOdds = obj.odds[2] ? bigNumberFormatter(obj.odds[2]) : undefined;
+                    });
             }
 
             if (
@@ -147,7 +143,8 @@ const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions
                         isOpen: true,
                         network: networkId,
                     }),
-                    true
+                    true,
+                    networkId
                 );
 
                 // fetch and map markets in the background that are not opened
@@ -157,7 +154,7 @@ const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions
                         minTimestamp: priorDate,
                     })
                     .then(async (result: any) => {
-                        mapMarkets(result, false);
+                        mapMarkets(result, false, networkId);
                     });
 
                 return marketsCache;
