@@ -4,6 +4,7 @@ export const sportsAMMContract = {
         10: '0x170a5714112daEfF20E798B6e92e25B86Ea603C1',
         42: '0x2d6455eE8615B8B5EA5CBc33c06E8376d70762A1',
         420: '0x7465c5d60d3d095443CF9991Da03304A30D42Eae',
+        42161: '0xae56177e405929c95E5d4b04C0C87E428cB6432B',
     },
     abi: [
         {

@@ -18,6 +18,7 @@ export const NetworkNameById: Record<NetworkId, string> = {
     42: 'kovan',
     5: 'goerli',
     420: 'optimism goerli',
+    42161: 'ARBITRUM ONE',
 };
 
 export enum Network {
@@ -38,6 +39,7 @@ export const InfuraNetworkNameById: Record<NetworkId, string> = {
     42: 'kovan',
     5: 'goerli',
     420: 'optimism-goerli',
+    42161: 'arbitrum-mainnet',
 };
 
 export const hasEthereumInjected = () => !!window.ethereum;
