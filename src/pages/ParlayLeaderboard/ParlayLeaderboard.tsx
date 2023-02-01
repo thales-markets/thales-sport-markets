@@ -4,7 +4,7 @@ import SelectInput from 'components/SelectInput';
 import Table from 'components/Table';
 import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
-import { OddsType, PARLAY_LEADERBOARD_START_DATE, TODAYS_DATE } from 'constants/markets';
+import { OddsType, PARLAY_LEADERBOARD_START_DATE } from 'constants/markets';
 import { t } from 'i18next';
 import { addMonths, differenceInCalendarMonths } from 'date-fns';
 import { PaginationWrapper } from 'pages/Quiz/styled-components';
@@ -68,7 +68,7 @@ const ParlayLeaderboard: React.FC = () => {
     const [expandStickyRow, setExpandStickyRowState] = useState<boolean>(false);
 
     const monthOptions: Array<{ value: number; label: string }> = [];
-    const latestPeriod = differenceInCalendarMonths(TODAYS_DATE, PARLAY_LEADERBOARD_START_DATE);
+    const latestPeriod = differenceInCalendarMonths(new Date(), PARLAY_LEADERBOARD_START_DATE);
 
     for (let index = 0; index <= latestPeriod; index++) {
         const periodDate = addMonths(PARLAY_LEADERBOARD_START_DATE, index);

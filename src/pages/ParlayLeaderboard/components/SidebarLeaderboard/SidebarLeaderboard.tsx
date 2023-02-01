@@ -1,7 +1,7 @@
 import PositionSymbol from 'components/PositionSymbol';
 import SimpleLoader from 'components/SimpleLoader';
 import SPAAnchor from 'components/SPAAnchor';
-import { PARLAY_LEADERBOARD_START_DATE, TODAYS_DATE } from 'constants/markets';
+import { PARLAY_LEADERBOARD_START_DATE } from 'constants/markets';
 import { SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
 import ROUTES from 'constants/routes';
 import { differenceInCalendarMonths } from 'date-fns';
@@ -56,7 +56,7 @@ const SidebarLeaderboard: React.FC = () => {
 
     const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
 
-    const latestPeriod = differenceInCalendarMonths(TODAYS_DATE, PARLAY_LEADERBOARD_START_DATE);
+    const latestPeriod = differenceInCalendarMonths(new Date(), PARLAY_LEADERBOARD_START_DATE);
     const query = useParlayLeaderboardQuery(networkId, latestPeriod + 1, { enabled: isAppReady });
 
     const parlaysData = useMemo(() => {
