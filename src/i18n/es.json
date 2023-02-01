@@ -751,7 +751,8 @@
         "pnl": {
             "title": "PnL por round",
             "no-data": "No hay data de PnL para rounds previos.",
-            "lifetime-pnl": "PnL Total"
+            "lifetime-pnl": "PnL Total",
+            "ongoing-pnl": "Ongoing PnL"
         },
         "user-transactions": {
             "type": {

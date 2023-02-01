@@ -206,3 +206,7 @@
     background-color: #d0e3f0;
     border-radius: 10px;
 }
+
+.overtime-voucher-overlay .rc-tooltip-arrow {
+    display: none;
+}

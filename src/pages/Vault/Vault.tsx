@@ -794,7 +794,13 @@ const Vault: React.FC<VaultProps> = (props) => {
                 </RightContainer>
             </Container>
             {vaultData && <PnL vaultAddress={vaultAddress} lifetimePnl={vaultData.lifetimePnl} />}
-            {vaultData && <TradesHistory vaultAddress={vaultAddress} currentRound={vaultData.round} />}
+            {vaultData && (
+                <TradesHistory
+                    vaultAddress={vaultAddress}
+                    currentRound={vaultData.round}
+                    currentRoundDeposit={vaultData.allocationCurrentRound}
+                />
+            )}
             {vaultData && <UserTransactions vaultAddress={vaultAddress} currentRound={vaultData.round} />}
             {openApprovalModal && (
                 <ApprovalModal

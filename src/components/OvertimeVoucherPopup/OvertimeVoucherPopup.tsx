@@ -1,3 +1,4 @@
+import { MAIN_COLORS } from 'constants/ui';
 import React from 'react';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
@@ -27,6 +28,7 @@ const OvertimeVoucherImage = styled.img`
 
 const OvertimeVoucherPopupContainer = styled(FlexDivColumnCentered)`
     text-align: center;
+    color: ${MAIN_COLORS.GRAY};
 `;
 
 const OvertimeVoucherPopupTitle = styled.span`

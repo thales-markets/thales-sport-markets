@@ -848,7 +848,8 @@
         "pnl": {
             "title": "PnL par tour",
             "no-data": "Pas de données PnL pour les tours précédents.",
-            "lifetime-pnl": "PnL depuis la création"
+            "lifetime-pnl": "PnL depuis la création",
+            "ongoing-pnl": "Ongoing PnL"
         },
         "user-transactions": {
             "type": {

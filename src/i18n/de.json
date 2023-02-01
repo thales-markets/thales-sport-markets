@@ -748,7 +748,8 @@
         "pnl": {
             "title": "PnL per Runde",
             "no-data": "Keine PnL-Daten für frühere Runden.",
-            "lifetime-pnl": "Lifetime PnL"
+            "lifetime-pnl": "Lifetime PnL",
+            "ongoing-pnl": "Ongoing PnL"
         },
         "user-transactions": {
             "type": {
