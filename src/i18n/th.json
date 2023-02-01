@@ -752,7 +752,8 @@
         "pnl": {
             "title": "PnL ต่อรอบ",
             "no-data": "ไม่มีข้อมูล PnL สำหรับรอบก่อนหน้า",
-            "lifetime-pnl": "Lifetime PnL"
+            "lifetime-pnl": "Lifetime PnL",
+            "ongoing-pnl": "Ongoing PnL"
         },
         "user-transactions": {
             "type": {

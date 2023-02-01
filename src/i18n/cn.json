@@ -751,7 +751,8 @@
         "pnl": {
             "title": "每轮盈亏",
             "no-data": "无上一轮盈亏数据",
-            "lifetime-pnl": "总盈亏"
+            "lifetime-pnl": "总盈亏",
+            "ongoing-pnl": "Ongoing PnL"
         },
         "user-transactions": {
             "type": {

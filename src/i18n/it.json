@@ -722,8 +722,9 @@
         },
         "pnl": {
             "title": "PnL per round",
+            "no-data": "Nessun dato PnL per i turni precedenti.",
             "lifetime-pnl": "PnL a vita",
-            "no-data": "Nessun dato PnL per i turni precedenti."
+            "ongoing-pnl": "Ongoing PnL"
         },
         "deposit-min-amount-error": "L'importo minimo per il deposito è {{amount}}",
         "withdrawal-request-label": "Richiesta di prelievo: <bold>{{amount}}</bold>",
