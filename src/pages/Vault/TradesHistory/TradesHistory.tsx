@@ -12,7 +12,7 @@ import useVaultTradesQuery from 'queries/vault/useVaultTradesQuery';
 import { VaultTrades, VaultTrade } from 'types/vault';
 import SelectInput from 'components/SelectInput';
 import { VaultTradeStatus } from 'constants/vault';
-import { formatPercentageWithSign } from 'utils/formatters/number';
+import { formatCurrency, formatPercentageWithSign } from 'utils/formatters/number';
 
 type TradesHistoryProps = {
     vaultAddress: string;
@@ -27,6 +27,7 @@ const TradesHistory: React.FC<TradesHistoryProps> = ({ vaultAddress, currentRoun
     const [vaultTrades, setVaultTrades] = useState<VaultTrades>([]);
     const [round, setRound] = useState<number>(currentRound > 0 ? currentRound - 1 : 0);
     const [pnl, setPnl] = useState<number | undefined>(undefined);
+    const [pnlAmount, setPnlAmount] = useState<number | undefined>(undefined);
 
     const rounds: Array<{ value: number; label: string }> = [];
     for (let index = 0; index < currentRound; index++) {
@@ -56,8 +57,8 @@ const TradesHistory: React.FC<TradesHistoryProps> = ({ vaultAddress, currentRoun
 
     useEffect(() => {
         if (round === currentRound - 1) {
-            const initialPnlAmount = 0;
-            const pnlAmount = vaultTrades.reduce((accumulator: number, trade: VaultTrade) => {
+            const initialNetAmount = 0;
+            const netAmount = vaultTrades.reduce((accumulator: number, trade: VaultTrade) => {
                 return (
                     accumulator +
                     (trade.status === VaultTradeStatus.WIN
@@ -66,9 +67,10 @@ const TradesHistory: React.FC<TradesHistoryProps> = ({ vaultAddress, currentRoun
                         ? -trade.paid
                         : 0)
                 );
-            }, initialPnlAmount);
+            }, initialNetAmount);
 
-            setPnl(pnlAmount / currentRoundDeposit);
+            setPnlAmount(netAmount);
+            setPnl(netAmount / currentRoundDeposit);
         }
     }, [vaultTrades, currentRoundDeposit, round, currentRound]);
 
@@ -79,11 +81,13 @@ const TradesHistory: React.FC<TradesHistoryProps> = ({ vaultAddress, currentRoun
             <Header>
                 <Title>{t(`vault.trades-history.title`)}</Title>
                 <RightHeader>
-                    {!!pnl && round === currentRound - 1 && (
+                    {!!pnl && !!pnlAmount && round === currentRound - 1 && (
                         <OngoingPnlContainer>
                             <OngoingPnlLabel>{t('vault.pnl.ongoing-pnl')}:</OngoingPnlLabel>
                             <OngoingPnl color={pnl === 0 ? Colors.WHITE : pnl > 0 ? Colors.GREEN : Colors.RED}>
-                                {formatPercentageWithSign(pnl)}
+                                {`${formatPercentageWithSign(pnl)} (${pnlAmount > 0 ? '+' : '-'}${formatCurrency(
+                                    Math.abs(pnlAmount)
+                                )}$)`}
                             </OngoingPnl>
                         </OngoingPnlContainer>
                     )}

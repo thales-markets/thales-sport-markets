@@ -4,7 +4,12 @@ import SelectInput from 'components/SelectInput';
 import Table from 'components/Table';
 import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
-import { OddsType, PARLAY_LEADERBOARD_START_DATE, TODAYS_DATE } from 'constants/markets';
+import {
+    OddsType,
+    PARLAY_LEADERBOARD_JANUARY_REWARDS,
+    PARLAY_LEADERBOARD_REWARDS,
+    PARLAY_LEADERBOARD_START_DATE,
+} from 'constants/markets';
 import { t } from 'i18next';
 import { addMonths, differenceInCalendarMonths } from 'date-fns';
 import { PaginationWrapper } from 'pages/Quiz/styled-components';
@@ -35,29 +40,6 @@ import {
     getSymbolText,
 } from 'utils/markets';
 
-export const REWARDS = [
-    2000,
-    1500,
-    1000,
-    800,
-    750,
-    700,
-    600,
-    500,
-    300,
-    250,
-    225,
-    210,
-    200,
-    185,
-    170,
-    145,
-    130,
-    125,
-    110,
-    100,
-];
-
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -68,7 +50,7 @@ const ParlayLeaderboard: React.FC = () => {
     const [expandStickyRow, setExpandStickyRowState] = useState<boolean>(false);
 
     const monthOptions: Array<{ value: number; label: string }> = [];
-    const latestPeriod = differenceInCalendarMonths(TODAYS_DATE, PARLAY_LEADERBOARD_START_DATE);
+    const latestPeriod = differenceInCalendarMonths(new Date(), PARLAY_LEADERBOARD_START_DATE);
 
     for (let index = 0; index <= latestPeriod; index++) {
         const periodDate = addMonths(PARLAY_LEADERBOARD_START_DATE, index);
@@ -93,6 +75,8 @@ const ParlayLeaderboard: React.FC = () => {
         return parlays.filter((parlay) => parlay.account.toLowerCase().includes(searchText.toLowerCase()));
     }, [searchText, parlays]);
 
+    const rewards = month === 0 ? PARLAY_LEADERBOARD_JANUARY_REWARDS : PARLAY_LEADERBOARD_REWARDS;
+
     const stickyRow = useMemo(() => {
         const data = parlays.find((parlay) => parlay.account.toLowerCase() == walletAddress?.toLowerCase());
         if (!data) return undefined;
@@ -100,9 +84,9 @@ const ParlayLeaderboard: React.FC = () => {
             <StickyRow>
                 <StickyContrainer>
                     <StickyCell>
-                        {data.rank <= 20 ? (
+                        {data.rank <= rewards.length ? (
                             <Tooltip
-                                overlay={<>{REWARDS[data.rank - 1]} OP</>}
+                                overlay={<>{rewards[data.rank - 1]} OP</>}
                                 component={
                                     <FlexDivRowCentered style={{ position: 'relative', width: 14 }}>
                                         <StatusIcon
@@ -130,14 +114,14 @@ const ParlayLeaderboard: React.FC = () => {
                 <ExpandedContainer hide={!expandStickyRow}>{getExpandedRow(data, selectedOddsType)}</ExpandedContainer>
             </StickyRow>
         );
-    }, [expandStickyRow, parlays, walletAddress, selectedOddsType]);
+    }, [expandStickyRow, parlays, walletAddress, selectedOddsType, rewards]);
 
     const [page, setPage] = useState(0);
     const handleChangePage = (_event: unknown, newPage: number) => {
         setPage(newPage);
     };
 
-    const [rowsPerPage, setRowsPerPage] = useState(20);
+    const [rowsPerPage, setRowsPerPage] = useState(50);
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(Number(event.target.value));
         setPage(0);
@@ -156,6 +140,7 @@ const ParlayLeaderboard: React.FC = () => {
                     <Description>{t('parlay-leaderboard.info1')}</Description>
                     <Description>{t('parlay-leaderboard.info2')}</Description>
                 </ul>
+                <Description>{t('parlay-leaderboard.info3')}</Description>
                 <Warning>{t('parlay-leaderboard.warning')}</Warning>
                 <LeaderboardHeader>
                     <SelectContainer>
@@ -180,14 +165,15 @@ const ParlayLeaderboard: React.FC = () => {
                 tableRowHeadStyles={{ width: '100%' }}
                 tableHeadCellStyles={TableHeaderStyle}
                 tableRowCellStyles={TableRowStyle}
+                columnsDeps={[rewards]}
                 columns={[
                     {
                         accessor: 'rank',
                         Header: <>{t('rewards.table.rank')}</>,
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['rank']>) => {
-                            return cellProps.cell.value <= 20 ? (
+                            return cellProps.cell.value <= rewards.length ? (
                                 <Tooltip
-                                    overlay={<>{REWARDS[cellProps.cell.value - 1]} OP</>}
+                                    overlay={<>{rewards[cellProps.cell.value - 1]} OP</>}
                                     component={
                                         <FlexDivRowCentered style={{ position: 'relative', width: 14 }}>
                                             <StatusIcon

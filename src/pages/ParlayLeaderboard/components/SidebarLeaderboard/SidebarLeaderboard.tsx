@@ -1,11 +1,11 @@
 import PositionSymbol from 'components/PositionSymbol';
 import SimpleLoader from 'components/SimpleLoader';
 import SPAAnchor from 'components/SPAAnchor';
-import { PARLAY_LEADERBOARD_START_DATE, TODAYS_DATE } from 'constants/markets';
+import { PARLAY_LEADERBOARD_REWARDS, PARLAY_LEADERBOARD_START_DATE } from 'constants/markets';
 import { SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
 import ROUTES from 'constants/routes';
 import { differenceInCalendarMonths } from 'date-fns';
-import { getOpacity, getParlayItemStatus, getPositionStatus, REWARDS } from 'pages/ParlayLeaderboard/ParlayLeaderboard';
+import { getOpacity, getParlayItemStatus, getPositionStatus } from 'pages/ParlayLeaderboard/ParlayLeaderboard';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -56,7 +56,7 @@ const SidebarLeaderboard: React.FC = () => {
 
     const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
 
-    const latestPeriod = differenceInCalendarMonths(TODAYS_DATE, PARLAY_LEADERBOARD_START_DATE);
+    const latestPeriod = differenceInCalendarMonths(new Date(), PARLAY_LEADERBOARD_START_DATE);
     const query = useParlayLeaderboardQuery(networkId, latestPeriod + 1, { enabled: isAppReady });
 
     const parlaysData = useMemo(() => {
@@ -119,7 +119,7 @@ const SidebarLeaderboard: React.FC = () => {
                                         </ColumnWrapper>
                                         <ColumnWrapper>
                                             <DataLabel>
-                                                {formatCurrency(REWARDS[parlay.rank - 1], 0)}
+                                                {formatCurrency(PARLAY_LEADERBOARD_REWARDS[parlay.rank - 1], 0)}
                                                 <OPLogoWrapper />
                                             </DataLabel>
                                         </ColumnWrapper>
