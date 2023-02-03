@@ -3,7 +3,7 @@ import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivRowCentered } from '../../styles/common';
-import { PAYMENT_CURRENCY } from '../../constants/currency';
+import { CRYPTO_CURRENCY, PAYMENT_CURRENCY } from '../../constants/currency';
 import { useTranslation } from 'react-i18next';
 import { truncateAddress } from '../../utils/formatters/string';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from '../../redux/modules/wallet';
@@ -74,7 +74,9 @@ const ConnectButton: React.FC = () => {
                                         </Wallet>
                                         <Balance hasVoucher={!!overtimeVoucher}>
                                             <Info>{sUSDBalance}</Info>
-                                            <Currency>{PAYMENT_CURRENCY}</Currency>
+                                            <Currency>
+                                                {networkId === 42161 ? CRYPTO_CURRENCY[0] : PAYMENT_CURRENCY}
+                                            </Currency>
                                         </Balance>
                                     </FlexDivRowCentered>
                                 );

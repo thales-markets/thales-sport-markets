@@ -195,7 +195,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     parsedAmount
                 );
 
-                if (selectedStableIndex !== COLLATERALS_INDEX.sUSD) {
+                if (networkId !== 42161 && selectedStableIndex !== COLLATERALS_INDEX.sUSD) {
                     return ammQuote[0];
                 }
                 return ammQuote;

@@ -16,8 +16,8 @@ const queryConnector: QueryConnector = {
     },
 };
 
-export const refetchMarketData = (marketAddress: string) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Market(marketAddress));
+export const refetchMarketData = (marketAddress: string, networkId: NetworkId) => {
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Market(marketAddress, networkId));
 };
 
 export const refetchMarkets = (networkId: NetworkId) => {

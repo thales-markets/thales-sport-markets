@@ -43,7 +43,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         doubleChanceMarkets: [],
     });
 
-    const childMarketsQuery = useChildMarketsQuery(market, {
+    const childMarketsQuery = useChildMarketsQuery(market, networkId, {
         enabled: isAppReady,
     });
 

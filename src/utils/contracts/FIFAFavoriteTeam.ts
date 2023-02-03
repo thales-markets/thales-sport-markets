@@ -5,6 +5,7 @@ export const FIFAFavoriteTeam = {
         42: 'TBD',
         69: 'TBD',
         420: '0xD66eE2D0F8810304402F6bE0E57E7C0a261b54A3',
+        42161: 'TBD',
     },
     abi: [
         {

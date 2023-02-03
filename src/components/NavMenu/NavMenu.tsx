@@ -82,6 +82,8 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                     })}
                     <Separator />
                     {NAV_MENU_SECOND_SECTION.map((item, index) => {
+                        // removing vaults on arbitrum
+                        if (networkId === 42161 && item.name === 'vaults') return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
                                 <ItemContainer

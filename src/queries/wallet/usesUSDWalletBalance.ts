@@ -16,7 +16,9 @@ const useSUSDWalletBalance = (
                 const { sUSDContract } = networkConnector;
                 if (sUSDContract && walletAddress) {
                     const balance = await sUSDContract?.balanceOf(walletAddress);
-                    return parseInt(balance) / 10 ** STABLE_DECIMALS.sUSD;
+                    return (
+                        parseInt(balance) / 10 ** (networkId === 42161 ? STABLE_DECIMALS.USDC : STABLE_DECIMALS.sUSD)
+                    );
                 }
                 return 0;
             } catch (e) {

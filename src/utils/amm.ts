@@ -28,7 +28,7 @@ export const getAMMSportsTransaction: any = (
         return overtimeVoucherContract?.buyFromAMMWithVoucher(marketAddress, selectedPosition, parsedAmount, voucherId);
     }
 
-    if (stableIndex !== 0 && collateralAddress) {
+    if (networkId !== 42161 && stableIndex !== 0 && collateralAddress) {
         return sportsAMMContract?.buyFromAMMWithDifferentCollateralAndReferrer(
             marketAddress,
             selectedPosition,
@@ -71,7 +71,7 @@ export const getSportsAMMQuoteMethod: any = (
 ) => {
     const collateralAddress = getCollateralAddress(stableIndex ? stableIndex !== 0 : false, networkId, stableIndex);
 
-    if (stableIndex !== 0 && collateralAddress) {
+    if (networkId !== 42161 && stableIndex !== 0 && collateralAddress) {
         return sportsAMMContract.buyFromAmmQuoteWithDifferentCollateral(
             marketAddress,
             selectedPosition,

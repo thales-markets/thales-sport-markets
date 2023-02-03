@@ -4,13 +4,18 @@ import { MarketData } from 'types/markets';
 import { ethers } from 'ethers';
 import networkConnector from 'utils/networkConnector';
 import marketContract from 'utils/contracts/sportsMarketContract';
-import { bigNumberFormatter } from '../../utils/formatters/ethers';
+import { bigNumberFormmaterWithDecimals } from '../../utils/formatters/ethers';
 import { fixDuplicatedTeamName } from '../../utils/formatters/string';
 import { Position } from '../../constants/options';
+import { NetworkId } from 'types/network';
 
-const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketData | undefined>) => {
+const useMarketQuery = (
+    marketAddress: string,
+    networkId: NetworkId,
+    options?: UseQueryOptions<MarketData | undefined>
+) => {
     return useQuery<MarketData | undefined>(
-        QUERY_KEYS.Market(marketAddress),
+        QUERY_KEYS.Market(marketAddress, networkId),
         async () => {
             try {
                 const contract = new ethers.Contract(marketAddress, marketContract.abi, networkConnector.provider);
@@ -61,13 +66,18 @@ const useMarketQuery = (marketAddress: string, options?: UseQueryOptions<MarketD
                     gameDetails,
                     positions: {
                         [Position.HOME]: {
-                            odd: bigNumberFormatter(buyMarketDefaultOdds[0]),
+                            odd: bigNumberFormmaterWithDecimals(buyMarketDefaultOdds[0], networkId === 42161 ? 6 : 18),
                         },
                         [Position.AWAY]: {
-                            odd: bigNumberFormatter(buyMarketDefaultOdds[1]),
+                            odd: bigNumberFormmaterWithDecimals(buyMarketDefaultOdds[1], networkId === 42161 ? 6 : 18),
                         },
                         [Position.DRAW]: {
-                            odd: buyMarketDefaultOdds[2] ? bigNumberFormatter(buyMarketDefaultOdds[2] || 0) : undefined,
+                            odd: buyMarketDefaultOdds[2]
+                                ? bigNumberFormmaterWithDecimals(
+                                      buyMarketDefaultOdds[2] || 0,
+                                      networkId === 42161 ? 6 : 18
+                                  )
+                                : undefined,
                         },
                     },
                     tags: [Number(tags)],
