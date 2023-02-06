@@ -6,7 +6,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { SportMarketInfo, SportMarkets } from 'types/markets';
 import { NetworkId } from 'types/network';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { fixDuplicatedTeamName } from 'utils/formatters/string';
 import networkConnector from 'utils/networkConnector';
 import { convertPriceImpactToBonus } from 'utils/markets';
@@ -31,7 +31,7 @@ const groupMarkets = (allMarkets: SportMarkets) => {
     return childrenOf('null', groupedMarkets);
 };
 
-const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolean) => {
+const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolean, networkId: NetworkId) => {
     const openMarkets = [] as SportMarkets;
     const canceledMarkets = [] as SportMarkets;
     const resolvedMarkets = [] as SportMarkets;
@@ -66,9 +66,11 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
                     (obj: any) => obj[0].toString().toLowerCase() === market.address.toLowerCase()
                 );
                 if (oddsItem) {
-                    market.homeOdds = bigNumberFormatter(oddsItem.odds[0]);
-                    market.awayOdds = bigNumberFormatter(oddsItem.odds[1]);
-                    market.drawOdds = oddsItem.odds[2] ? bigNumberFormatter(oddsItem.odds[2]) : undefined;
+                    market.homeOdds = bigNumberFormmaterWithDecimals(oddsItem.odds[0], networkId === 42161 ? 6 : 18);
+                    market.awayOdds = bigNumberFormmaterWithDecimals(oddsItem.odds[1], networkId === 42161 ? 6 : 18);
+                    market.drawOdds = oddsItem.odds[2]
+                        ? bigNumberFormmaterWithDecimals(oddsItem.odds[2], networkId === 42161 ? 6 : 18)
+                        : undefined;
                 }
             }
             if (priceImpactFromContract) {
@@ -76,10 +78,19 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
                     (obj: any) => obj[0].toString().toLowerCase() === market.address.toLowerCase()
                 );
                 if (priceImpactItem) {
-                    market.homeBonus = convertPriceImpactToBonus(bigNumberFormatter(priceImpactItem.priceImpact[0]));
-                    market.awayBonus = convertPriceImpactToBonus(bigNumberFormatter(priceImpactItem.priceImpact[1]));
+                    market.homeBonus = convertPriceImpactToBonus(
+                        bigNumberFormmaterWithDecimals(priceImpactItem.priceImpact[0], networkId === 42161 ? 6 : 18)
+                    );
+                    market.awayBonus = convertPriceImpactToBonus(
+                        bigNumberFormmaterWithDecimals(priceImpactItem.priceImpact[1], networkId === 42161 ? 6 : 18)
+                    );
                     market.drawBonus = priceImpactItem.priceImpact[2]
-                        ? convertPriceImpactToBonus(bigNumberFormatter(priceImpactItem.priceImpact[2]))
+                        ? convertPriceImpactToBonus(
+                              bigNumberFormmaterWithDecimals(
+                                  priceImpactItem.priceImpact[2],
+                                  networkId === 42161 ? 6 : 18
+                              )
+                          )
                         : undefined;
                 }
             }
@@ -148,7 +159,8 @@ const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions
                         isOpen: true,
                         network: networkId,
                     }),
-                    true
+                    true,
+                    networkId
                 );
 
                 // fetch and map markets in the background that are not opened
@@ -158,7 +170,7 @@ const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions
                         minTimestamp: priorDate,
                     })
                     .then(async (result: any) => {
-                        mapMarkets(result, false);
+                        mapMarkets(result, false, networkId);
                     });
 
                 return marketsCache;
