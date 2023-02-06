@@ -16,13 +16,13 @@ import { formatCurrency, formatPercentageWithSign } from 'utils/formatters/numbe
 import useVaultUserTransactionsQuery from 'queries/vault/useVaultUserTransactionsQuery';
 import UserTransactionsTable from '../UserTransactionsTable';
 
-type TradesHistoryProps = {
+type TransactionsProps = {
     vaultAddress: string;
     currentRound: number;
     currentRoundDeposit: number;
 };
 
-const TradesHistory: React.FC<TradesHistoryProps> = ({ vaultAddress, currentRound, currentRoundDeposit }) => {
+const Transactions: React.FC<TransactionsProps> = ({ vaultAddress, currentRound, currentRoundDeposit }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -289,4 +289,4 @@ const OngoingPnl = styled.p<{ color: string }>`
     color: ${(props) => props.color};
 `;
 
-export default TradesHistory;
+export default Transactions;
