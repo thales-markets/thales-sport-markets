@@ -4,6 +4,7 @@ import { t } from 'i18next';
 import React from 'react';
 import QRCode from 'react-qr-code';
 import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -31,11 +32,16 @@ type MyTicketProps = {
 
 const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const selectedOddsType = useSelector(getOddsType);
 
     const isTicketLost = markets.some((market) => market.isResolved && !market.winning);
     const isTicketResolved = markets.every((market) => market.isResolved || market.isCanceled) || isTicketLost;
     const isParlay = markets.length > 1;
+
+    const matchInfoStyle = isMobile
+        ? { fontSize: '10px', lineHeight: '12px' }
+        : { fontSize: '11px', lineHeight: '13px' };
 
     return (
         <Container>
@@ -110,15 +116,16 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
     );
 };
 
-const matchInfoStyle = { fontSize: '11px', lineHeight: '13px' };
-
 const Container = styled(FlexDivColumnCentered)`
     align-items: center;
 `;
 
 const ContentRow = styled(FlexDivRowCentered)<{ margin?: string }>`
-    width: 294px;
+    width: 356px;
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
+    @media (max-width: 950px) {
+        width: 327px;
+    }
 `;
 
 const MarketsContainer = styled(FlexDivColumn)`
@@ -131,10 +138,13 @@ const Header = styled.span<{ isParlay: boolean }>`
     line-height: ${(props) => (props.isParlay ? '13' : '12')}px;
     text-align: center;
     text-transform: uppercase;
-    letter-spacing: 0.045em;
+    letter-spacing: 0.175em;
     color: #ffffff;
     ${(props) => (props.isParlay ? 'white-space: nowrap;' : '')};
     ${(props) => (props.isParlay ? 'margin-top: 3px' : '')};
+    @media (max-width: 950px) {
+        letter-spacing: 0.117em;
+    }
 `;
 
 const BoldContent = styled.span`
@@ -144,12 +154,15 @@ const BoldContent = styled.span`
 const ParlayLabel = styled.span`
     font-size: 34px;
     line-height: 27px;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.3em;
     font-weight: 300;
     text-transform: uppercase;
     color: #ffffff;
-    padding-left: 5px;
+    padding-left: 8px;
     opacity: 0.8;
+    @media (max-width: 950px) {
+        letter-spacing: 0.18em;
+    }
 `;
 
 const OvertimeLogo = styled(OvertimeLogoIcon)`
@@ -195,6 +208,9 @@ const RowMarket = styled.div`
     align-items: center;
     text-align: center;
     padding: 2px 7px;
+    @media (max-width: 950px) {
+        height: 35px;
+    }
 `;
 
 const InfoWrapper = styled(FlexDivRow)`
