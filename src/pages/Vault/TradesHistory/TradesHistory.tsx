@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { Colors, FlexDivColumn, FlexDivRow } from 'styles/common';
+import { Colors, FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getNetworkId } from 'redux/modules/wallet';
@@ -9,10 +9,12 @@ import { orderBy } from 'lodash';
 import { getIsAppReady } from 'redux/modules/app';
 import TradesTable from '../TradesTable';
 import useVaultTradesQuery from 'queries/vault/useVaultTradesQuery';
-import { VaultTrades, VaultTrade } from 'types/vault';
+import { VaultTrades, VaultTrade, VaultUserTransactions, VaultUserTransaction } from 'types/vault';
 import SelectInput from 'components/SelectInput';
-import { VaultTradeStatus } from 'constants/vault';
+import { VaultTradeStatus, VaultTransaction } from 'constants/vault';
 import { formatCurrency, formatPercentageWithSign } from 'utils/formatters/number';
+import useVaultUserTransactionsQuery from 'queries/vault/useVaultUserTransactionsQuery';
+import UserTransactionsTable from '../UserTransactionsTable';
 
 type TradesHistoryProps = {
     vaultAddress: string;
@@ -25,9 +27,28 @@ const TradesHistory: React.FC<TradesHistoryProps> = ({ vaultAddress, currentRoun
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [vaultTrades, setVaultTrades] = useState<VaultTrades>([]);
+    const [vaultUserTransactions, setVaultUserTransactions] = useState<VaultUserTransactions>([]);
     const [round, setRound] = useState<number>(currentRound > 0 ? currentRound - 1 : 0);
+    const [selectedTab, setSelectedTab] = useState<VaultTransaction>(VaultTransaction.TRADES_HISTORY);
     const [pnl, setPnl] = useState<number | undefined>(undefined);
     const [pnlAmount, setPnlAmount] = useState<number | undefined>(undefined);
+
+    const tabContent: Array<{
+        id: VaultTransaction;
+        name: string;
+    }> = useMemo(
+        () => [
+            {
+                id: VaultTransaction.TRADES_HISTORY,
+                name: t(`vault.trades-history.title`),
+            },
+            {
+                id: VaultTransaction.USER_TRANSACTIONS,
+                name: t(`vault.user-transactions.title`),
+            },
+        ],
+        [t]
+    );
 
     const rounds: Array<{ value: number; label: string }> = [];
     for (let index = 0; index < currentRound; index++) {
@@ -55,6 +76,28 @@ const TradesHistory: React.FC<TradesHistoryProps> = ({ vaultAddress, currentRoun
         }
     }, [vaultTradesQuery.isSuccess, vaultTradesQuery.data, round]);
 
+    const noVaultTrades = vaultTrades.length === 0;
+
+    const vaultUserTransactionsQuery = useVaultUserTransactionsQuery(vaultAddress, networkId, {
+        enabled: isAppReady && !!vaultAddress,
+    });
+
+    useEffect(() => {
+        if (vaultUserTransactionsQuery.isSuccess && vaultUserTransactionsQuery.data) {
+            setVaultUserTransactions(
+                orderBy(
+                    vaultUserTransactionsQuery.data.filter((trade: VaultUserTransaction) => trade.round === round + 1),
+                    ['timestamp', 'blockNumber'],
+                    ['desc', 'desc']
+                )
+            );
+        } else {
+            setVaultUserTransactions([]);
+        }
+    }, [vaultUserTransactionsQuery.isSuccess, vaultUserTransactionsQuery.data, round]);
+
+    const noVaultUserTransactions = vaultUserTransactions.length === 0;
+
     useEffect(() => {
         if (round === currentRound - 1) {
             const initialNetAmount = 0;
@@ -74,12 +117,24 @@ const TradesHistory: React.FC<TradesHistoryProps> = ({ vaultAddress, currentRoun
         }
     }, [vaultTrades, currentRoundDeposit, round, currentRound]);
 
-    const noResults = vaultTrades.length === 0;
-
     return (
         <Container>
             <Header>
-                <Title>{t(`vault.trades-history.title`)}</Title>
+                <TabContainer>
+                    {tabContent.map((tab, index) => (
+                        <Tab
+                            isActive={tab.id === selectedTab}
+                            key={index}
+                            index={index}
+                            onClick={() => {
+                                setSelectedTab(tab.id);
+                            }}
+                            className={`${tab.id === selectedTab ? 'selected' : ''}`}
+                        >
+                            {tab.name}
+                        </Tab>
+                    ))}
+                </TabContainer>
                 <RightHeader>
                     {!!pnl && !!pnlAmount && round === currentRound - 1 && (
                         <OngoingPnlContainer>
@@ -104,11 +159,26 @@ const TradesHistory: React.FC<TradesHistoryProps> = ({ vaultAddress, currentRoun
                 </RightHeader>
             </Header>
             <TableContainer>
-                <TradesTable
-                    transactions={vaultTrades}
-                    isLoading={vaultTradesQuery.isLoading}
-                    noResultsMessage={noResults ? <span>{t(`vault.trades-history.no-trades`)}</span> : undefined}
-                />
+                {selectedTab === VaultTransaction.TRADES_HISTORY && (
+                    <TradesTable
+                        transactions={vaultTrades}
+                        isLoading={vaultTradesQuery.isLoading}
+                        noResultsMessage={
+                            noVaultTrades ? <span>{t(`vault.trades-history.no-trades`)}</span> : undefined
+                        }
+                    />
+                )}
+                {selectedTab === VaultTransaction.USER_TRANSACTIONS && (
+                    <UserTransactionsTable
+                        transactions={vaultUserTransactions}
+                        isLoading={vaultUserTransactionsQuery.isLoading}
+                        noResultsMessage={
+                            noVaultUserTransactions ? (
+                                <span>{t(`vault.user-transactions.no-transactions`)}</span>
+                            ) : undefined
+                        }
+                    />
+                )}
             </TableContainer>
         </Container>
     );
@@ -145,12 +215,32 @@ const RightHeader = styled(FlexDivRow)`
     }
 `;
 
-const Title = styled.span`
+const TabContainer = styled(FlexDiv)`
+    @media (max-width: 767px) {
+        flex-direction: column;
+    }
+`;
+
+const Tab = styled(FlexDivCentered)<{ isActive: boolean; index: number }>`
+    font-style: normal;
     font-weight: bold;
     font-size: 20px;
-    color: ${(props) => props.theme.textColor.primary};
+    user-select: none;ar
+    margin-left: 0px;
+    margin-right: 40px;
+    color: ${(props) => props.theme.textColor.secondary};
+    &.selected {
+        transition: 0.2s;
+        color: ${(props) => props.theme.textColor.primary};
+    }
+    &:hover:not(.selected) {
+        cursor: pointer;
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
     @media (max-width: 767px) {
         margin-bottom: 10px;
+        margin-left: 0px;
+        margin-right: 0px;
     }
 `;
 
