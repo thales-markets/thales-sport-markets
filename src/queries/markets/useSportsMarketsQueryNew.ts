@@ -26,7 +26,6 @@ const childrenOf = (parentMarket: string, groupedMarkets: any) => {
 };
 
 const groupMarkets = (allMarkets: SportMarkets) => {
-    console.log('lets see: ', allMarkets);
     const groupedMarkets = groupBy(allMarkets, (market) => market.parentMarket);
     return childrenOf('null', groupedMarkets);
 };
