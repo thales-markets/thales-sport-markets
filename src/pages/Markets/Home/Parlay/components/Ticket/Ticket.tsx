@@ -4,7 +4,7 @@ import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER, COLLATERALS, OddsType } from 'constants/markets';
-import { MAX_GAS_LIMIT } from 'constants/network';
+import { MAX_GAS_LIMIT, MAX_GAS_LIMIT_ARB } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -334,7 +334,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     referralId,
                     additionalSlippage,
                     {
-                        gasLimit: MAX_GAS_LIMIT,
+                        gasLimit: networkId === 42161 ? MAX_GAS_LIMIT_ARB : MAX_GAS_LIMIT,
                     }
                 );
 
