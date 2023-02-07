@@ -35,3 +35,8 @@ export const VAULT_MAP: Record<string, any> = {
         },
     },
 };
+
+export enum VaultTransaction {
+    TRADES_HISTORY = 'trades-hisotry',
+    USER_TRANSACTIONS = 'user-transactions',
+}
