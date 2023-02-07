@@ -362,7 +362,8 @@
                 "team-in-parlay": "{{team}} ya está en Parlay. El mismo equipo no se puede agregar a un Parlay más de una vez.",
                 "max-payout": "El pago máximo admitido es {{max}}",
                 "max-profit": "La ganancia máxima admitida es {{max}}",
-                "max-teams": "Máximo de {{max}} mercados en Parlay"
+                "max-teams": "Máximo de {{max}} mercados en Parlay",
+                "no-funds-multi-collateral": "Asegúrese de que su billetera tenga fondos suficientes ({{percentage}}% más del monto de la entrada)"
             },
             "fee": "Costo total",
             "payout": "Total recibido",
