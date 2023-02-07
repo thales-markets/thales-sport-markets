@@ -69,6 +69,7 @@ const TicketErrorMessage = {
 };
 
 const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOfLiquidity }) => {
+    console.log('ticket');
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
@@ -180,6 +181,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
     const fetchParlayAmmQuote = useCallback(
         async (susdAmountForQuote: number) => {
+            console.log('fetch it like you mean it');
             const { parlayMarketsAMMContract } = networkConnector;
             if (parlayMarketsAMMContract && parlayAmmData?.minUsdAmount) {
                 const marketsAddresses = markets.map((market) => market.address);
@@ -199,6 +201,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         selectedPositions,
                         susdPaid
                     );
+
+                    console.log('parlayAmmQuote: ', parlayAmmQuote);
 
                     return parlayAmmQuote;
                 } catch (e: any) {
@@ -472,6 +476,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
         const fetchData = async () => {
             setIsFetching(true);
+            console.log('usdAmountValue', usdAmountValue);
+            console.log('parlayAmmData', parlayAmmData);
             const { parlayMarketsAMMContract } = networkConnector;
             if (parlayMarketsAMMContract && Number(usdAmountValue) >= 0 && parlayAmmData?.minUsdAmount) {
                 // Fetching for min usd amount in order to calculate total bonus difference
@@ -479,6 +485,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     fetchParlayAmmQuote(parlayAmmData.minUsdAmount),
                     fetchParlayAmmQuote(Number(usdAmountValue)),
                 ]);
+
+                console.log('fetch', parlayAmmMinimumUSDAmountQuote, parlayAmmQuote);
 
                 if (!mountedRef.current || !isSubscribed) return null;
 

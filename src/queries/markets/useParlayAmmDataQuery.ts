@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ParlayAmmData } from 'types/markets';
 import networkConnector from 'utils/networkConnector';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { NetworkId } from 'types/network';
 
 const useParlayAmmDataQuery = (networkId: NetworkId, options?: UseQueryOptions<ParlayAmmData | undefined>) => {
@@ -36,11 +36,14 @@ const useParlayAmmDataQuery = (networkId: NetworkId, options?: UseQueryOptions<P
                         parlayMarketsAMMContract.safeBoxImpact(),
                         parlayMarketsAMMContract.parlaySize(),
                     ]);
-                    parlayData.minUsdAmount = bigNumberFormatter(minUsdAmount);
-                    parlayData.maxSupportedAmount = bigNumberFormatter(maxSupportedAmount);
-                    parlayData.maxSupportedOdds = bigNumberFormatter(maxSupportedOdds);
-                    parlayData.parlayAmmFee = bigNumberFormatter(parlayAmmFee);
-                    parlayData.safeBoxImpact = bigNumberFormatter(safeBoxImpact);
+                    parlayData.minUsdAmount = bigNumberFormmaterWithDecimals(
+                        minUsdAmount,
+                        networkId === 42161 ? 6 : 18
+                    );
+                    parlayData.maxSupportedAmount = bigNumberFormmaterWithDecimals(maxSupportedAmount);
+                    parlayData.maxSupportedOdds = bigNumberFormmaterWithDecimals(maxSupportedOdds);
+                    parlayData.parlayAmmFee = bigNumberFormmaterWithDecimals(parlayAmmFee);
+                    parlayData.safeBoxImpact = bigNumberFormmaterWithDecimals(safeBoxImpact);
                     parlayData.parlaySize = Number(parlaySize);
                 }
 

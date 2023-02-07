@@ -37,7 +37,7 @@ export const getParlayAMMTransaction: any = (
         );
     }
 
-    if (isNonSusdCollateral && collateralAddress) {
+    if (networkId !== 42161 && isNonSusdCollateral && collateralAddress) {
         return parlayMarketsAMMContract?.buyFromParlayWithDifferentCollateralAndReferrer(
             marketsAddresses,
             selectedPositions,
@@ -83,7 +83,7 @@ export const getParlayMarketsAMMQuoteMethod: any = (
     const isNonSusdCollateral = stableIndex !== COLLATERALS_INDEX.sUSD;
     const collateralAddress = getCollateralAddress(isNonSusdCollateral, networkId, stableIndex);
 
-    if (isNonSusdCollateral && collateralAddress) {
+    if (networkId !== 42161 && isNonSusdCollateral && collateralAddress) {
         return parlayMarketsAMMContract.buyQuoteFromParlayWithDifferentCollateral(
             marketsAddresses,
             selectedPositions,
