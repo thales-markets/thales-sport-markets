@@ -78,3 +78,4 @@ export const OPTIMISM_OPTIONS = [
 ];
 
 export const MAX_GAS_LIMIT = 15000000;
+export const MAX_GAS_LIMIT_ARB = 20000000;
