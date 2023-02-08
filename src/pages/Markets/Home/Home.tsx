@@ -280,14 +280,16 @@ const Home: React.FC = () => {
 
     return (
         <Container>
-            <Info>
-                <Trans
-                    i18nKey="rewards.op-rewards-banner-message"
-                    components={{
-                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                    }}
-                />
-            </Info>
+            {networkId !== 42161 && (
+                <Info>
+                    <Trans
+                        i18nKey="rewards.op-rewards-banner-message"
+                        components={{
+                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                        }}
+                    />
+                </Info>
+            )}
             <ReactModal
                 isOpen={showBurger && isMobile}
                 onRequestClose={() => {
