@@ -64,8 +64,6 @@ const SidebarLeaderboard: React.FC = () => {
         return query.isSuccess ? query.data.slice(0, SIDEBAR_NUMBER_OF_TOP_USERS) : [];
     }, [query.isSuccess, query.data, networkId]);
 
-    console.log(parlaysData);
-
     return (
         <LeaderboardWrapper>
             <Container>
