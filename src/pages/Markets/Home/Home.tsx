@@ -451,9 +451,11 @@ const Home: React.FC = () => {
                             );
                         })}
                     </SportFiltersContainer>
-                    <Suspense fallback={<Loader />}>
-                        <SidebarLeaderboard />
-                    </Suspense>
+                    {networkId !== 42161 && (
+                        <Suspense fallback={<Loader />}>
+                            <SidebarLeaderboard />
+                        </Suspense>
+                    )}
                 </SidebarContainer>
                 {/* MAIN PART */}
                 {sportMarketsQueryNew.isLoading ? (
