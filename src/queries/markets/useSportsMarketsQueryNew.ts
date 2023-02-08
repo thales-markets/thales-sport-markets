@@ -78,18 +78,13 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
                 );
                 if (priceImpactItem) {
                     market.homeBonus = convertPriceImpactToBonus(
-                        bigNumberFormmaterWithDecimals(priceImpactItem.priceImpact[0], networkId === 42161 ? 6 : 18)
+                        bigNumberFormmaterWithDecimals(priceImpactItem.priceImpact[0])
                     );
                     market.awayBonus = convertPriceImpactToBonus(
-                        bigNumberFormmaterWithDecimals(priceImpactItem.priceImpact[1], networkId === 42161 ? 6 : 18)
+                        bigNumberFormmaterWithDecimals(priceImpactItem.priceImpact[1])
                     );
                     market.drawBonus = priceImpactItem.priceImpact[2]
-                        ? convertPriceImpactToBonus(
-                              bigNumberFormmaterWithDecimals(
-                                  priceImpactItem.priceImpact[2],
-                                  networkId === 42161 ? 6 : 18
-                              )
-                          )
+                        ? convertPriceImpactToBonus(bigNumberFormmaterWithDecimals(priceImpactItem.priceImpact[2]))
                         : undefined;
                 }
             }
