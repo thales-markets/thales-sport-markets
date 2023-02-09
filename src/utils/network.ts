@@ -135,7 +135,6 @@ export const getIsVaultSupportedForNetworkId = (networkId: NetworkId): boolean =
 
 export const isRouteAvailableForNetwork = (route: string, networkId: NetworkId): boolean => {
     const navItem = getNavItemFromRoute(route);
-    console.log('NavItem ', navItem);
     if (navItem && navItem?.supportedNetworks?.includes(networkId)) return true;
     return false;
 };
