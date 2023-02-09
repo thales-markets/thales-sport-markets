@@ -48,7 +48,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
 
     const customStyles = {
         content: {
-            top: isMobile ? '40%' : '50%',
+            top: isMobile ? '41%' : '50%',
             left: '50%',
             right: 'auto',
             bottom: 'auto',
@@ -223,58 +223,55 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
     };
 
     return (
-        <>
-            <ReactModal
-                isOpen
-                onRequestClose={onModalClose}
-                shouldCloseOnOverlayClick={true}
-                style={customStyles}
-                contentElement={(props, children) => (
-                    <>
-                        <div {...props}>{children}</div>
-                        {!isMobile && (
-                            <DisplayOptions
-                                defaultDisplayOptions={displayOptions}
-                                setDisplayOptions={setDisplayOptions}
-                                onShare={onTwitterShareClick}
-                                isDisabled={isLoading}
-                            />
-                        )}
-                        {isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
-                    </>
-                )}
-            >
-                <Container ref={ref} isSimpleView={displayOptions.isSimpleView}>
-                    {!isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
-                    {displayOptions.isSimpleView ? (
-                        <MySimpleTicket markets={markets} payout={payout} />
-                    ) : (
-                        <MyTicket markets={markets} totalQuote={totalQuote} paid={paid} payout={payout} />
-                    )}
-                    {isMobile ? (
+        <ReactModal
+            isOpen
+            onRequestClose={onModalClose}
+            shouldCloseOnOverlayClick={true}
+            style={customStyles}
+            contentElement={(props, children) => (
+                <>
+                    <div {...props}>{children}</div>
+                    {!isMobile && (
                         <DisplayOptions
                             defaultDisplayOptions={displayOptions}
                             setDisplayOptions={setDisplayOptions}
                             onShare={onTwitterShareClick}
                             isDisabled={isLoading}
                         />
-                    ) : (
-                        <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
-                            <TwitterIcon disabled={isLoading} fontSize={'30px'} />
-                            <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
-                        </TwitterShare>
                     )}
-                </Container>
-            </ReactModal>
-        </>
+                    {isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
+                </>
+            )}
+        >
+            <Container ref={ref} isSimpleView={displayOptions.isSimpleView}>
+                {!isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
+                {displayOptions.isSimpleView ? (
+                    <MySimpleTicket markets={markets} payout={payout} />
+                ) : (
+                    <MyTicket markets={markets} totalQuote={totalQuote} paid={paid} payout={payout} />
+                )}
+                {isMobile ? (
+                    <DisplayOptions
+                        defaultDisplayOptions={displayOptions}
+                        setDisplayOptions={setDisplayOptions}
+                        onShare={onTwitterShareClick}
+                        isDisabled={isLoading}
+                    />
+                ) : (
+                    <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
+                        <TwitterIcon disabled={isLoading} fontSize={'30px'} />
+                        <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
+                    </TwitterShare>
+                )}
+            </Container>
+        </ReactModal>
     );
 };
 
 // Aspect ratio is important for Twitter: horizontal (Simple View) 2:1 and vertical min 3:4
 const Container = styled(FlexDivColumnCentered)<{ isSimpleView: boolean }>`
-    width: ${(props) => (props.isSimpleView ? '400' : '324')}px;
-    ${(props) => (props.isSimpleView ? 'height: 200px;' : '')}
-    ${(props) => (props.isSimpleView ? '' : 'max-height: 432px;')}
+    width: ${(props) => (props.isSimpleView ? '400' : '386')}px;
+    ${(props) => (props.isSimpleView ? 'height: 200px;' : 'max-height: 515px;')}
     padding: 15px;
     flex: none;
     background: ${(props) =>
@@ -283,8 +280,8 @@ const Container = styled(FlexDivColumnCentered)<{ isSimpleView: boolean }>`
             : 'linear-gradient(180deg, #303656 0%, #1a1c2b 100%)'};
     border-radius: 10px;
     @media (max-width: 950px) {
-        ${(props) => (props.isSimpleView ? 'width: 360px;' : '')}
-        ${(props) => (props.isSimpleView ? 'height: 180px;' : '')}
+        width: ${(props) => (props.isSimpleView ? '360' : '357')}px;
+        ${(props) => (props.isSimpleView ? 'height: 180px;' : 'max-height: 476px;')}
     }
 `;
 

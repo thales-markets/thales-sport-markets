@@ -63,13 +63,12 @@ import { checkAllowance } from 'utils/network';
 import { BigNumber, ethers } from 'ethers';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
-import TradesHistory from './TradesHistory';
+import Transactions from './Transactions';
 import PnL from './PnL';
 import { RouteComponentProps } from 'react-router-dom';
 import vaultContract from 'utils/contracts/sportVaultContract';
 import Toggle from 'components/Toggle/Toggle';
 import Tooltip from 'components/Tooltip';
-import UserTransactions from './UserTransactions';
 
 type VaultProps = RouteComponentProps<{
     vaultId: string;
@@ -795,13 +794,12 @@ const Vault: React.FC<VaultProps> = (props) => {
             </Container>
             {vaultData && <PnL vaultAddress={vaultAddress} lifetimePnl={vaultData.lifetimePnl} />}
             {vaultData && (
-                <TradesHistory
+                <Transactions
                     vaultAddress={vaultAddress}
                     currentRound={vaultData.round}
                     currentRoundDeposit={vaultData.allocationCurrentRound}
                 />
             )}
-            {vaultData && <UserTransactions vaultAddress={vaultAddress} currentRound={vaultData.round} />}
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={amount}

@@ -86,6 +86,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     );
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
+    const [minUsdAmountValue, setMinUsdAmountValue] = useState<number>(0);
     const [totalQuote, setTotalQuote] = useState(0);
     const [totalBonusPercentageDec, setTotalBonusPercentageDec] = useState(0);
     const [totalBonusCurrency, setTotalBonusCurrency] = useState(0);
@@ -107,6 +108,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         payout: 0,
         onClose: () => {},
     });
+
+    // Due to conversion from non sUSD to sUSD user needs 2% more funds in wallet
+    const COLLATERAL_CONVERSION_MULTIPLIER = selectedStableIndex !== COLLATERALS_INDEX.sUSD ? 1.02 : 1;
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -163,6 +167,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     ]);
 
     useEffect(() => {
+        setMinUsdAmountValue(parlayAmmData?.minUsdAmount || 0);
+    }, [parlayAmmData?.minUsdAmount]);
+
+    useEffect(() => {
         // Used for transition between Ticket and Single to save payment selection and amount
         dispatch(setPayment({ selectedStableIndex, isVoucherSelected, amountToBuy: usdAmountValue }));
     }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
@@ -181,12 +189,12 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const fetchParlayAmmQuote = useCallback(
         async (susdAmountForQuote: number) => {
             const { parlayMarketsAMMContract } = networkConnector;
-            if (parlayMarketsAMMContract && parlayAmmData?.minUsdAmount) {
+            if (parlayMarketsAMMContract && minUsdAmountValue) {
                 const marketsAddresses = markets.map((market) => market.address);
                 const selectedPositions = markets.map((market) => market.position);
                 const minUsdAmount =
-                    parlayAmmData?.minUsdAmount && susdAmountForQuote < parlayAmmData?.minUsdAmount
-                        ? parlayAmmData?.minUsdAmount // deafult value for qoute info
+                    susdAmountForQuote < minUsdAmountValue
+                        ? minUsdAmountValue // deafult value for qoute info
                         : susdAmountForQuote;
                 const susdPaid = ethers.utils.parseEther(roundNumberToDecimals(minUsdAmount).toString());
 
@@ -215,7 +223,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 }
             }
         },
-        [networkId, selectedStableIndex, markets, parlayAmmData?.minUsdAmount]
+        [networkId, selectedStableIndex, markets, minUsdAmountValue]
     );
 
     useEffect(() => {
@@ -359,12 +367,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
     useEffect(() => {
         // Minimum of sUSD
-        if (
-            !Number(usdAmountValue) ||
-            Number(usdAmountValue) < (parlayAmmData?.minUsdAmount || 0) ||
-            isBuying ||
-            isAllowing
-        ) {
+        if (!Number(usdAmountValue) || Number(usdAmountValue) < minUsdAmountValue || isBuying || isAllowing) {
             setSubmitDisabled(true);
             return;
         }
@@ -379,7 +382,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             return;
         }
         // Not enough funds
-        setSubmitDisabled(!paymentTokenBalance || usdAmountValue > paymentTokenBalance);
+        setSubmitDisabled(
+            !paymentTokenBalance || Number(usdAmountValue) * COLLATERAL_CONVERSION_MULTIPLIER > paymentTokenBalance
+        );
     }, [
         usdAmountValue,
         isBuying,
@@ -388,7 +393,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         paymentTokenBalance,
         totalQuote,
         tooltipTextUsdAmount,
-        parlayAmmData?.minUsdAmount,
+        minUsdAmountValue,
+        COLLATERAL_CONVERSION_MULTIPLIER,
     ]);
 
     const getSubmitButton = () => {
@@ -400,7 +406,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             );
         }
         // Show Approve only on valid input buy amount
-        if (!hasAllowance && usdAmountValue && Number(usdAmountValue) >= (parlayAmmData?.minUsdAmount || 0)) {
+        if (!hasAllowance && usdAmountValue && Number(usdAmountValue) >= minUsdAmountValue) {
             return (
                 <SubmitButton disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)}>
                     {t('common.wallet.approve')}
@@ -437,10 +443,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 }
             } else if (quotes.some((quote) => quote === 0)) {
                 setTooltipTextUsdAmount(t('markets.parlay.validation.availability'));
-            } else if (value && Number(value) < (parlayAmmData?.minUsdAmount || 0)) {
+            } else if (value && Number(value) < minUsdAmountValue) {
                 setTooltipTextUsdAmount(
                     t('markets.parlay.validation.min-amount', {
-                        min: formatCurrencyWithSign(USD_SIGN, parlayAmmData?.minUsdAmount || 0),
+                        min: formatCurrencyWithSign(USD_SIGN, minUsdAmountValue),
                     })
                 );
             } else if (isValidProfit) {
@@ -449,13 +455,26 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         max: formatCurrencyWithSign(USD_SIGN, parlayAmmData?.maxSupportedAmount || 0),
                     })
                 );
-            } else if (Number(value) > paymentTokenBalance) {
-                setTooltipTextUsdAmount(t('markets.parlay.validation.no-funds'));
+            } else if (Number(value) * COLLATERAL_CONVERSION_MULTIPLIER > paymentTokenBalance) {
+                setTooltipTextUsdAmount(
+                    COLLATERAL_CONVERSION_MULTIPLIER === 1
+                        ? t('markets.parlay.validation.no-funds')
+                        : t('markets.parlay.validation.no-funds-multi-collateral', {
+                              percentage: COLLATERAL_CONVERSION_MULTIPLIER * 100 - 100,
+                          })
+                );
             } else {
                 setTooltipTextUsdAmount('');
             }
         },
-        [parlayAmmData?.maxSupportedAmount, parlayAmmData?.minUsdAmount, t, paymentTokenBalance, isValidProfit]
+        [
+            parlayAmmData?.maxSupportedAmount,
+            minUsdAmountValue,
+            t,
+            paymentTokenBalance,
+            isValidProfit,
+            COLLATERAL_CONVERSION_MULTIPLIER,
+        ]
     );
 
     const calculatedBonusPercentageDec = useMemo(() => {
@@ -473,10 +492,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         const fetchData = async () => {
             setIsFetching(true);
             const { parlayMarketsAMMContract } = networkConnector;
-            if (parlayMarketsAMMContract && Number(usdAmountValue) >= 0 && parlayAmmData?.minUsdAmount) {
+            if (parlayMarketsAMMContract && Number(usdAmountValue) >= 0 && minUsdAmountValue) {
                 // Fetching for min usd amount in order to calculate total bonus difference
                 const [parlayAmmMinimumUSDAmountQuote, parlayAmmQuote] = await Promise.all([
-                    fetchParlayAmmQuote(parlayAmmData.minUsdAmount),
+                    fetchParlayAmmQuote(minUsdAmountValue),
                     fetchParlayAmmQuote(Number(usdAmountValue)),
                 ]);
 
@@ -534,7 +553,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         usdAmountValue,
         fetchParlayAmmQuote,
         setTooltipTextMessageUsdAmount,
-        parlayAmmData?.minUsdAmount,
+        minUsdAmountValue,
         setMarketsOutOfLiquidity,
         calculatedBonusPercentageDec,
     ]);
@@ -565,7 +584,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         Number(usdAmountValue) <= 0 ||
         totalBuyAmount === 0 ||
         // hide when validation tooltip exists except in case of invalid profit and not enough funds
-        (tooltipTextUsdAmount && !isValidProfit && usdAmountValue <= paymentTokenBalance) ||
+        (tooltipTextUsdAmount &&
+            !isValidProfit &&
+            Number(usdAmountValue) * COLLATERAL_CONVERSION_MULTIPLIER < paymentTokenBalance) ||
         isFetching;
 
     const profitPercentage = (totalBuyAmount - Number(usdAmountValue)) / Number(usdAmountValue);

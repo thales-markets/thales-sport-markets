@@ -362,7 +362,8 @@
                 "team-in-parlay": "{{team}} 已经在 Parlay 中。同一支球队不能多次加入过关。",
                 "max-payout": "支持的最大支出为 {{max}}",
                 "max-teams": "Parlay 中的最大 {{max}} 个盘口",
-                "max-profit": "最大支持利润为 {{max}}"
+                "max-profit": "最大支持利润为 {{max}}",
+                "no-funds-multi-collateral": "请确保您的钱包有足够的资金（买入金额的 {{percentage}}%）"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",

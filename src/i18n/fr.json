@@ -412,7 +412,8 @@
             "half": "Moitié",
             "round": "Rond",
             "half-time": "Mi-temps",
-            "inning": "Tour de batte"
+            "inning": "Tour de batte",
+            "total-markets": "Marchés totaux"
         },
         "market-details": {
             "wallet-info": {
@@ -459,7 +460,8 @@
                 "same-team": "La même équipe ne peut pas être dans un Parlay plus d'une fois",
                 "max-payout": "Le paiement maximal pris en charge est de {{max}}",
                 "max-teams": "Maximum {{max}} marchés à Parlay",
-                "max-profit": "Le profit maximal pris en charge est de {{max}}"
+                "max-profit": "Le profit maximal pris en charge est de {{max}}",
+                "no-funds-multi-collateral": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds ({{percentage}} % de plus du montant du buy-in)"
             },
             "payout": "Total reçu",
             "empty-title": "Aucune position",
@@ -896,7 +898,8 @@
             "period-11": "Novembre",
             "period-0": "Décembre",
             "period-9": "Septembre"
-        }
+        },
+        "info3": "*1 pari gagnant éligible par portefeuille"
     },
     "wizard": {
         "title": "C'est parti !",

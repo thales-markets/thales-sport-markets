@@ -359,7 +359,8 @@
                 "team-in-parlay": "{{team}} ist bereits in Parlay. Dasselbe Team kann nicht mehr als einmal zu einem Parlay hinzugefügt werden.",
                 "max-payout": "Die maximal unterstützte Auszahlung beträgt {{max}}",
                 "max-profit": "Der maximal unterstützte Gewinn beträgt {{max}}",
-                "max-teams": "Maximal {{max}} Märkte in Parlay"
+                "max-teams": "Maximal {{max}} Märkte in Parlay",
+                "no-funds-multi-collateral": "Bitte stellen Sie sicher, dass Ihr Guthaben ausreichend ist ({{percentage}} % mehr des Buy-in-Betrags)"
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",
