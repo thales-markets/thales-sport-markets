@@ -13,6 +13,24 @@ export const L2_TO_L1_NETWORK_MAPPER: NetworkMapper = {
     69: 42,
 };
 
+export const SUPPORTED_NETWORKS = [
+    {
+        chainId: 10,
+        chainName: 'Optimism Mainnet',
+        iconClassName: 'icon icon--op',
+    },
+    {
+        chainId: 42161,
+        chainName: 'Arbitrum One',
+        iconClassName: 'icon icon--arb',
+    },
+    {
+        chainId: 420,
+        chainName: 'Optimism Goerli Testnet',
+        iconClassName: 'icon icon--op',
+    },
+];
+
 export type OptimismNetwork = {
     chainId: string;
     chainName: string;

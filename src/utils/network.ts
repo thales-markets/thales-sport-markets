@@ -1,6 +1,6 @@
 import { getContractFactory, predeploys } from '@eth-optimism/contracts';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
-import { GWEI_UNIT } from 'constants/network';
+import { GWEI_UNIT, SUPPORTED_NETWORKS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { serializeTransaction, UnsignedTransaction } from 'ethers/lib/utils';
 import { NetworkId } from 'types/network';
@@ -114,11 +114,13 @@ export const checkAllowance = async (amount: BigNumber, token: any, walletAddres
 };
 
 export const getNetworkIconClassNameByNetworkId = (networkId: NetworkId): string => {
-    if (networkId == 10) return 'icon icon--op';
-    return 'icon icon--op';
+    const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
+    if (network) return network.iconClassName;
+    return 'Unknown';
 };
 
 export const getNetworkNameByNetworkId = (networkId: NetworkId): string => {
-    if (networkId == 10) return 'Optimism Mainnet';
-    return 'Optimism Mainnet';
+    const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
+    if (network) return network.chainName;
+    return 'Unknown';
 };
