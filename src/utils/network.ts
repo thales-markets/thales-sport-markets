@@ -124,3 +124,9 @@ export const getNetworkNameByNetworkId = (networkId: NetworkId): string => {
     if (network) return network.chainName;
     return 'Unknown';
 };
+
+export const getIsVaultSupportedForNetworkId = (networkId: NetworkId): boolean => {
+    const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
+    if (network) return network.supportsVaults;
+    return false;
+};
