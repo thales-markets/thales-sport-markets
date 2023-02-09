@@ -5,6 +5,7 @@ import { BigNumber, ethers } from 'ethers';
 import { serializeTransaction, UnsignedTransaction } from 'ethers/lib/utils';
 import { NetworkId } from 'types/network';
 import networkConnector from 'utils/networkConnector';
+import { getNavItemFromRoute } from './ui';
 
 export const NetworkIdByName: Record<string, NetworkId> = {
     OptimismMainnet: 10,
@@ -28,6 +29,7 @@ export enum Network {
     Goerli = 5,
     Kovan = 42,
     'Mainnet-Ovm' = 10,
+    'Arbitrum' = 42161,
     'Kovan-Ovm' = 69,
     'Goerli-Ovm' = 420,
     'POLYGON-MUMBAI' = 80001,
@@ -128,5 +130,12 @@ export const getNetworkNameByNetworkId = (networkId: NetworkId): string => {
 export const getIsVaultSupportedForNetworkId = (networkId: NetworkId): boolean => {
     const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
     if (network) return network.supportsVaults;
+    return false;
+};
+
+export const isRouteAvailableForNetwork = (route: string, networkId: NetworkId): boolean => {
+    const navItem = getNavItemFromRoute(route);
+    console.log('NavItem ', navItem);
+    if (navItem && navItem?.supportedNetworks?.includes(networkId)) return true;
     return false;
 };
