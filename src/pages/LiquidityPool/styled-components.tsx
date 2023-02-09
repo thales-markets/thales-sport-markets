@@ -117,9 +117,7 @@ export const Description = styled.div`
     }
 `;
 
-export const ContentInfoContainer = styled.div`
-    margin-bottom: 10px;
-`;
+export const ContentInfoContainer = styled.div``;
 
 export const ContentInfo = styled.p`
     text-align: center;
@@ -152,36 +150,30 @@ export const UsersInLiquidityPoolText = styled(ContentInfo)`
     margin-bottom: 10px;
 `;
 
-export const LiquidityPoolFilledText = styled(ContentInfo)`
+export const LiquidityPoolFilledText = styled(FlexDivRow)`
     margin-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    width: 100%;
 `;
 
 export const LiquidityPoolFilledGraphicContainer = styled(FlexDivStart)`
     position: relative;
-    width: 400px;
+    width: 100%;
     height: 14px;
     background: #3b4472;
     border-radius: 9px;
-    margin-bottom: 10px;
-    @media (max-width: 575px) {
-        width: 250px;
-    }
 `;
 
 export const LiquidityPoolFilledGraphicPercentage = styled(FlexDivStart)<{ width: number }>`
     position: absolute;
     width: ${(props) => props.width}%;
     transition: width 1s linear;
-    max-width: 400px;
+    max-width: 100%;
     height: 10px;
     left: 2px;
     top: 2px;
     background: linear-gradient(269.97deg, #ff774c 16.18%, #b50a5e 77.77%);
     border-radius: 9px;
-    @media (max-width: 575px) {
-        max-width: 250px;
-    }
 `;
 
 export const SubmitButton = styled.button`
@@ -274,4 +266,37 @@ export const ToggleContainer = styled(FlexDiv)`
     width: 100%;
     margin-bottom: 5px;
     text-transform: uppercase;
+`;
+
+export const LiquidityPoolInfoTitle = styled.div`
+    text-align: center;
+    white-space: nowrap;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+`;
+
+export const LiquidityPoolInfoContainer = styled(FlexDivStart)`
+    align-items: center;
+    margin-bottom: 10px;
+`;
+
+export const LiquidityPoolInfoLabel = styled.span`
+    white-space: nowrap;
+    margin-right: 6px;
+    width: 115px;
+`;
+
+export const LiquidityPoolInfoGraphic = styled(FlexDivStart)<{ background: string }>`
+    width: 100px;
+    height: 14px;
+    background: ${(props) => props.background};
+    border-radius: 9px;
+`;
+
+export const LiquidityPoolInfo = styled.span`
+    white-space: nowrap;
+    margin-left: 6px;
 `;

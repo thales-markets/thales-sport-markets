@@ -17,7 +17,6 @@ import {
     LiquidityPoolFilledText,
     RoundInfoContainer,
     RoundInfo,
-    ContentInfoContainer,
     ContentInfo,
     BoldContent,
     WarningContentInfo,
@@ -26,10 +25,15 @@ import {
     RoundEndContainer,
     RoundEndLabel,
     RoundEnd,
-    UsersInLiquidityPoolText,
     ContentContainer,
     MainContainer,
     ExternalButton,
+    LiquidityPoolInfoContainer,
+    LiquidityPoolInfoGraphic,
+    LiquidityPoolInfoLabel,
+    LiquidityPoolInfo,
+    LiquidityPoolInfoTitle,
+    ContentInfoContainer,
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -41,7 +45,7 @@ import { LiquidityPoolPnlType, LiquidityPoolTab } from 'constants/liquidityPool'
 import NumericInput from 'components/fields/NumericInput';
 import { getIsAppReady } from 'redux/modules/app';
 import { UserLiquidityPoolData, LiquidityPoolData } from 'types/liquidityPool';
-import { formatCurrencyWithSign } from 'utils/formatters/number';
+import { formatCurrencyWithSign, formatPercentage } from 'utils/formatters/number';
 import { PAYMENT_CURRENCY, USD_SIGN } from 'constants/currency';
 import TimeRemaining from 'components/TimeRemaining';
 import networkConnector from 'utils/networkConnector';
@@ -577,98 +581,72 @@ const LiquidityPool: React.FC = () => {
                 ) : (
                     <>
                         <ContentContainer>
-                            {userLiquidityPoolData && (
-                                <ContentInfoContainer>
-                                    {liquidityPoolData.liquidityPoolStarted && (
-                                        <ContentInfo>
-                                            <Trans
-                                                i18nKey="liquidity-pool.your-round-allocation-label"
-                                                components={{
-                                                    bold: <BoldContent />,
-                                                }}
-                                                values={{
-                                                    amount: formatCurrencyWithSign(
-                                                        USD_SIGN,
-                                                        userLiquidityPoolData.balanceCurrentRound
-                                                    ),
-                                                }}
-                                            />
-                                        </ContentInfo>
-                                    )}
-                                    <ContentInfo>
-                                        <Trans
-                                            i18nKey="liquidity-pool.your-next-round-allocation-label"
-                                            components={{
-                                                bold: <BoldContent />,
-                                            }}
-                                            values={{
-                                                amount: formatCurrencyWithSign(
-                                                    USD_SIGN,
-                                                    userLiquidityPoolData.balanceTotal
-                                                ),
-                                            }}
-                                        />
-                                        {userLiquidityPoolData.balanceCurrentRound > 0 && !isWithdrawalRequested && (
-                                            <Tooltip
-                                                overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
-                                                iconFontSize={14}
-                                            />
-                                        )}
-                                    </ContentInfo>
-                                    {isWithdrawalRequested && (
-                                        <WarningContentInfo>
-                                            <Trans
-                                                i18nKey="liquidity-pool.withdrawal-request-label"
-                                                components={{
-                                                    bold: <BoldContent />,
-                                                }}
-                                                values={{
-                                                    amount: formatCurrencyWithSign(
-                                                        USD_SIGN,
-                                                        userLiquidityPoolData.balanceCurrentRound
-                                                    ),
-                                                }}
-                                            />
-                                            <Tooltip
-                                                overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
-                                                iconFontSize={14}
-                                            />
-                                        </WarningContentInfo>
-                                    )}
-                                </ContentInfoContainer>
-                            )}
-                            {liquidityPoolData && (
+                            {liquidityPoolData && userLiquidityPoolData && (
                                 <>
-                                    <UsersInLiquidityPoolText>
-                                        <Trans
-                                            i18nKey="liquidity-pool.users-in-liquidity-pool-label"
-                                            values={{
-                                                number: liquidityPoolData.usersCurrentlyInLiquidityPool,
-                                                max: liquidityPoolData.maxAllowedUsers,
-                                            }}
-                                        />
-                                    </UsersInLiquidityPoolText>
-                                    <LiquidityPoolFilledText>
-                                        <Trans
-                                            i18nKey="liquidity-pool.liquidity-pool-filled-label"
-                                            values={{
-                                                amount: formatCurrencyWithSign(
-                                                    USD_SIGN,
-                                                    liquidityPoolData.allocationNextRound
-                                                ),
-                                                max: formatCurrencyWithSign(
-                                                    USD_SIGN,
-                                                    liquidityPoolData.maxAllowedDeposit
-                                                ),
-                                            }}
-                                        />
-                                    </LiquidityPoolFilledText>
+                                    <LiquidityPoolInfoTitle>Total LP info</LiquidityPoolInfoTitle>
                                     <LiquidityPoolFilledGraphicContainer>
                                         <LiquidityPoolFilledGraphicPercentage
                                             width={liquidityPoolData.allocationNextRoundPercentage}
                                         ></LiquidityPoolFilledGraphicPercentage>
                                     </LiquidityPoolFilledGraphicContainer>
+                                    <LiquidityPoolFilledText>
+                                        <span>{`${formatCurrencyWithSign(
+                                            USD_SIGN,
+                                            liquidityPoolData.allocationNextRound
+                                        )} / ${formatCurrencyWithSign(
+                                            USD_SIGN,
+                                            liquidityPoolData.maxAllowedDeposit
+                                        )}`}</span>
+                                        <span>{`Your share ${formatPercentage(
+                                            userLiquidityPoolData.balanceTotal / liquidityPoolData.allocationNextRound
+                                        )} of LP`}</span>
+                                    </LiquidityPoolFilledText>
                                 </>
+                            )}
+                            {userLiquidityPoolData && (
+                                <ContentInfoContainer>
+                                    <LiquidityPoolInfoTitle>Your LP info</LiquidityPoolInfoTitle>
+                                    <LiquidityPoolInfoContainer>
+                                        <LiquidityPoolInfoLabel>Your total deposit</LiquidityPoolInfoLabel>
+                                        <LiquidityPoolInfoGraphic
+                                            background={'linear-gradient(90.21deg, #A40A95 0.18%, #FC6679 99.82%)'}
+                                        />
+                                        <LiquidityPoolInfo>
+                                            {formatCurrencyWithSign(
+                                                USD_SIGN,
+                                                userLiquidityPoolData.balanceCurrentRound
+                                            )}
+                                        </LiquidityPoolInfo>
+                                    </LiquidityPoolInfoContainer>
+                                    <LiquidityPoolInfoContainer>
+                                        <LiquidityPoolInfoLabel>Max allowance</LiquidityPoolInfoLabel>
+                                        <LiquidityPoolInfoGraphic
+                                            background={'linear-gradient(90deg, #2A3895 0%, #893CE2 100%)'}
+                                        />
+                                        <LiquidityPoolInfo>
+                                            {formatCurrencyWithSign(
+                                                USD_SIGN,
+                                                userLiquidityPoolData.balanceCurrentRound * 1.5
+                                            )}
+                                        </LiquidityPoolInfo>
+                                    </LiquidityPoolInfoContainer>
+                                    <LiquidityPoolInfoContainer>
+                                        <LiquidityPoolInfoLabel>Current balance</LiquidityPoolInfoLabel>
+                                        <LiquidityPoolInfoGraphic
+                                            background={'linear-gradient(270deg, #3AECD3 0%, #017F9C 100%)'}
+                                        />
+                                        <LiquidityPoolInfo>
+                                            {formatCurrencyWithSign(
+                                                USD_SIGN,
+                                                userLiquidityPoolData.balanceCurrentRound
+                                            )}
+                                            <Tooltip
+                                                overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
+                                                iconFontSize={14}
+                                            />
+                                        </LiquidityPoolInfo>
+                                    </LiquidityPoolInfoContainer>
+                                </ContentInfoContainer>
                             )}
                         </ContentContainer>
                         <ContentContainer>
