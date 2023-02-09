@@ -18,16 +18,19 @@ export const SUPPORTED_NETWORKS = [
         chainId: 10,
         chainName: 'Optimism Mainnet',
         iconClassName: 'icon icon--op',
+        supportsVaults: true,
     },
     {
         chainId: 42161,
         chainName: 'Arbitrum One',
         iconClassName: 'icon icon--arb',
+        supportsVaults: false,
     },
     {
         chainId: 420,
         chainName: 'Optimism Goerli Testnet',
         iconClassName: 'icon icon--op',
+        supportsVaults: true,
     },
 ];
 

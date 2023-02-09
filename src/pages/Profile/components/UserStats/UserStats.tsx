@@ -9,6 +9,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { WinningInfo } from 'types/markets';
 import { UserVaultsData } from 'types/vault';
+import { getIsVaultSupportedForNetworkId } from 'utils/network';
 
 const UserStats: React.FC<{ openPositionsValue: number }> = ({ openPositionsValue }) => {
     const { t } = useTranslation();
@@ -25,7 +26,7 @@ const UserStats: React.FC<{ openPositionsValue: number }> = ({ openPositionsValu
         : { highestWin: 0, lifetimeWins: 0 };
 
     const userVaultsDataQuery = useUserVaultsDataQuery(walletAddress.toLowerCase(), networkId, {
-        enabled: isWalletConnected,
+        enabled: isWalletConnected && getIsVaultSupportedForNetworkId(networkId),
     });
 
     const vaultsData = userVaultsDataQuery.isSuccess
