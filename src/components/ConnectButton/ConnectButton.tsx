@@ -3,7 +3,6 @@ import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivRowCentered } from '../../styles/common';
-import { CRYPTO_CURRENCY, PAYMENT_CURRENCY } from '../../constants/currency';
 import { useTranslation } from 'react-i18next';
 import { truncateAddress } from '../../utils/formatters/string';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from '../../redux/modules/wallet';
@@ -12,6 +11,7 @@ import useSUSDWalletBalance from '../../queries/wallet/usesUSDWalletBalance';
 import { formatCurrency } from '../../utils/formatters/number';
 import { getIsAppReady } from '../../redux/modules/app';
 import useOvertimeVoucherQuery from '../../queries/wallet/useOvertimeVoucherQuery';
+import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 
 const ConnectButton: React.FC = () => {
     const { t } = useTranslation();
@@ -74,9 +74,7 @@ const ConnectButton: React.FC = () => {
                                         </Wallet>
                                         <Balance hasVoucher={!!overtimeVoucher}>
                                             <Info>{sUSDBalance}</Info>
-                                            <Currency>
-                                                {networkId === 42161 ? CRYPTO_CURRENCY[0] : PAYMENT_CURRENCY}
-                                            </Currency>
+                                            <Currency>{getDefaultColleteralForNetwork(networkId)}</Currency>
                                         </Balance>
                                     </FlexDivRowCentered>
                                 );
