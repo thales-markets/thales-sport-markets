@@ -17,7 +17,7 @@ import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
 import i18n from 'i18n';
 
-const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 35;
+const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 90;
 
 export const getRoi = (ticketPrice: number, potentialWinnings: number, showRoi: boolean) =>
     showRoi ? (potentialWinnings - ticketPrice) / ticketPrice : 0;

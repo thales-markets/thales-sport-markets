@@ -314,9 +314,9 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
 };
 
 const getMarketWinStatus = (position: PositionData) =>
-    position.market.isResolved
+    position.market.isResolved && !position.market.isCanceled
         ? convertPositionNameToPosition(position.side) === convertFinalResultToResultType(position.market.finalResult)
-        : undefined;
+        : undefined; // open or canceled
 
 const getPositionStatus = (position: PositionData) => {
     const winStatus = getMarketWinStatus(position);
