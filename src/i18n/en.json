@@ -436,7 +436,7 @@
                 "single-min-amount": "Minimal buy-in is {{min}}",
                 "availability": "Not enough liquidity for this buy-in amount",
                 "no-funds": "Please ensure your wallet has enough funds",
-                "no-funds-multi-collateral": "Please ensure your wallet has enough funds ({{percentage}}% more of buy-in amount)",
+                "no-funds-multi-collateral": "Please ensure your wallet has enough funds (buy-in amount plus {{percentage}}%)",
                 "risk-per-comb": "Risk per combination exceeded",
                 "same-team": "The same team can't be in a Parlay more than once",
                 "not-supported": "Not supported validation error: {{error}}"
