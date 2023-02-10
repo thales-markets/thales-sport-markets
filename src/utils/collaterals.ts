@@ -36,3 +36,8 @@ export const getDefaultColleteralForNetwork = (networkId: NetworkId) => {
     if (networkId == Network.Arbitrum) return CRYPTO_CURRENCY_MAP.USDC;
     return CRYPTO_CURRENCY_MAP.sUSD;
 };
+
+export const getDefaultDecimalsForNetwork = (networkId: NetworkId) => {
+    if (networkId == Network.Arbitrum) return STABLE_DECIMALS['USDC'];
+    return STABLE_DECIMALS['sUSD'];
+};

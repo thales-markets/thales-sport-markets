@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from 'utils/networkConnector';
 import { NetworkId } from 'types/network';
-import { STABLE_DECIMALS } from 'constants/currency';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 const useSUSDWalletBalance = (
     walletAddress: string,
@@ -16,9 +16,7 @@ const useSUSDWalletBalance = (
                 const { sUSDContract } = networkConnector;
                 if (sUSDContract && walletAddress) {
                     const balance = await sUSDContract?.balanceOf(walletAddress);
-                    return (
-                        parseInt(balance) / 10 ** (networkId === 42161 ? STABLE_DECIMALS.USDC : STABLE_DECIMALS.sUSD)
-                    );
+                    return parseInt(balance) / 10 ** getDefaultDecimalsForNetwork(networkId);
                 }
                 return 0;
             } catch (e) {

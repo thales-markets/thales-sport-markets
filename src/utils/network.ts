@@ -1,6 +1,7 @@
 import { getContractFactory, predeploys } from '@eth-optimism/contracts';
+import { COLLATERALS_INDEX } from 'constants/currency';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
-import { GWEI_UNIT, SUPPORTED_NETWORKS } from 'constants/network';
+import { GWEI_UNIT, MAX_GAS_LIMIT, MAX_GAS_LIMIT_ARB, SUPPORTED_NETWORKS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { serializeTransaction, UnsignedTransaction } from 'ethers/lib/utils';
 import { NetworkId } from 'types/network';
@@ -137,4 +138,25 @@ export const isRouteAvailableForNetwork = (route: string, networkId: NetworkId):
     const navItem = getNavItemFromRoute(route);
     if (navItem && navItem?.supportedNetworks?.includes(networkId)) return true;
     return false;
+};
+
+export const getDefaultCollateralForNetworkId = (networkId: NetworkId) => {
+    if (networkId == Network.Arbitrum) return COLLATERALS_INDEX['USDC'];
+    return COLLATERALS_INDEX['sUSD'];
+};
+
+export const isMultiCollateralSupportedForNetwork = (networkId: NetworkId) => {
+    const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId && item.isMultiCollateralSupported);
+    if (network) return true;
+    return false;
+};
+
+export const getMaxGasLimitForNetwork = (networkId: NetworkId) => {
+    if (networkId == Network.Arbitrum) return MAX_GAS_LIMIT_ARB;
+    return MAX_GAS_LIMIT;
+};
+
+export const isCollateralSupportedOnNetwork = (collateralIndex: COLLATERALS_INDEX, networkId: NetworkId) => {
+    if (!isMultiCollateralSupportedForNetwork(networkId)) return getDefaultCollateralForNetworkId(networkId);
+    return collateralIndex;
 };

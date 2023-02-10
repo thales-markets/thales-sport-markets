@@ -34,7 +34,7 @@ import {
     roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { formatMarketOdds, getBonus, getPositionOdds } from 'utils/markets';
-import { checkAllowance } from 'utils/network';
+import { checkAllowance, isMultiCollateralSupportedForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -129,6 +129,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         };
     }, []);
 
+    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
+
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
@@ -185,6 +187,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         async (amountForQuote: number) => {
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract && amountForQuote) {
+                console.log('selectedStableIndex ', selectedStableIndex);
                 const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(amountForQuote).toString());
                 const ammQuote = await getSportsAMMQuoteMethod(
                     selectedStableIndex,
@@ -195,13 +198,13 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     parsedAmount
                 );
 
-                if (networkId !== 42161 && selectedStableIndex !== COLLATERALS_INDEX.sUSD) {
+                if (isMultiCollateralSupported && selectedStableIndex !== COLLATERALS_INDEX.sUSD) {
                     return ammQuote[0];
                 }
                 return ammQuote;
             }
         },
-        [market.address, market.position, networkId, selectedStableIndex]
+        [isMultiCollateralSupported, market.address, market.position, networkId, selectedStableIndex]
     );
 
     useEffect(() => {
@@ -343,7 +346,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         if (sportsAMMContract && signer) {
             let collateralContractWithSigner: ethers.Contract | undefined;
 
-            if (selectedStableIndex !== 0 && multipleCollateral) {
+            if (selectedStableIndex !== 0 && multipleCollateral && isMultiCollateralSupported) {
                 collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
             } else {
                 collateralContractWithSigner = sUSDContract?.connect(signer);
@@ -379,6 +382,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         usdAmountValue,
         selectedStableIndex,
         isVoucherSelected,
+        isMultiCollateralSupported,
     ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
@@ -389,7 +393,12 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             try {
                 let collateralContractWithSigner: ethers.Contract | undefined;
 
-                if (selectedStableIndex !== 0 && multipleCollateral && multipleCollateral[selectedStableIndex]) {
+                if (
+                    selectedStableIndex !== 0 &&
+                    multipleCollateral &&
+                    multipleCollateral[selectedStableIndex] &&
+                    isMultiCollateralSupported
+                ) {
                     collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
                 } else {
                     collateralContractWithSigner = sUSDContract?.connect(signer);
@@ -608,6 +617,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             <Payment
                 defaultSelectedStableIndex={selectedStableIndex}
                 defaultIsVoucherSelected={isVoucherSelected}
+                hideCollateralSelector={!isMultiCollateralSupported}
                 onChangeCollateral={(index) => setSelectedStableIndex(index)}
                 setIsVoucherSelectedProp={setIsVoucherSelected}
             />

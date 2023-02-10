@@ -4,6 +4,7 @@ import { ParlayAmmData } from 'types/markets';
 import networkConnector from 'utils/networkConnector';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { NetworkId } from 'types/network';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 const useParlayAmmDataQuery = (networkId: NetworkId, options?: UseQueryOptions<ParlayAmmData | undefined>) => {
     return useQuery<ParlayAmmData | undefined>(
@@ -38,7 +39,7 @@ const useParlayAmmDataQuery = (networkId: NetworkId, options?: UseQueryOptions<P
                     ]);
                     parlayData.minUsdAmount = bigNumberFormmaterWithDecimals(
                         minUsdAmount,
-                        networkId === 42161 ? 6 : 18
+                        getDefaultDecimalsForNetwork(networkId)
                     );
                     parlayData.maxSupportedAmount = bigNumberFormmaterWithDecimals(maxSupportedAmount);
                     parlayData.maxSupportedOdds = bigNumberFormmaterWithDecimals(maxSupportedOdds);

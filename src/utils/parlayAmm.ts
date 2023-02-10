@@ -4,6 +4,7 @@ import { Position } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
 import { NetworkId } from 'types/network';
 import { getCollateralAddress } from './collaterals';
+import { isMultiCollateralSupportedForNetwork } from './network';
 
 export const getParlayAMMTransaction: any = (
     isVoucherSelected: boolean,
@@ -24,6 +25,7 @@ export const getParlayAMMTransaction: any = (
 ): Promise<ethers.ContractTransaction> => {
     const isNonSusdCollateral = stableIndex !== COLLATERALS_INDEX.sUSD;
     const collateralAddress = getCollateralAddress(isNonSusdCollateral, networkId, stableIndex);
+    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
     if (isVoucherSelected) {
         return overtimeVoucherContract?.buyFromParlayAMMWithVoucher(
@@ -37,7 +39,7 @@ export const getParlayAMMTransaction: any = (
         );
     }
 
-    if (networkId !== 42161 && isNonSusdCollateral && collateralAddress) {
+    if (isMultiCollateralSupported && isNonSusdCollateral && collateralAddress) {
         return parlayMarketsAMMContract?.buyFromParlayWithDifferentCollateralAndReferrer(
             marketsAddresses,
             selectedPositions,
@@ -82,8 +84,9 @@ export const getParlayMarketsAMMQuoteMethod: any = (
 ) => {
     const isNonSusdCollateral = stableIndex !== COLLATERALS_INDEX.sUSD;
     const collateralAddress = getCollateralAddress(isNonSusdCollateral, networkId, stableIndex);
+    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
-    if (networkId !== 42161 && isNonSusdCollateral && collateralAddress) {
+    if (isMultiCollateralSupported && isNonSusdCollateral && collateralAddress) {
         return parlayMarketsAMMContract.buyQuoteFromParlayWithDifferentCollateral(
             marketsAddresses,
             selectedPositions,

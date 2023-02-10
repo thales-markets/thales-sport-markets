@@ -9,6 +9,7 @@ import { Position } from '../../constants/options';
 import { groupBy, orderBy } from 'lodash';
 import { BetType } from 'constants/tags';
 import { NetworkId } from 'types/network';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 const useChildMarketsQuery = (
     parentMarket: MarketData,
@@ -61,20 +62,20 @@ const useChildMarketsQuery = (
                                 [Position.HOME]: {
                                     odd: bigNumberFormmaterWithDecimals(
                                         buyMarketDefaultOdds[0],
-                                        networkId === 42161 ? 6 : 18
+                                        getDefaultDecimalsForNetwork(networkId)
                                     ),
                                 },
                                 [Position.AWAY]: {
                                     odd: bigNumberFormmaterWithDecimals(
                                         buyMarketDefaultOdds[1],
-                                        networkId === 42161 ? 6 : 18
+                                        getDefaultDecimalsForNetwork(networkId)
                                     ),
                                 },
                                 [Position.DRAW]: {
                                     odd: buyMarketDefaultOdds[2]
                                         ? bigNumberFormmaterWithDecimals(
                                               buyMarketDefaultOdds[2] || 0,
-                                              networkId === 42161 ? 6 : 18
+                                              getDefaultDecimalsForNetwork(networkId)
                                           )
                                         : undefined,
                                 },

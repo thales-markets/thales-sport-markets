@@ -4,6 +4,7 @@ import { Position } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
 import { NetworkId } from 'types/network';
 import { getCollateralAddress } from './collaterals';
+import { isMultiCollateralSupportedForNetwork } from './network';
 
 export const getAMMSportsTransaction: any = (
     isVoucherSelected: boolean,
@@ -23,12 +24,13 @@ export const getAMMSportsTransaction: any = (
     }
 ): Promise<ethers.ContractTransaction> => {
     const collateralAddress = getCollateralAddress(stableIndex ? stableIndex !== 0 : false, networkId, stableIndex);
+    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
     if (isVoucherSelected) {
         return overtimeVoucherContract?.buyFromAMMWithVoucher(marketAddress, selectedPosition, parsedAmount, voucherId);
     }
 
-    if (networkId !== 42161 && stableIndex !== 0 && collateralAddress) {
+    if (isMultiCollateralSupported && stableIndex !== 0 && collateralAddress) {
         return sportsAMMContract?.buyFromAMMWithDifferentCollateralAndReferrer(
             marketAddress,
             selectedPosition,
@@ -70,8 +72,9 @@ export const getSportsAMMQuoteMethod: any = (
     parsedAmount: BigNumber
 ) => {
     const collateralAddress = getCollateralAddress(stableIndex ? stableIndex !== 0 : false, networkId, stableIndex);
+    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
-    if (networkId !== 42161 && stableIndex !== 0 && collateralAddress) {
+    if (isMultiCollateralSupported && stableIndex !== 0 && collateralAddress) {
         return sportsAMMContract.buyFromAmmQuoteWithDifferentCollateral(
             marketAddress,
             selectedPosition,

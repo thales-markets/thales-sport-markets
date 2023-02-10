@@ -10,6 +10,7 @@ import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { fixDuplicatedTeamName } from 'utils/formatters/string';
 import networkConnector from 'utils/networkConnector';
 import { convertPriceImpactToBonus } from 'utils/markets';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 const marketsCache = {
     [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,
@@ -65,10 +66,16 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
                     (obj: any) => obj[0].toString().toLowerCase() === market.address.toLowerCase()
                 );
                 if (oddsItem) {
-                    market.homeOdds = bigNumberFormmaterWithDecimals(oddsItem.odds[0], networkId === 42161 ? 6 : 18);
-                    market.awayOdds = bigNumberFormmaterWithDecimals(oddsItem.odds[1], networkId === 42161 ? 6 : 18);
+                    market.homeOdds = bigNumberFormmaterWithDecimals(
+                        oddsItem.odds[0],
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
+                    market.awayOdds = bigNumberFormmaterWithDecimals(
+                        oddsItem.odds[1],
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
                     market.drawOdds = oddsItem.odds[2]
-                        ? bigNumberFormmaterWithDecimals(oddsItem.odds[2], networkId === 42161 ? 6 : 18)
+                        ? bigNumberFormmaterWithDecimals(oddsItem.odds[2], getDefaultDecimalsForNetwork(networkId))
                         : undefined;
                 }
             }

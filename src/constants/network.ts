@@ -19,18 +19,21 @@ export const SUPPORTED_NETWORKS = [
         chainName: 'Optimism Mainnet',
         iconClassName: 'icon icon--op',
         supportsVaults: true,
+        isMultiCollateralSupported: true,
     },
     {
         chainId: 42161,
         chainName: 'Arbitrum One',
         iconClassName: 'icon icon--arb',
         supportsVaults: false,
+        isMultiCollateralSupported: false,
     },
     {
         chainId: 420,
         chainName: 'Optimism Goerli Testnet',
         iconClassName: 'icon icon--op',
         supportsVaults: true,
+        isMultiCollateralSupported: true,
     },
 ];
 

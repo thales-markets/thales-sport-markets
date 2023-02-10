@@ -8,6 +8,7 @@ import { bigNumberFormmaterWithDecimals } from '../../utils/formatters/ethers';
 import { fixDuplicatedTeamName } from '../../utils/formatters/string';
 import { Position } from '../../constants/options';
 import { NetworkId } from 'types/network';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 const useMarketQuery = (
     marketAddress: string,
@@ -66,16 +67,22 @@ const useMarketQuery = (
                     gameDetails,
                     positions: {
                         [Position.HOME]: {
-                            odd: bigNumberFormmaterWithDecimals(buyMarketDefaultOdds[0], networkId === 42161 ? 6 : 18),
+                            odd: bigNumberFormmaterWithDecimals(
+                                buyMarketDefaultOdds[0],
+                                getDefaultDecimalsForNetwork(networkId)
+                            ),
                         },
                         [Position.AWAY]: {
-                            odd: bigNumberFormmaterWithDecimals(buyMarketDefaultOdds[1], networkId === 42161 ? 6 : 18),
+                            odd: bigNumberFormmaterWithDecimals(
+                                buyMarketDefaultOdds[1],
+                                getDefaultDecimalsForNetwork(networkId)
+                            ),
                         },
                         [Position.DRAW]: {
                             odd: buyMarketDefaultOdds[2]
                                 ? bigNumberFormmaterWithDecimals(
                                       buyMarketDefaultOdds[2] || 0,
-                                      networkId === 42161 ? 6 : 18
+                                      getDefaultDecimalsForNetwork(networkId)
                                   )
                                 : undefined,
                         },

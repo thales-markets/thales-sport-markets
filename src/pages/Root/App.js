@@ -38,6 +38,7 @@ const App = () => {
     const { trackPageView, trackEvent } = useMatomo();
     const networkId = useSelector((state) => getNetworkId(state));
     const isWalletConnected = useSelector((state) => getIsWalletConnected(state));
+
     const provider = useProvider({ chainId: networkId });
     const { address } = useAccount();
     const { data: signer } = useSigner();

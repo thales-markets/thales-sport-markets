@@ -4,7 +4,7 @@ import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER, COLLATERALS, OddsType } from 'constants/markets';
-import { MAX_GAS_LIMIT, MAX_GAS_LIMIT_ARB } from 'constants/network';
+import { MAX_GAS_LIMIT } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -21,6 +21,7 @@ import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { ParlayPayment, ParlaysMarket } from 'types/markets';
 import { getAmountForApproval } from 'utils/amm';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import {
     countDecimals,
@@ -29,7 +30,7 @@ import {
     roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { formatMarketOdds, getBonus } from 'utils/markets';
-import { checkAllowance } from 'utils/network';
+import { checkAllowance, getMaxGasLimitForNetwork, isMultiCollateralSupportedForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { getParlayAMMTransaction, getParlayMarketsAMMQuoteMethod } from 'utils/parlayAmm';
 import { refetchBalances } from 'utils/queryConnector';
@@ -107,6 +108,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         payout: 0,
         onClose: () => {},
     });
+
+    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -190,7 +193,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         : susdAmountForQuote;
                 const susdPaid = ethers.utils.parseUnits(
                     roundNumberToDecimals(minUsdAmount).toString(),
-                    networkId === 42161 ? 6 : 18
+                    getDefaultDecimalsForNetwork(networkId)
                 );
                 try {
                     const parlayAmmQuote = await getParlayMarketsAMMQuoteMethod(
@@ -315,7 +318,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 const selectedPositions = markets.map((market) => market.position);
                 const susdPaid = ethers.utils.parseUnits(
                     roundNumberToDecimals(Number(usdAmountValue)).toString(),
-                    networkId === 42161 ? 6 : 18
+                    getDefaultDecimalsForNetwork(networkId)
                 );
                 const expectedPayout = ethers.utils.parseEther(roundNumberToDecimals(totalBuyAmount).toString());
                 const additionalSlippage = ethers.utils.parseEther('0.02');
@@ -334,7 +337,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     referralId,
                     additionalSlippage,
                     {
-                        gasLimit: networkId === 42161 ? MAX_GAS_LIMIT_ARB : MAX_GAS_LIMIT,
+                        gasLimit: getMaxGasLimitForNetwork(networkId),
                     }
                 );
 
@@ -624,6 +627,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             <Payment
                 defaultSelectedStableIndex={selectedStableIndex}
                 defaultIsVoucherSelected={isVoucherSelected}
+                hideCollateralSelector={!isMultiCollateralSupported}
                 onChangeCollateral={(index) => setSelectedStableIndex(index)}
                 setIsVoucherSelectedProp={setIsVoucherSelected}
             />

@@ -11,10 +11,12 @@ import { RootState } from 'redux/rootReducer';
 import { formatCurrency } from 'utils/formatters/number';
 import { BalanceLabel, BalanceValue, BalanceWrapper, RowSummary, SummaryLabel } from '../styled-components';
 import CollateralSelector from '../CollateralSelector';
+import { getDefaultCollateralForNetworkId, isCollateralSupportedOnNetwork } from 'utils/network';
 
 type PaymentProps = {
     defaultSelectedStableIndex?: COLLATERALS_INDEX;
     defaultIsVoucherSelected?: boolean;
+    hideCollateralSelector?: boolean;
     onChangeCollateral?: (index: number) => void;
     setIsVoucherSelectedProp?: (selected: boolean) => void;
 };
@@ -22,6 +24,7 @@ type PaymentProps = {
 const Payment: React.FC<PaymentProps> = ({
     defaultSelectedStableIndex,
     defaultIsVoucherSelected,
+    hideCollateralSelector,
     onChangeCollateral,
     setIsVoucherSelectedProp,
 }) => {
@@ -33,8 +36,11 @@ const Payment: React.FC<PaymentProps> = ({
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
-        defaultSelectedStableIndex !== undefined ? defaultSelectedStableIndex : COLLATERALS_INDEX.sUSD
+        defaultSelectedStableIndex !== undefined
+            ? isCollateralSupportedOnNetwork(defaultSelectedStableIndex, networkId)
+            : getDefaultCollateralForNetworkId(networkId)
     );
+
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(!!defaultIsVoucherSelected);
 
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
@@ -89,17 +95,19 @@ const Payment: React.FC<PaymentProps> = ({
                     <BalanceValue>{formatCurrency(paymentTokenBalance, 2)}</BalanceValue>
                 </BalanceWrapper>
             </RowSummary>
-            <CollateralSelector
-                collateralArray={COLLATERALS}
-                selectedItem={selectedStableIndex}
-                onChangeCollateral={(index) => {
-                    setSelectedStableIndex(index);
-                    onChangeCollateral && onChangeCollateral(index);
-                }}
-                overtimeVoucher={overtimeVoucher}
-                isVoucherSelected={isVoucherSelected}
-                setIsVoucherSelected={handleSetIsVoucherSelected}
-            />
+            {!hideCollateralSelector && (
+                <CollateralSelector
+                    collateralArray={COLLATERALS}
+                    selectedItem={selectedStableIndex}
+                    onChangeCollateral={(index) => {
+                        setSelectedStableIndex(index);
+                        onChangeCollateral && onChangeCollateral(index);
+                    }}
+                    overtimeVoucher={overtimeVoucher}
+                    isVoucherSelected={isVoucherSelected}
+                    setIsVoucherSelected={handleSetIsVoucherSelected}
+                />
+            )}
         </>
     );
 };
