@@ -244,7 +244,7 @@ const App = () => {
                                 </LandingPageLayout>
                             </Route>
                             <Route>
-                                <Redirect to={ROUTES.Home} />
+                                <Redirect to={ROUTES.Markets.Home} />
                                 <LandingPageLayout>
                                     <LandingPage />
                                 </LandingPageLayout>
