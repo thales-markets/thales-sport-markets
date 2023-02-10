@@ -2,7 +2,7 @@ import { COLLATERALS_INDEX, COLLATERAL_INDEX_TO_COLLATERAL } from 'constants/cur
 import { COLLATERALS } from 'constants/markets';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
@@ -11,12 +11,12 @@ import { RootState } from 'redux/rootReducer';
 import { formatCurrency } from 'utils/formatters/number';
 import { BalanceLabel, BalanceValue, BalanceWrapper, RowSummary, SummaryLabel } from '../styled-components';
 import CollateralSelector from '../CollateralSelector';
-import { getDefaultCollateralForNetworkId, isCollateralSupportedOnNetwork } from 'utils/network';
+import { getDefaultCollateralForNetworkId } from 'utils/network';
 
 type PaymentProps = {
     defaultSelectedStableIndex?: COLLATERALS_INDEX;
     defaultIsVoucherSelected?: boolean;
-    hideCollateralSelector?: boolean;
+    showCollateralSelector?: boolean;
     onChangeCollateral?: (index: number) => void;
     setIsVoucherSelectedProp?: (selected: boolean) => void;
 };
@@ -24,7 +24,7 @@ type PaymentProps = {
 const Payment: React.FC<PaymentProps> = ({
     defaultSelectedStableIndex,
     defaultIsVoucherSelected,
-    hideCollateralSelector,
+    showCollateralSelector,
     onChangeCollateral,
     setIsVoucherSelectedProp,
 }) => {
@@ -37,11 +37,17 @@ const Payment: React.FC<PaymentProps> = ({
 
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
         defaultSelectedStableIndex !== undefined
-            ? isCollateralSupportedOnNetwork(defaultSelectedStableIndex, networkId)
+            ? defaultSelectedStableIndex
             : getDefaultCollateralForNetworkId(networkId)
     );
 
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(!!defaultIsVoucherSelected);
+
+    useEffect(() => {
+        if (defaultSelectedStableIndex !== undefined) {
+            setSelectedStableIndex(defaultSelectedStableIndex);
+        }
+    }, [defaultSelectedStableIndex]);
 
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -95,7 +101,7 @@ const Payment: React.FC<PaymentProps> = ({
                     <BalanceValue>{formatCurrency(paymentTokenBalance, 2)}</BalanceValue>
                 </BalanceWrapper>
             </RowSummary>
-            {!hideCollateralSelector && (
+            {showCollateralSelector && (
                 <CollateralSelector
                     collateralArray={COLLATERALS}
                     selectedItem={selectedStableIndex}

@@ -14,13 +14,14 @@ import {
     removeFromParlay,
     resetParlayError,
     setPayment,
+    setPaymentSelectedStableIndex,
 } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { ParlaysMarket, SportMarketInfo } from 'types/markets';
-import { isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { getDefaultCollateralForNetworkId, isMultiCollateralSupportedForNetwork } from 'utils/network';
 import MatchInfo from './components/MatchInfo';
 import Payment from './components/Payment';
 import Single from './components/Single';
@@ -37,7 +38,7 @@ const Parlay: React.FC = () => {
     const parlayPayment = useSelector(getParlayPayment);
     const hasParlayError = useSelector(getHasParlayError);
 
-    const hideCollateralSelector = !isMultiCollateralSupportedForNetwork(networkId);
+    const showCollateralSelector = isMultiCollateralSupportedForNetwork(networkId);
 
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
@@ -49,6 +50,10 @@ const Parlay: React.FC = () => {
     const sportMarketsQuery = useSportMarketsQueryNew(networkId, {
         enabled: isAppReady,
     });
+
+    useEffect(() => {
+        dispatch(setPaymentSelectedStableIndex(getDefaultCollateralForNetworkId(networkId)));
+    }, [networkId, dispatch]);
 
     useEffect(() => {
         if (parlayAmmDataQuery.isSuccess && parlayAmmDataQuery.data) {
@@ -143,7 +148,7 @@ const Parlay: React.FC = () => {
                         <Payment
                             defaultSelectedStableIndex={parlayPayment.selectedStableIndex}
                             defaultIsVoucherSelected={parlayPayment.isVoucherSelected}
-                            hideCollateralSelector={hideCollateralSelector}
+                            showCollateralSelector={showCollateralSelector}
                             onChangeCollateral={(index) => {
                                 if (index !== parlayPayment.selectedStableIndex) {
                                     dispatch(setPayment({ ...parlayPayment, selectedStableIndex: index }));

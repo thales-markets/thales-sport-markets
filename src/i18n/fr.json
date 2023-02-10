@@ -412,7 +412,8 @@
             "half": "Moitié",
             "round": "Rond",
             "half-time": "Mi-temps",
-            "inning": "Tour de batte"
+            "inning": "Tour de batte",
+            "total-markets": "Marchés totaux"
         },
         "market-details": {
             "wallet-info": {

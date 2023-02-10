@@ -141,8 +141,7 @@ export const isRouteAvailableForNetwork = (route: string, networkId: NetworkId):
 };
 
 export const getDefaultCollateralForNetworkId = (networkId: NetworkId) => {
-    if (networkId == Network.Arbitrum) return COLLATERALS_INDEX['USDC'];
-    return COLLATERALS_INDEX['sUSD'];
+    return networkId == Network.Arbitrum ? COLLATERALS_INDEX.USDC : COLLATERALS_INDEX.sUSD;
 };
 
 export const isMultiCollateralSupportedForNetwork = (networkId: NetworkId) => {
@@ -154,9 +153,4 @@ export const isMultiCollateralSupportedForNetwork = (networkId: NetworkId) => {
 export const getMaxGasLimitForNetwork = (networkId: NetworkId) => {
     if (networkId == Network.Arbitrum) return MAX_GAS_LIMIT_ARB;
     return MAX_GAS_LIMIT;
-};
-
-export const isCollateralSupportedOnNetwork = (collateralIndex: COLLATERALS_INDEX, networkId: NetworkId) => {
-    if (!isMultiCollateralSupportedForNetwork(networkId)) return getDefaultCollateralForNetworkId(networkId);
-    return collateralIndex;
 };

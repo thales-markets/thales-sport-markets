@@ -187,7 +187,6 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         async (amountForQuote: number) => {
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract && amountForQuote) {
-                console.log('selectedStableIndex ', selectedStableIndex);
                 const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(amountForQuote).toString());
                 const ammQuote = await getSportsAMMQuoteMethod(
                     selectedStableIndex,
@@ -617,7 +616,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             <Payment
                 defaultSelectedStableIndex={selectedStableIndex}
                 defaultIsVoucherSelected={isVoucherSelected}
-                hideCollateralSelector={!isMultiCollateralSupported}
+                showCollateralSelector={isMultiCollateralSupported}
                 onChangeCollateral={(index) => setSelectedStableIndex(index)}
                 setIsVoucherSelectedProp={setIsVoucherSelected}
             />

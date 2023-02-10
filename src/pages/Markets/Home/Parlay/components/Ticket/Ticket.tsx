@@ -627,7 +627,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             <Payment
                 defaultSelectedStableIndex={selectedStableIndex}
                 defaultIsVoucherSelected={isVoucherSelected}
-                hideCollateralSelector={!isMultiCollateralSupported}
+                showCollateralSelector={isMultiCollateralSupported}
                 onChangeCollateral={(index) => setSelectedStableIndex(index)}
                 setIsVoucherSelectedProp={setIsVoucherSelected}
             />
