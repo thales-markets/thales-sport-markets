@@ -22,4 +22,7 @@ export const LINKS = {
         Tutorial: 'https://www.youtube.com/watch?v=olp7jOj4Iyg',
         GitHub: 'https://github.com/thales-markets/thales-sport-markets',
     },
+    UniswapBuyThales:
+        'https://app.uniswap.org/#/swap?outputCurrency=0x217d47011b23bb961eb6d93ca9945b7501a5bb11&chain=optimism',
+    ThalesStaking: 'https://thalesmarket.io/token',
 };

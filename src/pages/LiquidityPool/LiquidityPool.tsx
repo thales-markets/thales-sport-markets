@@ -63,6 +63,7 @@ import Toggle from 'components/Toggle/Toggle';
 import Tooltip from 'components/Tooltip';
 import useLiquidityPoolDataQuery from 'queries/liquidityPool/useLiquidityPoolDataQuery';
 import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
+import { LINKS } from 'constants/links';
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
@@ -567,8 +568,28 @@ const LiquidityPool: React.FC = () => {
                     </ContentContainer>
                     <ContentContainer>
                         <ButtonContainer>
-                            <ExternalButton onClick={() => {}}>{'BUY THALES'}</ExternalButton>
-                            <ExternalButton onClick={() => {}}>{'STAKE THALES'}</ExternalButton>
+                            <ExternalButton
+                                onClick={() => {
+                                    if (window.innerWidth <= 767) {
+                                        window.location.replace(LINKS.UniswapBuyThales);
+                                    } else {
+                                        window.open(LINKS.UniswapBuyThales);
+                                    }
+                                }}
+                            >
+                                {'BUY THALES'}
+                            </ExternalButton>
+                            <ExternalButton
+                                onClick={() => {
+                                    if (window.innerWidth <= 767) {
+                                        window.location.replace(LINKS.ThalesStaking);
+                                    } else {
+                                        window.open(LINKS.ThalesStaking);
+                                    }
+                                }}
+                            >
+                                {'STAKE THALES'}
+                            </ExternalButton>
                         </ButtonContainer>
                     </ContentContainer>
                 </Container>
