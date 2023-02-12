@@ -24,6 +24,7 @@ import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { AMMPosition, AvailablePerPosition, ParlayPayment, ParlaysMarket } from 'types/markets';
 import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
+import { getDecimalsByStableCoinIndex } from 'utils/collaterals';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
     countDecimals,
@@ -212,10 +213,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract) {
                 const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
-                const divider =
-                    selectedStableIndex === COLLATERALS_INDEX.sUSD || selectedStableIndex == COLLATERALS_INDEX.DAI
-                        ? 1e18
-                        : 1e6;
+                const divider = Number('1e' + getDecimalsByStableCoinIndex(selectedStableIndex));
                 const susdToSpendForMaxAmount = await fetchAmmQuote(roundedMaxAmount);
                 const decimalSusdToSpendForMaxAmount = susdToSpendForMaxAmount / divider;
 

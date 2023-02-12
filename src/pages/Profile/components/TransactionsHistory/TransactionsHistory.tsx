@@ -11,19 +11,19 @@ type TransactionHistoryProps = {
 };
 
 const TransactionsHistory: React.FC<TransactionHistoryProps> = ({ searchText }) => {
-    const [showSingles, setShow] = useState<boolean>(false);
+    const [showSingles, setShowSingles] = useState<boolean>(false);
     const { t } = useTranslation();
 
     return (
         <>
             <Container>
-                <Wrapper active={showSingles} onClick={() => setShow(!showSingles)}>
-                    <Icon className="icon icon--claimable-flag" />
-                    <Label>{t('profile.categories.single')}</Label>
+                <Wrapper active={showSingles}>
+                    <Icon className="icon icon--claimable-flag" onClick={() => setShowSingles(true)} />
+                    <Label onClick={() => setShowSingles(true)}>{t('profile.categories.single')}</Label>
                 </Wrapper>
-                <Wrapper active={!showSingles} onClick={() => setShow(!showSingles)}>
-                    <Icon className="icon icon--logo" />
-                    <Label>{t('profile.categories.parlay')}</Label>
+                <Wrapper active={!showSingles}>
+                    <Icon className="icon icon--logo" onClick={() => setShowSingles(false)} />
+                    <Label onClick={() => setShowSingles(false)}>{t('profile.categories.parlay')}</Label>
                 </Wrapper>
             </Container>
             {showSingles && <SingleTransactions searchText={searchText} />}
@@ -37,7 +37,9 @@ const Container = styled(FlexDivStart)`
     margin-left: 20px;
 `;
 
-const Icon = styled(CategoryIcon)``;
+const Icon = styled(CategoryIcon)`
+    cursor: pointer;
+`;
 
 const Label = styled(CategoryLabel)`
     font-family: 'Roboto';

@@ -48,8 +48,6 @@ export const MINIMUM_TICKET_PRICE = 10;
 export const MAXIMUM_TICKET_PRICE = 1000;
 
 export const DATE_PICKER_MAX_LENGTH_MONTHS = 1;
-export const TODAYS_DATE = new Date();
-export const DATE_PICKER_MIN_DATE = TODAYS_DATE; // today's date
 
 const maxDate = new Date();
 maxDate.setMonth(maxDate.getMonth() + DATE_PICKER_MAX_LENGTH_MONTHS);
@@ -116,3 +114,79 @@ export const PARLAY_LEADERBOARD_START_DATE = new Date(2023, 0, 1, 0, 0, 0);
 export const PARLAY_LEADERBOARD_START_DATE_UTC = new Date(Date.UTC(2023, 0, 1, 0, 0, 0));
 
 export const PARLAY_LEADERBOARD_MINIMUM_GAMES = 4;
+
+export const PARLAY_LEADERBOARD_JANUARY_REWARDS = [
+    2000,
+    1500,
+    1000,
+    800,
+    750,
+    700,
+    600,
+    500,
+    300,
+    250,
+    225,
+    210,
+    200,
+    185,
+    170,
+    145,
+    130,
+    125,
+    110,
+    100,
+];
+
+export const PARLAY_LEADERBOARD_REWARDS = [
+    750,
+    500,
+    350,
+    260,
+    230,
+    210,
+    200,
+    175,
+    150,
+    125,
+    110,
+    105,
+    100,
+    95,
+    90,
+    85,
+    80,
+    75,
+    70,
+    60,
+    50,
+    50,
+    50,
+    50,
+    50,
+    50,
+    50,
+    50,
+    50,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    30,
+    30,
+    30,
+    30,
+    30,
+    30,
+    30,
+    30,
+    30,
+    30,
+    30,
+];

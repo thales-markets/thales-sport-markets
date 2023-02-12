@@ -109,7 +109,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         components={{
                                             duneLink: (
                                                 <a
-                                                    href="https://dune.com/leifu/overtime-npl-playoff-rewards-leaderboard"
+                                                    href="https://dune.com/leifu/overtime-nfl-superbowl-leaderboard-12-feb-2023"
                                                     target="_blank"
                                                     rel="noreferrer"
                                                 />
