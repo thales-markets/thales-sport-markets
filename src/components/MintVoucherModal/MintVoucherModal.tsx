@@ -10,7 +10,7 @@ import Modal from 'components/Modal';
 import { getIsAppReady } from 'redux/modules/app';
 import { PAYMENT_CURRENCY } from 'constants/currency';
 import { BigNumber, ethers } from 'ethers';
-import { checkAllowance } from 'utils/network';
+import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { MAX_GAS_LIMIT } from 'constants/network';
@@ -24,7 +24,7 @@ import { LINKS } from 'constants/links';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Tooltip, withStyles } from '@material-ui/core';
 import { NetworkId } from 'types/network';
-import { getDefaultColleteralForNetwork } from 'utils/collaterals';
+import { getDefaultColleteralForNetwork, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 type MintVoucherModalProps = {
     onClose: () => void;
@@ -154,13 +154,16 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
             setIsSubmitting(true);
             try {
                 const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
-                const parsedAmount = ethers.utils.parseEther(Number(amount).toString());
+                const parsedAmount = ethers.utils.parseUnits(
+                    Number(amount).toString(),
+                    getDefaultDecimalsForNetwork(networkId)
+                );
 
                 const tx = await overtimeVoucherContractWithSigner.mint(
                     isAnotherWallet ? getAddress(recipient) : getAddress(walletAddress),
                     parsedAmount,
                     {
-                        gasLimit: MAX_GAS_LIMIT,
+                        gasLimit: getMaxGasLimitForNetwork(networkId),
                     }
                 );
                 const txResult = await tx.wait();
