@@ -133,9 +133,9 @@ export const getNetworkKeyByNetworkId = (networkId: NetworkId): string => {
     return network?.chainKey || 'optimism_mainnet';
 };
 
-export const getIsVaultSupportedForNetworkId = (networkId: NetworkId): boolean => {
+export const getAreVaultsSupportedForNetworkId = (networkId: NetworkId): boolean => {
     const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
-    if (network) return network.supportsVaults;
+    if (network) return network.areVaultsSupported;
     return false;
 };
 

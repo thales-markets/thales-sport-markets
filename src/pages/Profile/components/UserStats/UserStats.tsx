@@ -9,7 +9,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { WinningInfo } from 'types/markets';
 import { UserVaultsData } from 'types/vault';
-import { getIsVaultSupportedForNetworkId } from 'utils/network';
+import { getAreVaultsSupportedForNetworkId } from 'utils/network';
 
 const UserStats: React.FC<{ openPositionsValue: number }> = ({ openPositionsValue }) => {
     const { t } = useTranslation();
@@ -26,12 +26,14 @@ const UserStats: React.FC<{ openPositionsValue: number }> = ({ openPositionsValu
         : { highestWin: 0, lifetimeWins: 0 };
 
     const userVaultsDataQuery = useUserVaultsDataQuery(walletAddress.toLowerCase(), networkId, {
-        enabled: isWalletConnected && getIsVaultSupportedForNetworkId(networkId),
+        enabled: isWalletConnected && getAreVaultsSupportedForNetworkId(networkId),
     });
 
     const vaultsData = userVaultsDataQuery.isSuccess
         ? (userVaultsDataQuery.data as UserVaultsData)
         : { balanceTotal: 0 };
+
+    const areVaultsSupported = getAreVaultsSupportedForNetworkId(networkId);
 
     return (
         <Wrapper>
@@ -58,12 +60,16 @@ const UserStats: React.FC<{ openPositionsValue: number }> = ({ openPositionsValu
                     <Value>{!user ? 0 : winningInfo.lifetimeWins}</Value>
                 </Section>
                 <Separator />
-                <Section>
-                    <Label>{t('profile.stats.in-vaults')}</Label>
-                    <Value>{!user ? 0 : vaultsData.balanceTotal.toFixed(2)}</Value>
-                    <CurrencyLabel>USD</CurrencyLabel>
-                </Section>
-                <Separator />
+                {areVaultsSupported && (
+                    <>
+                        <Section>
+                            <Label>{t('profile.stats.in-vaults')}</Label>
+                            <Value>{!user ? 0 : vaultsData.balanceTotal.toFixed(2)}</Value>
+                            <CurrencyLabel>USD</CurrencyLabel>
+                        </Section>
+                        <Separator />
+                    </>
+                )}
                 <Section>
                     <Label>P&L</Label>
                     <Value>{!user ? 0 : (user.pnl + openPositionsValue).toFixed(2)}</Value>
