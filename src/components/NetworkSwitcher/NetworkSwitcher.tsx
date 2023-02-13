@@ -6,6 +6,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { truncateAddress } from 'utils/formatters/string';
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 const NetworkSwitcher: React.FC = () => {
     const { t } = useTranslation();
@@ -44,32 +45,38 @@ const NetworkSwitcher: React.FC = () => {
                             </NetworkIconWrapper>
                         </Wrapper>
                         {dropDownOpen && (
-                            <NetworkDropDown>
-                                <NetworkWrapper
-                                    onClick={async () => {
-                                        await (window.ethereum as any).request({
-                                            method: 'wallet_switchEthereumChain',
-                                            params: [{ chainId: networkId === 42161 ? '0xa4b1' : '0xa' }],
-                                        });
-                                        setDropDownOpen(false);
-                                    }}
-                                >
-                                    <NetworkIcon className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`} />
-                                    <NetworkText>{networkId === 42161 ? 'Arbitrum' : 'Optimism'}</NetworkText>
-                                </NetworkWrapper>
-                                <NetworkWrapper
-                                    onClick={async () => {
-                                        await (window.ethereum as any).request({
-                                            method: 'wallet_switchEthereumChain',
-                                            params: [{ chainId: networkId !== 42161 ? '0xa4b1' : '0xa' }],
-                                        });
-                                        setDropDownOpen(false);
-                                    }}
-                                >
-                                    <NetworkIcon className={`icon ${networkId !== 42161 ? 'icon--arb' : 'icon--op'}`} />
-                                    <NetworkText>{networkId !== 42161 ? 'Arbitrum' : 'Optimism'}</NetworkText>
-                                </NetworkWrapper>
-                            </NetworkDropDown>
+                            <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
+                                <NetworkDropDown>
+                                    <NetworkWrapper
+                                        onClick={async () => {
+                                            await (window.ethereum as any).request({
+                                                method: 'wallet_switchEthereumChain',
+                                                params: [{ chainId: networkId === 42161 ? '0xa4b1' : '0xa' }],
+                                            });
+                                            setDropDownOpen(false);
+                                        }}
+                                    >
+                                        <NetworkIcon
+                                            className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`}
+                                        />
+                                        <NetworkText>{networkId === 42161 ? 'Arbitrum' : 'Optimism'}</NetworkText>
+                                    </NetworkWrapper>
+                                    <NetworkWrapper
+                                        onClick={async () => {
+                                            await (window.ethereum as any).request({
+                                                method: 'wallet_switchEthereumChain',
+                                                params: [{ chainId: networkId !== 42161 ? '0xa4b1' : '0xa' }],
+                                            });
+                                            setDropDownOpen(false);
+                                        }}
+                                    >
+                                        <NetworkIcon
+                                            className={`icon ${networkId !== 42161 ? 'icon--arb' : 'icon--op'}`}
+                                        />
+                                        <NetworkText>{networkId !== 42161 ? 'Arbitrum' : 'Optimism'}</NetworkText>
+                                    </NetworkWrapper>
+                                </NetworkDropDown>
+                            </OutsideClickHandler>
                         )}
                     </div>
                 );
