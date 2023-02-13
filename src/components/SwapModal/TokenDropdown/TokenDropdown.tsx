@@ -4,6 +4,11 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import styled from 'styled-components';
 import { Token } from 'types/tokens';
 import { AVAILABLE_TOKENS } from 'constants/tokens';
+import { getDefaultCollateralIndexForNetworkId, isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { getNetworkId } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import { useSelector } from 'react-redux';
+import { COLLATERAL_INDEX_TO_COLLATERAL } from 'constants/currency';
 
 type StatusDropdownProps = {
     selectedToken: Token;
@@ -13,6 +18,8 @@ type StatusDropdownProps = {
 };
 
 export const TokenDropdown: React.FC<StatusDropdownProps> = ({ selectedToken, onSelect, readOnly, disabled }) => {
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
+
     const [tokenDropdownIsOpen, setTokenDropdownIsOpen] = useState(false);
     const setDropdownIsOpen = (isOpen: boolean) => {
         if (!isOpen && !tokenDropdownIsOpen) {
@@ -43,22 +50,24 @@ export const TokenDropdown: React.FC<StatusDropdownProps> = ({ selectedToken, on
                     {tokenDropdownIsOpen && (
                         <DropdownContainer>
                             <DropDown>
-                                {AVAILABLE_TOKENS.map((token: Token) => (
-                                    <DropDownItem
-                                        key={token.symbol}
-                                        onClick={() => {
-                                            onSelect(token);
-                                            setDropdownIsOpen(false);
-                                        }}
-                                    >
-                                        <FlexDivCentered>
-                                            <TokenName>
-                                                <TokenIcon src={token.logoURI} />
-                                                {token.symbol}
-                                            </TokenName>
-                                        </FlexDivCentered>
-                                    </DropDownItem>
-                                ))}
+                                {AVAILABLE_TOKENS.filter((token: Token) => token.chainId === networkId).map(
+                                    (token: Token) => (
+                                        <DropDownItem
+                                            key={token.symbol}
+                                            onClick={() => {
+                                                onSelect(token);
+                                                setDropdownIsOpen(false);
+                                            }}
+                                        >
+                                            <FlexDivCentered>
+                                                <TokenName>
+                                                    <TokenIcon src={token.logoURI} />
+                                                    {token.symbol}
+                                                </TokenName>
+                                            </FlexDivCentered>
+                                        </DropDownItem>
+                                    )
+                                )}
                             </DropDown>
                         </DropdownContainer>
                     )}

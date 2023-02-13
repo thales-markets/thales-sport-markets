@@ -673,9 +673,9 @@
                 "trade": "Overtime Markets"
             },
             "description": {
-                "connect-wallet": "If you don't have Optimism connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
-                "fund": "Before you can use Overtime, first you need to get ETH on your Optimism connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
-                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to sUSD button, seamlessly swap ETH to a desired amount of stablecoins.",
+                "connect-wallet": "If you don't have {{network}} connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
+                "fund": "Before you can use Overtime, first you need to get ETH on your {{network}} connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
+                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to {{collateral}} button, seamlessly swap ETH to a desired amount of stablecoins.",
                 "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
             },
             "action": {
@@ -691,7 +691,7 @@
             "buy": "Fund with card",
             "buy-banxa": "Fund with Banxa",
             "buy-mt-pelerin": "Fund with Mt Pelerin",
-            "bridge": "Bridge to optimism  ",
+            "bridge": "Bridge to {{network}}",
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
             "copied": "Copied!",

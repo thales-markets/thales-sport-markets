@@ -539,7 +539,7 @@ const Home: React.FC = () => {
                 )}
                 {/* RIGHT PART */}
                 <SidebarContainer maxWidth={320}>
-                    {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
+                    {[NetworkIdByName.OptimismMainnet, NetworkIdByName.ArbitrumOne].includes(networkId) && <GetUsd />}
                     <Suspense fallback={<Loader />}>
                         <Parlay />
                     </Suspense>
