@@ -1,10 +1,11 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 import { NetworkId } from 'types/network';
 import { OvertimeVoucher, OvertimeVouchers } from 'types/tokens';
 import thalesData from 'thales-data';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 const useTokenBalanceQuery = (
     walletAddress: string,
@@ -29,7 +30,10 @@ const useTokenBalanceQuery = (
                         overtimeVoucherContract?.tokenURI(overtimeVoucher.id),
                     ]);
 
-                    overtimeVoucher.remainingAmount = bigNumberFormatter(remainingAmount);
+                    overtimeVoucher.remainingAmount = bigNumberFormmaterWithDecimals(
+                        remainingAmount,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
                     overtimeVoucher.image = image;
                     return overtimeVoucher;
                 }
