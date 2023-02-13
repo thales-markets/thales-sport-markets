@@ -4,11 +4,9 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import styled from 'styled-components';
 import { Token } from 'types/tokens';
 import { AVAILABLE_TOKENS } from 'constants/tokens';
-import { getDefaultCollateralIndexForNetworkId, isMultiCollateralSupportedForNetwork } from 'utils/network';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useSelector } from 'react-redux';
-import { COLLATERAL_INDEX_TO_COLLATERAL } from 'constants/currency';
 
 type StatusDropdownProps = {
     selectedToken: Token;
