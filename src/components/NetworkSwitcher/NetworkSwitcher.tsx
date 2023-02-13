@@ -6,7 +6,6 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { truncateAddress } from 'utils/formatters/string';
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
-import { useSwitchNetwork } from 'wagmi';
 
 const NetworkSwitcher: React.FC = () => {
     const { t } = useTranslation();
@@ -14,7 +13,6 @@ const NetworkSwitcher: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const [dropDownOpen, setDropDownOpen] = useState(false);
-    const { switchNetwork } = useSwitchNetwork();
 
     // const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
@@ -48,22 +46,24 @@ const NetworkSwitcher: React.FC = () => {
                         {dropDownOpen && (
                             <NetworkDropDown>
                                 <NetworkWrapper
-                                    onClick={() => {
-                                        if (switchNetwork) {
-                                            switchNetwork(networkId === 42161 ? 42161 : 10);
-                                            setDropDownOpen(false);
-                                        }
+                                    onClick={async () => {
+                                        await (window.ethereum as any).request({
+                                            method: 'wallet_switchEthereumChain',
+                                            params: [{ chainId: networkId === 42161 ? '0xa4b1' : '0xa' }],
+                                        });
+                                        setDropDownOpen(false);
                                     }}
                                 >
                                     <NetworkIcon className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`} />
                                     <NetworkText>{networkId === 42161 ? 'Arbitrum' : 'Optimism'}</NetworkText>
                                 </NetworkWrapper>
                                 <NetworkWrapper
-                                    onClick={() => {
-                                        if (switchNetwork) {
-                                            switchNetwork(networkId !== 42161 ? 42161 : 10);
-                                            setDropDownOpen(false);
-                                        }
+                                    onClick={async () => {
+                                        await (window.ethereum as any).request({
+                                            method: 'wallet_switchEthereumChain',
+                                            params: [{ chainId: networkId !== 42161 ? '0xa4b1' : '0xa' }],
+                                        });
+                                        setDropDownOpen(false);
                                     }}
                                 >
                                     <NetworkIcon className={`icon ${networkId !== 42161 ? 'icon--arb' : 'icon--op'}`} />
