@@ -206,7 +206,9 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
             return (
                 <ModalButton disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
                     {!isAllowing
-                        ? t('common.enable-wallet-access.approve-label', { currencyKey: PAYMENT_CURRENCY })
+                        ? t('common.enable-wallet-access.approve-label', {
+                              currencyKey: getDefaultColleteralForNetwork(networkId),
+                          })
                         : t('common.enable-wallet-access.approve-progress-label', {
                               currencyKey: PAYMENT_CURRENCY,
                           })}
