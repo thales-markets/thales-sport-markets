@@ -8,7 +8,7 @@ import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import SwapNumericInput from 'components/fields/SwapNumericInput';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
-import { ONE_INCH_EXCHANGE_URL, OP_ETH, OP_SUSD, QUOTE_SUFFIX, SWAP_SUFFIX } from 'constants/tokens';
+import { AVAILABLE_TOKENS, ONE_INCH_EXCHANGE_URL, OP_ETH, QUOTE_SUFFIX, SWAP_SUFFIX } from 'constants/tokens';
 import TokenDropdown from './TokenDropdown';
 import { Token } from 'types/tokens';
 import { getIsAppReady } from 'redux/modules/app';
@@ -21,6 +21,8 @@ import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import useInterval from 'hooks/useInterval';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { COLLATERAL_INDEX_TO_COLLATERAL } from 'constants/currency';
+import { getDefaultCollateralIndexForNetworkId, isMultiCollateralSupportedForNetwork } from 'utils/network';
 
 type SwapModalProps = {
     onClose: () => void;
@@ -34,7 +36,15 @@ export const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const [amount, setAmount] = useState<number | string>('');
     const [outputAmount, setOutputAmount] = useState<number | string>('');
-    const [selectedToken, setSelectedToken] = useState<Token>(OP_SUSD);
+
+    const defaultSelectedToken = AVAILABLE_TOKENS.filter(
+        (token: Token) =>
+            token.chainId === networkId &&
+            (isMultiCollateralSupportedForNetwork(networkId)
+                ? true
+                : token.symbol === COLLATERAL_INDEX_TO_COLLATERAL[getDefaultCollateralIndexForNetworkId(networkId)])
+    )[0];
+    const [selectedToken, setSelectedToken] = useState<Token>(defaultSelectedToken);
     const [tokenBalance, setTokenBalance] = useState<number | string>('');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [isGettingQuote, setIsGettingQuote] = useState<boolean>(false);

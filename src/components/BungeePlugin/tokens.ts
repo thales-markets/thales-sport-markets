@@ -21,7 +21,7 @@ export const OP_SUSD: Currency = {
 };
 
 export const OP_USDC: Currency = {
-    name: 'USDCoin',
+    name: 'USD Coin',
     address: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
     symbol: 'USDC',
     decimals: 6,
@@ -40,4 +40,14 @@ export const OP_USDT: Currency = {
     logoURI: 'https://tokens.1inch.io/0xdac17f958d2ee523a2206206994597c13d831ec7.png',
 };
 
-export const destinationTokens = [OP_DAI, OP_SUSD, OP_USDC, OP_USDT];
+export const ARB_USDC: Currency = {
+    name: 'USD Coin',
+    address: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+    symbol: 'USDC',
+    decimals: 6,
+    chainId: 42161,
+    icon: '',
+    logoURI: 'https://tokens.1inch.io/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png',
+};
+
+export const destinationTokens = [OP_DAI, OP_SUSD, OP_USDC, OP_USDT, ARB_USDC];

@@ -13,6 +13,7 @@ export const NetworkIdByName: Record<string, NetworkId> = {
     Kovan: 42,
     Goerli: 5,
     OptimismGoerli: 420,
+    ArbitrumOne: 42161,
 };
 
 export const NetworkNameById: Record<NetworkId, string> = {
@@ -122,10 +123,14 @@ export const getNetworkIconClassNameByNetworkId = (networkId: NetworkId): string
     return 'Unknown';
 };
 
-export const getNetworkNameByNetworkId = (networkId: NetworkId): string => {
+export const getNetworkNameByNetworkId = (networkId: NetworkId, shortName = false): string | undefined => {
     const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
-    if (network) return network.chainName;
-    return 'Unknown';
+    return shortName ? network?.shortChainName : network?.chainName;
+};
+
+export const getNetworkKeyByNetworkId = (networkId: NetworkId): string => {
+    const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
+    return network?.chainKey || 'optimism_mainnet';
 };
 
 export const getIsVaultSupportedForNetworkId = (networkId: NetworkId): boolean => {
