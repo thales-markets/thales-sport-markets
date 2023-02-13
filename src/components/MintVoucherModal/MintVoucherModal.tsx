@@ -23,21 +23,26 @@ import { getAddress, isAddress } from 'ethers/lib/utils';
 import { LINKS } from 'constants/links';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Tooltip, withStyles } from '@material-ui/core';
+import { NetworkId } from 'types/network';
+import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 
 type MintVoucherModalProps = {
     onClose: () => void;
 };
 
-const VOUCHER_OPTIONS: Array<{ value: number; label: string }> = [
-    { value: 5, label: '5 sUSD' },
-    { value: 10, label: '10 sUSD' },
-    { value: 20, label: '20 sUSD' },
-    { value: 50, label: '50 sUSD' },
-    { value: 100, label: '100 sUSD' },
-    { value: 200, label: '200 sUSD' },
-    { value: 500, label: '500 sUSD' },
-    { value: 1000, label: '1000 sUSD' },
-];
+const getVoucherOptions = (networkId: NetworkId): Array<{ value: number; label: string }> => {
+    const collateral = getDefaultColleteralForNetwork(networkId);
+    return [
+        { value: 5, label: `5 ${collateral}` },
+        { value: 10, label: `10 ${collateral}` },
+        { value: 20, label: `20 ${collateral}` },
+        { value: 50, label: `50 ${collateral}` },
+        { value: 100, label: `100 ${collateral}` },
+        { value: 200, label: `200 ${collateral}` },
+        { value: 500, label: `500 ${collateral}` },
+        { value: 1000, label: `1000 ${collateral}` },
+    ];
+};
 
 export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
@@ -56,6 +61,8 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
     const [amount, setAmount] = useState<number>(-1);
     const [isAnotherWallet, setIsAnotherWallet] = useState<boolean>(false);
     const [recipient, setRecipient] = useState<string>('');
+
+    const VOUCHER_OPTIONS = getVoucherOptions(networkId);
 
     const isAmountEntered = Number(amount) > 0;
     const insufficientBalance = Number(paymentTokenBalance) < Number(amount) || Number(paymentTokenBalance) === 0;
