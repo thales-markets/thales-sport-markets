@@ -12,6 +12,7 @@ import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import Tooltip from 'components/Tooltip';
 import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
 import ConnectButton from 'components/ConnectButton';
+import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -42,7 +43,7 @@ const WalletInfo: React.FC = () => {
                                 title={t('common.voucher.overtime-voucher')}
                                 imageSrc={overtimeVoucher.image}
                                 text={`${t('common.voucher.remaining-amount')}: ${formatCurrencyWithKey(
-                                    PAYMENT_CURRENCY,
+                                    getDefaultColleteralForNetwork(networkId),
                                     overtimeVoucher.remainingAmount
                                 )}`}
                             />

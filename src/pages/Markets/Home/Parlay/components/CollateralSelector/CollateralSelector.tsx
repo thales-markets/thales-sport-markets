@@ -1,7 +1,6 @@
 import { ReactComponent as OvertimeVoucherIcon } from 'assets/images/overtime-voucher.svg';
 import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
 import Tooltip from 'components/Tooltip';
-import { PAYMENT_CURRENCY } from 'constants/currency';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +10,12 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { OvertimeVoucher } from 'types/tokens';
-import { getCollateralIndexByCollateralKey, getStableIcon, StablecoinKey } from 'utils/collaterals';
+import {
+    getCollateralIndexByCollateralKey,
+    getDefaultColleteralForNetwork,
+    getStableIcon,
+    StablecoinKey,
+} from 'utils/collaterals';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
 
 type CollateralSelectorProps = {
@@ -55,7 +59,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                 title={t('common.voucher.overtime-voucher')}
                                 imageSrc={overtimeVoucher.image}
                                 text={`${t('common.voucher.remaining-amount')}: ${formatCurrencyWithKey(
-                                    PAYMENT_CURRENCY,
+                                    getDefaultColleteralForNetwork(networkId),
                                     overtimeVoucher.remainingAmount
                                 )}`}
                             />
