@@ -21,7 +21,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { ParlaysMarket, SportMarketInfo } from 'types/markets';
-import { getDefaultCollateralForNetworkId, isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import MatchInfo from './components/MatchInfo';
 import Payment from './components/Payment';
 import Single from './components/Single';
@@ -38,8 +38,6 @@ const Parlay: React.FC = () => {
     const parlayPayment = useSelector(getParlayPayment);
     const hasParlayError = useSelector(getHasParlayError);
 
-    const showCollateralSelector = isMultiCollateralSupportedForNetwork(networkId);
-
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
 
@@ -52,7 +50,7 @@ const Parlay: React.FC = () => {
     });
 
     useEffect(() => {
-        dispatch(setPaymentSelectedStableIndex(getDefaultCollateralForNetworkId(networkId)));
+        dispatch(setPaymentSelectedStableIndex(getDefaultCollateralIndexForNetworkId(networkId)));
     }, [networkId, dispatch]);
 
     useEffect(() => {
@@ -148,7 +146,6 @@ const Parlay: React.FC = () => {
                         <Payment
                             defaultSelectedStableIndex={parlayPayment.selectedStableIndex}
                             defaultIsVoucherSelected={parlayPayment.isVoucherSelected}
-                            showCollateralSelector={showCollateralSelector}
                             onChangeCollateral={(index) => {
                                 if (index !== parlayPayment.selectedStableIndex) {
                                     dispatch(setPayment({ ...parlayPayment, selectedStableIndex: index }));

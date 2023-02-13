@@ -11,7 +11,8 @@ import { RootState } from 'redux/rootReducer';
 import { formatCurrency } from 'utils/formatters/number';
 import { BalanceLabel, BalanceValue, BalanceWrapper, RowSummary, SummaryLabel } from '../styled-components';
 import CollateralSelector from '../CollateralSelector';
-import { getDefaultCollateralForNetworkId } from 'utils/network';
+import { getDefaultCollateralIndexForNetworkId, isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 
 type PaymentProps = {
     defaultSelectedStableIndex?: COLLATERALS_INDEX;
@@ -24,7 +25,6 @@ type PaymentProps = {
 const Payment: React.FC<PaymentProps> = ({
     defaultSelectedStableIndex,
     defaultIsVoucherSelected,
-    showCollateralSelector,
     onChangeCollateral,
     setIsVoucherSelectedProp,
 }) => {
@@ -38,8 +38,10 @@ const Payment: React.FC<PaymentProps> = ({
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
         defaultSelectedStableIndex !== undefined
             ? defaultSelectedStableIndex
-            : getDefaultCollateralForNetworkId(networkId)
+            : getDefaultCollateralIndexForNetworkId(networkId)
     );
+
+    const showMultiCollateral = isMultiCollateralSupportedForNetwork(networkId);
 
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(!!defaultIsVoucherSelected);
 
@@ -101,9 +103,13 @@ const Payment: React.FC<PaymentProps> = ({
                     <BalanceValue>{formatCurrency(paymentTokenBalance, 2)}</BalanceValue>
                 </BalanceWrapper>
             </RowSummary>
-            {showCollateralSelector && (
+            {(showMultiCollateral || (overtimeVoucher !== undefined && !showMultiCollateral)) && (
                 <CollateralSelector
-                    collateralArray={COLLATERALS}
+                    collateralArray={
+                        isMultiCollateralSupportedForNetwork(networkId)
+                            ? COLLATERALS
+                            : [getDefaultColleteralForNetwork(networkId)]
+                    }
                     selectedItem={selectedStableIndex}
                     onChangeCollateral={(index) => {
                         setSelectedStableIndex(index);

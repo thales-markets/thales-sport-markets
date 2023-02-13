@@ -140,7 +140,7 @@ export const isRouteAvailableForNetwork = (route: string, networkId: NetworkId):
     return false;
 };
 
-export const getDefaultCollateralForNetworkId = (networkId: NetworkId) => {
+export const getDefaultCollateralIndexForNetworkId = (networkId: NetworkId) => {
     return networkId == Network.Arbitrum ? COLLATERALS_INDEX.USDC : COLLATERALS_INDEX.sUSD;
 };
 

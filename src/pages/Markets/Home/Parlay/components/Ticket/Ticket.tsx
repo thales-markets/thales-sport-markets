@@ -30,7 +30,7 @@ import {
     roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { formatMarketOdds, getBonus } from 'utils/markets';
-import { checkAllowance, getMaxGasLimitForNetwork, isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { getParlayAMMTransaction, getParlayMarketsAMMQuoteMethod } from 'utils/parlayAmm';
 import { refetchBalances } from 'utils/queryConnector';
@@ -110,7 +110,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         onClose: () => {},
     });
 
-    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
     // Due to conversion from non sUSD to sUSD user needs 2% more funds in wallet
     const COLLATERAL_CONVERSION_MULTIPLIER = selectedStableIndex !== COLLATERALS_INDEX.sUSD ? 1.02 : 1;
 
@@ -647,7 +646,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             <Payment
                 defaultSelectedStableIndex={selectedStableIndex}
                 defaultIsVoucherSelected={isVoucherSelected}
-                showCollateralSelector={isMultiCollateralSupported}
                 onChangeCollateral={(index) => setSelectedStableIndex(index)}
                 setIsVoucherSelectedProp={setIsVoucherSelected}
             />

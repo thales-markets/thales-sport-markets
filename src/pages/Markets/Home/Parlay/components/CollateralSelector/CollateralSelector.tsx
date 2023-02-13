@@ -11,7 +11,7 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { OvertimeVoucher } from 'types/tokens';
-import { getStableIcon, StablecoinKey } from 'utils/collaterals';
+import { getCollateralIndexByCollateralKey, getStableIcon, StablecoinKey } from 'utils/collaterals';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
 
 type CollateralSelectorProps = {
@@ -94,7 +94,8 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                     />
                 )}
                 {collateralArray.length &&
-                    collateralArray.map((item, index) => {
+                    collateralArray.map((item) => {
+                        const index = getCollateralIndexByCollateralKey(item as StablecoinKey);
                         const AssetIcon = getStableIcon(item as StablecoinKey);
                         return (
                             <CollateralContainer key={index + 'container'}>

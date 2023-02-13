@@ -41,3 +41,8 @@ export const getDefaultDecimalsForNetwork = (networkId: NetworkId) => {
     if (networkId == Network.Arbitrum) return STABLE_DECIMALS['USDC'];
     return STABLE_DECIMALS['sUSD'];
 };
+
+export const getCollateralIndexByCollateralKey = (collateralKey: StablecoinKey) => {
+    const index = COLLATERALS.indexOf(collateralKey);
+    return index ? index : 0;
+};

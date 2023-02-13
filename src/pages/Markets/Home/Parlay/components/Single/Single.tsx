@@ -614,7 +614,6 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             <Payment
                 defaultSelectedStableIndex={selectedStableIndex}
                 defaultIsVoucherSelected={isVoucherSelected}
-                showCollateralSelector={isMultiCollateralSupported}
                 onChangeCollateral={(index) => setSelectedStableIndex(index)}
                 setIsVoucherSelectedProp={setIsVoucherSelected}
             />
