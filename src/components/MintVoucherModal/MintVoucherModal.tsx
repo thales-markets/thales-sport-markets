@@ -8,7 +8,6 @@ import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import { getIsAppReady } from 'redux/modules/app';
-import { PAYMENT_CURRENCY } from 'constants/currency';
 import { BigNumber, ethers } from 'ethers';
 import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
@@ -135,7 +134,11 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
                 if (txResult && txResult.transactionHash) {
                     toast.update(
                         id,
-                        getSuccessToastOptions(t('market.toast-message.approve-success', { token: PAYMENT_CURRENCY }))
+                        getSuccessToastOptions(
+                            t('market.toast-message.approve-success', {
+                                token: getDefaultColleteralForNetwork(networkId),
+                            })
+                        )
                     );
                     setIsAllowing(false);
                 }
@@ -210,7 +213,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
                               currencyKey: getDefaultColleteralForNetwork(networkId),
                           })
                         : t('common.enable-wallet-access.approve-progress-label', {
-                              currencyKey: PAYMENT_CURRENCY,
+                              currencyKey: getDefaultColleteralForNetwork(networkId),
                           })}
                 </ModalButton>
             );
@@ -226,7 +229,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
 
     return (
         <Modal
-            title={t('common.voucher.modal.title', { currencyKey: PAYMENT_CURRENCY })}
+            title={t('common.voucher.modal.title', { currencyKey: getDefaultColleteralForNetwork(networkId) })}
             onClose={onClose}
             shouldCloseOnOverlayClick={false}
         >
