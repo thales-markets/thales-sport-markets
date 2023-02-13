@@ -6,7 +6,6 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 import { useTranslation } from 'react-i18next';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { PAYMENT_CURRENCY } from 'constants/currency';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import Tooltip from 'components/Tooltip';
@@ -55,7 +54,7 @@ const WalletInfo: React.FC = () => {
                                 </Wallet>
                                 <VoucherBalance>
                                     <Info>{formatCurrency(overtimeVoucher.remainingAmount, 2)}</Info>
-                                    <Currency>{PAYMENT_CURRENCY}</Currency>
+                                    <Currency>{getDefaultColleteralForNetwork(networkId)}</Currency>
                                 </VoucherBalance>
                             </VoucherContainer>
                         }
