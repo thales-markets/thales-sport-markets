@@ -287,7 +287,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={amount}
-                    tokenSymbol={PAYMENT_CURRENCY}
+                    tokenSymbol={getDefaultColleteralForNetwork(networkId)}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}
