@@ -297,7 +297,7 @@
                 },
                 "spread": {
                     "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
-                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                    "plus": "{{team}} will win the match, or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
@@ -436,23 +436,6 @@
             "volume": "ปริมาณ",
             "percent": "เปอร์เซ็นต์",
             "rank": "Rank"
-        },
-        "periods": {
-            "second-period": "ช่วงที่สอง",
-            "first-period": "ช่วงแรก",
-            "fourth-period": "ช่วงที่สี่",
-            "third-period": "ช่วงที่สาม",
-            "fifth-period": "ช่วงที่ห้า",
-            "period-0": "ช่วงแรก",
-            "period-4": "ช่วงที่ห้า",
-            "period-3": "ช่วงที่สี่",
-            "period-2": "ช่วงที่สาม",
-            "period-1": "ช่วงที่สอง",
-            "period-9": "งวดที่สิบ",
-            "period-7": "งวดที่แปด",
-            "period-8": "สมัยที่เก้า",
-            "period-5": "งวดที่หก",
-            "period-6": "สมัยที่เจ็ด"
         },
         "your-score": "คะแนนของคุณ",
         "twap": "หนึ่งสัปดาห์ TWAP",

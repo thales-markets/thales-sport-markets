@@ -300,7 +300,7 @@
                 },
                 "spread": {
                     "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
-                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                    "plus": "{{team}} will win the match, or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
@@ -440,18 +440,6 @@
             "safebox": "保险箱费用",
             "percent": "百分",
             "rank": "Rank"
-        },
-        "periods": {
-            "period-0": "第一节课",
-            "period-1": "第二阶段",
-            "period-2": "第三期",
-            "period-3": "第五期",
-            "period-4": "第四期",
-            "period-5": "第六期",
-            "period-6": "第七期",
-            "period-7": "第八期",
-            "period-8": "第九期",
-            "period-9": "第十期"
         },
         "your-score": "你的分数",
         "twap": "一周TWAP",

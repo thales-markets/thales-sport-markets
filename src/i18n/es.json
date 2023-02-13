@@ -300,7 +300,7 @@
                 },
                 "spread": {
                     "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
-                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                    "plus": "{{team}} will win the match, or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
@@ -439,18 +439,6 @@
             "safebox": "Tarifas de SafeBox",
             "percent": "Por ciento",
             "rank": "Rank"
-        },
-        "periods": {
-            "period-0": "Primer periodo",
-            "period-1": "Cuarto periodo",
-            "period-2": "Segundo período",
-            "period-3": "Tercer periodo",
-            "period-4": "Quinto periodo",
-            "period-7": "Octavo periodo",
-            "period-6": "Septimo periodo",
-            "period-5": "Sexto periodo",
-            "period-9": "Décimo período",
-            "period-8": "noveno periodo"
         },
         "your-score": "Tu puntuación",
         "total-negative-pnl": "pérdidas totales",

@@ -71,7 +71,7 @@ const Rewards: React.FC = () => {
             CALCULATED_START = new Date(CALCULATED_START.getTime() + PERIOD_DURATION_IN_DAYS * 24 * 60 * 60 * 1000);
             options.push({
                 value: PERIOD_COUNTER,
-                label: t(`rewards.periods.period-${PERIOD_COUNTER}`),
+                label: `${t(`markets.market-card.period`)} ${PERIOD_COUNTER + 1}`,
             });
             PERIOD_COUNTER++;
         } else {

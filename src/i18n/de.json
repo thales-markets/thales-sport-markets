@@ -297,7 +297,7 @@
                 },
                 "spread": {
                     "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
-                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                    "plus": "{{team}} will win the match, or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
@@ -436,18 +436,6 @@
             "rebates": "Rabatte",
             "percent": "Prozent",
             "rank": "Rank"
-        },
-        "periods": {
-            "period-0": "Zweite Periode",
-            "period-1": "Erste Periode",
-            "period-2": "Dritte Periode",
-            "period-3": "Vierte Periode",
-            "period-4": "Fünfte Periode",
-            "period-6": "Siebte Periode",
-            "period-7": "Achte Periode",
-            "period-8": "Neunte Periode",
-            "period-5": "Sechste Periode",
-            "period-9": "Zehnte Periode"
         },
         "your-score": "Ihr Ergebnis",
         "total-negative-pnl": "Totalverluste",

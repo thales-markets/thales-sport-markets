@@ -300,7 +300,7 @@
                 },
                 "spread": {
                     "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
-                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                    "plus": "{{team}} will win the match, or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
@@ -439,18 +439,6 @@
             "safebox": "Плата за сейфы",
             "percent": "Процент",
             "rank": "Rank"
-        },
-        "periods": {
-            "period-3": "Четвертый период",
-            "period-4": "Пятый период",
-            "period-2": "Третий период",
-            "period-0": "Первый период",
-            "period-1": "Второй период",
-            "period-8": "Девятый период",
-            "period-5": "Шестой период",
-            "period-6": "Седьмой период",
-            "period-9": "Десятый период",
-            "period-7": "Восьмой период"
         },
         "your-score": "Твой счет",
         "total-negative-pnl": "Общие потери",
