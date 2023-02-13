@@ -91,13 +91,17 @@ const Payment: React.FC<PaymentProps> = ({
         setIsVoucherSelected(isSelected);
     };
 
+    const collateralKey = isVoucherSelected
+        ? getDefaultColleteralForNetwork(networkId)
+        : (COLLATERAL_INDEX_TO_COLLATERAL as any)[selectedStableIndex];
+
     return (
         <>
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.pay-with')}:</SummaryLabel>
                 <BalanceWrapper>
                     <BalanceLabel bold={true} originalText={true}>
-                        {(COLLATERAL_INDEX_TO_COLLATERAL as any)[selectedStableIndex]}
+                        {collateralKey}
                     </BalanceLabel>
                     <BalanceLabel marginLeft={'5px'}>{t('markets.parlay.available')}:</BalanceLabel>
                     <BalanceValue>{formatCurrency(paymentTokenBalance, 2)}</BalanceValue>

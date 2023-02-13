@@ -24,7 +24,7 @@ import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { AMMPosition, AvailablePerPosition, ParlayPayment, ParlaysMarket } from 'types/markets';
 import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
-import { getDecimalsByStableCoinIndex } from 'utils/collaterals';
+import { getDecimalsByStableCoinIndex, getDefaultColleteralForNetwork } from 'utils/collaterals';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
     countDecimals,
@@ -213,7 +213,9 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract) {
                 const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
-                const divider = Number('1e' + getDecimalsByStableCoinIndex(selectedStableIndex));
+                const divider = isMultiCollateralSupported
+                    ? Number('1e' + getDecimalsByStableCoinIndex(selectedStableIndex))
+                    : Number(`1e${getDefaultColleteralForNetwork(networkId)}`);
                 const susdToSpendForMaxAmount = await fetchAmmQuote(roundedMaxAmount);
                 const decimalSusdToSpendForMaxAmount = susdToSpendForMaxAmount / divider;
 
@@ -243,6 +245,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         market.position,
         availablePerPosition,
         fetchAmmQuote,
+        isMultiCollateralSupported,
+        networkId,
     ]);
 
     const calculatedBonusPercentageDec = useMemo(() => getBonus(market) / 100, [market]);
@@ -321,6 +325,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             enabled: isAppReady,
         }
     );
+
+    console.log('positionPriceDetailsQuery ', positionPriceDetailsQuery?.data);
 
     useEffect(() => {
         if (positionPriceDetailsQuery.isSuccess && positionPriceDetailsQuery.data) {
@@ -542,6 +548,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     })
                 );
             } else if (Number(value) > availableUsdAmount) {
+                console.log('Value ', value);
+                console.log('availableUsdAmount ', availableUsdAmount);
                 setTooltipTextUsdAmount(t('markets.parlay.validation.amount-exceeded'));
             } else if (Number(value) > paymentTokenBalance) {
                 setTooltipTextUsdAmount(t('markets.parlay.validation.no-funds'));
