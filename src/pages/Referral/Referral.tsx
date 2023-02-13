@@ -12,6 +12,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
+import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { buildHref } from 'utils/routes';
 import AffiliateLeaderboard from './components/AffiliateLeaderboard';
@@ -123,6 +124,7 @@ const Referral: React.FC = () => {
                 <Paragraph>
                     <Trans
                         i18nKey={'referral.paragraph'}
+                        values={{ collateralKey: getDefaultColleteralForNetwork(networkId) }}
                         components={{
                             bold: <strong style={{ fontWeight: '900' }} />,
                         }}
