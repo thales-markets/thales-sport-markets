@@ -5,6 +5,7 @@ export const apexConsumerContract = {
         42: 'TBD',
         69: 'TBD',
         420: 'TBD',
+        42161: 'TBD',
     },
     abi: [
         {

@@ -62,6 +62,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                 </HeaderContainer>
                 <ItemsContainer>
                     {NAV_MENU_FIRST_SECTION.map((item, index) => {
+                        if (!item.supportedNetworks.includes(networkId)) return;
                         if (item.name == 'profile' && !isWalletConnected) return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
@@ -82,6 +83,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                     })}
                     <Separator />
                     {NAV_MENU_SECOND_SECTION.map((item, index) => {
+                        if (!item.supportedNetworks.includes(networkId)) return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
                                 <ItemContainer
@@ -97,6 +99,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                     })}
                     <Separator />
                     {NAV_MENU_THIRD_SECTION.map((item, index) => {
+                        if (!item.supportedNetworks.includes(networkId)) return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
                                 <ItemContainer
@@ -112,6 +115,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                     })}
                     <Separator />
                     {NAV_MENU_FOURTH_SECTION.map((item, index) => {
+                        if (!item.supportedNetworks.includes(networkId)) return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
                                 <ItemContainer

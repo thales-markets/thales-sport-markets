@@ -21,6 +21,7 @@ import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { ParlayPayment, ParlaysMarket } from 'types/markets';
 import { getAmountForApproval } from 'utils/amm';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import {
     countDecimals,
@@ -29,7 +30,7 @@ import {
     roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { formatMarketOdds, getBonus } from 'utils/markets';
-import { checkAllowance } from 'utils/network';
+import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { getParlayAMMTransaction, getParlayMarketsAMMQuoteMethod } from 'utils/parlayAmm';
 import { refetchBalances } from 'utils/queryConnector';
@@ -196,8 +197,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     susdAmountForQuote < minUsdAmountValue
                         ? minUsdAmountValue // deafult value for qoute info
                         : susdAmountForQuote;
-                const susdPaid = ethers.utils.parseEther(roundNumberToDecimals(minUsdAmount).toString());
-
+                const susdPaid = ethers.utils.parseUnits(
+                    roundNumberToDecimals(minUsdAmount).toString(),
+                    getDefaultDecimalsForNetwork(networkId)
+                );
                 try {
                     const parlayAmmQuote = await getParlayMarketsAMMQuoteMethod(
                         selectedStableIndex,
@@ -319,7 +322,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         : null;
                 const marketsAddresses = markets.map((market) => market.address);
                 const selectedPositions = markets.map((market) => market.position);
-                const susdPaid = ethers.utils.parseEther(roundNumberToDecimals(Number(usdAmountValue)).toString());
+                const susdPaid = ethers.utils.parseUnits(
+                    roundNumberToDecimals(Number(usdAmountValue)).toString(),
+                    getDefaultDecimalsForNetwork(networkId)
+                );
                 const expectedPayout = ethers.utils.parseEther(roundNumberToDecimals(totalBuyAmount).toString());
                 const additionalSlippage = ethers.utils.parseEther('0.02');
 
@@ -337,7 +343,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     referralId,
                     additionalSlippage,
                     {
-                        gasLimit: MAX_GAS_LIMIT,
+                        gasLimit: getMaxGasLimitForNetwork(networkId),
                     }
                 );
 

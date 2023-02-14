@@ -60,8 +60,9 @@ const SidebarLeaderboard: React.FC = () => {
     const query = useParlayLeaderboardQuery(networkId, latestPeriod + 1, { enabled: isAppReady });
 
     const parlaysData = useMemo(() => {
+        if (networkId === 42161) return [];
         return query.isSuccess ? query.data.slice(0, SIDEBAR_NUMBER_OF_TOP_USERS) : [];
-    }, [query.isSuccess, query.data]);
+    }, [query.isSuccess, query.data, networkId]);
 
     return (
         <LeaderboardWrapper>

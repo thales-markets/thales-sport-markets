@@ -291,14 +291,16 @@ const Home: React.FC = () => {
 
     return (
         <Container>
-            <Info>
-                <Trans
-                    i18nKey="rewards.op-rewards-banner-message"
-                    components={{
-                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                    }}
-                />
-            </Info>
+            {networkId !== 42161 && (
+                <Info>
+                    <Trans
+                        i18nKey="rewards.op-rewards-banner-message"
+                        components={{
+                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                        }}
+                    />
+                </Info>
+            )}
             <ReactModal
                 isOpen={showBurger && isMobile}
                 onRequestClose={() => {
@@ -462,9 +464,11 @@ const Home: React.FC = () => {
                             );
                         })}
                     </SportFiltersContainer>
-                    <Suspense fallback={<Loader />}>
-                        <SidebarLeaderboard />
-                    </Suspense>
+                    {networkId !== 42161 && (
+                        <Suspense fallback={<Loader />}>
+                            <SidebarLeaderboard />
+                        </Suspense>
+                    )}
                 </SidebarContainer>
                 {/* MAIN PART */}
                 {sportMarketsQueryNew.isLoading ? (
@@ -535,7 +539,7 @@ const Home: React.FC = () => {
                 )}
                 {/* RIGHT PART */}
                 <SidebarContainer maxWidth={320}>
-                    {networkId === NetworkIdByName.OptimismMainnet && <GetUsd />}
+                    {[NetworkIdByName.OptimismMainnet, NetworkIdByName.ArbitrumOne].includes(networkId) && <GetUsd />}
                     <Suspense fallback={<Loader />}>
                         <Parlay />
                     </Suspense>

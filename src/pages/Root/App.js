@@ -9,7 +9,12 @@ import { getNetworkId, updateNetworkSettings, updateWallet, getIsWalletConnected
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import networkConnector from 'utils/networkConnector';
-import { getDefaultNetworkId } from 'utils/network';
+import {
+    getDefaultNetworkId,
+    hasEthereumInjected,
+    isNetworkSupported,
+    isRouteAvailableForNetwork,
+} from 'utils/network';
 import ROUTES from 'constants/routes';
 import Theme from 'layouts/Theme';
 import DappLayout from 'layouts/DappLayout';
@@ -29,7 +34,6 @@ const Market = lazy(() => import('pages/Markets/Market'));
 const Rewards = lazy(() => import('pages/Rewards'));
 const Quiz = lazy(() => import('pages/Quiz'));
 const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
-const MintWorldCupNFT = lazy(() => import('pages/MintWorldCupNFT'));
 const Vaults = lazy(() => import('pages/Vaults'));
 const Vault = lazy(() => import('pages/Vault'));
 const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
@@ -39,6 +43,7 @@ const App = () => {
     const { trackPageView, trackEvent } = useMatomo();
     const networkId = useSelector((state) => getNetworkId(state));
     const isWalletConnected = useSelector((state) => getIsWalletConnected(state));
+
     const provider = useProvider({ chainId: networkId });
     const { address } = useAccount();
     const { data: signer } = useSigner();
@@ -83,7 +88,12 @@ const App = () => {
 
     useEffect(() => {
         const init = async () => {
-            const providerNetworkId = client.lastUsedChainId || (await getDefaultNetworkId());
+            let providerNetworkId;
+            if (hasEthereumInjected()) {
+                providerNetworkId = client.lastUsedChainId || (await getDefaultNetworkId());
+            } else {
+                providerNetworkId = isNetworkSupported(networkId) ? networkId : await getDefaultNetworkId();
+            }
             try {
                 dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
                 networkConnector.setNetworkSettings({
@@ -167,47 +177,61 @@ const App = () => {
                                     </DappLayout>
                                 )}
                             />
-                            <Route exact path={ROUTES.Markets.Home}>
-                                <DappLayout>
-                                    <BannerCarousel />
-                                    <Markets />
-                                </DappLayout>
-                            </Route>
-                            <Route exact path={ROUTES.Leaderboard}>
-                                <DappLayout>
-                                    <ParlayLeaderboard />
-                                </DappLayout>
-                            </Route>
-                            <Route exact path={ROUTES.Rewards}>
-                                <DappLayout>
-                                    <Rewards />
-                                </DappLayout>
-                            </Route>
-                            <Route exact path={ROUTES.Profile}>
-                                <DappLayout>
-                                    <Profile />
-                                </DappLayout>
-                            </Route>
-                            <Route exact path={ROUTES.Referral}>
-                                <DappLayout>
-                                    <Referral />
-                                </DappLayout>
-                            </Route>
+                            {isRouteAvailableForNetwork(ROUTES.Markets.Home, networkId) && (
+                                <Route exact path={ROUTES.Markets.Home}>
+                                    <DappLayout>
+                                        <BannerCarousel />
+                                        <Markets />
+                                    </DappLayout>
+                                </Route>
+                            )}
+                            {isRouteAvailableForNetwork(ROUTES.Leaderboard, networkId) && (
+                                <Route exact path={ROUTES.Leaderboard}>
+                                    <DappLayout>
+                                        <ParlayLeaderboard />
+                                    </DappLayout>
+                                </Route>
+                            )}
+                            {isRouteAvailableForNetwork(ROUTES.Rewards, networkId) && (
+                                <Route exact path={ROUTES.Rewards}>
+                                    <DappLayout>
+                                        <Rewards />
+                                    </DappLayout>
+                                </Route>
+                            )}
+                            {isRouteAvailableForNetwork(ROUTES.Profile, networkId) && (
+                                <Route exact path={ROUTES.Profile}>
+                                    <DappLayout>
+                                        <Profile />
+                                    </DappLayout>
+                                </Route>
+                            )}
+                            {isRouteAvailableForNetwork(ROUTES.Referral, networkId) && (
+                                <Route exact path={ROUTES.Referral}>
+                                    <DappLayout>
+                                        <Referral />
+                                    </DappLayout>
+                                </Route>
+                            )}
                             <Route exact path={ROUTES.Wizard}>
                                 <DappLayout>
                                     <Wizard />
                                 </DappLayout>
                             </Route>
-                            <Route exact path={ROUTES.Quiz}>
-                                <DappLayout>
-                                    <Quiz />
-                                </DappLayout>
-                            </Route>
-                            <Route exact path={ROUTES.Vaults}>
-                                <DappLayout>
-                                    <Vaults />
-                                </DappLayout>
-                            </Route>
+                            {isRouteAvailableForNetwork(ROUTES.Quiz, networkId) && (
+                                <Route exact path={ROUTES.Quiz}>
+                                    <DappLayout>
+                                        <Quiz />
+                                    </DappLayout>
+                                </Route>
+                            )}
+                            {isRouteAvailableForNetwork(ROUTES.Vaults, networkId) && (
+                                <Route exact path={ROUTES.Vaults}>
+                                    <DappLayout>
+                                        <Vaults />
+                                    </DappLayout>
+                                </Route>
+                            )}
                             <Route
                                 exact
                                 path={ROUTES.Vault}
@@ -217,23 +241,20 @@ const App = () => {
                                     </DappLayout>
                                 )}
                             />
-                            <Route exact path={ROUTES.QuizLeaderboard}>
-                                <DappLayout>
-                                    <QuizLeaderboard />
-                                </DappLayout>
-                            </Route>
-                            <Route exact path={ROUTES.MintWorldCupNFT}>
-                                <DappLayout>
-                                    <MintWorldCupNFT />
-                                </DappLayout>
-                            </Route>
+                            {isRouteAvailableForNetwork(ROUTES.QuizLeaderboard, networkId) && (
+                                <Route exact path={ROUTES.QuizLeaderboard}>
+                                    <DappLayout>
+                                        <QuizLeaderboard />
+                                    </DappLayout>
+                                </Route>
+                            )}
                             <Route exact path={ROUTES.Home}>
                                 <LandingPageLayout>
                                     <LandingPage />
                                 </LandingPageLayout>
                             </Route>
                             <Route>
-                                <Redirect to={ROUTES.Home} />
+                                <Redirect to={ROUTES.Markets.Home} />
                                 <LandingPageLayout>
                                     <LandingPage />
                                 </LandingPageLayout>

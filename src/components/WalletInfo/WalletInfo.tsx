@@ -6,12 +6,13 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 import { useTranslation } from 'react-i18next';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { PAYMENT_CURRENCY } from 'constants/currency';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import Tooltip from 'components/Tooltip';
 import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
-import ConnectButton from 'components/ConnectButton';
+// import ConnectButton from 'components/ConnectButton';
+import { getDefaultColleteralForNetwork } from 'utils/collaterals';
+import NetworkSwitcher from 'components/NetworkSwitcher';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -34,7 +35,8 @@ const WalletInfo: React.FC = () => {
     return (
         <Container hasVoucher={!!overtimeVoucher} isMobile={isMobile}>
             <FlexDivColumn>
-                <ConnectButton />
+                <NetworkSwitcher />
+                {/* <ConnectButton /> */}
                 {overtimeVoucher && (
                     <Tooltip
                         overlay={
@@ -42,7 +44,7 @@ const WalletInfo: React.FC = () => {
                                 title={t('common.voucher.overtime-voucher')}
                                 imageSrc={overtimeVoucher.image}
                                 text={`${t('common.voucher.remaining-amount')}: ${formatCurrencyWithKey(
-                                    PAYMENT_CURRENCY,
+                                    getDefaultColleteralForNetwork(networkId),
                                     overtimeVoucher.remainingAmount
                                 )}`}
                             />
@@ -54,7 +56,7 @@ const WalletInfo: React.FC = () => {
                                 </Wallet>
                                 <VoucherBalance>
                                     <Info>{formatCurrency(overtimeVoucher.remainingAmount, 2)}</Info>
-                                    <Currency>{PAYMENT_CURRENCY}</Currency>
+                                    <Currency>{getDefaultColleteralForNetwork(networkId)}</Currency>
                                 </VoucherBalance>
                             </VoucherContainer>
                         }
@@ -69,7 +71,7 @@ const WalletInfo: React.FC = () => {
 const Container = styled(FlexDivCentered)<{ hasVoucher: boolean; isMobile?: boolean }>`
     border: ${(props) => (props.isMobile ? '1px solid ' + props.theme.borderColor.primary : ' ')};
     color: ${(props) => props.theme.textColor.primary};
-    background: ${(props) => props.theme.background.secondary};
+
     border-radius: 5px;
     position: relative;
     justify-content: end;

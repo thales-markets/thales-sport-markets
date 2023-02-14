@@ -5,10 +5,15 @@ export const EtherscanNetworkNameById: Record<NetworkId, string> = {
     42: 'kovan',
     5: 'goerli',
     420: 'goerli-optimism',
+    42161: '',
 };
 
 const getEtherscanBaseURL = (networkId: NetworkId) => {
     const network = EtherscanNetworkNameById[networkId];
+
+    if (networkId === 42161) {
+        return 'https://arbiscan.io/';
+    }
 
     return `https://${network?.toLowerCase()}.etherscan.io`;
 };

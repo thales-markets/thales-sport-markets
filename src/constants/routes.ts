@@ -15,6 +15,7 @@ export const ROUTES = {
     Vault: '/vaults/:vaultId',
     Leaderboard: '/parlay-leaderboard',
 };
+
 export default ROUTES;
 
 export const RESET_STATE = 'reset';

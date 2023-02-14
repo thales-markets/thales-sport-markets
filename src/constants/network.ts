@@ -13,6 +13,36 @@ export const L2_TO_L1_NETWORK_MAPPER: NetworkMapper = {
     69: 42,
 };
 
+export const SUPPORTED_NETWORKS = [
+    {
+        chainId: 10,
+        chainName: 'Optimism Mainnet',
+        shortChainName: 'Optimism',
+        chainKey: 'optimism_mainnet',
+        iconClassName: 'icon icon--op',
+        areVaultsSupported: true,
+        isMultiCollateralSupported: true,
+    },
+    {
+        chainId: 42161,
+        chainName: 'Arbitrum One',
+        shortChainName: 'Arbitrum',
+        chainKey: 'arbitrum_mainnet',
+        iconClassName: 'icon icon--arb',
+        areVaultsSupported: false,
+        isMultiCollateralSupported: false,
+    },
+    {
+        chainId: 420,
+        chainName: 'Optimism Goerli Testnet',
+        shortChainName: 'Optimism Goerli Testnet',
+        chainKey: 'optimism_mainnet',
+        iconClassName: 'icon icon--op',
+        areVaultsSupported: true,
+        isMultiCollateralSupported: true,
+    },
+];
+
 export type OptimismNetwork = {
     chainId: string;
     chainName: string;
@@ -78,3 +108,4 @@ export const OPTIMISM_OPTIONS = [
 ];
 
 export const MAX_GAS_LIMIT = 15000000;
+export const MAX_GAS_LIMIT_ARB = 20000000;

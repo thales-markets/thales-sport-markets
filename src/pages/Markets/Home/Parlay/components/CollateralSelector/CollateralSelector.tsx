@@ -1,7 +1,6 @@
 import { ReactComponent as OvertimeVoucherIcon } from 'assets/images/overtime-voucher.svg';
 import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
 import Tooltip from 'components/Tooltip';
-import { PAYMENT_CURRENCY } from 'constants/currency';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,8 +10,14 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { OvertimeVoucher } from 'types/tokens';
-import { getStableIcon, StablecoinKey } from 'utils/collaterals';
+import {
+    getCollateralIndexByCollateralKey,
+    getDefaultColleteralForNetwork,
+    getStableIcon,
+    StablecoinKey,
+} from 'utils/collaterals';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
+import { isMultiCollateralSupportedForNetwork } from 'utils/network';
 
 type CollateralSelectorProps = {
     collateralArray: Array<string>;
@@ -41,13 +46,15 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
         enabled: isAppReady && isWalletConnected,
     });
 
+    const isMultiColletaralSupported = isMultiCollateralSupportedForNetwork(networkId);
+
     const stableBalances = useMemo(() => {
         return multipleStableBalances.data;
     }, [multipleStableBalances.data]);
 
     return (
         <Container>
-            <AssetContainer>
+            <AssetContainer hasMoreThenTwoCollaterals={isMultiColletaralSupported}>
                 {overtimeVoucher && (
                     <Tooltip
                         overlay={
@@ -55,13 +62,13 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                 title={t('common.voucher.overtime-voucher')}
                                 imageSrc={overtimeVoucher.image}
                                 text={`${t('common.voucher.remaining-amount')}: ${formatCurrencyWithKey(
-                                    PAYMENT_CURRENCY,
+                                    getDefaultColleteralForNetwork(networkId),
                                     overtimeVoucher.remainingAmount
                                 )}`}
                             />
                         }
                         component={
-                            <CollateralContainer>
+                            <CollateralContainer hasMoreThenTwoCollaterals={isMultiColletaralSupported}>
                                 <CollateralName selected={isVoucherSelected} uppercase={true}>
                                     {t('common.voucher.voucher')}
                                 </CollateralName>
@@ -94,10 +101,14 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                     />
                 )}
                 {collateralArray.length &&
-                    collateralArray.map((item, index) => {
+                    collateralArray.map((item) => {
+                        const index = getCollateralIndexByCollateralKey(item as StablecoinKey);
                         const AssetIcon = getStableIcon(item as StablecoinKey);
                         return (
-                            <CollateralContainer key={index + 'container'}>
+                            <CollateralContainer
+                                key={index + 'container'}
+                                hasMoreThenTwoCollaterals={isMultiColletaralSupported}
+                            >
                                 <CollateralName selected={selectedItem == index && !isVoucherSelected}>
                                     {item}
                                 </CollateralName>
@@ -144,10 +155,10 @@ export const Container = styled.div`
     }
 `;
 
-const AssetContainer = styled.div`
+const AssetContainer = styled.div<{ hasMoreThenTwoCollaterals?: boolean }>`
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: ${(_props) => (_props?.hasMoreThenTwoCollaterals == true ? 'space-between' : 'flex-start')};
     width: 100%;
 `;
 
@@ -170,9 +181,10 @@ const CollateralIcon = styled.div<{ active?: boolean }>`
     margin-bottom: 5px;
 `;
 
-const CollateralContainer = styled.div`
+const CollateralContainer = styled.div<{ hasMoreThenTwoCollaterals?: boolean }>`
     display: flex;
     flex-direction: column;
+    ${(_props) => (_props?.hasMoreThenTwoCollaterals == true ? '' : `padding-right: 20px;`)}
     align-items: center;
 `;
 

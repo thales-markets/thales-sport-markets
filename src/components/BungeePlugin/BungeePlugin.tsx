@@ -1,8 +1,9 @@
-import { Bridge } from '@socket.tech/plugin';
+import { Bridge, Currency } from '@socket.tech/plugin';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { Network } from 'utils/network';
@@ -28,6 +29,7 @@ type CustomizationProps = {
 const BungeePlugin: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const apiKey = process.env.REACT_APP_BUNGEE_API_KEY || '';
     if (!apiKey) {
@@ -35,17 +37,28 @@ const BungeePlugin: React.FC = () => {
     }
 
     const defaultSourceNetwork = Network.Mainnet;
-    const destinationNetworks = [Network['Mainnet-Ovm']];
-    const defaultDestNetwork = Network['Mainnet-Ovm'];
+    const destinationNetworks = [Network['Mainnet-Ovm'], Network.Arbitrum].filter((n: number) => n === networkId);
+    const defaultDestNetwork = destinationNetworks[0];
 
     const allSourceTokensQuery = useAllSourceTokensQuery(apiKey, defaultDestNetwork, { enabled: isAppReady });
     const sourceTokens = allSourceTokensQuery.isSuccess && allSourceTokensQuery.data ? allSourceTokensQuery.data : [];
 
-    const tokenList = [...sourceTokens, ...destinationTokens];
+    const destTokens = useMemo(() => destinationTokens.filter((token: Currency) => token.chainId === networkId), [
+        networkId,
+    ]);
+    const tokenList = [...sourceTokens, ...destTokens];
 
-    const defaultDestinationToken = destinationTokens.filter(
-        (token) => token.chainId === Network['Mainnet-Ovm'] && token.symbol === CRYPTO_CURRENCY_MAP.sUSD
-    )[0].address;
+    const defaultDestinationToken = useMemo(
+        () =>
+            destTokens.filter((token) =>
+                token.chainId === Network['Mainnet-Ovm']
+                    ? token.symbol === CRYPTO_CURRENCY_MAP.sUSD
+                    : token.chainId === Network.Arbitrum
+                    ? token.symbol === CRYPTO_CURRENCY_MAP.USDC
+                    : true
+            )[0]?.address,
+        [destTokens]
+    );
 
     // All colors should stricktly be in RGB format
     const customize: CustomizationProps = {

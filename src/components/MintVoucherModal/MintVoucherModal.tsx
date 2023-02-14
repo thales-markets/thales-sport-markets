@@ -8,9 +8,8 @@ import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import { getIsAppReady } from 'redux/modules/app';
-import { PAYMENT_CURRENCY } from 'constants/currency';
 import { BigNumber, ethers } from 'ethers';
-import { checkAllowance } from 'utils/network';
+import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { MAX_GAS_LIMIT } from 'constants/network';
@@ -23,21 +22,26 @@ import { getAddress, isAddress } from 'ethers/lib/utils';
 import { LINKS } from 'constants/links';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Tooltip, withStyles } from '@material-ui/core';
+import { NetworkId } from 'types/network';
+import { getDefaultColleteralForNetwork, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 type MintVoucherModalProps = {
     onClose: () => void;
 };
 
-const VOUCHER_OPTIONS: Array<{ value: number; label: string }> = [
-    { value: 5, label: '5 sUSD' },
-    { value: 10, label: '10 sUSD' },
-    { value: 20, label: '20 sUSD' },
-    { value: 50, label: '50 sUSD' },
-    { value: 100, label: '100 sUSD' },
-    { value: 200, label: '200 sUSD' },
-    { value: 500, label: '500 sUSD' },
-    { value: 1000, label: '1000 sUSD' },
-];
+const getVoucherOptions = (networkId: NetworkId): Array<{ value: number; label: string }> => {
+    const collateral = getDefaultColleteralForNetwork(networkId);
+    return [
+        { value: 5, label: `5 ${collateral}` },
+        { value: 10, label: `10 ${collateral}` },
+        { value: 20, label: `20 ${collateral}` },
+        { value: 50, label: `50 ${collateral}` },
+        { value: 100, label: `100 ${collateral}` },
+        { value: 200, label: `200 ${collateral}` },
+        { value: 500, label: `500 ${collateral}` },
+        { value: 1000, label: `1000 ${collateral}` },
+    ];
+};
 
 export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
@@ -56,6 +60,8 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
     const [amount, setAmount] = useState<number>(-1);
     const [isAnotherWallet, setIsAnotherWallet] = useState<boolean>(false);
     const [recipient, setRecipient] = useState<string>('');
+
+    const VOUCHER_OPTIONS = getVoucherOptions(networkId);
 
     const isAmountEntered = Number(amount) > 0;
     const insufficientBalance = Number(paymentTokenBalance) < Number(amount) || Number(paymentTokenBalance) === 0;
@@ -128,7 +134,11 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
                 if (txResult && txResult.transactionHash) {
                     toast.update(
                         id,
-                        getSuccessToastOptions(t('market.toast-message.approve-success', { token: PAYMENT_CURRENCY }))
+                        getSuccessToastOptions(
+                            t('market.toast-message.approve-success', {
+                                token: getDefaultColleteralForNetwork(networkId),
+                            })
+                        )
                     );
                     setIsAllowing(false);
                 }
@@ -147,13 +157,16 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
             setIsSubmitting(true);
             try {
                 const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
-                const parsedAmount = ethers.utils.parseEther(Number(amount).toString());
+                const parsedAmount = ethers.utils.parseUnits(
+                    Number(amount).toString(),
+                    getDefaultDecimalsForNetwork(networkId)
+                );
 
                 const tx = await overtimeVoucherContractWithSigner.mint(
                     isAnotherWallet ? getAddress(recipient) : getAddress(walletAddress),
                     parsedAmount,
                     {
-                        gasLimit: MAX_GAS_LIMIT,
+                        gasLimit: getMaxGasLimitForNetwork(networkId),
                     }
                 );
                 const txResult = await tx.wait();
@@ -196,9 +209,11 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
             return (
                 <ModalButton disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
                     {!isAllowing
-                        ? t('common.enable-wallet-access.approve-label', { currencyKey: PAYMENT_CURRENCY })
+                        ? t('common.enable-wallet-access.approve-label', {
+                              currencyKey: getDefaultColleteralForNetwork(networkId),
+                          })
                         : t('common.enable-wallet-access.approve-progress-label', {
-                              currencyKey: PAYMENT_CURRENCY,
+                              currencyKey: getDefaultColleteralForNetwork(networkId),
                           })}
                 </ModalButton>
             );
@@ -214,7 +229,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
 
     return (
         <Modal
-            title={t('common.voucher.modal.title', { currencyKey: PAYMENT_CURRENCY })}
+            title={t('common.voucher.modal.title', { currencyKey: getDefaultColleteralForNetwork(networkId) })}
             onClose={onClose}
             shouldCloseOnOverlayClick={false}
         >
@@ -275,7 +290,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={amount}
-                    tokenSymbol={PAYMENT_CURRENCY}
+                    tokenSymbol={getDefaultColleteralForNetwork(networkId)}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}

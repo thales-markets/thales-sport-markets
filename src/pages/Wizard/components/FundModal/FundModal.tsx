@@ -9,10 +9,12 @@ import { t } from 'i18next';
 import React, { useState } from 'react';
 import QRCode from 'react-qr-code';
 import { useSelector } from 'react-redux';
-import { getWalletAddress } from 'redux/modules/wallet';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import { NetworkId } from 'types/network';
+import { getNetworkKeyByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
 
 type FundModalProps = {
@@ -26,19 +28,20 @@ enum Provider {
     LAYER_SWAP,
 }
 
-const getProviderUrl = (provider: Provider | undefined) => {
+const getProviderUrl = (provider: Provider | undefined, networkId: NetworkId) => {
+    const networkParam = getNetworkKeyByNetworkId(networkId);
     switch (provider) {
         case Provider.BANXA:
             return 'https://thalesmarket.banxa.com/iframe?code=x68QxHYZ2hQU0rccKDgDSeUO7QonDXsY&coinType=ETH&fiatType=EUR&blockchain=OPTIMISM';
         case Provider.MT_PELERIN:
             const baseUrl = 'https://widget.mtpelerin.com/';
-            const queryParams = '?type=popup&lang=en&primary=%235F6180&net=optimism_mainnet&bsc=EUR&bdc=ETH&crys=ETH';
+            const queryParams = `?type=popup&lang=en&primary=%235F6180&net=${networkParam}&bsc=EUR&bdc=ETH&crys=ETH`;
             const queryParamMyLogo = `&mylogo=${window.location.origin + buildHref('/overtime-logo-black.svg')}`;
             return baseUrl + queryParams + queryParamMyLogo;
         case Provider.BUNGEE:
             return '';
         case Provider.LAYER_SWAP:
-            return 'https://www.layerswap.io/?destNetwork=optimism_mainnet&lockNetwork=true&sourceExchangeName=binance&asset=usdc';
+            return `https://www.layerswap.io/?destNetwork=${networkParam}&lockNetwork=true&sourceExchangeName=binance&asset=usdc`;
         default:
             return '';
     }
@@ -46,6 +49,7 @@ const getProviderUrl = (provider: Provider | undefined) => {
 
 const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const [iframeProvider, setIframeProvider] = useState<Provider | undefined>(undefined);
     const [iframeLoader, setIframeLoader] = useState(false);
@@ -87,13 +91,19 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     </Row>
                     <Row>
                         <ButtonWrapper>
-                            <ButtonDiv onClick={onBridgeClickHandler}>{t('wizard.fund-modal.bridge')}</ButtonDiv>
+                            <ButtonDiv onClick={onBridgeClickHandler}>
+                                {t('wizard.fund-modal.bridge', { network: getNetworkNameByNetworkId(networkId, true) })}
+                            </ButtonDiv>
                         </ButtonWrapper>
                         <Logo logoType={Provider.BUNGEE} />
                     </Row>
                     <Row>
                         <ButtonWrapper>
-                            <Link target="_blank" rel="noreferrer" href={getProviderUrl(Provider.LAYER_SWAP)}>
+                            <Link
+                                target="_blank"
+                                rel="noreferrer"
+                                href={getProviderUrl(Provider.LAYER_SWAP, networkId)}
+                            >
                                 <ButtonDiv>{t('wizard.fund-modal.exchange')}</ButtonDiv>
                             </Link>
                         </ButtonWrapper>
@@ -129,13 +139,13 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 >
                     <IFrameWrapper height={iframeProvider === Provider.MT_PELERIN ? 588 : 635}>
                         {iframeLoader && <SimpleLoader />}
-                        <IFrame src={getProviderUrl(iframeProvider)} onLoad={() => setIframeLoader(false)} />
+                        <IFrame src={getProviderUrl(iframeProvider, networkId)} onLoad={() => setIframeLoader(false)} />
                     </IFrameWrapper>
                 </Modal>
             )}
             {showBungeePlugin && (
                 <Modal
-                    title={t('wizard.fund-modal.bridge')}
+                    title={t('wizard.fund-modal.bridge', { network: getNetworkNameByNetworkId(networkId, true) })}
                     onClose={() => setShowBungeePlugin(false)}
                     shouldCloseOnOverlayClick={false}
                     mobileStyle={{

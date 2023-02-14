@@ -15,6 +15,7 @@ import { buildHref } from 'utils/routes';
 import ROUTES from 'constants/routes';
 import { Trans } from 'react-i18next';
 import { Info } from '../Home/Home';
+import { getNetworkId } from 'redux/modules/wallet';
 
 type MarketProps = RouteComponentProps<{
     marketAddress: string;
@@ -24,11 +25,12 @@ const Market: React.FC<MarketProps> = (props) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const [lastValidMarket, setLastValidMarket] = useState<MarketData | undefined>(undefined);
     const { trackPageView } = useMatomo();
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const { params } = props.match;
     const marketAddress = params && params.marketAddress ? params.marketAddress : '';
 
-    const marketQuery = useMarketQuery(marketAddress, {
+    const marketQuery = useMarketQuery(marketAddress, networkId, {
         enabled: isAppReady,
     });
 
