@@ -9,7 +9,12 @@ import { getNetworkId, updateNetworkSettings, updateWallet, getIsWalletConnected
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import networkConnector from 'utils/networkConnector';
-import { getDefaultNetworkId, isRouteAvailableForNetwork } from 'utils/network';
+import {
+    getDefaultNetworkId,
+    hasEthereumInjected,
+    isNetworkSupported,
+    isRouteAvailableForNetwork,
+} from 'utils/network';
 import ROUTES from 'constants/routes';
 import Theme from 'layouts/Theme';
 import DappLayout from 'layouts/DappLayout';
@@ -83,7 +88,12 @@ const App = () => {
 
     useEffect(() => {
         const init = async () => {
-            const providerNetworkId = client.lastUsedChainId || (await getDefaultNetworkId());
+            let providerNetworkId;
+            if (hasEthereumInjected()) {
+                providerNetworkId = client.lastUsedChainId || (await getDefaultNetworkId());
+            } else {
+                providerNetworkId = isNetworkSupported(networkId) ? networkId : await getDefaultNetworkId();
+            }
             try {
                 dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
                 networkConnector.setNetworkSettings({

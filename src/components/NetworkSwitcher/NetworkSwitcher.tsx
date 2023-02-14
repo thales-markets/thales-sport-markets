@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { useSelector, useDispatch } from 'react-redux';
+import { getIsWalletConnected, getNetworkId, getWalletAddress, updateNetworkSettings } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { truncateAddress } from 'utils/formatters/string';
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { hasEthereumInjected } from 'utils/network';
 
 const NetworkSwitcher: React.FC = () => {
     const { t } = useTranslation();
@@ -14,6 +15,7 @@ const NetworkSwitcher: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const [dropDownOpen, setDropDownOpen] = useState(false);
+    const dispatch = useDispatch();
 
     // const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
@@ -49,10 +51,6 @@ const NetworkSwitcher: React.FC = () => {
                                 <NetworkDropDown>
                                     <NetworkWrapper
                                         onClick={async () => {
-                                            await (window.ethereum as any).request({
-                                                method: 'wallet_switchEthereumChain',
-                                                params: [{ chainId: networkId === 42161 ? '0xa4b1' : '0xa' }],
-                                            });
                                             setDropDownOpen(false);
                                         }}
                                     >
@@ -63,10 +61,19 @@ const NetworkSwitcher: React.FC = () => {
                                     </NetworkWrapper>
                                     <NetworkWrapper
                                         onClick={async () => {
-                                            await (window.ethereum as any).request({
-                                                method: 'wallet_switchEthereumChain',
-                                                params: [{ chainId: networkId !== 42161 ? '0xa4b1' : '0xa' }],
-                                            });
+                                            if (hasEthereumInjected()) {
+                                                await (window.ethereum as any).request({
+                                                    method: 'wallet_switchEthereumChain',
+                                                    params: [{ chainId: networkId !== 42161 ? '0xa4b1' : '0xa' }],
+                                                });
+                                            } else {
+                                                dispatch(
+                                                    updateNetworkSettings({
+                                                        networkId: networkId !== 42161 ? 42161 : 10,
+                                                    })
+                                                );
+                                            }
+
                                             setDropDownOpen(false);
                                         }}
                                     >
