@@ -12,6 +12,8 @@ import networkConnector from 'utils/networkConnector';
 import { convertPriceImpactToBonus } from 'utils/markets';
 import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
+const BATCH_SIZE = 100;
+
 const marketsCache = {
     [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,
     [GlobalFiltersEnum.Canceled]: [] as SportMarkets,
@@ -41,14 +43,24 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
     let priceImpactFromContract: undefined | Array<any>;
     if (mapOnlyOpenedMarkets) {
         try {
-            const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
-            const [oddsForAllActive, priceImpactForAllActiveMarkets] = await Promise.all([
-                sportPositionalMarketDataContract?.getOddsForAllActiveMarkets(),
-                sportPositionalMarketDataContract?.getPriceImpactForAllActiveMarkets(),
-            ]);
+            const { sportPositionalMarketDataContract, sportMarketManagerContract } = networkConnector;
+            const numberOfActiveMarkets = await sportMarketManagerContract?.numActiveMarkets();
+            const numberOfBatches = Math.trunc(numberOfActiveMarkets / BATCH_SIZE) + 1;
 
-            oddsFromContract = oddsForAllActive;
-            priceImpactFromContract = priceImpactForAllActiveMarkets;
+            const promises = [];
+            for (let i = 0; i < numberOfBatches; i++) {
+                promises.push(sportPositionalMarketDataContract?.getOddsForAllActiveMarketsInBatches(i, BATCH_SIZE));
+            }
+            for (let i = 0; i < numberOfBatches; i++) {
+                promises.push(
+                    sportPositionalMarketDataContract?.getPriceImpactForAllActiveMarketsInBatches(i, BATCH_SIZE)
+                );
+            }
+
+            const promisesResult = await Promise.all(promises);
+
+            oddsFromContract = promisesResult.slice(0, numberOfBatches).flat(1);
+            priceImpactFromContract = promisesResult.slice(numberOfBatches, numberOfBatches + numberOfBatches).flat(1);
         } catch (e) {
             console.log('Could not get oods from chain', e);
         }

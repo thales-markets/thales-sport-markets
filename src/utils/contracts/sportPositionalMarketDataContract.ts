@@ -43,7 +43,44 @@ export const sportPositionalMarketDataContract = {
         { inputs: [], name: 'acceptOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
         {
             inputs: [],
+            name: 'getBaseOddsForAllActiveMarkets',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'address', name: 'market', type: 'address' },
+                        { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
+                    ],
+                    internalType: 'struct SportPositionalMarketData.ActiveMarketsOdds[]',
+                    name: '',
+                    type: 'tuple[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
             name: 'getOddsForAllActiveMarkets',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'address', name: 'market', type: 'address' },
+                        { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
+                    ],
+                    internalType: 'struct SportPositionalMarketData.ActiveMarketsOdds[]',
+                    name: '',
+                    type: 'tuple[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'uint256', name: 'batchNumber', type: 'uint256' },
+                { internalType: 'uint256', name: 'batchSize', type: 'uint256' },
+            ],
+            name: 'getOddsForAllActiveMarketsInBatches',
             outputs: [
                 {
                     components: [
@@ -61,6 +98,26 @@ export const sportPositionalMarketDataContract = {
         {
             inputs: [],
             name: 'getPriceImpactForAllActiveMarkets',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'address', name: 'market', type: 'address' },
+                        { internalType: 'int256[]', name: 'priceImpact', type: 'int256[]' },
+                    ],
+                    internalType: 'struct SportPositionalMarketData.ActiveMarketsPriceImpact[]',
+                    name: '',
+                    type: 'tuple[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'uint256', name: 'batchNumber', type: 'uint256' },
+                { internalType: 'uint256', name: 'batchSize', type: 'uint256' },
+            ],
+            name: 'getPriceImpactForAllActiveMarketsInBatches',
             outputs: [
                 {
                     components: [
