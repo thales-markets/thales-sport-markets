@@ -95,10 +95,24 @@ export const TAGS_LIST: Tags = [
         favourite: false,
     },
     {
+        id: 9017,
+        label: 'UEFA Europa League',
+        logo: ``,
+        logoClass: '',
+        favourite: false,
+    },
+    {
         id: 9018,
         label: 'FIFA World Cup',
         logo: ``,
         logoClass: 'icon-league icon-league--fifa-world-cup',
+        favourite: false,
+    },
+    {
+        id: 9019,
+        label: 'J1 League',
+        logo: ``,
+        logoClass: '',
         favourite: false,
     },
     {
@@ -133,7 +147,9 @@ export const SPORTS_MAP: SportsMap = {
     9014: 'Soccer',
     9015: 'Soccer',
     9016: 'Soccer',
+    9017: 'Soccer',
     9018: 'Soccer',
+    9019: 'Soccer',
     9100: 'Motosport',
     9101: 'Motosport',
 };
@@ -145,7 +161,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Baseball: [9003],
     Basketball: [9004, 9005, 9008],
     Hockey: [9006],
-    Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9018],
+    Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019],
     UFC: [9007],
     Motosport: [9100, 9101],
 };
@@ -166,6 +182,8 @@ export enum TAGS_FLAGS {
     LA_LIGA = 9014,
     SERIE_A = 9015,
     UEFA_CL = 9016,
+    UEFA_EL = 9017,
+    J1_LEAGUE = 9019,
     FORMULA1 = 9100,
     MOTOGP = 9101,
 }
@@ -211,7 +229,9 @@ export const SCORING_MAP: SportsMap = {
     9014: 'goals',
     9015: 'goals',
     9016: 'goals',
+    9017: 'goals',
     9018: 'goals',
+    9019: 'goals',
     9100: '',
     9101: '',
 };
@@ -232,7 +252,9 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9014: 'regular',
     9015: 'regular',
     9016: 'regular',
+    9017: 'regular',
     9018: 'regular',
+    9019: 'regular',
     9100: '',
     9101: '',
 };
@@ -253,5 +275,7 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     9014: 'half',
     9015: 'half',
     9016: 'half',
+    9017: 'half',
     9018: 'half',
+    9019: 'half',
 };
