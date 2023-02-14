@@ -326,8 +326,6 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         }
     );
 
-    console.log('positionPriceDetailsQuery ', positionPriceDetailsQuery?.data);
-
     useEffect(() => {
         if (positionPriceDetailsQuery.isSuccess && positionPriceDetailsQuery.data) {
             setAmmPosition(positionPriceDetailsQuery.data);

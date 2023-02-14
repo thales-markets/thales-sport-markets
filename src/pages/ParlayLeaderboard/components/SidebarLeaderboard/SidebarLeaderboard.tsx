@@ -24,6 +24,7 @@ import {
     getSpreadTotalText,
     getSymbolText,
 } from 'utils/markets';
+import { Network } from 'utils/network';
 import { buildHref } from 'utils/routes';
 import {
     ArrowIcon,
@@ -60,7 +61,7 @@ const SidebarLeaderboard: React.FC = () => {
     const query = useParlayLeaderboardQuery(networkId, latestPeriod + 1, { enabled: isAppReady });
 
     const parlaysData = useMemo(() => {
-        if (networkId === 42161) return [];
+        if (networkId !== Network['Mainnet-Ovm']) return [];
         return query.isSuccess ? query.data.slice(0, SIDEBAR_NUMBER_OF_TOP_USERS) : [];
     }, [query.isSuccess, query.data, networkId]);
 
