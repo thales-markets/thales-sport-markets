@@ -1,15 +1,16 @@
-import { Bridge, Currency } from '@socket.tech/plugin';
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
-import React, { useMemo } from 'react';
+import { Bridge } from '@socket.tech/plugin';
+import { COLLATERAL_INDEX_TO_COLLATERAL } from 'constants/currency';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { Network } from 'utils/network';
+import { getDefaultCollateralIndexForNetworkId, Network } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import useAllSourceTokensQuery, { SOURCE_NETWORK_IDS } from './queries/useAllSourceTokensQuery';
-import { destinationTokens } from './tokens';
+// import { destinationTokens } from './tokens';
+import { NetworkId } from 'types/network';
 
 type CustomizationProps = {
     width?: number;
@@ -26,6 +27,8 @@ type CustomizationProps = {
     outline?: string;
 };
 
+const SUPPORTED_DESTINATION_NETWORKS = [Network['Mainnet-Ovm'], Network.Arbitrum];
+
 const BungeePlugin: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -37,28 +40,24 @@ const BungeePlugin: React.FC = () => {
     }
 
     const defaultSourceNetwork = Network.Mainnet;
-    const destinationNetworks = [Network['Mainnet-Ovm'], Network.Arbitrum].filter((n: number) => n === networkId);
+
+    const destinationNetworks = SUPPORTED_DESTINATION_NETWORKS.includes(networkId)
+        ? SUPPORTED_DESTINATION_NETWORKS.filter((id: number) => id === networkId)
+        : SUPPORTED_DESTINATION_NETWORKS;
     const defaultDestNetwork = destinationNetworks[0];
 
     const allSourceTokensQuery = useAllSourceTokensQuery(apiKey, defaultDestNetwork, { enabled: isAppReady });
-    const sourceTokens = allSourceTokensQuery.isSuccess && allSourceTokensQuery.data ? allSourceTokensQuery.data : [];
+    const allTokens = allSourceTokensQuery.isSuccess && allSourceTokensQuery.data ? allSourceTokensQuery.data : [];
 
-    const destTokens = useMemo(() => destinationTokens.filter((token: Currency) => token.chainId === networkId), [
-        networkId,
-    ]);
-    const tokenList = [...sourceTokens, ...destTokens];
-
-    const defaultDestinationToken = useMemo(
-        () =>
-            destTokens.filter((token) =>
-                token.chainId === Network['Mainnet-Ovm']
-                    ? token.symbol === CRYPTO_CURRENCY_MAP.sUSD
-                    : token.chainId === Network.Arbitrum
-                    ? token.symbol === CRYPTO_CURRENCY_MAP.USDC
-                    : true
-            )[0]?.address,
-        [destTokens]
-    );
+    const defaultSrcToken = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'; // native token
+    const defaultDestinationToken = allTokens.filter(
+        (token) =>
+            token.chainId === defaultDestNetwork &&
+            token.symbol ===
+                COLLATERAL_INDEX_TO_COLLATERAL[
+                    getDefaultCollateralIndexForNetworkId(defaultDestNetwork as NetworkId)
+                ].toUpperCase() // SUSD is symbol on Bungee instead of sUSD
+    )[0]?.address;
 
     // All colors should stricktly be in RGB format
     const customize: CustomizationProps = {
@@ -84,7 +83,8 @@ const BungeePlugin: React.FC = () => {
                 defaultSourceNetwork={defaultSourceNetwork}
                 destNetworks={destinationNetworks}
                 defaultDestNetwork={defaultDestNetwork}
-                tokenList={tokenList}
+                tokenList={allTokens}
+                defaultSourceToken={defaultSrcToken}
                 defaultDestToken={defaultDestinationToken}
                 customize={customize}
             />

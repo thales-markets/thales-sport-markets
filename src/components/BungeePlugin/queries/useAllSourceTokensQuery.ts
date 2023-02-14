@@ -7,7 +7,7 @@ export interface TokenListOutput {
     result: Currency[];
 }
 
-export const SOURCE_NETWORK_IDS = [1, 56, 100, 137, 250, 43114, 42161, 1313161554];
+export const SOURCE_NETWORK_IDS = [1, 10, 56, 100, 137, 250, 43114, 42161, 1313161554];
 
 // Check docs on: https://docs.socket.tech/socket-api/versioning
 const baseUrl = 'https://api.socket.tech/v2/token-lists/from-token-list';

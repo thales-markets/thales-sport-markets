@@ -128,6 +128,12 @@ export const getNetworkNameByNetworkId = (networkId: NetworkId, shortName = fals
     return shortName ? network?.shortChainName : network?.chainName;
 };
 
+export const getDefaultNetworkName = (shortName = false): string => {
+    // find should always return Object for default network ID
+    const network = SUPPORTED_NETWORKS.find((item) => item.chainId === DEFAULT_NETWORK_ID) || SUPPORTED_NETWORKS[0];
+    return shortName ? network?.shortChainName : network?.chainName;
+};
+
 export const getNetworkKeyByNetworkId = (networkId: NetworkId): string => {
     const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
     return network?.chainKey || 'optimism_mainnet';

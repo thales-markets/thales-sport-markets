@@ -10,7 +10,7 @@ import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { getDefaultCollateralIndexForNetworkId, getNetworkNameByNetworkId } from 'utils/network';
+import { getDefaultCollateralIndexForNetworkId, getDefaultNetworkName, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
 import { WizardStep } from '../../Wizard';
 import FundModal from '../FundModal';
@@ -69,7 +69,10 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                 break;
         }
         const collateralName = COLLATERAL_INDEX_TO_COLLATERAL[getDefaultCollateralIndexForNetworkId(networkId)];
-        return t(transKey, { network: getNetworkNameByNetworkId(networkId, true), collateral: collateralName });
+        return t(transKey, {
+            network: getNetworkNameByNetworkId(networkId, true) || getDefaultNetworkName(true),
+            collateral: collateralName,
+        });
     }, [stepType, networkId]);
 
     const getStepAction = () => {

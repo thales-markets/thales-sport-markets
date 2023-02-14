@@ -14,7 +14,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { NetworkId } from 'types/network';
-import { getNetworkKeyByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
+import { getDefaultNetworkName, getNetworkKeyByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
 
 type FundModalProps = {
@@ -30,9 +30,10 @@ enum Provider {
 
 const getProviderUrl = (provider: Provider | undefined, networkId: NetworkId) => {
     const networkParam = getNetworkKeyByNetworkId(networkId);
+    const blockchainParam = getDefaultNetworkName(true);
     switch (provider) {
         case Provider.BANXA:
-            return 'https://thalesmarket.banxa.com/iframe?code=x68QxHYZ2hQU0rccKDgDSeUO7QonDXsY&coinType=ETH&fiatType=EUR&blockchain=OPTIMISM';
+            return `https://thalesmarket.banxa.com/iframe?code=x68QxHYZ2hQU0rccKDgDSeUO7QonDXsY&coinType=ETH&fiatType=EUR&blockchain=${blockchainParam}`;
         case Provider.MT_PELERIN:
             const baseUrl = 'https://widget.mtpelerin.com/';
             const queryParams = `?type=popup&lang=en&primary=%235F6180&net=${networkParam}&bsc=EUR&bdc=ETH&crys=ETH`;
@@ -92,7 +93,9 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     <Row>
                         <ButtonWrapper>
                             <ButtonDiv onClick={onBridgeClickHandler}>
-                                {t('wizard.fund-modal.bridge', { network: getNetworkNameByNetworkId(networkId, true) })}
+                                {t('wizard.fund-modal.bridge', {
+                                    network: getNetworkNameByNetworkId(networkId, true) || getDefaultNetworkName(true),
+                                })}
                             </ButtonDiv>
                         </ButtonWrapper>
                         <Logo logoType={Provider.BUNGEE} />
