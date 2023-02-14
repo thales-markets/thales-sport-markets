@@ -98,7 +98,7 @@ export const TAGS_LIST: Tags = [
         id: 9017,
         label: 'UEFA Europa League',
         logo: ``,
-        logoClass: '',
+        logoClass: undefined,
         favourite: false,
     },
     {
@@ -112,7 +112,7 @@ export const TAGS_LIST: Tags = [
         id: 9019,
         label: 'J1 League',
         logo: ``,
-        logoClass: '',
+        logoClass: undefined,
         favourite: false,
     },
     {
