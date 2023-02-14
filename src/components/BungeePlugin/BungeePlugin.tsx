@@ -9,7 +9,6 @@ import styled from 'styled-components';
 import { getDefaultCollateralIndexForNetworkId, Network } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import useAllSourceTokensQuery, { SOURCE_NETWORK_IDS } from './queries/useAllSourceTokensQuery';
-// import { destinationTokens } from './tokens';
 import { NetworkId } from 'types/network';
 
 type CustomizationProps = {

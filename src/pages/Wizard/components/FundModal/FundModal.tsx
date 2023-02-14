@@ -30,10 +30,9 @@ enum Provider {
 
 const getProviderUrl = (provider: Provider | undefined, networkId: NetworkId) => {
     const networkParam = getNetworkKeyByNetworkId(networkId);
-    const blockchainParam = getDefaultNetworkName(true);
     switch (provider) {
         case Provider.BANXA:
-            return `https://thalesmarket.banxa.com/iframe?code=x68QxHYZ2hQU0rccKDgDSeUO7QonDXsY&coinType=ETH&fiatType=EUR&blockchain=${blockchainParam}`;
+            return `https://thalesmarket.banxa.com/iframe?code=x68QxHYZ2hQU0rccKDgDSeUO7QonDXsY&coinType=ETH&fiatType=EUR&blockchain=OPTIMISM`;
         case Provider.MT_PELERIN:
             const baseUrl = 'https://widget.mtpelerin.com/';
             const queryParams = `?type=popup&lang=en&primary=%235F6180&net=${networkParam}&bsc=EUR&bdc=ETH&crys=ETH`;
