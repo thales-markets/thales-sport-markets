@@ -9,12 +9,7 @@ import { getNetworkId, updateNetworkSettings, updateWallet, getIsWalletConnected
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import networkConnector from 'utils/networkConnector';
-import {
-    getDefaultNetworkId,
-    hasEthereumInjected,
-    isNetworkSupported,
-    isRouteAvailableForNetwork,
-} from 'utils/network';
+import { hasEthereumInjected, isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import ROUTES from 'constants/routes';
 import Theme from 'layouts/Theme';
 import DappLayout from 'layouts/DappLayout';
@@ -92,14 +87,17 @@ const App = () => {
         const init = async () => {
             let providerNetworkId;
             if (hasEthereumInjected()) {
-                if (isNetworkSupported(client.lastUsedChainId) && client.lastUsedChainId) {
+                if (isNetworkSupported(networkId)) {
+                    providerNetworkId = networkId;
+                } else if (isNetworkSupported(client.lastUsedChainId) && client.lastUsedChainId) {
                     providerNetworkId = client.lastUsedChainId;
+                    disconnect();
                 } else {
                     providerNetworkId = DEFAULT_NETWORK_ID;
                     disconnect();
                 }
             } else {
-                providerNetworkId = isNetworkSupported(networkId) ? networkId : await getDefaultNetworkId();
+                providerNetworkId = isNetworkSupported(networkId) ? networkId : DEFAULT_NETWORK_ID;
             }
             try {
                 dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
