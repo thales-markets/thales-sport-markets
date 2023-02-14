@@ -92,10 +92,12 @@ const App = () => {
         const init = async () => {
             let providerNetworkId;
             if (hasEthereumInjected()) {
-                providerNetworkId =
-                    isNetworkSupported(client.lastUsedChainId) && client.lastUsedChainId
-                        ? client.lastUsedChainId
-                        : DEFAULT_NETWORK_ID;
+                if (isNetworkSupported(client.lastUsedChainId) && client.lastUsedChainId) {
+                    providerNetworkId = client.lastUsedChainId;
+                } else {
+                    providerNetworkId = DEFAULT_NETWORK_ID;
+                    disconnect();
+                }
             } else {
                 providerNetworkId = isNetworkSupported(networkId) ? networkId : await getDefaultNetworkId();
             }
@@ -118,7 +120,7 @@ const App = () => {
             }
         };
         init();
-    }, [dispatch, provider, signer, client.lastUsedChainId, networkId]);
+    }, [dispatch, provider, signer, client.lastUsedChainId, networkId, disconnect]);
 
     useEffect(() => {
         dispatch(updateWallet({ walletAddress: address }));
@@ -254,7 +256,6 @@ const App = () => {
                                     />
                                 </>
                             )}
-
                             {isRouteAvailableForNetwork(ROUTES.QuizLeaderboard, ethereumChainId) && (
                                 <Route exact path={ROUTES.QuizLeaderboard}>
                                     <DappLayout>
@@ -262,11 +263,6 @@ const App = () => {
                                     </DappLayout>
                                 </Route>
                             )}
-                            <Route exact path={ROUTES.Markets.Home}>
-                                <LandingPageLayout>
-                                    <LandingPage />
-                                </LandingPageLayout>
-                            </Route>
                             <Route>
                                 <Redirect to={ROUTES.Home} />
                                 <LandingPageLayout>
