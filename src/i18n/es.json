@@ -20,10 +20,7 @@
             "get-usd": "Obtener {{amount}}",
             "approve": "Aprobar",
             "get-usd-progress": "Obteniendo {{amount}}...",
-            "disclaimer": "Al conectar tu billetera reconoce el haber leido y entendido el <a target=\"_blank\" href={{link}}>disclaimer</a> de Overtime Markets, aceptando sus condiciones de uso.",
-            "disclaimer1": "Al conectar una billetera, reconoce que ha leído y comprende los Mercados de tiempo extra",
-            "disclaimer2": "y aceptar sus condiciones de uso.",
-            "disclaimer-lowercase": "Descargo de responsabilidad",
+            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "Información de la billetera"
         },
         "voucher": {

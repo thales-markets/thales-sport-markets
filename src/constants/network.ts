@@ -109,3 +109,22 @@ export const OPTIMISM_OPTIONS = [
 
 export const MAX_GAS_LIMIT = 15000000;
 export const MAX_GAS_LIMIT_ARB = 20000000;
+
+export const NETWORK_SWITCHER_SUPPORTED_NETWORKS = [
+    {
+        networkId: 10,
+        chainId: '0xA',
+        chainName: 'Optimism Mainnet',
+        shortChainName: 'Optimism',
+        chainKey: 'optimism_mainnet',
+        iconClassName: 'icon icon--op',
+    },
+    {
+        networkId: 42161,
+        chainId: '0xa4b1',
+        chainName: 'Arbitrum One',
+        shortChainName: 'Arbitrum',
+        chainKey: 'arbitrum_mainnet',
+        iconClassName: 'icon icon--arb',
+    },
+];

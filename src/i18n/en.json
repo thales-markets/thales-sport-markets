@@ -30,9 +30,7 @@
             "get-usd": "Get {{amount}}",
             "approve": "Approve",
             "get-usd-progress": "Minting {{amount}}...",
-            "disclaimer-lowercase": "disclaimer",
-            "disclaimer1": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets",
-            "disclaimer2": "and agree to its conditions of use."
+            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>."
         },
         "voucher": {
             "remaining-amount": "Remaining amount",

@@ -24,6 +24,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Tooltip, withStyles } from '@material-ui/core';
 import { NetworkId } from 'types/network';
 import { getDefaultColleteralForNetwork, getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { refetchAfterVoucherMint } from 'utils/queryConnector';
 
 type MintVoucherModalProps = {
     onClose: () => void;
@@ -177,6 +178,9 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
                     setIsAnotherWallet(false);
                     setRecipient('');
                     setIsSubmitting(false);
+                    setTimeout(() => {
+                        refetchAfterVoucherMint(walletAddress, networkId);
+                    }, 2000);
                     onClose();
                 }
             } catch (e) {
