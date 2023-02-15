@@ -37,7 +37,21 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, setT
                     const favouriteB = favouriteLeagues.find((league: TagInfo) => league.id == b.id);
                     const isFavouriteB = Number(favouriteB && favouriteB.favourite);
 
-                    return isFavouriteA == isFavouriteB ? -1 : isFavouriteB - isFavouriteA;
+                    const leagueNameA = favouriteA?.label || '';
+                    const leagueNameB = favouriteB?.label || '';
+
+                    const leaguePriorityA = favouriteA?.priority || 0;
+                    const leaguePriorityB = favouriteB?.priority || 0;
+
+                    return isFavouriteA == isFavouriteB
+                        ? leaguePriorityA > leaguePriorityB
+                            ? 1
+                            : leaguePriorityA < leaguePriorityB
+                            ? -1
+                            : leagueNameA > leagueNameB
+                            ? 1
+                            : -1
+                        : isFavouriteB - isFavouriteA;
                 })
                 .map((tag: TagInfo) => {
                     const favouriteLeague = favouriteLeagues.find((favourite: TagInfo) => favourite.id == tag.id);
