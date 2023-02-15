@@ -87,8 +87,8 @@ const App = () => {
         const init = async () => {
             let providerNetworkId;
             if (hasEthereumInjected()) {
-                if (isNetworkSupported(networkId)) {
-                    providerNetworkId = networkId;
+                if (isNetworkSupported(parseInt(window.ethereum?.chainId, 16))) {
+                    providerNetworkId = parseInt(window.ethereum?.chainId, 16);
                 } else if (isNetworkSupported(client.lastUsedChainId) && client.lastUsedChainId) {
                     providerNetworkId = client.lastUsedChainId;
                     disconnect();
@@ -104,10 +104,12 @@ const App = () => {
                 networkConnector.setNetworkSettings({
                     networkId: providerNetworkId,
                     provider:
-                        !!signer && !!signer.provider
-                            ? new ethers.providers.Web3Provider(signer.provider.provider, 'any')
-                            : window.ethereum
-                            ? new ethers.providers.Web3Provider(window.ethereum, 'any')
+                        parseInt(window.ethereum?.chainId, 16) === providerNetworkId
+                            ? !!signer && !!signer.provider
+                                ? new ethers.providers.Web3Provider(signer.provider.provider, 'any')
+                                : window.ethereum
+                                ? new ethers.providers.Web3Provider(window.ethereum, 'any')
+                                : provider
                             : provider,
                     signer,
                 });
