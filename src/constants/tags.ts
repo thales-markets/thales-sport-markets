@@ -7,6 +7,7 @@ export const TAGS_LIST: Tags = [
         logo: `/logos/leagueLogos/ncaa.png`,
         logoClass: 'icon-league league--ncaa',
         favourite: false,
+        hidden: false,
     },
     {
         id: 9002,
@@ -14,6 +15,7 @@ export const TAGS_LIST: Tags = [
         logo: `/logos/leagueLogos/nfl.png`,
         logoClass: 'icon-league league--nfl',
         favourite: false,
+        hidden: false,
     },
     {
         id: 9003,
@@ -21,6 +23,7 @@ export const TAGS_LIST: Tags = [
         logo: `/logos/leagueLogos/mlb.svg`,
         logoClass: 'icon-league league--mlb',
         favourite: false,
+        hidden: false,
     },
     {
         id: 9004,
@@ -28,14 +31,16 @@ export const TAGS_LIST: Tags = [
         logo: `/logos/leagueLogos/nba.svg`,
         logoClass: 'icon-league league--nba',
         favourite: false,
+        hidden: false,
     },
-    { id: 9005, label: 'NCAA Basketball', logoClass: 'icon-league league--ncaa', favourite: false },
+    { id: 9005, label: 'NCAA Basketball', logoClass: 'icon-league league--ncaa', favourite: false, hidden: false },
     {
         id: 9006,
         label: 'NHL',
         logo: `/logos/leagueLogos/nhl.png`,
         logoClass: 'icon-league league--nhl',
         favourite: false,
+        hidden: false,
     },
     {
         id: 9007,
@@ -43,14 +48,16 @@ export const TAGS_LIST: Tags = [
         logo: '/logos/ufc-logo.png',
         logoClass: 'icon-league league--ufc',
         favourite: false,
+        hidden: false,
     },
-    { id: 9008, label: 'WNBA', logoClass: 'icon-league league--wnba', favourite: false },
+    { id: 9008, label: 'WNBA', logoClass: 'icon-league league--wnba', favourite: false, hidden: false },
     {
         id: 9010,
         label: 'MLS',
         logo: `/logos/leagueLogos/mls.png`,
         logoClass: 'icon-league league--mls',
         favourite: false,
+        hidden: false,
     },
     {
         id: 9011,
@@ -58,6 +65,7 @@ export const TAGS_LIST: Tags = [
         logo: `/logos/leagueLogos/EPL.png`,
         logoClass: 'icon-league league--epl',
         favourite: false,
+        hidden: false,
     },
     {
         id: 9012,
@@ -65,6 +73,7 @@ export const TAGS_LIST: Tags = [
         logo: `/logos/leagueLogos/Ligue1.png`,
         logoClass: 'icon-league league--ligue1',
         favourite: false,
+        hidden: false,
     },
     {
         id: 9013,
@@ -72,6 +81,7 @@ export const TAGS_LIST: Tags = [
         logo: '/logos/leagueLogos/bundesliga.png',
         logoClass: 'icon-league league--bundesliga',
         favourite: false,
+        hidden: false,
     },
     {
         id: 9014,
@@ -79,6 +89,7 @@ export const TAGS_LIST: Tags = [
         logo: `/logos/leagueLogos/LaLiga.png`,
         logoClass: 'icon-league league--la-liga',
         favourite: false,
+        hidden: false,
     },
     {
         id: 9015,
@@ -86,6 +97,7 @@ export const TAGS_LIST: Tags = [
         logo: `/logos/leagueLogos/seriea.png`,
         logoClass: 'icon-league league--serie-a',
         favourite: false,
+        hidden: false,
     },
     {
         id: 9016,
@@ -93,6 +105,7 @@ export const TAGS_LIST: Tags = [
         logo: `/logos/leagueLogos/ucl-white.png`,
         logoClass: 'icon-league league--ucl',
         favourite: false,
+        hidden: false,
     },
     {
         id: 9017,
@@ -100,6 +113,7 @@ export const TAGS_LIST: Tags = [
         logo: ``,
         logoClass: 'icon-league league--uel',
         favourite: false,
+        hidden: false,
     },
     {
         id: 9018,
@@ -107,6 +121,7 @@ export const TAGS_LIST: Tags = [
         logo: ``,
         logoClass: 'icon-league league--fifa-world-cup',
         favourite: false,
+        hidden: true,
     },
     {
         id: 9019,
@@ -114,6 +129,7 @@ export const TAGS_LIST: Tags = [
         logo: ``,
         logoClass: 'icon-league league--j1',
         favourite: false,
+        hidden: false,
     },
     {
         id: 9100,
@@ -121,6 +137,7 @@ export const TAGS_LIST: Tags = [
         logo: '/logos/leagueLogos/f1.png',
         logoClass: 'icon-league league--f1',
         favourite: false,
+        hidden: false,
     },
     {
         id: 9101,
@@ -128,6 +145,7 @@ export const TAGS_LIST: Tags = [
         logo: `/logos/leagueLogos/motogp.png`,
         logoClass: 'icon-league league--motogp',
         favourite: false,
+        hidden: false,
     },
 ];
 
