@@ -16,6 +16,8 @@ import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
 import Tooltip from 'components/Tooltip';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import { NetworkId } from 'types/network';
+import { NETWORK_SWITCHER_SUPPORTED_NETWORKS } from 'constants/network';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -106,58 +108,50 @@ const WalletInfo: React.FC = () => {
                                                 <Currency>{getDefaultColleteralForNetwork(networkId)}</Currency>
                                             </WalletBalanceInfo>
                                         ))}
-                                    <NetworkIconWrapper onClick={setDropDownOpen.bind(this, !dropDownOpen)}>
-                                        <NetworkIcon
-                                            className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`}
-                                        />
-                                        <DownIcon className={`icon icon--arrow-down`} />
-                                    </NetworkIconWrapper>
-                                </Wrapper>
-                                {dropDownOpen && (
                                     <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
-                                        <NetworkDropDown>
-                                            <NetworkWrapper
-                                                onClick={async () => {
-                                                    setDropDownOpen(false);
-                                                }}
-                                            >
-                                                <NetworkIcon
-                                                    className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`}
-                                                />
-                                                <NetworkText>
-                                                    {networkId === 42161 ? 'Arbitrum' : 'Optimism'}
-                                                </NetworkText>
-                                            </NetworkWrapper>
-                                            <NetworkWrapper
-                                                onClick={async () => {
-                                                    if (hasEthereumInjected()) {
-                                                        await (window.ethereum as any).request({
-                                                            method: 'wallet_switchEthereumChain',
-                                                            params: [
-                                                                { chainId: networkId !== 42161 ? '0xa4b1' : '0xa' },
-                                                            ],
-                                                        });
-                                                    } else {
-                                                        dispatch(
-                                                            updateNetworkSettings({
-                                                                networkId: networkId !== 42161 ? 42161 : 10,
-                                                            })
-                                                        );
-                                                    }
+                                        <NetworkIconWrapper onClick={() => setDropDownOpen(!dropDownOpen)}>
+                                            <NetworkIcon
+                                                className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`}
+                                            />
+                                            <DownIcon className={`icon icon--arrow-down`} />
+                                        </NetworkIconWrapper>
+                                        {dropDownOpen && (
+                                            <NetworkDropDown>
+                                                {NETWORK_SWITCHER_SUPPORTED_NETWORKS.map((network) => (
+                                                    <NetworkWrapper
+                                                        key={network.shortChainName}
+                                                        onClick={async () => {
+                                                            if (networkId !== network.networkId) {
+                                                                if (hasEthereumInjected()) {
+                                                                    await (window.ethereum as any).request({
+                                                                        method: 'wallet_switchEthereumChain',
+                                                                        params: [{ chainId: network.chainId }],
+                                                                    });
+                                                                } else {
+                                                                    dispatch(
+                                                                        updateNetworkSettings({
+                                                                            networkId: network.networkId as NetworkId,
+                                                                        })
+                                                                    );
+                                                                }
+                                                            }
 
-                                                    setDropDownOpen(false);
-                                                }}
-                                            >
-                                                <NetworkIcon
-                                                    className={`icon ${networkId !== 42161 ? 'icon--arb' : 'icon--op'}`}
-                                                />
-                                                <NetworkText>
-                                                    {networkId !== 42161 ? 'Arbitrum' : 'Optimism'}
-                                                </NetworkText>
-                                            </NetworkWrapper>
-                                        </NetworkDropDown>
+                                                            setDropDownOpen(false);
+                                                        }}
+                                                    >
+                                                        <NetworkIcon className={network.iconClassName} />
+                                                        <NetworkText>
+                                                            {networkId === network.networkId && (
+                                                                <NetworkSelectedIndicator />
+                                                            )}
+                                                            {network.shortChainName}
+                                                        </NetworkText>
+                                                    </NetworkWrapper>
+                                                ))}
+                                            </NetworkDropDown>
+                                        )}
                                     </OutsideClickHandler>
-                                )}
+                                </Wrapper>
                             </div>
                         );
                     }}
@@ -214,6 +208,7 @@ const NetworkIconWrapper = styled.div`
     max-width: 65px;
     min-width: 65px;
     cursor: pointer;
+    margin-right: -1px;
 `;
 
 const Text = styled.span<{ isClickable?: boolean }>`
@@ -237,6 +232,7 @@ const Currency = styled(Text)`
 `;
 
 const NetworkText = styled.span`
+    position: relative;
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 800;
@@ -283,6 +279,17 @@ const NetworkWrapper = styled.div`
     align-items: center;
     gap: 6px;
     cursor: pointer;
+    width: 100%;
+`;
+
+const NetworkSelectedIndicator = styled.div`
+    position: absolute;
+    background: #1a1c2b;
+    border-radius: 20px;
+    width: 6px;
+    height: 6px;
+    left: -45px;
+    top: 3px;
 `;
 
 export default WalletInfo;
