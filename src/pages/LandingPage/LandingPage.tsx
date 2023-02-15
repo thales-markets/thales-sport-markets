@@ -108,63 +108,59 @@ const LandingPage: React.FC = () => {
                         centerSlidePercentage={25}
                     >
                         <CarouselIconContainer>
-                            <LogoLink
-                                target="_blank"
-                                rel="noreferrer"
-                                href="https://www.fifa.com/fifaplus/en/tournaments/mens/worldcup/qatar2022"
-                            >
-                                <LeagueIcon className="icon-league icon-league--fifa-world-cup" />
-                            </LogoLink>
                             <LogoLink target="_blank" rel="norefferer" href="https://www.uefa.com/uefachampionsleague/">
-                                <LeagueIcon className="icon-league icon-league--uefa-cl" />
+                                <LeagueIcon className="icon-league league--ucl" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.uefa.com/uefaeuropaleague/">
+                                <LeagueIcon className="icon-league league--uel" />
                             </LogoLink>
                             <LogoLink target="_blank" rel="norefferer" href="https://www.premierleague.com/">
-                                <LeagueIcon className="icon-league icon-league--epl" />
+                                <LeagueIcon className="icon-league league--epl" />
                             </LogoLink>
                             <LogoLink target="_blank" rel="norefferer" href="https://www.laliga.com/en-GB">
-                                <LeagueIcon className="icon-league icon-league--la-liga" />
+                                <LeagueIcon className="icon-league league--la-liga" />
                             </LogoLink>
                         </CarouselIconContainer>
                         <CarouselIconContainer>
                             <LogoLink target="_blank" rel="norefferer" href="https://www.nba.com/">
-                                <LeagueIcon className="icon-league icon-league--nba" />
+                                <LeagueIcon className="icon-league league--nba" />
                             </LogoLink>
                             <LogoLink target="_blank" rel="norefferer" href="https://www.nhl.com/">
-                                <LeagueIcon className="icon-league icon-league--nhl" />
+                                <LeagueIcon className="icon-league league--nhl" />
                             </LogoLink>
                             <LogoLink target="_blank" rel="norefferer" href="https://www.nfl.com/">
-                                <LeagueIcon className="icon-league icon-league--nfl" />
+                                <LeagueIcon className="icon-league league--nfl" />
                             </LogoLink>
                             <LogoLink target="_blank" rel="norefferer" href="https://www.mlb.com/">
-                                <LeagueIcon className="icon-league icon-league--mlb" />
+                                <LeagueIcon className="icon-league league--mlb" />
                             </LogoLink>
                         </CarouselIconContainer>
                         <CarouselIconContainer>
                             <LogoLink target="_blank" rel="norefferer" href="https://www.ncaa.com/">
-                                <LeagueIcon className="icon-league icon-league--ncaa" />
+                                <LeagueIcon className="icon-league league--ncaa" />
                             </LogoLink>
                             <LogoLink target="_blank" rel="norefferer" href="https://www.ufc.com/">
-                                <LeagueIcon className="icon-league icon-league--ufc" />
+                                <LeagueIcon className="icon-league league--ufc" />
                             </LogoLink>
                             <LogoLink target="_blank" rel="norefferer" href="https://www.formula1.com/">
-                                <LeagueIcon className="icon-league icon-league--f1" />
+                                <LeagueIcon className="icon-league league--f1" />
                             </LogoLink>
                             <LogoLink target="_blank" rel="norefferer" href="https://www.motogp.com/">
-                                <LeagueIcon className="icon-league icon-league--motogp" />
+                                <LeagueIcon className="icon-league league--motogp" />
                             </LogoLink>
                         </CarouselIconContainer>
                         <CarouselIconContainer>
                             <LogoLink target="_blank" rel="norefferer" href="https://www.ligue1.com/">
-                                <LeagueIcon className="icon-league icon-league--ligue1" />
+                                <LeagueIcon className="icon-league league--ligue1" />
                             </LogoLink>
                             <LogoLink target="_blank" rel="norefferer" href="https://www.legaseriea.it/">
-                                <LeagueIcon className="icon-league icon-league--serie-a" />
+                                <LeagueIcon className="icon-league league--serie-a" />
                             </LogoLink>
                             <LogoLink target="_blank" rel="norefferer" href="https://www.bundesliga.com/en/bundesliga">
-                                <LeagueIcon className="icon-league icon-league--bundesliga" />
+                                <LeagueIcon className="icon-league league--bundesliga" />
                             </LogoLink>
                             <LogoLink target="_blank" rel="norefferer" href="https://www.mlssoccer.com/">
-                                <LeagueIcon className="icon-league icon-league--mls" />
+                                <LeagueIcon className="icon-league league--mls" />
                             </LogoLink>
                         </CarouselIconContainer>
                     </Carousel>
