@@ -92,7 +92,7 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
                                 if (filterItem === SportFilterEnum.All) {
                                     setDateFilter(0);
                                     setDateParam('');
-                                    setAvailableTags(tagsList);
+                                    setAvailableTags(tagsList.sort((a, b) => a.label.localeCompare(b.label)));
                                 } else {
                                     const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
                                     if (tagsPerSport) {
@@ -109,7 +109,7 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
                                 setSportParam(SportFilterEnum.All);
                                 setTagFilter([]);
                                 setTagParam('');
-                                setAvailableTags(tagsList);
+                                setAvailableTags(tagsList.sort((a, b) => a.label.localeCompare(b.label)));
                             }
                         }}
                     >

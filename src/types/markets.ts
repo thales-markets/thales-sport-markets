@@ -209,7 +209,6 @@ export type TagInfo = {
     logoClass?: string;
     favourite?: boolean;
     hidden?: boolean;
-    priority?: number;
 };
 
 export type Tags = TagInfo[];
