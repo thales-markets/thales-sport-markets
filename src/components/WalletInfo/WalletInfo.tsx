@@ -68,17 +68,24 @@ const WalletInfo: React.FC = () => {
                                 })}
                             >
                                 <Wrapper>
-                                    <WalletAddressInfo>
-                                        <Text
-                                            isClickable={true}
-                                            onClick={isWalletConnected ? openAccountModal : openConnectModal}
-                                        >
+                                    <WalletAddressInfo
+                                        isWalletConnected={isWalletConnected}
+                                        isClickable={true}
+                                        onClick={isWalletConnected ? openAccountModal : openConnectModal}
+                                    >
+                                        <Text className="wallet-info">
                                             {isWalletConnected
                                                 ? truncateAddress(walletAddress, 5, 5)
                                                 : t('common.wallet.connect-your-wallet')}
                                         </Text>
+                                        {isWalletConnected && (
+                                            <Text className="wallet-info-hover">
+                                                {t('common.wallet.wallet-options')}
+                                            </Text>
+                                        )}
                                     </WalletAddressInfo>
                                     {!isMobile &&
+                                        isWalletConnected &&
                                         (overtimeVoucher ? (
                                             <Tooltip
                                                 overlay={
@@ -183,9 +190,28 @@ const Wrapper = styled.div`
     padding-left: 10px;
 `;
 
-const WalletAddressInfo = styled.div`
-    border-right: 2px solid #39caf7;
+const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?: boolean }>`
+    ${(props) => (props.isWalletConnected ? 'border-right: 2px solid #39caf7;' : '')}
+    cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
     padding-right: 4px;
+    min-width: 77px;
+    height: 100%;
+    align-items: center;
+    display: flex;
+
+    .wallet-info-hover {
+        display: none;
+    }
+    :hover {
+        .wallet-info {
+            ${(props) => (props.isWalletConnected ? ' display: none;' : '')}
+        }
+        .wallet-info-hover {
+            display: inline;
+            width: fit-content;
+        }
+    }
+
     @media (max-width: 950px) {
         border-right: none;
         padding-right: none;
@@ -195,6 +221,9 @@ const WalletAddressInfo = styled.div`
 const WalletBalanceInfo = styled.div`
     padding-left: 5px;
     padding-right: 6px;
+    height: 100%;
+    align-items: center;
+    display: flex;
 `;
 
 const NetworkIconWrapper = styled.div`
@@ -211,14 +240,13 @@ const NetworkIconWrapper = styled.div`
     margin-right: -1px;
 `;
 
-const Text = styled.span<{ isClickable?: boolean }>`
+const Text = styled.span`
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 800;
     font-size: 10.8px;
     line-height: 13px;
     color: #39caf7;
-    cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
 `;
 
 const VoucherText = styled(Text)`
