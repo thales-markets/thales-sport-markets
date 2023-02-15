@@ -41,50 +41,50 @@ const NetworkSwitcher: React.FC = () => {
                             {!isWalletConnected && (
                                 <Text onClick={openConnectModal}>{t('common.wallet.connect-your-wallet')}</Text>
                             )}
-                            <NetworkIconWrapper onClick={setDropDownOpen.bind(this, !dropDownOpen)}>
-                                <NetworkIcon className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`} />
-                                <DownIcon className={`icon icon--arrow-down`} />
-                            </NetworkIconWrapper>
-                        </Wrapper>
-                        {dropDownOpen && (
                             <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
-                                <NetworkDropDown>
-                                    <NetworkWrapper
-                                        onClick={async () => {
-                                            setDropDownOpen(false);
-                                        }}
-                                    >
-                                        <NetworkIcon
-                                            className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`}
-                                        />
-                                        <NetworkText>{networkId === 42161 ? 'Arbitrum' : 'Optimism'}</NetworkText>
-                                    </NetworkWrapper>
-                                    <NetworkWrapper
-                                        onClick={async () => {
-                                            if (hasEthereumInjected()) {
-                                                await (window.ethereum as any).request({
-                                                    method: 'wallet_switchEthereumChain',
-                                                    params: [{ chainId: networkId !== 42161 ? '0xa4b1' : '0xa' }],
-                                                });
-                                            } else {
-                                                dispatch(
-                                                    updateNetworkSettings({
-                                                        networkId: networkId !== 42161 ? 42161 : 10,
-                                                    })
-                                                );
-                                            }
+                                <NetworkIconWrapper onClick={() => setDropDownOpen(!dropDownOpen)}>
+                                    <NetworkIcon className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`} />
+                                    <DownIcon className={`icon icon--arrow-down`} />
+                                </NetworkIconWrapper>
+                                {dropDownOpen && (
+                                    <NetworkDropDown>
+                                        <NetworkWrapper
+                                            onClick={async () => {
+                                                setDropDownOpen(false);
+                                            }}
+                                        >
+                                            <NetworkIcon
+                                                className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`}
+                                            />
+                                            <NetworkText>{networkId === 42161 ? 'Arbitrum' : 'Optimism'}</NetworkText>
+                                        </NetworkWrapper>
+                                        <NetworkWrapper
+                                            onClick={async () => {
+                                                if (hasEthereumInjected()) {
+                                                    await (window.ethereum as any).request({
+                                                        method: 'wallet_switchEthereumChain',
+                                                        params: [{ chainId: networkId !== 42161 ? '0xa4b1' : '0xa' }],
+                                                    });
+                                                } else {
+                                                    dispatch(
+                                                        updateNetworkSettings({
+                                                            networkId: networkId !== 42161 ? 42161 : 10,
+                                                        })
+                                                    );
+                                                }
 
-                                            setDropDownOpen(false);
-                                        }}
-                                    >
-                                        <NetworkIcon
-                                            className={`icon ${networkId !== 42161 ? 'icon--arb' : 'icon--op'}`}
-                                        />
-                                        <NetworkText>{networkId !== 42161 ? 'Arbitrum' : 'Optimism'}</NetworkText>
-                                    </NetworkWrapper>
-                                </NetworkDropDown>
+                                                setDropDownOpen(false);
+                                            }}
+                                        >
+                                            <NetworkIcon
+                                                className={`icon ${networkId !== 42161 ? 'icon--arb' : 'icon--op'}`}
+                                            />
+                                            <NetworkText>{networkId !== 42161 ? 'Arbitrum' : 'Optimism'}</NetworkText>
+                                        </NetworkWrapper>
+                                    </NetworkDropDown>
+                                )}
                             </OutsideClickHandler>
-                        )}
+                        </Wrapper>
                     </div>
                 );
             }}
@@ -172,6 +172,7 @@ const NetworkWrapper = styled.div`
     align-items: center;
     gap: 6px;
     cursor: pointer;
+    width: 100%;
 `;
 
 export default NetworkSwitcher;
