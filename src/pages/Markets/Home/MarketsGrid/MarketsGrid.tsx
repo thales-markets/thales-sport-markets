@@ -30,12 +30,12 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
             <ListContainer>
                 {marketsKeys
                     .sort((a, b) => {
-                        const isFavouriteA = Number(
-                            favouriteLeagues.filter((league: TagInfo) => league.id == a)[0].favourite
-                        );
-                        const isFavouriteB = Number(
-                            favouriteLeagues.filter((league: TagInfo) => league.id == b)[0].favourite
-                        );
+                        const favouriteA = favouriteLeagues.find((league: TagInfo) => league.id == a);
+                        const isFavouriteA = Number(favouriteA && favouriteA.favourite);
+
+                        const favouriteB = favouriteLeagues.find((league: TagInfo) => league.id == b);
+                        const isFavouriteB = Number(favouriteB && favouriteB.favourite);
+
                         const leagueNameA = TAGS_LIST.find((t: TagInfo) => t.id == a)?.label;
                         const leagueNameB = TAGS_LIST.find((t: TagInfo) => t.id == b)?.label;
                         if (isFavouriteA == isFavouriteB) {
