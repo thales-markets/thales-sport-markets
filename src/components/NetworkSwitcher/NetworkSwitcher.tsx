@@ -114,6 +114,7 @@ const NetworkIconWrapper = styled.div`
     max-width: 65px;
     min-width: 65px;
     cursor: pointer;
+    margin-right: -1px;
 `;
 
 const Text = styled.span`

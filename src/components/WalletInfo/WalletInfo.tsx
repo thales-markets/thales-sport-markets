@@ -5,12 +5,11 @@ import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 import { useTranslation } from 'react-i18next';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsAppReady } from 'redux/modules/app';
 import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import Tooltip from 'components/Tooltip';
 import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
-// import ConnectButton from 'components/ConnectButton';
 import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 
@@ -20,7 +19,6 @@ const WalletInfo: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -33,7 +31,7 @@ const WalletInfo: React.FC = () => {
     }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
 
     return (
-        <Container hasVoucher={!!overtimeVoucher} isMobile={isMobile}>
+        <Container hasVoucher={!!overtimeVoucher}>
             <FlexDivColumn>
                 <NetworkSwitcher />
                 {/* <ConnectButton /> */}
@@ -68,10 +66,8 @@ const WalletInfo: React.FC = () => {
     );
 };
 
-const Container = styled(FlexDivCentered)<{ hasVoucher: boolean; isMobile?: boolean }>`
-    border: ${(props) => (props.isMobile ? '1px solid ' + props.theme.borderColor.primary : ' ')};
+const Container = styled(FlexDivCentered)<{ hasVoucher: boolean }>`
     color: ${(props) => props.theme.textColor.primary};
-
     border-radius: 5px;
     position: relative;
     justify-content: end;
