@@ -79,7 +79,7 @@ const Home: React.FC = () => {
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
 
-    const tagsList = TAGS_LIST.filter((tag) => !tag.hidden).map((tag) => {
+    const tagsList = TAGS_LIST.map((tag) => {
         return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite };
     });
 
