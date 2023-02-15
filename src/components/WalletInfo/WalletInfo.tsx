@@ -192,7 +192,6 @@ const Wrapper = styled.div`
 
 const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?: boolean }>`
     cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
-    padding-right: 4px;
     min-width: 77px;
     height: 100%;
     align-items: center;
@@ -219,7 +218,7 @@ const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?:
 
 const WalletBalanceInfo = styled.div`
     border-left: 2px solid #39caf7;
-    padding-left: 5px;
+    padding-left: 7px;
     padding-right: 6px;
     height: 70%;
     align-items: center;
