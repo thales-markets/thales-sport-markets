@@ -73,7 +73,10 @@ const NetworkSwitcher: React.FC = () => {
                                                 }}
                                             >
                                                 <NetworkIcon className={network.iconClassName} />
-                                                <NetworkText>{network.shortChainName}</NetworkText>
+                                                <NetworkText>
+                                                    {networkId === network.networkId && <NetworkSelectedIndicator />}
+                                                    {network.shortChainName}
+                                                </NetworkText>
                                             </NetworkWrapper>
                                         ))}
                                     </NetworkDropDown>
@@ -123,6 +126,7 @@ const Text = styled.span`
 `;
 
 const NetworkText = styled.span`
+    position: relative;
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 800;
@@ -169,6 +173,16 @@ const NetworkWrapper = styled.div`
     gap: 6px;
     cursor: pointer;
     width: 100%;
+`;
+
+const NetworkSelectedIndicator = styled.div`
+    position: absolute;
+    background: #1a1c2b;
+    border-radius: 20px;
+    width: 6px;
+    height: 6px;
+    left: -45px;
+    top: 3px;
 `;
 
 export default NetworkSwitcher;
