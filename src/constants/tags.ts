@@ -137,13 +137,6 @@ export const TAGS_LIST: Tags = [
         priority: 109,
     },
     {
-        id: 9017,
-        label: 'UEFA Europa League',
-        logo: ``,
-        logoClass: undefined,
-        favourite: false,
-    },
-    {
         id: 9018,
         label: 'FIFA World Cup',
         logo: ``,
@@ -160,13 +153,6 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 107,
-    },
-    {
-        id: 9019,
-        label: 'J1 League',
-        logo: ``,
-        logoClass: undefined,
-        favourite: false,
     },
     {
         id: 9100,
