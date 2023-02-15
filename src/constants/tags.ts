@@ -8,6 +8,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--ncaa',
         favourite: false,
         hidden: false,
+        priority: 202,
     },
     {
         id: 9002,
@@ -16,6 +17,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--nfl',
         favourite: false,
         hidden: false,
+        priority: 201,
     },
     {
         id: 9003,
@@ -24,6 +26,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--mlb',
         favourite: false,
         hidden: false,
+        priority: 401,
     },
     {
         id: 9004,
@@ -32,8 +35,16 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--nba',
         favourite: false,
         hidden: false,
+        priority: 301,
     },
-    { id: 9005, label: 'NCAA Basketball', logoClass: 'icon-league league--ncaa', favourite: false, hidden: false },
+    {
+        id: 9005,
+        label: 'NCAA Basketball',
+        logoClass: 'icon-league league--ncaa',
+        favourite: false,
+        hidden: false,
+        priority: 302,
+    },
     {
         id: 9006,
         label: 'NHL',
@@ -41,6 +52,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--nhl',
         favourite: false,
         hidden: false,
+        priority: 501,
     },
     {
         id: 9007,
@@ -49,8 +61,9 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--ufc',
         favourite: false,
         hidden: false,
+        priority: 601,
     },
-    { id: 9008, label: 'WNBA', logoClass: 'icon-league league--wnba', favourite: false, hidden: false },
+    { id: 9008, label: 'WNBA', logoClass: 'icon-league league--wnba', favourite: false, hidden: false, priority: 303 },
     {
         id: 9010,
         label: 'MLS',
@@ -58,6 +71,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--mls',
         favourite: false,
         hidden: false,
+        priority: 106,
     },
     {
         id: 9011,
@@ -66,6 +80,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--epl',
         favourite: false,
         hidden: false,
+        priority: 101,
     },
     {
         id: 9012,
@@ -74,6 +89,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--ligue1',
         favourite: false,
         hidden: false,
+        priority: 105,
     },
     {
         id: 9013,
@@ -82,6 +98,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--bundesliga',
         favourite: false,
         hidden: false,
+        priority: 104,
     },
     {
         id: 9014,
@@ -90,6 +107,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--la-liga',
         favourite: false,
         hidden: false,
+        priority: 102,
     },
     {
         id: 9015,
@@ -98,6 +116,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--serie-a',
         favourite: false,
         hidden: false,
+        priority: 103,
     },
     {
         id: 9016,
@@ -106,6 +125,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--ucl',
         favourite: false,
         hidden: false,
+        priority: 108,
     },
     {
         id: 9017,
@@ -114,6 +134,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--uel',
         favourite: false,
         hidden: false,
+        priority: 109,
     },
     {
         id: 9018,
@@ -122,6 +143,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--fifa-world-cup',
         favourite: false,
         hidden: true,
+        priority: 0,
     },
     {
         id: 9019,
@@ -130,6 +152,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--j1',
         favourite: false,
         hidden: false,
+        priority: 107,
     },
     {
         id: 9100,
@@ -138,6 +161,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--f1',
         favourite: false,
         hidden: false,
+        priority: 701,
     },
     {
         id: 9101,
@@ -146,6 +170,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--motogp',
         favourite: false,
         hidden: false,
+        priority: 702,
     },
 ];
 

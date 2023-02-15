@@ -36,10 +36,23 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
                         const favouriteB = favouriteLeagues.find((league: TagInfo) => league.id == b);
                         const isFavouriteB = Number(favouriteB && favouriteB.favourite);
 
-                        const leagueNameA = TAGS_LIST.find((t: TagInfo) => t.id == a)?.label;
-                        const leagueNameB = TAGS_LIST.find((t: TagInfo) => t.id == b)?.label;
+                        const leagueA = TAGS_LIST.find((t: TagInfo) => t.id == a);
+                        const leagueB = TAGS_LIST.find((t: TagInfo) => t.id == b);
+
+                        const leagueNameA = leagueA?.label || '';
+                        const leagueNameB = leagueB?.label || '';
+
+                        const leaguePriorityA = leagueA?.priority || 0;
+                        const leaguePriorityB = leagueB?.priority || 0;
+
                         if (isFavouriteA == isFavouriteB) {
-                            return (leagueNameA || '') > (leagueNameB || '') ? 1 : -1;
+                            return leaguePriorityA > leaguePriorityB
+                                ? 1
+                                : leaguePriorityA < leaguePriorityB
+                                ? -1
+                                : leagueNameA > leagueNameB
+                                ? 1
+                                : -1;
                         } else {
                             return isFavouriteB - isFavouriteA;
                         }
