@@ -175,7 +175,7 @@ const App = () => {
         trackPageView();
     }, [trackPageView]);
 
-    const ethereumChainId = parseInt(window.ethereum?.chainId, 16);
+    const ethereumChainId = networkId ? networkId : parseInt(window.ethereum?.chainId, 16);
 
     return (
         <Theme>
