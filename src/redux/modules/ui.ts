@@ -6,6 +6,7 @@ import { RootState } from '../rootReducer';
 import { OddsType } from '../../constants/markets';
 import { TAGS_LIST } from 'constants/tags';
 import { Tags } from 'types/markets';
+import { uniqBy } from 'lodash';
 
 const sliceName = 'ui';
 
@@ -60,7 +61,7 @@ export const uiSlice = createSlice({
             localStore.set(LOCAL_STORAGE_KEYS.STOP_PULSING, action.payload);
         },
         setFavouriteLeagues: (state, action: PayloadAction<Tags>) => {
-            state.favouriteLeagues = action.payload;
+            state.favouriteLeagues = uniqBy(action.payload, 'id');
             localStore.set(LOCAL_STORAGE_KEYS.FAVOURITE_LEAGUES, action.payload);
         },
     },
