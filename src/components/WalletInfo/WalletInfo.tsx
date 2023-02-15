@@ -191,7 +191,6 @@ const Wrapper = styled.div`
 `;
 
 const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?: boolean }>`
-    ${(props) => (props.isWalletConnected ? 'border-right: 2px solid #39caf7;' : '')}
     cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
     padding-right: 4px;
     min-width: 77px;
@@ -214,14 +213,15 @@ const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?:
 
     @media (max-width: 950px) {
         border-right: none;
-        padding-right: none;
+        padding-right: 0;
     }
 `;
 
 const WalletBalanceInfo = styled.div`
+    border-left: 2px solid #39caf7;
     padding-left: 5px;
     padding-right: 6px;
-    height: 100%;
+    height: 70%;
     align-items: center;
     display: flex;
 `;
@@ -245,7 +245,7 @@ const Text = styled.span`
     font-style: normal;
     font-weight: 800;
     font-size: 10.8px;
-    line-height: 13px;
+    line-height: 12px;
     color: #39caf7;
 `;
 
