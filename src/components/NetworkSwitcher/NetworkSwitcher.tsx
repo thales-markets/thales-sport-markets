@@ -8,6 +8,8 @@ import { truncateAddress } from 'utils/formatters/string';
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { hasEthereumInjected } from 'utils/network';
+import { NETWORK_SWITCHER_SUPPORTED_NETWORKS } from 'constants/network';
+import { NetworkId } from 'types/network';
 
 const NetworkSwitcher: React.FC = () => {
     const { t } = useTranslation();
@@ -48,39 +50,32 @@ const NetworkSwitcher: React.FC = () => {
                                 </NetworkIconWrapper>
                                 {dropDownOpen && (
                                     <NetworkDropDown>
-                                        <NetworkWrapper
-                                            onClick={async () => {
-                                                setDropDownOpen(false);
-                                            }}
-                                        >
-                                            <NetworkIcon
-                                                className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`}
-                                            />
-                                            <NetworkText>{networkId === 42161 ? 'Arbitrum' : 'Optimism'}</NetworkText>
-                                        </NetworkWrapper>
-                                        <NetworkWrapper
-                                            onClick={async () => {
-                                                if (hasEthereumInjected()) {
-                                                    await (window.ethereum as any).request({
-                                                        method: 'wallet_switchEthereumChain',
-                                                        params: [{ chainId: networkId !== 42161 ? '0xa4b1' : '0xa' }],
-                                                    });
-                                                } else {
-                                                    dispatch(
-                                                        updateNetworkSettings({
-                                                            networkId: networkId !== 42161 ? 42161 : 10,
-                                                        })
-                                                    );
-                                                }
+                                        {NETWORK_SWITCHER_SUPPORTED_NETWORKS.map((network) => (
+                                            <NetworkWrapper
+                                                key={network.shortChainName}
+                                                onClick={async () => {
+                                                    if (networkId !== network.networkId) {
+                                                        if (hasEthereumInjected()) {
+                                                            await (window.ethereum as any).request({
+                                                                method: 'wallet_switchEthereumChain',
+                                                                params: [{ chainId: network.chainId }],
+                                                            });
+                                                        } else {
+                                                            dispatch(
+                                                                updateNetworkSettings({
+                                                                    networkId: network.networkId as NetworkId,
+                                                                })
+                                                            );
+                                                        }
+                                                    }
 
-                                                setDropDownOpen(false);
-                                            }}
-                                        >
-                                            <NetworkIcon
-                                                className={`icon ${networkId !== 42161 ? 'icon--arb' : 'icon--op'}`}
-                                            />
-                                            <NetworkText>{networkId !== 42161 ? 'Arbitrum' : 'Optimism'}</NetworkText>
-                                        </NetworkWrapper>
+                                                    setDropDownOpen(false);
+                                                }}
+                                            >
+                                                <NetworkIcon className={network.iconClassName} />
+                                                <NetworkText>{network.shortChainName}</NetworkText>
+                                            </NetworkWrapper>
+                                        ))}
                                     </NetworkDropDown>
                                 )}
                             </OutsideClickHandler>
