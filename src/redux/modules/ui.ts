@@ -27,7 +27,7 @@ const getDefaultStopPulsing = (): boolean => {
 
 const getDefaultFavouriteLeagues = (): Tags => {
     const lsFavouriteLeagues = localStore.get(LOCAL_STORAGE_KEYS.FAVOURITE_LEAGUES);
-    return (lsFavouriteLeagues !== undefined ? lsFavouriteLeagues : TAGS_LIST) as Tags;
+    return (lsFavouriteLeagues !== undefined ? uniqBy(lsFavouriteLeagues as Tags, 'id') : TAGS_LIST) as Tags;
 };
 
 type UISliceState = {
