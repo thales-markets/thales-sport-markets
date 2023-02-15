@@ -1,14 +1,16 @@
 import { useAccountModal, useConnectModal } from '@rainbow-me/rainbowkit';
 import SwapModal from 'components/SwapModal';
+import { COLLATERAL_INDEX_TO_COLLATERAL } from 'constants/currency';
 import ROUTES from 'constants/routes';
 import { t } from 'i18next';
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import { getDefaultCollateralIndexForNetworkId, getDefaultNetworkName, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
 import { WizardStep } from '../../Wizard';
 import FundModal from '../FundModal';
@@ -25,6 +27,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
     const { openAccountModal } = useAccountModal();
 
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const [showFundModal, setShowFundModal] = useState(false);
@@ -65,8 +68,12 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                 transKey += '.trade';
                 break;
         }
-        return t(transKey);
-    }, [stepType]);
+        const collateralName = COLLATERAL_INDEX_TO_COLLATERAL[getDefaultCollateralIndexForNetworkId(networkId)];
+        return t(transKey, {
+            network: getNetworkNameByNetworkId(networkId, true) || getDefaultNetworkName(true),
+            collateral: collateralName,
+        });
+    }, [stepType, networkId]);
 
     const getStepAction = () => {
         let className = '';

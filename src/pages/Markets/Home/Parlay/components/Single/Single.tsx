@@ -24,7 +24,7 @@ import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { AMMPosition, AvailablePerPosition, ParlayPayment, ParlaysMarket } from 'types/markets';
 import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
-import { getDecimalsByStableCoinIndex } from 'utils/collaterals';
+import { getDecimalsByStableCoinIndex, getDefaultColleteralForNetwork } from 'utils/collaterals';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
     countDecimals,
@@ -35,7 +35,7 @@ import {
     roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { formatMarketOdds, getBonus, getPositionOdds } from 'utils/markets';
-import { checkAllowance } from 'utils/network';
+import { checkAllowance, isMultiCollateralSupportedForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -130,6 +130,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         };
     }, []);
 
+    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
+
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
@@ -196,13 +198,13 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     parsedAmount
                 );
 
-                if (selectedStableIndex !== COLLATERALS_INDEX.sUSD) {
+                if (isMultiCollateralSupported && selectedStableIndex !== COLLATERALS_INDEX.sUSD) {
                     return ammQuote[0];
                 }
                 return ammQuote;
             }
         },
-        [market.address, market.position, networkId, selectedStableIndex]
+        [isMultiCollateralSupported, market.address, market.position, networkId, selectedStableIndex]
     );
 
     useEffect(() => {
@@ -211,7 +213,9 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract) {
                 const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
-                const divider = Number('1e' + getDecimalsByStableCoinIndex(selectedStableIndex));
+                const divider = isMultiCollateralSupported
+                    ? Number('1e' + getDecimalsByStableCoinIndex(selectedStableIndex))
+                    : Number(`1e${getDefaultColleteralForNetwork(networkId)}`);
                 const susdToSpendForMaxAmount = await fetchAmmQuote(roundedMaxAmount);
                 const decimalSusdToSpendForMaxAmount = susdToSpendForMaxAmount / divider;
 
@@ -241,6 +245,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         market.position,
         availablePerPosition,
         fetchAmmQuote,
+        isMultiCollateralSupported,
+        networkId,
     ]);
 
     const calculatedBonusPercentageDec = useMemo(() => getBonus(market) / 100, [market]);
@@ -341,7 +347,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         if (sportsAMMContract && signer) {
             let collateralContractWithSigner: ethers.Contract | undefined;
 
-            if (selectedStableIndex !== 0 && multipleCollateral) {
+            if (selectedStableIndex !== 0 && multipleCollateral && isMultiCollateralSupported) {
                 collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
             } else {
                 collateralContractWithSigner = sUSDContract?.connect(signer);
@@ -377,6 +383,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         usdAmountValue,
         selectedStableIndex,
         isVoucherSelected,
+        isMultiCollateralSupported,
     ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
@@ -387,7 +394,12 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             try {
                 let collateralContractWithSigner: ethers.Contract | undefined;
 
-                if (selectedStableIndex !== 0 && multipleCollateral && multipleCollateral[selectedStableIndex]) {
+                if (
+                    selectedStableIndex !== 0 &&
+                    multipleCollateral &&
+                    multipleCollateral[selectedStableIndex] &&
+                    isMultiCollateralSupported
+                ) {
                     collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
                 } else {
                     collateralContractWithSigner = sUSDContract?.connect(signer);
@@ -534,6 +546,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     })
                 );
             } else if (Number(value) > availableUsdAmount) {
+                console.log('Value ', value);
+                console.log('availableUsdAmount ', availableUsdAmount);
                 setTooltipTextUsdAmount(t('markets.parlay.validation.amount-exceeded'));
             } else if (Number(value) > paymentTokenBalance) {
                 setTooltipTextUsdAmount(t('markets.parlay.validation.no-funds'));

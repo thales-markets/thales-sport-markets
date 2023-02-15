@@ -3,10 +3,12 @@ import { Position } from '../../constants/options';
 import { AMMPosition } from '../../types/markets';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
-import { ethers } from 'ethers';
 import { bigNumberFormatter, bigNumberFormmaterWithDecimals } from '../../utils/formatters/ethers';
 import { NetworkId } from 'types/network';
-import { getCollateralAddress } from 'utils/collaterals';
+import { getCollateralAddress, getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { COLLATERAL_INDEX_TO_COLLATERAL } from 'constants/currency';
+import { ethers } from 'ethers';
 
 const usePositionPriceDetailsQuery = (
     marketAddress: string,
@@ -20,13 +22,14 @@ const usePositionPriceDetailsQuery = (
         QUERY_KEYS.PositionDetails(marketAddress, position, amount, stableIndex, networkId),
         async () => {
             try {
+                const isMultiCollateral = isMultiCollateralSupportedForNetwork(networkId);
+
                 const sportsAMMContract = networkConnector.sportsAMMContract;
                 const parsedAmount = ethers.utils.parseEther(amount.toString());
-                const collateralAddress = getCollateralAddress(
-                    stableIndex ? stableIndex !== 0 : false,
-                    networkId,
-                    stableIndex
-                );
+
+                const collateralAddress =
+                    isMultiCollateral &&
+                    getCollateralAddress(stableIndex ? stableIndex !== 0 : false, networkId, stableIndex);
                 const [availableToBuy, buyFromAmmQuote, buyPriceImpact, buyFromAMMQuoteCollateral] = await Promise.all([
                     await sportsAMMContract?.availableToBuyFromAMM(marketAddress, position),
                     await sportsAMMContract?.buyFromAmmQuote(marketAddress, position, parsedAmount),
@@ -44,8 +47,10 @@ const usePositionPriceDetailsQuery = (
                 return {
                     available: bigNumberFormatter(availableToBuy),
                     quote: bigNumberFormmaterWithDecimals(
-                        stableIndex == 0 ? buyFromAmmQuote : buyFromAMMQuoteCollateral[0],
-                        stableIndex == 0 || stableIndex == 1 ? 18 : 6
+                        isMultiCollateral ? buyFromAMMQuoteCollateral[0] : buyFromAmmQuote,
+                        isMultiCollateral
+                            ? (COLLATERAL_INDEX_TO_COLLATERAL as any)[stableIndex]
+                            : getDefaultDecimalsForNetwork(networkId)
                     ),
                     priceImpact: bigNumberFormatter(buyPriceImpact),
                 };

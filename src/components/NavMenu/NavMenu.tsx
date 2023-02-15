@@ -1,7 +1,6 @@
 import LanguageSelector from 'components/LanguageSelector';
 import MintVoucher from 'components/MintVoucher';
 import SPAAnchor from 'components/SPAAnchor';
-import WalletInfo from 'components/WalletInfo';
 import {
     NAV_MENU_FIRST_SECTION,
     NAV_MENU_FOURTH_SECTION,
@@ -14,7 +13,6 @@ import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsMobile } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
@@ -45,7 +43,6 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
     const location = useLocation();
 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
 
     return (
@@ -62,6 +59,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                 </HeaderContainer>
                 <ItemsContainer>
                     {NAV_MENU_FIRST_SECTION.map((item, index) => {
+                        if (!item.supportedNetworks.includes(networkId)) return;
                         if (item.name == 'profile' && !isWalletConnected) return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
@@ -82,6 +80,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                     })}
                     <Separator />
                     {NAV_MENU_SECOND_SECTION.map((item, index) => {
+                        if (!item.supportedNetworks.includes(networkId)) return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
                                 <ItemContainer
@@ -97,6 +96,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                     })}
                     <Separator />
                     {NAV_MENU_THIRD_SECTION.map((item, index) => {
+                        if (!item.supportedNetworks.includes(networkId)) return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
                                 <ItemContainer
@@ -112,6 +112,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                     })}
                     <Separator />
                     {NAV_MENU_FOURTH_SECTION.map((item, index) => {
+                        if (!item.supportedNetworks.includes(networkId)) return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
                                 <ItemContainer
@@ -139,7 +140,6 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                             lineHeight: '16px',
                         }}
                     />
-                    {isMobile && <WalletInfo />}
                 </FooterContainer>
             </Wrapper>
         </OutsideClickHandler>

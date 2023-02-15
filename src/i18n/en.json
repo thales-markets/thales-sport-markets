@@ -30,9 +30,7 @@
             "get-usd": "Get {{amount}}",
             "approve": "Approve",
             "get-usd-progress": "Minting {{amount}}...",
-            "disclaimer-lowercase": "disclaimer",
-            "disclaimer1": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets",
-            "disclaimer2": "and agree to its conditions of use."
+            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>."
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -353,7 +351,7 @@
                 },
                 "spread": {
                     "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
-                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                    "plus": "{{team}} will win the match, or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
@@ -436,7 +434,7 @@
                 "single-min-amount": "Minimal buy-in is {{min}}",
                 "availability": "Not enough liquidity for this buy-in amount",
                 "no-funds": "Please ensure your wallet has enough funds",
-                "no-funds-multi-collateral": "Please ensure your wallet has enough funds ({{percentage}}% more of buy-in amount)",
+                "no-funds-multi-collateral": "Please ensure your wallet has enough funds (buy-in amount plus {{percentage}}%)",
                 "risk-per-comb": "Risk per combination exceeded",
                 "same-team": "The same team can't be in a Parlay more than once",
                 "not-supported": "Not supported validation error: {{error}}"
@@ -484,18 +482,6 @@
             "safebox": "SafeBox fees",
             "rebates": "Rebates",
             "rank": "Rank"
-        },
-        "periods": {
-            "period-0": "First period",
-            "period-1": "Second period",
-            "period-2": "Third period",
-            "period-3": "Fourth period",
-            "period-4": "Fifth period",
-            "period-5": "Sixth period",
-            "period-6": "Seventh period",
-            "period-7": "Eighth period",
-            "period-8": "Ninth period",
-            "period-9": "Tenth period"
         }
     },
     "quiz": {
@@ -656,7 +642,7 @@
         "no-result": "There are no results for this table",
         "earned": "Earned",
         "header": "Create referral links",
-        "paragraph": "<bold>Overtime Referrals Program is an on-chain incentivized user acquisition and onboarding tool.</bold>The program allows anyone to <bold>generate a Referral Link</bold> and share it with users they are trying to onboard.<br /><br /> When sharing your personal Referral Link, you earn <bold>0.5% of all sUSD volume your referred users produce!</bold> There are no manual claims needed, the sUSD is auto-accruing in your wallet in form of simple sUSD transfers.",
+        "paragraph": "<bold>Overtime Referrals Program is an on-chain incentivized user acquisition and onboarding tool.</bold>The program allows anyone to <bold>generate a Referral Link</bold> and share it with users they are trying to onboard.<br /><br /> When sharing your personal Referral Link, you earn <bold>0.5% of all {{ collateralKey }} volume your referred users produce!</bold> There are no manual claims needed, the {{ collateralKey }} is auto-accruing in your wallet in form of simple {{ collateralKey }} transfers.",
         "nav-items": {
             "all-transactions": "All transactions",
             "see-result-by-trader": "See result by trader",
@@ -673,9 +659,9 @@
                 "trade": "Overtime Markets"
             },
             "description": {
-                "connect-wallet": "If you don't have Optimism connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
-                "fund": "Before you can use Overtime, first you need to get ETH on your Optimism connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
-                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to sUSD button, seamlessly swap ETH to a desired amount of stablecoins.",
+                "connect-wallet": "If you don't have {{network}} connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
+                "fund": "Before you can use Overtime, first you need to get ETH on your {{network}} connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
+                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to {{collateral}} button, seamlessly swap ETH to a desired amount of stablecoins.",
                 "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
             },
             "action": {
@@ -691,7 +677,7 @@
             "buy": "Fund with card",
             "buy-banxa": "Fund with Banxa",
             "buy-mt-pelerin": "Fund with Mt Pelerin",
-            "bridge": "Bridge to optimism  ",
+            "bridge": "Bridge to {{network}}",
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
             "copied": "Copied!",

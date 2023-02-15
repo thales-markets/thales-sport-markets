@@ -1,16 +1,19 @@
 import { getContractFactory, predeploys } from '@eth-optimism/contracts';
+import { COLLATERALS_INDEX } from 'constants/currency';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
-import { GWEI_UNIT } from 'constants/network';
+import { GWEI_UNIT, MAX_GAS_LIMIT, MAX_GAS_LIMIT_ARB, SUPPORTED_NETWORKS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { serializeTransaction, UnsignedTransaction } from 'ethers/lib/utils';
 import { NetworkId } from 'types/network';
 import networkConnector from 'utils/networkConnector';
+import { getNavItemFromRoute } from './ui';
 
 export const NetworkIdByName: Record<string, NetworkId> = {
     OptimismMainnet: 10,
     Kovan: 42,
     Goerli: 5,
     OptimismGoerli: 420,
+    ArbitrumOne: 42161,
 };
 
 export const NetworkNameById: Record<NetworkId, string> = {
@@ -18,6 +21,7 @@ export const NetworkNameById: Record<NetworkId, string> = {
     42: 'kovan',
     5: 'goerli',
     420: 'optimism goerli',
+    42161: 'ARBITRUM ONE',
 };
 
 export enum Network {
@@ -27,6 +31,7 @@ export enum Network {
     Goerli = 5,
     Kovan = 42,
     'Mainnet-Ovm' = 10,
+    'Arbitrum' = 42161,
     'Kovan-Ovm' = 69,
     'Goerli-Ovm' = 420,
     'POLYGON-MUMBAI' = 80001,
@@ -38,6 +43,7 @@ export const InfuraNetworkNameById: Record<NetworkId, string> = {
     42: 'kovan',
     5: 'goerli',
     420: 'optimism-goerli',
+    42161: 'arbitrum-mainnet',
 };
 
 export const hasEthereumInjected = () => !!window.ethereum;
@@ -112,11 +118,50 @@ export const checkAllowance = async (amount: BigNumber, token: any, walletAddres
 };
 
 export const getNetworkIconClassNameByNetworkId = (networkId: NetworkId): string => {
-    if (networkId == 10) return 'icon icon--op';
-    return 'icon icon--op';
+    const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
+    if (network) return network.iconClassName;
+    return 'Unknown';
 };
 
-export const getNetworkNameByNetworkId = (networkId: NetworkId): string => {
-    if (networkId == 10) return 'Optimism Mainnet';
-    return 'Optimism Mainnet';
+export const getNetworkNameByNetworkId = (networkId: NetworkId, shortName = false): string | undefined => {
+    const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
+    return shortName ? network?.shortChainName : network?.chainName;
+};
+
+export const getDefaultNetworkName = (shortName = false): string => {
+    // find should always return Object for default network ID
+    const network = SUPPORTED_NETWORKS.find((item) => item.chainId === DEFAULT_NETWORK_ID) || SUPPORTED_NETWORKS[0];
+    return shortName ? network?.shortChainName : network?.chainName;
+};
+
+export const getNetworkKeyByNetworkId = (networkId: NetworkId): string => {
+    const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
+    return network?.chainKey || 'optimism_mainnet';
+};
+
+export const getAreVaultsSupportedForNetworkId = (networkId: NetworkId): boolean => {
+    const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
+    if (network) return network.areVaultsSupported;
+    return false;
+};
+
+export const isRouteAvailableForNetwork = (route: string, networkId: NetworkId): boolean => {
+    const navItem = getNavItemFromRoute(route);
+    if (navItem && navItem?.supportedNetworks?.includes(networkId)) return true;
+    return false;
+};
+
+export const getDefaultCollateralIndexForNetworkId = (networkId: NetworkId) => {
+    return networkId == Network.Arbitrum ? COLLATERALS_INDEX.USDC : COLLATERALS_INDEX.sUSD;
+};
+
+export const isMultiCollateralSupportedForNetwork = (networkId: NetworkId) => {
+    const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId && item.isMultiCollateralSupported);
+    if (network) return true;
+    return false;
+};
+
+export const getMaxGasLimitForNetwork = (networkId: NetworkId) => {
+    if (networkId == Network.Arbitrum) return MAX_GAS_LIMIT_ARB;
+    return MAX_GAS_LIMIT;
 };

@@ -19,7 +19,7 @@ type RootProps = {
 };
 
 const { chains, provider } = configureChains(
-    [chain.optimism, chain.goerli, chain.optimismGoerli],
+    [chain.optimism, chain.goerli, chain.optimismGoerli, chain.arbitrum],
     [infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID }), publicProvider()]
 );
 

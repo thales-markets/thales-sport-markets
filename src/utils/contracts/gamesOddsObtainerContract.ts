@@ -5,6 +5,7 @@ export const gamesOddsObtainerContract = {
         42: 'TBD',
         69: 'TBD',
         420: '0x00d23ce013094f7100b681426c046023d1c02858',
+        42161: '0xd7C5dF8F490e0eFe8c043F888a39Ea247D4D3e10',
     },
     abi: [
         {

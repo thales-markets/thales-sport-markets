@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
-    min-width: 700px;
+    min-width: 780px;
     @media (max-width: 768px) {
         width: 100%;
         min-width: auto;

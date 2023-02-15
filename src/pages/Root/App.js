@@ -9,12 +9,12 @@ import { getNetworkId, updateNetworkSettings, updateWallet, getIsWalletConnected
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import networkConnector from 'utils/networkConnector';
-import { getDefaultNetworkId } from 'utils/network';
+import { hasEthereumInjected, isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import ROUTES from 'constants/routes';
 import Theme from 'layouts/Theme';
 import DappLayout from 'layouts/DappLayout';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-import { useAccount, useProvider, useSigner, useClient } from 'wagmi';
+import { useAccount, useProvider, useSigner, useClient, useDisconnect } from 'wagmi';
 import LandingPageLayout from 'layouts/LandingPageLayout';
 import { ethers } from 'ethers';
 import BannerCarousel from 'components/BannerCarousel';
@@ -22,6 +22,7 @@ import { isMobile } from 'utils/device';
 import Profile from 'pages/Profile';
 import Wizard from 'pages/Wizard';
 import Referral from 'pages/Referral';
+import { DEFAULT_NETWORK_ID } from 'constants/defaults';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -29,7 +30,6 @@ const Market = lazy(() => import('pages/Markets/Market'));
 const Rewards = lazy(() => import('pages/Rewards'));
 const Quiz = lazy(() => import('pages/Quiz'));
 const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
-const MintWorldCupNFT = lazy(() => import('pages/MintWorldCupNFT'));
 const Vaults = lazy(() => import('pages/Vaults'));
 const Vault = lazy(() => import('pages/Vault'));
 const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
@@ -39,10 +39,12 @@ const App = () => {
     const { trackPageView, trackEvent } = useMatomo();
     const networkId = useSelector((state) => getNetworkId(state));
     const isWalletConnected = useSelector((state) => getIsWalletConnected(state));
+
     const provider = useProvider({ chainId: networkId });
     const { address } = useAccount();
     const { data: signer } = useSigner();
     const client = useClient();
+    const { disconnect } = useDisconnect();
 
     queryConnector.setQueryClient();
 
@@ -83,16 +85,31 @@ const App = () => {
 
     useEffect(() => {
         const init = async () => {
-            const providerNetworkId = client.lastUsedChainId || (await getDefaultNetworkId());
+            let providerNetworkId;
+            if (hasEthereumInjected()) {
+                if (isNetworkSupported(parseInt(window.ethereum?.chainId, 16))) {
+                    providerNetworkId = parseInt(window.ethereum?.chainId, 16);
+                } else if (isNetworkSupported(client.lastUsedChainId) && client.lastUsedChainId) {
+                    providerNetworkId = client.lastUsedChainId;
+                    // disconnect();
+                } else {
+                    providerNetworkId = DEFAULT_NETWORK_ID;
+                    disconnect();
+                }
+            } else {
+                providerNetworkId = isNetworkSupported(networkId) ? networkId : DEFAULT_NETWORK_ID;
+            }
             try {
                 dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
                 networkConnector.setNetworkSettings({
                     networkId: providerNetworkId,
                     provider:
-                        !!signer && !!signer.provider
-                            ? new ethers.providers.Web3Provider(signer.provider.provider, 'any')
-                            : window.ethereum
-                            ? new ethers.providers.Web3Provider(window.ethereum, 'any')
+                        parseInt(window.ethereum?.chainId, 16) === providerNetworkId
+                            ? !!signer && !!signer.provider
+                                ? new ethers.providers.Web3Provider(signer.provider.provider, 'any')
+                                : window.ethereum
+                                ? new ethers.providers.Web3Provider(window.ethereum, 'any')
+                                : provider
                             : provider,
                     signer,
                 });
@@ -103,7 +120,7 @@ const App = () => {
             }
         };
         init();
-    }, [dispatch, provider, signer, client.lastUsedChainId, networkId]);
+    }, [dispatch, provider, signer, client.lastUsedChainId, networkId, disconnect]);
 
     useEffect(() => {
         dispatch(updateWallet({ walletAddress: address }));
@@ -140,17 +157,25 @@ const App = () => {
 
         if (window.ethereum) {
             window.ethereum.on('chainChanged', (chainId) => {
-                dispatch(updateNetworkSettings({ networkId: parseInt(chainId, 16) }));
-                if (window.ethereum.isMetaMask && !isWalletConnected) {
-                    autoConnect();
+                const chainIdInt = parseInt(chainId, 16);
+                const supportedNetworkId = isNetworkSupported(chainIdInt) ? chainIdInt : DEFAULT_NETWORK_ID;
+                dispatch(updateNetworkSettings({ networkId: supportedNetworkId }));
+                if (isNetworkSupported(chainIdInt)) {
+                    if (window.ethereum.isMetaMask && !isWalletConnected) {
+                        autoConnect();
+                    }
+                } else {
+                    disconnect();
                 }
             });
         }
-    }, [client, isWalletConnected, dispatch]);
+    }, [client, isWalletConnected, dispatch, disconnect]);
 
     useEffect(() => {
         trackPageView();
     }, [trackPageView]);
+
+    const ethereumChainId = parseInt(window.ethereum?.chainId, 16);
 
     return (
         <Theme>
@@ -173,70 +198,82 @@ const App = () => {
                                     <Markets />
                                 </DappLayout>
                             </Route>
-                            <Route exact path={ROUTES.Leaderboard}>
-                                <DappLayout>
-                                    <ParlayLeaderboard />
-                                </DappLayout>
-                            </Route>
-                            <Route exact path={ROUTES.Rewards}>
-                                <DappLayout>
-                                    <Rewards />
-                                </DappLayout>
-                            </Route>
-                            <Route exact path={ROUTES.Profile}>
-                                <DappLayout>
-                                    <Profile />
-                                </DappLayout>
-                            </Route>
-                            <Route exact path={ROUTES.Referral}>
-                                <DappLayout>
-                                    <Referral />
-                                </DappLayout>
-                            </Route>
+                            {isRouteAvailableForNetwork(ROUTES.Leaderboard, ethereumChainId) && (
+                                <Route exact path={ROUTES.Leaderboard}>
+                                    <DappLayout>
+                                        <ParlayLeaderboard />
+                                    </DappLayout>
+                                </Route>
+                            )}
+                            {isRouteAvailableForNetwork(ROUTES.Rewards, ethereumChainId) && (
+                                <Route exact path={ROUTES.Rewards}>
+                                    <DappLayout>
+                                        <Rewards />
+                                    </DappLayout>
+                                </Route>
+                            )}
+                            {isRouteAvailableForNetwork(ROUTES.Profile, ethereumChainId) && (
+                                <Route exact path={ROUTES.Profile}>
+                                    <DappLayout>
+                                        <Profile />
+                                    </DappLayout>
+                                </Route>
+                            )}
+                            {isRouteAvailableForNetwork(ROUTES.Referral, ethereumChainId) && (
+                                <Route exact path={ROUTES.Referral}>
+                                    <DappLayout>
+                                        <Referral />
+                                    </DappLayout>
+                                </Route>
+                            )}
                             <Route exact path={ROUTES.Wizard}>
                                 <DappLayout>
                                     <Wizard />
                                 </DappLayout>
                             </Route>
-                            <Route exact path={ROUTES.Quiz}>
-                                <DappLayout>
-                                    <Quiz />
-                                </DappLayout>
-                            </Route>
-                            <Route exact path={ROUTES.Vaults}>
-                                <DappLayout>
-                                    <Vaults />
-                                </DappLayout>
-                            </Route>
-                            <Route
-                                exact
-                                path={ROUTES.Vault}
-                                render={(routeProps) => (
+                            {isRouteAvailableForNetwork(ROUTES.Quiz, ethereumChainId) && (
+                                <Route exact path={ROUTES.Quiz}>
                                     <DappLayout>
-                                        <Vault {...routeProps} />
+                                        <Quiz />
                                     </DappLayout>
-                                )}
-                            />
-                            <Route exact path={ROUTES.QuizLeaderboard}>
-                                <DappLayout>
-                                    <QuizLeaderboard />
-                                </DappLayout>
-                            </Route>
-                            <Route exact path={ROUTES.MintWorldCupNFT}>
-                                <DappLayout>
-                                    <MintWorldCupNFT />
-                                </DappLayout>
-                            </Route>
+                                </Route>
+                            )}
+                            {isRouteAvailableForNetwork(ROUTES.Vaults, ethereumChainId) && (
+                                <>
+                                    <Route exact path={ROUTES.Vaults}>
+                                        <DappLayout>
+                                            <Vaults />
+                                        </DappLayout>
+                                    </Route>
+                                    <Route
+                                        exact
+                                        path={ROUTES.Vault}
+                                        render={(routeProps) => (
+                                            <DappLayout>
+                                                <Vault {...routeProps} />
+                                            </DappLayout>
+                                        )}
+                                    />
+                                </>
+                            )}
+                            {isRouteAvailableForNetwork(ROUTES.QuizLeaderboard, ethereumChainId) && (
+                                <Route exact path={ROUTES.QuizLeaderboard}>
+                                    <DappLayout>
+                                        <QuizLeaderboard />
+                                    </DappLayout>
+                                </Route>
+                            )}
                             <Route exact path={ROUTES.Home}>
                                 <LandingPageLayout>
                                     <LandingPage />
                                 </LandingPageLayout>
                             </Route>
                             <Route>
-                                <Redirect to={ROUTES.Home} />
-                                <LandingPageLayout>
-                                    <LandingPage />
-                                </LandingPageLayout>
+                                <Redirect to={ROUTES.Markets.Home} />
+                                <DappLayout>
+                                    <BannerCarousel />
+                                    <Markets />
+                                </DappLayout>
                             </Route>
                         </Switch>
                     </Router>

@@ -2,7 +2,7 @@ import { COLLATERALS_INDEX, COLLATERAL_INDEX_TO_COLLATERAL } from 'constants/cur
 import { COLLATERALS } from 'constants/markets';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
@@ -11,10 +11,13 @@ import { RootState } from 'redux/rootReducer';
 import { formatCurrency } from 'utils/formatters/number';
 import { BalanceLabel, BalanceValue, BalanceWrapper, RowSummary, SummaryLabel } from '../styled-components';
 import CollateralSelector from '../CollateralSelector';
+import { getDefaultCollateralIndexForNetworkId, isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 
 type PaymentProps = {
     defaultSelectedStableIndex?: COLLATERALS_INDEX;
     defaultIsVoucherSelected?: boolean;
+    showCollateralSelector?: boolean;
     onChangeCollateral?: (index: number) => void;
     setIsVoucherSelectedProp?: (selected: boolean) => void;
 };
@@ -33,9 +36,20 @@ const Payment: React.FC<PaymentProps> = ({
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
-        defaultSelectedStableIndex !== undefined ? defaultSelectedStableIndex : COLLATERALS_INDEX.sUSD
+        defaultSelectedStableIndex !== undefined
+            ? defaultSelectedStableIndex
+            : getDefaultCollateralIndexForNetworkId(networkId)
     );
+
+    const showMultiCollateral = isMultiCollateralSupportedForNetwork(networkId);
+
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(!!defaultIsVoucherSelected);
+
+    useEffect(() => {
+        if (defaultSelectedStableIndex !== undefined) {
+            setSelectedStableIndex(defaultSelectedStableIndex);
+        }
+    }, [defaultSelectedStableIndex]);
 
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -77,29 +91,39 @@ const Payment: React.FC<PaymentProps> = ({
         setIsVoucherSelected(isSelected);
     };
 
+    const collateralKey = isVoucherSelected
+        ? getDefaultColleteralForNetwork(networkId)
+        : (COLLATERAL_INDEX_TO_COLLATERAL as any)[selectedStableIndex];
+
     return (
         <>
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.pay-with')}:</SummaryLabel>
                 <BalanceWrapper>
                     <BalanceLabel bold={true} originalText={true}>
-                        {(COLLATERAL_INDEX_TO_COLLATERAL as any)[selectedStableIndex]}
+                        {collateralKey}
                     </BalanceLabel>
                     <BalanceLabel marginLeft={'5px'}>{t('markets.parlay.available')}:</BalanceLabel>
                     <BalanceValue>{formatCurrency(paymentTokenBalance, 2)}</BalanceValue>
                 </BalanceWrapper>
             </RowSummary>
-            <CollateralSelector
-                collateralArray={COLLATERALS}
-                selectedItem={selectedStableIndex}
-                onChangeCollateral={(index) => {
-                    setSelectedStableIndex(index);
-                    onChangeCollateral && onChangeCollateral(index);
-                }}
-                overtimeVoucher={overtimeVoucher}
-                isVoucherSelected={isVoucherSelected}
-                setIsVoucherSelected={handleSetIsVoucherSelected}
-            />
+            {(showMultiCollateral || (overtimeVoucher !== undefined && !showMultiCollateral)) && (
+                <CollateralSelector
+                    collateralArray={
+                        isMultiCollateralSupportedForNetwork(networkId)
+                            ? COLLATERALS
+                            : [getDefaultColleteralForNetwork(networkId)]
+                    }
+                    selectedItem={selectedStableIndex}
+                    onChangeCollateral={(index) => {
+                        setSelectedStableIndex(index);
+                        onChangeCollateral && onChangeCollateral(index);
+                    }}
+                    overtimeVoucher={overtimeVoucher}
+                    isVoucherSelected={isVoucherSelected}
+                    setIsVoucherSelected={handleSetIsVoucherSelected}
+                />
+            )}
         </>
     );
 };

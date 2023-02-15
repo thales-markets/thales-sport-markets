@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo.svg';
 import { LINKS } from 'constants/links';
-import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
+import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
 
 const DappFooter: React.FC = () => {
     const { t } = useTranslation();
@@ -65,7 +65,7 @@ const DappFooter: React.FC = () => {
                 <Trans
                     i18nKey="footer.disclaimer"
                     components={{
-                        disclaimer: <DisclaimerLink href={disclaimer} rel="noreferrer" target="_blank" />,
+                        disclaimer: <DisclaimerLink href={termsOfUse} rel="noreferrer" target="_blank" />,
                     }}
                 />
             </DisclaimerContainer>

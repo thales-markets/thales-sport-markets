@@ -23,7 +23,7 @@ const MySimpleTicket: React.FC<MySimpleTicketProps> = ({ markets, payout }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
-    const isTicketLost = markets.some((market) => market.isResolved && !market.winning);
+    const isTicketLost = markets.some((market) => market.isResolved && market.winning !== undefined && !market.winning);
     const isTicketResolved = markets.every((market) => market.isResolved || market.isCanceled) || isTicketLost;
 
     return (
