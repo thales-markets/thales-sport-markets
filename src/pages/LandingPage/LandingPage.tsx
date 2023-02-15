@@ -1,6 +1,7 @@
 import ChainlinkLogo from 'assets/images/landing-page/chainlink.svg';
 import DiscordLogo from 'assets/images/landing-page/discord.svg';
 import OptimismLogo from 'assets/images/landing-page/optimism.svg';
+import ArbitrumLogo from 'assets/images/landing-page/arbitrum.svg';
 import ThalesLogo from 'assets/images/landing-page/thales.svg';
 import ZebraBaseball from 'assets/images/landing-page/zebra-baseball.svg';
 import ZebraBasketball from 'assets/images/landing-page/zebra-basketball.svg';
@@ -75,14 +76,17 @@ const LandingPage: React.FC = () => {
 
                 <SubSection className="first">{t('landing-page.powered-by')}</SubSection>
                 <Initiatives>
-                    <InitiativeLink target="_blank" rel="noreferrer" height={'42px'} href="https://chain.link/">
+                    <InitiativeLink target="_blank" rel="noreferrer" href="https://chain.link/">
                         <Initiative src={ChainlinkLogo} alt="Chainlink logo" />
                     </InitiativeLink>
-                    <InitiativeLink target="_blank" rel="noreferrer" height={'39px'} href="https://thalesmarket.io/">
+                    <InitiativeLink target="_blank" rel="noreferrer" href="https://thalesmarket.io/">
                         <Initiative src={ThalesLogo} alt="Thales logo" />
                     </InitiativeLink>
-                    <InitiativeLink target="_blank" rel="noreferrer" height={'27px'} href="https://www.optimism.io/">
+                    <InitiativeLink target="_blank" rel="noreferrer" href="https://www.optimism.io/">
                         <Initiative src={OptimismLogo} alt="Optimism logo" />
+                    </InitiativeLink>
+                    <InitiativeLink target="_blank" rel="noreferrer" href="https://www.arbitrum.io/">
+                        <Initiative src={ArbitrumLogo} alt="Arbitrum logo" />
                     </InitiativeLink>
                 </Initiatives>
             </Section>
