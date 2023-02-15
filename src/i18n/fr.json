@@ -18,10 +18,7 @@
             "get-usd": "Obtenir {{amount}}",
             "approve": "Autoriser",
             "get-usd-progress": "Création de {{amount}}...",
-            "disclaimer": "En connectant votre portefeuille vous reconnaissez que vous avez lu et compris la <a target=\"_blank\" href={{link}}>décharge de responsabilité</a> d’Overtime et accepté les conditions d’utilisation.",
-            "disclaimer-lowercase": "clause de non-responsabilité",
-            "disclaimer2": "et acceptez ses conditions d'utilisation.",
-            "disclaimer1": "En connectant un portefeuille, vous reconnaissez avoir lu et compris les marchés des heures supplémentaires",
+            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "Informations sur le portefeuille"
         },
         "referral": {

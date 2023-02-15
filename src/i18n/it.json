@@ -11,10 +11,7 @@
             "get-usd": "Get {{amount}}",
             "approve": "Approve",
             "get-usd-progress": "Minting {{amount}}...",
-            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use.",
-            "disclaimer-lowercase": "disclaimer",
-            "disclaimer1": "Collegando un portafoglio dichiari di aver letto e compreso i Mercati Straordinari",
-            "disclaimer2": "e accetta le sue condizioni d'uso.",
+            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "Informazioni sul portafoglio"
         },
         "voucher": {

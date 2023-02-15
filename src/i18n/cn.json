@@ -20,10 +20,7 @@
             "get-usd": "获取 {{amount}}",
             "approve": "批准",
             "get-usd-progress": "铸造 {{amount}}...",
-            "disclaimer": "将你的钱包连接到Overtime意味着您已经阅读并理解了参与Overtime活动的风险 <a target=\"_blank\" href={{link}}>免责声明</a> 并决定继续使用.",
-            "disclaimer-lowercase": "免责声明",
-            "disclaimer2": "并同意其使用条件。",
-            "disclaimer1": "通过连接钱包，您承认您已阅读并理解加班市场",
+            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "钱包信息"
         },
         "voucher": {
