@@ -31,12 +31,12 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, setT
         <Container open={open}>
             {tags
                 .sort((a, b) => {
-                    const favouriteA = favouriteLeagues.find((league: TagInfo) => league.id == a.id);
-                    const isFavouriteA = Number(favouriteA && favouriteA.favourite);
-
-                    const favouriteB = favouriteLeagues.find((league: TagInfo) => league.id == b.id);
-                    const isFavouriteB = Number(favouriteB && favouriteB.favourite);
-
+                    const isFavouriteA = Number(
+                        favouriteLeagues.filter((league: TagInfo) => league.id == a.id)[0].favourite
+                    );
+                    const isFavouriteB = Number(
+                        favouriteLeagues.filter((league: TagInfo) => league.id == b.id)[0].favourite
+                    );
                     if (isFavouriteA == isFavouriteB) {
                         return a.label > b.label ? 1 : -1;
                     } else {
@@ -44,8 +44,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, setT
                     }
                 })
                 .map((tag: TagInfo) => {
-                    const favouriteLeague = favouriteLeagues.find((favourite: TagInfo) => favourite.id == tag.id);
-                    const isFavourite = favouriteLeague && favouriteLeague.favourite;
+                    const isFavourite = favouriteLeagues.filter((league: TagInfo) => league.id == tag.id)[0].favourite;
                     return (
                         <TagContainer key={tag.id}>
                             <StarIcon
