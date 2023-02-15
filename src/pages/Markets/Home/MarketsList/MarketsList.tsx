@@ -23,7 +23,8 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
     const leagueName = TAGS_LIST.find((t: TagInfo) => t.id == league)?.label;
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
-    const isFavourite = favouriteLeagues.filter((favourite: TagInfo) => favourite.id == league)[0].favourite;
+    const favouriteLeague = favouriteLeagues.find((favourite: TagInfo) => favourite.id == league);
+    const isFavourite = favouriteLeague && favouriteLeague.favourite;
 
     return (
         <>

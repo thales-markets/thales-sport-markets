@@ -13,6 +13,7 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
+import { orderBy } from 'lodash';
 import useSportMarketsQueryNew from 'queries/markets/useSportsMarketsQueryNew';
 import React, { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -79,14 +80,18 @@ const Home: React.FC = () => {
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
 
-    const tagsList = TAGS_LIST.map((tag) => {
+    const tagsList = orderBy(
+        TAGS_LIST.filter((tag) => !tag.hidden),
+        ['priority', 'label'],
+        ['asc', 'asc']
+    ).map((tag) => {
         return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite };
     });
 
     const favouriteLeagues = useSelector(getFavouriteLeagues);
 
     const [tagFilter, setTagFilter] = useLocalStorage<Tags>(LOCAL_STORAGE_KEYS.FILTER_TAGS, []);
-    const [availableTags, setAvailableTags] = useState<Tags>(tagsList.sort((a, b) => a.label.localeCompare(b.label)));
+    const [availableTags, setAvailableTags] = useState<Tags>(tagsList);
 
     const [dateFilter, setDateFilter] = useLocalStorage<Date | number>(
         LOCAL_STORAGE_KEYS.FILTER_DATE,
@@ -331,9 +336,7 @@ const Home: React.FC = () => {
                                                 if (filterItem === SportFilterEnum.All) {
                                                     setDateFilter(0);
                                                     setDateParam('');
-                                                    setAvailableTags(
-                                                        tagsList.sort((a, b) => a.label.localeCompare(b.label))
-                                                    );
+                                                    setAvailableTags(tagsList);
                                                 } else {
                                                     const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
                                                     if (tagsPerSport) {
@@ -350,9 +353,7 @@ const Home: React.FC = () => {
                                                 setSportParam(SportFilterEnum.All);
                                                 setTagFilter([]);
                                                 setTagParam('');
-                                                setAvailableTags(
-                                                    tagsList.sort((a, b) => a.label.localeCompare(b.label))
-                                                );
+                                                setAvailableTags(tagsList);
                                             }
                                         }}
                                         key={filterItem}
@@ -424,9 +425,7 @@ const Home: React.FC = () => {
                                                 if (filterItem === SportFilterEnum.All) {
                                                     setDateFilter(0);
                                                     setDateParam('');
-                                                    setAvailableTags(
-                                                        tagsList.sort((a, b) => a.label.localeCompare(b.label))
-                                                    );
+                                                    setAvailableTags(tagsList);
                                                 } else {
                                                     const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
                                                     if (tagsPerSport) {
@@ -443,9 +442,7 @@ const Home: React.FC = () => {
                                                 setSportParam(SportFilterEnum.All);
                                                 setTagFilter([]);
                                                 setTagParam('');
-                                                setAvailableTags(
-                                                    tagsList.sort((a, b) => a.label.localeCompare(b.label))
-                                                );
+                                                setAvailableTags(tagsList);
                                             }
                                         }}
                                         key={filterItem}
