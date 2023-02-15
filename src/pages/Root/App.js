@@ -239,22 +239,22 @@ const App = () => {
                                 </Route>
                             )}
                             {isRouteAvailableForNetwork(ROUTES.Vaults, ethereumChainId) && (
-                                <>
-                                    <Route exact path={ROUTES.Vaults}>
+                                <Route exact path={ROUTES.Vaults}>
+                                    <DappLayout>
+                                        <Vaults />
+                                    </DappLayout>
+                                </Route>
+                            )}
+                            {isRouteAvailableForNetwork(ROUTES.Vault, ethereumChainId) && (
+                                <Route
+                                    exact
+                                    path={ROUTES.Vault}
+                                    render={(routeProps) => (
                                         <DappLayout>
-                                            <Vaults />
+                                            <Vault {...routeProps} />
                                         </DappLayout>
-                                    </Route>
-                                    <Route
-                                        exact
-                                        path={ROUTES.Vault}
-                                        render={(routeProps) => (
-                                            <DappLayout>
-                                                <Vault {...routeProps} />
-                                            </DappLayout>
-                                        )}
-                                    />
-                                </>
+                                    )}
+                                />
                             )}
                             {isRouteAvailableForNetwork(ROUTES.QuizLeaderboard, ethereumChainId) && (
                                 <Route exact path={ROUTES.QuizLeaderboard}>
