@@ -263,11 +263,17 @@ const App = () => {
                                     </DappLayout>
                                 </Route>
                             )}
-                            <Route>
-                                <Redirect to={ROUTES.Markets.Home} />
+                            <Route exact path={ROUTES.Home}>
                                 <LandingPageLayout>
                                     <LandingPage />
                                 </LandingPageLayout>
+                            </Route>
+                            <Route>
+                                <Redirect to={ROUTES.Markets.Home} />
+                                <DappLayout>
+                                    <BannerCarousel />
+                                    <Markets />
+                                </DappLayout>
                             </Route>
                         </Switch>
                     </Router>
