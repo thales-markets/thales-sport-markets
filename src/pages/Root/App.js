@@ -91,7 +91,7 @@ const App = () => {
                     providerNetworkId = parseInt(window.ethereum?.chainId, 16);
                 } else if (isNetworkSupported(client.lastUsedChainId) && client.lastUsedChainId) {
                     providerNetworkId = client.lastUsedChainId;
-                    disconnect();
+                    // disconnect();
                 } else {
                     providerNetworkId = DEFAULT_NETWORK_ID;
                     disconnect();
