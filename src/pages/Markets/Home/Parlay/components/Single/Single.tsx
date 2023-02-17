@@ -23,7 +23,7 @@ import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { AMMPosition, AvailablePerPosition, ParlayPayment, ParlaysMarket } from 'types/markets';
 import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
-import { getDecimalsByStableCoinIndex, getDefaultColleteralForNetwork } from 'utils/collaterals';
+import { getDecimalsByStableCoinIndex, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
     countDecimals,
@@ -214,8 +214,9 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
                 const divider = isMultiCollateralSupported
                     ? Number('1e' + getDecimalsByStableCoinIndex(selectedStableIndex))
-                    : Number(`1e${getDefaultColleteralForNetwork(networkId)}`);
+                    : Number(`1e${getDefaultDecimalsForNetwork(networkId)}`);
                 const susdToSpendForMaxAmount = await fetchAmmQuote(roundedMaxAmount);
+
                 const decimalSusdToSpendForMaxAmount = susdToSpendForMaxAmount / divider;
 
                 if (!mountedRef.current) return null;
@@ -324,6 +325,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             enabled: isAppReady,
         }
     );
+
+    console.log('positionPriceDetailsQuery ', positionPriceDetailsQuery.data);
 
     useEffect(() => {
         if (positionPriceDetailsQuery.isSuccess && positionPriceDetailsQuery.data) {
