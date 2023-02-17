@@ -50,6 +50,15 @@ const WalletInfo: React.FC = () => {
 
     const walletBalance = overtimeVoucher ? overtimeVoucher.remainingAmount : stableCoinBalance;
 
+    // currently not supported network synchronization between browser without integrated wallet and wallet app on mobile
+    const hideNetworkSwitcher =
+        isMobile &&
+        !window.ethereum?.isMetaMask &&
+        !window.ethereum?.isBraveWallet &&
+        !window.ethereum?.isCoinbaseWallet &&
+        !window.ethereum?.isTrust &&
+        !window.ethereum?.isCoinbaseWallet;
+
     return (
         <Container>
             <FlexDivColumn>
@@ -120,9 +129,9 @@ const WalletInfo: React.FC = () => {
                                             <NetworkIcon
                                                 className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`}
                                             />
-                                            <DownIcon className={`icon icon--arrow-down`} />
+                                            {!hideNetworkSwitcher && <DownIcon className={`icon icon--arrow-down`} />}
                                         </NetworkIconWrapper>
-                                        {dropDownOpen && (
+                                        {dropDownOpen && !hideNetworkSwitcher && (
                                             <NetworkDropDown>
                                                 {NETWORK_SWITCHER_SUPPORTED_NETWORKS.map((network) => (
                                                     <NetworkWrapper
