@@ -17,7 +17,7 @@ import Tooltip from 'components/Tooltip';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { NetworkId } from 'types/network';
-import { NETWORK_SWITCHER_SUPPORTED_NETWORKS } from 'constants/network';
+import { NETWORK_SWITCHER_SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_DESCRIPTIONS } from 'constants/network';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -130,10 +130,34 @@ const WalletInfo: React.FC = () => {
                                                         onClick={async () => {
                                                             if (networkId !== network.networkId) {
                                                                 if (hasEthereumInjected()) {
-                                                                    await (window.ethereum as any).request({
-                                                                        method: 'wallet_switchEthereumChain',
-                                                                        params: [{ chainId: network.chainId }],
-                                                                    });
+                                                                    try {
+                                                                        await (window.ethereum as any).request({
+                                                                            method: 'wallet_switchEthereumChain',
+                                                                            params: [{ chainId: network.chainId }],
+                                                                        });
+                                                                    } catch (switchError: any) {
+                                                                        if (switchError.code === 4902) {
+                                                                            try {
+                                                                                await (window.ethereum as any).request({
+                                                                                    method: 'wallet_addEthereumChain',
+                                                                                    params: [
+                                                                                        SUPPORTED_NETWORKS_DESCRIPTIONS[
+                                                                                            +network.chainId
+                                                                                        ],
+                                                                                    ],
+                                                                                });
+                                                                                await (window.ethereum as any).request({
+                                                                                    method:
+                                                                                        'wallet_switchEthereumChain',
+                                                                                    params: [
+                                                                                        { chainId: network.chainId },
+                                                                                    ],
+                                                                                });
+                                                                            } catch (addError) {
+                                                                                console.log(addError);
+                                                                            }
+                                                                        }
+                                                                    }
                                                                 } else {
                                                                     dispatch(
                                                                         updateNetworkSettings({
