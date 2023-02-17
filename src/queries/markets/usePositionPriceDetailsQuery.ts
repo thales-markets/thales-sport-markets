@@ -5,9 +5,8 @@ import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
 import { bigNumberFormatter, bigNumberFormmaterWithDecimals } from '../../utils/formatters/ethers';
 import { NetworkId } from 'types/network';
-import { getCollateralAddress, getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { getCollateralAddress, getDecimalsByStableCoinIndex, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { isMultiCollateralSupportedForNetwork } from 'utils/network';
-import { COLLATERAL_INDEX_TO_COLLATERAL } from 'constants/currency';
 import { ethers } from 'ethers';
 
 const usePositionPriceDetailsQuery = (
@@ -49,7 +48,7 @@ const usePositionPriceDetailsQuery = (
                     quote: bigNumberFormmaterWithDecimals(
                         isMultiCollateral ? buyFromAMMQuoteCollateral[0] : buyFromAmmQuote,
                         isMultiCollateral
-                            ? (COLLATERAL_INDEX_TO_COLLATERAL as any)[stableIndex]
+                            ? getDecimalsByStableCoinIndex(stableIndex)
                             : getDefaultDecimalsForNetwork(networkId)
                     ),
                     priceImpact: bigNumberFormatter(buyPriceImpact),
