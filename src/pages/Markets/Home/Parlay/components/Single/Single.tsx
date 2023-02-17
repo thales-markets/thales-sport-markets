@@ -4,7 +4,6 @@ import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE, OddsType } from 'constants/markets';
-import { MAX_GAS_LIMIT } from 'constants/network';
 import { Position } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
@@ -24,7 +23,7 @@ import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { AMMPosition, AvailablePerPosition, ParlayPayment, ParlaysMarket } from 'types/markets';
 import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
-import { getDecimalsByStableCoinIndex, getDefaultColleteralForNetwork } from 'utils/collaterals';
+import { getDecimalsByStableCoinIndex, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
     countDecimals,
@@ -35,7 +34,7 @@ import {
     roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { formatMarketOdds, getBonus, getPositionOdds } from 'utils/markets';
-import { checkAllowance, isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { checkAllowance, getMaxGasLimitForNetwork, isMultiCollateralSupportedForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -215,8 +214,9 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
                 const divider = isMultiCollateralSupported
                     ? Number('1e' + getDecimalsByStableCoinIndex(selectedStableIndex))
-                    : Number(`1e${getDefaultColleteralForNetwork(networkId)}`);
+                    : Number(`1e${getDefaultDecimalsForNetwork(networkId)}`);
                 const susdToSpendForMaxAmount = await fetchAmmQuote(roundedMaxAmount);
+
                 const decimalSusdToSpendForMaxAmount = susdToSpendForMaxAmount / divider;
 
                 if (!mountedRef.current) return null;
@@ -326,6 +326,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         }
     );
 
+    console.log('positionPriceDetailsQuery ', positionPriceDetailsQuery.data);
+
     useEffect(() => {
         if (positionPriceDetailsQuery.isSuccess && positionPriceDetailsQuery.data) {
             setAmmPosition(positionPriceDetailsQuery.data);
@@ -408,7 +410,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 const addressToApprove = sportsAMMContract.address;
 
                 const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
-                    gasLimit: MAX_GAS_LIMIT,
+                    gasLimit: getMaxGasLimitForNetwork(networkId),
                 })) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
                 const txResult = await tx.wait();
@@ -453,7 +455,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     ammQuote,
                     referralId,
                     ethers.utils.parseEther('0.02'),
-                    { gasLimit: MAX_GAS_LIMIT }
+                    { gasLimit: getMaxGasLimitForNetwork(networkId) }
                 );
 
                 const txResult = await tx.wait();

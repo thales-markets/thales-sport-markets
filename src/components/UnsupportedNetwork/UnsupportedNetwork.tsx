@@ -1,6 +1,6 @@
 import Button from 'components/Button';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
-import { OPTIMISM_NETWORKS } from 'constants/network';
+import { SUPPORTED_NETWORKS_DESCRIPTIONS } from 'constants/network';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -12,7 +12,7 @@ const UnsupportedNetwork: React.FC = () => {
     const { switchNetwork } = useSwitchNetwork();
 
     const switchOrAddOptimismNetwork = async () => {
-        const optimismNetworkParms = OPTIMISM_NETWORKS[DEFAULT_NETWORK_ID];
+        const optimismNetworkParms = SUPPORTED_NETWORKS_DESCRIPTIONS[DEFAULT_NETWORK_ID];
 
         if (typeof window.ethereum !== 'undefined') {
             try {

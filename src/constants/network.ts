@@ -56,7 +56,7 @@ export type OptimismNetwork = {
     };
 };
 
-export const OPTIMISM_NETWORKS: Record<number, OptimismNetwork> = {
+export const SUPPORTED_NETWORKS_DESCRIPTIONS: Record<number, OptimismNetwork> = {
     10: {
         chainId: '0xA',
         chainName: 'Optimism',
@@ -84,6 +84,17 @@ export const OPTIMISM_NETWORKS: Record<number, OptimismNetwork> = {
         chainName: 'Optimism Goerli',
         rpcUrls: ['https://goerli.optimism.io/'],
         blockExplorerUrls: ['https://goerli-optimism.etherscan.io/'],
+        iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
+        nativeCurrency: {
+            symbol: 'ETH',
+            decimals: 18,
+        },
+    },
+    42161: {
+        chainId: '0xA4B1',
+        chainName: 'Arbitrum One',
+        rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+        blockExplorerUrls: ['https://arbiscan.io/'],
         iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
         nativeCurrency: {
             symbol: 'ETH',

@@ -45,10 +45,10 @@ import { getIsMobile } from 'redux/modules/app';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import { buildMarketLink } from 'utils/routes';
 import i18n from 'i18n';
-import { MAX_GAS_LIMIT } from 'constants/network';
 import useMarketTransactionsQuery from 'queries/markets/useMarketTransactionsQuery';
 import { ParlaysMarket } from 'types/markets';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
+import { getMaxGasLimitForNetwork } from 'utils/network';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;
@@ -116,7 +116,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 const tx = await contract.exerciseOptions({
-                    gasLimit: MAX_GAS_LIMIT,
+                    gasLimit: getMaxGasLimitForNetwork(networkId),
                 });
                 const txResult = await tx.wait();
 

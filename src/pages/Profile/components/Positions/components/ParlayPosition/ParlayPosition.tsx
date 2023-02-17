@@ -1,6 +1,5 @@
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
-import { MAX_GAS_LIMIT } from 'constants/network';
 import { Position } from 'constants/options';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import React, { useState } from 'react';
@@ -52,6 +51,7 @@ import {
     Label,
     ClaimButton,
 } from '../../styled-components';
+import { getMaxGasLimitForNetwork } from 'utils/network';
 
 type ParlayPosition = {
     parlayMarket: ParlayMarket;
@@ -81,7 +81,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
                 const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
 
                 const tx = await parlayMarketsAMMContractWithSigner?.exerciseParlay(parlayAddress, {
-                    gasLimit: MAX_GAS_LIMIT,
+                    gasLimit: getMaxGasLimitForNetwork(networkId),
                 });
                 const txResult = await tx.wait();
 

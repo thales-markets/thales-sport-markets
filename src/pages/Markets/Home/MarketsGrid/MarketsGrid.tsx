@@ -45,17 +45,15 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
                         const leaguePriorityA = leagueA?.priority || 0;
                         const leaguePriorityB = leagueB?.priority || 0;
 
-                        if (isFavouriteA == isFavouriteB) {
-                            return leaguePriorityA > leaguePriorityB
+                        return isFavouriteA == isFavouriteB
+                            ? leaguePriorityA > leaguePriorityB
                                 ? 1
                                 : leaguePriorityA < leaguePriorityB
                                 ? -1
                                 : leagueNameA > leagueNameB
                                 ? 1
-                                : -1;
-                        } else {
-                            return isFavouriteB - isFavouriteA;
-                        }
+                                : -1
+                            : isFavouriteB - isFavouriteA;
                     })
                     .map((leagueId: number, index: number) => {
                         return (

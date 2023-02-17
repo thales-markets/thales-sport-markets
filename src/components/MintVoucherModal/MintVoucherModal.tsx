@@ -12,7 +12,6 @@ import { BigNumber, ethers } from 'ethers';
 import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
-import { MAX_GAS_LIMIT } from 'constants/network';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
@@ -127,7 +126,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
                 const sUSDContractWithSigner = sUSDContract.connect(signer);
 
                 const tx = (await sUSDContractWithSigner.approve(addressToApprove, approveAmount, {
-                    gasLimit: MAX_GAS_LIMIT,
+                    gasLimit: getMaxGasLimitForNetwork(networkId),
                 })) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
                 const txResult = await tx.wait();

@@ -4,7 +4,6 @@ import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER, COLLATERALS, OddsType } from 'constants/markets';
-import { MAX_GAS_LIMIT } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -289,7 +288,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 const addressToApprove = parlayMarketsAMMContract.address;
 
                 const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
-                    gasLimit: MAX_GAS_LIMIT,
+                    gasLimit: getMaxGasLimitForNetwork(networkId),
                 })) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
                 const txResult = await tx.wait();
