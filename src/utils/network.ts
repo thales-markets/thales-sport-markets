@@ -1,7 +1,7 @@
 import { getContractFactory, predeploys } from '@eth-optimism/contracts';
 import { COLLATERALS_INDEX } from 'constants/currency';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
-import { GWEI_UNIT, MAX_GAS_LIMIT, MAX_GAS_LIMIT_ARB, SUPPORTED_NETWORKS } from 'constants/network';
+import { GWEI_UNIT, MAX_GAS_LIMIT, SUPPORTED_NETWORKS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { serializeTransaction, UnsignedTransaction } from 'ethers/lib/utils';
 import { NetworkId } from 'types/network';
@@ -162,6 +162,6 @@ export const isMultiCollateralSupportedForNetwork = (networkId: NetworkId) => {
 };
 
 export const getMaxGasLimitForNetwork = (networkId: NetworkId) => {
-    if (networkId == Network.Arbitrum) return MAX_GAS_LIMIT_ARB;
+    if (networkId == Network.Arbitrum) return undefined;
     return MAX_GAS_LIMIT;
 };

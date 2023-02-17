@@ -4,7 +4,6 @@ import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE, OddsType } from 'constants/markets';
-import { MAX_GAS_LIMIT } from 'constants/network';
 import { Position } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
@@ -35,7 +34,7 @@ import {
     roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { formatMarketOdds, getBonus, getPositionOdds } from 'utils/markets';
-import { checkAllowance, isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { checkAllowance, getMaxGasLimitForNetwork, isMultiCollateralSupportedForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -408,7 +407,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 const addressToApprove = sportsAMMContract.address;
 
                 const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
-                    gasLimit: MAX_GAS_LIMIT,
+                    gasLimit: getMaxGasLimitForNetwork(networkId),
                 })) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
                 const txResult = await tx.wait();
@@ -453,7 +452,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     ammQuote,
                     referralId,
                     ethers.utils.parseEther('0.02'),
-                    { gasLimit: MAX_GAS_LIMIT }
+                    { gasLimit: getMaxGasLimitForNetwork(networkId) }
                 );
 
                 const txResult = await tx.wait();
