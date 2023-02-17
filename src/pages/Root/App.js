@@ -175,8 +175,6 @@ const App = () => {
         trackPageView();
     }, [trackPageView]);
 
-    const ethereumChainId = networkId ? networkId : parseInt(window.ethereum?.chainId, 16);
-
     return (
         <Theme>
             <QueryClientProvider client={queryConnector.queryClient}>
@@ -198,28 +196,28 @@ const App = () => {
                                     <Markets />
                                 </DappLayout>
                             </Route>
-                            {isRouteAvailableForNetwork(ROUTES.Leaderboard, ethereumChainId) && (
+                            {isRouteAvailableForNetwork(ROUTES.Leaderboard, networkId) && (
                                 <Route exact path={ROUTES.Leaderboard}>
                                     <DappLayout>
                                         <ParlayLeaderboard />
                                     </DappLayout>
                                 </Route>
                             )}
-                            {isRouteAvailableForNetwork(ROUTES.Rewards, ethereumChainId) && (
+                            {isRouteAvailableForNetwork(ROUTES.Rewards, networkId) && (
                                 <Route exact path={ROUTES.Rewards}>
                                     <DappLayout>
                                         <Rewards />
                                     </DappLayout>
                                 </Route>
                             )}
-                            {isRouteAvailableForNetwork(ROUTES.Profile, ethereumChainId) && (
+                            {isRouteAvailableForNetwork(ROUTES.Profile, networkId) && (
                                 <Route exact path={ROUTES.Profile}>
                                     <DappLayout>
                                         <Profile />
                                     </DappLayout>
                                 </Route>
                             )}
-                            {isRouteAvailableForNetwork(ROUTES.Referral, ethereumChainId) && (
+                            {isRouteAvailableForNetwork(ROUTES.Referral, networkId) && (
                                 <Route exact path={ROUTES.Referral}>
                                     <DappLayout>
                                         <Referral />
@@ -231,21 +229,21 @@ const App = () => {
                                     <Wizard />
                                 </DappLayout>
                             </Route>
-                            {isRouteAvailableForNetwork(ROUTES.Quiz, ethereumChainId) && (
+                            {isRouteAvailableForNetwork(ROUTES.Quiz, networkId) && (
                                 <Route exact path={ROUTES.Quiz}>
                                     <DappLayout>
                                         <Quiz />
                                     </DappLayout>
                                 </Route>
                             )}
-                            {isRouteAvailableForNetwork(ROUTES.Vaults, ethereumChainId) && (
+                            {isRouteAvailableForNetwork(ROUTES.Vaults, networkId) && (
                                 <Route exact path={ROUTES.Vaults}>
                                     <DappLayout>
                                         <Vaults />
                                     </DappLayout>
                                 </Route>
                             )}
-                            {ethereumChainId === NetworkIdByName.OptimismMainnet && (
+                            {networkId === NetworkIdByName.OptimismMainnet && (
                                 <Route
                                     exact
                                     path={ROUTES.Vault}
@@ -256,7 +254,7 @@ const App = () => {
                                     )}
                                 />
                             )}
-                            {isRouteAvailableForNetwork(ROUTES.QuizLeaderboard, ethereumChainId) && (
+                            {isRouteAvailableForNetwork(ROUTES.QuizLeaderboard, networkId) && (
                                 <Route exact path={ROUTES.QuizLeaderboard}>
                                     <DappLayout>
                                         <QuizLeaderboard />
