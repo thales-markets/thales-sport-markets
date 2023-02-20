@@ -23,6 +23,7 @@ import Profile from 'pages/Profile';
 import Wizard from 'pages/Wizard';
 import Referral from 'pages/Referral';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
+import MarchMadness from 'pages/MarchMadness';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -261,6 +262,11 @@ const App = () => {
                                     </DappLayout>
                                 </Route>
                             )}
+                            <Route exact path={ROUTES.MarchMadness}>
+                                <DappLayout>
+                                    <MarchMadness />
+                                </DappLayout>
+                            </Route>
                             <Route exact path={ROUTES.Home}>
                                 <LandingPageLayout>
                                     <LandingPage />
