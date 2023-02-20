@@ -26,7 +26,7 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound }) => {
         []
     );
     const [liquidityPoolMyTransactions, setLiquidityPoolMyTransactions] = useState<LiquidityPoolUserTransactions>([]);
-    const [round, setRound] = useState<number>(currentRound > 0 ? currentRound - 1 : 0);
+    const [round, setRound] = useState<number>(currentRound);
     const [selectedTab, setSelectedTab] = useState<LiquidityPoolTransaction>(
         LiquidityPoolTransaction.USER_TRANSACTIONS
     );
@@ -49,10 +49,10 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound }) => {
     );
 
     const rounds: Array<{ value: number; label: string }> = [];
-    for (let index = 0; index < currentRound; index++) {
+    for (let index = 0; index <= currentRound; index++) {
         rounds.push({
             value: index,
-            label: `${t('liquidity-pool.user-transactions.round-label')} ${index + 1}`,
+            label: `${t('liquidity-pool.user-transactions.round-label')} ${index}`,
         });
     }
 
@@ -65,7 +65,7 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound }) => {
             setLiquidityPoolUserTransactions(
                 orderBy(
                     liquidityPoolUserTransactionsQuery.data.filter(
-                        (trade: LiquidityPoolUserTransaction) => trade.round === round + 1
+                        (trade: LiquidityPoolUserTransaction) => trade.round === round
                     ),
                     ['timestamp', 'blockNumber'],
                     ['desc', 'desc']
@@ -75,7 +75,7 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound }) => {
                 orderBy(
                     liquidityPoolUserTransactionsQuery.data.filter(
                         (trade: LiquidityPoolUserTransaction) =>
-                            trade.round === round + 1 && trade.account === walletAddress.toLowerCase()
+                            trade.round === round && trade.account === walletAddress.toLowerCase()
                     ),
                     ['timestamp', 'blockNumber'],
                     ['desc', 'desc']
@@ -108,16 +108,14 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound }) => {
                     ))}
                 </TabContainer>
                 <RightHeader>
-                    {currentRound !== 0 && (
-                        <SelectContainer>
-                            <SelectInput
-                                options={rounds}
-                                handleChange={(value) => setRound(Number(value))}
-                                defaultValue={round}
-                                width={230}
-                            />
-                        </SelectContainer>
-                    )}
+                    <SelectContainer>
+                        <SelectInput
+                            options={rounds}
+                            handleChange={(value) => setRound(Number(value))}
+                            defaultValue={round}
+                            width={230}
+                        />
+                    </SelectContainer>
                 </RightHeader>
             </Header>
             <TableContainer>

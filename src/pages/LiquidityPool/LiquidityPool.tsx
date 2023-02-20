@@ -523,6 +523,7 @@ const LiquidityPool: React.FC = () => {
                                                                             `liquidity-pool.estimated-amount-tooltip`
                                                                         )}
                                                                         iconFontSize={14}
+                                                                        marginLeft={2}
                                                                     />
                                                                 </ContentInfo>
                                                                 <ContentInfo>
@@ -550,6 +551,7 @@ const LiquidityPool: React.FC = () => {
                                                             <Tooltip
                                                                 overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
                                                                 iconFontSize={14}
+                                                                marginLeft={2}
                                                             />
                                                         ),
                                                     }}
@@ -664,6 +666,7 @@ const LiquidityPool: React.FC = () => {
                                             <Tooltip
                                                 overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
                                                 iconFontSize={14}
+                                                marginLeft={2}
                                             />
                                         </LiquidityPoolInfo>
                                     </LiquidityPoolInfoContainer>
