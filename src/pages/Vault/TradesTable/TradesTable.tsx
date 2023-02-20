@@ -4,7 +4,6 @@ import { CellProps } from 'react-table';
 import { formatTxTimestamp } from 'utils/formatters/date';
 import Table from 'components/Table';
 import styled from 'styled-components';
-import { Position, PositionName } from 'constants/options';
 import { buildMarketLink } from 'utils/routes';
 import ViewEtherscanLink from 'components/ViewEtherscanLink';
 import './style.css';
@@ -125,35 +124,26 @@ export const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResults
                     },
                     {
                         Header: <>{t('market.table.result-col')}</>,
-                        accessor: 'result',
-                        Cell: (cellProps: CellProps<VaultTrade, VaultTrade['result']>) => (
+                        accessor: 'status',
+                        Cell: (cellProps: CellProps<VaultTrade, VaultTrade['status']>) => (
                             <>
-                                {cellProps.row.original.status !== VaultTradeStatus.IN_PROGRESS && (
+                                {cellProps.cell.value !== VaultTradeStatus.IN_PROGRESS && (
                                     <Status
                                         color={
-                                            cellProps.row.original.status == VaultTradeStatus.WIN
+                                            cellProps.cell.value == VaultTradeStatus.WIN
                                                 ? Colors.GREEN
-                                                : Colors.RED
+                                                : cellProps.cell.value == VaultTradeStatus.LOSE
+                                                ? Colors.RED
+                                                : Colors.GRAY_LIGHT
                                         }
                                     >
-                                        {cellProps.row.original.status}
+                                        {cellProps.cell.value}
                                     </Status>
                                 )}
                             </>
                         ),
                         width: 150,
                         sortable: true,
-                        sortType: (rowA: any, rowB: any, _columnId?: string, desc?: boolean) => {
-                            let aValue = (Position[rowA.original.result as PositionName] ?? -1) + 1;
-                            let bValue = (Position[rowB.original.result as PositionName] ?? -1) + 1;
-                            if (!aValue) {
-                                aValue = desc ? -1 : 3;
-                            }
-                            if (!bValue) {
-                                bValue = desc ? -1 : 3;
-                            }
-                            return aValue < bValue ? -1 : 1;
-                        },
                     },
                     {
                         Header: <>{t('market.table.tx-status-col')}</>,
