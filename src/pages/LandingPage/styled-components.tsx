@@ -494,81 +494,33 @@ export const Initiatives = styled(FlexDivRow)`
     display: flex;
     width: 100%;
     margin-top: 50px;
+    align-items: center;
     @media (max-width: 750px) {
         margin-top: 35px;
     }
 `;
 
-export const InitiativeLink = styled.a<{ height: string }>`
+export const Initiative = styled.img``;
+
+export const InitiativeLink = styled.a`
     display: flex;
-    height: 50px;
-    width: 33%;
-    height: ${(props) => props.height};
+    height: 100px;
+    width: 25%;
     cursor: pointer;
     transition: 0.2s;
     justify-content: center;
     z-index: 1001;
-    &:hover {
-        transform: scale(1.2);
+    @media (max-width: 750px) {
+        &:hover {
+            transform: scale(1.2);
+        }
     }
-    &:first-child {
-        margin-top: -13px;
-        @media (max-width: 960px) {
-            height: 42px;
-        }
-
-        @media (max-width: 750px) {
-            height: 35px;
-        }
+    ${Initiative} {
         @media (max-width: 450px) {
             height: 30px;
-        }
-    }
-    &:nth-child(2) {
-        margin-top: -10px;
-        @media (max-width: 960px) {
-            height: 39px;
-        }
-
-        @media (max-width: 750px) {
-            height: 30px;
-            margin-top: -8px;
-        }
-
-        @media (max-width: 450px) {
-            height: 25px;
-        }
-        @media (max-width: 400px) {
-            height: 23px;
-        }
-    }
-    &:nth-child(3) {
-        margin-top: -9px;
-        @media (max-width: 960px) {
-            height: 27px;
-            margin-top: -7px;
-        }
-        @media (max-width: 750px) {
-            height: 20px;
-            margin-top: -5px;
-        }
-
-        @media (max-width: 500px) {
-            height: 20px;
-            margin-top: -5px;
-        }
-        @media (max-width: 450px) {
-            height: 17px;
-            margin-top: -6px;
-        }
-        @media (max-width: 400px) {
-            height: 15px;
-            margin-top: -6px;
         }
     }
 `;
-
-export const Initiative = styled.img``;
 
 export const SectionRow = styled(FlexDivRow)`
     display: flex;

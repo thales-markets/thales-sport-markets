@@ -23,7 +23,8 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
     const leagueName = TAGS_LIST.find((t: TagInfo) => t.id == league)?.label;
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
-    const isFavourite = favouriteLeagues.filter((favourite: TagInfo) => favourite.id == league)[0].favourite;
+    const favouriteLeague = favouriteLeagues.find((favourite: TagInfo) => favourite.id == league);
+    const isFavourite = favouriteLeague && favouriteLeague.favourite;
 
     return (
         <>
@@ -128,6 +129,8 @@ const LeagueFlag = (tagId: number | any) => {
             return <Flag size="l" code="ES" />;
         case TAGS_FLAGS.SERIE_A:
             return <Flag size="l" code="IT" />;
+        case TAGS_FLAGS.J1_LEAGUE:
+            return <Flag size="l" code="JP" />;
         default:
             return <FlagWorld alt="World flag" src="/world-flag.png" />;
     }

@@ -69,14 +69,14 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
             />
             {!readOnly && <Bonus>{bonus > 0 ? getFormattedBonus(bonus) : ''}</Bonus>}
             {readOnly ? (
-                market?.isResolved ? (
+                market?.isCanceled ? (
+                    <Canceled className={`icon icon--open`} />
+                ) : market?.isResolved ? (
                     market?.winning ? (
                         <Correct className={`icon icon--correct`} />
                     ) : (
                         <Wrong className={`icon icon--wrong`} />
                     )
-                ) : market?.isCanceled ? (
-                    <Canceled className={`icon icon--open`} />
                 ) : (
                     <Empty className={`icon icon--open`} />
                 )

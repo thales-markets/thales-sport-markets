@@ -30,19 +30,30 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
             <ListContainer>
                 {marketsKeys
                     .sort((a, b) => {
-                        const isFavouriteA = Number(
-                            favouriteLeagues.filter((league: TagInfo) => league.id == a)[0].favourite
-                        );
-                        const isFavouriteB = Number(
-                            favouriteLeagues.filter((league: TagInfo) => league.id == b)[0].favourite
-                        );
-                        const leagueNameA = TAGS_LIST.find((t: TagInfo) => t.id == a)?.label;
-                        const leagueNameB = TAGS_LIST.find((t: TagInfo) => t.id == b)?.label;
-                        if (isFavouriteA == isFavouriteB) {
-                            return (leagueNameA || '') > (leagueNameB || '') ? 1 : -1;
-                        } else {
-                            return isFavouriteB - isFavouriteA;
-                        }
+                        const favouriteA = favouriteLeagues.find((league: TagInfo) => league.id == a);
+                        const isFavouriteA = Number(favouriteA && favouriteA.favourite);
+
+                        const favouriteB = favouriteLeagues.find((league: TagInfo) => league.id == b);
+                        const isFavouriteB = Number(favouriteB && favouriteB.favourite);
+
+                        const leagueA = TAGS_LIST.find((t: TagInfo) => t.id == a);
+                        const leagueB = TAGS_LIST.find((t: TagInfo) => t.id == b);
+
+                        const leagueNameA = leagueA?.label || '';
+                        const leagueNameB = leagueB?.label || '';
+
+                        const leaguePriorityA = leagueA?.priority || 0;
+                        const leaguePriorityB = leagueB?.priority || 0;
+
+                        return isFavouriteA == isFavouriteB
+                            ? leaguePriorityA > leaguePriorityB
+                                ? 1
+                                : leaguePriorityA < leaguePriorityB
+                                ? -1
+                                : leagueNameA > leagueNameB
+                                ? 1
+                                : -1
+                            : isFavouriteB - isFavouriteA;
                     })
                     .map((leagueId: number, index: number) => {
                         return (

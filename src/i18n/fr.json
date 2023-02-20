@@ -18,10 +18,7 @@
             "get-usd": "Obtenir {{amount}}",
             "approve": "Autoriser",
             "get-usd-progress": "Création de {{amount}}...",
-            "disclaimer": "En connectant votre portefeuille vous reconnaissez que vous avez lu et compris la <a target=\"_blank\" href={{link}}>décharge de responsabilité</a> d’Overtime et accepté les conditions d’utilisation.",
-            "disclaimer-lowercase": "clause de non-responsabilité",
-            "disclaimer2": "et acceptez ses conditions d'utilisation.",
-            "disclaimer1": "En connectant un portefeuille, vous reconnaissez avoir lu et compris les marchés des heures supplémentaires",
+            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "Informations sur le portefeuille"
         },
         "referral": {
@@ -460,7 +457,8 @@
                 "same-team": "La même équipe ne peut pas être dans un Parlay plus d'une fois",
                 "max-payout": "Le paiement maximal pris en charge est de {{max}}",
                 "max-teams": "Maximum {{max}} marchés à Parlay",
-                "max-profit": "Le profit maximal pris en charge est de {{max}}"
+                "max-profit": "Le profit maximal pris en charge est de {{max}}",
+                "no-funds-multi-collateral": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds ({{percentage}} % de plus du montant du buy-in)"
             },
             "payout": "Total reçu",
             "empty-title": "Aucune position",
@@ -538,18 +536,6 @@
         "search-placeholder": "Rechercher l'adresse du portefeuille",
         "description": "<div>Un total de <bold>8000 OP</bold> et <bold>8000 Thales</bold> sera distribué sur une base continuetoutes les deux semaines selon le <tipLink>TIP-96</tipLink> pour compenser les frais payés au contrat safebox.</div> <div>Le classement calculera les récompenses comme une remise de 90% sur les frais SafeBox, soit 3% du montant total payé en sUSD.</div> <div>La valeur en $ de OP et THALES sera calculée en utilisant un twap de 7 jours au début de la période. Si à la fin de la période de deux semaines, le total des remises est supérieur à la valeur de twap initiale des jetons OP et THALES, la remise sera réduite proportionnellement pour chaque utilisateur.</div>",
         "total-negative-pnl": "Pertes totales",
-        "periods": {
-            "period-0": "Première période",
-            "period-1": "Seconde période",
-            "period-2": "Troisième période",
-            "period-3": "Quatrième période",
-            "period-4": "Cinquième période",
-            "period-6": "Septième période",
-            "period-7": "Huitième période",
-            "period-5": "Sixième période",
-            "period-8": "Neuvième période",
-            "period-9": "Dixième période"
-        },
         "your-score": "Ton score",
         "total-global-rebates": "Remises totales à payer",
         "twap": "TWAP d'une semaine",

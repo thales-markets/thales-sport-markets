@@ -9,9 +9,9 @@ export const QUERY_KEYS = {
     SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
     SportMarketsNew: (networkId: NetworkId) => ['sportMarketsNew', networkId],
     ParlayAmmData: (networkId: NetworkId) => ['parlayAmmData', networkId],
-    Market: (marketAddress: string) => ['market', marketAddress],
+    Market: (marketAddress: string, networkId: NetworkId) => ['market', marketAddress, networkId],
     LiveResult: (marketId: string) => ['liveResult', marketId],
-    ChildMarkets: (marketAddress: string) => ['childMarkets', marketAddress],
+    ChildMarkets: (marketAddress: string, networkId: NetworkId) => ['childMarkets', marketAddress, networkId],
     PositionDetails: (
         marketAddress: string,
         position: Position,

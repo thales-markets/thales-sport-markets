@@ -11,10 +11,7 @@
             "get-usd": "Get {{amount}}",
             "approve": "Approve",
             "get-usd-progress": "Minting {{amount}}...",
-            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <a target=\"_blank\" href={{link}}>disclaimer</a> and agree to its conditions of use.",
-            "disclaimer-lowercase": "disclaimer",
-            "disclaimer1": "Collegando un portafoglio dichiari di aver letto e compreso i Mercati Straordinari",
-            "disclaimer2": "e accetta le sue condizioni d'uso.",
+            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "Informazioni sul portafoglio"
         },
         "voucher": {
@@ -300,7 +297,7 @@
                 },
                 "spread": {
                     "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
-                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                    "plus": "{{team}} will win the match, or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
@@ -362,7 +359,8 @@
                 "team-in-parlay": "{{team}} è già a Parlay. La stessa squadra non può essere aggiunta a un Parlay più di una volta.",
                 "max-payout": "Il pagamento massimo supportato è {{max}}",
                 "max-teams": "Massimo {{max}} mercati a Parlay",
-                "max-profit": "Il profitto massimo supportato è {{max}}"
+                "max-profit": "Il profitto massimo supportato è {{max}}",
+                "no-funds-multi-collateral": "Assicurati che il tuo portafoglio abbia fondi sufficienti ({{percentage}}% in più dell'importo del buy-in)"
             },
             "empty-title": "Nessuna posizione",
             "fee": "Tariffa totale",
@@ -438,18 +436,6 @@
             "volume": "Volume",
             "percent": "Per cento",
             "rank": "Rank"
-        },
-        "periods": {
-            "period-1": "Secondo periodo",
-            "period-2": "Terzo periodo",
-            "period-0": "Primo periodo",
-            "period-4": "Quinto periodo",
-            "period-3": "Quarto periodo",
-            "period-5": "Sesto periodo",
-            "period-8": "Nono periodo",
-            "period-9": "Decimo periodo",
-            "period-6": "Settimo periodo",
-            "period-7": "Ottavo periodo"
         },
         "your-score": "Il tuo punteggio",
         "total-negative-pnl": "Perdite totali",

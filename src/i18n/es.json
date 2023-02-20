@@ -20,10 +20,7 @@
             "get-usd": "Obtener {{amount}}",
             "approve": "Aprobar",
             "get-usd-progress": "Obteniendo {{amount}}...",
-            "disclaimer": "Al conectar tu billetera reconoce el haber leido y entendido el <a target=\"_blank\" href={{link}}>disclaimer</a> de Overtime Markets, aceptando sus condiciones de uso.",
-            "disclaimer1": "Al conectar una billetera, reconoce que ha leído y comprende los Mercados de tiempo extra",
-            "disclaimer2": "y aceptar sus condiciones de uso.",
-            "disclaimer-lowercase": "Descargo de responsabilidad",
+            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "Información de la billetera"
         },
         "voucher": {
@@ -300,7 +297,7 @@
                 },
                 "spread": {
                     "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
-                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                    "plus": "{{team}} will win the match, or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
@@ -362,7 +359,8 @@
                 "team-in-parlay": "{{team}} ya está en Parlay. El mismo equipo no se puede agregar a un Parlay más de una vez.",
                 "max-payout": "El pago máximo admitido es {{max}}",
                 "max-profit": "La ganancia máxima admitida es {{max}}",
-                "max-teams": "Máximo de {{max}} mercados en Parlay"
+                "max-teams": "Máximo de {{max}} mercados en Parlay",
+                "no-funds-multi-collateral": "Asegúrese de que su billetera tenga fondos suficientes ({{percentage}}% más del monto de la entrada)"
             },
             "fee": "Costo total",
             "payout": "Total recibido",
@@ -438,18 +436,6 @@
             "safebox": "Tarifas de SafeBox",
             "percent": "Por ciento",
             "rank": "Rank"
-        },
-        "periods": {
-            "period-0": "Primer periodo",
-            "period-1": "Cuarto periodo",
-            "period-2": "Segundo período",
-            "period-3": "Tercer periodo",
-            "period-4": "Quinto periodo",
-            "period-7": "Octavo periodo",
-            "period-6": "Septimo periodo",
-            "period-5": "Sexto periodo",
-            "period-9": "Décimo período",
-            "period-8": "noveno periodo"
         },
         "your-score": "Tu puntuación",
         "total-negative-pnl": "pérdidas totales",

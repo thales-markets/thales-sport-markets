@@ -57,7 +57,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                                 cellProps.cell.row.original.wholeMarket,
                                 cellProps.cell.value
                             );
-                            return (
+                            return symbolText ? (
                                 <PositionSymbol
                                     symbolText={symbolText}
                                     additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
@@ -84,6 +84,8 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                                         </>
                                     }
                                 />
+                            ) : (
+                                <p>N/A</p>
                             );
                         },
                         width: 150,

@@ -13,6 +13,36 @@ export const L2_TO_L1_NETWORK_MAPPER: NetworkMapper = {
     69: 42,
 };
 
+export const SUPPORTED_NETWORKS = [
+    {
+        chainId: 10,
+        chainName: 'Optimism Mainnet',
+        shortChainName: 'Optimism',
+        chainKey: 'optimism_mainnet',
+        iconClassName: 'icon icon--op',
+        areVaultsSupported: true,
+        isMultiCollateralSupported: true,
+    },
+    {
+        chainId: 42161,
+        chainName: 'Arbitrum One',
+        shortChainName: 'Arbitrum',
+        chainKey: 'arbitrum_mainnet',
+        iconClassName: 'icon icon--arb',
+        areVaultsSupported: false,
+        isMultiCollateralSupported: false,
+    },
+    {
+        chainId: 420,
+        chainName: 'Optimism Goerli Testnet',
+        shortChainName: 'Optimism Goerli Testnet',
+        chainKey: 'optimism_mainnet',
+        iconClassName: 'icon icon--op',
+        areVaultsSupported: true,
+        isMultiCollateralSupported: true,
+    },
+];
+
 export type OptimismNetwork = {
     chainId: string;
     chainName: string;
@@ -26,7 +56,7 @@ export type OptimismNetwork = {
     };
 };
 
-export const OPTIMISM_NETWORKS: Record<number, OptimismNetwork> = {
+export const SUPPORTED_NETWORKS_DESCRIPTIONS: Record<number, OptimismNetwork> = {
     10: {
         chainId: '0xA',
         chainName: 'Optimism',
@@ -60,6 +90,17 @@ export const OPTIMISM_NETWORKS: Record<number, OptimismNetwork> = {
             decimals: 18,
         },
     },
+    42161: {
+        chainId: '0xA4B1',
+        chainName: 'Arbitrum One',
+        rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+        blockExplorerUrls: ['https://arbiscan.io/'],
+        iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
+        nativeCurrency: {
+            symbol: 'ETH',
+            decimals: 18,
+        },
+    },
 };
 
 export const OPTIMISM_OPTIONS = [
@@ -78,3 +119,23 @@ export const OPTIMISM_OPTIONS = [
 ];
 
 export const MAX_GAS_LIMIT = 15000000;
+export const MAX_GAS_LIMIT_ARB = 20000000;
+
+export const NETWORK_SWITCHER_SUPPORTED_NETWORKS = [
+    {
+        networkId: 10,
+        chainId: '0xA',
+        chainName: 'Optimism Mainnet',
+        shortChainName: 'Optimism',
+        chainKey: 'optimism_mainnet',
+        iconClassName: 'icon icon--op',
+    },
+    {
+        networkId: 42161,
+        chainId: '0xa4b1',
+        chainName: 'Arbitrum One',
+        shortChainName: 'Arbitrum',
+        chainKey: 'arbitrum_mainnet',
+        iconClassName: 'icon icon--arb',
+    },
+];

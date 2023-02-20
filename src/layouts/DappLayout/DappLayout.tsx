@@ -4,8 +4,6 @@ import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { getNetworkId } from 'redux/modules/wallet';
-import UnsupportedNetwork from 'components/UnsupportedNetwork';
-import { isNetworkSupported } from 'utils/network';
 import { FlexDivColumn } from 'styles/common';
 import DappHeader from './DappHeader';
 import Loader from 'components/Loader';
@@ -74,19 +72,14 @@ const DappLayout: React.FC = ({ children }) => {
     return (
         <>
             {isAppReady ? (
-                // Exclude Wizard page because of Bridge functionality
-                networkId && !isNetworkSupported(networkId) && location.pathname !== ROUTES.Wizard ? (
-                    <UnsupportedNetwork />
-                ) : (
-                    <Background>
-                        <Wrapper>
-                            <DappHeader />
-                            {children}
-                            <DappFooter />
-                        </Wrapper>
-                        <ToastContainer theme={'colored'} />
-                    </Background>
-                )
+                <Background>
+                    <Wrapper>
+                        <DappHeader />
+                        {children}
+                        <DappFooter />
+                    </Wrapper>
+                    <ToastContainer theme={'colored'} />
+                </Background>
             ) : (
                 <Loader />
             )}

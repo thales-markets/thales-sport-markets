@@ -16,8 +16,8 @@ const queryConnector: QueryConnector = {
     },
 };
 
-export const refetchMarketData = (marketAddress: string) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Market(marketAddress));
+export const refetchMarketData = (marketAddress: string, networkId: NetworkId) => {
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Market(marketAddress, networkId));
 };
 
 export const refetchMarkets = (networkId: NetworkId) => {
@@ -33,6 +33,12 @@ export const refetchAfterClaim = (walletAddress: string, networkId: NetworkId) =
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ParlayMarkets(networkId, walletAddress));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.AccountPositionsProfile(walletAddress, networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ClaimableCount(walletAddress, networkId));
+};
+
+export const refetchAfterVoucherMint = (walletAddress: string, networkId: NetworkId) => {
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.GetsUSDWalletBalance(walletAddress, networkId));
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId));
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.OvertimeVoucher(walletAddress, networkId));
 };
 
 export default queryConnector;

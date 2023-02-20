@@ -4,6 +4,7 @@ export const paymentTokenContract = {
         10: '0x8c6f28f2f1a3c87f0f938b96d27520d9751ec8d9',
         69: '0x762838253a45a9106cc859ec99df31df48fcf735',
         420: '0xE1ceaa829525a08C1d39A5CEBe4b42aF58d77198',
+        42161: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
     },
     abi: [
         {

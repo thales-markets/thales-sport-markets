@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { getWalletAddress } from 'redux/modules/wallet';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ReactComponent as ConfirmationRectangle } from 'assets/images/favorite-team/confirmation-rectangle.svg';
@@ -11,7 +11,7 @@ import { Team } from 'pages/MintWorldCupNFT/groups';
 import { StyledButton } from 'pages/MintWorldCupNFT/styled-components';
 import networkConnector from 'utils/networkConnector';
 import { useSelector } from 'react-redux';
-import { MAX_GAS_LIMIT } from 'constants/network';
+import { getMaxGasLimitForNetwork } from 'utils/network';
 
 type ConfirmationDialogProps = {
     closeDialog: VoidFunction;
@@ -23,6 +23,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ closeDialog, se
     const { t } = useTranslation();
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [minted, setMinted] = useState(false);
     const [isMinting, setIsMinting] = useState(false);
 
@@ -34,7 +35,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ closeDialog, se
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 const tx = await favoriteTeamContractWithSigner.mint(walletAddress, selectedTeam?.number, {
-                    gasLimit: MAX_GAS_LIMIT,
+                    gasLimit: getMaxGasLimitForNetwork(networkId),
                 });
                 const txResult = await tx.wait();
 

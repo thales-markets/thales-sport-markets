@@ -14,12 +14,14 @@ import {
     removeFromParlay,
     resetParlayError,
     setPayment,
+    setPaymentSelectedStableIndex,
 } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { ParlaysMarket, SportMarketInfo } from 'types/markets';
+import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import MatchInfo from './components/MatchInfo';
 import Payment from './components/Payment';
 import Single from './components/Single';
@@ -46,6 +48,10 @@ const Parlay: React.FC = () => {
     const sportMarketsQuery = useSportMarketsQueryNew(networkId, {
         enabled: isAppReady,
     });
+
+    useEffect(() => {
+        dispatch(setPaymentSelectedStableIndex(getDefaultCollateralIndexForNetworkId(networkId)));
+    }, [networkId, dispatch]);
 
     useEffect(() => {
         if (parlayAmmDataQuery.isSuccess && parlayAmmDataQuery.data) {

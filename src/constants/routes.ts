@@ -16,6 +16,7 @@ export const ROUTES = {
     Leaderboard: '/parlay-leaderboard',
     LiquidityPool: '/liquidity-pool',
 };
+
 export default ROUTES;
 
 export const RESET_STATE = 'reset';

@@ -20,10 +20,7 @@
             "get-usd": "获取 {{amount}}",
             "approve": "批准",
             "get-usd-progress": "铸造 {{amount}}...",
-            "disclaimer": "将你的钱包连接到Overtime意味着您已经阅读并理解了参与Overtime活动的风险 <a target=\"_blank\" href={{link}}>免责声明</a> 并决定继续使用.",
-            "disclaimer-lowercase": "免责声明",
-            "disclaimer2": "并同意其使用条件。",
-            "disclaimer1": "通过连接钱包，您承认您已阅读并理解加班市场",
+            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "钱包信息"
         },
         "voucher": {
@@ -300,7 +297,7 @@
                 },
                 "spread": {
                     "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
-                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                    "plus": "{{team}} will win the match, or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
@@ -362,7 +359,8 @@
                 "team-in-parlay": "{{team}} 已经在 Parlay 中。同一支球队不能多次加入过关。",
                 "max-payout": "支持的最大支出为 {{max}}",
                 "max-teams": "Parlay 中的最大 {{max}} 个盘口",
-                "max-profit": "最大支持利润为 {{max}}"
+                "max-profit": "最大支持利润为 {{max}}",
+                "no-funds-multi-collateral": "请确保您的钱包有足够的资金（买入金额的 {{percentage}}%）"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",
@@ -439,18 +437,6 @@
             "safebox": "保险箱费用",
             "percent": "百分",
             "rank": "Rank"
-        },
-        "periods": {
-            "period-0": "第一节课",
-            "period-1": "第二阶段",
-            "period-2": "第三期",
-            "period-3": "第五期",
-            "period-4": "第四期",
-            "period-5": "第六期",
-            "period-6": "第七期",
-            "period-7": "第八期",
-            "period-8": "第九期",
-            "period-9": "第十期"
         },
         "your-score": "你的分数",
         "twap": "一周TWAP",

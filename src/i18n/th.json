@@ -11,10 +11,7 @@
             "get-usd": "รับ {{amount}}",
             "approve": "อนุมัติ",
             "get-usd-progress": "กำลังมิ้นต์ {{amount}}...",
-            "disclaimer": "การเชื่อมต่อกระเป๋าเงินหมายความว่าคุณรับทราบว่าคุณได้อ่านและเข้าใจ<a target=\"_blank\" href={{link}}>ข้อจำกัดความรับผิดชอบ</a>ของ Overtime Markets และยอมรับเงื่อนไขการใช้งาน",
-            "disclaimer-lowercase": "ข้อจำกัดความรับผิดชอบ",
-            "disclaimer2": "และยอมรับเงื่อนไขการใช้งาน",
-            "disclaimer1": "โดยการเชื่อมต่อกระเป๋าเงิน คุณรับทราบว่าคุณได้อ่านและเข้าใจการทำงานของ Overtime Market แล้ว",
+            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "ข้อมูลกระเป๋าเงิน"
         },
         "voucher": {
@@ -297,7 +294,7 @@
                 },
                 "spread": {
                     "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
-                    "plus": "{{team}} will win the match or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                    "plus": "{{team}} will win the match, or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
                 },
                 "double-chance": {
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
@@ -354,7 +351,8 @@
                 "team-in-parlay": "{{team}} อยู่ในพาร์เลย์แล้ว ไม่สามารถเพิ่มทีมเดียวกันในพาร์เลย์ได้มากกว่าหนึ่งครั้ง",
                 "max-payout": "การจ่ายเงินที่รองรับสูงสุดคือ {{max}}",
                 "max-profit": "กำไรที่รองรับสูงสุดคือ {{max}}",
-                "max-teams": "สูงสุด {{max}} ตลาดใน Parlay"
+                "max-teams": "สูงสุด {{max}} ตลาดใน Parlay",
+                "no-funds-multi-collateral": "โปรดตรวจสอบให้แน่ใจว่ากระเป๋าเงินของคุณมีเงินเพียงพอ (เพิ่มขึ้น {{percentage}}% ของจำนวนเงินที่ซื้อเข้า)"
             },
             "skew": "ลาด",
             "payout": "การจ่ายเงิน",
@@ -435,23 +433,6 @@
             "volume": "ปริมาณ",
             "percent": "เปอร์เซ็นต์",
             "rank": "Rank"
-        },
-        "periods": {
-            "second-period": "ช่วงที่สอง",
-            "first-period": "ช่วงแรก",
-            "fourth-period": "ช่วงที่สี่",
-            "third-period": "ช่วงที่สาม",
-            "fifth-period": "ช่วงที่ห้า",
-            "period-0": "ช่วงแรก",
-            "period-4": "ช่วงที่ห้า",
-            "period-3": "ช่วงที่สี่",
-            "period-2": "ช่วงที่สาม",
-            "period-1": "ช่วงที่สอง",
-            "period-9": "งวดที่สิบ",
-            "period-7": "งวดที่แปด",
-            "period-8": "สมัยที่เก้า",
-            "period-5": "งวดที่หก",
-            "period-6": "สมัยที่เจ็ด"
         },
         "your-score": "คะแนนของคุณ",
         "twap": "หนึ่งสัปดาห์ TWAP",

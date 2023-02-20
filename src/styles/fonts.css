@@ -44,8 +44,6 @@
 }
 
 @font-face {
-    font-family: 'LeaguesIcons';
-    src: local('LeaguesIcons'), url(../assets/fonts/OvertimeIcons/LeaguesIcons.ttf) format('truetype');
     font-family: 'LeagueIcons';
     src: local('LeagueIcons'), url(../assets/fonts/LeagueIcons/LeagueIcons.ttf) format('truetype');
 }

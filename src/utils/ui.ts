@@ -1,5 +1,6 @@
 import { Position } from 'constants/options';
-import { ODDS_COLOR } from 'constants/ui';
+import { NAV_MENU, ODDS_COLOR } from 'constants/ui';
+import { NavMenuItem } from 'types/ui';
 
 export const getPositionColor = (position: Position): string => {
     return position === Position.HOME
@@ -20,4 +21,10 @@ export const getOrdinalNumberLabel = (num: number): string => {
         default:
             return num + 'th';
     }
+};
+
+export const getNavItemFromRoute = (route: string): NavMenuItem | null => {
+    const navItem = NAV_MENU.find((item) => item.route == route);
+    if (navItem) return navItem;
+    return null;
 };

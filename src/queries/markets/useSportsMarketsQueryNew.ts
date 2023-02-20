@@ -6,10 +6,13 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { SportMarketInfo, SportMarkets } from 'types/markets';
 import { NetworkId } from 'types/network';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { fixDuplicatedTeamName } from 'utils/formatters/string';
 import networkConnector from 'utils/networkConnector';
 import { convertPriceImpactToBonus } from 'utils/markets';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
+
+const BATCH_SIZE = 100;
 
 const marketsCache = {
     [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,
@@ -30,7 +33,7 @@ const groupMarkets = (allMarkets: SportMarkets) => {
     return childrenOf('null', groupedMarkets);
 };
 
-const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolean) => {
+const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolean, networkId: NetworkId) => {
     const openMarkets = [] as SportMarkets;
     const canceledMarkets = [] as SportMarkets;
     const resolvedMarkets = [] as SportMarkets;
@@ -40,14 +43,24 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
     let priceImpactFromContract: undefined | Array<any>;
     if (mapOnlyOpenedMarkets) {
         try {
-            const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
-            const [oddsForAllActive, priceImpactForAllActiveMarkets] = await Promise.all([
-                sportPositionalMarketDataContract?.getOddsForAllActiveMarkets(),
-                sportPositionalMarketDataContract?.getPriceImpactForAllActiveMarkets(),
-            ]);
+            const { sportPositionalMarketDataContract, sportMarketManagerContract } = networkConnector;
+            const numberOfActiveMarkets = await sportMarketManagerContract?.numActiveMarkets();
+            const numberOfBatches = Math.trunc(numberOfActiveMarkets / BATCH_SIZE) + 1;
 
-            oddsFromContract = oddsForAllActive;
-            priceImpactFromContract = priceImpactForAllActiveMarkets;
+            const promises = [];
+            for (let i = 0; i < numberOfBatches; i++) {
+                promises.push(sportPositionalMarketDataContract?.getOddsForAllActiveMarketsInBatches(i, BATCH_SIZE));
+            }
+            for (let i = 0; i < numberOfBatches; i++) {
+                promises.push(
+                    sportPositionalMarketDataContract?.getPriceImpactForAllActiveMarketsInBatches(i, BATCH_SIZE)
+                );
+            }
+
+            const promisesResult = await Promise.all(promises);
+
+            oddsFromContract = promisesResult.slice(0, numberOfBatches).flat(1);
+            priceImpactFromContract = promisesResult.slice(numberOfBatches, numberOfBatches + numberOfBatches).flat(1);
         } catch (e) {
             console.log('Could not get oods from chain', e);
         }
@@ -65,9 +78,17 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
                     (obj: any) => obj[0].toString().toLowerCase() === market.address.toLowerCase()
                 );
                 if (oddsItem) {
-                    market.homeOdds = bigNumberFormatter(oddsItem.odds[0]);
-                    market.awayOdds = bigNumberFormatter(oddsItem.odds[1]);
-                    market.drawOdds = oddsItem.odds[2] ? bigNumberFormatter(oddsItem.odds[2]) : undefined;
+                    market.homeOdds = bigNumberFormmaterWithDecimals(
+                        oddsItem.odds[0],
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
+                    market.awayOdds = bigNumberFormmaterWithDecimals(
+                        oddsItem.odds[1],
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
+                    market.drawOdds = oddsItem.odds[2]
+                        ? bigNumberFormmaterWithDecimals(oddsItem.odds[2], getDefaultDecimalsForNetwork(networkId))
+                        : undefined;
                 }
             }
             if (priceImpactFromContract) {
@@ -75,10 +96,14 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
                     (obj: any) => obj[0].toString().toLowerCase() === market.address.toLowerCase()
                 );
                 if (priceImpactItem) {
-                    market.homeBonus = convertPriceImpactToBonus(bigNumberFormatter(priceImpactItem.priceImpact[0]));
-                    market.awayBonus = convertPriceImpactToBonus(bigNumberFormatter(priceImpactItem.priceImpact[1]));
+                    market.homeBonus = convertPriceImpactToBonus(
+                        bigNumberFormmaterWithDecimals(priceImpactItem.priceImpact[0])
+                    );
+                    market.awayBonus = convertPriceImpactToBonus(
+                        bigNumberFormmaterWithDecimals(priceImpactItem.priceImpact[1])
+                    );
                     market.drawBonus = priceImpactItem.priceImpact[2]
-                        ? convertPriceImpactToBonus(bigNumberFormatter(priceImpactItem.priceImpact[2]))
+                        ? convertPriceImpactToBonus(bigNumberFormmaterWithDecimals(priceImpactItem.priceImpact[2]))
                         : undefined;
                 }
             }
@@ -147,7 +172,8 @@ const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions
                         isOpen: true,
                         network: networkId,
                     }),
-                    true
+                    true,
+                    networkId
                 );
 
                 // fetch and map markets in the background that are not opened
@@ -157,7 +183,7 @@ const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions
                         minTimestamp: priorDate,
                     })
                     .then(async (result: any) => {
-                        mapMarkets(result, false);
+                        mapMarkets(result, false, networkId);
                     });
 
                 return marketsCache;

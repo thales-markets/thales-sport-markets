@@ -4,14 +4,20 @@ import { MarketData, ChildMarkets } from 'types/markets';
 import { ethers } from 'ethers';
 import networkConnector from 'utils/networkConnector';
 import marketContract from 'utils/contracts/sportsMarketContract';
-import { bigNumberFormatter } from '../../utils/formatters/ethers';
+import { bigNumberFormmaterWithDecimals } from '../../utils/formatters/ethers';
 import { Position } from '../../constants/options';
 import { groupBy, orderBy } from 'lodash';
 import { BetType } from 'constants/tags';
+import { NetworkId } from 'types/network';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
-const useChildMarketsQuery = (parentMarket: MarketData, options?: UseQueryOptions<ChildMarkets | undefined>) => {
+const useChildMarketsQuery = (
+    parentMarket: MarketData,
+    networkId: NetworkId,
+    options?: UseQueryOptions<ChildMarkets | undefined>
+) => {
     return useQuery<ChildMarkets | undefined>(
-        QUERY_KEYS.ChildMarkets(parentMarket.address),
+        QUERY_KEYS.ChildMarkets(parentMarket.address, networkId),
         async () => {
             try {
                 const childMarkets = await Promise.all(
@@ -54,14 +60,23 @@ const useChildMarketsQuery = (parentMarket: MarketData, options?: UseQueryOption
                             gameDetails: parentMarket.gameDetails,
                             positions: {
                                 [Position.HOME]: {
-                                    odd: bigNumberFormatter(buyMarketDefaultOdds[0]),
+                                    odd: bigNumberFormmaterWithDecimals(
+                                        buyMarketDefaultOdds[0],
+                                        getDefaultDecimalsForNetwork(networkId)
+                                    ),
                                 },
                                 [Position.AWAY]: {
-                                    odd: bigNumberFormatter(buyMarketDefaultOdds[1]),
+                                    odd: bigNumberFormmaterWithDecimals(
+                                        buyMarketDefaultOdds[1],
+                                        getDefaultDecimalsForNetwork(networkId)
+                                    ),
                                 },
                                 [Position.DRAW]: {
                                     odd: buyMarketDefaultOdds[2]
-                                        ? bigNumberFormatter(buyMarketDefaultOdds[2] || 0)
+                                        ? bigNumberFormmaterWithDecimals(
+                                              buyMarketDefaultOdds[2] || 0,
+                                              getDefaultDecimalsForNetwork(networkId)
+                                          )
                                         : undefined,
                                 },
                             },
