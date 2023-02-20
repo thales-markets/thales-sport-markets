@@ -7,9 +7,9 @@ type MatchProps = { id: number; height: number; margin?: string };
 const Match: React.FC<MatchProps> = ({ id, height, margin }) => {
     return (
         <Container height={height} margin={margin}>
-            <HomeTeam></HomeTeam>
+            <TeamRow></TeamRow>
             <TeamSeparator />
-            <AwayTeam></AwayTeam>
+            <TeamRow></TeamRow>
             <MatchConnector id={id} />
         </Container>
     );
@@ -33,12 +33,7 @@ const TeamSeparator = styled.hr`
     margin: auto;
 `;
 
-const HomeTeam = styled.div`
-    width: 100%;
-    height: 50%;
-`;
-
-const AwayTeam = styled.div`
+const TeamRow = styled.div`
     width: 100%;
     height: 50%;
 `;
