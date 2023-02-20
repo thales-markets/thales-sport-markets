@@ -393,7 +393,8 @@
                 "leaderboard": "Parlay leaderboard",
                 "fee-rebates": "Fee rebates",
                 "become-affiliate": "Become affiliate",
-                "vaults": "Vaults"
+                "vaults": "Vaults",
+                "liquidity-pool": "Liquidity pool"
             },
             "buttons": {
                 "switch": "Switch",

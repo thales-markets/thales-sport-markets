@@ -14,14 +14,6 @@ export type LiquidityPoolData = {
     canCloseCurrentRound: boolean;
     paused: boolean;
     lifetimePnl: number;
-    utilizationRate: number;
-    priceLowerLimit: number;
-    priceUpperLimit: number;
-    skewImpactLimit: number;
-    allocationLimitsPerMarketPerRound: number;
-    minTradeAmount: number;
-    allocationSpentInARound: number;
-    availableAllocationInARound: number;
     roundLength: number;
 };
 

@@ -12,9 +12,8 @@ const useLiquidityPoolUserTransactionsQuery = (
         QUERY_KEYS.LiquidityPool.UserTransactions(networkId),
         async () => {
             try {
-                const liquidityPoolUserTransactions = await thalesData.sportMarkets.vaultUserTransactions({
+                const liquidityPoolUserTransactions = await thalesData.sportMarkets.liquidityPoolUserTransactions({
                     network: networkId,
-                    vault: '0x43D19841D818B2ccC63a8B44Ce8C7DEF8616D98E',
                 });
                 return liquidityPoolUserTransactions;
             } catch (e) {

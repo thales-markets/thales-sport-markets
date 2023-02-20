@@ -262,7 +262,7 @@ const App = () => {
                                     </DappLayout>
                                 </Route>
                             )}
-                            {networkId === NetworkIdByName.OptimismMainnet && (
+                            {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (
                                 <Route exact path={ROUTES.LiquidityPool}>
                                     <DappLayout>
                                         <LiquidityPool />
