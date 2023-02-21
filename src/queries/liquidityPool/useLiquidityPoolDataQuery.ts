@@ -26,6 +26,7 @@ const useLiquidityPoolDataQuery = (networkId: NetworkId, options?: UseQueryOptio
                 paused: false,
                 lifetimePnl: 0,
                 roundLength: 0,
+                stakedThalesMultiplier: 0,
             };
 
             try {
@@ -42,6 +43,7 @@ const useLiquidityPoolDataQuery = (networkId: NetworkId, options?: UseQueryOptio
                         canCloseCurrentRound,
                         paused,
                         roundLength,
+                        stakedThalesMultiplier,
                     ] = await Promise.all([
                         liquidityPoolContract?.started(),
                         liquidityPoolContract?.maxAllowedDeposit(),
@@ -53,6 +55,7 @@ const useLiquidityPoolDataQuery = (networkId: NetworkId, options?: UseQueryOptio
                         liquidityPoolContract?.canCloseCurrentRound(),
                         liquidityPoolContract?.paused(),
                         liquidityPoolContract?.roundLength(),
+                        liquidityPoolContract?.stakedThalesMultiplier(),
                     ]);
 
                     liquidityPoolData.liquidityPoolStarted = liquidityPoolStarted;
@@ -69,6 +72,7 @@ const useLiquidityPoolDataQuery = (networkId: NetworkId, options?: UseQueryOptio
                     liquidityPoolData.canCloseCurrentRound = canCloseCurrentRound;
                     liquidityPoolData.paused = paused;
                     liquidityPoolData.roundLength = Number(roundLength) / 60 / 60 / 24;
+                    liquidityPoolData.stakedThalesMultiplier = bigNumberFormatter(stakedThalesMultiplier);
 
                     const [allocationCurrentRound, lifetimePnl, roundEndTime] = await Promise.all([
                         liquidityPoolContract?.allocationPerRound(liquidityPoolData.round),

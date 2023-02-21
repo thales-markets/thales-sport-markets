@@ -20,6 +20,10 @@ const useLiquidityPoolUserDataQuery = (
                 isWithdrawalRequested: false,
                 hasDepositForCurrentRound: false,
                 hasDepositForNextRound: false,
+                stakedThales: 0,
+                maxDeposit: 0,
+                availableToDeposit: 0,
+                neededStakedThalesToWithdraw: 0,
             };
 
             try {
@@ -27,10 +31,18 @@ const useLiquidityPoolUserDataQuery = (
                 if (liquidityPoolContract) {
                     const [round] = await Promise.all([liquidityPoolContract?.round()]);
 
-                    const [balanceCurrentRound, balanceNextRound, withdrawalRequested] = await Promise.all([
+                    const [
+                        balanceCurrentRound,
+                        balanceNextRound,
+                        withdrawalRequested,
+                        maxAvailableDeposit,
+                        neededStakedThalesToWithdraw,
+                    ] = await Promise.all([
                         liquidityPoolContract?.balancesPerRound(Number(round), walletAddress),
                         liquidityPoolContract?.balancesPerRound(Number(round) + 1, walletAddress),
                         liquidityPoolContract?.withdrawalRequested(walletAddress),
+                        liquidityPoolContract?.getMaxAvailableDepositForUser(walletAddress),
+                        liquidityPoolContract?.getNeededStakedThalesToWithdrawForUser(walletAddress),
                     ]);
 
                     userLiquidityPoolData.balanceCurrentRound = bigNumberFormatter(balanceCurrentRound);
@@ -41,6 +53,14 @@ const useLiquidityPoolUserDataQuery = (
                     userLiquidityPoolData.isWithdrawalRequested = withdrawalRequested;
                     userLiquidityPoolData.hasDepositForCurrentRound = userLiquidityPoolData.balanceCurrentRound > 0;
                     userLiquidityPoolData.hasDepositForNextRound = userLiquidityPoolData.balanceNextRound > 0;
+                    userLiquidityPoolData.maxDeposit = bigNumberFormatter(maxAvailableDeposit.maxDepositForUser);
+                    userLiquidityPoolData.stakedThales = bigNumberFormatter(maxAvailableDeposit.stakedThalesForUser);
+                    userLiquidityPoolData.availableToDeposit = bigNumberFormatter(
+                        maxAvailableDeposit.availableToDepositForUser
+                    );
+                    userLiquidityPoolData.neededStakedThalesToWithdraw = bigNumberFormatter(
+                        neededStakedThalesToWithdraw
+                    );
 
                     return userLiquidityPoolData;
                 }

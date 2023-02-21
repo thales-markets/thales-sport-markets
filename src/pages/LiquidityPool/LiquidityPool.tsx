@@ -45,7 +45,7 @@ import { LiquidityPoolPnlType, LiquidityPoolTab } from 'constants/liquidityPool'
 import NumericInput from 'components/fields/NumericInput';
 import { getIsAppReady } from 'redux/modules/app';
 import { UserLiquidityPoolData, LiquidityPoolData } from 'types/liquidityPool';
-import { formatCurrencyWithSign, formatPercentage } from 'utils/formatters/number';
+import { formatCurrencyWithSign, formatPercentage, formatCurrency } from 'utils/formatters/number';
 import { PAYMENT_CURRENCY, USD_SIGN } from 'constants/currency';
 import TimeRemaining from 'components/TimeRemaining';
 import networkConnector from 'utils/networkConnector';
@@ -132,27 +132,38 @@ const LiquidityPool: React.FC = () => {
     }, [userLiquidityPoolDataQuery.isSuccess, userLiquidityPoolDataQuery.data, lastValidUserLiquidityPoolData]);
 
     const isAmountEntered = Number(amount) > 0;
+    const invalidAmount =
+        liquidityPoolData && Number(liquidityPoolData.minDepositAmount) > Number(amount) && isAmountEntered;
     const insufficientBalance =
         (Number(paymentTokenBalance) < Number(amount) || Number(paymentTokenBalance) === 0) && isWalletConnected;
+
+    const liquidityPoolPaused = liquidityPoolData && liquidityPoolData.paused;
+
     const exceededLiquidityPoolCap =
         liquidityPoolData && liquidityPoolData.availableAllocationNextRound < Number(amount);
-    const isWithdrawalRequested = userLiquidityPoolData && userLiquidityPoolData.isWithdrawalRequested;
-    const nothingToWithdraw = userLiquidityPoolData && userLiquidityPoolData.balanceCurrentRound === 0;
+    const exceededMaxAllowance = userLiquidityPoolData && userLiquidityPoolData.availableToDeposit < Number(amount);
     const isMaximumAmountOfUsersReached =
         liquidityPoolData &&
         liquidityPoolData.usersCurrentlyInLiquidityPool === liquidityPoolData.maxAllowedUsers &&
         userLiquidityPoolData &&
         !userLiquidityPoolData.hasDepositForCurrentRound &&
         !userLiquidityPoolData.hasDepositForNextRound;
-    const invalidAmount =
-        liquidityPoolData && Number(liquidityPoolData.minDepositAmount) > Number(amount) && isAmountEntered;
-    const liquidityPoolPaused = liquidityPoolData && liquidityPoolData.paused;
     const isLiquidityPoolCapReached = liquidityPoolData && liquidityPoolData.allocationNextRoundPercentage >= 100;
+
+    const isWithdrawalRequested = userLiquidityPoolData && userLiquidityPoolData.isWithdrawalRequested;
+    const nothingToWithdraw = userLiquidityPoolData && userLiquidityPoolData.balanceCurrentRound === 0;
+    const isMoreStakedThalesNeededToWithdraw =
+        userLiquidityPoolData &&
+        userLiquidityPoolData.neededStakedThalesToWithdraw > userLiquidityPoolData.stakedThales;
+    const stakedThalesNeededToWithdraw = userLiquidityPoolData
+        ? userLiquidityPoolData.neededStakedThalesToWithdraw - userLiquidityPoolData.stakedThales
+        : 0;
 
     const isRequestWithdrawalButtonDisabled =
         !isWalletConnected ||
         isSubmitting ||
         nothingToWithdraw ||
+        isMoreStakedThalesNeededToWithdraw ||
         (userLiquidityPoolData && userLiquidityPoolData.hasDepositForNextRound) ||
         liquidityPoolPaused;
 
@@ -163,6 +174,7 @@ const LiquidityPool: React.FC = () => {
         isSubmitting ||
         isWithdrawalRequested ||
         exceededLiquidityPoolCap ||
+        exceededMaxAllowance ||
         isMaximumAmountOfUsersReached ||
         invalidAmount ||
         liquidityPoolPaused ||
@@ -365,7 +377,7 @@ const LiquidityPool: React.FC = () => {
     const infoGraphicPercentages = getInfoGraphicPercentages(
         userLiquidityPoolData ? userLiquidityPoolData.balanceCurrentRound : 0,
         userLiquidityPoolData ? userLiquidityPoolData.balanceTotal : 0,
-        userLiquidityPoolData ? userLiquidityPoolData.balanceTotal : 0
+        userLiquidityPoolData ? userLiquidityPoolData.maxDeposit : 0
     );
 
     return (
@@ -382,7 +394,7 @@ const LiquidityPool: React.FC = () => {
             {liquidityPoolData && (
                 <Container>
                     <ContentContainer>
-                        {liquidityPoolData.paused ? (
+                        {liquidityPoolPaused ? (
                             <RoundInfoContainer>
                                 <RoundInfo>{t('liquidity-pool.liquidity-pool-paused-message')}</RoundInfo>
                             </RoundInfoContainer>
@@ -454,7 +466,12 @@ const LiquidityPool: React.FC = () => {
                                 )}
                                 <InputContainer>
                                     <ValidationTooltip
-                                        open={insufficientBalance || exceededLiquidityPoolCap || invalidAmount}
+                                        open={
+                                            insufficientBalance ||
+                                            exceededLiquidityPoolCap ||
+                                            exceededMaxAllowance ||
+                                            invalidAmount
+                                        }
                                         title={
                                             t(
                                                 `${
@@ -462,6 +479,8 @@ const LiquidityPool: React.FC = () => {
                                                         ? 'common.errors.insufficient-balance'
                                                         : exceededLiquidityPoolCap
                                                         ? 'liquidity-pool.deposit-liquidity-pool-cap-error'
+                                                        : exceededMaxAllowance
+                                                        ? 'liquidity-pool.deposit-staked-thales-error'
                                                         : 'liquidity-pool.deposit-min-amount-error'
                                                 }`,
                                                 {
@@ -495,7 +514,7 @@ const LiquidityPool: React.FC = () => {
                                                 <ContentInfo>
                                                     <Trans i18nKey="liquidity-pool.nothing-to-withdraw-label" />
                                                 </ContentInfo>
-                                                {userLiquidityPoolData && userLiquidityPoolData.balanceNextRound > 0 && (
+                                                {userLiquidityPoolData && userLiquidityPoolData.hasDepositForNextRound && (
                                                     <ContentInfo>
                                                         <Trans i18nKey="liquidity-pool.first-deposit-withdrawal-message" />
                                                     </ContentInfo>
@@ -508,6 +527,17 @@ const LiquidityPool: React.FC = () => {
                                                         {userLiquidityPoolData.hasDepositForNextRound ? (
                                                             <WarningContentInfo>
                                                                 <Trans i18nKey="liquidity-pool.withdrawal-deposit-warning" />
+                                                            </WarningContentInfo>
+                                                        ) : isMoreStakedThalesNeededToWithdraw ? (
+                                                            <WarningContentInfo>
+                                                                <Trans
+                                                                    i18nKey="liquidity-pool.withdrawal-staked-thales-warning"
+                                                                    values={{
+                                                                        amount: formatCurrency(
+                                                                            stakedThalesNeededToWithdraw
+                                                                        ),
+                                                                    }}
+                                                                />
                                                             </WarningContentInfo>
                                                         ) : (
                                                             <>
@@ -659,7 +689,7 @@ const LiquidityPool: React.FC = () => {
                                     {liquidityPoolData.liquidityPoolStarted && (
                                         <LiquidityPoolInfoContainer>
                                             <LiquidityPoolInfoLabel>
-                                                {t('liquidity-pool.current-balance-label')}
+                                                {t('liquidity-pool.current-balance-label')}:
                                             </LiquidityPoolInfoLabel>
                                             <LiquidityPoolInfoGraphic
                                                 background={'linear-gradient(90.21deg, #A40A95 0.18%, #FC6679 99.82%)'}
@@ -675,7 +705,7 @@ const LiquidityPool: React.FC = () => {
                                     )}
                                     <LiquidityPoolInfoContainer>
                                         <LiquidityPoolInfoLabel>
-                                            {t('liquidity-pool.next-round-balance-label')}
+                                            {t('liquidity-pool.next-round-balance-label')}:
                                         </LiquidityPoolInfoLabel>
                                         <LiquidityPoolInfoGraphic
                                             background={'linear-gradient(90deg, #2A3895 0%, #893CE2 100%)'}
@@ -695,14 +725,14 @@ const LiquidityPool: React.FC = () => {
                                     </LiquidityPoolInfoContainer>
                                     <LiquidityPoolInfoContainer>
                                         <LiquidityPoolInfoLabel>
-                                            {t('liquidity-pool.max-allowance-label')}
+                                            {t('liquidity-pool.max-allowance-label')}:
                                         </LiquidityPoolInfoLabel>
                                         <LiquidityPoolInfoGraphic
                                             background={'linear-gradient(270deg, #3AECD3 0%, #017F9C 100%)'}
                                             widthPercentage={infoGraphicPercentages.maxAllowancePercenatage}
                                         />
                                         <LiquidityPoolInfo>
-                                            {formatCurrencyWithSign(USD_SIGN, userLiquidityPoolData.balanceTotal)}
+                                            {formatCurrencyWithSign(USD_SIGN, userLiquidityPoolData.maxDeposit)}
                                         </LiquidityPoolInfo>
                                     </LiquidityPoolInfoContainer>
                                     {isWithdrawalRequested && (

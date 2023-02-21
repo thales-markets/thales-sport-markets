@@ -15,6 +15,7 @@ export type LiquidityPoolData = {
     paused: boolean;
     lifetimePnl: number;
     roundLength: number;
+    stakedThalesMultiplier: number;
 };
 
 export type UserLiquidityPoolData = {
@@ -24,6 +25,10 @@ export type UserLiquidityPoolData = {
     isWithdrawalRequested: boolean;
     hasDepositForCurrentRound: boolean;
     hasDepositForNextRound: boolean;
+    stakedThales: number;
+    maxDeposit: number;
+    availableToDeposit: number;
+    neededStakedThalesToWithdraw: number;
 };
 
 export type UserLiquidityPoolsData = {
