@@ -20,6 +20,7 @@ import {
     getSpreadTotalText,
     getSymbolText,
 } from 'utils/markets';
+import { CollateralByNetworkId } from 'utils/network';
 
 const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -125,7 +126,11 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                         accessor: 'paid',
                         sortable: false,
                         Cell: (cellProps: any) => {
-                            return <TableText>{formatCurrencyWithKey('sUSD', cellProps.cell.value, 2)}</TableText>;
+                            return (
+                                <TableText>
+                                    {formatCurrencyWithKey(CollateralByNetworkId[networkId], cellProps.cell.value, 2)}
+                                </TableText>
+                            );
                         },
                     },
                     {

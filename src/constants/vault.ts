@@ -7,6 +7,7 @@ export enum VaultTradeStatus {
     IN_PROGRESS = 'IN_PROGRESS',
     WIN = 'WIN',
     LOSE = 'LOSE',
+    CANCELLED = 'CANCELLED',
 }
 
 export const VAULT_MAP: Record<string, any> = {
