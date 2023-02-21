@@ -3,7 +3,7 @@ export const liquidityPoolContract = {
         5: '',
         10: '',
         42: '',
-        420: '0x5A17bB0394dD25f21fd11aC6202561B04f126065',
+        420: '0x1dBc8eF4c551feb01C693e2c064aA66900D0f103',
     },
     abi: [
         {
@@ -85,6 +85,7 @@ export const liquidityPoolContract = {
             name: 'PoolRoundMastercopyChanged',
             type: 'event',
         },
+        { anonymous: false, inputs: [], name: 'PoolStarted', type: 'event' },
         {
             anonymous: false,
             inputs: [
@@ -226,6 +227,24 @@ export const liquidityPoolContract = {
             inputs: [{ internalType: 'address', name: 'market', type: 'address' }],
             name: 'getMarketRound',
             outputs: [{ internalType: 'uint256', name: '_round', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: 'user', type: 'address' }],
+            name: 'getMaxAvailableDepositForUser',
+            outputs: [
+                { internalType: 'uint256', name: 'maxDepositForUser', type: 'uint256' },
+                { internalType: 'uint256', name: 'availableToDepositForUser', type: 'uint256' },
+                { internalType: 'uint256', name: 'stakedThalesForUser', type: 'uint256' },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: 'user', type: 'address' }],
+            name: 'getNeededStakedThalesToWithdrawForUser',
+            outputs: [{ internalType: 'uint256', name: 'neededStaked', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
         },
