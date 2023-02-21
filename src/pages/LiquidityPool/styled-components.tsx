@@ -291,6 +291,18 @@ export const LiquidityPoolInfoGraphic = styled(FlexDivStart)<{ background: strin
     background: ${(props) => props.background};
     border-radius: 9px;
     margin-right: ${(props) => (props.widthPercentage === 0 ? 0 : 6)}px;
+    @media (max-width: 1199px) {
+        width: ${(props) => 150 * props.widthPercentage}px;
+    }
+    @media (max-width: 991px) {
+        width: ${(props) => 120 * props.widthPercentage}px;
+    }
+    @media (max-width: 767px) {
+        width: ${(props) => 200 * props.widthPercentage}px;
+    }
+    @media (max-width: 575px) {
+        width: ${(props) => 120 * props.widthPercentage}px;
+    }
 `;
 
 export const LiquidityPoolInfo = styled.span`

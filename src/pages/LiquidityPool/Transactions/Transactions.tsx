@@ -41,8 +41,8 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound }) => {
                 name: t(`liquidity-pool.user-transactions.title`),
             },
             {
-                id: LiquidityPoolTransaction.MY_TRANSACTIONS,
-                name: 'My transactions',
+                id: LiquidityPoolTransaction.YOUR_TRANSACTIONS,
+                name: t(`liquidity-pool.user-transactions.your-transactions-title`),
             },
         ],
         [t]
@@ -130,7 +130,7 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound }) => {
                         }
                     />
                 )}
-                {selectedTab === LiquidityPoolTransaction.MY_TRANSACTIONS && (
+                {selectedTab === LiquidityPoolTransaction.YOUR_TRANSACTIONS && (
                     <UserTransactionsTable
                         transactions={liquidityPoolMyTransactions}
                         isLoading={liquidityPoolUserTransactionsQuery.isLoading}

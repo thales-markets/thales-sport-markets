@@ -5,7 +5,7 @@ export enum LiquidityPoolTab {
 
 export enum LiquidityPoolTransaction {
     USER_TRANSACTIONS = 'user-transactions',
-    MY_TRANSACTIONS = 'my-transactions',
+    YOUR_TRANSACTIONS = 'your-transactions',
 }
 
 export enum LiquidityPoolPnlType {

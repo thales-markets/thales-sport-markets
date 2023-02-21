@@ -879,6 +879,7 @@
         },
         "user-transactions": {
             "title": "User transactions",
+            "your-transactions-title": "Your transactions",
             "no-transactions": "No user transactions associated with this liquidity pool in the selected round.",
             "round-label": "Round",
             "type": {

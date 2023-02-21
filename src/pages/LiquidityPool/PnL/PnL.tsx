@@ -207,6 +207,8 @@ const NoData = styled(FlexDivCentered)`
     margin-bottom: 10px;
     height: 200px;
     color: #5f6180;
+    padding: 10px;
+    text-align: center;
 `;
 
 export default PnL;
