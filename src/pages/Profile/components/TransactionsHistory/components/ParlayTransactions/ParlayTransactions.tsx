@@ -140,6 +140,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
             <Table
                 tableHeadCellStyles={TableHeaderStyle}
                 tableRowCellStyles={TableRowStyle}
+                columnsDeps={[networkId]}
                 columns={[
                     {
                         id: 'time',

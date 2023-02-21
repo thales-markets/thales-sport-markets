@@ -59,9 +59,9 @@ const UserStats: React.FC = () => {
                     <Label>{t('profile.stats.lifetime-wins')}</Label>
                     <Value>{!user ? 0 : winningInfo.lifetimeWins}</Value>
                 </Section>
-                <Separator />
                 {areVaultsSupported && (
                     <>
+                        <Separator />
                         <Section>
                             <Label>{t('profile.stats.in-vaults')}</Label>
                             <Value>{!user ? 0 : vaultsData.balanceTotal.toFixed(2)}</Value>
