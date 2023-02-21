@@ -71,7 +71,7 @@ const Tab = styled.div<{ active: boolean }>`
     font-weight: 700;
     font-size: 16px;
     line-height: 24px;
-    color: #ffffff;
+    color: ${(props) => (props.active ? '#c12b34' : '#ffffff')};
 `;
 
 const TabHome = styled(Tab)`
