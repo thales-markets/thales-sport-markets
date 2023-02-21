@@ -11,7 +11,7 @@ import { WinningInfo } from 'types/markets';
 import { UserVaultsData } from 'types/vault';
 import { getAreVaultsSupportedForNetworkId } from 'utils/network';
 
-const UserStats: React.FC<{ openPositionsValue: number }> = ({ openPositionsValue }) => {
+const UserStats: React.FC = () => {
     const { t } = useTranslation();
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -67,14 +67,8 @@ const UserStats: React.FC<{ openPositionsValue: number }> = ({ openPositionsValu
                             <Value>{!user ? 0 : vaultsData.balanceTotal.toFixed(2)}</Value>
                             <CurrencyLabel>USD</CurrencyLabel>
                         </Section>
-                        <Separator />
                     </>
                 )}
-                <Section>
-                    <Label>P&L</Label>
-                    <Value>{!user ? 0 : (user.pnl + openPositionsValue).toFixed(2)}</Value>
-                    <CurrencyLabel>USD</CurrencyLabel>
-                </Section>
             </SectionWrapper>
         </Wrapper>
     );
