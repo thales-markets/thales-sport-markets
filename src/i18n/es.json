@@ -823,5 +823,13 @@
             "address": "Your address QR code",
             "copied": "¡Copiado!"
         }
+    },
+    "march-madness": {
+        "tabs": {
+            "leaderboard": "Tabla de clasificación",
+            "home": "Hogar",
+            "brackets": "Soportes"
+        },
+        "back-to-markets": "volver a los mercados"
     }
 }

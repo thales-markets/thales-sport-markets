@@ -826,5 +826,13 @@
             "address": "Your address QR code",
             "copied": "Copiato!"
         }
+    },
+    "march-madness": {
+        "tabs": {
+            "home": "Casa",
+            "leaderboard": "Classifica",
+            "brackets": "Parentesi"
+        },
+        "back-to-markets": "Torniamo ai mercati"
     }
 }

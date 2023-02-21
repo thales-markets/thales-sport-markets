@@ -823,5 +823,13 @@
             "address": "Your address QR code",
             "copied": "已复制！"
         }
+    },
+    "march-madness": {
+        "tabs": {
+            "leaderboard": "排行榜",
+            "home": "家",
+            "brackets": "括号"
+        },
+        "back-to-markets": "回到市场"
     }
 }

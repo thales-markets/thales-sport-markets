@@ -58,11 +58,11 @@ const Brackets: React.FC = () => {
                 </RightQuarter>
             </RowHalf>
             <SemiFinals>
-                <Match id={61} height={MATCH_HEIGHT} margin="-9px 25px 0 0"></Match>
-                <Match id={62} height={MATCH_HEIGHT} margin="-9px 0 0 25px"></Match>
+                <Match id={61} height={MATCH_HEIGHT} margin="-7px 25px 0 0"></Match>
+                <Match id={62} height={MATCH_HEIGHT} margin="-7px 0 0 25px"></Match>
             </SemiFinals>
             <Final>
-                <Match id={63} height={MATCH_HEIGHT} margin="26px 0 0 0"></Match>
+                <Match id={63} height={MATCH_HEIGHT} margin="24px 0 0 0"></Match>
             </Final>
             <RowHalf>
                 <LeftQuarter>
@@ -158,7 +158,7 @@ const SecondRound = styled.div<{ sideLeft: boolean }>`
 const Sweet16 = styled.div<{ sideLeft: boolean }>`
     display: flex;
     flex-direction: column;
-    ${(props) => `${props.sideLeft ? 'margin-left: ' : 'margin-right: '}-18px;`}
+    ${(props) => `${props.sideLeft ? 'margin-left: ' : 'margin-right: '}-24px;`}
     z-index: 20;
 `;
 
@@ -173,7 +173,7 @@ const SemiFinals = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
-    height: 34px;
+    height: 38px;
 `;
 
 const Final = styled.div`

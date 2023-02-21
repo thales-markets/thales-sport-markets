@@ -819,5 +819,13 @@
             "address": "Your address QR code",
             "copied": "คัดลอก!"
         }
+    },
+    "march-madness": {
+        "tabs": {
+            "brackets": "วงเล็บ",
+            "home": "บ้าน",
+            "leaderboard": "กระดานผู้นำ"
+        },
+        "back-to-markets": "กลับไปที่ตลาด"
     }
 }

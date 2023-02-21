@@ -812,5 +812,13 @@
             "period-10": "October",
             "period-11": "November"
         }
+    },
+    "march-madness": {
+        "back-to-markets": "Back to markets",
+        "tabs": {
+            "home": "Home",
+            "brackets": "Brackets",
+            "leaderboard": "Leaderboard"
+        }
     }
 }

@@ -826,5 +826,13 @@
             "address": "Your address QR code",
             "copied": "Скопировано!"
         }
+    },
+    "march-madness": {
+        "tabs": {
+            "home": "Дом",
+            "leaderboard": "Таблица лидеров",
+            "brackets": "Кронштейны"
+        },
+        "back-to-markets": "Назад к рынкам"
     }
 }

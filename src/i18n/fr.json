@@ -921,5 +921,13 @@
             "address": "QR code de votre adfesse",
             "copied": "Copié !"
         }
+    },
+    "march-madness": {
+        "tabs": {
+            "home": "Maison",
+            "brackets": "Supports",
+            "leaderboard": "Classement"
+        },
+        "back-to-markets": "Retour aux marchés"
     }
 }
