@@ -63,7 +63,6 @@ const useLiquidityPoolDataQuery = (networkId: NetworkId, options?: UseQueryOptio
                         liquidityPoolData.maxAllowedDeposit - liquidityPoolData.allocationNextRound;
                     liquidityPoolData.allocationNextRoundPercentage =
                         (liquidityPoolData.allocationNextRound / liquidityPoolData.maxAllowedDeposit) * 100;
-                    liquidityPoolData.isRoundEnded = new Date().getTime() > liquidityPoolData.roundEndTime;
                     liquidityPoolData.minDepositAmount = bigNumberFormatter(minDepositAmount);
                     liquidityPoolData.maxAllowedUsers = Number(maxAllowedUsers);
                     liquidityPoolData.usersCurrentlyInLiquidityPool = Number(usersCurrentlyInLiquidityPool);
@@ -83,6 +82,7 @@ const useLiquidityPoolDataQuery = (networkId: NetworkId, options?: UseQueryOptio
                     liquidityPoolData.lifetimePnl =
                         bigNumberFormatter(lifetimePnl) === 0 ? 0 : bigNumberFormatter(lifetimePnl) - 1;
                     liquidityPoolData.roundEndTime = Number(roundEndTime) * 1000;
+                    liquidityPoolData.isRoundEnded = new Date().getTime() > liquidityPoolData.roundEndTime;
 
                     return liquidityPoolData;
                 }

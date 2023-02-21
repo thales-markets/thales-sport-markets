@@ -394,7 +394,7 @@
                 "fee-rebates": "Fee rebates",
                 "become-affiliate": "Become affiliate",
                 "vaults": "Vaults",
-                "liquidity-pool": "Liquidity pool"
+                "liquidity-pool": "Provide Liquidity"
             },
             "buttons": {
                 "switch": "Switch",
@@ -815,7 +815,7 @@
         }
     },
     "liquidity-pool": {
-        "title": "Liquidity Pool",
+        "title": "Provide Liquidity",
         "liquidity-pool-not-started-message": "The liquidity pool has not started",
         "liquidity-pool-paused-message": "The liquidity pool is paused",
         "round-end-label": "The round ends in",
@@ -861,7 +861,7 @@
             "close-round-label": "Close round",
             "close-round-progress-label": "Closing round in progress...",
             "close-round-confirmation-message": "Round successfully closed",
-            "buy-thales-label": "Buy THALES",
+            "get-thales-label": "Get THALES",
             "stake-thales-label": "Stake THALES"
         },
         "pnl": {

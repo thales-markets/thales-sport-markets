@@ -585,7 +585,7 @@ const LiquidityPool: React.FC = () => {
                                     }
                                 }}
                             >
-                                {t('liquidity-pool.button.buy-thales-label')}
+                                {t('liquidity-pool.button.get-thales-label')}
                             </ExternalButton>
                             <ExternalButton
                                 onClick={() => {
