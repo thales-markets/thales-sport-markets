@@ -362,6 +362,12 @@ const LiquidityPool: React.FC = () => {
         );
     };
 
+    const infoGraphicPercentages = getInfoGraphicPercentages(
+        userLiquidityPoolData ? userLiquidityPoolData.balanceCurrentRound : 0,
+        userLiquidityPoolData ? userLiquidityPoolData.balanceTotal : 0,
+        userLiquidityPoolData ? userLiquidityPoolData.balanceTotal : 0
+    );
+
     return (
         <Wrapper>
             <Info>
@@ -579,7 +585,7 @@ const LiquidityPool: React.FC = () => {
                                     }
                                 }}
                             >
-                                {'BUY THALES'}
+                                {t('liquidity-pool.button.buy-thales-label')}
                             </ExternalButton>
                             <ExternalButton
                                 onClick={() => {
@@ -590,7 +596,7 @@ const LiquidityPool: React.FC = () => {
                                     }
                                 }}
                             >
-                                {'STAKE THALES'}
+                                {t('liquidity-pool.button.stake-thales-label')}
                             </ExternalButton>
                         </ButtonContainer>
                     </ContentContainer>
@@ -606,7 +612,18 @@ const LiquidityPool: React.FC = () => {
                         <ContentContainer>
                             {liquidityPoolData && userLiquidityPoolData && (
                                 <>
-                                    <LiquidityPoolInfoTitle>Total LP info</LiquidityPoolInfoTitle>
+                                    <LiquidityPoolInfoTitle>
+                                        {t('liquidity-pool.total-info-label')}
+                                    </LiquidityPoolInfoTitle>
+                                    <span>
+                                        <Trans
+                                            i18nKey="liquidity-pool.users-in-liquidity-pool-label"
+                                            values={{
+                                                number: liquidityPoolData.usersCurrentlyInLiquidityPool,
+                                                max: liquidityPoolData.maxAllowedUsers,
+                                            }}
+                                        />
+                                    </span>
                                     <LiquidityPoolFilledGraphicContainer>
                                         <LiquidityPoolFilledGraphicPercentage
                                             width={liquidityPoolData.allocationNextRoundPercentage}
@@ -620,56 +637,92 @@ const LiquidityPool: React.FC = () => {
                                             USD_SIGN,
                                             liquidityPoolData.maxAllowedDeposit
                                         )}`}</span>
-                                        <span>{`Your share ${formatPercentage(
-                                            userLiquidityPoolData.balanceTotal / liquidityPoolData.allocationNextRound
-                                        )} of LP`}</span>
+                                        <span>
+                                            <Trans
+                                                i18nKey="liquidity-pool.your-share-label"
+                                                values={{
+                                                    percentage: formatPercentage(
+                                                        userLiquidityPoolData.balanceTotal /
+                                                            liquidityPoolData.allocationNextRound
+                                                    ),
+                                                }}
+                                            />
+                                        </span>
                                     </LiquidityPoolFilledText>
                                 </>
                             )}
                             {userLiquidityPoolData && (
                                 <ContentInfoContainer>
-                                    <LiquidityPoolInfoTitle>Your LP info</LiquidityPoolInfoTitle>
+                                    <LiquidityPoolInfoTitle>
+                                        {t('liquidity-pool.your-info-label')}
+                                    </LiquidityPoolInfoTitle>
+                                    {liquidityPoolData.liquidityPoolStarted && (
+                                        <LiquidityPoolInfoContainer>
+                                            <LiquidityPoolInfoLabel>
+                                                {t('liquidity-pool.current-balance-label')}
+                                            </LiquidityPoolInfoLabel>
+                                            <LiquidityPoolInfoGraphic
+                                                background={'linear-gradient(90.21deg, #A40A95 0.18%, #FC6679 99.82%)'}
+                                                widthPercentage={infoGraphicPercentages.currentBalancePercenatage}
+                                            />
+                                            <LiquidityPoolInfo>
+                                                {formatCurrencyWithSign(
+                                                    USD_SIGN,
+                                                    userLiquidityPoolData.balanceCurrentRound
+                                                )}
+                                            </LiquidityPoolInfo>
+                                        </LiquidityPoolInfoContainer>
+                                    )}
                                     <LiquidityPoolInfoContainer>
-                                        <LiquidityPoolInfoLabel>Your total deposit</LiquidityPoolInfoLabel>
-                                        <LiquidityPoolInfoGraphic
-                                            background={'linear-gradient(90.21deg, #A40A95 0.18%, #FC6679 99.82%)'}
-                                        />
-                                        <LiquidityPoolInfo>
-                                            {formatCurrencyWithSign(
-                                                USD_SIGN,
-                                                userLiquidityPoolData.balanceCurrentRound
-                                            )}
-                                        </LiquidityPoolInfo>
-                                    </LiquidityPoolInfoContainer>
-                                    <LiquidityPoolInfoContainer>
-                                        <LiquidityPoolInfoLabel>Max allowance</LiquidityPoolInfoLabel>
+                                        <LiquidityPoolInfoLabel>
+                                            {t('liquidity-pool.next-round-balance-label')}
+                                        </LiquidityPoolInfoLabel>
                                         <LiquidityPoolInfoGraphic
                                             background={'linear-gradient(90deg, #2A3895 0%, #893CE2 100%)'}
+                                            widthPercentage={infoGraphicPercentages.nextRoundBalancePercenatage}
                                         />
                                         <LiquidityPoolInfo>
-                                            {formatCurrencyWithSign(
-                                                USD_SIGN,
-                                                userLiquidityPoolData.balanceCurrentRound * 1.5
-                                            )}
+                                            {formatCurrencyWithSign(USD_SIGN, userLiquidityPoolData.balanceTotal)}
+                                            {userLiquidityPoolData.balanceCurrentRound > 0 &&
+                                                !isWithdrawalRequested && (
+                                                    <Tooltip
+                                                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
+                                                        iconFontSize={14}
+                                                        marginLeft={2}
+                                                    />
+                                                )}
                                         </LiquidityPoolInfo>
                                     </LiquidityPoolInfoContainer>
                                     <LiquidityPoolInfoContainer>
-                                        <LiquidityPoolInfoLabel>Current balance</LiquidityPoolInfoLabel>
+                                        <LiquidityPoolInfoLabel>
+                                            {t('liquidity-pool.max-allowance-label')}
+                                        </LiquidityPoolInfoLabel>
                                         <LiquidityPoolInfoGraphic
                                             background={'linear-gradient(270deg, #3AECD3 0%, #017F9C 100%)'}
+                                            widthPercentage={infoGraphicPercentages.maxAllowancePercenatage}
                                         />
                                         <LiquidityPoolInfo>
-                                            {formatCurrencyWithSign(
-                                                USD_SIGN,
-                                                userLiquidityPoolData.balanceCurrentRound
-                                            )}
+                                            {formatCurrencyWithSign(USD_SIGN, userLiquidityPoolData.balanceTotal)}
+                                        </LiquidityPoolInfo>
+                                    </LiquidityPoolInfoContainer>
+                                    {isWithdrawalRequested && (
+                                        <WarningContentInfo>
+                                            <Trans
+                                                i18nKey="liquidity-pool.withdrawal-request-label"
+                                                values={{
+                                                    amount: formatCurrencyWithSign(
+                                                        USD_SIGN,
+                                                        userLiquidityPoolData.balanceCurrentRound
+                                                    ),
+                                                }}
+                                            />
                                             <Tooltip
-                                                overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
+                                                overlay={t(`vault.estimated-amount-tooltip`)}
                                                 iconFontSize={14}
                                                 marginLeft={2}
                                             />
-                                        </LiquidityPoolInfo>
-                                    </LiquidityPoolInfoContainer>
+                                        </WarningContentInfo>
+                                    )}
                                 </ContentInfoContainer>
                             )}
                         </ContentContainer>
@@ -704,6 +757,33 @@ const LiquidityPool: React.FC = () => {
             )}
         </Wrapper>
     );
+};
+
+const getInfoGraphicPercentages = (currentBalance: number, nextRoundBalance: number, maxAllowance: number) => {
+    let currentBalancePercenatage = 1;
+    let nextRoundBalancePercenatage = 1;
+    let maxAllowancePercenatage = 1;
+
+    if (maxAllowance > currentBalance && maxAllowance > nextRoundBalance) {
+        currentBalancePercenatage = currentBalance / maxAllowance;
+        nextRoundBalancePercenatage = nextRoundBalance / maxAllowance;
+    } else if (currentBalance > nextRoundBalance) {
+        maxAllowancePercenatage = maxAllowance / currentBalance;
+        nextRoundBalancePercenatage = nextRoundBalance / currentBalance;
+    } else if (nextRoundBalance === 0) {
+        currentBalancePercenatage = 0;
+        nextRoundBalancePercenatage = 0;
+        maxAllowancePercenatage = 0;
+    } else {
+        maxAllowancePercenatage = maxAllowance / nextRoundBalance;
+        currentBalancePercenatage = currentBalance / nextRoundBalance;
+    }
+
+    return {
+        currentBalancePercenatage,
+        nextRoundBalancePercenatage,
+        maxAllowancePercenatage,
+    };
 };
 
 export default LiquidityPool;

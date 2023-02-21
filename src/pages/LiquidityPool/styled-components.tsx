@@ -145,11 +145,6 @@ export const Title = styled.span`
     }
 `;
 
-export const UsersInLiquidityPoolText = styled(ContentInfo)`
-    margin-top: 20px;
-    margin-bottom: 10px;
-`;
-
 export const LiquidityPoolFilledText = styled(FlexDivRow)`
     margin-top: 10px;
     margin-bottom: 20px;
@@ -162,6 +157,7 @@ export const LiquidityPoolFilledGraphicContainer = styled(FlexDivStart)`
     height: 14px;
     background: #3b4472;
     border-radius: 9px;
+    margin-top: 10px;
 `;
 
 export const LiquidityPoolFilledGraphicPercentage = styled(FlexDivStart)<{ width: number }>`
@@ -275,7 +271,7 @@ export const LiquidityPoolInfoTitle = styled.div`
     font-size: 18px;
     line-height: 100%;
     margin-top: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 `;
 
 export const LiquidityPoolInfoContainer = styled(FlexDivStart)`
@@ -286,17 +282,17 @@ export const LiquidityPoolInfoContainer = styled(FlexDivStart)`
 export const LiquidityPoolInfoLabel = styled.span`
     white-space: nowrap;
     margin-right: 6px;
-    width: 115px;
+    width: 122px;
 `;
 
-export const LiquidityPoolInfoGraphic = styled(FlexDivStart)<{ background: string }>`
-    width: 100px;
+export const LiquidityPoolInfoGraphic = styled(FlexDivStart)<{ background: string; widthPercentage: number }>`
+    width: ${(props) => 200 * props.widthPercentage}px;
     height: 14px;
     background: ${(props) => props.background};
     border-radius: 9px;
+    margin-right: ${(props) => (props.widthPercentage === 0 ? 0 : 6)}px;
 `;
 
 export const LiquidityPoolInfo = styled.span`
     white-space: nowrap;
-    margin-left: 6px;
 `;
