@@ -833,6 +833,10 @@
             "leaderboard": "Classifica",
             "brackets": "Parentesi"
         },
-        "back-to-markets": "Torniamo ai mercati"
+        "back-to-markets": "Torniamo ai mercati",
+        "brackets": {
+            "team-2": "Squadra 2",
+            "team-1": "Squadra 1"
+        }
     }
 }

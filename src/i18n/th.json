@@ -826,6 +826,10 @@
             "home": "บ้าน",
             "leaderboard": "กระดานผู้นำ"
         },
-        "back-to-markets": "กลับไปที่ตลาด"
+        "back-to-markets": "กลับไปที่ตลาด",
+        "brackets": {
+            "team-2": "ทีมที่ 2",
+            "team-1": "ทีมที่ 1"
+        }
     }
 }

@@ -1,55 +1,106 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import { MarchMadMatch } from 'types/marchMadness';
+import { teamsData } from 'utils/marchMadness';
 import MatchConnector from '../MatchConnector';
+import TeamStatus from '../TeamStatus';
 
-type MatchProps = { id: number; height: number; margin?: string };
+type MatchProps = {
+    id: number;
+    matchData: MarchMadMatch;
+    updateBrackets: (id: number, isHomeTeamSelected: boolean) => void;
+    height: number;
+    margin?: string;
+};
 
-const Match: React.FC<MatchProps> = ({ id, height, margin }) => {
+const Match: React.FC<MatchProps> = ({ id, matchData, updateBrackets: updateMatch, height, margin }) => {
+    const { t } = useTranslation();
+
     const isBracketsLeftSide = useMemo(
-        () => id <= 16 || (id > 32 && id <= 40) || (id > 48 && id <= 52) || [57, 58, 61, 63].includes(id),
-        []
+        () => id <= 15 || (id > 31 && id <= 39) || (id > 47 && id <= 51) || [56, 57, 60, 62].includes(id),
+        [id]
     );
+
+    const homeTeam = teamsData.find((team) => team.id === matchData?.homeTeamId);
+    const awayTeam = teamsData.find((team) => team.id === matchData?.awayTeamId);
+
+    const [isHomeTeamSelected, setIsHomeTeamSelected] = useState(matchData?.isHomeTeamSelected);
+    const isAwayTeamSelected = isHomeTeamSelected !== undefined ? !isHomeTeamSelected : undefined;
+
+    const teamClickHandler = (matchId: number, isHomeTeamClicked: boolean) => {
+        if (!matchData.isResolved) {
+            setIsHomeTeamSelected(isHomeTeamClicked);
+            updateMatch(matchId, isHomeTeamClicked);
+        }
+    };
 
     return (
         <Container height={height} margin={margin}>
-            <TeamRow>
+            <TeamRow isClickable={!matchData.isResolved} onClick={() => teamClickHandler(id, true)}>
+                {/* HOME TEAM */}
                 {isBracketsLeftSide ? (
                     <>
                         <Logo>L1</Logo>
                         <TeamPosition isLeftSide={true}>
-                            <TeamPositionValue>1</TeamPositionValue>
+                            <TeamPositionValue>{homeTeam?.position}</TeamPositionValue>
                         </TeamPosition>
-                        <TeamName isLeftSide={true}>Purdue</TeamName>
-                        <TeamSelector isLeftSide={true} />
+                        <TeamName isLeftSide={true} hasName={!!homeTeam?.displayName} isSelected={isHomeTeamSelected}>
+                            {homeTeam?.displayName || t('march-madness.brackets.team-1')}
+                        </TeamName>
+                        <TeamStatus
+                            isSelected={!!isHomeTeamSelected}
+                            isResolved={!!matchData?.isResolved}
+                            margin="0 5px 0 0"
+                        />
                     </>
                 ) : (
                     <>
-                        <TeamSelector isLeftSide={false} />
-                        <TeamName isLeftSide={false}>Purdue</TeamName>
+                        <TeamStatus
+                            isSelected={!!isHomeTeamSelected}
+                            isResolved={!!matchData?.isResolved}
+                            margin="0 0 0 5px"
+                        />
+                        <TeamName isLeftSide={false} hasName={!!homeTeam?.displayName} isSelected={isHomeTeamSelected}>
+                            {homeTeam?.displayName || t('march-madness.brackets.team-1')}
+                        </TeamName>
                         <TeamPosition isLeftSide={false}>
-                            <TeamPositionValue>1</TeamPositionValue>
+                            <TeamPositionValue>{homeTeam?.position}</TeamPositionValue>
                         </TeamPosition>
                         <Logo>L1</Logo>
                     </>
                 )}
             </TeamRow>
             <TeamSeparator />
-            <TeamRow>
+            <TeamRow isClickable={!matchData.isResolved} onClick={() => teamClickHandler(id, false)}>
+                {/* AWAY TEAM */}
                 {isBracketsLeftSide ? (
                     <>
                         <Logo>L2</Logo>
                         <TeamPosition isLeftSide={true}>
-                            <TeamPositionValue>16</TeamPositionValue>
+                            <TeamPositionValue>{awayTeam?.position}</TeamPositionValue>
                         </TeamPosition>
-                        <TeamName isLeftSide={true}>Milwuakee</TeamName>
-                        <TeamSelector isLeftSide={true} />
+                        <TeamName isLeftSide={true} hasName={!!awayTeam?.displayName} isSelected={isAwayTeamSelected}>
+                            {awayTeam?.displayName || t('march-madness.brackets.team-2')}
+                        </TeamName>
+                        <TeamStatus
+                            isSelected={!!isAwayTeamSelected}
+                            isResolved={!!matchData?.isResolved}
+                            margin="0 5px 0 0"
+                        />
                     </>
                 ) : (
                     <>
-                        <TeamSelector isLeftSide={false} />
-                        <TeamName isLeftSide={false}>Purdue</TeamName>
+                        <TeamStatus
+                            isSelected={!!isAwayTeamSelected}
+                            isResolved={!!matchData?.isResolved}
+                            margin="0 0 0 5px"
+                        />
+                        <TeamName isLeftSide={false} hasName={!!awayTeam?.displayName} isSelected={isAwayTeamSelected}>
+                            {awayTeam?.displayName || t('march-madness.brackets.team-2')}
+                        </TeamName>
                         <TeamPosition isLeftSide={false}>
-                            <TeamPositionValue>16</TeamPositionValue>
+                            <TeamPositionValue>{awayTeam?.position}</TeamPositionValue>
                         </TeamPosition>
                         <Logo>L2</Logo>
                     </>
@@ -79,7 +130,7 @@ const TeamSeparator = styled.hr`
     margin: auto;
 `;
 
-const TeamRow = styled.div`
+const TeamRow = styled.div<{ isClickable: boolean }>`
     width: 100%;
     height: 50%;
     position: relative;
@@ -89,6 +140,7 @@ const TeamRow = styled.div`
     align-items: center;
     padding: 1px;
     z-index: 100;
+    cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
 `;
 
 const Logo = styled.div`
@@ -117,7 +169,7 @@ const TeamPositionValue = styled.span`
     color: #9aaeb1;
 `;
 
-const TeamName = styled.div<{ isLeftSide: boolean }>`
+const TeamName = styled.div<{ isLeftSide: boolean; hasName: boolean; isSelected: boolean | undefined }>`
     width: 90px;
     font-family: 'Oswald' !important;
     font-style: normal;
@@ -125,17 +177,19 @@ const TeamName = styled.div<{ isLeftSide: boolean }>`
     font-size: 14px;
     line-height: 14px;
     text-transform: uppercase;
-    color: #021631;
+    color: ${(props) =>
+        props.hasName
+            ? props.isSelected === undefined
+                ? '#021631'
+                : props.isSelected
+                ? '#0E94CB'
+                : '#9AAEB1'
+            : '#9AAEB1'};
     ${(props) => (props.isLeftSide ? 'margin-left: 2px;' : 'margin-right: 2px;')}
     text-align: ${(props) => (props.isLeftSide ? 'left' : 'right')};
-`;
-
-const TeamSelector = styled.div<{ isLeftSide: boolean }>`
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #0e94cb;
-    ${(props) => (props.isLeftSide ? 'margin-right: 5px;' : 'margin-left: 5px;')}
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 export default Match;

@@ -830,6 +830,10 @@
             "home": "Hogar",
             "brackets": "Soportes"
         },
-        "back-to-markets": "volver a los mercados"
+        "back-to-markets": "volver a los mercados",
+        "brackets": {
+            "team-2": "equipo 2",
+            "team-1": "equipo 1"
+        }
     }
 }

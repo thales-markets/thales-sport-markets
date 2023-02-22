@@ -833,6 +833,10 @@
             "leaderboard": "Таблица лидеров",
             "brackets": "Кронштейны"
         },
-        "back-to-markets": "Назад к рынкам"
+        "back-to-markets": "Назад к рынкам",
+        "brackets": {
+            "team-1": "Команда 1",
+            "team-2": "Команда 2"
+        }
     }
 }

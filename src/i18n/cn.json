@@ -830,6 +830,10 @@
             "home": "家",
             "brackets": "括号"
         },
-        "back-to-markets": "回到市场"
+        "back-to-markets": "回到市场",
+        "brackets": {
+            "team-2": "团队 2",
+            "team-1": "团队 1"
+        }
     }
 }

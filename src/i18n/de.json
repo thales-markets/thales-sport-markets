@@ -827,6 +827,10 @@
             "leaderboard": "Bestenliste",
             "brackets": "Klammern"
         },
-        "back-to-markets": "Zurück zu den Märkten"
+        "back-to-markets": "Zurück zu den Märkten",
+        "brackets": {
+            "team-2": "Mannschaft 2",
+            "team-1": "Mannschaft 1"
+        }
     }
 }

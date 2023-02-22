@@ -819,6 +819,10 @@
             "home": "Home",
             "brackets": "Brackets",
             "leaderboard": "Leaderboard"
+        },
+        "brackets": {
+            "team-1": "Team 1",
+            "team-2": "Team 2"
         }
     }
 }

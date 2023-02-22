@@ -928,6 +928,10 @@
             "brackets": "Supports",
             "leaderboard": "Classement"
         },
-        "back-to-markets": "Retour aux marchés"
+        "back-to-markets": "Retour aux marchés",
+        "brackets": {
+            "team-2": "Equipe 2",
+            "team-1": "Equipe 1"
+        }
     }
 }
