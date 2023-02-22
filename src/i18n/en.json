@@ -828,6 +828,8 @@
         "current-balance-label": "Current balance",
         "next-round-balance-label": "Next round balance",
         "max-allowance-label": "Max allowance",
+        "your-thales-staked-label": "Your THALES staked",
+        "allowance-multiplier-label": "Allowance multiplier",
         "withdrawal-request-label": "Withdrawal request: {{amount}}",
         "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
 

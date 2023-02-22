@@ -64,6 +64,7 @@ import Tooltip from 'components/Tooltip';
 import useLiquidityPoolDataQuery from 'queries/liquidityPool/useLiquidityPoolDataQuery';
 import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
 import { LINKS } from 'constants/links';
+import MaxAllowanceTooltip from './components/MaxAllowanceTooltip';
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
@@ -733,6 +734,19 @@ const LiquidityPool: React.FC = () => {
                                         />
                                         <LiquidityPoolInfo>
                                             {formatCurrencyWithSign(USD_SIGN, userLiquidityPoolData.maxDeposit)}
+                                            <Tooltip
+                                                overlay={
+                                                    <MaxAllowanceTooltip
+                                                        stakedThales={userLiquidityPoolData.stakedThales}
+                                                        stakedThalesMultiplier={
+                                                            liquidityPoolData.stakedThalesMultiplier
+                                                        }
+                                                    />
+                                                }
+                                                overlayClassName="lp-max-allowance"
+                                                iconFontSize={14}
+                                                marginLeft={2}
+                                            />
                                         </LiquidityPoolInfo>
                                     </LiquidityPoolInfoContainer>
                                     {isWithdrawalRequested && (
