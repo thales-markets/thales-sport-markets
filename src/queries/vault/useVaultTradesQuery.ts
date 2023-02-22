@@ -22,12 +22,13 @@ const useVaultTradesQuery = (vaultAddress: string, networkId: NetworkId, options
                     const position = trade.position;
                     const result = convertFinalResultToResultType(trade.wholeMarket.finalResult);
                     const link = getEtherscanTxLink(networkId, trade.hash);
-                    const status =
-                        Number(trade.wholeMarket.finalResult) === 0
-                            ? VaultTradeStatus.IN_PROGRESS
-                            : position === result
-                            ? VaultTradeStatus.WIN
-                            : VaultTradeStatus.LOSE;
+                    const status = trade.wholeMarket.isCanceled
+                        ? VaultTradeStatus.CANCELLED
+                        : Number(trade.wholeMarket.finalResult) === 0
+                        ? VaultTradeStatus.IN_PROGRESS
+                        : position === result
+                        ? VaultTradeStatus.WIN
+                        : VaultTradeStatus.LOSE;
 
                     return {
                         ...trade,

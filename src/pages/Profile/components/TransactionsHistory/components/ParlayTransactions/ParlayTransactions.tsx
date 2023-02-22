@@ -31,6 +31,7 @@ import ShareTicketModal from 'pages/Markets/Home/Parlay/components/ShareTicketMo
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import { Position } from 'constants/options';
 import { ethers } from 'ethers';
+import { CollateralByNetworkId } from 'utils/network';
 
 const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
@@ -139,6 +140,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
             <Table
                 tableHeadCellStyles={TableHeaderStyle}
                 tableRowCellStyles={TableRowStyle}
+                columnsDeps={[networkId]}
                 columns={[
                     {
                         id: 'time',
@@ -181,7 +183,11 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         accessor: 'sUSDPaid',
                         sortable: false,
                         Cell: (cellProps: any) => {
-                            return <TableText>{formatCurrencyWithKey('sUSD', cellProps.cell.value, 2)}</TableText>;
+                            return (
+                                <TableText>
+                                    {formatCurrencyWithKey(CollateralByNetworkId[networkId], cellProps.cell.value, 2)}
+                                </TableText>
+                            );
                         },
                     },
                     {

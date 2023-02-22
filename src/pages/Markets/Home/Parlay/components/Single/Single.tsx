@@ -326,8 +326,6 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         }
     );
 
-    console.log('positionPriceDetailsQuery ', positionPriceDetailsQuery.data);
-
     useEffect(() => {
         if (positionPriceDetailsQuery.isSuccess && positionPriceDetailsQuery.data) {
             setAmmPosition(positionPriceDetailsQuery.data);
@@ -548,8 +546,6 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     })
                 );
             } else if (Number(value) > availableUsdAmount) {
-                console.log('Value ', value);
-                console.log('availableUsdAmount ', availableUsdAmount);
                 setTooltipTextUsdAmount(t('markets.parlay.validation.amount-exceeded'));
             } else if (Number(value) > paymentTokenBalance) {
                 setTooltipTextUsdAmount(t('markets.parlay.validation.no-funds'));

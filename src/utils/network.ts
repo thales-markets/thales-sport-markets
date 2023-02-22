@@ -46,6 +46,14 @@ export const InfuraNetworkNameById: Record<NetworkId, string> = {
     42161: 'arbitrum-mainnet',
 };
 
+export const CollateralByNetworkId: Record<NetworkId, string> = {
+    10: 'sUSD',
+    42: 'sUSD',
+    5: 'sUSD',
+    420: 'sUSD',
+    42161: 'USDC',
+};
+
 export const hasEthereumInjected = () => !!window.ethereum;
 
 export async function getDefaultNetworkId(): Promise<NetworkId> {
