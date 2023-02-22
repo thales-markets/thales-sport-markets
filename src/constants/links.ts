@@ -21,5 +21,7 @@ export const LINKS = {
         Medium: 'https://medium.com/@OvertimeMarkets.xyz',
         Tutorial: 'https://www.youtube.com/watch?v=olp7jOj4Iyg',
         GitHub: 'https://github.com/thales-markets/thales-sport-markets',
+        Instagram: 'https://www.instagram.com/overtimemarkets',
+        Reddit: 'https://www.reddit.com/r/overtimemarkets',
     },
 };
