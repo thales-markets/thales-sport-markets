@@ -3,7 +3,7 @@ export const liquidityPoolContract = {
         5: '',
         10: '',
         42: '',
-        420: '0x1dBc8eF4c551feb01C693e2c064aA66900D0f103',
+        420: '0xdd0879AB819287637f33A29d1ee91d5a76c890Af',
     },
     abi: [
         {
