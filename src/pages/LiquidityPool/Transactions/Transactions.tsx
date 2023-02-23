@@ -74,8 +74,7 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound }) => {
             setLiquidityPoolMyTransactions(
                 orderBy(
                     liquidityPoolUserTransactionsQuery.data.filter(
-                        (trade: LiquidityPoolUserTransaction) =>
-                            trade.round === round && trade.account === walletAddress.toLowerCase()
+                        (trade: LiquidityPoolUserTransaction) => trade.account === walletAddress.toLowerCase()
                     ),
                     ['timestamp', 'blockNumber'],
                     ['desc', 'desc']
@@ -107,16 +106,18 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound }) => {
                         </Tab>
                     ))}
                 </TabContainer>
-                <RightHeader>
-                    <SelectContainer>
-                        <SelectInput
-                            options={rounds}
-                            handleChange={(value) => setRound(Number(value))}
-                            defaultValue={round}
-                            width={230}
-                        />
-                    </SelectContainer>
-                </RightHeader>
+                {selectedTab === LiquidityPoolTransaction.USER_TRANSACTIONS && (
+                    <RightHeader>
+                        <SelectContainer>
+                            <SelectInput
+                                options={rounds}
+                                handleChange={(value) => setRound(Number(value))}
+                                defaultValue={round}
+                                width={230}
+                            />
+                        </SelectContainer>
+                    </RightHeader>
+                )}
             </Header>
             <TableContainer>
                 {selectedTab === LiquidityPoolTransaction.USER_TRANSACTIONS && (
@@ -176,6 +177,7 @@ const RightHeader = styled(FlexDivRow)`
 `;
 
 const TabContainer = styled(FlexDiv)`
+    min-height: 38px;
     @media (max-width: 767px) {
         flex-direction: column;
     }
