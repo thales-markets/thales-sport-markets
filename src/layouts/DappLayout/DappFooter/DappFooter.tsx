@@ -59,6 +59,18 @@ const DappFooter: React.FC = () => {
                             <LinkText>{t('footer.github')}</LinkText>
                         </LinkContent>
                     </Link>
+                    <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Instagram}>
+                        <LinkContent>
+                            <InstagramIcon />
+                            <LinkText>{t('footer.instagram')}</LinkText>
+                        </LinkContent>
+                    </Link>
+                    <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Reddit}>
+                        <LinkContent>
+                            <RedditIcon />
+                            <LinkText>{t('footer.reddit')}</LinkText>
+                        </LinkContent>
+                    </Link>
                 </LinksContainer>
             </Container>
             <DisclaimerContainer>
@@ -192,6 +204,22 @@ const GithubIcon = styled.i`
     &:before {
         font-family: ExoticIcons !important;
         content: '\\0057';
+    }
+`;
+
+const InstagramIcon = styled.i`
+    color: ${(props) => props.theme.textColor.secondary};
+    &:before {
+        font-family: ExoticIcons !important;
+        content: '\\002C';
+    }
+`;
+
+const RedditIcon = styled.i`
+    color: ${(props) => props.theme.textColor.secondary};
+    &:before {
+        font-family: ExoticIcons !important;
+        content: '\\002E';
     }
 `;
 

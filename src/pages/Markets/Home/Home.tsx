@@ -709,7 +709,7 @@ export const Info = styled.div`
     margin-bottom: 20px;
     background-color: #303656;
     box-shadow: 0px 0px 20px rgb(0 0 0 / 40%);
-    z-index: 2;
+    z-index: 1;
     position: absolute;
     top: 0px;
     left: 0px;
