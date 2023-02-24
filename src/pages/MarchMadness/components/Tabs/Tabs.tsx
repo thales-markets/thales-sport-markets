@@ -33,18 +33,21 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
     return (
         <Container>
             <TabHome active={selectedTab === MarchMadTabs.HOME} onClick={() => tabClickHandler(MarchMadTabs.HOME)}>
+                {selectedTab === MarchMadTabs.HOME && <TabSelected />}
                 {t('march-madness.tabs.home')}
             </TabHome>
             <TabBrackets
                 active={selectedTab === MarchMadTabs.BRACKETS}
                 onClick={() => tabClickHandler(MarchMadTabs.BRACKETS)}
             >
+                {selectedTab === MarchMadTabs.BRACKETS && <TabSelected />}
                 {t('march-madness.tabs.brackets')}
             </TabBrackets>
             <TabLeaderboard
                 active={selectedTab === MarchMadTabs.LEADERBOARD}
                 onClick={() => tabClickHandler(MarchMadTabs.LEADERBOARD)}
             >
+                {selectedTab === MarchMadTabs.LEADERBOARD && <TabSelected />}
                 {t('march-madness.tabs.leaderboard')}
             </TabLeaderboard>
         </Container>
@@ -61,7 +64,7 @@ const Container = styled.div`
 `;
 
 const Tab = styled.div<{ active: boolean }>`
-    ${(props) => (props.active ? 'box-shadow: 0px 5px #c12b34;' : '')}
+    position: relative;
     text-transform: uppercase;
     padding-bottom: 6px;
     padding-left: 40px;
@@ -72,6 +75,16 @@ const Tab = styled.div<{ active: boolean }>`
     font-size: 16px;
     line-height: 24px;
     color: ${(props) => (props.active ? '#c12b34' : '#ffffff')};
+`;
+
+const TabSelected = styled.div`
+    position: absolute;
+    bottom: -3.25px;
+    right: 0;
+    width: 100%;
+    height: 5px;
+    background: #c12b34;
+    border-radius: 5px;
 `;
 
 const TabHome = styled(Tab)`
@@ -85,4 +98,5 @@ const TabBrackets = styled(Tab)`
 const TabLeaderboard = styled(Tab)`
     width: 40%;
 `;
+
 export default Tabs;
