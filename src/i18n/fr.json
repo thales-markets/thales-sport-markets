@@ -514,7 +514,8 @@
             },
             "labels": {
                 "get-started": "Commencer",
-                "language": "Langue"
+                "language": "Langue",
+                "march-madness": "Folie de mars"
             }
         },
         "op-incentivized-tooltip": "Les marchés NFL sont récompensés par 10.000 OP entre les matchs du 14 janvier au 12 février, en fonction du volume proportionnel. Consultez le classement <duneLink>ici</ duneLink>.",

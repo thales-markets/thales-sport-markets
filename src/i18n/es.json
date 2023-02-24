@@ -416,7 +416,8 @@
             },
             "labels": {
                 "language": "Idioma",
-                "get-started": "Empezar"
+                "get-started": "Empezar",
+                "march-madness": "locura de Marzo"
             }
         },
         "incentivized-markets": "MERCADOS INCENTIVIZADOS",

@@ -1,14 +1,21 @@
-import background from 'assets/images/march-madness/background_marchmadness1-01.svg';
+import background from 'assets/images/march-madness/background-marchmadness.svg';
 import { userSampleBracketsData, resultSampleBracketsData, wildCardTeams } from 'utils/marchMadness';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Match from '../Match';
 import { BracketMatch, ResultMatch } from 'types/marchMadness';
 import { useTranslation } from 'react-i18next';
 import WildCardMatch from '../WildCardMatch';
+import { getNetworkId } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import { useSelector } from 'react-redux';
+import localStore from 'utils/localStore';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
+
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const [bracketsData, setBracketsData] = useState(userSampleBracketsData); // TODO: switch to initial
 
@@ -16,6 +23,15 @@ const Brackets: React.FC = () => {
 
     const isBracketsLocked = false; // TODO: fetch from contract
     const isBracketSubmitted = false;
+
+    useEffect(() => {
+        if (!isBracketsLocked && !isBracketSubmitted) {
+            const lsBrackets = localStore.get(LOCAL_STORAGE_KEYS.BRACKETS + networkId);
+            if (lsBrackets !== undefined) {
+                setBracketsData(lsBrackets as BracketMatch[]);
+            }
+        }
+    }, [networkId, isBracketsLocked, isBracketSubmitted]);
 
     const isTeamLostInPreviousRounds = (teamId: number | undefined) => {
         if (teamId === undefined) {
@@ -102,6 +118,8 @@ const Brackets: React.FC = () => {
             }
             return match;
         });
+
+        localStore.set(LOCAL_STORAGE_KEYS.BRACKETS + networkId, updatedChildrenMatches);
 
         setBracketsData(updatedChildrenMatches);
     };
@@ -417,6 +435,7 @@ const MyTotalScore = styled.div`
 `;
 
 const WildCardsContainer = styled.div`
+    width: 1350px;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -403,7 +403,8 @@
             },
             "labels": {
                 "language": "Language",
-                "get-started": "Get started"
+                "get-started": "Get started",
+                "march-madness": "March Madness"
             }
         },
         "parlay": {

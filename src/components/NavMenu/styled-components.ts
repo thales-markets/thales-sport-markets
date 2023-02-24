@@ -52,7 +52,7 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     ${({ show }) => show === false && animationClose};
     background-color: ${(props) => props.theme.nav.background};
     justify-content: space-between;
-    z-index: 3;
+    z-index: 300;
     ${(props) => (props?.show == true ? `-webkit-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
     ${(props) => (props?.show == true ? `-moz-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
     ${(props) => (props?.show == true ? `${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};

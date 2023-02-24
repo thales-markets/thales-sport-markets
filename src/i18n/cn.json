@@ -416,7 +416,8 @@
             },
             "labels": {
                 "language": "语言",
-                "get-started": "开始吧"
+                "get-started": "开始吧",
+                "march-madness": "疯狂三月"
             }
         },
         "incentivized-markets": "激励市场",

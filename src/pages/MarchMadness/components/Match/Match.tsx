@@ -55,6 +55,12 @@ const Match: React.FC<MatchProps> = ({
         setAwayLogoSrc(getTeamImageSource(awayTeam?.name || '', NCAA_BASKETBALL_LEAGU_TAG));
     }, [homeTeam?.name, awayTeam?.name]);
 
+    useEffect(() => {
+        if (matchData?.isHomeTeamSelected !== isHomeTeamSelected) {
+            setIsHomeTeamSelected(matchData?.isHomeTeamSelected);
+        }
+    }, [matchData?.isHomeTeamSelected]);
+
     const isTeamClickable = !isBracketsLocked && !isBracketSubmitted;
     const teamClickHandler = (isHomeTeamClicked: boolean) => {
         if (isTeamClickable) {
