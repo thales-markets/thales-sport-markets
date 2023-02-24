@@ -131,7 +131,7 @@ const Match: React.FC<MatchProps> = ({
                     </>
                 )}
             </TeamRow>
-            <TeamSeparator />
+            <TeamSeparator isActive={!!homeTeam?.displayName || !!awayTeam?.displayName} />
             <TeamRow isClickable={isTeamClickable} onClick={() => teamClickHandler(false)}>
                 {/* AWAY TEAM */}
                 {isBracketsLeftSide ? (
@@ -183,11 +183,11 @@ const Container = styled.div<{ height: number; margin?: string }>`
     border-radius: 4px;
 `;
 
-const TeamSeparator = styled.hr`
+const TeamSeparator = styled.hr<{ isActive: boolean }>`
     width: 122px;
     height: 1px;
     border: none;
-    background-color: #0e94cb;
+    background-color: ${(props) => (props.isActive ? '#0e94cb' : '#9AAEB1')};
     margin: auto;
 `;
 

@@ -8,32 +8,31 @@ type TeamStatusProps = {
 };
 
 const TeamStatus: React.FC<TeamStatusProps> = ({ isSelected, isWon, margin }) => {
+    const isResolved = isSelected && isWon !== undefined;
     return (
-        <>
-            {isSelected && isWon !== undefined ? (
+        <Container isResolved={isResolved} isSelected={isSelected} margin={margin}>
+            {isResolved ? (
                 isWon ? (
-                    <Correct className={`icon icon--correct`} />
+                    <Correct className={`icon icon--correct-full`} />
                 ) : (
-                    <Wrong className={`icon icon--wrong`} />
+                    <Wrong className={`icon icon--wrong-full`} />
                 )
             ) : (
-                <TeamSelector isSelected={isSelected} margin={margin}>
-                    {isSelected && <TeamSelected />}
-                </TeamSelector>
+                isSelected && <TeamSelected />
             )}
-        </>
+        </Container>
     );
 };
 
-const TeamSelector = styled.div<{ isSelected: boolean; margin: string }>`
+const Container = styled.div<{ isResolved: boolean; isSelected: boolean; margin: string }>`
     display: flex;
     align-items: center;
     justify-content: center;
     width: 10px;
     height: 10px;
-    border-radius: 50%;
-    border: 1px solid ${(props) => (props.isSelected ? '#0e94cb' : '#9aaeb1')};
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
+    ${(props) => (!props.isResolved ? 'border-radius: 50%;' : '')}
+    ${(props) => (!props.isResolved ? `border: 1px solid ${props.isSelected ? '#0e94cb' : '#9aaeb1'};` : '')}
 `;
 
 const TeamSelected = styled.div`

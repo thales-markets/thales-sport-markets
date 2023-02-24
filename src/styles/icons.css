@@ -273,3 +273,11 @@
 .icon--card::before {
     content: '\007E';
 }
+
+.icon--wrong-full::before {
+    content: '\0081';
+}
+
+.icon--correct-full::before {
+    content: '\0082';
+}

@@ -27,7 +27,6 @@ export type MarchMadTeam = {
     id: number;
     name: string;
     displayName: string;
-    logo: string;
     region: string;
     position: number;
 };

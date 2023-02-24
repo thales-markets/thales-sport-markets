@@ -1,10 +1,11 @@
 import background from 'assets/images/march-madness/background_marchmadness1-01.svg';
-import { userSampleBracketsData, resultSampleBracketsData } from 'utils/marchMadness';
+import { userSampleBracketsData, resultSampleBracketsData, wildCardTeams } from 'utils/marchMadness';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Match from '../Match';
 import { BracketMatch, ResultMatch } from 'types/marchMadness';
 import { useTranslation } from 'react-i18next';
+import WildCardMatch from '../WildCardMatch';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -13,8 +14,8 @@ const Brackets: React.FC = () => {
 
     const results: ResultMatch[] = [...resultSampleBracketsData]; // TODO: fetch from contract
 
-    const isBracketsLocked = true; // TODO: fetch from contract
-    const isBracketSubmitted = true;
+    const isBracketsLocked = false; // TODO: fetch from contract
+    const isBracketSubmitted = false;
 
     const isTeamLostInPreviousRounds = (teamId: number | undefined) => {
         if (teamId === undefined) {
@@ -183,20 +184,26 @@ const Brackets: React.FC = () => {
 
     return (
         <Container>
-            <RowRounds>
-                <RoundName></RoundName>
-                <RoundName></RoundName>
-                <RoundName></RoundName>
-                <RoundName></RoundName>
-                <RoundName></RoundName>
-                <RoundName></RoundName>
-                <RoundName></RoundName>
-                <RoundName></RoundName>
-                <RoundName></RoundName>
-            </RowRounds>
+            <RowHeader marginBottom={14}>
+                <MyStats></MyStats>
+                <MyTotalScore></MyTotalScore>
+            </RowHeader>
+            <RowHeader marginBottom={6}>
+                <RoundName>{'1st Round'}</RoundName>
+                <RoundName>{'2nd Round'}</RoundName>
+                <RoundName>{'Sweet 16'}</RoundName>
+                <RoundName>{'Elite 8'}</RoundName>
+                <RoundName>{'Final 4'}</RoundName>
+                <RoundName>{'Elite 8'}</RoundName>
+                <RoundName>{'Sweet 16'}</RoundName>
+                <RoundName>{'2nd Round'}</RoundName>
+                <RoundName>{'1st Round'}</RoundName>
+            </RowHeader>
             <BracketsWrapper>
                 <RowHalf>
-                    <Region isSideLeft={true}>{t('march-madness.regions.east')}</Region>
+                    <Region isSideLeft={true} isVertical={true}>
+                        {t('march-madness.regions.east')}
+                    </Region>
                     <LeftQuarter>
                         <FirstRound>{getMatchesPerIdRange(0, 7)}</FirstRound>
                         <SecondRound isSideLeft={true}>{getMatchesPerIdRange(32, 35)}</SecondRound>
@@ -209,7 +216,9 @@ const Brackets: React.FC = () => {
                         <SecondRound isSideLeft={false}>{getMatchesPerIdRange(40, 43)}</SecondRound>
                         <FirstRound>{getMatchesPerIdRange(16, 23)}</FirstRound>
                     </RightQuarter>
-                    <Region isSideLeft={false}>{t('march-madness.regions.south')}</Region>
+                    <Region isSideLeft={false} isVertical={true}>
+                        {t('march-madness.regions.south')}
+                    </Region>
                 </RowHalf>
                 <SemiFinals>
                     {getMatchById(60)}
@@ -217,7 +226,9 @@ const Brackets: React.FC = () => {
                 </SemiFinals>
                 <Final>{getMatchById(62)}</Final>
                 <RowHalf>
-                    <Region isSideLeft={true}>{t('march-madness.regions.west')}</Region>
+                    <Region isSideLeft={true} isVertical={true}>
+                        {t('march-madness.regions.west')}
+                    </Region>
                     <LeftQuarter>
                         <FirstRound>{getMatchesPerIdRange(8, 15)}</FirstRound>
                         <SecondRound isSideLeft={true}>{getMatchesPerIdRange(36, 39)}</SecondRound>
@@ -230,9 +241,42 @@ const Brackets: React.FC = () => {
                         <SecondRound isSideLeft={false}>{getMatchesPerIdRange(44, 47)}</SecondRound>
                         <FirstRound>{getMatchesPerIdRange(24, 31)}</FirstRound>
                     </RightQuarter>
-                    <Region isSideLeft={false}>{t('march-madness.regions.midwest')}</Region>
+                    <Region isSideLeft={false} isVertical={true}>
+                        {t('march-madness.regions.midwest')}
+                    </Region>
                 </RowHalf>
             </BracketsWrapper>
+            <WildCardsContainer>
+                <WildCardsHeader>{'Wild Cards'}</WildCardsHeader>
+                <WildCardsRow>
+                    <Region isSideLeft={true} isVertical={false}>
+                        {t('march-madness.regions.east')}
+                    </Region>
+                    <WildCardMatch
+                        homeTeam={wildCardTeams[0].displayName}
+                        awayTeam={wildCardTeams[1].displayName}
+                        margin="0 2px 0 0"
+                    />
+                    <WildCardMatch homeTeam={wildCardTeams[4].displayName} awayTeam={wildCardTeams[5].displayName} />
+                    <Region isSideLeft={false} isVertical={false}>
+                        {t('march-madness.regions.south')}
+                    </Region>
+                </WildCardsRow>
+                <WildCardsRow>
+                    <Region isSideLeft={true} isVertical={false}>
+                        {t('march-madness.regions.west')}
+                    </Region>
+                    <WildCardMatch
+                        homeTeam={wildCardTeams[2].displayName}
+                        awayTeam={wildCardTeams[3].displayName}
+                        margin="0 2px 0 0"
+                    />
+                    <WildCardMatch homeTeam={wildCardTeams[6].displayName} awayTeam={wildCardTeams[7].displayName} />
+                    <Region isSideLeft={false} isVertical={false}>
+                        {t('march-madness.regions.midwest')}
+                    </Region>
+                </WildCardsRow>
+            </WildCardsContainer>
         </Container>
     );
 };
@@ -242,9 +286,17 @@ const FIRST_ROUND_MATCH_GAP = 8;
 const SECOND_ROUND_MATCH_GAP = 1 * (MATCH_HEIGHT + FIRST_ROUND_MATCH_GAP) + FIRST_ROUND_MATCH_GAP;
 const SWEET16_ROUND_MATCH_GAP = 3 * (MATCH_HEIGHT + FIRST_ROUND_MATCH_GAP) + FIRST_ROUND_MATCH_GAP;
 
-const Container = styled.div``;
+const Container = styled.div`
+    overflow: auto;
+    padding-bottom: 20px;
+    ::-webkit-scrollbar {
+        height: 10px;
+    }
+`;
 
 const BracketsWrapper = styled.div`
+    width: 1350px;
+    height: 982px;
     background-image: url('${background}');
     background-position: center;
     background-repeat: no-repeat;
@@ -306,13 +358,13 @@ const Final = styled.div`
     height: 0;
 `;
 
-const Region = styled.div<{ isSideLeft: boolean }>`
-    width: 30px;
-    height: 472px;
+const Region = styled.div<{ isSideLeft: boolean; isVertical: boolean }>`
+    width: ${(props) => (props.isVertical ? '30px' : '81px')};
+    height: ${(props) => (props.isVertical ? '472px' : '52px')};
     background: #0e94cb;
-    ${(props) => `${props.isSideLeft ? 'margin-right: ' : 'margin-left: '}5px;`}
-    writing-mode: vertical-rl;
-    text-orientation: upright;
+    ${(props) => `${props.isSideLeft ? 'margin-right: ' : 'margin-left: '}${props.isVertical ? '5' : '1'}`}px;
+    ${(props) => (props.isVertical ? 'writing-mode: vertical-rl;' : '')}
+    ${(props) => (props.isVertical ? 'text-orientation: upright;' : '')}
     text-align: justify;
     justify-content: center;
     display: flex;
@@ -320,24 +372,82 @@ const Region = styled.div<{ isSideLeft: boolean }>`
     font-family: 'NCAA' !important;
     font-style: normal;
     font-weight: 400;
-    font-size: 30px;
+    font-size: ${(props) => (props.isVertical ? '30px' : '20px')};
     color: #ffffff;
-    letter-spacing: 0.5em;
+    letter-spacing: ${(props) => (props.isVertical ? '15px' : '2px')};
 }
 `;
 
-const RowRounds = styled.div`
+const RowHeader = styled.div<{ marginBottom: number }>`
     width: 1252px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 0 49px 6px 49px;
+    margin: ${(props) => `0 49px ${props.marginBottom}px 49px`};
 `;
 
 const RoundName = styled.div`
     width: 129px;
     height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: rgba(0, 94, 184, 0.4);
+    font-family: 'Oswald' !important;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #ffffff;
+`;
+
+const MyStats = styled.div`
+    width: 312px;
+    height: 80px;
+    background: #c12b34;
+    border: 1px solid #c12b34;
+`;
+const MyTotalScore = styled.div`
+    width: 930px;
+    height: 80px;
+    background: #021631;
+    border: 1px solid #0e94cb;
+`;
+
+const WildCardsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: -50px;
+`;
+
+const WildCardsHeader = styled.div`
+    width: 436px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #0e94cb;
+    margin-bottom: 6px;
+    font-family: 'NCAA' !important;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #ffffff;
+`;
+
+const WildCardsRow = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
 `;
 
 export default Brackets;
