@@ -6,6 +6,7 @@ import { NetworkId } from 'types/network';
 import { VaultData } from 'types/vault';
 import vaultContract from 'utils/contracts/sportVaultContract';
 import { ethers } from 'ethers';
+import { VAULT_MAP } from 'constants/vault';
 
 const useVaultDataQuery = (
     vaultAddress: string,
@@ -82,7 +83,10 @@ const useVaultDataQuery = (
                         sportVaultContract?.priceLowerLimit(),
                         sportVaultContract?.priceUpperLimit(),
                         sportVaultContract?.skewImpactLimit(),
-                        sportVaultContract?.allocationLimitsPerMarketPerRound(),
+                        vaultAddress !== VAULT_MAP['parlay-discount-vault'].addresses[10] &&
+                        vaultAddress !== VAULT_MAP['parlay-discount-vault'].addresses[420]
+                            ? sportVaultContract?.allocationLimitsPerMarketPerRound()
+                            : 0,
                         sportVaultContract?.minTradeAmount(),
                         sportVaultContract?.roundLength(),
                     ]);

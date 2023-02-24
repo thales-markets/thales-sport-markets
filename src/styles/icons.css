@@ -25,7 +25,6 @@
     content: '\0034';
 }
 
-
 .icon--overtime:before {
     content: '\0041';
 }
@@ -204,6 +203,10 @@
 
 .icon--safu-discount-vault::before {
     content: '\0073';
+}
+
+.icon--parlay-discount-vault::before {
+    content: '\007B';
 }
 
 .icon--strategy::before {

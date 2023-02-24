@@ -707,6 +707,11 @@
             "description": "<p>Buys positions that have more than {{odds}} odds and are available at any discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
             "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
         },
+        "parlay-discount-vault": {
+            "title": "Parlay Discount Vault",
+            "description": "<p>Buys parlay tickets where each individual position in the ticket has at least a {{skewImpactLimit}} discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{maxTradeRate*tradingAllocation()}} can be spent on a single parlay ticket per round, thus diversifying the risk into multiple parlay tickets that have a discount greater than {{skewImpactLimit}}.</p>"
+        },
         "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
         "back-to-vaults": "Back to vaults",
         "vault-not-started-message": "The vault has not started",
