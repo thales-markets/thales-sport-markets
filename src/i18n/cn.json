@@ -836,6 +836,12 @@
         "brackets": {
             "team-2": "团队 2",
             "team-1": "团队 1"
+        },
+        "regions": {
+            "west": "西方",
+            "east": "东方",
+            "midwest": "中西部",
+            "south": "南"
         }
     }
 }

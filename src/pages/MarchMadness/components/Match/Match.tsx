@@ -1,112 +1,174 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { MarchMadMatch } from 'types/marchMadness';
+import { BracketMatch, ResultMatch } from 'types/marchMadness';
+import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { teamsData } from 'utils/marchMadness';
 import MatchConnector from '../MatchConnector';
 import TeamStatus from '../TeamStatus';
 
 type MatchProps = {
-    id: number;
-    matchData: MarchMadMatch;
+    matchData: BracketMatch;
+    resultData: ResultMatch;
+    isBracketsLocked: boolean;
+    isBracketSubmitted: boolean;
+    isTeamLostInPreviousRounds: (teamId: number | undefined) => boolean;
     updateBrackets: (id: number, isHomeTeamSelected: boolean) => void;
     height: number;
     margin?: string;
 };
 
-const Match: React.FC<MatchProps> = ({ id, matchData, updateBrackets: updateMatch, height, margin }) => {
+const NCAA_BASKETBALL_LEAGU_TAG = 9005;
+
+const Match: React.FC<MatchProps> = ({
+    matchData,
+    resultData,
+    isBracketsLocked,
+    isBracketSubmitted,
+    isTeamLostInPreviousRounds,
+    updateBrackets,
+    height,
+    margin,
+}) => {
     const { t } = useTranslation();
 
     const isBracketsLeftSide = useMemo(
-        () => id <= 15 || (id > 31 && id <= 39) || (id > 47 && id <= 51) || [56, 57, 60, 62].includes(id),
-        [id]
+        () =>
+            matchData.id <= 15 ||
+            (matchData.id > 31 && matchData.id <= 39) ||
+            (matchData.id > 47 && matchData.id <= 51) ||
+            [56, 57, 60, 62].includes(matchData.id),
+        [matchData.id]
     );
-
-    const homeTeam = teamsData.find((team) => team.id === matchData?.homeTeamId);
-    const awayTeam = teamsData.find((team) => team.id === matchData?.awayTeamId);
 
     const [isHomeTeamSelected, setIsHomeTeamSelected] = useState(matchData?.isHomeTeamSelected);
     const isAwayTeamSelected = isHomeTeamSelected !== undefined ? !isHomeTeamSelected : undefined;
 
-    const teamClickHandler = (matchId: number, isHomeTeamClicked: boolean) => {
-        if (!matchData.isResolved) {
+    const homeTeam = teamsData.find((team) => team.id === matchData?.homeTeamId);
+    const awayTeam = teamsData.find((team) => team.id === matchData?.awayTeamId);
+
+    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(homeTeam?.name || '', NCAA_BASKETBALL_LEAGU_TAG));
+    const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(awayTeam?.name || '', NCAA_BASKETBALL_LEAGU_TAG));
+
+    useEffect(() => {
+        setHomeLogoSrc(getTeamImageSource(homeTeam?.name || '', NCAA_BASKETBALL_LEAGU_TAG));
+        setAwayLogoSrc(getTeamImageSource(awayTeam?.name || '', NCAA_BASKETBALL_LEAGU_TAG));
+    }, [homeTeam?.name, awayTeam?.name]);
+
+    const isTeamClickable = !isBracketsLocked && !isBracketSubmitted;
+    const teamClickHandler = (isHomeTeamClicked: boolean) => {
+        if (isTeamClickable) {
             setIsHomeTeamSelected(isHomeTeamClicked);
-            updateMatch(matchId, isHomeTeamClicked);
+            updateBrackets(matchData.id, isHomeTeamClicked);
         }
+    };
+
+    const homeTeamWonStatus =
+        resultData.isHomeTeamWon !== undefined
+            ? resultData.isHomeTeamWon && matchData.homeTeamId === resultData.homeTeamId
+            : isTeamLostInPreviousRounds(matchData.homeTeamId)
+            ? false
+            : undefined;
+    const awayTeamWonStatus =
+        resultData.isHomeTeamWon !== undefined
+            ? !resultData.isHomeTeamWon && matchData.awayTeamId === resultData.awayTeamId
+            : isTeamLostInPreviousRounds(matchData.awayTeamId)
+            ? false
+            : undefined;
+
+    const getTeamName = (isHomeTeam: boolean, isLeftSide: boolean) => {
+        const isWon = isHomeTeam ? homeTeamWonStatus : awayTeamWonStatus;
+        return (
+            <TeamName
+                isLeftSide={isLeftSide}
+                hasName={isHomeTeam ? !!homeTeam?.displayName : !!awayTeam?.displayName}
+                isSelected={isHomeTeam ? isHomeTeamSelected : isAwayTeamSelected}
+                isWon={isWon}
+                isBracketsLocked={isBracketsLocked}
+            >
+                {isHomeTeam
+                    ? homeTeam?.displayName || t('march-madness.brackets.team-1')
+                    : awayTeam?.displayName || t('march-madness.brackets.team-2')}
+            </TeamName>
+        );
     };
 
     return (
         <Container height={height} margin={margin}>
-            <TeamRow isClickable={!matchData.isResolved} onClick={() => teamClickHandler(id, true)}>
+            <TeamRow isClickable={isTeamClickable} onClick={() => teamClickHandler(true)}>
                 {/* HOME TEAM */}
                 {isBracketsLeftSide ? (
+                    /* LEFT HALF */
                     <>
-                        <Logo>L1</Logo>
+                        <Logo>
+                            <TeamLogo
+                                alt="Home team logo"
+                                src={homeLogoSrc}
+                                onError={getOnImageError(setHomeLogoSrc, NCAA_BASKETBALL_LEAGU_TAG, true)}
+                            />
+                        </Logo>
                         <TeamPosition isLeftSide={true}>
                             <TeamPositionValue>{homeTeam?.position}</TeamPositionValue>
                         </TeamPosition>
-                        <TeamName isLeftSide={true} hasName={!!homeTeam?.displayName} isSelected={isHomeTeamSelected}>
-                            {homeTeam?.displayName || t('march-madness.brackets.team-1')}
-                        </TeamName>
-                        <TeamStatus
-                            isSelected={!!isHomeTeamSelected}
-                            isResolved={!!matchData?.isResolved}
-                            margin="0 5px 0 0"
-                        />
+                        {getTeamName(true, true)}
+                        <TeamStatus isSelected={!!isHomeTeamSelected} isWon={homeTeamWonStatus} margin="0 5px 0 0" />
                     </>
                 ) : (
+                    /* RIGHT HALF */
                     <>
-                        <TeamStatus
-                            isSelected={!!isHomeTeamSelected}
-                            isResolved={!!matchData?.isResolved}
-                            margin="0 0 0 5px"
-                        />
-                        <TeamName isLeftSide={false} hasName={!!homeTeam?.displayName} isSelected={isHomeTeamSelected}>
-                            {homeTeam?.displayName || t('march-madness.brackets.team-1')}
-                        </TeamName>
+                        <TeamStatus isSelected={!!isHomeTeamSelected} isWon={homeTeamWonStatus} margin="0 0 0 5px" />
+                        {getTeamName(true, false)}
                         <TeamPosition isLeftSide={false}>
                             <TeamPositionValue>{homeTeam?.position}</TeamPositionValue>
                         </TeamPosition>
-                        <Logo>L1</Logo>
+                        <Logo>
+                            <TeamLogo
+                                alt="Home team logo"
+                                src={homeLogoSrc}
+                                onError={getOnImageError(setHomeLogoSrc, NCAA_BASKETBALL_LEAGU_TAG, true)}
+                            />
+                        </Logo>
                     </>
                 )}
             </TeamRow>
             <TeamSeparator />
-            <TeamRow isClickable={!matchData.isResolved} onClick={() => teamClickHandler(id, false)}>
+            <TeamRow isClickable={isTeamClickable} onClick={() => teamClickHandler(false)}>
                 {/* AWAY TEAM */}
                 {isBracketsLeftSide ? (
+                    /* LEFT HALF */
                     <>
-                        <Logo>L2</Logo>
+                        <Logo>
+                            <TeamLogo
+                                alt="Away team logo"
+                                src={awayLogoSrc}
+                                onError={getOnImageError(setAwayLogoSrc, NCAA_BASKETBALL_LEAGU_TAG, true)}
+                            />
+                        </Logo>
                         <TeamPosition isLeftSide={true}>
                             <TeamPositionValue>{awayTeam?.position}</TeamPositionValue>
                         </TeamPosition>
-                        <TeamName isLeftSide={true} hasName={!!awayTeam?.displayName} isSelected={isAwayTeamSelected}>
-                            {awayTeam?.displayName || t('march-madness.brackets.team-2')}
-                        </TeamName>
-                        <TeamStatus
-                            isSelected={!!isAwayTeamSelected}
-                            isResolved={!!matchData?.isResolved}
-                            margin="0 5px 0 0"
-                        />
+                        {getTeamName(false, true)}
+                        <TeamStatus isSelected={!!isAwayTeamSelected} isWon={awayTeamWonStatus} margin="0 5px 0 0" />
                     </>
                 ) : (
+                    /* RIGHT HALF */
                     <>
-                        <TeamStatus
-                            isSelected={!!isAwayTeamSelected}
-                            isResolved={!!matchData?.isResolved}
-                            margin="0 0 0 5px"
-                        />
-                        <TeamName isLeftSide={false} hasName={!!awayTeam?.displayName} isSelected={isAwayTeamSelected}>
-                            {awayTeam?.displayName || t('march-madness.brackets.team-2')}
-                        </TeamName>
+                        <TeamStatus isSelected={!!isAwayTeamSelected} isWon={awayTeamWonStatus} margin="0 0 0 5px" />
+                        {getTeamName(false, false)}
                         <TeamPosition isLeftSide={false}>
                             <TeamPositionValue>{awayTeam?.position}</TeamPositionValue>
                         </TeamPosition>
-                        <Logo>L2</Logo>
+                        <Logo>
+                            <TeamLogo
+                                alt="Away team logo"
+                                src={awayLogoSrc}
+                                onError={getOnImageError(setAwayLogoSrc, NCAA_BASKETBALL_LEAGU_TAG, true)}
+                            />
+                        </Logo>
                     </>
                 )}
             </TeamRow>
-            <MatchConnector id={id} />
+            <MatchConnector id={matchData.id} />
         </Container>
     );
 };
@@ -119,7 +181,6 @@ const Container = styled.div<{ height: number; margin?: string }>`
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
     border: 1px solid #0E94CB;
     border-radius: 4px;
-    padding: 1px;
 `;
 
 const TeamSeparator = styled.hr`
@@ -132,7 +193,7 @@ const TeamSeparator = styled.hr`
 
 const TeamRow = styled.div<{ isClickable: boolean }>`
     width: 100%;
-    height: 50%;
+    height: 24.5px;
     position: relative;
     display: flex;
     flex-direction: row;
@@ -141,6 +202,13 @@ const TeamRow = styled.div<{ isClickable: boolean }>`
     padding: 1px;
     z-index: 100;
     cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
+    ${(props) =>
+        props.isClickable
+            ? `:hover {
+                    background: #c4def2;
+                    border-radius: 0px 0px 4px 4px;
+                }`
+            : ''}
 `;
 
 const Logo = styled.div`
@@ -149,7 +217,10 @@ const Logo = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #9aaeb1; // remove this
+`;
+
+const TeamLogo = styled.img`
+    width: 20px;
 `;
 
 const TeamPosition = styled.div<{ isLeftSide: boolean }>`
@@ -169,7 +240,13 @@ const TeamPositionValue = styled.span`
     color: #9aaeb1;
 `;
 
-const TeamName = styled.div<{ isLeftSide: boolean; hasName: boolean; isSelected: boolean | undefined }>`
+const TeamName = styled.div<{
+    isLeftSide: boolean;
+    hasName: boolean;
+    isSelected: boolean | undefined;
+    isWon: boolean | undefined;
+    isBracketsLocked: boolean;
+}>`
     width: 90px;
     font-family: 'Oswald' !important;
     font-style: normal;
@@ -179,17 +256,27 @@ const TeamName = styled.div<{ isLeftSide: boolean; hasName: boolean; isSelected:
     text-transform: uppercase;
     color: ${(props) =>
         props.hasName
-            ? props.isSelected === undefined
-                ? '#021631'
+            ? props.isBracketsLocked
+                ? props.isSelected
+                    ? props.isWon === undefined
+                        ? '#0E94CB'
+                        : props.isWon
+                        ? '#00957E'
+                        : '#606A78'
+                    : '#9AAEB1'
                 : props.isSelected
                 ? '#0E94CB'
-                : '#9AAEB1'
+                : '#021631'
             : '#9AAEB1'};
     ${(props) => (props.isLeftSide ? 'margin-left: 2px;' : 'margin-right: 2px;')}
     text-align: ${(props) => (props.isLeftSide ? 'left' : 'right')};
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    ${(props) =>
+        props.hasName && props.isBracketsLocked && props.isSelected && props.isWon === false
+            ? 'text-decoration: line-through #CA4C53;'
+            : ''}
 `;
 
 export default Match;

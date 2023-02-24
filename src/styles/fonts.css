@@ -67,3 +67,8 @@
     font-family: 'OswaldBold';
     src: local('OswaldBold'), url(../assets/fonts/Oswald/Oswald-Bold.ttf) format('truetype');
 }
+
+@font-face {
+    font-family: 'NCAA';
+    src: local('NCAA'), url(../assets/fonts/NCAA/NCAA_Colorado_Buffs_Boulder_Bold.ttf) format('truetype');
+}

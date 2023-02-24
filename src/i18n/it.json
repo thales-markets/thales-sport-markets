@@ -839,6 +839,12 @@
         "brackets": {
             "team-2": "Squadra 2",
             "team-1": "Squadra 1"
+        },
+        "regions": {
+            "south": "Sud",
+            "west": "ovest",
+            "east": "Est",
+            "midwest": "Midwest"
         }
     }
 }

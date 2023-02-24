@@ -3,15 +3,19 @@ import React from 'react';
 
 type TeamStatusProps = {
     isSelected: boolean;
-    isResolved: boolean;
+    isWon: boolean | undefined;
     margin: string;
 };
 
-const TeamStatus: React.FC<TeamStatusProps> = ({ isSelected, isResolved, margin }) => {
+const TeamStatus: React.FC<TeamStatusProps> = ({ isSelected, isWon, margin }) => {
     return (
         <>
-            {isResolved ? (
-                <></>
+            {isSelected && isWon !== undefined ? (
+                isWon ? (
+                    <Correct className={`icon icon--correct`} />
+                ) : (
+                    <Wrong className={`icon icon--wrong`} />
+                )
             ) : (
                 <TeamSelector isSelected={isSelected} margin={margin}>
                     {isSelected && <TeamSelected />}
@@ -37,6 +41,16 @@ const TeamSelected = styled.div`
     height: 6px;
     border-radius: 50%;
     background: #0e94cb;
+`;
+
+const Icon = styled.i`
+    font-size: 10px;
+`;
+const Correct = styled(Icon)`
+    color: #00957e;
+`;
+const Wrong = styled(Icon)`
+    color: #ca4c53;
 `;
 
 export default TeamStatus;

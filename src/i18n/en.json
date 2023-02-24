@@ -825,6 +825,12 @@
         "brackets": {
             "team-1": "Team 1",
             "team-2": "Team 2"
+        },
+        "regions": {
+            "east": "East",
+            "west": "West",
+            "south": "South",
+            "midwest": "Midwest"
         }
     }
 }

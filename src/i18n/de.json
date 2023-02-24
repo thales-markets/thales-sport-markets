@@ -833,6 +833,12 @@
         "brackets": {
             "team-2": "Mannschaft 2",
             "team-1": "Mannschaft 1"
+        },
+        "regions": {
+            "south": "Süd",
+            "east": "Ost",
+            "midwest": "Mittlerer Westen",
+            "west": "Westen"
         }
     }
 }
