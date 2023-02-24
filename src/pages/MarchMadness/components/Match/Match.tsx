@@ -59,7 +59,7 @@ const Match: React.FC<MatchProps> = ({
         if (matchData?.isHomeTeamSelected !== isHomeTeamSelected) {
             setIsHomeTeamSelected(matchData?.isHomeTeamSelected);
         }
-    }, [matchData?.isHomeTeamSelected]);
+    }, [matchData?.isHomeTeamSelected, isHomeTeamSelected]);
 
     const isTeamClickable = !isBracketsLocked && !isBracketSubmitted;
     const teamClickHandler = (isHomeTeamClicked: boolean) => {
