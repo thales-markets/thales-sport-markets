@@ -1,6 +1,7 @@
 import background from 'assets/images/march-madness/background-marchmadness.svg';
+import backgrounBall from 'assets/images/march-madness/background-marchmadness-ball.png';
 import { userSampleBracketsData, resultSampleBracketsData, wildCardTeams } from 'utils/marchMadness';
-import React, { useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Match from '../Match';
 import { BracketMatch, ResultMatch } from 'types/marchMadness';
@@ -11,6 +12,7 @@ import { RootState } from 'redux/rootReducer';
 import { useSelector } from 'react-redux';
 import localStore from 'utils/localStore';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import Button from 'components/Button';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -70,7 +72,6 @@ const Brackets: React.FC = () => {
                 return {
                     ...match,
                     homeTeamId: newTeamId,
-                    isHomeTeamSelected: true,
                 };
             }
             if (match.awayTeamParentMatchId === updatedMatch?.id) {
@@ -81,7 +82,6 @@ const Brackets: React.FC = () => {
                 return {
                     ...match,
                     awayTeamId: newTeamId,
-                    isHomeTeamSelected: false,
                 };
             }
             return match;
@@ -200,24 +200,31 @@ const Brackets: React.FC = () => {
         );
     };
 
+    const isSubmitDisabled = bracketsData.find((match) => match.isHomeTeamSelected === undefined) !== undefined;
+
+    const handleSubmit = () => {
+        // TODO
+        console.log('clicked submit');
+    };
+
     return (
         <Container>
-            <RowHeader marginBottom={14}>
+            <RowHeader marginBottom={0}>
                 <MyStats></MyStats>
                 <MyTotalScore></MyTotalScore>
             </RowHeader>
-            <RowHeader marginBottom={6}>
-                <RoundName>{'1st Round'}</RoundName>
-                <RoundName>{'2nd Round'}</RoundName>
-                <RoundName>{'Sweet 16'}</RoundName>
-                <RoundName>{'Elite 8'}</RoundName>
-                <RoundName>{'Final 4'}</RoundName>
-                <RoundName>{'Elite 8'}</RoundName>
-                <RoundName>{'Sweet 16'}</RoundName>
-                <RoundName>{'2nd Round'}</RoundName>
-                <RoundName>{'1st Round'}</RoundName>
-            </RowHeader>
             <BracketsWrapper>
+                <RowHeader marginBottom={6}>
+                    <RoundName>{'1st Round'}</RoundName>
+                    <RoundName>{'2nd Round'}</RoundName>
+                    <RoundName>{'Sweet 16'}</RoundName>
+                    <RoundName>{'Elite 8'}</RoundName>
+                    <RoundName>{'Final 4'}</RoundName>
+                    <RoundName>{'Elite 8'}</RoundName>
+                    <RoundName>{'Sweet 16'}</RoundName>
+                    <RoundName>{'2nd Round'}</RoundName>
+                    <RoundName>{'1st Round'}</RoundName>
+                </RowHeader>
                 <RowHalf>
                     <Region isSideLeft={true} isVertical={true}>
                         {t('march-madness.regions.east')}
@@ -242,7 +249,16 @@ const Brackets: React.FC = () => {
                     {getMatchById(60)}
                     {getMatchById(61)}
                 </SemiFinals>
-                <Final>{getMatchById(62)}</Final>
+                <Final>
+                    <>{getMatchById(62)}</>
+                </Final>
+                {!isBracketsLocked && (
+                    <SubmitWrapper>
+                        <Button style={submitButtonStyle} disabled={isSubmitDisabled} onClick={handleSubmit}>
+                            {t('march-madness.brackets.submit-text')}
+                        </Button>
+                    </SubmitWrapper>
+                )}
                 <RowHalf>
                     <Region isSideLeft={true} isVertical={true}>
                         {t('march-madness.regions.west')}
@@ -315,8 +331,9 @@ const Container = styled.div`
 const BracketsWrapper = styled.div`
     width: 1350px;
     height: 982px;
-    background-image: url('${background}');
-    background-position: center;
+    background-image: url('${background}'), url('${backgrounBall}');
+    background-size: auto;
+    background-position: 0 71px, -354px -162px;
     background-repeat: no-repeat;
 `;
 
@@ -376,6 +393,25 @@ const Final = styled.div`
     height: 0;
 `;
 
+const SubmitWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 0;
+`;
+
+const submitButtonStyle: CSSProperties = {
+    fontSize: '14px',
+    fontFamily: "'NCAA' !important",
+    textTransform: 'uppercase',
+    background: '#FFFFFF',
+    border: '2px solid #005EB8',
+    borderRadius: '4px',
+    color: '#021631',
+    width: '142px',
+    marginTop: '82px',
+};
+
 const Region = styled.div<{ isSideLeft: boolean; isVertical: boolean }>`
     width: ${(props) => (props.isVertical ? '30px' : '81px')};
     height: ${(props) => (props.isVertical ? '472px' : '52px')};
@@ -419,6 +455,7 @@ const RoundName = styled.div`
     text-align: center;
     text-transform: uppercase;
     color: #ffffff;
+    margin-top: 14px;
 `;
 
 const MyStats = styled.div`
@@ -440,7 +477,7 @@ const WildCardsContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: -50px;
+    margin-top: -10px;
 `;
 
 const WildCardsHeader = styled.div`

@@ -1,7 +1,10 @@
 import queryString from 'query-string';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { getIsWalletConnected } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { history } from 'utils/routes';
 
@@ -20,7 +23,12 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
     const { t } = useTranslation();
     const location = useLocation();
 
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+
     const tabClickHandler = (tab: MarchMadTabs) => {
+        if (tab === MarchMadTabs.BRACKETS && !isWalletConnected) {
+            return;
+        }
         history.push({
             pathname: location.pathname,
             search: queryString.stringify({
@@ -32,12 +40,17 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
 
     return (
         <Container>
-            <TabHome active={selectedTab === MarchMadTabs.HOME} onClick={() => tabClickHandler(MarchMadTabs.HOME)}>
+            <TabHome
+                active={selectedTab === MarchMadTabs.HOME}
+                isClickable={true}
+                onClick={() => tabClickHandler(MarchMadTabs.HOME)}
+            >
                 {selectedTab === MarchMadTabs.HOME && <TabSelected />}
                 {t('march-madness.tabs.home')}
             </TabHome>
             <TabBrackets
                 active={selectedTab === MarchMadTabs.BRACKETS}
+                isClickable={isWalletConnected}
                 onClick={() => tabClickHandler(MarchMadTabs.BRACKETS)}
             >
                 {selectedTab === MarchMadTabs.BRACKETS && <TabSelected />}
@@ -45,6 +58,7 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
             </TabBrackets>
             <TabLeaderboard
                 active={selectedTab === MarchMadTabs.LEADERBOARD}
+                isClickable={true}
                 onClick={() => tabClickHandler(MarchMadTabs.LEADERBOARD)}
             >
                 {selectedTab === MarchMadTabs.LEADERBOARD && <TabSelected />}
@@ -63,12 +77,13 @@ const Container = styled.div`
     border-bottom: 2px solid #005eb8;
 `;
 
-const Tab = styled.div<{ active: boolean }>`
+const Tab = styled.div<{ active: boolean; isClickable: boolean }>`
     position: relative;
     text-transform: uppercase;
     padding-bottom: 6px;
     padding-left: 40px;
-    cursor: pointer;
+    cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
+    opacity: ${(props) => (props.isClickable ? '1' : '0.4')};
     font-family: 'Oswald' !important;
     font-style: normal;
     font-weight: 700;

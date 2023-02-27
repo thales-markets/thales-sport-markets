@@ -833,7 +833,8 @@
         "back-to-markets": "Zurück zu den Märkten",
         "brackets": {
             "team-2": "Mannschaft 2",
-            "team-1": "Mannschaft 1"
+            "team-1": "Mannschaft 1",
+            "submit-text": "Klammer beenden"
         },
         "regions": {
             "south": "Süd",

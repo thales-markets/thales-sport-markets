@@ -103,16 +103,18 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <Logo />
                     <RightContainer>
-                        {isWalletConnected && (
+                        {location.pathname !== ROUTES.MarchMadness && (
                             <SPAAnchor style={{ marginRight: 20 }} href={buildHref(ROUTES.MarchMadness)}>
                                 <Button fontSize={18} style={marchMadnessButtonStyle}>
                                     {t('markets.nav-menu.labels.march-madness')}
                                 </Button>
                             </SPAAnchor>
                         )}
-                        <SPAAnchor style={{ marginRight: 20 }} href={buildHref(ROUTES.Wizard)}>
-                            <Button fontSize={12.5}>{t('markets.nav-menu.labels.get-started')}</Button>
-                        </SPAAnchor>
+                        {location.pathname !== ROUTES.Wizard && (
+                            <SPAAnchor style={{ marginRight: 20 }} href={buildHref(ROUTES.Wizard)}>
+                                <Button fontSize={12.5}>{t('markets.nav-menu.labels.get-started')}</Button>
+                            </SPAAnchor>
+                        )}
                         <WalletInfo />
                         {isWalletConnected && <ProfileItem />}
                         <MenuIcon

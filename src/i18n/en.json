@@ -825,7 +825,8 @@
         },
         "brackets": {
             "team-1": "Team 1",
-            "team-2": "Team 2"
+            "team-2": "Team 2",
+            "submit-text": "Finish Bracket"
         },
         "regions": {
             "east": "East",

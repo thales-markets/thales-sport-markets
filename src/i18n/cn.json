@@ -836,7 +836,8 @@
         "back-to-markets": "回到市场",
         "brackets": {
             "team-2": "团队 2",
-            "team-1": "团队 1"
+            "team-1": "团队 1",
+            "submit-text": "完成括号"
         },
         "regions": {
             "west": "西方",

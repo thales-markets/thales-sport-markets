@@ -44,7 +44,6 @@ const TeamRow = styled.div`
 `;
 
 const TeamName = styled.div`
-    width: 90px;
     font-family: 'Oswald' !important;
     font-style: normal;
     font-weight: 600;

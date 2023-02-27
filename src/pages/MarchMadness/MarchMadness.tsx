@@ -1,13 +1,17 @@
 import ROUTES from 'constants/routes';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { Theme } from 'constants/ui';
 import BackToLink from 'pages/Markets/components/BackToLink';
 import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected } from 'redux/modules/wallet';
+import { setTheme } from 'redux/modules/ui';
+import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
+import localStore from 'utils/localStore';
 import { buildHref } from 'utils/routes';
 import Brackets from './components/Brackets';
 import Home from './components/Home';
@@ -17,13 +21,23 @@ import { MarchMadTabs } from './components/Tabs/Tabs';
 
 const MarchMadness: React.FC = () => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
 
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const queryParamTab: MarchMadTabs = queryString.parse(location.search).tab as MarchMadTabs;
     const isTabAvailable = Object.values(MarchMadTabs).includes(queryParamTab);
-    const [selectedTab, setSelectedTab] = useState(isTabAvailable ? queryParamTab : MarchMadTabs.HOME); // TODO: some logic when to go to Home
+    const lsBrackets = localStore.get(LOCAL_STORAGE_KEYS.BRACKETS + networkId);
+
+    const [selectedTab, setSelectedTab] = useState(
+        isTabAvailable ? queryParamTab : lsBrackets !== undefined ? MarchMadTabs.BRACKETS : MarchMadTabs.HOME
+    );
+
+    useEffect(() => {
+        dispatch(setTheme(Theme.MARCH_MADNESS));
+    }, [dispatch]);
 
     useEffect(() => {
         if (!isWalletConnected) {

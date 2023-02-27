@@ -839,7 +839,8 @@
         "back-to-markets": "Torniamo ai mercati",
         "brackets": {
             "team-2": "Squadra 2",
-            "team-1": "Squadra 1"
+            "team-1": "Squadra 1",
+            "submit-text": "Staffa di finitura"
         },
         "regions": {
             "south": "Sud",

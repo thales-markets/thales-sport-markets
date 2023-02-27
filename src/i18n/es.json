@@ -836,7 +836,8 @@
         "back-to-markets": "volver a los mercados",
         "brackets": {
             "team-2": "equipo 2",
-            "team-1": "equipo 1"
+            "team-1": "equipo 1",
+            "submit-text": "Soporte de acabado"
         },
         "regions": {
             "east": "Este",
