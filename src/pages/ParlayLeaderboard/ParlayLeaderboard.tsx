@@ -6,17 +6,19 @@ import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import {
     OddsType,
-    PARLAY_LEADERBOARD_JANUARY_REWARDS,
-    PARLAY_LEADERBOARD_REWARDS,
-    PARLAY_LEADERBOARD_START_DATE,
+    PARLAY_LEADERBOARD_BIWEEKLY_START_DATE,
+    PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC,
+    PARLAY_LEADERBOARD_FEBRUARY_REWARDS,
+    PARLAY_LEADERBOARD_OPTIMISM_REWARDS,
+    PARLAY_LEADERBOARD_ARBITRUM_REWARDS,
 } from 'constants/markets';
 import { t } from 'i18next';
-import { addMonths, differenceInCalendarMonths } from 'date-fns';
+import { addDays, differenceInDays, subMilliseconds } from 'date-fns';
 import { PaginationWrapper } from 'pages/Quiz/styled-components';
 import { AddressLink } from 'pages/Rewards/styled-components';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { CellProps } from 'react-table';
 import { getIsAppReady } from 'redux/modules/app';
@@ -24,7 +26,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDivColumn, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
 import { ParlayMarketWithRank, PositionData, SportMarketInfo } from 'types/markets';
 import { getEtherscanAddressLink } from 'utils/etherscan';
 import { formatDateWithTime } from 'utils/formatters/date';
@@ -39,6 +41,8 @@ import {
     getSpreadTotalText,
     getSymbolText,
 } from 'utils/markets';
+import { NetworkIdByName } from 'utils/network';
+import TimeRemaining from 'components/TimeRemaining';
 
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -48,23 +52,46 @@ const ParlayLeaderboard: React.FC = () => {
     const selectedOddsType = useSelector(getOddsType);
     const [searchText, setSearchText] = useState<string>('');
     const [expandStickyRow, setExpandStickyRowState] = useState<boolean>(false);
+    const [periodEnd, setPeriodEnd] = useState<number>(0);
 
-    const monthOptions: Array<{ value: number; label: string }> = [];
-    const latestPeriod = differenceInCalendarMonths(new Date(), PARLAY_LEADERBOARD_START_DATE);
+    const periodOptions: Array<{ value: number; label: string }> = [];
 
-    for (let index = 0; index <= latestPeriod; index++) {
-        const periodDate = addMonths(PARLAY_LEADERBOARD_START_DATE, index);
-        const periodYear = periodDate.getFullYear();
-        const periodMonth = periodDate.getMonth() + 1;
-        monthOptions.push({
+    let startingBiweeklyPeriod = 0;
+    if (networkId !== NetworkIdByName.ArbitrumOne) {
+        startingBiweeklyPeriod = 1;
+        periodOptions.push({
+            value: 0,
+            label: `${t(`parlay-leaderboard.periods.february`)} 2023`,
+        });
+    }
+    const latestPeriodBiweekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_BIWEEKLY_START_DATE) / 14);
+    const numberOfPeriods = latestPeriodBiweekly + startingBiweeklyPeriod;
+
+    for (let index = startingBiweeklyPeriod; index <= numberOfPeriods; index++) {
+        periodOptions.push({
             value: index,
-            label: `${t(`parlay-leaderboard.periods.period-${periodMonth % 12}`)} ${periodYear}`,
+            label: `${t(`parlay-leaderboard.periods.bi-weekly-period`)} ${index + 1 - startingBiweeklyPeriod}`,
         });
     }
 
-    const [month, setMonth] = useState<number>(latestPeriod);
+    const [period, setPeriod] = useState<number>(numberOfPeriods);
 
-    const parlayLeaderboardQuery = useParlayLeaderboardQuery(networkId, month + 1, { enabled: isAppReady });
+    useEffect(() => setPeriod(numberOfPeriods), [numberOfPeriods]);
+
+    useEffect(() => {
+        if (networkId !== NetworkIdByName.ArbitrumOne && period == 0) {
+            setPeriodEnd(0);
+        } else {
+            setPeriodEnd(
+                subMilliseconds(
+                    addDays(PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC, (period + 1 - startingBiweeklyPeriod) * 14),
+                    1
+                ).getTime()
+            );
+        }
+    }, [period, networkId, startingBiweeklyPeriod]);
+
+    const parlayLeaderboardQuery = useParlayLeaderboardQuery(networkId, period, { enabled: isAppReady });
 
     const parlays = useMemo(() => {
         return parlayLeaderboardQuery.isSuccess && parlayLeaderboardQuery.data ? parlayLeaderboardQuery.data : [];
@@ -75,7 +102,14 @@ const ParlayLeaderboard: React.FC = () => {
         return parlays.filter((parlay) => parlay.account.toLowerCase().includes(searchText.toLowerCase()));
     }, [searchText, parlays]);
 
-    const rewards = month === 0 ? PARLAY_LEADERBOARD_JANUARY_REWARDS : PARLAY_LEADERBOARD_REWARDS;
+    const rewards =
+        networkId !== NetworkIdByName.ArbitrumOne
+            ? period === 0
+                ? PARLAY_LEADERBOARD_FEBRUARY_REWARDS
+                : PARLAY_LEADERBOARD_OPTIMISM_REWARDS
+            : PARLAY_LEADERBOARD_ARBITRUM_REWARDS;
+
+    const rewardsAmount = networkId !== NetworkIdByName.ArbitrumOne ? '2,000 OP' : '5,0000 THALES';
 
     const stickyRow = useMemo(() => {
         const data = parlays.find((parlay) => parlay.account.toLowerCase() == walletAddress?.toLowerCase());
@@ -86,13 +120,22 @@ const ParlayLeaderboard: React.FC = () => {
                     <StickyCell>
                         {data.rank <= rewards.length ? (
                             <Tooltip
-                                overlay={<>{rewards[data.rank - 1]} OP</>}
+                                overlay={
+                                    <>
+                                        {rewards[data.rank - 1]}{' '}
+                                        {networkId !== NetworkIdByName.ArbitrumOne ? 'OP' : 'THALES'}
+                                    </>
+                                }
                                 component={
                                     <FlexDivRowCentered style={{ position: 'relative', width: 14 }}>
                                         <StatusIcon
                                             style={{ fontSize: 16, position: 'absolute', left: '-20px' }}
                                             color="rgb(95, 97, 128)"
-                                            className={`icon icon--fee-rebates`}
+                                            className={`icon ${
+                                                networkId !== NetworkIdByName.ArbitrumOne
+                                                    ? 'icon--op-rewards'
+                                                    : 'icon--thales-rewards'
+                                            }`}
                                         />
                                         <TableText>{data.rank}</TableText>
                                     </FlexDivRowCentered>
@@ -114,7 +157,7 @@ const ParlayLeaderboard: React.FC = () => {
                 <ExpandedContainer hide={!expandStickyRow}>{getExpandedRow(data, selectedOddsType)}</ExpandedContainer>
             </StickyRow>
         );
-    }, [expandStickyRow, parlays, walletAddress, selectedOddsType, rewards]);
+    }, [expandStickyRow, parlays, walletAddress, selectedOddsType, rewards, networkId]);
 
     const [page, setPage] = useState(0);
     const handleChangePage = (_event: unknown, newPage: number) => {
@@ -127,14 +170,31 @@ const ParlayLeaderboard: React.FC = () => {
         setPage(0);
     };
 
-    useEffect(() => setPage(0), [searchText, month]);
+    useEffect(() => setPage(0), [searchText, period]);
 
     return (
         <Container>
             <TextContainer>
                 <Title>{t('parlay-leaderboard.title')}</Title>
-                <Description>{t('parlay-leaderboard.description')}</Description>
-                <Description>{t('parlay-leaderboard.distribution-note')}</Description>
+                <Description>
+                    <Trans
+                        i18nKey="parlay-leaderboard.description"
+                        components={{
+                            bold: <BoldContent />,
+                        }}
+                        values={{
+                            amount: rewardsAmount,
+                        }}
+                    />
+                </Description>
+                <Description>
+                    <Trans
+                        i18nKey="parlay-leaderboard.distribution-note"
+                        components={{
+                            bold: <BoldContent />,
+                        }}
+                    />
+                </Description>
                 <Description>{t('parlay-leaderboard.info')}</Description>
                 <ul style={{ paddingLeft: 10 }}>
                     <Description>{t('parlay-leaderboard.info1')}</Description>
@@ -143,20 +203,32 @@ const ParlayLeaderboard: React.FC = () => {
                 <Description>{t('parlay-leaderboard.info3')}</Description>
                 <Warning>{t('parlay-leaderboard.warning')}</Warning>
                 <LeaderboardHeader>
-                    <SelectContainer>
-                        <SelectInput
-                            options={monthOptions}
-                            handleChange={(value) => setMonth(Number(value))}
-                            defaultValue={month}
-                            width={230}
-                        />
-                    </SelectContainer>
+                    <PeriodContainer>
+                        <SelectContainer>
+                            <SelectInput
+                                options={periodOptions}
+                                handleChange={(value) => setPeriod(Number(value))}
+                                defaultValue={period}
+                                width={230}
+                            />
+                        </SelectContainer>
+                        {new Date().getTime() < periodEnd ? (
+                            <PeriodEndContainer>
+                                <PeriodEndLabel>{t('parlay-leaderboard.periods.period-end-label')}:</PeriodEndLabel>
+                                <TimeRemaining end={periodEnd} fontSize={16} showFullCounter />
+                            </PeriodEndContainer>
+                        ) : (
+                            <PeriodEndContainer>
+                                <PeriodEndLabel>{t('parlay-leaderboard.periods.period-ended-label')}</PeriodEndLabel>
+                            </PeriodEndContainer>
+                        )}
+                    </PeriodContainer>
                     <Search
                         text={searchText}
                         customPlaceholder={t('rewards.search-placeholder')}
                         handleChange={(e) => setSearchText(e)}
                         customStyle={{ border: '1px solid #fffff' }}
-                        width={300}
+                        width={200}
                     />
                 </LeaderboardHeader>
             </TextContainer>
@@ -173,13 +245,22 @@ const ParlayLeaderboard: React.FC = () => {
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['rank']>) => {
                             return cellProps.cell.value <= rewards.length ? (
                                 <Tooltip
-                                    overlay={<>{rewards[cellProps.cell.value - 1]} OP</>}
+                                    overlay={
+                                        <>
+                                            {rewards[cellProps.cell.value - 1]}{' '}
+                                            {networkId !== NetworkIdByName.ArbitrumOne ? 'OP' : 'THALES'}
+                                        </>
+                                    }
                                     component={
                                         <FlexDivRowCentered style={{ position: 'relative', width: 14 }}>
                                             <StatusIcon
                                                 style={{ fontSize: 16, position: 'absolute', left: '-20px' }}
                                                 color="rgb(95, 97, 128)"
-                                                className={`icon icon--fee-rebates`}
+                                                className={`icon ${
+                                                    networkId !== NetworkIdByName.ArbitrumOne
+                                                        ? 'icon--op-rewards'
+                                                        : 'icon--thales-rewards'
+                                                }`}
                                             />
                                             <TableText>{cellProps.cell.value}</TableText>
                                         </FlexDivRowCentered>
@@ -189,6 +270,7 @@ const ParlayLeaderboard: React.FC = () => {
                                 <TableText>{cellProps.cell.value}</TableText>
                             );
                         },
+                        sortable: true,
                     },
                     {
                         Header: <>{t('rewards.table.wallet-address')}</>,
@@ -456,7 +538,7 @@ const Title = styled.p`
 const Description = styled.p`
     font-family: 'Roboto';
     font-style: normal;
-    font-weight: 600;
+    font-weight: 400;
     font-size: 14px;
     line-height: 150%;
     text-align: justify;
@@ -650,6 +732,33 @@ const SelectContainer = styled.div`
     @media screen and (max-width: 767px) {
         margin-bottom: 10px;
     }
+`;
+
+const PeriodContainer = styled(FlexDivStart)`
+    align-items: center;
+    @media screen and (max-width: 767px) {
+        flex-direction: column;
+    }
+`;
+
+const PeriodEndContainer = styled(FlexDivStart)`
+    margin-left: 10px;
+    margin-right: 10px;
+    @media screen and (max-width: 767px) {
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-top: 6px;
+        margin-bottom: 15px;
+    }
+`;
+
+const PeriodEndLabel = styled.span`
+    font-size: 16px;
+    margin-right: 6px;
+`;
+
+export const BoldContent = styled.span`
+    font-weight: 600;
 `;
 
 export default ParlayLeaderboard;

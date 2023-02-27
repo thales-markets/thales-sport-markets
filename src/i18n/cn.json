@@ -754,8 +754,8 @@
     },
     "parlay-leaderboard": {
         "title": "Parlay 奖励排行榜",
-        "description": "A total of 5,000 OP will be distributed to the best parlays of the month. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
-        "distribution-note": "Rewards will be distributed to the top 50 parlays for the month!",
+        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best parlays on a <bold>bi-weekly basis</bold> starting from the March 1st. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
+        "distribution-note": "Rewards will be distributed to the <bold>TOP 30 parlays every 2 weeks</bold>!",
         "no-parlays": "No winning parlays registered in the period yet.",
         "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
         "info": "If multiple parlays have the same number of positions and total quote the following will be used as tie-breakers in respective order:",
@@ -776,18 +776,10 @@
             "positions": "职位"
         },
         "periods": {
-            "period-4": "四月",
-            "period-7": "七月",
-            "period-8": "八月",
-            "period-2": "二月",
-            "period-5": "可能",
-            "period-0": "十二月",
-            "period-6": "六月",
-            "period-1": "一月",
-            "period-9": "九月",
-            "period-10": "十月",
-            "period-11": "十一月",
-            "period-3": "行进"
+            "february": "February",
+            "period-end-label": "The period ends in",
+            "period-ended-label": "Period ended",
+            "bi-weekly-period": "Bi-weekly period"
         }
     },
     "wizard": {
