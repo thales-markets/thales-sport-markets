@@ -837,7 +837,9 @@
         "brackets": {
             "team-2": "团队 2",
             "team-1": "团队 1",
-            "submit-text": "完成括号"
+            "submit-text": "完成括号",
+            "submit": "完成括号",
+            "submit-modify": "更新支架"
         },
         "regions": {
             "west": "西方",

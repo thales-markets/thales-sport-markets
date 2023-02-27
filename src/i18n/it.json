@@ -840,7 +840,9 @@
         "brackets": {
             "team-2": "Squadra 2",
             "team-1": "Squadra 1",
-            "submit-text": "Staffa di finitura"
+            "submit-text": "Staffa di finitura",
+            "submit-modify": "Aggiorna staffa",
+            "submit": "Staffa di finitura"
         },
         "regions": {
             "south": "Sud",

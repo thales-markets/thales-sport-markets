@@ -11,7 +11,6 @@ type MatchProps = {
     matchData: BracketMatch;
     resultData: ResultMatch;
     isBracketsLocked: boolean;
-    isBracketSubmitted: boolean;
     isTeamLostInPreviousRounds: (teamId: number | undefined) => boolean;
     updateBrackets: (id: number, isHomeTeamSelected: boolean) => void;
     height: number;
@@ -24,7 +23,6 @@ const Match: React.FC<MatchProps> = ({
     matchData,
     resultData,
     isBracketsLocked,
-    isBracketSubmitted,
     isTeamLostInPreviousRounds,
     updateBrackets,
     height,
@@ -61,7 +59,7 @@ const Match: React.FC<MatchProps> = ({
         }
     }, [matchData?.isHomeTeamSelected, isHomeTeamSelected]);
 
-    const isTeamClickable = !isBracketsLocked && !isBracketSubmitted;
+    const isTeamClickable = !isBracketsLocked;
     const teamClickHandler = (isHomeTeamClicked: boolean) => {
         if (isTeamClickable) {
             setIsHomeTeamSelected(isHomeTeamClicked);

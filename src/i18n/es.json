@@ -837,7 +837,9 @@
         "brackets": {
             "team-2": "equipo 2",
             "team-1": "equipo 1",
-            "submit-text": "Soporte de acabado"
+            "submit-text": "Soporte de acabado",
+            "submit": "Soporte de acabado",
+            "submit-modify": "Actualizar soporte"
         },
         "regions": {
             "east": "Este",

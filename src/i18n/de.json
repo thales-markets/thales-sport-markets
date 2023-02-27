@@ -834,7 +834,9 @@
         "brackets": {
             "team-2": "Mannschaft 2",
             "team-1": "Mannschaft 1",
-            "submit-text": "Klammer beenden"
+            "submit-text": "Klammer beenden",
+            "submit-modify": "Halterung aktualisieren",
+            "submit": "Klammer beenden"
         },
         "regions": {
             "south": "Süd",

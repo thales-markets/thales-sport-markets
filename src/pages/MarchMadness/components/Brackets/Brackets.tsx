@@ -1,6 +1,11 @@
 import background from 'assets/images/march-madness/background-marchmadness.svg';
 import backgrounBall from 'assets/images/march-madness/background-marchmadness-ball.png';
-import { userSampleBracketsData, resultSampleBracketsData, wildCardTeams } from 'utils/marchMadness';
+import {
+    userSampleBracketsData,
+    resultSampleBracketsData,
+    wildCardTeams,
+    initialBracketsData,
+} from 'utils/marchMadness';
 import React, { CSSProperties, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Match from '../Match';
@@ -19,19 +24,17 @@ const Brackets: React.FC = () => {
 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const [bracketsData, setBracketsData] = useState(userSampleBracketsData); // TODO: switch to initial
+    const [bracketsData, setBracketsData] = useState(userSampleBracketsData); // TODO: switch to initial if not on contract
+    const [isBracketSubmitted, setIsBracketSubmitted] = useState(false); // TODO: fetch from contract
 
     const results: ResultMatch[] = [...resultSampleBracketsData]; // TODO: fetch from contract
 
     const isBracketsLocked = false; // TODO: fetch from contract
-    const isBracketSubmitted = false;
 
     useEffect(() => {
         if (!isBracketsLocked && !isBracketSubmitted) {
             const lsBrackets = localStore.get(LOCAL_STORAGE_KEYS.BRACKETS + networkId);
-            if (lsBrackets !== undefined) {
-                setBracketsData(lsBrackets as BracketMatch[]);
-            }
+            setBracketsData(lsBrackets !== undefined ? (lsBrackets as BracketMatch[]) : initialBracketsData);
         }
     }, [networkId, isBracketsLocked, isBracketSubmitted]);
 
@@ -156,7 +159,6 @@ const Brackets: React.FC = () => {
                         matchData={match}
                         resultData={results[match.id]}
                         isBracketsLocked={isBracketsLocked}
-                        isBracketSubmitted={isBracketSubmitted}
                         isTeamLostInPreviousRounds={isTeamLostInPreviousRounds}
                         updateBrackets={updateBracketsByMatch}
                         height={MATCH_HEIGHT}
@@ -191,7 +193,6 @@ const Brackets: React.FC = () => {
                 matchData={bracketsData.find((match) => match.id === id) || bracketsData[id]}
                 resultData={results[id]}
                 isBracketsLocked={isBracketsLocked}
-                isBracketSubmitted={isBracketSubmitted}
                 isTeamLostInPreviousRounds={isTeamLostInPreviousRounds}
                 updateBrackets={updateBracketsByMatch}
                 height={MATCH_HEIGHT}
@@ -205,6 +206,7 @@ const Brackets: React.FC = () => {
     const handleSubmit = () => {
         // TODO
         console.log('clicked submit');
+        setIsBracketSubmitted(true);
     };
 
     return (
@@ -255,7 +257,9 @@ const Brackets: React.FC = () => {
                 {!isBracketsLocked && (
                     <SubmitWrapper>
                         <Button style={submitButtonStyle} disabled={isSubmitDisabled} onClick={handleSubmit}>
-                            {t('march-madness.brackets.submit-text')}
+                            {isBracketSubmitted
+                                ? t('march-madness.brackets.submit-modify')
+                                : t('march-madness.brackets.submit')}
                         </Button>
                     </SubmitWrapper>
                 )}

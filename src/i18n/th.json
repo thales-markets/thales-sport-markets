@@ -833,7 +833,9 @@
         "brackets": {
             "team-2": "ทีมที่ 2",
             "team-1": "ทีมที่ 1",
-            "submit-text": "เสร็จสิ้นวงเล็บ"
+            "submit-text": "เสร็จสิ้นวงเล็บ",
+            "submit-modify": "อัปเดตวงเล็บ",
+            "submit": "เสร็จสิ้นวงเล็บ"
         },
         "regions": {
             "south": "ใต้",

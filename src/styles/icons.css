@@ -274,10 +274,10 @@
     content: '\007E';
 }
 
-.icon--wrong-full::before {
-    content: '\0081';
+.icon--correct-full::before {
+    content: '\0080';
 }
 
-.icon--correct-full::before {
-    content: '\0082';
+.icon--wrong-full::before {
+    content: '\0081';
 }
