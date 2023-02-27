@@ -21,14 +21,12 @@ const usePositionPriceDetailsQuery = (
         QUERY_KEYS.PositionDetails(marketAddress, position, amount, stableIndex, networkId),
         async () => {
             try {
-                const isMultiCollateral = isMultiCollateralSupportedForNetwork(networkId);
+                const isMultiCollateral = isMultiCollateralSupportedForNetwork(networkId) && stableIndex !== 0;
 
                 const sportsAMMContract = networkConnector.sportsAMMContract;
                 const parsedAmount = ethers.utils.parseEther(amount.toString());
 
-                const collateralAddress =
-                    isMultiCollateral &&
-                    getCollateralAddress(stableIndex ? stableIndex !== 0 : false, networkId, stableIndex);
+                const collateralAddress = isMultiCollateral && getCollateralAddress(true, networkId, stableIndex);
                 const [availableToBuy, buyFromAmmQuote, buyPriceImpact, buyFromAMMQuoteCollateral] = await Promise.all([
                     await sportsAMMContract?.availableToBuyFromAMM(marketAddress, position),
                     await sportsAMMContract?.buyFromAmmQuote(marketAddress, position, parsedAmount),
