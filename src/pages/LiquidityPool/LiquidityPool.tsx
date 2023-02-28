@@ -34,6 +34,8 @@ import {
     LiquidityPoolInfo,
     LiquidityPoolInfoTitle,
     ContentInfoContainer,
+    CopyContainer,
+    Description,
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -632,6 +634,44 @@ const LiquidityPool: React.FC = () => {
                         </ButtonContainer>
                     </ContentContainer>
                 </Container>
+            )}
+            {liquidityPoolData && (
+                <CopyContainer>
+                    <Description>
+                        <Trans
+                            i18nKey={`liquidity-pool.description`}
+                            components={{
+                                h1: <h1 />,
+                                p: <p />,
+                            }}
+                        />
+                    </Description>
+                    <Description>
+                        <Trans
+                            i18nKey={`liquidity-pool.variables`}
+                            components={{
+                                h1: <h1 />,
+                                p: <p />,
+                                ul: <ul />,
+                                li: <li />,
+                            }}
+                            values={{
+                                maxAllowedDeposit: formatCurrencyWithSign(
+                                    USD_SIGN,
+                                    liquidityPoolData.maxAllowedDeposit,
+                                    0
+                                ),
+                                maxAllowedUsers: liquidityPoolData.maxAllowedUsers,
+                                minDepositAmount: formatCurrencyWithSign(
+                                    USD_SIGN,
+                                    liquidityPoolData.minDepositAmount,
+                                    0
+                                ),
+                                roundLength: liquidityPoolData.roundLength,
+                            }}
+                        />
+                    </Description>
+                </CopyContainer>
             )}
             <MainContainer>
                 {!liquidityPoolData ? (

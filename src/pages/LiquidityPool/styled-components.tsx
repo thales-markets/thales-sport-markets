@@ -29,7 +29,6 @@ export const Container = styled(FlexDivRow)`
     }
     @media (max-width: 767px) {
         flex-direction: column;
-        padding: 0 20px;
     }
 `;
 
@@ -101,10 +100,24 @@ export const RoundInfo = styled.p`
     line-height: 20px;
 `;
 
+export const CopyContainer = styled(Container)`
+    align-items: start;
+`;
+
 export const Description = styled.div`
-    font-size: 18px;
-    line-height: 22px;
+    font-size: 14px;
+    line-height: 16px;
     text-align: justify;
+    padding: 0 10px;
+    width: 50%;
+    :first-child {
+        width: 90%;
+    }
+    h1 {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
     p {
         margin-bottom: 10px;
     }
@@ -114,6 +127,13 @@ export const Description = styled.div`
     }
     li {
         margin-bottom: 4px;
+    }
+    @media (max-width: 767px) {
+        padding: 0 5px;
+        width: 100%;
+        :first-child {
+            width: 100%;
+        }
     }
 `;
 
