@@ -107,7 +107,7 @@ const customButtonStyle: CSSProperties = {
     width: '653px',
     height: '64px',
     marginTop: '16px',
-    marginBottom: '50px',
+    marginBottom: '150px',
     background: '#ffffff',
     border: '3px solid #0E94CB',
     fontSize: '30px',
@@ -120,6 +120,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
+    margin-bottom: -40px; // fix for dappLayout padding
 `;
 
 const RowTitle = styled.div`

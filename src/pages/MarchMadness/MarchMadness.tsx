@@ -1,3 +1,4 @@
+import backgrounBall from 'assets/images/march-madness/background-marchmadness-ball.png';
 import Loader from 'components/Loader';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
@@ -74,7 +75,7 @@ const MarchMadness: React.FC = () => {
     }, [isWalletConnected]);
 
     return (
-        <Container>
+        <Container showBackground={selectedTab !== MarchMadTabs.BRACKETS}>
             {isMobile ? (
                 <Home />
             ) : marchMadnessDataQuery.isSuccess ? (
@@ -103,8 +104,12 @@ const MarchMadness: React.FC = () => {
     );
 };
 
-const Container = styled.div`
+const Container = styled.div<{ showBackground: boolean }>`
     width: 100%;
+    ${(props) => (props.showBackground ? `background-image: url('${backgrounBall}');` : '')}
+    ${(props) => (props.showBackground ? 'background-size: 1900px;' : '')}
+    ${(props) => (props.showBackground ? 'background-position: -277px -58px;' : '')}
+    ${(props) => (props.showBackground ? 'background-repeat: no-repeat;' : '')}
 `;
 
 export default MarchMadness;

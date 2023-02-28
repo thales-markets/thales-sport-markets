@@ -18,6 +18,7 @@ import i18n from 'i18n';
 import { setTheme } from 'redux/modules/ui';
 import { Theme } from 'constants/ui';
 import ROUTES from 'constants/routes';
+import { MarchMadTabs } from 'pages/MarchMadness/components/Tabs/Tabs';
 
 const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -69,6 +70,9 @@ const DappLayout: React.FC = ({ children }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location.pathname]);
 
+    const queryParamTab: MarchMadTabs = queryString.parse(location.search).tab as MarchMadTabs;
+    const hideFooter = location.pathname === ROUTES.MarchMadness && queryParamTab === MarchMadTabs.HOME;
+
     return (
         <>
             {isAppReady ? (
@@ -76,7 +80,7 @@ const DappLayout: React.FC = ({ children }) => {
                     <Wrapper>
                         <DappHeader />
                         {children}
-                        <DappFooter />
+                        {!hideFooter && <DappFooter />}
                     </Wrapper>
                     <ToastContainer theme={'colored'} />
                 </Background>
