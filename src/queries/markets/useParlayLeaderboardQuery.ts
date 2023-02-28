@@ -2,7 +2,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { ParlayMarketWithRank } from 'types/markets';
 import { NetworkId } from 'types/network';
-// import { generalConfig } from 'config/general';
+import { generalConfig } from 'config/general';
 import axios from 'axios';
 
 export const useParlayLeaderboardQuery = (
@@ -14,7 +14,7 @@ export const useParlayLeaderboardQuery = (
         QUERY_KEYS.ParlayLeaderboard(networkId, period),
         async () => {
             try {
-                const response = await axios.get(`http://localhost:3002/parlay-leaderboard/${networkId}/${period}`);
+                const response = await axios.get(`${generalConfig.API_URL}/parlay-leaderboard/${networkId}/${period}`);
                 return response.data;
             } catch (e) {
                 console.log('error', e);
