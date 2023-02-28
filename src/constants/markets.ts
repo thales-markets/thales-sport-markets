@@ -27,8 +27,8 @@ export enum SportFilterEnum {
     Baseball = 'Baseball',
     Hockey = 'Hockey',
     UFC = 'UFC',
-    Motosport = 'Motosport',
     Tennis = 'Tennis',
+    // Motosport = 'Motosport',
 }
 
 export const COLLATERALS = [
