@@ -852,7 +852,7 @@
     },
     "parlay-leaderboard": {
         "title": "Classement des récompenses de combinés",
-        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best parlays on a <bold>bi-weekly basis</bold> starting from the March 1st. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
+        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best parlays on a <bold>bi-weekly basis</bold> starting from March 1st. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
         "distribution-note": "Rewards will be distributed to the <bold>TOP 30 parlays every 2 weeks</bold>!",
         "no-parlays": "Aucun combiné gagnant n'a encore été enregistré pour cette période.",
         "warning": "* L'équipe Overtime se réserve le droit de disqualifier les portefeuilles qu'elle soupçonne de jouer avec le système.",

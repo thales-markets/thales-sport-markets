@@ -109,7 +109,7 @@ const ParlayLeaderboard: React.FC = () => {
                 : PARLAY_LEADERBOARD_OPTIMISM_REWARDS
             : PARLAY_LEADERBOARD_ARBITRUM_REWARDS;
 
-    const rewardsAmount = networkId !== NetworkIdByName.ArbitrumOne ? '2,000 OP' : '5,0000 THALES';
+    const rewardsAmount = networkId !== NetworkIdByName.ArbitrumOne ? '2,000 OP' : '5,000 THALES';
 
     const stickyRow = useMemo(() => {
         const data = parlays.find((parlay) => parlay.account.toLowerCase() == walletAddress?.toLowerCase());
