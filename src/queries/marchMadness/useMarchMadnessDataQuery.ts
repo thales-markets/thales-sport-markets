@@ -6,6 +6,7 @@ import networkConnector from 'utils/networkConnector';
 type MarchMadnessData = {
     isAddressAlreadyMinted: boolean;
     isMintAvailable: boolean;
+    daysLeftToMint: number;
     brackets: number[];
     tokenId: number;
     winnerTeamIdsPerMatch: number[];
@@ -18,6 +19,7 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
             const marchMadnessData: MarchMadnessData = {
                 isAddressAlreadyMinted: false,
                 isMintAvailable: false,
+                daysLeftToMint: 0,
                 brackets: [],
                 tokenId: 0,
                 winnerTeamIdsPerMatch: Array<number>(63).fill(0),
@@ -40,6 +42,9 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
 
                 marchMadnessData.isAddressAlreadyMinted = addressAlreadyMinted;
                 marchMadnessData.isMintAvailable = Date.now() < Number(canNotMintOrUpdateAfter) * 1000;
+                marchMadnessData.daysLeftToMint = Math.floor(
+                    (Number(canNotMintOrUpdateAfter) * 1000 - Date.now()) / 1000 / 60 / 60 / 24
+                );
                 marchMadnessData.brackets = brackets;
                 marchMadnessData.tokenId = tokenId;
                 marchMadnessData.winnerTeamIdsPerMatch = winnerTeamIdsPerMatch;

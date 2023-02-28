@@ -1,12 +1,14 @@
+import Loader from 'components/Loader';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { Theme } from 'constants/ui';
 import BackToLink from 'pages/Markets/components/BackToLink';
+import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
 import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { setTheme } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -23,6 +25,7 @@ const MarchMadness: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -32,9 +35,33 @@ const MarchMadness: React.FC = () => {
     const isTabAvailable = Object.values(MarchMadTabs).includes(queryParamTab);
     const lsBrackets = localStore.get(LOCAL_STORAGE_KEYS.BRACKETS + networkId + walletAddress);
 
-    const [selectedTab, setSelectedTab] = useState(
-        isTabAvailable ? queryParamTab : lsBrackets !== undefined ? MarchMadTabs.BRACKETS : MarchMadTabs.HOME
-    );
+    const defaultTab = isTabAvailable
+        ? queryParamTab === MarchMadTabs.BRACKETS
+            ? lsBrackets !== undefined
+                ? MarchMadTabs.BRACKETS
+                : MarchMadTabs.HOME
+            : queryParamTab
+        : MarchMadTabs.HOME;
+
+    const [selectedTab, setSelectedTab] = useState(defaultTab);
+
+    const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
+        enabled: isAppReady,
+        refetchInterval: 60 * 1000,
+    });
+    const marchMadnessData =
+        marchMadnessDataQuery.isSuccess && marchMadnessDataQuery.data ? marchMadnessDataQuery.data : null;
+
+    useEffect(() => {
+        if (marchMadnessData) {
+            if (
+                queryParamTab === undefined ||
+                (queryParamTab === MarchMadTabs.BRACKETS && marchMadnessData.isAddressAlreadyMinted)
+            ) {
+                setSelectedTab(MarchMadTabs.BRACKETS);
+            }
+        }
+    }, [networkId, marchMadnessData, queryParamTab]);
 
     useEffect(() => {
         dispatch(setTheme(Theme.MARCH_MADNESS));
@@ -50,7 +77,7 @@ const MarchMadness: React.FC = () => {
         <Container>
             {isMobile ? (
                 <Home />
-            ) : (
+            ) : marchMadnessDataQuery.isSuccess ? (
                 <>
                     <BackToLink
                         link={buildHref(ROUTES.Markets.Home)}
@@ -65,10 +92,12 @@ const MarchMadness: React.FC = () => {
                         hideIcon={true}
                     />
                     <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-                    {selectedTab === MarchMadTabs.HOME && <Home />}
+                    {selectedTab === MarchMadTabs.HOME && <Home setSelectedTab={setSelectedTab} />}
                     {selectedTab === MarchMadTabs.BRACKETS && <Brackets />}
                     {selectedTab === MarchMadTabs.LEADERBOARD && <Leaderboard />}
                 </>
+            ) : (
+                <Loader />
             )}
         </Container>
     );

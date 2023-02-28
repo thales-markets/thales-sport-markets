@@ -944,6 +944,21 @@
             "east": "Est",
             "south": "Sud",
             "midwest": "Midwest"
+        },
+        "home": {
+            "text-2b": "Résultat des huitièmes de finale correctement prédit : 2 % de bonus",
+            "text-2c": "Résultat des huitièmes de finale correctement prédit : 4 % de bonus",
+            "text-2e": "Résultat du tour de 4 prédit correctement : 10 % de bonus",
+            "text-2": "Une autre façon de calculer le bonus serait de le baser sur le tour, car plus un match est avancé dans la phase d'élimination, plus il est difficile de prédire le résultat (car vous devez également deviner correctement tous les jeux précédents), alors peut-être :",
+            "button-connect": "Connecter le portefeuille",
+            "text-1": "March Madness est un événement NCAAB dans lequel 68 équipes s'affrontent sous forme d'élimination pour le championnat. L'événement commence le 14 mars au cours duquel 8 équipes s'affrontent pour les 4 dernières places dans les 64 phases à élimination directe. La frappe commence le 12 mars et dure jusqu'au 16 mars lorsque l'événement principal commence.",
+            "button-create": "Créer un support",
+            "title": "Bienvenue au tournoi March Madness",
+            "time-info": "Il vous reste {{days}} JOURS POUR faire une prédiction",
+            "text-2a": "Résultat des huitièmes de finale correctement prédit : 1 % de bonus",
+            "text-2g": "Bonus maximum ici : 32*1+16*2+8*4+4*7+2*10+20=164 %",
+            "text-2d": "Résultat du huitième de finale correctement prédit : 7 % de bonus",
+            "text-2f": "Résultat final du jeu prédit correctement : 20 % de bonus"
         }
     }
 }

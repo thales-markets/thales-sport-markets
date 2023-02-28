@@ -843,6 +843,21 @@
             "east": "Ost",
             "midwest": "Mittlerer Westen",
             "west": "Westen"
+        },
+        "home": {
+            "button-connect": "Brieftasche verbinden",
+            "time-info": "Sie haben NOCH {{days}} DAYS, um eine Vorhersage zu treffen",
+            "title": "Willkommen zum March Madness-Turnier",
+            "text-2f": "Richtig vorhergesagtes Endergebnis des Spiels: 20 % Bonus",
+            "text-2": "Eine alternative Möglichkeit, den Bonus zu berechnen, wäre, ihn auf die Runde zu stützen, da es umso schwieriger ist, das Ergebnis vorherzusagen, je weiter die Ausscheidungsphase eines Spiels fortgeschritten ist (da Sie auch alle vorherigen Spiele richtig erraten müssen), also vielleicht :",
+            "text-2e": "Richtig vorhergesagtes Spielergebnis der Runde der letzten 4: 10 % Bonus",
+            "text-2d": "Ausgang des Achtelfinalspiels korrekt vorhergesagt: 7 % Bonus",
+            "text-2g": "Maximaler Bonus hier: 32*1+16*2+8*4+4*7+2*10+20=164%",
+            "text-1": "March Madness ist ein NCAAB-Event, bei dem 68 Teams in einer Elimination-Bracket-Form um die Meisterschaft kämpfen. Die Veranstaltung beginnt am 14. März, bei der 8 Teams um die letzten 4 Plätze in den 64 KO-Runden kämpfen. Die Prägung beginnt am 12. März und dauert bis zum 16. März, wenn das Hauptereignis beginnt.",
+            "text-2b": "Richtig vorhergesagtes Spielergebnis der Runde der letzten 32: 2 % Bonus",
+            "button-create": "Klammer erstellen",
+            "text-2a": "Richtig vorhergesagtes Spielergebnis der Runde der letzten 64: 1 % Bonus",
+            "text-2c": "Ausgang des Achtelfinalspiels korrekt vorhergesagt: 4 % Bonus"
         }
     }
 }

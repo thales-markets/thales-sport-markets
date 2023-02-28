@@ -846,6 +846,21 @@
             "west": "Oeste",
             "south": "Sur",
             "midwest": "medio oeste"
+        },
+        "home": {
+            "title": "Bienvenidos al torneo March Madness",
+            "text-1": "March Madness es un evento de la NCAAB en el que 68 equipos compiten en forma eliminatoria por el campeonato. El evento comienza el 14 de marzo en el que 8 equipos compiten por los últimos 4 lugares en los 64 grupos de la etapa eliminatoria. La acuñación comienza el 12 de marzo y dura hasta el 16 de marzo cuando comienza el evento principal.",
+            "text-2g": "Bono máximo aquí: 32*1+16*2+8*4+4*7+2*10+20=164%",
+            "text-2c": "Resultado de los octavos de final predicho correctamente: bonificación del 4 %",
+            "time-info": "Te quedan {{days}} DÍAS PARA hacer la predicción",
+            "text-2a": "Resultado de la ronda de 64 juegos predicho correctamente: 1% de bonificación",
+            "text-2e": "Resultado de la ronda de 4 juegos predicho correctamente: 10% de bonificación",
+            "button-connect": "Conectar billetera",
+            "text-2": "Una forma alternativa de calcular la bonificación sería basarla en la ronda, ya que cuanto más se avanza en la fase de eliminación de un juego, más difícil es predecir el resultado (ya que también debe adivinar correctamente todos los juegos anteriores), así que tal vez :",
+            "text-2d": "Resultado del juego de la ronda de 8 predicho correctamente: 7% de bonificación",
+            "text-2f": "Resultado final del juego predicho correctamente: 20 % de bonificación",
+            "button-create": "Crear soporte",
+            "text-2b": "Resultado de la ronda de 32 juegos predicho correctamente: 2% de bonificación"
         }
     }
 }

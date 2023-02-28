@@ -823,6 +823,21 @@
             "brackets": "Brackets",
             "leaderboard": "Leaderboard"
         },
+        "home": {
+            "title": "Welcome to March Madness tournament",
+            "time-info": "You have {{days}} DAYS LEFT TO make prediction",
+            "text-1": "March Madness is an NCAAB event that has 68 teams compete in an elimination bracket form for the championship. The event starts on March 14 in which 8 teams compete for the last 4 places in the 64 knockout stage brackets. The minting starts on 12th of March and last until March 16th when the main event starts.",
+            "text-2": "An alternative way to calculate the bonus would be to base it on the round, as the further into the elimination phase a game is the harder it is to predict the outcome (as you have to guess all the prior games correctly too), so maybe:",
+            "text-2a": "Round of 64 game outcome predicted correctly: 1% bonus",
+            "text-2b": "Round of 32 game outcome predicted correctly: 2% bonus",
+            "text-2c": "Round of 16 game outcome predicted correctly: 4% bonus",
+            "text-2d": "Round of 8 game outcome predicted correctly: 7% bonus",
+            "text-2e": "Round of 4 game outcome predicted correctly: 10% bonus",
+            "text-2f": "Final game outcome predicted correctly: 20% bonus",
+            "text-2g": "Max bonus here: 32*1+16*2+8*4+4*7+2*10+20=164%",
+            "button-create": "Create bracket",
+            "button-connect": "Connect wallet"
+        },
         "brackets": {
             "team-1": "Team 1",
             "team-2": "Team 2",

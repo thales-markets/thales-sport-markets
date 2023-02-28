@@ -849,6 +849,21 @@
             "west": "ovest",
             "east": "Est",
             "midwest": "Midwest"
+        },
+        "home": {
+            "text-2e": "Risultato del round di 4 previsto correttamente: bonus del 10%.",
+            "time-info": "Hai {{days}} GIORNI RIMASTI PER fare una previsione",
+            "text-2": "Un modo alternativo per calcolare il bonus sarebbe quello di basarlo sul round, poiché più avanti nella fase di eliminazione di un gioco è più difficile è prevedere il risultato (poiché devi indovinare correttamente anche tutti i giochi precedenti), quindi forse :",
+            "text-2b": "Esito dei sedicesimi di finale previsto correttamente: bonus del 2%.",
+            "text-2d": "Esito degli ottavi di finale previsto correttamente: bonus del 7%.",
+            "text-2f": "Risultato finale del gioco previsto correttamente: bonus del 20%.",
+            "text-2a": "Risultato del round di 64 previsto correttamente: 1% di bonus",
+            "text-2g": "Bonus massimo qui: 32*1+16*2+8*4+4*7+2*10+20=164%",
+            "text-2c": "Esito degli ottavi di finale previsto correttamente: bonus del 4%.",
+            "title": "Benvenuti al torneo March Madness",
+            "button-create": "Crea parentesi",
+            "button-connect": "Collega il portafoglio",
+            "text-1": "March Madness è un evento NCAAB in cui 68 squadre competono in un girone eliminatorio per il campionato. L'evento inizia il 14 marzo in cui 8 squadre competono per gli ultimi 4 posti nei 64 gironi della fase a eliminazione diretta. Il conio inizia il 12 marzo e dura fino al 16 marzo, quando inizia l'evento principale."
         }
     }
 }

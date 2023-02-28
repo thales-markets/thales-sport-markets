@@ -16,6 +16,7 @@ import Button from 'components/Button';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
 import { getIsAppReady } from 'redux/modules/app';
 import networkConnector from 'utils/networkConnector';
+import Loader from 'components/Loader';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -314,110 +315,122 @@ const Brackets: React.FC = () => {
 
     return (
         <Container>
-            <RowHeader marginBottom={0}>
-                <MyStats></MyStats>
-                <MyTotalScore></MyTotalScore>
-            </RowHeader>
-            <BracketsWrapper>
-                <RowHeader marginBottom={6}>
-                    <RoundName>{'1st Round'}</RoundName>
-                    <RoundName>{'2nd Round'}</RoundName>
-                    <RoundName>{'Sweet 16'}</RoundName>
-                    <RoundName>{'Elite 8'}</RoundName>
-                    <RoundName>{'Final 4'}</RoundName>
-                    <RoundName>{'Elite 8'}</RoundName>
-                    <RoundName>{'Sweet 16'}</RoundName>
-                    <RoundName>{'2nd Round'}</RoundName>
-                    <RoundName>{'1st Round'}</RoundName>
-                </RowHeader>
-                <RowHalf>
-                    <Region isSideLeft={true} isVertical={true}>
-                        {t('march-madness.regions.east')}
-                    </Region>
-                    <LeftQuarter>
-                        <FirstRound>{getMatchesPerIdRange(0, 7)}</FirstRound>
-                        <SecondRound isSideLeft={true}>{getMatchesPerIdRange(32, 35)}</SecondRound>
-                        <Sweet16 isSideLeft={true}>{getMatchesPerIdRange(48, 49)}</Sweet16>
-                        <Elite8 isSideLeft={true}>{getMatchById(56)}</Elite8>
-                    </LeftQuarter>
-                    <RightQuarter>
-                        <Elite8 isSideLeft={false}>{getMatchById(58)}</Elite8>
-                        <Sweet16 isSideLeft={false}>{getMatchesPerIdRange(52, 53)}</Sweet16>
-                        <SecondRound isSideLeft={false}>{getMatchesPerIdRange(40, 43)}</SecondRound>
-                        <FirstRound>{getMatchesPerIdRange(16, 23)}</FirstRound>
-                    </RightQuarter>
-                    <Region isSideLeft={false} isVertical={true}>
-                        {t('march-madness.regions.south')}
-                    </Region>
-                </RowHalf>
-                <SemiFinals>
-                    {getMatchById(60)}
-                    {getMatchById(61)}
-                </SemiFinals>
-                <Final>
-                    <>{getMatchById(62)}</>
-                </Final>
-                {!isBracketsLocked && (
-                    <SubmitWrapper>
-                        <Button style={submitButtonStyle} disabled={isSubmitDisabled} onClick={handleSubmit}>
-                            {isBracketMinted
-                                ? t('march-madness.brackets.submit-modify')
-                                : t('march-madness.brackets.submit')}
-                        </Button>
-                    </SubmitWrapper>
-                )}
-                <RowHalf>
-                    <Region isSideLeft={true} isVertical={true}>
-                        {t('march-madness.regions.west')}
-                    </Region>
-                    <LeftQuarter>
-                        <FirstRound>{getMatchesPerIdRange(8, 15)}</FirstRound>
-                        <SecondRound isSideLeft={true}>{getMatchesPerIdRange(36, 39)}</SecondRound>
-                        <Sweet16 isSideLeft={true}>{getMatchesPerIdRange(50, 51)}</Sweet16>
-                        <Elite8 isSideLeft={true}>{getMatchById(57)}</Elite8>
-                    </LeftQuarter>
-                    <RightQuarter>
-                        <Elite8 isSideLeft={false}>{getMatchById(59)}</Elite8>
-                        <Sweet16 isSideLeft={false}>{getMatchesPerIdRange(54, 55)}</Sweet16>
-                        <SecondRound isSideLeft={false}>{getMatchesPerIdRange(44, 47)}</SecondRound>
-                        <FirstRound>{getMatchesPerIdRange(24, 31)}</FirstRound>
-                    </RightQuarter>
-                    <Region isSideLeft={false} isVertical={true}>
-                        {t('march-madness.regions.midwest')}
-                    </Region>
-                </RowHalf>
-            </BracketsWrapper>
-            <WildCardsContainer>
-                <WildCardsHeader>{'Wild Cards'}</WildCardsHeader>
-                <WildCardsRow>
-                    <Region isSideLeft={true} isVertical={false}>
-                        {t('march-madness.regions.east')}
-                    </Region>
-                    <WildCardMatch
-                        homeTeam={wildCardTeams[0].displayName}
-                        awayTeam={wildCardTeams[1].displayName}
-                        margin="0 2px 0 0"
-                    />
-                    <WildCardMatch homeTeam={wildCardTeams[4].displayName} awayTeam={wildCardTeams[5].displayName} />
-                    <Region isSideLeft={false} isVertical={false}>
-                        {t('march-madness.regions.south')}
-                    </Region>
-                </WildCardsRow>
-                <WildCardsRow>
-                    <Region isSideLeft={true} isVertical={false}>
-                        {t('march-madness.regions.west')}
-                    </Region>
-                    <WildCardMatch
-                        homeTeam={wildCardTeams[2].displayName}
-                        awayTeam={wildCardTeams[3].displayName}
-                        margin="0 2px 0 0"
-                    />
-                    <WildCardMatch homeTeam={wildCardTeams[6].displayName} awayTeam={wildCardTeams[7].displayName} />
-                    <Region isSideLeft={false} isVertical={false}>
-                        {t('march-madness.regions.midwest')}
-                    </Region>
-                </WildCardsRow>
-            </WildCardsContainer>
+            {marchMadnessDataQuery.isSuccess ? (
+                <>
+                    <RowHeader marginBottom={0}>
+                        <MyStats></MyStats>
+                        <MyTotalScore></MyTotalScore>
+                    </RowHeader>
+                    <BracketsWrapper>
+                        <RowHeader marginBottom={6}>
+                            <RoundName>{'1st Round'}</RoundName>
+                            <RoundName>{'2nd Round'}</RoundName>
+                            <RoundName>{'Sweet 16'}</RoundName>
+                            <RoundName>{'Elite 8'}</RoundName>
+                            <RoundName>{'Final 4'}</RoundName>
+                            <RoundName>{'Elite 8'}</RoundName>
+                            <RoundName>{'Sweet 16'}</RoundName>
+                            <RoundName>{'2nd Round'}</RoundName>
+                            <RoundName>{'1st Round'}</RoundName>
+                        </RowHeader>
+                        <RowHalf>
+                            <Region isSideLeft={true} isVertical={true}>
+                                {t('march-madness.regions.east')}
+                            </Region>
+                            <LeftQuarter>
+                                <FirstRound>{getMatchesPerIdRange(0, 7)}</FirstRound>
+                                <SecondRound isSideLeft={true}>{getMatchesPerIdRange(32, 35)}</SecondRound>
+                                <Sweet16 isSideLeft={true}>{getMatchesPerIdRange(48, 49)}</Sweet16>
+                                <Elite8 isSideLeft={true}>{getMatchById(56)}</Elite8>
+                            </LeftQuarter>
+                            <RightQuarter>
+                                <Elite8 isSideLeft={false}>{getMatchById(58)}</Elite8>
+                                <Sweet16 isSideLeft={false}>{getMatchesPerIdRange(52, 53)}</Sweet16>
+                                <SecondRound isSideLeft={false}>{getMatchesPerIdRange(40, 43)}</SecondRound>
+                                <FirstRound>{getMatchesPerIdRange(16, 23)}</FirstRound>
+                            </RightQuarter>
+                            <Region isSideLeft={false} isVertical={true}>
+                                {t('march-madness.regions.south')}
+                            </Region>
+                        </RowHalf>
+                        <SemiFinals>
+                            {getMatchById(60)}
+                            {getMatchById(61)}
+                        </SemiFinals>
+                        <Final>
+                            <>{getMatchById(62)}</>
+                        </Final>
+                        {!isBracketsLocked && (
+                            <SubmitWrapper>
+                                <Button style={submitButtonStyle} disabled={isSubmitDisabled} onClick={handleSubmit}>
+                                    {isBracketMinted
+                                        ? t('march-madness.brackets.submit-modify')
+                                        : t('march-madness.brackets.submit')}
+                                </Button>
+                            </SubmitWrapper>
+                        )}
+                        <RowHalf>
+                            <Region isSideLeft={true} isVertical={true}>
+                                {t('march-madness.regions.west')}
+                            </Region>
+                            <LeftQuarter>
+                                <FirstRound>{getMatchesPerIdRange(8, 15)}</FirstRound>
+                                <SecondRound isSideLeft={true}>{getMatchesPerIdRange(36, 39)}</SecondRound>
+                                <Sweet16 isSideLeft={true}>{getMatchesPerIdRange(50, 51)}</Sweet16>
+                                <Elite8 isSideLeft={true}>{getMatchById(57)}</Elite8>
+                            </LeftQuarter>
+                            <RightQuarter>
+                                <Elite8 isSideLeft={false}>{getMatchById(59)}</Elite8>
+                                <Sweet16 isSideLeft={false}>{getMatchesPerIdRange(54, 55)}</Sweet16>
+                                <SecondRound isSideLeft={false}>{getMatchesPerIdRange(44, 47)}</SecondRound>
+                                <FirstRound>{getMatchesPerIdRange(24, 31)}</FirstRound>
+                            </RightQuarter>
+                            <Region isSideLeft={false} isVertical={true}>
+                                {t('march-madness.regions.midwest')}
+                            </Region>
+                        </RowHalf>
+                    </BracketsWrapper>
+                    <WildCardsContainer>
+                        <WildCardsHeader>{'Wild Cards'}</WildCardsHeader>
+                        <WildCardsRow>
+                            <Region isSideLeft={true} isVertical={false}>
+                                {t('march-madness.regions.east')}
+                            </Region>
+                            <WildCardMatch
+                                homeTeam={wildCardTeams[0].displayName}
+                                awayTeam={wildCardTeams[1].displayName}
+                                margin="0 2px 0 0"
+                            />
+                            <WildCardMatch
+                                homeTeam={wildCardTeams[4].displayName}
+                                awayTeam={wildCardTeams[5].displayName}
+                            />
+                            <Region isSideLeft={false} isVertical={false}>
+                                {t('march-madness.regions.south')}
+                            </Region>
+                        </WildCardsRow>
+                        <WildCardsRow>
+                            <Region isSideLeft={true} isVertical={false}>
+                                {t('march-madness.regions.west')}
+                            </Region>
+                            <WildCardMatch
+                                homeTeam={wildCardTeams[2].displayName}
+                                awayTeam={wildCardTeams[3].displayName}
+                                margin="0 2px 0 0"
+                            />
+                            <WildCardMatch
+                                homeTeam={wildCardTeams[6].displayName}
+                                awayTeam={wildCardTeams[7].displayName}
+                            />
+                            <Region isSideLeft={false} isVertical={false}>
+                                {t('march-madness.regions.midwest')}
+                            </Region>
+                        </WildCardsRow>
+                    </WildCardsContainer>
+                </>
+            ) : (
+                <Loader />
+            )}
         </Container>
     );
 };
