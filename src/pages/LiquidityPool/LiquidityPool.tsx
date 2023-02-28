@@ -36,6 +36,7 @@ import {
     ContentInfoContainer,
     CopyContainer,
     Description,
+    GetStakeThalesIcon,
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -609,27 +610,13 @@ const LiquidityPool: React.FC = () => {
                     </ContentContainer>
                     <ContentContainer>
                         <ButtonContainer>
-                            <ExternalButton
-                                onClick={() => {
-                                    if (window.innerWidth <= 767) {
-                                        window.location.replace(LINKS.UniswapBuyThales);
-                                    } else {
-                                        window.open(LINKS.UniswapBuyThales);
-                                    }
-                                }}
-                            >
+                            <ExternalButton target="_blank" rel="noreferrer" href={LINKS.UniswapBuyThales}>
                                 {t('liquidity-pool.button.get-thales-label')}
+                                <GetStakeThalesIcon className={`icon icon--get-thales`} />
                             </ExternalButton>
-                            <ExternalButton
-                                onClick={() => {
-                                    if (window.innerWidth <= 767) {
-                                        window.location.replace(LINKS.ThalesStaking);
-                                    } else {
-                                        window.open(LINKS.ThalesStaking);
-                                    }
-                                }}
-                            >
+                            <ExternalButton target="_blank" rel="noreferrer" href={LINKS.ThalesStaking}>
                                 {t('liquidity-pool.button.stake-thales-label')}
+                                <GetStakeThalesIcon className={`icon icon--stake-thales`} />
                             </ExternalButton>
                         </ButtonContainer>
                     </ContentContainer>

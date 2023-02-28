@@ -210,9 +210,20 @@ export const SubmitButton = styled.button`
     }
 `;
 
-export const ExternalButton = styled(SubmitButton)`
+export const ExternalButton = styled.a`
     background: #64d9fe;
     margin-top: 5px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 20px;
+    color: #1a1c2b;
+    width: 100%;
+    border: none;
+    padding: 3px;
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
 `;
 
 export const CloseRoundButton = styled(SubmitButton)`
@@ -327,4 +338,10 @@ export const LiquidityPoolInfoGraphic = styled(FlexDivStart)<{ background: strin
 
 export const LiquidityPoolInfo = styled.span`
     white-space: nowrap;
+`;
+
+export const GetStakeThalesIcon = styled.i`
+    font-size: 21px;
+    margin-left: 4px;
+    vertical-align: initial;
 `;
