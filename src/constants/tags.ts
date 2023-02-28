@@ -175,8 +175,8 @@ export const TAGS_LIST: Tags = [
     {
         id: 9153,
         label: 'Tennis',
-        logo: ``,
-        logoClass: '',
+        logo: `/logos/Tennis/atp.png`,
+        logoClass: 'icon-league league--atp',
         favourite: false,
         hidden: false,
         priority: 602,
@@ -184,8 +184,8 @@ export const TAGS_LIST: Tags = [
     {
         id: 9156,
         label: 'Tennis',
-        logo: ``,
-        logoClass: '',
+        logo: `/logos/Tennis/atp.png`,
+        logoClass: 'icon-league league--atp',
         favourite: false,
         hidden: false,
         priority: 603,
