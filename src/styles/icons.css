@@ -25,7 +25,6 @@
     content: '\0034';
 }
 
-
 .icon--overtime:before {
     content: '\0041';
 }
@@ -272,4 +271,8 @@
 
 .icon--card::before {
     content: '\007E';
+}
+
+.icon--liquidity-pool::before {
+    content: '\00AE';
 }

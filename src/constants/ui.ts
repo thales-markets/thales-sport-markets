@@ -101,7 +101,7 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
     },
     {
         i18label: 'markets.nav-menu.items.liquidity-pool',
-        iconClass: 'icon icon--vaults',
+        iconClass: 'icon icon--liquidity-pool',
         name: 'liquidity-pool',
         route: ROUTES.LiquidityPool,
         supportedNetworks: [10, 420],
