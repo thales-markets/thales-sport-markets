@@ -224,6 +224,7 @@ export const ExternalButton = styled.a`
     cursor: pointer;
     text-align: center;
     text-transform: uppercase;
+    height: 26px;
 `;
 
 export const CloseRoundButton = styled(SubmitButton)`
