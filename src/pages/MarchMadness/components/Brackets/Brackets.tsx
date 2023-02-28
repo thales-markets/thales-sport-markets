@@ -1,51 +1,131 @@
 import background from 'assets/images/march-madness/background-marchmadness.svg';
 import backgrounBall from 'assets/images/march-madness/background-marchmadness-ball.png';
-import {
-    userSampleBracketsData,
-    resultSampleBracketsData,
-    wildCardTeams,
-    initialBracketsData,
-} from 'utils/marchMadness';
-import React, { CSSProperties, useEffect, useState } from 'react';
+import { wildCardTeams, initialBracketsData, NUMBER_OF_ROUNDS, NUMBER_OF_TEAMS } from 'utils/marchMadness';
+import React, { CSSProperties, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import Match from '../Match';
-import { BracketMatch, ResultMatch } from 'types/marchMadness';
+import { BracketMatch } from 'types/marchMadness';
 import { useTranslation } from 'react-i18next';
 import WildCardMatch from '../WildCardMatch';
-import { getNetworkId } from 'redux/modules/wallet';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useSelector } from 'react-redux';
 import localStore from 'utils/localStore';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import Button from 'components/Button';
+import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
+import { getIsAppReady } from 'redux/modules/app';
+import networkConnector from 'utils/networkConnector';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
 
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
-    const [bracketsData, setBracketsData] = useState(userSampleBracketsData); // TODO: switch to initial if not on contract
-    const [isBracketSubmitted, setIsBracketSubmitted] = useState(false); // TODO: fetch from contract
+    const [isBracketMinted, setIsBracketMinted] = useState(false);
+    const [bracketsData, setBracketsData] = useState(initialBracketsData);
+    const [winnerTeamIds, setWinnerTeamIds] = useState(Array<number>(63).fill(0));
 
-    const results: ResultMatch[] = [...resultSampleBracketsData]; // TODO: fetch from contract
+    const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
+        enabled: isAppReady,
+        refetchInterval: 60 * 1000,
+    });
+    const marchMadnessData =
+        marchMadnessDataQuery.isSuccess && marchMadnessDataQuery.data ? marchMadnessDataQuery.data : null;
 
-    const isBracketsLocked = false; // TODO: fetch from contract
+    const isBracketsLocked = useMemo(() => !marchMadnessData?.isMintAvailable, [marchMadnessData?.isMintAvailable]);
 
     useEffect(() => {
-        if (!isBracketsLocked && !isBracketSubmitted) {
-            const lsBrackets = localStore.get(LOCAL_STORAGE_KEYS.BRACKETS + networkId);
-            setBracketsData(lsBrackets !== undefined ? (lsBrackets as BracketMatch[]) : initialBracketsData);
+        if (!isBracketsLocked && !isBracketMinted) {
+            const lsBrackets = localStore.get(LOCAL_STORAGE_KEYS.BRACKETS + networkId + walletAddress);
+            setBracketsData(
+                lsBrackets !== undefined && (lsBrackets as BracketMatch[]).length
+                    ? (lsBrackets as BracketMatch[])
+                    : initialBracketsData
+            );
+        } else if (marchMadnessData?.isAddressAlreadyMinted && marchMadnessData.brackets.length) {
+            let bracketsMapped: BracketMatch[] = [];
+            for (let i = 0; i < NUMBER_OF_ROUNDS; i++) {
+                const currentRound: BracketMatch[] = [...initialBracketsData]
+                    .filter(
+                        // filter matches by round
+                        (match) => {
+                            const startId = NUMBER_OF_TEAMS - NUMBER_OF_TEAMS / Math.pow(2, i);
+                            const endId = startId + NUMBER_OF_TEAMS / Math.pow(2, i + 1);
+                            return match.id >= startId && match.id < endId;
+                        }
+                    )
+                    .map((match) => {
+                        // populate brackets data based on minted teams
+                        const homeTeamParentMatch = bracketsMapped.find(
+                            (mappedMatch) => mappedMatch.id === match.homeTeamParentMatchId
+                        );
+                        const selectedTeamFromParentHome = homeTeamParentMatch?.isHomeTeamSelected
+                            ? homeTeamParentMatch.homeTeamId
+                            : homeTeamParentMatch?.awayTeamId;
+
+                        const homeTeamId =
+                            homeTeamParentMatch !== undefined ? selectedTeamFromParentHome : match.homeTeamId;
+
+                        const awayTeamParentMatch = bracketsMapped.find(
+                            (mappedMatch) => mappedMatch.id === match.awayTeamParentMatchId
+                        );
+                        const selectedTeamFromParentAway = awayTeamParentMatch?.isHomeTeamSelected
+                            ? awayTeamParentMatch.homeTeamId
+                            : awayTeamParentMatch?.awayTeamId;
+
+                        const awayTeamId =
+                            awayTeamParentMatch !== undefined ? selectedTeamFromParentAway : match.awayTeamId;
+
+                        const isHomeTeamSelected = homeTeamId === marchMadnessData.brackets[match.id];
+                        return {
+                            ...match,
+                            homeTeamId,
+                            awayTeamId,
+                            isHomeTeamSelected,
+                        };
+                    });
+                bracketsMapped = bracketsMapped.concat(currentRound);
+            }
+
+            localStore.set(LOCAL_STORAGE_KEYS.BRACKETS + networkId + walletAddress, bracketsMapped);
+            setBracketsData(bracketsMapped);
         }
-    }, [networkId, isBracketsLocked, isBracketSubmitted]);
+    }, [
+        networkId,
+        walletAddress,
+        marchMadnessData?.isAddressAlreadyMinted,
+        marchMadnessData?.brackets,
+        isBracketMinted,
+        isBracketsLocked,
+    ]);
+
+    useEffect(() => {
+        if (marchMadnessData) {
+            if (isBracketMinted !== marchMadnessData.isAddressAlreadyMinted) {
+                setIsBracketMinted(marchMadnessData.isAddressAlreadyMinted);
+            }
+
+            const shouldUpdate =
+                winnerTeamIds.findIndex((teamId, index) => teamId !== marchMadnessData.winnerTeamIdsPerMatch[index]) !==
+                -1;
+            if (shouldUpdate) {
+                setWinnerTeamIds(marchMadnessData.winnerTeamIdsPerMatch);
+            }
+        }
+    }, [networkId, marchMadnessData, isBracketMinted, winnerTeamIds]);
 
     const isTeamLostInPreviousRounds = (teamId: number | undefined) => {
         if (teamId === undefined) {
             return false;
         }
-        const teamLost = results.find(
-            (result) =>
-                (result.homeTeamId === teamId && result.isHomeTeamWon === false) ||
-                (result.awayTeamId === teamId && result.isHomeTeamWon === true)
+        const teamLost = bracketsData.find(
+            (match) =>
+                (match.homeTeamId === teamId || match.awayTeamId === teamId) &&
+                winnerTeamIds[match.id] !== 0 &&
+                winnerTeamIds[match.id] !== teamId
         );
 
         return !!teamLost;
@@ -122,8 +202,7 @@ const Brackets: React.FC = () => {
             return match;
         });
 
-        localStore.set(LOCAL_STORAGE_KEYS.BRACKETS + networkId, updatedChildrenMatches);
-
+        localStore.set(LOCAL_STORAGE_KEYS.BRACKETS + networkId + walletAddress, updatedChildrenMatches);
         setBracketsData(updatedChildrenMatches);
     };
 
@@ -157,7 +236,7 @@ const Brackets: React.FC = () => {
                     <Match
                         key={match.id}
                         matchData={match}
-                        resultData={results[match.id]}
+                        winnerTeamId={winnerTeamIds[match.id]}
                         isBracketsLocked={isBracketsLocked}
                         isTeamLostInPreviousRounds={isTeamLostInPreviousRounds}
                         updateBrackets={updateBracketsByMatch}
@@ -191,7 +270,7 @@ const Brackets: React.FC = () => {
         return (
             <Match
                 matchData={bracketsData.find((match) => match.id === id) || bracketsData[id]}
-                resultData={results[id]}
+                winnerTeamId={winnerTeamIds[id]}
                 isBracketsLocked={isBracketsLocked}
                 isTeamLostInPreviousRounds={isTeamLostInPreviousRounds}
                 updateBrackets={updateBracketsByMatch}
@@ -203,10 +282,34 @@ const Brackets: React.FC = () => {
 
     const isSubmitDisabled = bracketsData.find((match) => match.isHomeTeamSelected === undefined) !== undefined;
 
-    const handleSubmit = () => {
-        // TODO
-        console.log('clicked submit');
-        setIsBracketSubmitted(true);
+    const handleSubmit = async () => {
+        const { marchMadnessContract, signer } = networkConnector;
+        if (marchMadnessContract && signer) {
+            const marchMadnessContractWithSigner = marchMadnessContract.connect(signer);
+            const bracketsContractData = bracketsData.map((match) =>
+                match.isHomeTeamSelected ? match.homeTeamId : match.awayTeamId
+            );
+
+            try {
+                let tx;
+                if (isBracketMinted) {
+                    tx = await marchMadnessContractWithSigner.updateBracketsForAlreadyMintedItem(
+                        marchMadnessData?.tokenId,
+                        bracketsContractData
+                    );
+                } else {
+                    tx = await marchMadnessContractWithSigner.mint(bracketsContractData);
+                }
+
+                const txResult = await tx.wait();
+
+                if (txResult && txResult.transactionHash) {
+                    setIsBracketMinted(true);
+                }
+            } catch (e) {
+                console.log('Error ', e);
+            }
+        }
     };
 
     return (
@@ -257,7 +360,7 @@ const Brackets: React.FC = () => {
                 {!isBracketsLocked && (
                     <SubmitWrapper>
                         <Button style={submitButtonStyle} disabled={isSubmitDisabled} onClick={handleSubmit}>
-                            {isBracketSubmitted
+                            {isBracketMinted
                                 ? t('march-madness.brackets.submit-modify')
                                 : t('march-madness.brackets.submit')}
                         </Button>

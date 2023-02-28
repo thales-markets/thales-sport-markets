@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { setTheme } from 'redux/modules/ui';
-import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import localStore from 'utils/localStore';
@@ -25,11 +25,12 @@ const MarchMadness: React.FC = () => {
 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const queryParamTab: MarchMadTabs = queryString.parse(location.search).tab as MarchMadTabs;
     const isTabAvailable = Object.values(MarchMadTabs).includes(queryParamTab);
-    const lsBrackets = localStore.get(LOCAL_STORAGE_KEYS.BRACKETS + networkId);
+    const lsBrackets = localStore.get(LOCAL_STORAGE_KEYS.BRACKETS + networkId + walletAddress);
 
     const [selectedTab, setSelectedTab] = useState(
         isTabAvailable ? queryParamTab : lsBrackets !== undefined ? MarchMadTabs.BRACKETS : MarchMadTabs.HOME

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { BracketMatch, ResultMatch } from 'types/marchMadness';
+import { BracketMatch } from 'types/marchMadness';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { teamsData } from 'utils/marchMadness';
 import MatchConnector from '../MatchConnector';
@@ -9,7 +9,7 @@ import TeamStatus from '../TeamStatus';
 
 type MatchProps = {
     matchData: BracketMatch;
-    resultData: ResultMatch;
+    winnerTeamId: number;
     isBracketsLocked: boolean;
     isTeamLostInPreviousRounds: (teamId: number | undefined) => boolean;
     updateBrackets: (id: number, isHomeTeamSelected: boolean) => void;
@@ -21,7 +21,7 @@ const NCAA_BASKETBALL_LEAGU_TAG = 9005;
 
 const Match: React.FC<MatchProps> = ({
     matchData,
-    resultData,
+    winnerTeamId,
     isBracketsLocked,
     isTeamLostInPreviousRounds,
     updateBrackets,
@@ -68,14 +68,14 @@ const Match: React.FC<MatchProps> = ({
     };
 
     const homeTeamWonStatus =
-        resultData.isHomeTeamWon !== undefined
-            ? resultData.isHomeTeamWon && matchData.homeTeamId === resultData.homeTeamId
+        winnerTeamId !== 0
+            ? matchData.isHomeTeamSelected === true && matchData.homeTeamId === winnerTeamId
             : isTeamLostInPreviousRounds(matchData.homeTeamId)
             ? false
             : undefined;
     const awayTeamWonStatus =
-        resultData.isHomeTeamWon !== undefined
-            ? !resultData.isHomeTeamWon && matchData.awayTeamId === resultData.awayTeamId
+        winnerTeamId !== 0
+            ? matchData.isHomeTeamSelected === false && matchData.awayTeamId === winnerTeamId
             : isTeamLostInPreviousRounds(matchData.awayTeamId)
             ? false
             : undefined;
