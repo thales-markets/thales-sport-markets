@@ -14,6 +14,8 @@ import localStore from 'utils/localStore';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
 import { getIsAppReady } from 'redux/modules/app';
 import Loader from 'components/Loader';
+import { history } from 'utils/routes';
+import queryString from 'query-string';
 
 type HomeProps = {
     setSelectedTab?: (tab: MarchMadTabs) => void;
@@ -47,6 +49,12 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
         if (isWalletConnected) {
             localStore.set(LOCAL_STORAGE_KEYS.BRACKETS + networkId + walletAddress, initialBracketsData);
             setIsButtonDisabled(true);
+            history.push({
+                pathname: location.pathname,
+                search: queryString.stringify({
+                    tab: MarchMadTabs.BRACKETS,
+                }),
+            });
             setSelectedTab && setSelectedTab(MarchMadTabs.BRACKETS);
         } else {
             openConnectModal?.();
@@ -107,7 +115,7 @@ const customButtonStyle: CSSProperties = {
     width: '653px',
     height: '64px',
     marginTop: '16px',
-    marginBottom: '150px',
+    marginBottom: '110px',
     background: '#ffffff',
     border: '3px solid #0E94CB',
     fontSize: '30px',
@@ -120,7 +128,6 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
-    margin-bottom: -40px; // fix for dappLayout padding
 `;
 
 const RowTitle = styled.div`

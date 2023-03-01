@@ -36,16 +36,6 @@ const MarchMadness: React.FC = () => {
     const isTabAvailable = Object.values(MarchMadTabs).includes(queryParamTab);
     const lsBrackets = localStore.get(LOCAL_STORAGE_KEYS.BRACKETS + networkId + walletAddress);
 
-    const defaultTab = isTabAvailable
-        ? queryParamTab === MarchMadTabs.BRACKETS
-            ? lsBrackets !== undefined
-                ? MarchMadTabs.BRACKETS
-                : MarchMadTabs.HOME
-            : queryParamTab
-        : MarchMadTabs.HOME;
-
-    const [selectedTab, setSelectedTab] = useState(defaultTab);
-
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
         enabled: isAppReady,
         refetchInterval: 60 * 1000,
@@ -53,16 +43,24 @@ const MarchMadness: React.FC = () => {
     const marchMadnessData =
         marchMadnessDataQuery.isSuccess && marchMadnessDataQuery.data ? marchMadnessDataQuery.data : null;
 
+    const defaultTab = isTabAvailable
+        ? queryParamTab
+        : lsBrackets !== undefined || marchMadnessData?.isAddressAlreadyMinted
+        ? MarchMadTabs.BRACKETS
+        : MarchMadTabs.HOME;
+
+    const [selectedTab, setSelectedTab] = useState(defaultTab);
+
     useEffect(() => {
-        if (marchMadnessData) {
-            if (
-                queryParamTab === undefined ||
-                (queryParamTab === MarchMadTabs.BRACKETS && marchMadnessData.isAddressAlreadyMinted)
-            ) {
+        const lsBrackets = localStore.get(LOCAL_STORAGE_KEYS.BRACKETS + networkId + walletAddress);
+        if (queryParamTab === undefined) {
+            if (lsBrackets !== undefined || marchMadnessData?.isAddressAlreadyMinted) {
                 setSelectedTab(MarchMadTabs.BRACKETS);
+            } else {
+                setSelectedTab(MarchMadTabs.HOME);
             }
         }
-    }, [networkId, marchMadnessData, queryParamTab]);
+    }, [walletAddress, marchMadnessData?.isAddressAlreadyMinted, networkId, queryParamTab]);
 
     useEffect(() => {
         dispatch(setTheme(Theme.MARCH_MADNESS));

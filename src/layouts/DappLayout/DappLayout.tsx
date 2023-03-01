@@ -77,7 +77,7 @@ const DappLayout: React.FC = ({ children }) => {
         <>
             {isAppReady ? (
                 <Background>
-                    <Wrapper>
+                    <Wrapper hidePaddingBottom={hideFooter}>
                         <DappHeader />
                         {children}
                         {!hideFooter && <DappFooter />}
@@ -98,12 +98,12 @@ const Background = styled.section`
     position: relative;
 `;
 
-const Wrapper = styled(FlexDivColumn)`
+const Wrapper = styled(FlexDivColumn)<{ hidePaddingBottom: boolean }>`
     align-items: center;
     width: 99%;
     margin-left: auto;
     margin-right: auto;
-    padding: 40px 0px;
+    padding: ${(props) => (props.hidePaddingBottom ? '40px 0 0 0' : '40px 0px')};
     max-width: 1350px;
     min-height: 100vh;
     justify-content: space-between;
