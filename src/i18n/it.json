@@ -834,7 +834,16 @@
             "team-1": "Squadra 1",
             "submit-text": "Staffa di finitura",
             "submit-modify": "Aggiorna staffa",
-            "submit": "Staffa di finitura"
+            "submit": "Staffa di finitura",
+            "modal": {
+                "button-minting": "Conio...",
+                "button-mint": "Come NFT",
+                "finish-text-1": "Ben fatto!",
+                "update-text": "Hai già coniato il tuo NFT!",
+                "button-updating": "In aggiornamento...",
+                "finish-text-2": "Ora puoi coniare il tuo NFT!",
+                "button-update": "Aggiorna staffa"
+            }
         },
         "regions": {
             "south": "Sud",

@@ -1,7 +1,7 @@
 import background from 'assets/images/march-madness/background-marchmadness.svg';
 import backgrounBall from 'assets/images/march-madness/background-marchmadness-ball.png';
 import { wildCardTeams, initialBracketsData, NUMBER_OF_ROUNDS, NUMBER_OF_TEAMS } from 'utils/marchMadness';
-import React, { CSSProperties, useEffect, useMemo, useState } from 'react';
+import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import Match from '../Match';
 import { BracketMatch } from 'types/marchMadness';
@@ -17,6 +17,7 @@ import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQu
 import { getIsAppReady } from 'redux/modules/app';
 import networkConnector from 'utils/networkConnector';
 import Loader from 'components/Loader';
+import MintNFTModal from '../MintNFTModal';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -28,6 +29,10 @@ const Brackets: React.FC = () => {
     const [isBracketMinted, setIsBracketMinted] = useState(false);
     const [bracketsData, setBracketsData] = useState(initialBracketsData);
     const [winnerTeamIds, setWinnerTeamIds] = useState(Array<number>(63).fill(0));
+    const [showMintNFTModal, setShowMintNFTModal] = useState(false);
+    const [isMinting, setIsMinting] = useState(false);
+    const [isUpdating, setIsUpdateing] = useState(false);
+    const [isMintError, setIsMintError] = useState(false);
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
         enabled: isAppReady,
@@ -284,6 +289,7 @@ const Brackets: React.FC = () => {
     const isSubmitDisabled = bracketsData.find((match) => match.isHomeTeamSelected === undefined) !== undefined;
 
     const handleSubmit = async () => {
+        setIsMintError(false);
         const { marchMadnessContract, signer } = networkConnector;
         if (marchMadnessContract && signer) {
             const marchMadnessContractWithSigner = marchMadnessContract.connect(signer);
@@ -294,11 +300,13 @@ const Brackets: React.FC = () => {
             try {
                 let tx;
                 if (isBracketMinted) {
+                    setIsUpdateing(true);
                     tx = await marchMadnessContractWithSigner.updateBracketsForAlreadyMintedItem(
                         marchMadnessData?.tokenId,
                         bracketsContractData
                     );
                 } else {
+                    setIsMinting(true);
                     tx = await marchMadnessContractWithSigner.mint(bracketsContractData);
                 }
 
@@ -306,12 +314,22 @@ const Brackets: React.FC = () => {
 
                 if (txResult && txResult.transactionHash) {
                     setIsBracketMinted(true);
+                    setIsUpdateing(false);
+                    setIsMinting(false);
+                    setShowMintNFTModal(false);
                 }
             } catch (e) {
+                setIsUpdateing(false);
+                setIsMinting(false);
+                setIsMintError(true);
                 console.log('Error ', e);
             }
         }
     };
+
+    const handleClose = useCallback(() => {
+        setShowMintNFTModal(false);
+    }, []);
 
     return (
         <Container>
@@ -362,7 +380,11 @@ const Brackets: React.FC = () => {
                         </Final>
                         {!isBracketsLocked && (
                             <SubmitWrapper>
-                                <Button style={submitButtonStyle} disabled={isSubmitDisabled} onClick={handleSubmit}>
+                                <Button
+                                    style={submitButtonStyle}
+                                    disabled={isSubmitDisabled}
+                                    onClick={() => setShowMintNFTModal(true)}
+                                >
                                     {isBracketMinted
                                         ? t('march-madness.brackets.submit-modify')
                                         : t('march-madness.brackets.submit')}
@@ -427,6 +449,16 @@ const Brackets: React.FC = () => {
                             </Region>
                         </WildCardsRow>
                     </WildCardsContainer>
+                    {showMintNFTModal && (
+                        <MintNFTModal
+                            isMinted={isBracketMinted}
+                            isMinting={isMinting}
+                            isUpdating={isUpdating}
+                            isError={isMintError}
+                            handleSubmit={handleSubmit}
+                            handleClose={handleClose}
+                        />
+                    )}
                 </>
             ) : (
                 <Loader />

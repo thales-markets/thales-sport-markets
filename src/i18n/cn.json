@@ -831,7 +831,16 @@
             "team-1": "团队 1",
             "submit-text": "完成括号",
             "submit": "完成括号",
-            "submit-modify": "更新支架"
+            "submit-modify": "更新支架",
+            "modal": {
+                "finish-text-1": "做得好！",
+                "button-minting": "铸币...",
+                "button-mint": "喜欢NFT",
+                "button-update": "更新支架",
+                "update-text": "你已经铸造了你的 NFT！",
+                "button-updating": "更新中...",
+                "finish-text-2": "现在你可以铸造你的 NFT 了！"
+            }
         },
         "regions": {
             "west": "西方",

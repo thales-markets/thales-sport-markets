@@ -828,7 +828,16 @@
             "team-1": "Mannschaft 1",
             "submit-text": "Klammer beenden",
             "submit-modify": "Halterung aktualisieren",
-            "submit": "Klammer beenden"
+            "submit": "Klammer beenden",
+            "modal": {
+                "button-mint": "Wie NFT",
+                "update-text": "Sie haben Ihr NFT bereits geprägt!",
+                "finish-text-1": "Gut gemacht!",
+                "button-updating": "Aktualisierung...",
+                "button-update": "Halterung aktualisieren",
+                "button-minting": "Prägung...",
+                "finish-text-2": "Jetzt können Sie Ihr NFT prägen!"
+            }
         },
         "regions": {
             "south": "Süd",

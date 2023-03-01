@@ -827,7 +827,16 @@
             "team-1": "ทีมที่ 1",
             "submit-text": "เสร็จสิ้นวงเล็บ",
             "submit-modify": "อัปเดตวงเล็บ",
-            "submit": "เสร็จสิ้นวงเล็บ"
+            "submit": "เสร็จสิ้นวงเล็บ",
+            "modal": {
+                "finish-text-2": "ตอนนี้คุณสามารถสร้าง NFT ของคุณได้แล้ว!",
+                "button-updating": "กำลังอัปเดต...",
+                "button-minting": "โรงกษาปณ์...",
+                "button-mint": "เช่นเดียวกับเอ็นเอฟที",
+                "update-text": "คุณได้สร้าง NFT ของคุณแล้ว!",
+                "finish-text-1": "ทำได้ดี!",
+                "button-update": "อัปเดตวงเล็บ"
+            }
         },
         "regions": {
             "south": "ใต้",

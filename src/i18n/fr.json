@@ -929,7 +929,16 @@
             "team-1": "Equipe 1",
             "submit-text": "Support de finition",
             "submit": "Support de finition",
-            "submit-modify": "Support de mise à jour"
+            "submit-modify": "Support de mise à jour",
+            "modal": {
+                "update-text": "Vous avez déjà frappé votre NFT !",
+                "button-mint": "Comme NFT",
+                "finish-text-2": "Vous pouvez maintenant frapper votre NFT !",
+                "finish-text-1": "Bien joué!",
+                "button-update": "Support de mise à jour",
+                "button-minting": "Frappe...",
+                "button-updating": "Mise à jour..."
+            }
         },
         "regions": {
             "west": "Ouest",

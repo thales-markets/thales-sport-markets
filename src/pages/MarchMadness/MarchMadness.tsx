@@ -52,6 +52,10 @@ const MarchMadness: React.FC = () => {
     const [selectedTab, setSelectedTab] = useState(defaultTab);
 
     useEffect(() => {
+        if (!isWalletConnected) {
+            setSelectedTab(MarchMadTabs.HOME);
+            return;
+        }
         const lsBrackets = localStore.get(LOCAL_STORAGE_KEYS.BRACKETS + networkId + walletAddress);
         if (queryParamTab === undefined) {
             if (lsBrackets !== undefined || marchMadnessData?.isAddressAlreadyMinted) {
@@ -60,17 +64,11 @@ const MarchMadness: React.FC = () => {
                 setSelectedTab(MarchMadTabs.HOME);
             }
         }
-    }, [walletAddress, marchMadnessData?.isAddressAlreadyMinted, networkId, queryParamTab]);
+    }, [walletAddress, marchMadnessData?.isAddressAlreadyMinted, networkId, queryParamTab, isWalletConnected]);
 
     useEffect(() => {
         dispatch(setTheme(Theme.MARCH_MADNESS));
     }, [dispatch]);
-
-    useEffect(() => {
-        if (!isWalletConnected) {
-            setSelectedTab(MarchMadTabs.HOME);
-        }
-    }, [isWalletConnected]);
 
     return (
         <Container showBackground={selectedTab !== MarchMadTabs.BRACKETS}>

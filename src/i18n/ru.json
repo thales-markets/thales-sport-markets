@@ -834,7 +834,16 @@
             "team-2": "Команда 2",
             "submit-text": "Финишный кронштейн",
             "submit-modify": "Обновить скобку",
-            "submit": "Финишный кронштейн"
+            "submit": "Финишный кронштейн",
+            "modal": {
+                "update-text": "Вы уже отчеканили свой NFT!",
+                "finish-text-2": "Теперь вы можете создать свой NFT!",
+                "button-minting": "Чеканка...",
+                "button-mint": "Как NFT",
+                "button-update": "Обновить скобку",
+                "finish-text-1": "Отличная работа!",
+                "button-updating": "Обновление..."
+            }
         },
         "regions": {
             "west": "Запад",

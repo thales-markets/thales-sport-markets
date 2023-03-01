@@ -831,7 +831,16 @@
             "team-1": "equipo 1",
             "submit-text": "Soporte de acabado",
             "submit": "Soporte de acabado",
-            "submit-modify": "Actualizar soporte"
+            "submit-modify": "Actualizar soporte",
+            "modal": {
+                "button-minting": "Acuñación...",
+                "update-text": "¡Ya has acuñado tu NFT!",
+                "finish-text-1": "¡Bien hecho!",
+                "button-update": "Actualizar soporte",
+                "button-mint": "Me gusta NFT",
+                "button-updating": "Actualizando...",
+                "finish-text-2": "¡Ahora puedes acuñar tu NFT!"
+            }
         },
         "regions": {
             "east": "Este",
