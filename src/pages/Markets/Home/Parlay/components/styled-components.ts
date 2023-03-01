@@ -127,6 +127,58 @@ export const AmountToBuyInput = styled.input`
     outline: none;
 `;
 
+export const AmountToBuyMultiContainer = styled.div`
+    display: flex;
+    position: relative;
+    justify-content: flex-end;
+    align-items: flex-end;
+`;
+
+export const AmountToBuyMultiInput = styled.input`
+    width: 80px;
+    margin-left: 2px;
+    margin-bottom: 5px;
+    border: 2px solid #3accfa;
+    border-radius: 3px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 13px;
+    outline: none;
+`;
+
+export const AmountToBuyMultiInfoLabel = styled.span<{ alignRight?: boolean }>`
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 27px;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: #64d9fe;
+    ${(props) => (props.alignRight ? `margin-left: auto;` : '')}
+    @media (max-width: 950px) {
+        line-height: 24px;
+    }
+`;
+
+export const AmountToBuyMultiPayoutLabel = styled.span<{ alignRight?: boolean }>`
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 27px;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: #64d9fe;
+    margin-left: auto;
+`;
+
+export const AmountToBuyMultiPayoutValue = styled.span<{ isInfo?: boolean; isCurrency?: boolean; isHidden?: boolean }>`
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 27px;
+    letter-spacing: 0.025em;
+    display: ${(props) => (props.isHidden ? 'none' : '')};
+    color: ${(props) => (props.isInfo || props.isCurrency ? '#5fc694' : '#ffffff')};
+    margin-left: 5px;
+`;
+
 export const MaxButton = styled.button`
     background: #3accfa;
     font-size: 10px;

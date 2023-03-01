@@ -14,19 +14,22 @@ import {
     removeFromParlay,
     resetParlayError,
     setPayment,
+    getMultiSingle,
     setPaymentSelectedStableIndex,
 } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
-import { ParlaysMarket, SportMarketInfo } from 'types/markets';
+import { MultiSingleAmounts, ParlaysMarket, SportMarketInfo } from 'types/markets';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import MatchInfo from './components/MatchInfo';
 import Payment from './components/Payment';
 import Single from './components/Single';
+import MultiSingle from './components/MultiSingle';
 import Ticket from './components/Ticket';
 import ValidationModal from './components/ValidationModal';
+import Toggle from 'components/Toggle/Toggle';
 
 const Parlay: React.FC = () => {
     const dispatch = useDispatch();
@@ -36,10 +39,13 @@ const Parlay: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const parlay = useSelector(getParlay);
     const parlayPayment = useSelector(getParlayPayment);
+    const multiSingleStore = useSelector(getMultiSingle);
     const hasParlayError = useSelector(getHasParlayError);
 
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
+    const [isMultiSingleBet, setIsMultiSingleBet] = useState(false);
+    const [multiSingleAmounts, setMultiSingleAmounts] = useState<MultiSingleAmounts[]>([]);
 
     const parlayAmmDataQuery = useParlayAmmDataQuery(networkId, {
         enabled: isAppReady,
@@ -98,34 +104,64 @@ const Parlay: React.FC = () => {
             }
 
             setParlayMarkets(parlayMarkets);
+            setMultiSingleAmounts(multiSingleStore);
         }
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay, dispatch]);
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay, dispatch, multiSingleStore]);
 
-    const onCloaseValidationModal = useCallback(() => dispatch(resetParlayError()), [dispatch]);
+    const onCloseValidationModal = useCallback(() => dispatch(resetParlayError()), [dispatch]);
+
+    const onToggleTypeClickHandler = () => {
+        const toggle = !isMultiSingleBet;
+        setIsMultiSingleBet(toggle);
+    };
 
     return (
         <Container isMobile={isMobile} isWalletConnected={isWalletConnected}>
             {parlayMarkets.length > 0 ? (
                 <>
-                    <ListContainer>
-                        {parlayMarkets.map((market, index) => {
-                            const outOfLiquidity = outOfLiquidityMarkets.includes(index);
-                            return (
-                                <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
-                                    <MatchInfo market={market} isHighlighted={true} />
-                                </RowMarket>
-                            );
-                        })}
-                    </ListContainer>
-                    <HorizontalLine />
-                    {parlayMarkets.length === 1 ? (
-                        <Single market={parlayMarkets[0]} parlayPayment={parlayPayment} />
+                    <Toggle
+                        label={{
+                            firstLabel: t('markets.parlay.toggle-parlay.parlay'),
+                            secondLabel: t('markets.parlay.toggle-parlay.multi-single'),
+                        }}
+                        active={isMultiSingleBet}
+                        disabled={parlayMarkets.length === 1}
+                        dotSize="18px"
+                        dotBackground="#303656"
+                        dotBorder="3px solid #3FD1FF"
+                        handleClick={onToggleTypeClickHandler}
+                    />
+                    {isMultiSingleBet && parlayMarkets.length > 1 ? (
+                        <>
+                            <MultiSingle
+                                markets={parlayMarkets}
+                                parlayPayment={parlayPayment}
+                                multiSingleAmounts={multiSingleAmounts}
+                            />
+                        </>
                     ) : (
-                        <Ticket
-                            markets={parlayMarkets}
-                            parlayPayment={parlayPayment}
-                            setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
-                        />
+                        <>
+                            <ListContainer>
+                                {parlayMarkets.map((market, index) => {
+                                    const outOfLiquidity = outOfLiquidityMarkets.includes(index);
+                                    return (
+                                        <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
+                                            <MatchInfo market={market} isHighlighted={true} />
+                                        </RowMarket>
+                                    );
+                                })}
+                            </ListContainer>
+                            <HorizontalLine />
+                            {parlayMarkets.length === 1 ? (
+                                <Single market={parlayMarkets[0]} parlayPayment={parlayPayment} />
+                            ) : (
+                                <Ticket
+                                    markets={parlayMarkets}
+                                    parlayPayment={parlayPayment}
+                                    setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
+                                />
+                            )}
+                        </>
                     )}
                 </>
             ) : (
@@ -158,7 +194,7 @@ const Parlay: React.FC = () => {
                     )}
                 </>
             )}
-            {hasParlayError && <ValidationModal onClose={onCloaseValidationModal} />}
+            {hasParlayError && <ValidationModal onClose={onCloseValidationModal} />}
         </Container>
     );
 };

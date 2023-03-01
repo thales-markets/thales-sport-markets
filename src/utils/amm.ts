@@ -5,6 +5,8 @@ import { BigNumber, ethers } from 'ethers';
 import { NetworkId } from 'types/network';
 import { getCollateralAddress } from './collaterals';
 import { isMultiCollateralSupportedForNetwork } from './network';
+import { MultiSingleTokenQuoteAndBonus, ParlaysMarket } from 'types/markets';
+import { roundNumberToDecimals } from './formatters/number';
 
 export const getAMMSportsTransaction: any = (
     isVoucherSelected: boolean,
@@ -61,6 +63,78 @@ export const getAMMSportsTransaction: any = (
               additionalSlippage,
               providerOptions
           );
+};
+
+export const getMultiAMMSportsTransactions: any = (
+    isVoucherSelected: boolean,
+    voucherId: number,
+    stableIndex: number,
+    networkId: NetworkId,
+    sportsAMMContract: ethers.Contract,
+    overtimeVoucherContract: ethers.Contract,
+    markets: ParlaysMarket[],
+    tokensAndQuote: Record<string, MultiSingleTokenQuoteAndBonus>,
+    referral?: string | null,
+    additionalSlippage?: BigNumber,
+    providerOptions?: {
+        gasLimit: number | null;
+    }
+): Promise<ethers.ContractTransaction[]> => {
+    const collateralAddress = getCollateralAddress(stableIndex ? stableIndex !== 0 : false, networkId, stableIndex);
+    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
+    const transactions: any = [];
+
+    markets.forEach((market: ParlaysMarket) => {
+        const marketAddress = market.address;
+        const selectedPosition = market.position;
+        const tokenAmount = tokensAndQuote[marketAddress].tokenAmount ?? 0;
+        const ammQuote = tokensAndQuote[marketAddress].ammQuote ?? 0;
+        const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(tokenAmount).toString());
+
+        if (isVoucherSelected) {
+            transactions.push(
+                overtimeVoucherContract?.buyFromAMMWithVoucher(marketAddress, selectedPosition, parsedAmount, voucherId)
+            );
+        }
+
+        if (isMultiCollateralSupported && stableIndex !== 0 && collateralAddress) {
+            transactions.push(
+                sportsAMMContract?.buyFromAMMWithDifferentCollateralAndReferrer(
+                    marketAddress,
+                    selectedPosition,
+                    parsedAmount,
+                    ammQuote,
+                    additionalSlippage,
+                    collateralAddress,
+                    referral || ZERO_ADDRESS,
+                    providerOptions
+                )
+            );
+        }
+
+        transactions.push(
+            referral
+                ? sportsAMMContract?.buyFromAMMWithReferrer(
+                      marketAddress,
+                      selectedPosition,
+                      parsedAmount,
+                      ammQuote,
+                      additionalSlippage,
+                      referral,
+                      providerOptions
+                  )
+                : sportsAMMContract?.buyFromAMM(
+                      marketAddress,
+                      selectedPosition,
+                      parsedAmount,
+                      ammQuote,
+                      additionalSlippage,
+                      providerOptions
+                  )
+        );
+    });
+
+    return transactions;
 };
 
 export const getSportsAMMQuoteMethod: any = (

@@ -115,6 +115,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
         markets: [],
+        multiSingle: false,
         totalQuote: 0,
         paid: 0,
         payout: 0,
@@ -591,6 +592,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         // create data copy to avoid modal re-render while opened
         const modalData: ShareTicketModalProps = {
             markets: [market],
+            multiSingle: false,
             totalQuote: getPositionOdds(market),
             paid: Number(usdAmountValue),
             payout: tokenAmount,
@@ -684,6 +686,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             {showShareTicketModal && (
                 <ShareTicketModal
                     markets={shareTicketModalData.markets}
+                    multiSingle={false}
                     totalQuote={shareTicketModalData.totalQuote}
                     paid={shareTicketModalData.paid}
                     payout={shareTicketModalData.payout}

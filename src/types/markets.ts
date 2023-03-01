@@ -342,6 +342,19 @@ export type ParlayPayment = {
     amountToBuy: number | string;
 };
 
+export type MultiSingleAmounts = {
+    sportMarketAddress: string;
+    amountToBuy: number;
+};
+
+export type MultiSingleTokenQuoteAndBonus = {
+    sportMarketAddress: string;
+    tokenAmount: number;
+    bonusPercentageDec: number;
+    totalBonusCurrency: number;
+    ammQuote: number;
+};
+
 export type WinningInfo = {
     highestWin: number;
     lifetimeWins: number;

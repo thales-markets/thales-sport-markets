@@ -41,6 +41,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketData, setShareTicketData] = useState<ShareTicketModalProps>({
         markets: [],
+        multiSingle: false,
         totalQuote: 0,
         paid: 0,
         payout: 0,
@@ -254,6 +255,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
             {showShareTicketModal && (
                 <ShareTicketModal
                     markets={shareTicketData.markets}
+                    multiSingle={false}
                     totalQuote={shareTicketData.totalQuote}
                     paid={shareTicketData.paid}
                     payout={shareTicketData.payout}
