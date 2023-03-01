@@ -757,8 +757,8 @@
     },
     "parlay-leaderboard": {
         "title": "Таблица поощрений Parlay",
-        "description": "A total of 5,000 OP will be distributed to the best parlays of the month. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
-        "distribution-note": "Rewards will be distributed to the top 50 parlays for the month!",
+        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best parlays on a <bold>bi-weekly basis</bold> starting from March 1st. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
+        "distribution-note": "Rewards will be distributed to the <bold>TOP 30 parlays every 2 weeks</bold>!",
         "no-parlays": "No winning parlays registered in the period yet.",
         "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
         "info": "If multiple parlays have the same number of positions and total quote the following will be used as tie-breakers in respective order:",
@@ -779,18 +779,10 @@
             "positions": "Позиции"
         },
         "periods": {
-            "period-5": "Может",
-            "period-8": "Август",
-            "period-10": "Октябрь",
-            "period-0": "Декабрь",
-            "period-1": "январь",
-            "period-7": "Июль",
-            "period-11": "ноябрь",
-            "period-3": "Маршировать",
-            "period-6": "Июнь",
-            "period-9": "Сентябрь",
-            "period-4": "апреля",
-            "period-2": "февраль"
+            "february": "February",
+            "period-end-label": "The period ends in",
+            "period-ended-label": "Period ended",
+            "bi-weekly-period": "Bi-weekly period"
         }
     },
     "wizard": {
