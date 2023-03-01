@@ -18,7 +18,6 @@ import i18n from 'i18n';
 import { setTheme } from 'redux/modules/ui';
 import { Theme } from 'constants/ui';
 import ROUTES from 'constants/routes';
-import { MarchMadTabs } from 'pages/MarchMadness/components/Tabs/Tabs';
 
 const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -70,17 +69,14 @@ const DappLayout: React.FC = ({ children }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location.pathname]);
 
-    const queryParamTab: MarchMadTabs = queryString.parse(location.search).tab as MarchMadTabs;
-    const hideFooter = location.pathname === ROUTES.MarchMadness && queryParamTab === MarchMadTabs.HOME;
-
     return (
         <>
             {isAppReady ? (
                 <Background>
-                    <Wrapper hidePaddingBottom={hideFooter}>
+                    <Wrapper>
                         <DappHeader />
                         {children}
-                        {!hideFooter && <DappFooter />}
+                        <DappFooter />
                     </Wrapper>
                     <ToastContainer theme={'colored'} />
                 </Background>
@@ -98,12 +94,12 @@ const Background = styled.section`
     position: relative;
 `;
 
-const Wrapper = styled(FlexDivColumn)<{ hidePaddingBottom: boolean }>`
+const Wrapper = styled(FlexDivColumn)`
     align-items: center;
     width: 99%;
     margin-left: auto;
     margin-right: auto;
-    padding: ${(props) => (props.hidePaddingBottom ? '40px 0 0 0' : '40px 0px')};
+    padding: 40px 0px;
     max-width: 1350px;
     min-height: 100vh;
     justify-content: space-between;

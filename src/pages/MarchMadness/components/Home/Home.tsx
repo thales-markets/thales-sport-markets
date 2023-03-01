@@ -115,7 +115,7 @@ const customButtonStyle: CSSProperties = {
     width: '653px',
     height: '64px',
     marginTop: '16px',
-    marginBottom: '110px',
+    marginBottom: '200px',
     background: '#ffffff',
     border: '3px solid #0E94CB',
     fontSize: '30px',
