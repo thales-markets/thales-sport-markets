@@ -71,7 +71,8 @@
             "insufficient-balance-wallet": "โปรดตรวจสอบให้แน่ใจว่ากระเป๋าเงินของคุณมี {{currencyKey}} เพียงพอ",
             "user-rejected-tx": "ผู้ใช้ปฏิเสธการทำธุรกรรม",
             "enter-address": "ใส่ที่อยู่กระเป๋าเงิน",
-            "invalid-address": "ที่อยู่ที่ไม่ถูกต้อง"
+            "invalid-address": "ที่อยู่ที่ไม่ถูกต้อง",
+            "batch-transaction-single-failure": "ธุรกรรมถูกปฏิเสธหรือล้มเหลว"
         },
         "time-remaining": {
             "ended": "เสร็จสิ้น",
@@ -388,10 +389,15 @@
                 "parlay": "พาร์เลย์",
                 "total-quote": "ใบเสนอราคาทั้งหมด",
                 "referral": "ลิงค์อ้างอิง",
-                "winner": "ผู้ชนะ"
+                "winner": "ผู้ชนะ",
+                "positions": "จำนวนตำแหน่ง"
             },
             "buy-in": "ซื้อใน",
-            "total-bonus": "โบนัสรวม"
+            "total-bonus": "โบนัสรวม",
+            "toggle-parlay": {
+                "multi-single": "เดี่ยว",
+                "parlay": "พาร์เลย์"
+            }
         },
         "nav-menu": {
             "items": {

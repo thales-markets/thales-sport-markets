@@ -71,7 +71,8 @@
             "insufficient-balance-wallet": "Please ensure your wallet has sufficient {{currencyKey}}",
             "user-rejected-tx": "User rejected transaction",
             "enter-address": "Enter address",
-            "invalid-address": "Invalid address"
+            "invalid-address": "Invalid address",
+            "batch-transaction-single-failure": "Una transazione è stata rifiutata o fallita."
         },
         "time-remaining": {
             "ended": "ended",
@@ -391,10 +392,15 @@
                 "total-quote": "Citazione totale",
                 "potential-payout": "Potenziale pagamento",
                 "loser": "Perdente",
-                "referral": "Link di riferimento"
+                "referral": "Link di riferimento",
+                "positions": "Numero di posizioni"
             },
             "buy-in": "Consenso",
-            "total-bonus": "Bonus totale"
+            "total-bonus": "Bonus totale",
+            "toggle-parlay": {
+                "parlay": "Parla",
+                "multi-single": "Separare"
+            }
         },
         "discounted-per": "Scontato come da",
         "nav-menu": {

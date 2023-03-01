@@ -80,7 +80,8 @@
             "insufficient-balance-wallet": "Bitte stell sicher, dass dein Wallet genügend {{currencyKey}} enthält",
             "user-rejected-tx": "Benutzer hat die Transaktion abgelehnt",
             "enter-address": "Adresse eingeben",
-            "invalid-address": "Ungültige Adresse"
+            "invalid-address": "Ungültige Adresse",
+            "batch-transaction-single-failure": "Eine Transaktion wurde abgelehnt oder ist fehlgeschlagen."
         },
         "time-remaining": {
             "ended": "zu Ende",
@@ -388,10 +389,15 @@
                 "winner": "Gewinner",
                 "total-quote": "Gesamtangebot",
                 "header": "Web 3 Sportmärkte auf",
-                "potential-payout": "Mögliche Auszahlung"
+                "potential-payout": "Mögliche Auszahlung",
+                "positions": "Anzahl der Positionen"
             },
             "buy-in": "Kaufen",
-            "total-bonus": "Gesamtbonus"
+            "total-bonus": "Gesamtbonus",
+            "toggle-parlay": {
+                "parlay": "Spielen",
+                "multi-single": "Einzel"
+            }
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {

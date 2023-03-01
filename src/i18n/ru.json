@@ -71,7 +71,8 @@
             "insufficient-balance-wallet": "Please ensure your wallet has sufficient {{currencyKey}}",
             "user-rejected-tx": "User rejected transaction",
             "enter-address": "Enter address",
-            "invalid-address": "Invalid address"
+            "invalid-address": "Invalid address",
+            "batch-transaction-single-failure": "Транзакция была отклонена или не удалась."
         },
         "time-remaining": {
             "ended": "ended",
@@ -391,10 +392,15 @@
                 "parlay": "ставить на кон",
                 "header": "Web 3 Спортивные рынки на",
                 "referral": "Реферальная ссылка",
-                "potential-payout": "Возможная выплата"
+                "potential-payout": "Возможная выплата",
+                "positions": "Количество позиций"
             },
             "buy-in": "Купить в",
-            "total-bonus": "Общий бонус"
+            "total-bonus": "Общий бонус",
+            "toggle-parlay": {
+                "multi-single": "Одинокий",
+                "parlay": "экспресс"
+            }
         },
         "discounted-per": "Со скидкой согласно",
         "nav-menu": {
