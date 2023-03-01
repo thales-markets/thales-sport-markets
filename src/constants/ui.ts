@@ -114,7 +114,7 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--competition',
         name: 'parlay-competition',
         route: ROUTES.Leaderboard,
-        supportedNetworks: [10, 420],
+        supportedNetworks: [10, 420, 42161],
     },
 
     {

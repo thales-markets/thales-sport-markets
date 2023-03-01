@@ -273,6 +273,14 @@
     content: '\007E';
 }
 
+.icon--op-rewards::before {
+    content: '\00A9';
+}
+
+.icon--thales-rewards::before {
+    content: '\00AA';
+}
+
 .icon--liquidity-pool::before {
     content: '\00AE';
 }

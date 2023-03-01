@@ -461,11 +461,9 @@ const Home: React.FC = () => {
                             );
                         })}
                     </SportFiltersContainer>
-                    {networkId !== 42161 && (
-                        <Suspense fallback={<Loader />}>
-                            <SidebarLeaderboard />
-                        </Suspense>
-                    )}
+                    <Suspense fallback={<Loader />}>
+                        <SidebarLeaderboard />
+                    </Suspense>
                 </SidebarContainer>
                 {/* MAIN PART */}
                 {sportMarketsQueryNew.isLoading ? (
