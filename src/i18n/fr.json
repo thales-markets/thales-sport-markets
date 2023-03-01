@@ -852,13 +852,14 @@
     },
     "parlay-leaderboard": {
         "title": "Classement des récompenses de combinés",
-        "description": "Un total de 10 000 OP sera distribué aux meilleurs combinés du mois. Les tickets seront classés en fonction du nombre de positions sur les combinés, puis de la cote totale.",
-        "distribution-note": "Les récompenses seront distribuées aux 20 meilleurs combinés du mois !",
+        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best parlays on a <bold>bi-weekly basis</bold> starting from March 1st. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
+        "distribution-note": "Rewards will be distributed to the <bold>TOP 30 parlays every 2 weeks</bold>!",
         "no-parlays": "Aucun combiné gagnant n'a encore été enregistré pour cette période.",
         "warning": "* L'équipe Overtime se réserve le droit de disqualifier les portefeuilles qu'elle soupçonne de jouer avec le système.",
         "info": "Si plusieurs combinés ont le même nombre de positions et la même cote totale, les éléments suivants seront utilisés pour départager les ex-aequo dans l'ordre respectif :",
         "info1": "- Le montant payé",
         "info2": "- Cote totale réelle (obtenue en multipliant les positions individuellement)",
+        "info3": "*1 pari gagnant éligible par portefeuille",
         "sidebar": {
             "title-parlay": "Combiné",
             "title-leaderboard": "Classement",
@@ -873,20 +874,11 @@
             "positions": "Positions"
         },
         "periods": {
-            "period-6": "Juin",
-            "period-1": "Janvier",
-            "period-5": "Mai",
-            "period-7": "Juillet",
-            "period-8": "Août",
-            "period-4": "Avril",
-            "period-10": "Octobre",
-            "period-3": "Mars",
-            "period-2": "Février",
-            "period-11": "Novembre",
-            "period-0": "Décembre",
-            "period-9": "Septembre"
-        },
-        "info3": "*1 pari gagnant éligible par portefeuille"
+            "february": "February",
+            "period-end-label": "The period ends in",
+            "period-ended-label": "Period ended",
+            "bi-weekly-period": "Bi-weekly period"
+        }
     },
     "wizard": {
         "title": "C'est parti !",

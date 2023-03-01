@@ -25,7 +25,6 @@
     content: '\0034';
 }
 
-
 .icon--overtime:before {
     content: '\0041';
 }
@@ -272,4 +271,12 @@
 
 .icon--card::before {
     content: '\007E';
+}
+
+.icon--op-rewards::before {
+    content: '\00A9';
+}
+
+.icon--thales-rewards::before {
+    content: '\00AA';
 }
