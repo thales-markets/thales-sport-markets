@@ -288,6 +288,7 @@
             "to-win": "win",
             "to-claim": "claim",
             "claim": "Claim",
+            "claim-all": "Claim All",
             "canceled": "Canceled",
             "total-quote": "Total quote",
             "result": "Result",

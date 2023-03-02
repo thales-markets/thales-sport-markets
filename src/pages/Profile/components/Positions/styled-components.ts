@@ -178,6 +178,23 @@ export const ClaimContainer = styled(FlexDivColumnNative)`
     }
 `;
 
+export const ClaimAllContainer = styled(FlexDivColumnNative)`
+    min-width: 100px;
+    align-items: end;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+
+    @media (max-width: 768px) {
+        min-width: 60px;
+    }
+    button {
+        margin-top: 2px;
+        @media (max-width: 768px) {
+            margin-top: 0px;
+        }
+    }
+`;
+
 export const ExternalLinkContainer = styled.div`
     height: 20px;
     width: 20px;
@@ -200,6 +217,25 @@ export const ExternalLinkArrow = styled.i.attrs({ className: 'icon icon--arrow-e
 export const ExternalLink = styled.a``;
 
 export const ClaimButton = styled(Button)<{ claimable?: boolean }>`
+    background: ${(props) => props.theme.background.quaternary};
+    color: ${(props) => props.theme.textColor.tertiary};
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.025em;
+    padding: 1px 15px 1px 15px;
+    visibility: ${(props) => (!props.claimable ? 'hidden' : '')};
+    @media (max-width: 768px) {
+        position: initial;
+        font-size: 9px;
+        padding: 2px 5px;
+        min-height: 12px;
+    }
+`;
+
+export const ClaimAllButton = styled(Button)<{ claimable?: boolean }>`
     background: ${(props) => props.theme.background.quaternary};
     color: ${(props) => props.theme.textColor.tertiary};
     text-transform: uppercase;

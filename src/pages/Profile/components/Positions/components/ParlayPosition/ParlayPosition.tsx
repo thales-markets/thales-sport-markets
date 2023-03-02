@@ -124,7 +124,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
                 winning: isParlayClaimable(parlayMarket),
             } as ParlaysMarket;
         }),
-        multiSingle: false, //TODO:
+        multiSingle: false,
         totalQuote: parlayMarket.totalQuote,
         paid: parlayMarket.sUSDPaid,
         payout: parlayMarket.totalAmount,
