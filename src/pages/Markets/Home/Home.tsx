@@ -296,7 +296,7 @@ const Home: React.FC = () => {
 
     return (
         <Container>
-            {networkId !== 42161 && (
+            {networkId !== NetworkIdByName.ArbitrumOne && (
                 <Info>
                     <Trans
                         i18nKey="rewards.op-rewards-banner-message"
