@@ -1,5 +1,5 @@
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
-import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-blue.svg';
+import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
 import styled from 'styled-components';
 import {
     FlexDiv,
