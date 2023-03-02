@@ -1,6 +1,6 @@
 import background from 'assets/images/march-madness/background-marchmadness.svg';
 import backgrounBall from 'assets/images/march-madness/background-marchmadness-ball.png';
-import { wildCardTeams, initialBracketsData, NUMBER_OF_ROUNDS, NUMBER_OF_TEAMS } from 'utils/marchMadness';
+import { wildCardTeams, initialBracketsData, NUMBER_OF_ROUNDS, NUMBER_OF_TEAMS } from 'constants/marchMadness';
 import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import Match from '../Match';

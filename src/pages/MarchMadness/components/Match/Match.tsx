@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { BracketMatch } from 'types/marchMadness';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { teamsData } from 'utils/marchMadness';
+import { teamsData } from 'constants/marchMadness';
 import MatchConnector from '../MatchConnector';
 import TeamStatus from '../TeamStatus';
 

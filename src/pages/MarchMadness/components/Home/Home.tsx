@@ -9,7 +9,7 @@ import { RootState } from 'redux/rootReducer';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { MarchMadTabs } from '../Tabs/Tabs';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { initialBracketsData } from 'utils/marchMadness';
+import { initialBracketsData } from 'constants/marchMadness';
 import localStore from 'utils/localStore';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
 import { getIsAppReady } from 'redux/modules/app';

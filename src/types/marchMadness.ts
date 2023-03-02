@@ -5,6 +5,8 @@ export type BracketMatch = {
     isHomeTeamSelected: boolean | undefined;
     homeTeamParentMatchId: number | undefined;
     awayTeamParentMatchId: number | undefined;
+    region: string;
+    round: string;
 };
 
 export type MarchMadTeam = {
