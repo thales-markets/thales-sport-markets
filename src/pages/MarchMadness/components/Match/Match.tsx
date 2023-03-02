@@ -6,6 +6,7 @@ import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { teamsData } from 'constants/marchMadness';
 import MatchConnector from '../MatchConnector';
 import TeamStatus from '../TeamStatus';
+import { isMatchInRegion } from 'utils/marchMadness';
 
 type MatchProps = {
     matchData: BracketMatch;
@@ -31,11 +32,7 @@ const Match: React.FC<MatchProps> = ({
     const { t } = useTranslation();
 
     const isBracketsLeftSide = useMemo(
-        () =>
-            matchData.id <= 15 ||
-            (matchData.id > 31 && matchData.id <= 39) ||
-            (matchData.id > 47 && matchData.id <= 51) ||
-            [56, 57, 60, 62].includes(matchData.id),
+        () => isMatchInRegion(matchData.id, 'East') || isMatchInRegion(matchData.id, 'West'),
         [matchData.id]
     );
 

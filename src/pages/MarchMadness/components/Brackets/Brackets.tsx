@@ -1,6 +1,16 @@
 import background from 'assets/images/march-madness/background-marchmadness.svg';
 import backgrounBall from 'assets/images/march-madness/background-marchmadness-ball.png';
-import { wildCardTeams, initialBracketsData, NUMBER_OF_ROUNDS, FINAL_MATCH_ID } from 'constants/marchMadness';
+import {
+    wildCardTeams,
+    initialBracketsData,
+    NUMBER_OF_ROUNDS,
+    FINAL_MATCH_ID,
+    FIRST_ROUND_MATCH_IDS,
+    SECOND_ROUND_MATCH_IDS,
+    SWEET16_ROUND_MATCH_IDS,
+    SEMI_FINAL_MATCH_IDS,
+    ELITE8_ROUND_MATCH_IDS,
+} from 'constants/marchMadness';
 import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import Match from '../Match';
@@ -18,7 +28,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import networkConnector from 'utils/networkConnector';
 import Loader from 'components/Loader';
 import MintNFTModal from '../MintNFTModal';
-import { getFirstMatchIndexInRound, getNumberOfMatchesPerRound } from 'utils/marchMadness';
+import { getFirstMatchIndexInRound, getNumberOfMatchesPerRound, isMatchInRegion } from 'utils/marchMadness';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -216,11 +226,15 @@ const Brackets: React.FC = () => {
     const getMatchesPerIdRange = (fromId: number, toId: number) => {
         return bracketsData.map((match) => {
             if (match.id >= fromId && match.id <= toId) {
-                const isFirstRound = fromId < 32;
-                const isSecondRound = fromId >= 32 && toId < 48;
-                const isSecondRoundLowerHalf = [36, 44].includes(match.id);
-                const isSweet16 = fromId >= 48 && toId < 56;
-                const isSweet16LowerHalf = [50, 54].includes(match.id);
+                const isFirstRound = FIRST_ROUND_MATCH_IDS.includes(fromId) || FIRST_ROUND_MATCH_IDS.includes(toId);
+                const isSecondRound = SECOND_ROUND_MATCH_IDS.includes(fromId) || SECOND_ROUND_MATCH_IDS.includes(toId);
+                const isSecondRoundLowerHalf =
+                    SECOND_ROUND_MATCH_IDS.includes(match.id) &&
+                    (isMatchInRegion(match.id, 'West') || isMatchInRegion(match.id, 'Midwest'));
+                const isSweet16 = SWEET16_ROUND_MATCH_IDS.includes(fromId) || SWEET16_ROUND_MATCH_IDS.includes(toId);
+                const isSweet16LowerHalf =
+                    SWEET16_ROUND_MATCH_IDS.includes(match.id) &&
+                    (isMatchInRegion(match.id, 'West') || isMatchInRegion(match.id, 'Midwest'));
 
                 const margin = isFirstRound
                     ? match.id === fromId
@@ -256,11 +270,13 @@ const Brackets: React.FC = () => {
     };
 
     const getMatchById = (id: number) => {
-        const isElite8UpperHalf = [56, 58].includes(id);
-        const isElite8LowerHalf = [57, 59].includes(id);
-        const isSemiFinalLeft = id === 60;
-        const isSemiFinalRight = id === 61;
-        const isFinal = id === 62;
+        const isElite8UpperHalf =
+            ELITE8_ROUND_MATCH_IDS.includes(id) && (isMatchInRegion(id, 'East') || isMatchInRegion(id, 'South'));
+        const isElite8LowerHalf =
+            ELITE8_ROUND_MATCH_IDS.includes(id) && (isMatchInRegion(id, 'West') || isMatchInRegion(id, 'Midwest'));
+        const isSemiFinalLeft = SEMI_FINAL_MATCH_IDS.includes(id) && isMatchInRegion(id, 'East-West');
+        const isSemiFinalRight = SEMI_FINAL_MATCH_IDS.includes(id) && isMatchInRegion(id, 'South-Midwest');
+        const isFinal = id === FINAL_MATCH_ID;
 
         const margin = isElite8UpperHalf
             ? `${SWEET16_ROUND_MATCH_GAP + 1}px 0 0 0`
