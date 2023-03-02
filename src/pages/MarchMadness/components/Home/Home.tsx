@@ -61,14 +61,25 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
         }
     };
 
-    const daysLeftForMint = useMemo(() => (marchMadnessData ? marchMadnessData.daysLeftToMint : 0), [marchMadnessData]);
+    const hoursLeftToMint = useMemo(() => (marchMadnessData ? marchMadnessData.hoursLeftToMint : 0), [
+        marchMadnessData,
+    ]);
 
     return (
         <Container>
             {marchMadnessDataQuery.isSuccess ? (
                 <>
                     <RowTitle>{t('march-madness.home.title')}</RowTitle>
-                    <RowTimeInfo>{t('march-madness.home.time-info', { days: daysLeftForMint })}</RowTimeInfo>
+                    <RowTimeInfo>
+                        {t('march-madness.home.time-info', {
+                            hours:
+                                hoursLeftToMint +
+                                ' ' +
+                                (hoursLeftToMint === 1
+                                    ? t('common.time-remaining.hour')
+                                    : t('common.time-remaining.hours')),
+                        })}
+                    </RowTimeInfo>
                     <TextWrapper marginTop={7} padding="17px 23px">
                         <Text>{t('march-madness.home.text-1')}</Text>
                     </TextWrapper>

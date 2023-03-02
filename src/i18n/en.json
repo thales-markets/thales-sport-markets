@@ -817,7 +817,7 @@
         },
         "home": {
             "title": "Welcome to March Madness tournament",
-            "time-info": "You have {{days}} days left to creat your bracket",
+            "time-info": "You have {{hours}} left to creat your bracket",
             "text-1": "March Madness is an NCAAB event that has 68 teams compete in an elimination bracket form for the championship. The event starts on March 14 in which 8 teams compete for the last 4 places in the 64 knockout stage brackets. The minting starts on 12th of March and last until March 16th when the main event starts.",
             "text-2": "An alternative way to calculate the bonus would be to base it on the round, as the further into the elimination phase a game is the harder it is to predict the outcome (as you have to guess all the prior games correctly too), so maybe:",
             "text-2a": "Round of 64 game outcome predicted correctly: 1% bonus",
@@ -826,7 +826,7 @@
             "text-2d": "Round of 8 game outcome predicted correctly: 7% bonus",
             "text-2e": "Round of 4 game outcome predicted correctly: 10% bonus",
             "text-2f": "Final game outcome predicted correctly: 20% bonus",
-            "text-2g": "Max bonus here: 32*1+16*2+8*4+4*7+2*10+20=164%",
+            "text-2g": "Max bonus here: 32*1 + 16*2 + 8*4 + 4*7 + 2*10 + 20 = 164%",
             "button-create": "Create bracket",
             "button-connect": "Connect wallet"
         },
@@ -835,6 +835,23 @@
             "team-2": "Team 2",
             "submit": "Finish Bracket",
             "submit-modify": "Update Bracket",
+            "round-0": "1st Round",
+            "round-1": "2nd Round",
+            "round-2": "Sweet 16",
+            "round-3": "Elite 8",
+            "round-4": "Final 4",
+            "round-5": "Final",
+            "stats": {
+                "my-stats": "My stats",
+                "status": "Status",
+                "rank": "Rank",
+                "complete": "Complete",
+                "incomplete": "Incomplete",
+                "place": "Place",
+                "my-total-score": "My total score",
+                "points": "Points",
+                "bonus": "Bonus"
+            },
             "modal": {
                 "finish-text-1": "Well done!",
                 "finish-text-2": "Now you can mint your NFT!",

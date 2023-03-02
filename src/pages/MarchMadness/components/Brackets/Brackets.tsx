@@ -1,6 +1,6 @@
 import background from 'assets/images/march-madness/background-marchmadness.svg';
 import backgrounBall from 'assets/images/march-madness/background-marchmadness-ball.png';
-import { wildCardTeams, initialBracketsData, NUMBER_OF_ROUNDS, NUMBER_OF_TEAMS } from 'constants/marchMadness';
+import { wildCardTeams, initialBracketsData, NUMBER_OF_ROUNDS, FINAL_MATCH_ID } from 'constants/marchMadness';
 import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import Match from '../Match';
@@ -18,6 +18,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import networkConnector from 'utils/networkConnector';
 import Loader from 'components/Loader';
 import MintNFTModal from '../MintNFTModal';
+import { getFirstMatchIndexInRound, getNumberOfMatchesPerRound } from 'utils/marchMadness';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -58,9 +59,9 @@ const Brackets: React.FC = () => {
                     .filter(
                         // filter matches by round
                         (match) => {
-                            const startId = NUMBER_OF_TEAMS - NUMBER_OF_TEAMS / Math.pow(2, i);
-                            const endId = startId + NUMBER_OF_TEAMS / Math.pow(2, i + 1);
-                            return match.id >= startId && match.id < endId;
+                            const startId = getFirstMatchIndexInRound(i);
+                            const endId = startId + getNumberOfMatchesPerRound(i) - 1;
+                            return match.id >= startId && match.id <= endId;
                         }
                     )
                     .map((match) => {
@@ -331,25 +332,114 @@ const Brackets: React.FC = () => {
         setShowMintNFTModal(false);
     }, []);
 
+    const getMyStats = () => {
+        const isFinalFinished = winnerTeamIds[FINAL_MATCH_ID] !== 0;
+        const isFirstMatchFinished = winnerTeamIds.find((id) => id !== 0) !== undefined;
+        const myRank = 65; // TODO: fetch rank
+
+        return (
+            <MyStats>
+                <StatsColumn width="50%">
+                    <StatsText fontWeight={600} margin="0 0 0 21px">
+                        {t('march-madness.brackets.stats.my-stats')}
+                    </StatsText>
+                </StatsColumn>
+                <StatsColumn width="50%">
+                    <StatsRow margin="0 0 10px 0" justify="normal">
+                        <StatsText>{t('march-madness.brackets.stats.status')}:</StatsText>
+                        <StatsText margin="0 0 0 5px" fontWeight={700}>
+                            {isFinalFinished
+                                ? t('march-madness.brackets.stats.complete')
+                                : t('march-madness.brackets.stats.incomplete')}
+                        </StatsText>
+                    </StatsRow>
+                    <StatsRow margin="10px 0 0 0" justify="normal">
+                        <StatsText>{t('march-madness.brackets.stats.rank')}:</StatsText>
+                        <StatsText margin="0 0 0 17px" fontWeight={700}>
+                            {isFirstMatchFinished ? myRank + ' ' + t('march-madness.brackets.stats.place') : 'N/A'}
+                        </StatsText>
+                    </StatsRow>
+                </StatsColumn>
+            </MyStats>
+        );
+    };
+
+    const getScorePerRound = (round: number) => {
+        const roundPoints = marchMadnessData?.winningsPerRound[round] || 0;
+        const roundBonus = marchMadnessData?.bonusesPerRound[round] || 0;
+        const roundNameKey = 'march-madness.brackets.round-' + round;
+
+        return (
+            <StatsColumn width="9%" margin="4px 15px 0 15px" justify="initial" key={round}>
+                <StatsRow margin="0 0 10px 0" justify="center" hasBorder={true}>
+                    <StatsText fontWeight={700} fontSize={14} lineHeight={21} margin="0 0 2px 0">
+                        {t(roundNameKey)}
+                    </StatsText>
+                </StatsRow>
+                <StatsRow margin="0 0 5px 0">
+                    <StatsText fontSize={14}>{t('march-madness.brackets.stats.points')}</StatsText>
+                    <StatsText fontWeight={600} fontSize={14}>
+                        {roundPoints + '/' + getNumberOfMatchesPerRound(round)}
+                    </StatsText>
+                </StatsRow>
+                <StatsRow>
+                    <StatsText fontSize={14}>{t('march-madness.brackets.stats.bonus')}</StatsText>
+                    <StatsText fontWeight={600} fontSize={14}>
+                        {roundBonus + '%'}
+                    </StatsText>
+                </StatsRow>
+            </StatsColumn>
+        );
+    };
+
+    const getMyTotalScore = () => {
+        const totalPoints = marchMadnessData?.winningsPerRound.reduce((a, b) => a + b, 0) || 0;
+        const totalBonus = marchMadnessData?.bonusesPerRound.reduce((a, b) => a + b, 0) || 0;
+
+        return (
+            <MyTotalScore>
+                <StatsColumn width="15%">
+                    <StatsText fontWeight={700} lineHeight={24} margin="0 0 0 13px">
+                        {t('march-madness.brackets.stats.my-total-score')}
+                    </StatsText>
+                </StatsColumn>
+                <StatsColumn width="13%">
+                    <StatsRow margin="0 20px 7px 0">
+                        <StatsText>{t('march-madness.brackets.stats.points')}</StatsText>
+                        <StatsText fontWeight={700}>{totalPoints + ' / 63'}</StatsText>
+                    </StatsRow>
+                    <StatsRow margin="7px 20px 0 0">
+                        <StatsText>{t('march-madness.brackets.stats.bonus')}</StatsText>
+                        <StatsText fontWeight={700}>{totalBonus + '%'}</StatsText>
+                    </StatsRow>
+                </StatsColumn>
+                <VerticalLine />
+                {Array(NUMBER_OF_ROUNDS)
+                    .fill(0)
+                    .map((_round, index) => getScorePerRound(index))}
+            </MyTotalScore>
+        );
+    };
+
     return (
         <Container>
             {marchMadnessDataQuery.isSuccess ? (
                 <>
                     <RowHeader marginBottom={0}>
-                        <MyStats></MyStats>
-                        <MyTotalScore></MyTotalScore>
+                        {getMyStats()}
+                        {getMyTotalScore()}
                     </RowHeader>
                     <BracketsWrapper>
                         <RowHeader marginBottom={6}>
-                            <RoundName>{'1st Round'}</RoundName>
-                            <RoundName>{'2nd Round'}</RoundName>
-                            <RoundName>{'Sweet 16'}</RoundName>
-                            <RoundName>{'Elite 8'}</RoundName>
-                            <RoundName>{'Final 4'}</RoundName>
-                            <RoundName>{'Elite 8'}</RoundName>
-                            <RoundName>{'Sweet 16'}</RoundName>
-                            <RoundName>{'2nd Round'}</RoundName>
-                            <RoundName>{'1st Round'}</RoundName>
+                            <RoundName>{t('march-madness.brackets.round-0')}</RoundName>
+                            <RoundName>{t('march-madness.brackets.round-1')}</RoundName>
+                            <RoundName>{t('march-madness.brackets.round-2')}</RoundName>
+                            <RoundName>{t('march-madness.brackets.round-3')}</RoundName>
+                            <RoundName>{t('march-madness.brackets.round-4')}</RoundName>
+                            <RoundName>{t('march-madness.brackets.round-3')}</RoundName>
+                            <RoundName>{t('march-madness.brackets.round-2')}</RoundName>
+                            <RoundName>{t('march-madness.brackets.round-1')}</RoundName>
+                            <RoundName>{t('march-madness.brackets.round-0')}</RoundName>
                         </RowHeader>
                         <RowHalf>
                             <Region isSideLeft={true} isVertical={true}>
@@ -611,14 +701,44 @@ const RoundName = styled.div`
 `;
 
 const MyStats = styled.div`
+    display: flex;
     width: 312px;
     height: 80px;
     background: #c12b34;
     border: 1px solid #c12b34;
 `;
+
+const StatsColumn = styled.div<{ width?: string; margin?: string; justify?: string }>`
+    display: flex;
+    flex-direction: column;
+    justify-content: ${(props) => (props.justify ? props.justify : 'center')};
+    ${(props) => (props.width ? `width: ${props.width};` : '')}
+    ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
+`;
+
+const StatsRow = styled.div<{ justify?: string; margin?: string; hasBorder?: boolean }>`
+    display: flex;
+    flex-direction: row;
+    justify-content: ${(props) => (props.justify ? props.justify : 'space-between')};
+    ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
+    ${(props) => (props.hasBorder ? 'border-bottom: 1px solid #0E94CB;' : '')}
+`;
+
+const StatsText = styled.span<{ fontWeight?: number; fontSize?: number; lineHeight?: number; margin?: string }>`
+    font-family: 'Oswald' !important;
+    font-style: normal;
+    font-weight: ${(props) => (props.fontWeight ? props.fontWeight : '400')};
+    font-size: ${(props) => (props.fontSize ? props.fontSize : '16')}px;
+    line-height: ${(props) => (props.lineHeight ? props.lineHeight : '14')}px;
+    text-transform: uppercase;
+    color: #ffffff;
+    ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
+`;
+
 const MyTotalScore = styled.div`
     width: 930px;
     height: 80px;
+    display: flex;
     background: #021631;
     border: 1px solid #0e94cb;
 `;
@@ -656,6 +776,12 @@ const WildCardsRow = styled.div`
     align-items: center;
     justify-content: center;
     margin-bottom: 5px;
+`;
+
+const VerticalLine = styled.div`
+    border-left: 2px solid #0e94cb;
+    height: 70px;
+    margin: 4px 0;
 `;
 
 export default Brackets;
