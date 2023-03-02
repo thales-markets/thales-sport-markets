@@ -653,7 +653,8 @@
             "ticket-paid": "Billet payé",
             "result": "Résultat",
             "starts": "Départs",
-            "position-size": "Taille du poste"
+            "position-size": "Taille du poste",
+            "claim-all": "Réclamer tout"
         },
         "messages": {
             "no-claimable": "Vous n'avez pas de poste réclamable",

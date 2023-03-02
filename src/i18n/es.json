@@ -555,7 +555,8 @@
             "number-of-games": "Numero de juegos",
             "result": "Resultado",
             "starts": "Empieza",
-            "position-size": "Tamaño de la posición"
+            "position-size": "Tamaño de la posición",
+            "claim-all": "Reclamar todo"
         },
         "messages": {
             "no-open": "No tienes ninguna posición abierta",

@@ -551,7 +551,8 @@
             "number-of-games": "จำนวนเกม",
             "result": "ผลลัพธ์",
             "position-size": "ขนาดตำแหน่ง",
-            "starts": "เริ่ม"
+            "starts": "เริ่ม",
+            "claim-all": "อ้างสิทธิ์ทั้งหมด"
         },
         "messages": {
             "no-open": "คุณไม่มีตำแหน่งที่เปิดอยู่",

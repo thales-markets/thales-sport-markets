@@ -552,7 +552,8 @@
             "ticket-paid": "Ticket bezahlt",
             "starts": "Beginnt",
             "result": "Ergebnis",
-            "position-size": "Positionsgröße"
+            "position-size": "Positionsgröße",
+            "claim-all": "Alle beanspruchen"
         },
         "messages": {
             "no-open": "Sie haben keine offene Stelle",

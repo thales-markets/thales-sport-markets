@@ -555,7 +555,8 @@
             "number-of-games": "游戏数",
             "result": "结果",
             "starts": "开始",
-            "position-size": "仓位大小"
+            "position-size": "仓位大小",
+            "claim-all": "索取全部"
         },
         "messages": {
             "no-claimable": "您没有任何可申请的职位",

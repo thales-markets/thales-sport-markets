@@ -558,7 +558,8 @@
             "to-claim": "Требовать",
             "starts": "Старт",
             "result": "Результат",
-            "position-size": "Размер позиции"
+            "position-size": "Размер позиции",
+            "claim-all": "Требовать все"
         },
         "messages": {
             "no-claimable": "У вас нет требуемых должностей",
