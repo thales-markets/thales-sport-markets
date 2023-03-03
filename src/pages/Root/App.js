@@ -243,17 +243,17 @@ const App = () => {
                                     </DappLayout>
                                 </Route>
                             )}
-                            {networkId === NetworkIdByName.OptimismMainnet && (
-                                <Route
-                                    exact
-                                    path={ROUTES.Vault}
-                                    render={(routeProps) => (
-                                        <DappLayout>
-                                            <Vault {...routeProps} />
-                                        </DappLayout>
-                                    )}
-                                />
-                            )}
+
+                            <Route
+                                exact
+                                path={ROUTES.Vault}
+                                render={(routeProps) => (
+                                    <DappLayout>
+                                        <Vault {...routeProps} />
+                                    </DappLayout>
+                                )}
+                            />
+
                             {isRouteAvailableForNetwork(ROUTES.QuizLeaderboard, networkId) && (
                                 <Route exact path={ROUTES.QuizLeaderboard}>
                                     <DappLayout>

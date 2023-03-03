@@ -158,6 +158,7 @@ export type ParlayMarket = {
 };
 
 export type ParlayMarketWithRank = ParlayMarket & { rank: number; numberOfPositions: number };
+export type ParlayMarketWithRound = ParlayMarket & { round: number };
 
 export type PositionData = {
     id: string;
