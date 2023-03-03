@@ -10,8 +10,10 @@ import {
     SWEET16_ROUND_MATCH_IDS,
     SEMI_FINAL_MATCH_IDS,
     ELITE8_ROUND_MATCH_IDS,
+    SEMI_FINAL_EAST_WEST_MATCH_ID,
+    SEMI_FINAL_SOUTH_MIDWEST_MATCH_ID,
 } from 'constants/marchMadness';
-import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { CSSProperties, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import Match from '../Match';
 import { BracketMatch } from 'types/marchMadness';
@@ -29,6 +31,9 @@ import networkConnector from 'utils/networkConnector';
 import Loader from 'components/Loader';
 import MintNFTModal from '../MintNFTModal';
 import { getFirstMatchIndexInRound, getNumberOfMatchesPerRound, isMatchInRegion } from 'utils/marchMadness';
+import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
+import ShareModal from '../ShareModal';
+import { MatchProps } from '../Match/Match';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -41,6 +46,7 @@ const Brackets: React.FC = () => {
     const [bracketsData, setBracketsData] = useState(initialBracketsData);
     const [winnerTeamIds, setWinnerTeamIds] = useState(Array<number>(63).fill(0));
     const [showMintNFTModal, setShowMintNFTModal] = useState(false);
+    const [showShareModal, setShowShareModal] = useState(false);
     const [isMinting, setIsMinting] = useState(false);
     const [isUpdating, setIsUpdateing] = useState(false);
     const [isMintError, setIsMintError] = useState(false);
@@ -344,10 +350,6 @@ const Brackets: React.FC = () => {
         }
     };
 
-    const handleClose = useCallback(() => {
-        setShowMintNFTModal(false);
-    }, []);
-
     const getMyStats = () => {
         const isFinalFinished = winnerTeamIds[FINAL_MATCH_ID] !== 0;
         const isFirstMatchFinished = winnerTeamIds.find((id) => id !== 0) !== undefined;
@@ -437,6 +439,37 @@ const Brackets: React.FC = () => {
         );
     };
 
+    const onTwitterIconClick = () => {
+        setShowShareModal(true);
+    };
+
+    const shareData: MatchProps[] = [
+        {
+            matchData: bracketsData[SEMI_FINAL_EAST_WEST_MATCH_ID],
+            winnerTeamId: winnerTeamIds[SEMI_FINAL_EAST_WEST_MATCH_ID],
+            isBracketsLocked,
+            isTeamLostInPreviousRounds,
+            updateBrackets: () => {},
+            height: MATCH_HEIGHT,
+        },
+        {
+            matchData: bracketsData[SEMI_FINAL_SOUTH_MIDWEST_MATCH_ID],
+            winnerTeamId: winnerTeamIds[SEMI_FINAL_SOUTH_MIDWEST_MATCH_ID],
+            isBracketsLocked,
+            isTeamLostInPreviousRounds,
+            updateBrackets: () => {},
+            height: MATCH_HEIGHT,
+        },
+        {
+            matchData: bracketsData[FINAL_MATCH_ID],
+            winnerTeamId: winnerTeamIds[FINAL_MATCH_ID],
+            isBracketsLocked,
+            isTeamLostInPreviousRounds,
+            updateBrackets: () => {},
+            height: MATCH_HEIGHT,
+        },
+    ];
+
     return (
         <Container>
             {marchMadnessDataQuery.isSuccess ? (
@@ -481,9 +514,8 @@ const Brackets: React.FC = () => {
                             {getMatchById(60)}
                             {getMatchById(61)}
                         </SemiFinals>
-                        <Final>
-                            <>{getMatchById(62)}</>
-                        </Final>
+                        <Final>{getMatchById(62)}</Final>
+
                         {!isBracketsLocked && (
                             <SubmitWrapper>
                                 <Button
@@ -497,6 +529,17 @@ const Brackets: React.FC = () => {
                                 </Button>
                             </SubmitWrapper>
                         )}
+                        <ShareWrapper>
+                            <Share>
+                                {t('march-madness.brackets.share')}
+                                <TwitterIcon
+                                    disabled={isSubmitDisabled}
+                                    padding="8px 0 0 0"
+                                    onClick={onTwitterIconClick}
+                                />
+                            </Share>
+                        </ShareWrapper>
+
                         <RowHalf>
                             <Region isSideLeft={true} isVertical={true}>
                                 {t('march-madness.regions.west')}
@@ -562,8 +605,11 @@ const Brackets: React.FC = () => {
                             isUpdating={isUpdating}
                             isError={isMintError}
                             handleSubmit={handleSubmit}
-                            handleClose={handleClose}
+                            handleClose={() => setShowMintNFTModal(false)}
                         />
+                    )}
+                    {showShareModal && (
+                        <ShareModal final4Matches={shareData} handleClose={() => setShowShareModal(false)} />
                     )}
                 </>
             ) : (
@@ -651,12 +697,7 @@ const Final = styled.div`
     height: 0;
 `;
 
-const SubmitWrapper = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    height: 0;
-`;
+const SubmitWrapper = styled(Final)``;
 
 const submitButtonStyle: CSSProperties = {
     fontSize: '14px',
@@ -798,6 +839,22 @@ const VerticalLine = styled.div`
     border-left: 2px solid #0e94cb;
     height: 70px;
     margin: 4px 0;
+`;
+
+const ShareWrapper = styled(Final)``;
+
+const Share = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Oswald' !important;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 14px;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin-top: 116px;
 `;
 
 export default Brackets;

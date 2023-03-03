@@ -955,7 +955,22 @@
             "round-0": "1er tour",
             "round-4": "Finale 4",
             "round-1": "2e tour",
-            "round-2": "Doux 16"
+            "round-2": "Doux 16",
+            "modal-mint": {
+                "finish-text-1": "Bien joué!",
+                "button-minting": "Frappe...",
+                "finish-text-2": "Vous pouvez maintenant frapper votre NFT !",
+                "button-mint": "Comme NFT",
+                "button-updating": "Mise à jour...",
+                "button-update": "Support de mise à jour",
+                "update-text": "Vous avez déjà frappé votre NFT !"
+            },
+            "modal-share": {
+                "header": "Mes 4 derniers choix",
+                "user-selection": "J'ai choisi l'{{team}} pour couper les filets à Houston !",
+                "share": "Partager"
+            },
+            "share": "Partagez cette parenthèse"
         },
         "regions": {
             "west": "Ouest",

@@ -857,7 +857,22 @@
             "round-4": "4 finales",
             "round-0": "1ra Ronda",
             "round-2": "Dulces 16",
-            "round-5": "Final"
+            "round-5": "Final",
+            "modal-mint": {
+                "finish-text-2": "¡Ahora puedes acuñar tu NFT!",
+                "button-minting": "Acuñación...",
+                "finish-text-1": "¡Bien hecho!",
+                "update-text": "¡Ya has acuñado tu NFT!",
+                "button-updating": "Actualizando...",
+                "button-update": "Actualizar soporte",
+                "button-mint": "Me gusta NFT"
+            },
+            "modal-share": {
+                "header": "Mis 4 últimas elecciones",
+                "share": "Compartir",
+                "user-selection": "¡Elegí al {{team}} para cortar las redes en Houston!"
+            },
+            "share": "Comparte este paréntesis"
         },
         "regions": {
             "east": "Este",

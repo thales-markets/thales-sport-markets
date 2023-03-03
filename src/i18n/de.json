@@ -854,7 +854,22 @@
             "round-2": "Süße 16",
             "round-0": "1. Runde",
             "round-3": "Elite 8",
-            "round-5": "Finale"
+            "round-5": "Finale",
+            "modal-mint": {
+                "button-update": "Halterung aktualisieren",
+                "button-minting": "Prägung...",
+                "update-text": "Sie haben Ihr NFT bereits geprägt!",
+                "finish-text-1": "Gut gemacht!",
+                "finish-text-2": "Jetzt können Sie Ihr NFT prägen!",
+                "button-updating": "Aktualisierung...",
+                "button-mint": "Wie NFT"
+            },
+            "modal-share": {
+                "share": "Aktie",
+                "header": "Meine letzten 4 Tipps",
+                "user-selection": "Ich habe das {{team}} ausgewählt, um die Netze in Houston zu fällen!"
+            },
+            "share": "Teilen Sie diese Klammer"
         },
         "regions": {
             "south": "Süd",

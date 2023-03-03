@@ -857,7 +857,22 @@
             "round-2": "甜蜜 16",
             "round-0": "第一轮",
             "round-3": "精英8",
-            "round-4": "决赛 4"
+            "round-4": "决赛 4",
+            "modal-mint": {
+                "finish-text-1": "做得好！",
+                "button-updating": "更新中...",
+                "update-text": "你已经铸造了你的 NFT！",
+                "button-minting": "铸币...",
+                "finish-text-2": "现在你可以铸造你的 NFT 了！",
+                "button-update": "更新支架",
+                "button-mint": "喜欢NFT"
+            },
+            "modal-share": {
+                "share": "分享",
+                "user-selection": "我选择了 {{team}} 在休斯敦削减网络！",
+                "header": "我最后的 4 个选择"
+            },
+            "share": "分享这个支架"
         },
         "regions": {
             "west": "西方",

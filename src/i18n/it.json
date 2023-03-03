@@ -860,7 +860,22 @@
             "round-2": "Dolce 16",
             "round-1": "2° giro",
             "round-3": "Élite 8",
-            "round-0": "1° giro"
+            "round-0": "1° giro",
+            "modal-mint": {
+                "button-minting": "Conio...",
+                "finish-text-1": "Ben fatto!",
+                "button-updating": "In aggiornamento...",
+                "finish-text-2": "Ora puoi coniare il tuo NFT!",
+                "button-update": "Aggiorna staffa",
+                "update-text": "Hai già coniato il tuo NFT!",
+                "button-mint": "Come NFT"
+            },
+            "modal-share": {
+                "header": "Le mie ultime 4 scelte",
+                "user-selection": "Ho scelto il {{team}} per tagliare le reti a Houston!",
+                "share": "Condividere"
+            },
+            "share": "Condividi questa parentesi"
         },
         "regions": {
             "south": "Sud",

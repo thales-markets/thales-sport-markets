@@ -258,6 +258,9 @@ const Link = styled.a`
     line-height: 24px;
     text-decoration: underline;
     color: #ffffff;
+    :hover {
+        color: #021631;
+    }
 `;
 
 const TextList = styled.ul`

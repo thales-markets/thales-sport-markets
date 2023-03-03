@@ -854,7 +854,7 @@
                 "points": "Points",
                 "bonus": "Bonus"
             },
-            "modal": {
+            "modal-mint": {
                 "finish-text-1": "Well done!",
                 "finish-text-2": "Now you can mint your NFT!",
                 "update-text": "You have already minted your NFT!",
@@ -862,6 +862,12 @@
                 "button-minting": "Minting...",
                 "button-update": "Update Bracket",
                 "button-updating": "Updating..."
+            },
+            "share": "Share this bracket",
+            "modal-share": {
+                "header": "My final 4 picks",
+                "user-selection": "I picked the {{team}} to cut the nets down in Houston!",
+                "share": "Share"
             }
         },
         "regions": {

@@ -23,19 +23,19 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({ isMinted, isMinting, isUpda
                 <TextWrapper>
                     <Text>
                         {isMinted
-                            ? t('march-madness.brackets.modal.update-text')
-                            : t('march-madness.brackets.modal.finish-text-1')}
+                            ? t('march-madness.brackets.modal-mint.update-text')
+                            : t('march-madness.brackets.modal-mint.finish-text-1')}
                     </Text>
-                    {!isMinted && <Text>{t('march-madness.brackets.modal.finish-text-2')}</Text>}
+                    {!isMinted && <Text>{t('march-madness.brackets.modal-mint.finish-text-2')}</Text>}
                 </TextWrapper>
                 <Button style={buttonStyle} disabled={isMinting || isUpdating} onClick={handleSubmit}>
                     {isMinted
                         ? isUpdating
-                            ? t('march-madness.brackets.modal.button-updating')
-                            : t('march-madness.brackets.modal.button-update')
+                            ? t('march-madness.brackets.modal-mint.button-updating')
+                            : t('march-madness.brackets.modal-mint.button-update')
                         : isMinting
-                        ? t('march-madness.brackets.modal.button-minting')
-                        : t('march-madness.brackets.modal.button-mint')}
+                        ? t('march-madness.brackets.modal-mint.button-minting')
+                        : t('march-madness.brackets.modal-mint.button-mint')}
                 </Button>
             </Container>
         </ReactModal>

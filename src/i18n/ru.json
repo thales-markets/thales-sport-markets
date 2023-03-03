@@ -860,7 +860,22 @@
             "round-4": "Финал 4",
             "round-0": "1-й раунд",
             "round-2": "Сладкие 16",
-            "round-5": "Финал"
+            "round-5": "Финал",
+            "modal-mint": {
+                "button-updating": "Обновление...",
+                "finish-text-1": "Отличная работа!",
+                "finish-text-2": "Теперь вы можете создать свой NFT!",
+                "update-text": "Вы уже отчеканили свой NFT!",
+                "button-minting": "Чеканка...",
+                "button-mint": "Как NFT",
+                "button-update": "Обновить скобку"
+            },
+            "modal-share": {
+                "user-selection": "Я выбрал {{team}}, чтобы перерезать сети в Хьюстоне!",
+                "header": "Мои последние 4 выбора",
+                "share": "Делиться"
+            },
+            "share": "Поделитесь этой скобкой"
         },
         "regions": {
             "west": "Запад",

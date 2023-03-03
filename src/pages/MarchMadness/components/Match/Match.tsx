@@ -3,22 +3,21 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { BracketMatch } from 'types/marchMadness';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { teamsData } from 'constants/marchMadness';
+import { NCAA_BASKETBALL_LEAGU_TAG, teamsData } from 'constants/marchMadness';
 import MatchConnector from '../MatchConnector';
 import TeamStatus from '../TeamStatus';
 import { isMatchInRegion } from 'utils/marchMadness';
 
-type MatchProps = {
+export type MatchProps = {
     matchData: BracketMatch;
     winnerTeamId: number;
     isBracketsLocked: boolean;
     isTeamLostInPreviousRounds: (teamId: number | undefined) => boolean;
     updateBrackets: (id: number, isHomeTeamSelected: boolean) => void;
     height: number;
+    isReadOnly?: boolean;
     margin?: string;
 };
-
-const NCAA_BASKETBALL_LEAGU_TAG = 9005;
 
 const Match: React.FC<MatchProps> = ({
     matchData,
@@ -27,6 +26,7 @@ const Match: React.FC<MatchProps> = ({
     isTeamLostInPreviousRounds,
     updateBrackets,
     height,
+    isReadOnly,
     margin,
 }) => {
     const { t } = useTranslation();
@@ -56,7 +56,7 @@ const Match: React.FC<MatchProps> = ({
         }
     }, [matchData?.isHomeTeamSelected, isHomeTeamSelected]);
 
-    const isTeamClickable = !isBracketsLocked;
+    const isTeamClickable = !isReadOnly && !isBracketsLocked;
     const teamClickHandler = (isHomeTeamClicked: boolean) => {
         if (isTeamClickable) {
             setIsHomeTeamSelected(isHomeTeamClicked);
@@ -95,7 +95,7 @@ const Match: React.FC<MatchProps> = ({
     };
 
     return (
-        <Container height={height} margin={margin}>
+        <Container height={height} margin={margin} isReadOnly={!!isReadOnly}>
             <TeamRow isClickable={isTeamClickable} onClick={() => teamClickHandler(true)}>
                 {/* HOME TEAM */}
                 {isBracketsLeftSide ? (
@@ -174,8 +174,8 @@ const Match: React.FC<MatchProps> = ({
     );
 };
 
-const Container = styled.div<{ height: number; margin?: string }>`
-    background: #ffffff;
+const Container = styled.div<{ height: number; margin?: string; isReadOnly: boolean }>`
+    background: ${(props) => (props.isReadOnly ? '#ffffff33' : '#ffffff')};
     position: relative;
     width: 142px;
     height: ${(props) => props.height}px;
