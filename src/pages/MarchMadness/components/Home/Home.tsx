@@ -94,7 +94,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                     : t('common.time-remaining.hours')),
                         })}
                     </RowTimeInfo>
-                    <TextWrapper marginTop={7} padding="17px 23px">
+                    <TextWrapper marginTop={10} padding="14px 23px">
                         <Text>
                             <Trans
                                 i18nKey="march-madness.home.text-1"
@@ -204,7 +204,7 @@ const RowTitle = styled.div`
     font-size: 50px;
     line-height: 58px;
     color: #ffffff;
-    margin-top: 20px;
+    margin-top: 10px;
 `;
 
 const RowTimeInfo = styled.div`
@@ -213,9 +213,9 @@ const RowTimeInfo = styled.div`
     justify-content: center;
     align-items: center;
     width: 90%;
-    min-height: 77px;
+    min-height: 70px;
     background: linear-gradient(270deg, #da252f -1.63%, #5c2c3b 18.12%, #021630 36.93%, #0c99d0 65.71%, #02223e 96.12%);
-    margin-top: 32px;
+    margin-top: 16px;
     font-family: 'NCAA' !important;
     font-style: normal;
     font-weight: 400;
