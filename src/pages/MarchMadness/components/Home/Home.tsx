@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import React, { CSSProperties, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { FlexDivColumn } from 'styles/common';
 import Button from 'components/Button';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -16,6 +16,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import Loader from 'components/Loader';
 import { history } from 'utils/routes';
 import queryString from 'query-string';
+import { LINKS } from 'constants/links';
 
 type HomeProps = {
     setSelectedTab?: (tab: MarchMadTabs) => void;
@@ -61,9 +62,16 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
         }
     };
 
-    const hoursLeftToMint = useMemo(() => (marchMadnessData ? marchMadnessData.hoursLeftToMint : 0), [
+    const daysLeftToMint = useMemo(() => (marchMadnessData ? Math.floor(marchMadnessData.hoursLeftToMint / 24) : 0), [
         marchMadnessData,
     ]);
+    const hoursLeftToMint = useMemo(
+        () =>
+            marchMadnessData
+                ? marchMadnessData.hoursLeftToMint - Math.floor(marchMadnessData.hoursLeftToMint / 24) * 24
+                : 0,
+        [marchMadnessData]
+    );
 
     return (
         <Container>
@@ -72,6 +80,12 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                     <RowTitle>{t('march-madness.home.title')}</RowTitle>
                     <RowTimeInfo>
                         {t('march-madness.home.time-info', {
+                            days:
+                                daysLeftToMint +
+                                ' ' +
+                                (daysLeftToMint === 1
+                                    ? t('common.time-remaining.day')
+                                    : t('common.time-remaining.days')),
                             hours:
                                 hoursLeftToMint +
                                 ' ' +
@@ -81,31 +95,71 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                         })}
                     </RowTimeInfo>
                     <TextWrapper marginTop={7} padding="17px 23px">
-                        <Text>{t('march-madness.home.text-1')}</Text>
+                        <Text>
+                            <Trans
+                                i18nKey="march-madness.home.text-1"
+                                components={{
+                                    bold: <BoldText />,
+                                }}
+                            />
+                        </Text>
                     </TextWrapper>
                     <TextWrapper marginTop={10} padding="20px 23px">
-                        <Text>{t('march-madness.home.text-2')}</Text>
+                        <Text>
+                            <Trans
+                                i18nKey="march-madness.home.text-2"
+                                components={{
+                                    bold: <BoldText />,
+                                }}
+                            />
+                        </Text>
+                        <br />
+                        <Text>
+                            <Trans
+                                i18nKey="march-madness.home.text-3"
+                                components={{
+                                    bold: <BoldText />,
+                                }}
+                            />
+                        </Text>
                         <TextList>
                             <TextBullet>
-                                <Text>{t('march-madness.home.text-2a')}</Text>
+                                <Text>{t('march-madness.home.text-3a')}</Text>
                             </TextBullet>
                             <TextBullet>
-                                <Text>{t('march-madness.home.text-2b')}</Text>
+                                <Text>{t('march-madness.home.text-3b')}</Text>
                             </TextBullet>
                             <TextBullet>
-                                <Text>{t('march-madness.home.text-2c')}</Text>
+                                <Text>{t('march-madness.home.text-3c')}</Text>
                             </TextBullet>
                             <TextBullet>
-                                <Text>{t('march-madness.home.text-2d')}</Text>
+                                <Text>{t('march-madness.home.text-3d')}</Text>
                             </TextBullet>
                             <TextBullet>
-                                <Text>{t('march-madness.home.text-2e')}</Text>
+                                <Text>{t('march-madness.home.text-3e')}</Text>
                             </TextBullet>
                             <TextBullet>
-                                <Text>{t('march-madness.home.text-2f')}</Text>
+                                <Text>{t('march-madness.home.text-3f')}</Text>
                             </TextBullet>
                         </TextList>
-                        <Text>{t('march-madness.home.text-2g')}</Text>
+                        <br />
+                        <Text>
+                            <Trans
+                                i18nKey="march-madness.home.text-4"
+                                components={{
+                                    bold: <BoldText />,
+                                }}
+                            />
+                        </Text>
+                        <br />
+                        <Text>
+                            <Trans
+                                i18nKey="march-madness.home.text-5"
+                                components={{
+                                    mediumLink: <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Medium} />,
+                                }}
+                            />
+                        </Text>
                     </TextWrapper>
                     {(!isWalletConnected || !isBracketsLocked) && (
                         <Button style={customButtonStyle} disabled={isButtonDisabled} onClick={buttonClickHandler}>
@@ -147,8 +201,8 @@ const RowTitle = styled.div`
     font-family: 'NCAA' !important;
     font-style: normal;
     font-weight: 400;
-    font-size: 60px;
-    line-height: 69px;
+    font-size: 50px;
+    line-height: 58px;
     color: #ffffff;
     margin-top: 20px;
 `;
@@ -165,10 +219,10 @@ const RowTimeInfo = styled.div`
     font-family: 'NCAA' !important;
     font-style: normal;
     font-weight: 400;
-    font-size: 35px;
-    line-height: 40px;
+    font-size: 30px;
+    line-height: 35px;
     text-align: center;
-    letter-spacing: 10px;
+    letter-spacing: 8px;
     text-transform: uppercase;
     color: #ffffff;
     padding: 10px 20px;
@@ -182,12 +236,27 @@ const TextWrapper = styled(FlexDivColumn)<{ marginTop: number; padding: string }
     padding: ${(props) => props.padding};
 `;
 
-const Text = styled.p`
+const Text = styled.span`
     font-family: 'Oswald' !important;
     font-style: normal;
     font-weight: 400;
-    font-size: 20px;
-    line-height: 30px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #ffffff;
+`;
+
+const BoldText = styled(Text)`
+    font-weight: 700;
+    text-transform: uppercase;
+`;
+
+const Link = styled.a`
+    font-family: 'Oswald' !important;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-decoration: underline;
     color: #ffffff;
 `;
 

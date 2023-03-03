@@ -837,7 +837,24 @@
                 "button-update": "Halterung aktualisieren",
                 "button-minting": "Prägung...",
                 "finish-text-2": "Jetzt können Sie Ihr NFT prägen!"
-            }
+            },
+            "stats": {
+                "status": "Status",
+                "my-stats": "Meine Statistiken",
+                "rank": "Rang",
+                "bonus": "Bonus",
+                "my-total-score": "Meine Gesamtpunktzahl",
+                "place": "Ort",
+                "complete": "Vollständig",
+                "incomplete": "Unvollständig",
+                "points": "Punkte"
+            },
+            "round-4": "Finale 4",
+            "round-1": "2. Runde",
+            "round-2": "Süße 16",
+            "round-0": "1. Runde",
+            "round-3": "Elite 8",
+            "round-5": "Finale"
         },
         "regions": {
             "south": "Süd",
@@ -858,7 +875,17 @@
             "text-2b": "Richtig vorhergesagtes Spielergebnis der Runde der letzten 32: 2 % Bonus",
             "button-create": "Klammer erstellen",
             "text-2a": "Richtig vorhergesagtes Spielergebnis der Runde der letzten 64: 1 % Bonus",
-            "text-2c": "Ausgang des Achtelfinalspiels korrekt vorhergesagt: 4 % Bonus"
-        }
+            "text-2c": "Ausgang des Achtelfinalspiels korrekt vorhergesagt: 4 % Bonus",
+            "text-3e": "Zweite Runde - 2 %",
+            "text-3a": "Meisterschaft - 20 %",
+            "text-3f": "Erste Runde - 1 %",
+            "text-3b": "Final Four - 10 %",
+            "text-3c": "Elite Acht - 7 %",
+            "text-3d": "Süß 16 - 4%",
+            "text-4": "Der <bold>zweite Pool</bold> wird zwischen den Inhabern der genauesten Gruppe mit einem Volumen-Benchmark von 10 sUSD für March Madness-Spiele aufgeteilt. Inhaber, die die Volumenanforderungen erfüllen, können ihre Position in der Best-Bracket-Bestenliste verfolgen, wo die Gewinner einen Belohnungspool von 3.000 OP aufteilen.",
+            "text-5": "Weitere Details in unserem <mediumLink>Medium-Blogbeitrag</mediumLink>.",
+            "text-3": "Für den <bold>Ersten Pool</bold> werden 10.000 OP auf alle volumengesteuerten March Madness-Spiele aufgeteilt, einschließlich aller Markttypen und Parlays mit mindestens einem NCAAB-Spiel. Inhaber der March Madness-Kategorie NFT haben Anspruch auf einen Handelsschub. Jedes richtige Spiel ist für einen gestaffelten Boost mit einem Maximum von 164 % berechtigt."
+        },
+        "mobile-message": "Die Seite ist nur auf größeren Bildschirmen verfügbar. Bitte verwenden Sie die Desktop-Version!"
     }
 }

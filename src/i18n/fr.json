@@ -938,7 +938,24 @@
                 "button-update": "Support de mise à jour",
                 "button-minting": "Frappe...",
                 "button-updating": "Mise à jour..."
-            }
+            },
+            "stats": {
+                "my-total-score": "Mon score total",
+                "rank": "Rang",
+                "place": "Lieu",
+                "bonus": "Prime",
+                "incomplete": "Incomplet",
+                "status": "Statut",
+                "points": "Points",
+                "my-stats": "Mes stats",
+                "complete": "Complet"
+            },
+            "round-5": "Final",
+            "round-3": "Élite 8",
+            "round-0": "1er tour",
+            "round-4": "Finale 4",
+            "round-1": "2e tour",
+            "round-2": "Doux 16"
         },
         "regions": {
             "west": "Ouest",
@@ -959,7 +976,17 @@
             "text-2a": "Résultat des huitièmes de finale correctement prédit : 1 % de bonus",
             "text-2g": "Bonus maximum ici : 32*1+16*2+8*4+4*7+2*10+20=164 %",
             "text-2d": "Résultat du huitième de finale correctement prédit : 7 % de bonus",
-            "text-2f": "Résultat final du jeu prédit correctement : 20 % de bonus"
-        }
+            "text-2f": "Résultat final du jeu prédit correctement : 20 % de bonus",
+            "text-3b": "Final Four - 10%",
+            "text-5": "Plus de détails dans notre <mediumLink>article de blog Medium</mediumLink>.",
+            "text-3f": "Premier tour - 1%",
+            "text-3e": "Deuxième tour - 2 %",
+            "text-3": "Pour le <bold>Premier pool</bold>, 10 000 OP seront répartis entre tous les volumes générés par les jeux March Madness, y compris tous les types de marché et parlay avec au moins un jeu NCAAB. Les détenteurs de la tranche March Madness NFT sont éligibles pour un coup de pouce commercial. Chaque jeu correct est éligible pour un boost à plusieurs niveaux, avec un maximum de 164 %.",
+            "text-3a": "Championnat - 20%",
+            "text-3d": "Doux 16 - 4%",
+            "text-3c": "Élite Huit - 7%",
+            "text-4": "Le <bold>deuxième pool</bold> sera divisé entre les détenteurs de la fourchette la plus précise avec une référence de volume de 10 sUSD sur les jeux March Madness. Les détenteurs qui satisfont à l'exigence de volume peuvent suivre leur position dans le classement du meilleur groupe où les gagnants se partageront un pool de récompenses de 3 000 OP."
+        },
+        "mobile-message": "La page n'est disponible que sur les grands écrans. Veuillez utiliser la version de bureau !"
     }
 }

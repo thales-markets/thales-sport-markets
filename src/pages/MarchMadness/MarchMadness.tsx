@@ -14,6 +14,7 @@ import { setTheme } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
+import { FlexDivColumn } from 'styles/common';
 import localStore from 'utils/localStore';
 import { buildHref } from 'utils/routes';
 import Brackets from './components/Brackets';
@@ -73,7 +74,9 @@ const MarchMadness: React.FC = () => {
     return (
         <Container showBackground={selectedTab !== MarchMadTabs.BRACKETS}>
             {isMobile ? (
-                <Home />
+                <TextWrapper>
+                    <Text>{t('march-madness.mobile-message')}</Text>
+                </TextWrapper>
             ) : marchMadnessDataQuery.isSuccess ? (
                 <>
                     <BackToLink
@@ -106,6 +109,22 @@ const Container = styled.div<{ showBackground: boolean }>`
     ${(props) => (props.showBackground ? 'background-size: 1900px;' : '')}
     ${(props) => (props.showBackground ? 'background-position: -277px -58px;' : '')}
     ${(props) => (props.showBackground ? 'background-repeat: no-repeat;' : '')}
+`;
+
+const TextWrapper = styled(FlexDivColumn)`
+    background: #0e94cb;
+    border: 2px solid #0e94cb;
+    padding: 6px 12px;
+    margin-top: 10px;
+`;
+
+const Text = styled.span`
+    font-family: 'Oswald' !important;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #ffffff;
 `;
 
 export default MarchMadness;

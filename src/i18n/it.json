@@ -843,7 +843,24 @@
                 "button-updating": "In aggiornamento...",
                 "finish-text-2": "Ora puoi coniare il tuo NFT!",
                 "button-update": "Aggiorna staffa"
-            }
+            },
+            "stats": {
+                "rank": "Rango",
+                "status": "Stato",
+                "incomplete": "Incompleto",
+                "my-stats": "Le mie statistiche",
+                "my-total-score": "Il mio punteggio totale",
+                "complete": "Completare",
+                "place": "Posto",
+                "bonus": "Bonus",
+                "points": "Punti"
+            },
+            "round-4": "Finale 4",
+            "round-5": "Finale",
+            "round-2": "Dolce 16",
+            "round-1": "2° giro",
+            "round-3": "Élite 8",
+            "round-0": "1° giro"
         },
         "regions": {
             "south": "Sud",
@@ -864,7 +881,17 @@
             "title": "Benvenuti al torneo March Madness",
             "button-create": "Crea parentesi",
             "button-connect": "Collega il portafoglio",
-            "text-1": "March Madness è un evento NCAAB in cui 68 squadre competono in un girone eliminatorio per il campionato. L'evento inizia il 14 marzo in cui 8 squadre competono per gli ultimi 4 posti nei 64 gironi della fase a eliminazione diretta. Il conio inizia il 12 marzo e dura fino al 16 marzo, quando inizia l'evento principale."
-        }
+            "text-1": "March Madness è un evento NCAAB in cui 68 squadre competono in un girone eliminatorio per il campionato. L'evento inizia il 14 marzo in cui 8 squadre competono per gli ultimi 4 posti nei 64 gironi della fase a eliminazione diretta. Il conio inizia il 12 marzo e dura fino al 16 marzo, quando inizia l'evento principale.",
+            "text-3b": "Quattro finali - 10%",
+            "text-3c": "Elite Otto - 7%",
+            "text-3e": "Secondo turno - 2%",
+            "text-3f": "Primo round - 1%",
+            "text-3a": "Campionato - 20%",
+            "text-4": "Il <bold>secondo pool</bold> sarà diviso tra i detentori della fascia più accurata con un benchmark di volume di 10 sUSD sui giochi March Madness. I titolari che soddisfano il requisito di volume possono tenere traccia della loro posizione nella classifica della fascia migliore in cui i vincitori si divideranno un montepremi di 3.000 OP.",
+            "text-3d": "Dolce 16 - 4%",
+            "text-5": "Maggiori dettagli nel nostro <mediumLink>Post del blog medio</mediumLink>.",
+            "text-3": "Per il <bold>Primo pool</bold>, 10.000 OP saranno divisi tra tutti i volumi guidati attraverso i giochi March Madness, inclusi tutti i tipi di mercato e parlay con almeno un gioco NCAAB. I possessori della fascia March Madness NFT possono beneficiare di un aumento del trading. Ogni gioco corretto è idoneo per un potenziamento a più livelli, con un massimo del 164%."
+        },
+        "mobile-message": "La pagina è disponibile solo su schermi più grandi. Si prega di utilizzare la versione desktop!"
     }
 }
