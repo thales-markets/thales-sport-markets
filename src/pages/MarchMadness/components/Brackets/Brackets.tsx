@@ -440,7 +440,9 @@ const Brackets: React.FC = () => {
     };
 
     const onTwitterIconClick = () => {
-        setShowShareModal(true);
+        if (!isSubmitDisabled) {
+            setShowShareModal(true);
+        }
     };
 
     const shareData: MatchProps[] = [
