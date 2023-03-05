@@ -117,7 +117,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) =
                 }
             }
         },
-        [isLoading, useDownloadImage, handleClose]
+        [isLoading, useDownloadImage, handleClose, t]
     );
 
     const onTwitterShareClickHandler = () => {
