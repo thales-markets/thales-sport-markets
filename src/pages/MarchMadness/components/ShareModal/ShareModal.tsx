@@ -1,7 +1,7 @@
 import twitterIcon from 'assets/images/march-madness/twitter-icon.svg';
 import background from 'assets/images/march-madness/flexcard-background.png';
 import styled from 'styled-components';
-import React, { CSSProperties, useState } from 'react';
+import React, { CSSProperties, useCallback, useRef, useState } from 'react';
 import ReactModal from 'react-modal';
 import Button from 'components/Button';
 import { useTranslation } from 'react-i18next';
@@ -9,11 +9,20 @@ import Match from '../Match';
 import { MatchProps } from '../Match/Match';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { NCAA_BASKETBALL_LEAGU_TAG, teamsData } from 'constants/marchMadness';
+import { isFirefox } from 'utils/device';
+import { toast } from 'react-toastify';
+import { LINKS } from 'constants/links';
+import { defaultToastOptions, getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { toPng } from 'html-to-image';
 
 type ShareModalProps = {
     final4Matches: MatchProps[];
     handleClose: () => void;
 };
+
+const IMAGE_NAME = 'BracketImage.png';
+const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
+const TWITTER_MESSAGE_UPLOAD = `%0A<UPLOAD YOUR ${IMAGE_NAME}>`;
 
 const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) => {
     const { t } = useTranslation();
@@ -31,14 +40,112 @@ const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) =
     const [winnerLogoSrc, setWinnerLogoSrc] = useState(
         getTeamImageSource(winnerTeamName || '', NCAA_BASKETBALL_LEAGU_TAG)
     );
+    const [isLoading, setIsLoading] = useState(false);
+    const [toastId, setToastId] = useState<string | number>(0);
+
+    const ref = useRef<HTMLDivElement>(null);
+
+    // Download image desktop: clipboard.write not supported/enabled in Firefox
+    const useDownloadImage = isFirefox();
+
+    const saveImageAndOpenTwitter = useCallback(
+        async (toastIdParam: string | number) => {
+            if (!isLoading) {
+                if (ref.current === null) {
+                    return;
+                }
+
+                try {
+                    // In order to improve image quality enlarge image by 2.
+                    // Twitter is trying to fit into 504 x 510 with the same aspect ratio, so when image is smaller than 504 x 510, there is quality loss.
+                    const aspectRatio = 2;
+                    const canvasWidth = ref.current.clientWidth * aspectRatio;
+                    const canvasHeight = ref.current.clientHeight * aspectRatio;
+
+                    const base64Image = await toPng(ref.current, { canvasWidth, canvasHeight });
+
+                    if (useDownloadImage) {
+                        // Download image
+                        const link = document.createElement('a');
+                        link.href = base64Image;
+                        link.download = IMAGE_NAME;
+                        document.body.appendChild(link);
+                        link.click();
+                        // Cleanup the DOM
+                        document.body.removeChild(link);
+                    } else {
+                        // Save to clipboard
+                        const b64Blob = (await fetch(base64Image)).blob();
+                        const cbi = new ClipboardItem({
+                            'image/png': b64Blob,
+                        });
+                        await navigator.clipboard.write([cbi]); // not supported by FF
+                    }
+
+                    if (ref.current === null) {
+                        return;
+                    }
+
+                    const twitterLinkWithStatusMessage =
+                        LINKS.TwitterTweetStatus +
+                        LINKS.Overtime +
+                        (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+
+                    toast.update(
+                        toastIdParam,
+                        getSuccessToastOptions(
+                            <>
+                                {!useDownloadImage && (
+                                    <>
+                                        {t('market.toast-message.image-in-clipboard')}
+                                        <br />
+                                    </>
+                                )}
+                                {t('market.toast-message.open-twitter')}
+                            </>
+                        )
+                    );
+
+                    setTimeout(() => {
+                        window.open(twitterLinkWithStatusMessage);
+                    }, defaultToastOptions.autoClose);
+                    handleClose();
+                } catch (e) {
+                    console.log(e);
+                    setIsLoading(false);
+                    toast.update(toastIdParam, getErrorToastOptions(t('market.toast-message.save-image-error')));
+                }
+            }
+        },
+        [isLoading, useDownloadImage, handleClose]
+    );
 
     const onTwitterShareClickHandler = () => {
-        //TODO: implement
+        if (!isLoading) {
+            const id = toast.loading(
+                useDownloadImage ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
+            );
+            setToastId(id);
+            setIsLoading(true);
+
+            // If image creation is not postponed with timeout toaster is not displayed immediately, it is rendered in parallel with toPng() execution.
+            // Function toPng is causing UI to freez for couple of seconds and there is no notification message during that time, so it confuses user.
+            setTimeout(() => {
+                saveImageAndOpenTwitter(id);
+            }, 300);
+        }
+    };
+
+    const onModalClose = () => {
+        if (isLoading) {
+            toast.update(toastId, getErrorToastOptions(t('market.toast-message.save-image-cancel')));
+        }
+        handleClose();
     };
 
     return (
-        <ReactModal isOpen shouldCloseOnOverlayClick={true} onRequestClose={handleClose} style={customStyle}>
-            <Container>
+        <ReactModal isOpen shouldCloseOnOverlayClick={true} onRequestClose={onModalClose} style={customStyle}>
+            <Container ref={ref}>
                 <CloseIcon className={`icon icon--close`} onClick={handleClose} />
                 <ContentWrapper>
                     <Text margin="13px 0 17px 0">{t('march-madness.brackets.modal-share.header')}</Text>
