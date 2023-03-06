@@ -27,4 +27,5 @@ export const LINKS = {
     UniswapBuyThales:
         'https://app.uniswap.org/#/swap?outputCurrency=0x217d47011b23bb961eb6d93ca9945b7501a5bb11&chain=optimism',
     ThalesStaking: 'https://thalesmarket.io/token',
+    ThalesTip99: 'https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-99.md',
 };

@@ -37,6 +37,7 @@ import {
     CopyContainer,
     Description,
     GetStakeThalesIcon,
+    TipLink,
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -630,6 +631,10 @@ const LiquidityPool: React.FC = () => {
                             components={{
                                 h1: <h1 />,
                                 p: <p />,
+                                tipLink: <TipLink href={LINKS.ThalesTip99} />,
+                            }}
+                            values={{
+                                thalesStakedAmount: 1 / liquidityPoolData.stakedThalesMultiplier,
                             }}
                         />
                     </Description>

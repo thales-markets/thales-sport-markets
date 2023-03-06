@@ -1,4 +1,5 @@
 import { Tooltip, withStyles } from '@material-ui/core';
+import React from 'react';
 import styled from 'styled-components';
 import {
     FlexDivCentered,
@@ -102,6 +103,14 @@ export const RoundInfo = styled.p`
 
 export const CopyContainer = styled(Container)`
     align-items: start;
+    width: 80%;
+    @media (max-width: 1199px) {
+        width: 90%;
+    }
+    @media (max-width: 991px) {
+        width: 100%;
+        padding: 0;
+    }
 `;
 
 export const Description = styled.div`
@@ -112,6 +121,9 @@ export const Description = styled.div`
     width: 50%;
     :first-child {
         width: 90%;
+    }
+    :last-child {
+        width: 30%;
     }
     h1 {
         font-size: 15px;
@@ -132,6 +144,9 @@ export const Description = styled.div`
         padding: 0 5px;
         width: 100%;
         :first-child {
+            width: 100%;
+        }
+        :last-child {
             width: 100%;
         }
     }
@@ -346,3 +361,18 @@ export const GetStakeThalesIcon = styled.i`
     margin-left: 4px;
     vertical-align: initial;
 `;
+
+export const TextLink = styled.a`
+    color: #91bced;
+    &:hover {
+        color: #00f9ff;
+    }
+`;
+
+export const TipLink: React.FC<{ href: string }> = ({ children, href }) => {
+    return (
+        <TextLink target="_blank" rel="noreferrer" href={href}>
+            {children}
+        </TextLink>
+    );
+};
