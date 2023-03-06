@@ -811,7 +811,7 @@
     "liquidity-pool": {
         "title": "Provide Liquidity",
         "description": "<h1>Description</h1><p>Liquidity providing involves users depositing funds into a smart contract-based liquidity pool for Overtime trading. These funds are used to facilitate trading.</p><p>Each week, users can signal their intent to withdraw their funds, which triggers a new round of liquidity provision to ensure that there is always enough liquidity in the pool for trading to continue.</p>",
-        "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
+        "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the pool: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
 
         "liquidity-pool-not-started-message": "The liquidity pool has not started",
         "liquidity-pool-paused-message": "The liquidity pool is paused",
