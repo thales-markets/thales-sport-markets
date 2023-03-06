@@ -69,8 +69,6 @@ const Transactions: React.FC<TransactionsProps> = ({ vaultAddress, currentRound,
         enabled: isAppReady && !!vaultAddress,
     });
 
-    const parlayTxs = parlayVaultTradesQuery.data ?? [];
-
     useEffect(() => {
         if (vaultTradesQuery.isSuccess && vaultTradesQuery.data) {
             setVaultTrades(
@@ -127,10 +125,13 @@ const Transactions: React.FC<TransactionsProps> = ({ vaultAddress, currentRound,
     }, [vaultTrades, currentRoundDeposit, round, currentRound]);
 
     const parlayTrades = useMemo(() => {
-        return parlayTxs.filter((parlayTrade) => {
-            return parlayTrade.round === round;
-        });
-    }, [round, parlayTxs]);
+        if (parlayVaultTradesQuery.isSuccess) {
+            return parlayVaultTradesQuery.data.filter((parlayTrade) => {
+                return parlayTrade.round === round;
+            });
+        }
+        return [];
+    }, [round, parlayVaultTradesQuery]);
 
     return (
         <Container>
@@ -176,7 +177,7 @@ const Transactions: React.FC<TransactionsProps> = ({ vaultAddress, currentRound,
             <TableContainer>
                 {selectedTab === VaultTransaction.TRADES_HISTORY &&
                     (isParlayVault(vaultAddress, networkId) ? (
-                        ParlayTransactionsTable({ parlayTx: parlayTrades, searchText: '' })
+                        <ParlayTransactionsTable parlayTx={parlayTrades} searchText=""></ParlayTransactionsTable>
                     ) : (
                         <TradesTable
                             transactions={vaultTrades}
