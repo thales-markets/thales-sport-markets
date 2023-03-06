@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { BracketMatch } from 'types/marchMadness';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { NCAA_BASKETBALL_LEAGU_TAG, teamsData } from 'constants/marchMadness';
+import { teamsData } from 'constants/marchMadness';
 import MatchConnector from '../MatchConnector';
 import TeamStatus from '../TeamStatus';
 import { isMatchInRegion } from 'utils/marchMadness';
+import { TAGS_FLAGS } from 'constants/tags';
 
 export type MatchProps = {
     matchData: BracketMatch;
@@ -42,12 +43,16 @@ const Match: React.FC<MatchProps> = ({
     const homeTeam = teamsData.find((team) => team.id === matchData?.homeTeamId);
     const awayTeam = teamsData.find((team) => team.id === matchData?.awayTeamId);
 
-    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(homeTeam?.name || '', NCAA_BASKETBALL_LEAGU_TAG));
-    const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(awayTeam?.name || '', NCAA_BASKETBALL_LEAGU_TAG));
+    const [homeLogoSrc, setHomeLogoSrc] = useState(
+        getTeamImageSource(homeTeam?.name || '', TAGS_FLAGS.NCAA_BASKETBALL)
+    );
+    const [awayLogoSrc, setAwayLogoSrc] = useState(
+        getTeamImageSource(awayTeam?.name || '', TAGS_FLAGS.NCAA_BASKETBALL)
+    );
 
     useEffect(() => {
-        setHomeLogoSrc(getTeamImageSource(homeTeam?.name || '', NCAA_BASKETBALL_LEAGU_TAG));
-        setAwayLogoSrc(getTeamImageSource(awayTeam?.name || '', NCAA_BASKETBALL_LEAGU_TAG));
+        setHomeLogoSrc(getTeamImageSource(homeTeam?.name || '', TAGS_FLAGS.NCAA_BASKETBALL));
+        setAwayLogoSrc(getTeamImageSource(awayTeam?.name || '', TAGS_FLAGS.NCAA_BASKETBALL));
     }, [homeTeam?.name, awayTeam?.name]);
 
     useEffect(() => {
@@ -105,7 +110,7 @@ const Match: React.FC<MatchProps> = ({
                             <TeamLogo
                                 alt="Home team logo"
                                 src={homeLogoSrc}
-                                onError={getOnImageError(setHomeLogoSrc, NCAA_BASKETBALL_LEAGU_TAG, true)}
+                                onError={getOnImageError(setHomeLogoSrc, TAGS_FLAGS.NCAA_BASKETBALL, true)}
                             />
                         </Logo>
                         <TeamPosition isLeftSide={true}>
@@ -126,7 +131,7 @@ const Match: React.FC<MatchProps> = ({
                             <TeamLogo
                                 alt="Home team logo"
                                 src={homeLogoSrc}
-                                onError={getOnImageError(setHomeLogoSrc, NCAA_BASKETBALL_LEAGU_TAG, true)}
+                                onError={getOnImageError(setHomeLogoSrc, TAGS_FLAGS.NCAA_BASKETBALL, true)}
                             />
                         </Logo>
                     </>
@@ -142,7 +147,7 @@ const Match: React.FC<MatchProps> = ({
                             <TeamLogo
                                 alt="Away team logo"
                                 src={awayLogoSrc}
-                                onError={getOnImageError(setAwayLogoSrc, NCAA_BASKETBALL_LEAGU_TAG, true)}
+                                onError={getOnImageError(setAwayLogoSrc, TAGS_FLAGS.NCAA_BASKETBALL, true)}
                             />
                         </Logo>
                         <TeamPosition isLeftSide={true}>
@@ -163,7 +168,7 @@ const Match: React.FC<MatchProps> = ({
                             <TeamLogo
                                 alt="Away team logo"
                                 src={awayLogoSrc}
-                                onError={getOnImageError(setAwayLogoSrc, NCAA_BASKETBALL_LEAGU_TAG, true)}
+                                onError={getOnImageError(setAwayLogoSrc, TAGS_FLAGS.NCAA_BASKETBALL, true)}
                             />
                         </Logo>
                     </>

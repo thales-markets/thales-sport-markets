@@ -8,12 +8,13 @@ import { useTranslation } from 'react-i18next';
 import Match from '../Match';
 import { MatchProps } from '../Match/Match';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { NCAA_BASKETBALL_LEAGU_TAG, teamsData } from 'constants/marchMadness';
+import { teamsData } from 'constants/marchMadness';
 import { isFirefox } from 'utils/device';
 import { toast } from 'react-toastify';
 import { LINKS } from 'constants/links';
 import { defaultToastOptions, getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { toPng } from 'html-to-image';
+import { TAGS_FLAGS } from 'constants/tags';
 
 type ShareModalProps = {
     final4Matches: MatchProps[];
@@ -38,7 +39,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) =
     const winnerTeamDisplayName = teamsData.find((team) => team?.id === winnerTeamId)?.displayName;
 
     const [winnerLogoSrc, setWinnerLogoSrc] = useState(
-        getTeamImageSource(winnerTeamName || '', NCAA_BASKETBALL_LEAGU_TAG)
+        getTeamImageSource(winnerTeamName || '', TAGS_FLAGS.NCAA_BASKETBALL)
     );
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
@@ -187,7 +188,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) =
                         <TeamLogo
                             alt="Winner team logo"
                             src={winnerLogoSrc}
-                            onError={getOnImageError(setWinnerLogoSrc, NCAA_BASKETBALL_LEAGU_TAG, true)}
+                            onError={getOnImageError(setWinnerLogoSrc, TAGS_FLAGS.NCAA_BASKETBALL, true)}
                         />
                     </Logo>
                     <Text margin="16px 0 0 0">

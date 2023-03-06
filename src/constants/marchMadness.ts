@@ -1,7 +1,5 @@
 import { BracketMatch, MarchMadTeam } from 'types/marchMadness';
 
-export const NCAA_BASKETBALL_LEAGU_TAG = 9005;
-
 export const NUMBER_OF_MATCHES = 63;
 export const NUMBER_OF_TEAMS = 64;
 export const NUMBER_OF_ROUNDS = 6;
