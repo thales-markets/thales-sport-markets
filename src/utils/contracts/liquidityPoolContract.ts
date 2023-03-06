@@ -1,7 +1,7 @@
 export const liquidityPoolContract = {
     addresses: {
         5: '',
-        10: '',
+        10: '0x842e89b7a7eF8Ce099540b3613264C933cE0eBa5',
         42: '',
         420: '0xdd0879AB819287637f33A29d1ee91d5a76c890Af',
     },
