@@ -19,6 +19,7 @@ import {
     convertPositionNameToPositionType,
     formatMarketOdds,
     getOddTooltipText,
+    getParentMarketAddress,
     getSpreadTotalText,
     getSymbolText,
     isParlayClaimable,
@@ -32,9 +33,13 @@ import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/Shar
 import { Position } from 'constants/options';
 import { ethers } from 'ethers';
 import { CollateralByNetworkId } from 'utils/network';
+import { buildMarketLink } from 'utils/routes';
+import SPAAnchor from 'components/SPAAnchor';
+import i18n from 'i18n';
 
 const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
+    const language = i18n.language;
     const selectedOddsType = useSelector(getOddsType);
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -248,12 +253,21 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
 
                         return (
                             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
-                                <ParlayRowText>
-                                    {getPositionStatus(position)}
-                                    <ParlayRowTeam title={position.market.homeTeam + ' vs ' + position.market.awayTeam}>
-                                        {position.market.homeTeam + ' vs ' + position.market.awayTeam}
-                                    </ParlayRowTeam>
-                                </ParlayRowText>
+                                <SPAAnchor
+                                    href={buildMarketLink(
+                                        getParentMarketAddress(position.market.parentMarket, position.market.address),
+                                        language
+                                    )}
+                                >
+                                    <ParlayRowText style={{ cursor: 'pointer' }}>
+                                        {getPositionStatus(position)}
+                                        <ParlayRowTeam
+                                            title={position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                                        >
+                                            {position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                                        </ParlayRowTeam>
+                                    </ParlayRowText>
+                                </SPAAnchor>
                                 <PositionSymbol
                                     symbolAdditionalText={{
                                         text: formatMarketOdds(selectedOddsType, quote),
