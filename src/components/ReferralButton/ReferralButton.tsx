@@ -1,6 +1,7 @@
+import RefferalModal from 'components/RefferalModal';
 import Tooltip from 'components/Tooltip';
 import ROUTES from 'constants/routes';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { matchPath, useLocation } from 'react-router-dom';
@@ -15,6 +16,7 @@ const ReferralButton: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
     const location = useLocation();
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
 
     const referralClickHandler = () => {
         if (!walletAddress) {
@@ -43,6 +45,7 @@ const ReferralButton: React.FC = () => {
 
     return (
         <Container>
+            {isModalOpen && <RefferalModal onClose={() => setIsModalOpen(false)} />}
             <Tooltip
                 overlay={
                     <>
