@@ -31,7 +31,7 @@ const Transactions: React.FC<TransactionsProps> = ({ vaultAddress, currentRound,
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [vaultTrades, setVaultTrades] = useState<VaultTrades>([]);
     const [vaultUserTransactions, setVaultUserTransactions] = useState<VaultUserTransactions>([]);
-    const [round, setRound] = useState<number>(currentRound > 0 ? currentRound - 1 : 0);
+    const [round, setRound] = useState<number>(currentRound);
     const [selectedTab, setSelectedTab] = useState<VaultTransaction>(VaultTransaction.TRADES_HISTORY);
     const [pnl, setPnl] = useState<number | undefined>(undefined);
     const [pnlAmount, setPnlAmount] = useState<number | undefined>(undefined);
