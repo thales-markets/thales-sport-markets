@@ -1,23 +1,60 @@
+import {
+    ELITE8_ROUND_EAST_MATCH_ID,
+    ELITE8_ROUND_MATCH_IDS,
+    ELITE8_ROUND_SOUTH_MATCH_ID,
+    ELITE8_ROUND_WEST_MATCH_ID,
+    SECOND_ROUND_EAST_MATCH_IDS,
+    SECOND_ROUND_MATCH_IDS,
+    SECOND_ROUND_MIDWEST_MATCH_IDS,
+    SECOND_ROUND_SOUTH_MATCH_IDS,
+    SECOND_ROUND_WEST_MATCH_IDS,
+    SWEET16_ROUND_EAST_MATCH_IDS,
+    SWEET16_ROUND_MATCH_IDS,
+    SWEET16_ROUND_MIDWEST_MATCH_IDS,
+    SWEET16_ROUND_SOUTH_MATCH_IDS,
+    SWEET16_ROUND_WEST_MATCH_IDS,
+} from 'constants/marchMadness';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 
 type MatchConnectorProps = { id: number };
 
 const MatchConnector: React.FC<MatchConnectorProps> = ({ id }) => {
-    const isSecondRound = useMemo(() => id > 31 && id <= 47, [id]);
-    const isSecondRoundLeft = useMemo(() => id > 31 && id <= 39, [id]);
-    const isSecondRoundUpper = useMemo(() => (id > 31 && id <= 35) || (id > 39 && id <= 43), [id]);
-    const secondRoundNoTopConnector = useMemo(() => [32, 40].includes(id), [id]);
-    const secondRoundNoBottomConnector = useMemo(() => [39, 47].includes(id), [id]);
+    const isSecondRound = useMemo(() => SECOND_ROUND_MATCH_IDS.includes(id), [id]);
+    const isSecondRoundLeft = useMemo(
+        () => [...SECOND_ROUND_EAST_MATCH_IDS, ...SECOND_ROUND_WEST_MATCH_IDS].includes(id),
+        [id]
+    );
+    const isSecondRoundUpper = useMemo(
+        () => [...SECOND_ROUND_EAST_MATCH_IDS, ...SECOND_ROUND_SOUTH_MATCH_IDS].includes(id),
+        [id]
+    );
+    const secondRoundNoTopConnector = useMemo(
+        () => [SECOND_ROUND_EAST_MATCH_IDS[0], SECOND_ROUND_SOUTH_MATCH_IDS[0]].includes(id),
+        [id]
+    );
+    const secondRoundNoBottomConnector = useMemo(
+        () => [SECOND_ROUND_WEST_MATCH_IDS[3], SECOND_ROUND_MIDWEST_MATCH_IDS[3]].includes(id),
+        [id]
+    );
 
-    const isSweet16 = useMemo(() => id > 47 && id <= 55, [id]);
-    const isSweet16Left = useMemo(() => id > 47 && id <= 51, [id]);
-    const sweet16NoTopConnector = useMemo(() => [48, 52].includes(id), [id]);
-    const sweet16NoBottomConnector = useMemo(() => [51, 55].includes(id), [id]);
+    const isSweet16 = useMemo(() => SWEET16_ROUND_MATCH_IDS.includes(id), [id]);
+    const isSweet16Left = useMemo(
+        () => [...SWEET16_ROUND_EAST_MATCH_IDS, ...SWEET16_ROUND_WEST_MATCH_IDS].includes(id),
+        [id]
+    );
+    const sweet16NoTopConnector = useMemo(
+        () => [SWEET16_ROUND_EAST_MATCH_IDS[0], SWEET16_ROUND_SOUTH_MATCH_IDS[0]].includes(id),
+        [id]
+    );
+    const sweet16NoBottomConnector = useMemo(
+        () => [SWEET16_ROUND_WEST_MATCH_IDS[1], SWEET16_ROUND_MIDWEST_MATCH_IDS[1]].includes(id),
+        [id]
+    );
 
-    const isElite8 = useMemo(() => id > 55 && id <= 59, [id]);
-    const isElite8Left = useMemo(() => [56, 57].includes(id), [id]);
-    const isElite8Upper = useMemo(() => [56, 58].includes(id), [id]);
+    const isElite8 = useMemo(() => ELITE8_ROUND_MATCH_IDS.includes(id), [id]);
+    const isElite8Left = useMemo(() => [ELITE8_ROUND_EAST_MATCH_ID, ELITE8_ROUND_WEST_MATCH_ID].includes(id), [id]);
+    const isElite8Upper = useMemo(() => [ELITE8_ROUND_EAST_MATCH_ID, ELITE8_ROUND_SOUTH_MATCH_ID].includes(id), [id]);
 
     return (
         <>

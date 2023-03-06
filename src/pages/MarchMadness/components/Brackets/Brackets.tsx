@@ -8,10 +8,24 @@ import {
     FIRST_ROUND_MATCH_IDS,
     SECOND_ROUND_MATCH_IDS,
     SWEET16_ROUND_MATCH_IDS,
-    SEMI_FINAL_MATCH_IDS,
-    ELITE8_ROUND_MATCH_IDS,
     SEMI_FINAL_EAST_WEST_MATCH_ID,
     SEMI_FINAL_SOUTH_MIDWEST_MATCH_ID,
+    FIRST_ROUND_EAST_MATCH_IDS,
+    SECOND_ROUND_EAST_MATCH_IDS,
+    SWEET16_ROUND_EAST_MATCH_IDS,
+    ELITE8_ROUND_EAST_MATCH_ID,
+    ELITE8_ROUND_SOUTH_MATCH_ID,
+    SWEET16_ROUND_SOUTH_MATCH_IDS,
+    SECOND_ROUND_SOUTH_MATCH_IDS,
+    FIRST_ROUND_SOUTH_MATCH_IDS,
+    FIRST_ROUND_WEST_MATCH_IDS,
+    SECOND_ROUND_WEST_MATCH_IDS,
+    SWEET16_ROUND_WEST_MATCH_IDS,
+    ELITE8_ROUND_WEST_MATCH_ID,
+    ELITE8_ROUND_MIDWEST_MATCH_ID,
+    SWEET16_ROUND_MIDWEST_MATCH_IDS,
+    SECOND_ROUND_MIDWEST_MATCH_IDS,
+    FIRST_ROUND_MIDWEST_MATCH_IDS,
 } from 'constants/marchMadness';
 import React, { CSSProperties, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
@@ -30,7 +44,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import networkConnector from 'utils/networkConnector';
 import Loader from 'components/Loader';
 import MintNFTModal from '../MintNFTModal';
-import { getFirstMatchIndexInRound, getNumberOfMatchesPerRound, isMatchInRegion } from 'utils/marchMadness';
+import { getFirstMatchIndexInRound, getNumberOfMatchesPerRound } from 'utils/marchMadness';
 import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import ShareModal from '../ShareModal';
 import { MatchProps } from '../Match/Match';
@@ -229,18 +243,23 @@ const Brackets: React.FC = () => {
         setBracketsData(updatedChildrenMatches);
     };
 
-    const getMatchesPerIdRange = (fromId: number, toId: number) => {
+    const getMatchesPerIdRange = (matches: number[]) => {
+        const fromId = matches[0];
         return bracketsData.map((match) => {
-            if (match.id >= fromId && match.id <= toId) {
-                const isFirstRound = FIRST_ROUND_MATCH_IDS.includes(fromId) || FIRST_ROUND_MATCH_IDS.includes(toId);
-                const isSecondRound = SECOND_ROUND_MATCH_IDS.includes(fromId) || SECOND_ROUND_MATCH_IDS.includes(toId);
-                const isSecondRoundLowerHalf =
-                    SECOND_ROUND_MATCH_IDS.includes(match.id) &&
-                    (isMatchInRegion(match.id, 'West') || isMatchInRegion(match.id, 'Midwest'));
-                const isSweet16 = SWEET16_ROUND_MATCH_IDS.includes(fromId) || SWEET16_ROUND_MATCH_IDS.includes(toId);
-                const isSweet16LowerHalf =
-                    SWEET16_ROUND_MATCH_IDS.includes(match.id) &&
-                    (isMatchInRegion(match.id, 'West') || isMatchInRegion(match.id, 'Midwest'));
+            if (matches.includes(match.id)) {
+                const isFirstRound = FIRST_ROUND_MATCH_IDS.includes(match.id);
+
+                const isSecondRound = SECOND_ROUND_MATCH_IDS.includes(match.id);
+                const isSecondRoundLowerHalf = [
+                    ...SECOND_ROUND_WEST_MATCH_IDS,
+                    ...SECOND_ROUND_MIDWEST_MATCH_IDS,
+                ].includes(match.id);
+
+                const isSweet16 = SWEET16_ROUND_MATCH_IDS.includes(match.id);
+                const isSweet16LowerHalf = [
+                    ...SWEET16_ROUND_WEST_MATCH_IDS,
+                    ...SWEET16_ROUND_MIDWEST_MATCH_IDS,
+                ].includes(match.id);
 
                 const margin = isFirstRound
                     ? match.id === fromId
@@ -276,12 +295,10 @@ const Brackets: React.FC = () => {
     };
 
     const getMatchById = (id: number) => {
-        const isElite8UpperHalf =
-            ELITE8_ROUND_MATCH_IDS.includes(id) && (isMatchInRegion(id, 'East') || isMatchInRegion(id, 'South'));
-        const isElite8LowerHalf =
-            ELITE8_ROUND_MATCH_IDS.includes(id) && (isMatchInRegion(id, 'West') || isMatchInRegion(id, 'Midwest'));
-        const isSemiFinalLeft = SEMI_FINAL_MATCH_IDS.includes(id) && isMatchInRegion(id, 'East-West');
-        const isSemiFinalRight = SEMI_FINAL_MATCH_IDS.includes(id) && isMatchInRegion(id, 'South-Midwest');
+        const isElite8UpperHalf = [ELITE8_ROUND_EAST_MATCH_ID, ELITE8_ROUND_SOUTH_MATCH_ID].includes(id);
+        const isElite8LowerHalf = [ELITE8_ROUND_WEST_MATCH_ID, ELITE8_ROUND_MIDWEST_MATCH_ID].includes(id);
+        const isSemiFinalLeft = id === SEMI_FINAL_EAST_WEST_MATCH_ID;
+        const isSemiFinalRight = id === SEMI_FINAL_SOUTH_MIDWEST_MATCH_ID;
         const isFinal = id === FINAL_MATCH_ID;
 
         const margin = isElite8UpperHalf
@@ -497,26 +514,34 @@ const Brackets: React.FC = () => {
                                 {t('march-madness.regions.east')}
                             </Region>
                             <LeftQuarter>
-                                <FirstRound>{getMatchesPerIdRange(0, 7)}</FirstRound>
-                                <SecondRound isSideLeft={true}>{getMatchesPerIdRange(32, 35)}</SecondRound>
-                                <Sweet16 isSideLeft={true}>{getMatchesPerIdRange(48, 49)}</Sweet16>
-                                <Elite8 isSideLeft={true}>{getMatchById(56)}</Elite8>
+                                <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_EAST_MATCH_IDS)}</FirstRound>
+                                <SecondRound isSideLeft={true}>
+                                    {getMatchesPerIdRange(SECOND_ROUND_EAST_MATCH_IDS)}
+                                </SecondRound>
+                                <Sweet16 isSideLeft={true}>
+                                    {getMatchesPerIdRange(SWEET16_ROUND_EAST_MATCH_IDS)}
+                                </Sweet16>
+                                <Elite8 isSideLeft={true}>{getMatchById(ELITE8_ROUND_EAST_MATCH_ID)}</Elite8>
                             </LeftQuarter>
                             <RightQuarter>
-                                <Elite8 isSideLeft={false}>{getMatchById(58)}</Elite8>
-                                <Sweet16 isSideLeft={false}>{getMatchesPerIdRange(52, 53)}</Sweet16>
-                                <SecondRound isSideLeft={false}>{getMatchesPerIdRange(40, 43)}</SecondRound>
-                                <FirstRound>{getMatchesPerIdRange(16, 23)}</FirstRound>
+                                <Elite8 isSideLeft={false}>{getMatchById(ELITE8_ROUND_SOUTH_MATCH_ID)}</Elite8>
+                                <Sweet16 isSideLeft={false}>
+                                    {getMatchesPerIdRange(SWEET16_ROUND_SOUTH_MATCH_IDS)}
+                                </Sweet16>
+                                <SecondRound isSideLeft={false}>
+                                    {getMatchesPerIdRange(SECOND_ROUND_SOUTH_MATCH_IDS)}
+                                </SecondRound>
+                                <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_SOUTH_MATCH_IDS)}</FirstRound>
                             </RightQuarter>
                             <Region isSideLeft={false} isVertical={true}>
                                 {t('march-madness.regions.south')}
                             </Region>
                         </RowHalf>
                         <SemiFinals>
-                            {getMatchById(60)}
-                            {getMatchById(61)}
+                            {getMatchById(SEMI_FINAL_EAST_WEST_MATCH_ID)}
+                            {getMatchById(SEMI_FINAL_SOUTH_MIDWEST_MATCH_ID)}
                         </SemiFinals>
-                        <Final>{getMatchById(62)}</Final>
+                        <Final>{getMatchById(FINAL_MATCH_ID)}</Final>
 
                         {!isBracketsLocked && (
                             <SubmitWrapper>
@@ -547,16 +572,24 @@ const Brackets: React.FC = () => {
                                 {t('march-madness.regions.west')}
                             </Region>
                             <LeftQuarter>
-                                <FirstRound>{getMatchesPerIdRange(8, 15)}</FirstRound>
-                                <SecondRound isSideLeft={true}>{getMatchesPerIdRange(36, 39)}</SecondRound>
-                                <Sweet16 isSideLeft={true}>{getMatchesPerIdRange(50, 51)}</Sweet16>
-                                <Elite8 isSideLeft={true}>{getMatchById(57)}</Elite8>
+                                <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_WEST_MATCH_IDS)}</FirstRound>
+                                <SecondRound isSideLeft={true}>
+                                    {getMatchesPerIdRange(SECOND_ROUND_WEST_MATCH_IDS)}
+                                </SecondRound>
+                                <Sweet16 isSideLeft={true}>
+                                    {getMatchesPerIdRange(SWEET16_ROUND_WEST_MATCH_IDS)}
+                                </Sweet16>
+                                <Elite8 isSideLeft={true}>{getMatchById(ELITE8_ROUND_WEST_MATCH_ID)}</Elite8>
                             </LeftQuarter>
                             <RightQuarter>
-                                <Elite8 isSideLeft={false}>{getMatchById(59)}</Elite8>
-                                <Sweet16 isSideLeft={false}>{getMatchesPerIdRange(54, 55)}</Sweet16>
-                                <SecondRound isSideLeft={false}>{getMatchesPerIdRange(44, 47)}</SecondRound>
-                                <FirstRound>{getMatchesPerIdRange(24, 31)}</FirstRound>
+                                <Elite8 isSideLeft={false}>{getMatchById(ELITE8_ROUND_MIDWEST_MATCH_ID)}</Elite8>
+                                <Sweet16 isSideLeft={false}>
+                                    {getMatchesPerIdRange(SWEET16_ROUND_MIDWEST_MATCH_IDS)}
+                                </Sweet16>
+                                <SecondRound isSideLeft={false}>
+                                    {getMatchesPerIdRange(SECOND_ROUND_MIDWEST_MATCH_IDS)}
+                                </SecondRound>
+                                <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_MIDWEST_MATCH_IDS)}</FirstRound>
                             </RightQuarter>
                             <Region isSideLeft={false} isVertical={true}>
                                 {t('march-madness.regions.midwest')}
@@ -636,7 +669,7 @@ const Container = styled.div`
 
 const BracketsWrapper = styled.div`
     width: 1350px;
-    height: 982px;
+    height: 1010px;
     background-image: url('${background}'), url('${backgrounBall}');
     background-size: auto;
     background-position: 0 71px, -354px -162px;
@@ -808,7 +841,7 @@ const WildCardsContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: -10px;
+    margin-top: -38px;
 `;
 
 const WildCardsHeader = styled.div`
