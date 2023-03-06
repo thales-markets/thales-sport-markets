@@ -78,22 +78,24 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
             {marchMadnessDataQuery.isSuccess ? (
                 <>
                     <RowTitle>{t('march-madness.home.title')}</RowTitle>
-                    <RowTimeInfo>
-                        {t('march-madness.home.time-info', {
-                            days:
-                                daysLeftToMint +
-                                ' ' +
-                                (daysLeftToMint === 1
-                                    ? t('common.time-remaining.day')
-                                    : t('common.time-remaining.days')),
-                            hours:
-                                hoursLeftToMint +
-                                ' ' +
-                                (hoursLeftToMint === 1
-                                    ? t('common.time-remaining.hour')
-                                    : t('common.time-remaining.hours')),
-                        })}
-                    </RowTimeInfo>
+                    {!isBracketsLocked && (
+                        <RowTimeInfo>
+                            {t('march-madness.home.time-info', {
+                                days:
+                                    daysLeftToMint +
+                                    ' ' +
+                                    (daysLeftToMint === 1
+                                        ? t('common.time-remaining.day')
+                                        : t('common.time-remaining.days')),
+                                hours:
+                                    hoursLeftToMint +
+                                    ' ' +
+                                    (hoursLeftToMint === 1
+                                        ? t('common.time-remaining.hour')
+                                        : t('common.time-remaining.hours')),
+                            })}
+                        </RowTimeInfo>
+                    )}
                     <TextWrapper marginTop={10} padding="14px 23px">
                         <Text>
                             <Trans
@@ -180,7 +182,6 @@ const customButtonStyle: CSSProperties = {
     width: '653px',
     height: '64px',
     marginTop: '16px',
-    marginBottom: '200px',
     background: '#ffffff',
     border: '3px solid #0E94CB',
     fontSize: '30px',
@@ -193,6 +194,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
+    margin-bottom: 200px;
 `;
 
 const RowTitle = styled.div`

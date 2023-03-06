@@ -40,56 +40,21 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
                     canNotMintOrUpdateAfter,
                     bracketsByMinter,
                     results,
-                    winningsInRound0,
-                    winningsInRound1,
-                    winningsInRound2,
-                    winningsInRound3,
-                    winningsInRound4,
-                    winningsInRound5,
-                    bonusInRound0,
-                    bonusInRound1,
-                    bonusInRound2,
-                    bonusInRound3,
-                    bonusInRound4,
-                    bonusInRound5,
+                    correctPositionsByRound,
+                    pointsPerRound,
                 ] = await Promise.all([
                     await marchMadnessContract.addressAlreadyMinted(walletAddress),
                     await marchMadnessContract.canNotMintOrUpdateAfter(), // timestamp in milis
                     await marchMadnessContract.getBracketsByMinter(walletAddress),
                     await marchMadnessContract.getResults(),
-                    await marchMadnessContract.getCorrectPositionsPerRoundByMinterAddress(0, walletAddress),
-                    await marchMadnessContract.getCorrectPositionsPerRoundByMinterAddress(1, walletAddress),
-                    await marchMadnessContract.getCorrectPositionsPerRoundByMinterAddress(2, walletAddress),
-                    await marchMadnessContract.getCorrectPositionsPerRoundByMinterAddress(3, walletAddress),
-                    await marchMadnessContract.getCorrectPositionsPerRoundByMinterAddress(4, walletAddress),
-                    await marchMadnessContract.getCorrectPositionsPerRoundByMinterAddress(5, walletAddress),
-                    await marchMadnessContract.roundToPoints(0),
-                    await marchMadnessContract.roundToPoints(1),
-                    await marchMadnessContract.roundToPoints(2),
-                    await marchMadnessContract.roundToPoints(3),
-                    await marchMadnessContract.roundToPoints(4),
-                    await marchMadnessContract.roundToPoints(5),
+                    await marchMadnessContract.getCorrectPositionsByRound(walletAddress),
+                    await marchMadnessContract.getPointsPerRound(walletAddress),
                 ]);
 
                 const brackets = bracketsByMinter.map((value: any) => Number(value));
                 const winnerTeamIdsPerMatch = results.map((value: any) => Number(value));
-                const winningsPerRound = [
-                    Number(winningsInRound0),
-                    Number(winningsInRound1),
-                    Number(winningsInRound2),
-                    Number(winningsInRound3),
-                    Number(winningsInRound4),
-                    Number(winningsInRound5),
-                ];
-                const bonuses = [
-                    Number(bonusInRound0),
-                    Number(bonusInRound1),
-                    Number(bonusInRound2),
-                    Number(bonusInRound3),
-                    Number(bonusInRound4),
-                    Number(bonusInRound5),
-                ];
-                const bonusesPerRound = winningsPerRound.map((winCount: number, index) => winCount * bonuses[index]);
+                const winningsPerRound = correctPositionsByRound.map((value: any) => Number(value));
+                const bonusesPerRound = pointsPerRound.map((value: any) => Number(value));
 
                 marchMadnessData.isAddressAlreadyMinted = addressAlreadyMinted;
                 marchMadnessData.isMintAvailable = Date.now() < Number(canNotMintOrUpdateAfter) * 1000;

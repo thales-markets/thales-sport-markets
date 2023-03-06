@@ -1,8 +1,8 @@
 export const marchMadnessContract = {
     addresses: {
-        10: '',
-        420: '0xc65c2fe2d1dcd0E65ceDF222AD674aC4c27Dcb2d',
-        42161: '',
+        10: '', // TODO: add
+        420: '0x6F5caeeaB9f73D7639931A4a052B739EA9D3e48A',
+        42161: '', // TODO: add
     },
     abi: [
         { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
@@ -194,6 +194,13 @@ export const marchMadnessContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'address', name: '_minter', type: 'address' }],
+            name: 'getCorrectPositionsByRound',
+            outputs: [{ internalType: 'uint256[6]', name: 'correctPositionsByRound', type: 'uint256[6]' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'uint256', name: '_tokenId', type: 'uint256' }],
             name: 'getCorrectPositionsByTokenId',
             outputs: [{ internalType: 'uint256', name: 'correctPredictions', type: 'uint256' }],
@@ -217,6 +224,13 @@ export const marchMadnessContract = {
             ],
             name: 'getCorrectPositionsPerRoundByTokenId',
             outputs: [{ internalType: 'uint256', name: 'correctPredictions', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '_minter', type: 'address' }],
+            name: 'getPointsPerRound',
+            outputs: [{ internalType: 'uint256[6]', name: 'pointsPerRound', type: 'uint256[6]' }],
             stateMutability: 'view',
             type: 'function',
         },
