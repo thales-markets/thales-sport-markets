@@ -265,6 +265,8 @@ export enum TAGS_FLAGS {
     MOTOGP = 9101,
 }
 
+export const ENETPULSE_SPORTS = [9153, 9156];
+
 export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
 

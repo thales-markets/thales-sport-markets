@@ -18,13 +18,14 @@ import Transactions from '../Transactions';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import useChildMarketsQuery from 'queries/markets/useChildMarketsQuery';
 import { GAME_STATUS, MAIN_COLORS } from 'constants/ui';
-import { BetType, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
+import { BetType, ENETPULSE_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import Web3 from 'web3';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import { getNetworkId } from 'redux/modules/wallet';
+import useEnetpulseSportMarketLiveResultQuery from 'queries/markets/useEnetpulseSportMarketLiveResultQuery';
 
 type MarketDetailsPropType = {
     market: MarketData;
@@ -77,18 +78,36 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const isPendingResolution = market.gameStarted && !isGameResolved;
     const isGamePaused = market.paused && !isGameResolved;
     const showStatus = market.resolved || market.cancelled || market.gameStarted || market.paused;
-    const gameIdString = Web3.utils.toAscii(market.gameDetails.gameId);
+    const gameIdString = Web3.utils.hexToAscii(market.gameDetails.gameId);
+    const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.tags[0]));
+    const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
     const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
-        enabled: isAppReady,
+        enabled: isAppReady && !isEnetpulseSport,
+    });
+
+    const useEnetpulseLiveResultQuery = useEnetpulseSportMarketLiveResultQuery(gameIdString, gameDate, market.tags[0], {
+        enabled: isAppReady && isEnetpulseSport,
     });
 
     useEffect(() => {
-        if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
-            setLiveResultInfo(useLiveResultQuery.data);
+        if (isEnetpulseSport) {
+            if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
+                setLiveResultInfo(useEnetpulseLiveResultQuery.data);
+            }
+        } else {
+            if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
+                setLiveResultInfo(useLiveResultQuery.data);
+            }
         }
-    }, [useLiveResultQuery.isSuccess, useLiveResultQuery.data]);
+    }, [
+        useLiveResultQuery,
+        useLiveResultQuery.data,
+        useEnetpulseLiveResultQuery,
+        useEnetpulseLiveResultQuery.data,
+        isEnetpulseSport,
+    ]);
 
     return (
         <RowContainer>
@@ -130,57 +149,63 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                 {showStatus && (
                     <Status backgroundColor={isGameCancelled ? MAIN_COLORS.BACKGROUNDS.RED : MAIN_COLORS.LIGHT_GRAY}>
                         {isPendingResolution ? (
-                            <ResultContainer>
-                                <ResultLabel>
-                                    {liveResultInfo?.homeScore + ' - ' + liveResultInfo?.awayScore}{' '}
-                                    {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
-                                        liveResultInfo?.period == 2 && (
-                                            <InfoLabel className="football">
-                                                {'(' +
-                                                    liveResultInfo?.scoreHomeByPeriod[0] +
-                                                    ' - ' +
-                                                    liveResultInfo?.scoreAwayByPeriod[0] +
-                                                    ')'}
-                                            </InfoLabel>
+                            isEnetpulseSport ? (
+                                <ResultContainer>
+                                    <ResultLabel>
+                                        {liveResultInfo?.homeScore + ' - ' + liveResultInfo?.awayScore}{' '}
+                                        {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
+                                            liveResultInfo?.period == 2 && (
+                                                <InfoLabel className="football">
+                                                    {'(' +
+                                                        liveResultInfo?.scoreHomeByPeriod[0] +
+                                                        ' - ' +
+                                                        liveResultInfo?.scoreAwayByPeriod[0] +
+                                                        ')'}
+                                                </InfoLabel>
+                                            )}
+                                    </ResultLabel>
+                                    {liveResultInfo?.status != GAME_STATUS.FINAL &&
+                                        liveResultInfo?.status != GAME_STATUS.FULL_TIME && (
+                                            <PeriodsContainer>
+                                                {liveResultInfo?.status == GAME_STATUS.HALF_TIME && (
+                                                    <InfoLabel>{t('markets.market-card.half-time')}</InfoLabel>
+                                                )}
+                                                {liveResultInfo?.status != GAME_STATUS.HALF_TIME && (
+                                                    <>
+                                                        <InfoLabel>
+                                                            {` ${getOrdinalNumberLabel(
+                                                                Number(liveResultInfo?.period)
+                                                            )} ${t(
+                                                                `markets.market-card.${
+                                                                    SPORT_PERIODS_MAP[Number(liveResultInfo?.sportId)]
+                                                                }`
+                                                            )}`}
+                                                        </InfoLabel>
+                                                        <InfoLabel className="red">
+                                                            {liveResultInfo?.displayClock.replaceAll("'", '')}
+                                                            <InfoLabel className="blink">&prime;</InfoLabel>
+                                                        </InfoLabel>
+                                                    </>
+                                                )}
+                                            </PeriodsContainer>
                                         )}
-                                </ResultLabel>
-                                {liveResultInfo?.status != GAME_STATUS.FINAL &&
-                                    liveResultInfo?.status != GAME_STATUS.FULL_TIME && (
-                                        <PeriodsContainer>
-                                            {liveResultInfo?.status == GAME_STATUS.HALF_TIME && (
-                                                <InfoLabel>{t('markets.market-card.half-time')}</InfoLabel>
-                                            )}
-                                            {liveResultInfo?.status != GAME_STATUS.HALF_TIME && (
-                                                <>
-                                                    <InfoLabel>
-                                                        {` ${getOrdinalNumberLabel(Number(liveResultInfo?.period))} ${t(
-                                                            `markets.market-card.${
-                                                                SPORT_PERIODS_MAP[Number(liveResultInfo?.sportId)]
-                                                            }`
-                                                        )}`}
-                                                    </InfoLabel>
-                                                    <InfoLabel className="red">
-                                                        {liveResultInfo?.displayClock.replaceAll("'", '')}
-                                                        <InfoLabel className="blink">&prime;</InfoLabel>
-                                                    </InfoLabel>
-                                                </>
-                                            )}
-                                        </PeriodsContainer>
+                                    {!SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) && (
+                                        <FlexDivRow>
+                                            {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
+                                                return (
+                                                    <PeriodContainer key={index}>
+                                                        <InfoLabel className="gray">{index + 1}</InfoLabel>
+                                                        <InfoLabel>{homePeriodResult}</InfoLabel>
+                                                        <InfoLabel>{liveResultInfo.scoreAwayByPeriod[index]}</InfoLabel>
+                                                    </PeriodContainer>
+                                                );
+                                            })}
+                                        </FlexDivRow>
                                     )}
-                                {!SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) && (
-                                    <FlexDivRow>
-                                        {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
-                                            return (
-                                                <PeriodContainer key={index}>
-                                                    <InfoLabel className="gray">{index + 1}</InfoLabel>
-                                                    <InfoLabel>{homePeriodResult}</InfoLabel>
-                                                    <InfoLabel>{liveResultInfo.scoreAwayByPeriod[index]}</InfoLabel>
-                                                </PeriodContainer>
-                                            );
-                                        })}
-                                    </FlexDivRow>
-                                )}
-                            </ResultContainer>
+                                </ResultContainer>
+                            ) : (
+                                t('markets.market-card.pending')
+                            )
                         ) : isGameCancelled ? (
                             t('markets.market-card.canceled')
                         ) : isGamePaused ? (
