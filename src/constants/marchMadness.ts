@@ -1113,8 +1113,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 61,
-        name: 'Marquette Golden Eagles',
-        displayName: 'Marquette',
+        name: 'Louisiana Ragin_ Cajuns',
+        displayName: 'Louisiana',
         region: 'Midwest',
         position: 13,
     },
