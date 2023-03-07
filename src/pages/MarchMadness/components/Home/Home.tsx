@@ -17,6 +17,7 @@ import Loader from 'components/Loader';
 import { history } from 'utils/routes';
 import queryString from 'query-string';
 import { LINKS } from 'constants/links';
+import { NetworkIdByName } from 'utils/network';
 
 type HomeProps = {
     setSelectedTab?: (tab: MarchMadTabs) => void;
@@ -73,6 +74,11 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
         [marchMadnessData]
     );
 
+    const reward = networkId === NetworkIdByName.ArbitrumOne ? '40,000 THALES' : '13,000 OP';
+    const firstPoolReward = networkId === NetworkIdByName.ArbitrumOne ? '30,000 THALES' : '10,000 OP';
+    const secondPoolReward = networkId === NetworkIdByName.ArbitrumOne ? '10,000 THALES' : '3,000 OP';
+    const volume = networkId === NetworkIdByName.ArbitrumOne ? '10 USDC' : '10 sUSD';
+
     return (
         <Container>
             {marchMadnessDataQuery.isSuccess ? (
@@ -102,6 +108,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                 i18nKey="march-madness.home.text-1"
                                 components={{
                                     bold: <BoldText />,
+                                    reward,
                                 }}
                             />
                         </Text>
@@ -112,6 +119,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                 i18nKey="march-madness.home.text-2"
                                 components={{
                                     bold: <BoldText />,
+                                    reward,
                                 }}
                             />
                         </Text>
@@ -121,6 +129,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                 i18nKey="march-madness.home.text-3"
                                 components={{
                                     bold: <BoldText />,
+                                    reward: firstPoolReward,
                                 }}
                             />
                         </Text>
@@ -150,6 +159,8 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                 i18nKey="march-madness.home.text-4"
                                 components={{
                                     bold: <BoldText />,
+                                    reward: secondPoolReward,
+                                    volume,
                                 }}
                             />
                         </Text>

@@ -95,7 +95,7 @@ const MarchMadness: React.FC = () => {
                             fontFamily: 'Oswald',
                             lineHeight: '24px',
                         }}
-                        hideIcon={true}
+                        useArrow={true}
                     />
                     <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
                     {selectedTab === MarchMadTabs.HOME && <Home setSelectedTab={setSelectedTab} />}
