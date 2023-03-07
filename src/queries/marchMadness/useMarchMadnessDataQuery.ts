@@ -30,45 +30,50 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
                 bonusesPerRound: Array<number>(NUMBER_OF_ROUNDS).fill(0),
             };
 
-            const marchMadnessContract = networkConnector.marchMadnessContract;
+            try {
+                const marchMadnessContract = networkConnector.marchMadnessContract;
 
-            if (marchMadnessContract && walletAddress !== '') {
-                const tokenId = await marchMadnessContract.addressToTokenId(walletAddress);
+                if (marchMadnessContract && walletAddress !== '') {
+                    const tokenId = await marchMadnessContract.addressToTokenId(walletAddress);
 
-                const [
-                    addressAlreadyMinted,
-                    canNotMintOrUpdateAfter,
-                    bracketsByMinter,
-                    results,
-                    correctPositionsByRound,
-                    pointsPerRound,
-                ] = await Promise.all([
-                    await marchMadnessContract.addressAlreadyMinted(walletAddress),
-                    await marchMadnessContract.canNotMintOrUpdateAfter(), // timestamp in milis
-                    await marchMadnessContract.getBracketsByMinter(walletAddress),
-                    await marchMadnessContract.getResults(),
-                    await marchMadnessContract.getCorrectPositionsByRound(walletAddress),
-                    await marchMadnessContract.getPointsPerRound(walletAddress),
-                ]);
+                    const [
+                        addressAlreadyMinted,
+                        canNotMintOrUpdateAfter,
+                        bracketsByMinter,
+                        results,
+                        correctPositionsByRound,
+                        pointsPerRound,
+                    ] = await Promise.all([
+                        await marchMadnessContract.addressAlreadyMinted(walletAddress),
+                        await marchMadnessContract.canNotMintOrUpdateAfter(), // timestamp in milis
+                        await marchMadnessContract.getBracketsByMinter(walletAddress),
+                        await marchMadnessContract.getResults(),
+                        await marchMadnessContract.getCorrectPositionsByRound(walletAddress),
+                        await marchMadnessContract.getPointsPerRound(walletAddress),
+                    ]);
 
-                const brackets = bracketsByMinter.map((value: any) => Number(value));
-                const winnerTeamIdsPerMatch = results.map((value: any) => Number(value));
-                const winningsPerRound = correctPositionsByRound.map((value: any) => Number(value));
-                const bonusesPerRound = pointsPerRound.map((value: any) => Number(value));
+                    const brackets = bracketsByMinter.map((value: any) => Number(value));
+                    const winnerTeamIdsPerMatch = results.map((value: any) => Number(value));
+                    const winningsPerRound = correctPositionsByRound.map((value: any) => Number(value));
+                    const bonusesPerRound = pointsPerRound.map((value: any) => Number(value));
 
-                marchMadnessData.isAddressAlreadyMinted = addressAlreadyMinted;
-                marchMadnessData.isMintAvailable = Date.now() < Number(canNotMintOrUpdateAfter) * 1000;
-                marchMadnessData.hoursLeftToMint = Math.floor(
-                    (Number(canNotMintOrUpdateAfter) * 1000 - Date.now()) / 1000 / 60 / 60
-                );
-                marchMadnessData.brackets = brackets;
-                marchMadnessData.tokenId = tokenId;
-                marchMadnessData.winnerTeamIdsPerMatch = winnerTeamIdsPerMatch;
-                marchMadnessData.winningsPerRound = winningsPerRound;
-                marchMadnessData.bonusesPerRound = bonusesPerRound;
+                    marchMadnessData.isAddressAlreadyMinted = addressAlreadyMinted;
+                    marchMadnessData.isMintAvailable = Date.now() < Number(canNotMintOrUpdateAfter) * 1000;
+                    marchMadnessData.hoursLeftToMint = Math.floor(
+                        (Number(canNotMintOrUpdateAfter) * 1000 - Date.now()) / 1000 / 60 / 60
+                    );
+                    marchMadnessData.brackets = brackets;
+                    marchMadnessData.tokenId = tokenId;
+                    marchMadnessData.winnerTeamIdsPerMatch = winnerTeamIdsPerMatch;
+                    marchMadnessData.winningsPerRound = winningsPerRound;
+                    marchMadnessData.bonusesPerRound = bonusesPerRound;
+                }
+
+                return marchMadnessData;
+            } catch (e) {
+                console.log(e);
+                return marchMadnessData;
             }
-
-            return marchMadnessData;
         },
         options
     );

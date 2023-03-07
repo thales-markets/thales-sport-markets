@@ -491,7 +491,9 @@ const Brackets: React.FC = () => {
 
     return (
         <Container>
-            {marchMadnessDataQuery.isSuccess ? (
+            {marchMadnessDataQuery.isLoading ? (
+                <Loader />
+            ) : (
                 <>
                     <RowHeader marginBottom={0}>
                         {getMyStats()}
@@ -647,8 +649,6 @@ const Brackets: React.FC = () => {
                         <ShareModal final4Matches={shareData} handleClose={() => setShowShareModal(false)} />
                     )}
                 </>
-            ) : (
-                <Loader />
             )}
         </Container>
     );

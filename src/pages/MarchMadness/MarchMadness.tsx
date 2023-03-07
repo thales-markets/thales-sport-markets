@@ -83,7 +83,9 @@ const MarchMadness: React.FC = () => {
                 <TextWrapper>
                     <Text>{t('march-madness.mobile-message')}</Text>
                 </TextWrapper>
-            ) : marchMadnessDataQuery.isSuccess ? (
+            ) : marchMadnessDataQuery.isLoading ? (
+                <Loader />
+            ) : (
                 <>
                     <BackToLink
                         link={buildHref(ROUTES.Markets.Home)}
@@ -102,8 +104,6 @@ const MarchMadness: React.FC = () => {
                     {selectedTab === MarchMadTabs.BRACKETS && <Brackets />}
                     {selectedTab === MarchMadTabs.LEADERBOARD && <Leaderboard />}
                 </>
-            ) : (
-                <Loader />
             )}
         </Container>
     );

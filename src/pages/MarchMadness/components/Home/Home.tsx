@@ -81,7 +81,9 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
 
     return (
         <Container>
-            {marchMadnessDataQuery.isSuccess ? (
+            {marchMadnessDataQuery.isLoading ? (
+                <Loader />
+            ) : (
                 <>
                     <RowTitle>{t('march-madness.home.title')}</RowTitle>
                     {!isBracketsLocked && (
@@ -182,8 +184,6 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                         </Button>
                     )}
                 </>
-            ) : (
-                <Loader />
             )}
         </Container>
     );
