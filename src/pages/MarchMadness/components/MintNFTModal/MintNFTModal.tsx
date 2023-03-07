@@ -3,6 +3,7 @@ import React, { CSSProperties } from 'react';
 import ReactModal from 'react-modal';
 import Button from 'components/Button';
 import { useTranslation } from 'react-i18next';
+import nftImage from 'assets/images/march-madness/march-madness-nft.png';
 
 type MintNFTModalProps = {
     isMinted: boolean;
@@ -28,6 +29,7 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({ isMinted, isMinting, isUpda
                     </Text>
                     {!isMinted && <Text>{t('march-madness.brackets.modal-mint.finish-text-2')}</Text>}
                 </TextWrapper>
+                <NftImage alt="March Madness NFT" src={nftImage} />
                 <Button style={buttonStyle} disabled={isMinting || isUpdating} onClick={handleSubmit}>
                     {isMinted
                         ? isUpdating
@@ -76,12 +78,12 @@ const buttonStyle: CSSProperties = {
     borderRadius: '0',
     width: '320px',
     height: '50px',
-    marginTop: '60px',
+    marginTop: '34px',
 };
 
 const Container = styled.div`
     width: 717px;
-    height: 278px;
+    height: 630px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -121,6 +123,12 @@ const Text = styled.span`
     line-height: 46px;
     letter-spacing: 2px;
     color: #ffffff;
+`;
+
+export const NftImage = styled.img`
+    width: 280px;
+    height: 351px;
+    margin-top: 20px;
 `;
 
 export default MintNFTModal;
