@@ -673,7 +673,7 @@ const LiquidityPool: React.FC = () => {
                 ) : (
                     <>
                         <ContentContainer>
-                            {liquidityPoolData && userLiquidityPoolData && (
+                            {liquidityPoolData && (
                                 <>
                                     <LiquidityPoolInfoTitle>
                                         {t('liquidity-pool.total-info-label')}
@@ -705,8 +705,9 @@ const LiquidityPool: React.FC = () => {
                                                 i18nKey="liquidity-pool.your-share-label"
                                                 values={{
                                                     percentage: formatPercentage(
-                                                        userLiquidityPoolData.balanceTotal /
-                                                            liquidityPoolData.allocationNextRound
+                                                        (userLiquidityPoolData
+                                                            ? userLiquidityPoolData.balanceTotal
+                                                            : 0) / liquidityPoolData.allocationNextRound
                                                     ),
                                                 }}
                                             />
@@ -714,93 +715,96 @@ const LiquidityPool: React.FC = () => {
                                     </LiquidityPoolFilledText>
                                 </>
                             )}
-                            {userLiquidityPoolData && (
-                                <ContentInfoContainer>
-                                    <LiquidityPoolInfoTitle>
-                                        {t('liquidity-pool.your-info-label')}
-                                    </LiquidityPoolInfoTitle>
-                                    {liquidityPoolData.liquidityPoolStarted && (
-                                        <LiquidityPoolInfoContainer>
-                                            <LiquidityPoolInfoLabel>
-                                                {t('liquidity-pool.current-balance-label')}:
-                                            </LiquidityPoolInfoLabel>
-                                            <LiquidityPoolInfoGraphic
-                                                background={'linear-gradient(90.21deg, #A40A95 0.18%, #FC6679 99.82%)'}
-                                                widthPercentage={infoGraphicPercentages.currentBalancePercenatage}
-                                            />
-                                            <LiquidityPoolInfo>
-                                                {formatCurrencyWithSign(
+                            <ContentInfoContainer>
+                                <LiquidityPoolInfoTitle>{t('liquidity-pool.your-info-label')}</LiquidityPoolInfoTitle>
+                                {liquidityPoolData.liquidityPoolStarted && (
+                                    <LiquidityPoolInfoContainer>
+                                        <LiquidityPoolInfoLabel>
+                                            {t('liquidity-pool.current-balance-label')}:
+                                        </LiquidityPoolInfoLabel>
+                                        <LiquidityPoolInfoGraphic
+                                            background={'linear-gradient(90.21deg, #A40A95 0.18%, #FC6679 99.82%)'}
+                                            widthPercentage={infoGraphicPercentages.currentBalancePercenatage}
+                                        />
+                                        <LiquidityPoolInfo>
+                                            {formatCurrencyWithSign(
+                                                USD_SIGN,
+                                                userLiquidityPoolData ? userLiquidityPoolData.balanceCurrentRound : 0
+                                            )}
+                                        </LiquidityPoolInfo>
+                                    </LiquidityPoolInfoContainer>
+                                )}
+                                <LiquidityPoolInfoContainer>
+                                    <LiquidityPoolInfoLabel>
+                                        {t('liquidity-pool.next-round-balance-label')}:
+                                    </LiquidityPoolInfoLabel>
+                                    <LiquidityPoolInfoGraphic
+                                        background={'linear-gradient(90deg, #2A3895 0%, #893CE2 100%)'}
+                                        widthPercentage={infoGraphicPercentages.nextRoundBalancePercenatage}
+                                    />
+                                    <LiquidityPoolInfo>
+                                        {formatCurrencyWithSign(
+                                            USD_SIGN,
+                                            userLiquidityPoolData ? userLiquidityPoolData.balanceTotal : 0
+                                        )}
+                                        {userLiquidityPoolData &&
+                                            userLiquidityPoolData.balanceCurrentRound > 0 &&
+                                            !isWithdrawalRequested && (
+                                                <Tooltip
+                                                    overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
+                                                    iconFontSize={14}
+                                                    marginLeft={2}
+                                                />
+                                            )}
+                                    </LiquidityPoolInfo>
+                                </LiquidityPoolInfoContainer>
+                                <LiquidityPoolInfoContainer>
+                                    <LiquidityPoolInfoLabel>
+                                        {t('liquidity-pool.max-allowance-label')}:
+                                    </LiquidityPoolInfoLabel>
+                                    <LiquidityPoolInfoGraphic
+                                        background={'linear-gradient(270deg, #3AECD3 0%, #017F9C 100%)'}
+                                        widthPercentage={infoGraphicPercentages.maxAllowancePercenatage}
+                                    />
+                                    <LiquidityPoolInfo>
+                                        {formatCurrencyWithSign(
+                                            USD_SIGN,
+                                            userLiquidityPoolData ? userLiquidityPoolData.maxDeposit : 0
+                                        )}
+                                        <Tooltip
+                                            overlay={
+                                                <MaxAllowanceTooltip
+                                                    stakedThales={
+                                                        userLiquidityPoolData ? userLiquidityPoolData.stakedThales : 0
+                                                    }
+                                                    stakedThalesMultiplier={liquidityPoolData.stakedThalesMultiplier}
+                                                />
+                                            }
+                                            overlayClassName="lp-max-allowance"
+                                            iconFontSize={14}
+                                            marginLeft={2}
+                                        />
+                                    </LiquidityPoolInfo>
+                                </LiquidityPoolInfoContainer>
+                                {isWithdrawalRequested && (
+                                    <WarningContentInfo>
+                                        <Trans
+                                            i18nKey="liquidity-pool.withdrawal-request-label"
+                                            values={{
+                                                amount: formatCurrencyWithSign(
                                                     USD_SIGN,
                                                     userLiquidityPoolData.balanceCurrentRound
-                                                )}
-                                            </LiquidityPoolInfo>
-                                        </LiquidityPoolInfoContainer>
-                                    )}
-                                    <LiquidityPoolInfoContainer>
-                                        <LiquidityPoolInfoLabel>
-                                            {t('liquidity-pool.next-round-balance-label')}:
-                                        </LiquidityPoolInfoLabel>
-                                        <LiquidityPoolInfoGraphic
-                                            background={'linear-gradient(90deg, #2A3895 0%, #893CE2 100%)'}
-                                            widthPercentage={infoGraphicPercentages.nextRoundBalancePercenatage}
+                                                ),
+                                            }}
                                         />
-                                        <LiquidityPoolInfo>
-                                            {formatCurrencyWithSign(USD_SIGN, userLiquidityPoolData.balanceTotal)}
-                                            {userLiquidityPoolData.balanceCurrentRound > 0 &&
-                                                !isWithdrawalRequested && (
-                                                    <Tooltip
-                                                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
-                                                        iconFontSize={14}
-                                                        marginLeft={2}
-                                                    />
-                                                )}
-                                        </LiquidityPoolInfo>
-                                    </LiquidityPoolInfoContainer>
-                                    <LiquidityPoolInfoContainer>
-                                        <LiquidityPoolInfoLabel>
-                                            {t('liquidity-pool.max-allowance-label')}:
-                                        </LiquidityPoolInfoLabel>
-                                        <LiquidityPoolInfoGraphic
-                                            background={'linear-gradient(270deg, #3AECD3 0%, #017F9C 100%)'}
-                                            widthPercentage={infoGraphicPercentages.maxAllowancePercenatage}
+                                        <Tooltip
+                                            overlay={t(`vault.estimated-amount-tooltip`)}
+                                            iconFontSize={14}
+                                            marginLeft={2}
                                         />
-                                        <LiquidityPoolInfo>
-                                            {formatCurrencyWithSign(USD_SIGN, userLiquidityPoolData.maxDeposit)}
-                                            <Tooltip
-                                                overlay={
-                                                    <MaxAllowanceTooltip
-                                                        stakedThales={userLiquidityPoolData.stakedThales}
-                                                        stakedThalesMultiplier={
-                                                            liquidityPoolData.stakedThalesMultiplier
-                                                        }
-                                                    />
-                                                }
-                                                overlayClassName="lp-max-allowance"
-                                                iconFontSize={14}
-                                                marginLeft={2}
-                                            />
-                                        </LiquidityPoolInfo>
-                                    </LiquidityPoolInfoContainer>
-                                    {isWithdrawalRequested && (
-                                        <WarningContentInfo>
-                                            <Trans
-                                                i18nKey="liquidity-pool.withdrawal-request-label"
-                                                values={{
-                                                    amount: formatCurrencyWithSign(
-                                                        USD_SIGN,
-                                                        userLiquidityPoolData.balanceCurrentRound
-                                                    ),
-                                                }}
-                                            />
-                                            <Tooltip
-                                                overlay={t(`vault.estimated-amount-tooltip`)}
-                                                iconFontSize={14}
-                                                marginLeft={2}
-                                            />
-                                        </WarningContentInfo>
-                                    )}
-                                </ContentInfoContainer>
-                            )}
+                                    </WarningContentInfo>
+                                )}
+                            </ContentInfoContainer>
                         </ContentContainer>
                         <ContentContainer>
                             {liquidityPoolData && (
