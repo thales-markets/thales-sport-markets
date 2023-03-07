@@ -9,6 +9,7 @@ import { RootState } from '../rootReducer';
 const sliceName = 'parlay';
 
 const DEFAULT_MAX_NUMBER_OF_MATCHES = 8;
+const MAX_NUMBER_OF_DOUBLE_CHANCES_ON_PARLAY = 9;
 
 const getDefaultParlay = (): ParlaysMarketPosition[] => {
     const lsParlay = localStore.get(LOCAL_STORAGE_KEYS.PARLAY);
@@ -46,11 +47,20 @@ export const parlaySlice = createSlice({
     initialState,
     reducers: {
         updateParlay: (state, action: PayloadAction<ParlaysMarketPosition>) => {
+            const parlayCopy = [...state.parlay];
             const index = state.parlay.findIndex((el) => el.parentMarket === action.payload.parentMarket);
-            if (index === -1) {
+            const numberOfDoubleChances = parlayCopy.filter((market) => market.doubleChanceMarketType !== null).length;
+
+            if (
+                action.payload.doubleChanceMarketType !== null &&
+                numberOfDoubleChances >= MAX_NUMBER_OF_DOUBLE_CHANCES_ON_PARLAY &&
+                (index === -1 || parlayCopy[index].doubleChanceMarketType === null)
+            ) {
+                state.error.code = ParlayErrorCode.MAX_DOUBLE_CHANCES;
+                state.error.data = MAX_NUMBER_OF_DOUBLE_CHANCES_ON_PARLAY.toString();
+            } else if (index === -1) {
                 // ADD new market
                 if (state.parlay.length < state.parlaySize) {
-                    const parlayCopy = [...state.parlay];
                     const allParlayTeams = parlayCopy.map((market) => [market.homeTeam, market.awayTeam]).flat();
 
                     const homeTeamInParlay = allParlayTeams.filter((team) => team === action.payload.homeTeam)[0];
@@ -68,7 +78,6 @@ export const parlaySlice = createSlice({
                 }
             } else {
                 // UPDATE market position
-                const parlayCopy = [...state.parlay];
                 parlayCopy[index].sportMarketAddress = action.payload.sportMarketAddress;
                 parlayCopy[index].position = action.payload.position;
                 parlayCopy[index].doubleChanceMarketType = action.payload.doubleChanceMarketType;

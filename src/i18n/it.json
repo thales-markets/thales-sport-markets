@@ -359,6 +359,7 @@
                 "single-min-amount": "L'importo minimo è {{min}}",
                 "same-team": "La stessa squadra non può essere in un Parlay più di una volta",
                 "team-in-parlay": "{{team}} è già a Parlay. La stessa squadra non può essere aggiunta a un Parlay più di una volta.",
+                "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
                 "max-payout": "Il pagamento massimo supportato è {{max}}",
                 "max-teams": "Massimo {{max}} mercati a Parlay",
                 "max-profit": "Il profitto massimo supportato è {{max}}",

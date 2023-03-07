@@ -86,6 +86,11 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => 
                         {t('markets.parlay.validation.team-in-parlay', { team: parlayError.data })}
                     </ErrorMessage>
                 )}
+                {parlayError.code === ParlayErrorCode.MAX_DOUBLE_CHANCES && (
+                    <ErrorMessage>
+                        {t('markets.parlay.validation.max-double-chances', { max: parlayError.data })}
+                    </ErrorMessage>
+                )}
             </Container>
         </Modal>
     );
