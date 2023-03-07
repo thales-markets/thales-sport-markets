@@ -370,7 +370,7 @@ const Brackets: React.FC = () => {
     const getMyStats = () => {
         const isFinalFinished = winnerTeamIds[FINAL_MATCH_ID] !== 0;
         const isFirstMatchFinished = winnerTeamIds.find((id) => id !== 0) !== undefined;
-        const myRank = 65; // TODO: fetch rank
+        const myRank = 'N/A'; // TODO: fetch rank
 
         return (
             <MyStats>
