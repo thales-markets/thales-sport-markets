@@ -22,6 +22,7 @@ import Home from './components/Home';
 import Leaderboard from './components/Leaderboard';
 import Tabs from './components/Tabs';
 import { MarchMadTabs } from './components/Tabs/Tabs';
+import { history } from 'utils/routes';
 
 const MarchMadness: React.FC = () => {
     const { t } = useTranslation();
@@ -54,6 +55,11 @@ const MarchMadness: React.FC = () => {
 
     useEffect(() => {
         if (!isWalletConnected) {
+            const queryParams = queryString.parse(location.search);
+            if (queryParams.tab) {
+                delete queryParams.tab;
+                history.push({ search: queryString.stringify({ ...queryParams }) });
+            }
             setSelectedTab(MarchMadTabs.HOME);
             return;
         }
