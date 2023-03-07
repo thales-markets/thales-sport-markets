@@ -108,6 +108,7 @@ export const QUERY_KEYS = {
     Bungee: {
         Tokens: () => ['bungee', 'tokens'],
     },
+    Banners: (networkId: NetworkId) => ['banners', networkId],
 };
 
 export default QUERY_KEYS;
