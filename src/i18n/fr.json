@@ -456,6 +456,7 @@
                 "risk-per-comb": "Risque par combinaison dépassé",
                 "single-min-amount": "Le montant minimal est de {{min}}",
                 "team-in-parlay": "{{team}} est déjà à Parlay. La même équipe ne peut pas être ajoutée à un Parlay plus d'une fois.",
+                "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
                 "same-team": "La même équipe ne peut pas être dans un Parlay plus d'une fois",
                 "max-payout": "Le paiement maximal pris en charge est de {{max}}",
                 "max-teams": "Maximum {{max}} marchés à Parlay",
