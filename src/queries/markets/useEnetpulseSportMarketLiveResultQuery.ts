@@ -27,44 +27,53 @@ const useEnetpulseSportMarketLiveResultQuery = (
                 }
 
                 const event = events.find((sportEvent: any) => sportEvent.id == trimmedMarketId) as any;
-                const eventParticipants: any[] = Object.values(event.event_participants);
-                const homeResults: any[] = Object.values(eventParticipants[0].result);
-                const awayResults: any[] = Object.values(eventParticipants[1].result);
+                if (event) {
+                    const tournamentName = event ? event.tournament_stage_name : '';
+                    const eventParticipants: any[] = Object.values(event.event_participants);
+                    const homeResults: any[] = Object.values(eventParticipants[0].result);
+                    const awayResults: any[] = Object.values(eventParticipants[1].result);
 
-                const homeScore = homeResults.find((result) => result.result_code.toLowerCase() == 'setswon').value;
-                const awayScore = awayResults.find((result) => result.result_code.toLowerCase() == 'setswon').value;
+                    const homeScore = homeResults.find((result) => result.result_code.toLowerCase() == 'setswon').value;
+                    const awayScore = awayResults.find((result) => result.result_code.toLowerCase() == 'setswon').value;
 
-                const scoreHomeByPeriod = [];
-                const scoreAwayByPeriod = [];
+                    const scoreHomeByPeriod = [];
+                    const scoreAwayByPeriod = [];
 
-                for (let i = 1; i <= 5; i++) {
-                    const homeSetResult = homeResults.find((result) => result.result_code.toLowerCase() == 'set' + i);
-                    if (homeSetResult) {
-                        scoreHomeByPeriod.push(homeSetResult.value);
+                    for (let i = 1; i <= 5; i++) {
+                        const homeSetResult = homeResults.find(
+                            (result) => result.result_code.toLowerCase() == 'set' + i
+                        );
+                        if (homeSetResult) {
+                            scoreHomeByPeriod.push(homeSetResult.value);
+                        }
+
+                        const awaySetResult = awayResults.find(
+                            (result) => result.result_code.toLowerCase() == 'set' + i
+                        );
+                        if (awaySetResult) {
+                            scoreAwayByPeriod.push(awaySetResult.value);
+                        }
                     }
+                    const period = 0;
+                    const status = 'finished';
+                    const displayClock = '0';
+                    const sportId = sportParameter;
 
-                    const awaySetResult = awayResults.find((result) => result.result_code.toLowerCase() == 'set' + i);
-                    if (awaySetResult) {
-                        scoreAwayByPeriod.push(awaySetResult.value);
-                    }
+                    const finalResult: SportMarketLiveResult = {
+                        homeScore,
+                        awayScore,
+                        period,
+                        status,
+                        scoreHomeByPeriod,
+                        scoreAwayByPeriod,
+                        displayClock,
+                        sportId,
+                        tournamentName,
+                    };
+                    return finalResult;
                 }
-                const period = 0;
-                const status = 'finished';
-                const displayClock = '0';
-                const sportId = sportParameter;
 
-                const finalResult: SportMarketLiveResult = {
-                    homeScore,
-                    awayScore,
-                    period,
-                    status,
-                    scoreHomeByPeriod,
-                    scoreAwayByPeriod,
-                    displayClock,
-                    sportId,
-                };
-
-                return finalResult;
+                return undefined;
             } catch (e) {
                 console.log(e);
                 return undefined;

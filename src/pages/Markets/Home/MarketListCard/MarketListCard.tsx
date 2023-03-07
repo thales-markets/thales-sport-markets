@@ -3,6 +3,7 @@ import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { BetType, ENETPULSE_SPORTS } from 'constants/tags';
 import { t } from 'i18next';
+import useEnetpulseSportMarketLiveResultQuery from 'queries/markets/useEnetpulseSportMarketLiveResultQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -70,6 +71,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const showOdds = !isPendingResolution && !isGameResolved && !market.isPaused;
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.tags[0]));
     const gameIdString = Web3.utils.hexToAscii(market.gameId);
+    const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
     const doubleChanceMarkets = market.childMarkets.filter((market) => market.betType === BetType.DOUBLE_CHANCE);
     const spreadTotalMarkets = market.childMarkets.filter((market) => market.betType !== BetType.DOUBLE_CHANCE);
@@ -82,11 +84,27 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport,
     });
 
+    const useEnetpulseLiveResultQuery = useEnetpulseSportMarketLiveResultQuery(gameIdString, gameDate, market.tags[0], {
+        enabled: isAppReady && isEnetpulseSport,
+    });
+
     useEffect(() => {
-        if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
-            setLiveResultInfo(useLiveResultQuery.data);
+        if (isEnetpulseSport) {
+            if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
+                setLiveResultInfo(useEnetpulseLiveResultQuery.data);
+            }
+        } else {
+            if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
+                setLiveResultInfo(useLiveResultQuery.data);
+            }
         }
-    }, [useLiveResultQuery, useLiveResultQuery.data]);
+    }, [
+        useLiveResultQuery,
+        useLiveResultQuery.data,
+        useEnetpulseLiveResultQuery,
+        useEnetpulseLiveResultQuery.data,
+        isEnetpulseSport,
+    ]);
 
     return (
         <Wrapper isResolved={isGameRegularlyResolved}>
@@ -103,6 +121,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             component={
                                 <MatchTimeLabel>
                                     {formatShortDateWithTime(market.maturityDate)}{' '}
+                                    {isEnetpulseSport && liveResultInfo?.tournamentName
+                                        ? '| ' + liveResultInfo?.tournamentName
+                                        : ''}
                                     {isFifaWCGame(market.tags[0]) && (
                                         <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
                                     )}

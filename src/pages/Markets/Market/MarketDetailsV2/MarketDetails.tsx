@@ -145,7 +145,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             ></Tooltip>
                         )}
                 </HeaderWrapper>
-                <MatchInfo market={market} />
+                <MatchInfo market={market} liveResultInfo={liveResultInfo} />
                 {showStatus && (
                     <Status backgroundColor={isGameCancelled ? MAIN_COLORS.BACKGROUNDS.RED : MAIN_COLORS.LIGHT_GRAY}>
                         {isPendingResolution ? (
