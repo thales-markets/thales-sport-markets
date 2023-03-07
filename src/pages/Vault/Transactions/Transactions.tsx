@@ -18,6 +18,8 @@ import useParlayVaultTradesQuery from 'queries/vault/useParlayVaultTradesQuery';
 import ParlayTransactionsTable from 'components/ParlayTransactionsTable/ParlayTransactionsTable';
 import { NetworkId } from 'types/network';
 import TradesTable from '../TradesTable';
+import { ParlayMarketWithRound } from 'types/markets';
+import { isParlayClaimable, isParlayOpen } from 'utils/markets';
 
 type TransactionsProps = {
     vaultAddress: string;
@@ -66,7 +68,7 @@ const Transactions: React.FC<TransactionsProps> = ({ vaultAddress, currentRound,
     });
 
     const parlayVaultTradesQuery = useParlayVaultTradesQuery(vaultAddress, networkId, {
-        enabled: isAppReady && !!vaultAddress,
+        enabled: isAppReady && !!vaultAddress && isParlayVault(vaultAddress, networkId),
     });
 
     useEffect(() => {
@@ -82,6 +84,15 @@ const Transactions: React.FC<TransactionsProps> = ({ vaultAddress, currentRound,
             setVaultTrades([]);
         }
     }, [vaultTradesQuery.isSuccess, vaultTradesQuery.data, round]);
+
+    const parlayTrades = useMemo(() => {
+        if (parlayVaultTradesQuery.isSuccess) {
+            return parlayVaultTradesQuery.data.filter((parlayTrade) => {
+                return parlayTrade.round === round + 1;
+            });
+        }
+        return [];
+    }, [round, parlayVaultTradesQuery]);
 
     const noVaultTrades = vaultTrades.length === 0;
 
@@ -108,30 +119,35 @@ const Transactions: React.FC<TransactionsProps> = ({ vaultAddress, currentRound,
     useEffect(() => {
         if (round === currentRound - 1) {
             const initialNetAmount = 0;
-            const netAmount = vaultTrades.reduce((accumulator: number, trade: VaultTrade) => {
-                return (
-                    accumulator +
-                    (trade.status === VaultTradeStatus.WIN
-                        ? trade.amount - trade.paid
-                        : trade.status === VaultTradeStatus.LOSE
-                        ? -trade.paid
-                        : 0)
-                );
-            }, initialNetAmount);
-
-            setPnlAmount(netAmount);
-            setPnl(netAmount / currentRoundDeposit);
+            if (isParlayVault(vaultAddress, networkId)) {
+                const netAmount = parlayTrades.reduce((accumulator: number, trade: ParlayMarketWithRound) => {
+                    return (
+                        accumulator +
+                        (isParlayClaimable(trade)
+                            ? trade.totalAmount - trade.sUSDPaid
+                            : isParlayOpen(trade)
+                            ? 0
+                            : -trade.sUSDPaid)
+                    );
+                }, initialNetAmount);
+                setPnlAmount(netAmount);
+                setPnl(netAmount / currentRoundDeposit);
+            } else {
+                const netAmount = vaultTrades.reduce((accumulator: number, trade: VaultTrade) => {
+                    return (
+                        accumulator +
+                        (trade.status === VaultTradeStatus.WIN
+                            ? trade.amount - trade.paid
+                            : trade.status === VaultTradeStatus.LOSE
+                            ? -trade.paid
+                            : 0)
+                    );
+                }, initialNetAmount);
+                setPnlAmount(netAmount);
+                setPnl(netAmount / currentRoundDeposit);
+            }
         }
-    }, [vaultTrades, currentRoundDeposit, round, currentRound]);
-
-    const parlayTrades = useMemo(() => {
-        if (parlayVaultTradesQuery.isSuccess) {
-            return parlayVaultTradesQuery.data.filter((parlayTrade) => {
-                return parlayTrade.round === round + 1;
-            });
-        }
-        return [];
-    }, [round, parlayVaultTradesQuery]);
+    }, [vaultTrades, parlayTrades, currentRoundDeposit, round, currentRound, networkId, vaultAddress]);
 
     return (
         <Container>
