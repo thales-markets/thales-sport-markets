@@ -14,6 +14,7 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
+import { NetworkIdByName } from 'utils/network';
 import { buildHref } from 'utils/routes';
 import AffiliateLeaderboard from './components/AffiliateLeaderboard';
 import ReferralTransactionsTable from './components/ReferralTransactionsTable';
@@ -90,14 +91,16 @@ const Referral: React.FC = () => {
 
     return (
         <Wrapper>
-            <Info>
-                <Trans
-                    i18nKey="rewards.op-rewards-banner-message"
-                    components={{
-                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                    }}
-                />
-            </Info>
+            {networkId !== NetworkIdByName.ArbitrumOne && (
+                <Info>
+                    <Trans
+                        i18nKey="rewards.op-rewards-banner-message"
+                        components={{
+                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                        }}
+                    />
+                </Info>
+            )}
             <MainInfoContainer>
                 <ButtonContainer>
                     <ReferralButton />

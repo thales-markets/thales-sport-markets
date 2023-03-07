@@ -27,7 +27,8 @@ export enum SportFilterEnum {
     Baseball = 'Baseball',
     Hockey = 'Hockey',
     UFC = 'UFC',
-    Motosport = 'Motosport',
+    Tennis = 'Tennis',
+    // Motosport = 'Motosport',
 }
 
 export const COLLATERALS = [
@@ -100,6 +101,7 @@ export enum ParlayErrorCode {
     NO_ERROS = 0,
     MAX_MATCHES = 1,
     SAME_TEAM_TWICE = 2,
+    MAX_DOUBLE_CHANCES = 3,
 }
 
 export const OP_INCENTIVIZED_LEAGUE = {

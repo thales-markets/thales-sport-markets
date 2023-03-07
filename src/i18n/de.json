@@ -356,6 +356,7 @@
                 "single-min-amount": "Minimale Menge ist {{min}}",
                 "same-team": "Dasselbe Team kann nicht mehr als einmal in einem Parlay sein",
                 "team-in-parlay": "{{team}} ist bereits in Parlay. Dasselbe Team kann nicht mehr als einmal zu einem Parlay hinzugefügt werden.",
+                "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
                 "max-payout": "Die maximal unterstützte Auszahlung beträgt {{max}}",
                 "max-profit": "Der maximal unterstützte Gewinn beträgt {{max}}",
                 "max-teams": "Maximal {{max}} Märkte in Parlay",
