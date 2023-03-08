@@ -1,7 +1,7 @@
 export const marchMadnessContract = {
     addresses: {
         10: '0x3b05d4C58De4E96Ea093032c6D70C7e4212a4c31',
-        420: '0x6F5caeeaB9f73D7639931A4a052B739EA9D3e48A',
+        420: '0x81FB5DAb46Ba7fb5b85D7fcBbF019a400a2000FD',
         42161: '0x29bd4ceDb94C4dC37B4D9c52Ac98Eb4967BFAaa3',
     },
     abi: [
