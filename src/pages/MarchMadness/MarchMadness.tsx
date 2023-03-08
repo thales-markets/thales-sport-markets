@@ -54,7 +54,7 @@ const MarchMadness: React.FC = () => {
     const [selectedTab, setSelectedTab] = useState(defaultTab);
 
     useEffect(() => {
-        if (!isWalletConnected) {
+        if (!isWalletConnected && queryParamTab === MarchMadTabs.BRACKETS) {
             const queryParams = queryString.parse(location.search);
             if (queryParams.tab) {
                 delete queryParams.tab;
