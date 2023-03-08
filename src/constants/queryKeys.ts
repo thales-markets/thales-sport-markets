@@ -116,6 +116,9 @@ export const QUERY_KEYS = {
     },
     MarchMadness: (walletAddress: string, networkId: NetworkId) => ['marchMadness', walletAddress, networkId],
     Banners: (networkId: NetworkId) => ['banners', networkId],
+    MarchMadnessCompetition: {
+        LeaderboardByVolume: (networkId: NetworkId) => ['marchMadnessLeaderboardByVolume ', networkId],
+    },
 };
 
 export default QUERY_KEYS;
