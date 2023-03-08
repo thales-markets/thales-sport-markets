@@ -137,7 +137,8 @@
         "top5": "TOP 5",
         "top10": "TOP 10",
         "yes": "YES",
-        "no": "NO"
+        "no": "NO",
+        "tennis-tooltip": "In case of a walkover, match will be treated as canceled. In case of retirement / disqualification during the match, it will be treated as a win for the player advancing to the next round"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime Markets ALL RIGHTS RESERVED.",
