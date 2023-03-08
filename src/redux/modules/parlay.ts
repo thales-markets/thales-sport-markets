@@ -9,7 +9,7 @@ import { RootState } from '../rootReducer';
 const sliceName = 'parlay';
 
 const DEFAULT_MAX_NUMBER_OF_MATCHES = 8;
-const MAX_NUMBER_OF_DOUBLE_CHANCES_ON_PARLAY = 9;
+const MAX_NUMBER_OF_DOUBLE_CHANCES_ON_PARLAY = 6;
 
 const getDefaultParlay = (): ParlaysMarketPosition[] => {
     const lsParlay = localStore.get(LOCAL_STORAGE_KEYS.PARLAY);
