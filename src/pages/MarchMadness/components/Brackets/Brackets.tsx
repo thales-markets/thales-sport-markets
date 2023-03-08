@@ -62,7 +62,7 @@ const Brackets: React.FC = () => {
     const [showMintNFTModal, setShowMintNFTModal] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
     const [isMinting, setIsMinting] = useState(false);
-    const [isUpdating, setIsUpdateing] = useState(false);
+    const [isUpdating, setIsUpdating] = useState(false);
     const [isMintError, setIsMintError] = useState(false);
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
@@ -141,9 +141,7 @@ const Brackets: React.FC = () => {
 
     useEffect(() => {
         if (marchMadnessData) {
-            if (isBracketMinted !== marchMadnessData.isAddressAlreadyMinted) {
-                setIsBracketMinted(marchMadnessData.isAddressAlreadyMinted);
-            }
+            setIsBracketMinted(marchMadnessData.isAddressAlreadyMinted);
 
             const shouldUpdate =
                 winnerTeamIds.findIndex((teamId, index) => teamId !== marchMadnessData.winnerTeamIdsPerMatch[index]) !==
@@ -152,7 +150,7 @@ const Brackets: React.FC = () => {
                 setWinnerTeamIds(marchMadnessData.winnerTeamIdsPerMatch);
             }
         }
-    }, [networkId, marchMadnessData, isBracketMinted, winnerTeamIds]);
+    }, [networkId, marchMadnessData, winnerTeamIds]);
 
     const isTeamLostInPreviousRounds = (teamId: number | undefined) => {
         if (teamId === undefined) {
@@ -340,7 +338,7 @@ const Brackets: React.FC = () => {
             try {
                 let tx;
                 if (isBracketMinted) {
-                    setIsUpdateing(true);
+                    setIsUpdating(true);
                     tx = await marchMadnessContractWithSigner.updateBracketsForAlreadyMintedItem(
                         marchMadnessData?.tokenId,
                         bracketsContractData
@@ -354,12 +352,12 @@ const Brackets: React.FC = () => {
 
                 if (txResult && txResult.transactionHash) {
                     setIsBracketMinted(true);
-                    setIsUpdateing(false);
+                    setIsUpdating(false);
                     setIsMinting(false);
                     setShowMintNFTModal(false);
                 }
             } catch (e) {
-                setIsUpdateing(false);
+                setIsUpdating(false);
                 setIsMinting(false);
                 setIsMintError(true);
                 console.log('Error ', e);

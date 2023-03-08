@@ -18,6 +18,7 @@ import { history } from 'utils/routes';
 import queryString from 'query-string';
 import { LINKS } from 'constants/links';
 import { NetworkIdByName } from 'utils/network';
+import { useLocation } from 'react-router-dom';
 
 type HomeProps = {
     setSelectedTab?: (tab: MarchMadTabs) => void;
@@ -27,6 +28,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     const { t } = useTranslation();
 
     const { openConnectModal } = useConnectModal();
+    const location = useLocation();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
