@@ -137,7 +137,8 @@
         "top10": "TOP 10",
         "yes": "YES",
         "no": "NO",
-        "fifa-tooltip": "FIFA世界杯的盘口结果以规则结果为准，如果他们进入加时赛，规则结果将由盘口决定。"
+        "fifa-tooltip": "FIFA世界杯的盘口结果以规则结果为准，如果他们进入加时赛，规则结果将由盘口决定。",
+        "tennis-tooltip": "如果出现超车，比赛将被视为取消。如果在比赛中退赛/取消资格，将被视为晋级下一轮的球员获胜"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",
