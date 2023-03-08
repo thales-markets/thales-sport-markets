@@ -48,6 +48,7 @@ import { getFirstMatchIndexInRound, getNumberOfMatchesPerRound } from 'utils/mar
 import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import ShareModal from '../ShareModal';
 import { MatchProps } from '../Match/Match';
+import { refetchAfterMarchMadnessMint } from 'utils/queryConnector';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -59,6 +60,7 @@ const Brackets: React.FC = () => {
     const [isBracketMinted, setIsBracketMinted] = useState(false);
     const [bracketsData, setBracketsData] = useState(initialBracketsData);
     const [winnerTeamIds, setWinnerTeamIds] = useState(Array<number>(63).fill(0));
+    const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
     const [showMintNFTModal, setShowMintNFTModal] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
     const [isMinting, setIsMinting] = useState(false);
@@ -324,7 +326,24 @@ const Brackets: React.FC = () => {
         );
     };
 
-    const isSubmitDisabled = bracketsData.find((match) => match.isHomeTeamSelected === undefined) !== undefined;
+    useEffect(() => {
+        let submitDisabled = false;
+        if (isBracketMinted) {
+            // if already minted compare selction on contract and on UI
+            if (isBracketMinted === marchMadnessData?.isAddressAlreadyMinted) {
+                submitDisabled =
+                    bracketsData.find(
+                        (match) =>
+                            (match.isHomeTeamSelected ? match.homeTeamId : match.awayTeamId) !==
+                            marchMadnessData?.brackets[match.id]
+                    ) === undefined;
+                setIsSubmitDisabled(submitDisabled);
+            }
+        } else {
+            submitDisabled = bracketsData.find((match) => match.isHomeTeamSelected === undefined) !== undefined;
+            setIsSubmitDisabled(submitDisabled);
+        }
+    }, [isBracketMinted, bracketsData, marchMadnessData?.brackets, marchMadnessData?.isAddressAlreadyMinted]);
 
     const handleSubmit = async () => {
         setIsMintError(false);
@@ -351,7 +370,9 @@ const Brackets: React.FC = () => {
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
+                    refetchAfterMarchMadnessMint(walletAddress, networkId);
                     setIsBracketMinted(true);
+                    setIsSubmitDisabled(true);
                     setIsUpdating(false);
                     setIsMinting(false);
                     setShowMintNFTModal(false);
