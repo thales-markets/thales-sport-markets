@@ -17,6 +17,7 @@ const Container = styled.div`
     flex-direction: row;
     height: auto;
     width: 100%;
+    margin: 70px 0;
 `;
 
 export default Leaderboard;

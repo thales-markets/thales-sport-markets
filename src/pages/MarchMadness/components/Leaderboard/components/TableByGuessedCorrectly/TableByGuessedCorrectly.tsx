@@ -2,10 +2,14 @@ import styled from 'styled-components';
 import React, { useMemo } from 'react';
 import { Column, useTable } from 'react-table';
 import {
+    NoDataContainer,
+    NoDataLabel,
+    OverlayContainer,
     Table,
     TableContainer,
     TableHeader,
     TableHeaderCell,
+    TableHeaderContainer,
     TableRow,
     TableRowCell,
 } from '../TableByVolume/styled-components';
@@ -14,8 +18,11 @@ import { RootState } from 'redux/rootReducer';
 import { useSelector } from 'react-redux';
 import { truncateAddress } from 'utils/formatters/string';
 import useLoeaderboardByGuessedCorrectlyQuery from 'queries/marchMadness/useLoeaderboardByGuessedCorrectlyQuery';
+import { useTranslation } from 'react-i18next';
+import Tooltip from 'components/Tooltip';
 
 const TableByGuessedCorrectly: React.FC = () => {
+    const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const columns: Column[] = useMemo(() => {
@@ -25,20 +32,40 @@ const TableByGuessedCorrectly: React.FC = () => {
                 accessor: 'rank',
             },
             {
-                Header: 'Address',
+                Header: <>{t('march-madness.leaderboard.address')}</>,
                 accessor: 'walletAddress',
                 Cell: (cellProps) => <>{truncateAddress(cellProps.cell.value, 5)}</>,
             },
             {
-                Header: 'Guessed games',
+                Header: () => (
+                    <>
+                        {t('march-madness.leaderboard.guessed-games')}
+                        <Tooltip
+                            overlay={<OverlayContainer>{'Test test test test'}</OverlayContainer>}
+                            iconFontSize={14}
+                            marginLeft={2}
+                            top={0}
+                        />
+                    </>
+                ),
                 accessor: 'totalCorrectedPredictions',
             },
             {
-                Header: 'Rewards',
+                Header: () => (
+                    <>
+                        {t('march-madness.leaderboard.rewards')}
+                        <Tooltip
+                            overlay={<OverlayContainer>{'Test test test test'}</OverlayContainer>}
+                            iconFontSize={14}
+                            marginLeft={2}
+                            top={0}
+                        />
+                    </>
+                ),
                 accessor: 'rewards',
             },
         ];
-    }, []);
+    }, [t]);
 
     const leaderboardQuery = useLoeaderboardByGuessedCorrectlyQuery(networkId);
 
@@ -47,45 +74,50 @@ const TableByGuessedCorrectly: React.FC = () => {
         return [];
     }, [leaderboardQuery.data, leaderboardQuery.isSuccess]);
 
-    console.log('Data ', data);
-
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
 
     return (
         <Container>
-            <TableContainer hideBottomBorder={true}>
+            <TableHeaderContainer hideBottomBorder={true}>
                 <TableHeader>{'By guessed correctly'}</TableHeader>
-            </TableContainer>
+            </TableHeaderContainer>
             <TableContainer>
-                <Table {...getTableProps()}>
-                    <thead>
-                        {headerGroups.map((headerGroup, headerGroupIndex) => (
-                            <tr {...headerGroup.getHeaderGroupProps()} key={headerGroupIndex}>
-                                {headerGroup.headers.map((column, columnKey) => (
-                                    <TableHeaderCell {...column.getHeaderProps()} key={columnKey}>
-                                        {column.render('Header')}
-                                    </TableHeaderCell>
-                                ))}
-                            </tr>
-                        ))}
-                    </thead>
-                    <tbody {...getTableBodyProps()}>
-                        {rows.map((row, rowKey) => {
-                            prepareRow(row);
-                            return (
-                                <TableRow {...row.getRowProps()} key={rowKey}>
-                                    {row.cells.map((cell, cellIndex) => {
-                                        return (
-                                            <TableRowCell {...cell.getCellProps()} key={cellIndex}>
-                                                {cell.render('Cell')}
-                                            </TableRowCell>
-                                        );
-                                    })}
-                                </TableRow>
-                            );
-                        })}
-                    </tbody>
-                </Table>
+                {!data?.length && (
+                    <NoDataContainer>
+                        <NoDataLabel>{t('march-madness.leaderboard.no-data')}</NoDataLabel>
+                    </NoDataContainer>
+                )}
+                {data?.length > 0 && (
+                    <Table {...getTableProps()}>
+                        <thead>
+                            {headerGroups.map((headerGroup, headerGroupIndex) => (
+                                <tr {...headerGroup.getHeaderGroupProps()} key={headerGroupIndex}>
+                                    {headerGroup.headers.map((column, columnKey) => (
+                                        <TableHeaderCell {...column.getHeaderProps()} key={columnKey}>
+                                            {column.render('Header')}
+                                        </TableHeaderCell>
+                                    ))}
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody {...getTableBodyProps()}>
+                            {rows.map((row, rowKey) => {
+                                prepareRow(row);
+                                return (
+                                    <TableRow {...row.getRowProps()} key={rowKey} topTen={rowKey < 10 ? true : false}>
+                                        {row.cells.map((cell, cellIndex) => {
+                                            return (
+                                                <TableRowCell {...cell.getCellProps()} key={cellIndex}>
+                                                    {cell.render('Cell')}
+                                                </TableRowCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                );
+                            })}
+                        </tbody>
+                    </Table>
+                )}
             </TableContainer>
         </Container>
     );

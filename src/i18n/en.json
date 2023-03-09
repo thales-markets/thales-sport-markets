@@ -834,6 +834,19 @@
             "button-create": "Mint bracket",
             "button-connect": "Connect wallet"
         },
+        "leaderboard": {
+            "owner": "Owner",
+            "address": "Address",
+            "volume": "Volume",
+            "base-volume": "Base",
+            "bonus-volume": "Bonus",
+            "rewards": "Rewards",
+            "search-placeholder": "SEARCH WALLET ADDRESS",
+            "player": "Player",
+            "guessed-games": "Guessed games",
+            "rank": "Rank",
+            "no-data": "No data currently available"
+        },
         "brackets": {
             "team-1": "Team 1",
             "team-2": "Team 2",
