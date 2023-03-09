@@ -137,7 +137,8 @@
         "top10": "TOP 10",
         "yes": "YES",
         "no": "NO",
-        "fifa-tooltip": "Die Ergebnisse der FIFA-Weltmeisterschaftsmärkte basieren auf den regulären Ergebnissen. Sollte es in die Verlängerung gehen, ist das reguläre Ergebnis dasjenige, zu dem der Markt entscheidet."
+        "fifa-tooltip": "Die Ergebnisse der FIFA-Weltmeisterschaftsmärkte basieren auf den regulären Ergebnissen. Sollte es in die Verlängerung gehen, ist das reguläre Ergebnis dasjenige, zu dem der Markt entscheidet.",
+        "tennis-tooltip": "Im Falle eines Walkovers wird das Spiel als abgebrochen behandelt. Im Falle einer Aufgabe / Disqualifikation während des Spiels wird dies als Gewinn für den Spieler gewertet, der in die nächste Runde aufsteigt"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",

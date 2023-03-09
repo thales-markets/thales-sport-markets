@@ -61,7 +61,8 @@ const Match: React.FC<MatchProps> = ({
         }
     }, [matchData?.isHomeTeamSelected, isHomeTeamSelected]);
 
-    const isTeamClickable = !isReadOnly && !isBracketsLocked;
+    const isTeamClickable =
+        !isReadOnly && !isBracketsLocked && matchData.homeTeamId !== undefined && matchData.awayTeamId !== undefined;
     const teamClickHandler = (isHomeTeamClicked: boolean) => {
         if (isTeamClickable) {
             setIsHomeTeamSelected(isHomeTeamClicked);

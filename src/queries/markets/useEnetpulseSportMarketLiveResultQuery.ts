@@ -80,7 +80,6 @@ const useEnetpulseSportMarketLiveResultQuery = (
             }
         },
         {
-            refetchInterval: 1000,
             ...options,
         }
     );
