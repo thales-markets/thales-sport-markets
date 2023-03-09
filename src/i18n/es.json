@@ -912,6 +912,20 @@
             "text-3b": "Final Four - 10%",
             "text-3": "Para el <bold>Primer grupo</bold>, 10 000 OP se dividirán entre todo el volumen generado a través de los juegos de March Madness, incluidos todos los tipos de mercado y parlay con al menos un juego de la NCAAB. Los titulares del soporte NFT de March Madness son elegibles para un impulso comercial. Cada juego correcto es elegible para un impulso escalonado, con un máximo de 164%."
         },
-        "mobile-message": "La página solo está disponible en pantallas más grandes. ¡Utilice la versión de escritorio!"
+        "mobile-message": "La página solo está disponible en pantallas más grandes. ¡Utilice la versión de escritorio!",
+        "leaderboard": {
+            "rank": "Rango",
+            "volume": "Volumen",
+            "rewards": "Recompensas",
+            "player": "Jugador",
+            "owner": "Dueño",
+            "address": "DIRECCIÓN",
+            "base-volume": "Base",
+            "search-placeholder": "BUSCAR DIRECCIÓN DE CARTERA",
+            "bonus-volume": "Prima",
+            "guessed-games": "juegos adivinados",
+            "no-data": "No hay datos disponibles actualmente"
+        },
+        "test-info": "Ya está abierta la fase de pruebas con los equipos de muestra, ¡la selección 2023 se abre el 12 de marzo!"
     }
 }

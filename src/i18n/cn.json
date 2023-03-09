@@ -912,6 +912,20 @@
             "text-4": "<bold>第二个池子</bold> 将在 March Madness 游戏中以 10 sUSD 交易量为基准的最准确支架的持有者之间分配。满足数量要求的持有者可以跟踪他们在最佳组别排行榜中的位置，获胜者将在其中瓜分 3,000 OP 奖励池。",
             "text-3c": "精英八强 - 7%"
         },
-        "mobile-message": "页面仅在更大的屏幕上可用。请使用桌面版！"
+        "mobile-message": "页面仅在更大的屏幕上可用。请使用桌面版！",
+        "leaderboard": {
+            "address": "地址",
+            "rewards": "奖励",
+            "base-volume": "根据",
+            "volume": "体积",
+            "owner": "所有者",
+            "bonus-volume": "奖金",
+            "player": "播放器",
+            "search-placeholder": "搜索钱包地址",
+            "rank": "秩",
+            "guessed-games": "猜谜游戏",
+            "no-data": "目前没有可用数据"
+        },
+        "test-info": "测试阶段现已开放样本团队，2023 年选择将于 3 月 12 日开放！"
     }
 }

@@ -1010,6 +1010,20 @@
             "text-3c": "Élite Huit - 7%",
             "text-4": "Le <bold>deuxième pool</bold> sera divisé entre les détenteurs de la fourchette la plus précise avec une référence de volume de 10 sUSD sur les jeux March Madness. Les détenteurs qui satisfont à l'exigence de volume peuvent suivre leur position dans le classement du meilleur groupe où les gagnants se partageront un pool de récompenses de 3 000 OP."
         },
-        "mobile-message": "La page n'est disponible que sur les grands écrans. Veuillez utiliser la version de bureau !"
+        "mobile-message": "La page n'est disponible que sur les grands écrans. Veuillez utiliser la version de bureau !",
+        "leaderboard": {
+            "address": "Adresse",
+            "volume": "Volume",
+            "owner": "Propriétaire",
+            "base-volume": "Base",
+            "bonus-volume": "Prime",
+            "player": "Joueur",
+            "rewards": "Récompenses",
+            "search-placeholder": "RECHERCHER L'ADRESSE DU PORTEFEUILLE",
+            "no-data": "Aucune donnée actuellement disponible",
+            "guessed-games": "Jeux devinés",
+            "rank": "Rang"
+        },
+        "test-info": "La phase de tests est maintenant ouverte avec les équipes échantillons, la sélection 2023 s'ouvre le 12 mars !"
     }
 }

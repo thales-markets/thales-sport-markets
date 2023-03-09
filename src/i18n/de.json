@@ -909,6 +909,20 @@
             "text-5": "Weitere Details in unserem <mediumLink>Medium-Blogbeitrag</mediumLink>.",
             "text-3": "Für den <bold>Ersten Pool</bold> werden 10.000 OP auf alle volumengesteuerten March Madness-Spiele aufgeteilt, einschließlich aller Markttypen und Parlays mit mindestens einem NCAAB-Spiel. Inhaber der March Madness-Kategorie NFT haben Anspruch auf einen Handelsschub. Jedes richtige Spiel ist für einen gestaffelten Boost mit einem Maximum von 164 % berechtigt."
         },
-        "mobile-message": "Die Seite ist nur auf größeren Bildschirmen verfügbar. Bitte verwenden Sie die Desktop-Version!"
+        "mobile-message": "Die Seite ist nur auf größeren Bildschirmen verfügbar. Bitte verwenden Sie die Desktop-Version!",
+        "leaderboard": {
+            "volume": "Volumen",
+            "owner": "Eigentümer",
+            "base-volume": "Base",
+            "rank": "Rang",
+            "address": "Adresse",
+            "rewards": "Belohnung",
+            "bonus-volume": "Bonus",
+            "player": "Spieler",
+            "search-placeholder": "WALLET-ADRESSE SUCHEN",
+            "guessed-games": "Geschätzte Spiele",
+            "no-data": "Derzeit keine Daten verfügbar"
+        },
+        "test-info": "Die Testphase mit den Musterteams ist jetzt eröffnet, die Auswahl 2023 öffnet am 12. März!"
     }
 }
