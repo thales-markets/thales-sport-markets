@@ -18,6 +18,22 @@ export const TableHeaderCell = styled.th`
     padding: 5px 0px;
 `;
 
+export const NoDataContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 60px;
+    background-color: #ffffff;
+    margin-top: 100px;
+`;
+
+export const NoDataLabel = styled.span`
+    font-family: 'NCAA' !important;
+    font-size: 25px;
+    color: #021631;
+`;
+
 export const TableRow = styled.tr<{ hideBorder?: boolean }>`
     font-family: 'Oswald' !important;
     font-size: 14px;

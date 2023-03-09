@@ -11,6 +11,8 @@ import { formatCurrencyWithKey } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
 import {
     Container,
+    NoDataContainer,
+    NoDataLabel,
     OverlayContainer,
     Table,
     TableContainer,
@@ -109,35 +111,42 @@ const TableByVolume: React.FC = () => {
                 <TableHeader>{'By volume'}</TableHeader>
             </TableHeaderContainer>
             <TableContainer>
-                <Table {...getTableProps()}>
-                    <thead>
-                        {headerGroups.map((headerGroup, headerGroupIndex) => (
-                            <tr {...headerGroup.getHeaderGroupProps()} key={headerGroupIndex}>
-                                {headerGroup.headers.map((column, columnKey) => (
-                                    <TableHeaderCell {...column.getHeaderProps()} key={columnKey}>
-                                        {column.render('Header')}
-                                    </TableHeaderCell>
-                                ))}
-                            </tr>
-                        ))}
-                    </thead>
-                    <tbody {...getTableBodyProps()}>
-                        {rows.map((row, rowKey) => {
-                            prepareRow(row);
-                            return (
-                                <TableRow {...row.getRowProps()} key={rowKey} hideBorder={rowKey == rows.length}>
-                                    {row.cells.map((cell, cellIndex) => {
-                                        return (
-                                            <TableRowCell {...cell.getCellProps()} key={cellIndex}>
-                                                {cell.render('Cell')}
-                                            </TableRowCell>
-                                        );
-                                    })}
-                                </TableRow>
-                            );
-                        })}
-                    </tbody>
-                </Table>
+                {!data?.length && (
+                    <NoDataContainer>
+                        <NoDataLabel>{t('march-madness.leaderboard.no-data')}</NoDataLabel>
+                    </NoDataContainer>
+                )}
+                {data?.length > 0 && (
+                    <Table {...getTableProps()}>
+                        <thead>
+                            {headerGroups.map((headerGroup, headerGroupIndex) => (
+                                <tr {...headerGroup.getHeaderGroupProps()} key={headerGroupIndex}>
+                                    {headerGroup.headers.map((column, columnKey) => (
+                                        <TableHeaderCell {...column.getHeaderProps()} key={columnKey}>
+                                            {column.render('Header')}
+                                        </TableHeaderCell>
+                                    ))}
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody {...getTableBodyProps()}>
+                            {rows.map((row, rowKey) => {
+                                prepareRow(row);
+                                return (
+                                    <TableRow {...row.getRowProps()} key={rowKey} hideBorder={rowKey == rows.length}>
+                                        {row.cells.map((cell, cellIndex) => {
+                                            return (
+                                                <TableRowCell {...cell.getCellProps()} key={cellIndex}>
+                                                    {cell.render('Cell')}
+                                                </TableRowCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                );
+                            })}
+                        </tbody>
+                    </Table>
+                )}
             </TableContainer>
         </Container>
     );

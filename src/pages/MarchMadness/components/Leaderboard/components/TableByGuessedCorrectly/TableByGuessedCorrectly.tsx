@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import React, { useMemo } from 'react';
 import { Column, useTable } from 'react-table';
 import {
+    NoDataContainer,
+    NoDataLabel,
     OverlayContainer,
     Table,
     TableContainer,
@@ -72,8 +74,6 @@ const TableByGuessedCorrectly: React.FC = () => {
         return [];
     }, [leaderboardQuery.data, leaderboardQuery.isSuccess]);
 
-    console.log('Data ', data);
-
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
 
     return (
@@ -82,35 +82,42 @@ const TableByGuessedCorrectly: React.FC = () => {
                 <TableHeader>{'By guessed correctly'}</TableHeader>
             </TableHeaderContainer>
             <TableContainer>
-                <Table {...getTableProps()}>
-                    <thead>
-                        {headerGroups.map((headerGroup, headerGroupIndex) => (
-                            <tr {...headerGroup.getHeaderGroupProps()} key={headerGroupIndex}>
-                                {headerGroup.headers.map((column, columnKey) => (
-                                    <TableHeaderCell {...column.getHeaderProps()} key={columnKey}>
-                                        {column.render('Header')}
-                                    </TableHeaderCell>
-                                ))}
-                            </tr>
-                        ))}
-                    </thead>
-                    <tbody {...getTableBodyProps()}>
-                        {rows.map((row, rowKey) => {
-                            prepareRow(row);
-                            return (
-                                <TableRow {...row.getRowProps()} key={rowKey}>
-                                    {row.cells.map((cell, cellIndex) => {
-                                        return (
-                                            <TableRowCell {...cell.getCellProps()} key={cellIndex}>
-                                                {cell.render('Cell')}
-                                            </TableRowCell>
-                                        );
-                                    })}
-                                </TableRow>
-                            );
-                        })}
-                    </tbody>
-                </Table>
+                {!data?.length && (
+                    <NoDataContainer>
+                        <NoDataLabel>{t('march-madness.leaderboard.no-data')}</NoDataLabel>
+                    </NoDataContainer>
+                )}
+                {data?.length > 0 && (
+                    <Table {...getTableProps()}>
+                        <thead>
+                            {headerGroups.map((headerGroup, headerGroupIndex) => (
+                                <tr {...headerGroup.getHeaderGroupProps()} key={headerGroupIndex}>
+                                    {headerGroup.headers.map((column, columnKey) => (
+                                        <TableHeaderCell {...column.getHeaderProps()} key={columnKey}>
+                                            {column.render('Header')}
+                                        </TableHeaderCell>
+                                    ))}
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody {...getTableBodyProps()}>
+                            {rows.map((row, rowKey) => {
+                                prepareRow(row);
+                                return (
+                                    <TableRow {...row.getRowProps()} key={rowKey}>
+                                        {row.cells.map((cell, cellIndex) => {
+                                            return (
+                                                <TableRowCell {...cell.getCellProps()} key={cellIndex}>
+                                                    {cell.render('Cell')}
+                                                </TableRowCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                );
+                            })}
+                        </tbody>
+                    </Table>
+                )}
             </TableContainer>
         </Container>
     );

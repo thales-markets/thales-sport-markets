@@ -844,7 +844,8 @@
             "search-placeholder": "SEARCH WALLET ADDRESS",
             "player": "Player",
             "guessed-games": "Guessed games",
-            "rank": "Rank"
+            "rank": "Rank",
+            "no-data": "No data currently available"
         },
         "brackets": {
             "team-1": "Team 1",
