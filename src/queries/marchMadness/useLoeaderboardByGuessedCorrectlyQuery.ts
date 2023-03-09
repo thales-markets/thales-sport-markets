@@ -22,8 +22,6 @@ const useLoeaderboardByGuessedCorrectlyQuery = (
                 const rawResponse = await fetch(`https://api.thalesmarket.io/march-madness/1/${networkId}`);
                 const response = JSON.parse(await rawResponse.text());
 
-                console.log('Response ', response);
-
                 return response;
             } catch (e) {
                 console.log('E ', e);
