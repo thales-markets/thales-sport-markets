@@ -3,11 +3,7 @@ import { NetworkId } from 'types/network';
 import { NetworkIdByName } from './network';
 
 export const isMatchInRegion = (matchId: number, region: string) => {
-    return (
-        initialBracketsData.find(
-            (match) => match.id === matchId && match.region.toLowerCase().includes(region.toLowerCase())
-        ) !== undefined
-    );
+    return initialBracketsData.find((match) => match.id === matchId && match.region.includes(region)) !== undefined;
 };
 
 // rounds index starts from 0

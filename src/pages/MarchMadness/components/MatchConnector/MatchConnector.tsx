@@ -101,7 +101,6 @@ const Sweet16Connector = styled.div<{ isLeft: boolean; noTop?: boolean; noBottom
     width: 142px;
     top: ${(props) => (props.noTop ? '27' : '-35')}px;
     ${(props) => (props.isLeft ? 'right: 71px;' : 'left: 71px;')}
-    z-index: -1;
 `;
 
 const Elite8Connector = styled.div<{ isLeft: boolean; isUpper: boolean }>`

@@ -101,8 +101,8 @@ const Match: React.FC<MatchProps> = ({
     };
 
     return (
-        <Container height={height} margin={margin} isReadOnly={!!isReadOnly}>
-            <TeamRow isClickable={isTeamClickable} onClick={() => teamClickHandler(true)}>
+        <Container height={height} margin={margin}>
+            <TeamRow isClickable={isTeamClickable} isHomeTeam={true} onClick={() => teamClickHandler(true)}>
                 {/* HOME TEAM */}
                 {isBracketsLeftSide ? (
                     /* LEFT HALF */
@@ -139,7 +139,7 @@ const Match: React.FC<MatchProps> = ({
                 )}
             </TeamRow>
             <TeamSeparator isActive={!!homeTeam?.displayName || !!awayTeam?.displayName} />
-            <TeamRow isClickable={isTeamClickable} onClick={() => teamClickHandler(false)}>
+            <TeamRow isClickable={isTeamClickable} isHomeTeam={false} onClick={() => teamClickHandler(false)}>
                 {/* AWAY TEAM */}
                 {isBracketsLeftSide ? (
                     /* LEFT HALF */
@@ -180,8 +180,8 @@ const Match: React.FC<MatchProps> = ({
     );
 };
 
-const Container = styled.div<{ height: number; margin?: string; isReadOnly: boolean }>`
-    background: ${(props) => (props.isReadOnly ? '#ffffff33' : '#ffffff')};
+const Container = styled.div<{ height: number; margin?: string }>`
+    background: #ffffff;
     position: relative;
     width: 142px;
     height: ${(props) => props.height}px;
@@ -198,7 +198,9 @@ const TeamSeparator = styled.hr<{ isActive: boolean }>`
     margin: auto;
 `;
 
-const TeamRow = styled.div<{ isClickable: boolean }>`
+const TeamRow = styled.div<{ isClickable: boolean; isHomeTeam: boolean }>`
+    background: #ffffff;
+    border-radius: 4px;
     width: 100%;
     height: 24.5px;
     position: relative;
@@ -213,7 +215,7 @@ const TeamRow = styled.div<{ isClickable: boolean }>`
         props.isClickable
             ? `:hover {
                     background: #c4def2;
-                    border-radius: 0px 0px 4px 4px;
+                    border-radius: ${props.isHomeTeam ? '4px 4px 0 0' : '0 0 4px 4px'};
                 }`
             : ''}
 `;
