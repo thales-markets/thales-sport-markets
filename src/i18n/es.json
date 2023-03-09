@@ -867,7 +867,13 @@
                 "update-text": "¡Ya has acuñado tu NFT!",
                 "button-updating": "Actualizando...",
                 "button-update": "Actualizar soporte",
-                "button-mint": "Me gusta NFT"
+                "button-mint": "Me gusta NFT",
+                "update-text-1": "¡Bien hecho!",
+                "finish-text-3-success": "¡Dirígete a los <marketsLink>mercados de la NCAAB</marketsLink> y comienza a ganar recompensas!",
+                "finish-text-1-success": "¡Felicidades!",
+                "finish-info": "*El soporte NFT de March Madness es un NFT de tiempo extra que permite a los titulares participar en la campaña Overtime March Madness creando su propio soporte de torneo de predicción.",
+                "update-text-2": "Guardamos su predicción de paréntesis, ¡actualice su paréntesis ahora!",
+                "finish-text-2-success": "¡Acabas de acuñar tu March Madness Bracket!"
             },
             "modal-share": {
                 "header": "Mis 4 últimas elecciones",

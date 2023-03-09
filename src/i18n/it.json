@@ -870,7 +870,13 @@
                 "finish-text-2": "Ora puoi coniare il tuo NFT!",
                 "button-update": "Aggiorna staffa",
                 "update-text": "Hai già coniato il tuo NFT!",
-                "button-mint": "Come NFT"
+                "button-mint": "Come NFT",
+                "finish-text-2-success": "Hai appena coniato la tua parentesi March Madness!",
+                "finish-text-3-success": "Vai ai <marketsLink>mercati NCAAB</marketsLink> e inizia a guadagnare premi!",
+                "update-text-2": "Abbiamo salvato la previsione della tua parentesi, per favore aggiorna la tua parentesi ora!",
+                "finish-info": "*Il tabellone March Madness NFT è un NFT straordinario che consente ai titolari di partecipare alla campagna Overtime March Madness creando il proprio girone del torneo di previsione.",
+                "update-text-1": "Ben fatto!",
+                "finish-text-1-success": "Congratulazioni!"
             },
             "modal-share": {
                 "header": "Le mie ultime 4 scelte",

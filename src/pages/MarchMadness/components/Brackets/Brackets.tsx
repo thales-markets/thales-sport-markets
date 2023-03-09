@@ -375,7 +375,6 @@ const Brackets: React.FC = () => {
                     setIsSubmitDisabled(true);
                     setIsUpdating(false);
                     setIsMinting(false);
-                    setShowMintNFTModal(false);
                 }
             } catch (e) {
                 setIsUpdating(false);

@@ -870,7 +870,13 @@
                 "update-text": "Вы уже отчеканили свой NFT!",
                 "button-minting": "Чеканка...",
                 "button-mint": "Как NFT",
-                "button-update": "Обновить скобку"
+                "button-update": "Обновить скобку",
+                "update-text-2": "Мы сохранили прогноз вашей сетки, пожалуйста, обновите ее прямо сейчас!",
+                "finish-text-3-success": "Перейдите на <marketsLink>рынки NCAAB</marketsLink> и начните зарабатывать вознаграждения!",
+                "update-text-1": "Отлично сделано!",
+                "finish-text-2-success": "Вы только что отчеканили скобку «Мартовское безумие»!",
+                "finish-text-1-success": "Поздравляем!",
+                "finish-info": "*Сетка March Madness NFT — это Overtime NFT, который позволяет владельцам участвовать в кампании Overtime March Madness, создавая свою собственную турнирную сетку предсказаний."
             },
             "modal-share": {
                 "user-selection": "Я выбрал {{team}}, чтобы перерезать сети в Хьюстоне!",

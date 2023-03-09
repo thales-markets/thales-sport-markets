@@ -863,7 +863,13 @@
                 "finish-text-2": "ตอนนี้คุณสามารถสร้าง NFT ของคุณได้แล้ว!",
                 "button-mint": "เช่นเดียวกับเอ็นเอฟที",
                 "finish-text-1": "ทำได้ดี!",
-                "button-minting": "โรงกษาปณ์..."
+                "button-minting": "โรงกษาปณ์...",
+                "finish-text-3-success": "ตรงไปที่ <marketsLink>ตลาด NCAAB</marketsLink> และเริ่มรับรางวัล!",
+                "finish-info": "*วงเล็บ NFT ของ March Madness คือ NFT แบบต่อเวลาที่ช่วยให้ผู้ถือสามารถเข้าร่วมในแคมเปญ Overtime March Madness ได้โดยสร้างกลุ่มการแข่งขันทายผลของตนเอง",
+                "finish-text-2-success": "คุณเพิ่งสร้าง March Madness Bracket!",
+                "finish-text-1-success": "ยินดีด้วย!",
+                "update-text-2": "เราได้บันทึกการคาดคะเนในวงเล็บของคุณแล้ว โปรดอัปเดตวงเล็บตอนนี้!",
+                "update-text-1": "ทำได้ดีมาก!"
             },
             "modal-share": {
                 "header": "4 อันดับสุดท้ายของผม",

@@ -1,9 +1,14 @@
 import styled from 'styled-components';
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useState } from 'react';
 import ReactModal from 'react-modal';
 import Button from 'components/Button';
-import { useTranslation } from 'react-i18next';
-import nftImage from 'assets/images/march-madness/march-madness-nft.png';
+import { Trans, useTranslation } from 'react-i18next';
+import nftImage from 'assets/images/march-madness/march-madness-nft.svg';
+import nftBackground from 'assets/images/march-madness/mm-nft-background.svg';
+import { buildHref } from 'utils/routes';
+import ROUTES from 'constants/routes';
+import { GlobalFiltersEnum, SportFilterEnum } from 'constants/markets';
+import { TAGS_FLAGS, TAGS_LIST } from 'constants/tags';
 
 type MintNFTModalProps = {
     isMinted: boolean;
@@ -17,28 +22,76 @@ type MintNFTModalProps = {
 const MintNFTModal: React.FC<MintNFTModalProps> = ({ isMinted, isMinting, isUpdating, handleSubmit, handleClose }) => {
     const { t } = useTranslation();
 
+    const [isUpdate] = useState(isMinted);
+
+    const NCAABasketballLink =
+        ROUTES.Markets.Home +
+        '?globalFilter=' +
+        GlobalFiltersEnum.OpenMarkets +
+        '&sport=' +
+        SportFilterEnum.Basketball +
+        '&tag=' +
+        TAGS_LIST.find((tag) => tag.id === TAGS_FLAGS.NCAA_BASKETBALL)?.label;
+
     return (
         <ReactModal isOpen shouldCloseOnOverlayClick={true} onRequestClose={handleClose} style={customStyle}>
             <Container>
-                <CloseIcon className={`icon icon--close`} onClick={handleClose} />
-                <TextWrapper>
-                    <Text>
-                        {isMinted
-                            ? t('march-madness.brackets.modal-mint.update-text')
-                            : t('march-madness.brackets.modal-mint.finish-text-1')}
-                    </Text>
-                    {!isMinted && <Text>{t('march-madness.brackets.modal-mint.finish-text-2')}</Text>}
-                </TextWrapper>
-                <NftImage alt="March Madness NFT" src={nftImage} />
-                <Button style={buttonStyle} disabled={isMinting || isUpdating} onClick={handleSubmit}>
-                    {isMinted
-                        ? isUpdating
-                            ? t('march-madness.brackets.modal-mint.button-updating')
-                            : t('march-madness.brackets.modal-mint.button-update')
-                        : isMinting
-                        ? t('march-madness.brackets.modal-mint.button-minting')
-                        : t('march-madness.brackets.modal-mint.button-mint')}
-                </Button>
+                <Wrapper>
+                    <CloseIcon className={`icon icon--close`} onClick={handleClose} />
+                    <TextWrapper>
+                        <Text fontSize={50} lineHeight={60} letterSpacing={2} margin="30px 0 0 0">
+                            {isMinted
+                                ? isUpdate
+                                    ? t('march-madness.brackets.modal-mint.update-text-1')
+                                    : t('march-madness.brackets.modal-mint.finish-text-1-success')
+                                : t('march-madness.brackets.modal-mint.finish-text-1')}
+                        </Text>
+                        <Text margin={isMinted ? (isUpdate ? '65px 0 0 0' : '-10px 0 0 0') : '70px 0 0 0'}>
+                            {isMinted ? (
+                                isUpdate ? (
+                                    t('march-madness.brackets.modal-mint.update-text-2')
+                                ) : (
+                                    t('march-madness.brackets.modal-mint.finish-text-2-success')
+                                )
+                            ) : (
+                                <Trans i18nKey="march-madness.brackets.modal-mint.finish-text-2" />
+                            )}
+                        </Text>
+                    </TextWrapper>
+                    {isMinted && !isUpdate && (
+                        <NFTImageWrapper>
+                            <NftImage alt="March Madness NFT" src={nftImage} />
+                        </NFTImageWrapper>
+                    )}
+                    {(!isMinted || isUpdate) && (
+                        <ButtonWrapper>
+                            <Button style={buttonStyle} disabled={isMinting || isUpdating} onClick={handleSubmit}>
+                                {isMinted
+                                    ? isUpdating
+                                        ? t('march-madness.brackets.modal-mint.button-updating')
+                                        : t('march-madness.brackets.modal-mint.button-update')
+                                    : isMinting
+                                    ? t('march-madness.brackets.modal-mint.button-minting')
+                                    : t('march-madness.brackets.modal-mint.button-mint')}
+                            </Button>
+                        </ButtonWrapper>
+                    )}
+                    {!isMinted && !isUpdate && (
+                        <TextInfo>{t('march-madness.brackets.modal-mint.finish-info')}</TextInfo>
+                    )}
+                    {isMinted && !isUpdate && (
+                        <Text margin="40px 0">
+                            <Trans
+                                i18nKey="march-madness.brackets.modal-mint.finish-text-3-success"
+                                components={{
+                                    marketsLink: (
+                                        <Link target="_blank" rel="noreferrer" href={buildHref(NCAABasketballLink)} />
+                                    ),
+                                }}
+                            />
+                        </Text>
+                    )}
+                </Wrapper>
             </Container>
         </ReactModal>
     );
@@ -74,20 +127,14 @@ const buttonStyle: CSSProperties = {
     color: '#1A1C2B',
     textTransform: 'uppercase',
     background: '#FFFFFF',
-    border: '2px solid #021631',
+    border: 'none',
     borderRadius: '0',
-    width: '320px',
-    height: '50px',
-    marginTop: '34px',
+    width: '314px',
+    height: '44px',
 };
 
 const Container = styled.div`
-    width: 717px;
-    height: 630px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    width: 690px;
     background: linear-gradient(
         284.91deg,
         #da252f -3.75%,
@@ -100,6 +147,16 @@ const Container = styled.div`
     border-radius: 8px;
 `;
 
+const Wrapper = styled.div`
+    width: 100%;
+    height: 100%;
+    background: url('${nftBackground}');
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`;
+
 const CloseIcon = styled.i`
     position: absolute;
     top: 22px;
@@ -110,25 +167,71 @@ const CloseIcon = styled.i`
 `;
 
 const TextWrapper = styled.div`
+    width: 575px;
     display: flex;
     flex-direction: column;
     align-items: center;
 `;
 
-const Text = styled.span`
+const Text = styled.span<{ fontSize?: number; lineHeight?: number; letterSpacing?: number; margin?: string }>`
     font-family: 'NCAA' !important;
     font-style: normal;
     font-weight: 400;
-    font-size: 40px;
-    line-height: 46px;
-    letter-spacing: 2px;
+    font-size: ${(props) => (props.fontSize ? props.fontSize : 30)}px;
+    line-height: ${(props) => (props.lineHeight ? props.lineHeight : 40)}px;
+    letter-spacing: ${(props) => (props.letterSpacing ? props.letterSpacing : -1)}px;
+    ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
+    text-align: center;
     color: #ffffff;
 `;
 
+const TextInfo = styled.span`
+    font-family: 'Oswald' !important;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: #ffffff;
+    margin: 0 25px 35px 25px;
+`;
+
+const BorderGradient = styled.div`
+    background: linear-gradient(270deg, #da252f -3.75%, #5c2c3b 11.81%, #021630 33.38%, #0c99d0 66.39%, #02223e 98.43%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
 export const NftImage = styled.img`
-    width: 280px;
-    height: 351px;
+    width: 337px;
+    height: 468px;
+`;
+
+const NFTImageWrapper = styled(BorderGradient)`
+    width: 347px;
+    height: 478px;
     margin-top: 20px;
+    box-shadow: 0px 0px 100px 20px #4d21db;
+`;
+
+const ButtonWrapper = styled(BorderGradient)`
+    width: 320px;
+    height: 50px;
+    margin-top: 140px;
+    margin-bottom: 50px;
+`;
+
+const Link = styled.a`
+    font-family: 'NCAA' !important;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 40px;
+    text-decoration: underline;
+    color: #ffffff;
+    :hover {
+        color: #0e94cb;
+    }
 `;
 
 export default MintNFTModal;

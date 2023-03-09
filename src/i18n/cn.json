@@ -867,7 +867,13 @@
                 "button-minting": "铸币...",
                 "finish-text-2": "现在你可以铸造你的 NFT 了！",
                 "button-update": "更新支架",
-                "button-mint": "喜欢NFT"
+                "button-mint": "喜欢NFT",
+                "finish-text-1-success": "恭喜！",
+                "update-text-1": "做得很好！",
+                "finish-text-2-success": "您刚刚铸造了您的 March Madness 支架！",
+                "update-text-2": "我们保存了您的括号预测，请立即更新您的括号！",
+                "finish-text-3-success": "前往 <marketsLink>NCAAB 市场</marketsLink> 并开始赚取奖励！",
+                "finish-info": "*March Madness 支架 NFT 是一种 Overtime NFT，它允许持有者通过创建自己的预测锦标赛支架来参与 Overtime March Madness 活动。"
             },
             "modal-share": {
                 "share": "分享",
