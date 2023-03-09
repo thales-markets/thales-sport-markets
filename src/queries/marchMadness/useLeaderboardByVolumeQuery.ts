@@ -23,7 +23,7 @@ const useLeaderboardByVolumeQuery = (
         async () => {
             try {
                 const rawResponse = await fetch(`https://api.thalesmarket.io/march-madness/0/${networkId}`);
-                const response = await rawResponse.json();
+                const response = JSON.parse(await rawResponse.text());
 
                 return response;
             } catch (e) {

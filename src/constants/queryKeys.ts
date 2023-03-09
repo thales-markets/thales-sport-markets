@@ -118,6 +118,10 @@ export const QUERY_KEYS = {
     Banners: (networkId: NetworkId) => ['banners', networkId],
     MarchMadnessCompetition: {
         LeaderboardByVolume: (networkId: NetworkId) => ['marchMadnessLeaderboardByVolume ', networkId],
+        LeaderboardByNumberOfCorrectPredictions: (networkId: NetworkId) => [
+            'marchMadnessLeaderboardByCorrectPred',
+            networkId,
+        ],
     },
 };
 

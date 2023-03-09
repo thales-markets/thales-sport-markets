@@ -16,11 +16,13 @@ const useLoeaderboardByGuessedCorrectlyQuery = (
     options?: UseQueryOptions<LeaderboardByGuessedCorrectlyResponse | undefined>
 ) => {
     return useQuery<LeaderboardByGuessedCorrectlyResponse | undefined>(
-        QUERY_KEYS.MarchMadnessCompetition.LeaderboardByVolume(networkId),
+        QUERY_KEYS.MarchMadnessCompetition.LeaderboardByNumberOfCorrectPredictions(networkId),
         async () => {
             try {
                 const rawResponse = await fetch(`https://api.thalesmarket.io/march-madness/1/${networkId}`);
-                const response = await rawResponse.json();
+                const response = JSON.parse(await rawResponse.text());
+
+                console.log('Response ', response);
 
                 return response;
             } catch (e) {
