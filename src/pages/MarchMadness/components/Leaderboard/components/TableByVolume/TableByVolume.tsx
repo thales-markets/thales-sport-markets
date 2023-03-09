@@ -1,5 +1,7 @@
+import Tooltip from 'components/Tooltip';
 import useLeaderboardByVolumeQuery from 'queries/marchMadness/useLeaderboardByVolumeQuery';
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Column, useTable } from 'react-table';
 import { getNetworkId } from 'redux/modules/wallet';
@@ -9,15 +11,18 @@ import { formatCurrencyWithKey } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
 import {
     Container,
+    OverlayContainer,
     Table,
     TableContainer,
     TableHeader,
     TableHeaderCell,
+    TableHeaderContainer,
     TableRow,
     TableRowCell,
 } from './styled-components';
 
 const TableByVolume: React.FC = () => {
+    const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const columns: Column[] = useMemo(() => {
@@ -27,37 +32,67 @@ const TableByVolume: React.FC = () => {
                 accessor: 'rank',
             },
             {
-                Header: 'Address',
+                Header: <>{t('march-madness.leaderboard.address')}</>,
                 accessor: 'walletAddress',
                 Cell: (cellProps) => <>{truncateAddress(cellProps.cell.value, 5)}</>,
             },
             {
-                Header: 'Base',
-                accessor: 'baseVolume',
-                Cell: (cellProps) => (
-                    <>{formatCurrencyWithKey(getDefaultColleteralForNetwork(networkId), cellProps.cell.value, 2)}</>
-                ),
-            },
-            {
-                Header: 'Bonus',
-                accessor: 'bonusVolume',
-                Cell: (cellProps) => (
-                    <>{formatCurrencyWithKey(getDefaultColleteralForNetwork(networkId), cellProps.cell.value, 2)}</>
-                ),
-            },
-            {
-                Header: 'Volume',
+                Header: <>{t('march-madness.leaderboard.volume')}</>,
                 accessor: 'volume',
                 Cell: (cellProps) => (
                     <>{formatCurrencyWithKey(getDefaultColleteralForNetwork(networkId), cellProps.cell.value, 2)}</>
                 ),
             },
             {
-                Header: 'Rewards',
+                Header: () => (
+                    <>
+                        {t('march-madness.leaderboard.base-volume')}
+                        <Tooltip
+                            overlay={<OverlayContainer>{'Test test test test'}</OverlayContainer>}
+                            iconFontSize={14}
+                            marginLeft={2}
+                            top={0}
+                        />
+                    </>
+                ),
+                accessor: 'baseVolume',
+                Cell: (cellProps) => (
+                    <>{formatCurrencyWithKey(getDefaultColleteralForNetwork(networkId), cellProps.cell.value, 2)}</>
+                ),
+            },
+            {
+                Header: () => (
+                    <>
+                        {t('march-madness.leaderboard.bonus-volume')}
+                        <Tooltip
+                            overlay={<OverlayContainer>{'Test test test test'}</OverlayContainer>}
+                            iconFontSize={14}
+                            marginLeft={2}
+                            top={0}
+                        />
+                    </>
+                ),
+                accessor: 'bonusVolume',
+                Cell: (cellProps) => (
+                    <>{formatCurrencyWithKey(getDefaultColleteralForNetwork(networkId), cellProps.cell.value, 2)}</>
+                ),
+            },
+            {
+                Header: () => (
+                    <>
+                        {t('march-madness.leaderboard.rewards')}
+                        <Tooltip
+                            overlay={<OverlayContainer>{'Test test test test'}</OverlayContainer>}
+                            iconFontSize={14}
+                            marginLeft={2}
+                            top={0}
+                        />
+                    </>
+                ),
                 accessor: 'rewards',
             },
         ];
-    }, [networkId]);
+    }, [networkId, t]);
 
     const leaderboardQuery = useLeaderboardByVolumeQuery(networkId);
 
@@ -70,9 +105,9 @@ const TableByVolume: React.FC = () => {
 
     return (
         <Container>
-            <TableContainer hideBottomBorder={true}>
+            <TableHeaderContainer hideBottomBorder={true}>
                 <TableHeader>{'By volume'}</TableHeader>
-            </TableContainer>
+            </TableHeaderContainer>
             <TableContainer>
                 <Table {...getTableProps()}>
                     <thead>

@@ -5,6 +5,10 @@ export const Table = styled.table`
     width: 100%;
 `;
 
+export const OverlayContainer = styled.div`
+    text-align: center;
+`;
+
 export const TableHeaderCell = styled.th`
     font-family: 'Oswald' !important;
     text-transform: uppercase;
@@ -31,7 +35,7 @@ export const Container = styled.div`
     width: 60%;
 `;
 
-export const TableContainer = styled.div<{ hideBottomBorder?: boolean }>`
+export const TableHeaderContainer = styled.div<{ hideBottomBorder?: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -48,6 +52,11 @@ export const TableContainer = styled.div<{ hideBottomBorder?: boolean }>`
         )
         1;
     width: 100%;
+`;
+
+export const TableContainer = styled(TableHeaderContainer)`
+    min-height: 600px;
+    align-items: flex-start;
 `;
 
 export const TableHeader = styled.span`
