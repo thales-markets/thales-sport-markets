@@ -102,7 +102,7 @@ const Match: React.FC<MatchProps> = ({
 
     return (
         <Container height={height} margin={margin} isReadOnly={!!isReadOnly}>
-            <TeamRow isClickable={isTeamClickable} onClick={() => teamClickHandler(true)}>
+            <TeamRow isClickable={isTeamClickable} isReadOnly={!!isReadOnly} onClick={() => teamClickHandler(true)}>
                 {/* HOME TEAM */}
                 {isBracketsLeftSide ? (
                     /* LEFT HALF */
@@ -139,7 +139,7 @@ const Match: React.FC<MatchProps> = ({
                 )}
             </TeamRow>
             <TeamSeparator isActive={!!homeTeam?.displayName || !!awayTeam?.displayName} />
-            <TeamRow isClickable={isTeamClickable} onClick={() => teamClickHandler(false)}>
+            <TeamRow isClickable={isTeamClickable} isReadOnly={!!isReadOnly} onClick={() => teamClickHandler(false)}>
                 {/* AWAY TEAM */}
                 {isBracketsLeftSide ? (
                     /* LEFT HALF */
@@ -198,7 +198,8 @@ const TeamSeparator = styled.hr<{ isActive: boolean }>`
     margin: auto;
 `;
 
-const TeamRow = styled.div<{ isClickable: boolean }>`
+const TeamRow = styled.div<{ isClickable: boolean; isReadOnly: boolean }>`
+    background: ${(props) => (props.isReadOnly ? '#ffffff33' : '#ffffff')};
     width: 100%;
     height: 24.5px;
     position: relative;

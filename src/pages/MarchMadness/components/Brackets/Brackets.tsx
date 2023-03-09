@@ -508,6 +508,8 @@ const Brackets: React.FC = () => {
         },
     ];
 
+    const isShareDisabled = bracketsData.find((match) => match.isHomeTeamSelected === undefined) !== undefined;
+
     return (
         <Container>
             {marchMadnessDataQuery.isLoading ? (
@@ -581,7 +583,7 @@ const Brackets: React.FC = () => {
                             <Share>
                                 {t('march-madness.brackets.share')}
                                 <TwitterIcon
-                                    disabled={isSubmitDisabled}
+                                    disabled={isShareDisabled}
                                     padding="8px 0 0 0"
                                     onClick={onTwitterIconClick}
                                 />
@@ -727,7 +729,6 @@ const Sweet16 = styled.div<{ isSideLeft: boolean }>`
     display: flex;
     flex-direction: column;
     ${(props) => `${props.isSideLeft ? 'margin-left: ' : 'margin-right: '}-24px;`}
-    z-index: 20;
 `;
 
 const Elite8 = styled.div<{ isSideLeft: boolean }>`

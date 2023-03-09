@@ -1141,7 +1141,7 @@ export const teamsData: MarchMadTeam[] = [
     },
 ];
 
-// TODO: Populate after draw only only name (not in use) and displayName by region and position.
+// TODO: Populate after draw only name (not in use) and displayName by region and position.
 export const wildCardTeams: MarchMadTeam[] = [
     {
         id: 1,
