@@ -34,11 +34,14 @@ export const NoDataLabel = styled.span`
     color: #021631;
 `;
 
-export const TableRow = styled.tr<{ hideBorder?: boolean }>`
+export const TableRow = styled.tr<{ hideBorder?: boolean; topTen?: boolean }>`
     font-family: 'Oswald' !important;
     font-size: 14px;
     font-weight: 600;
-    border-bottom: ${(_props) => (_props?.hideBorder == true ? `2px dotted rgba(0, 94, 184, 1)` : ``)};
+    ${(_props) => (_props?.hideBorder == true ? `border-bottom: '';` : ``)}
+    ${(_props) => (!_props?.hideBorder ? `border-bottom: 2px dotted rgba(0, 94, 184, 1);` : ``)}
+    ${(_props) => (_props?.topTen == true ? `background-color: #C12B34;` : ``)}
+    ${(_props) => (_props?.topTen == true ? `border-bottom: 2px dashed #FFFFFF;` : ``)}
 `;
 
 export const TableRowCell = styled.td`

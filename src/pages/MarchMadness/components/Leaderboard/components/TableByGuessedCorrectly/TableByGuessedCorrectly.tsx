@@ -104,7 +104,7 @@ const TableByGuessedCorrectly: React.FC = () => {
                             {rows.map((row, rowKey) => {
                                 prepareRow(row);
                                 return (
-                                    <TableRow {...row.getRowProps()} key={rowKey}>
+                                    <TableRow {...row.getRowProps()} key={rowKey} topTen={rowKey < 10 ? true : false}>
                                         {row.cells.map((cell, cellIndex) => {
                                             return (
                                                 <TableRowCell {...cell.getCellProps()} key={cellIndex}>
