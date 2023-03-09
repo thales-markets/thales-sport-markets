@@ -476,7 +476,7 @@ const Brackets: React.FC = () => {
     };
 
     const onTwitterIconClick = () => {
-        if (!isSubmitDisabled) {
+        if (!isShareDisabled) {
             setShowShareModal(true);
         }
     };
