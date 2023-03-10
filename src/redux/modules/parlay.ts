@@ -36,6 +36,11 @@ const getDefaultMultiSingle = (): MultiSingleAmounts[] => {
           });
 };
 
+const getDefaultIsMultiSingle = () => {
+    const lsIsMultiSingle = localStore.get(LOCAL_STORAGE_KEYS.IS_MULTI_SINGLE);
+    return lsIsMultiSingle !== undefined ? (lsIsMultiSingle as boolean) : false;
+};
+
 const getDefaultError = () => {
     return { code: ParlayErrorCode.NO_ERROS, data: '' };
 };
@@ -45,6 +50,7 @@ type ParlaySliceState = {
     parlaySize: number;
     payment: ParlayPayment;
     multiSingle: MultiSingleAmounts[];
+    isMultiSingle: boolean;
     error: { code: ParlayErrorCode; data: string };
 };
 
@@ -53,6 +59,7 @@ const initialState: ParlaySliceState = {
     parlaySize: DEFAULT_MAX_NUMBER_OF_MATCHES,
     payment: getDefaultPayment(),
     multiSingle: getDefaultMultiSingle(),
+    isMultiSingle: getDefaultIsMultiSingle(),
     error: getDefaultError(),
 };
 
@@ -92,6 +99,12 @@ export const parlaySlice = createSlice({
                 parlayCopy[index].position = action.payload.position;
                 parlayCopy[index].doubleChanceMarketType = action.payload.doubleChanceMarketType;
                 state.parlay = [...parlayCopy];
+
+                // reset multiSingle if position is changed
+                const multiSingleCopy = [...state.multiSingle];
+                multiSingleCopy[index].sportMarketAddress = action.payload.sportMarketAddress;
+                multiSingleCopy[index].amountToBuy = 0;
+                state.multiSingle = [...multiSingleCopy];
             }
 
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
@@ -121,6 +134,10 @@ export const parlaySlice = createSlice({
         },
         setPayment: (state, action: PayloadAction<ParlayPayment>) => {
             state.payment = { ...state.payment, ...action.payload };
+        },
+        setIsMultiSingle: (state, action: PayloadAction<boolean>) => {
+            state.isMultiSingle = action.payload;
+            localStore.set(LOCAL_STORAGE_KEYS.IS_MULTI_SINGLE, state.isMultiSingle);
         },
         setMultiSingle: (state, action: PayloadAction<MultiSingleAmounts>) => {
             const index = state.multiSingle.findIndex(
@@ -156,6 +173,7 @@ export const {
     removeAll,
     setPayment,
     setMultiSingle,
+    setIsMultiSingle,
     setPaymentSelectedStableIndex,
     resetParlayError,
     removeFromMultiSingle,
@@ -164,6 +182,7 @@ export const {
 export const getParlayState = (state: RootState) => state[sliceName];
 export const getParlay = (state: RootState) => getParlayState(state).parlay;
 export const getMultiSingle = (state: RootState) => getParlayState(state).multiSingle;
+export const getIsMultiSingle = (state: RootState) => getParlayState(state).isMultiSingle;
 export const getParlaySize = (state: RootState) => getParlayState(state).parlaySize;
 export const getParlayPayment = (state: RootState) => getParlayState(state).payment;
 export const getParlayError = (state: RootState) => getParlayState(state).error;

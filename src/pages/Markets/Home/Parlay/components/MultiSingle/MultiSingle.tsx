@@ -108,8 +108,9 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
             ammQuote: 0,
         })
     );
-    const [isFetching, setIsFetching] = useState(false);
+    const [isFetching, setIsFetching] = useState<Record<string, boolean>>({});
     const [isAllowing, setIsAllowing] = useState(false);
+    const [isRecalculating, setIsRecalculating] = useState(false);
     const [isBuying, setIsBuying] = useState(false);
     const [hasValidationError, setHasValidationError] = useState(false);
     const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState<Record<string, string>>({});
@@ -225,11 +226,12 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
         let isSubscribed = true; // Use for race condition
 
         const fetchData = async () => {
-            setIsFetching(true);
+            setIsRecalculating(true);
 
             const divider = selectedStableIndex == 0 || selectedStableIndex == 1 ? 1e18 : 1e6;
             const { sportsAMMContract, signer } = networkConnector;
             const tokenAndBonusArr = [] as MultiSingleTokenQuoteAndBonus[];
+            const isFetchingRecords = isFetching;
             let totalTokenAmount = 0;
             let totalBuyInAmount = 0;
             let totalBonusPercentage = 0;
@@ -332,6 +334,8 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                         });
                     }
                 }
+                isFetchingRecords[address] = false;
+                setIsFetching(isFetchingRecords);
             }
 
             setCalculatedSkewAverage(skewTotal / markets.length);
@@ -340,7 +344,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
             setCalculatedTotalBuyIn(totalBuyInAmount);
             setCalculatedTotalTokenAmount(totalTokenAmount);
             setTokenAndBonus(tokenAndBonusArr);
-            setIsFetching(false);
+            setIsRecalculating(false);
         };
 
         fetchData().catch((e) => console.log(e));
@@ -356,6 +360,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
         markets,
         multiSingleAmounts,
         fetchSkew,
+        isFetching,
     ]);
 
     const availablePerPositionMultiQuery = useAvailablePerPositionMultiQuery(markets, {
@@ -615,10 +620,20 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
         [multiSingleAmounts, paymentTokenBalance, t, tooltipTextUsdAmount, tokenAndBonus]
     );
 
+    useEffect(() => {
+        // No point in adding a tool tip to all vals. Lets just set the tooltip on the highest value
+        const maxMsVal = multiSingleAmounts.reduce((max, ms) => (max.amountToBuy > ms.amountToBuy ? max : ms));
+
+        const market = markets.find((m) => m.address === maxMsVal.sportMarketAddress);
+        if (market !== undefined) {
+            setTooltipTextMessageUsdAmount(market, maxMsVal.amountToBuy);
+        }
+    }, [isVoucherSelected, setTooltipTextMessageUsdAmount, usdAmountValue, multiSingleAmounts, markets]);
+
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
 
-    const hidePayout = isFetching || hasValidationError;
+    const hidePayout = isRecalculating || hasValidationError;
 
     const totalProfitPercentage = (calculatedTotalTokenAmount - calculatedTotalBuyIn) / calculatedTotalBuyIn;
 
@@ -642,6 +657,10 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
     };
 
     const setMultiSingleUsd = (market: ParlaysMarket, value: number) => {
+        const isFetchingRecords = isFetching;
+        isFetchingRecords[market.address] = true;
+        setIsFetching(isFetchingRecords);
+
         new Promise((resolve) => {
             dispatch(
                 setMultiSingle({
@@ -680,7 +699,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                                         type="number"
                                         value={
                                             multiSingleAmounts.find((m) => market.address === m.sportMarketAddress)
-                                                ?.amountToBuy || 0.0
+                                                ?.amountToBuy || ''
                                         }
                                         onChange={(e) => {
                                             if (countDecimals(Number(e.target.value)) > 2) {
@@ -692,7 +711,8 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                                 </ValidationTooltip>
                                 <AmountToBuyMultiPayoutLabel>{t('markets.parlay.payout')}:</AmountToBuyMultiPayoutLabel>{' '}
                                 <AmountToBuyMultiPayoutValue isInfo={true}>
-                                    {hidePayout
+                                    {isFetching[market.address] ||
+                                    !tokenAndBonus.find((t) => t.sportMarketAddress === market.address)?.tokenAmount
                                         ? '-'
                                         : formatCurrencyWithSign(
                                               USD_SIGN,
@@ -740,7 +760,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                 <InfoWrapper>
                     <InfoLabel>{t('markets.parlay.skew')}:</InfoLabel>
                     <InfoValue>
-                        {isFetching
+                        {isRecalculating
                             ? '-'
                             : calculatedSkewAverage < 0
                             ? '0.00%'

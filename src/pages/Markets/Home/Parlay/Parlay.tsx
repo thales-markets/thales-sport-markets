@@ -16,6 +16,8 @@ import {
     setPayment,
     getMultiSingle,
     setPaymentSelectedStableIndex,
+    getIsMultiSingle,
+    setIsMultiSingle,
 } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -39,12 +41,12 @@ const Parlay: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const parlay = useSelector(getParlay);
     const parlayPayment = useSelector(getParlayPayment);
+    const isMultiSingleBet = useSelector(getIsMultiSingle);
     const multiSingleStore = useSelector(getMultiSingle);
     const hasParlayError = useSelector(getHasParlayError);
 
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
-    const [isMultiSingleBet, setIsMultiSingleBet] = useState(false);
     const [multiSingleAmounts, setMultiSingleAmounts] = useState<MultiSingleAmounts[]>([]);
 
     const parlayAmmDataQuery = useParlayAmmDataQuery(networkId, {
@@ -112,7 +114,7 @@ const Parlay: React.FC = () => {
 
     const onToggleTypeClickHandler = () => {
         const toggle = !isMultiSingleBet;
-        setIsMultiSingleBet(toggle);
+        dispatch(setIsMultiSingle(toggle));
     };
 
     return (
