@@ -16,16 +16,17 @@ import {
     Versus,
 } from './styled-components';
 import Tooltip from 'components/Tooltip';
-import { MarketData } from 'types/markets';
+import { MarketData, SportMarketLiveResult } from 'types/markets';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { convertFinalResultToResultType, isFifaWCGame } from 'utils/markets';
 
 type MatchInfoPropsType = {
     market: MarketData;
+    liveResultInfo: SportMarketLiveResult | undefined;
 };
 
-const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
+const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo }) => {
     const { t } = useTranslation();
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(
@@ -89,6 +90,15 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                             )}
                         </MatchTimeLabel>
                         <MatchTime>{formatShortDateWithTime(market.maturityDate)}</MatchTime>
+                        {liveResultInfo ? (
+                            <>
+                                {liveResultInfo.tournamentName ? liveResultInfo.tournamentName : ''}
+                                {liveResultInfo.tournamentRound ? ' | ' + liveResultInfo.tournamentRound : ''}
+                                <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={14} marginLeft={2} />{' '}
+                            </>
+                        ) : (
+                            ''
+                        )}
                     </MatchTimeContainer>
                 </Container>
                 {getTeamsNames(true)}

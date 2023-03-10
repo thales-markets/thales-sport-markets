@@ -88,3 +88,7 @@
 .league--uel:before {
     content: '\0054';
 }
+
+.league--atp:before {
+    content: '\005C';
+}

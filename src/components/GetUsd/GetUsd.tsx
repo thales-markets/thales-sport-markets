@@ -86,7 +86,6 @@ const GetUsd: React.FC = () => {
             {isWalletConnected && (
                 <Container>
                     <Button
-                        type="primary"
                         onClick={() => {
                             if (networkId === NetworkIdByName.OptimsimKovan) {
                                 handleGet();

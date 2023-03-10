@@ -12,9 +12,16 @@ type MatchStatusProps = {
     isCanceled: boolean;
     isPaused: boolean;
     liveResultInfo: SportMarketLiveResult | undefined;
+    isEnetpulseSport: boolean;
 };
 
-const MatchStatus: React.FC<MatchStatusProps> = ({ isPendingResolution, isCanceled, isPaused, liveResultInfo }) => {
+const MatchStatus: React.FC<MatchStatusProps> = ({
+    isPendingResolution,
+    isCanceled,
+    isPaused,
+    liveResultInfo,
+    isEnetpulseSport,
+}) => {
     const { t } = useTranslation();
 
     const displayClockTime = liveResultInfo?.displayClock.replaceAll("'", '');
@@ -22,46 +29,53 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ isPendingResolution, isCancel
     return (
         <Container bottomAlign={isPendingResolution}>
             {isPendingResolution ? (
-                <FlexDivRow>
-                    {liveResultInfo?.status != GAME_STATUS.FINAL && liveResultInfo?.status != GAME_STATUS.FULL_TIME && (
-                        <MatchPeriodContainer>
-                            <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveResultInfo?.period))} ${t(
-                                `markets.market-card.${SPORT_PERIODS_MAP[Number(liveResultInfo?.sportId)]}`
-                            )}`}</MatchPeriodLabel>
-                            <FlexDivCentered>
-                                <MatchPeriodLabel className="red">
-                                    {displayClockTime}
-                                    <MatchPeriodLabel className="blink">&prime;</MatchPeriodLabel>
-                                </MatchPeriodLabel>
-                            </FlexDivCentered>
-                        </MatchPeriodContainer>
-                    )}
-                    <ScoreContainer>
-                        <TeamScoreLabel>{liveResultInfo?.homeScore}</TeamScoreLabel>
-                        <TeamScoreLabel>{liveResultInfo?.awayScore}</TeamScoreLabel>
-                    </ScoreContainer>
-                    {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId))
-                        ? liveResultInfo?.period == 2 && (
-                              <ScoreContainer>
-                                  <TeamScoreLabel className="period">
-                                      {liveResultInfo?.scoreHomeByPeriod[0]}
-                                  </TeamScoreLabel>
-                                  <TeamScoreLabel className="period">
-                                      {liveResultInfo?.scoreAwayByPeriod[0]}
-                                  </TeamScoreLabel>
-                              </ScoreContainer>
-                          )
-                        : liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
-                              return (
-                                  <ScoreContainer key={index}>
-                                      <TeamScoreLabel className="period">{homePeriodResult}</TeamScoreLabel>
+                isEnetpulseSport ? (
+                    <Status color={STATUS_COLOR.STARTED}>{t('markets.market-card.pending')}</Status>
+                ) : (
+                    <FlexDivRow>
+                        {liveResultInfo?.status != GAME_STATUS.FINAL &&
+                            liveResultInfo?.status != GAME_STATUS.FULL_TIME &&
+                            !isEnetpulseSport && (
+                                <MatchPeriodContainer>
+                                    <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveResultInfo?.period))} ${t(
+                                        `markets.market-card.${SPORT_PERIODS_MAP[Number(liveResultInfo?.sportId)]}`
+                                    )}`}</MatchPeriodLabel>
+                                    <FlexDivCentered>
+                                        <MatchPeriodLabel className="red">
+                                            {displayClockTime}
+                                            <MatchPeriodLabel className="blink">&prime;</MatchPeriodLabel>
+                                        </MatchPeriodLabel>
+                                    </FlexDivCentered>
+                                </MatchPeriodContainer>
+                            )}
+
+                        <ScoreContainer>
+                            <TeamScoreLabel>{liveResultInfo?.homeScore}</TeamScoreLabel>
+                            <TeamScoreLabel>{liveResultInfo?.awayScore}</TeamScoreLabel>
+                        </ScoreContainer>
+                        {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId))
+                            ? liveResultInfo?.period == 2 && (
+                                  <ScoreContainer>
                                       <TeamScoreLabel className="period">
-                                          {liveResultInfo.scoreAwayByPeriod[index]}
+                                          {liveResultInfo?.scoreHomeByPeriod[0]}
+                                      </TeamScoreLabel>
+                                      <TeamScoreLabel className="period">
+                                          {liveResultInfo?.scoreAwayByPeriod[0]}
                                       </TeamScoreLabel>
                                   </ScoreContainer>
-                              );
-                          })}
-                </FlexDivRow>
+                              )
+                            : liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
+                                  return (
+                                      <ScoreContainer key={index}>
+                                          <TeamScoreLabel className="period">{homePeriodResult}</TeamScoreLabel>
+                                          <TeamScoreLabel className="period">
+                                              {liveResultInfo.scoreAwayByPeriod[index]}
+                                          </TeamScoreLabel>
+                                      </ScoreContainer>
+                                  );
+                              })}
+                    </FlexDivRow>
+                )
             ) : isCanceled ? (
                 <Status color={STATUS_COLOR.CANCELED}>{t('markets.market-card.canceled')}</Status>
             ) : isPaused ? (

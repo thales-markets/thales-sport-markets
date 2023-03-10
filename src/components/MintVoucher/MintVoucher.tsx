@@ -22,12 +22,7 @@ const MintVoucher: React.FC<MintVoucherProps> = ({ style, buttonStyle }) => {
         <>
             {isWalletConnected && (
                 <Container style={style}>
-                    <Button
-                        style={buttonStyle}
-                        type="primary"
-                        onClick={() => setOpenMintVoucherModal(true)}
-                        fontSize={12.5}
-                    >
+                    <Button style={buttonStyle} onClick={() => setOpenMintVoucherModal(true)} fontSize={12.5}>
                         {t('common.voucher.mint-voucher')}
                     </Button>
                     {openMintVoucherModal && <MintVoucherModal onClose={() => setOpenMintVoucherModal(false)} />}
