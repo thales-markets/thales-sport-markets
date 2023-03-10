@@ -30,6 +30,7 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({
 }) => {
     const { t } = useTranslation();
 
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [isUpdate] = useState(isMinted);
 
     const NCAABasketballLink =
@@ -43,78 +44,90 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({
 
     return (
         <ReactModal isOpen shouldCloseOnOverlayClick={true} onRequestClose={handleClose} style={customStyle}>
-            <Container>
-                <Wrapper>
-                    <CloseIcon className={`icon icon--close`} onClick={handleClose} />
-                    <TextWrapper>
-                        <Text fontSize={50} lineHeight={60} letterSpacing={2} margin="30px 0 0 0">
-                            {isMinted
-                                ? isUpdated
-                                    ? t('march-madness.brackets.modal-mint.finish-text-1-success')
-                                    : isUpdate
-                                    ? t('march-madness.brackets.modal-mint.update-text-1')
-                                    : t('march-madness.brackets.modal-mint.finish-text-1-success')
-                                : t('march-madness.brackets.modal-mint.finish-text-1')}
-                        </Text>
-                        <Text
-                            margin={
-                                isMinted
-                                    ? isUpdated
-                                        ? '-10px 0 0 0'
-                                        : isUpdate
-                                        ? '65px 0 0 0'
-                                        : '-10px 0 0 0'
-                                    : '70px 0 0 0'
-                            }
-                        >
-                            {isMinted ? (
-                                isUpdated ? (
-                                    t('march-madness.brackets.modal-mint.update-text-2-success')
-                                ) : isUpdate ? (
-                                    t('march-madness.brackets.modal-mint.update-text-2')
-                                ) : (
-                                    t('march-madness.brackets.modal-mint.finish-text-2-success')
-                                )
-                            ) : (
-                                <Trans i18nKey="march-madness.brackets.modal-mint.finish-text-2" />
-                            )}
-                        </Text>
-                    </TextWrapper>
-                    {((isMinted && !isUpdate) || isUpdated) && (
-                        <NFTImageWrapper>
-                            <NftImage alt="March Madness NFT" src={nftImage} />
-                        </NFTImageWrapper>
-                    )}
-                    {(!isMinted || isUpdate) && !isUpdated && (
-                        <ButtonWrapper>
-                            <Button style={buttonStyle} disabled={isMinting || isUpdating} onClick={handleSubmit}>
+            {isImageLoaded && (
+                <Container>
+                    <Wrapper>
+                        <CloseIcon className={`icon icon--close`} onClick={handleClose} />
+                        <TextWrapper>
+                            <Text fontSize={50} lineHeight={60} letterSpacing={2} margin="30px 0 0 0">
                                 {isMinted
-                                    ? isUpdating
-                                        ? t('march-madness.brackets.modal-mint.button-updating')
-                                        : t('march-madness.brackets.modal-mint.button-update')
-                                    : isMinting
-                                    ? t('march-madness.brackets.modal-mint.button-minting')
-                                    : t('march-madness.brackets.modal-mint.button-mint')}
-                            </Button>
-                        </ButtonWrapper>
-                    )}
-                    {!isMinted && !isUpdate && (
-                        <TextInfo>{t('march-madness.brackets.modal-mint.finish-info')}</TextInfo>
-                    )}
-                    {((isMinted && !isUpdate) || isUpdated) && (
-                        <Text margin="40px 0">
-                            <Trans
-                                i18nKey="march-madness.brackets.modal-mint.finish-text-3-success"
-                                components={{
-                                    marketsLink: (
-                                        <Link target="_blank" rel="noreferrer" href={buildHref(NCAABasketballLink)} />
-                                    ),
-                                }}
-                            />
-                        </Text>
-                    )}
-                </Wrapper>
-            </Container>
+                                    ? isUpdated
+                                        ? t('march-madness.brackets.modal-mint.finish-text-1-success')
+                                        : isUpdate
+                                        ? t('march-madness.brackets.modal-mint.update-text-1')
+                                        : t('march-madness.brackets.modal-mint.finish-text-1-success')
+                                    : t('march-madness.brackets.modal-mint.finish-text-1')}
+                            </Text>
+                            <Text
+                                margin={
+                                    isMinted
+                                        ? isUpdated
+                                            ? '-10px 0 0 0'
+                                            : isUpdate
+                                            ? '65px 0 0 0'
+                                            : '-10px 0 0 0'
+                                        : '70px 0 0 0'
+                                }
+                            >
+                                {isMinted ? (
+                                    isUpdated ? (
+                                        t('march-madness.brackets.modal-mint.update-text-2-success')
+                                    ) : isUpdate ? (
+                                        t('march-madness.brackets.modal-mint.update-text-2')
+                                    ) : (
+                                        t('march-madness.brackets.modal-mint.finish-text-2-success')
+                                    )
+                                ) : (
+                                    <Trans i18nKey="march-madness.brackets.modal-mint.finish-text-2" />
+                                )}
+                            </Text>
+                        </TextWrapper>
+                        {((isMinted && !isUpdate) || isUpdated) && (
+                            <NFTImageWrapper>
+                                <NftImage alt="March Madness NFT" src={nftImage} />
+                            </NFTImageWrapper>
+                        )}
+                        {(!isMinted || isUpdate) && !isUpdated && (
+                            <ButtonWrapper>
+                                <Button style={buttonStyle} disabled={isMinting || isUpdating} onClick={handleSubmit}>
+                                    {isMinted
+                                        ? isUpdating
+                                            ? t('march-madness.brackets.modal-mint.button-updating')
+                                            : t('march-madness.brackets.modal-mint.button-update')
+                                        : isMinting
+                                        ? t('march-madness.brackets.modal-mint.button-minting')
+                                        : t('march-madness.brackets.modal-mint.button-mint')}
+                                </Button>
+                            </ButtonWrapper>
+                        )}
+                        {!isMinted && !isUpdate && (
+                            <TextInfo>{t('march-madness.brackets.modal-mint.finish-info')}</TextInfo>
+                        )}
+                        {((isMinted && !isUpdate) || isUpdated) && (
+                            <Text margin="40px 0">
+                                <Trans
+                                    i18nKey="march-madness.brackets.modal-mint.finish-text-3-success"
+                                    components={{
+                                        marketsLink: (
+                                            <Link
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                href={buildHref(NCAABasketballLink)}
+                                            />
+                                        ),
+                                    }}
+                                />
+                            </Text>
+                        )}
+                    </Wrapper>
+                </Container>
+            )}
+            <NftImage
+                alt="March Madness NFT"
+                src={nftImage}
+                style={{ display: 'none' }}
+                onLoad={() => setTimeout(() => setIsImageLoaded(true), 300)}
+            />
         </ReactModal>
     );
 };
@@ -131,7 +144,7 @@ const customStyle = {
         background: 'transparent',
         border: 'none',
         borderRadius: '20px',
-        boxShadow: '0px 0px 59px 11px rgba(100, 217, 254, 0.89)',
+        boxShadow: '0px 0px 59px 11px #1A1C2B',
         overflow: 'visibile',
     },
     overlay: {
@@ -233,7 +246,7 @@ const NFTImageWrapper = styled(BorderGradient)`
     width: 347px;
     height: 478px;
     margin-top: 20px;
-    box-shadow: 0px 0px 100px 20px #4d21db;
+    box-shadow: 0px 0px 100px -2px #4d21db;
 `;
 
 const ButtonWrapper = styled(BorderGradient)`

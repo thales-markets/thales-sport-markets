@@ -216,7 +216,7 @@ const customStyle = {
         background: 'transparent',
         border: 'none',
         borderRadius: '20px',
-        boxShadow: '0px 0px 59px 11px rgba(100, 217, 254, 0.89)',
+        boxShadow: '0px 0px 59px 11px #1A1C2B',
         overflow: 'visibile',
     },
     overlay: {
@@ -250,6 +250,7 @@ const Container = styled.div`
     width: 383px;
     height: 510px;
     background: url('${background}');
+    background-size: 383px 510px;
     border-radius: 10px;
 `;
 
