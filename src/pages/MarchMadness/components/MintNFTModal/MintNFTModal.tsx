@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { CSSProperties, useState } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 import ReactModal from 'react-modal';
 import Button from 'components/Button';
 import { Trans, useTranslation } from 'react-i18next';
@@ -32,6 +32,13 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({
 
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [isUpdate] = useState(isMinted);
+    const [isMintedInModal, setIsMintedInModal] = useState(isMinted);
+
+    useEffect(() => {
+        if (isMinted) {
+            setIsMintedInModal(true);
+        }
+    }, [isMinted]);
 
     const NCAABasketballLink =
         ROUTES.Markets.Home +
@@ -50,7 +57,7 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({
                         <CloseIcon className={`icon icon--close`} onClick={handleClose} />
                         <TextWrapper>
                             <Text fontSize={50} lineHeight={60} letterSpacing={2} margin="30px 0 0 0">
-                                {isMinted
+                                {isMintedInModal
                                     ? isUpdated
                                         ? t('march-madness.brackets.modal-mint.finish-text-1-success')
                                         : isUpdate
@@ -60,7 +67,7 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({
                             </Text>
                             <Text
                                 margin={
-                                    isMinted
+                                    isMintedInModal
                                         ? isUpdated
                                             ? '-10px 0 0 0'
                                             : isUpdate
@@ -69,7 +76,7 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({
                                         : '70px 0 0 0'
                                 }
                             >
-                                {isMinted ? (
+                                {isMintedInModal ? (
                                     isUpdated ? (
                                         t('march-madness.brackets.modal-mint.update-text-2-success')
                                     ) : isUpdate ? (
@@ -82,15 +89,15 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({
                                 )}
                             </Text>
                         </TextWrapper>
-                        {((isMinted && !isUpdate) || isUpdated) && (
+                        {((isMintedInModal && !isUpdate) || isUpdated) && (
                             <NFTImageWrapper>
                                 <NftImage alt="March Madness NFT" src={nftImage} />
                             </NFTImageWrapper>
                         )}
-                        {(!isMinted || isUpdate) && !isUpdated && (
+                        {(!isMintedInModal || isUpdate) && !isUpdated && (
                             <ButtonWrapper>
                                 <Button style={buttonStyle} disabled={isMinting || isUpdating} onClick={handleSubmit}>
-                                    {isMinted
+                                    {isMintedInModal
                                         ? isUpdating
                                             ? t('march-madness.brackets.modal-mint.button-updating')
                                             : t('march-madness.brackets.modal-mint.button-update')
@@ -100,10 +107,10 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({
                                 </Button>
                             </ButtonWrapper>
                         )}
-                        {!isMinted && !isUpdate && (
+                        {!isMintedInModal && !isUpdate && (
                             <TextInfo>{t('march-madness.brackets.modal-mint.finish-info')}</TextInfo>
                         )}
-                        {((isMinted && !isUpdate) || isUpdated) && (
+                        {((isMintedInModal && !isUpdate) || isUpdated) && (
                             <Text margin="40px 0">
                                 <Trans
                                     i18nKey="march-madness.brackets.modal-mint.finish-text-3-success"

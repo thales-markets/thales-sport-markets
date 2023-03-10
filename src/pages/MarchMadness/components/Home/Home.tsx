@@ -173,7 +173,9 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                             <Trans
                                 i18nKey="march-madness.home.text-5"
                                 components={{
-                                    mediumLink: <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Medium} />,
+                                    mediumLink: (
+                                        <Link target="_blank" rel="noreferrer" href={LINKS.MarchMadness.Medium} />
+                                    ),
                                 }}
                             />
                         </Text>

@@ -24,4 +24,8 @@ export const LINKS = {
         Instagram: 'https://www.instagram.com/overtimemarkets',
         Reddit: 'https://www.reddit.com/r/overtimemarkets',
     },
+    MarchMadness: {
+        Medium:
+            'https://medium.com/@OvertimeMarkets.xyz/overtime-brings-the-bracket-to-the-blockchain-for-march-madness-66777956d87f',
+    },
 };
