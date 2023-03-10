@@ -274,7 +274,7 @@
                 "tooltip": "Les marchés ont été résolus il y a plus de 7 jours",
                 "archivedmarkets": "Archivés",
                 "resolvedmarkets": "Terminés",
-                "openmarkets": "Tout",
+                "openmarkets": "Ouvrir",
                 "canceled": "En pause / Annulés",
                 "pendingmarkets": "En cours"
             },

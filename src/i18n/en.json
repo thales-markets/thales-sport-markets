@@ -190,7 +190,7 @@
         "filter-label": {
             "global": {
                 "allmarkets": "All",
-                "openmarkets": "All",
+                "openmarkets": "Open",
                 "resolvedmarkets": "Finished",
                 "pendingmarkets": "Ongoing",
                 "yourpositions": "Your positions",

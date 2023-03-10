@@ -188,7 +188,7 @@
         "filter-label": {
             "global": {
                 "allmarkets": "ตลาดทั้งหมด",
-                "openmarkets": "ตลาดที่เปิดอยู่",
+                "openmarkets": "เปิด",
                 "resolvedmarkets": "ตลาดที่สิ้นสุดไปแล้ว",
                 "yourpositions": "โพสิชั่นของคุณ",
                 "claim": "สามารถรับได้",
