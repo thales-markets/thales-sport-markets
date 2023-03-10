@@ -194,7 +194,7 @@
                 "tooltip": "Märkte aufgelöst vor mehr als 7 Tagen",
                 "resolvedmarkets": "Fertig",
                 "allmarkets": "Alle",
-                "openmarkets": "Alle",
+                "openmarkets": "Offen",
                 "canceled": "Angehalten / Abgebrochen",
                 "pendingmarkets": "Laufend"
             },

@@ -188,7 +188,7 @@
         "filter-label": {
             "global": {
                 "allmarkets": "所有比赛",
-                "openmarkets": "开放中的比赛",
+                "openmarkets": "打开",
                 "resolvedmarkets": "已结束的比赛",
                 "yourpositions": "你参与的比赛",
                 "claim": "结算参与的比赛",

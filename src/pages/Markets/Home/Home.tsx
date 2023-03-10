@@ -379,10 +379,6 @@ const Home: React.FC = () => {
                             setDateParam={setDateParam}
                             setGlobalFilter={setGlobalFilter}
                             setGlobalFilterParam={setGlobalFilterParam}
-                            setTagFilter={setTagFilter}
-                            setTagParam={setTagParam}
-                            setSportFilter={setSportFilter}
-                            setSportParam={setSportParam}
                             globalFilter={globalFilter}
                             dateFilter={dateFilter}
                             sportFilter={sportFilter}
@@ -476,10 +472,6 @@ const Home: React.FC = () => {
                             <>
                                 <SportFilterMobile
                                     sportFilter={sportFilter}
-                                    setDateFilter={setDateFilter}
-                                    setDateParam={setDateParam}
-                                    setGlobalFilter={setGlobalFilter}
-                                    setGlobalFilterParam={setGlobalFilterParam}
                                     setTagFilter={setTagFilter}
                                     setTagParam={setTagParam}
                                     setSportFilter={setSportFilter}
@@ -510,10 +502,6 @@ const Home: React.FC = () => {
                                 setDateParam={setDateParam}
                                 setGlobalFilter={setGlobalFilter}
                                 setGlobalFilterParam={setGlobalFilterParam}
-                                setTagFilter={setTagFilter}
-                                setTagParam={setTagParam}
-                                setSportFilter={setSportFilter}
-                                setSportParam={setSportParam}
                                 globalFilter={globalFilter}
                                 dateFilter={dateFilter}
                                 sportFilter={sportFilter}
