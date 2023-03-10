@@ -274,7 +274,7 @@
                 "tooltip": "Les marchés ont été résolus il y a plus de 7 jours",
                 "archivedmarkets": "Archivés",
                 "resolvedmarkets": "Terminés",
-                "openmarkets": "Tout",
+                "openmarkets": "Ouvrir",
                 "canceled": "En pause / Annulés",
                 "pendingmarkets": "En cours"
             },
@@ -303,7 +303,7 @@
         },
         "back-to-markets": "Retour aux marchés",
         "back-to-market": "Retour au marché",
-        "no-markets-found": "Aucun marché disponible",
+        "no-markets-found": "Aucun marché disponible pour",
         "view-all-markets": "Voir tous les marchés",
         "resolve-market": {
             "title": "Choisissez une position avec laquelle résoudre le marché",
@@ -516,7 +516,8 @@
             },
             "labels": {
                 "get-started": "Commencer",
-                "language": "Langue"
+                "language": "Langue",
+                "march-madness": "Folie de mars"
             }
         },
         "op-incentivized-tooltip": "Les marchés NFL sont récompensés par 10.000 OP entre les matchs du 14 janvier au 12 février, en fonction du volume proportionnel. Consultez le classement <duneLink>ici</ duneLink>.",
@@ -917,5 +918,118 @@
             "address": "QR code de votre adfesse",
             "copied": "Copié !"
         }
+    },
+    "march-madness": {
+        "tabs": {
+            "home": "Maison",
+            "brackets": "Supports",
+            "leaderboard": "Classement"
+        },
+        "back-to-markets": "Retour aux marchés",
+        "brackets": {
+            "team-2": "Equipe 2",
+            "team-1": "Equipe 1",
+            "submit-text": "Support de finition",
+            "submit": "Support de finition",
+            "submit-modify": "Support de mise à jour",
+            "modal": {
+                "update-text": "Vous avez déjà frappé votre NFT !",
+                "button-mint": "Comme NFT",
+                "finish-text-2": "Vous pouvez maintenant frapper votre NFT !",
+                "finish-text-1": "Bien joué!",
+                "button-update": "Support de mise à jour",
+                "button-minting": "Frappe...",
+                "button-updating": "Mise à jour..."
+            },
+            "stats": {
+                "my-total-score": "Mon score total",
+                "rank": "Rang",
+                "place": "Lieu",
+                "bonus": "Prime",
+                "incomplete": "Incomplet",
+                "status": "Statut",
+                "points": "Points",
+                "my-stats": "Mes stats",
+                "complete": "Complet"
+            },
+            "round-5": "Final",
+            "round-3": "Élite 8",
+            "round-0": "1er tour",
+            "round-4": "Finale 4",
+            "round-1": "2e tour",
+            "round-2": "Doux 16",
+            "modal-mint": {
+                "finish-text-1": "Bien joué!",
+                "button-minting": "Frappe...",
+                "finish-text-2": "Vous pouvez maintenant frapper votre NFT !",
+                "button-mint": "Comme NFT",
+                "button-updating": "Mise à jour...",
+                "button-update": "Support de mise à jour",
+                "update-text": "Vous avez déjà frappé votre NFT !",
+                "finish-text-1-success": "Toutes nos félicitations!",
+                "finish-text-2-success": "Vous venez de frapper votre March Madness Bracket !",
+                "finish-text-3-success": "Rendez-vous sur les <marketsLink>marchés NCAAB</marketsLink> et commencez à gagner des récompenses !",
+                "update-text-1": "Bien fait!",
+                "finish-info": "* Le support March Madness NFT est un NFT Overtime qui permet aux détenteurs de participer à la campagne Overtime March Madness en créant leur propre support de tournoi de prédiction.",
+                "update-text-2": "Nous avons enregistré votre prédiction de parenthèse, veuillez mettre à jour votre parenthèse maintenant !",
+                "update-text-2-success": "Votre support March Madness NFT a été mis à jour !"
+            },
+            "modal-share": {
+                "header": "Mes 4 derniers choix",
+                "user-selection": "J'ai choisi l'{{team}} pour couper les filets à Houston !",
+                "share": "Partager"
+            },
+            "share": "Partagez cette parenthèse"
+        },
+        "regions": {
+            "west": "Ouest",
+            "east": "Est",
+            "south": "Sud",
+            "midwest": "Midwest"
+        },
+        "home": {
+            "text-2b": "Résultat des huitièmes de finale correctement prédit : 2 % de bonus",
+            "text-2c": "Résultat des huitièmes de finale correctement prédit : 4 % de bonus",
+            "text-2e": "Résultat du tour de 4 prédit correctement : 10 % de bonus",
+            "text-2": "Une autre façon de calculer le bonus serait de le baser sur le tour, car plus un match est avancé dans la phase d'élimination, plus il est difficile de prédire le résultat (car vous devez également deviner correctement tous les jeux précédents), alors peut-être :",
+            "button-connect": "Connecter le portefeuille",
+            "text-1": "March Madness est un événement NCAAB dans lequel 68 équipes s'affrontent sous forme d'élimination pour le championnat. L'événement commence le 14 mars au cours duquel 8 équipes s'affrontent pour les 4 dernières places dans les 64 phases à élimination directe. La frappe commence le 12 mars et dure jusqu'au 16 mars lorsque l'événement principal commence.",
+            "button-create": "Créer un support",
+            "title": "Bienvenue au tournoi March Madness",
+            "time-info": "Il vous reste {{days}} JOURS POUR faire une prédiction",
+            "text-2a": "Résultat des huitièmes de finale correctement prédit : 1 % de bonus",
+            "text-2g": "Bonus maximum ici : 32*1+16*2+8*4+4*7+2*10+20=164 %",
+            "text-2d": "Résultat du huitième de finale correctement prédit : 7 % de bonus",
+            "text-2f": "Résultat final du jeu prédit correctement : 20 % de bonus",
+            "text-3b": "Final Four - 10%",
+            "text-5": "Plus de détails dans notre <mediumLink>article de blog Medium</mediumLink>.",
+            "text-3f": "Premier tour - 1%",
+            "text-3e": "Deuxième tour - 2 %",
+            "text-3": "Pour le <bold>Premier pool</bold>, 10 000 OP seront répartis entre tous les volumes générés par les jeux March Madness, y compris tous les types de marché et parlay avec au moins un jeu NCAAB. Les détenteurs de la tranche March Madness NFT sont éligibles pour un coup de pouce commercial. Chaque jeu correct est éligible pour un boost à plusieurs niveaux, avec un maximum de 164 %.",
+            "text-3a": "Championnat - 20%",
+            "text-3d": "Doux 16 - 4%",
+            "text-3c": "Élite Huit - 7%",
+            "text-4": "Le <bold>deuxième pool</bold> sera divisé entre les détenteurs de la fourchette la plus précise avec une référence de volume de 10 sUSD sur les jeux March Madness. Les détenteurs qui satisfont à l'exigence de volume peuvent suivre leur position dans le classement du meilleur groupe où les gagnants se partageront un pool de récompenses de 3 000 OP."
+        },
+        "mobile-message": "La page n'est disponible que sur les grands écrans. Veuillez utiliser la version de bureau !",
+        "leaderboard": {
+            "address": "Adresse",
+            "volume": "Volume",
+            "owner": "Propriétaire",
+            "base-volume": "Base",
+            "bonus-volume": "Prime",
+            "player": "Joueur",
+            "rewards": "Récompenses",
+            "search-placeholder": "RECHERCHER L'ADRESSE DU PORTEFEUILLE",
+            "no-data": "Aucune donnée actuellement disponible",
+            "guessed-games": "Jeux devinés",
+            "rank": "Rang",
+            "tooltip-base-volume-table": "Volume généré par les matchs de basket-ball de la NCAA",
+            "tooltip-bonus-volume-table": "Volume bonus calculé en fonction de vos sélections de tranches",
+            "tooltip-correct-correct-table": "Nombre de jeux correctement devinés dans votre fourchette",
+            "tooltip-rewards-volume-table": "10 000 OP (30 000 Thales sur arb) seront divisés en fonction du volume au prorata",
+            "tooltip-rewards-correct-table": "3 000 OP (10k thales sur arb) seront répartis entre les 10 premiers"
+        },
+        "test-info": "La phase de tests est maintenant ouverte avec les équipes échantillons, la sélection 2023 s'ouvre le 12 mars !"
     }
 }

@@ -114,7 +114,15 @@ export const QUERY_KEYS = {
     Bungee: {
         Tokens: () => ['bungee', 'tokens'],
     },
+    MarchMadness: (walletAddress: string, networkId: NetworkId) => ['marchMadness', walletAddress, networkId],
     Banners: (networkId: NetworkId) => ['banners', networkId],
+    MarchMadnessCompetition: {
+        LeaderboardByVolume: (networkId: NetworkId) => ['marchMadnessLeaderboardByVolume ', networkId],
+        LeaderboardByNumberOfCorrectPredictions: (networkId: NetworkId) => [
+            'marchMadnessLeaderboardByCorrectPred',
+            networkId,
+        ],
+    },
 };
 
 export default QUERY_KEYS;

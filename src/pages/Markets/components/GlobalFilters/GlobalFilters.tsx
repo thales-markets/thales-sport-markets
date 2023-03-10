@@ -15,10 +15,6 @@ type GlobalFiltersProps = {
     setDateParam: (value: any) => void;
     setGlobalFilter: (value: any) => void;
     setGlobalFilterParam: (value: any) => void;
-    setTagFilter: (value: any) => void;
-    setTagParam: (value: any) => void;
-    setSportFilter: (value: any) => void;
-    setSportParam: (value: any) => void;
     globalFilter: GlobalFiltersEnum;
     dateFilter: Date | number;
     sportFilter: SportFilterEnum;
@@ -30,10 +26,6 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
     setDateParam,
     setGlobalFilter,
     setGlobalFilterParam,
-    setTagFilter,
-    setTagParam,
-    setSportFilter,
-    setSportParam,
     globalFilter,
     dateFilter,
     sportFilter,
@@ -100,14 +92,6 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                                 isMobile={isMobile}
                                 cancelled={filterItem == GlobalFiltersEnum.Canceled}
                                 onClick={() => {
-                                    if (filterItem === GlobalFiltersEnum.OpenMarkets) {
-                                        setDateFilter(0);
-                                        setDateParam('');
-                                        setTagFilter([]);
-                                        setTagParam('');
-                                        setSportFilter(SportFilterEnum.All);
-                                        setSportParam(SportFilterEnum.All);
-                                    }
                                     setGlobalFilter(filterItem);
                                     setGlobalFilterParam(filterItem);
                                 }}

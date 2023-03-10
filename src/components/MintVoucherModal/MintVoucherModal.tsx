@@ -235,6 +235,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
             title={t('common.voucher.modal.title', { currencyKey: getDefaultColleteralForNetwork(networkId) })}
             onClose={onClose}
             shouldCloseOnOverlayClick={false}
+            customStyle={{ overlay: { zIndex: 200 } }}
         >
             <Container>
                 <Description>

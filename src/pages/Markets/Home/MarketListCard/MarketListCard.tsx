@@ -128,9 +128,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             }
                         />
                         <MatchTimeLabel>
-                            {isEnetpulseSport && liveResultInfo?.tournamentName ? (
+                            {isEnetpulseSport && liveResultInfo ? (
                                 <>
-                                    {'| ' + liveResultInfo?.tournamentName}{' '}
+                                    {liveResultInfo.tournamentName ? '| ' + liveResultInfo.tournamentName : ''}
+                                    {liveResultInfo.tournamentRound ? ' | ' + liveResultInfo.tournamentRound : ''}
                                     <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={12} marginLeft={2} />
                                 </>
                             ) : (

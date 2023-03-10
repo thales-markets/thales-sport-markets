@@ -14,4 +14,5 @@ export const LOCAL_STORAGE_KEYS = {
     STOP_PULSING: 'stopPulsing',
     FAVOURITE_LEAGUES: 'favouriteLeagues',
     PARLAY: 'parlay',
+    BRACKETS: 'brackets',
 };

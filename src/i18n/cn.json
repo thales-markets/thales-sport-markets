@@ -188,7 +188,7 @@
         "filter-label": {
             "global": {
                 "allmarkets": "所有比赛",
-                "openmarkets": "开放中的比赛",
+                "openmarkets": "打开",
                 "resolvedmarkets": "已结束的比赛",
                 "yourpositions": "你参与的比赛",
                 "claim": "结算参与的比赛",
@@ -223,7 +223,7 @@
         },
         "back-to-markets": "查看其他比赛",
         "back-to-market": "返回市场页面",
-        "no-markets-found": "没有符合条件的比赛",
+        "no-markets-found": "找不到匹配项",
         "view-all-markets": "查看所有比赛",
         "table": {
             "title": "最近的竞猜记录",
@@ -418,7 +418,8 @@
             },
             "labels": {
                 "language": "语言",
-                "get-started": "开始吧"
+                "get-started": "开始吧",
+                "march-madness": "疯狂三月"
             }
         },
         "incentivized-markets": "激励市场",
@@ -819,5 +820,118 @@
             "address": "Your address QR code",
             "copied": "已复制！"
         }
+    },
+    "march-madness": {
+        "tabs": {
+            "leaderboard": "排行榜",
+            "home": "家",
+            "brackets": "括号"
+        },
+        "back-to-markets": "回到市场",
+        "brackets": {
+            "team-2": "团队 2",
+            "team-1": "团队 1",
+            "submit-text": "完成括号",
+            "submit": "完成括号",
+            "submit-modify": "更新支架",
+            "modal": {
+                "finish-text-1": "做得好！",
+                "button-minting": "铸币...",
+                "button-mint": "喜欢NFT",
+                "button-update": "更新支架",
+                "update-text": "你已经铸造了你的 NFT！",
+                "button-updating": "更新中...",
+                "finish-text-2": "现在你可以铸造你的 NFT 了！"
+            },
+            "stats": {
+                "rank": "秩",
+                "incomplete": "不完整",
+                "my-stats": "我的数据",
+                "complete": "完全的",
+                "status": "地位",
+                "bonus": "奖金",
+                "place": "地方",
+                "my-total-score": "我的总分",
+                "points": "积分"
+            },
+            "round-1": "第二轮",
+            "round-5": "最终的",
+            "round-2": "甜蜜 16",
+            "round-0": "第一轮",
+            "round-3": "精英8",
+            "round-4": "决赛 4",
+            "modal-mint": {
+                "finish-text-1": "做得好！",
+                "button-updating": "更新中...",
+                "update-text": "你已经铸造了你的 NFT！",
+                "button-minting": "铸币...",
+                "finish-text-2": "现在你可以铸造你的 NFT 了！",
+                "button-update": "更新支架",
+                "button-mint": "喜欢NFT",
+                "finish-text-1-success": "恭喜！",
+                "update-text-1": "做得很好！",
+                "finish-text-2-success": "您刚刚铸造了您的 March Madness 支架！",
+                "update-text-2": "我们保存了您的括号预测，请立即更新您的括号！",
+                "finish-text-3-success": "前往 <marketsLink>NCAAB 市场</marketsLink> 并开始赚取奖励！",
+                "finish-info": "*March Madness 支架 NFT 是一种 Overtime NFT，它允许持有者通过创建自己的预测锦标赛支架来参与 Overtime March Madness 活动。",
+                "update-text-2-success": "您的 March Madness 支架 NFT 已更新！"
+            },
+            "modal-share": {
+                "share": "分享",
+                "user-selection": "我选择了 {{team}} 在休斯敦削减网络！",
+                "header": "我最后的 4 个选择"
+            },
+            "share": "分享这个支架"
+        },
+        "regions": {
+            "west": "西方",
+            "east": "东方",
+            "midwest": "中西部",
+            "south": "南"
+        },
+        "home": {
+            "time-info": "您还有 {{days}} 天时间进行预测",
+            "button-connect": "连接钱包",
+            "text-1": "March Madness 是一项 NCAAB 赛事，有 68 支球队以淘汰赛形式争夺冠军。该赛事于 3 月 14 日开始，8 支球队将在 64 场淘汰赛阶段争夺最后 4 个名额。铸造从 3 月 12 日开始，一直持续到 3 月 16 日主赛事开始。",
+            "title": "欢迎来到疯狂三月锦标赛",
+            "text-2": "计算奖金的另一种方法是将其基于回合，因为进入淘汰阶段的比赛越难预测结果（因为您也必须正确猜测所有之前的比赛），所以也许:",
+            "text-2b": "正确预测 32 轮比赛结果：2% 奖金",
+            "text-2f": "正确预测最终游戏结果：20% 奖金",
+            "text-2a": "正确预测 64 轮比赛结果：1% 奖金",
+            "text-2e": "正确预测第 4 轮比赛结果：10% 奖金",
+            "text-2d": "正确预测 8 轮比赛结果：7% 奖金",
+            "text-2c": "正确预测 16 强比赛结果：4% 奖金",
+            "button-create": "创建支架",
+            "text-2g": "这里的最大加成：32*1+16*2+8*4+4*7+2*10+20=164%",
+            "text-3f": "第一轮 - 1%",
+            "text-3": "对于<bold>第一池</bold>，10,000 OP 将分配给通过 March Madness 游戏驱动的所有数量，包括所有市场类型和与至少一个 NCAAB 游戏的连赢。 March Madness 支架 NFT 的持有者有资格获得交易提升。每个正确的游戏都有资格获得分层提升，最高可达 164%。",
+            "text-3d": "甜 16 - 4%",
+            "text-3a": "冠军 - 20%",
+            "text-3e": "第二轮 - 2%",
+            "text-5": "更多详细信息，请参阅我们的 <mediumLink>Medium 博客文章</mediumLink>。",
+            "text-3b": "四强 - 10%",
+            "text-4": "<bold>第二个池子</bold> 将在 March Madness 游戏中以 10 sUSD 交易量为基准的最准确支架的持有者之间分配。满足数量要求的持有者可以跟踪他们在最佳组别排行榜中的位置，获胜者将在其中瓜分 3,000 OP 奖励池。",
+            "text-3c": "精英八强 - 7%"
+        },
+        "mobile-message": "页面仅在更大的屏幕上可用。请使用桌面版！",
+        "leaderboard": {
+            "address": "地址",
+            "rewards": "奖励",
+            "base-volume": "根据",
+            "volume": "体积",
+            "owner": "所有者",
+            "bonus-volume": "奖金",
+            "player": "播放器",
+            "search-placeholder": "搜索钱包地址",
+            "rank": "秩",
+            "guessed-games": "猜谜游戏",
+            "no-data": "目前没有可用数据",
+            "tooltip-base-volume-table": "通过 NCAA 篮球比赛推动销量",
+            "tooltip-bonus-volume-table": "根据您的括号选择计算的奖金量",
+            "tooltip-correct-correct-table": "在您的括号中正确猜出的游戏数量",
+            "tooltip-rewards-correct-table": "3,000 OP (10k thales on arb) 将分配给前 10 名",
+            "tooltip-rewards-volume-table": "10,000 OP（30k Thales on arb）将按比例分配"
+        },
+        "test-info": "测试阶段现已开放样本团队，2023 年选择将于 3 月 12 日开放！"
     }
 }

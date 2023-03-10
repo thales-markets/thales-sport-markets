@@ -357,4 +357,5 @@ export type SportMarketLiveResult = {
     displayClock: string;
     sportId: number;
     tournamentName?: string;
+    tournamentRound?: string;
 };
