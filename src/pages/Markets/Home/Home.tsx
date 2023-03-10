@@ -510,7 +510,10 @@ const Home: React.FC = () => {
                         )}
                         {finalMarkets.length === 0 ? (
                             <NoMarketsContainer>
-                                <NoMarketsLabel>{t('market.no-markets-found')}</NoMarketsLabel>
+                                <NoMarketsLabel>
+                                    {t('market.no-markets-found')}{' '}
+                                    {t(`market.filter-label.sport.${sportFilter.toLowerCase()}`)}
+                                </NoMarketsLabel>
                                 <Button onClick={resetFilters}>{t('market.view-all-markets')}</Button>
                             </NoMarketsContainer>
                         ) : (

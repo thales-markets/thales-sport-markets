@@ -223,7 +223,7 @@
         },
         "back-to-markets": "查看其他比赛",
         "back-to-market": "返回市场页面",
-        "no-markets-found": "没有符合条件的比赛",
+        "no-markets-found": "找不到匹配项",
         "view-all-markets": "查看所有比赛",
         "table": {
             "title": "最近的竞猜记录",

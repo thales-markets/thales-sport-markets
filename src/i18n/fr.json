@@ -303,7 +303,7 @@
         },
         "back-to-markets": "Retour aux marchés",
         "back-to-market": "Retour au marché",
-        "no-markets-found": "Aucun marché disponible",
+        "no-markets-found": "Aucun marché disponible pour",
         "view-all-markets": "Voir tous les marchés",
         "resolve-market": {
             "title": "Choisissez une position avec laquelle résoudre le marché",
