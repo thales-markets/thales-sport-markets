@@ -8,7 +8,7 @@ type LeaderboardByGuessedCorrectlyResponse = {
     bonusVolume: number;
     totalCorrectedPredictions: number;
     rank: number;
-    rewards: number;
+    rewards: string;
 }[];
 
 const useLoeaderboardByGuessedCorrectlyQuery = (
