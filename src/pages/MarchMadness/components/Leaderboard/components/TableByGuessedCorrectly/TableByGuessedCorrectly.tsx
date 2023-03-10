@@ -20,6 +20,7 @@ import { truncateAddress } from 'utils/formatters/string';
 import useLoeaderboardByGuessedCorrectlyQuery from 'queries/marchMadness/useLoeaderboardByGuessedCorrectlyQuery';
 import { useTranslation } from 'react-i18next';
 import Tooltip from 'components/Tooltip';
+import { TooltipStyle } from '../TableByVolume/TableByVolume';
 
 const TableByGuessedCorrectly: React.FC = () => {
     const { t } = useTranslation();
@@ -41,7 +42,12 @@ const TableByGuessedCorrectly: React.FC = () => {
                     <>
                         {t('march-madness.leaderboard.guessed-games')}
                         <Tooltip
-                            overlay={<OverlayContainer>{'Test test test test'}</OverlayContainer>}
+                            overlayInnerStyle={TooltipStyle}
+                            overlay={
+                                <OverlayContainer>
+                                    {t('march-madness.leaderboard.tooltip-correct-correct-table')}
+                                </OverlayContainer>
+                            }
                             iconFontSize={14}
                             marginLeft={2}
                             top={0}
@@ -55,7 +61,12 @@ const TableByGuessedCorrectly: React.FC = () => {
                     <>
                         {t('march-madness.leaderboard.rewards')}
                         <Tooltip
-                            overlay={<OverlayContainer>{'Test test test test'}</OverlayContainer>}
+                            overlayInnerStyle={TooltipStyle}
+                            overlay={
+                                <OverlayContainer>
+                                    {t('march-madness.leaderboard.tooltip-rewards-correct-table')}
+                                </OverlayContainer>
+                            }
                             iconFontSize={14}
                             marginLeft={2}
                             top={0}

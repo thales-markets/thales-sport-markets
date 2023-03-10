@@ -23,6 +23,8 @@ import {
     TableRowCell,
 } from './styled-components';
 
+export const TooltipStyle = { backgroundColor: '#021631', border: '1px solid #005EB8' };
+
 const TableByVolume: React.FC = () => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -50,7 +52,12 @@ const TableByVolume: React.FC = () => {
                     <>
                         {t('march-madness.leaderboard.base-volume')}
                         <Tooltip
-                            overlay={<OverlayContainer>{'Test test test test'}</OverlayContainer>}
+                            overlayInnerStyle={TooltipStyle}
+                            overlay={
+                                <OverlayContainer>
+                                    {t('march-madness.leaderboard.tooltip-base-volume-table')}
+                                </OverlayContainer>
+                            }
                             iconFontSize={14}
                             marginLeft={2}
                             top={0}
@@ -67,7 +74,12 @@ const TableByVolume: React.FC = () => {
                     <>
                         {t('march-madness.leaderboard.bonus-volume')}
                         <Tooltip
-                            overlay={<OverlayContainer>{'Test test test test'}</OverlayContainer>}
+                            overlayInnerStyle={TooltipStyle}
+                            overlay={
+                                <OverlayContainer>
+                                    {t('march-madness.leaderboard.tooltip-bonus-volume-table')}
+                                </OverlayContainer>
+                            }
                             iconFontSize={14}
                             marginLeft={2}
                             top={0}
@@ -84,7 +96,12 @@ const TableByVolume: React.FC = () => {
                     <>
                         {t('march-madness.leaderboard.rewards')}
                         <Tooltip
-                            overlay={<OverlayContainer>{'Test test test test'}</OverlayContainer>}
+                            overlayInnerStyle={TooltipStyle}
+                            overlay={
+                                <OverlayContainer>
+                                    {t('march-madness.leaderboard.tooltip-rewards-volume-table')}
+                                </OverlayContainer>
+                            }
                             iconFontSize={14}
                             marginLeft={2}
                             top={0}

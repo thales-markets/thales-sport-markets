@@ -7,6 +7,9 @@ export const Table = styled.table`
 
 export const OverlayContainer = styled.div`
     text-align: center;
+    font-family: 'Oswald' !important;
+    font-weight: 400;
+    font-size: 12px;
 `;
 
 export const TableHeaderCell = styled.th`
