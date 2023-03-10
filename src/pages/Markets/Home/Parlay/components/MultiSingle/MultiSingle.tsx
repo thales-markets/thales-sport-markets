@@ -35,7 +35,7 @@ import {
     roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { formatMarketOdds, getBonus, getPositionOdds } from 'utils/markets';
-import { checkAllowance } from 'utils/network';
+import { checkAllowance, getMaxGasLimitForNetwork, isMultiCollateralSupportedForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -133,6 +133,8 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
         };
     }, []);
 
+    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
+
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
@@ -199,13 +201,14 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                     parsedAmount
                 );
 
-                if (selectedStableIndex !== COLLATERALS_INDEX.sUSD) {
+                if (isMultiCollateralSupported && selectedStableIndex !== COLLATERALS_INDEX.sUSD) {
                     return ammQuote[0];
                 }
+
                 return ammQuote;
             }
         },
-        [networkId, selectedStableIndex]
+        [isMultiCollateralSupported, networkId, selectedStableIndex]
     );
 
     const fetchSkew = useCallback(async (amountForQuote: number, market: ParlaysMarket) => {
@@ -361,6 +364,8 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
         multiSingleAmounts,
         fetchSkew,
         isFetching,
+        isMultiCollateralSupported,
+        networkId,
     ]);
 
     const availablePerPositionMultiQuery = useAvailablePerPositionMultiQuery(markets, {
@@ -378,7 +383,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
         if (sportsAMMContract && signer) {
             let collateralContractWithSigner: ethers.Contract | undefined;
 
-            if (selectedStableIndex !== 0 && multipleCollateral) {
+            if (selectedStableIndex !== 0 && multipleCollateral && isMultiCollateralSupported) {
                 collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
             } else {
                 collateralContractWithSigner = sUSDContract?.connect(signer);
@@ -388,7 +393,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                 try {
                     const parsedTicketPrice = getAmountForApproval(
                         selectedStableIndex,
-                        Number(calculatedTotalBuyIn).toString()
+                        Number(usdAmountValue).toString()
                     );
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
@@ -402,7 +407,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                     console.log(e);
                 }
             };
-            if (isWalletConnected && calculatedTotalBuyIn) {
+            if (isWalletConnected && usdAmountValue) {
                 isVoucherSelected ? setHasAllowance(true) : getAllowance();
             }
         }
@@ -411,9 +416,10 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
         isWalletConnected,
         hasAllowance,
         isAllowing,
-        calculatedTotalBuyIn,
+        usdAmountValue,
         selectedStableIndex,
         isVoucherSelected,
+        isMultiCollateralSupported,
     ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
@@ -424,7 +430,12 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
             try {
                 let collateralContractWithSigner: ethers.Contract | undefined;
 
-                if (selectedStableIndex !== 0 && multipleCollateral && multipleCollateral[selectedStableIndex]) {
+                if (
+                    selectedStableIndex !== 0 &&
+                    multipleCollateral &&
+                    multipleCollateral[selectedStableIndex] &&
+                    isMultiCollateralSupported
+                ) {
                     collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
                 } else {
                     collateralContractWithSigner = sUSDContract?.connect(signer);
@@ -433,7 +444,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                 const addressToApprove = sportsAMMContract.address;
 
                 const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
-                    gasLimit: MAX_GAS_LIMIT,
+                    gasLimit: getMaxGasLimitForNetwork(networkId),
                 })) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
                 const txResult = await tx.wait();
