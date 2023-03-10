@@ -233,3 +233,15 @@ export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS = [
     53,
     50,
 ];
+
+export const ENETPULSE_ROUNDS: Record<number, string> = {
+    [1]: 'no round',
+    [2]: 'Semi Finals',
+    [3]: 'Quarter Finals',
+    [4]: '1/8',
+    [5]: '1/16',
+    [6]: '1/32',
+    [7]: '1/64',
+    [8]: '1/128',
+    [9]: 'Final',
+};

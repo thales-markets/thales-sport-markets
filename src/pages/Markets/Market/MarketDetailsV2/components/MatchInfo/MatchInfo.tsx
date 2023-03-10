@@ -90,9 +90,10 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo }) => 
                             )}
                         </MatchTimeLabel>
                         <MatchTime>{formatShortDateWithTime(market.maturityDate)}</MatchTime>
-                        {liveResultInfo && liveResultInfo.tournamentName ? (
+                        {liveResultInfo ? (
                             <>
-                                {liveResultInfo.tournamentName}
+                                {liveResultInfo.tournamentName ? liveResultInfo.tournamentName : ''}
+                                {liveResultInfo.tournamentRound ? ' | ' + liveResultInfo.tournamentRound : ''}
                                 <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={14} marginLeft={2} />{' '}
                             </>
                         ) : (
