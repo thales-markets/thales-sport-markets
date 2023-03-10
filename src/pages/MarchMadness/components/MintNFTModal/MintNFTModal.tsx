@@ -13,13 +13,21 @@ import { TAGS_FLAGS, TAGS_LIST } from 'constants/tags';
 type MintNFTModalProps = {
     isMinted: boolean;
     isMinting: boolean;
+    isUpdated: boolean;
     isUpdating: boolean;
     isError: boolean;
     handleSubmit: () => void;
     handleClose: () => void;
 };
 
-const MintNFTModal: React.FC<MintNFTModalProps> = ({ isMinted, isMinting, isUpdating, handleSubmit, handleClose }) => {
+const MintNFTModal: React.FC<MintNFTModalProps> = ({
+    isMinted,
+    isMinting,
+    isUpdated,
+    isUpdating,
+    handleSubmit,
+    handleClose,
+}) => {
     const { t } = useTranslation();
 
     const [isUpdate] = useState(isMinted);
@@ -41,14 +49,28 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({ isMinted, isMinting, isUpda
                     <TextWrapper>
                         <Text fontSize={50} lineHeight={60} letterSpacing={2} margin="30px 0 0 0">
                             {isMinted
-                                ? isUpdate
+                                ? isUpdated
+                                    ? t('march-madness.brackets.modal-mint.finish-text-1-success')
+                                    : isUpdate
                                     ? t('march-madness.brackets.modal-mint.update-text-1')
                                     : t('march-madness.brackets.modal-mint.finish-text-1-success')
                                 : t('march-madness.brackets.modal-mint.finish-text-1')}
                         </Text>
-                        <Text margin={isMinted ? (isUpdate ? '65px 0 0 0' : '-10px 0 0 0') : '70px 0 0 0'}>
+                        <Text
+                            margin={
+                                isMinted
+                                    ? isUpdated
+                                        ? '-10px 0 0 0'
+                                        : isUpdate
+                                        ? '65px 0 0 0'
+                                        : '-10px 0 0 0'
+                                    : '70px 0 0 0'
+                            }
+                        >
                             {isMinted ? (
-                                isUpdate ? (
+                                isUpdated ? (
+                                    t('march-madness.brackets.modal-mint.update-text-2-success')
+                                ) : isUpdate ? (
                                     t('march-madness.brackets.modal-mint.update-text-2')
                                 ) : (
                                     t('march-madness.brackets.modal-mint.finish-text-2-success')
@@ -58,12 +80,12 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({ isMinted, isMinting, isUpda
                             )}
                         </Text>
                     </TextWrapper>
-                    {isMinted && !isUpdate && (
+                    {((isMinted && !isUpdate) || isUpdated) && (
                         <NFTImageWrapper>
                             <NftImage alt="March Madness NFT" src={nftImage} />
                         </NFTImageWrapper>
                     )}
-                    {(!isMinted || isUpdate) && (
+                    {(!isMinted || isUpdate) && !isUpdated && (
                         <ButtonWrapper>
                             <Button style={buttonStyle} disabled={isMinting || isUpdating} onClick={handleSubmit}>
                                 {isMinted
@@ -79,7 +101,7 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({ isMinted, isMinting, isUpda
                     {!isMinted && !isUpdate && (
                         <TextInfo>{t('march-madness.brackets.modal-mint.finish-info')}</TextInfo>
                     )}
-                    {isMinted && !isUpdate && (
+                    {((isMinted && !isUpdate) || isUpdated) && (
                         <Text margin="40px 0">
                             <Trans
                                 i18nKey="march-madness.brackets.modal-mint.finish-text-3-success"

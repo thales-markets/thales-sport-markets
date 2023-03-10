@@ -869,7 +869,8 @@
                 "finish-text-2-success": "คุณเพิ่งสร้าง March Madness Bracket!",
                 "finish-text-1-success": "ยินดีด้วย!",
                 "update-text-2": "เราได้บันทึกการคาดคะเนในวงเล็บของคุณแล้ว โปรดอัปเดตวงเล็บตอนนี้!",
-                "update-text-1": "ทำได้ดีมาก!"
+                "update-text-1": "ทำได้ดีมาก!",
+                "update-text-2-success": "วง March Madness NFT ของคุณได้รับการอัปเดตแล้ว!"
             },
             "modal-share": {
                 "header": "4 อันดับสุดท้ายของผม",
@@ -920,7 +921,12 @@
             "bonus-volume": "โบนัส",
             "base-volume": "ฐาน",
             "search-placeholder": "ค้นหาที่อยู่กระเป๋าเงิน",
-            "guessed-games": "เกมเดา"
+            "guessed-games": "เกมเดา",
+            "tooltip-rewards-correct-table": "3,000 OP (10k thales on arb) จะถูกแบ่งระหว่าง 10 อันดับแรก",
+            "tooltip-rewards-volume-table": "10,000 OP (30k Thales บน arb) จะถูกแบ่งตามปริมาณตามสัดส่วน",
+            "tooltip-correct-correct-table": "จำนวนเกมที่เดาถูกในวงเล็บของคุณ",
+            "tooltip-bonus-volume-table": "ปริมาณโบนัสคำนวณจากการเลือกกลุ่มของคุณ",
+            "tooltip-base-volume-table": "ปริมาณขับเคลื่อนผ่านเกม NCAA Basketball"
         },
         "test-info": "ขั้นตอนการทดสอบได้เปิดขึ้นแล้วพร้อมกับทีมตัวอย่าง การคัดเลือกในปี 2023 จะเปิดขึ้นในวันที่ 12 มีนาคม!"
     }

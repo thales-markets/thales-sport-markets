@@ -65,6 +65,7 @@ const Brackets: React.FC = () => {
     const [showShareModal, setShowShareModal] = useState(false);
     const [isMinting, setIsMinting] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
+    const [isUpdated, setIsUpdated] = useState(false);
     const [isMintError, setIsMintError] = useState(false);
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
@@ -371,6 +372,9 @@ const Brackets: React.FC = () => {
 
                 if (txResult && txResult.transactionHash) {
                     refetchAfterMarchMadnessMint(walletAddress, networkId);
+                    if (isBracketMinted) {
+                        setIsUpdated(true);
+                    }
                     setIsBracketMinted(true);
                     setIsSubmitDisabled(true);
                     setIsUpdating(false);
@@ -392,15 +396,15 @@ const Brackets: React.FC = () => {
 
         return (
             <MyStats>
-                <StatsColumn width="50%">
+                <StatsColumn width="35%">
                     <StatsText fontWeight={600} margin="0 0 0 21px">
                         {t('march-madness.brackets.stats.my-stats')}
                     </StatsText>
                 </StatsColumn>
-                <StatsColumn width="50%">
+                <StatsColumn width="65%">
                     <StatsRow margin="0 0 10px 0" justify="normal">
                         <StatsText>{t('march-madness.brackets.stats.status')}:</StatsText>
-                        <StatsText margin="0 0 0 5px" fontWeight={700}>
+                        <StatsText margin="0 10px 0 auto" fontWeight={700}>
                             {isFinalFinished
                                 ? t('march-madness.brackets.stats.complete')
                                 : t('march-madness.brackets.stats.incomplete')}
@@ -408,7 +412,7 @@ const Brackets: React.FC = () => {
                     </StatsRow>
                     <StatsRow margin="10px 0 0 0" justify="normal">
                         <StatsText>{t('march-madness.brackets.stats.rank')}:</StatsText>
-                        <StatsText margin="0 0 0 17px" fontWeight={700}>
+                        <StatsText margin="0 0 0 18px" fontWeight={700}>
                             {isFirstMatchFinished ? myRank + ' ' + t('march-madness.brackets.stats.place') : 'N/A'}
                         </StatsText>
                     </StatsRow>
@@ -659,10 +663,14 @@ const Brackets: React.FC = () => {
                         <MintNFTModal
                             isMinted={isBracketMinted}
                             isMinting={isMinting}
+                            isUpdated={isUpdated}
                             isUpdating={isUpdating}
                             isError={isMintError}
                             handleSubmit={handleSubmit}
-                            handleClose={() => setShowMintNFTModal(false)}
+                            handleClose={() => {
+                                setIsUpdated(false);
+                                setShowMintNFTModal(false);
+                            }}
                         />
                     )}
                     {showShareModal && (

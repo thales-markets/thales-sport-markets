@@ -873,7 +873,8 @@
                 "finish-text-1-success": "¡Felicidades!",
                 "finish-info": "*El soporte NFT de March Madness es un NFT de tiempo extra que permite a los titulares participar en la campaña Overtime March Madness creando su propio soporte de torneo de predicción.",
                 "update-text-2": "Guardamos su predicción de paréntesis, ¡actualice su paréntesis ahora!",
-                "finish-text-2-success": "¡Acabas de acuñar tu March Madness Bracket!"
+                "finish-text-2-success": "¡Acabas de acuñar tu March Madness Bracket!",
+                "update-text-2-success": "¡Tu soporte NFT de March Madness ha sido actualizado!"
             },
             "modal-share": {
                 "header": "Mis 4 últimas elecciones",
@@ -924,7 +925,12 @@
             "search-placeholder": "BUSCAR DIRECCIÓN DE CARTERA",
             "bonus-volume": "Prima",
             "guessed-games": "juegos adivinados",
-            "no-data": "No hay datos disponibles actualmente"
+            "no-data": "No hay datos disponibles actualmente",
+            "tooltip-rewards-volume-table": "10,000 OP (30k Thales en arbitraje) se dividirán en función del volumen prorrateado",
+            "tooltip-correct-correct-table": "Número de juegos adivinados correctamente en su paréntesis",
+            "tooltip-bonus-volume-table": "Volumen de bonificación calculado en función de sus selecciones de soporte",
+            "tooltip-base-volume-table": "Volumen impulsado a través de los juegos de baloncesto de la NCAA",
+            "tooltip-rewards-correct-table": "3,000 OP (10k thales en arb) se dividirán entre los 10 mejores"
         },
         "test-info": "Ya está abierta la fase de pruebas con los equipos de muestra, ¡la selección 2023 se abre el 12 de marzo!"
     }

@@ -873,7 +873,8 @@
                 "finish-text-2-success": "您刚刚铸造了您的 March Madness 支架！",
                 "update-text-2": "我们保存了您的括号预测，请立即更新您的括号！",
                 "finish-text-3-success": "前往 <marketsLink>NCAAB 市场</marketsLink> 并开始赚取奖励！",
-                "finish-info": "*March Madness 支架 NFT 是一种 Overtime NFT，它允许持有者通过创建自己的预测锦标赛支架来参与 Overtime March Madness 活动。"
+                "finish-info": "*March Madness 支架 NFT 是一种 Overtime NFT，它允许持有者通过创建自己的预测锦标赛支架来参与 Overtime March Madness 活动。",
+                "update-text-2-success": "您的 March Madness 支架 NFT 已更新！"
             },
             "modal-share": {
                 "share": "分享",
@@ -924,7 +925,12 @@
             "search-placeholder": "搜索钱包地址",
             "rank": "秩",
             "guessed-games": "猜谜游戏",
-            "no-data": "目前没有可用数据"
+            "no-data": "目前没有可用数据",
+            "tooltip-base-volume-table": "通过 NCAA 篮球比赛推动销量",
+            "tooltip-bonus-volume-table": "根据您的括号选择计算的奖金量",
+            "tooltip-correct-correct-table": "在您的括号中正确猜出的游戏数量",
+            "tooltip-rewards-correct-table": "3,000 OP (10k thales on arb) 将分配给前 10 名",
+            "tooltip-rewards-volume-table": "10,000 OP（30k Thales on arb）将按比例分配"
         },
         "test-info": "测试阶段现已开放样本团队，2023 年选择将于 3 月 12 日开放！"
     }

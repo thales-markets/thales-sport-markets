@@ -876,7 +876,8 @@
                 "update-text-1": "Отлично сделано!",
                 "finish-text-2-success": "Вы только что отчеканили скобку «Мартовское безумие»!",
                 "finish-text-1-success": "Поздравляем!",
-                "finish-info": "*Сетка March Madness NFT — это Overtime NFT, который позволяет владельцам участвовать в кампании Overtime March Madness, создавая свою собственную турнирную сетку предсказаний."
+                "finish-info": "*Сетка March Madness NFT — это Overtime NFT, который позволяет владельцам участвовать в кампании Overtime March Madness, создавая свою собственную турнирную сетку предсказаний.",
+                "update-text-2-success": "Ваша сетка March Madness NFT была обновлена!"
             },
             "modal-share": {
                 "user-selection": "Я выбрал {{team}}, чтобы перерезать сети в Хьюстоне!",
