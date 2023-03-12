@@ -4,10 +4,10 @@ export const NUMBER_OF_MATCHES = 63;
 export const NUMBER_OF_TEAMS = 64;
 export const NUMBER_OF_ROUNDS = 6;
 
-export const FIRST_ROUND_EAST_MATCH_IDS = [0, 1, 2, 3, 4, 5, 6, 7];
-export const FIRST_ROUND_WEST_MATCH_IDS = [8, 9, 10, 11, 12, 13, 14, 15];
-export const FIRST_ROUND_SOUTH_MATCH_IDS = [16, 17, 18, 19, 20, 21, 22, 23];
-export const FIRST_ROUND_MIDWEST_MATCH_IDS = [24, 25, 26, 27, 28, 29, 30, 31];
+export const FIRST_ROUND_SOUTH_MATCH_IDS = [0, 1, 2, 3, 4, 5, 6, 7];
+export const FIRST_ROUND_EAST_MATCH_IDS = [8, 9, 10, 11, 12, 13, 14, 15];
+export const FIRST_ROUND_MIDWEST_MATCH_IDS = [16, 17, 18, 19, 20, 21, 22, 23];
+export const FIRST_ROUND_WEST_MATCH_IDS = [24, 25, 26, 27, 28, 29, 30, 31];
 export const FIRST_ROUND_MATCH_IDS = [
     ...FIRST_ROUND_EAST_MATCH_IDS,
     ...FIRST_ROUND_WEST_MATCH_IDS,
@@ -15,10 +15,10 @@ export const FIRST_ROUND_MATCH_IDS = [
     ...FIRST_ROUND_MIDWEST_MATCH_IDS,
 ];
 
-export const SECOND_ROUND_EAST_MATCH_IDS = [32, 33, 34, 35];
-export const SECOND_ROUND_WEST_MATCH_IDS = [36, 37, 38, 39];
-export const SECOND_ROUND_SOUTH_MATCH_IDS = [40, 41, 42, 43];
-export const SECOND_ROUND_MIDWEST_MATCH_IDS = [44, 45, 46, 47];
+export const SECOND_ROUND_SOUTH_MATCH_IDS = [32, 33, 34, 35];
+export const SECOND_ROUND_EAST_MATCH_IDS = [36, 37, 38, 39];
+export const SECOND_ROUND_MIDWEST_MATCH_IDS = [40, 41, 42, 43];
+export const SECOND_ROUND_WEST_MATCH_IDS = [44, 45, 46, 47];
 export const SECOND_ROUND_MATCH_IDS = [
     ...SECOND_ROUND_EAST_MATCH_IDS,
     ...SECOND_ROUND_WEST_MATCH_IDS,
@@ -26,10 +26,10 @@ export const SECOND_ROUND_MATCH_IDS = [
     ...SECOND_ROUND_MIDWEST_MATCH_IDS,
 ];
 
-export const SWEET16_ROUND_EAST_MATCH_IDS = [48, 49];
-export const SWEET16_ROUND_WEST_MATCH_IDS = [50, 51];
-export const SWEET16_ROUND_SOUTH_MATCH_IDS = [52, 53];
-export const SWEET16_ROUND_MIDWEST_MATCH_IDS = [54, 55];
+export const SWEET16_ROUND_SOUTH_MATCH_IDS = [48, 49];
+export const SWEET16_ROUND_EAST_MATCH_IDS = [50, 51];
+export const SWEET16_ROUND_MIDWEST_MATCH_IDS = [52, 53];
+export const SWEET16_ROUND_WEST_MATCH_IDS = [54, 55];
 export const SWEET16_ROUND_MATCH_IDS = [
     ...SWEET16_ROUND_EAST_MATCH_IDS,
     ...SWEET16_ROUND_WEST_MATCH_IDS,
@@ -37,10 +37,10 @@ export const SWEET16_ROUND_MATCH_IDS = [
     ...SWEET16_ROUND_MIDWEST_MATCH_IDS,
 ];
 
-export const ELITE8_ROUND_EAST_MATCH_ID = 56;
-export const ELITE8_ROUND_WEST_MATCH_ID = 57;
-export const ELITE8_ROUND_SOUTH_MATCH_ID = 58;
-export const ELITE8_ROUND_MIDWEST_MATCH_ID = 59;
+export const ELITE8_ROUND_SOUTH_MATCH_ID = 56;
+export const ELITE8_ROUND_EAST_MATCH_ID = 57;
+export const ELITE8_ROUND_MIDWEST_MATCH_ID = 58;
+export const ELITE8_ROUND_WEST_MATCH_ID = 59;
 export const ELITE8_ROUND_MATCH_IDS = [
     ELITE8_ROUND_EAST_MATCH_ID,
     ELITE8_ROUND_WEST_MATCH_ID,
@@ -48,9 +48,9 @@ export const ELITE8_ROUND_MATCH_IDS = [
     ELITE8_ROUND_MIDWEST_MATCH_ID,
 ];
 
-export const SEMI_FINAL_EAST_WEST_MATCH_ID = 60;
-export const SEMI_FINAL_SOUTH_MIDWEST_MATCH_ID = 61;
-export const SEMI_FINAL_MATCH_IDS = [SEMI_FINAL_EAST_WEST_MATCH_ID, SEMI_FINAL_SOUTH_MIDWEST_MATCH_ID];
+export const SEMI_FINAL_SOUTH_EAST_MATCH_ID = 60;
+export const SEMI_FINAL_MIDWEST_WEST_MATCH_ID = 61;
+export const SEMI_FINAL_MATCH_IDS = [SEMI_FINAL_SOUTH_EAST_MATCH_ID, SEMI_FINAL_MIDWEST_WEST_MATCH_ID];
 
 export const FINAL_MATCH_ID = 62;
 
@@ -62,7 +62,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'South',
         round: 'First',
     },
     {
@@ -72,7 +72,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'South',
         round: 'First',
     },
     {
@@ -82,7 +82,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'South',
         round: 'First',
     },
     {
@@ -92,7 +92,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'South',
         round: 'First',
     },
     {
@@ -102,7 +102,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'South',
         round: 'First',
     },
     {
@@ -112,7 +112,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'South',
         round: 'First',
     },
     {
@@ -122,7 +122,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'South',
         round: 'First',
     },
     {
@@ -132,7 +132,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'South',
         round: 'First',
     },
     {
@@ -142,7 +142,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'East',
         round: 'First',
     },
     {
@@ -152,7 +152,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'East',
         round: 'First',
     },
     {
@@ -162,7 +162,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'East',
         round: 'First',
     },
     {
@@ -172,7 +172,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'East',
         round: 'First',
     },
     {
@@ -182,7 +182,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'East',
         round: 'First',
     },
     {
@@ -192,7 +192,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'East',
         round: 'First',
     },
     {
@@ -202,7 +202,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'East',
         round: 'First',
     },
     {
@@ -212,7 +212,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'East',
         round: 'First',
     },
     {
@@ -222,7 +222,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -232,7 +232,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -242,7 +242,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -252,7 +252,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -262,7 +262,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -272,7 +272,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -282,7 +282,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -292,7 +292,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -302,7 +302,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'West',
         round: 'First',
     },
     {
@@ -312,7 +312,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'West',
         round: 'First',
     },
     {
@@ -322,7 +322,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'West',
         round: 'First',
     },
     {
@@ -332,7 +332,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'West',
         round: 'First',
     },
     {
@@ -342,7 +342,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'West',
         round: 'First',
     },
     {
@@ -352,7 +352,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'West',
         round: 'First',
     },
     {
@@ -362,7 +362,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'West',
         round: 'First',
     },
     {
@@ -372,7 +372,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'West',
         round: 'First',
     },
     {
@@ -382,7 +382,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 0,
         awayTeamParentMatchId: 1,
-        region: 'East',
+        region: 'South',
         round: 'Second',
     },
     {
@@ -392,7 +392,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 2,
         awayTeamParentMatchId: 3,
-        region: 'East',
+        region: 'South',
         round: 'Second',
     },
     {
@@ -402,7 +402,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 4,
         awayTeamParentMatchId: 5,
-        region: 'East',
+        region: 'South',
         round: 'Second',
     },
     {
@@ -412,7 +412,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 6,
         awayTeamParentMatchId: 7,
-        region: 'East',
+        region: 'South',
         round: 'Second',
     },
     {
@@ -422,7 +422,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 8,
         awayTeamParentMatchId: 9,
-        region: 'West',
+        region: 'East',
         round: 'Second',
     },
     {
@@ -432,7 +432,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 10,
         awayTeamParentMatchId: 11,
-        region: 'West',
+        region: 'East',
         round: 'Second',
     },
     {
@@ -442,7 +442,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 12,
         awayTeamParentMatchId: 13,
-        region: 'West',
+        region: 'East',
         round: 'Second',
     },
     {
@@ -452,7 +452,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 14,
         awayTeamParentMatchId: 15,
-        region: 'West',
+        region: 'East',
         round: 'Second',
     },
     {
@@ -462,7 +462,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 16,
         awayTeamParentMatchId: 17,
-        region: 'South',
+        region: 'Midwest',
         round: 'Second',
     },
     {
@@ -472,7 +472,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 18,
         awayTeamParentMatchId: 19,
-        region: 'South',
+        region: 'Midwest',
         round: 'Second',
     },
     {
@@ -482,7 +482,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 20,
         awayTeamParentMatchId: 21,
-        region: 'South',
+        region: 'Midwest',
         round: 'Second',
     },
     {
@@ -492,7 +492,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 22,
         awayTeamParentMatchId: 23,
-        region: 'South',
+        region: 'Midwest',
         round: 'Second',
     },
     {
@@ -502,7 +502,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 24,
         awayTeamParentMatchId: 25,
-        region: 'Midwest',
+        region: 'West',
         round: 'Second',
     },
     {
@@ -512,7 +512,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 26,
         awayTeamParentMatchId: 27,
-        region: 'Midwest',
+        region: 'West',
         round: 'Second',
     },
     {
@@ -522,7 +522,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 28,
         awayTeamParentMatchId: 29,
-        region: 'Midwest',
+        region: 'West',
         round: 'Second',
     },
     {
@@ -532,7 +532,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 30,
         awayTeamParentMatchId: 31,
-        region: 'Midwest',
+        region: 'West',
         round: 'Second',
     },
     {
@@ -542,7 +542,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 32,
         awayTeamParentMatchId: 33,
-        region: 'East',
+        region: 'South',
         round: 'Sweet16',
     },
     {
@@ -552,7 +552,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 34,
         awayTeamParentMatchId: 35,
-        region: 'East',
+        region: 'South',
         round: 'Sweet16',
     },
     {
@@ -562,7 +562,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 36,
         awayTeamParentMatchId: 37,
-        region: 'West',
+        region: 'East',
         round: 'Sweet16',
     },
     {
@@ -572,7 +572,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 38,
         awayTeamParentMatchId: 39,
-        region: 'West',
+        region: 'East',
         round: 'Sweet16',
     },
     {
@@ -582,7 +582,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 40,
         awayTeamParentMatchId: 41,
-        region: 'South',
+        region: 'Midwest',
         round: 'Sweet16',
     },
     {
@@ -592,7 +592,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 42,
         awayTeamParentMatchId: 43,
-        region: 'South',
+        region: 'Midwest',
         round: 'Sweet16',
     },
     {
@@ -602,7 +602,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 44,
         awayTeamParentMatchId: 45,
-        region: 'Midwest',
+        region: 'West',
         round: 'Sweet16',
     },
     {
@@ -612,7 +612,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 46,
         awayTeamParentMatchId: 47,
-        region: 'Midwest',
+        region: 'West',
         round: 'Sweet16',
     },
     {
@@ -622,7 +622,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 48,
         awayTeamParentMatchId: 49,
-        region: 'East',
+        region: 'South',
         round: 'Elite8',
     },
     {
@@ -632,7 +632,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 50,
         awayTeamParentMatchId: 51,
-        region: 'West',
+        region: 'East',
         round: 'Elite8',
     },
     {
@@ -642,7 +642,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 52,
         awayTeamParentMatchId: 53,
-        region: 'South',
+        region: 'Midwest',
         round: 'Elite8',
     },
     {
@@ -652,7 +652,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 54,
         awayTeamParentMatchId: 55,
-        region: 'Midwest',
+        region: 'West',
         round: 'Elite8',
     },
     {
@@ -662,7 +662,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 56,
         awayTeamParentMatchId: 57,
-        region: 'East-West',
+        region: 'South-East',
         round: 'SemiFinal',
     },
     {
@@ -672,7 +672,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 58,
         awayTeamParentMatchId: 59,
-        region: 'South-Midwest',
+        region: 'Midwest-West',
         round: 'SemiFinal',
     },
     {
@@ -682,7 +682,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 60,
         awayTeamParentMatchId: 61,
-        region: 'East-West-South-Midwest',
+        region: 'South-East-Midwest-West',
         round: 'Final',
     },
 ];
@@ -690,450 +690,450 @@ export const initialBracketsData: BracketMatch[] = [
 export const teamsData: MarchMadTeam[] = [
     {
         id: 1,
-        name: 'Purdue Boilermakers',
-        displayName: 'Purdue',
-        region: 'East',
-        position: 1,
-    },
-    {
-        id: 2,
-        name: 'Marquette Golden Eagles',
-        displayName: 'Marquette',
-        region: 'East',
-        position: 2,
-    },
-    {
-        id: 3,
-        name: 'Kansas State Wildcats',
-        displayName: 'Kansas St.',
-        region: 'East',
-        position: 3,
-    },
-    {
-        id: 4,
-        name: 'Tennessee Volunteers',
-        displayName: 'Tennessee',
-        region: 'East',
-        position: 4,
-    },
-    {
-        id: 5,
-        name: 'Duke Blue Devils',
-        displayName: 'Duke',
-        region: 'East',
-        position: 5,
-    },
-    {
-        id: 6,
-        name: 'Kentucky Wildcats',
-        displayName: 'Kentucky',
-        region: 'East',
-        position: 6,
-    },
-    {
-        id: 7,
-        name: 'Michigan State Spartans',
-        displayName: 'Michigan St.',
-        region: 'East',
-        position: 7,
-    },
-    {
-        id: 8,
-        name: 'Memphis Tigers',
-        displayName: 'Memphis',
-        region: 'East',
-        position: 8,
-    },
-    {
-        id: 9,
-        name: 'Florida Atlantic Owls',
-        displayName: 'FAU',
-        region: 'East',
-        position: 9,
-    },
-    {
-        id: 10,
-        name: 'USC Trojans',
-        displayName: 'USC',
-        region: 'East',
-        position: 10,
-    },
-    {
-        id: 11,
-        name: 'Providence Friars',
-        displayName: 'Providence',
-        region: 'East',
-        position: 11,
-    },
-    {
-        id: 12,
-        name: 'Oral Roberts Golden Eagles',
-        displayName: 'Oral Roberts',
-        region: 'East',
-        position: 12,
-    },
-    {
-        id: 13,
-        name: 'Louisiana Ragin_ Cajuns',
-        displayName: 'Louisiana',
-        region: 'East',
-        position: 13,
-    },
-    {
-        id: 14,
-        name: 'Montana State Bobcats',
-        displayName: 'Montana St.',
-        region: 'East',
-        position: 14,
-    },
-    {
-        id: 15,
-        name: 'Vermont Catamounts',
-        displayName: 'Vermont',
-        region: 'East',
-        position: 15,
-    },
-    {
-        id: 16,
-        name: '',
-        displayName: 'Wild card',
-        region: 'East',
-        position: 16,
-    },
-    {
-        id: 17,
-        name: 'Kansas Jayhawks',
-        displayName: 'Kansas',
-        region: 'West',
-        position: 1,
-    },
-    {
-        id: 18,
-        name: 'UCLA Bruins',
-        displayName: 'UCLA',
-        region: 'West',
-        position: 2,
-    },
-    {
-        id: 19,
-        name: 'Gonzaga Bulldogs',
-        displayName: 'Gonzaga',
-        region: 'West',
-        position: 3,
-    },
-    {
-        id: 20,
-        name: 'UConn Huskies',
-        displayName: 'UConn',
-        region: 'West',
-        position: 4,
-    },
-    {
-        id: 21,
-        name: "Saint Mary's Gaels",
-        displayName: "Saint Mary's",
-        region: 'West',
-        position: 5,
-    },
-    {
-        id: 22,
-        name: 'TCU Horned Frogs',
-        displayName: 'TCU',
-        region: 'West',
-        position: 6,
-    },
-    {
-        id: 23,
-        name: 'Northwestern Wildcats',
-        displayName: 'Northwestern',
-        region: 'West',
-        position: 7,
-    },
-    {
-        id: 24,
-        name: 'Arkansas Razorbacks',
-        displayName: 'Arkansase',
-        region: 'West',
-        position: 8,
-    },
-    {
-        id: 25,
-        name: 'Illinois Fighting Illini',
-        displayName: 'Illinois',
-        region: 'West',
-        position: 9,
-    },
-    {
-        id: 26,
-        name: 'Boise State Broncos',
-        displayName: 'Boise State',
-        region: 'West',
-        position: 10,
-    },
-    {
-        id: 27,
-        name: '',
-        displayName: 'Wild Card',
-        region: 'West',
-        position: 11,
-    },
-    {
-        id: 28,
-        name: 'VCU Rams',
-        displayName: 'VCU',
-        region: 'West',
-        position: 12,
-    },
-    {
-        id: 29,
-        name: 'Iona Gaels',
-        displayName: 'Iona',
-        region: 'West',
-        position: 13,
-    },
-    {
-        id: 30,
-        name: 'Grand Canyon Lopes',
-        displayName: 'Grand Canyon',
-        region: 'West',
-        position: 14,
-    },
-    {
-        id: 31,
-        name: 'UNC Asheville Bulldogs',
-        displayName: 'UNC Asheville',
-        region: 'West',
-        position: 15,
-    },
-    {
-        id: 32,
-        name: 'Howard Bison',
-        displayName: 'Howard',
-        region: 'West',
-        position: 16,
-    },
-    {
-        id: 33,
         name: 'Alabama Crimson Tide',
         displayName: 'Alabama',
         region: 'South',
         position: 1,
     },
     {
-        id: 34,
+        id: 2,
         name: 'Arizona Wildcats',
         displayName: 'Arizona',
         region: 'South',
         position: 2,
     },
     {
-        id: 35,
+        id: 3,
         name: 'Baylor Bears',
         displayName: 'Baylor',
         region: 'South',
         position: 3,
     },
     {
-        id: 36,
+        id: 4,
         name: 'Virginia Cavaliers',
         displayName: 'Virginia',
         region: 'South',
         position: 4,
     },
     {
-        id: 37,
+        id: 5,
         name: 'San Diego State Aztecs',
         displayName: 'San Diego St.',
         region: 'South',
         position: 5,
     },
     {
-        id: 38,
+        id: 6,
         name: 'Creighton Blue Jays',
         displayName: 'Creighton',
         region: 'South',
         position: 6,
     },
     {
-        id: 39,
+        id: 7,
         name: 'Missouri Tigers',
         displayName: 'Missouri',
         region: 'South',
         position: 7,
     },
     {
-        id: 40,
+        id: 8,
         name: 'Maryland Terrapins',
         displayName: 'Maryland',
         region: 'South',
         position: 8,
     },
     {
-        id: 41,
+        id: 9,
         name: 'West Virginia Mountaineers',
         displayName: 'West Virginia',
         region: 'South',
         position: 9,
     },
     {
-        id: 42,
+        id: 10,
         name: 'Utah State Aggies',
         displayName: 'Utah State',
         region: 'South',
         position: 10,
     },
     {
-        id: 43,
+        id: 11,
         name: 'NC State Wolfpack',
         displayName: 'NC State',
         region: 'South',
         position: 11,
     },
     {
-        id: 44,
+        id: 12,
         name: 'Charleston Cougars',
         displayName: 'Charleston',
         region: 'South',
         position: 12,
     },
     {
-        id: 45,
+        id: 13,
         name: 'Furman Paladins',
         displayName: 'Furman',
         region: 'South',
         position: 13,
     },
     {
-        id: 46,
+        id: 14,
         name: 'UC Santa Barbara Gauchos',
         displayName: 'UCSB',
         region: 'South',
         position: 14,
     },
     {
-        id: 47,
+        id: 15,
         name: 'Princeton Tigers',
         displayName: 'Princeton',
         region: 'South',
         position: 15,
     },
     {
-        id: 48,
+        id: 16,
         name: '',
         displayName: 'Wild Card',
         region: 'South',
         position: 16,
     },
     {
-        id: 49,
+        id: 17,
+        name: 'Purdue Boilermakers',
+        displayName: 'Purdue',
+        region: 'East',
+        position: 1,
+    },
+    {
+        id: 18,
+        name: 'Marquette Golden Eagles',
+        displayName: 'Marquette',
+        region: 'East',
+        position: 2,
+    },
+    {
+        id: 19,
+        name: 'Kansas State Wildcats',
+        displayName: 'Kansas St.',
+        region: 'East',
+        position: 3,
+    },
+    {
+        id: 20,
+        name: 'Tennessee Volunteers',
+        displayName: 'Tennessee',
+        region: 'East',
+        position: 4,
+    },
+    {
+        id: 21,
+        name: 'Duke Blue Devils',
+        displayName: 'Duke',
+        region: 'East',
+        position: 5,
+    },
+    {
+        id: 22,
+        name: 'Kentucky Wildcats',
+        displayName: 'Kentucky',
+        region: 'East',
+        position: 6,
+    },
+    {
+        id: 23,
+        name: 'Michigan State Spartans',
+        displayName: 'Michigan St.',
+        region: 'East',
+        position: 7,
+    },
+    {
+        id: 24,
+        name: 'Memphis Tigers',
+        displayName: 'Memphis',
+        region: 'East',
+        position: 8,
+    },
+    {
+        id: 25,
+        name: 'Florida Atlantic Owls',
+        displayName: 'FAU',
+        region: 'East',
+        position: 9,
+    },
+    {
+        id: 26,
+        name: 'USC Trojans',
+        displayName: 'USC',
+        region: 'East',
+        position: 10,
+    },
+    {
+        id: 27,
+        name: 'Providence Friars',
+        displayName: 'Providence',
+        region: 'East',
+        position: 11,
+    },
+    {
+        id: 28,
+        name: 'Oral Roberts Golden Eagles',
+        displayName: 'Oral Roberts',
+        region: 'East',
+        position: 12,
+    },
+    {
+        id: 29,
+        name: 'Louisiana Ragin_ Cajuns',
+        displayName: 'Louisiana',
+        region: 'East',
+        position: 13,
+    },
+    {
+        id: 30,
+        name: 'Montana State Bobcats',
+        displayName: 'Montana St.',
+        region: 'East',
+        position: 14,
+    },
+    {
+        id: 31,
+        name: 'Vermont Catamounts',
+        displayName: 'Vermont',
+        region: 'East',
+        position: 15,
+    },
+    {
+        id: 32,
+        name: '',
+        displayName: 'Wild card',
+        region: 'East',
+        position: 16,
+    },
+    {
+        id: 33,
         name: 'Houston Cougars',
         displayName: 'Houston',
         region: 'Midwest',
         position: 1,
     },
     {
-        id: 50,
+        id: 34,
         name: 'Texas Longhorns',
         displayName: 'Texas',
         region: 'Midwest',
         position: 2,
     },
     {
-        id: 51,
+        id: 35,
         name: 'Xavier Muskateers',
         displayName: 'Xavier',
         region: 'Midwest',
         position: 3,
     },
     {
-        id: 52,
+        id: 36,
         name: 'Indiana Hoosiers',
         displayName: 'Indiana',
         region: 'Midwest',
         position: 4,
     },
     {
-        id: 53,
+        id: 37,
         name: 'Miami (fl) Hurricanes',
         displayName: 'Miami (FL)',
         region: 'Midwest',
         position: 5,
     },
     {
-        id: 54,
+        id: 38,
         name: 'Iowa State Cyclones',
         displayName: 'Iowa State',
         region: 'Midwest',
         position: 6,
     },
     {
-        id: 55,
+        id: 39,
         name: 'Texas A&M Aggies',
         displayName: 'Texas A&M',
         region: 'Midwest',
         position: 7,
     },
     {
-        id: 56,
+        id: 40,
         name: 'Iowa Hawkeyes',
         displayName: 'Iowa',
         region: 'Midwest',
         position: 8,
     },
     {
-        id: 57,
+        id: 41,
         name: 'Auburn Tigers',
         displayName: 'Auburn',
         region: 'Midwest',
         position: 9,
     },
     {
-        id: 58,
+        id: 42,
         name: 'Penn State Nittany Lions',
         displayName: 'Penn State',
         region: 'Midwest',
         position: 10,
     },
     {
-        id: 59,
+        id: 43,
         name: '',
         displayName: 'Wild Card',
         region: 'Midwest',
         position: 11,
     },
     {
-        id: 60,
+        id: 44,
         name: 'Drake Bulldogs',
         displayName: 'Drake',
         region: 'Midwest',
         position: 12,
     },
     {
-        id: 61,
+        id: 45,
         name: 'Kent State Golden Flashes',
         displayName: 'Kent State',
         region: 'Midwest',
         position: 13,
     },
     {
-        id: 62,
+        id: 46,
         name: 'Kennesaw State Owls',
         displayName: 'Kennesaw St.',
         region: 'Midwest',
         position: 14,
     },
     {
-        id: 63,
+        id: 47,
         name: 'Colgate Raiders',
         displayName: 'Colgate',
         region: 'Midwest',
         position: 15,
     },
     {
-        id: 64,
+        id: 48,
         name: 'Northern Kentucky Norse',
         displayName: 'N Kentucky',
         region: 'Midwest',
+        position: 16,
+    },
+    {
+        id: 49,
+        name: 'Kansas Jayhawks',
+        displayName: 'Kansas',
+        region: 'West',
+        position: 1,
+    },
+    {
+        id: 50,
+        name: 'UCLA Bruins',
+        displayName: 'UCLA',
+        region: 'West',
+        position: 2,
+    },
+    {
+        id: 51,
+        name: 'Gonzaga Bulldogs',
+        displayName: 'Gonzaga',
+        region: 'West',
+        position: 3,
+    },
+    {
+        id: 52,
+        name: 'UConn Huskies',
+        displayName: 'UConn',
+        region: 'West',
+        position: 4,
+    },
+    {
+        id: 53,
+        name: "Saint Mary's Gaels",
+        displayName: "Saint Mary's",
+        region: 'West',
+        position: 5,
+    },
+    {
+        id: 54,
+        name: 'TCU Horned Frogs',
+        displayName: 'TCU',
+        region: 'West',
+        position: 6,
+    },
+    {
+        id: 55,
+        name: 'Northwestern Wildcats',
+        displayName: 'Northwestern',
+        region: 'West',
+        position: 7,
+    },
+    {
+        id: 56,
+        name: 'Arkansas Razorbacks',
+        displayName: 'Arkansase',
+        region: 'West',
+        position: 8,
+    },
+    {
+        id: 57,
+        name: 'Illinois Fighting Illini',
+        displayName: 'Illinois',
+        region: 'West',
+        position: 9,
+    },
+    {
+        id: 58,
+        name: 'Boise State Broncos',
+        displayName: 'Boise State',
+        region: 'West',
+        position: 10,
+    },
+    {
+        id: 59,
+        name: '',
+        displayName: 'Wild Card',
+        region: 'West',
+        position: 11,
+    },
+    {
+        id: 60,
+        name: 'VCU Rams',
+        displayName: 'VCU',
+        region: 'West',
+        position: 12,
+    },
+    {
+        id: 61,
+        name: 'Iona Gaels',
+        displayName: 'Iona',
+        region: 'West',
+        position: 13,
+    },
+    {
+        id: 62,
+        name: 'Grand Canyon Lopes',
+        displayName: 'Grand Canyon',
+        region: 'West',
+        position: 14,
+    },
+    {
+        id: 63,
+        name: 'UNC Asheville Bulldogs',
+        displayName: 'UNC Asheville',
+        region: 'West',
+        position: 15,
+    },
+    {
+        id: 64,
+        name: 'Howard Bison',
+        displayName: 'Howard',
+        region: 'West',
         position: 16,
     },
 ];
@@ -1141,58 +1141,58 @@ export const teamsData: MarchMadTeam[] = [
 export const wildCardTeams: MarchMadTeam[] = [
     {
         id: 1,
-        name: 'Texas Southern Tigers',
-        displayName: 'Texas Southern',
-        region: 'East',
-        position: 1,
-    },
-    {
-        id: 2,
-        name: 'Fairleigh Dickinson Knights',
-        displayName: 'F. Dickinson',
-        region: 'East',
-        position: 2,
-    },
-    {
-        id: 3,
-        name: 'Arizona State Sun Devils',
-        displayName: 'Arizona St.',
-        region: 'West',
-        position: 3,
-    },
-    {
-        id: 4,
-        name: 'Nevada Wolf Pack',
-        displayName: 'Nevada',
-        region: 'West',
-        position: 4,
-    },
-    {
-        id: 5,
         name: 'Texas A&M-Corpus Christi Islanders',
         displayName: 'Texas A&M-CC',
         region: 'South',
         position: 5,
     },
     {
-        id: 6,
+        id: 2,
         name: 'Southeast Missouri State Redhawks',
         displayName: 'SE Missouri St.',
         region: 'South',
         position: 6,
     },
     {
-        id: 7,
+        id: 3,
+        name: 'Texas Southern Tigers',
+        displayName: 'Texas Southern',
+        region: 'East',
+        position: 1,
+    },
+    {
+        id: 4,
+        name: 'Fairleigh Dickinson Knights',
+        displayName: 'F. Dickinson',
+        region: 'East',
+        position: 2,
+    },
+    {
+        id: 5,
         name: 'Mississippi State Bulldogs',
         displayName: 'Mississippi St.',
         region: 'Midwest',
         position: 7,
     },
     {
-        id: 8,
+        id: 6,
         name: 'Pittsburgh Panthers',
         displayName: 'Pittsburgh',
         region: 'Midwest',
         position: 8,
+    },
+    {
+        id: 7,
+        name: 'Arizona State Sun Devils',
+        displayName: 'Arizona St.',
+        region: 'West',
+        position: 3,
+    },
+    {
+        id: 8,
+        name: 'Nevada Wolf Pack',
+        displayName: 'Nevada',
+        region: 'West',
+        position: 4,
     },
 ];
