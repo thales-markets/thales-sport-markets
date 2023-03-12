@@ -17,11 +17,20 @@ const getDefaultParlay = (): ParlaysMarketPosition[] => {
 };
 
 const getDefaultPayment = (): ParlayPayment => {
+    const lsSelectedStable = localStore.get(LOCAL_STORAGE_KEYS.STABLE_INDEX);
+
     return {
-        selectedStableIndex: COLLATERALS_INDEX.sUSD,
+        selectedStableIndex:
+            lsSelectedStable !== undefined ? (lsSelectedStable as COLLATERALS_INDEX) : COLLATERALS_INDEX.sUSD,
         isVoucherSelected: undefined,
         amountToBuy: '',
     };
+};
+
+export const getLastSavedStableIndex = (): COLLATERALS_INDEX => {
+    const lsSelectedStable = localStore.get(LOCAL_STORAGE_KEYS.STABLE_INDEX);
+
+    return lsSelectedStable !== undefined ? (lsSelectedStable as COLLATERALS_INDEX) : COLLATERALS_INDEX.sUSD;
 };
 
 const getDefaultError = () => {
@@ -105,6 +114,7 @@ export const parlaySlice = createSlice({
         },
         setPayment: (state, action: PayloadAction<ParlayPayment>) => {
             state.payment = { ...state.payment, ...action.payload };
+            localStore.set(LOCAL_STORAGE_KEYS.STABLE_INDEX, state.payment.selectedStableIndex);
         },
         setPaymentSelectedStableIndex: (state, action: PayloadAction<COLLATERALS_INDEX>) => {
             state.payment = { ...state.payment, selectedStableIndex: action.payload };

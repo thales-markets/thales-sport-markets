@@ -15,4 +15,5 @@ export const LOCAL_STORAGE_KEYS = {
     FAVOURITE_LEAGUES: 'favouriteLeagues',
     PARLAY: 'parlay',
     BRACKETS: 'brackets',
+    STABLE_INDEX: 'stableIndex',
 };
