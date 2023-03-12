@@ -331,8 +331,6 @@ const Home: React.FC = () => {
                                                 setSportParam(filterItem);
                                                 setTagFilter([]);
                                                 setTagParam('');
-                                                setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
-                                                setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
                                                 if (filterItem === SportFilterEnum.All) {
                                                     setDateFilter(0);
                                                     setDateParam('');
@@ -416,8 +414,6 @@ const Home: React.FC = () => {
                                                 setSportParam(filterItem);
                                                 setTagFilter([]);
                                                 setTagParam('');
-                                                setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
-                                                setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
                                                 if (filterItem === SportFilterEnum.All) {
                                                     setDateFilter(0);
                                                     setDateParam('');
