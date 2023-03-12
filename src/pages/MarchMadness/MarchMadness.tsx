@@ -87,8 +87,6 @@ const MarchMadness: React.FC = () => {
                 <Loader />
             ) : (
                 <>
-                    {/* TODO: Remove this when teams for brackets are known */}
-                    <TestingTeamsInfo>{t('march-madness.test-info')}</TestingTeamsInfo>
                     <BackToLink
                         link={buildHref(ROUTES.Markets.Home)}
                         text={t('march-madness.back-to-markets')}
@@ -132,23 +130,6 @@ const Text = styled.span`
     font-weight: 400;
     font-size: 14px;
     line-height: 21px;
-    color: #ffffff;
-`;
-
-const TestingTeamsInfo = styled.div`
-    width: 100%;
-    height: 61px;
-    background: #c12b34;
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Oswald' !important;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 25px;
-    line-height: 14px;
-    text-transform: uppercase;
     color: #ffffff;
 `;
 

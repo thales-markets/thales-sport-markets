@@ -145,11 +145,11 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             ></Tooltip>
                         )}
                 </HeaderWrapper>
-                <MatchInfo market={market} liveResultInfo={liveResultInfo} />
+                <MatchInfo market={market} liveResultInfo={liveResultInfo} isEnetpulseSport={isEnetpulseSport} />
                 {showStatus && (
                     <Status backgroundColor={isGameCancelled ? MAIN_COLORS.BACKGROUNDS.RED : MAIN_COLORS.LIGHT_GRAY}>
                         {isPendingResolution ? (
-                            isEnetpulseSport ? (
+                            !isEnetpulseSport ? (
                                 <ResultContainer>
                                     <ResultLabel>
                                         {liveResultInfo?.homeScore + ' - ' + liveResultInfo?.awayScore}{' '}
