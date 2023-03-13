@@ -331,8 +331,6 @@ const Home: React.FC = () => {
                                                 setSportParam(filterItem);
                                                 setTagFilter([]);
                                                 setTagParam('');
-                                                setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
-                                                setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
                                                 if (filterItem === SportFilterEnum.All) {
                                                     setDateFilter(0);
                                                     setDateParam('');
@@ -379,10 +377,6 @@ const Home: React.FC = () => {
                             setDateParam={setDateParam}
                             setGlobalFilter={setGlobalFilter}
                             setGlobalFilterParam={setGlobalFilterParam}
-                            setTagFilter={setTagFilter}
-                            setTagParam={setTagParam}
-                            setSportFilter={setSportFilter}
-                            setSportParam={setSportParam}
                             globalFilter={globalFilter}
                             dateFilter={dateFilter}
                             sportFilter={sportFilter}
@@ -420,8 +414,6 @@ const Home: React.FC = () => {
                                                 setSportParam(filterItem);
                                                 setTagFilter([]);
                                                 setTagParam('');
-                                                setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
-                                                setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
                                                 if (filterItem === SportFilterEnum.All) {
                                                     setDateFilter(0);
                                                     setDateParam('');
@@ -476,10 +468,6 @@ const Home: React.FC = () => {
                             <>
                                 <SportFilterMobile
                                     sportFilter={sportFilter}
-                                    setDateFilter={setDateFilter}
-                                    setDateParam={setDateParam}
-                                    setGlobalFilter={setGlobalFilter}
-                                    setGlobalFilterParam={setGlobalFilterParam}
                                     setTagFilter={setTagFilter}
                                     setTagParam={setTagParam}
                                     setSportFilter={setSportFilter}
@@ -510,10 +498,6 @@ const Home: React.FC = () => {
                                 setDateParam={setDateParam}
                                 setGlobalFilter={setGlobalFilter}
                                 setGlobalFilterParam={setGlobalFilterParam}
-                                setTagFilter={setTagFilter}
-                                setTagParam={setTagParam}
-                                setSportFilter={setSportFilter}
-                                setSportParam={setSportParam}
                                 globalFilter={globalFilter}
                                 dateFilter={dateFilter}
                                 sportFilter={sportFilter}
@@ -522,7 +506,10 @@ const Home: React.FC = () => {
                         )}
                         {finalMarkets.length === 0 ? (
                             <NoMarketsContainer>
-                                <NoMarketsLabel>{t('market.no-markets-found')}</NoMarketsLabel>
+                                <NoMarketsLabel>
+                                    {t('market.no-markets-found')}{' '}
+                                    {t(`market.filter-label.sport.${sportFilter.toLowerCase()}`)}
+                                </NoMarketsLabel>
                                 <Button onClick={resetFilters}>{t('market.view-all-markets')}</Button>
                             </NoMarketsContainer>
                         ) : (

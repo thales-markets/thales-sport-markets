@@ -356,4 +356,6 @@ export type SportMarketLiveResult = {
     scoreAwayByPeriod: number[];
     displayClock: string;
     sportId: number;
+    tournamentName?: string;
+    tournamentRound?: string;
 };

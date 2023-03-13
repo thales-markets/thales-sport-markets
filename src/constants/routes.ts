@@ -14,6 +14,7 @@ export const ROUTES = {
     Vaults: '/vaults',
     Vault: '/vaults/:vaultId',
     Leaderboard: '/parlay-leaderboard',
+    MarchMadness: '/march-madness',
 };
 
 export default ROUTES;

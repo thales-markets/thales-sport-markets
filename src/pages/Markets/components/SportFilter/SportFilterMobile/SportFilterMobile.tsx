@@ -1,4 +1,4 @@
-import { GlobalFiltersEnum, SportFilterEnum } from 'constants/markets';
+import { SportFilterEnum } from 'constants/markets';
 import { SPORTS_TAGS_MAP } from 'constants/tags';
 import { DIRECTION_HORIZONTAL } from 'hammerjs';
 import React, { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
@@ -13,10 +13,6 @@ type SportFilterMobileProps = {
     setSportParam: (val: string) => void;
     setTagFilter: (value: Tags) => void;
     setTagParam: (val: string) => void;
-    setGlobalFilter: (value: GlobalFiltersEnum) => void;
-    setGlobalFilterParam: (val: string) => void;
-    setDateFilter: (value: number | Date) => void;
-    setDateParam: (val: string) => void;
     setAvailableTags: Dispatch<SetStateAction<Tags>>;
 };
 
@@ -27,10 +23,6 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
     setSportParam,
     setTagFilter,
     setTagParam,
-    setGlobalFilter,
-    setGlobalFilterParam,
-    setDateFilter,
-    setDateParam,
     setAvailableTags,
 }) => {
     const [leftIndex, setLeftIndex] = useState(0);
@@ -87,11 +79,7 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
                                 setSportParam(filterItem);
                                 setTagFilter([]);
                                 setTagParam('');
-                                setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
-                                setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
                                 if (filterItem === SportFilterEnum.All) {
-                                    setDateFilter(0);
-                                    setDateParam('');
                                     setAvailableTags(tagsList);
                                 } else {
                                     const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
