@@ -12,22 +12,29 @@ import { Trans } from 'react-i18next';
 import SPAAnchor from 'components/SPAAnchor';
 import { buildHref } from 'utils/routes';
 import ROUTES from 'constants/routes';
+import { NetworkIdByName } from 'utils/network';
+import { useSelector } from 'react-redux';
+import { getNetworkId } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 
 const Profile: React.FC = () => {
     const navItemFromQuery = getQueryStringVal('nav-item');
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [navItem, setNavItem] = useState<number>(navItemFromQuery ? Number(navItemFromQuery) : 1);
     const [searchText, setSearchText] = useState<string>('');
 
     return (
         <Container>
-            <Info>
-                <Trans
-                    i18nKey="rewards.op-rewards-banner-message"
-                    components={{
-                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                    }}
-                />
-            </Info>
+            {networkId !== NetworkIdByName.ArbitrumOne && (
+                <Info>
+                    <Trans
+                        i18nKey="rewards.op-rewards-banner-message"
+                        components={{
+                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                        }}
+                    />
+                </Info>
+            )}
             <UserStats />
             <NavigationWrapper>
                 <NavigationBar itemSelected={navItem} onSelectItem={(index) => setNavItem(index)} />

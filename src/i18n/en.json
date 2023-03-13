@@ -137,7 +137,8 @@
         "top5": "TOP 5",
         "top10": "TOP 10",
         "yes": "YES",
-        "no": "NO"
+        "no": "NO",
+        "tennis-tooltip": "In case of a walkover, match will be treated as canceled. In case of retirement / disqualification during the match, it will be treated as a win for the player advancing to the next round"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime Markets ALL RIGHTS RESERVED.",
@@ -189,7 +190,7 @@
         "filter-label": {
             "global": {
                 "allmarkets": "All",
-                "openmarkets": "All",
+                "openmarkets": "Open",
                 "resolvedmarkets": "Finished",
                 "pendingmarkets": "Ongoing",
                 "yourpositions": "Your positions",
@@ -226,7 +227,7 @@
         "back": "Back",
         "back-to-market": "Back to market",
         "apply-filters": "Apply filters",
-        "no-markets-found": "No markets found",
+        "no-markets-found": "No markets found for",
         "view-all-markets": "View all markets",
         "table": {
             "title": "Recent activity",
@@ -404,7 +405,8 @@
             },
             "labels": {
                 "language": "Language",
-                "get-started": "Get started"
+                "get-started": "Get started",
+                "march-madness": "March Madness"
             }
         },
         "parlay": {
@@ -431,6 +433,7 @@
                 "title": "Parlay Validation",
                 "max-teams": "Maximum {{max}} markets in Parlay",
                 "team-in-parlay": "{{team}} is already in Parlay. The same team can't be added to a Parlay more than once.",
+                "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
                 "amount-exceeded": "Amount exceeded the amount available on AMM",
                 "max-profit": "Maximal supported profit is {{max}}",
                 "min-amount": "Minimal buy-in for a Parlay ticket is {{min}}",
@@ -461,7 +464,7 @@
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
         "discounted-per": "Discounted as per",
-        "op-incentivized-tooltip": "NFL markets are incentivized with 10,000 OP from Jan 14th games to Feb 12th games based on pro-rata volume. Check out the leaderboard <duneLink>here</ duneLink>.",
+        "incentivized-tooltip": "NCAA markets are incentivized with {{rewards}} during March Madness. More details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "INCENTIVIZED MARKETS"
     },
     "rewards": {
@@ -807,6 +810,101 @@
             "period-ended-label": "Period ended",
             "bi-weekly-period": "Bi-weekly period"
         }
+    },
+    "march-madness": {
+        "test-info": "The testing phase is now open with the 2022 teams, the 2023 selection opens up on March 12th!",
+        "back-to-markets": "Back to markets",
+        "tabs": {
+            "home": "Home",
+            "brackets": "Brackets",
+            "leaderboard": "Leaderboard"
+        },
+        "home": {
+            "title": "Welcome to March Madness tournament",
+            "time-info": "You have {{days}} {{hours}} left to mint your bracket",
+            "text-1": "<bold>March Madness</bold> is here, and with <bold>Overtime</bold> you can mint your bracket. To celebrate we are rewarding users with <bold>{{reward}}</bold> for the duration of the NCAAB tournament. The bracket NFT will help holders boost their volume rewards while granting them an entry in the bracket leaderboard. Minting is free and open from March 12th to 16th, when the first round starts.",
+            "text-2": "Minting your <bold>March Madness bracket</bold> is done fully on-chain. While the NFT minted is soulbound, it gives the holder access to a reward boost plus participation to the bracket leaderboard. The March Madness campaign is incentivized with {{reward}} and separated into 2 pools.",
+            "text-3": "For the <bold>First pool</bold>, {{reward}} will be divided between all volume driven through March Madness games, including all market type and parlay with at least one NCAAB game. Holders of the March Madness bracket NFT are eligible for a trading boost. Each correct game is eligible for a tiered boost, with a maximum of 164%.",
+            "text-3a": "Championship - 20%",
+            "text-3b": "Final Four - 10%",
+            "text-3c": "Elite Eight - 7%",
+            "text-3d": "Sweet 16 - 4%",
+            "text-3e": "Second Round - 2%",
+            "text-3f": "First Round - 1%",
+            "text-4": "The <bold>second pool</bold> will be divided between the holders of the most accurate bracket with a {{volume}} volume benchmark on March Madness games. Holders that meet the volume requirement can track their position in the best bracket leaderboard where winners will split a {{reward}} reward pool.",
+            "text-5": "More detail in our <mediumLink>Medium blog post</mediumLink>.",
+            "button-create": "Mint bracket",
+            "button-connect": "Connect wallet"
+        },
+        "leaderboard": {
+            "owner": "Owner",
+            "address": "Address",
+            "volume": "Volume",
+            "base-volume": "Base",
+            "bonus-volume": "Bonus",
+            "rewards": "Rewards",
+            "search-placeholder": "SEARCH WALLET ADDRESS",
+            "player": "Player",
+            "guessed-games": "Guessed games",
+            "rank": "Rank",
+            "no-data": "No data currently available",
+            "tooltip-base-volume-table": "Volume driven through NCAA Basketball games",
+            "tooltip-bonus-volume-table": "Bonus volume calculated based on your bracket selections",
+            "tooltip-rewards-volume-table": "10,000 OP (30k Thales on arb) will be divided based on pro-rata volume",
+            "tooltip-correct-correct-table": "Number of games guessed properly in your bracket",
+            "tooltip-rewards-correct-table": "3,000 OP (10k thales on arb) will be divided amongst the top 10"
+        },
+        "brackets": {
+            "team-1": "Team 1",
+            "team-2": "Team 2",
+            "submit": "Finish Bracket",
+            "submit-modify": "Update Bracket",
+            "round-0": "1st Round",
+            "round-1": "2nd Round",
+            "round-2": "Sweet 16",
+            "round-3": "Elite 8",
+            "round-4": "Final 4",
+            "round-5": "Final",
+            "stats": {
+                "my-stats": "My stats",
+                "status": "Bracket status",
+                "rank": "Rank by bonus",
+                "complete": "Complete",
+                "incomplete": "Incomplete",
+                "place": "Place",
+                "my-total-score": "My total score",
+                "points": "Points",
+                "bonus": "Bonus"
+            },
+            "modal-mint": {
+                "finish-text-1": "Well done!",
+                "finish-text-1-success": "Congratulations!",
+                "finish-text-2": "You have successfully created your bracket!<br />You can now mint your march madness bracket nft!",
+                "finish-text-2-success": "You just minted your March Madness Bracket!",
+                "finish-text-3-success": "Head over to the <marketsLink>NCAAB markets</marketsLink> and start earning rewards!",
+                "finish-info": "*The March Madness bracket NFT is an Overtime NFT that allows holders to participate in the Overtime March Madness campaign by creating their own prediction tournament bracket.",
+                "update-text-1": "Nicely done!",
+                "update-text-2": "We saved your bracket prediction, please update your bracket now!",
+                "update-text-2-success": "Your March Madness bracket NFT has been updated!",
+                "button-mint": "Mint NFT",
+                "button-minting": "Minting...",
+                "button-update": "Update Bracket",
+                "button-updating": "Updating..."
+            },
+            "share": "Share this bracket",
+            "modal-share": {
+                "header": "My final 4 picks",
+                "user-selection": "I picked the {{team}} to cut the nets down in Houston!",
+                "share": "Share"
+            }
+        },
+        "regions": {
+            "east": "East",
+            "west": "West",
+            "south": "South",
+            "midwest": "Midwest"
+        },
+        "mobile-message": "Page is only available on bigger screens. Please use desktop version!"
     },
     "liquidity-pool": {
         "title": "Provide Liquidity",

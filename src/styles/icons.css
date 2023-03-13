@@ -273,6 +273,14 @@
     content: '\007E';
 }
 
+.icon--correct-full::before {
+    content: '\0080';
+}
+
+.icon--wrong-full::before {
+    content: '\0081';
+}
+
 .icon--op-rewards::before {
     content: '\00A9';
 }

@@ -1,8 +1,9 @@
 import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
-import { BetType } from 'constants/tags';
+import { BetType, ENETPULSE_SPORTS } from 'constants/tags';
 import { t } from 'i18next';
+import useEnetpulseSportMarketLiveResultQuery from 'queries/markets/useEnetpulseSportMarketLiveResultQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -19,24 +20,24 @@ import Odds from './components/Odds';
 import {
     Arrow,
     ClubLogo,
+    MainContainer,
     MatchInfoConatiner,
     MatchTimeLabel,
-    MainContainer,
-    SecondRowContainer,
     OddsWrapper,
     Result,
     ResultLabel,
     ResultWrapper,
+    SecondRowContainer,
     TeamLogosConatiner,
     TeamNameLabel,
     TeamNamesConatiner,
     TeamsInfoConatiner,
-    VSLabel,
-    Wrapper,
-    TotalMarketsContainer,
-    TotalMarketsLabel,
     TotalMarkets,
     TotalMarketsArrow,
+    TotalMarketsContainer,
+    TotalMarketsLabel,
+    VSLabel,
+    Wrapper,
 } from './styled-components';
 
 // 3 for double chance, 1 for spread, 1 for total
@@ -68,7 +69,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
     const isPendingResolution = isGameStarted && !isGameResolved;
     const showOdds = !isPendingResolution && !isGameResolved && !market.isPaused;
-    const gameIdString = Web3.utils.toAscii(market.gameId);
+    const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.tags[0]));
+    const gameIdString = Web3.utils.hexToAscii(market.gameId);
+    const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
     const doubleChanceMarkets = market.childMarkets.filter((market) => market.betType === BetType.DOUBLE_CHANCE);
     const spreadTotalMarkets = market.childMarkets.filter((market) => market.betType !== BetType.DOUBLE_CHANCE);
@@ -78,14 +81,30 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const showSecondRowOnMobile = isMobile && hasChildMarkets;
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
-        enabled: isAppReady && isPendingResolution,
+        enabled: isAppReady && isPendingResolution && !isEnetpulseSport,
+    });
+
+    const useEnetpulseLiveResultQuery = useEnetpulseSportMarketLiveResultQuery(gameIdString, gameDate, market.tags[0], {
+        enabled: isAppReady && isEnetpulseSport,
     });
 
     useEffect(() => {
-        if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
-            setLiveResultInfo(useLiveResultQuery.data);
+        if (isEnetpulseSport) {
+            if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
+                setLiveResultInfo(useEnetpulseLiveResultQuery.data);
+            }
+        } else {
+            if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
+                setLiveResultInfo(useLiveResultQuery.data);
+            }
         }
-    }, [useLiveResultQuery, useLiveResultQuery.data]);
+    }, [
+        useLiveResultQuery,
+        useLiveResultQuery.data,
+        useEnetpulseLiveResultQuery,
+        useEnetpulseLiveResultQuery.data,
+        isEnetpulseSport,
+    ]);
 
     return (
         <Wrapper isResolved={isGameRegularlyResolved}>
@@ -108,6 +127,17 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 </MatchTimeLabel>
                             }
                         />
+                        <MatchTimeLabel>
+                            {isEnetpulseSport && liveResultInfo ? (
+                                <>
+                                    {liveResultInfo.tournamentName ? '| ' + liveResultInfo.tournamentName : ''}
+                                    {liveResultInfo.tournamentRound ? ' | ' + liveResultInfo.tournamentRound : ''}
+                                    <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={12} marginLeft={2} />
+                                </>
+                            ) : (
+                                ''
+                            )}
+                        </MatchTimeLabel>
                         <TeamsInfoConatiner>
                             <TeamLogosConatiner>
                                 <ClubLogo
@@ -181,6 +211,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         liveResultInfo={liveResultInfo}
                         isCanceled={market.isCanceled}
                         isPaused={market.isPaused}
+                        isEnetpulseSport={isEnetpulseSport}
                     />
                 )}
             </MainContainer>

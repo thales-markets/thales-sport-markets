@@ -11,7 +11,10 @@ import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
-import { OP_INCENTIVIZED_LEAGUE } from 'constants/markets';
+import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
+import { INCENTIVIZED_LEAGUE } from 'constants/markets';
+import { getNetworkId } from 'redux/modules/wallet';
+import { NetworkIdByName } from 'utils/network';
 
 type TagsDropdownProps = {
     open: boolean;
@@ -24,12 +27,14 @@ type TagsDropdownProps = {
 const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, setTagFilter, setTagParam }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
+    const networkId = useSelector(getNetworkId);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const tagFilterIds = tagFilter.map((tag) => tag.id);
 
     return (
         <Container open={open}>
             {tags
+                .filter((tag: TagInfo) => tag.id != 9153 && tag.id != 9156)
                 .sort((a, b) => {
                     const favouriteA = favouriteLeagues.find((league: TagInfo) => league.id == a.id);
                     const isFavouriteA = Number(favouriteA && favouriteA.favourite);
@@ -94,27 +99,37 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, setT
                             >
                                 {LeagueFlag(tag.id)}
                                 <Label>{tag.label}</Label>
-                                {OP_INCENTIVIZED_LEAGUE.id == tag.id &&
-                                    new Date() > OP_INCENTIVIZED_LEAGUE.startDate &&
-                                    new Date() < OP_INCENTIVIZED_LEAGUE.endDate && (
+                                {INCENTIVIZED_LEAGUE.id == tag.id &&
+                                    new Date() > INCENTIVIZED_LEAGUE.startDate &&
+                                    new Date() < INCENTIVIZED_LEAGUE.endDate && (
                                         <Tooltip
                                             overlay={
                                                 <Trans
-                                                    i18nKey="markets.op-incentivized-tooltip"
+                                                    i18nKey="markets.incentivized-tooltip"
                                                     components={{
-                                                        duneLink: (
+                                                        detailsLink: (
                                                             <a
-                                                                href="https://dune.com/leifu/overtime-nfl-superbowl-leaderboard-12-feb-2023"
+                                                                href={INCENTIVIZED_LEAGUE.link}
                                                                 target="_blank"
                                                                 rel="noreferrer"
                                                             />
                                                         ),
                                                     }}
+                                                    values={{
+                                                        rewards:
+                                                            networkId !== NetworkIdByName.ArbitrumOne
+                                                                ? INCENTIVIZED_LEAGUE.opRewards
+                                                                : INCENTIVIZED_LEAGUE.thalesRewards,
+                                                    }}
                                                 />
                                             }
                                             component={
                                                 <IncentivizedLeague>
-                                                    <OPLogo />
+                                                    {networkId !== NetworkIdByName.ArbitrumOne ? (
+                                                        <OPLogo />
+                                                    ) : (
+                                                        <ThalesLogo />
+                                                    )}
                                                 </IncentivizedLeague>
                                             }
                                         ></Tooltip>
@@ -229,9 +244,9 @@ const IncentivizedLeague = styled.div`
     display: flex;
     align-items: center;
     cursor: pointer;
-    margin-left: 10px;
+    margin-left: 6px;
     svg {
-        width: 18px;
+        height: 18px;
     }
 `;
 

@@ -14,6 +14,7 @@ import overtimeVoucherContract from './contracts/overtimeVoucherContract';
 import parlayMarketsAMMContract from './contracts/parlayMarketsAMMContract';
 import { FIFAFavoriteTeam } from './contracts/FIFAFavoriteTeam';
 import gamesOddsObtainerContract from 'utils/contracts/gamesOddsObtainerContract';
+import { marchMadnessContract } from './contracts/marchMadnessContract';
 import liquidityPoolContract from 'utils/contracts/liquidityPoolContract';
 
 type NetworkConnector = {
@@ -39,6 +40,7 @@ type NetworkConnector = {
     parlayMarketsAMMContract?: ethers.Contract;
     favoriteTeamContract?: ethers.Contract;
     gamesOddsObtainerContract?: ethers.Contract;
+    marchMadnessContract?: ethers.Contract;
     liquidityPoolContract?: ethers.Contract;
 };
 
@@ -60,6 +62,7 @@ const networkConnector: NetworkConnector = {
         this.parlayMarketsAMMContract = initializeContract(parlayMarketsAMMContract, networkSettings);
         this.favoriteTeamContract = initializeContract(FIFAFavoriteTeam, networkSettings);
         this.gamesOddsObtainerContract = initializeContract(gamesOddsObtainerContract, networkSettings);
+        this.marchMadnessContract = initializeContract(marchMadnessContract, networkSettings);
         this.liquidityPoolContract = initializeContract(liquidityPoolContract, networkSettings);
 
         this.multipleCollateral = [

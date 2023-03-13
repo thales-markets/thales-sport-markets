@@ -12,7 +12,9 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
     leagueTag == 9001 ||
     leagueTag == 9101 ||
     leagueTag == 9017 ||
-    leagueTag == 9018
+    leagueTag == 9018 ||
+    leagueTag == 9153 ||
+    leagueTag == 9156
         ? `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${team
               .trim()
               .replaceAll(' ', '-')
@@ -22,8 +24,8 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
               .replaceAll(' ', '-')
               .toLowerCase()}.svg`;
 
-export const getOnImageError = (setSrc: (src: string) => void, leagueTag: number | string) => () => {
-    setSrc(TAGS_LIST.find((t) => t.id === Number(leagueTag))?.logo || OVERTIME_LOGO);
+export const getOnImageError = (setSrc: (src: string) => void, leagueTag: number | string, isDark = false) => () => {
+    setSrc(TAGS_LIST.find((t) => t.id === Number(leagueTag))?.logo || (isDark ? OVERTIME_LOGO_DARK : OVERTIME_LOGO));
 };
 
 export const getErrorImage = (leagueTag: number | string) => {
@@ -39,3 +41,4 @@ export const getLeagueLogoClass = (leagueTag: number) => {
 };
 
 export const OVERTIME_LOGO = '/logos/overtime-logo.png';
+export const OVERTIME_LOGO_DARK = '/logos/overtime-logo-dark.svg';

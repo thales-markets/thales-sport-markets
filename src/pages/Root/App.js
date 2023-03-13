@@ -23,6 +23,8 @@ import Profile from 'pages/Profile';
 import Wizard from 'pages/Wizard';
 import Referral from 'pages/Referral';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
+import MarchMadness from 'pages/MarchMadness';
+import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -259,6 +261,13 @@ const App = () => {
                                 <Route exact path={ROUTES.QuizLeaderboard}>
                                     <DappLayout>
                                         <QuizLeaderboard />
+                                    </DappLayout>
+                                </Route>
+                            )}
+                            {isMarchMadnessAvailableForNetworkId(networkId) && (
+                                <Route exact path={ROUTES.MarchMadness}>
+                                    <DappLayout>
+                                        <MarchMadness />
                                     </DappLayout>
                                 </Route>
                             )}
