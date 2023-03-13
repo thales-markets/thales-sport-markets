@@ -231,6 +231,7 @@ const IncentivizedLeague = styled.div`
 const IncentivizedTitle = styled.span`
     font-size: 13px;
     padding-right: 5px;
+    text-align: right;
 `;
 
 export default MarketsList;
