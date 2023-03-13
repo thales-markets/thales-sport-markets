@@ -7,9 +7,12 @@ import styled from 'styled-components';
 import { SportMarkets, TagInfo } from 'types/markets';
 import MarketListCard from '../MarketListCard';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
+import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
 import Tooltip from 'components/Tooltip';
 import { Trans, useTranslation } from 'react-i18next';
-import { OP_INCENTIVIZED_LEAGUE } from 'constants/markets';
+import { INCENTIVIZED_LEAGUE } from 'constants/markets';
+import { getNetworkId } from 'redux/modules/wallet';
+import { NetworkIdByName } from 'utils/network';
 
 type MarketsList = {
     markets: SportMarkets;
@@ -23,6 +26,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
     const leagueName = TAGS_LIST.find((t: TagInfo) => t.id == league)?.label;
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
+    const networkId = useSelector(getNetworkId);
     const favouriteLeague = favouriteLeagues.find((favourite: TagInfo) => favourite.id == league);
     const isFavourite = favouriteLeague && favouriteLeague.favourite;
 
@@ -46,28 +50,30 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                         <ArrowIcon down={true} className={`icon-exotic icon-exotic--down`} />
                     )}
                 </LeagueInfo>
-                {OP_INCENTIVIZED_LEAGUE.id == league &&
-                    new Date() > OP_INCENTIVIZED_LEAGUE.startDate &&
-                    new Date() < OP_INCENTIVIZED_LEAGUE.endDate && (
+                {INCENTIVIZED_LEAGUE.id == league &&
+                    new Date() > INCENTIVIZED_LEAGUE.startDate &&
+                    new Date() < INCENTIVIZED_LEAGUE.endDate && (
                         <Tooltip
                             overlay={
                                 <Trans
-                                    i18nKey="markets.op-incentivized-tooltip"
+                                    i18nKey="markets.incentivized-tooltip"
                                     components={{
-                                        duneLink: (
-                                            <a
-                                                href="https://dune.com/leifu/overtime-nfl-superbowl-leaderboard-12-feb-2023"
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            />
+                                        detailsLink: (
+                                            <a href={INCENTIVIZED_LEAGUE.link} target="_blank" rel="noreferrer" />
                                         ),
+                                    }}
+                                    values={{
+                                        rewards:
+                                            networkId !== NetworkIdByName.ArbitrumOne
+                                                ? INCENTIVIZED_LEAGUE.opRewards
+                                                : INCENTIVIZED_LEAGUE.thalesRewards,
                                     }}
                                 />
                             }
                             component={
                                 <IncentivizedLeague>
                                     <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
-                                    <OPLogo />
+                                    {networkId !== NetworkIdByName.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
                                 </IncentivizedLeague>
                             }
                         ></Tooltip>
@@ -217,11 +223,15 @@ const IncentivizedLeague = styled.div`
     display: flex;
     align-items: center;
     cursor: pointer;
+    svg {
+        height: 21px;
+    }
 `;
 
 const IncentivizedTitle = styled.span`
     font-size: 13px;
     padding-right: 5px;
+    text-align: right;
 `;
 
 export default MarketsList;
