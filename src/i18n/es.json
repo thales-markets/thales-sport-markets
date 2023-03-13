@@ -423,7 +423,7 @@
             }
         },
         "incentivized-markets": "MERCADOS INCENTIVIZADOS",
-        "op-incentivized-tooltip": "Los mercados de EPL están incentivados con 5,000 OP desde los juegos del 26 de diciembre hasta los juegos del 6 de enero según el volumen prorrateado. Consulte la tabla de clasificación <duneLink>aquí</ duneLink>."
+        "incentivized-tooltip": "NCAA markets are incentivized with {{rewards}} during March Madness. More details <detailsLink>here</detailsLink>."
     },
     "rewards": {
         "header": "Recompensas",

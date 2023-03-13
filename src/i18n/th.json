@@ -418,7 +418,7 @@
                 "march-madness": "มาร์ชแมดเนส"
             }
         },
-        "op-incentivized-tooltip": "ตลาด EPL ได้รับแรงจูงใจด้วย 5,000 OP จากเกมวันที่ 26 ธันวาคมถึงเกมที่ 6 มกราคม โดยพิจารณาจากปริมาณตามสัดส่วน ดูลีดเดอร์บอร์ด <duneLink>ที่นี่</ duneLink>",
+        "incentivized-tooltip": "NCAA markets are incentivized with {{rewards}} during March Madness. More details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "ตลาดที่สร้างแรงจูงใจ"
     },
     "rewards": {
