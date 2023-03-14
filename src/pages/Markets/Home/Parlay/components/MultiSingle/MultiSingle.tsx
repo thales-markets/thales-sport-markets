@@ -96,7 +96,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
     const [totalBonusPercentageDec, setTotalBonusPercentageDec] = useState(0);
     const [bonusCurrency, setBonusCurrency] = useState(0);
     const [calculatedTotalTokenAmount, setCalculatedTotalTokenAmount] = useState(0);
-    const [calculatedTotalBuyIn, setCalculatedTotalBuyIn] = useState(0);
+    // const [calculatedTotalBuyIn, setCalculatedTotalBuyIn] = useState(0);
     const [calculatedSkewAverage, setCalculatedSkewAverage] = useState(0);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [tokenAndBonus, setTokenAndBonus] = useState<MultiSingleTokenQuoteAndBonus[]>(
@@ -225,6 +225,10 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
         return markets.map((market) => getBonus(market) / 100);
     }, [markets]);
 
+    const calculatedTotalBuyIn = useMemo(() => {
+        return multiSingleAmounts.reduce((a, b) => a + b.amountToBuy, 0);
+    }, [multiSingleAmounts]);
+
     useEffect(() => {
         let isSubscribed = true; // Use for race condition
 
@@ -236,7 +240,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
             const tokenAndBonusArr = [] as MultiSingleTokenQuoteAndBonus[];
             const isFetchingRecords = isFetching;
             let totalTokenAmount = 0;
-            let totalBuyInAmount = 0;
             let totalBonusPercentage = 0;
             let totalBonusCurrency = 0;
             let skewTotal = 0;
@@ -251,10 +254,10 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                     contract.connect(signer);
 
                     const amtToBuy = multiSingleAmounts[i].amountToBuy;
-
-                    const roundedMaxAmount = floorNumberToDecimals(
-                        availablePerPosition[markets[i].address][markets[i].position]?.available || 0
-                    );
+                    const availAmount = availablePerPosition[markets[i].address]
+                        ? availablePerPosition[markets[i].address][markets[i].position]?.available || 0
+                        : 0;
+                    const roundedMaxAmount = floorNumberToDecimals(availAmount);
 
                     if (roundedMaxAmount) {
                         const [sUSDToSpendForMaxAmount, ammBalances, skewImpact] = await Promise.all([
@@ -269,21 +272,16 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
 
                         const ammBalanceForSelectedPosition = ammBalances[markets[i].position];
 
-                        totalBuyInAmount += amtToBuy;
-
                         const amountOfTokens =
                             fetchAmountOfTokensForXsUSDAmount(
                                 Number(amtToBuy),
                                 getPositionOdds(markets[i]),
                                 sUSDToSpendForMaxAmount / divider,
-                                availablePerPosition[markets[i].address][markets[i].position].available || 0,
+                                availAmount,
                                 ammBalanceForSelectedPosition / divider
                             ) || 0;
 
-                        if (
-                            amountOfTokens >
-                            (availablePerPosition[markets[i].address][markets[i].position].available || 0)
-                        ) {
+                        if (amountOfTokens > availAmount) {
                             tokenAndBonusArr.push({
                                 sportMarketAddress: address,
                                 tokenAmount: 0.0,
@@ -344,7 +342,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
             setCalculatedSkewAverage(skewTotal / markets.length);
             setBonusCurrency(totalBonusCurrency);
             setTotalBonusPercentageDec(totalBonusPercentage);
-            setCalculatedTotalBuyIn(totalBuyInAmount);
             setCalculatedTotalTokenAmount(totalTokenAmount);
             setTokenAndBonus(tokenAndBonusArr);
             setIsRecalculating(false);
@@ -393,21 +390,23 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                 try {
                     const parsedTicketPrice = getAmountForApproval(
                         selectedStableIndex,
-                        Number(usdAmountValue).toString()
+                        Number(calculatedTotalBuyIn).toString()
                     );
-                    const allowance = await checkAllowance(
+                    await checkAllowance(
                         parsedTicketPrice,
                         collateralContractWithSigner,
                         walletAddress,
                         sportsAMMContract.address
-                    );
-                    if (!mountedRef.current) return null;
-                    setHasAllowance(allowance);
+                    ).then((a) => {
+                        if (!mountedRef.current) return null;
+                        setHasAllowance(a);
+                        console.log(hasAllowance);
+                    });
                 } catch (e) {
                     console.log(e);
                 }
             };
-            if (isWalletConnected && usdAmountValue) {
+            if (isWalletConnected && calculatedTotalBuyIn) {
                 isVoucherSelected ? setHasAllowance(true) : getAllowance();
             }
         }
@@ -416,7 +415,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
         isWalletConnected,
         hasAllowance,
         isAllowing,
-        usdAmountValue,
+        calculatedTotalBuyIn,
         selectedStableIndex,
         isVoucherSelected,
         isMultiCollateralSupported,
@@ -816,7 +815,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
             {openApprovalModal && (
                 <ApprovalModal
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
-                    defaultAmount={Number(0) + Number(0) * APPROVAL_BUFFER}
+                    defaultAmount={Number(calculatedTotalBuyIn) + Number(calculatedTotalBuyIn) * APPROVAL_BUFFER}
                     collateralIndex={selectedStableIndex}
                     tokenSymbol={COLLATERALS[selectedStableIndex]}
                     isAllowing={isAllowing}
