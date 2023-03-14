@@ -97,7 +97,5 @@ export const getAmountForApproval = (stableIndex: number, amountToApprove: strin
             collateralDecimals = (STABLE_DECIMALS as any)[stable];
         }
     }
-
-    console.log(amountToApprove, collateralDecimals, stableIndex);
     return ethers.utils.parseUnits(amountToApprove, collateralDecimals);
 };
