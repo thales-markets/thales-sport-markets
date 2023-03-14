@@ -12,7 +12,7 @@ export const ParylayMobileModal: React.FC<ParylayMobileModalProps> = ({ onClose 
     return (
         <MobileModal onClose={() => onClose()} shouldCloseOnOverlayClick={true}>
             <Container>
-                <Parlay />
+                <Parlay onBuySuccess={onClose} />
             </Container>
         </MobileModal>
     );

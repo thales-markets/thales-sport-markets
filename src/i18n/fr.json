@@ -30,7 +30,7 @@
             }
         },
         "swap": {
-            "title": "Obtenir {{currencyKey}}",
+            "title": "Obtenir USD",
             "from-label": "De",
             "to-label": "À",
             "balance-label": "Balance: {{amount}}",
@@ -526,7 +526,7 @@
                 "march-madness": "Folie de mars"
             }
         },
-        "op-incentivized-tooltip": "Les marchés NFL sont récompensés par 10.000 OP entre les matchs du 14 janvier au 12 février, en fonction du volume proportionnel. Consultez le classement <duneLink>ici</ duneLink>.",
+        "incentivized-tooltip": "NCAA markets are incentivized with {{rewards}} during March Madness. More details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "MARCHÉS RÉCOMPENSÉS"
     },
     "rewards": {
@@ -1035,7 +1035,9 @@
             "tooltip-bonus-volume-table": "Volume bonus calculé en fonction de vos sélections de tranches",
             "tooltip-correct-correct-table": "Nombre de jeux correctement devinés dans votre fourchette",
             "tooltip-rewards-volume-table": "10 000 OP (30 000 Thales sur arb) seront divisés en fonction du volume au prorata",
-            "tooltip-rewards-correct-table": "3 000 OP (10k thales sur arb) seront répartis entre les 10 premiers"
+            "tooltip-rewards-correct-table": "3 000 OP (10k thales sur arb) seront répartis entre les 10 premiers",
+            "my-rewards": "Mes récompenses",
+            "by-guessed-correctly": "Par deviné correctement"
         },
         "test-info": "La phase de tests est maintenant ouverte avec les équipes échantillons, la sélection 2023 s'ouvre le 12 mars !"
     }

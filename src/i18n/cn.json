@@ -51,7 +51,7 @@
             }
         },
         "swap": {
-            "title": "获取 {{currencyKey}}",
+            "title": "获取 美元",
             "from-label": "来源",
             "to-label": "目标",
             "balance-label": "钱包余额: {{amount}}",
@@ -429,7 +429,7 @@
             }
         },
         "incentivized-markets": "激励市场",
-        "op-incentivized-tooltip": "NFL markets are incentivized with 10,000 OP from Jan 14th games to Feb 12th games based on pro-rata volume. Check out the leaderboard <duneLink>here</ duneLink>."
+        "incentivized-tooltip": "NCAA markets are incentivized with {{rewards}} during March Madness. More details <detailsLink>here</detailsLink>."
     },
     "rewards": {
         "header": "奖励",
@@ -937,7 +937,9 @@
             "tooltip-bonus-volume-table": "根据您的括号选择计算的奖金量",
             "tooltip-correct-correct-table": "在您的括号中正确猜出的游戏数量",
             "tooltip-rewards-correct-table": "3,000 OP (10k thales on arb) 将分配给前 10 名",
-            "tooltip-rewards-volume-table": "10,000 OP（30k Thales on arb）将按比例分配"
+            "tooltip-rewards-volume-table": "10,000 OP（30k Thales on arb）将按比例分配",
+            "by-guessed-correctly": "猜对了",
+            "my-rewards": "我的奖励"
         },
         "test-info": "测试阶段现已开放样本团队，2023 年选择将于 3 月 12 日开放！"
     }

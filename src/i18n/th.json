@@ -42,7 +42,7 @@
             }
         },
         "swap": {
-            "title": "รับ {{currencyKey}}",
+            "title": "รับ USD",
             "from-label": "จาก",
             "to-label": "ถึง",
             "balance-label": "ยอดเงิน: {{amount}}",
@@ -424,7 +424,7 @@
                 "march-madness": "มาร์ชแมดเนส"
             }
         },
-        "op-incentivized-tooltip": "ตลาด EPL ได้รับแรงจูงใจด้วย 5,000 OP จากเกมวันที่ 26 ธันวาคมถึงเกมที่ 6 มกราคม โดยพิจารณาจากปริมาณตามสัดส่วน ดูลีดเดอร์บอร์ด <duneLink>ที่นี่</ duneLink>",
+        "incentivized-tooltip": "NCAA markets are incentivized with {{rewards}} during March Madness. More details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "ตลาดที่สร้างแรงจูงใจ"
     },
     "rewards": {
@@ -933,7 +933,9 @@
             "tooltip-rewards-volume-table": "10,000 OP (30k Thales บน arb) จะถูกแบ่งตามปริมาณตามสัดส่วน",
             "tooltip-correct-correct-table": "จำนวนเกมที่เดาถูกในวงเล็บของคุณ",
             "tooltip-bonus-volume-table": "ปริมาณโบนัสคำนวณจากการเลือกกลุ่มของคุณ",
-            "tooltip-base-volume-table": "ปริมาณขับเคลื่อนผ่านเกม NCAA Basketball"
+            "tooltip-base-volume-table": "ปริมาณขับเคลื่อนผ่านเกม NCAA Basketball",
+            "by-guessed-correctly": "โดยเดาถูก",
+            "my-rewards": "รางวัลของฉัน"
         },
         "test-info": "ขั้นตอนการทดสอบได้เปิดขึ้นแล้วพร้อมกับทีมตัวอย่าง การคัดเลือกในปี 2023 จะเปิดขึ้นในวันที่ 12 มีนาคม!"
     }

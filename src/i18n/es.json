@@ -51,7 +51,7 @@
             }
         },
         "swap": {
-            "title": "Obtener {{currencyKey}}",
+            "title": "Obtener USD",
             "from-label": "Envio",
             "to-label": "Recibo",
             "balance-label": "Balance: {{amount}}",
@@ -429,7 +429,7 @@
             }
         },
         "incentivized-markets": "MERCADOS INCENTIVIZADOS",
-        "op-incentivized-tooltip": "Los mercados de EPL están incentivados con 5,000 OP desde los juegos del 26 de diciembre hasta los juegos del 6 de enero según el volumen prorrateado. Consulte la tabla de clasificación <duneLink>aquí</ duneLink>."
+        "incentivized-tooltip": "NCAA markets are incentivized with {{rewards}} during March Madness. More details <detailsLink>here</detailsLink>."
     },
     "rewards": {
         "header": "Recompensas",
@@ -937,7 +937,9 @@
             "tooltip-correct-correct-table": "Número de juegos adivinados correctamente en su paréntesis",
             "tooltip-bonus-volume-table": "Volumen de bonificación calculado en función de sus selecciones de soporte",
             "tooltip-base-volume-table": "Volumen impulsado a través de los juegos de baloncesto de la NCAA",
-            "tooltip-rewards-correct-table": "3,000 OP (10k thales en arb) se dividirán entre los 10 mejores"
+            "tooltip-rewards-correct-table": "3,000 OP (10k thales en arb) se dividirán entre los 10 mejores",
+            "by-guessed-correctly": "Por adivinar correctamente",
+            "my-rewards": "Mi recompensa"
         },
         "test-info": "Ya está abierta la fase de pruebas con los equipos de muestra, ¡la selección 2023 se abre el 12 de marzo!"
     }
