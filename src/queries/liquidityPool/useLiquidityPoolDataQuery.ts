@@ -1,9 +1,10 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormmaterWithDecimals, bigNumberFormatter } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 import { NetworkId } from 'types/network';
 import { LiquidityPoolData } from 'types/liquidityPool';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 const useLiquidityPoolDataQuery = (networkId: NetworkId, options?: UseQueryOptions<LiquidityPoolData | undefined>) => {
     return useQuery<LiquidityPoolData | undefined>(
@@ -29,6 +30,7 @@ const useLiquidityPoolDataQuery = (networkId: NetworkId, options?: UseQueryOptio
                 stakedThalesMultiplier: 0,
             };
 
+            const decimals = getDefaultDecimalsForNetwork(networkId);
             try {
                 const { liquidityPoolContract } = networkConnector;
                 if (liquidityPoolContract) {
@@ -59,14 +61,17 @@ const useLiquidityPoolDataQuery = (networkId: NetworkId, options?: UseQueryOptio
                     ]);
 
                     liquidityPoolData.liquidityPoolStarted = liquidityPoolStarted;
-                    liquidityPoolData.maxAllowedDeposit = bigNumberFormatter(maxAllowedDeposit);
+                    liquidityPoolData.maxAllowedDeposit = bigNumberFormmaterWithDecimals(maxAllowedDeposit, decimals);
                     liquidityPoolData.round = Number(round);
-                    liquidityPoolData.allocationNextRound = bigNumberFormatter(allocationNextRound);
+                    liquidityPoolData.allocationNextRound = bigNumberFormmaterWithDecimals(
+                        allocationNextRound,
+                        decimals
+                    );
                     liquidityPoolData.availableAllocationNextRound =
                         liquidityPoolData.maxAllowedDeposit - liquidityPoolData.allocationNextRound;
                     liquidityPoolData.allocationNextRoundPercentage =
                         (liquidityPoolData.allocationNextRound / liquidityPoolData.maxAllowedDeposit) * 100;
-                    liquidityPoolData.minDepositAmount = bigNumberFormatter(minDepositAmount);
+                    liquidityPoolData.minDepositAmount = bigNumberFormmaterWithDecimals(minDepositAmount, decimals);
                     liquidityPoolData.maxAllowedUsers = Number(maxAllowedUsers);
                     liquidityPoolData.usersCurrentlyInLiquidityPool = Number(usersCurrentlyInLiquidityPool);
                     liquidityPoolData.canCloseCurrentRound = canCloseCurrentRound;
@@ -82,9 +87,14 @@ const useLiquidityPoolDataQuery = (networkId: NetworkId, options?: UseQueryOptio
                         liquidityPoolContract?.getRoundEndTime(liquidityPoolData.round),
                     ]);
 
-                    liquidityPoolData.allocationCurrentRound = bigNumberFormatter(allocationCurrentRound);
+                    liquidityPoolData.allocationCurrentRound = bigNumberFormmaterWithDecimals(
+                        allocationCurrentRound,
+                        decimals
+                    );
                     liquidityPoolData.lifetimePnl =
-                        bigNumberFormatter(lifetimePnl) === 0 ? 0 : bigNumberFormatter(lifetimePnl) - 1;
+                        bigNumberFormmaterWithDecimals(lifetimePnl, decimals) === 0
+                            ? 0
+                            : bigNumberFormmaterWithDecimals(lifetimePnl, decimals) - 1;
                     liquidityPoolData.roundEndTime = Number(roundEndTime) * 1000;
                     liquidityPoolData.isRoundEnded = new Date().getTime() > liquidityPoolData.roundEndTime;
 

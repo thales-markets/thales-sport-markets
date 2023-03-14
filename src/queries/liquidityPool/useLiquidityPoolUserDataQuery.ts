@@ -1,9 +1,10 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormmaterWithDecimals, bigNumberFormatter } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 import { NetworkId } from 'types/network';
 import { UserLiquidityPoolData } from 'types/liquidityPool';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 const useLiquidityPoolUserDataQuery = (
     walletAddress: string,
@@ -26,6 +27,7 @@ const useLiquidityPoolUserDataQuery = (
                 neededStakedThalesToWithdraw: 0,
             };
 
+            const decimals = getDefaultDecimalsForNetwork(networkId);
             try {
                 const { liquidityPoolContract } = networkConnector;
                 if (liquidityPoolContract) {
@@ -45,8 +47,11 @@ const useLiquidityPoolUserDataQuery = (
                         liquidityPoolContract?.getNeededStakedThalesToWithdrawForUser(walletAddress),
                     ]);
 
-                    userLiquidityPoolData.balanceCurrentRound = bigNumberFormatter(balanceCurrentRound);
-                    userLiquidityPoolData.balanceNextRound = bigNumberFormatter(balanceNextRound);
+                    userLiquidityPoolData.balanceCurrentRound = bigNumberFormmaterWithDecimals(
+                        balanceCurrentRound,
+                        decimals
+                    );
+                    userLiquidityPoolData.balanceNextRound = bigNumberFormmaterWithDecimals(balanceNextRound, decimals);
                     userLiquidityPoolData.balanceTotal = withdrawalRequested
                         ? 0
                         : userLiquidityPoolData.balanceCurrentRound + userLiquidityPoolData.balanceNextRound;

@@ -107,7 +107,7 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--liquidity-pool',
         name: 'liquidity-pool',
         route: ROUTES.LiquidityPool,
-        supportedNetworks: [10, 420],
+        supportedNetworks: [10, 420, 42161],
     },
 ];
 

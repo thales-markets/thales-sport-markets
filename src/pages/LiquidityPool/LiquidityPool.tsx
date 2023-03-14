@@ -50,7 +50,7 @@ import NumericInput from 'components/fields/NumericInput';
 import { getIsAppReady } from 'redux/modules/app';
 import { UserLiquidityPoolData, LiquidityPoolData } from 'types/liquidityPool';
 import { formatCurrencyWithSign, formatPercentage, formatCurrency } from 'utils/formatters/number';
-import { PAYMENT_CURRENCY, USD_SIGN } from 'constants/currency';
+import { USD_SIGN } from 'constants/currency';
 import TimeRemaining from 'components/TimeRemaining';
 import networkConnector from 'utils/networkConnector';
 import { MAX_GAS_LIMIT } from 'constants/network';
@@ -69,6 +69,7 @@ import useLiquidityPoolDataQuery from 'queries/liquidityPool/useLiquidityPoolDat
 import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
 import { LINKS } from 'constants/links';
 import MaxAllowanceTooltip from './components/MaxAllowanceTooltip';
+import { getDefaultDecimalsForNetwork, getDefaultColleteralForNetwork } from 'utils/collaterals';
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
@@ -89,6 +90,7 @@ const LiquidityPool: React.FC = () => {
     const [lastValidUserLiquidityPoolData, setLastValidUserLiquidityPoolData] = useState<
         UserLiquidityPoolData | undefined
     >(undefined);
+    const collateral = getDefaultColleteralForNetwork(networkId);
 
     const { openConnectModal } = useConnectModal();
 
@@ -234,7 +236,7 @@ const LiquidityPool: React.FC = () => {
                 if (txResult && txResult.transactionHash) {
                     toast.update(
                         id,
-                        getSuccessToastOptions(t('market.toast-message.approve-success', { token: PAYMENT_CURRENCY }))
+                        getSuccessToastOptions(t('market.toast-message.approve-success', { token: collateral }))
                     );
                     setIsAllowing(false);
                 }
@@ -253,7 +255,10 @@ const LiquidityPool: React.FC = () => {
             setIsSubmitting(true);
             try {
                 const liquidityPoolContractWithSigner = liquidityPoolContract.connect(signer);
-                const parsedAmount = ethers.utils.parseEther(Number(amount).toString());
+                const parsedAmount = ethers.utils.parseUnits(
+                    Number(amount).toString(),
+                    getDefaultDecimalsForNetwork(networkId)
+                );
 
                 const tx = await liquidityPoolContractWithSigner.deposit(parsedAmount, {
                     gasLimit: MAX_GAS_LIMIT,
@@ -348,9 +353,9 @@ const LiquidityPool: React.FC = () => {
             return (
                 <SubmitButton disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
                     {!isAllowing
-                        ? t('common.enable-wallet-access.approve-label', { currencyKey: PAYMENT_CURRENCY })
+                        ? t('common.enable-wallet-access.approve-label', { currencyKey: collateral })
                         : t('common.enable-wallet-access.approve-progress-label', {
-                              currencyKey: PAYMENT_CURRENCY,
+                              currencyKey: collateral,
                           })}
                 </SubmitButton>
             );
@@ -502,7 +507,7 @@ const LiquidityPool: React.FC = () => {
                                             disabled={isDepositAmountInputDisabled}
                                             onChange={(_, value) => setAmount(value)}
                                             placeholder={t('liquidity-pool.deposit-amount-placeholder')}
-                                            currencyLabel={PAYMENT_CURRENCY}
+                                            currencyLabel={collateral}
                                         />
                                     </ValidationTooltip>
                                 </InputContainer>
@@ -635,6 +640,7 @@ const LiquidityPool: React.FC = () => {
                             }}
                             values={{
                                 thalesStakedAmount: 1 / liquidityPoolData.stakedThalesMultiplier,
+                                currency: collateral,
                             }}
                         />
                     </Description>
@@ -829,7 +835,7 @@ const LiquidityPool: React.FC = () => {
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={amount}
-                    tokenSymbol={PAYMENT_CURRENCY}
+                    tokenSymbol={collateral}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}
