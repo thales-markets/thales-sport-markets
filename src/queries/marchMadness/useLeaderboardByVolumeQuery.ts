@@ -6,6 +6,7 @@ type LeaderboardByVolumeResponse = {
     globalVolume: number;
     leaderboard: {
         walletAddress: string;
+        volume: number;
         baseVolume: number;
         bonusVolume: number;
         totalCorrectedPredictions: number;
