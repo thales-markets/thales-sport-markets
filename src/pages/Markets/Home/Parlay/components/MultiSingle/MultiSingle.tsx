@@ -400,7 +400,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                     ).then((a) => {
                         if (!mountedRef.current) return null;
                         setHasAllowance(a);
-                        console.log(hasAllowance);
                     });
                 } catch (e) {
                     console.log(e);
@@ -500,7 +499,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                         walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
                             ? getReferralId()
                             : null;
-                    const tx = getMultiAMMSportsTransactions(
+                    const tx = await getMultiAMMSportsTransactions(
                         isVoucherSelected,
                         overtimeVoucher ? overtimeVoucher.id : 0,
                         selectedStableIndex,

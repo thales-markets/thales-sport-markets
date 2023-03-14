@@ -110,28 +110,28 @@ export const getMultiAMMSportsTransactions: any = (
                     providerOptions
                 )
             );
+        } else {
+            transactions.push(
+                referral
+                    ? sportsAMMContract?.buyFromAMMWithReferrer(
+                          marketAddress,
+                          selectedPosition,
+                          parsedAmount,
+                          ammQuote,
+                          additionalSlippage,
+                          referral,
+                          providerOptions
+                      )
+                    : sportsAMMContract?.buyFromAMM(
+                          marketAddress,
+                          selectedPosition,
+                          parsedAmount,
+                          ammQuote,
+                          additionalSlippage,
+                          providerOptions
+                      )
+            );
         }
-
-        transactions.push(
-            referral
-                ? sportsAMMContract?.buyFromAMMWithReferrer(
-                      marketAddress,
-                      selectedPosition,
-                      parsedAmount,
-                      ammQuote,
-                      additionalSlippage,
-                      referral,
-                      providerOptions
-                  )
-                : sportsAMMContract?.buyFromAMM(
-                      marketAddress,
-                      selectedPosition,
-                      parsedAmount,
-                      ammQuote,
-                      additionalSlippage,
-                      providerOptions
-                  )
-        );
     });
 
     return transactions;
