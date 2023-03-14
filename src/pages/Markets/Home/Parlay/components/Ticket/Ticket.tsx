@@ -61,6 +61,7 @@ type TicketProps = {
     markets: ParlaysMarket[];
     parlayPayment: ParlayPayment;
     setMarketsOutOfLiquidity: (indexes: number[]) => void;
+    onBuySuccess?: () => void;
 };
 
 const TicketErrorMessage = {
@@ -68,7 +69,7 @@ const TicketErrorMessage = {
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
 };
 
-const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOfLiquidity }) => {
+const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOfLiquidity, onBuySuccess }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
@@ -354,6 +355,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     setIsBuying(false);
                     setUsdAmount('');
                     dispatch(removeAll());
+                    onBuySuccess && onBuySuccess();
 
                     trackEvent({
                         category: 'parlay',
