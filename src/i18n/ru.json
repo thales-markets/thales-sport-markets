@@ -42,7 +42,7 @@
             }
         },
         "swap": {
-            "title": "Get {{currencyKey}}",
+            "title": "Get USD",
             "from-label": "From",
             "to-label": "To",
             "balance-label": "Balance: {{amount}}",
@@ -933,7 +933,9 @@
             "tooltip-rewards-correct-table": "3000 OP (10 тысяч талеров на вилке) будут разделены между 10 лучшими",
             "tooltip-base-volume-table": "Объем продаж благодаря баскетбольным играм NCAA",
             "tooltip-correct-correct-table": "Количество правильно угаданных игр в вашей группе",
-            "tooltip-rewards-volume-table": "10 000 OP (30 000 Thales на вилке) будут разделены пропорционально объему"
+            "tooltip-rewards-volume-table": "10 000 OP (30 000 Thales на вилке) будут разделены пропорционально объему",
+            "my-rewards": "Мои награды",
+            "by-guessed-correctly": "По правильному угадыванию"
         },
         "test-info": "Фаза тестирования уже открыта с выборочными командами, выбор 2023 года открывается 12 марта!"
     }

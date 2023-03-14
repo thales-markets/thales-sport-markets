@@ -42,7 +42,7 @@
             }
         },
         "swap": {
-            "title": "Get {{currencyKey}}",
+            "title": "Get USD",
             "from-label": "From",
             "to-label": "To",
             "balance-label": "Balance: {{amount}}",
@@ -933,7 +933,9 @@
             "tooltip-base-volume-table": "Volume guidato dalle partite di basket NCAA",
             "tooltip-correct-correct-table": "Numero di partite indovinate correttamente nel tuo girone",
             "tooltip-rewards-correct-table": "3.000 OP (10k thales su arb) saranno divisi tra i primi 10",
-            "tooltip-rewards-volume-table": "10.000 OP (30k Thales su arb) saranno divisi in base al volume pro-rata"
+            "tooltip-rewards-volume-table": "10.000 OP (30k Thales su arb) saranno divisi in base al volume pro-rata",
+            "my-rewards": "Le mie ricompense",
+            "by-guessed-correctly": "Indovinato correttamente"
         },
         "test-info": "Ora è aperta la fase di test con le squadre campione, il 12 marzo si aprono le selezioni 2023!"
     }
