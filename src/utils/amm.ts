@@ -4,7 +4,7 @@ import { Position } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
 import { NetworkId } from 'types/network';
 import { getCollateralAddress } from './collaterals';
-import { isMultiCollateralSupportedForNetwork } from './network';
+import { isMultiCollateralSupportedForNetwork, NetworkIdByName } from './network';
 
 export const getAMMSportsTransaction: any = (
     isVoucherSelected: boolean,
@@ -86,12 +86,18 @@ export const getSportsAMMQuoteMethod: any = (
     }
 };
 
-export const getAmountForApproval = (stableIndex: number, amountToApprove: string) => {
-    const stable = (COLLATERAL_INDEX_TO_COLLATERAL as any)[stableIndex];
-
+export const getAmountForApproval = (stableIndex: number, amountToApprove: string, networkId: NetworkId) => {
     let collateralDecimals = 18;
+    if (networkId === NetworkIdByName.ArbitrumOne) {
+        collateralDecimals = 6;
+    } else {
+        const stable = (COLLATERAL_INDEX_TO_COLLATERAL as any)[stableIndex];
 
-    if ((STABLE_DECIMALS as any)[stable]) collateralDecimals = (STABLE_DECIMALS as any)[stable];
+        if ((STABLE_DECIMALS as any)[stable]) {
+            collateralDecimals = (STABLE_DECIMALS as any)[stable];
+        }
+    }
 
+    console.log(amountToApprove, collateralDecimals, stableIndex);
     return ethers.utils.parseUnits(amountToApprove, collateralDecimals);
 };

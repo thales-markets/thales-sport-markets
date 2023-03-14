@@ -53,11 +53,10 @@ import { formatCurrencyWithSign, formatPercentage, formatCurrency } from 'utils/
 import { USD_SIGN } from 'constants/currency';
 import TimeRemaining from 'components/TimeRemaining';
 import networkConnector from 'utils/networkConnector';
-import { MAX_GAS_LIMIT } from 'constants/network';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
-import { checkAllowance, NetworkIdByName } from 'utils/network';
+import { checkAllowance, NetworkIdByName, getMaxGasLimitForNetwork } from 'utils/network';
 import { BigNumber, ethers } from 'ethers';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
@@ -200,7 +199,10 @@ const LiquidityPool: React.FC = () => {
             const sUSDContractWithSigner = sUSDContract.connect(signer);
             const getAllowance = async () => {
                 try {
-                    const parsedAmount = ethers.utils.parseEther(Number(amount).toString());
+                    const parsedAmount = ethers.utils.parseUnits(
+                        Number(amount).toString(),
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
                     const allowance = await checkAllowance(
                         parsedAmount,
                         sUSDContractWithSigner,
@@ -216,7 +218,7 @@ const LiquidityPool: React.FC = () => {
                 getAllowance();
             }
         }
-    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing]);
+    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { signer, sUSDContract, liquidityPoolContract } = networkConnector;
@@ -228,7 +230,7 @@ const LiquidityPool: React.FC = () => {
                 const sUSDContractWithSigner = sUSDContract.connect(signer);
 
                 const tx = (await sUSDContractWithSigner.approve(liquidityPoolContract.address, approveAmount, {
-                    gasLimit: MAX_GAS_LIMIT,
+                    gasLimit: getMaxGasLimitForNetwork(networkId),
                 })) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
                 const txResult = await tx.wait();
@@ -261,7 +263,7 @@ const LiquidityPool: React.FC = () => {
                 );
 
                 const tx = await liquidityPoolContractWithSigner.deposit(parsedAmount, {
-                    gasLimit: MAX_GAS_LIMIT,
+                    gasLimit: getMaxGasLimitForNetwork(networkId),
                 });
                 const txResult = await tx.wait();
 
@@ -287,7 +289,7 @@ const LiquidityPool: React.FC = () => {
                 const liquidityPoolContractWithSigner = liquidityPoolContract.connect(signer);
 
                 const tx = await liquidityPoolContractWithSigner.withdrawalRequest({
-                    gasLimit: MAX_GAS_LIMIT,
+                    gasLimit: getMaxGasLimitForNetwork(networkId),
                 });
                 const txResult = await tx.wait();
 
@@ -316,7 +318,7 @@ const LiquidityPool: React.FC = () => {
                 const liquidityPoolContractWithSigner = liquidityPoolContract.connect(signer);
 
                 const tx = await liquidityPoolContractWithSigner.closeRound({
-                    gasLimit: MAX_GAS_LIMIT,
+                    gasLimit: getMaxGasLimitForNetwork(networkId),
                 });
                 const txResult = await tx.wait();
 

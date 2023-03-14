@@ -243,7 +243,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 try {
                     const parsedTicketPrice = getAmountForApproval(
                         selectedStableIndex,
-                        Number(usdAmountValue).toString()
+                        Number(usdAmountValue).toString(),
+                        networkId
                     );
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
@@ -269,6 +270,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         usdAmountValue,
         selectedStableIndex,
         isVoucherSelected,
+        networkId,
     ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
