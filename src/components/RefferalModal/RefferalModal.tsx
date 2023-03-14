@@ -140,7 +140,7 @@ const SubmitButton = styled.button`
     color: #1a1c2b;
     width: 252px;
     border: none;
-    padding: 7px;
+    padding: 5px;
     cursor: pointer;
     text-transform: uppercase;
     &:disabled {
