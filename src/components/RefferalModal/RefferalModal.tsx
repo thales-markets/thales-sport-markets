@@ -41,12 +41,12 @@ export const RefferalModal: React.FC<RefferalModalProps> = ({ onClose }) => {
             previousReffererID: savedReffererID,
         });
         if (response.data.error) {
-            toast('Refferal ID already exists', { type: 'error' });
+            toast(t('common.referral.id-exists'), { type: 'error' });
         } else {
             setSavedReffererID(reffererID);
-            toast('Successfully set refferal ID', { type: 'success' });
+            toast(t('common.referral.id-create-success'), { type: 'success' });
         }
-    }, [walletAddress, reffererID, savedReffererID]);
+    }, [reffererID, walletAddress, savedReffererID, t]);
 
     const referralClickHandler = () => {
         if (!walletAddress) {
@@ -60,13 +60,13 @@ export const RefferalModal: React.FC<RefferalModalProps> = ({ onClose }) => {
     };
 
     return (
-        <Modal title="Refferal ID" onClose={onClose}>
+        <Modal title={t('common.referral.modal.title')} onClose={onClose}>
             <Container>
-                <Description>Choose your Refferal ID</Description>
+                <Description>{t('common.referral.modal.description')}</Description>
                 <FlexDivRowCentered>
                     <StyledInput value={reffererID} onChange={(e) => setReffererID(e.target.value)} />
                     <SubmitButton disabled={!reffererID || savedReffererID === reffererID} onClick={onSubmit}>
-                        Submit
+                        {t('common.referral.modal.submit-button')}
                     </SubmitButton>
                 </FlexDivRowCentered>
                 <FlexDivCentered style={{ marginTop: '30px' }}>
@@ -75,7 +75,7 @@ export const RefferalModal: React.FC<RefferalModalProps> = ({ onClose }) => {
                         disabled={!savedReffererID}
                         customDisabled={!savedReffererID}
                     >
-                        Copy Refferal link
+                        {t('common.referral.modal.copy-button')}
                     </CopyToClipboardButton>
                 </FlexDivCentered>
             </Container>

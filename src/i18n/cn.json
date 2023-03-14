@@ -48,7 +48,15 @@
                 "label": "通过推广赚取收益",
                 "disbled-tooltip": "链接钱包生成一个推广链接",
                 "enabled-tooltip": "邀请朋友在Overtime参与比赛预测，同时赚取收益分成。"
-            }
+            },
+            "modal": {
+                "submit-button": "提交",
+                "description": "选择您的推荐人 ID",
+                "title": "推荐编号",
+                "copy-button": "复制推荐链接"
+            },
+            "id-create-success": "成功设置推荐人ID",
+            "id-exists": "推荐 ID 已存在"
         },
         "swap": {
             "title": "获取 {{currencyKey}}",
@@ -930,7 +938,9 @@
             "tooltip-bonus-volume-table": "根据您的括号选择计算的奖金量",
             "tooltip-correct-correct-table": "在您的括号中正确猜出的游戏数量",
             "tooltip-rewards-correct-table": "3,000 OP (10k thales on arb) 将分配给前 10 名",
-            "tooltip-rewards-volume-table": "10,000 OP（30k Thales on arb）将按比例分配"
+            "tooltip-rewards-volume-table": "10,000 OP（30k Thales on arb）将按比例分配",
+            "my-rewards": "我的奖励",
+            "by-guessed-correctly": "猜对了"
         },
         "test-info": "测试阶段现已开放样本团队，2023 年选择将于 3 月 12 日开放！"
     }

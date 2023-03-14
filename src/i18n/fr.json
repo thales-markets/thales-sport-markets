@@ -27,7 +27,15 @@
                 "label": "Parrainage",
                 "disbled-tooltip": "Connecter votre portefeuille pour générer un lien de parrainage.",
                 "enabled-tooltip": "Invitez vos amis à rejoindre Overtime pour gagner des frais sur chaque position qu’ils prennent."
-            }
+            },
+            "modal": {
+                "submit-button": "Soumettre",
+                "copy-button": "Copier le lien de parrainage",
+                "title": "ID de parrainage",
+                "description": "Choisissez votre identifiant de parrainage"
+            },
+            "id-create-success": "L'ID de parrainage a bien été défini",
+            "id-exists": "L'ID de parrainage existe déjà"
         },
         "swap": {
             "title": "Obtenir {{currencyKey}}",
@@ -1028,7 +1036,9 @@
             "tooltip-bonus-volume-table": "Volume bonus calculé en fonction de vos sélections de tranches",
             "tooltip-correct-correct-table": "Nombre de jeux correctement devinés dans votre fourchette",
             "tooltip-rewards-volume-table": "10 000 OP (30 000 Thales sur arb) seront divisés en fonction du volume au prorata",
-            "tooltip-rewards-correct-table": "3 000 OP (10k thales sur arb) seront répartis entre les 10 premiers"
+            "tooltip-rewards-correct-table": "3 000 OP (10k thales sur arb) seront répartis entre les 10 premiers",
+            "my-rewards": "Mes récompenses",
+            "by-guessed-correctly": "Par deviné correctement"
         },
         "test-info": "La phase de tests est maintenant ouverte avec les équipes échantillons, la sélection 2023 s'ouvre le 12 mars !"
     }

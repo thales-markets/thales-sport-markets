@@ -39,7 +39,15 @@
                 "label": "Refer and earn",
                 "disbled-tooltip": "Connect wallet to generate a referral link.",
                 "enabled-tooltip": "Invite people to trade on overtime to earn fees from each trade they make."
-            }
+            },
+            "modal": {
+                "submit-button": "Представлять на рассмотрение",
+                "title": "Направление ID",
+                "copy-button": "Скопировать реферальную ссылку",
+                "description": "Выберите свой реферальный идентификатор"
+            },
+            "id-exists": "Идентификатор реферала уже существует",
+            "id-create-success": "Идентификатор реферала установлен успешно"
         },
         "swap": {
             "title": "Get {{currencyKey}}",
@@ -933,7 +941,9 @@
             "tooltip-rewards-correct-table": "3000 OP (10 тысяч талеров на вилке) будут разделены между 10 лучшими",
             "tooltip-base-volume-table": "Объем продаж благодаря баскетбольным играм NCAA",
             "tooltip-correct-correct-table": "Количество правильно угаданных игр в вашей группе",
-            "tooltip-rewards-volume-table": "10 000 OP (30 000 Thales на вилке) будут разделены пропорционально объему"
+            "tooltip-rewards-volume-table": "10 000 OP (30 000 Thales на вилке) будут разделены пропорционально объему",
+            "by-guessed-correctly": "По правильному угадыванию",
+            "my-rewards": "Мои награды"
         },
         "test-info": "Фаза тестирования уже открыта с выборочными командами, выбор 2023 года открывается 12 марта!"
     }

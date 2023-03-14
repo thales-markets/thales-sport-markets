@@ -55,10 +55,12 @@ const MySimpleTicket: React.FC<MySimpleTicketProps> = ({ markets, payout }) => {
                         <PayoutValue isLost={isTicketLost}>{formatCurrencyWithSign(USD_SIGN, payout)}</PayoutValue>
                     </PayoutRow>
                 </ContentColumn>
-                <ReferralWrapper>
-                    <QRCode size={isMobile ? 70 : 80} value={buildReffererLink(reffererID)} />
-                    <ReferralLabel>{t('markets.parlay.share-ticket.referral')}</ReferralLabel>
-                </ReferralWrapper>
+                {reffererID && (
+                    <ReferralWrapper>
+                        <QRCode size={isMobile ? 70 : 80} value={buildReffererLink(reffererID)} />
+                        <ReferralLabel>{t('markets.parlay.share-ticket.referral')}</ReferralLabel>
+                    </ReferralWrapper>
+                )}
             </ContentRow>
             <ContentRow height={'35px'} margin={isMobile ? '5px 0 0 0' : '10px 0 0 0'} justify={'space-around'}>
                 {markets.map((market, index) => (

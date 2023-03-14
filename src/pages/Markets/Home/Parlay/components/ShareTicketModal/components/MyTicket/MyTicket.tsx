@@ -66,10 +66,12 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
                 </Header>
             )}
             <ContentRow margin={'3px 0'}>
-                <ReferralWrapper>
-                    <QRCode size={70} value={buildReffererLink(reffererID)} />
-                    <ReferralLabel>{t('markets.parlay.share-ticket.referral')}</ReferralLabel>
-                </ReferralWrapper>
+                {reffererID && (
+                    <ReferralWrapper>
+                        <QRCode size={70} value={buildReffererLink(reffererID)} />
+                        <ReferralLabel>{t('markets.parlay.share-ticket.referral')}</ReferralLabel>
+                    </ReferralWrapper>
+                )}
                 <PayoutWrapper>
                     <PayoutRow>
                         <Square isLost={isTicketLost} isResolved={isTicketResolved} />
