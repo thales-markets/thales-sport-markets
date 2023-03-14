@@ -49,6 +49,7 @@ import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-compone
 import ShareModal from '../ShareModal';
 import { MatchProps } from '../Match/Match';
 import { refetchAfterMarchMadnessMint } from 'utils/queryConnector';
+import useLeaderboardByVolumeQuery from 'queries/marchMadness/useLeaderboardByVolumeQuery';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -388,10 +389,27 @@ const Brackets: React.FC = () => {
         }
     };
 
+    const leaderboardQuery = useLeaderboardByVolumeQuery(networkId);
+
+    const rankByBonusAndPoints = useMemo(() => {
+        if (leaderboardQuery.isSuccess && leaderboardQuery.data) {
+            const sortedAddresses = leaderboardQuery.data?.leaderboard.sort((a, b) =>
+                a.bonusVolume === b.bonusVolume
+                    ? b.totalCorrectedPredictions - a.totalCorrectedPredictions
+                    : b.bonusVolume - a.bonusVolume
+            );
+            return (
+                sortedAddresses.findIndex((data) => data.walletAddress.toLowerCase() === walletAddress.toLowerCase()) +
+                1
+            );
+        }
+        return 0;
+    }, [leaderboardQuery.data, leaderboardQuery.isSuccess, walletAddress]);
+
     const getMyStats = () => {
         const isFinalFinished = winnerTeamIds[FINAL_MATCH_ID] !== 0;
         const isFirstMatchFinished = winnerTeamIds.find((id) => id !== 0) !== undefined;
-        const myRank = 'N/A'; // TODO: fetch rank
+        const myRank = rankByBonusAndPoints;
 
         return (
             <MyStats>
@@ -412,7 +430,11 @@ const Brackets: React.FC = () => {
                     <StatsRow margin="10px 0 0 0" justify="normal">
                         <StatsText>{t('march-madness.brackets.stats.rank')}:</StatsText>
                         <StatsText margin="0 0 0 18px" fontWeight={700}>
-                            {isFirstMatchFinished ? myRank + ' ' + t('march-madness.brackets.stats.place') : 'N/A'}
+                            {isFirstMatchFinished
+                                ? myRank
+                                    ? myRank + ' ' + t('march-madness.brackets.stats.place')
+                                    : '-'
+                                : 'N/A'}
                         </StatsText>
                     </StatsRow>
                 </StatsColumn>
