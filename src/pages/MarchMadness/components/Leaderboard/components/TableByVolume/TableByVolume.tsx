@@ -4,16 +4,19 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Column, useTable } from 'react-table';
-import { getNetworkId } from 'redux/modules/wallet';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { getDefaultColleteralForNetwork } from 'utils/collaterals';
+import { getEtherscanAddressLink } from 'utils/etherscan';
 import { formatCurrencyWithKey } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
 import {
+    Arrow,
     Container,
     NoDataContainer,
     NoDataLabel,
     OverlayContainer,
+    StickyRow,
     Table,
     TableContainer,
     TableHeader,
@@ -28,6 +31,7 @@ export const TooltipStyle = { backgroundColor: '#021631', border: '1px solid #00
 const TableByVolume: React.FC = () => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
 
     const columns: Column[] = useMemo(() => {
         return [
@@ -38,7 +42,18 @@ const TableByVolume: React.FC = () => {
             {
                 Header: <>{t('march-madness.leaderboard.address')}</>,
                 accessor: 'walletAddress',
-                Cell: (cellProps) => <>{truncateAddress(cellProps.cell.value, 5)}</>,
+                Cell: (cellProps) => (
+                    <>
+                        {truncateAddress(cellProps.cell.value, 5)}
+                        <a
+                            href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            <Arrow />
+                        </a>
+                    </>
+                ),
             },
             {
                 Header: <>{t('march-madness.leaderboard.volume')}</>,
@@ -120,7 +135,50 @@ const TableByVolume: React.FC = () => {
         return [];
     }, [leaderboardQuery.data, leaderboardQuery.isSuccess]);
 
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
+    const myScore = useMemo(() => {
+        if (data) {
+            return data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
+        }
+        return [];
+    }, [data, walletAddress]);
+
+    const filteredData = useMemo(() => {
+        if (data) {
+            const myScore = data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
+            if (myScore.length) {
+                console.log('MyScore ', myScore);
+                return data.filter((user) => user.walletAddress.toLowerCase() !== walletAddress?.toLowerCase());
+            }
+            return data;
+        }
+        return [];
+    }, [data, walletAddress]);
+
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
+        columns,
+        data: filteredData,
+    });
+
+    const stickyRow = useMemo(() => {
+        if (myScore?.length) {
+            return (
+                <StickyRow myScore={true}>
+                    <TableRowCell>{myScore[0].rank}</TableRowCell>
+                    <TableRowCell>{t('march-madness.leaderboard.my-rewards').toUpperCase()}</TableRowCell>
+                    <TableRowCell>
+                        {formatCurrencyWithKey(getDefaultColleteralForNetwork(networkId), myScore[0].volume, 2)}
+                    </TableRowCell>
+                    <TableRowCell>
+                        {formatCurrencyWithKey(getDefaultColleteralForNetwork(networkId), myScore[0].baseVolume, 2)}
+                    </TableRowCell>
+                    <TableRowCell>
+                        {formatCurrencyWithKey(getDefaultColleteralForNetwork(networkId), myScore[0].bonusVolume, 2)}
+                    </TableRowCell>
+                    <TableRowCell>{myScore[0].rewards}</TableRowCell>
+                </StickyRow>
+            );
+        }
+    }, [myScore, networkId, t]);
 
     return (
         <Container>
@@ -128,12 +186,12 @@ const TableByVolume: React.FC = () => {
                 <TableHeader>{'By volume'}</TableHeader>
             </TableHeaderContainer>
             <TableContainer>
-                {!data?.length && (
+                {!filteredData?.length && (
                     <NoDataContainer>
                         <NoDataLabel>{t('march-madness.leaderboard.no-data')}</NoDataLabel>
                     </NoDataContainer>
                 )}
-                {data?.length > 0 && (
+                {filteredData?.length > 0 && (
                     <Table {...getTableProps()}>
                         <thead>
                             {headerGroups.map((headerGroup, headerGroupIndex) => (
@@ -147,6 +205,7 @@ const TableByVolume: React.FC = () => {
                             ))}
                         </thead>
                         <tbody {...getTableBodyProps()}>
+                            {myScore ? stickyRow : <></>}
                             {rows.map((row, rowKey) => {
                                 prepareRow(row);
                                 return (
