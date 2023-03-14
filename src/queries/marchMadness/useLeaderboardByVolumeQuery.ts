@@ -15,6 +15,16 @@ type LeaderboardByVolumeResponse = {
     }[];
 };
 
+export type LeaderboardByVolumeData = {
+    walletAddress: string;
+    volume: number;
+    baseVolume: number;
+    bonusVolume: number;
+    totalCorrectedPredictions: number;
+    rank: number;
+    rewards: string;
+}[];
+
 const useLeaderboardByVolumeQuery = (
     networkId: NetworkId,
     options?: UseQueryOptions<LeaderboardByVolumeResponse | undefined>

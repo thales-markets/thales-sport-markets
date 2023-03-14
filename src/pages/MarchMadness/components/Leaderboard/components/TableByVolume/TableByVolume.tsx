@@ -1,5 +1,5 @@
 import Tooltip from 'components/Tooltip';
-import useLeaderboardByVolumeQuery from 'queries/marchMadness/useLeaderboardByVolumeQuery';
+import useLeaderboardByVolumeQuery, { LeaderboardByVolumeData } from 'queries/marchMadness/useLeaderboardByVolumeQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -28,7 +28,11 @@ import {
 
 export const TooltipStyle = { backgroundColor: '#021631', border: '1px solid #005EB8' };
 
-const TableByVolume: React.FC = () => {
+type TableByVolumeProps = {
+    searchText: string;
+};
+
+const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
@@ -144,15 +148,21 @@ const TableByVolume: React.FC = () => {
 
     const filteredData = useMemo(() => {
         if (data) {
+            let finalData: LeaderboardByVolumeData = [];
+
             const myScore = data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
             if (myScore.length) {
-                console.log('MyScore ', myScore);
-                return data.filter((user) => user.walletAddress.toLowerCase() !== walletAddress?.toLowerCase());
+                finalData = data.filter((user) => user.walletAddress.toLowerCase() !== walletAddress?.toLowerCase());
             }
-            return data;
+
+            if (searchText) {
+                finalData = data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
+            }
+
+            return finalData;
         }
         return [];
-    }, [data, walletAddress]);
+    }, [data, searchText, walletAddress]);
 
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
         columns,
