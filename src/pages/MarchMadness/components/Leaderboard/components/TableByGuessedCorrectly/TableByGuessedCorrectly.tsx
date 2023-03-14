@@ -22,7 +22,11 @@ import { useTranslation } from 'react-i18next';
 import Tooltip from 'components/Tooltip';
 import { TooltipStyle } from '../TableByVolume/TableByVolume';
 
-const TableByGuessedCorrectly: React.FC = () => {
+type TableByGuessedCorrectlyProps = {
+    searchText: string;
+};
+
+const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searchText }) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
@@ -85,20 +89,30 @@ const TableByGuessedCorrectly: React.FC = () => {
         return [];
     }, [leaderboardQuery.data, leaderboardQuery.isSuccess]);
 
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
+    const filteredData = useMemo(() => {
+        if (data && searchText !== '') {
+            return data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
+        }
+        return data;
+    }, [data, searchText]);
+
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
+        columns,
+        data: filteredData,
+    });
 
     return (
         <Container>
             <TableHeaderContainer hideBottomBorder={true}>
-                <TableHeader>{'By guessed correctly'}</TableHeader>
+                <TableHeader>{t('march-madness.leaderboard.by-guessed-correctly')}</TableHeader>
             </TableHeaderContainer>
             <TableContainer>
-                {!data?.length && (
+                {!filteredData?.length && (
                     <NoDataContainer>
                         <NoDataLabel>{t('march-madness.leaderboard.no-data')}</NoDataLabel>
                     </NoDataContainer>
                 )}
-                {data?.length > 0 && (
+                {filteredData?.length > 0 && (
                     <Table {...getTableProps()}>
                         <thead>
                             {headerGroups.map((headerGroup, headerGroupIndex) => (
