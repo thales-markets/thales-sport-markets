@@ -28,8 +28,10 @@ export const LINKS = {
         Medium:
             'https://medium.com/@OvertimeMarkets.xyz/overtime-brings-the-bracket-to-the-blockchain-for-march-madness-66777956d87f',
     },
-    UniswapBuyThales:
+    UniswapBuyThalesOp:
         'https://app.uniswap.org/#/swap?outputCurrency=0x217d47011b23bb961eb6d93ca9945b7501a5bb11&chain=optimism',
+    UniswapBuyThalesArbitrum:
+        'https://app.uniswap.org/#/swap?outputCurrency=0xE85B662Fe97e8562f4099d8A1d5A92D4B453bF30',
     ThalesStaking: 'https://thalesmarket.io/token',
     ThalesTip99: 'https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-99.md',
 };

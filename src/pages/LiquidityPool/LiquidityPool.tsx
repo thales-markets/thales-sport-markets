@@ -57,7 +57,7 @@ import { MAX_GAS_LIMIT } from 'constants/network';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
-import { checkAllowance } from 'utils/network';
+import { checkAllowance, NetworkIdByName } from 'utils/network';
 import { BigNumber, ethers } from 'ethers';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
@@ -616,7 +616,15 @@ const LiquidityPool: React.FC = () => {
                     </ContentContainer>
                     <ContentContainer>
                         <ButtonContainer>
-                            <ExternalButton target="_blank" rel="noreferrer" href={LINKS.UniswapBuyThales}>
+                            <ExternalButton
+                                target="_blank"
+                                rel="noreferrer"
+                                href={
+                                    networkId !== NetworkIdByName.ArbitrumOne
+                                        ? LINKS.UniswapBuyThalesOp
+                                        : LINKS.UniswapBuyThalesArbitrum
+                                }
+                            >
                                 {t('liquidity-pool.button.get-thales-label')}
                                 <GetStakeThalesIcon className={`icon icon--get-thales`} />
                             </ExternalButton>

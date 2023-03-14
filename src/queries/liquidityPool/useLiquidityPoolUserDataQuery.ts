@@ -58,10 +58,14 @@ const useLiquidityPoolUserDataQuery = (
                     userLiquidityPoolData.isWithdrawalRequested = withdrawalRequested;
                     userLiquidityPoolData.hasDepositForCurrentRound = userLiquidityPoolData.balanceCurrentRound > 0;
                     userLiquidityPoolData.hasDepositForNextRound = userLiquidityPoolData.balanceNextRound > 0;
-                    userLiquidityPoolData.maxDeposit = bigNumberFormatter(maxAvailableDeposit.maxDepositForUser);
+                    userLiquidityPoolData.maxDeposit = bigNumberFormmaterWithDecimals(
+                        maxAvailableDeposit.maxDepositForUser,
+                        decimals
+                    );
                     userLiquidityPoolData.stakedThales = bigNumberFormatter(maxAvailableDeposit.stakedThalesForUser);
-                    userLiquidityPoolData.availableToDeposit = bigNumberFormatter(
-                        maxAvailableDeposit.availableToDepositForUser
+                    userLiquidityPoolData.availableToDeposit = bigNumberFormmaterWithDecimals(
+                        maxAvailableDeposit.availableToDepositForUser,
+                        decimals
                     );
                     userLiquidityPoolData.neededStakedThalesToWithdraw = bigNumberFormatter(
                         neededStakedThalesToWithdraw
