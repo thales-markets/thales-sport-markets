@@ -1,6 +1,7 @@
 import { ReactComponent as OvertimeLogoIcon } from 'assets/images/overtime-logo.svg';
 import { USD_SIGN } from 'constants/currency';
 import { t } from 'i18next';
+import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';
 import React from 'react';
 import QRCode from 'react-qr-code';
 import { useSelector } from 'react-redux';
@@ -11,7 +12,7 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
-import { generateReferralLink } from 'utils/referral';
+import { buildReffererLink } from 'utils/routes';
 import MatchLogos from '../../../MatchLogos';
 
 type MySimpleTicketProps = {
@@ -25,6 +26,9 @@ const MySimpleTicket: React.FC<MySimpleTicketProps> = ({ markets, payout }) => {
 
     const isTicketLost = markets.some((market) => market.isResolved && market.winning !== undefined && !market.winning);
     const isTicketResolved = markets.every((market) => market.isResolved || market.isCanceled) || isTicketLost;
+
+    const reffererIDQuery = useGetReffererIdQuery(walletAddress || '');
+    const reffererID = reffererIDQuery.isSuccess && reffererIDQuery.data ? reffererIDQuery.data : '';
 
     return (
         <Container>
@@ -52,7 +56,7 @@ const MySimpleTicket: React.FC<MySimpleTicketProps> = ({ markets, payout }) => {
                     </PayoutRow>
                 </ContentColumn>
                 <ReferralWrapper>
-                    <QRCode size={isMobile ? 70 : 80} value={generateReferralLink(walletAddress)} />
+                    <QRCode size={isMobile ? 70 : 80} value={buildReffererLink(reffererID)} />
                     <ReferralLabel>{t('markets.parlay.share-ticket.referral')}</ReferralLabel>
                 </ReferralWrapper>
             </ContentRow>

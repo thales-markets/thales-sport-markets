@@ -7,32 +7,38 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getWalletAddress } from 'redux/modules/wallet';
 import { toast } from 'react-toastify';
+import networkConnector from 'utils/networkConnector';
+import { generalConfig } from 'config/general';
+import { buildReffererLink } from 'utils/routes';
+import { useTranslation } from 'react-i18next';
+import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';
 
 type RefferalModalProps = {
     onClose: () => void;
 };
 
 export const RefferalModal: React.FC<RefferalModalProps> = ({ onClose }) => {
+    const { t } = useTranslation();
     const [reffererID, setReffererID] = useState('');
     const [savedReffererID, setSavedReffererID] = useState('');
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
 
+    const reffererIDQuery = useGetReffererIdQuery(walletAddress || '');
+
     useEffect(() => {
-        const fetchData = async () => {
-            const response = await axios.get(`http://localho.st:3002/get-address-refferer-id/${walletAddress}`);
-            if (response.data) {
-                setReffererID(response.data);
-                setSavedReffererID(response.data);
-            }
-        };
-        fetchData();
-    }, [walletAddress]);
+        if (reffererIDQuery.isSuccess && reffererIDQuery.data) {
+            setReffererID(reffererIDQuery.data);
+            setSavedReffererID(reffererIDQuery.data);
+        }
+    }, [reffererIDQuery.isSuccess, reffererIDQuery.data]);
 
     const onSubmit = useCallback(async () => {
-        // ${generalConfig.API_URL}
-        const response = await axios.post(`http://localho.st:3002/update-refferer-id`, {
+        const signature = await (networkConnector as any).signer.signMessage(reffererID);
+        const response = await axios.post(`${generalConfig.API_URL}/update-refferer-id`, {
             walletAddress,
             reffererID,
+            signature,
+            previousReffererID: savedReffererID,
         });
         if (response.data.error) {
             toast('Refferal ID already exists', { type: 'error' });
@@ -40,7 +46,18 @@ export const RefferalModal: React.FC<RefferalModalProps> = ({ onClose }) => {
             setSavedReffererID(reffererID);
             toast('Successfully set refferal ID', { type: 'success' });
         }
-    }, [walletAddress, reffererID]);
+    }, [walletAddress, reffererID, savedReffererID]);
+
+    const referralClickHandler = () => {
+        if (!walletAddress) {
+            return;
+        }
+
+        const referralLink = buildReffererLink(savedReffererID);
+
+        navigator.clipboard.writeText(referralLink);
+        toast(t('common.referral.link-copied'), { type: 'success' });
+    };
 
     return (
         <Modal title="Refferal ID" onClose={onClose}>
@@ -54,7 +71,7 @@ export const RefferalModal: React.FC<RefferalModalProps> = ({ onClose }) => {
                 </FlexDivRowCentered>
                 <FlexDivCentered style={{ marginTop: '30px' }}>
                     <CopyToClipboardButton
-                        onClick={() => console.log('aaaa')}
+                        onClick={referralClickHandler}
                         disabled={!savedReffererID}
                         customDisabled={!savedReffererID}
                     >

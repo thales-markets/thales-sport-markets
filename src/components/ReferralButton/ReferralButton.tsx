@@ -1,44 +1,20 @@
 import RefferalModal from 'components/RefferalModal';
 import Tooltip from 'components/Tooltip';
-import ROUTES from 'constants/routes';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { matchPath, useLocation } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
+import { getIsWalletConnected } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
-import { buildReferralLink } from 'utils/routes';
+
 const ReferralButton: React.FC = () => {
     const { t } = useTranslation();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
-    const location = useLocation();
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
-
-    const referralClickHandler = () => {
-        if (!walletAddress) {
-            return;
-        }
-        const referralPath = matchPath(location.pathname, ROUTES.Markets.Market)
-            ? location.pathname
-            : ROUTES.Markets.Home;
-
-        const referralLink = `${window.location.origin}${buildReferralLink(
-            referralPath,
-            window.location.hash,
-            window.location.search,
-            walletAddress
-        )}`;
-
-        navigator.clipboard.writeText(referralLink);
-        toast(t('common.referral.link-copied'), { type: 'success' });
-    };
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const getButtonComponent = () => (
-        <StyledButton onClick={referralClickHandler} customDisabled={!isWalletConnected}>
+        <StyledButton onClick={() => setIsModalOpen(true)} customDisabled={!isWalletConnected}>
             {t('common.referral.button.label')}
         </StyledButton>
     );
