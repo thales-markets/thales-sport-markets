@@ -60,7 +60,11 @@ export const RefferalModal: React.FC<RefferalModalProps> = ({ onClose }) => {
     };
 
     return (
-        <Modal title={t('common.referral.modal.title')} onClose={onClose}>
+        <Modal
+            customStyle={{ content: { maxWidth: '100%' } }}
+            title={t('common.referral.modal.title')}
+            onClose={onClose}
+        >
             <Container>
                 <Description>{t('common.referral.modal.description')}</Description>
                 <FlexDivRowCentered>
@@ -121,6 +125,9 @@ const StyledInput = styled.input`
     padding-right: 60px;
     font-size: 18px;
     outline: none;
+    @media (max-width: 575px) {
+        width: 250px;
+    }
 `;
 
 const SubmitButton = styled.button`
