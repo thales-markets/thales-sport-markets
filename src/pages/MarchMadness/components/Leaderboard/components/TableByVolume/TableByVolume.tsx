@@ -1,19 +1,23 @@
 import Tooltip from 'components/Tooltip';
-import useLeaderboardByVolumeQuery from 'queries/marchMadness/useLeaderboardByVolumeQuery';
+import { PaginationWrapper } from 'pages/Quiz/styled-components';
+import useLeaderboardByVolumeQuery, { LeaderboardByVolumeData } from 'queries/marchMadness/useLeaderboardByVolumeQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Column, useTable } from 'react-table';
-import { getNetworkId } from 'redux/modules/wallet';
+import { Column, useTable, usePagination } from 'react-table';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { getDefaultColleteralForNetwork } from 'utils/collaterals';
+import { getEtherscanAddressLink } from 'utils/etherscan';
 import { formatCurrencyWithKey } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
 import {
+    Arrow,
     Container,
     NoDataContainer,
     NoDataLabel,
     OverlayContainer,
+    StickyRow,
     Table,
     TableContainer,
     TableHeader,
@@ -25,9 +29,14 @@ import {
 
 export const TooltipStyle = { backgroundColor: '#021631', border: '1px solid #005EB8' };
 
-const TableByVolume: React.FC = () => {
+type TableByVolumeProps = {
+    searchText: string;
+};
+
+const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
 
     const columns: Column[] = useMemo(() => {
         return [
@@ -38,7 +47,18 @@ const TableByVolume: React.FC = () => {
             {
                 Header: <>{t('march-madness.leaderboard.address')}</>,
                 accessor: 'walletAddress',
-                Cell: (cellProps) => <>{truncateAddress(cellProps.cell.value, 5)}</>,
+                Cell: (cellProps) => (
+                    <>
+                        {truncateAddress(cellProps.cell.value, 5)}
+                        <a
+                            href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            <Arrow />
+                        </a>
+                    </>
+                ),
             },
             {
                 Header: <>{t('march-madness.leaderboard.volume')}</>,
@@ -120,7 +140,82 @@ const TableByVolume: React.FC = () => {
         return [];
     }, [leaderboardQuery.data, leaderboardQuery.isSuccess]);
 
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
+    const myScore = useMemo(() => {
+        if (data) {
+            return data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
+        }
+        return [];
+    }, [data, walletAddress]);
+
+    const filteredData = useMemo(() => {
+        if (data) {
+            let finalData: LeaderboardByVolumeData = [];
+
+            const myScore = data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
+            if (myScore.length) {
+                finalData = data.filter((user) => user.walletAddress.toLowerCase() !== walletAddress?.toLowerCase());
+            }
+
+            if (searchText.trim() !== '') {
+                finalData = data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
+            }
+
+            return finalData?.length ? finalData : data;
+        }
+        return [];
+    }, [data, searchText, walletAddress]);
+
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        prepareRow,
+        rows,
+        state,
+        gotoPage,
+        setPageSize,
+        page,
+    } = useTable(
+        {
+            columns,
+            data: filteredData,
+            initialState: {
+                pageIndex: 0,
+                pageSize: 15,
+            },
+        },
+        usePagination
+    );
+
+    const handleChangePage = (_event: unknown, newPage: number) => {
+        gotoPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPageSize(Number(event.target.value));
+        gotoPage(0);
+    };
+
+    const stickyRow = useMemo(() => {
+        if (myScore?.length) {
+            return (
+                <StickyRow myScore={true}>
+                    <TableRowCell>{myScore[0].rank}</TableRowCell>
+                    <TableRowCell>{t('march-madness.leaderboard.my-rewards').toUpperCase()}</TableRowCell>
+                    <TableRowCell>
+                        {formatCurrencyWithKey(getDefaultColleteralForNetwork(networkId), myScore[0].volume, 2)}
+                    </TableRowCell>
+                    <TableRowCell>
+                        {formatCurrencyWithKey(getDefaultColleteralForNetwork(networkId), myScore[0].baseVolume, 2)}
+                    </TableRowCell>
+                    <TableRowCell>
+                        {formatCurrencyWithKey(getDefaultColleteralForNetwork(networkId), myScore[0].bonusVolume, 2)}
+                    </TableRowCell>
+                    <TableRowCell>{myScore[0].rewards}</TableRowCell>
+                </StickyRow>
+            );
+        }
+    }, [myScore, networkId, t]);
 
     return (
         <Container>
@@ -128,12 +223,12 @@ const TableByVolume: React.FC = () => {
                 <TableHeader>{'By volume'}</TableHeader>
             </TableHeaderContainer>
             <TableContainer>
-                {!data?.length && (
+                {!filteredData?.length && (
                     <NoDataContainer>
                         <NoDataLabel>{t('march-madness.leaderboard.no-data')}</NoDataLabel>
                     </NoDataContainer>
                 )}
-                {data?.length > 0 && (
+                {filteredData?.length > 0 && (
                     <Table {...getTableProps()}>
                         <thead>
                             {headerGroups.map((headerGroup, headerGroupIndex) => (
@@ -147,10 +242,11 @@ const TableByVolume: React.FC = () => {
                             ))}
                         </thead>
                         <tbody {...getTableBodyProps()}>
-                            {rows.map((row, rowKey) => {
+                            {myScore ? stickyRow : <></>}
+                            {(page.length ? page : rows).map((row, rowKey) => {
                                 prepareRow(row);
                                 return (
-                                    <TableRow {...row.getRowProps()} key={rowKey} hideBorder={rowKey == rows.length}>
+                                    <TableRow {...row.getRowProps()} key={rowKey} hideBorder={rowKey == page.length}>
                                         {row.cells.map((cell, cellIndex) => {
                                             return (
                                                 <TableRowCell {...cell.getCellProps()} key={cellIndex}>
@@ -164,6 +260,15 @@ const TableByVolume: React.FC = () => {
                         </tbody>
                     </Table>
                 )}
+                <PaginationWrapper
+                    rowsPerPageOptions={[15, 30, 50, 100]}
+                    count={filteredData?.length ? filteredData.length : 0}
+                    labelRowsPerPage={t(`common.pagination.rows-per-page`)}
+                    rowsPerPage={state.pageSize}
+                    page={state.pageIndex}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </TableContainer>
         </Container>
     );

@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import React, { useMemo } from 'react';
-import { Column, useTable } from 'react-table';
+import { Column, usePagination, useTable } from 'react-table';
 import {
     NoDataContainer,
     NoDataLabel,
     OverlayContainer,
+    PaginationWrapper,
     Table,
     TableContainer,
     TableHeader,
@@ -22,7 +23,11 @@ import { useTranslation } from 'react-i18next';
 import Tooltip from 'components/Tooltip';
 import { TooltipStyle } from '../TableByVolume/TableByVolume';
 
-const TableByGuessedCorrectly: React.FC = () => {
+type TableByGuessedCorrectlyProps = {
+    searchText: string;
+};
+
+const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searchText }) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
@@ -85,20 +90,56 @@ const TableByGuessedCorrectly: React.FC = () => {
         return [];
     }, [leaderboardQuery.data, leaderboardQuery.isSuccess]);
 
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
+    const filteredData = useMemo(() => {
+        if (data && searchText?.trim() !== '') {
+            return data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
+        }
+        return data;
+    }, [data, searchText]);
+
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        prepareRow,
+        rows,
+        state,
+        gotoPage,
+        setPageSize,
+        page,
+    } = useTable(
+        {
+            columns,
+            data: filteredData,
+            initialState: {
+                pageIndex: 0,
+                pageSize: 20,
+            },
+        },
+        usePagination
+    );
+
+    const handleChangePage = (_event: unknown, newPage: number) => {
+        gotoPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPageSize(Number(event.target.value));
+        gotoPage(0);
+    };
 
     return (
         <Container>
             <TableHeaderContainer hideBottomBorder={true}>
-                <TableHeader>{'By guessed correctly'}</TableHeader>
+                <TableHeader>{t('march-madness.leaderboard.by-guessed-correctly')}</TableHeader>
             </TableHeaderContainer>
             <TableContainer>
-                {!data?.length && (
+                {!filteredData?.length && (
                     <NoDataContainer>
                         <NoDataLabel>{t('march-madness.leaderboard.no-data')}</NoDataLabel>
                     </NoDataContainer>
                 )}
-                {data?.length > 0 && (
+                {filteredData?.length > 0 && (
                     <Table {...getTableProps()}>
                         <thead>
                             {headerGroups.map((headerGroup, headerGroupIndex) => (
@@ -112,7 +153,7 @@ const TableByGuessedCorrectly: React.FC = () => {
                             ))}
                         </thead>
                         <tbody {...getTableBodyProps()}>
-                            {rows.map((row, rowKey) => {
+                            {(page.length ? page : rows).map((row, rowKey) => {
                                 prepareRow(row);
                                 return (
                                     <TableRow {...row.getRowProps()} key={rowKey} topTen={rowKey < 10 ? true : false}>
@@ -129,6 +170,15 @@ const TableByGuessedCorrectly: React.FC = () => {
                         </tbody>
                     </Table>
                 )}
+                <PaginationWrapper
+                    rowsPerPageOptions={[20, 50, 100]}
+                    count={filteredData?.length ? filteredData.length : 0}
+                    labelRowsPerPage={t(`common.pagination.rows-per-page`)}
+                    rowsPerPage={state.pageSize}
+                    page={state.pageIndex}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </TableContainer>
         </Container>
     );

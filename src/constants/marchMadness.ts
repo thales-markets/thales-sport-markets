@@ -795,8 +795,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 16,
-        name: '',
-        displayName: 'Wild Card',
+        name: 'Texas A&M-CC Islanders',
+        displayName: 'Texas A&M-CC',
         region: 'South',
         position: 16,
     },
@@ -886,7 +886,7 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 29,
-        name: 'Louisiana Ragin_ Cajuns',
+        name: "Louisiana Ragin' Cajuns",
         displayName: 'Louisiana',
         region: 'East',
         position: 13,
@@ -984,8 +984,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 43,
-        name: '',
-        displayName: 'Wild Card',
+        name: 'Pittsburgh Panthers',
+        displayName: 'Pittsburgh',
         region: 'Midwest',
         position: 11,
     },
@@ -1054,7 +1054,7 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 53,
-        name: "Saint Mary's Gaels",
+        name: "St. Mary's Gaels",
         displayName: "Saint Mary's",
         region: 'West',
         position: 5,
@@ -1076,7 +1076,7 @@ export const teamsData: MarchMadTeam[] = [
     {
         id: 56,
         name: 'Arkansas Razorbacks',
-        displayName: 'Arkansase',
+        displayName: 'Arkansas',
         region: 'West',
         position: 8,
     },
@@ -1141,14 +1141,14 @@ export const teamsData: MarchMadTeam[] = [
 export const wildCardTeams: MarchMadTeam[] = [
     {
         id: 1,
-        name: 'Texas A&M-Corpus Christi Islanders',
+        name: 'Texas A&M-CC Islanders',
         displayName: 'Texas A&M-CC',
         region: 'South',
         position: 5,
     },
     {
         id: 2,
-        name: 'Southeast Missouri State Redhawks',
+        name: 'SE Missouri State Redhawks',
         displayName: 'SE Missouri St.',
         region: 'South',
         position: 6,

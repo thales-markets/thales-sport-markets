@@ -102,6 +102,13 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         route: ROUTES.Vaults,
         supportedNetworks: [10, 420],
     },
+    {
+        i18label: 'markets.nav-menu.items.liquidity-pool',
+        iconClass: 'icon icon--liquidity-pool',
+        name: 'liquidity-pool',
+        route: ROUTES.LiquidityPool,
+        supportedNetworks: [10, 420, 42161],
+    },
 ];
 
 export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [

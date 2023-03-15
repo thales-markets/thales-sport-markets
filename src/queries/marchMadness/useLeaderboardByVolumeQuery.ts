@@ -6,6 +6,7 @@ type LeaderboardByVolumeResponse = {
     globalVolume: number;
     leaderboard: {
         walletAddress: string;
+        volume: number;
         baseVolume: number;
         bonusVolume: number;
         totalCorrectedPredictions: number;
@@ -13,6 +14,16 @@ type LeaderboardByVolumeResponse = {
         rewards: string;
     }[];
 };
+
+export type LeaderboardByVolumeData = {
+    walletAddress: string;
+    volume: number;
+    baseVolume: number;
+    bonusVolume: number;
+    totalCorrectedPredictions: number;
+    rank: number;
+    rewards: string;
+}[];
 
 const useLeaderboardByVolumeQuery = (
     networkId: NetworkId,

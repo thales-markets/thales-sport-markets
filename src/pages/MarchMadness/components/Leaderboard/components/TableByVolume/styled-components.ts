@@ -1,3 +1,4 @@
+import { TablePagination } from '@material-ui/core';
 import styled from 'styled-components';
 
 export const Table = styled.table`
@@ -37,19 +38,21 @@ export const NoDataLabel = styled.span`
     color: #021631;
 `;
 
-export const TableRow = styled.tr<{ hideBorder?: boolean; topTen?: boolean }>`
+export const TableRow = styled.tr<{ hideBorder?: boolean; topTen?: boolean; myScore?: boolean }>`
     font-family: 'Oswald' !important;
     font-size: 14px;
     font-weight: 600;
     ${(_props) => (_props?.hideBorder == true ? `border-bottom: '';` : ``)}
     ${(_props) => (!_props?.hideBorder ? `border-bottom: 2px dotted rgba(0, 94, 184, 1);` : ``)}
     ${(_props) => (_props?.topTen == true ? `background-color: #C12B34;` : ``)}
-    ${(_props) => (_props?.topTen == true ? `border-bottom: 2px dashed #FFFFFF;` : ``)}
+    ${(_props) => (_props?.topTen == true ? `border-bottom: 2px dotted #FFFFFF;` : ``)}
+    ${(_props) => (_props?.myScore == true ? `background-color: #005EB8;` : ``)}
 `;
 
 export const TableRowCell = styled.td`
     padding: 10px 0px;
     text-align: center;
+    font-weight: 600;
 `;
 
 export const Container = styled.div`
@@ -79,6 +82,7 @@ export const TableHeaderContainer = styled.div<{ hideBottomBorder?: boolean }>`
 export const TableContainer = styled(TableHeaderContainer)`
     min-height: 600px;
     align-items: flex-start;
+    flex-direction: column;
 `;
 
 export const TableHeader = styled.span`
@@ -87,4 +91,54 @@ export const TableHeader = styled.span`
     font-weight: 400;
     padding: 6px 0px;
     font-family: 'NCAA' !important;
+`;
+
+export const Arrow = styled.i`
+    font-size: 14px;
+    margin-left: 8px;
+    text-transform: none;
+    transform: rotate(225deg);
+    color: white;
+    font-weight: 400;
+    &:before {
+        font-family: OvertimeIcons !important;
+        content: '\\006C';
+    }
+`;
+
+export const StickyRow = styled(TableRow)`
+    width: 100%;
+    height: 35px !important;
+`;
+
+export const StickyCell = styled.div``;
+
+export const PaginationWrapper = styled(TablePagination)`
+    border: none !important;
+    display: flex;
+    width: 100%;
+    height: auto;
+    color: #f6f6fe !important;
+    .MuiToolbar-root {
+        padding: 0;
+        display: flex;
+        .MuiSelect-icon {
+            color: #f6f6fe;
+        }
+    }
+    .MuiIconButton-root.Mui-disabled {
+        color: #5f6180;
+    }
+    .MuiTablePagination-toolbar > .MuiTablePagination-caption:last-of-type {
+        display: block;
+    }
+    .MuiTablePagination-input {
+        margin-top: 2px;
+    }
+    .MuiTablePagination-selectRoot {
+        @media (max-width: 767px) {
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+    }
 `;
