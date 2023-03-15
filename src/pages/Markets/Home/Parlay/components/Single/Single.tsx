@@ -358,7 +358,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                 try {
                     const parsedTicketPrice = getAmountForApproval(
                         selectedStableIndex,
-                        Number(usdAmountValue).toString()
+                        Number(usdAmountValue).toString(),
+                        networkId
                     );
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
@@ -385,6 +386,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         selectedStableIndex,
         isVoucherSelected,
         isMultiCollateralSupported,
+        networkId,
     ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
