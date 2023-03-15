@@ -1,3 +1,4 @@
+import { TablePagination } from '@material-ui/core';
 import styled from 'styled-components';
 
 export const Table = styled.table`
@@ -110,3 +111,33 @@ export const StickyRow = styled(TableRow)`
 `;
 
 export const StickyCell = styled.div``;
+
+export const PaginationWrapper = styled(TablePagination)`
+    border: none !important;
+    display: flex;
+    width: 100%;
+    height: auto;
+    color: #f6f6fe !important;
+    .MuiToolbar-root {
+        padding: 0;
+        display: flex;
+        .MuiSelect-icon {
+            color: #f6f6fe;
+        }
+    }
+    .MuiIconButton-root.Mui-disabled {
+        color: #5f6180;
+    }
+    .MuiTablePagination-toolbar > .MuiTablePagination-caption:last-of-type {
+        display: block;
+    }
+    .MuiTablePagination-input {
+        margin-top: 2px;
+    }
+    .MuiTablePagination-selectRoot {
+        @media (max-width: 767px) {
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+    }
+`;
