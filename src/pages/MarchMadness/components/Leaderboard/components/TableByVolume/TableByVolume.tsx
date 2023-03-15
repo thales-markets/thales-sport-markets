@@ -155,11 +155,11 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                 finalData = data.filter((user) => user.walletAddress.toLowerCase() !== walletAddress?.toLowerCase());
             }
 
-            if (searchText) {
+            if (searchText.trim() !== '') {
                 finalData = data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
             }
 
-            return finalData;
+            return finalData?.length ? finalData : data;
         }
         return [];
     }, [data, searchText, walletAddress]);
