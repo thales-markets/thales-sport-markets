@@ -373,7 +373,9 @@ export const getCanceledGamesPreviousQuotes = (parlay: ParlayMarket): number[] =
     const quotes: number[] = [];
     parlay.sportMarketsFromContract.forEach((marketAddress, index) => {
         const market = parlay.sportMarkets.find((market) => market.address == marketAddress);
-        if (market?.isCanceled) quotes.push(parlay.marketQuotes[index]);
+        if (market?.isCanceled && parlay.marketQuotes) {
+            quotes.push(parlay.marketQuotes[index]);
+        }
     });
 
     return quotes;
