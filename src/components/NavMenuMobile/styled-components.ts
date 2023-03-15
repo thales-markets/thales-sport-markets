@@ -43,7 +43,6 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 600px;
     position: fixed;
     top: 0;
     left: 0;
