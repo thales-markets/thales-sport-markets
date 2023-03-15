@@ -416,7 +416,8 @@
                 "become-affiliate": "Diventa affiliato",
                 "fifa-campaign": "Campagna Zebro FIFA",
                 "fee-rebates": "Riduzioni sulle commissioni",
-                "vaults": "Volte"
+                "vaults": "Volte",
+                "liquidity-pool": "Fornire liquidità"
             },
             "buttons": {
                 "switch": "Interruttore",
@@ -945,5 +946,81 @@
             "by-guessed-correctly": "Indovinato correttamente"
         },
         "test-info": "Ora è aperta la fase di test con le squadre campione, il 12 marzo si aprono le selezioni 2023!"
+    },
+    "liquidity-pool": {
+        "title": "Provide Liquidity",
+        "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round your balance (inclusive of that round's PnL) is sent to you. To withdraw, you need to have at least {{thalesStakedAmount}} THALES staked per each {{currency}} you are withdrawing.</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
+        "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the pool: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
+        "liquidity-pool-not-started-message": "The liquidity pool has not started",
+        "liquidity-pool-paused-message": "The liquidity pool is paused",
+        "round-end-label": "The round ends in",
+        "round-ended-label": "Round ended",
+        "total-info-label": "Total LP info",
+        "users-in-liquidity-pool-label": "Users in the liquidity pool: {{number}} / {{max}}",
+        "your-share-label": "Your share: {{percentage}} of LP",
+        "your-info-label": "Your LP info",
+        "current-balance-label": "Current balance",
+        "next-round-balance-label": "Next round balance",
+        "max-allowance-label": "Max allowance",
+        "your-thales-staked-label": "Your THALES staked",
+        "allowance-multiplier-label": "Allowance multiplier",
+        "withdrawal-request-label": "Withdrawal request: {{amount}}",
+        "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
+        "deposit-amount-placeholder": "Enter amount",
+        "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "Nothing to withdraw.",
+        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
+        "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
+        "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
+        "deposit-max-amount-of-users-warning": "Maximum number of users in the liquidity pool is reached, you cannot deposit.",
+        "deposit-liquidity-pool-cap-reached-warning": "The liquidity pool cap is reached, you cannot deposit.",
+        "deposit-liquidity-pool-cap-error": "Deposit amount exceeds liquidity pool cap",
+        "deposit-staked-thales-error": "Deposit amount exceeds max allowance, stake more THALES to deposit",
+        "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
+        "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
+        "withdrawal-staked-thales-warning": "You cannot withdraw as you need more staked THALES to withdraw. Stake {{amount}} THALES more to enable withdrawal.",
+        "tabs": {
+            "deposit": "Deposit",
+            "withdraw": "Withdraw"
+        },
+        "button": {
+            "deposit-label": "Deposit",
+            "deposit-progress-label": "Deposit in progress...",
+            "deposit-confirmation-message": "Deposit successfully placed",
+            "request-withdrawal-label": "Request withdrawal",
+            "request-withdrawal-progress-label": "Request in progress...",
+            "request-withdrawal-confirmation-message": "Withdrawal request successfully sent",
+            "withdraw-label": "Withdraw",
+            "withdraw-progress-label": "Withdrawal in progress...",
+            "withdraw-confirmation-message": "Funds successfully withdrawn",
+            "close-round-label": "Close round",
+            "close-round-progress-label": "Closing round in progress...",
+            "close-round-confirmation-message": "Round successfully closed",
+            "get-thales-label": "Get THALES",
+            "stake-thales-label": "Stake THALES"
+        },
+        "pnl": {
+            "pnl-per-round": {
+                "title": "PnL per round"
+            },
+            "cumulative-pnl": {
+                "title": "PnL over time"
+            },
+            "no-data": "No PnL data for previous rounds.",
+            "lifetime-pnl": "Lifetime PnL",
+            "ongoing-pnl": "Ongoing PnL"
+        },
+        "user-transactions": {
+            "title": "User transactions",
+            "your-transactions-title": "Your transactions",
+            "no-transactions": "No user transactions associated with this liquidity pool in the selected round.",
+            "round-label": "Round",
+            "type": {
+                "deposit": "Deposit",
+                "withdrawalRequest": "Withdrawal Request",
+                "claim": "Withdrawal Claim"
+            }
+        }
     }
 }

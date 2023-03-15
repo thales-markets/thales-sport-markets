@@ -1,9 +1,10 @@
 import Tooltip from 'components/Tooltip';
+import { PaginationWrapper } from 'pages/Quiz/styled-components';
 import useLeaderboardByVolumeQuery, { LeaderboardByVolumeData } from 'queries/marchMadness/useLeaderboardByVolumeQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Column, useTable } from 'react-table';
+import { Column, useTable, usePagination } from 'react-table';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { getDefaultColleteralForNetwork } from 'utils/collaterals';
@@ -155,19 +156,45 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                 finalData = data.filter((user) => user.walletAddress.toLowerCase() !== walletAddress?.toLowerCase());
             }
 
-            if (searchText) {
+            if (searchText.trim() !== '') {
                 finalData = data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
             }
 
-            return finalData;
+            return finalData?.length ? finalData : data;
         }
         return [];
     }, [data, searchText, walletAddress]);
 
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
-        columns,
-        data: filteredData,
-    });
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        prepareRow,
+        rows,
+        state,
+        gotoPage,
+        setPageSize,
+        page,
+    } = useTable(
+        {
+            columns,
+            data: filteredData,
+            initialState: {
+                pageIndex: 0,
+                pageSize: 15,
+            },
+        },
+        usePagination
+    );
+
+    const handleChangePage = (_event: unknown, newPage: number) => {
+        gotoPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPageSize(Number(event.target.value));
+        gotoPage(0);
+    };
 
     const stickyRow = useMemo(() => {
         if (myScore?.length) {
@@ -216,10 +243,10 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                         </thead>
                         <tbody {...getTableBodyProps()}>
                             {myScore ? stickyRow : <></>}
-                            {rows.map((row, rowKey) => {
+                            {(page.length ? page : rows).map((row, rowKey) => {
                                 prepareRow(row);
                                 return (
-                                    <TableRow {...row.getRowProps()} key={rowKey} hideBorder={rowKey == rows.length}>
+                                    <TableRow {...row.getRowProps()} key={rowKey} hideBorder={rowKey == page.length}>
                                         {row.cells.map((cell, cellIndex) => {
                                             return (
                                                 <TableRowCell {...cell.getCellProps()} key={cellIndex}>
@@ -233,6 +260,15 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                         </tbody>
                     </Table>
                 )}
+                <PaginationWrapper
+                    rowsPerPageOptions={[15, 30, 50, 100]}
+                    count={filteredData?.length ? filteredData.length : 0}
+                    labelRowsPerPage={t(`common.pagination.rows-per-page`)}
+                    rowsPerPage={state.pageSize}
+                    page={state.pageIndex}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </TableContainer>
         </Container>
     );

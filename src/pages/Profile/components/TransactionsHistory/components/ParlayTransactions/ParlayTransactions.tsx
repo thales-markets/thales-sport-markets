@@ -21,8 +21,8 @@ import {
     getOddTooltipText,
     getSpreadTotalText,
     getSymbolText,
-    isParlayClaimable,
     isParlayOpen,
+    isParlayWon,
 } from 'utils/markets';
 import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
@@ -206,7 +206,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         Header: <>{t('profile.table.status')}</>,
                         sortable: false,
                         Cell: (cellProps: any) => {
-                            if (cellProps.row.original.won || isParlayClaimable(cellProps.row.original)) {
+                            if (isParlayWon(cellProps.row.original)) {
                                 return <StatusWrapper color="#5FC694">WON </StatusWrapper>;
                             } else {
                                 return isParlayOpen(cellProps.row.original) ? (

@@ -649,7 +649,9 @@ const NoMarketsContainer = styled(FlexDivColumnCentered)`
 `;
 
 const NoMarketsLabel = styled.span`
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 20px;
 `;
 
 export const LoaderContainer = styled(FlexDivColumn)`

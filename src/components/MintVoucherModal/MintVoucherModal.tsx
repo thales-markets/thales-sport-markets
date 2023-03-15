@@ -97,7 +97,10 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
             const sUSDContractWithSigner = sUSDContract.connect(signer);
             const getAllowance = async () => {
                 try {
-                    const parsedAmount = ethers.utils.parseEther(Number(amount).toString());
+                    const parsedAmount = ethers.utils.parseUnits(
+                        Number(amount).toString(),
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
                     const allowance = await checkAllowance(
                         parsedAmount,
                         sUSDContractWithSigner,
@@ -113,7 +116,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
                 getAllowance();
             }
         }
-    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing]);
+    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { signer, sUSDContract, overtimeVoucherContract } = networkConnector;
