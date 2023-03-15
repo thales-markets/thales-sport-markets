@@ -90,7 +90,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
     }, [leaderboardQuery.data, leaderboardQuery.isSuccess]);
 
     const filteredData = useMemo(() => {
-        if (data && searchText !== '') {
+        if (data && searchText?.trim() !== '') {
             return data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
         }
         return data;
