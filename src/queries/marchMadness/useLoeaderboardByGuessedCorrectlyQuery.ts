@@ -4,6 +4,7 @@ import { NetworkId } from 'types/network';
 
 type LeaderboardByGuessedCorrectlyResponse = {
     walletAddress: string;
+    volume: number;
     baseVolume: number;
     bonusVolume: number;
     totalCorrectedPredictions: number;

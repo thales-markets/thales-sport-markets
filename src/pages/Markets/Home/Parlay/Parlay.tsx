@@ -28,7 +28,11 @@ import Single from './components/Single';
 import Ticket from './components/Ticket';
 import ValidationModal from './components/ValidationModal';
 
-const Parlay: React.FC = () => {
+type ParylayProps = {
+    onBuySuccess?: () => void;
+};
+
+const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     const dispatch = useDispatch();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -119,12 +123,13 @@ const Parlay: React.FC = () => {
                     </ListContainer>
                     <HorizontalLine />
                     {parlayMarkets.length === 1 ? (
-                        <Single market={parlayMarkets[0]} parlayPayment={parlayPayment} />
+                        <Single market={parlayMarkets[0]} parlayPayment={parlayPayment} onBuySuccess={onBuySuccess} />
                     ) : (
                         <Ticket
                             markets={parlayMarkets}
                             parlayPayment={parlayPayment}
                             setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
+                            onBuySuccess={onBuySuccess}
                         />
                     )}
                 </>

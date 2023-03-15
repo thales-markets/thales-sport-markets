@@ -65,16 +65,14 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
         }
     };
 
-    const daysLeftToMint = useMemo(() => (marchMadnessData ? Math.floor(marchMadnessData.hoursLeftToMint / 24) : 0), [
-        marchMadnessData,
-    ]);
-    const hoursLeftToMint = useMemo(
-        () =>
-            marchMadnessData
-                ? marchMadnessData.hoursLeftToMint - Math.floor(marchMadnessData.hoursLeftToMint / 24) * 24
-                : 0,
-        [marchMadnessData]
-    );
+    const timeLeftToMint = useMemo(() => {
+        return {
+            days: Math.floor((marchMadnessData?.hoursLeftToMint || 0) / 24),
+            hours:
+                (marchMadnessData?.hoursLeftToMint || 0) -
+                Math.floor((marchMadnessData?.hoursLeftToMint || 0) / 24) * 24,
+        };
+    }, [marchMadnessData?.hoursLeftToMint]);
 
     const reward = networkId === NetworkIdByName.ArbitrumOne ? '40,000 THALES' : '13,000 OP';
     const firstPoolReward = networkId === NetworkIdByName.ArbitrumOne ? '30,000 THALES' : '10,000 OP';
@@ -92,15 +90,15 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                         <RowTimeInfo>
                             {t('march-madness.home.time-info', {
                                 days:
-                                    daysLeftToMint +
+                                    timeLeftToMint.days +
                                     ' ' +
-                                    (daysLeftToMint === 1
+                                    (timeLeftToMint.days === 1
                                         ? t('common.time-remaining.day')
                                         : t('common.time-remaining.days')),
                                 hours:
-                                    hoursLeftToMint +
+                                    timeLeftToMint.hours +
                                     ' ' +
-                                    (hoursLeftToMint === 1
+                                    (timeLeftToMint.hours === 1
                                         ? t('common.time-remaining.hour')
                                         : t('common.time-remaining.hours')),
                             })}
