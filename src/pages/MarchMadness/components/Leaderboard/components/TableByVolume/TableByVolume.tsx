@@ -223,12 +223,12 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                 <TableHeader>{'By volume'}</TableHeader>
             </TableHeaderContainer>
             <TableContainer>
-                {!page?.length && (
+                {!filteredData?.length && (
                     <NoDataContainer>
                         <NoDataLabel>{t('march-madness.leaderboard.no-data')}</NoDataLabel>
                     </NoDataContainer>
                 )}
-                {page?.length > 0 && (
+                {filteredData?.length > 0 && (
                     <Table {...getTableProps()}>
                         <thead>
                             {headerGroups.map((headerGroup, headerGroupIndex) => (
@@ -260,16 +260,16 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                         </tbody>
                     </Table>
                 )}
+                <PaginationWrapper
+                    rowsPerPageOptions={[15, 30, 50, 100]}
+                    count={filteredData?.length ? filteredData.length : 0}
+                    labelRowsPerPage={t(`common.pagination.rows-per-page`)}
+                    rowsPerPage={state.pageSize}
+                    page={state.pageIndex}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </TableContainer>
-            <PaginationWrapper
-                rowsPerPageOptions={[15, 30, 50, 100]}
-                count={filteredData?.length ? filteredData.length : 0}
-                labelRowsPerPage={t(`common.pagination.rows-per-page`)}
-                rowsPerPage={state.pageSize}
-                page={state.pageIndex}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
         </Container>
     );
 };

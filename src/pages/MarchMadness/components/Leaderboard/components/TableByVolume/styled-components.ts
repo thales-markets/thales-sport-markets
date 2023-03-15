@@ -82,6 +82,7 @@ export const TableHeaderContainer = styled.div<{ hideBottomBorder?: boolean }>`
 export const TableContainer = styled(TableHeaderContainer)`
     min-height: 600px;
     align-items: flex-start;
+    flex-direction: column;
 `;
 
 export const TableHeader = styled.span`
