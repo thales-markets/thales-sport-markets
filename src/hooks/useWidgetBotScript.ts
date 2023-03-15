@@ -11,6 +11,15 @@ const useWidgetBotScript = () => {
             new (window as any).Crate({
                 server: '906484044915687464',
                 channel: '907009643295940618',
+                css: `
+                @media (max-width: 950px) {
+                    &:not(.open) .button {
+                        margin-bottom: 70px;
+                        width: 45px;
+                        height: 45px;
+                    }
+                }
+              `,
             });
         };
 
