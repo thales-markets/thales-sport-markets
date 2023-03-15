@@ -95,9 +95,7 @@ export const getMultiAMMSportsTransactions: any = (
             transactions.push(
                 overtimeVoucherContract?.buyFromAMMWithVoucher(marketAddress, selectedPosition, parsedAmount, voucherId)
             );
-        }
-
-        if (isMultiCollateralSupported && stableIndex !== 0 && collateralAddress) {
+        } else if (isMultiCollateralSupported && stableIndex !== 0 && collateralAddress) {
             transactions.push(
                 sportsAMMContract?.buyFromAMMWithDifferentCollateralAndReferrer(
                     marketAddress,
