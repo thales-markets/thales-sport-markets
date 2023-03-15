@@ -292,6 +292,18 @@ export const isFifaWCGame = (tag: number) => Number(tag) === FIFA_WC_TAG;
 
 export const getIsIndividualCompetition = (tag: number) => PERSON_COMPETITIONS.includes(tag);
 
+export const isParlayWon = (parlayMarket: ParlayMarket) => {
+    const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved || market?.isCanceled);
+    const claimablePositions = parlayMarket.positions.filter((position) => position.claimable);
+
+    return (
+        (resolvedMarkets &&
+            resolvedMarkets?.length === claimablePositions?.length &&
+            resolvedMarkets?.length === parlayMarket.sportMarkets.length) ||
+        parlayMarket.won
+    );
+};
+
 export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
     const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved || market?.isCanceled);
     const claimablePositions = parlayMarket.positions.filter((position) => position.claimable);
@@ -327,6 +339,8 @@ export const isParlayOpen = (parlayMarket: ParlayMarket) => {
     if (resolvedMarkets?.length == 0) return true;
 
     if (resolvedMarkets?.length !== resolvedAndClaimable?.length) return false;
+    if (resolvedMarkets?.length === parlayMarket.sportMarkets.length) return false;
+
     return true;
 };
 
