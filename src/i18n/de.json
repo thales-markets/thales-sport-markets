@@ -51,7 +51,7 @@
             }
         },
         "swap": {
-            "title": "{{currencyKey}} erhalten",
+            "title": "USD erhalten",
             "from-label": "Von",
             "to-label": "Zu",
             "balance-label": "Guthaben: {{amount}}",
@@ -927,7 +927,9 @@
             "tooltip-correct-correct-table": "Anzahl der korrekt erratenen Partien in Ihrem Bracket",
             "tooltip-rewards-correct-table": "3.000 OP (10.000 Thales auf Arb) werden unter den Top 10 aufgeteilt",
             "tooltip-base-volume-table": "Durch NCAA-Basketballspiele getriebenes Volumen",
-            "tooltip-rewards-volume-table": "10.000 OP (30.000 Thales auf Arb) werden basierend auf dem anteiligen Volumen aufgeteilt"
+            "tooltip-rewards-volume-table": "10.000 OP (30.000 Thales auf Arb) werden basierend auf dem anteiligen Volumen aufgeteilt",
+            "by-guessed-correctly": "Durch richtig geraten",
+            "my-rewards": "Meine Belohnungen"
         },
         "test-info": "Die Testphase mit den Musterteams ist jetzt eröffnet, die Auswahl 2023 öffnet am 12. März!"
     },

@@ -64,9 +64,10 @@ import {
 type SingleProps = {
     market: ParlaysMarket;
     parlayPayment: ParlayPayment;
+    onBuySuccess?: () => void;
 };
 
-const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
+const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
@@ -467,6 +468,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     setUsdAmount('');
                     setTokenAmount(0);
                     dispatch(removeAll());
+                    onBuySuccess && onBuySuccess();
 
                     trackEvent({
                         category: 'parlay-single',
