@@ -288,3 +288,15 @@
 .icon--thales-rewards::before {
     content: '\00AA';
 }
+
+.icon--liquidity-pool::before {
+    content: '\00AE';
+}
+
+.icon--get-thales::before {
+    content: '\005C';
+}
+
+.icon--stake-thales::before {
+    content: '\005F';
+}

@@ -210,3 +210,7 @@
 .overtime-voucher-overlay .rc-tooltip-arrow {
     display: none;
 }
+
+.lp-max-allowance .rc-tooltip-inner {
+    max-width: 500px;
+}

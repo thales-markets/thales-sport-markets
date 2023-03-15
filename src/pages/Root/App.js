@@ -35,6 +35,7 @@ const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
 const Vaults = lazy(() => import('pages/Vaults'));
 const Vault = lazy(() => import('pages/Vault'));
 const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
+const LiquidityPool = lazy(() => import('pages/LiquidityPool'));
 
 const App = () => {
     const dispatch = useDispatch();
@@ -267,6 +268,13 @@ const App = () => {
                                 <Route exact path={ROUTES.MarchMadness}>
                                     <DappLayout>
                                         <MarchMadness />
+                                    </DappLayout>
+                                </Route>
+                            )}
+                            {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (
+                                <Route exact path={ROUTES.LiquidityPool}>
+                                    <DappLayout>
+                                        <LiquidityPool />
                                     </DappLayout>
                                 </Route>
                             )}
