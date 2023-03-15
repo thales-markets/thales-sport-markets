@@ -795,8 +795,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 16,
-        name: '',
-        displayName: 'Wild Card',
+        name: 'Texas A&M-CC Islanders',
+        displayName: 'Texas A&M-CC',
         region: 'South',
         position: 16,
     },
@@ -984,8 +984,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 43,
-        name: '',
-        displayName: 'Wild Card',
+        name: 'Pittsburgh Panthers',
+        displayName: 'Pittsburgh',
         region: 'Midwest',
         position: 11,
     },
@@ -1076,7 +1076,7 @@ export const teamsData: MarchMadTeam[] = [
     {
         id: 56,
         name: 'Arkansas Razorbacks',
-        displayName: 'Arkansase',
+        displayName: 'Arkansas',
         region: 'West',
         position: 8,
     },
