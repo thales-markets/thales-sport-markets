@@ -51,7 +51,7 @@
             }
         },
         "swap": {
-            "title": "Obtener {{currencyKey}}",
+            "title": "Obtener USD",
             "from-label": "Envio",
             "to-label": "Recibo",
             "balance-label": "Balance: {{amount}}",
@@ -137,7 +137,8 @@
         "top10": "TOP 10",
         "yes": "YES",
         "no": "NO",
-        "fifa-tooltip": "Los resultados de los mercados de la Copa Mundial de la FIFA se basan en los resultados reglamentarios; en caso de que vayan a la prórroga, el resultado reglamentario es el que resolverá el mercado."
+        "fifa-tooltip": "Los resultados de los mercados de la Copa Mundial de la FIFA se basan en los resultados reglamentarios; en caso de que vayan a la prórroga, el resultado reglamentario es el que resolverá el mercado.",
+        "tennis-tooltip": "En caso de un walkover, el partido se considerará cancelado. En caso de retiro/descalificación durante el partido, se tratará como una victoria para el jugador que avanza a la siguiente ronda."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS.",
@@ -191,7 +192,7 @@
                 "history": "Tus transacciones",
                 "archivedmarkets": "Mercados archivados",
                 "tooltip": "Mercados resueltos hace más de 7 días",
-                "openmarkets": "Todos",
+                "openmarkets": "Abierto",
                 "resolvedmarkets": "Acabado",
                 "allmarkets": "Todos",
                 "canceled": "En pausa / Cancelado",
@@ -222,7 +223,7 @@
         },
         "back-to-markets": "Volver a los mercados",
         "back-to-market": "Volver al mercado",
-        "no-markets-found": "Mercados no encontrados",
+        "no-markets-found": "Mercados no encontrados para",
         "view-all-markets": "Ver todos los mercados",
         "table": {
             "title": "Actividad reciente",
@@ -417,11 +418,12 @@
             },
             "labels": {
                 "language": "Idioma",
-                "get-started": "Empezar"
+                "get-started": "Empezar",
+                "march-madness": "locura de Marzo"
             }
         },
         "incentivized-markets": "MERCADOS INCENTIVIZADOS",
-        "op-incentivized-tooltip": "Los mercados de EPL están incentivados con 5,000 OP desde los juegos del 26 de diciembre hasta los juegos del 6 de enero según el volumen prorrateado. Consulte la tabla de clasificación <duneLink>aquí</ duneLink>."
+        "incentivized-tooltip": "NCAA markets are incentivized with {{rewards}} during March Madness. More details <detailsLink>here</detailsLink>."
     },
     "rewards": {
         "header": "Recompensas",
@@ -817,6 +819,201 @@
             "coppied": "Coppied!",
             "address": "Your address QR code",
             "copied": "¡Copiado!"
+        }
+    },
+    "march-madness": {
+        "tabs": {
+            "leaderboard": "Tabla de clasificación",
+            "home": "Hogar",
+            "brackets": "Soportes"
+        },
+        "back-to-markets": "volver a los mercados",
+        "brackets": {
+            "team-2": "equipo 2",
+            "team-1": "equipo 1",
+            "submit-text": "Soporte de acabado",
+            "submit": "Soporte de acabado",
+            "submit-modify": "Actualizar soporte",
+            "modal": {
+                "button-minting": "Acuñación...",
+                "update-text": "¡Ya has acuñado tu NFT!",
+                "finish-text-1": "¡Bien hecho!",
+                "button-update": "Actualizar soporte",
+                "button-mint": "Me gusta NFT",
+                "button-updating": "Actualizando...",
+                "finish-text-2": "¡Ahora puedes acuñar tu NFT!"
+            },
+            "stats": {
+                "rank": "Rango",
+                "complete": "Completo",
+                "my-stats": "Mis estadísticas",
+                "bonus": "Prima",
+                "points": "Puntos",
+                "incomplete": "Incompleto",
+                "status": "Estado",
+                "my-total-score": "mi puntuación total",
+                "place": "Lugar"
+            },
+            "round-1": "2da ronda",
+            "round-3": "Élite 8",
+            "round-4": "4 finales",
+            "round-0": "1ra Ronda",
+            "round-2": "Dulces 16",
+            "round-5": "Final",
+            "modal-mint": {
+                "finish-text-2": "¡Ahora puedes acuñar tu NFT!",
+                "button-minting": "Acuñación...",
+                "finish-text-1": "¡Bien hecho!",
+                "update-text": "¡Ya has acuñado tu NFT!",
+                "button-updating": "Actualizando...",
+                "button-update": "Actualizar soporte",
+                "button-mint": "Me gusta NFT",
+                "update-text-1": "¡Bien hecho!",
+                "finish-text-3-success": "¡Dirígete a los <marketsLink>mercados de la NCAAB</marketsLink> y comienza a ganar recompensas!",
+                "finish-text-1-success": "¡Felicidades!",
+                "finish-info": "*El soporte NFT de March Madness es un NFT de tiempo extra que permite a los titulares participar en la campaña Overtime March Madness creando su propio soporte de torneo de predicción.",
+                "update-text-2": "Guardamos su predicción de paréntesis, ¡actualice su paréntesis ahora!",
+                "finish-text-2-success": "¡Acabas de acuñar tu March Madness Bracket!",
+                "update-text-2-success": "¡Tu soporte NFT de March Madness ha sido actualizado!"
+            },
+            "modal-share": {
+                "header": "Mis 4 últimas elecciones",
+                "share": "Compartir",
+                "user-selection": "¡Elegí al {{team}} para cortar las redes en Houston!"
+            },
+            "share": "Comparte este paréntesis"
+        },
+        "regions": {
+            "east": "Este",
+            "west": "Oeste",
+            "south": "Sur",
+            "midwest": "medio oeste"
+        },
+        "home": {
+            "title": "Bienvenidos al torneo March Madness",
+            "text-1": "March Madness es un evento de la NCAAB en el que 68 equipos compiten en forma eliminatoria por el campeonato. El evento comienza el 14 de marzo en el que 8 equipos compiten por los últimos 4 lugares en los 64 grupos de la etapa eliminatoria. La acuñación comienza el 12 de marzo y dura hasta el 16 de marzo cuando comienza el evento principal.",
+            "text-2g": "Bono máximo aquí: 32*1+16*2+8*4+4*7+2*10+20=164%",
+            "text-2c": "Resultado de los octavos de final predicho correctamente: bonificación del 4 %",
+            "time-info": "Te quedan {{days}} DÍAS PARA hacer la predicción",
+            "text-2a": "Resultado de la ronda de 64 juegos predicho correctamente: 1% de bonificación",
+            "text-2e": "Resultado de la ronda de 4 juegos predicho correctamente: 10% de bonificación",
+            "button-connect": "Conectar billetera",
+            "text-2": "Una forma alternativa de calcular la bonificación sería basarla en la ronda, ya que cuanto más se avanza en la fase de eliminación de un juego, más difícil es predecir el resultado (ya que también debe adivinar correctamente todos los juegos anteriores), así que tal vez :",
+            "text-2d": "Resultado del juego de la ronda de 8 predicho correctamente: 7% de bonificación",
+            "text-2f": "Resultado final del juego predicho correctamente: 20 % de bonificación",
+            "button-create": "Crear soporte",
+            "text-2b": "Resultado de la ronda de 32 juegos predicho correctamente: 2% de bonificación",
+            "text-3c": "Élite Ocho - 7%",
+            "text-4": "El <bold>segundo grupo</bold> se dividirá entre los poseedores del tramo más preciso con un volumen de referencia de 10 sUSD en los juegos March Madness. Los poseedores que cumplan con el requisito de volumen pueden rastrear su posición en la tabla de clasificación de mejor soporte donde los ganadores dividirán un fondo de recompensa de 3,000 OP.",
+            "text-3d": "Dulce 16 - 4%",
+            "text-5": "Más detalles en nuestra <mediumLink>publicación de blog mediana</mediumLink>.",
+            "text-3e": "Segunda Ronda - 2%",
+            "text-3a": "Campeonato - 20%",
+            "text-3f": "Primera Vuelta - 1%",
+            "text-3b": "Final Four - 10%",
+            "text-3": "Para el <bold>Primer grupo</bold>, 10 000 OP se dividirán entre todo el volumen generado a través de los juegos de March Madness, incluidos todos los tipos de mercado y parlay con al menos un juego de la NCAAB. Los titulares del soporte NFT de March Madness son elegibles para un impulso comercial. Cada juego correcto es elegible para un impulso escalonado, con un máximo de 164%."
+        },
+        "mobile-message": "La página solo está disponible en pantallas más grandes. ¡Utilice la versión de escritorio!",
+        "leaderboard": {
+            "rank": "Rango",
+            "volume": "Volumen",
+            "rewards": "Recompensas",
+            "player": "Jugador",
+            "owner": "Dueño",
+            "address": "DIRECCIÓN",
+            "base-volume": "Base",
+            "search-placeholder": "BUSCAR DIRECCIÓN DE CARTERA",
+            "bonus-volume": "Prima",
+            "guessed-games": "juegos adivinados",
+            "no-data": "No hay datos disponibles actualmente",
+            "tooltip-rewards-volume-table": "10,000 OP (30k Thales en arbitraje) se dividirán en función del volumen prorrateado",
+            "tooltip-correct-correct-table": "Número de juegos adivinados correctamente en su paréntesis",
+            "tooltip-bonus-volume-table": "Volumen de bonificación calculado en función de sus selecciones de soporte",
+            "tooltip-base-volume-table": "Volumen impulsado a través de los juegos de baloncesto de la NCAA",
+            "tooltip-rewards-correct-table": "3,000 OP (10k thales en arb) se dividirán entre los 10 mejores",
+            "by-guessed-correctly": "Por adivinar correctamente",
+            "my-rewards": "Mi recompensa"
+        },
+        "test-info": "Ya está abierta la fase de pruebas con los equipos de muestra, ¡la selección 2023 se abre el 12 de marzo!"
+    },
+    "liquidity-pool": {
+        "title": "Provide Liquidity",
+        "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round your balance (inclusive of that round's PnL) is sent to you. To withdraw, you need to have at least {{thalesStakedAmount}} THALES staked per each {{currency}} you are withdrawing.</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
+        "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the pool: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
+
+        "liquidity-pool-not-started-message": "The liquidity pool has not started",
+        "liquidity-pool-paused-message": "The liquidity pool is paused",
+        "round-end-label": "The round ends in",
+        "round-ended-label": "Round ended",
+
+        "total-info-label": "Total LP info",
+        "users-in-liquidity-pool-label": "Users in the liquidity pool: {{number}} / {{max}}",
+        "your-share-label": "Your share: {{percentage}} of LP",
+        "your-info-label": "Your LP info",
+        "current-balance-label": "Current balance",
+        "next-round-balance-label": "Next round balance",
+        "max-allowance-label": "Max allowance",
+        "your-thales-staked-label": "Your THALES staked",
+        "allowance-multiplier-label": "Allowance multiplier",
+        "withdrawal-request-label": "Withdrawal request: {{amount}}",
+        "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
+
+        "deposit-amount-placeholder": "Enter amount",
+        "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "Nothing to withdraw.",
+        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
+        "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
+        "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
+        "deposit-max-amount-of-users-warning": "Maximum number of users in the liquidity pool is reached, you cannot deposit.",
+        "deposit-liquidity-pool-cap-reached-warning": "The liquidity pool cap is reached, you cannot deposit.",
+        "deposit-liquidity-pool-cap-error": "Deposit amount exceeds liquidity pool cap",
+        "deposit-staked-thales-error": "Deposit amount exceeds max allowance, stake more THALES to deposit",
+        "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
+        "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
+        "withdrawal-staked-thales-warning": "You cannot withdraw as you need more staked THALES to withdraw. Stake {{amount}} THALES more to enable withdrawal.",
+
+        "tabs": {
+            "deposit": "Deposit",
+            "withdraw": "Withdraw"
+        },
+        "button": {
+            "deposit-label": "Deposit",
+            "deposit-progress-label": "Deposit in progress...",
+            "deposit-confirmation-message": "Deposit successfully placed",
+            "request-withdrawal-label": "Request withdrawal",
+            "request-withdrawal-progress-label": "Request in progress...",
+            "request-withdrawal-confirmation-message": "Withdrawal request successfully sent",
+            "withdraw-label": "Withdraw",
+            "withdraw-progress-label": "Withdrawal in progress...",
+            "withdraw-confirmation-message": "Funds successfully withdrawn",
+            "close-round-label": "Close round",
+            "close-round-progress-label": "Closing round in progress...",
+            "close-round-confirmation-message": "Round successfully closed",
+            "get-thales-label": "Get THALES",
+            "stake-thales-label": "Stake THALES"
+        },
+        "pnl": {
+            "pnl-per-round": {
+                "title": "PnL per round"
+            },
+            "cumulative-pnl": {
+                "title": "PnL over time"
+            },
+            "no-data": "No PnL data for previous rounds.",
+            "lifetime-pnl": "Lifetime PnL",
+            "ongoing-pnl": "Ongoing PnL"
+        },
+        "user-transactions": {
+            "title": "User transactions",
+            "your-transactions-title": "Your transactions",
+            "no-transactions": "No user transactions associated with this liquidity pool in the selected round.",
+            "round-label": "Round",
+            "type": {
+                "deposit": "Deposit",
+                "withdrawalRequest": "Withdrawal Request",
+                "claim": "Withdrawal Claim"
+            }
         }
     }
 }

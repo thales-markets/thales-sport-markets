@@ -86,7 +86,6 @@ const GetUsd: React.FC = () => {
             {isWalletConnected && (
                 <Container>
                     <Button
-                        type="primary"
                         onClick={() => {
                             if (networkId === NetworkIdByName.OptimsimKovan) {
                                 handleGet();
@@ -106,7 +105,7 @@ const GetUsd: React.FC = () => {
                             ? t('common.wallet.get-usd', {
                                   amount: formattedAmount,
                               })
-                            : t('common.swap.title', { currencyKey: PAYMENT_CURRENCY })}
+                            : t('common.swap.title')}
                     </Button>
                     {openSwapModal && <SwapModal onClose={() => setOpenSwapModal(false)} />}
                 </Container>

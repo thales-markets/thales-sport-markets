@@ -64,7 +64,7 @@ const DappLayout: React.FC = ({ children }) => {
     }, [networkId, i18n.language]);
 
     useEffect(() => {
-        if (location.pathname !== ROUTES.MintWorldCupNFT) {
+        if (![ROUTES.MintWorldCupNFT, ROUTES.MarchMadness].includes(location.pathname)) {
             dispatch(setTheme(Theme.DARK));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

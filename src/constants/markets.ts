@@ -104,10 +104,14 @@ export enum ParlayErrorCode {
     MAX_DOUBLE_CHANCES = 3,
 }
 
-export const OP_INCENTIVIZED_LEAGUE = {
-    id: 9002,
-    startDate: new Date(Date.UTC(2023, 0, 13, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2023, 1, 12, 23, 59, 59)),
+export const INCENTIVIZED_LEAGUE = {
+    id: 9005,
+    startDate: new Date(Date.UTC(2023, 2, 13, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2023, 3, 3, 23, 59, 59)),
+    link:
+        'https://medium.com/@OvertimeMarkets.xyz/overtime-brings-the-bracket-to-the-blockchain-for-march-madness-66777956d87f',
+    opRewards: '13,000 OP',
+    thalesRewards: '40,000 THALES',
 };
 
 export const MIN_LIQUIDITY = 10;
@@ -233,3 +237,15 @@ export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS = [
     53,
     50,
 ];
+
+export const ENETPULSE_ROUNDS: Record<number, string> = {
+    [1]: 'no round',
+    [2]: 'Semi Finals',
+    [3]: 'Quarter Finals',
+    [4]: '1/8',
+    [5]: '1/16',
+    [6]: '1/32',
+    [7]: '1/64',
+    [8]: '1/128',
+    [9]: 'Final',
+};

@@ -1,3 +1,4 @@
+import { ENETPULSE_ROUNDS } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { SportMarketLiveResult } from 'types/markets';
@@ -28,7 +29,8 @@ const useEnetpulseSportMarketLiveResultQuery = (
 
                 const event = events.find((sportEvent: any) => sportEvent.id == trimmedMarketId) as any;
                 if (event) {
-                    const tournamentName = event ? event.tournament_stage_name : '';
+                    const tournamentName = event.tournament_stage_name;
+                    const tournamentRound = ENETPULSE_ROUNDS[Number(event.round_typeFK)];
                     const eventParticipants: any[] = Object.values(event.event_participants);
                     const homeResults: any[] = Object.values(eventParticipants[0].result);
                     const awayResults: any[] = Object.values(eventParticipants[1].result);
@@ -69,6 +71,7 @@ const useEnetpulseSportMarketLiveResultQuery = (
                         displayClock,
                         sportId,
                         tournamentName,
+                        tournamentRound,
                     };
                     return finalResult;
                 }
@@ -80,7 +83,6 @@ const useEnetpulseSportMarketLiveResultQuery = (
             }
         },
         {
-            refetchInterval: 1000,
             ...options,
         }
     );

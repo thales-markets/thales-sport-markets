@@ -360,7 +360,7 @@ export const updateTotalQuoteAndAmountFromContract = (parlayMarkets: ParlayMarke
             return {
                 ...parlay,
                 totalQuote,
-                totalAmount: parlay.sUSDAfterFees / totalQuote,
+                totalAmount: totalQuote ? parlay.sUSDAfterFees / totalQuote : 0,
             };
         } else {
             return parlay;

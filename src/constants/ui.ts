@@ -2,18 +2,21 @@ import { NavMenuItem, ThemeInterface } from 'types/ui';
 import lightTheme from 'styles/themes/light';
 import darkTheme from 'styles/themes/dark';
 import worldCupTheme from 'styles/themes/worldcup';
+import marchMadnessTheme from 'styles/themes/marchMadness';
 import ROUTES from './routes';
 
 export enum Theme {
     LIGHT,
     DARK,
     WORLDCUP,
+    MARCH_MADNESS,
 }
 
 export const ThemeMap: Record<Theme, ThemeInterface> = {
     [Theme.LIGHT]: lightTheme,
     [Theme.DARK]: darkTheme,
     [Theme.WORLDCUP]: worldCupTheme,
+    [Theme.MARCH_MADNESS]: marchMadnessTheme,
 };
 
 export const ODDS_COLOR = {
@@ -98,6 +101,13 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         name: 'vaults',
         route: ROUTES.Vaults,
         supportedNetworks: [10, 420],
+    },
+    {
+        i18label: 'markets.nav-menu.items.liquidity-pool',
+        iconClass: 'icon icon--liquidity-pool',
+        name: 'liquidity-pool',
+        route: ROUTES.LiquidityPool,
+        supportedNetworks: [10, 420, 42161],
     },
 ];
 
