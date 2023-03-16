@@ -60,28 +60,22 @@ export const Container = styled.div`
     width: 60%;
 `;
 
-export const TableHeaderContainer = styled.div<{ hideBottomBorder?: boolean }>`
+export const TableHeaderContainer = styled.div<{ hideBottomBorder?: boolean; inverseBorderGradient?: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
     border: 2px;
     border-bottom: ${(_props) => (_props?.hideBottomBorder === true ? '0px' : '')};
     border-style: solid;
-    border-image: linear-gradient(
-            279.41deg,
-            #da252f 10.64%,
-            #5c2c3b 23.38%,
-            #021630 41.03%,
-            #0c99d0 70.84%,
-            #02223e 94.26%
-        )
-        1;
+    border-image: ${(_props) =>
+        _props.inverseBorderGradient == true
+            ? 'linear-gradient(100.41deg, #DA252F -0.79%, #5C2C3B 29.78%, #021630 47.85%, #0C99D0 75.56%, #02223E 110.04%) 1'
+            : `linear-gradient(268.11deg, #DA252F 0.03%, #5C2C3B 21.05%, #021630 41.08%, #0C99D0 71.72%, #02223E 104.1%) 1`};
     width: 100%;
 `;
 
 export const TableContainer = styled(TableHeaderContainer)`
     min-height: 600px;
-    align-items: flex-start;
     flex-direction: column;
 `;
 
@@ -109,6 +103,11 @@ export const Arrow = styled.i`
 export const StickyRow = styled(TableRow)`
     width: 100%;
     height: 35px !important;
+`;
+
+export const StickyRowTopTable = styled(TableRow)`
+    width: 100%;
+    background-color: transparent;
 `;
 
 export const StickyCell = styled.div``;
