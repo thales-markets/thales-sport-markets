@@ -907,8 +907,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 32,
-        name: '',
-        displayName: 'Wild card',
+        name: 'Fairleigh Dickinson Knights',
+        displayName: 'F. Dickinson',
         region: 'East',
         position: 16,
     },
@@ -1096,8 +1096,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 59,
-        name: '',
-        displayName: 'Wild Card',
+        name: 'Arizona State Sun Devils',
+        displayName: 'Arizona St.',
         region: 'West',
         position: 11,
     },
