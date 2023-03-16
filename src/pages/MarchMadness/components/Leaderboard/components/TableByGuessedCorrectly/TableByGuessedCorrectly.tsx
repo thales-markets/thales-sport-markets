@@ -117,6 +117,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
     const filteredData = useMemo(() => {
         let finalData: LeaderboardByGuessedCorrectlyResponse = [];
         if (data) {
+            finalData = data;
             const myScore = data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
             if (myScore.length) {
                 finalData = data.filter((user) => user.walletAddress.toLowerCase() !== walletAddress?.toLowerCase());
@@ -126,7 +127,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                 finalData = data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
             }
 
-            return finalData?.length ? finalData : data;
+            return finalData;
         }
 
         return [];
