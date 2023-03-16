@@ -390,7 +390,8 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                 try {
                     const parsedTicketPrice = getAmountForApproval(
                         selectedStableIndex,
-                        Number(calculatedTotalBuyIn).toString()
+                        Number(calculatedTotalBuyIn).toString(),
+                        networkId
                     );
                     await checkAllowance(
                         parsedTicketPrice,
@@ -418,6 +419,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
         selectedStableIndex,
         isVoucherSelected,
         isMultiCollateralSupported,
+        networkId,
     ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
