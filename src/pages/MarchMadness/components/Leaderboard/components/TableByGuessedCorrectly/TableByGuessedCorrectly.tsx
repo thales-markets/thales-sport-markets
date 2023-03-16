@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import React, { useMemo } from 'react';
 import { Column, usePagination, useTable } from 'react-table';
 import {
+    Arrow,
     NoDataContainer,
     NoDataLabel,
     OverlayContainer,
@@ -25,6 +26,7 @@ import useLoeaderboardByGuessedCorrectlyQuery, {
 import { useTranslation } from 'react-i18next';
 import Tooltip from 'components/Tooltip';
 import { TooltipStyle } from '../TableByVolume/TableByVolume';
+import { getEtherscanAddressLink } from 'utils/etherscan';
 
 type TableByGuessedCorrectlyProps = {
     searchText: string;
@@ -44,7 +46,18 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
             {
                 Header: <>{t('march-madness.leaderboard.address')}</>,
                 accessor: 'walletAddress',
-                Cell: (cellProps) => <>{truncateAddress(cellProps.cell.value, 5)}</>,
+                Cell: (cellProps) => (
+                    <>
+                        {truncateAddress(cellProps.cell.value, 5)}
+                        <a
+                            href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            <Arrow />
+                        </a>
+                    </>
+                ),
             },
             {
                 Header: () => (
