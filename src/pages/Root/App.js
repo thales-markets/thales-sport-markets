@@ -43,7 +43,7 @@ const App = () => {
     const networkId = useSelector((state) => getNetworkId(state));
     const isWalletConnected = useSelector((state) => getIsWalletConnected(state));
 
-    const provider = useProvider({ chainId: networkId });
+    const provider = useProvider(!hasEthereumInjected() && { chainId: networkId }); // for incognito mode set chainId from dApp
     const { address } = useAccount();
     const { data: signer } = useSigner();
     const client = useClient();
@@ -88,34 +88,39 @@ const App = () => {
 
     useEffect(() => {
         const init = async () => {
-            let providerNetworkId;
-            if (hasEthereumInjected()) {
-                if (isNetworkSupported(parseInt(window.ethereum?.chainId, 16))) {
-                    providerNetworkId = parseInt(window.ethereum?.chainId, 16);
-                } else if (isNetworkSupported(client.lastUsedChainId) && client.lastUsedChainId) {
-                    providerNetworkId = client.lastUsedChainId;
-                    // disconnect();
+            let providerNetworkId = address && (await provider.getNetwork()).chainId;
+            let mmChainId = undefined;
+
+            if (!providerNetworkId) {
+                // can't use wagmi when wallet is not connected
+                if (hasEthereumInjected()) {
+                    mmChainId = parseInt(await window.ethereum.request({ method: 'eth_chainId' }), 16);
+                    if (isNetworkSupported(mmChainId)) {
+                        providerNetworkId = mmChainId;
+                    } else {
+                        providerNetworkId = DEFAULT_NETWORK_ID;
+                        disconnect();
+                    }
                 } else {
-                    providerNetworkId = DEFAULT_NETWORK_ID;
-                    disconnect();
+                    // without MM, for incognito mode
+                    providerNetworkId = isNetworkSupported(networkId) ? networkId : DEFAULT_NETWORK_ID;
                 }
-            } else {
-                providerNetworkId = isNetworkSupported(networkId) ? networkId : DEFAULT_NETWORK_ID;
             }
             try {
                 dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
+
+                // can't use wagmi provider when wallet exists in browser but locked, then use MM network if supported
+                const selectedProvider =
+                    !address && hasEthereumInjected() && isNetworkSupported(mmChainId)
+                        ? new ethers.providers.Web3Provider(window.ethereum, 'any')
+                        : provider;
+
                 networkConnector.setNetworkSettings({
                     networkId: providerNetworkId,
-                    provider:
-                        parseInt(window.ethereum?.chainId, 16) === providerNetworkId
-                            ? !!signer && !!signer.provider
-                                ? new ethers.providers.Web3Provider(signer.provider.provider, 'any')
-                                : window.ethereum
-                                ? new ethers.providers.Web3Provider(window.ethereum, 'any')
-                                : provider
-                            : provider,
+                    provider: selectedProvider,
                     signer,
                 });
+
                 dispatch(setAppReady());
             } catch (e) {
                 dispatch(setAppReady());
@@ -123,7 +128,7 @@ const App = () => {
             }
         };
         init();
-    }, [dispatch, provider, signer, client.lastUsedChainId, networkId, disconnect]);
+    }, [dispatch, provider, signer, networkId, disconnect, address]);
 
     useEffect(() => {
         dispatch(updateWallet({ walletAddress: address }));
@@ -159,11 +164,14 @@ const App = () => {
         };
 
         if (window.ethereum) {
-            window.ethereum.on('chainChanged', (chainId) => {
-                const chainIdInt = parseInt(chainId, 16);
-                const supportedNetworkId = isNetworkSupported(chainIdInt) ? chainIdInt : DEFAULT_NETWORK_ID;
-                dispatch(updateNetworkSettings({ networkId: supportedNetworkId }));
-                if (isNetworkSupported(chainIdInt)) {
+            window.ethereum.on('chainChanged', (chainIdHex) => {
+                const chainId = parseInt(chainIdHex, 16);
+                if (!address) {
+                    // when wallet exists in browser but locked, change network manually
+                    const supportedNetworkId = isNetworkSupported(chainId) ? chainId : DEFAULT_NETWORK_ID;
+                    dispatch(updateNetworkSettings({ networkId: supportedNetworkId }));
+                }
+                if (isNetworkSupported(chainId)) {
                     if (window.ethereum.isMetaMask && !isWalletConnected) {
                         autoConnect();
                     }
@@ -172,7 +180,7 @@ const App = () => {
                 }
             });
         }
-    }, [client, isWalletConnected, dispatch, disconnect]);
+    }, [client, isWalletConnected, dispatch, disconnect, provider, signer, address]);
 
     useEffect(() => {
         trackPageView();

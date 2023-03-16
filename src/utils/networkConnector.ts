@@ -74,13 +74,11 @@ const networkConnector: NetworkConnector = {
     },
 };
 
-const initializeContract = (contract: any, networkSettings: NetworkSettings) =>
-    contract.addresses[networkSettings.networkId || NetworkIdByName.OptimismMainnet] !== ''
-        ? new ethers.Contract(
-              contract.addresses[networkSettings.networkId || NetworkIdByName.OptimismMainnet],
-              contract.abi,
-              networkConnector.provider
-          )
+const initializeContract = (contract: any, networkSettings: NetworkSettings) => {
+    const contractAddress = contract.addresses[networkSettings.networkId || NetworkIdByName.OptimismMainnet];
+    return contractAddress !== ''
+        ? new ethers.Contract(contractAddress, contract.abi, networkConnector.provider)
         : undefined;
+};
 
 export default networkConnector;
