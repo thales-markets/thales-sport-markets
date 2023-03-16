@@ -130,10 +130,10 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
 
     return (
         <Container>
-            <TableHeaderContainer hideBottomBorder={true}>
+            <TableHeaderContainer hideBottomBorder={true} inverseBorderGradient={true}>
                 <TableHeader>{t('march-madness.leaderboard.by-guessed-correctly')}</TableHeader>
             </TableHeaderContainer>
-            <TableContainer>
+            <TableContainer inverseBorderGradient={true}>
                 {!filteredData?.length && (
                     <NoDataContainer>
                         <NoDataLabel>{t('march-madness.leaderboard.no-data')}</NoDataLabel>
