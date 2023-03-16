@@ -60,6 +60,8 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound }) => {
         enabled: isAppReady,
     });
 
+    useEffect(() => setRound(currentRound), [currentRound]);
+
     useEffect(() => {
         if (liquidityPoolUserTransactionsQuery.isSuccess && liquidityPoolUserTransactionsQuery.data) {
             setLiquidityPoolUserTransactions(
