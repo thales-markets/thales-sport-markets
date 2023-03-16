@@ -6,6 +6,7 @@ import {
     NoDataLabel,
     OverlayContainer,
     PaginationWrapper,
+    StickyRowTopTable,
     Table,
     TableContainer,
     TableHeader,
@@ -14,11 +15,13 @@ import {
     TableRow,
     TableRowCell,
 } from '../TableByVolume/styled-components';
-import { getNetworkId } from 'redux/modules/wallet';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useSelector } from 'react-redux';
 import { truncateAddress } from 'utils/formatters/string';
-import useLoeaderboardByGuessedCorrectlyQuery from 'queries/marchMadness/useLoeaderboardByGuessedCorrectlyQuery';
+import useLoeaderboardByGuessedCorrectlyQuery, {
+    LeaderboardByGuessedCorrectlyResponse,
+} from 'queries/marchMadness/useLoeaderboardByGuessedCorrectlyQuery';
 import { useTranslation } from 'react-i18next';
 import Tooltip from 'components/Tooltip';
 import { TooltipStyle } from '../TableByVolume/TableByVolume';
@@ -30,6 +33,7 @@ type TableByGuessedCorrectlyProps = {
 const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searchText }) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
 
     const columns: Column[] = useMemo(() => {
         return [
@@ -90,12 +94,30 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
         return [];
     }, [leaderboardQuery.data, leaderboardQuery.isSuccess]);
 
-    const filteredData = useMemo(() => {
-        if (data && searchText?.trim() !== '') {
-            return data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
+    const myScore = useMemo(() => {
+        if (data) {
+            return data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
         }
-        return data;
-    }, [data, searchText]);
+        return [];
+    }, [data, walletAddress]);
+
+    const filteredData = useMemo(() => {
+        let finalData: LeaderboardByGuessedCorrectlyResponse = [];
+        if (data) {
+            const myScore = data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
+            if (myScore.length) {
+                finalData = data.filter((user) => user.walletAddress.toLowerCase() !== walletAddress?.toLowerCase());
+            }
+
+            if (searchText?.trim() !== '') {
+                finalData = data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
+            }
+
+            return finalData?.length ? finalData : data;
+        }
+
+        return [];
+    }, [data, searchText, walletAddress]);
 
     const {
         getTableProps,
@@ -128,12 +150,25 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
         gotoPage(0);
     };
 
+    const stickyRow = useMemo(() => {
+        if (myScore?.length) {
+            return (
+                <StickyRowTopTable>
+                    <TableRowCell>{myScore[0].rank}</TableRowCell>
+                    <TableRowCell>{t('march-madness.leaderboard.my-rewards').toUpperCase()}</TableRowCell>
+                    <TableRowCell>{myScore[0].totalCorrectedPredictions}</TableRowCell>
+                    <TableRowCell>{myScore[0].rewards}</TableRowCell>
+                </StickyRowTopTable>
+            );
+        }
+    }, [myScore, t]);
+
     return (
         <Container>
-            <TableHeaderContainer hideBottomBorder={true}>
+            <TableHeaderContainer hideBottomBorder={true} inverseBorderGradient={true}>
                 <TableHeader>{t('march-madness.leaderboard.by-guessed-correctly')}</TableHeader>
             </TableHeaderContainer>
-            <TableContainer>
+            <TableContainer inverseBorderGradient={true}>
                 {!filteredData?.length && (
                     <NoDataContainer>
                         <NoDataLabel>{t('march-madness.leaderboard.no-data')}</NoDataLabel>
@@ -153,6 +188,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                             ))}
                         </thead>
                         <tbody {...getTableBodyProps()}>
+                            {myScore ? stickyRow : <></>}
                             {(page.length ? page : rows).map((row, rowKey) => {
                                 prepareRow(row);
                                 return (
@@ -170,15 +206,17 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                         </tbody>
                     </Table>
                 )}
-                <PaginationWrapper
-                    rowsPerPageOptions={[20, 50, 100]}
-                    count={filteredData?.length ? filteredData.length : 0}
-                    labelRowsPerPage={t(`common.pagination.rows-per-page`)}
-                    rowsPerPage={state.pageSize}
-                    page={state.pageIndex}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+                {filteredData?.length > 0 && (
+                    <PaginationWrapper
+                        rowsPerPageOptions={[10, 20, 50, 100]}
+                        count={filteredData?.length ? filteredData.length : 0}
+                        labelRowsPerPage={t(`common.pagination.rows-per-page`)}
+                        rowsPerPage={state.pageSize}
+                        page={state.pageIndex}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                )}
             </TableContainer>
         </Container>
     );

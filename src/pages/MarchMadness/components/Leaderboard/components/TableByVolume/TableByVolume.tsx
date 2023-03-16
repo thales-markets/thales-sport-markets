@@ -181,7 +181,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
             data: filteredData,
             initialState: {
                 pageIndex: 0,
-                pageSize: 15,
+                pageSize: 20,
             },
         },
         usePagination
@@ -261,7 +261,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                     </Table>
                 )}
                 <PaginationWrapper
-                    rowsPerPageOptions={[15, 30, 50, 100]}
+                    rowsPerPageOptions={[10, 20, 50, 100]}
                     count={filteredData?.length ? filteredData.length : 0}
                     labelRowsPerPage={t(`common.pagination.rows-per-page`)}
                     rowsPerPage={state.pageSize}
