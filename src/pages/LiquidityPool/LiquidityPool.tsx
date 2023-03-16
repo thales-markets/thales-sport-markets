@@ -392,6 +392,10 @@ const LiquidityPool: React.FC = () => {
         userLiquidityPoolData ? userLiquidityPoolData.maxDeposit : 0
     );
 
+    const setMaxAmount = () => {
+        setAmount(Math.trunc(userLiquidityPoolData ? userLiquidityPoolData.availableToDeposit * 100 : 0) / 100);
+    };
+
     return (
         <Wrapper>
             {networkId !== NetworkIdByName.ArbitrumOne && (
@@ -512,6 +516,7 @@ const LiquidityPool: React.FC = () => {
                                             onChange={(_, value) => setAmount(value)}
                                             placeholder={t('liquidity-pool.deposit-amount-placeholder')}
                                             currencyLabel={collateral}
+                                            onMaxButton={setMaxAmount}
                                         />
                                     </ValidationTooltip>
                                 </InputContainer>
