@@ -98,7 +98,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                 accessor: 'rewards',
             },
         ];
-    }, [t]);
+    }, [t, networkId]);
 
     const leaderboardQuery = useLoeaderboardByGuessedCorrectlyQuery(networkId);
 
