@@ -940,8 +940,8 @@
             "tooltip-bonus-volume-table": "Volume del bonus calcolato in base alle selezioni del tuo girone",
             "tooltip-base-volume-table": "Volume guidato dalle partite di basket NCAA",
             "tooltip-correct-correct-table": "Numero di partite indovinate correttamente nel tuo girone",
-            "tooltip-rewards-correct-table": "3.000 OP (10k thales su arb) saranno divisi tra i primi 10",
-            "tooltip-rewards-volume-table": "10.000 OP (30k Thales su arb) saranno divisi in base al volume pro-rata",
+            "tooltip-rewards-correct-table": "3.000 OP (10.000 THALES su Arbitrum) saranno divisi tra i primi 10",
+            "tooltip-rewards-volume-table": "10.000 OP (30.000 THALES su Arbitrum) saranno divisi in base al volume pro-rata",
             "my-rewards": "Le mie ricompense",
             "by-guessed-correctly": "Indovinato correttamente"
         },

@@ -1035,8 +1035,8 @@
             "tooltip-base-volume-table": "Volume généré par les matchs de basket-ball de la NCAA",
             "tooltip-bonus-volume-table": "Volume bonus calculé en fonction de vos sélections de tranches",
             "tooltip-correct-correct-table": "Nombre de jeux correctement devinés dans votre fourchette",
-            "tooltip-rewards-volume-table": "10 000 OP (30 000 Thales sur arb) seront divisés en fonction du volume au prorata",
-            "tooltip-rewards-correct-table": "3 000 OP (10k thales sur arb) seront répartis entre les 10 premiers",
+            "tooltip-rewards-volume-table": "10 000 OP (30 000 THALES sur Arbitrum) seront divisés en fonction du volume au prorata",
+            "tooltip-rewards-correct-table": "3 000 OP (10 000 THALES sur Arbitrum) seront répartis entre les 10 premiers",
             "my-rewards": "Mes récompenses",
             "by-guessed-correctly": "Par deviné correctement"
         },
