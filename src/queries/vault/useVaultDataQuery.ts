@@ -7,6 +7,7 @@ import { VaultData } from 'types/vault';
 import vaultContract from 'utils/contracts/sportVaultContract';
 import { ethers } from 'ethers';
 import { VAULT_MAP } from 'constants/vault';
+import parlayVaultContract from 'utils/contracts/parlayVaultContract';
 
 const useVaultDataQuery = (
     vaultAddress: string,
@@ -46,7 +47,9 @@ const useVaultDataQuery = (
             try {
                 const sportVaultContract = new ethers.Contract(
                     vaultAddress,
-                    vaultContract.abi,
+                    vaultAddress !== VAULT_MAP['parlay-discount-vault'].addresses[networkId]
+                        ? vaultContract.abi
+                        : parlayVaultContract.abi,
                     networkConnector.provider
                 );
                 if (sportVaultContract) {
@@ -83,10 +86,9 @@ const useVaultDataQuery = (
                         sportVaultContract?.priceLowerLimit(),
                         sportVaultContract?.priceUpperLimit(),
                         sportVaultContract?.skewImpactLimit(),
-                        vaultAddress !== VAULT_MAP['parlay-discount-vault'].addresses[10] &&
-                        vaultAddress !== VAULT_MAP['parlay-discount-vault'].addresses[420]
+                        vaultAddress !== VAULT_MAP['parlay-discount-vault'].addresses[networkId]
                             ? sportVaultContract?.allocationLimitsPerMarketPerRound()
-                            : 0,
+                            : sportVaultContract?.maxTradeRate(),
                         sportVaultContract?.minTradeAmount(),
                         sportVaultContract?.roundLength(),
                     ]);
@@ -107,7 +109,9 @@ const useVaultDataQuery = (
                     vaultData.priceUpperLimit = bigNumberFormatter(priceUpperLimit);
                     vaultData.skewImpactLimit = bigNumberFormatter(skewImpactLimit);
                     vaultData.allocationLimitsPerMarketPerRound =
-                        bigNumberFormatter(allocationLimitsPerMarketPerRound) / 100;
+                        vaultAddress === VAULT_MAP['parlay-discount-vault'].addresses[networkId]
+                            ? bigNumberFormatter(allocationLimitsPerMarketPerRound)
+                            : bigNumberFormatter(allocationLimitsPerMarketPerRound) / 100;
                     vaultData.minTradeAmount = bigNumberFormatter(minTradeAmount);
                     vaultData.roundLength = Number(roundLength) / 60 / 60 / 24;
 
