@@ -296,7 +296,7 @@ const Home: React.FC = () => {
 
     return (
         <Container>
-            {networkId !== 42161 && (
+            {networkId !== NetworkIdByName.ArbitrumOne && (
                 <Info>
                     <Trans
                         i18nKey="rewards.op-rewards-banner-message"
@@ -331,8 +331,6 @@ const Home: React.FC = () => {
                                                 setSportParam(filterItem);
                                                 setTagFilter([]);
                                                 setTagParam('');
-                                                setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
-                                                setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
                                                 if (filterItem === SportFilterEnum.All) {
                                                     setDateFilter(0);
                                                     setDateParam('');
@@ -379,10 +377,6 @@ const Home: React.FC = () => {
                             setDateParam={setDateParam}
                             setGlobalFilter={setGlobalFilter}
                             setGlobalFilterParam={setGlobalFilterParam}
-                            setTagFilter={setTagFilter}
-                            setTagParam={setTagParam}
-                            setSportFilter={setSportFilter}
-                            setSportParam={setSportParam}
                             globalFilter={globalFilter}
                             dateFilter={dateFilter}
                             sportFilter={sportFilter}
@@ -420,8 +414,6 @@ const Home: React.FC = () => {
                                                 setSportParam(filterItem);
                                                 setTagFilter([]);
                                                 setTagParam('');
-                                                setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
-                                                setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
                                                 if (filterItem === SportFilterEnum.All) {
                                                     setDateFilter(0);
                                                     setDateParam('');
@@ -461,11 +453,9 @@ const Home: React.FC = () => {
                             );
                         })}
                     </SportFiltersContainer>
-                    {networkId !== 42161 && (
-                        <Suspense fallback={<Loader />}>
-                            <SidebarLeaderboard />
-                        </Suspense>
-                    )}
+                    <Suspense fallback={<Loader />}>
+                        <SidebarLeaderboard />
+                    </Suspense>
                 </SidebarContainer>
                 {/* MAIN PART */}
                 {sportMarketsQueryNew.isLoading ? (
@@ -478,10 +468,6 @@ const Home: React.FC = () => {
                             <>
                                 <SportFilterMobile
                                     sportFilter={sportFilter}
-                                    setDateFilter={setDateFilter}
-                                    setDateParam={setDateParam}
-                                    setGlobalFilter={setGlobalFilter}
-                                    setGlobalFilterParam={setGlobalFilterParam}
                                     setTagFilter={setTagFilter}
                                     setTagParam={setTagParam}
                                     setSportFilter={setSportFilter}
@@ -512,10 +498,6 @@ const Home: React.FC = () => {
                                 setDateParam={setDateParam}
                                 setGlobalFilter={setGlobalFilter}
                                 setGlobalFilterParam={setGlobalFilterParam}
-                                setTagFilter={setTagFilter}
-                                setTagParam={setTagParam}
-                                setSportFilter={setSportFilter}
-                                setSportParam={setSportParam}
                                 globalFilter={globalFilter}
                                 dateFilter={dateFilter}
                                 sportFilter={sportFilter}
@@ -524,7 +506,10 @@ const Home: React.FC = () => {
                         )}
                         {finalMarkets.length === 0 ? (
                             <NoMarketsContainer>
-                                <NoMarketsLabel>{t('market.no-markets-found')}</NoMarketsLabel>
+                                <NoMarketsLabel>
+                                    {t('market.no-markets-found')}{' '}
+                                    {t(`market.filter-label.sport.${sportFilter.toLowerCase()}`)}
+                                </NoMarketsLabel>
                                 <Button onClick={resetFilters}>{t('market.view-all-markets')}</Button>
                             </NoMarketsContainer>
                         ) : (
@@ -664,7 +649,9 @@ const NoMarketsContainer = styled(FlexDivColumnCentered)`
 `;
 
 const NoMarketsLabel = styled.span`
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 20px;
 `;
 
 export const LoaderContainer = styled(FlexDivColumn)`

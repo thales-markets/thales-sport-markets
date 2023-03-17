@@ -43,18 +43,18 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 600px;
+    height: 630px;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     ${(_props) => (_props?.show == true ? 'top: 0;' : '')}
-    ${(_props) => (_props?.show == false || _props?.show == null ? 'top: -600px;' : '')}
+    ${(_props) => (_props?.show == false || _props?.show == null ? 'top: -630px;' : '')}
     ${(_props) => _props?.show === true && animationOpen};
     ${({ show }) => show === false && animationClose};
     background-color: ${(props) => props.theme.nav.background};
     justify-content: space-between;
-    z-index: 2;
+    z-index: 200;
     ${(_props) => (_props?.show == true ? `-webkit-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
     ${(_props) => (_props?.show == true ? `-moz-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
     ${(_props) => (_props?.show == true ? `${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
@@ -145,7 +145,7 @@ export const CloseIcon = styled.i.attrs({ className: 'icon icon--arrow-up' })`
     color: white;
     font-size: 20px;
     position: absolute;
-    bottom: 40px;
+    bottom: 30px;
     right: 20px;
     cursor: pointer;
 `;

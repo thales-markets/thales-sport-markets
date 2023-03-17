@@ -1,53 +1,24 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
+import { Banner, useBannersQuery } from 'queries/banners/useBannersQuery';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/rootReducer';
+import { getNetworkId } from 'redux/modules/wallet';
 
 const BannerCarousel: React.FC = () => {
-    const [urlMap, setUrlMap] = useState<Record<number, string>>({});
-    const [imageCount, setImageCount] = useState<number>(0);
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`https://api.thalesmarket.io/banner-image-count`);
-                if (response) {
-                    const json = await response.json();
-                    setImageCount(json.count);
-                }
-            } catch (e) {}
-        };
-        fetchData();
-    }, []);
+    const bannersQuery = useBannersQuery(networkId);
 
-    useEffect(() => {
-        const map = {} as Record<number, string>;
-        const fetchData = async () => {
-            for (let i = 1; i <= imageCount; i++) {
-                try {
-                    const response = await fetch(`https://api.thalesmarket.io/banner-json/${i}`);
-                    if (response) {
-                        const json = await response.json();
-                        map[i] = json.url;
-                    }
-                } catch (e) {}
-            }
-            setUrlMap(map);
-        };
-        fetchData();
-    }, [imageCount]);
-
-    const getStyledDivs = useCallback(() => {
-        const divList = [];
-        for (let i = 1; i <= imageCount; i++) {
-            divList.push(<StyledDiv key={i} hasHref={!!urlMap[i]} index={i} />);
-        }
-        return divList;
-    }, [imageCount, urlMap]);
+    const banners: Banner[] = useMemo(() => {
+        return bannersQuery.isSuccess && bannersQuery.data ? bannersQuery.data : [];
+    }, [bannersQuery.isSuccess, bannersQuery.data]);
 
     return (
         <Container>
-            {!!imageCount && (
+            {banners.length > 0 && (
                 <Carousel
                     transitionTime={1000}
                     interval={10000}
@@ -58,12 +29,14 @@ const BannerCarousel: React.FC = () => {
                     dynamicHeight={true}
                     autoPlay={true}
                     onClickItem={(index) => {
-                        if (urlMap[index + 1]) {
-                            window.open(urlMap[index + 1]);
+                        if (banners[index].url !== '') {
+                            window.open(banners[index].url);
                         }
                     }}
                 >
-                    {getStyledDivs()}
+                    {banners.map((banner: Banner) => (
+                        <StyledDiv key={banner.image} hasHref={banner.url !== ''} image={banner.image} />
+                    ))}
                 </Carousel>
             )}
         </Container>
@@ -85,12 +58,12 @@ const Container = styled.div`
     }
 `;
 
-const StyledDiv = styled.div<{ index: number; hasHref?: boolean }>`
+const StyledDiv = styled.div<{ image: string; hasHref: boolean }>`
     max-width: 100%;
     width: 1700px;
     height: 165px;
     margin: -1px;
-    background-image: ${(props) => `url(https://api.thalesmarket.io/banner-image/${props.index})`};
+    background-image: ${(props) => `url(${props.image})`};
     cursor: ${(props) => (props.hasHref ? 'pointer' : 'default')};
     background-position: center;
 `;

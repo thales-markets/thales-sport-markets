@@ -51,7 +51,7 @@
             }
         },
         "swap": {
-            "title": "获取 {{currencyKey}}",
+            "title": "获取 美元",
             "from-label": "来源",
             "to-label": "目标",
             "balance-label": "钱包余额: {{amount}}",
@@ -137,7 +137,8 @@
         "top10": "TOP 10",
         "yes": "YES",
         "no": "NO",
-        "fifa-tooltip": "FIFA世界杯的盘口结果以规则结果为准，如果他们进入加时赛，规则结果将由盘口决定。"
+        "fifa-tooltip": "FIFA世界杯的盘口结果以规则结果为准，如果他们进入加时赛，规则结果将由盘口决定。",
+        "tennis-tooltip": "如果出现超车，比赛将被视为取消。如果在比赛中退赛/取消资格，将被视为晋级下一轮的球员获胜"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",
@@ -187,7 +188,7 @@
         "filter-label": {
             "global": {
                 "allmarkets": "所有比赛",
-                "openmarkets": "开放中的比赛",
+                "openmarkets": "打开",
                 "resolvedmarkets": "已结束的比赛",
                 "yourpositions": "你参与的比赛",
                 "claim": "结算参与的比赛",
@@ -222,7 +223,7 @@
         },
         "back-to-markets": "查看其他比赛",
         "back-to-market": "返回市场页面",
-        "no-markets-found": "没有符合条件的比赛",
+        "no-markets-found": "找不到匹配项",
         "view-all-markets": "查看所有比赛",
         "table": {
             "title": "最近的竞猜记录",
@@ -359,6 +360,7 @@
                 "single-min-amount": "最低金额为 {{min}}",
                 "same-team": "同一支球队不能在 Parlay 中超过一次",
                 "team-in-parlay": "{{team}} 已经在 Parlay 中。同一支球队不能多次加入过关。",
+                "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
                 "max-payout": "支持的最大支出为 {{max}}",
                 "max-teams": "Parlay 中的最大 {{max}} 个盘口",
                 "max-profit": "最大支持利润为 {{max}}",
@@ -408,7 +410,8 @@
                 "history": "历史",
                 "fifa-campaign": "斑马FIFA活动",
                 "fee-rebates": "费用回扣",
-                "vaults": "金库"
+                "vaults": "金库",
+                "liquidity-pool": "提供流动性"
             },
             "buttons": {
                 "disconnect": "断开",
@@ -416,11 +419,12 @@
             },
             "labels": {
                 "language": "语言",
-                "get-started": "开始吧"
+                "get-started": "开始吧",
+                "march-madness": "疯狂三月"
             }
         },
         "incentivized-markets": "激励市场",
-        "op-incentivized-tooltip": "NFL markets are incentivized with 10,000 OP from Jan 14th games to Feb 12th games based on pro-rata volume. Check out the leaderboard <duneLink>here</ duneLink>."
+        "incentivized-tooltip": "NCAA markets are incentivized with {{rewards}} during March Madness. More details <detailsLink>here</detailsLink>."
     },
     "rewards": {
         "header": "奖励",
@@ -754,8 +758,8 @@
     },
     "parlay-leaderboard": {
         "title": "Parlay 奖励排行榜",
-        "description": "A total of 5,000 OP will be distributed to the best parlays of the month. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
-        "distribution-note": "Rewards will be distributed to the top 50 parlays for the month!",
+        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best parlays on a <bold>bi-weekly basis</bold> starting from March 1st. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
+        "distribution-note": "Rewards will be distributed to the <bold>TOP 30 parlays every 2 weeks</bold>!",
         "no-parlays": "No winning parlays registered in the period yet.",
         "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
         "info": "If multiple parlays have the same number of positions and total quote the following will be used as tie-breakers in respective order:",
@@ -776,18 +780,10 @@
             "positions": "职位"
         },
         "periods": {
-            "period-4": "四月",
-            "period-7": "七月",
-            "period-8": "八月",
-            "period-2": "二月",
-            "period-5": "可能",
-            "period-0": "十二月",
-            "period-6": "六月",
-            "period-1": "一月",
-            "period-9": "九月",
-            "period-10": "十月",
-            "period-11": "十一月",
-            "period-3": "行进"
+            "february": "February",
+            "period-end-label": "The period ends in",
+            "period-ended-label": "Period ended",
+            "bi-weekly-period": "Bi-weekly period"
         }
     },
     "wizard": {
@@ -824,6 +820,197 @@
             "coppied": "Coppied!",
             "address": "Your address QR code",
             "copied": "已复制！"
+        }
+    },
+    "march-madness": {
+        "tabs": {
+            "leaderboard": "排行榜",
+            "home": "家",
+            "brackets": "括号"
+        },
+        "back-to-markets": "回到市场",
+        "brackets": {
+            "team-2": "团队 2",
+            "team-1": "团队 1",
+            "submit-text": "完成括号",
+            "submit": "完成括号",
+            "submit-modify": "更新支架",
+            "modal": {
+                "finish-text-1": "做得好！",
+                "button-minting": "铸币...",
+                "button-mint": "喜欢NFT",
+                "button-update": "更新支架",
+                "update-text": "你已经铸造了你的 NFT！",
+                "button-updating": "更新中...",
+                "finish-text-2": "现在你可以铸造你的 NFT 了！"
+            },
+            "stats": {
+                "rank": "秩",
+                "incomplete": "不完整",
+                "my-stats": "我的数据",
+                "complete": "完全的",
+                "status": "地位",
+                "bonus": "奖金",
+                "place": "地方",
+                "my-total-score": "我的总分",
+                "points": "积分"
+            },
+            "round-1": "第二轮",
+            "round-5": "最终的",
+            "round-2": "甜蜜 16",
+            "round-0": "第一轮",
+            "round-3": "精英8",
+            "round-4": "决赛 4",
+            "modal-mint": {
+                "finish-text-1": "做得好！",
+                "button-updating": "更新中...",
+                "update-text": "你已经铸造了你的 NFT！",
+                "button-minting": "铸币...",
+                "finish-text-2": "现在你可以铸造你的 NFT 了！",
+                "button-update": "更新支架",
+                "button-mint": "喜欢NFT",
+                "finish-text-1-success": "恭喜！",
+                "update-text-1": "做得很好！",
+                "finish-text-2-success": "您刚刚铸造了您的 March Madness 支架！",
+                "update-text-2": "我们保存了您的括号预测，请立即更新您的括号！",
+                "finish-text-3-success": "前往 <marketsLink>NCAAB 市场</marketsLink> 并开始赚取奖励！",
+                "finish-info": "*March Madness 支架 NFT 是一种 Overtime NFT，它允许持有者通过创建自己的预测锦标赛支架来参与 Overtime March Madness 活动。",
+                "update-text-2-success": "您的 March Madness 支架 NFT 已更新！"
+            },
+            "modal-share": {
+                "share": "分享",
+                "user-selection": "我选择了 {{team}} 在休斯敦削减网络！",
+                "header": "我最后的 4 个选择"
+            },
+            "share": "分享这个支架"
+        },
+        "regions": {
+            "west": "西方",
+            "east": "东方",
+            "midwest": "中西部",
+            "south": "南"
+        },
+        "home": {
+            "time-info": "您还有 {{days}} 天时间进行预测",
+            "button-connect": "连接钱包",
+            "text-1": "March Madness 是一项 NCAAB 赛事，有 68 支球队以淘汰赛形式争夺冠军。该赛事于 3 月 14 日开始，8 支球队将在 64 场淘汰赛阶段争夺最后 4 个名额。铸造从 3 月 12 日开始，一直持续到 3 月 16 日主赛事开始。",
+            "title": "欢迎来到疯狂三月锦标赛",
+            "text-2": "计算奖金的另一种方法是将其基于回合，因为进入淘汰阶段的比赛越难预测结果（因为您也必须正确猜测所有之前的比赛），所以也许:",
+            "text-2b": "正确预测 32 轮比赛结果：2% 奖金",
+            "text-2f": "正确预测最终游戏结果：20% 奖金",
+            "text-2a": "正确预测 64 轮比赛结果：1% 奖金",
+            "text-2e": "正确预测第 4 轮比赛结果：10% 奖金",
+            "text-2d": "正确预测 8 轮比赛结果：7% 奖金",
+            "text-2c": "正确预测 16 强比赛结果：4% 奖金",
+            "button-create": "创建支架",
+            "text-2g": "这里的最大加成：32*1+16*2+8*4+4*7+2*10+20=164%",
+            "text-3f": "第一轮 - 1%",
+            "text-3": "对于<bold>第一池</bold>，10,000 OP 将分配给通过 March Madness 游戏驱动的所有数量，包括所有市场类型和与至少一个 NCAAB 游戏的连赢。 March Madness 支架 NFT 的持有者有资格获得交易提升。每个正确的游戏都有资格获得分层提升，最高可达 164%。",
+            "text-3d": "甜 16 - 4%",
+            "text-3a": "冠军 - 20%",
+            "text-3e": "第二轮 - 2%",
+            "text-5": "更多详细信息，请参阅我们的 <mediumLink>Medium 博客文章</mediumLink>。",
+            "text-3b": "四强 - 10%",
+            "text-4": "<bold>第二个池子</bold> 将在 March Madness 游戏中以 10 sUSD 交易量为基准的最准确支架的持有者之间分配。满足数量要求的持有者可以跟踪他们在最佳组别排行榜中的位置，获胜者将在其中瓜分 3,000 OP 奖励池。",
+            "text-3c": "精英八强 - 7%"
+        },
+        "mobile-message": "页面仅在更大的屏幕上可用。请使用桌面版！",
+        "leaderboard": {
+            "address": "地址",
+            "rewards": "奖励",
+            "base-volume": "根据",
+            "volume": "体积",
+            "owner": "所有者",
+            "bonus-volume": "奖金",
+            "player": "播放器",
+            "search-placeholder": "搜索钱包地址",
+            "rank": "秩",
+            "guessed-games": "猜谜游戏",
+            "no-data": "目前没有可用数据",
+            "tooltip-base-volume-table": "通过 NCAA 篮球比赛推动销量",
+            "tooltip-bonus-volume-table": "根据您的括号选择计算的奖金量",
+            "tooltip-correct-correct-table": "在您的括号中正确猜出的游戏数量",
+            "tooltip-rewards-correct-table": "3,000 OP (10,000 THALES on Arbitrum) 将分配给前 10 名",
+            "tooltip-rewards-volume-table": "10,000 OP (30,000 THALES on Arbitrum) 将按比例分配",
+            "by-guessed-correctly": "猜对了",
+            "my-rewards": "我的奖励"
+        },
+        "test-info": "测试阶段现已开放样本团队，2023 年选择将于 3 月 12 日开放！"
+    },
+    "liquidity-pool": {
+        "title": "Provide Liquidity",
+        "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round your balance (inclusive of that round's PnL) is sent to you. To withdraw, you need to have at least {{thalesStakedAmount}} THALES staked per each {{currency}} you are withdrawing.</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
+        "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the pool: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
+        "liquidity-pool-not-started-message": "The liquidity pool has not started",
+        "liquidity-pool-paused-message": "The liquidity pool is paused",
+        "round-end-label": "The round ends in",
+        "round-ended-label": "Round ended",
+        "total-info-label": "Total LP info",
+        "users-in-liquidity-pool-label": "Users in the liquidity pool: {{number}} / {{max}}",
+        "your-share-label": "Your share: {{percentage}} of LP",
+        "your-info-label": "Your LP info",
+        "current-balance-label": "Current balance",
+        "next-round-balance-label": "Next round balance",
+        "max-allowance-label": "Max allowance",
+        "your-thales-staked-label": "Your THALES staked",
+        "allowance-multiplier-label": "Allowance multiplier",
+        "withdrawal-request-label": "Withdrawal request: {{amount}}",
+        "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
+        "deposit-amount-placeholder": "Enter amount",
+        "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "Nothing to withdraw.",
+        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
+        "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
+        "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
+        "deposit-max-amount-of-users-warning": "Maximum number of users in the liquidity pool is reached, you cannot deposit.",
+        "deposit-liquidity-pool-cap-reached-warning": "The liquidity pool cap is reached, you cannot deposit.",
+        "deposit-liquidity-pool-cap-error": "Deposit amount exceeds liquidity pool cap",
+        "deposit-staked-thales-error": "Deposit amount exceeds max allowance, stake more THALES to deposit",
+        "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
+        "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
+        "withdrawal-staked-thales-warning": "You cannot withdraw as you need more staked THALES to withdraw. Stake {{amount}} THALES more to enable withdrawal.",
+        "tabs": {
+            "deposit": "Deposit",
+            "withdraw": "Withdraw"
+        },
+        "button": {
+            "deposit-label": "Deposit",
+            "deposit-progress-label": "Deposit in progress...",
+            "deposit-confirmation-message": "Deposit successfully placed",
+            "request-withdrawal-label": "Request withdrawal",
+            "request-withdrawal-progress-label": "Request in progress...",
+            "request-withdrawal-confirmation-message": "Withdrawal request successfully sent",
+            "withdraw-label": "Withdraw",
+            "withdraw-progress-label": "Withdrawal in progress...",
+            "withdraw-confirmation-message": "Funds successfully withdrawn",
+            "close-round-label": "Close round",
+            "close-round-progress-label": "Closing round in progress...",
+            "close-round-confirmation-message": "Round successfully closed",
+            "get-thales-label": "Get THALES",
+            "stake-thales-label": "Stake THALES"
+        },
+        "pnl": {
+            "pnl-per-round": {
+                "title": "PnL per round"
+            },
+            "cumulative-pnl": {
+                "title": "PnL over time"
+            },
+            "no-data": "No PnL data for previous rounds.",
+            "lifetime-pnl": "Lifetime PnL",
+            "ongoing-pnl": "Ongoing PnL"
+        },
+        "user-transactions": {
+            "title": "User transactions",
+            "your-transactions-title": "Your transactions",
+            "no-transactions": "No user transactions associated with this liquidity pool in the selected round.",
+            "round-label": "Round",
+            "type": {
+                "deposit": "Deposit",
+                "withdrawalRequest": "Withdrawal Request",
+                "claim": "Withdrawal Claim"
+            }
         }
     }
 }

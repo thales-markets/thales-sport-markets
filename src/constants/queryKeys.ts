@@ -11,6 +11,12 @@ export const QUERY_KEYS = {
     ParlayAmmData: (networkId: NetworkId) => ['parlayAmmData', networkId],
     Market: (marketAddress: string, networkId: NetworkId) => ['market', marketAddress, networkId],
     LiveResult: (marketId: string) => ['liveResult', marketId],
+    EnetpulseLiveResult: (marketId: string, gameDate: string, sportTag: number) => [
+        'enetpulseLiveResult',
+        marketId,
+        gameDate,
+        sportTag,
+    ],
     ChildMarkets: (marketAddress: string, networkId: NetworkId) => ['childMarkets', marketAddress, networkId],
     PositionDetails: (
         marketAddress: string,
@@ -108,6 +114,21 @@ export const QUERY_KEYS = {
     },
     Bungee: {
         Tokens: () => ['bungee', 'tokens'],
+    },
+    MarchMadness: (walletAddress: string, networkId: NetworkId) => ['marchMadness', walletAddress, networkId],
+    Banners: (networkId: NetworkId) => ['banners', networkId],
+    MarchMadnessCompetition: {
+        LeaderboardByVolume: (networkId: NetworkId) => ['marchMadnessLeaderboardByVolume ', networkId],
+        LeaderboardByNumberOfCorrectPredictions: (networkId: NetworkId) => [
+            'marchMadnessLeaderboardByCorrectPred',
+            networkId,
+        ],
+    },
+    LiquidityPool: {
+        Data: (networkId: NetworkId) => ['liquidityPool', 'data', networkId],
+        UserData: (walletAddress: string, networkId: NetworkId) => ['liquidityPool', 'data', walletAddress, networkId],
+        PnL: (networkId: NetworkId) => ['liquidityPool', 'pnl', networkId],
+        UserTransactions: (networkId: NetworkId) => ['liquidityPool', 'userTransactions', networkId],
     },
 };
 

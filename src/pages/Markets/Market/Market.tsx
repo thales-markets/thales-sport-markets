@@ -16,6 +16,7 @@ import ROUTES from 'constants/routes';
 import { Trans } from 'react-i18next';
 import { Info } from '../Home/Home';
 import { getNetworkId } from 'redux/modules/wallet';
+import { NetworkIdByName } from 'utils/network';
 
 type MarketProps = RouteComponentProps<{
     marketAddress: string;
@@ -53,14 +54,16 @@ const Market: React.FC<MarketProps> = (props) => {
 
     return (
         <Container>
-            <Info>
-                <Trans
-                    i18nKey="rewards.op-rewards-banner-message"
-                    components={{
-                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                    }}
-                />
-            </Info>
+            {networkId !== NetworkIdByName.ArbitrumOne && (
+                <Info>
+                    <Trans
+                        i18nKey="rewards.op-rewards-banner-message"
+                        components={{
+                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                        }}
+                    />
+                </Info>
+            )}
             {market ? <MarketDetailsV2 market={market} /> : <SimpleLoader />}
         </Container>
     );

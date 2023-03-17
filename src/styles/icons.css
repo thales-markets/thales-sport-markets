@@ -276,3 +276,31 @@
 .icon--card::before {
     content: '\007E';
 }
+
+.icon--correct-full::before {
+    content: '\0080';
+}
+
+.icon--wrong-full::before {
+    content: '\0081';
+}
+
+.icon--op-rewards::before {
+    content: '\00A9';
+}
+
+.icon--thales-rewards::before {
+    content: '\00AA';
+}
+
+.icon--liquidity-pool::before {
+    content: '\00AE';
+}
+
+.icon--get-thales::before {
+    content: '\005C';
+}
+
+.icon--stake-thales::before {
+    content: '\005F';
+}

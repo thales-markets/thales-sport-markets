@@ -27,7 +27,8 @@ export enum SportFilterEnum {
     Baseball = 'Baseball',
     Hockey = 'Hockey',
     UFC = 'UFC',
-    Motosport = 'Motosport',
+    Tennis = 'Tennis',
+    // Motosport = 'Motosport',
 }
 
 export const COLLATERALS = [
@@ -100,45 +101,25 @@ export enum ParlayErrorCode {
     NO_ERROS = 0,
     MAX_MATCHES = 1,
     SAME_TEAM_TWICE = 2,
+    MAX_DOUBLE_CHANCES = 3,
 }
 
-export const OP_INCENTIVIZED_LEAGUE = {
-    id: 9002,
-    startDate: new Date(Date.UTC(2023, 0, 13, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2023, 1, 12, 23, 59, 59)),
+export const INCENTIVIZED_LEAGUE = {
+    id: 9005,
+    startDate: new Date(Date.UTC(2023, 2, 13, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2023, 3, 3, 23, 59, 59)),
+    link:
+        'https://medium.com/@OvertimeMarkets.xyz/overtime-brings-the-bracket-to-the-blockchain-for-march-madness-66777956d87f',
+    opRewards: '13,000 OP',
+    thalesRewards: '40,000 THALES',
 };
 
 export const MIN_LIQUIDITY = 10;
 
-export const PARLAY_LEADERBOARD_START_DATE = new Date(2023, 0, 1, 0, 0, 0);
-export const PARLAY_LEADERBOARD_START_DATE_UTC = new Date(Date.UTC(2023, 0, 1, 0, 0, 0));
+export const PARLAY_LEADERBOARD_BIWEEKLY_START_DATE = new Date(2023, 2, 1, 0, 0, 0);
+export const PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC = new Date(Date.UTC(2023, 2, 1, 0, 0, 0));
 
-export const PARLAY_LEADERBOARD_MINIMUM_GAMES = 4;
-
-export const PARLAY_LEADERBOARD_JANUARY_REWARDS = [
-    2000,
-    1500,
-    1000,
-    800,
-    750,
-    700,
-    600,
-    500,
-    300,
-    250,
-    225,
-    210,
-    200,
-    185,
-    170,
-    145,
-    130,
-    125,
-    110,
-    100,
-];
-
-export const PARLAY_LEADERBOARD_REWARDS = [
+export const PARLAY_LEADERBOARD_FEBRUARY_REWARDS = [
     750,
     500,
     350,
@@ -190,3 +171,81 @@ export const PARLAY_LEADERBOARD_REWARDS = [
     30,
     30,
 ];
+
+export const PARLAY_LEADERBOARD_OPTIMISM_REWARDS = [
+    300,
+    200,
+    150,
+    115,
+    100,
+    95,
+    90,
+    80,
+    70,
+    65,
+    60,
+    55,
+    50,
+    48,
+    46,
+    45,
+    44,
+    40,
+    38,
+    36,
+    35,
+    34,
+    32,
+    30,
+    28,
+    26,
+    25,
+    22,
+    21,
+    20,
+];
+
+export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS = [
+    750,
+    500,
+    375,
+    286,
+    250,
+    238,
+    225,
+    200,
+    175,
+    162,
+    150,
+    138,
+    125,
+    120,
+    115,
+    113,
+    110,
+    100,
+    95,
+    90,
+    87,
+    85,
+    80,
+    75,
+    70,
+    65,
+    63,
+    55,
+    53,
+    50,
+];
+
+export const ENETPULSE_ROUNDS: Record<number, string> = {
+    [1]: 'no round',
+    [2]: 'Semi Finals',
+    [3]: 'Quarter Finals',
+    [4]: '1/8',
+    [5]: '1/16',
+    [6]: '1/32',
+    [7]: '1/64',
+    [8]: '1/128',
+    [9]: 'Final',
+};

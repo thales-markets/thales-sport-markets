@@ -1,30 +1,28 @@
 import React, { CSSProperties } from 'react';
 import styled from 'styled-components';
 
-type ButtonType = 'primary' | 'secondary' | undefined;
-
 type ButtonProps = {
-    type?: ButtonType;
     disabled?: boolean;
     onClick?: any;
     style?: CSSProperties;
     fontSize?: number;
 };
 
-const Button: React.FC<ButtonProps> = ({ type, disabled, onClick, fontSize, children, ...rest }) => {
+const Button: React.FC<ButtonProps> = ({ disabled, onClick, fontSize, children, ...rest }) => {
     return (
-        <StyledButton disabled={disabled} onClick={onClick} buttonType={type} fontSize={fontSize} {...rest}>
+        <StyledButton disabled={disabled} onClick={onClick} fontSize={fontSize} {...rest}>
             {children}
         </StyledButton>
     );
 };
 
-const StyledButton = styled.button<{ buttonType: ButtonType; fontSize?: number }>`
+const StyledButton = styled.button<{ fontSize?: number; style?: CSSProperties }>`
     background: ${(props) => props.theme.button.background.secondary};
     border: 2px solid ${(props) => props.theme.button.borderColor.secondary};
     color: ${(props) => props.theme.button.textColor.quaternary};
     border-radius: 5px;
     padding: 1px 20px 1px 20px;
+    ${(props) => (props.style?.fontFamily ? `font-family: ${props.style?.fontFamily};` : '')}
     font-style: normal;
     font-weight: 400;
     font-size: ${(props) => props.fontSize || 18}px;

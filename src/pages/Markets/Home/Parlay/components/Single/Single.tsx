@@ -64,9 +64,10 @@ import {
 type SingleProps = {
     market: ParlaysMarket;
     parlayPayment: ParlayPayment;
+    onBuySuccess?: () => void;
 };
 
-const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
+const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
@@ -357,7 +358,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 try {
                     const parsedTicketPrice = getAmountForApproval(
                         selectedStableIndex,
-                        Number(usdAmountValue).toString()
+                        Number(usdAmountValue).toString(),
+                        networkId
                     );
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
@@ -384,6 +386,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         selectedStableIndex,
         isVoucherSelected,
         isMultiCollateralSupported,
+        networkId,
     ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
@@ -465,6 +468,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     setUsdAmount('');
                     setTokenAmount(0);
                     dispatch(removeAll());
+                    onBuySuccess && onBuySuccess();
 
                     trackEvent({
                         category: 'parlay-single',
