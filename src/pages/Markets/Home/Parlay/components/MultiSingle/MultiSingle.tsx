@@ -4,7 +4,6 @@ import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER, COLLATERALS, OddsType } from 'constants/markets';
-import { MAX_GAS_LIMIT } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import useAvailablePerPositionMultiQuery from 'queries/markets/useAvailablePerPositionMultiQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -14,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import { removeAll, setPayment, setMultiSingle } from 'redux/modules/parlay';
+import { removeAll, setPayment, setMultiSingle, removeFromParlay } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
@@ -25,7 +24,7 @@ import {
     ParlayPayment,
     ParlaysMarket,
 } from 'types/markets';
-import { getAmountForApproval, getMultiAMMSportsTransactions, getSportsAMMQuoteMethod } from 'utils/amm';
+import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
     countDecimals,
@@ -467,78 +466,75 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
             setIsBuying(true);
             const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
             const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
-            const tokenMap: Record<string, MultiSingleTokenQuoteAndBonus> = {};
 
-            new Promise(async (resolve) => {
-                for (let i = 0; i < tokenAndBonus.length; i++) {
-                    const t = tokenAndBonus[i];
-                    const market = markets.find((m) => m.address === t.sportMarketAddress);
-                    if (market !== undefined) {
-                        tokenMap[t.sportMarketAddress] = {
-                            sportMarketAddress: t.sportMarketAddress,
-                            bonusPercentageDec: t.bonusPercentageDec,
-                            totalBonusCurrency: t.totalBonusCurrency,
-                            ammQuote: await fetchAmmQuote(t.tokenAmount, market),
-                            tokenAmount: t.tokenAmount,
-                        };
-                    } else {
-                        tokenMap[t.sportMarketAddress] = {
-                            sportMarketAddress: t.sportMarketAddress,
-                            bonusPercentageDec: t.bonusPercentageDec,
-                            totalBonusCurrency: t.totalBonusCurrency,
-                            ammQuote: 0,
-                            tokenAmount: t.tokenAmount,
-                        };
-                    }
-                }
+            const transactions: any = [];
 
-                resolve(true);
-            }).then(async () => {
-                const id = toast.loading(t('market.toast-message.transaction-pending'));
+            markets.forEach(async (market: ParlaysMarket) => {
+                const marketAddress = market.address;
+                const selectedPosition = market.position;
+                const singleTokenBonus = tokenAndBonus.find((t) => t.sportMarketAddress === marketAddress);
 
-                try {
-                    const referralId =
-                        walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
-                            ? getReferralId()
-                            : null;
-                    const tx = await getMultiAMMSportsTransactions(
-                        isVoucherSelected,
-                        overtimeVoucher ? overtimeVoucher.id : 0,
-                        selectedStableIndex,
-                        networkId,
-                        sportsAMMContractWithSigner,
-                        overtimeVoucherContractWithSigner,
-                        markets,
-                        tokenMap,
-                        referralId,
-                        ethers.utils.parseEther('0.02'),
-                        { gasLimit: MAX_GAS_LIMIT }
-                    );
+                const tokenAmount = singleTokenBonus !== undefined ? singleTokenBonus.tokenAmount : 0.0;
+                const ammQuote = (await fetchAmmQuote(tokenAmount, market)) ?? 0;
+                const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(tokenAmount).toString());
 
-                    await Promise.all(tx).then((results) => {
-                        console.log(results);
-                        // we still can get txResult && txResult.transactionHash by looping through these
-                        // if one tx is rejected we currently treat this as a fail.. not sure if this is the correct approach
+                transactions.push(
+                    new Promise(async (resolve, reject) => {
+                        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-                        refetchBalances(walletAddress, networkId);
-                        toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
-                        setIsBuying(false);
-                        setUsdAmountValue('');
-                        dispatch(removeAll());
+                        try {
+                            const referralId =
+                                walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
+                                    ? getReferralId()
+                                    : null;
+                            const tx = await getAMMSportsTransaction(
+                                isVoucherSelected,
+                                overtimeVoucher ? overtimeVoucher.id : 0,
+                                selectedStableIndex,
+                                networkId,
+                                sportsAMMContractWithSigner,
+                                overtimeVoucherContractWithSigner,
+                                marketAddress,
+                                selectedPosition,
+                                parsedAmount,
+                                ammQuote,
+                                referralId,
+                                ethers.utils.parseEther('0.02'),
+                                { gasLimit: getMaxGasLimitForNetwork(networkId) }
+                            );
 
-                        trackEvent({
-                            category: 'parlay-multi-single',
-                            action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
-                            value: Number(calculatedTotalBuyIn),
-                        });
-                    });
-                } catch (e) {
-                    setIsBuying(false);
-                    refetchBalances(walletAddress, networkId);
-                    toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                    console.log('Error ', e);
-                }
+                            const txResult = await tx.wait();
+
+                            if (txResult && txResult.transactionHash) {
+                                resolve(
+                                    toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')))
+                                );
+                                trackEvent({
+                                    category: 'parlay-multi-single',
+                                    action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
+                                    value: Number(calculatedTotalBuyIn),
+                                });
+                                dispatch(removeFromParlay(marketAddress));
+                                refetchBalances(walletAddress, networkId);
+                            } else {
+                                reject(
+                                    toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')))
+                                );
+                            }
+                        } catch (e) {
+                            reject(toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again'))));
+                        }
+                    })
+                );
             });
+
+            await Promise.all(transactions)
+                .then(() => {
+                    setIsBuying(false);
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
         }
     };
 

@@ -200,6 +200,13 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                             getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
                                         )
                                     );
+                                } else {
+                                    reject(
+                                        toast.update(
+                                            id,
+                                            getErrorToastOptions(t('common.errors.unknown-error-try-again'))
+                                        )
+                                    );
                                 }
                             } catch (e) {
                                 reject(
@@ -234,6 +241,14 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                                 getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
                                             )
                                         );
+                                    } else {
+                                        reject(
+                                            toast.update(
+                                                id,
+                                                getErrorToastOptions(t('common.errors.unknown-error-try-again'))
+                                            )
+                                        );
+                                        console.log(e);
                                     }
                                 } catch (e) {
                                     reject(
@@ -250,7 +265,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                 }
             }
 
-            Promise.all(transactions);
+            Promise.all(transactions).catch((e) => console.log(e));
         }
     };
 
