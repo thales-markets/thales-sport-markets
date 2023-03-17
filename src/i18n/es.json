@@ -927,11 +927,11 @@
             "bonus-volume": "Prima",
             "guessed-games": "juegos adivinados",
             "no-data": "No hay datos disponibles actualmente",
-            "tooltip-rewards-volume-table": "10,000 OP (30k Thales en arbitraje) se dividirán en función del volumen prorrateado",
+            "tooltip-rewards-volume-table": "10,000 OP (30,000 THALES en Arbitrum) se dividirán en función del volumen prorrateado",
             "tooltip-correct-correct-table": "Número de juegos adivinados correctamente en su paréntesis",
             "tooltip-bonus-volume-table": "Volumen de bonificación calculado en función de sus selecciones de soporte",
             "tooltip-base-volume-table": "Volumen impulsado a través de los juegos de baloncesto de la NCAA",
-            "tooltip-rewards-correct-table": "3,000 OP (10k thales en arb) se dividirán entre los 10 mejores",
+            "tooltip-rewards-correct-table": "3,000 OP (10,000 THALES en Arbitrum) se dividirán entre los 10 mejores",
             "by-guessed-correctly": "Por adivinar correctamente",
             "my-rewards": "Mi recompensa"
         },
