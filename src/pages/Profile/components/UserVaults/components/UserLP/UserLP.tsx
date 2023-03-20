@@ -1,23 +1,21 @@
 import SPAAnchor from 'components/SPAAnchor';
-import i18n from 'i18n';
-import useUserVaultDataQuery from 'queries/vault/useUserVaultDataQuery';
+import ROUTES from 'constants/routes';
+import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { buildVaultLink } from 'utils/routes';
 
-const UserVault: React.FC<{ vaultName: string; vaultAddress: string }> = ({ vaultName, vaultAddress }) => {
+const UserLP: React.FC = () => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const language = i18n.language;
 
-    const userVaultDataQuery = useUserVaultDataQuery(vaultAddress, walletAddress, networkId, {
-        enabled: isWalletConnected && !!vaultAddress,
+    const userVaultDataQuery = useLiquidityPoolUserDataQuery(walletAddress, networkId, {
+        enabled: isWalletConnected,
     });
 
     console.log(userVaultDataQuery.data);
@@ -25,19 +23,19 @@ const UserVault: React.FC<{ vaultName: string; vaultAddress: string }> = ({ vaul
     const vaultAllocation = userVaultDataQuery.isSuccess ? userVaultDataQuery.data?.balanceTotal : 0;
 
     return (
-        <SPAAnchor href={buildVaultLink(vaultName, language)}>
+        <SPAAnchor href={ROUTES.LiquidityPool}>
             <VaultCard>
                 <TitleWrapper>
-                    <Icon className={`icon icon--${vaultName}`} />
-                    <Title> {t(`vault.${vaultName}.title`)}</Title>
+                    <Icon className={`icon icon--liquidity-pool`} />
+                    <Title> {t(`profile.lp-title`)}</Title>
                 </TitleWrapper>
                 <ContentWrapper>
                     <TextWrapper>
-                        <PreLabel>{t('profile.in-vault')}</PreLabel>
+                        <PreLabel>{t('profile.in-lp')}</PreLabel>
                         <Value>{vaultAllocation?.toFixed(2)}</Value>
                         <PostLabel>USD</PostLabel>
                     </TextWrapper>
-                    <Button>{t('profile.go-to-vault')}</Button>
+                    <Button>{t('profile.go-to-lp')}</Button>
                 </ContentWrapper>
             </VaultCard>
         </SPAAnchor>
@@ -140,4 +138,4 @@ const Button = styled.button`
     cursor: pointer;
 `;
 
-export default UserVault;
+export default UserLP;

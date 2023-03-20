@@ -268,6 +268,12 @@
         },
         "open-claimable": "Open/Claimable",
         "transaction-history": "Transaction history",
+        "vaults": "Vaults/LP",
+        "in-vault": "In vault",
+        "go-to-vault": "Go to vault",
+        "in-lp": "Liquidity provided",
+        "lp-title": "Liquidity pool",
+        "go-to-lp": "Go to LP",
         "messages": {
             "no-claimable": "You don't have any claimable positions",
             "no-open": "You don't have any open positions",
