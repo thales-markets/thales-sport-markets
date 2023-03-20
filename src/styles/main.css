@@ -141,6 +141,7 @@ table {
 @import './exotic-icons.css';
 @import './homepage-icons.css';
 @import './league-icons.css';
+@import './thales-icons.css';
 
 * {
     box-sizing: border-box;
