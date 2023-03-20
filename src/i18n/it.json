@@ -47,7 +47,8 @@
                 "description": "Scegli il tuo ID referral"
             },
             "id-exists": "L'ID referral esiste già",
-            "id-create-success": "ID referral impostato correttamente"
+            "id-create-success": "ID referral impostato correttamente",
+            "your-referral-id": "Il tuo ID di riferimento"
         },
         "swap": {
             "title": "Get {{currencyKey}}",

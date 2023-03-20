@@ -56,7 +56,8 @@
                 "title": "Empfehlungs-ID"
             },
             "id-create-success": "Empfehlungs-ID erfolgreich festgelegt",
-            "id-exists": "Empfehlungs-ID existiert bereits"
+            "id-exists": "Empfehlungs-ID existiert bereits",
+            "your-referral-id": "Ihre Empfehlungs-ID"
         },
         "swap": {
             "title": "{{currencyKey}} erhalten",

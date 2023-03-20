@@ -56,7 +56,8 @@
                 "title": "Identificación de referencia"
             },
             "id-create-success": "Establecer ID de referencia con éxito",
-            "id-exists": "El ID de referencia ya existe"
+            "id-exists": "El ID de referencia ya existe",
+            "your-referral-id": "Su identificación de referencia"
         },
         "swap": {
             "title": "Obtener {{currencyKey}}",

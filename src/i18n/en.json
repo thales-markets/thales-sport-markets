@@ -65,7 +65,8 @@
                 "description": "Choose your Referral ID",
                 "submit-button": "Submit",
                 "copy-button": "Copy Referral link"
-            }
+            },
+            "your-referral-id": "Your Referral ID"
         },
         "swap": {
             "title": "Get USD",

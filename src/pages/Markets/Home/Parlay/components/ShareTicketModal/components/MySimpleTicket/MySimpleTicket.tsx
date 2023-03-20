@@ -27,7 +27,7 @@ const MySimpleTicket: React.FC<MySimpleTicketProps> = ({ markets, payout }) => {
     const isTicketLost = markets.some((market) => market.isResolved && market.winning !== undefined && !market.winning);
     const isTicketResolved = markets.every((market) => market.isResolved || market.isCanceled) || isTicketLost;
 
-    const reffererIDQuery = useGetReffererIdQuery(walletAddress || '');
+    const reffererIDQuery = useGetReffererIdQuery(walletAddress || '', { enabled: !!walletAddress });
     const reffererID = reffererIDQuery.isSuccess && reffererIDQuery.data ? reffererIDQuery.data : '';
 
     return (

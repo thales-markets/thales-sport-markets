@@ -23,7 +23,7 @@ export const RefferalModal: React.FC<RefferalModalProps> = ({ onClose }) => {
     const [savedReffererID, setSavedReffererID] = useState('');
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
 
-    const reffererIDQuery = useGetReffererIdQuery(walletAddress || '');
+    const reffererIDQuery = useGetReffererIdQuery(walletAddress || '', { enabled: !!walletAddress });
 
     useEffect(() => {
         if (reffererIDQuery.isSuccess && reffererIDQuery.data) {

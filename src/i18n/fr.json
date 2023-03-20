@@ -35,7 +35,8 @@
                 "description": "Choisissez votre identifiant de parrainage"
             },
             "id-create-success": "L'ID de parrainage a bien été défini",
-            "id-exists": "L'ID de parrainage existe déjà"
+            "id-exists": "L'ID de parrainage existe déjà",
+            "your-referral-id": "Votre identifiant de parrainage"
         },
         "swap": {
             "title": "Obtenir {{currencyKey}}",

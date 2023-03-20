@@ -44,7 +44,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
         ? { fontSize: '10px', lineHeight: '12px' }
         : { fontSize: '11px', lineHeight: '13px' };
 
-    const reffererIDQuery = useGetReffererIdQuery(walletAddress || '');
+    const reffererIDQuery = useGetReffererIdQuery(walletAddress || '', { enabled: !!walletAddress });
     const reffererID = reffererIDQuery.isSuccess && reffererIDQuery.data ? reffererIDQuery.data : '';
 
     return (

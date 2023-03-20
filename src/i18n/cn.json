@@ -56,7 +56,8 @@
                 "copy-button": "复制推荐链接"
             },
             "id-create-success": "成功设置推荐人ID",
-            "id-exists": "推荐 ID 已存在"
+            "id-exists": "推荐 ID 已存在",
+            "your-referral-id": "您的推荐 ID"
         },
         "swap": {
             "title": "获取 {{currencyKey}}",

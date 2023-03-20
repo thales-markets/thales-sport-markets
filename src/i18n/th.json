@@ -47,7 +47,8 @@
                 "title": "รหัสอ้างอิง"
             },
             "id-exists": "ID ผู้อ้างอิงมีอยู่แล้ว",
-            "id-create-success": "กำหนด ID ผู้อ้างอิงสำเร็จ"
+            "id-create-success": "กำหนด ID ผู้อ้างอิงสำเร็จ",
+            "your-referral-id": "ID ผู้อ้างอิงของคุณ"
         },
         "swap": {
             "title": "รับ {{currencyKey}}",
