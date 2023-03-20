@@ -958,7 +958,9 @@
                 "status": "Statut",
                 "points": "Points",
                 "my-stats": "Mes stats",
-                "complete": "Complet"
+                "complete": "Complet",
+                "rank-games": "Classement par jeux devinés",
+                "rank-volume": "Classement par volume"
             },
             "round-5": "Final",
             "round-3": "Élite 8",

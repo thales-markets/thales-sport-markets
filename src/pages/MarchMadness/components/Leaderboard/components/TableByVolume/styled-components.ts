@@ -108,7 +108,6 @@ export const StickyRow = styled(TableRow)`
 
 export const StickyRowTopTable = styled(TableRow)`
     width: 100%;
-    background-color: transparent;
 `;
 
 export const StickyCell = styled.div``;

@@ -857,7 +857,9 @@
                 "place": "Ort",
                 "complete": "Vollständig",
                 "incomplete": "Unvollständig",
-                "points": "Punkte"
+                "points": "Punkte",
+                "rank-volume": "Rang nach Volumen",
+                "rank-games": "Rang nach erratenen Spielen"
             },
             "round-4": "Finale 4",
             "round-1": "2. Runde",

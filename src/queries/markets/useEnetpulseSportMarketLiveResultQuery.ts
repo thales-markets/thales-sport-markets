@@ -1,7 +1,11 @@
 import { ENETPULSE_ROUNDS } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
+import { ethers } from 'ethers';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { SportMarketLiveResult } from 'types/markets';
+import networkConnector from 'utils/networkConnector';
+import Web3 from 'web3';
+import marketContract from 'utils/contracts/sportsMarketContract';
 
 const useEnetpulseSportMarketLiveResultQuery = (
     marketId: string,
@@ -20,10 +24,27 @@ const useEnetpulseSportMarketLiveResultQuery = (
                 );
                 const events = Object.values(JSON.parse(await response.text()).events);
 
+                let gameIdString = '';
+                if (marketId.length == 42) {
+                    // marketId represents market address in types ParlayMarket and AccountPositionProfile
+                    const contract = new ethers.Contract(marketId, marketContract.abi, networkConnector.provider);
+
+                    const [gameId] = await Promise.all([contract?.getGameId()]);
+                    gameIdString = Web3.utils.hexToAscii(gameId);
+                }
+
                 let trimmedMarketId = '';
-                for (let i = 0; i < marketId.length; i++) {
-                    if (!Number.isNaN(Number(marketId[i]))) {
-                        trimmedMarketId = trimmedMarketId.concat(marketId[i]);
+                if (gameIdString == '') {
+                    for (let i = 0; i < marketId.length; i++) {
+                        if (!Number.isNaN(Number(marketId[i]))) {
+                            trimmedMarketId = trimmedMarketId.concat(marketId[i]);
+                        }
+                    }
+                } else {
+                    for (let i = 0; i < gameIdString.length; i++) {
+                        if (!Number.isNaN(Number(marketId[i]))) {
+                            trimmedMarketId = trimmedMarketId.concat(marketId[i]);
+                        }
                     }
                 }
 

@@ -860,7 +860,9 @@
                 "incomplete": "Incompleto",
                 "status": "Estado",
                 "my-total-score": "mi puntuación total",
-                "place": "Lugar"
+                "place": "Lugar",
+                "rank-volume": "Clasificar por volumen",
+                "rank-games": "Clasificación por juegos adivinados"
             },
             "round-1": "2da ronda",
             "round-3": "Élite 8",

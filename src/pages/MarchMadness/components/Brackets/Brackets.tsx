@@ -50,6 +50,7 @@ import ShareModal from '../ShareModal';
 import { MatchProps } from '../Match/Match';
 import { refetchAfterMarchMadnessMint } from 'utils/queryConnector';
 import useLeaderboardByVolumeQuery from 'queries/marchMadness/useLeaderboardByVolumeQuery';
+import useLoeaderboardByGuessedCorrectlyQuery from 'queries/marchMadness/useLoeaderboardByGuessedCorrectlyQuery';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -389,27 +390,31 @@ const Brackets: React.FC = () => {
         }
     };
 
-    const leaderboardQuery = useLeaderboardByVolumeQuery(networkId);
+    const leaderboardByVolumeQuery = useLeaderboardByVolumeQuery(networkId);
+    const leaderboardByGuessedGamesQuery = useLoeaderboardByGuessedCorrectlyQuery(networkId);
 
-    const rankByBonusAndPoints = useMemo(() => {
-        if (leaderboardQuery.isSuccess && leaderboardQuery.data) {
-            const sortedAddresses = leaderboardQuery.data?.leaderboard.sort((a, b) =>
-                a.bonusVolume === b.bonusVolume
-                    ? b.totalCorrectedPredictions - a.totalCorrectedPredictions
-                    : b.bonusVolume - a.bonusVolume
+    const rankByVolume = useMemo(() => {
+        if (leaderboardByVolumeQuery.isSuccess && leaderboardByVolumeQuery.data) {
+            const leaderboardData = leaderboardByVolumeQuery.data?.leaderboard.find(
+                (data) => data.walletAddress.toLowerCase() === walletAddress.toLowerCase()
             );
-            return (
-                sortedAddresses.findIndex((data) => data.walletAddress.toLowerCase() === walletAddress.toLowerCase()) +
-                1
-            );
+            return leaderboardData ? leaderboardData.rank : 0;
         }
         return 0;
-    }, [leaderboardQuery.data, leaderboardQuery.isSuccess, walletAddress]);
+    }, [leaderboardByVolumeQuery.data, leaderboardByVolumeQuery.isSuccess, walletAddress]);
+
+    const rankByGames = useMemo(() => {
+        if (leaderboardByGuessedGamesQuery.isSuccess && leaderboardByGuessedGamesQuery.data) {
+            const leaderboardData = leaderboardByGuessedGamesQuery.data.find(
+                (data) => data.walletAddress.toLowerCase() === walletAddress.toLowerCase()
+            );
+            return leaderboardData ? leaderboardData.rank : 0;
+        }
+        return 0;
+    }, [leaderboardByGuessedGamesQuery.data, leaderboardByGuessedGamesQuery.isSuccess, walletAddress]);
 
     const getMyStats = () => {
-        const isFinalFinished = winnerTeamIds[FINAL_MATCH_ID] !== 0;
         const isFirstMatchFinished = winnerTeamIds.find((id) => id !== 0) !== undefined;
-        const myRank = rankByBonusAndPoints;
 
         return (
             <MyStats>
@@ -420,21 +425,15 @@ const Brackets: React.FC = () => {
                 </StatsColumn>
                 <StatsColumn width="65%">
                     <StatsRow margin="0 0 10px 0" justify="normal">
-                        <StatsText>{t('march-madness.brackets.stats.status')}:</StatsText>
-                        <StatsText margin="0 10px 0 auto" fontWeight={700}>
-                            {isFinalFinished
-                                ? t('march-madness.brackets.stats.complete')
-                                : t('march-madness.brackets.stats.incomplete')}
+                        <StatsText>{t('march-madness.brackets.stats.rank-volume')}:</StatsText>
+                        <StatsText margin="0 15px 0 auto" fontWeight={700}>
+                            {isFirstMatchFinished ? (rankByVolume ? rankByVolume : '-') : 'N/A'}
                         </StatsText>
                     </StatsRow>
                     <StatsRow margin="10px 0 0 0" justify="normal">
-                        <StatsText>{t('march-madness.brackets.stats.rank')}:</StatsText>
-                        <StatsText margin="0 0 0 18px" fontWeight={700}>
-                            {isFirstMatchFinished
-                                ? myRank
-                                    ? myRank + ' ' + t('march-madness.brackets.stats.place')
-                                    : '-'
-                                : 'N/A'}
+                        <StatsText>{t('march-madness.brackets.stats.rank-games')}:</StatsText>
+                        <StatsText margin="0 15px 0 auto" fontWeight={700}>
+                            {isFirstMatchFinished ? (rankByGames ? rankByGames : '-') : 'N/A'}
                         </StatsText>
                     </StatsRow>
                 </StatsColumn>

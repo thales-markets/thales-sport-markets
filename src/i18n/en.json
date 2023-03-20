@@ -876,11 +876,8 @@
             "round-5": "Final",
             "stats": {
                 "my-stats": "My stats",
-                "status": "Ranking status",
-                "rank": "Rank by bonus",
-                "complete": "Complete",
-                "incomplete": "Incomplete",
-                "place": "Place",
+                "rank-volume": "Rank by volume",
+                "rank-games": "Rank by guessed games",
                 "my-total-score": "My total score",
                 "points": "Points",
                 "bonus": "Bonus"
