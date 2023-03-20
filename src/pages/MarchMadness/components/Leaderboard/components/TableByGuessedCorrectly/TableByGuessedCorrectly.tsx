@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import React, { useMemo } from 'react';
 import { Column, usePagination, useTable } from 'react-table';
 import {
+    Arrow,
     NoDataContainer,
     NoDataLabel,
     OverlayContainer,
@@ -25,6 +26,7 @@ import useLoeaderboardByGuessedCorrectlyQuery, {
 import { useTranslation } from 'react-i18next';
 import Tooltip from 'components/Tooltip';
 import { TooltipStyle } from '../TableByVolume/TableByVolume';
+import { getEtherscanAddressLink } from 'utils/etherscan';
 
 type TableByGuessedCorrectlyProps = {
     searchText: string;
@@ -44,7 +46,18 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
             {
                 Header: <>{t('march-madness.leaderboard.address')}</>,
                 accessor: 'walletAddress',
-                Cell: (cellProps) => <>{truncateAddress(cellProps.cell.value, 5)}</>,
+                Cell: (cellProps) => (
+                    <>
+                        {truncateAddress(cellProps.cell.value, 5)}
+                        <a
+                            href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            <Arrow />
+                        </a>
+                    </>
+                ),
             },
             {
                 Header: () => (
@@ -85,7 +98,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                 accessor: 'rewards',
             },
         ];
-    }, [t]);
+    }, [t, networkId]);
 
     const leaderboardQuery = useLoeaderboardByGuessedCorrectlyQuery(networkId);
 
@@ -104,6 +117,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
     const filteredData = useMemo(() => {
         let finalData: LeaderboardByGuessedCorrectlyResponse = [];
         if (data) {
+            finalData = data;
             const myScore = data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
             if (myScore.length) {
                 finalData = data.filter((user) => user.walletAddress.toLowerCase() !== walletAddress?.toLowerCase());
@@ -113,7 +127,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                 finalData = data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
             }
 
-            return finalData?.length ? finalData : data;
+            return finalData;
         }
 
         return [];
@@ -153,7 +167,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
     const stickyRow = useMemo(() => {
         if (myScore?.length) {
             return (
-                <StickyRowTopTable>
+                <StickyRowTopTable myScore={true}>
                     <TableRowCell>{myScore[0].rank}</TableRowCell>
                     <TableRowCell>{t('march-madness.leaderboard.my-rewards').toUpperCase()}</TableRowCell>
                     <TableRowCell>{myScore[0].totalCorrectedPredictions}</TableRowCell>
@@ -189,10 +203,18 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                         </thead>
                         <tbody {...getTableBodyProps()}>
                             {myScore ? stickyRow : <></>}
-                            {(page.length ? page : rows).map((row, rowKey) => {
+                            {(page.length ? page : rows).map((row, index) => {
                                 prepareRow(row);
+                                const isTopTen =
+                                    state.pageIndex === 0 &&
+                                    (myScore.length && myScore[0].rank <= 10 ? index < 9 : index < 10);
                                 return (
-                                    <TableRow {...row.getRowProps()} key={rowKey} topTen={rowKey < 10 ? true : false}>
+                                    <TableRow
+                                        {...row.getRowProps()}
+                                        key={index}
+                                        topTen={isTopTen}
+                                        hideBorder={index === page.length - 1}
+                                    >
                                         {row.cells.map((cell, cellIndex) => {
                                             return (
                                                 <TableRowCell {...cell.getCellProps()} key={cellIndex}>

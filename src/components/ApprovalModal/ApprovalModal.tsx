@@ -82,7 +82,7 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
             title={t('common.enable-wallet-access.approve-label', { currencyKey: tokenSymbol })}
             onClose={onClose}
             shouldCloseOnOverlayClick={false}
-            customStyle={{ overlay: { zIndex: 3 } }}
+            customStyle={{ overlay: { zIndex: 201 } }}
         >
             <Container>
                 <CheckboxContainer>

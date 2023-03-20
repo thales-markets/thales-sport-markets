@@ -34,7 +34,6 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, setT
     return (
         <Container open={open}>
             {tags
-                .filter((tag: TagInfo) => tag.id != 9153 && tag.id != 9156)
                 .sort((a, b) => {
                     const favouriteA = favouriteLeagues.find((league: TagInfo) => league.id == a.id);
                     const isFavouriteA = Number(favouriteA && favouriteA.favourite);

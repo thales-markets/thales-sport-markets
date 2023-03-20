@@ -849,7 +849,9 @@
                 "place": "สถานที่",
                 "my-stats": "สถิติของฉัน",
                 "bonus": "โบนัส",
-                "complete": "สมบูรณ์"
+                "complete": "สมบูรณ์",
+                "rank-games": "จัดอันดับตามเกมที่เดา",
+                "rank-volume": "จัดอันดับตามปริมาณ"
             },
             "round-0": "รอบที่ 1",
             "round-5": "สุดท้าย",
@@ -923,8 +925,8 @@
             "base-volume": "ฐาน",
             "search-placeholder": "ค้นหาที่อยู่กระเป๋าเงิน",
             "guessed-games": "เกมเดา",
-            "tooltip-rewards-correct-table": "3,000 OP (10k thales on arb) จะถูกแบ่งระหว่าง 10 อันดับแรก",
-            "tooltip-rewards-volume-table": "10,000 OP (30k Thales บน arb) จะถูกแบ่งตามปริมาณตามสัดส่วน",
+            "tooltip-rewards-correct-table": "3,000 OP (10,000 THALES on Arbitrum) จะถูกแบ่งระหว่าง 10 อันดับแรก",
+            "tooltip-rewards-volume-table": "10,000 OP (30,000 THALES บน Arbitrum) จะถูกแบ่งตามปริมาณตามสัดส่วน",
             "tooltip-correct-correct-table": "จำนวนเกมที่เดาถูกในวงเล็บของคุณ",
             "tooltip-bonus-volume-table": "ปริมาณโบนัสคำนวณจากการเลือกกลุ่มของคุณ",
             "tooltip-base-volume-table": "ปริมาณขับเคลื่อนผ่านเกม NCAA Basketball",
