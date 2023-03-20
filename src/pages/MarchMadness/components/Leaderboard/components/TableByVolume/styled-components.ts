@@ -1,3 +1,4 @@
+import { TablePagination } from '@material-ui/core';
 import styled from 'styled-components';
 
 export const Table = styled.table`
@@ -59,28 +60,24 @@ export const Container = styled.div`
     width: 60%;
 `;
 
-export const TableHeaderContainer = styled.div<{ hideBottomBorder?: boolean }>`
+export const TableHeaderContainer = styled.div<{ hideBottomBorder?: boolean; inverseBorderGradient?: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
     border: 2px;
     border-bottom: ${(_props) => (_props?.hideBottomBorder === true ? '0px' : '')};
     border-style: solid;
-    border-image: linear-gradient(
-            279.41deg,
-            #da252f 10.64%,
-            #5c2c3b 23.38%,
-            #021630 41.03%,
-            #0c99d0 70.84%,
-            #02223e 94.26%
-        )
-        1;
+    border-image: ${(_props) =>
+        _props.inverseBorderGradient == true
+            ? 'linear-gradient(100.41deg, #DA252F -0.79%, #5C2C3B 29.78%, #021630 47.85%, #0C99D0 75.56%, #02223E 110.04%) 1'
+            : `linear-gradient(268.11deg, #DA252F 0.03%, #5C2C3B 21.05%, #021630 41.08%, #0C99D0 71.72%, #02223E 104.1%) 1`};
     width: 100%;
 `;
 
 export const TableContainer = styled(TableHeaderContainer)`
     min-height: 600px;
-    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
 `;
 
 export const TableHeader = styled.span`
@@ -109,4 +106,38 @@ export const StickyRow = styled(TableRow)`
     height: 35px !important;
 `;
 
+export const StickyRowTopTable = styled(TableRow)`
+    width: 100%;
+`;
+
 export const StickyCell = styled.div``;
+
+export const PaginationWrapper = styled(TablePagination)`
+    border: none !important;
+    display: flex;
+    width: 100%;
+    height: auto;
+    color: #f6f6fe !important;
+    .MuiToolbar-root {
+        padding: 0;
+        display: flex;
+        .MuiSelect-icon {
+            color: #f6f6fe;
+        }
+    }
+    .MuiIconButton-root.Mui-disabled {
+        color: #5f6180;
+    }
+    .MuiTablePagination-toolbar > .MuiTablePagination-caption:last-of-type {
+        display: block;
+    }
+    .MuiTablePagination-input {
+        margin-top: 2px;
+    }
+    .MuiTablePagination-selectRoot {
+        @media (max-width: 767px) {
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+    }
+`;

@@ -31,7 +31,7 @@ const SearchContainer = styled.div`
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
-    margin: 70px 0 20px 0;
+    margin: 0 0 20px 0;
 `;
 
 const TablesContainer = styled.div`

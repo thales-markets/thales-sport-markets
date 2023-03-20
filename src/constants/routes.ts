@@ -15,6 +15,7 @@ export const ROUTES = {
     Vault: '/vaults/:vaultId',
     Leaderboard: '/parlay-leaderboard',
     MarchMadness: '/march-madness',
+    LiquidityPool: '/liquidity-pool',
 };
 
 export default ROUTES;
