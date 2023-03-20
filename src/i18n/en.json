@@ -643,7 +643,7 @@
         "total-earned": "Total earned",
         "total-trading-fees": "Total trading fees",
         "affiliate-leaderboard-table": {
-            "address": "Address",
+            "address": "Referral ID",
             "number-of-trades": "Trades",
             "total-volume": "Total volume",
             "first-transaction": "First transaction",
