@@ -77,6 +77,7 @@ export const TableHeaderContainer = styled.div<{ hideBottomBorder?: boolean; inv
 export const TableContainer = styled(TableHeaderContainer)`
     min-height: 600px;
     flex-direction: column;
+    justify-content: flex-start;
 `;
 
 export const TableHeader = styled.span`
@@ -107,7 +108,6 @@ export const StickyRow = styled(TableRow)`
 
 export const StickyRowTopTable = styled(TableRow)`
     width: 100%;
-    background-color: transparent;
 `;
 
 export const StickyCell = styled.div``;

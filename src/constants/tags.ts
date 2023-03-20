@@ -174,7 +174,7 @@ export const TAGS_LIST: Tags = [
     },
     {
         id: 9153,
-        label: 'Tennis',
+        label: 'Grand Slam',
         logo: `/logos/Tennis/atp.png`,
         logoClass: 'icon-league league--atp',
         favourite: false,
@@ -183,7 +183,7 @@ export const TAGS_LIST: Tags = [
     },
     {
         id: 9156,
-        label: 'Tennis',
+        label: 'ATP Events',
         logo: `/logos/Tennis/atp.png`,
         logoClass: 'icon-league league--atp',
         favourite: false,

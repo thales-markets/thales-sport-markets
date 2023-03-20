@@ -151,6 +151,8 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
         if (data) {
             let finalData: LeaderboardByVolumeData = [];
 
+            finalData = data;
+
             const myScore = data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
             if (myScore.length) {
                 finalData = data.filter((user) => user.walletAddress.toLowerCase() !== walletAddress?.toLowerCase());
@@ -160,7 +162,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                 finalData = data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
             }
 
-            return finalData?.length ? finalData : data;
+            return finalData;
         }
         return [];
     }, [data, searchText, walletAddress]);
@@ -243,10 +245,10 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                         </thead>
                         <tbody {...getTableBodyProps()}>
                             {myScore ? stickyRow : <></>}
-                            {(page.length ? page : rows).map((row, rowKey) => {
+                            {(page.length ? page : rows).map((row, index) => {
                                 prepareRow(row);
                                 return (
-                                    <TableRow {...row.getRowProps()} key={rowKey} hideBorder={rowKey == page.length}>
+                                    <TableRow {...row.getRowProps()} key={index} hideBorder={index === page.length - 1}>
                                         {row.cells.map((cell, cellIndex) => {
                                             return (
                                                 <TableRowCell {...cell.getCellProps()} key={cellIndex}>
@@ -260,15 +262,17 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                         </tbody>
                     </Table>
                 )}
-                <PaginationWrapper
-                    rowsPerPageOptions={[10, 20, 50, 100]}
-                    count={filteredData?.length ? filteredData.length : 0}
-                    labelRowsPerPage={t(`common.pagination.rows-per-page`)}
-                    rowsPerPage={state.pageSize}
-                    page={state.pageIndex}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+                {filteredData?.length > 0 && (
+                    <PaginationWrapper
+                        rowsPerPageOptions={[10, 20, 50, 100]}
+                        count={filteredData?.length ? filteredData.length : 0}
+                        labelRowsPerPage={t(`common.pagination.rows-per-page`)}
+                        rowsPerPage={state.pageSize}
+                        page={state.pageIndex}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                )}
             </TableContainer>
         </Container>
     );

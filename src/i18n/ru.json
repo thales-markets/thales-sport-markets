@@ -856,7 +856,9 @@
                 "my-stats": "Моя статистика",
                 "incomplete": "Неполный",
                 "complete": "Полный",
-                "my-total-score": "Мой общий балл"
+                "my-total-score": "Мой общий балл",
+                "rank-volume": "Рейтинг по объему",
+                "rank-games": "Рейтинг по угаданным играм"
             },
             "round-3": "Элита 8",
             "round-1": "2-й раунд",
@@ -931,10 +933,10 @@
             "no-data": "В настоящее время нет доступных данных",
             "address": "Адрес",
             "tooltip-bonus-volume-table": "Бонусный объем рассчитывается на основе вашего выбора сетки",
-            "tooltip-rewards-correct-table": "3000 OP (10 тысяч талеров на вилке) будут разделены между 10 лучшими",
+            "tooltip-rewards-correct-table": "3 000 OP (10 000 THALES on Arbitrum) будут разделены между 10 лучшими",
             "tooltip-base-volume-table": "Объем продаж благодаря баскетбольным играм NCAA",
             "tooltip-correct-correct-table": "Количество правильно угаданных игр в вашей группе",
-            "tooltip-rewards-volume-table": "10 000 OP (30 000 Thales на вилке) будут разделены пропорционально объему",
+            "tooltip-rewards-volume-table": "10 000 OP (30 000 THALES on Arbitrum) будут разделены пропорционально объему",
             "my-rewards": "Мои награды",
             "by-guessed-correctly": "По правильному угадыванию"
         },
