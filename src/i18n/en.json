@@ -57,7 +57,16 @@
                 "label": "Refer and earn",
                 "disbled-tooltip": "Connect wallet to generate a referral link.",
                 "enabled-tooltip": "Invite people to trade on overtime to earn fees from each trade they make."
-            }
+            },
+            "id-exists": "Referral ID already exists",
+            "id-create-success": "Successfully set referral ID",
+            "modal": {
+                "title": "Referral ID",
+                "description": "Choose your Referral ID",
+                "submit-button": "Submit",
+                "copy-button": "Copy Referral link"
+            },
+            "your-referral-id": "Your Referral ID"
         },
         "swap": {
             "title": "Get USD",
@@ -635,7 +644,7 @@
         "total-earned": "Total earned",
         "total-trading-fees": "Total trading fees",
         "affiliate-leaderboard-table": {
-            "address": "Address",
+            "address": "Referral ID",
             "number-of-trades": "Trades",
             "total-volume": "Total volume",
             "first-transaction": "First transaction",

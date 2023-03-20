@@ -39,7 +39,16 @@
                 "label": "Refer and earn",
                 "disbled-tooltip": "Connect wallet to generate a referral link.",
                 "enabled-tooltip": "Invite people to trade on overtime to earn fees from each trade they make."
-            }
+            },
+            "modal": {
+                "title": "ID di riferimento",
+                "copy-button": "Copia il link di riferimento",
+                "submit-button": "Invia",
+                "description": "Scegli il tuo ID referral"
+            },
+            "id-exists": "L'ID referral esiste già",
+            "id-create-success": "ID referral impostato correttamente",
+            "your-referral-id": "Il tuo ID di riferimento"
         },
         "swap": {
             "title": "Get USD",
