@@ -95,7 +95,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
     const [totalBonusPercentageDec, setTotalBonusPercentageDec] = useState(0);
     const [bonusCurrency, setBonusCurrency] = useState(0);
     const [calculatedTotalTokenAmount, setCalculatedTotalTokenAmount] = useState(0);
-    // const [calculatedTotalBuyIn, setCalculatedTotalBuyIn] = useState(0);
     const [calculatedSkewAverage, setCalculatedSkewAverage] = useState(0);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [tokenAndBonus, setTokenAndBonus] = useState<MultiSingleTokenQuoteAndBonus[]>(
@@ -531,6 +530,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
             await Promise.all(transactions)
                 .then(() => {
                     setIsBuying(false);
+                    setUsdAmountValue('');
                 })
                 .catch((e) => {
                     console.log(e);
