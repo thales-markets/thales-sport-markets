@@ -347,7 +347,7 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     9002: 'quarter',
     9003: 'inning',
     9004: 'quarter',
-    9005: 'quarter',
+    9005: 'half',
     9006: 'period',
     9007: 'round',
     9008: 'quarter',

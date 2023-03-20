@@ -1,33 +1,29 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
-import {
-    ClubLogo,
-    ClubName,
-    MatchInfo,
-    MatchLabel,
-    MatchLogo,
-    StatusContainer,
-    ClaimContainer,
-    ClaimLabel,
-    ClaimValue,
-    ExternalLink,
-    ExternalLinkArrow,
-    ExternalLinkContainer,
-    Label,
-    ClaimButton,
-} from '../../styled-components';
-import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { BoldValue, ColumnDirectionInfo, PositionContainer, ResultContainer, Wrapper } from './styled-components';
-import { useTranslation } from 'react-i18next';
-import { USD_SIGN } from 'constants/currency';
-import { formatCurrencyWithSign } from 'utils/formatters/number';
-import networkConnector from 'utils/networkConnector';
-import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { ethers } from 'ethers';
-import sportsMarketContract from 'utils/contracts/sportsMarketContract';
-import { toast } from 'react-toastify';
 import PositionSymbol from 'components/PositionSymbol';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { USD_SIGN } from 'constants/currency';
+import { ENETPULSE_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
+import { GAME_STATUS, STATUS_COLOR } from 'constants/ui';
+import { ethers } from 'ethers';
+import i18n from 'i18n';
+import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
+import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
+import useEnetpulseSportMarketLiveResultQuery from 'queries/markets/useEnetpulseSportMarketLiveResultQuery';
+import useMarketTransactionsQuery from 'queries/markets/useMarketTransactionsQuery';
+import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import { FlexDivCentered, FlexDivRow } from 'styles/common';
+import { ParlaysMarket, SportMarketLiveResult } from 'types/markets';
+import sportsMarketContract from 'utils/contracts/sportsMarketContract';
+import { formatDateWithTime } from 'utils/formatters/date';
+import { formatCurrencyWithSign } from 'utils/formatters/number';
+import { getOnImageError, getTeamImageSource } from 'utils/images';
 import {
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
@@ -37,18 +33,39 @@ import {
     getSpreadTotalText,
     getSymbolText,
 } from 'utils/markets';
-import { formatDateWithTime } from 'utils/formatters/date';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import { getIsMobile } from 'redux/modules/app';
+import { getMaxGasLimitForNetwork } from 'utils/network';
+import networkConnector from 'utils/networkConnector';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import { buildMarketLink } from 'utils/routes';
-import i18n from 'i18n';
-import useMarketTransactionsQuery from 'queries/markets/useMarketTransactionsQuery';
-import { ParlaysMarket } from 'types/markets';
-import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
-import { getMaxGasLimitForNetwork } from 'utils/network';
+import { getOrdinalNumberLabel } from 'utils/ui';
+import {
+    ClaimButton,
+    ClaimContainer,
+    ClaimLabel,
+    ClaimValue,
+    ClubLogo,
+    ClubName,
+    ExternalLink,
+    ExternalLinkArrow,
+    ExternalLinkContainer,
+    Label,
+    MatchInfo,
+    MatchLabel,
+    MatchLogo,
+    StatusContainer,
+} from '../../styled-components';
+import {
+    BoldValue,
+    ColumnDirectionInfo,
+    MatchPeriodContainer,
+    MatchPeriodLabel,
+    PositionContainer,
+    ResultContainer,
+    ScoreContainer,
+    Status,
+    TeamScoreLabel,
+    Wrapper,
+} from './styled-components';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;
@@ -63,6 +80,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
 }) => {
     const language = i18n.language;
     const { t } = useTranslation();
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -102,6 +120,49 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const isClaimable = position.claimable;
     const isCanceled = position.market.isCanceled;
     const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
+
+    const isGameStarted = position.market.maturityDate < new Date();
+    const isGameResolved = position.market.isResolved || position.market.isCanceled;
+    const isPendingResolution = isGameStarted && !isGameResolved;
+    const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(position.market.tags[0]));
+    // const gameIdString = Web3.utils.hexToAscii(position.market.id);
+
+    const gameDate = new Date(position.market.maturityDate).toISOString().split('T')[0];
+    const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
+
+    const useLiveResultQuery = useSportMarketLiveResultQuery(position.market.id, {
+        enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isMobile,
+    });
+
+    const useEnetpulseLiveResultQuery = useEnetpulseSportMarketLiveResultQuery(
+        position.market.id,
+        gameDate,
+        position.market.tags[0],
+        {
+            enabled: isAppReady && isEnetpulseSport && !isMobile,
+        }
+    );
+
+    useEffect(() => {
+        if (isEnetpulseSport) {
+            if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
+                setLiveResultInfo(useEnetpulseLiveResultQuery.data);
+            }
+        } else {
+            if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
+                setLiveResultInfo(useLiveResultQuery.data);
+            }
+        }
+    }, [
+        useLiveResultQuery,
+        useLiveResultQuery.data,
+        useEnetpulseLiveResultQuery,
+        useEnetpulseLiveResultQuery.data,
+        isEnetpulseSport,
+    ]);
+
+    const displayClockTime = liveResultInfo?.displayClock.replaceAll("'", '');
+
     const claimCanceledGame = isClaimable && isCanceled;
 
     const claimAmountForCanceledGame = claimCanceledGame ? getCanceledGameClaimAmount(position) : 0;
@@ -185,6 +246,59 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                 </MatchLabel>
             </MatchInfo>
             <StatusContainer>
+                {isPendingResolution && !isMobile ? (
+                    isEnetpulseSport ? (
+                        <Status color={STATUS_COLOR.STARTED}>{t('markets.market-card.pending')}</Status>
+                    ) : (
+                        <FlexDivRow>
+                            {liveResultInfo?.status != GAME_STATUS.FINAL &&
+                                liveResultInfo?.status != GAME_STATUS.FULL_TIME &&
+                                !isEnetpulseSport && (
+                                    <MatchPeriodContainer>
+                                        <MatchPeriodLabel>{`${getOrdinalNumberLabel(
+                                            Number(liveResultInfo?.period)
+                                        )} ${t(
+                                            `markets.market-card.${SPORT_PERIODS_MAP[Number(liveResultInfo?.sportId)]}`
+                                        )}`}</MatchPeriodLabel>
+                                        <FlexDivCentered>
+                                            <MatchPeriodLabel className="red">
+                                                {displayClockTime}
+                                                <MatchPeriodLabel className="blink">&prime;</MatchPeriodLabel>
+                                            </MatchPeriodLabel>
+                                        </FlexDivCentered>
+                                    </MatchPeriodContainer>
+                                )}
+
+                            <ScoreContainer>
+                                <TeamScoreLabel>{liveResultInfo?.homeScore}</TeamScoreLabel>
+                                <TeamScoreLabel>{liveResultInfo?.awayScore}</TeamScoreLabel>
+                            </ScoreContainer>
+                            {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId))
+                                ? liveResultInfo?.period == 2 && (
+                                      <ScoreContainer>
+                                          <TeamScoreLabel className="period">
+                                              {liveResultInfo?.scoreHomeByPeriod[0]}
+                                          </TeamScoreLabel>
+                                          <TeamScoreLabel className="period">
+                                              {liveResultInfo?.scoreAwayByPeriod[0]}
+                                          </TeamScoreLabel>
+                                      </ScoreContainer>
+                                  )
+                                : liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
+                                      return (
+                                          <ScoreContainer key={index}>
+                                              <TeamScoreLabel className="period">{homePeriodResult}</TeamScoreLabel>
+                                              <TeamScoreLabel className="period">
+                                                  {liveResultInfo.scoreAwayByPeriod[index]}
+                                              </TeamScoreLabel>
+                                          </ScoreContainer>
+                                      );
+                                  })}
+                        </FlexDivRow>
+                    )
+                ) : (
+                    <></>
+                )}
                 <PositionContainer>
                     <PositionSymbol
                         symbolText={symbolText}
