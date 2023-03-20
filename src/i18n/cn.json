@@ -853,7 +853,9 @@
                 "bonus": "奖金",
                 "place": "地方",
                 "my-total-score": "我的总分",
-                "points": "积分"
+                "points": "积分",
+                "rank-volume": "按体积排名",
+                "rank-games": "按猜的游戏排名"
             },
             "round-1": "第二轮",
             "round-5": "最终的",

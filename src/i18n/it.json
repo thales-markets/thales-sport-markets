@@ -856,7 +856,9 @@
                 "complete": "Completare",
                 "place": "Posto",
                 "bonus": "Bonus",
-                "points": "Punti"
+                "points": "Punti",
+                "rank-volume": "Classifica per volume",
+                "rank-games": "Classifica per giochi indovinati"
             },
             "round-4": "Finale 4",
             "round-5": "Finale",
