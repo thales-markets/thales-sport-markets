@@ -4,8 +4,6 @@ import { Position } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
 import { NetworkId } from 'types/network';
 import { getCollateralAddress } from './collaterals';
-import { MultiSingleTokenQuoteAndBonus, ParlaysMarket } from 'types/markets';
-import { roundNumberToDecimals } from './formatters/number';
 import { isMultiCollateralSupportedForNetwork, NetworkIdByName } from './network';
 
 export const getAMMSportsTransaction: any = (
