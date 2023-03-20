@@ -248,7 +248,6 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                                 getErrorToastOptions(t('common.errors.unknown-error-try-again'))
                                             )
                                         );
-                                        console.log(e);
                                     }
                                 } catch (e) {
                                     reject(
