@@ -92,6 +92,12 @@ export const QUERY_KEYS = {
             networkId,
         ],
         Stats: (networkId: NetworkId, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
+        VaultsAndLpTxs: (networkId: NetworkId, walletAddress: string) => [
+            'wallet',
+            'VaultsAndLpTxs',
+            networkId,
+            walletAddress,
+        ],
     },
     Quiz: {
         Leaderboard: () => ['quiz', 'leaderboard'],
