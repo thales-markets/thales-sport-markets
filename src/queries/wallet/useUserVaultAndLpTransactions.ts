@@ -2,20 +2,20 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
 import { NetworkId } from 'types/network';
-import { LiquidityPoolUserTransactions } from 'types/liquidityPool';
+import { LiquidityPoolUserTransactions, VaultsAndLiquidityPoolUserTransactions } from 'types/liquidityPool';
 import { VAULT_MAP } from 'constants/vault';
-import { VaultUserTransactions, VaultUserTransactionsWithVaultName } from 'types/vault';
+import { VaultUserTransactions } from 'types/vault';
 
 const useUserVaultAndLpTransactions = (
     networkId: NetworkId,
     walletAddress: string,
-    options?: UseQueryOptions<LiquidityPoolUserTransactions>
+    options?: UseQueryOptions<VaultsAndLiquidityPoolUserTransactions>
 ) => {
-    return useQuery<LiquidityPoolUserTransactions>(
+    return useQuery<VaultsAndLiquidityPoolUserTransactions>(
         QUERY_KEYS.Wallet.VaultsAndLpTxs(networkId, walletAddress),
         async () => {
             try {
-                const vaultTx: VaultUserTransactionsWithVaultName = [];
+                const vaultTx: VaultsAndLiquidityPoolUserTransactions = [];
                 for (const key in VAULT_MAP) {
                     const vaultUserTransactions: VaultUserTransactions = await thalesData.sportMarkets.vaultUserTransactions(
                         {
@@ -32,22 +32,26 @@ const useUserVaultAndLpTransactions = (
                     );
                 }
 
-                console.log('vaultTx: ', vaultTx);
                 const liquidityPoolUserTransactions: LiquidityPoolUserTransactions = await thalesData.sportMarkets.liquidityPoolUserTransactions(
                     {
                         network: networkId,
                         account: walletAddress,
                     }
                 );
-                console.log('liquidityPoolUserTransactions: ', liquidityPoolUserTransactions);
-                return liquidityPoolUserTransactions;
+
+                vaultTx.push(
+                    ...liquidityPoolUserTransactions.map((tx) => {
+                        return { name: 'LP', ...tx };
+                    })
+                );
+
+                return vaultTx;
             } catch (e) {
                 console.log(e);
                 return [];
             }
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );

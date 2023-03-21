@@ -20,8 +20,6 @@ const UserVault: React.FC<{ vaultName: string; vaultAddress: string }> = ({ vaul
         enabled: isWalletConnected && !!vaultAddress,
     });
 
-    console.log(userVaultDataQuery.data);
-
     const vaultAllocation = userVaultDataQuery.isSuccess ? userVaultDataQuery.data?.balanceTotal : 0;
 
     return (
