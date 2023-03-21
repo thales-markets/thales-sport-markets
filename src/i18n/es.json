@@ -48,7 +48,16 @@
                 "label": "Refiere y gana",
                 "disbled-tooltip": "Conecta tu billetera para generar un enlace de referido.",
                 "enabled-tooltip": "Invita personas a probar Overtime para obtener una comisión por cada transacción que realicen."
-            }
+            },
+            "modal": {
+                "submit-button": "Entregar",
+                "copy-button": "Copiar enlace de referencia",
+                "description": "Elija su ID de referencia",
+                "title": "Identificación de referencia"
+            },
+            "id-create-success": "Establecer ID de referencia con éxito",
+            "id-exists": "El ID de referencia ya existe",
+            "your-referral-id": "Su identificación de referencia"
         },
         "swap": {
             "title": "Obtener USD",
@@ -853,7 +862,9 @@
                 "incomplete": "Incompleto",
                 "status": "Estado",
                 "my-total-score": "mi puntuación total",
-                "place": "Lugar"
+                "place": "Lugar",
+                "rank-volume": "Clasificar por volumen",
+                "rank-games": "Clasificación por juegos adivinados"
             },
             "round-1": "2da ronda",
             "round-3": "Élite 8",

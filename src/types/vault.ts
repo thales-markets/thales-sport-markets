@@ -1,5 +1,5 @@
 import { VaultTradeStatus } from 'constants/vault';
-import { SportMarketInfo } from './markets';
+import { ParlayMarket, SportMarketInfo } from './markets';
 
 export type VaultData = {
     round: number;
@@ -52,6 +52,17 @@ export type VaultTrade = {
     game: string;
     result: number;
     wholeMarket: SportMarketInfo;
+    status: VaultTradeStatus;
+    round: number;
+};
+
+export type ParlayVaultTrade = {
+    hash: string;
+    timestamp: number;
+    paid: number;
+    blockNumber: number;
+    market: string;
+    wholeMarket: ParlayMarket;
     status: VaultTradeStatus;
     round: number;
 };

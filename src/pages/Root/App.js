@@ -9,7 +9,7 @@ import { getNetworkId, updateNetworkSettings, updateWallet, getIsWalletConnected
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import networkConnector from 'utils/networkConnector';
-import { hasEthereumInjected, isNetworkSupported, isRouteAvailableForNetwork, NetworkIdByName } from 'utils/network';
+import { hasEthereumInjected, isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import ROUTES from 'constants/routes';
 import Theme from 'layouts/Theme';
 import DappLayout from 'layouts/DappLayout';
@@ -246,7 +246,8 @@ const App = () => {
                                     </DappLayout>
                                 </Route>
                             )}
-                            {networkId === NetworkIdByName.OptimismMainnet && (
+
+                            {isRouteAvailableForNetwork(ROUTES.Vaults, networkId) && (
                                 <Route
                                     exact
                                     path={ROUTES.Vault}
@@ -257,6 +258,7 @@ const App = () => {
                                     )}
                                 />
                             )}
+
                             {isRouteAvailableForNetwork(ROUTES.QuizLeaderboard, networkId) && (
                                 <Route exact path={ROUTES.QuizLeaderboard}>
                                     <DappLayout>

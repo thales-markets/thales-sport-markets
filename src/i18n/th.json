@@ -39,7 +39,16 @@
                 "label": "Refer and earn",
                 "disbled-tooltip": "เชื่อมต่อกระเป๋าเพื่อสร้าง referral link.",
                 "enabled-tooltip": "เชิญผู้คนให้มาใช้งาน Overtime เพื่อรับค่าธรรมเนียมจากการเทรดแต่ละครั้งที่พวกเขาทำ"
-            }
+            },
+            "modal": {
+                "submit-button": "ส่ง",
+                "copy-button": "คัดลอกลิงค์อ้างอิง",
+                "description": "เลือกรหัสอ้างอิงของคุณ",
+                "title": "รหัสอ้างอิง"
+            },
+            "id-exists": "ID ผู้อ้างอิงมีอยู่แล้ว",
+            "id-create-success": "กำหนด ID ผู้อ้างอิงสำเร็จ",
+            "your-referral-id": "ID ผู้อ้างอิงของคุณ"
         },
         "swap": {
             "title": "รับ USD",
@@ -849,7 +858,9 @@
                 "place": "สถานที่",
                 "my-stats": "สถิติของฉัน",
                 "bonus": "โบนัส",
-                "complete": "สมบูรณ์"
+                "complete": "สมบูรณ์",
+                "rank-games": "จัดอันดับตามเกมที่เดา",
+                "rank-volume": "จัดอันดับตามปริมาณ"
             },
             "round-0": "รอบที่ 1",
             "round-5": "สุดท้าย",

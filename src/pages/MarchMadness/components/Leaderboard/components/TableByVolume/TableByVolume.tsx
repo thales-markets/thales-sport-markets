@@ -245,10 +245,10 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                         </thead>
                         <tbody {...getTableBodyProps()}>
                             {myScore ? stickyRow : <></>}
-                            {(page.length ? page : rows).map((row, rowKey) => {
+                            {(page.length ? page : rows).map((row, index) => {
                                 prepareRow(row);
                                 return (
-                                    <TableRow {...row.getRowProps()} key={rowKey} hideBorder={rowKey == page.length}>
+                                    <TableRow {...row.getRowProps()} key={index} hideBorder={index === page.length - 1}>
                                         {row.cells.map((cell, cellIndex) => {
                                             return (
                                                 <TableRowCell {...cell.getCellProps()} key={cellIndex}>

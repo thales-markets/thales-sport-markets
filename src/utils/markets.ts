@@ -12,7 +12,15 @@ import {
 } from 'constants/tags';
 import ordinal from 'ordinal';
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
-import { AccountPosition, MarketData, MarketInfo, ParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
+import {
+    AccountPosition,
+    MarketData,
+    MarketInfo,
+    ParlayMarket,
+    ParlayMarketWithRound,
+    ParlaysMarket,
+    SportMarketInfo,
+} from 'types/markets';
 import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
 import i18n from 'i18n';
@@ -363,7 +371,9 @@ export const isSportMarketExpired = (sportMarket: SportMarketInfo) => {
     return false;
 };
 
-export const updateTotalQuoteAndAmountFromContract = (parlayMarkets: ParlayMarket[]): ParlayMarket[] => {
+export const updateTotalQuoteAndAmountFromContract = (
+    parlayMarkets: ParlayMarket[] | ParlayMarketWithRound[]
+): ParlayMarket[] | ParlayMarketWithRound[] => {
     const modifiedParlays = parlayMarkets.map((parlay) => {
         if ((isParlayOpen(parlay) || isParlayClaimable(parlay)) && isCanceledMarketInParlay(parlay)) {
             const canceledQuotes = getCanceledGamesPreviousQuotes(parlay);

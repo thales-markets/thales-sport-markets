@@ -39,7 +39,16 @@
                 "label": "Refer and earn",
                 "disbled-tooltip": "Connect wallet to generate a referral link.",
                 "enabled-tooltip": "Invite people to trade on overtime to earn fees from each trade they make."
-            }
+            },
+            "modal": {
+                "submit-button": "Представлять на рассмотрение",
+                "title": "Направление ID",
+                "copy-button": "Скопировать реферальную ссылку",
+                "description": "Выберите свой реферальный идентификатор"
+            },
+            "id-exists": "Идентификатор реферала уже существует",
+            "id-create-success": "Идентификатор реферала установлен успешно",
+            "your-referral-id": "Ваш реферальный идентификатор"
         },
         "swap": {
             "title": "Get USD",
@@ -856,7 +865,9 @@
                 "my-stats": "Моя статистика",
                 "incomplete": "Неполный",
                 "complete": "Полный",
-                "my-total-score": "Мой общий балл"
+                "my-total-score": "Мой общий балл",
+                "rank-volume": "Рейтинг по объему",
+                "rank-games": "Рейтинг по угаданным играм"
             },
             "round-3": "Элита 8",
             "round-1": "2-й раунд",

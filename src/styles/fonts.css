@@ -72,3 +72,8 @@
     font-family: 'NCAA';
     src: local('NCAA'), url(../assets/fonts/NCAA/NCAA_Colorado_Buffs_Boulder_Bold.ttf) format('truetype');
 }
+
+@font-face {
+    font-family: 'ThalesIcons';
+    src: local('ThalesIcons'), url(../assets/fonts/ThalesIcons/ThalesIcons.ttf) format('truetype');
+}

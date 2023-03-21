@@ -57,7 +57,16 @@
                 "label": "Refer and earn",
                 "disbled-tooltip": "Connect wallet to generate a referral link.",
                 "enabled-tooltip": "Invite people to trade on overtime to earn fees from each trade they make."
-            }
+            },
+            "id-exists": "Referral ID already exists",
+            "id-create-success": "Successfully set referral ID",
+            "modal": {
+                "title": "Referral ID",
+                "description": "Choose your Referral ID",
+                "submit-button": "Submit",
+                "copy-button": "Copy Referral link"
+            },
+            "your-referral-id": "Your Referral ID"
         },
         "swap": {
             "title": "Get USD",
@@ -641,7 +650,7 @@
         "total-earned": "Total earned",
         "total-trading-fees": "Total trading fees",
         "affiliate-leaderboard-table": {
-            "address": "Address",
+            "address": "Referral ID",
             "number-of-trades": "Trades",
             "total-volume": "Total volume",
             "first-transaction": "First transaction",
@@ -716,6 +725,11 @@
             "title": "Safu Discount Vault",
             "description": "<p>Buys positions that have more than {{odds}} odds and are available at any discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
             "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
+        },
+        "parlay-discount-vault": {
+            "title": "Parlay Discount Vault",
+            "description": "<p>Buys parlay tickets where each individual position in the ticket has at least a {{discount}} discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single parlay ticket per round, thus diversifying the risk into multiple parlay tickets that have a discount greater than {{odds}}.</p>"
         },
         "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
         "back-to-vaults": "Back to vaults",
@@ -875,11 +889,8 @@
             "round-5": "Final",
             "stats": {
                 "my-stats": "My stats",
-                "status": "Ranking status",
-                "rank": "Rank by bonus",
-                "complete": "Complete",
-                "incomplete": "Incomplete",
-                "place": "Place",
+                "rank-volume": "Rank by volume",
+                "rank-games": "Rank by guessed games",
                 "my-total-score": "My total score",
                 "points": "Points",
                 "bonus": "Bonus"

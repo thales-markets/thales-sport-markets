@@ -48,7 +48,16 @@
                 "label": "Empfehlen und Prämie sichern",
                 "disbled-tooltip": "Verbinden dein Wallet, um einen Empfehlungs-Link zu generieren.",
                 "enabled-tooltip": "Laden Freunde ein, mit Overtime zu traden, um mit jedem ihrerer Trades Gebühren zu verdienen."
-            }
+            },
+            "modal": {
+                "submit-button": "Einreichen",
+                "description": "Wählen Sie Ihre Empfehlungs-ID",
+                "copy-button": "Empfehlungslink kopieren",
+                "title": "Empfehlungs-ID"
+            },
+            "id-create-success": "Empfehlungs-ID erfolgreich festgelegt",
+            "id-exists": "Empfehlungs-ID existiert bereits",
+            "your-referral-id": "Ihre Empfehlungs-ID"
         },
         "swap": {
             "title": "USD erhalten",
@@ -850,7 +859,9 @@
                 "place": "Ort",
                 "complete": "Vollständig",
                 "incomplete": "Unvollständig",
-                "points": "Punkte"
+                "points": "Punkte",
+                "rank-volume": "Rang nach Volumen",
+                "rank-games": "Rang nach erratenen Spielen"
             },
             "round-4": "Finale 4",
             "round-1": "2. Runde",

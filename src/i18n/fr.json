@@ -27,7 +27,16 @@
                 "label": "Parrainage",
                 "disbled-tooltip": "Connecter votre portefeuille pour générer un lien de parrainage.",
                 "enabled-tooltip": "Invitez vos amis à rejoindre Overtime pour gagner des frais sur chaque position qu’ils prennent."
-            }
+            },
+            "modal": {
+                "submit-button": "Soumettre",
+                "copy-button": "Copier le lien de parrainage",
+                "title": "ID de parrainage",
+                "description": "Choisissez votre identifiant de parrainage"
+            },
+            "id-create-success": "L'ID de parrainage a bien été défini",
+            "id-exists": "L'ID de parrainage existe déjà",
+            "your-referral-id": "Votre identifiant de parrainage"
         },
         "swap": {
             "title": "Obtenir USD",
@@ -951,7 +960,9 @@
                 "status": "Statut",
                 "points": "Points",
                 "my-stats": "Mes stats",
-                "complete": "Complet"
+                "complete": "Complet",
+                "rank-games": "Classement par jeux devinés",
+                "rank-volume": "Classement par volume"
             },
             "round-5": "Final",
             "round-3": "Élite 8",
