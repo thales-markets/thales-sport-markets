@@ -770,6 +770,11 @@
             },
             "no-transactions": "No hay transacciones de usuario asociadas con esta bóveda en la ronda seleccionada.",
             "title": "Transacciones de usuario"
+        },
+        "parlay-discount-vault": {
+            "title": "Bóveda de descuento Parlay",
+            "description": "<p>Compra boletos parlay donde cada posición individual en el boleto tiene al menos un descuento de {{discount}}.</p><p> Todos los depósitos que ingresan a una ronda cuentan para el volumen de participación gamificado.</p>",
+            "risks": "<p>La bóveda tiene una tasa de utilización de {{utilizationRate}}, lo que garantiza que no se ponga en riesgo más de {{utilizationRate}} de lo depositado en una ronda. Además, de esos {{utilizationRate}}, se puede gastar un máximo de {{allocationLimitsPerMarketPerRound}} en un solo ticket parlay por ronda, diversificando así el riesgo en varios tickets parlay que tienen un descuento superior a {{odds}}.</p>"
         }
     },
     "parlay-leaderboard": {

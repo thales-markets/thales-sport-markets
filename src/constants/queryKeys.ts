@@ -100,6 +100,12 @@ export const QUERY_KEYS = {
             networkId,
         ],
         Stats: (networkId: NetworkId, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
+        VaultsAndLpTxs: (networkId: NetworkId, walletAddress: string) => [
+            'wallet',
+            'VaultsAndLpTxs',
+            networkId,
+            walletAddress,
+        ],
     },
     Quiz: {
         Leaderboard: () => ['quiz', 'leaderboard'],
@@ -117,6 +123,7 @@ export const QUERY_KEYS = {
         ],
         AllVaultsUserData: (walletAddress: string, networkId: NetworkId) => ['data', walletAddress, networkId],
         Trades: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'trades', networkId],
+        ParlayTrades: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'parlayTrades', networkId],
         PnL: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'pnl', networkId],
         UserTransactions: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'userTransactions', networkId],
     },

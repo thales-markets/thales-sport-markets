@@ -767,6 +767,11 @@
             },
             "title": "Benutzertransaktionen",
             "no-transactions": "Mit diesem Tresor sind in der ausgewählten Runde keine Benutzertransaktionen verbunden."
+        },
+        "parlay-discount-vault": {
+            "title": "Parlay-Rabatttresor",
+            "risks": "<p>Der Tresor hat eine Auslastungsrate von {{utilizationRate}}, was sicherstellt, dass nicht mehr als {{utilizationRate}} pro Runde eingezahlt werden. Darüber hinaus können von diesen {{utilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für ein einzelnes Parlay-Ticket pro Runde ausgegeben werden, wodurch das Risiko auf mehrere Parlay-Tickets verteilt wird, die einen Rabatt von mehr als {{odds}} haben.</p>",
+            "description": "<p>Kauft Parlay-Tickets, bei denen jede einzelne Position im Ticket mindestens einen Rabatt von {{discount}} hat.</p><p> Alle Einzahlungen, die in eine Runde eingehen, zählen zum gamifizierten Staking-Volumen.</p>"
         }
     },
     "parlay-leaderboard": {

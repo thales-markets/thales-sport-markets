@@ -16,6 +16,7 @@ import { NetworkIdByName } from 'utils/network';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
+import UserVaults from './components/UserVaults';
 
 const Profile: React.FC = () => {
     const navItemFromQuery = getQueryStringVal('nav-item');
@@ -42,6 +43,7 @@ const Profile: React.FC = () => {
             </NavigationWrapper>
             {navItems[0].id == navItem && <Positions searchText={searchText} />}
             {navItems[1].id == navItem && <TransactionsHistory searchText={searchText} />}
+            {navItems[2].id == navItem && <UserVaults />}
         </Container>
     );
 };
