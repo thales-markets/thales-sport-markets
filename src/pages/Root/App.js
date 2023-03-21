@@ -107,7 +107,8 @@ const App = () => {
                 }
             }
             try {
-                dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
+                // when switching network will throw Error: underlying network changed and then ignore network update
+                signer && signer.provider && (await signer.provider.getNetwork()).chainId;
 
                 // can't use wagmi provider when wallet exists in browser but locked, then use MM network if supported
                 const selectedProvider =
@@ -121,10 +122,13 @@ const App = () => {
                     signer,
                 });
 
+                dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
                 dispatch(setAppReady());
             } catch (e) {
                 dispatch(setAppReady());
-                console.log(e);
+                if (!e.toString().includes('Error: underlying network changed')) {
+                    console.log(e);
+                }
             }
         };
         init();
@@ -167,7 +171,7 @@ const App = () => {
             window.ethereum.on('chainChanged', (chainIdHex) => {
                 const chainId = parseInt(chainIdHex, 16);
                 if (!address) {
-                    // when wallet exists in browser but locked, change network manually
+                    // when wallet exists in browser but locked and changing network from MM update networkId manually
                     const supportedNetworkId = isNetworkSupported(chainId) ? chainId : DEFAULT_NETWORK_ID;
                     dispatch(updateNetworkSettings({ networkId: supportedNetworkId }));
                 }
