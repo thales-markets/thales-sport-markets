@@ -590,7 +590,13 @@
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
             "in-vaults": "In vaults"
-        }
+        },
+        "in-vault": "在保险库中",
+        "lp-title": "流动资金池",
+        "go-to-lp": "去LP",
+        "go-to-vault": "去金库",
+        "vaults": "金库/LP",
+        "in-lp": "提供流动资金"
     },
     "mint-world-cup-nft": {
         "get-thales": "获得泰雷兹",
@@ -768,6 +774,9 @@
             "title": "Parlay 折扣金库",
             "description": "<p>购买 parlay 彩票，其中彩票中的每个单独位置至少有 {{discount}} 折扣。</p><p>进入一轮的所有存款都计入游戏化的质押量。</p>",
             "risks": "<p>金库的利用率为 {{utilizationRate}}，确保不超过 {{utilizationRate}} 的存入一轮风险。此外，在这些 {{utilizationRate}} 中，每轮最多可以将 {{allocationLimitsPerMarketPerRound}} 花在一张连赢彩票上，从而将风险分散到折扣大于 {{odds}} 的多张连赢彩票上。</p>"
+        },
+        "LP": {
+            "title": "唱片"
         }
     },
     "parlay-leaderboard": {
