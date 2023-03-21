@@ -35,6 +35,14 @@ export const VAULT_MAP: Record<string, any> = {
             420: '',
         },
     },
+    'parlay-discount-vault': {
+        addresses: {
+            5: '',
+            10: '0x8285047F33c26c1Bf5B387f2b07F21A2aF29Ace2',
+            42: '',
+            420: '0x7e415D74eb5B01531B2059D1901aCe751c6B26B3',
+        },
+    },
 };
 
 export enum VaultTransaction {

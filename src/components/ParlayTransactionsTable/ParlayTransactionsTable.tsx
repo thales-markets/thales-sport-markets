@@ -1,15 +1,14 @@
 import PositionSymbol from 'components/PositionSymbol';
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
-import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { ParlaysMarket, PositionData, SportMarketInfo } from 'types/markets';
+import { ParlayMarket, ParlaysMarket, PositionData, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime, formatTxTimestamp } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
@@ -22,8 +21,8 @@ import {
     getParentMarketAddress,
     getSpreadTotalText,
     getSymbolText,
+    isParlayClaimable,
     isParlayOpen,
-    isParlayWon,
 } from 'utils/markets';
 import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
@@ -34,15 +33,16 @@ import { Position } from 'constants/options';
 import { ethers } from 'ethers';
 import { CollateralByNetworkId } from 'utils/network';
 import { buildMarketLink } from 'utils/routes';
-import SPAAnchor from 'components/SPAAnchor';
 import i18n from 'i18n';
+import SPAAnchor from 'components/SPAAnchor';
 
-const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) => {
+const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?: string }> = ({
+    parlayTx,
+    searchText,
+}) => {
     const { t } = useTranslation();
     const language = i18n.language;
     const selectedOddsType = useSelector(getOddsType);
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
@@ -55,18 +55,6 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
         payout: 0,
         onClose: () => {},
     });
-
-    const parlaysTxQuery = useParlayMarketsQuery(
-        isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
-        networkId,
-        undefined,
-        undefined,
-        {
-            enabled: isWalletConnected,
-            refetchInterval: false,
-        }
-    );
-    let parlayTx = parlaysTxQuery.isSuccess ? parlaysTxQuery.data : [];
 
     if (searchText && !isSearchTextWalletAddress) {
         parlayTx = parlayTx?.filter((item) => {
@@ -153,7 +141,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         accessor: 'timestamp',
                         sortable: false,
                         Cell: (cellProps: any) => {
-                            return <TableText>{formatTxTimestamp(cellProps.cell.value)}</TableText>;
+                            return <TableText>{formatTxTimestamp(Number(cellProps.cell.value))}</TableText>;
                         },
                     },
                     {
@@ -209,7 +197,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         Header: <>{t('profile.table.status')}</>,
                         sortable: false,
                         Cell: (cellProps: any) => {
-                            if (isParlayWon(cellProps.row.original)) {
+                            if (cellProps.row.original.won || isParlayClaimable(cellProps.row.original)) {
                                 return <StatusWrapper color="#5FC694">WON </StatusWrapper>;
                             } else {
                                 return isParlayOpen(cellProps.row.original) ? (
@@ -229,7 +217,6 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         },
                     ],
                 }}
-                isLoading={parlaysTxQuery?.isLoading}
                 data={parlayTx ?? []}
                 noResultsMessage={t('profile.messages.no-transactions')}
                 expandedRow={(row) => {
@@ -250,7 +237,6 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
 
                         const symbolText = getSymbolText(positionEnum, position.market);
                         const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
-
                         return (
                             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
                                 <SPAAnchor
@@ -268,6 +254,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                                         </ParlayRowTeam>
                                     </ParlayRowText>
                                 </SPAAnchor>
+
                                 <PositionSymbol
                                     symbolAdditionalText={{
                                         text: formatMarketOdds(selectedOddsType, quote),
@@ -464,6 +451,8 @@ const FlexCenter = styled.div`
 const ExpandedRowWrapper = styled.div`
     display: flex;
     padding-left: 30px;
+    max-width: 600px;
+    margin: auto;
     @media (max-width: 600px) {
         flex-direction: column;
         padding-left: 10px;
@@ -523,4 +512,4 @@ const TwitterWrapper = styled.div`
     }
 `;
 
-export default ParlayTransactions;
+export default ParlayTransactionsTable;
