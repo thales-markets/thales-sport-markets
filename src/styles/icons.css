@@ -205,6 +205,10 @@
     content: '\0073';
 }
 
+.icon--parlay-discount-vault::before {
+    content: '\007B';
+}
+
 .icon--strategy::before {
     content: '\0074';
 }
