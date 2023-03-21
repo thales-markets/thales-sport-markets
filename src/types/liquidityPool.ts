@@ -54,3 +54,16 @@ export type LiquidityPoolUserTransaction = {
 };
 
 export type LiquidityPoolUserTransactions = LiquidityPoolUserTransaction[];
+
+export type VaultsAndLiquidityPoolUserTransaction = {
+    name: string;
+    hash: string;
+    timestamp: number;
+    blockNumber: number;
+    type: string;
+    account: string;
+    amount: number;
+    round: number;
+};
+
+export type VaultsAndLiquidityPoolUserTransactions = VaultsAndLiquidityPoolUserTransaction[];

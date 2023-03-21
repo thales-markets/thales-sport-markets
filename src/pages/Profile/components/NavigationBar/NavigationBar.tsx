@@ -11,6 +11,10 @@ export const navItems = [
         id: 2,
         i18Label: 'profile.transaction-history',
     },
+    {
+        id: 3,
+        i18Label: 'profile.vaults',
+    },
 ];
 
 type NavigationBarProps = {
