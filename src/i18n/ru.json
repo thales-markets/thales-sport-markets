@@ -39,7 +39,16 @@
                 "label": "Refer and earn",
                 "disbled-tooltip": "Connect wallet to generate a referral link.",
                 "enabled-tooltip": "Invite people to trade on overtime to earn fees from each trade they make."
-            }
+            },
+            "modal": {
+                "submit-button": "Представлять на рассмотрение",
+                "title": "Направление ID",
+                "copy-button": "Скопировать реферальную ссылку",
+                "description": "Выберите свой реферальный идентификатор"
+            },
+            "id-exists": "Идентификатор реферала уже существует",
+            "id-create-success": "Идентификатор реферала установлен успешно",
+            "your-referral-id": "Ваш реферальный идентификатор"
         },
         "swap": {
             "title": "Get USD",
@@ -757,6 +766,11 @@
             },
             "no-transactions": "Нет пользовательских транзакций, связанных с этим хранилищем в выбранном раунде.",
             "title": "Пользовательские транзакции"
+        },
+        "parlay-discount-vault": {
+            "title": "Экспресс хранилище скидок",
+            "description": "<p>Покупает экспресс-билеты, каждая отдельная позиция в которых имеет скидку не менее {{discount}}.</p><p> Все депозиты, входящие в раунд, засчитываются в счет геймифицированного объема ставок.</p>",
+            "risks": "<p>Хранилище имеет коэффициент использования {{utilizationRate}}, который гарантирует, что риску подвергается не более {{utilizationRate}} депонированных в раунде средств. Кроме того, из этих {{utilizationRate}} максимум {{allocationLimitsPerMarketPerRound}} может быть потрачено на один экспресс-билет за раунд, что диверсифицирует риск на несколько экспресс-билетов со скидкой, превышающей {{odds}}.</p>"
         }
     },
     "parlay-leaderboard": {

@@ -42,4 +42,8 @@ export const buildReferralLink = (route: string, hash: string, search: string, r
     }
 };
 
+export const buildReffererLink = (reffererID: string) => {
+    return `${window.location.origin}${ifIpfsDeployment ? '/#' : ''}${ROUTES.Markets.Home}?referrerId=${reffererID}`;
+};
+
 export { history, ifIpfsDeployment };
