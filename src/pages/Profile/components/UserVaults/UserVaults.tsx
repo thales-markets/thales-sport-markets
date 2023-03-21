@@ -1,7 +1,8 @@
 import { VAULT_MAP } from 'constants/vault';
+import useUserVaultAndLpTransactions from 'queries/wallet/useUserVaultAndLpTransactions';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { getNetworkId } from 'redux/modules/wallet';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
@@ -10,7 +11,7 @@ import UserVault from './components/UserVault';
 
 const UserVaults: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const vaults = useMemo(() => {
         const arr = [];
         for (const key in VAULT_MAP) {
@@ -18,6 +19,9 @@ const UserVaults: React.FC = () => {
         }
         return arr;
     }, [networkId]);
+
+    const txQuery = useUserVaultAndLpTransactions(networkId, walletAddress, { enabled: walletAddress !== '' });
+    console.log(txQuery);
 
     return (
         <Wrapper>

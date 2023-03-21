@@ -75,4 +75,9 @@ export type VaultUserTransaction = {
     round: number;
 };
 
+export type VaultUserTransactionWithVaultName = VaultUserTransaction & {
+    name: string;
+};
+
 export type VaultUserTransactions = VaultUserTransaction[];
+export type VaultUserTransactionsWithVaultName = VaultUserTransactionWithVaultName[];
