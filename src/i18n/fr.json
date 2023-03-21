@@ -861,6 +861,11 @@
             },
             "title": "Opérations utilisateur",
             "no-transactions": "Aucune transaction utilisateur associée à ce coffre dans le tour sélectionné."
+        },
+        "parlay-discount-vault": {
+            "title": "Coffre-fort de remise Parlay",
+            "risks": "<p>Le coffre-fort a un taux d&#39;utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôts pour un tour ne sont mis en danger. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé pour un seul ticket Parlay par tour, diversifiant ainsi le risque en plusieurs tickets Parlay avec une réduction supérieure à {{odds}}.</p>",
+            "description": "<p>Achète des billets Parlay où chaque position individuelle dans le billet bénéficie d&#39;au moins une remise de {{discount}}.</p><p> Tous les dépôts qui entrent dans un tour comptent pour le volume de mise gamifié.</p>"
         }
     },
     "parlay-leaderboard": {

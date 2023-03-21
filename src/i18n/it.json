@@ -766,6 +766,11 @@
             },
             "title": "Transazioni utente",
             "no-transactions": "Nessuna transazione utente associata a questo vault nel round selezionato."
+        },
+        "parlay-discount-vault": {
+            "description": "<p>Acquista biglietti parlay in cui ogni singola posizione nel biglietto ha almeno uno sconto {{discount}}.</p><p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
+            "title": "Cassaforte scontata di Parlay",
+            "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso per un singolo biglietto parlay per round, diversificando così il rischio in più biglietti parlay che hanno uno sconto maggiore di {{odds}}.</p>"
         }
     },
     "parlay-leaderboard": {
