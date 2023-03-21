@@ -591,7 +591,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
     };
 
     const setTooltipTextMessageUsdAmount = useCallback(
-        (market: ParlaysMarket, value: string | number) => {
+        (market: ParlaysMarket, value: string | number, isMax: boolean) => {
             const toolTipRecords = tooltipTextUsdAmount;
 
             const positionOdds = roundNumberToDecimals(getPositionOdds(market));
@@ -614,7 +614,12 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
             } else if (ammQuote === 0) {
                 toolTipRecords[market.address] = t('markets.parlay.validation.availability');
                 setHasValidationError(true);
-            } else if (totalBuyIn > paymentTokenBalance) {
+            } else if (totalBuyIn > paymentTokenBalance && isMax) {
+                Object.keys(toolTipRecords).forEach((record) => {
+                    if (toolTipRecords[record] === t('markets.parlay.validation.no-funds')) {
+                        toolTipRecords[record] = '';
+                    }
+                });
                 toolTipRecords[market.address] = t('markets.parlay.validation.no-funds');
                 setHasValidationError(true);
             } else {
@@ -628,14 +633,23 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
     );
 
     useEffect(() => {
+        setHasValidationError(false);
+        setTooltipTextUsdAmount({});
         // No point in adding a tool tip to all vals. Lets just set the tooltip on the highest value
         const maxMsVal = multiSingleAmounts.reduce((max, ms) => (max.amountToBuy > ms.amountToBuy ? max : ms));
 
         const market = markets.find((m) => m.address === maxMsVal.sportMarketAddress);
         if (market !== undefined) {
-            setTooltipTextMessageUsdAmount(market, maxMsVal.amountToBuy);
+            setTooltipTextMessageUsdAmount(market, maxMsVal.amountToBuy, true);
         }
-    }, [isVoucherSelected, setTooltipTextMessageUsdAmount, usdAmountValue, multiSingleAmounts, markets]);
+    }, [
+        isVoucherSelected,
+        setTooltipTextMessageUsdAmount,
+        usdAmountValue,
+        multiSingleAmounts,
+        markets,
+        selectedStableIndex,
+    ]);
 
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
@@ -677,7 +691,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
             );
             resolve(true);
         }).then(() => {
-            setTooltipTextMessageUsdAmount(market, value);
+            setTooltipTextMessageUsdAmount(market, value, false);
         });
     };
     return (
