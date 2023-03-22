@@ -10,13 +10,12 @@ import { getIsAppReady } from 'redux/modules/app';
 import useVaultTradesQuery from 'queries/vault/useVaultTradesQuery';
 import { VaultTrades, VaultTrade, VaultUserTransactions, VaultUserTransaction } from 'types/vault';
 import SelectInput from 'components/SelectInput';
-import { VaultTradeStatus, VaultTransaction, VAULT_MAP } from 'constants/vault';
+import { isParlayVault, VaultTradeStatus, VaultTransaction } from 'constants/vault';
 import { formatCurrency, formatPercentageWithSign } from 'utils/formatters/number';
 import useVaultUserTransactionsQuery from 'queries/vault/useVaultUserTransactionsQuery';
 import UserTransactionsTable from '../UserTransactionsTable';
 import useParlayVaultTradesQuery from 'queries/vault/useParlayVaultTradesQuery';
 import ParlayTransactionsTable from 'components/ParlayTransactionsTable/ParlayTransactionsTable';
-import { NetworkId } from 'types/network';
 import TradesTable from '../TradesTable';
 import { ParlayMarketWithRound } from 'types/markets';
 import { isParlayClaimable, isParlayOpen } from 'utils/markets';
@@ -323,9 +322,5 @@ const OngoingPnl = styled.p<{ color: string }>`
     margin-left: 6px;
     color: ${(props) => props.color};
 `;
-
-const isParlayVault = (vaultAddress: string, networkId: NetworkId) => {
-    return vaultAddress === VAULT_MAP['parlay-discount-vault'].addresses[networkId];
-};
 
 export default Transactions;

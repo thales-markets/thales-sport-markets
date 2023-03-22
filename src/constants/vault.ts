@@ -1,3 +1,5 @@
+import { NetworkId } from 'types/network';
+
 export enum VaultTab {
     DEPOSIT = 'deposit',
     WITHDRAW = 'withdraw',
@@ -49,3 +51,7 @@ export enum VaultTransaction {
     TRADES_HISTORY = 'trades-hisotry',
     USER_TRANSACTIONS = 'user-transactions',
 }
+
+export const isParlayVault = (vaultAddress: string, networkId: NetworkId) => {
+    return vaultAddress === VAULT_MAP['parlay-discount-vault'].addresses[networkId];
+};
