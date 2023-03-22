@@ -1,7 +1,7 @@
 import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
-import { BetType, ENETPULSE_SPORTS } from 'constants/tags';
+import { BetType, ENETPULSE_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
 import { t } from 'i18next';
 import useEnetpulseSportMarketLiveResultQuery from 'queries/markets/useEnetpulseSportMarketLiveResultQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
@@ -132,7 +132,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 <>
                                     {liveResultInfo.tournamentName ? '| ' + liveResultInfo.tournamentName : ''}
                                     {liveResultInfo.tournamentRound ? ' | ' + liveResultInfo.tournamentRound : ''}
-                                    <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={12} marginLeft={2} />
+                                    {SPORTS_TAGS_MAP['Tennis'].includes(Number(market.tags[0])) && (
+                                        <Tooltip
+                                            overlay={t(`common.tennis-tooltip`)}
+                                            iconFontSize={12}
+                                            marginLeft={2}
+                                        />
+                                    )}
                                 </>
                             ) : (
                                 ''
