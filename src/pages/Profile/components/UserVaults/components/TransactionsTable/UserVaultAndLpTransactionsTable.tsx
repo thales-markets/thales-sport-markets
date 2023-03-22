@@ -27,7 +27,7 @@ export const UserVaultAndLpTransactionsTable: React.FC = () => {
     // @ts-ignore
     return (
         <Wrapper>
-            <Title>HISTORY</Title>
+            <Title>{t('markets.nav-menu.items.history')}</Title>
             <Table
                 tableHeadCellStyles={TableHeaderStyle}
                 tableRowCellStyles={TableRowStyle}

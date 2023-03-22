@@ -45,7 +45,7 @@ const useUserVaultAndLpTransactions = (
                     })
                 );
 
-                return vaultTx;
+                return vaultTx.sort((a, b) => a.timestamp - b.timestamp);
             } catch (e) {
                 console.log(e);
                 return [];

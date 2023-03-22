@@ -7,9 +7,10 @@ type SearchProps = {
     text: string;
     customPlaceholder?: string;
     handleChange: (event: any) => void;
+    disabled?: boolean;
 };
 
-const SearchField: React.FC<SearchProps> = ({ text, customPlaceholder, handleChange }) => {
+const SearchField: React.FC<SearchProps> = ({ text, customPlaceholder, handleChange, disabled = false }) => {
     const { t } = useTranslation();
     return (
         <Wrapper>
@@ -18,6 +19,7 @@ const SearchField: React.FC<SearchProps> = ({ text, customPlaceholder, handleCha
                 placeholder={customPlaceholder ? customPlaceholder : t('market.search-placeholder')}
                 value={text}
                 onChange={(event) => handleChange(event.target.value)}
+                disabled={disabled}
             />
             <IconWrapper>
                 <SearchIcon />
@@ -52,6 +54,10 @@ const Input = styled.input`
     }
     @media (max-width: 575px) {
         width: 100%;
+    }
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
     }
 `;
 

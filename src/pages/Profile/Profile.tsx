@@ -39,7 +39,12 @@ const Profile: React.FC = () => {
             <UserStats />
             <NavigationWrapper>
                 <NavigationBar itemSelected={navItem} onSelectItem={(index) => setNavItem(index)} />
-                <SearchField text={searchText} handleChange={(value) => setSearchText(value)} />
+
+                <SearchField
+                    disabled={navItems[2].id == navItem}
+                    text={searchText}
+                    handleChange={(value) => setSearchText(value)}
+                />
             </NavigationWrapper>
             {navItems[0].id == navItem && <Positions searchText={searchText} />}
             {navItems[1].id == navItem && <TransactionsHistory searchText={searchText} />}
