@@ -1,5 +1,5 @@
 import SPAAnchor from 'components/SPAAnchor';
-import ROUTES from 'constants/routes';
+import i18n from 'i18n';
 import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
+import { buildLpLink } from 'utils/routes';
 
 const UserLP: React.FC = () => {
     const { t } = useTranslation();
@@ -14,6 +15,7 @@ const UserLP: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const [lastValidData, setLastValidData] = useState<number>(0);
+    const language = i18n.language;
 
     const userLpQuery = useLiquidityPoolUserDataQuery(walletAddress, networkId, {
         enabled: isWalletConnected,
@@ -26,7 +28,7 @@ const UserLP: React.FC = () => {
     }, [userLpQuery.isSuccess, userLpQuery.data]);
 
     return (
-        <SPAAnchor href={ROUTES.LiquidityPool}>
+        <SPAAnchor href={buildLpLink(language)}>
             <VaultCard>
                 <TitleWrapper>
                     <Icon className={`icon icon--liquidity-pool`} />
