@@ -780,7 +780,8 @@
         },
         "LP": {
             "title": "LP"
-        }
+        },
+        "variables-parlay": "<p>Variabili:</p><ul><li> Tasso di utilizzo: {{utilizationRate}}</li><li> Limite inferiore del prezzo: {{priceLowerLimit}}</li><li> Limite massimo del prezzo: {{priceUpperLimit}}</li><li> Impatto Max Skew: {{skewImpactLimit}}</li><li> Allocazione massima su un singolo parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Deposito totale massimo: {{maxAllowedDeposit}}</li><li> Numero massimo di utenti nel vault: {{maxAllowedUsers}}</li><li> Importo minimo su una singola operazione: {{minTradeAmount}}</li><li> Deposito minimo: {{minDepositAmount}}</li><li> Durata round: {{roundLength}} giorni</li></ul>"
     },
     "parlay-leaderboard": {
         "title": "Classifica degli incentivi Parlay",
