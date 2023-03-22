@@ -593,7 +593,13 @@
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
             "in-vaults": "In vaults"
-        }
+        },
+        "vaults": "Хранилища/LP",
+        "lp-title": "Пул ликвидности",
+        "go-to-vault": "Перейти в хранилище",
+        "in-vault": "В хранилище",
+        "in-lp": "Предоставляемая ликвидность",
+        "go-to-lp": "Перейти на LP"
     },
     "mint-world-cup-nft": {
         "zebro-campaign": "Кампания Зебра ФИФА",
@@ -771,7 +777,11 @@
             "title": "Экспресс хранилище скидок",
             "description": "<p>Покупает экспресс-билеты, каждая отдельная позиция в которых имеет скидку не менее {{discount}}.</p><p> Все депозиты, входящие в раунд, засчитываются в счет геймифицированного объема ставок.</p>",
             "risks": "<p>Хранилище имеет коэффициент использования {{utilizationRate}}, который гарантирует, что риску подвергается не более {{utilizationRate}} депонированных в раунде средств. Кроме того, из этих {{utilizationRate}} максимум {{allocationLimitsPerMarketPerRound}} может быть потрачено на один экспресс-билет за раунд, что диверсифицирует риск на несколько экспресс-билетов со скидкой, превышающей {{odds}}.</p>"
-        }
+        },
+        "LP": {
+            "title": "LP"
+        },
+        "variables-parlay": "<p>Переменные:</p><ul><li> Коэффициент использования: {{utilizationRate}}</li><li> Нижний предел цены: {{priceLowerLimit}}</li><li> Верхний предел цены: {{priceUpperLimit}}</li><li> Максимальное влияние перекоса: {{skewImpactLimit}}</li><li> Максимальное распределение на один экспресс: {{allocationLimitsPerMarketPerRound}}</li><li> Максимальный общий депозит: {{maxAllowedDeposit}}</li><li> Максимальное количество пользователей в хранилище: {{maxAllowedUsers}}</li><li> Минимальная сумма для одной сделки: {{minTradeAmount}}</li><li> Минимальный депозит: {{minDepositAmount}}</li><li> Продолжительность раунда: {{roundLength}} дней</li></ul>"
     },
     "parlay-leaderboard": {
         "title": "Таблица поощрений Parlay",
