@@ -777,7 +777,8 @@
         },
         "LP": {
             "title": "LP"
-        }
+        },
+        "variables-parlay": "<p>Variables:</p><ul><li> Tasa de utilización: {{utilizationRate}}</li><li> Límite inferior de precio: {{priceLowerLimit}}</li><li> Límite superior de precio: {{priceUpperLimit}}</li><li> Impacto sesgado máximo: {{skewImpactLimit}}</li><li> Asignación máxima en un único parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Depósito total máximo: {{maxAllowedDeposit}}</li><li> Usuarios máximos en la bóveda: {{maxAllowedUsers}}</li><li> Monto mínimo en una sola operación: {{minTradeAmount}}</li><li> Depósito mínimo: {{minDepositAmount}}</li><li> Duración de la ronda: {{roundLength}} días</li></ul>"
     },
     "parlay-leaderboard": {
         "title": "Leaderboard de incentivos en Parlays",

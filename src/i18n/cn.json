@@ -777,7 +777,8 @@
         },
         "LP": {
             "title": "唱片"
-        }
+        },
+        "variables-parlay": "<p>变量：</p><ul><li>利用率：{{utilizationRate}}</li><li>价格下限：{{priceLowerLimit}}</li><li>价格上限：{{priceUpperLimit}}</li><li>最大偏斜影响：{{skewImpactLimit}}</li><li>单个 parlay 的最大分配：{{allocationLimitsPerMarketPerRound}}</li><li>最大总存款：{{maxAllowedDeposit}}</li><li>保险库中的最大用户数：{{maxAllowedUsers}}</li><li>单笔交易的最低金额：{{minTradeAmount}}</li><li>最低存款：{{minDepositAmount}}</li><li>回合持续时间：{{roundLength}} 天</li></ul>"
     },
     "parlay-leaderboard": {
         "title": "Parlay 奖励排行榜",

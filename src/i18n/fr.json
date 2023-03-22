@@ -875,7 +875,8 @@
         },
         "LP": {
             "title": "LP"
-        }
+        },
+        "variables-parlay": "<p>Variable :</p><ul><li> Taux d&#39;utilisation : {{utilizationRate}}</li><li> Limite inférieure de prix : {{priceLowerLimit}}</li><li> Limite supérieure de prix : {{priceUpperLimit}}</li><li> Impact d&#39;inclinaison maximum : {{skewImpactLimit}}</li><li> Allocation maximale sur un seul parlay : {{allocationLimitsPerMarketPerRound}}</li><li> Dépôt total maximum : {{maxAllowedDeposit}}</li><li> Nombre maximum d&#39;utilisateurs dans le coffre : {{maxAllowedUsers}}</li><li> Montant minimum sur une seule transaction : {{minTradeAmount}}</li><li> Dépôt minimum : {{minDepositAmount}}</li><li> Durée du cycle : {{roundLength}} jours</li></ul>"
     },
     "parlay-leaderboard": {
         "title": "Classement des récompenses de combinés",

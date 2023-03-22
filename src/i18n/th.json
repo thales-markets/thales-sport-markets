@@ -773,7 +773,8 @@
         },
         "LP": {
             "title": "หจก"
-        }
+        },
+        "variables-parlay": "<p>ตัวแปร:</p><ul><li> อัตราการใช้: {{utilizationRate}}</li><li> ขีดจำกัดล่างของราคา: {{priceLowerLimit}}</li><li> ขีดจำกัดสูงสุดของราคา: {{priceUpperLimit}}</li><li> ผลกระทบเอียงสูงสุด: {{skewImpactLimit}}</li><li> การจัดสรรสูงสุดในพาร์เลย์เดียว: {{allocationLimitsPerMarketPerRound}}</li><li> เงินฝากทั้งหมดสูงสุด: {{maxAllowedDeposit}}</li><li> ผู้ใช้สูงสุดในห้องนิรภัย: {{maxAllowedUsers}}</li><li> จำนวนเงินขั้นต่ำในการซื้อขายครั้งเดียว: {{minTradeAmount}}</li><li> เงินฝากขั้นต่ำ: {{minDepositAmount}}</li><li> ระยะเวลาของรอบ: {{roundLength}} วัน</li></ul>"
     },
     "parlay-leaderboard": {
         "title": "ลีดเดอร์บอร์ดสิ่งจูงใจ Parlay",

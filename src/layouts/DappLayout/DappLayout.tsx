@@ -33,10 +33,11 @@ const DappLayout: React.FC = ({ children }) => {
         if (queryParams.referralId) {
             setReferralId(queryParams.referralId);
         }
-        if (queryParams.referrerId) {
+        const referrerId = queryParams.referrerId;
+        if (referrerId) {
             const fetchIdAddress = async () => {
                 const response = await axios.get(
-                    `${generalConfig.API_URL}/get-refferer-id-address/${queryParams.referrerId}`
+                    `${generalConfig.API_URL}/get-refferer-id-address/${encodeURIComponent(referrerId)}`
                 );
                 if (response.data) {
                     setReferralId(response.data);
