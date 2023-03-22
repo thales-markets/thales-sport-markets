@@ -192,8 +192,8 @@ export const TAGS_LIST: Tags = [
     },
     {
         id: 18977,
-        label: 'CS:GO',
-        logo: `/logos/Tennis/atp.png`,
+        label: 'CS GO',
+        logo: `/logos/csgo/csgo.png`,
         logoClass: 'icon-league league--atp',
         favourite: false,
         hidden: false,
@@ -202,7 +202,7 @@ export const TAGS_LIST: Tags = [
     {
         id: 18983,
         label: 'DOTA 2',
-        logo: `/logos/Tennis/atp.png`,
+        logo: `/logos/dota2/dota2.png`,
         logoClass: 'icon-league league--atp',
         favourite: false,
         hidden: false,
@@ -211,7 +211,7 @@ export const TAGS_LIST: Tags = [
     {
         id: 19138,
         label: 'LOL',
-        logo: `/logos/Tennis/atp.png`,
+        logo: `/logos/lol/lol.png`,
         logoClass: 'icon-league league--atp',
         favourite: false,
         hidden: false,
