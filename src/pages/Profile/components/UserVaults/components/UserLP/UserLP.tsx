@@ -1,7 +1,7 @@
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
 import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -13,12 +13,17 @@ const UserLP: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const [lastValidData, setLastValidData] = useState<number>(0);
 
-    const userVaultDataQuery = useLiquidityPoolUserDataQuery(walletAddress, networkId, {
+    const userLpQuery = useLiquidityPoolUserDataQuery(walletAddress, networkId, {
         enabled: isWalletConnected,
     });
 
-    const vaultAllocation = userVaultDataQuery.isSuccess ? userVaultDataQuery.data?.balanceTotal : 0;
+    useEffect(() => {
+        if (userLpQuery.isSuccess && userLpQuery.data) {
+            setLastValidData(userLpQuery.data?.balanceTotal);
+        }
+    }, [userLpQuery.isSuccess, userLpQuery.data]);
 
     return (
         <SPAAnchor href={ROUTES.LiquidityPool}>
@@ -30,7 +35,7 @@ const UserLP: React.FC = () => {
                 <ContentWrapper>
                     <TextWrapper>
                         <PreLabel>{t('profile.in-lp')}</PreLabel>
-                        <Value>{vaultAllocation?.toFixed(2)}</Value>
+                        <Value>{lastValidData?.toFixed(2)}</Value>
                         <PostLabel>USD</PostLabel>
                     </TextWrapper>
                     <Button>{t('profile.go-to-lp')}</Button>
@@ -134,6 +139,7 @@ const Button = styled.button`
     text-align: center;
     letter-spacing: 0.025em;
     cursor: pointer;
+    border: none;
 `;
 
 export default UserLP;

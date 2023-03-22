@@ -593,7 +593,13 @@
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
             "in-vaults": "In vaults"
-        }
+        },
+        "vaults": "ห้องนิรภัย/LP",
+        "lp-title": "สระว่ายน้ำสภาพคล่อง",
+        "in-vault": "ในห้องนิรภัย",
+        "go-to-vault": "ไปที่ห้องนิรภัย",
+        "go-to-lp": "ไปที่หจก",
+        "in-lp": "มีสภาพคล่อง"
     },
     "mint-world-cup-nft": {
         "incentives": "สิ่งจูงใจ",
@@ -771,7 +777,11 @@
             "description": "<p>ซื้อตั๋วพาร์เลย์โดยแต่ละตำแหน่งในตั๋วมีส่วนลดอย่างน้อย {{discount}}</p><p> เงินฝากทั้งหมดที่เข้าสู่รอบจะนับรวมกับปริมาณการเดิมพันแบบเกม</p>",
             "risks": "<p>ห้องนิรภัยมีอัตราการใช้งาน {{utilizationRate}} ซึ่งรับรองว่าไม่เกิน {{utilizationRate}} ของเงินฝากในแต่ละรอบที่มีความเสี่ยง นอกจากนี้ จาก {{utilizationRate}} เหล่านั้น คุณสามารถใช้จ่ายได้สูงสุด {{allocationLimitsPerMarketPerRound}} กับตั๋วพาร์เลย์ใบเดียวต่อรอบ ดังนั้นจึงเป็นการกระจายความเสี่ยงไปสู่ตั๋วพาร์เลย์หลายใบที่มีส่วนลดมากกว่า {{odds}}</p>",
             "title": "ห้องเก็บส่วนลด Parlay"
-        }
+        },
+        "LP": {
+            "title": "หจก"
+        },
+        "variables-parlay": "<p>ตัวแปร:</p><ul><li> อัตราการใช้: {{utilizationRate}}</li><li> ขีดจำกัดล่างของราคา: {{priceLowerLimit}}</li><li> ขีดจำกัดสูงสุดของราคา: {{priceUpperLimit}}</li><li> ผลกระทบเอียงสูงสุด: {{skewImpactLimit}}</li><li> การจัดสรรสูงสุดในพาร์เลย์เดียว: {{allocationLimitsPerMarketPerRound}}</li><li> เงินฝากทั้งหมดสูงสุด: {{maxAllowedDeposit}}</li><li> ผู้ใช้สูงสุดในห้องนิรภัย: {{maxAllowedUsers}}</li><li> จำนวนเงินขั้นต่ำในการซื้อขายครั้งเดียว: {{minTradeAmount}}</li><li> เงินฝากขั้นต่ำ: {{minDepositAmount}}</li><li> ระยะเวลาของรอบ: {{roundLength}} วัน</li></ul>"
     },
     "parlay-leaderboard": {
         "title": "ลีดเดอร์บอร์ดสิ่งจูงใจ Parlay",

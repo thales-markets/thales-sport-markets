@@ -594,7 +594,13 @@
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
             "in-vaults": "In vaults"
-        }
+        },
+        "lp-title": "Liquiditätspool",
+        "in-lp": "Liquidität bereitgestellt",
+        "in-vault": "Im Tresor",
+        "go-to-vault": "Gehen Sie zum Tresor",
+        "vaults": "Gewölbe/LP",
+        "go-to-lp": "Gehen Sie zu LP"
     },
     "mint-world-cup-nft": {
         "eligible-text-2": "Prägen Sie ein Zebro Ihrer Lieblingsnationalmannschaft und qualifizieren Sie sich für 50.000 OP & 30.000 THALES-Bonusprämien!",
@@ -772,7 +778,11 @@
             "title": "Parlay-Rabatttresor",
             "risks": "<p>Der Tresor hat eine Auslastungsrate von {{utilizationRate}}, was sicherstellt, dass nicht mehr als {{utilizationRate}} pro Runde eingezahlt werden. Darüber hinaus können von diesen {{utilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für ein einzelnes Parlay-Ticket pro Runde ausgegeben werden, wodurch das Risiko auf mehrere Parlay-Tickets verteilt wird, die einen Rabatt von mehr als {{odds}} haben.</p>",
             "description": "<p>Kauft Parlay-Tickets, bei denen jede einzelne Position im Ticket mindestens einen Rabatt von {{discount}} hat.</p><p> Alle Einzahlungen, die in eine Runde eingehen, zählen zum gamifizierten Staking-Volumen.</p>"
-        }
+        },
+        "LP": {
+            "title": "LP"
+        },
+        "variables-parlay": "<p>Variablen:</p><ul><li> Nutzungsrate: {{utilizationRate}}</li><li> Preisuntergrenze: {{priceLowerLimit}}</li><li> Preisobergrenze: {{priceUpperLimit}}</li><li> Max. Skew-Auswirkung: {{skewImpactLimit}}</li><li> Maximale Zuweisung für eine einzelne Parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Maximale Gesamteinzahlung: {{maxAllowedDeposit}}</li><li> Max. Benutzer im Tresor: {{maxAllowedUsers}}</li><li> Mindestbetrag für einen einzelnen Trade: {{minTradeAmount}}</li><li> Mindesteinzahlung: {{minDepositAmount}}</li><li> Rundendauer: {{roundLength}} Tage</li></ul>"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives-Rangliste",

@@ -45,7 +45,7 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import SPAAnchor from 'components/SPAAnchor';
 import { Info } from 'pages/Markets/Home/Home';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { VaultTab, VAULT_MAP } from 'constants/vault';
+import { isParlayVault, VaultTab, VAULT_MAP } from 'constants/vault';
 import NumericInput from 'components/fields/NumericInput';
 import { getIsAppReady } from 'redux/modules/app';
 import { UserVaultData, VaultData } from 'types/vault';
@@ -448,7 +448,11 @@ const Vault: React.FC<VaultProps> = (props) => {
                                     }}
                                 />
                                 <Trans
-                                    i18nKey={`vault.variables`}
+                                    i18nKey={
+                                        isParlayVault(vaultAddress, networkId)
+                                            ? `vault.variables-parlay`
+                                            : `vault.variables`
+                                    }
                                     components={{
                                         p: <p />,
                                         ul: <ul />,

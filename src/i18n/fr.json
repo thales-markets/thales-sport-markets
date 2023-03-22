@@ -695,7 +695,13 @@
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
             "in-vaults": "In vaults"
-        }
+        },
+        "vaults": "Voûtes/LP",
+        "in-lp": "Liquidité fournie",
+        "in-vault": "Au coffre",
+        "go-to-lp": "Aller à LP",
+        "go-to-vault": "Aller au coffre",
+        "lp-title": "Pool de liquidité"
     },
     "mint-world-cup-nft": {
         "no": "Non",
@@ -873,7 +879,11 @@
             "title": "Coffre-fort de remise Parlay",
             "risks": "<p>Le coffre-fort a un taux d&#39;utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôts pour un tour ne sont mis en danger. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé pour un seul ticket Parlay par tour, diversifiant ainsi le risque en plusieurs tickets Parlay avec une réduction supérieure à {{odds}}.</p>",
             "description": "<p>Achète des billets Parlay où chaque position individuelle dans le billet bénéficie d&#39;au moins une remise de {{discount}}.</p><p> Tous les dépôts qui entrent dans un tour comptent pour le volume de mise gamifié.</p>"
-        }
+        },
+        "LP": {
+            "title": "LP"
+        },
+        "variables-parlay": "<p>Variable :</p><ul><li> Taux d&#39;utilisation : {{utilizationRate}}</li><li> Limite inférieure de prix : {{priceLowerLimit}}</li><li> Limite supérieure de prix : {{priceUpperLimit}}</li><li> Impact d&#39;inclinaison maximum : {{skewImpactLimit}}</li><li> Allocation maximale sur un seul parlay : {{allocationLimitsPerMarketPerRound}}</li><li> Dépôt total maximum : {{maxAllowedDeposit}}</li><li> Nombre maximum d&#39;utilisateurs dans le coffre : {{maxAllowedUsers}}</li><li> Montant minimum sur une seule transaction : {{minTradeAmount}}</li><li> Dépôt minimum : {{minDepositAmount}}</li><li> Durée du cycle : {{roundLength}} jours</li></ul>"
     },
     "parlay-leaderboard": {
         "title": "Classement des récompenses de combinés",
