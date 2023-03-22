@@ -26,7 +26,7 @@ import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveRes
 import Web3 from 'web3';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import { getNetworkId } from 'redux/modules/wallet';
-import useEnetpulseSportMarketLiveResultQuery from 'queries/markets/useEnetpulseSportMarketLiveResultQuery';
+import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import { NetworkIdByName } from 'utils/network';
 
 type MarketDetailsPropType = {
@@ -89,7 +89,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         enabled: isAppReady && !isEnetpulseSport,
     });
 
-    const useEnetpulseLiveResultQuery = useEnetpulseSportMarketLiveResultQuery(gameIdString, gameDate, market.tags[0], {
+    const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.tags[0], {
         enabled: isAppReady && isEnetpulseSport,
     });
 

@@ -9,7 +9,7 @@ import { ethers } from 'ethers';
 import i18n from 'i18n';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
-import useEnetpulseSportMarketLiveResultQuery from 'queries/markets/useEnetpulseSportMarketLiveResultQuery';
+import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useMarketTransactionsQuery from 'queries/markets/useMarketTransactionsQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import { useTranslation } from 'react-i18next';
@@ -134,7 +134,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isMobile,
     });
 
-    const useEnetpulseLiveResultQuery = useEnetpulseSportMarketLiveResultQuery(
+    const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(
         position.market.id,
         gameDate,
         position.market.tags[0],
