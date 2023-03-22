@@ -797,6 +797,7 @@
             "ongoing-pnl": "Ongoing PnL"
         },
         "user-transactions": {
+            "name": "Name",
             "title": "User transactions",
             "no-transactions": "No user transactions associated with this vault in the selected round.",
             "type": {

@@ -20,7 +20,6 @@ export const UserVaultAndLpTransactionsTable: React.FC = () => {
         enabled: walletAddress !== '',
         refetchInterval: false,
     });
-    console.log(txQuery);
 
     const transactions = txQuery.isSuccess ? txQuery.data : [];
 
@@ -45,7 +44,7 @@ export const UserVaultAndLpTransactionsTable: React.FC = () => {
                         sortable: true,
                     },
                     {
-                        Header: <>Name</>,
+                        Header: <>{t(`vault.user-transactions.name`)}</>,
                         accessor: 'name',
                         Cell: (
                             cellProps: CellProps<
@@ -91,14 +90,18 @@ export const UserVaultAndLpTransactionsTable: React.FC = () => {
                         sortable: true,
                     },
                     {
-                        Header: <>ROUND</>,
+                        Header: <>{t('vault.trades-history.round-label')}</>,
                         accessor: 'round',
                         Cell: (
                             cellProps: CellProps<
                                 VaultsAndLiquidityPoolUserTransaction,
                                 VaultsAndLiquidityPoolUserTransaction['round']
                             >
-                        ) => <TableText>ROUND {cellProps.cell.value}</TableText>,
+                        ) => (
+                            <TableText>
+                                {t('vault.trades-history.round-label')} {cellProps.cell.value}
+                            </TableText>
+                        ),
                         width: 150,
                     },
                     {
