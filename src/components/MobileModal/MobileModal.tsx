@@ -12,7 +12,7 @@ ReactModal.setAppElement('#root');
 
 const customStyles = {
     content: {
-        top: '60%',
+        top: '46%',
         left: '50%',
         right: 'auto',
         bottom: 'auto',
@@ -22,7 +22,6 @@ const customStyles = {
         background: 'transparent',
         border: 'none',
         width: '320px',
-        height: '100%',
         overflow: 'visible',
     },
     overlay: {
@@ -55,8 +54,7 @@ const Container = styled.div`
     overflow: auto;
     border-radius: 23px;
     overflow-y: auto;
-    max-height: 90vh;
-    height: fit-content;
+    max-height: 80vh;
 `;
 
 const Header = styled(FlexDivRow)`
