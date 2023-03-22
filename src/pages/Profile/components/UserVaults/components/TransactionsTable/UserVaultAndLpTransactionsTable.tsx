@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CellProps } from 'react-table';
 import { formatTxTimestamp } from 'utils/formatters/date';
@@ -9,7 +9,7 @@ import useUserVaultAndLpTransactions from 'queries/wallet/useUserVaultAndLpTrans
 import { useSelector } from 'react-redux';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { VaultsAndLiquidityPoolUserTransaction } from 'types/liquidityPool';
+import { VaultsAndLiquidityPoolUserTransaction, VaultsAndLiquidityPoolUserTransactions } from 'types/liquidityPool';
 import styled from 'styled-components';
 
 export const UserVaultAndLpTransactionsTable: React.FC = () => {
@@ -18,10 +18,13 @@ export const UserVaultAndLpTransactionsTable: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const txQuery = useUserVaultAndLpTransactions(networkId, walletAddress, {
         enabled: walletAddress !== '',
-        refetchInterval: false,
     });
 
-    const transactions = txQuery.isSuccess ? txQuery.data : [];
+    const [lastValidData, setLastValidData] = useState<VaultsAndLiquidityPoolUserTransactions>([]);
+
+    useEffect(() => {
+        if (txQuery.isSuccess && txQuery.data) setLastValidData(txQuery.data);
+    }, [txQuery]);
 
     // @ts-ignore
     return (
@@ -116,8 +119,8 @@ export const UserVaultAndLpTransactionsTable: React.FC = () => {
                         width: 150,
                     },
                 ]}
-                data={transactions}
-                isLoading={txQuery.isFetching}
+                data={lastValidData}
+                isLoading={lastValidData.length === 0 && txQuery.isFetching}
                 noResultsMessage={t('profile.messages.no-transactions')}
                 tableRowStyles={{ minHeight: '50px' }}
             />
