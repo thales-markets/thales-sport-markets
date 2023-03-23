@@ -51,7 +51,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { UserVaultData, VaultData } from 'types/vault';
 import useVaultDataQuery from 'queries/vault/useVaultDataQuery';
 import { formatCurrencyWithSign, formatPercentage, formatCurrency } from 'utils/formatters/number';
-import { PAYMENT_CURRENCY, USD_SIGN } from 'constants/currency';
+import { USD_SIGN } from 'constants/currency';
 import TimeRemaining from 'components/TimeRemaining';
 import useUserVaultDataQuery from 'queries/vault/useUserVaultDataQuery';
 import networkConnector from 'utils/networkConnector';
@@ -68,6 +68,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import vaultContract from 'utils/contracts/sportVaultContract';
 import Toggle from 'components/Toggle/Toggle';
 import Tooltip from 'components/Tooltip';
+import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 
 type VaultProps = RouteComponentProps<{
     vaultId: string;
@@ -219,7 +220,11 @@ const Vault: React.FC<VaultProps> = (props) => {
                 if (txResult && txResult.transactionHash) {
                     toast.update(
                         id,
-                        getSuccessToastOptions(t('market.toast-message.approve-success', { token: PAYMENT_CURRENCY }))
+                        getSuccessToastOptions(
+                            t('market.toast-message.approve-success', {
+                                token: getDefaultColleteralForNetwork(networkId),
+                            })
+                        )
                     );
                     setIsAllowing(false);
                 }
@@ -327,9 +332,11 @@ const Vault: React.FC<VaultProps> = (props) => {
             return (
                 <SubmitButton disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
                     {!isAllowing
-                        ? t('common.enable-wallet-access.approve-label', { currencyKey: PAYMENT_CURRENCY })
+                        ? t('common.enable-wallet-access.approve-label', {
+                              currencyKey: getDefaultColleteralForNetwork(networkId),
+                          })
                         : t('common.enable-wallet-access.approve-progress-label', {
-                              currencyKey: PAYMENT_CURRENCY,
+                              currencyKey: getDefaultColleteralForNetwork(networkId),
                           })}
                 </SubmitButton>
             );
@@ -616,7 +623,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                                                 disabled={isDepositAmountInputDisabled}
                                                 onChange={(_, value) => setAmount(value)}
                                                 placeholder={t('vault.deposit-amount-placeholder')}
-                                                currencyLabel={PAYMENT_CURRENCY}
+                                                currencyLabel={getDefaultColleteralForNetwork(networkId)}
                                             />
                                         </ValidationTooltip>
                                     </InputContainer>
@@ -806,7 +813,7 @@ const Vault: React.FC<VaultProps> = (props) => {
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={amount}
-                    tokenSymbol={PAYMENT_CURRENCY}
+                    tokenSymbol={getDefaultColleteralForNetwork(networkId)}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}
