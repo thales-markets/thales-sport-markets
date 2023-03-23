@@ -866,7 +866,8 @@
                 "withdrawalRequest": "Demande de retrait"
             },
             "title": "Opérations utilisateur",
-            "no-transactions": "Aucune transaction utilisateur associée à ce coffre dans le tour sélectionné."
+            "no-transactions": "Aucune transaction utilisateur associée à ce coffre dans le tour sélectionné.",
+            "name": "Nom"
         },
         "parlay-discount-vault": {
             "title": "Coffre-fort de remise Parlay",

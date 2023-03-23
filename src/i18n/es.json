@@ -768,7 +768,8 @@
                 "claim": "Reclamo de Retiro"
             },
             "no-transactions": "No hay transacciones de usuario asociadas con esta bóveda en la ronda seleccionada.",
-            "title": "Transacciones de usuario"
+            "title": "Transacciones de usuario",
+            "name": "Nombre"
         },
         "parlay-discount-vault": {
             "title": "Bóveda de descuento Parlay",

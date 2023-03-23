@@ -8,7 +8,7 @@ import UserStats from './components/UserStats';
 import { getQueryStringVal } from 'utils/useQueryParams';
 import SearchField from './components/SearchField';
 import { Info } from 'pages/Markets/Home/Home';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import SPAAnchor from 'components/SPAAnchor';
 import { buildHref } from 'utils/routes';
 import ROUTES from 'constants/routes';
@@ -19,6 +19,7 @@ import { RootState } from 'redux/rootReducer';
 import UserVaults from './components/UserVaults';
 
 const Profile: React.FC = () => {
+    const { t } = useTranslation();
     const navItemFromQuery = getQueryStringVal('nav-item');
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [navItem, setNavItem] = useState<number>(navItemFromQuery ? Number(navItemFromQuery) : 1);
@@ -42,6 +43,7 @@ const Profile: React.FC = () => {
 
                 <SearchField
                     disabled={navItems[2].id == navItem}
+                    customPlaceholder={t('profile.search-field')}
                     text={searchText}
                     handleChange={(value) => setSearchText(value)}
                 />
