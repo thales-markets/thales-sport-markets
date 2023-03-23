@@ -220,7 +220,8 @@
                 "motogp": "MotoGP",
                 "soon": "Bald noch mehr Sportarten!",
                 "motosport": "Motorsport",
-                "favourites": "Favoriten"
+                "favourites": "Favoriten",
+                "esports": "Sport"
             },
             "all": "Alle",
             "datepicker": {
@@ -765,7 +766,8 @@
                 "claim": "Rücktrittsanspruch"
             },
             "title": "Benutzertransaktionen",
-            "no-transactions": "Mit diesem Tresor sind in der ausgewählten Runde keine Benutzertransaktionen verbunden."
+            "no-transactions": "Mit diesem Tresor sind in der ausgewählten Runde keine Benutzertransaktionen verbunden.",
+            "name": "Name"
         },
         "parlay-discount-vault": {
             "title": "Parlay-Rabatttresor",

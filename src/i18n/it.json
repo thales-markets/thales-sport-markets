@@ -220,7 +220,8 @@
                 "motogp": "MotoGP",
                 "soon": "More sports coming soon!",
                 "motosport": "Motosport",
-                "favourites": "Preferiti"
+                "favourites": "Preferiti",
+                "esports": "Esport"
             },
             "all": "All",
             "datepicker": {
@@ -771,7 +772,8 @@
                 "claim": "Richiesta di recesso"
             },
             "title": "Transazioni utente",
-            "no-transactions": "Nessuna transazione utente associata a questo vault nel round selezionato."
+            "no-transactions": "Nessuna transazione utente associata a questo vault nel round selezionato.",
+            "name": "Nome"
         },
         "parlay-discount-vault": {
             "description": "<p>Acquista biglietti parlay in cui ogni singola posizione nel biglietto ha almeno uno sconto {{discount}}.</p><p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
