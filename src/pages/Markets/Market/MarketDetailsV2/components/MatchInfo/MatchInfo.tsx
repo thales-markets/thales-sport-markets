@@ -20,6 +20,7 @@ import { MarketData, SportMarketLiveResult } from 'types/markets';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { convertFinalResultToResultType, isFifaWCGame } from 'utils/markets';
+import { SPORTS_TAGS_MAP } from 'constants/tags';
 
 type MatchInfoPropsType = {
     market: MarketData;
@@ -95,7 +96,9 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                             <>
                                 {liveResultInfo.tournamentName ? liveResultInfo.tournamentName : ''}
                                 {liveResultInfo.tournamentRound ? ' | ' + liveResultInfo.tournamentRound : ''}
-                                <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={14} marginLeft={2} />{' '}
+                                {SPORTS_TAGS_MAP['Tennis'].includes(Number(market.tags[0])) && (
+                                    <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={14} marginLeft={2} />
+                                )}
                             </>
                         ) : (
                             ''

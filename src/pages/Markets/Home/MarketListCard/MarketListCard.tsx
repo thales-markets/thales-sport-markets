@@ -1,9 +1,9 @@
 import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
-import { BetType, ENETPULSE_SPORTS } from 'constants/tags';
+import { BetType, ENETPULSE_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
 import { t } from 'i18next';
-import useEnetpulseSportMarketLiveResultQuery from 'queries/markets/useEnetpulseSportMarketLiveResultQuery';
+import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -84,7 +84,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport,
     });
 
-    const useEnetpulseLiveResultQuery = useEnetpulseSportMarketLiveResultQuery(gameIdString, gameDate, market.tags[0], {
+    const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.tags[0], {
         enabled: isAppReady && isEnetpulseSport,
     });
 
@@ -132,7 +132,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 <>
                                     {liveResultInfo.tournamentName ? '| ' + liveResultInfo.tournamentName : ''}
                                     {liveResultInfo.tournamentRound ? ' | ' + liveResultInfo.tournamentRound : ''}
-                                    <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={12} marginLeft={2} />
+                                    {SPORTS_TAGS_MAP['Tennis'].includes(Number(market.tags[0])) && (
+                                        <Tooltip
+                                            overlay={t(`common.tennis-tooltip`)}
+                                            iconFontSize={12}
+                                            marginLeft={2}
+                                        />
+                                    )}
                                 </>
                             ) : (
                                 ''

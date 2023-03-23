@@ -122,6 +122,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     const hockeyKeys: number[] = [];
     const ufcKeys: number[] = [];
     const tennisKeys: number[] = [];
+    const eSportsKeys: number[] = [];
     marketsKeys.forEach((tag: number) => {
         if (SPORTS_MAP[tag] == 'Soccer') {
             soccerKeys.push(tag);
@@ -144,6 +145,9 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
         if (SPORTS_MAP[tag] == 'Tennis') {
             tennisKeys.push(tag);
         }
+        if (SPORTS_MAP[tag] == 'eSports') {
+            eSportsKeys.push(tag);
+        }
     });
 
     return [
@@ -154,6 +158,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
         ...hockeyKeys,
         ...ufcKeys,
         ...tennisKeys,
+        ...eSportsKeys,
     ];
 };
 
