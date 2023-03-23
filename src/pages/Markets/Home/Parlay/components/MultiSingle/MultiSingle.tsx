@@ -591,31 +591,20 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
     };
 
     const setTooltipTextMessageUsdAmount = useCallback(
-        (market: ParlaysMarket, value: string | number) => {
+        (market: ParlaysMarket, value: string | number, isMax: boolean) => {
             const toolTipRecords = tooltipTextUsdAmount;
 
             const positionOdds = roundNumberToDecimals(getPositionOdds(market));
             const ammQuote = tokenAndBonus.find((t) => t.sportMarketAddress === market.address)?.ammQuote ?? 1;
-            const thisIndex = multiSingleAmounts.findIndex((m) => m.sportMarketAddress === market.address);
 
             let totalBuyIn = 0;
-
-            for (let i = 0; i <= thisIndex; i++) {
-                const currentPosition = multiSingleAmounts[i];
-
-                if (currentPosition.sportMarketAddress === market.address) {
+            multiSingleAmounts.forEach((m) => {
+                if (m.sportMarketAddress === market.address) {
                     totalBuyIn += Number(value);
                 } else {
-                    totalBuyIn += currentPosition.amountToBuy;
+                    totalBuyIn += m.amountToBuy;
                 }
-
-                if (totalBuyIn > paymentTokenBalance) {
-                    toolTipRecords[currentPosition.sportMarketAddress] = t('markets.parlay.validation.no-funds');
-                    setHasValidationError(true);
-                } else {
-                    toolTipRecords[currentPosition.sportMarketAddress] = '';
-                }
-            }
+            });
 
             if (value && Number(value) < positionOdds) {
                 toolTipRecords[market.address] = t('markets.parlay.validation.single-min-amount', {
@@ -625,7 +614,13 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
             } else if (ammQuote === 0) {
                 toolTipRecords[market.address] = t('markets.parlay.validation.availability');
                 setHasValidationError(true);
-            } else if (totalBuyIn > paymentTokenBalance) {
+            } else if (totalBuyIn > paymentTokenBalance && isMax) {
+                Object.keys(toolTipRecords).forEach((record) => {
+                    if (toolTipRecords[record] === t('markets.parlay.validation.no-funds')) {
+                        toolTipRecords[record] = '';
+                    }
+                });
+                toolTipRecords[market.address] = t('markets.parlay.validation.no-funds');
                 setHasValidationError(true);
             } else {
                 toolTipRecords[market.address] = '';
@@ -640,14 +635,21 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
     useEffect(() => {
         setHasValidationError(false);
         setTooltipTextUsdAmount({});
+        // No point in adding a tool tip to all vals. Lets just set the tooltip on the highest value
+        const maxMsVal = multiSingleAmounts.reduce((max, ms) => (max.amountToBuy > ms.amountToBuy ? max : ms));
 
-        markets.forEach((market) => {
-            if (market !== undefined) {
-                const amt = multiSingleAmounts.find((m) => m.sportMarketAddress === market.address)?.amountToBuy || 0;
-                setTooltipTextMessageUsdAmount(market, amt);
-            }
-        });
-    }, [isVoucherSelected, setTooltipTextMessageUsdAmount, multiSingleAmounts, markets, selectedStableIndex]);
+        const market = markets.find((m) => m.address === maxMsVal.sportMarketAddress);
+        if (market !== undefined) {
+            setTooltipTextMessageUsdAmount(market, maxMsVal.amountToBuy, true);
+        }
+    }, [
+        isVoucherSelected,
+        setTooltipTextMessageUsdAmount,
+        usdAmountValue,
+        multiSingleAmounts,
+        markets,
+        selectedStableIndex,
+    ]);
 
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
@@ -689,7 +691,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
             );
             resolve(true);
         }).then(() => {
-            setTooltipTextMessageUsdAmount(market, value);
+            setTooltipTextMessageUsdAmount(market, value, false);
         });
     };
     return (
