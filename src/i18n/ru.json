@@ -220,7 +220,8 @@
                 "motogp": "MotoGP",
                 "soon": "More sports coming soon!",
                 "motosport": "Мотоспорт",
-                "favourites": "Избранное"
+                "favourites": "Избранное",
+                "esports": "Киберспорт"
             },
             "all": "All",
             "datepicker": {
