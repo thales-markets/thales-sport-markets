@@ -768,7 +768,8 @@
                 "claim": "提款申请"
             },
             "title": "用户交易",
-            "no-transactions": "在选定的回合中没有与此保管库关联的用户交易。"
+            "no-transactions": "在选定的回合中没有与此保管库关联的用户交易。",
+            "name": "姓名"
         },
         "parlay-discount-vault": {
             "title": "Parlay 折扣金库",
