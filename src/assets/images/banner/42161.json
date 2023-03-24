@@ -26,5 +26,9 @@
     {
         "image": "banner_bi-weekly.png",
         "url": "https://overtimemarkets.xyz/#/parlay-leaderboard"
+    },
+    {
+        "image": "LP_banner.png",
+        "url": "https://overtimemarkets.xyz/#/liquidity-pool"
     }
 ]
