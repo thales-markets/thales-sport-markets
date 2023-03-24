@@ -229,8 +229,6 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                             </InfoLabel>
                                         )}
                                 </ResultLabel>
-                                {console.log(!SPORTS_TAGS_MAP['eSports'].includes(Number(liveResultInfo?.sportId)))}
-                                {console.log(Number(liveResultInfo?.sportId))}
                                 {!SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
                                     !SPORTS_TAGS_MAP['eSports'].includes(Number(liveResultInfo?.sportId)) && (
                                         <PeriodsContainer directionRow={true}>
