@@ -229,24 +229,27 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                             </InfoLabel>
                                         )}
                                 </ResultLabel>
-                                {!SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) && (
-                                    <PeriodsContainer directionRow={true}>
-                                        {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
-                                            return (
-                                                <PeriodContainer key={index}>
-                                                    <InfoLabel className="gray">{index + 1}</InfoLabel>
-                                                    <InfoLabel>{homePeriodResult}</InfoLabel>
-                                                    <InfoLabel>{liveResultInfo.scoreAwayByPeriod[index]}</InfoLabel>
-                                                </PeriodContainer>
-                                            );
-                                        })}
-                                        <PeriodContainer>
-                                            <InfoLabel className="gray">T</InfoLabel>
-                                            <InfoLabel>{liveResultInfo?.homeScore}</InfoLabel>
-                                            <InfoLabel>{liveResultInfo?.awayScore}</InfoLabel>
-                                        </PeriodContainer>
-                                    </PeriodsContainer>
-                                )}
+                                {console.log(!SPORTS_TAGS_MAP['eSports'].includes(Number(liveResultInfo?.sportId)))}
+                                {console.log(Number(liveResultInfo?.sportId))}
+                                {!SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
+                                    !SPORTS_TAGS_MAP['eSports'].includes(Number(liveResultInfo?.sportId)) && (
+                                        <PeriodsContainer directionRow={true}>
+                                            {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
+                                                return (
+                                                    <PeriodContainer key={index}>
+                                                        <InfoLabel className="gray">{index + 1}</InfoLabel>
+                                                        <InfoLabel>{homePeriodResult}</InfoLabel>
+                                                        <InfoLabel>{liveResultInfo.scoreAwayByPeriod[index]}</InfoLabel>
+                                                    </PeriodContainer>
+                                                );
+                                            })}
+                                            <PeriodContainer>
+                                                <InfoLabel className="gray">T</InfoLabel>
+                                                <InfoLabel>{liveResultInfo?.homeScore}</InfoLabel>
+                                                <InfoLabel>{liveResultInfo?.awayScore}</InfoLabel>
+                                            </PeriodContainer>
+                                        </PeriodsContainer>
+                                    )}
                             </ResultContainer>
                         )}
                     </Status>
