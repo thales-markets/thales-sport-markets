@@ -19,7 +19,7 @@ export const VAULT_MAP: Record<string, any> = {
             10: '0xc922f4CDe42dD658A7D3EA852caF7Eae47F6cEcd',
             42: '',
             420: '0x3051d3a7e619C161B64dCe0B287688012655bA56',
-            // 42161: '0xfF7AEA98740fA1e2a9eB81680583e62aaFf1e3Ad',
+            42161: '0xfF7AEA98740fA1e2a9eB81680583e62aaFf1e3Ad',
         },
     },
     'degen-discount-vault': {
@@ -28,7 +28,7 @@ export const VAULT_MAP: Record<string, any> = {
             10: '0xBaaC5464BF6E767C9af0E8d4677C01Be2065fd5F',
             42: '',
             420: '',
-            // 42161: '0xA852a651377fbE23f3d3acF5919c3D092aD4b77d',
+            42161: '0xA852a651377fbE23f3d3acF5919c3D092aD4b77d',
         },
     },
     'safu-discount-vault': {
@@ -37,7 +37,7 @@ export const VAULT_MAP: Record<string, any> = {
             10: '0x43D19841D818B2ccC63a8B44Ce8C7DEF8616D98E',
             42: '',
             420: '',
-            // 42161: '0xE26374c7aFe71a2a6AB4A61080772547C43B87E6',
+            42161: '0xE26374c7aFe71a2a6AB4A61080772547C43B87E6',
         },
     },
     'parlay-discount-vault': {
@@ -46,7 +46,7 @@ export const VAULT_MAP: Record<string, any> = {
             10: '0x8285047F33c26c1Bf5B387f2b07F21A2aF29Ace2',
             42: '',
             420: '0x7e415D74eb5B01531B2059D1901aCe751c6B26B3',
-            // 42161: '0xAb9E5fc491c743AE0b45f7100fAf611Deb8FeC4A',
+            42161: '0xAb9E5fc491c743AE0b45f7100fAf611Deb8FeC4A',
         },
     },
 };
