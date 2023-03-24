@@ -306,5 +306,5 @@
 }
 
 .icon--esports::before {
-    content: '\00A1';
+    content: '\0085';
 }
