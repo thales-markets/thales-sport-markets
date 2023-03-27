@@ -1,11 +1,12 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 import { NetworkId } from 'types/network';
 import { UserVaultData } from 'types/vault';
 import vaultContract from 'utils/contracts/sportVaultContract';
 import { ethers } from 'ethers';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 const useUserVaultDataQuery = (
     vaultAddress: string,
@@ -40,8 +41,16 @@ const useUserVaultDataQuery = (
                         sportVaultContract?.withdrawalRequested(walletAddress),
                     ]);
 
-                    userVaultData.balanceCurrentRound = bigNumberFormatter(balanceCurrentRound);
-                    userVaultData.balanceNextRound = bigNumberFormatter(balanceNextRound);
+                    userVaultData.balanceCurrentRound = bigNumberFormmaterWithDecimals(
+                        balanceCurrentRound,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
+
+                    userVaultData.balanceNextRound = bigNumberFormmaterWithDecimals(
+                        balanceNextRound,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
+
                     userVaultData.balanceTotal = withdrawalRequested
                         ? 0
                         : userVaultData.balanceCurrentRound + userVaultData.balanceNextRound;
