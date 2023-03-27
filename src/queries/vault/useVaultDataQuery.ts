@@ -101,7 +101,10 @@ const useVaultDataQuery = (
                     );
                     vaultData.round = Number(round);
                     vaultData.roundEndTime = Number(roundEndTime) * 1000;
-                    vaultData.availableAllocationNextRound = bigNumberFormatter(availableAllocationNextRound);
+                    vaultData.availableAllocationNextRound = bigNumberFormmaterWithDecimals(
+                        availableAllocationNextRound,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
                     vaultData.isRoundEnded = new Date().getTime() > vaultData.roundEndTime;
                     vaultData.minDepositAmount = bigNumberFormmaterWithDecimals(
                         minDepositAmount,
