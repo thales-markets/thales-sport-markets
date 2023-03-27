@@ -26,7 +26,7 @@ import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveRes
 import Web3 from 'web3';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import { getNetworkId } from 'redux/modules/wallet';
-import useEnetpulseSportMarketLiveResultQuery from 'queries/markets/useEnetpulseSportMarketLiveResultQuery';
+import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import { NetworkIdByName } from 'utils/network';
 
 type MarketDetailsPropType = {
@@ -89,7 +89,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         enabled: isAppReady && !isEnetpulseSport,
     });
 
-    const useEnetpulseLiveResultQuery = useEnetpulseSportMarketLiveResultQuery(gameIdString, gameDate, market.tags[0], {
+    const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.tags[0], {
         enabled: isAppReady && isEnetpulseSport,
     });
 
@@ -229,24 +229,25 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                             </InfoLabel>
                                         )}
                                 </ResultLabel>
-                                {!SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) && (
-                                    <PeriodsContainer directionRow={true}>
-                                        {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
-                                            return (
-                                                <PeriodContainer key={index}>
-                                                    <InfoLabel className="gray">{index + 1}</InfoLabel>
-                                                    <InfoLabel>{homePeriodResult}</InfoLabel>
-                                                    <InfoLabel>{liveResultInfo.scoreAwayByPeriod[index]}</InfoLabel>
-                                                </PeriodContainer>
-                                            );
-                                        })}
-                                        <PeriodContainer>
-                                            <InfoLabel className="gray">T</InfoLabel>
-                                            <InfoLabel>{liveResultInfo?.homeScore}</InfoLabel>
-                                            <InfoLabel>{liveResultInfo?.awayScore}</InfoLabel>
-                                        </PeriodContainer>
-                                    </PeriodsContainer>
-                                )}
+                                {!SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
+                                    !SPORTS_TAGS_MAP['eSports'].includes(Number(liveResultInfo?.sportId)) && (
+                                        <PeriodsContainer directionRow={true}>
+                                            {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
+                                                return (
+                                                    <PeriodContainer key={index}>
+                                                        <InfoLabel className="gray">{index + 1}</InfoLabel>
+                                                        <InfoLabel>{homePeriodResult}</InfoLabel>
+                                                        <InfoLabel>{liveResultInfo.scoreAwayByPeriod[index]}</InfoLabel>
+                                                    </PeriodContainer>
+                                                );
+                                            })}
+                                            <PeriodContainer>
+                                                <InfoLabel className="gray">T</InfoLabel>
+                                                <InfoLabel>{liveResultInfo?.homeScore}</InfoLabel>
+                                                <InfoLabel>{liveResultInfo?.awayScore}</InfoLabel>
+                                            </PeriodContainer>
+                                        </PeriodsContainer>
+                                    )}
                             </ResultContainer>
                         )}
                     </Status>

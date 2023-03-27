@@ -2,7 +2,7 @@ import PositionSymbol from 'components/PositionSymbol';
 import { ENETPULSE_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS, STATUS_COLOR } from 'constants/ui';
 import { t } from 'i18next';
-import useEnetpulseSportMarketLiveResultQuery from 'queries/markets/useEnetpulseSportMarketLiveResultQuery';
+import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -68,7 +68,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport,
     });
 
-    const useEnetpulseLiveResultQuery = useEnetpulseSportMarketLiveResultQuery(market.id, gameDate, market.tags[0], {
+    const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(market.id, gameDate, market.tags[0], {
         enabled: isAppReady && isEnetpulseSport,
     });
 

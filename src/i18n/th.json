@@ -220,7 +220,8 @@
                 "motogp": "MotoGP",
                 "soon": "กีฬาอื่น ๆ เร็ว ๆ นี้!",
                 "motosport": "มอเตอร์สปอร์ต",
-                "favourites": "รายการโปรด"
+                "favourites": "รายการโปรด",
+                "esports": "อีสปอร์ต"
             },
             "datepicker": {
                 "games": "{{numberOfGames}} เกม"

@@ -92,3 +92,15 @@
 .league--atp:before {
     content: '\005C';
 }
+
+.league--dota2:before {
+    content: '\0061';
+}
+
+.league--csgo:before {
+    content: '\0062';
+}
+
+.league--lol:before {
+    content: '\0063';
+}
