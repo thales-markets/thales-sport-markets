@@ -1,14 +1,14 @@
 import PositionSymbol from 'components/PositionSymbol';
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { ParlayMarket, ParlaysMarket, PositionData, SportMarketInfo } from 'types/markets';
+import { ParlayMarket, PositionData, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime, formatTxTimestamp } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
@@ -26,10 +26,6 @@ import {
 } from 'utils/markets';
 import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
-import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
-import ShareTicketModal from 'pages/Markets/Home/Parlay/components/ShareTicketModal';
-import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
-import { Position } from 'constants/options';
 import { ethers } from 'ethers';
 import { CollateralByNetworkId } from 'utils/network';
 import { buildMarketLink } from 'utils/routes';
@@ -47,15 +43,6 @@ const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?:
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
 
-    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
-    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
-        markets: [],
-        totalQuote: 0,
-        paid: 0,
-        payout: 0,
-        onClose: () => {},
-    });
-
     if (searchText && !isSearchTextWalletAddress) {
         parlayTx = parlayTx?.filter((item) => {
             const marketWithSearchTextIncluded = item.sportMarkets.find(
@@ -67,66 +54,6 @@ const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?:
             if (marketWithSearchTextIncluded) return item;
         });
     }
-
-    const onTwitterIconClick = (data: any) => {
-        const sportMarkets: SportMarketInfo[] = data.sportMarkets;
-
-        const parlaysMarket: ParlaysMarket[] = sportMarkets
-            .map((sportMarket) => {
-                const sportMarketFromContractIndex = data.sportMarketsFromContract.findIndex(
-                    (address: string) => address === sportMarket.address
-                );
-                const position: Position = Number(data.positionsFromContract[sportMarketFromContractIndex]);
-
-                // Update odds with values from contract when position was bought
-                const sportMarketWithBuyQuotes = {
-                    ...sportMarket,
-                    homeOdds:
-                        position === Position.HOME
-                            ? sportMarket.isCanceled
-                                ? 1
-                                : data.marketQuotes[sportMarketFromContractIndex]
-                            : sportMarket.homeOdds,
-                    drawOdds:
-                        position === Position.DRAW
-                            ? sportMarket.isCanceled
-                                ? 1
-                                : data.marketQuotes[sportMarketFromContractIndex]
-                            : sportMarket.drawOdds,
-                    awayOdds:
-                        position === Position.AWAY
-                            ? sportMarket.isCanceled
-                                ? 1
-                                : data.marketQuotes[sportMarketFromContractIndex]
-                            : sportMarket.awayOdds,
-                };
-
-                const positionsIndex = data.positions.findIndex(
-                    (positionData: PositionData) => positionData.market.address === sportMarket.address
-                );
-
-                return {
-                    ...sportMarketWithBuyQuotes,
-                    position,
-                    winning: getMarketWinStatus(data.positions[positionsIndex]),
-                };
-            })
-            .sort(
-                (a, b) =>
-                    data.sportMarketsFromContract.findIndex((address: string) => address === a.address) -
-                    data.sportMarketsFromContract.findIndex((address: string) => address === b.address)
-            );
-
-        const modalData: ShareTicketModalProps = {
-            markets: parlaysMarket,
-            totalQuote: data.totalQuote,
-            paid: data.sUSDPaid,
-            payout: data.totalAmount,
-            onClose: () => setShowShareTicketModal(false),
-        };
-        setShareTicketModalData(modalData);
-        setShowShareTicketModal(true);
-    };
 
     return (
         <>
@@ -270,7 +197,6 @@ const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?:
                                             ? {
                                                   text: spreadTotalText,
                                                   textStyle: {
-                                                      backgroundColor: '#1A1C2B',
                                                       fontSize: '10px',
                                                       top: '-9px',
                                                       left: '10px',
@@ -299,23 +225,11 @@ const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?:
                                         {formatCurrencyWithKey(USD_SIGN, row.original.totalAmount, 2)}
                                     </QuoteText>
                                 </QuoteWrapper>
-                                <TwitterWrapper>
-                                    <TwitterIcon fontSize={'15px'} onClick={() => onTwitterIconClick(row.original)} />
-                                </TwitterWrapper>
                             </LastExpandedSection>
                         </ExpandedRowWrapper>
                     );
                 }}
             ></Table>
-            {showShareTicketModal && (
-                <ShareTicketModal
-                    markets={shareTicketModalData.markets}
-                    totalQuote={shareTicketModalData.totalQuote}
-                    paid={shareTicketModalData.paid}
-                    payout={shareTicketModalData.payout}
-                    onClose={shareTicketModalData.onClose}
-                />
-            )}
         </>
     );
 };
@@ -499,16 +413,6 @@ const LastExpandedSection = styled(FlexDivColumnCentered)`
     @media (max-width: 600px) {
         flex-direction: row;
         margin: 10px 0;
-    }
-`;
-
-const TwitterWrapper = styled.div`
-    position: absolute;
-    bottom: 10px;
-    right: 5px;
-    @media (max-width: 600px) {
-        bottom: -2px;
-        right: 2px;
     }
 `;
 

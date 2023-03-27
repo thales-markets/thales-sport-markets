@@ -220,7 +220,8 @@
                 "motogp": "MotoGP",
                 "soon": "Bald noch mehr Sportarten!",
                 "motosport": "Motorsport",
-                "favourites": "Favoriten"
+                "favourites": "Favoriten",
+                "esports": "Sport"
             },
             "all": "Alle",
             "datepicker": {
@@ -765,7 +766,8 @@
                 "claim": "Rücktrittsanspruch"
             },
             "title": "Benutzertransaktionen",
-            "no-transactions": "Mit diesem Tresor sind in der ausgewählten Runde keine Benutzertransaktionen verbunden."
+            "no-transactions": "Mit diesem Tresor sind in der ausgewählten Runde keine Benutzertransaktionen verbunden.",
+            "name": "Name"
         },
         "parlay-discount-vault": {
             "title": "Parlay-Rabatttresor",
@@ -774,7 +776,8 @@
         },
         "LP": {
             "title": "LP"
-        }
+        },
+        "variables-parlay": "<p>Variablen:</p><ul><li> Nutzungsrate: {{utilizationRate}}</li><li> Preisuntergrenze: {{priceLowerLimit}}</li><li> Preisobergrenze: {{priceUpperLimit}}</li><li> Max. Skew-Auswirkung: {{skewImpactLimit}}</li><li> Maximale Zuweisung für eine einzelne Parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Maximale Gesamteinzahlung: {{maxAllowedDeposit}}</li><li> Max. Benutzer im Tresor: {{maxAllowedUsers}}</li><li> Mindestbetrag für einen einzelnen Trade: {{minTradeAmount}}</li><li> Mindesteinzahlung: {{minDepositAmount}}</li><li> Rundendauer: {{roundLength}} Tage</li></ul>"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives-Rangliste",

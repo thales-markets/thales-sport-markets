@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormatter, bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 import { NetworkId } from 'types/network';
 import { VaultData } from 'types/vault';
@@ -8,6 +8,7 @@ import vaultContract from 'utils/contracts/sportVaultContract';
 import { ethers } from 'ethers';
 import { VAULT_MAP } from 'constants/vault';
 import parlayVaultContract from 'utils/contracts/parlayVaultContract';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 const useVaultDataQuery = (
     vaultAddress: string,
@@ -94,12 +95,18 @@ const useVaultDataQuery = (
                     ]);
 
                     vaultData.vaultStarted = vaultStarted;
-                    vaultData.maxAllowedDeposit = bigNumberFormatter(maxAllowedDeposit);
+                    vaultData.maxAllowedDeposit = bigNumberFormmaterWithDecimals(
+                        maxAllowedDeposit,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
                     vaultData.round = Number(round);
                     vaultData.roundEndTime = Number(roundEndTime) * 1000;
                     vaultData.availableAllocationNextRound = bigNumberFormatter(availableAllocationNextRound);
                     vaultData.isRoundEnded = new Date().getTime() > vaultData.roundEndTime;
-                    vaultData.minDepositAmount = bigNumberFormatter(minDepositAmount);
+                    vaultData.minDepositAmount = bigNumberFormmaterWithDecimals(
+                        minDepositAmount,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
                     vaultData.maxAllowedUsers = Number(maxAllowedUsers);
                     vaultData.usersCurrentlyInVault = Number(usersCurrentlyInVault);
                     vaultData.canCloseCurrentRound = canCloseCurrentRound;
@@ -112,7 +119,12 @@ const useVaultDataQuery = (
                         vaultAddress === VAULT_MAP['parlay-discount-vault'].addresses[networkId]
                             ? bigNumberFormatter(allocationLimitsPerMarketPerRound)
                             : bigNumberFormatter(allocationLimitsPerMarketPerRound) / 100;
-                    vaultData.minTradeAmount = bigNumberFormatter(minTradeAmount);
+                    vaultAddress === VAULT_MAP['parlay-discount-vault'].addresses[networkId]
+                        ? (vaultData.minTradeAmount = bigNumberFormmaterWithDecimals(
+                              minTradeAmount,
+                              getDefaultDecimalsForNetwork(networkId)
+                          ))
+                        : (vaultData.minTradeAmount = bigNumberFormatter(minTradeAmount));
                     vaultData.roundLength = Number(roundLength) / 60 / 60 / 24;
 
                     const [

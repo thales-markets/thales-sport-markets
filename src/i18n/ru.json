@@ -220,7 +220,8 @@
                 "motogp": "MotoGP",
                 "soon": "More sports coming soon!",
                 "motosport": "Мотоспорт",
-                "favourites": "Избранное"
+                "favourites": "Избранное",
+                "esports": "Киберспорт"
             },
             "all": "All",
             "datepicker": {
@@ -771,7 +772,8 @@
                 "claim": "Заявление о снятии средств"
             },
             "no-transactions": "Нет пользовательских транзакций, связанных с этим хранилищем в выбранном раунде.",
-            "title": "Пользовательские транзакции"
+            "title": "Пользовательские транзакции",
+            "name": "Имя"
         },
         "parlay-discount-vault": {
             "title": "Экспресс хранилище скидок",
@@ -780,7 +782,8 @@
         },
         "LP": {
             "title": "LP"
-        }
+        },
+        "variables-parlay": "<p>Переменные:</p><ul><li> Коэффициент использования: {{utilizationRate}}</li><li> Нижний предел цены: {{priceLowerLimit}}</li><li> Верхний предел цены: {{priceUpperLimit}}</li><li> Максимальное влияние перекоса: {{skewImpactLimit}}</li><li> Максимальное распределение на один экспресс: {{allocationLimitsPerMarketPerRound}}</li><li> Максимальный общий депозит: {{maxAllowedDeposit}}</li><li> Максимальное количество пользователей в хранилище: {{maxAllowedUsers}}</li><li> Минимальная сумма для одной сделки: {{minTradeAmount}}</li><li> Минимальный депозит: {{minDepositAmount}}</li><li> Продолжительность раунда: {{roundLength}} дней</li></ul>"
     },
     "parlay-leaderboard": {
         "title": "Таблица поощрений Parlay",

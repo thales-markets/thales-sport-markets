@@ -1,7 +1,7 @@
 import SPAAnchor from 'components/SPAAnchor';
 import i18n from 'i18n';
 import useUserVaultDataQuery from 'queries/vault/useUserVaultDataQuery';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -14,13 +14,18 @@ const UserVault: React.FC<{ vaultName: string; vaultAddress: string }> = ({ vaul
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const [lastValidVaultData, setLastValidVaultData] = useState<number>(0);
     const language = i18n.language;
 
     const userVaultDataQuery = useUserVaultDataQuery(vaultAddress, walletAddress, networkId, {
         enabled: isWalletConnected && !!vaultAddress,
     });
 
-    const vaultAllocation = userVaultDataQuery.isSuccess ? userVaultDataQuery.data?.balanceTotal : 0;
+    useEffect(() => {
+        if (userVaultDataQuery.isSuccess && userVaultDataQuery.data) {
+            setLastValidVaultData(userVaultDataQuery.data?.balanceTotal);
+        }
+    }, [userVaultDataQuery.isSuccess, userVaultDataQuery.data]);
 
     return (
         <SPAAnchor href={buildVaultLink(vaultName, language)}>
@@ -32,7 +37,7 @@ const UserVault: React.FC<{ vaultName: string; vaultAddress: string }> = ({ vaul
                 <ContentWrapper>
                     <TextWrapper>
                         <PreLabel>{t('profile.in-vault')}</PreLabel>
-                        <Value>{vaultAllocation?.toFixed(2)}</Value>
+                        <Value>{lastValidVaultData?.toFixed(2)}</Value>
                         <PostLabel>USD</PostLabel>
                     </TextWrapper>
                     <Button>{t('profile.go-to-vault')}</Button>
