@@ -566,7 +566,9 @@
             "no-claimable": "Sie haben keine beanspruchbaren Positionen",
             "no-transactions": "Sie haben keine Trades",
             "ticket-subtitle": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
-            "canceled-tooltip": "Abgebrochene Märkte können 2 Stunden nach Auflösung des Marktes beansprucht werden."
+            "canceled-tooltip": "Abgebrochene Märkte können 2 Stunden nach Auflösung des Marktes beansprucht werden.",
+            "voucher-claim-success": "Gutschein erfolgreich beansprucht",
+            "transaction-pending": "Transaktion ausstehend"
         },
         "table": {
             "games": "Spiele",
@@ -593,7 +595,13 @@
         "in-vault": "Im Tresor",
         "go-to-vault": "Gehen Sie zum Tresor",
         "vaults": "Gewölbe/LP",
-        "go-to-lp": "Gehen Sie zu LP"
+        "go-to-lp": "Gehen Sie zu LP",
+        "voucher": "Gutschein",
+        "gift-voucher": "Geschenkgutschein",
+        "left-to-claim": "Links zum Anspruch",
+        "claiming-voucher": "Anspruch...",
+        "claim-voucher": "Gutschein anfordern",
+        "voucher-info": "Aber damit Sie sehen, woher all dieser angeborene Irrtum derer kommt, die Freude anklagen und Schmerz preisen, werde ich die ganze Sache öffnen und genau das erklären, was dieser Entdecker der Wahrheit und sozusagen der Architekt der Wahrheit gesagt hat ein glückliches Leben."
     },
     "mint-world-cup-nft": {
         "eligible-text-2": "Prägen Sie ein Zebro Ihrer Lieblingsnationalmannschaft und qualifizieren Sie sich für 50.000 OP & 30.000 THALES-Bonusprämien!",

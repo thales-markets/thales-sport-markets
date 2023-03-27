@@ -667,7 +667,9 @@
             "no-open": "Vous n'avez pas de poste ouvert",
             "no-transactions": "Vous n'avez aucun métier",
             "ticket-subtitle": "Ajoutez une position, choisissez un marché et faites votre sélection.",
-            "canceled-tooltip": "Les marchés annulés sont réclamables 2 heures après la résolution du marché."
+            "canceled-tooltip": "Les marchés annulés sont réclamables 2 heures après la résolution du marché.",
+            "voucher-claim-success": "Bon réclamé avec succès",
+            "transaction-pending": "Transaction en attente"
         },
         "table": {
             "paid": "Payé",
@@ -694,7 +696,13 @@
         "in-vault": "Au coffre",
         "go-to-lp": "Aller à LP",
         "go-to-vault": "Aller au coffre",
-        "lp-title": "Pool de liquidité"
+        "lp-title": "Pool de liquidité",
+        "voucher-info": "Mais afin que vous puissiez voir d'où vient toute cette erreur née de ceux qui accusent le plaisir et louent la douleur, je vais ouvrir toute l'affaire et expliquer les choses mêmes qui ont été dites par ce découvreur de la vérité et, pour ainsi dire, l'architecte de une vie heureuse.",
+        "claim-voucher": "Bon de réclamation",
+        "voucher": "Bon",
+        "claiming-voucher": "Affirmant...",
+        "gift-voucher": "Chèque cadeau",
+        "left-to-claim": "Reste à réclamer"
     },
     "mint-world-cup-nft": {
         "no": "Non",

@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import UserVaults from './components/UserVaults';
+import Voucher from './components/Voucher';
 
 const Profile: React.FC = () => {
     const { t } = useTranslation();
@@ -51,6 +52,7 @@ const Profile: React.FC = () => {
             {navItems[0].id == navItem && <Positions searchText={searchText} />}
             {navItems[1].id == navItem && <TransactionsHistory searchText={searchText} />}
             {navItems[2].id == navItem && <UserVaults />}
+            {navItems[3].id == navItem && <Voucher />}
         </Container>
     );
 };

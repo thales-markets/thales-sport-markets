@@ -278,6 +278,7 @@
         "open-claimable": "Open/Claimable",
         "transaction-history": "Transaction history",
         "vaults": "Vaults/LP",
+        "voucher": "Voucher",
         "in-vault": "In vault",
         "go-to-vault": "Go to vault",
         "in-lp": "Liquidity provided",
@@ -288,7 +289,9 @@
             "no-open": "You don't have any open positions",
             "no-transactions": "You don't have any trades",
             "ticket-subtitle": "Add position, choose a market and make your selection.",
-            "canceled-tooltip": "Canceled markets are claimable 2 hours after market is resolved."
+            "canceled-tooltip": "Canceled markets are claimable 2 hours after market is resolved.",
+            "voucher-claim-success": "Voucher successfully claimed",
+            "transaction-pending": "Transaction pending"
         },
         "categories": {
             "claimable": "Claimable",
@@ -320,6 +323,11 @@
             "total-quote": "Total Quote",
             "total-amount": "Total Amount"
         },
+        "voucher-info": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+        "gift-voucher": "Gift voucher",
+        "left-to-claim": "Left to claim",
+        "claim-voucher": "Claim voucher",
+        "claiming-voucher": "Claiming...",
         "search-field": "Search wallet",
         "winnings-are-forfeit": "*Winnings not claimed within {{amount}} days of a market being resolved are forfeit."
     },

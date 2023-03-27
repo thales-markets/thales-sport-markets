@@ -572,7 +572,9 @@
             "no-open": "Non hai nessuna posizione aperta",
             "no-transactions": "Non hai scambi",
             "ticket-subtitle": "Aggiungi posizione, scegli un mercato ed effettua la tua selezione.",
-            "canceled-tooltip": "I mercati annullati possono essere rivendicati 2 ore dopo la risoluzione del mercato."
+            "canceled-tooltip": "I mercati annullati possono essere rivendicati 2 ore dopo la risoluzione del mercato.",
+            "transaction-pending": "Transazione in sospeso",
+            "voucher-claim-success": "Buono richiesto con successo"
         },
         "table": {
             "id": "Id",
@@ -599,7 +601,13 @@
         "in-lp": "Liquidità fornita",
         "lp-title": "Pool di liquidità",
         "go-to-lp": "Vai a L.P",
-        "go-to-vault": "Vai al caveau"
+        "go-to-vault": "Vai al caveau",
+        "voucher": "Voucher; tagliando",
+        "gift-voucher": "Buono regalo",
+        "claiming-voucher": "Rivendicazione...",
+        "claim-voucher": "Richiedi il buono",
+        "left-to-claim": "Lasciato a reclamare",
+        "voucher-info": "Ma affinché tu veda donde nasce tutto questo errore di coloro che accusano il piacere e lodano il dolore, aprirò tutta la questione e spiegherò le stesse cose che furono dette da quello scopritore della verità e, per così dire, l'artefice della una vita felice."
     },
     "mint-world-cup-nft": {
         "second-option": "La seconda opzione per metterti nella lista consentita è completare i seguenti passaggi:",

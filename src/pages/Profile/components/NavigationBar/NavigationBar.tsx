@@ -1,6 +1,11 @@
+import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
+import useOvertimeVoucherEscrowQuery from 'queries/wallet/useOvertimeVoucherEscrowQuery';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Item, Wrapper } from './styled-components';
+import { useSelector } from 'react-redux';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import { Count, Item, ItemWrapper, NotificationCount, Wrapper } from './styled-components';
 
 export const navItems = [
     {
@@ -15,6 +20,10 @@ export const navItems = [
         id: 3,
         i18Label: 'profile.vaults',
     },
+    {
+        id: 4,
+        i18Label: 'profile.voucher',
+    },
 ];
 
 type NavigationBarProps = {
@@ -24,13 +33,40 @@ type NavigationBarProps = {
 
 const NavigationBar: React.FC<NavigationBarProps> = ({ itemSelected, onSelectItem }) => {
     const { t } = useTranslation();
+
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+
+    const claimablePositionsCountQuery = useClaimablePositionCountQuery(walletAddress, networkId, {
+        enabled: isWalletConnected,
+    });
+    const claimablePositionCount =
+        claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
+            ? claimablePositionsCountQuery.data
+            : null;
+
+    const overtimeVoucherEscrowQuery = useOvertimeVoucherEscrowQuery(walletAddress, networkId, {
+        enabled: isWalletConnected,
+    });
+    const overtimeVoucherEscrowData = overtimeVoucherEscrowQuery.isSuccess ? overtimeVoucherEscrowQuery.data : null;
+    const vouchersCount = overtimeVoucherEscrowData?.isClaimable ? 1 : 0;
+
     return (
         <Wrapper>
             {navItems.map((item, index) => {
+                const notificationsCount = item.id === 1 ? claimablePositionCount : item.id === 4 ? vouchersCount : 0;
                 return (
-                    <Item key={index} selected={item.id == itemSelected} onClick={() => onSelectItem(item.id)}>
-                        {t(item.i18Label)}
-                    </Item>
+                    <ItemWrapper key={index}>
+                        <Item key={index} selected={item.id == itemSelected} onClick={() => onSelectItem(item.id)}>
+                            {t(item.i18Label)}
+                        </Item>
+                        {!!notificationsCount && (
+                            <NotificationCount key={'count' + index}>
+                                <Count>{notificationsCount}</Count>
+                            </NotificationCount>
+                        )}
+                    </ItemWrapper>
                 );
             })}
         </Wrapper>
