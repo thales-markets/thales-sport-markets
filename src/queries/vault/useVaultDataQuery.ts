@@ -144,16 +144,33 @@ const useVaultDataQuery = (
                         sportVaultContract?.tradingAllocation(),
                     ]);
 
-                    vaultData.allocationCurrentRound = bigNumberFormatter(allocationCurrentRound);
-                    vaultData.allocationNextRound = bigNumberFormatter(allocationNextRound);
+                    vaultData.allocationCurrentRound = bigNumberFormmaterWithDecimals(
+                        allocationCurrentRound,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
+
+                    vaultData.allocationNextRound = bigNumberFormmaterWithDecimals(
+                        allocationNextRound,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
                     vaultData.allocationNextRoundPercentage =
                         (vaultData.allocationNextRound / vaultData.maxAllowedDeposit) * 100;
                     vaultData.lifetimePnl =
                         bigNumberFormatter(lifetimePnl) === 0 ? 0 : bigNumberFormatter(lifetimePnl) - 1;
-                    vaultData.allocationSpentInARound = bigNumberFormatter(allocationSpentInARound);
-                    vaultData.availableAllocationInARound =
-                        bigNumberFormatter(tradingAllocation) - vaultData.allocationSpentInARound;
+                    vaultData.allocationSpentInARound = bigNumberFormmaterWithDecimals(
+                        allocationSpentInARound,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
 
+                    vaultData.availableAllocationInARound =
+                        bigNumberFormmaterWithDecimals(tradingAllocation, getDefaultDecimalsForNetwork(networkId)) -
+                        vaultData.allocationSpentInARound;
+
+                    console.log('allocationCurrentRound: ', vaultData.allocationCurrentRound);
+                    console.log('allocationNextRound: ', vaultData.allocationNextRound);
+                    console.log('allocationNextRoundPercentage: ', vaultData.allocationNextRoundPercentage);
+                    console.log('lifetimePnl: ', vaultData.lifetimePnl);
+                    console.log('availableAllocationInARound: ', vaultData.availableAllocationInARound);
                     return vaultData;
                 }
             } catch (e) {
