@@ -605,7 +605,8 @@
         "gift-voucher": "Vale regalo",
         "voucher-info": "Pero para que veáis de dónde viene todo este error nacido de los que acusan el placer y alaban el dolor, abriré todo el asunto y explicaré las mismas cosas que dijo aquel descubridor de la verdad y, por así decirlo, artífice de una vida feliz.",
         "claiming-voucher": "Reclamando...",
-        "voucher": "Vale"
+        "voucher": "Vale",
+        "voucher-title": "Reclamar vales de horas extras"
     },
     "mint-world-cup-nft": {
         "mint-nft-button": "Mint esta cebra!",

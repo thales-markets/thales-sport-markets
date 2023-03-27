@@ -703,7 +703,8 @@
         "voucher": "Bon",
         "claiming-voucher": "Affirmant...",
         "gift-voucher": "Chèque cadeau",
-        "left-to-claim": "Reste à réclamer"
+        "left-to-claim": "Reste à réclamer",
+        "voucher-title": "Réclamer des bons d'heures supplémentaires"
     },
     "mint-world-cup-nft": {
         "no": "Non",

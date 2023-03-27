@@ -103,7 +103,7 @@ const App = () => {
                     }
                 } else {
                     // without MM, for incognito mode
-                    providerNetworkId = isNetworkSupported(networkId) ? networkId : DEFAULT_NETWORK_ID;
+                    providerNetworkId = networkId;
                 }
             }
             try {

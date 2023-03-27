@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -19,18 +19,29 @@ import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { getMaxGasLimitForNetwork } from 'utils/network';
+import { ethers } from 'ethers';
+import { refetchAfterVoucherClaim } from 'utils/queryConnector';
+import { LINKS } from 'constants/links';
+import { generalConfig } from 'config/general';
 
-const Voucher: React.FC = () => {
+const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
+    const [isClaimable, setIsClaimable] = useState(false);
     const [isClaiming, setIsClaiming] = useState(false);
 
-    const overtimeVoucherEscrowQuery = useOvertimeVoucherEscrowQuery(walletAddress, networkId, {
-        enabled: isAppReady,
-    });
+    const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
+
+    const overtimeVoucherEscrowQuery = useOvertimeVoucherEscrowQuery(
+        isSearchTextWalletAddress ? searchText : walletAddress,
+        networkId,
+        {
+            enabled: isAppReady,
+        }
+    );
 
     const overtimeVoucherEscrowData = overtimeVoucherEscrowQuery.isSuccess ? overtimeVoucherEscrowQuery.data : null;
 
@@ -53,6 +64,7 @@ const Voucher: React.FC = () => {
                 });
                 const txResult = await tx.wait();
                 if (txResult && txResult.transactionHash) {
+                    refetchAfterVoucherClaim(walletAddress, networkId);
                     toast.update(id, getSuccessToastOptions(t('profile.messages.voucher-claim-success')));
                     setIsClaiming(false);
                 }
@@ -62,7 +74,13 @@ const Voucher: React.FC = () => {
                 console.log('Error ', e);
             }
         }
-    }, [networkId, t, isClaiming]);
+    }, [networkId, t, isClaiming, walletAddress]);
+
+    useEffect(() => {
+        setIsClaimable(!!overtimeVoucherEscrowData?.isClaimable);
+    }, [networkId, overtimeVoucherEscrowData?.isClaimable]);
+
+    const bannerImage = `${generalConfig.API_URL}/banners/image/voucher.jpg`;
 
     return (
         <Container>
@@ -70,8 +88,19 @@ const Voucher: React.FC = () => {
                 <SimpleLoader />
             ) : (
                 <>
-                    <InfoText>{t('profile.voucher-info')}</InfoText>
-                    {overtimeVoucherEscrowData?.isClaimable && (
+                    <Banner image={bannerImage} />
+                    <TextWrapper>
+                        <Title isUppercase={true}>{t('profile.voucher-title')}</Title>
+                        <InfoText>
+                            <Trans
+                                i18nKey={'profile.voucher-info'}
+                                components={{
+                                    docsLink: <Link target="_blank" rel="noreferrer" href={LINKS.Profile.Voucher} />,
+                                }}
+                            />
+                        </InfoText>
+                    </TextWrapper>
+                    {isClaimable && (
                         <VoucherRow>
                             <VoucherBox width="306px" backgroundImage={voucherLogoBox}>
                                 <Logo src={zebraLogo} />
@@ -114,6 +143,15 @@ const Container = styled(FlexDivColumn)`
     max-width: 780px;
 `;
 
+const Banner = styled.div<{ image: string }>`
+    max-width: 100%;
+    height: 150px;
+    background-image: ${(props) => `url(${props.image})`};
+    background-position: center;
+    border: 2px solid #5f6180;
+    border-radius: 14px;
+`;
+
 const VoucherRow = styled(FlexDivRowCentered)`
     margin-top: 20px;
 `;
@@ -138,12 +176,15 @@ const Logo = styled.img<{ width?: string }>`
     ${(props) => (props.width ? `width: ${props.width}` : '')};
 `;
 
+const TextWrapper = styled.div`
+    margin: 25px 5px 0 5px;
+`;
+
 const InfoText = styled.p`
-    margin: 0 10px;
     font-style: normal;
     font-weight: 400;
-    font-size: 12px;
-    line-height: 14px;
+    font-size: 14px;
+    line-height: 16px;
     text-align: justify;
     color: #ffffff;
 `;
@@ -156,6 +197,12 @@ const Text = styled.span<{ isUppercase?: boolean }>`
     color: #ffffff;
     text-align: center;
     text-transform: ${(props) => (props.isUppercase ? 'uppercase' : 'none')};
+`;
+
+const Title = styled(Text)`
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
 `;
 
 const GiftText = styled(Text)`
@@ -184,6 +231,13 @@ const ClaimText = styled(Text)`
     line-height: 19px;
     letter-spacing: 0.025em;
     color: #303656;
+`;
+
+const Link = styled.a`
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #3fd1ff;
 `;
 
 export default Voucher;
