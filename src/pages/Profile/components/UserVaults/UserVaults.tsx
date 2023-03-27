@@ -23,7 +23,8 @@ const UserVaults: React.FC = () => {
         <>
             <Wrapper>
                 {vaults.map((obj, index) => {
-                    return <UserVault key={index} vaultName={obj.key} vaultAddress={obj.vaultAddress} />;
+                    if (obj.vaultAddress)
+                        return <UserVault key={index} vaultName={obj.key} vaultAddress={obj.vaultAddress} />;
                 })}
                 <UserLP />
             </Wrapper>

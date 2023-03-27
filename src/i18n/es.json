@@ -220,7 +220,8 @@
                 "motogp": "MotoGP",
                 "soon": "Más deportes pronto!",
                 "motosport": "Motosport",
-                "favourites": "Favoritos"
+                "favourites": "Favoritos",
+                "esports": "deportes electrónicos"
             },
             "all": "Todo",
             "datepicker": {
@@ -768,7 +769,8 @@
                 "claim": "Reclamo de Retiro"
             },
             "no-transactions": "No hay transacciones de usuario asociadas con esta bóveda en la ronda seleccionada.",
-            "title": "Transacciones de usuario"
+            "title": "Transacciones de usuario",
+            "name": "Nombre"
         },
         "parlay-discount-vault": {
             "title": "Bóveda de descuento Parlay",
@@ -777,7 +779,8 @@
         },
         "LP": {
             "title": "LP"
-        }
+        },
+        "variables-parlay": "<p>Variables:</p><ul><li> Tasa de utilización: {{utilizationRate}}</li><li> Límite inferior de precio: {{priceLowerLimit}}</li><li> Límite superior de precio: {{priceUpperLimit}}</li><li> Impacto sesgado máximo: {{skewImpactLimit}}</li><li> Asignación máxima en un único parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Depósito total máximo: {{maxAllowedDeposit}}</li><li> Usuarios máximos en la bóveda: {{maxAllowedUsers}}</li><li> Monto mínimo en una sola operación: {{minTradeAmount}}</li><li> Depósito mínimo: {{minDepositAmount}}</li><li> Duración de la ronda: {{roundLength}} días</li></ul>"
     },
     "parlay-leaderboard": {
         "title": "Leaderboard de incentivos en Parlays",

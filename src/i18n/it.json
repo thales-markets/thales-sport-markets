@@ -220,7 +220,8 @@
                 "motogp": "MotoGP",
                 "soon": "More sports coming soon!",
                 "motosport": "Motosport",
-                "favourites": "Preferiti"
+                "favourites": "Preferiti",
+                "esports": "Esport"
             },
             "all": "All",
             "datepicker": {
@@ -771,7 +772,8 @@
                 "claim": "Richiesta di recesso"
             },
             "title": "Transazioni utente",
-            "no-transactions": "Nessuna transazione utente associata a questo vault nel round selezionato."
+            "no-transactions": "Nessuna transazione utente associata a questo vault nel round selezionato.",
+            "name": "Nome"
         },
         "parlay-discount-vault": {
             "description": "<p>Acquista biglietti parlay in cui ogni singola posizione nel biglietto ha almeno uno sconto {{discount}}.</p><p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
@@ -780,7 +782,8 @@
         },
         "LP": {
             "title": "LP"
-        }
+        },
+        "variables-parlay": "<p>Variabili:</p><ul><li> Tasso di utilizzo: {{utilizationRate}}</li><li> Limite inferiore del prezzo: {{priceLowerLimit}}</li><li> Limite massimo del prezzo: {{priceUpperLimit}}</li><li> Impatto Max Skew: {{skewImpactLimit}}</li><li> Allocazione massima su un singolo parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Deposito totale massimo: {{maxAllowedDeposit}}</li><li> Numero massimo di utenti nel vault: {{maxAllowedUsers}}</li><li> Importo minimo su una singola operazione: {{minTradeAmount}}</li><li> Deposito minimo: {{minDepositAmount}}</li><li> Durata round: {{roundLength}} giorni</li></ul>"
     },
     "parlay-leaderboard": {
         "title": "Classifica degli incentivi Parlay",

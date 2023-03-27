@@ -31,7 +31,7 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
             };
 
             try {
-                const marchMadnessContract = networkConnector.marchMadnessContract;
+                const { marchMadnessContract } = networkConnector;
 
                 if (marchMadnessContract && walletAddress !== '') {
                     const tokenId = await marchMadnessContract.addressToTokenId(walletAddress);

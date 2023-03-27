@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CellProps } from 'react-table';
 import { formatTxTimestamp } from 'utils/formatters/date';
@@ -9,7 +9,7 @@ import useUserVaultAndLpTransactions from 'queries/wallet/useUserVaultAndLpTrans
 import { useSelector } from 'react-redux';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { VaultsAndLiquidityPoolUserTransaction } from 'types/liquidityPool';
+import { VaultsAndLiquidityPoolUserTransaction, VaultsAndLiquidityPoolUserTransactions } from 'types/liquidityPool';
 import styled from 'styled-components';
 
 export const UserVaultAndLpTransactionsTable: React.FC = () => {
@@ -18,16 +18,18 @@ export const UserVaultAndLpTransactionsTable: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const txQuery = useUserVaultAndLpTransactions(networkId, walletAddress, {
         enabled: walletAddress !== '',
-        refetchInterval: false,
     });
-    console.log(txQuery);
 
-    const transactions = txQuery.isSuccess ? txQuery.data : [];
+    const [lastValidData, setLastValidData] = useState<VaultsAndLiquidityPoolUserTransactions>([]);
+
+    useEffect(() => {
+        if (txQuery.isSuccess && txQuery.data) setLastValidData(txQuery.data);
+    }, [txQuery]);
 
     // @ts-ignore
     return (
         <Wrapper>
-            <Title>HISTORY</Title>
+            <Title>{t('markets.nav-menu.items.history')}</Title>
             <Table
                 tableHeadCellStyles={TableHeaderStyle}
                 tableRowCellStyles={TableRowStyle}
@@ -45,7 +47,7 @@ export const UserVaultAndLpTransactionsTable: React.FC = () => {
                         sortable: true,
                     },
                     {
-                        Header: <>Name</>,
+                        Header: <>{t(`vault.user-transactions.name`)}</>,
                         accessor: 'name',
                         Cell: (
                             cellProps: CellProps<
@@ -91,14 +93,18 @@ export const UserVaultAndLpTransactionsTable: React.FC = () => {
                         sortable: true,
                     },
                     {
-                        Header: <>ROUND</>,
+                        Header: <>{t('vault.trades-history.round-label')}</>,
                         accessor: 'round',
                         Cell: (
                             cellProps: CellProps<
                                 VaultsAndLiquidityPoolUserTransaction,
                                 VaultsAndLiquidityPoolUserTransaction['round']
                             >
-                        ) => <TableText>ROUND {cellProps.cell.value}</TableText>,
+                        ) => (
+                            <TableText>
+                                {t('vault.trades-history.round-label')} {cellProps.cell.value}
+                            </TableText>
+                        ),
                         width: 150,
                     },
                     {
@@ -113,8 +119,8 @@ export const UserVaultAndLpTransactionsTable: React.FC = () => {
                         width: 150,
                     },
                 ]}
-                data={transactions}
-                isLoading={txQuery.isFetching}
+                data={lastValidData}
+                isLoading={lastValidData.length === 0 && txQuery.isFetching}
                 noResultsMessage={t('profile.messages.no-transactions')}
                 tableRowStyles={{ minHeight: '50px' }}
             />
