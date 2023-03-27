@@ -68,7 +68,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import vaultContract from 'utils/contracts/sportVaultContract';
 import Toggle from 'components/Toggle/Toggle';
 import Tooltip from 'components/Tooltip';
-import { getDefaultColleteralForNetwork } from 'utils/collaterals';
+import { getDefaultColleteralForNetwork, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 type VaultProps = RouteComponentProps<{
     vaultId: string;
@@ -184,7 +184,10 @@ const Vault: React.FC<VaultProps> = (props) => {
             const sUSDContractWithSigner = sUSDContract.connect(signer);
             const getAllowance = async () => {
                 try {
-                    const parsedAmount = ethers.utils.parseEther(Number(amount).toString());
+                    const parsedAmount = ethers.utils.parseUnits(
+                        Number(amount).toString(),
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
                     const allowance = await checkAllowance(
                         parsedAmount,
                         sUSDContractWithSigner,
@@ -200,9 +203,10 @@ const Vault: React.FC<VaultProps> = (props) => {
                 getAllowance();
             }
         }
-    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, vaultAddress]);
+    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, vaultAddress, networkId]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
+        console.log('handleAllowance amount: ', approveAmount);
         const { signer, sUSDContract } = networkConnector;
         if (signer && sUSDContract) {
             const id = toast.loading(t('market.toast-message.transaction-pending'));
