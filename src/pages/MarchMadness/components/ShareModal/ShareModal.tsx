@@ -22,6 +22,7 @@ type ShareModalProps = {
 };
 
 const IMAGE_NAME = 'BracketImage.png';
+const TWITTER_MESSAGE = '%0AI picked the {{winnerTeam}} to cut the nets down in Houston! How about you, anon?';
 const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
 const TWITTER_MESSAGE_UPLOAD = `%0A<UPLOAD YOUR ${IMAGE_NAME}>`;
 
@@ -36,7 +37,6 @@ const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) =
         ? finalMatch.matchData.homeTeamId
         : finalMatch.matchData.awayTeamId;
     const winnerTeamName = teamsData.find((team) => team?.id === winnerTeamId)?.name;
-    const winnerTeamDisplayName = teamsData.find((team) => team?.id === winnerTeamId)?.displayName;
 
     const [winnerLogoSrc, setWinnerLogoSrc] = useState(
         getTeamImageSource(winnerTeamName || '', TAGS_FLAGS.NCAA_BASKETBALL)
@@ -90,6 +90,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) =
                     const twitterLinkWithStatusMessage =
                         LINKS.TwitterTweetStatus +
                         LINKS.Overtime +
+                        TWITTER_MESSAGE.replace('{{winnerTeam}}', winnerTeamName || '') +
                         (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
 
                     toast.update(
@@ -118,7 +119,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) =
                 }
             }
         },
-        [isLoading, useDownloadImage, handleClose, t]
+        [isLoading, useDownloadImage, handleClose, t, winnerTeamName]
     );
 
     const onTwitterShareClickHandler = () => {
@@ -192,7 +193,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) =
                         />
                     </Logo>
                     <Text margin="16px 0 0 0">
-                        {t('march-madness.brackets.modal-share.user-selection', { team: winnerTeamDisplayName })}
+                        {t('march-madness.brackets.modal-share.user-selection', { team: winnerTeamName })}
                     </Text>
                 </ContentWrapper>
                 <Button style={buttonStyle} onClick={onTwitterShareClickHandler}>

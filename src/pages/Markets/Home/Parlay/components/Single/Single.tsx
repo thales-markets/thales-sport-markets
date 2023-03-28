@@ -64,9 +64,10 @@ import {
 type SingleProps = {
     market: ParlaysMarket;
     parlayPayment: ParlayPayment;
+    onBuySuccess?: () => void;
 };
 
-const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
+const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
@@ -115,6 +116,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
         markets: [],
+        multiSingle: false,
         totalQuote: 0,
         paid: 0,
         payout: 0,
@@ -357,7 +359,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                 try {
                     const parsedTicketPrice = getAmountForApproval(
                         selectedStableIndex,
-                        Number(usdAmountValue).toString()
+                        Number(usdAmountValue).toString(),
+                        networkId
                     );
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
@@ -384,6 +387,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         selectedStableIndex,
         isVoucherSelected,
         isMultiCollateralSupported,
+        networkId,
     ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
@@ -465,6 +469,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
                     setUsdAmount('');
                     setTokenAmount(0);
                     dispatch(removeAll());
+                    onBuySuccess && onBuySuccess();
 
                     trackEvent({
                         category: 'parlay-single',
@@ -591,6 +596,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
         // create data copy to avoid modal re-render while opened
         const modalData: ShareTicketModalProps = {
             markets: [market],
+            multiSingle: false,
             totalQuote: getPositionOdds(market),
             paid: Number(usdAmountValue),
             payout: tokenAmount,
@@ -684,6 +690,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment }) => {
             {showShareTicketModal && (
                 <ShareTicketModal
                     markets={shareTicketModalData.markets}
+                    multiSingle={false}
                     totalQuote={shareTicketModalData.totalQuote}
                     paid={shareTicketModalData.paid}
                     payout={shareTicketModalData.payout}

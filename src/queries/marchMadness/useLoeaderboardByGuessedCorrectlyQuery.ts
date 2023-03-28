@@ -2,8 +2,9 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { NetworkId } from 'types/network';
 
-type LeaderboardByGuessedCorrectlyResponse = {
+export type LeaderboardByGuessedCorrectlyResponse = {
     walletAddress: string;
+    volume: number;
     baseVolume: number;
     bonusVolume: number;
     totalCorrectedPredictions: number;

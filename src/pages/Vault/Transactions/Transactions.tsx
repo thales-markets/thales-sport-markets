@@ -7,14 +7,18 @@ import { getNetworkId } from 'redux/modules/wallet';
 import { useTranslation } from 'react-i18next';
 import { orderBy } from 'lodash';
 import { getIsAppReady } from 'redux/modules/app';
-import TradesTable from '../TradesTable';
 import useVaultTradesQuery from 'queries/vault/useVaultTradesQuery';
 import { VaultTrades, VaultTrade, VaultUserTransactions, VaultUserTransaction } from 'types/vault';
 import SelectInput from 'components/SelectInput';
-import { VaultTradeStatus, VaultTransaction } from 'constants/vault';
+import { isParlayVault, VaultTradeStatus, VaultTransaction } from 'constants/vault';
 import { formatCurrency, formatPercentageWithSign } from 'utils/formatters/number';
 import useVaultUserTransactionsQuery from 'queries/vault/useVaultUserTransactionsQuery';
 import UserTransactionsTable from '../UserTransactionsTable';
+import useParlayVaultTradesQuery from 'queries/vault/useParlayVaultTradesQuery';
+import ParlayTransactionsTable from 'components/ParlayTransactionsTable/ParlayTransactionsTable';
+import TradesTable from '../TradesTable';
+import { ParlayMarketWithRound } from 'types/markets';
+import { isParlayClaimable, isParlayOpen } from 'utils/markets';
 
 type TransactionsProps = {
     vaultAddress: string;
@@ -62,6 +66,10 @@ const Transactions: React.FC<TransactionsProps> = ({ vaultAddress, currentRound,
         enabled: isAppReady && !!vaultAddress,
     });
 
+    const parlayVaultTradesQuery = useParlayVaultTradesQuery(vaultAddress, networkId, {
+        enabled: isAppReady && !!vaultAddress && isParlayVault(vaultAddress, networkId),
+    });
+
     useEffect(() => {
         if (vaultTradesQuery.isSuccess && vaultTradesQuery.data) {
             setVaultTrades(
@@ -75,6 +83,15 @@ const Transactions: React.FC<TransactionsProps> = ({ vaultAddress, currentRound,
             setVaultTrades([]);
         }
     }, [vaultTradesQuery.isSuccess, vaultTradesQuery.data, round]);
+
+    const parlayTrades = useMemo(() => {
+        if (parlayVaultTradesQuery.isSuccess) {
+            return parlayVaultTradesQuery.data.filter((parlayTrade) => {
+                return parlayTrade.round === round + 1;
+            });
+        }
+        return [];
+    }, [round, parlayVaultTradesQuery]);
 
     const noVaultTrades = vaultTrades.length === 0;
 
@@ -101,21 +118,35 @@ const Transactions: React.FC<TransactionsProps> = ({ vaultAddress, currentRound,
     useEffect(() => {
         if (round === currentRound - 1) {
             const initialNetAmount = 0;
-            const netAmount = vaultTrades.reduce((accumulator: number, trade: VaultTrade) => {
-                return (
-                    accumulator +
-                    (trade.status === VaultTradeStatus.WIN
-                        ? trade.amount - trade.paid
-                        : trade.status === VaultTradeStatus.LOSE
-                        ? -trade.paid
-                        : 0)
-                );
-            }, initialNetAmount);
-
-            setPnlAmount(netAmount);
-            setPnl(netAmount / currentRoundDeposit);
+            if (isParlayVault(vaultAddress, networkId)) {
+                const netAmount = parlayTrades.reduce((accumulator: number, trade: ParlayMarketWithRound) => {
+                    return (
+                        accumulator +
+                        (isParlayClaimable(trade)
+                            ? trade.totalAmount - trade.sUSDPaid
+                            : isParlayOpen(trade)
+                            ? 0
+                            : -trade.sUSDPaid)
+                    );
+                }, initialNetAmount);
+                setPnlAmount(netAmount);
+                setPnl(netAmount / currentRoundDeposit);
+            } else {
+                const netAmount = vaultTrades.reduce((accumulator: number, trade: VaultTrade) => {
+                    return (
+                        accumulator +
+                        (trade.status === VaultTradeStatus.WIN
+                            ? trade.amount - trade.paid
+                            : trade.status === VaultTradeStatus.LOSE
+                            ? -trade.paid
+                            : 0)
+                    );
+                }, initialNetAmount);
+                setPnlAmount(netAmount);
+                setPnl(netAmount / currentRoundDeposit);
+            }
         }
-    }, [vaultTrades, currentRoundDeposit, round, currentRound]);
+    }, [vaultTrades, parlayTrades, currentRoundDeposit, round, currentRound, networkId, vaultAddress]);
 
     return (
         <Container>
@@ -159,15 +190,18 @@ const Transactions: React.FC<TransactionsProps> = ({ vaultAddress, currentRound,
                 </RightHeader>
             </Header>
             <TableContainer>
-                {selectedTab === VaultTransaction.TRADES_HISTORY && (
-                    <TradesTable
-                        transactions={vaultTrades}
-                        isLoading={vaultTradesQuery.isLoading}
-                        noResultsMessage={
-                            noVaultTrades ? <span>{t(`vault.trades-history.no-trades`)}</span> : undefined
-                        }
-                    />
-                )}
+                {selectedTab === VaultTransaction.TRADES_HISTORY &&
+                    (isParlayVault(vaultAddress, networkId) ? (
+                        <ParlayTransactionsTable parlayTx={parlayTrades} searchText=""></ParlayTransactionsTable>
+                    ) : (
+                        <TradesTable
+                            transactions={vaultTrades}
+                            isLoading={vaultTradesQuery.isLoading}
+                            noResultsMessage={
+                                noVaultTrades ? <span>{t(`vault.trades-history.no-trades`)}</span> : undefined
+                            }
+                        />
+                    ))}
                 {selectedTab === VaultTransaction.USER_TRANSACTIONS && (
                     <UserTransactionsTable
                         transactions={vaultUserTransactions}

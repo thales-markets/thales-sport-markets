@@ -10,9 +10,10 @@ import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } fro
 import styled from 'styled-components';
 import { buildHref, navigateTo } from 'utils/routes';
 import ROUTES from 'constants/routes';
-import { OP_INCENTIVIZED_LEAGUE } from 'constants/markets';
+import { INCENTIVIZED_LEAGUE } from 'constants/markets';
 import Tooltip from 'components/Tooltip';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
+import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
 import Parlay from 'pages/Markets/Home/Parlay';
 import Transactions from '../Transactions';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
@@ -25,7 +26,8 @@ import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveRes
 import Web3 from 'web3';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import { getNetworkId } from 'redux/modules/wallet';
-import useEnetpulseSportMarketLiveResultQuery from 'queries/markets/useEnetpulseSportMarketLiveResultQuery';
+import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
+import { NetworkIdByName } from 'utils/network';
 
 type MarketDetailsPropType = {
     market: MarketData;
@@ -87,7 +89,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         enabled: isAppReady && !isEnetpulseSport,
     });
 
-    const useEnetpulseLiveResultQuery = useEnetpulseSportMarketLiveResultQuery(gameIdString, gameDate, market.tags[0], {
+    const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.tags[0], {
         enabled: isAppReady && isEnetpulseSport,
     });
 
@@ -118,28 +120,30 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         text={t('market.back')}
                         customStylingContainer={{ position: 'absolute', left: 0, top: 0, marginTop: 0 }}
                     />
-                    {OP_INCENTIVIZED_LEAGUE.id == market.tags[0] &&
-                        new Date(market.maturityDate) > OP_INCENTIVIZED_LEAGUE.startDate &&
-                        new Date(market.maturityDate) < OP_INCENTIVIZED_LEAGUE.endDate && (
+                    {INCENTIVIZED_LEAGUE.id == market.tags[0] &&
+                        new Date(market.maturityDate) > INCENTIVIZED_LEAGUE.startDate &&
+                        new Date(market.maturityDate) < INCENTIVIZED_LEAGUE.endDate && (
                             <Tooltip
                                 overlay={
                                     <Trans
-                                        i18nKey="markets.op-incentivized-tooltip"
+                                        i18nKey="markets.incentivized-tooltip"
                                         components={{
-                                            duneLink: (
-                                                <a
-                                                    href="https://dune.com/leifu/overtime-nfl-superbowl-leaderboard-12-feb-2023"
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                />
+                                            detailsLink: (
+                                                <a href={INCENTIVIZED_LEAGUE.link} target="_blank" rel="noreferrer" />
                                             ),
+                                        }}
+                                        values={{
+                                            rewards:
+                                                networkId !== NetworkIdByName.ArbitrumOne
+                                                    ? INCENTIVIZED_LEAGUE.opRewards
+                                                    : INCENTIVIZED_LEAGUE.thalesRewards,
                                         }}
                                     />
                                 }
                                 component={
                                     <IncentivizedLeague>
                                         <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        <OPLogo width={25} height={25} />
+                                        {networkId !== NetworkIdByName.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>
@@ -225,24 +229,25 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                             </InfoLabel>
                                         )}
                                 </ResultLabel>
-                                {!SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) && (
-                                    <PeriodsContainer directionRow={true}>
-                                        {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
-                                            return (
-                                                <PeriodContainer key={index}>
-                                                    <InfoLabel className="gray">{index + 1}</InfoLabel>
-                                                    <InfoLabel>{homePeriodResult}</InfoLabel>
-                                                    <InfoLabel>{liveResultInfo.scoreAwayByPeriod[index]}</InfoLabel>
-                                                </PeriodContainer>
-                                            );
-                                        })}
-                                        <PeriodContainer>
-                                            <InfoLabel className="gray">T</InfoLabel>
-                                            <InfoLabel>{liveResultInfo?.homeScore}</InfoLabel>
-                                            <InfoLabel>{liveResultInfo?.awayScore}</InfoLabel>
-                                        </PeriodContainer>
-                                    </PeriodsContainer>
-                                )}
+                                {!SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
+                                    !SPORTS_TAGS_MAP['eSports'].includes(Number(liveResultInfo?.sportId)) && (
+                                        <PeriodsContainer directionRow={true}>
+                                            {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
+                                                return (
+                                                    <PeriodContainer key={index}>
+                                                        <InfoLabel className="gray">{index + 1}</InfoLabel>
+                                                        <InfoLabel>{homePeriodResult}</InfoLabel>
+                                                        <InfoLabel>{liveResultInfo.scoreAwayByPeriod[index]}</InfoLabel>
+                                                    </PeriodContainer>
+                                                );
+                                            })}
+                                            <PeriodContainer>
+                                                <InfoLabel className="gray">T</InfoLabel>
+                                                <InfoLabel>{liveResultInfo?.homeScore}</InfoLabel>
+                                                <InfoLabel>{liveResultInfo?.awayScore}</InfoLabel>
+                                            </PeriodContainer>
+                                        </PeriodsContainer>
+                                    )}
                             </ResultContainer>
                         )}
                     </Status>
@@ -321,6 +326,9 @@ const IncentivizedLeague = styled.div`
     @media (max-width: 950px) {
         position: static;
         margin-top: 20px;
+    }
+    svg {
+        height: 25px;
     }
 `;
 

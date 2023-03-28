@@ -1,5 +1,6 @@
 import { NetworkId } from 'types/network';
 import { Position } from './options';
+import { MultiSingleAmounts, ParlaysMarket } from 'types/markets';
 
 export const QUERY_KEYS = {
     Rewards: (networkId: NetworkId, period: number) => ['rewards', networkId, period],
@@ -25,7 +26,14 @@ export const QUERY_KEYS = {
         stableIndex: number,
         networkId: NetworkId
     ) => ['positionDetails', marketAddress, position, amount, stableIndex, networkId],
+    MultiplePositionDetails: (
+        markets: ParlaysMarket[],
+        amounts: MultiSingleAmounts[],
+        stableIndex: number,
+        networkId: NetworkId
+    ) => ['multiplePositionDetails', markets, amounts, stableIndex, networkId],
     AvailablePerPosition: (marketAddress: string) => ['availablePerPosition', marketAddress],
+    AvailablePerPositionMulti: (marketAddresses: ParlaysMarket[]) => ['availablePerPositionMulti', marketAddresses],
     AvailablePerDoubleChancePosition: (marketAddress: string) => ['availablePerDoubleChancePosition', marketAddress],
     MarketTransactions: (marketAddress: string, networkId: NetworkId, walletAddress?: string) => [
         'market',
@@ -61,6 +69,7 @@ export const QUERY_KEYS = {
         walletAddress,
         networkId,
     ],
+    ReferrerID: (walletAddress: string) => ['referrerId', walletAddress],
     Referrers: (networkId: NetworkId) => ['referrers', networkId],
     ReferredTraders: (walletAddress: string, networkId: NetworkId) => ['referredTraders', walletAddress, networkId],
     ReferralOverview: (walletAddress: string, networkId: NetworkId) => ['referralOverview', walletAddress, networkId],
@@ -91,6 +100,12 @@ export const QUERY_KEYS = {
             networkId,
         ],
         Stats: (networkId: NetworkId, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
+        VaultsAndLpTxs: (networkId: NetworkId, walletAddress: string) => [
+            'wallet',
+            'VaultsAndLpTxs',
+            networkId,
+            walletAddress,
+        ],
     },
     Quiz: {
         Leaderboard: () => ['quiz', 'leaderboard'],
@@ -108,6 +123,7 @@ export const QUERY_KEYS = {
         ],
         AllVaultsUserData: (walletAddress: string, networkId: NetworkId) => ['data', walletAddress, networkId],
         Trades: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'trades', networkId],
+        ParlayTrades: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'parlayTrades', networkId],
         PnL: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'pnl', networkId],
         UserTransactions: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'userTransactions', networkId],
     },
@@ -122,6 +138,12 @@ export const QUERY_KEYS = {
             'marchMadnessLeaderboardByCorrectPred',
             networkId,
         ],
+    },
+    LiquidityPool: {
+        Data: (networkId: NetworkId) => ['liquidityPool', 'data', networkId],
+        UserData: (walletAddress: string, networkId: NetworkId) => ['liquidityPool', 'data', walletAddress, networkId],
+        PnL: (networkId: NetworkId) => ['liquidityPool', 'pnl', networkId],
+        UserTransactions: (networkId: NetworkId) => ['liquidityPool', 'userTransactions', networkId],
     },
 };
 

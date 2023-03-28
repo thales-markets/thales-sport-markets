@@ -61,6 +61,7 @@ type TicketProps = {
     markets: ParlaysMarket[];
     parlayPayment: ParlayPayment;
     setMarketsOutOfLiquidity: (indexes: number[]) => void;
+    onBuySuccess?: () => void;
 };
 
 const TicketErrorMessage = {
@@ -68,7 +69,7 @@ const TicketErrorMessage = {
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
 };
 
-const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOfLiquidity }) => {
+const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOfLiquidity, onBuySuccess }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
@@ -103,6 +104,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
         markets: [],
+        multiSingle: false,
         totalQuote: 0,
         paid: 0,
         payout: 0,
@@ -243,7 +245,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 try {
                     const parsedTicketPrice = getAmountForApproval(
                         selectedStableIndex,
-                        Number(usdAmountValue).toString()
+                        Number(usdAmountValue).toString(),
+                        networkId
                     );
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
@@ -269,6 +272,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         usdAmountValue,
         selectedStableIndex,
         isVoucherSelected,
+        networkId,
     ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
@@ -354,6 +358,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     setIsBuying(false);
                     setUsdAmount('');
                     dispatch(removeAll());
+                    onBuySuccess && onBuySuccess();
 
                     trackEvent({
                         category: 'parlay',
@@ -522,7 +527,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         .filter((index) => index !== -1);
                     setMarketsOutOfLiquidity(marketsOutOfLiquidity);
                     setFinalQuotes(fetchedFinalQuotes);
-
                     if (!parlayAmmMinimumUSDAmountQuote.error) {
                         const baseQuote = bigNumberFormatter(parlayAmmMinimumUSDAmountQuote['totalQuote']);
                         const calculatedReducedTotalBonus =
@@ -605,6 +609,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         // create data copy to avoid modal re-render while opened
         const modalData: ShareTicketModalProps = {
             markets: [...markets],
+            multiSingle: false,
             totalQuote,
             paid: Number(usdAmountValue),
             payout: totalBuyAmount,
@@ -720,6 +725,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             {showShareTicketModal && (
                 <ShareTicketModal
                     markets={shareTicketModalData.markets}
+                    multiSingle={false}
                     totalQuote={shareTicketModalData.totalQuote}
                     paid={shareTicketModalData.paid}
                     payout={shareTicketModalData.payout}

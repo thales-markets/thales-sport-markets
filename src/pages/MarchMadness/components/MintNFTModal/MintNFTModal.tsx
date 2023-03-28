@@ -129,11 +129,11 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({
                     </Wrapper>
                 </Container>
             )}
-            <NftImage
-                alt="March Madness NFT"
-                src={nftImage}
+            <img
+                alt="Wait to load"
+                src={nftBackground}
                 style={{ display: 'none' }}
-                onLoad={() => setTimeout(() => setIsImageLoaded(true), 300)}
+                onLoad={() => setIsImageLoaded(true)}
             />
         </ReactModal>
     );

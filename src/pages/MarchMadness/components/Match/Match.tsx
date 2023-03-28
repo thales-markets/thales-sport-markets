@@ -33,7 +33,7 @@ const Match: React.FC<MatchProps> = ({
     const { t } = useTranslation();
 
     const isBracketsLeftSide = useMemo(
-        () => isMatchInRegion(matchData.id, 'East') || isMatchInRegion(matchData.id, 'West'),
+        () => isMatchInRegion(matchData.id, 'South') || isMatchInRegion(matchData.id, 'East'),
         [matchData.id]
     );
 

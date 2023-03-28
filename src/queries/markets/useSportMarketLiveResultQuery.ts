@@ -1,6 +1,10 @@
 import QUERY_KEYS from 'constants/queryKeys';
+import { ethers } from 'ethers';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { SportMarketLiveResult } from 'types/markets';
+import networkConnector from 'utils/networkConnector';
+import marketContract from 'utils/contracts/sportsMarketContract';
+import Web3 from 'web3';
 
 const useSportMarketLiveResultQuery = (
     marketId: string,
@@ -10,7 +14,18 @@ const useSportMarketLiveResultQuery = (
         QUERY_KEYS.LiveResult(marketId),
         async () => {
             try {
-                const response = await fetch(`https://api.thalesmarket.io/live-result/${marketId}`);
+                let gameIdString = '';
+                if (marketId.length == 42) {
+                    // marketId represents market address in types ParlayMarket and AccountPositionProfile
+                    const contract = new ethers.Contract(marketId, marketContract.abi, networkConnector.provider);
+
+                    const [gameId] = await Promise.all([contract?.getGameId()]);
+                    gameIdString = Web3.utils.hexToAscii(gameId);
+                }
+
+                const response = await fetch(
+                    `https://api.thalesmarket.io/live-result/${gameIdString != '' ? gameIdString : marketId}`
+                );
                 const resultData = JSON.parse(await response.text());
 
                 const homeScore = resultData.events[0].score.score_home;

@@ -19,10 +19,11 @@ import {
     convertPositionNameToPositionType,
     formatMarketOdds,
     getOddTooltipText,
+    getParentMarketAddress,
     getSpreadTotalText,
     getSymbolText,
-    isParlayClaimable,
     isParlayOpen,
+    isParlayWon,
 } from 'utils/markets';
 import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
@@ -32,9 +33,13 @@ import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/Shar
 import { Position } from 'constants/options';
 import { ethers } from 'ethers';
 import { CollateralByNetworkId } from 'utils/network';
+import { buildMarketLink } from 'utils/routes';
+import SPAAnchor from 'components/SPAAnchor';
+import i18n from 'i18n';
 
 const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
+    const language = i18n.language;
     const selectedOddsType = useSelector(getOddsType);
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -45,6 +50,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
         markets: [],
+        multiSingle: false,
         totalQuote: 0,
         paid: 0,
         payout: 0,
@@ -126,6 +132,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
 
         const modalData: ShareTicketModalProps = {
             markets: parlaysMarket,
+            multiSingle: false,
             totalQuote: data.totalQuote,
             paid: data.sUSDPaid,
             payout: data.totalAmount,
@@ -204,7 +211,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         Header: <>{t('profile.table.status')}</>,
                         sortable: false,
                         Cell: (cellProps: any) => {
-                            if (cellProps.row.original.won || isParlayClaimable(cellProps.row.original)) {
+                            if (isParlayWon(cellProps.row.original)) {
                                 return <StatusWrapper color="#5FC694">WON </StatusWrapper>;
                             } else {
                                 return isParlayOpen(cellProps.row.original) ? (
@@ -248,12 +255,21 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
 
                         return (
                             <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
-                                <ParlayRowText>
-                                    {getPositionStatus(position)}
-                                    <ParlayRowTeam title={position.market.homeTeam + ' vs ' + position.market.awayTeam}>
-                                        {position.market.homeTeam + ' vs ' + position.market.awayTeam}
-                                    </ParlayRowTeam>
-                                </ParlayRowText>
+                                <SPAAnchor
+                                    href={buildMarketLink(
+                                        getParentMarketAddress(position.market.parentMarket, position.market.address),
+                                        language
+                                    )}
+                                >
+                                    <ParlayRowText style={{ cursor: 'pointer' }}>
+                                        {getPositionStatus(position)}
+                                        <ParlayRowTeam
+                                            title={position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                                        >
+                                            {position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                                        </ParlayRowTeam>
+                                    </ParlayRowText>
+                                </SPAAnchor>
                                 <PositionSymbol
                                     symbolAdditionalText={{
                                         text: formatMarketOdds(selectedOddsType, quote),
@@ -309,6 +325,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
             {showShareTicketModal && (
                 <ShareTicketModal
                     markets={shareTicketModalData.markets}
+                    multiSingle={false}
                     totalQuote={shareTicketModalData.totalQuote}
                     paid={shareTicketModalData.paid}
                     payout={shareTicketModalData.payout}

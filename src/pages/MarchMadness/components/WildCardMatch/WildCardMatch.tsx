@@ -4,18 +4,19 @@ import React from 'react';
 type WildCardMatchProps = {
     homeTeam: string;
     awayTeam: string;
+    isHomeTeamWon: boolean | undefined;
     margin?: string;
 };
 
-const WildCardMatch: React.FC<WildCardMatchProps> = ({ homeTeam, awayTeam, margin }) => {
+const WildCardMatch: React.FC<WildCardMatchProps> = ({ homeTeam, awayTeam, isHomeTeamWon, margin }) => {
     return (
         <Container margin={margin}>
             <TeamRow>
-                <TeamName>{homeTeam}</TeamName>
+                <TeamName isWinner={isHomeTeamWon}>{homeTeam}</TeamName>
             </TeamRow>
             <TeamSeparator />
             <TeamRow>
-                <TeamName>{awayTeam}</TeamName>
+                <TeamName isWinner={!isHomeTeamWon}>{awayTeam}</TeamName>
             </TeamRow>
         </Container>
     );
@@ -43,14 +44,14 @@ const TeamRow = styled.div`
     z-index: 100;
 `;
 
-const TeamName = styled.div`
+const TeamName = styled.div<{ isWinner?: boolean }>`
     font-family: 'Oswald' !important;
     font-style: normal;
     font-weight: 600;
     font-size: 14px;
     line-height: 14px;
     text-transform: uppercase;
-    color: #021631;
+    color: ${(props) => (props.isWinner === undefined || props.isWinner ? '#021631' : '#9AAEB1')};
     text-align: center;
     white-space: nowrap;
     overflow: hidden;

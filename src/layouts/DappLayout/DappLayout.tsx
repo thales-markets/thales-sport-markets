@@ -18,6 +18,9 @@ import i18n from 'i18n';
 import { setTheme } from 'redux/modules/ui';
 import { Theme } from 'constants/ui';
 import ROUTES from 'constants/routes';
+import { generalConfig } from 'config/general';
+import axios from 'axios';
+import useWidgetBotScript from 'hooks/useWidgetBotScript';
 
 const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -25,13 +28,25 @@ const DappLayout: React.FC = ({ children }) => {
     const { trackPageView } = useMatomo();
     const dispatch = useDispatch();
     const location = useLocation();
-    const queryParams: { referralId?: string } = queryString.parse(location.search);
+    const queryParams: { referralId?: string; referrerId?: string } = queryString.parse(location.search);
 
     useEffect(() => {
         if (queryParams.referralId) {
             setReferralId(queryParams.referralId);
         }
-    }, [queryParams.referralId]);
+        const referrerId = queryParams.referrerId;
+        if (referrerId) {
+            const fetchIdAddress = async () => {
+                const response = await axios.get(
+                    `${generalConfig.API_URL}/get-refferer-id-address/${encodeURIComponent(referrerId)}`
+                );
+                if (response.data) {
+                    setReferralId(response.data);
+                }
+            };
+            fetchIdAddress();
+        }
+    }, [queryParams.referralId, queryParams.referrerId]);
 
     useEffect(() => {
         const customDimensions = [
@@ -68,6 +83,8 @@ const DappLayout: React.FC = ({ children }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location.pathname]);
+
+    useWidgetBotScript();
 
     return (
         <>

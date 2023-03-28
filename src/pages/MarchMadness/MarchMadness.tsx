@@ -23,10 +23,12 @@ import Leaderboard from './components/Leaderboard';
 import Tabs from './components/Tabs';
 import { MarchMadTabs } from './components/Tabs/Tabs';
 import { history } from 'utils/routes';
+import { useLocation } from 'react-router-dom';
 
 const MarchMadness: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const location = useLocation();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -71,7 +73,14 @@ const MarchMadness: React.FC = () => {
                 setSelectedTab(MarchMadTabs.HOME);
             }
         }
-    }, [walletAddress, marchMadnessData?.isAddressAlreadyMinted, networkId, queryParamTab, isWalletConnected]);
+    }, [
+        walletAddress,
+        marchMadnessData?.isAddressAlreadyMinted,
+        networkId,
+        queryParamTab,
+        isWalletConnected,
+        location.search,
+    ]);
 
     useEffect(() => {
         dispatch(setTheme(Theme.MARCH_MADNESS));
@@ -87,8 +96,6 @@ const MarchMadness: React.FC = () => {
                 <Loader />
             ) : (
                 <>
-                    {/* TODO: Remove this when teams for brackets are known */}
-                    <TestingTeamsInfo>{t('march-madness.test-info')}</TestingTeamsInfo>
                     <BackToLink
                         link={buildHref(ROUTES.Markets.Home)}
                         text={t('march-madness.back-to-markets')}
@@ -132,23 +139,6 @@ const Text = styled.span`
     font-weight: 400;
     font-size: 14px;
     line-height: 21px;
-    color: #ffffff;
-`;
-
-const TestingTeamsInfo = styled.div`
-    width: 100%;
-    height: 61px;
-    background: #c12b34;
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Oswald' !important;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 25px;
-    line-height: 14px;
-    text-transform: uppercase;
     color: #ffffff;
 `;
 
