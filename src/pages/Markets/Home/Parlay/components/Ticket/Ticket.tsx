@@ -104,6 +104,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
         markets: [],
+        multiSingle: false,
         totalQuote: 0,
         paid: 0,
         payout: 0,
@@ -526,7 +527,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         .filter((index) => index !== -1);
                     setMarketsOutOfLiquidity(marketsOutOfLiquidity);
                     setFinalQuotes(fetchedFinalQuotes);
-
                     if (!parlayAmmMinimumUSDAmountQuote.error) {
                         const baseQuote = bigNumberFormatter(parlayAmmMinimumUSDAmountQuote['totalQuote']);
                         const calculatedReducedTotalBonus =
@@ -609,6 +609,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         // create data copy to avoid modal re-render while opened
         const modalData: ShareTicketModalProps = {
             markets: [...markets],
+            multiSingle: false,
             totalQuote,
             paid: Number(usdAmountValue),
             payout: totalBuyAmount,
@@ -724,6 +725,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             {showShareTicketModal && (
                 <ShareTicketModal
                     markets={shareTicketModalData.markets}
+                    multiSingle={false}
                     totalQuote={shareTicketModalData.totalQuote}
                     paid={shareTicketModalData.paid}
                     payout={shareTicketModalData.payout}

@@ -89,7 +89,8 @@
             "insufficient-balance-wallet": "Por favor asegurese que su billetera tenga suficiente {{currencyKey}}",
             "user-rejected-tx": "Transacción rechazada por el usuario",
             "enter-address": "Enter address",
-            "invalid-address": "Invalid address"
+            "invalid-address": "Invalid address",
+            "batch-transaction-single-failure": "Una transacción fue rechazada o fallida."
         },
         "time-remaining": {
             "ended": "finalizado",
@@ -403,10 +404,15 @@
                 "winner": "Ganador",
                 "share": "Cuota",
                 "loser": "Perdedor",
-                "potential-payout": "Pago potencial"
+                "potential-payout": "Pago potencial",
+                "positions": "Número de posiciones"
             },
             "buy-in": "Aceptacion",
-            "total-bonus": "bono total"
+            "total-bonus": "bono total",
+            "toggle-parlay": {
+                "multi-single": "Soltero",
+                "parlay": "Incrementar dinero en apuestas"
+            }
         },
         "discounted-per": "Con descuento según",
         "nav-menu": {
@@ -563,7 +569,8 @@
             "number-of-games": "Numero de juegos",
             "result": "Resultado",
             "starts": "Empieza",
-            "position-size": "Tamaño de la posición"
+            "position-size": "Tamaño de la posición",
+            "claim-all": "Reclamar todo"
         },
         "messages": {
             "no-open": "No tienes ninguna posición abierta",

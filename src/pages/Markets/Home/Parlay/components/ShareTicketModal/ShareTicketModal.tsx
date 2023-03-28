@@ -21,6 +21,7 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 export type ShareTicketModalProps = {
     markets: ParlaysMarket[];
+    multiSingle: boolean;
     totalQuote: number;
     paid: number;
     payout: number;
@@ -31,7 +32,14 @@ const PARLAY_IMAGE_NAME = 'ParlayImage.png';
 const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
 const TWITTER_MESSAGE_UPLOAD = `%0A<UPLOAD YOUR ${PARLAY_IMAGE_NAME}>`;
 
-const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote, paid, payout, onClose }) => {
+const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
+    markets,
+    multiSingle,
+    totalQuote,
+    paid,
+    payout,
+    onClose,
+}) => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const { trackEvent } = useMatomo();
 
@@ -248,7 +256,13 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ markets, totalQuote
                 {displayOptions.isSimpleView ? (
                     <MySimpleTicket markets={markets} payout={payout} />
                 ) : (
-                    <MyTicket markets={markets} totalQuote={totalQuote} paid={paid} payout={payout} />
+                    <MyTicket
+                        markets={markets}
+                        totalQuote={totalQuote}
+                        paid={paid}
+                        payout={payout}
+                        multiSingle={multiSingle}
+                    />
                 )}
                 {isMobile ? (
                     <DisplayOptions

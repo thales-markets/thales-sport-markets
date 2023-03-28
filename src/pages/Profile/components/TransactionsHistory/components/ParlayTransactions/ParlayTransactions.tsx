@@ -50,6 +50,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
         markets: [],
+        multiSingle: false,
         totalQuote: 0,
         paid: 0,
         payout: 0,
@@ -131,6 +132,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
 
         const modalData: ShareTicketModalProps = {
             markets: parlaysMarket,
+            multiSingle: false,
             totalQuote: data.totalQuote,
             paid: data.sUSDPaid,
             payout: data.totalAmount,
@@ -323,6 +325,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
             {showShareTicketModal && (
                 <ShareTicketModal
                     markets={shareTicketModalData.markets}
+                    multiSingle={false}
                     totalQuote={shareTicketModalData.totalQuote}
                     paid={shareTicketModalData.paid}
                     payout={shareTicketModalData.payout}

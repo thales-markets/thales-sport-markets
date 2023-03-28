@@ -88,7 +88,8 @@
             "invalid-slippage": "Glissement non valide",
             "user-rejected-tx": "Utilisateur a rejeté la transaction",
             "invalid-address": "Adresse invalide",
-            "enter-address": "Entrer l'adresse"
+            "enter-address": "Entrer l'adresse",
+            "batch-transaction-single-failure": "Une transaction a été rejetée ou a échoué."
         },
         "time-remaining": {
             "ended": "terminé",
@@ -501,10 +502,15 @@
                 "total-quote": "Devis total",
                 "potential-payout": "Paiement potentiel",
                 "referral": "Lien de référence",
-                "header": "Web 3 Sport commercialise sur"
+                "header": "Web 3 Sport commercialise sur",
+                "positions": "Nombre de postes"
             },
             "buy-in": "Adhésion",
-            "total-bonus": "Prime totale"
+            "total-bonus": "Prime totale",
+            "toggle-parlay": {
+                "multi-single": "Seul",
+                "parlay": "Parler"
+            }
         },
         "discounted-per": "Remise selon",
         "nav-menu": {
@@ -661,7 +667,8 @@
             "ticket-paid": "Billet payé",
             "result": "Résultat",
             "starts": "Départs",
-            "position-size": "Taille du poste"
+            "position-size": "Taille du poste",
+            "claim-all": "Réclamer tout"
         },
         "messages": {
             "no-claimable": "Vous n'avez pas de poste réclamable",
