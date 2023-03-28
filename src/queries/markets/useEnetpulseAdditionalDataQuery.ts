@@ -1,9 +1,14 @@
 import { ENETPULSE_ROUNDS } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
+import { ethers } from 'ethers';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { SportMarketLiveResult } from 'types/markets';
+import networkConnector from 'utils/networkConnector';
+import Web3 from 'web3';
+import marketContract from 'utils/contracts/sportsMarketContract';
+import { SPORTS_TAGS_MAP } from 'constants/tags';
 
-const useEnetpulseSportMarketLiveResultQuery = (
+const useEnetpulseAdditionalDataQuery = (
     marketId: string,
     gameDate: string,
     sportTag: number,
@@ -20,23 +25,44 @@ const useEnetpulseSportMarketLiveResultQuery = (
                 );
                 const events = Object.values(JSON.parse(await response.text()).events);
 
+                let gameIdString = '';
+                if (marketId.length == 42) {
+                    // marketId represents market address in types ParlayMarket and AccountPositionProfile
+                    const contract = new ethers.Contract(marketId, marketContract.abi, networkConnector.provider);
+
+                    const [gameId] = await Promise.all([contract?.getGameId()]);
+                    gameIdString = Web3.utils.hexToAscii(gameId);
+                }
+
                 let trimmedMarketId = '';
-                for (let i = 0; i < marketId.length; i++) {
-                    if (!Number.isNaN(Number(marketId[i]))) {
-                        trimmedMarketId = trimmedMarketId.concat(marketId[i]);
+                if (gameIdString == '') {
+                    for (let i = 0; i < marketId.length; i++) {
+                        if (!Number.isNaN(Number(marketId[i]))) {
+                            trimmedMarketId = trimmedMarketId.concat(marketId[i]);
+                        }
+                    }
+                } else {
+                    for (let i = 0; i < gameIdString.length; i++) {
+                        if (!Number.isNaN(Number(marketId[i]))) {
+                            trimmedMarketId = trimmedMarketId.concat(marketId[i]);
+                        }
                     }
                 }
 
                 const event = events.find((sportEvent: any) => sportEvent.id == trimmedMarketId) as any;
+
                 if (event) {
                     const tournamentName = event.tournament_stage_name;
                     const tournamentRound = ENETPULSE_ROUNDS[Number(event.round_typeFK)];
                     const eventParticipants: any[] = Object.values(event.event_participants);
                     const homeResults: any[] = Object.values(eventParticipants[0].result);
                     const awayResults: any[] = Object.values(eventParticipants[1].result);
-
-                    const homeScore = homeResults.find((result) => result.result_code.toLowerCase() == 'setswon').value;
-                    const awayScore = awayResults.find((result) => result.result_code.toLowerCase() == 'setswon').value;
+                    let homeScore = 0;
+                    let awayScore = 0;
+                    if (SPORTS_TAGS_MAP['Tennis'].includes(sportTag)) {
+                        homeScore = homeResults.find((result) => result.result_code.toLowerCase() == 'setswon').value;
+                        awayScore = awayResults.find((result) => result.result_code.toLowerCase() == 'setswon').value;
+                    }
 
                     const scoreHomeByPeriod = [];
                     const scoreAwayByPeriod = [];
@@ -59,7 +85,7 @@ const useEnetpulseSportMarketLiveResultQuery = (
                     const period = 0;
                     const status = 'finished';
                     const displayClock = '0';
-                    const sportId = sportParameter;
+                    const sportId = sportTag;
 
                     const finalResult: SportMarketLiveResult = {
                         homeScore,
@@ -88,4 +114,4 @@ const useEnetpulseSportMarketLiveResultQuery = (
     );
 };
 
-export default useEnetpulseSportMarketLiveResultQuery;
+export default useEnetpulseAdditionalDataQuery;

@@ -48,7 +48,16 @@
                 "label": "Empfehlen und Prämie sichern",
                 "disbled-tooltip": "Verbinden dein Wallet, um einen Empfehlungs-Link zu generieren.",
                 "enabled-tooltip": "Laden Freunde ein, mit Overtime zu traden, um mit jedem ihrerer Trades Gebühren zu verdienen."
-            }
+            },
+            "modal": {
+                "submit-button": "Einreichen",
+                "description": "Wählen Sie Ihre Empfehlungs-ID",
+                "copy-button": "Empfehlungslink kopieren",
+                "title": "Empfehlungs-ID"
+            },
+            "id-create-success": "Empfehlungs-ID erfolgreich festgelegt",
+            "id-exists": "Empfehlungs-ID existiert bereits",
+            "your-referral-id": "Ihre Empfehlungs-ID"
         },
         "swap": {
             "title": "USD erhalten",
@@ -80,7 +89,8 @@
             "insufficient-balance-wallet": "Bitte stell sicher, dass dein Wallet genügend {{currencyKey}} enthält",
             "user-rejected-tx": "Benutzer hat die Transaktion abgelehnt",
             "enter-address": "Adresse eingeben",
-            "invalid-address": "Ungültige Adresse"
+            "invalid-address": "Ungültige Adresse",
+            "batch-transaction-single-failure": "Eine Transaktion wurde abgelehnt oder ist fehlgeschlagen."
         },
         "time-remaining": {
             "ended": "zu Ende",
@@ -211,7 +221,8 @@
                 "motogp": "MotoGP",
                 "soon": "Bald noch mehr Sportarten!",
                 "motosport": "Motorsport",
-                "favourites": "Favoriten"
+                "favourites": "Favoriten",
+                "esports": "Sport"
             },
             "all": "Alle",
             "datepicker": {
@@ -390,10 +401,15 @@
                 "winner": "Gewinner",
                 "total-quote": "Gesamtangebot",
                 "header": "Web 3 Sportmärkte auf",
-                "potential-payout": "Mögliche Auszahlung"
+                "potential-payout": "Mögliche Auszahlung",
+                "positions": "Anzahl der Positionen"
             },
             "buy-in": "Kaufen",
-            "total-bonus": "Gesamtbonus"
+            "total-bonus": "Gesamtbonus",
+            "toggle-parlay": {
+                "parlay": "Spielen",
+                "multi-single": "Einzel"
+            }
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {
@@ -407,7 +423,8 @@
                 "leaderboard": "Bestenliste",
                 "fee-rebates": "Gebührenrückerstattungen",
                 "fifa-campaign": "Zebro FIFA-Kampagne",
-                "vaults": "Gewölbe"
+                "vaults": "Gewölbe",
+                "liquidity-pool": "Liquidität bereitstellen"
             },
             "buttons": {
                 "switch": "Schalter",
@@ -549,7 +566,8 @@
             "ticket-paid": "Ticket bezahlt",
             "starts": "Beginnt",
             "result": "Ergebnis",
-            "position-size": "Positionsgröße"
+            "position-size": "Positionsgröße",
+            "claim-all": "Alle beanspruchen"
         },
         "messages": {
             "no-open": "Sie haben keine offene Stelle",
@@ -577,7 +595,13 @@
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
             "in-vaults": "In vaults"
-        }
+        },
+        "lp-title": "Liquiditätspool",
+        "in-lp": "Liquidität bereitgestellt",
+        "in-vault": "Im Tresor",
+        "go-to-vault": "Gehen Sie zum Tresor",
+        "vaults": "Gewölbe/LP",
+        "go-to-lp": "Gehen Sie zu LP"
     },
     "mint-world-cup-nft": {
         "eligible-text-2": "Prägen Sie ein Zebro Ihrer Lieblingsnationalmannschaft und qualifizieren Sie sich für 50.000 OP & 30.000 THALES-Bonusprämien!",
@@ -749,8 +773,18 @@
                 "claim": "Rücktrittsanspruch"
             },
             "title": "Benutzertransaktionen",
-            "no-transactions": "Mit diesem Tresor sind in der ausgewählten Runde keine Benutzertransaktionen verbunden."
-        }
+            "no-transactions": "Mit diesem Tresor sind in der ausgewählten Runde keine Benutzertransaktionen verbunden.",
+            "name": "Name"
+        },
+        "parlay-discount-vault": {
+            "title": "Parlay-Rabatttresor",
+            "risks": "<p>Der Tresor hat eine Auslastungsrate von {{utilizationRate}}, was sicherstellt, dass nicht mehr als {{utilizationRate}} pro Runde eingezahlt werden. Darüber hinaus können von diesen {{utilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für ein einzelnes Parlay-Ticket pro Runde ausgegeben werden, wodurch das Risiko auf mehrere Parlay-Tickets verteilt wird, die einen Rabatt von mehr als {{odds}} haben.</p>",
+            "description": "<p>Kauft Parlay-Tickets, bei denen jede einzelne Position im Ticket mindestens einen Rabatt von {{discount}} hat.</p><p> Alle Einzahlungen, die in eine Runde eingehen, zählen zum gamifizierten Staking-Volumen.</p>"
+        },
+        "LP": {
+            "title": "LP"
+        },
+        "variables-parlay": "<p>Variablen:</p><ul><li> Nutzungsrate: {{utilizationRate}}</li><li> Preisuntergrenze: {{priceLowerLimit}}</li><li> Preisobergrenze: {{priceUpperLimit}}</li><li> Max. Skew-Auswirkung: {{skewImpactLimit}}</li><li> Maximale Zuweisung für eine einzelne Parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Maximale Gesamteinzahlung: {{maxAllowedDeposit}}</li><li> Max. Benutzer im Tresor: {{maxAllowedUsers}}</li><li> Mindestbetrag für einen einzelnen Trade: {{minTradeAmount}}</li><li> Mindesteinzahlung: {{minDepositAmount}}</li><li> Rundendauer: {{roundLength}} Tage</li></ul>"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives-Rangliste",
@@ -849,7 +883,9 @@
                 "place": "Ort",
                 "complete": "Vollständig",
                 "incomplete": "Unvollständig",
-                "points": "Punkte"
+                "points": "Punkte",
+                "rank-volume": "Rang nach Volumen",
+                "rank-games": "Rang nach erratenen Spielen"
             },
             "round-4": "Finale 4",
             "round-1": "2. Runde",
@@ -925,9 +961,9 @@
             "no-data": "Derzeit keine Daten verfügbar",
             "tooltip-bonus-volume-table": "Das Bonusvolumen wird basierend auf Ihrer Klammerauswahl berechnet",
             "tooltip-correct-correct-table": "Anzahl der korrekt erratenen Partien in Ihrem Bracket",
-            "tooltip-rewards-correct-table": "3.000 OP (10.000 Thales auf Arb) werden unter den Top 10 aufgeteilt",
+            "tooltip-rewards-correct-table": "3.000 OP (10.000 THALES auf Arbitrum) werden unter den Top 10 aufgeteilt",
             "tooltip-base-volume-table": "Durch NCAA-Basketballspiele getriebenes Volumen",
-            "tooltip-rewards-volume-table": "10.000 OP (30.000 Thales auf Arb) werden basierend auf dem anteiligen Volumen aufgeteilt",
+            "tooltip-rewards-volume-table": "10.000 OP (30.000 THALES auf Arbitrum) werden basierend auf dem anteiligen Volumen aufgeteilt",
             "by-guessed-correctly": "Durch richtig geraten",
             "my-rewards": "Meine Belohnungen"
         },
@@ -937,12 +973,10 @@
         "title": "Provide Liquidity",
         "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round your balance (inclusive of that round's PnL) is sent to you. To withdraw, you need to have at least {{thalesStakedAmount}} THALES staked per each {{currency}} you are withdrawing.</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
         "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the pool: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
-
         "liquidity-pool-not-started-message": "The liquidity pool has not started",
         "liquidity-pool-paused-message": "The liquidity pool is paused",
         "round-end-label": "The round ends in",
         "round-ended-label": "Round ended",
-
         "total-info-label": "Total LP info",
         "users-in-liquidity-pool-label": "Users in the liquidity pool: {{number}} / {{max}}",
         "your-share-label": "Your share: {{percentage}} of LP",
@@ -954,7 +988,6 @@
         "allowance-multiplier-label": "Allowance multiplier",
         "withdrawal-request-label": "Withdrawal request: {{amount}}",
         "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
-
         "deposit-amount-placeholder": "Enter amount",
         "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
         "nothing-to-withdraw-label": "Nothing to withdraw.",
@@ -969,7 +1002,6 @@
         "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
         "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
         "withdrawal-staked-thales-warning": "You cannot withdraw as you need more staked THALES to withdraw. Stake {{amount}} THALES more to enable withdrawal.",
-
         "tabs": {
             "deposit": "Deposit",
             "withdraw": "Withdraw"

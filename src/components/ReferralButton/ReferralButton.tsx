@@ -1,72 +1,82 @@
+import RefferalModal from 'components/RefferalModal';
 import Tooltip from 'components/Tooltip';
-import ROUTES from 'constants/routes';
-import React from 'react';
+import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { matchPath, useLocation } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivCentered } from 'styles/common';
-import { buildReferralLink } from 'utils/routes';
+import { FlexDivCentered, FlexDivColumn, FlexDiv } from 'styles/common';
+import { buildReffererLink } from 'utils/routes';
+import { toast } from 'react-toastify';
+
 const ReferralButton: React.FC = () => {
     const { t } = useTranslation();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
-    const location = useLocation();
+
+    const reffererIDQuery = useGetReffererIdQuery(walletAddress || '');
+    const reffererID = reffererIDQuery.isSuccess && reffererIDQuery.data ? reffererIDQuery.data : '';
+
+    const getButtonComponent = () => (
+        <StyledButton onClick={() => setIsModalOpen(true)} customDisabled={!isWalletConnected}>
+            {t('common.referral.button.label')}
+        </StyledButton>
+    );
 
     const referralClickHandler = () => {
         if (!walletAddress) {
             return;
         }
-        const referralPath = matchPath(location.pathname, ROUTES.Markets.Market)
-            ? location.pathname
-            : ROUTES.Markets.Home;
 
-        const referralLink = `${window.location.origin}${buildReferralLink(
-            referralPath,
-            window.location.hash,
-            window.location.search,
-            walletAddress
-        )}`;
+        const referralLink = buildReffererLink(reffererID);
 
         navigator.clipboard.writeText(referralLink);
         toast(t('common.referral.link-copied'), { type: 'success' });
     };
 
-    const getButtonComponent = () => (
-        <StyledButton onClick={referralClickHandler} customDisabled={!isWalletConnected}>
-            {t('common.referral.button.label')}
-        </StyledButton>
-    );
-
     return (
         <Container>
-            <Tooltip
-                overlay={
-                    <>
-                        {isWalletConnected
-                            ? t('common.referral.button.enabled-tooltip')
-                            : t('common.referral.button.disbled-tooltip')}
-                    </>
-                }
-                component={getButtonComponent()}
-                iconFontSize={23}
-                marginLeft={2}
-                top={0}
-            />
+            {isModalOpen && <RefferalModal onClose={() => setIsModalOpen(false)} />}
+            <ButtonContainer>
+                <Tooltip
+                    overlay={
+                        <>
+                            {isWalletConnected
+                                ? t('common.referral.button.enabled-tooltip')
+                                : t('common.referral.button.disbled-tooltip')}
+                        </>
+                    }
+                    component={getButtonComponent()}
+                    iconFontSize={23}
+                    marginLeft={2}
+                    top={0}
+                />
+                {reffererID && (
+                    <CopyContainer>
+                        <span>{t('common.referral.your-referral-id')}:</span>
+                        <span>{reffererID} </span>
+                        <CopyIcon onClick={referralClickHandler} className={`icon-thales icon-thales--copy`} />
+                    </CopyContainer>
+                )}
+            </ButtonContainer>
         </Container>
     );
 };
 
 const Container = styled(FlexDivCentered)`
     position: relative;
-    height: 28px;
+    height: 92px;
     button {
         padding: 0 20px;
         width: 100%;
     }
+`;
+
+const ButtonContainer = styled(FlexDivColumn)`
+    height: 100%;
 `;
 
 const StyledButton = styled.button<{ customDisabled?: boolean }>`
@@ -90,6 +100,21 @@ const StyledButton = styled.button<{ customDisabled?: boolean }>`
         cursor: ${(props) => (props.customDisabled ? 'default' : 'pointer')};
         opacity: ${(props) => (props.customDisabled ? '0.4' : '0.8')};
     }
+`;
+
+const CopyContainer = styled(FlexDiv)`
+    font-size: 17px;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    & > span {
+        margin-right: 5px;
+    }
+`;
+
+const CopyIcon = styled.i`
+    color: ${(props) => props.theme.button.borderColor.secondary};
+    cursor: pointer;
 `;
 
 export default ReferralButton;

@@ -92,9 +92,9 @@ const useLiquidityPoolDataQuery = (networkId: NetworkId, options?: UseQueryOptio
                         decimals
                     );
                     liquidityPoolData.lifetimePnl =
-                        bigNumberFormmaterWithDecimals(lifetimePnl, decimals) === 0
+                        bigNumberFormmaterWithDecimals(lifetimePnl, 18) === 0
                             ? 0
-                            : bigNumberFormmaterWithDecimals(lifetimePnl, decimals) - 1;
+                            : bigNumberFormmaterWithDecimals(lifetimePnl, 18) - 1;
                     liquidityPoolData.roundEndTime = Number(roundEndTime) * 1000;
                     liquidityPoolData.isRoundEnded = new Date().getTime() > liquidityPoolData.roundEndTime;
 

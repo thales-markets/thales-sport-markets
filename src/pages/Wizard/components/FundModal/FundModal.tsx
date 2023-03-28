@@ -15,7 +15,6 @@ import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { NetworkId } from 'types/network';
 import { getDefaultNetworkName, getNetworkKeyByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
-import { buildHref } from 'utils/routes';
 
 type FundModalProps = {
     onClose: () => void;
@@ -36,7 +35,7 @@ const getProviderUrl = (provider: Provider | undefined, networkId: NetworkId) =>
         case Provider.MT_PELERIN:
             const baseUrl = 'https://widget.mtpelerin.com/';
             const queryParams = `?type=popup&lang=en&primary=%235F6180&net=${networkParam}&bsc=EUR&bdc=ETH&crys=ETH`;
-            const queryParamMyLogo = `&mylogo=${window.location.origin + buildHref('/overtime-logo-black.svg')}`;
+            const queryParamMyLogo = `&mylogo=${window.location.origin}/overtime-logo-black.svg`;
             return baseUrl + queryParams + queryParamMyLogo;
         case Provider.BUNGEE:
             return '';

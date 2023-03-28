@@ -1,6 +1,6 @@
 [
     {
-        "image": "march-madness.png",
+        "image": "march_madness_updated.jpg",
         "url": "https://overtimemarkets.xyz/#/march-madness"
     },
     {
@@ -24,7 +24,11 @@
         "url": "https://thalesmarket.io/token"
     },
     {
-        "image": "parlay-leaderboard.jpg",
+        "image": "banner_bi-weekly.png",
         "url": "https://overtimemarkets.xyz/#/parlay-leaderboard"
+    },
+    {
+        "image": "LP_banner.png",
+        "url": "https://overtimemarkets.xyz/#/liquidity-pool"
     }
 ]

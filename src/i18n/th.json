@@ -39,7 +39,16 @@
                 "label": "Refer and earn",
                 "disbled-tooltip": "เชื่อมต่อกระเป๋าเพื่อสร้าง referral link.",
                 "enabled-tooltip": "เชิญผู้คนให้มาใช้งาน Overtime เพื่อรับค่าธรรมเนียมจากการเทรดแต่ละครั้งที่พวกเขาทำ"
-            }
+            },
+            "modal": {
+                "submit-button": "ส่ง",
+                "copy-button": "คัดลอกลิงค์อ้างอิง",
+                "description": "เลือกรหัสอ้างอิงของคุณ",
+                "title": "รหัสอ้างอิง"
+            },
+            "id-exists": "ID ผู้อ้างอิงมีอยู่แล้ว",
+            "id-create-success": "กำหนด ID ผู้อ้างอิงสำเร็จ",
+            "your-referral-id": "ID ผู้อ้างอิงของคุณ"
         },
         "swap": {
             "title": "รับ USD",
@@ -71,7 +80,8 @@
             "insufficient-balance-wallet": "โปรดตรวจสอบให้แน่ใจว่ากระเป๋าเงินของคุณมี {{currencyKey}} เพียงพอ",
             "user-rejected-tx": "ผู้ใช้ปฏิเสธการทำธุรกรรม",
             "enter-address": "ใส่ที่อยู่กระเป๋าเงิน",
-            "invalid-address": "ที่อยู่ที่ไม่ถูกต้อง"
+            "invalid-address": "ที่อยู่ที่ไม่ถูกต้อง",
+            "batch-transaction-single-failure": "ธุรกรรมถูกปฏิเสธหรือล้มเหลว"
         },
         "time-remaining": {
             "ended": "เสร็จสิ้น",
@@ -211,7 +221,8 @@
                 "motogp": "MotoGP",
                 "soon": "กีฬาอื่น ๆ เร็ว ๆ นี้!",
                 "motosport": "มอเตอร์สปอร์ต",
-                "favourites": "รายการโปรด"
+                "favourites": "รายการโปรด",
+                "esports": "อีสปอร์ต"
             },
             "datepicker": {
                 "games": "{{numberOfGames}} เกม"
@@ -390,10 +401,15 @@
                 "parlay": "พาร์เลย์",
                 "total-quote": "ใบเสนอราคาทั้งหมด",
                 "referral": "ลิงค์อ้างอิง",
-                "winner": "ผู้ชนะ"
+                "winner": "ผู้ชนะ",
+                "positions": "จำนวนตำแหน่ง"
             },
             "buy-in": "ซื้อใน",
-            "total-bonus": "โบนัสรวม"
+            "total-bonus": "โบนัสรวม",
+            "toggle-parlay": {
+                "multi-single": "เดี่ยว",
+                "parlay": "พาร์เลย์"
+            }
         },
         "nav-menu": {
             "items": {
@@ -406,7 +422,8 @@
                 "onboarding-wizard": "วิซาร์ดการเริ่มต้นใช้งาน",
                 "fee-rebates": "ส่วนลดค่าธรรมเนียม",
                 "fifa-campaign": "แคมเปญ Zebro FIFA",
-                "vaults": "ห้องใต้ดิน"
+                "vaults": "ห้องใต้ดิน",
+                "liquidity-pool": "ให้สภาพคล่อง"
             },
             "buttons": {
                 "switch": "สวิตช์",
@@ -548,7 +565,8 @@
             "number-of-games": "จำนวนเกม",
             "result": "ผลลัพธ์",
             "position-size": "ขนาดตำแหน่ง",
-            "starts": "เริ่ม"
+            "starts": "เริ่ม",
+            "claim-all": "อ้างสิทธิ์ทั้งหมด"
         },
         "messages": {
             "no-open": "คุณไม่มีตำแหน่งที่เปิดอยู่",
@@ -576,7 +594,13 @@
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
             "in-vaults": "In vaults"
-        }
+        },
+        "vaults": "ห้องนิรภัย/LP",
+        "lp-title": "สระว่ายน้ำสภาพคล่อง",
+        "in-vault": "ในห้องนิรภัย",
+        "go-to-vault": "ไปที่ห้องนิรภัย",
+        "go-to-lp": "ไปที่หจก",
+        "in-lp": "มีสภาพคล่อง"
     },
     "mint-world-cup-nft": {
         "incentives": "สิ่งจูงใจ",
@@ -748,8 +772,18 @@
                 "withdrawalRequest": "คำขอถอนเงิน"
             },
             "title": "การทำธุรกรรมของผู้ใช้",
-            "no-transactions": "ไม่มีธุรกรรมของผู้ใช้ที่เกี่ยวข้องกับห้องนิรภัยนี้ในรอบที่เลือก"
-        }
+            "no-transactions": "ไม่มีธุรกรรมของผู้ใช้ที่เกี่ยวข้องกับห้องนิรภัยนี้ในรอบที่เลือก",
+            "name": "ชื่อ"
+        },
+        "parlay-discount-vault": {
+            "description": "<p>ซื้อตั๋วพาร์เลย์โดยแต่ละตำแหน่งในตั๋วมีส่วนลดอย่างน้อย {{discount}}</p><p> เงินฝากทั้งหมดที่เข้าสู่รอบจะนับรวมกับปริมาณการเดิมพันแบบเกม</p>",
+            "risks": "<p>ห้องนิรภัยมีอัตราการใช้งาน {{utilizationRate}} ซึ่งรับรองว่าไม่เกิน {{utilizationRate}} ของเงินฝากในแต่ละรอบที่มีความเสี่ยง นอกจากนี้ จาก {{utilizationRate}} เหล่านั้น คุณสามารถใช้จ่ายได้สูงสุด {{allocationLimitsPerMarketPerRound}} กับตั๋วพาร์เลย์ใบเดียวต่อรอบ ดังนั้นจึงเป็นการกระจายความเสี่ยงไปสู่ตั๋วพาร์เลย์หลายใบที่มีส่วนลดมากกว่า {{odds}}</p>",
+            "title": "ห้องเก็บส่วนลด Parlay"
+        },
+        "LP": {
+            "title": "หจก"
+        },
+        "variables-parlay": "<p>ตัวแปร:</p><ul><li> อัตราการใช้: {{utilizationRate}}</li><li> ขีดจำกัดล่างของราคา: {{priceLowerLimit}}</li><li> ขีดจำกัดสูงสุดของราคา: {{priceUpperLimit}}</li><li> ผลกระทบเอียงสูงสุด: {{skewImpactLimit}}</li><li> การจัดสรรสูงสุดในพาร์เลย์เดียว: {{allocationLimitsPerMarketPerRound}}</li><li> เงินฝากทั้งหมดสูงสุด: {{maxAllowedDeposit}}</li><li> ผู้ใช้สูงสุดในห้องนิรภัย: {{maxAllowedUsers}}</li><li> จำนวนเงินขั้นต่ำในการซื้อขายครั้งเดียว: {{minTradeAmount}}</li><li> เงินฝากขั้นต่ำ: {{minDepositAmount}}</li><li> ระยะเวลาของรอบ: {{roundLength}} วัน</li></ul>"
     },
     "parlay-leaderboard": {
         "title": "ลีดเดอร์บอร์ดสิ่งจูงใจ Parlay",
@@ -848,7 +882,9 @@
                 "place": "สถานที่",
                 "my-stats": "สถิติของฉัน",
                 "bonus": "โบนัส",
-                "complete": "สมบูรณ์"
+                "complete": "สมบูรณ์",
+                "rank-games": "จัดอันดับตามเกมที่เดา",
+                "rank-volume": "จัดอันดับตามปริมาณ"
             },
             "round-0": "รอบที่ 1",
             "round-5": "สุดท้าย",
@@ -922,8 +958,8 @@
             "base-volume": "ฐาน",
             "search-placeholder": "ค้นหาที่อยู่กระเป๋าเงิน",
             "guessed-games": "เกมเดา",
-            "tooltip-rewards-correct-table": "3,000 OP (10k thales on arb) จะถูกแบ่งระหว่าง 10 อันดับแรก",
-            "tooltip-rewards-volume-table": "10,000 OP (30k Thales บน arb) จะถูกแบ่งตามปริมาณตามสัดส่วน",
+            "tooltip-rewards-correct-table": "3,000 OP (10,000 THALES on Arbitrum) จะถูกแบ่งระหว่าง 10 อันดับแรก",
+            "tooltip-rewards-volume-table": "10,000 OP (30,000 THALES บน Arbitrum) จะถูกแบ่งตามปริมาณตามสัดส่วน",
             "tooltip-correct-correct-table": "จำนวนเกมที่เดาถูกในวงเล็บของคุณ",
             "tooltip-bonus-volume-table": "ปริมาณโบนัสคำนวณจากการเลือกกลุ่มของคุณ",
             "tooltip-base-volume-table": "ปริมาณขับเคลื่อนผ่านเกม NCAA Basketball",
@@ -936,12 +972,10 @@
         "title": "Provide Liquidity",
         "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round your balance (inclusive of that round's PnL) is sent to you. To withdraw, you need to have at least {{thalesStakedAmount}} THALES staked per each {{currency}} you are withdrawing.</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
         "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the pool: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
-
         "liquidity-pool-not-started-message": "The liquidity pool has not started",
         "liquidity-pool-paused-message": "The liquidity pool is paused",
         "round-end-label": "The round ends in",
         "round-ended-label": "Round ended",
-
         "total-info-label": "Total LP info",
         "users-in-liquidity-pool-label": "Users in the liquidity pool: {{number}} / {{max}}",
         "your-share-label": "Your share: {{percentage}} of LP",
@@ -953,7 +987,6 @@
         "allowance-multiplier-label": "Allowance multiplier",
         "withdrawal-request-label": "Withdrawal request: {{amount}}",
         "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
-
         "deposit-amount-placeholder": "Enter amount",
         "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
         "nothing-to-withdraw-label": "Nothing to withdraw.",
@@ -968,7 +1001,6 @@
         "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
         "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
         "withdrawal-staked-thales-warning": "You cannot withdraw as you need more staked THALES to withdraw. Stake {{amount}} THALES more to enable withdrawal.",
-
         "tabs": {
             "deposit": "Deposit",
             "withdraw": "Withdraw"

@@ -158,6 +158,7 @@ export type ParlayMarket = {
 };
 
 export type ParlayMarketWithRank = ParlayMarket & { rank: number; numberOfPositions: number };
+export type ParlayMarketWithRound = ParlayMarket & { round: number };
 
 export type PositionData = {
     id: string;
@@ -340,6 +341,19 @@ export type ParlayPayment = {
     selectedStableIndex: COLLATERALS_INDEX;
     isVoucherSelected: boolean | undefined;
     amountToBuy: number | string;
+};
+
+export type MultiSingleAmounts = {
+    sportMarketAddress: string;
+    amountToBuy: number;
+};
+
+export type MultiSingleTokenQuoteAndBonus = {
+    sportMarketAddress: string;
+    tokenAmount: number;
+    bonusPercentageDec: number;
+    totalBonusCurrency: number;
+    ammQuote: number;
 };
 
 export type WinningInfo = {

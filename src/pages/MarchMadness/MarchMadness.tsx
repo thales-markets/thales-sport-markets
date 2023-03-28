@@ -23,10 +23,12 @@ import Leaderboard from './components/Leaderboard';
 import Tabs from './components/Tabs';
 import { MarchMadTabs } from './components/Tabs/Tabs';
 import { history } from 'utils/routes';
+import { useLocation } from 'react-router-dom';
 
 const MarchMadness: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const location = useLocation();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -71,7 +73,14 @@ const MarchMadness: React.FC = () => {
                 setSelectedTab(MarchMadTabs.HOME);
             }
         }
-    }, [walletAddress, marchMadnessData?.isAddressAlreadyMinted, networkId, queryParamTab, isWalletConnected]);
+    }, [
+        walletAddress,
+        marchMadnessData?.isAddressAlreadyMinted,
+        networkId,
+        queryParamTab,
+        isWalletConnected,
+        location.search,
+    ]);
 
     useEffect(() => {
         dispatch(setTheme(Theme.MARCH_MADNESS));

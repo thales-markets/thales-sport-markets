@@ -130,7 +130,7 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
             }
             if (
                 (market.isCanceled || market.isPaused) &&
-                market.maturityDate.getTime() + 30 * 24 * 60 * 60 * 1000 > new Date().getTime()
+                market.maturityDate.getTime() + 7 * 24 * 60 * 60 * 1000 > new Date().getTime()
             ) {
                 canceledMarkets.push(market);
             }
@@ -164,7 +164,7 @@ const useSportMarketsQueryNew = (networkId: NetworkId, options?: UseQueryOptions
             try {
                 const today = new Date();
                 // thales-data takes timestamp argument in seconds
-                const priorDate = Math.round(new Date(new Date().setDate(today.getDate() - 30)).getTime() / 1000);
+                const priorDate = Math.round(new Date(new Date().setDate(today.getDate() - 14)).getTime() / 1000);
 
                 // mapping open markets first
                 await mapMarkets(

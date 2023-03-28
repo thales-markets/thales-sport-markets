@@ -392,16 +392,22 @@ const LiquidityPool: React.FC = () => {
         userLiquidityPoolData ? userLiquidityPoolData.maxDeposit : 0
     );
 
+    const setMaxAmount = () => {
+        setAmount(Math.trunc(userLiquidityPoolData ? userLiquidityPoolData.availableToDeposit * 100 : 0) / 100);
+    };
+
     return (
         <Wrapper>
-            <Info>
-                <Trans
-                    i18nKey="rewards.op-rewards-banner-message"
-                    components={{
-                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                    }}
-                />
-            </Info>
+            {networkId !== NetworkIdByName.ArbitrumOne && (
+                <Info>
+                    <Trans
+                        i18nKey="rewards.op-rewards-banner-message"
+                        components={{
+                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                        }}
+                    />
+                </Info>
+            )}
             <Title>{t('liquidity-pool.title')}</Title>
             {liquidityPoolData && (
                 <Container>
@@ -510,6 +516,7 @@ const LiquidityPool: React.FC = () => {
                                             onChange={(_, value) => setAmount(value)}
                                             placeholder={t('liquidity-pool.deposit-amount-placeholder')}
                                             currencyLabel={collateral}
+                                            onMaxButton={setMaxAmount}
                                         />
                                     </ValidationTooltip>
                                 </InputContainer>

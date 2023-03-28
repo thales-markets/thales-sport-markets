@@ -205,6 +205,10 @@
     content: '\0073';
 }
 
+.icon--parlay-discount-vault::before {
+    content: '\007B';
+}
+
 .icon--strategy::before {
     content: '\0074';
 }
@@ -299,4 +303,8 @@
 
 .icon--stake-thales::before {
     content: '\005F';
+}
+
+.icon--esports::before {
+    content: '\0085';
 }

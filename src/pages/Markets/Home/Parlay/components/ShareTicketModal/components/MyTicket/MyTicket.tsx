@@ -1,6 +1,7 @@
 import { ReactComponent as OvertimeLogoIcon } from 'assets/images/overtime-logo.svg';
 import { USD_SIGN } from 'constants/currency';
 import { t } from 'i18next';
+import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';
 import React from 'react';
 import QRCode from 'react-qr-code';
 import { useSelector } from 'react-redux';
@@ -20,28 +21,32 @@ import {
 import { ParlaysMarket } from 'types/markets';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { formatMarketOdds } from 'utils/markets';
-import { generateReferralLink } from 'utils/referral';
+import { buildReffererLink } from 'utils/routes';
 import MatchInfo from '../../../MatchInfo';
 
 type MyTicketProps = {
     markets: ParlaysMarket[];
+    multiSingle: boolean;
     totalQuote: number;
     paid: number;
     payout: number;
 };
 
-const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }) => {
+const MyTicket: React.FC<MyTicketProps> = ({ markets, multiSingle, totalQuote, paid, payout }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const selectedOddsType = useSelector(getOddsType);
 
     const isTicketLost = markets.some((market) => market.isResolved && market.winning !== undefined && !market.winning);
     const isTicketResolved = markets.every((market) => market.isResolved || market.isCanceled) || isTicketLost;
-    const isParlay = markets.length > 1;
+    const isParlay = markets.length > 1 && !multiSingle;
 
     const matchInfoStyle = isMobile
         ? { fontSize: '10px', lineHeight: '12px' }
         : { fontSize: '11px', lineHeight: '13px' };
+
+    const reffererIDQuery = useGetReffererIdQuery(walletAddress || '', { enabled: !!walletAddress });
+    const reffererID = reffererIDQuery.isSuccess && reffererIDQuery.data ? reffererIDQuery.data : '';
 
     return (
         <Container>
@@ -62,10 +67,12 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
                 </Header>
             )}
             <ContentRow margin={'3px 0'}>
-                <ReferralWrapper>
-                    <QRCode size={70} value={generateReferralLink(walletAddress)} />
-                    <ReferralLabel>{t('markets.parlay.share-ticket.referral')}</ReferralLabel>
-                </ReferralWrapper>
+                {reffererID && (
+                    <ReferralWrapper>
+                        <QRCode size={70} value={buildReffererLink(reffererID)} />
+                        <ReferralLabel>{t('markets.parlay.share-ticket.referral')}</ReferralLabel>
+                    </ReferralWrapper>
+                )}
                 <PayoutWrapper>
                     <PayoutRow>
                         <Square isLost={isTicketLost} isResolved={isTicketResolved} />
@@ -103,10 +110,21 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
             </MarketsContainer>
             <HorizontalLine />
             <InfoWrapper>
-                <InfoDiv>
-                    <InfoLabel>{t('markets.parlay.share-ticket.total-quote')}:</InfoLabel>
-                    <InfoValue>{formatMarketOdds(selectedOddsType, totalQuote)}</InfoValue>
-                </InfoDiv>
+                {multiSingle ? (
+                    <>
+                        <InfoDiv>
+                            <InfoLabel>{t('markets.parlay.share-ticket.positions')}:</InfoLabel>
+                            <InfoValue>{markets.length}</InfoValue>
+                        </InfoDiv>
+                    </>
+                ) : (
+                    <>
+                        <InfoDiv>
+                            <InfoLabel>{t('markets.parlay.share-ticket.total-quote')}:</InfoLabel>
+                            <InfoValue>{formatMarketOdds(selectedOddsType, totalQuote)}</InfoValue>
+                        </InfoDiv>
+                    </>
+                )}
                 <InfoDiv>
                     <InfoLabel>{t('markets.parlay.buy-in')}:</InfoLabel>
                     <InfoValue>{formatCurrencyWithSign(USD_SIGN, paid, 2)}</InfoValue>
