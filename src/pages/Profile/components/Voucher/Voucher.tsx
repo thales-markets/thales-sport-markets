@@ -89,8 +89,10 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
         setIsClaimable(!!overtimeVoucherEscrowData?.isClaimable);
     }, [networkId, overtimeVoucherEscrowData?.isClaimable]);
 
-    const bannerImageURL = `${generalConfig.API_URL}/banners/image/voucher-${networkId}.jpg`;
-    const mobilebannerImageURL = `${generalConfig.API_URL}/banners/image/voucher-mobile-${networkId}.jpg`;
+    const defaultBannerImageUrl = `${generalConfig.API_URL}/banners/image/voucher.jpg`;
+    const mobileDefultBannerImageUrl = `${generalConfig.API_URL}/banners/image/voucher-mobile.jpg`;
+    const bannerImageUrlByNetwork = `${generalConfig.API_URL}/banners/image/voucher-${networkId}.jpg`;
+    const mobilebannerImageUrlByNetwork = `${generalConfig.API_URL}/banners/image/voucher-mobile-${networkId}.jpg`;
 
     return (
         <Container>
@@ -98,7 +100,12 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
                 <SimpleLoader />
             ) : (
                 <>
-                    <Banner image={bannerImageURL} mobileImage={mobilebannerImageURL} />
+                    <Banner
+                        image={bannerImageUrlByNetwork}
+                        defaultImage={defaultBannerImageUrl}
+                        mobileImage={mobilebannerImageUrlByNetwork}
+                        mobileDefaultImage={mobileDefultBannerImageUrl}
+                    />
                     <TextWrapper>
                         <Title isUppercase={true}>{t('profile.voucher-title')}</Title>
                         <InfoText>
@@ -206,15 +213,15 @@ const Container = styled(FlexDivColumn)`
     margin-top: 15px;
 `;
 
-const Banner = styled.div<{ image: string; mobileImage: string }>`
+const Banner = styled.div<{ image: string; defaultImage: string; mobileImage: string; mobileDefaultImage: string }>`
     width: 100%;
     height: 150px;
-    background-image: ${(props) => `url(${props.image})`};
+    background-image: ${(props) => `url(${props.image}), url(${props.defaultImage})`};
     background-position: center;
     border: 2px solid #5f6180;
     border-radius: 14px;
     @media (max-width: ${MOBILE_MAX_WIDTH}) {
-        background-image: ${(props) => `url(${props.mobileImage})`};
+        background-image: ${(props) => `url(${props.mobileImage}), url(${props.mobileDefaultImage})`};
     }
 `;
 
