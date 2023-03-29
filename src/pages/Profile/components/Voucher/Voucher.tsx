@@ -210,7 +210,7 @@ const MOBILE_VOUCHER_MAX_WIDTH = '347px';
 const Container = styled(FlexDivColumn)`
     max-width: 780px;
     align-items: center;
-    margin-top: 15px;
+    margin: 15px 0;
 `;
 
 const Banner = styled.div<{ image: string; defaultImage: string; mobileImage: string; mobileDefaultImage: string }>`
@@ -362,7 +362,7 @@ const EmptyContainer = styled(FlexDivRowCentered)`
     border-radius: 4px;
     height: 200px;
     flex-direction: column;
-    margin-top: 20px;
+    margin: 20px 0 10px 0;
 `;
 
 const EmptyTitle = styled.span`
