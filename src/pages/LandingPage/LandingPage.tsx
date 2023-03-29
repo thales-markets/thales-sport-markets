@@ -167,6 +167,23 @@ const LandingPage: React.FC = () => {
                                 <LeagueIcon className="icon-league league--mls" />
                             </LogoLink>
                         </CarouselIconContainer>
+                        <CarouselIconContainer>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.jleague.co/">
+                                <LeagueIcon className="icon-league league--j1" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.atptour.com/en/">
+                                <LeagueIcon className="icon-league league--atp" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://iesf.org/">
+                                <LeagueIcon className="icon-league league--csgo" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://iesf.org/">
+                                <LeagueIcon className="icon-league league--dota2" />
+                            </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://iesf.org/">
+                                <LeagueIcon className="icon-league league--lol" />
+                            </LogoLink>
+                        </CarouselIconContainer>
                     </Carousel>
                 </CarouselContainer>
             </Section>

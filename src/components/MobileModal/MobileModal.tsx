@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FlexDivRow } from 'styles/common';
+import { FlexDivEnd } from 'styles/common';
 import ReactModal from 'react-modal';
 
 type MobileModalProps = {
@@ -12,7 +12,7 @@ ReactModal.setAppElement('#root');
 
 const customStyles = {
     content: {
-        top: '60%',
+        top: '50%',
         left: '50%',
         right: 'auto',
         bottom: 'auto',
@@ -22,7 +22,6 @@ const customStyles = {
         background: 'transparent',
         border: 'none',
         width: '320px',
-        height: '100%',
         overflow: 'visible',
     },
     overlay: {
@@ -39,30 +38,22 @@ export const MobileModal: React.FC<MobileModalProps> = ({ onClose, children, sho
             shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
             style={customStyles}
         >
-            <Container>
-                <Header>
-                    <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
-                </Header>
-                {children}
-            </Container>
+            <Header>{<CloseIcon onClick={onClose} />}</Header>
+            <Container>{children}</Container>
         </ReactModal>
     );
 };
 
 const Container = styled.div`
-    z-index: 1001;
     background: ${(props) => props.theme.background.secondary};
     overflow: auto;
     border-radius: 23px;
     overflow-y: auto;
-    max-height: 90vh;
-    height: fit-content;
+    max-height: 80vh;
 `;
 
-const Header = styled(FlexDivRow)`
-    position: absolute;
-    top: -18px;
-    right: -18px;
+const Header = styled(FlexDivEnd)`
+    margin-right: -18px;
 `;
 
 const CloseIcon = styled.i`
