@@ -59,7 +59,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ itemSelected, onSelectIte
                 return (
                     <ItemWrapper key={index}>
                         <Item key={index} selected={item.id == itemSelected} onClick={() => onSelectItem(item.id)}>
-                            {t(item.i18Label)}
+                            {t(item.i18Label).replace('/', '/\u200B')}
                         </Item>
                         {!!notificationsCount && (
                             <NotificationCount key={'count' + index}>
