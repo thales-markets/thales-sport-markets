@@ -4,11 +4,19 @@ import { useSelector } from 'react-redux';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivColumnNative, FlexDivRowCentered } from 'styles/common';
+import {
+    FlexDivCentered,
+    FlexDivColumn,
+    FlexDivColumnCentered,
+    FlexDivColumnNative,
+    FlexDivRowCentered,
+} from 'styles/common';
 import voucherLogoBox from 'assets/images/voucher/voucher-logo-box.svg';
 import voucherAmountBox from 'assets/images/voucher/voucher-amount-box.svg';
 import voucherTimeBox from 'assets/images/voucher/voucher-time-box.svg';
 import voucherClaimBox from 'assets/images/voucher/voucher-claim-box.svg';
+import mobileVoucherInfoBox from 'assets/images/voucher/mobile-voucher-info-box.svg';
+import mobileVoucherClaimBox from 'assets/images/voucher/mobile-voucher-claim-box.svg';
 import zebraLogo from 'assets/images/voucher/voucher-zebra-logo.svg';
 import overtimeLogo from 'assets/images/overtime-logo.svg';
 import useOvertimeVoucherEscrowQuery from 'queries/wallet/useOvertimeVoucherEscrowQuery';
@@ -23,6 +31,7 @@ import { ethers } from 'ethers';
 import { refetchAfterVoucherClaim } from 'utils/queryConnector';
 import { LINKS } from 'constants/links';
 import { generalConfig } from 'config/general';
+import { ReactComponent as OvertimeTicket } from 'assets/images/parlay-empty.svg';
 
 const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
@@ -80,7 +89,8 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
         setIsClaimable(!!overtimeVoucherEscrowData?.isClaimable);
     }, [networkId, overtimeVoucherEscrowData?.isClaimable]);
 
-    const bannerImage = `${generalConfig.API_URL}/banners/image/voucher.jpg`;
+    const bannerImageURL = `${generalConfig.API_URL}/banners/image/voucher-${networkId}.jpg`;
+    const mobilebannerImageURL = `${generalConfig.API_URL}/banners/image/voucher-mobile-${networkId}.jpg`;
 
     return (
         <Container>
@@ -88,7 +98,7 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
                 <SimpleLoader />
             ) : (
                 <>
-                    <Banner image={bannerImage} />
+                    <Banner image={bannerImageURL} mobileImage={mobilebannerImageURL} />
                     <TextWrapper>
                         <Title isUppercase={true}>{t('profile.voucher-title')}</Title>
                         <InfoText>
@@ -100,37 +110,86 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
                             />
                         </InfoText>
                     </TextWrapper>
-                    {isClaimable && (
-                        <VoucherRow>
-                            <VoucherBox width="306px" backgroundImage={voucherLogoBox}>
-                                <Logo src={zebraLogo} />
-                                <FlexDivColumnNative>
-                                    <Logo src={overtimeLogo} width="158px" />
-                                    <GiftText isUppercase={true}> {t('profile.gift-voucher')}</GiftText>
-                                </FlexDivColumnNative>
-                            </VoucherBox>
-                            <VoucherBox width="118px" backgroundImage={voucherAmountBox} isColumn={true}>
-                                <NumberText>{overtimeVoucherEscrowData?.voucherAmount}</NumberText>
-                                <Text>{getDefaultColleteralForNetwork(networkId)}</Text>
-                            </VoucherBox>
-                            <VoucherBox width="142px" backgroundImage={voucherTimeBox} isColumn={true}>
-                                <div>
-                                    <NumberText>{daysLeftToClaim}</NumberText>
-                                    <DaysText isUppercase={true}>{t('common.time-remaining.days')}</DaysText>
-                                </div>
-                                <Text isUppercase={true}>{t('profile.left-to-claim')}</Text>
-                            </VoucherBox>
-                            <ClaimDiv
-                                width="205px"
-                                backgroundImage={voucherClaimBox}
-                                onClick={claimHandler}
-                                disabled={isClaiming}
-                            >
-                                <ClaimText isUppercase={true}>
-                                    {isClaiming ? t('profile.claiming-voucher') : t('profile.claim-voucher')}
-                                </ClaimText>
-                            </ClaimDiv>
-                        </VoucherRow>
+                    {isClaimable ? (
+                        <>
+                            <VoucherRow>
+                                <VoucherBox width="306px" backgroundImage={voucherLogoBox}>
+                                    <Logo src={zebraLogo} />
+                                    <FlexDivColumnNative>
+                                        <Logo src={overtimeLogo} width="158px" />
+                                        <GiftText isUppercase={true}> {t('profile.gift-voucher')}</GiftText>
+                                    </FlexDivColumnNative>
+                                </VoucherBox>
+                                <VoucherBox width="118px" backgroundImage={voucherAmountBox} isColumn={true}>
+                                    <NumberText>{overtimeVoucherEscrowData?.voucherAmount}</NumberText>
+                                    <Text>{getDefaultColleteralForNetwork(networkId)}</Text>
+                                </VoucherBox>
+                                <VoucherBox width="142px" backgroundImage={voucherTimeBox} isColumn={true}>
+                                    <TextCenter>
+                                        <NumberText>{daysLeftToClaim}</NumberText>
+                                        <DaysText isUppercase={true}>{t('common.time-remaining.days')}</DaysText>
+                                    </TextCenter>
+                                    <Text isUppercase={true}>{t('profile.left-to-claim')}</Text>
+                                </VoucherBox>
+                                <ClaimVoucherBox
+                                    width="205px"
+                                    backgroundImage={voucherClaimBox}
+                                    onClick={claimHandler}
+                                    disabled={isClaiming}
+                                >
+                                    <ClaimText isUppercase={true}>
+                                        {isClaiming ? t('profile.claiming-voucher') : t('profile.claim-voucher')}
+                                    </ClaimText>
+                                </ClaimVoucherBox>
+                            </VoucherRow>
+                            <MobileVoucherColumn>
+                                <VoucherBox
+                                    width={MOBILE_VOUCHER_MAX_WIDTH}
+                                    height="182px"
+                                    backgroundImage={mobileVoucherInfoBox}
+                                    isColumn={true}
+                                >
+                                    <FlexDivRowCentered>
+                                        <Logo src={zebraLogo} />
+                                        <FlexDivColumnNative>
+                                            <Logo src={overtimeLogo} width="158px" />
+                                            <GiftText isUppercase={true}> {t('profile.gift-voucher')}</GiftText>
+                                        </FlexDivColumnNative>
+                                    </FlexDivRowCentered>
+                                    <MobileVoucherInfoRow>
+                                        <FlexDivColumnNative>
+                                            <NumberText>{overtimeVoucherEscrowData?.voucherAmount}</NumberText>
+                                            <Text>{getDefaultColleteralForNetwork(networkId)}</Text>
+                                        </FlexDivColumnNative>
+                                        <FlexDivColumnNative>
+                                            <TextCenter>
+                                                <NumberText>{daysLeftToClaim}</NumberText>
+                                                <DaysText isUppercase={true}>
+                                                    {t('common.time-remaining.days')}
+                                                </DaysText>
+                                            </TextCenter>
+                                            <Text isUppercase={true}>{t('profile.left-to-claim')}</Text>
+                                        </FlexDivColumnNative>
+                                    </MobileVoucherInfoRow>
+                                </VoucherBox>
+                                <ClaimVoucherBox
+                                    width={MOBILE_VOUCHER_MAX_WIDTH}
+                                    height="81px"
+                                    backgroundImage={mobileVoucherClaimBox}
+                                    onClick={claimHandler}
+                                    disabled={isClaiming}
+                                >
+                                    <ClaimText isUppercase={true}>
+                                        {isClaiming ? t('profile.claiming-voucher') : t('profile.claim-voucher')}
+                                    </ClaimText>
+                                </ClaimVoucherBox>
+                            </MobileVoucherColumn>
+                        </>
+                    ) : (
+                        <EmptyContainer>
+                            <EmptyTitle>{t('profile.messages.no-vouchers')}</EmptyTitle>
+                            <OvertimeTicket />
+                        </EmptyContainer>
                     )}
                 </>
             )}
@@ -138,32 +197,73 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
     );
 };
 
+const MOBILE_MAX_WIDTH = '450px';
+const MOBILE_VOUCHER_MAX_WIDTH = '347px';
+
 const Container = styled(FlexDivColumn)`
-    margin-top: 20px;
     max-width: 780px;
+    align-items: center;
+    margin-top: 15px;
 `;
 
-const Banner = styled.div<{ image: string }>`
-    max-width: 100%;
+const Banner = styled.div<{ image: string; mobileImage: string }>`
+    width: 100%;
     height: 150px;
     background-image: ${(props) => `url(${props.image})`};
     background-position: center;
     border: 2px solid #5f6180;
     border-radius: 14px;
+    @media (max-width: ${MOBILE_MAX_WIDTH}) {
+        background-image: ${(props) => `url(${props.mobileImage})`};
+    }
 `;
 
 const VoucherRow = styled(FlexDivRowCentered)`
+    flex-wrap: wrap;
     margin-top: 20px;
+    @media (max-width: 780px) {
+        justify-content: flex-start;
+    }
+    @media (max-width: ${MOBILE_MAX_WIDTH}) {
+        display: none;
+    }
 `;
 
-const VoucherBox = styled(FlexDivCentered)<{ width: string; backgroundImage: string; isColumn?: boolean }>`
-    height: 71px;
+const MobileVoucherColumn = styled(FlexDivColumnCentered)`
+    align-items: center;
+    margin-top: 10px;
+    @media (min-width: 451px) {
+        display: none;
+    }
+`;
+
+const MobileVoucherInfoRow = styled(FlexDivCentered)`
+    gap: 80px;
+    width: 90%;
+    border-top: 1px solid #5f6180;
+    margin-top: 10px;
+    padding-top: 10px;
+`;
+
+const VoucherBox = styled(FlexDivCentered)<{
+    width: string;
+    height?: string;
+    backgroundImage: string;
+    isColumn?: boolean;
+}>`
     width: ${(props) => props.width};
+    height: ${(props) => (props.height ? props.height : '71px')};
     background: url('${(props) => props.backgroundImage}') no-repeat;
     flex-direction: ${(props) => (props.isColumn ? 'column' : 'row')};
+    @media (max-width: 780px) {
+        margin: 5px 0;
+    }
+    @media (max-width: ${MOBILE_MAX_WIDTH}) {
+        margin: 5px 0 0 0;
+    }
 `;
 
-const ClaimDiv = styled(VoucherBox)<{ disabled: boolean }>`
+const ClaimVoucherBox = styled(VoucherBox)<{ disabled: boolean }>`
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.8' : '1')};
     &:hover {
@@ -176,8 +276,15 @@ const Logo = styled.img<{ width?: string }>`
     ${(props) => (props.width ? `width: ${props.width}` : '')};
 `;
 
+const TextCenter = styled.div`
+    text-align: center;
+`;
+
 const TextWrapper = styled.div`
-    margin: 25px 5px 0 5px;
+    padding: 25px 5px 0 5px;
+    @media (max-width: ${MOBILE_MAX_WIDTH}) {
+        max-width: ${MOBILE_VOUCHER_MAX_WIDTH};
+    }
 `;
 
 const InfoText = styled.p`
@@ -238,6 +345,29 @@ const Link = styled.a`
     font-size: 14px;
     line-height: 16px;
     color: #3fd1ff;
+`;
+
+const EmptyContainer = styled(FlexDivRowCentered)`
+    width: 100%;
+    text-align: center;
+    justify-content: space-evenly;
+    background: linear-gradient(180deg, #303656 41.5%, #1a1c2b 100%);
+    border-radius: 4px;
+    height: 200px;
+    flex-direction: column;
+    margin-top: 20px;
+`;
+
+const EmptyTitle = styled.span`
+    font-family: 'Nunito' !important;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 251%;
+    text-align: center;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: #64d9fe;
 `;
 
 export default Voucher;

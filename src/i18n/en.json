@@ -276,7 +276,7 @@
             "lifetime-wins": "Lifetime wins",
             "in-vaults": "In vaults"
         },
-        "open-claimable": "Open/Claimable",
+        "open-claimable": "Open/\u200BClaimable",
         "transaction-history": "Transaction history",
         "vaults": "Vaults/LP",
         "voucher": "Voucher",
@@ -289,6 +289,7 @@
             "no-claimable": "You don't have any claimable positions",
             "no-open": "You don't have any open positions",
             "no-transactions": "You don't have any trades",
+            "no-vouchers": "You do not have any voucher to claim",
             "ticket-subtitle": "Add position, choose a market and make your selection.",
             "canceled-tooltip": "Canceled markets are claimable 2 hours after market is resolved.",
             "voucher-claim-success": "Voucher successfully claimed",

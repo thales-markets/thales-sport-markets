@@ -572,7 +572,8 @@
             "ticket-subtitle": "添加头寸，选择市场并做出选择。",
             "canceled-tooltip": "已取消的盘口可在盘口解决后 2 小时内提出索赔。",
             "transaction-pending": "待处理交易",
-            "voucher-claim-success": "代金券领取成功"
+            "voucher-claim-success": "代金券领取成功",
+            "no-vouchers": "您没有任何凭证可以领取"
         },
         "table": {
             "position": "位置",

@@ -5,7 +5,7 @@ import { FlexDivRow } from 'styles/common';
 export const Wrapper = styled(FlexDivRow)`
     width: 100%;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     padding: 6px;
     border: 1px solid ${MAIN_COLORS.BORDERS.GRAY};
     border-radius: 5px;
@@ -14,11 +14,24 @@ export const Wrapper = styled(FlexDivRow)`
 
 export const ItemWrapper = styled.div`
     position: relative;
+    padding: 0 20px;
+    text-align: start;
+
+    @media (max-width: 768px) {
+        padding: 0 8px;
+        max-width: 100px;
+        width: min-content;
+        :first-child {
+            padding-left: 0;
+        }
+        :last-child {
+            padding-right: 10px;
+        }
+    }
 `;
 
 export const Item = styled.span<{ selected: boolean }>`
     color: ${(props) => (props?.selected ? `${MAIN_COLORS.TEXT.BLUE}` : `${MAIN_COLORS.TEXT.DARK_GRAY}`)};
-    padding: 0px 20px;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
@@ -38,6 +51,9 @@ export const NotificationCount = styled.div`
     width: 14px;
     background-color: ${MAIN_COLORS.BACKGROUNDS.BLUE};
     box-shadow: ${MAIN_COLORS.SHADOWS.NOTIFICATION};
+    @media (max-width: 768px) {
+        right: -5px;
+    }
 `;
 
 export const Count = styled.span`

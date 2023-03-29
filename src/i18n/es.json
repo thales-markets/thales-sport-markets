@@ -572,7 +572,8 @@
             "ticket-subtitle": "Agregue una posición, elija un mercado y haga su selección.",
             "canceled-tooltip": "Los mercados cancelados son reclamables 2 horas después de que se resuelva el mercado.",
             "transaction-pending": "Transacción pendiente",
-            "voucher-claim-success": "Cupón reclamado con éxito"
+            "voucher-claim-success": "Cupón reclamado con éxito",
+            "no-vouchers": "No tienes ningún vale para reclamar"
         },
         "table": {
             "paid": "Pagado",

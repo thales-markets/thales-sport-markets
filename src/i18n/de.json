@@ -569,7 +569,8 @@
             "ticket-subtitle": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "canceled-tooltip": "Abgebrochene Märkte können 2 Stunden nach Auflösung des Marktes beansprucht werden.",
             "voucher-claim-success": "Gutschein erfolgreich beansprucht",
-            "transaction-pending": "Transaktion ausstehend"
+            "transaction-pending": "Transaktion ausstehend",
+            "no-vouchers": "Sie haben keinen Gutschein zu beanspruchen"
         },
         "table": {
             "games": "Spiele",

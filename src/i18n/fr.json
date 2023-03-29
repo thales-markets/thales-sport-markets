@@ -670,7 +670,8 @@
             "ticket-subtitle": "Ajoutez une position, choisissez un marché et faites votre sélection.",
             "canceled-tooltip": "Les marchés annulés sont réclamables 2 heures après la résolution du marché.",
             "voucher-claim-success": "Bon réclamé avec succès",
-            "transaction-pending": "Transaction en attente"
+            "transaction-pending": "Transaction en attente",
+            "no-vouchers": "Vous n'avez pas de bon à réclamer"
         },
         "table": {
             "paid": "Payé",

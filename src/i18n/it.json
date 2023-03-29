@@ -575,7 +575,8 @@
             "ticket-subtitle": "Aggiungi posizione, scegli un mercato ed effettua la tua selezione.",
             "canceled-tooltip": "I mercati annullati possono essere rivendicati 2 ore dopo la risoluzione del mercato.",
             "transaction-pending": "Transazione in sospeso",
-            "voucher-claim-success": "Buono richiesto con successo"
+            "voucher-claim-success": "Buono richiesto con successo",
+            "no-vouchers": "Non hai alcun buono da richiedere"
         },
         "table": {
             "id": "Id",
