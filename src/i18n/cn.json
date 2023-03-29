@@ -89,7 +89,8 @@
             "insufficient-balance-wallet": "请确认您的钱包中有足够的 {{currencyKey}}",
             "user-rejected-tx": "用户拒绝交易",
             "enter-address": "Enter address",
-            "invalid-address": "Invalid address"
+            "invalid-address": "Invalid address",
+            "batch-transaction-single-failure": "交易被拒绝或失败。"
         },
         "time-remaining": {
             "ended": "ended",
@@ -403,10 +404,15 @@
                 "header": "Web 3 体育市场上",
                 "winner": "优胜者",
                 "potential-payout": "潜在支出",
-                "total-quote": "总报价"
+                "total-quote": "总报价",
+                "positions": "职位数量"
             },
             "buy-in": "买入",
-            "total-bonus": "总奖金"
+            "total-bonus": "总奖金",
+            "toggle-parlay": {
+                "multi-single": "单身的",
+                "parlay": "过关"
+            }
         },
         "discounted-per": "折扣按",
         "nav-menu": {
@@ -563,7 +569,8 @@
             "number-of-games": "游戏数",
             "result": "结果",
             "starts": "开始",
-            "position-size": "仓位大小"
+            "position-size": "仓位大小",
+            "claim-all": "索取全部"
         },
         "messages": {
             "no-claimable": "您没有任何可申请的职位",

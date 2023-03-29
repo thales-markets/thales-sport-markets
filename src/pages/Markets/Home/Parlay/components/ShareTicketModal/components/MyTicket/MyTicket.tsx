@@ -26,19 +26,20 @@ import MatchInfo from '../../../MatchInfo';
 
 type MyTicketProps = {
     markets: ParlaysMarket[];
+    multiSingle: boolean;
     totalQuote: number;
     paid: number;
     payout: number;
 };
 
-const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }) => {
+const MyTicket: React.FC<MyTicketProps> = ({ markets, multiSingle, totalQuote, paid, payout }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const selectedOddsType = useSelector(getOddsType);
 
     const isTicketLost = markets.some((market) => market.isResolved && market.winning !== undefined && !market.winning);
     const isTicketResolved = markets.every((market) => market.isResolved || market.isCanceled) || isTicketLost;
-    const isParlay = markets.length > 1;
+    const isParlay = markets.length > 1 && !multiSingle;
 
     const matchInfoStyle = isMobile
         ? { fontSize: '10px', lineHeight: '12px' }
@@ -109,10 +110,21 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, totalQuote, paid, payout }
             </MarketsContainer>
             <HorizontalLine />
             <InfoWrapper>
-                <InfoDiv>
-                    <InfoLabel>{t('markets.parlay.share-ticket.total-quote')}:</InfoLabel>
-                    <InfoValue>{formatMarketOdds(selectedOddsType, totalQuote)}</InfoValue>
-                </InfoDiv>
+                {multiSingle ? (
+                    <>
+                        <InfoDiv>
+                            <InfoLabel>{t('markets.parlay.share-ticket.positions')}:</InfoLabel>
+                            <InfoValue>{markets.length}</InfoValue>
+                        </InfoDiv>
+                    </>
+                ) : (
+                    <>
+                        <InfoDiv>
+                            <InfoLabel>{t('markets.parlay.share-ticket.total-quote')}:</InfoLabel>
+                            <InfoValue>{formatMarketOdds(selectedOddsType, totalQuote)}</InfoValue>
+                        </InfoDiv>
+                    </>
+                )}
                 <InfoDiv>
                     <InfoLabel>{t('markets.parlay.buy-in')}:</InfoLabel>
                     <InfoValue>{formatCurrencyWithSign(USD_SIGN, paid, 2)}</InfoValue>

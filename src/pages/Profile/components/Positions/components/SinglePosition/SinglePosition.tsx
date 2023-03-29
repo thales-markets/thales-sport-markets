@@ -206,6 +206,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                 position: convertPositionNameToPosition(position?.side ? position?.side : ''),
             } as ParlaysMarket,
         ],
+        multiSingle: false,
         totalQuote: sumOfTransactionPaidAmount / position.amount,
         paid: sumOfTransactionPaidAmount,
         payout: position.amount,

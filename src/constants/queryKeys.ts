@@ -1,5 +1,6 @@
 import { NetworkId } from 'types/network';
 import { Position } from './options';
+import { MultiSingleAmounts, ParlaysMarket } from 'types/markets';
 
 export const QUERY_KEYS = {
     Rewards: (networkId: NetworkId, period: number) => ['rewards', networkId, period],
@@ -25,7 +26,14 @@ export const QUERY_KEYS = {
         stableIndex: number,
         networkId: NetworkId
     ) => ['positionDetails', marketAddress, position, amount, stableIndex, networkId],
+    MultiplePositionDetails: (
+        markets: ParlaysMarket[],
+        amounts: MultiSingleAmounts[],
+        stableIndex: number,
+        networkId: NetworkId
+    ) => ['multiplePositionDetails', markets, amounts, stableIndex, networkId],
     AvailablePerPosition: (marketAddress: string) => ['availablePerPosition', marketAddress],
+    AvailablePerPositionMulti: (marketAddresses: ParlaysMarket[]) => ['availablePerPositionMulti', marketAddresses],
     AvailablePerDoubleChancePosition: (marketAddress: string) => ['availablePerDoubleChancePosition', marketAddress],
     MarketTransactions: (marketAddress: string, networkId: NetworkId, walletAddress?: string) => [
         'market',

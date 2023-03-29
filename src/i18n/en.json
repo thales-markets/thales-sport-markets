@@ -92,6 +92,7 @@
         "errors": {
             "unknown-error-try-again": "An unknown error occurred after you submitted. Please try again.",
             "unknown-error-try-again-general": "An unknown error occurred. Please try again.",
+            "batch-transaction-single-failure": "A transaction was rejected or failed.",
             "insufficient-balance": "Insufficient balance",
             "enter-amount": "Enter amount",
             "enter-price": "Enter price",
@@ -308,6 +309,7 @@
             "to-win": "win",
             "to-claim": "claim",
             "claim": "Claim",
+            "claim-all": "Claim All",
             "canceled": "Canceled",
             "total-quote": "Total quote",
             "result": "Result",
@@ -476,6 +478,7 @@
                 "parlay": "parlay",
                 "potential-payout": "Potential payout",
                 "total-quote": "Total quote",
+                "positions": "Number of Positions",
                 "referral": "Referral link",
                 "share": "Share",
                 "winner": "Winner",
@@ -486,6 +489,10 @@
                     "view-simple": "Simple",
                     "usd-amount": "USD amount"
                 }
+            },
+            "toggle-parlay": {
+                "multi-single": "Single",
+                "parlay": "Parlay"
             }
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",

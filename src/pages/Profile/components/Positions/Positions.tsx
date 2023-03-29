@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from 'react';
 
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { Trans, useTranslation } from 'react-i18next';
@@ -19,8 +21,14 @@ import {
     EmptySubtitle,
     EmptyTitle,
     ListContainer,
+    ClaimAllButton,
+    ClaimAllContainer,
 } from './styled-components';
 import { isParlayClaimable, isParlayOpen, isSportMarketExpired } from 'utils/markets';
+import { getMaxGasLimitForNetwork } from 'utils/network';
+import networkConnector from 'utils/networkConnector';
+import sportsMarketContract from 'utils/contracts/sportsMarketContract';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ParlayPosition from './components/ParlayPosition';
 import SimpleLoader from 'components/SimpleLoader';
 import { LoaderContainer } from 'pages/Markets/Home/Home';
@@ -41,6 +49,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketData, setShareTicketData] = useState<ShareTicketModalProps>({
         markets: [],
+        multiSingle: false,
         totalQuote: 0,
         paid: 0,
         payout: 0,
@@ -162,6 +171,103 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
 
     const isLoading = parlayMarketsQuery.isLoading || accountMarketsQuery.isLoading;
 
+    const claimAllRewards = async () => {
+        const { signer, parlayMarketsAMMContract } = networkConnector;
+        if (signer) {
+            const transactions: any = [];
+
+            if (accountPositionsByStatus.claimable.length) {
+                accountPositionsByStatus.claimable.forEach(async (position) => {
+                    transactions.push(
+                        new Promise(async (resolve, reject) => {
+                            const contract = new ethers.Contract(
+                                position.market.address,
+                                sportsMarketContract.abi,
+                                signer
+                            );
+                            contract.connect(signer);
+                            const id = toast.loading(t('market.toast-message.transaction-pending'));
+                            try {
+                                const tx = await contract.exerciseOptions({
+                                    gasLimit: getMaxGasLimitForNetwork(networkId),
+                                });
+                                const txResult = await tx.wait();
+
+                                if (txResult && txResult.transactionHash) {
+                                    resolve(
+                                        toast.update(
+                                            id,
+                                            getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
+                                        )
+                                    );
+                                } else {
+                                    reject(
+                                        toast.update(
+                                            id,
+                                            getErrorToastOptions(t('common.errors.unknown-error-try-again'))
+                                        )
+                                    );
+                                }
+                            } catch (e) {
+                                reject(
+                                    toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')))
+                                );
+                                console.log(e);
+                            }
+                        })
+                    );
+                });
+            }
+
+            if (parlayMarketsByStatus.claimable.length) {
+                if (parlayMarketsAMMContract) {
+                    parlayMarketsByStatus.claimable.forEach(async (market) => {
+                        transactions.push(
+                            new Promise(async (resolve, reject) => {
+                                const id = toast.loading(t('market.toast-message.transaction-pending'));
+
+                                try {
+                                    const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
+
+                                    const tx = await parlayMarketsAMMContractWithSigner?.exerciseParlay(market.id, {
+                                        gasLimit: getMaxGasLimitForNetwork(networkId),
+                                    });
+                                    const txResult = await tx.wait();
+
+                                    if (txResult && txResult.transactionHash) {
+                                        resolve(
+                                            toast.update(
+                                                id,
+                                                getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
+                                            )
+                                        );
+                                    } else {
+                                        reject(
+                                            toast.update(
+                                                id,
+                                                getErrorToastOptions(t('common.errors.unknown-error-try-again'))
+                                            )
+                                        );
+                                    }
+                                } catch (e) {
+                                    reject(
+                                        toast.update(
+                                            id,
+                                            getErrorToastOptions(t('common.errors.unknown-error-try-again'))
+                                        )
+                                    );
+                                    console.log(e);
+                                }
+                            })
+                        );
+                    });
+                }
+            }
+
+            Promise.all(transactions).catch((e) => console.log(e));
+        }
+    };
+
     return (
         <Container>
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
@@ -184,6 +290,18 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                         <>
                             {parlayMarketsByStatus.claimable.length || accountPositionsByStatus.claimable.length ? (
                                 <>
+                                    <ClaimAllContainer>
+                                        <ClaimAllButton
+                                            claimable={true}
+                                            onClick={(e: any) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                claimAllRewards();
+                                            }}
+                                        >
+                                            {t('profile.card.claim-all')}
+                                        </ClaimAllButton>
+                                    </ClaimAllContainer>
                                     {accountPositionsByStatus.claimable.map((singleMarket, index) => {
                                         return (
                                             <SinglePosition
@@ -254,6 +372,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
             {showShareTicketModal && (
                 <ShareTicketModal
                     markets={shareTicketData.markets}
+                    multiSingle={false}
                     totalQuote={shareTicketData.totalQuote}
                     paid={shareTicketData.paid}
                     payout={shareTicketData.payout}

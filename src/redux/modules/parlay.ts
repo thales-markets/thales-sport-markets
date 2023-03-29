@@ -2,7 +2,7 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { COLLATERALS_INDEX } from 'constants/currency';
 import { ParlayErrorCode } from 'constants/markets';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { ParlayPayment, ParlaysMarketPosition } from 'types/markets';
+import { MultiSingleAmounts, ParlayPayment, ParlaysMarketPosition } from 'types/markets';
 import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
 
@@ -24,6 +24,24 @@ const getDefaultPayment = (): ParlayPayment => {
     };
 };
 
+const getDefaultMultiSingle = (): MultiSingleAmounts[] => {
+    const lsMultiSingle = localStore.get(LOCAL_STORAGE_KEYS.MULTI_SINGLE);
+    const lsParlay = localStore.get(LOCAL_STORAGE_KEYS.PARLAY);
+    const defaultArr = lsParlay !== undefined ? (lsParlay as ParlaysMarketPosition[]) : [];
+
+    return lsMultiSingle !== undefined
+        ? (lsMultiSingle as MultiSingleAmounts[])
+        : Array(defaultArr.length).fill({
+              sportMarketAddress: '',
+              amountToBuy: 0,
+          });
+};
+
+const getDefaultIsMultiSingle = () => {
+    const lsIsMultiSingle = localStore.get(LOCAL_STORAGE_KEYS.IS_MULTI_SINGLE);
+    return lsIsMultiSingle !== undefined ? (lsIsMultiSingle as boolean) : false;
+};
+
 const getDefaultError = () => {
     return { code: ParlayErrorCode.NO_ERROS, data: '' };
 };
@@ -32,6 +50,8 @@ type ParlaySliceState = {
     parlay: ParlaysMarketPosition[];
     parlaySize: number;
     payment: ParlayPayment;
+    multiSingle: MultiSingleAmounts[];
+    isMultiSingle: boolean;
     error: { code: ParlayErrorCode; data: string };
 };
 
@@ -39,6 +59,8 @@ const initialState: ParlaySliceState = {
     parlay: getDefaultParlay(),
     parlaySize: DEFAULT_MAX_NUMBER_OF_MATCHES,
     payment: getDefaultPayment(),
+    multiSingle: getDefaultMultiSingle(),
+    isMultiSingle: getDefaultIsMultiSingle(),
     error: getDefaultError(),
 };
 
@@ -70,6 +92,10 @@ export const parlaySlice = createSlice({
                         state.error.code = ParlayErrorCode.SAME_TEAM_TWICE;
                         state.error.data = homeTeamInParlay ? homeTeamInParlay : awayTeamInParlay;
                     } else {
+                        state.multiSingle.push({
+                            sportMarketAddress: action.payload.sportMarketAddress,
+                            amountToBuy: 0,
+                        });
                         state.parlay.push(action.payload);
                     }
                 } else {
@@ -82,29 +108,63 @@ export const parlaySlice = createSlice({
                 parlayCopy[index].position = action.payload.position;
                 parlayCopy[index].doubleChanceMarketType = action.payload.doubleChanceMarketType;
                 state.parlay = [...parlayCopy];
+
+                // reset multiSingle if position is changed
+                const multiSingleCopy = [...state.multiSingle];
+                multiSingleCopy[index].sportMarketAddress = action.payload.sportMarketAddress;
+                multiSingleCopy[index].amountToBuy = 0;
+                state.multiSingle = [...multiSingleCopy];
             }
 
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
+            localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
         setParlaySize: (state, action: PayloadAction<number>) => {
             state.parlaySize = action.payload;
         },
         removeFromParlay: (state, action: PayloadAction<string>) => {
             state.parlay = state.parlay.filter((market) => market.sportMarketAddress !== action.payload);
+            state.multiSingle = state.multiSingle.filter((ms) => ms.sportMarketAddress !== action.payload);
+
             if (state.parlay.length === 0) {
                 state.payment.amountToBuy = getDefaultPayment().amountToBuy;
             }
             state.error = getDefaultError();
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
+            localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
         removeAll: (state) => {
             state.parlay = [];
             state.payment.amountToBuy = getDefaultPayment().amountToBuy;
+            state.multiSingle = [];
             state.error = getDefaultError();
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
+            localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
         setPayment: (state, action: PayloadAction<ParlayPayment>) => {
             state.payment = { ...state.payment, ...action.payload };
+        },
+        setIsMultiSingle: (state, action: PayloadAction<boolean>) => {
+            state.isMultiSingle = action.payload;
+            localStore.set(LOCAL_STORAGE_KEYS.IS_MULTI_SINGLE, state.isMultiSingle);
+        },
+        setMultiSingle: (state, action: PayloadAction<MultiSingleAmounts>) => {
+            const index = state.multiSingle.findIndex(
+                (el) => el.sportMarketAddress === action.payload.sportMarketAddress
+            );
+            if (index === -1) {
+                state.multiSingle.push(action.payload);
+            } else {
+                const multiSingleCopy = [...state.multiSingle];
+                multiSingleCopy[index].sportMarketAddress = action.payload.sportMarketAddress;
+                multiSingleCopy[index].amountToBuy = action.payload.amountToBuy;
+                state.multiSingle = [...multiSingleCopy];
+            }
+            localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
+        },
+        removeFromMultiSingle: (state, action: PayloadAction<string>) => {
+            state.multiSingle = state.multiSingle.filter((ms) => ms.sportMarketAddress !== action.payload);
+            localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
         setPaymentSelectedStableIndex: (state, action: PayloadAction<COLLATERALS_INDEX>) => {
             state.payment = { ...state.payment, selectedStableIndex: action.payload };
@@ -121,12 +181,17 @@ export const {
     removeFromParlay,
     removeAll,
     setPayment,
+    setMultiSingle,
+    setIsMultiSingle,
     setPaymentSelectedStableIndex,
     resetParlayError,
+    removeFromMultiSingle,
 } = parlaySlice.actions;
 
 export const getParlayState = (state: RootState) => state[sliceName];
 export const getParlay = (state: RootState) => getParlayState(state).parlay;
+export const getMultiSingle = (state: RootState) => getParlayState(state).multiSingle;
+export const getIsMultiSingle = (state: RootState) => getParlayState(state).isMultiSingle;
 export const getParlaySize = (state: RootState) => getParlayState(state).parlaySize;
 export const getParlayPayment = (state: RootState) => getParlayState(state).payment;
 export const getParlayError = (state: RootState) => getParlayState(state).error;
