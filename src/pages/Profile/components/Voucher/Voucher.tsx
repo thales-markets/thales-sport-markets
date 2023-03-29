@@ -220,7 +220,7 @@ const Banner = styled.div<{ image: string; defaultImage: string; mobileImage: st
     background-position: center;
     border: 2px solid #5f6180;
     border-radius: 14px;
-    @media (max-width: ${MOBILE_MAX_WIDTH}) {
+    @media (max-width: 600px) {
         background-image: ${(props) => `url(${props.mobileImage}), url(${props.mobileDefaultImage})`};
     }
 `;
