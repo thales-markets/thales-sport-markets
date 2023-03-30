@@ -17,9 +17,12 @@ const getDefaultParlay = (): ParlaysMarketPosition[] => {
 };
 
 const getDefaultPayment = (): ParlayPayment => {
+    const lsSelectedStable = localStore.get(LOCAL_STORAGE_KEYS.STABLE_INDEX);
+
     return {
-        selectedStableIndex: COLLATERALS_INDEX.sUSD,
-        isVoucherSelected: undefined,
+        selectedStableIndex:
+            lsSelectedStable !== undefined ? (lsSelectedStable as COLLATERALS_INDEX) : COLLATERALS_INDEX.sUSD,
+        isVoucherSelected: false,
         amountToBuy: '',
     };
 };
@@ -143,6 +146,9 @@ export const parlaySlice = createSlice({
         },
         setPayment: (state, action: PayloadAction<ParlayPayment>) => {
             state.payment = { ...state.payment, ...action.payload };
+
+            // Store the users last selected stable index
+            localStore.set(LOCAL_STORAGE_KEYS.STABLE_INDEX, state.payment.selectedStableIndex);
         },
         setIsMultiSingle: (state, action: PayloadAction<boolean>) => {
             state.isMultiSingle = action.payload;
@@ -174,6 +180,12 @@ export const parlaySlice = createSlice({
         },
     },
 });
+
+export const getLastSavedOrDefaultStableIndex = (): COLLATERALS_INDEX => {
+    const lsSelectedStable = localStore.get(LOCAL_STORAGE_KEYS.STABLE_INDEX);
+
+    return lsSelectedStable !== undefined ? (lsSelectedStable as COLLATERALS_INDEX) : COLLATERALS_INDEX.sUSD;
+};
 
 export const {
     updateParlay,
