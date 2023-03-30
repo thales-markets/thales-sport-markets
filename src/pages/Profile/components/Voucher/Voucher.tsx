@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -54,9 +54,19 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
 
     const overtimeVoucherEscrowData = overtimeVoucherEscrowQuery.isSuccess ? overtimeVoucherEscrowQuery.data : null;
 
-    const daysLeftToClaim =
-        overtimeVoucherEscrowData?.hoursLeftToClaim &&
-        Math.floor((overtimeVoucherEscrowData?.hoursLeftToClaim || 0) / 24);
+    const timeLeftToClaim = useMemo(() => {
+        const hoursLeftToClaim = overtimeVoucherEscrowData?.hoursLeftToClaim || 0;
+        const daysLeftToClaim = Math.floor(hoursLeftToClaim / 24);
+        return {
+            value: daysLeftToClaim < 2 ? hoursLeftToClaim : daysLeftToClaim,
+            label:
+                daysLeftToClaim < 2
+                    ? hoursLeftToClaim === 1
+                        ? t('common.time-remaining.hour')
+                        : t('common.time-remaining.hours')
+                    : t('common.time-remaining.days'),
+        };
+    }, [overtimeVoucherEscrowData?.hoursLeftToClaim, t]);
 
     const claimHandler = useCallback(async () => {
         if (isClaiming) {
@@ -133,8 +143,8 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                 </VoucherBox>
                                 <VoucherBox width="142px" backgroundImage={voucherTimeBox} isColumn={true}>
                                     <TextCenter>
-                                        <NumberText>{daysLeftToClaim}</NumberText>
-                                        <DaysText isUppercase={true}>{t('common.time-remaining.days')}</DaysText>
+                                        <NumberText>{timeLeftToClaim.value}</NumberText>
+                                        <TimeLabel isUppercase={true}>{timeLeftToClaim.label}</TimeLabel>
                                     </TextCenter>
                                     <Text isUppercase={true}>{t('profile.left-to-claim')}</Text>
                                 </VoucherBox>
@@ -170,10 +180,8 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                         </FlexDivColumnNative>
                                         <FlexDivColumnNative>
                                             <TextCenter>
-                                                <NumberText>{daysLeftToClaim}</NumberText>
-                                                <DaysText isUppercase={true}>
-                                                    {t('common.time-remaining.days')}
-                                                </DaysText>
+                                                <NumberText>{timeLeftToClaim.value}</NumberText>
+                                                <TimeLabel isUppercase={true}>{timeLeftToClaim.label}</TimeLabel>
                                             </TextCenter>
                                             <Text isUppercase={true}>{t('profile.left-to-claim')}</Text>
                                         </FlexDivColumnNative>
@@ -332,7 +340,7 @@ const NumberText = styled(Text)`
     color: #3fd1ff;
 `;
 
-const DaysText = styled(Text)`
+const TimeLabel = styled(Text)`
     font-weight: 700;
     font-size: 16px;
     color: #3fd1ff;
@@ -362,6 +370,7 @@ const EmptyContainer = styled(FlexDivRowCentered)`
     border-radius: 4px;
     height: 200px;
     flex-direction: column;
+    padding: 0 10px;
     margin: 20px 0 10px 0;
 `;
 
@@ -370,7 +379,7 @@ const EmptyTitle = styled.span`
     font-style: normal;
     font-weight: 700;
     font-size: 15px;
-    line-height: 251%;
+    line-height: 130%;
     text-align: center;
     letter-spacing: 0.025em;
     text-transform: uppercase;
