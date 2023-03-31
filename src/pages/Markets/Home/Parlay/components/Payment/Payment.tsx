@@ -53,7 +53,6 @@ const Payment: React.FC<PaymentProps> = ({
 
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
-        refetchInterval: 5000,
     });
     const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,

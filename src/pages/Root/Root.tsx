@@ -7,8 +7,10 @@ import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react';
 import '@rainbow-me/rainbowkit/dist/index.css';
 import { connectorsForWallets, wallet, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { publicProvider } from 'wagmi/providers/public';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import WalletDisclaimer from 'components/WalletDisclaimer';
 import { merge } from 'lodash';
 
@@ -18,9 +20,41 @@ type RootProps = {
     store: Store;
 };
 
+type RpcProvider = {
+    ankr: string;
+    chainnode: string;
+};
+
+const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
+    10: {
+        ankr: 'optimism',
+        chainnode: 'optimism-mainnet',
+    },
+    420: { ankr: 'optimism_testnet', chainnode: 'optimism-goerli' },
+    42161: { ankr: 'arbitrum', chainnode: 'arbitrum-one' },
+};
+
 const { chains, provider } = configureChains(
-    [chain.optimism, chain.goerli, chain.optimismGoerli, chain.arbitrum],
-    [infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID }), publicProvider()]
+    [chain.optimism, chain.optimismGoerli, chain.arbitrum],
+    [
+        alchemyProvider(), // TODO: It is recommended to use private API key
+        jsonRpcProvider({
+            rpc: (chain) => ({
+                http: `https://rpc.ankr.com/${
+                    CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].ankr
+                }/d395632b0cb6a9b4b162e8bb3017d05a25d37435d71fdcaa9489c7e3d27e1f4b`, // TODO: Move to environment variable
+            }),
+        }),
+        jsonRpcProvider({
+            rpc: (chain) => ({
+                http: `https://${
+                    CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].chainnode
+                }.chainnodes.org/114832a4-cf63-4168-b251-808d06c32cc8`, // TODO: Move to environment variable
+            }),
+        }),
+        infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID, stallTimeout: 2000 }),
+        publicProvider(),
+    ]
 );
 
 const connectors = connectorsForWallets([
