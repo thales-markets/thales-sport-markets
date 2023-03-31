@@ -40,19 +40,19 @@ const { chains, provider } = configureChains(
         alchemyProvider(), // TODO: It is recommended to use private API key
         jsonRpcProvider({
             rpc: (chain) => ({
-                http: `https://rpc.ankr.com/${
-                    CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].ankr
-                }/d395632b0cb6a9b4b162e8bb3017d05a25d37435d71fdcaa9489c7e3d27e1f4b`, // TODO: Move to environment variable
-            }),
-        }),
-        jsonRpcProvider({
-            rpc: (chain) => ({
-                http: `https://${
-                    CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].chainnode
-                }.chainnodes.org/114832a4-cf63-4168-b251-808d06c32cc8`, // TODO: Move to environment variable
+                http: `https://rpc.ankr.com/${CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].ankr}/${
+                    process.env.REACT_APP_ANKR_PROJECT_ID
+                }`,
             }),
         }),
         infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID, stallTimeout: 2000 }),
+        jsonRpcProvider({
+            rpc: (chain) => ({
+                http: `https://${CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].chainnode}.chainnodes.org/${
+                    process.env.REACT_APP_CHAINNODE_PROJECT_ID
+                }`,
+            }),
+        }),
         publicProvider(),
     ]
 );
