@@ -17,4 +17,5 @@ export const LOCAL_STORAGE_KEYS = {
     MULTI_SINGLE: 'multiSingle',
     IS_MULTI_SINGLE: 'isMultiSingle',
     BRACKETS: 'brackets',
+    STABLE_INDEX: 'stableIndex',
 };
