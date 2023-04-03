@@ -104,3 +104,7 @@
 .league--lol:before {
     content: '\0063';
 }
+
+.league--ipl:before {
+    content: '\0055';
+}
