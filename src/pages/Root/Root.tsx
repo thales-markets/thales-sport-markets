@@ -37,7 +37,8 @@ const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
 const { chains, provider } = configureChains(
     [chain.optimism, chain.optimismGoerli, chain.arbitrum],
     [
-        alchemyProvider(), // TODO: It is recommended to use private API key
+        infuraProvider({ stallTimeout: 2000 }),
+        alchemyProvider({ stallTimeout: 2000 }),
         jsonRpcProvider({
             rpc: (chain) => ({
                 http: `https://rpc.ankr.com/${CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].ankr}/${
