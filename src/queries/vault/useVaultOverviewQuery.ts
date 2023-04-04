@@ -37,12 +37,14 @@ const useVaultOverviewQuery = (
                 );
                 if (sportVaultContract) {
                     const [
+                        round,
                         roundEndTime,
                         utilizationRate,
                         priceLowerLimit,
                         skewImpactLimit,
                         allocationLimitsPerMarketPerRound,
                     ] = await Promise.all([
+                        sportVaultContract?.round(),
                         sportVaultContract?.getCurrentRoundEnd(),
 
                         sportVaultContract?.utilizationRate(),
@@ -66,6 +68,9 @@ const useVaultOverviewQuery = (
                         vaultAddress === VAULT_MAP['parlay-discount-vault'].addresses[networkId]
                             ? bigNumberFormatter(allocationLimitsPerMarketPerRound)
                             : bigNumberFormatter(allocationLimitsPerMarketPerRound) / 100;
+
+                    const pnl = await sportVaultContract?.cumulativeProfitAndLoss(round > 0 ? round - 1 : 0);
+                    vaultData.lifetimePnl = bigNumberFormatter(pnl) === 0 ? 0 : bigNumberFormatter(pnl) - 1;
 
                     return vaultData;
                 }
