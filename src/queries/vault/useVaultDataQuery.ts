@@ -166,11 +166,6 @@ const useVaultDataQuery = (
                         bigNumberFormmaterWithDecimals(tradingAllocation, getDefaultDecimalsForNetwork(networkId)) -
                         vaultData.allocationSpentInARound;
 
-                    console.log('allocationCurrentRound: ', vaultData.allocationCurrentRound);
-                    console.log('allocationNextRound: ', vaultData.allocationNextRound);
-                    console.log('allocationNextRoundPercentage: ', vaultData.allocationNextRoundPercentage);
-                    console.log('lifetimePnl: ', vaultData.lifetimePnl);
-                    console.log('availableAllocationInARound: ', vaultData.availableAllocationInARound);
                     return vaultData;
                 }
             } catch (e) {

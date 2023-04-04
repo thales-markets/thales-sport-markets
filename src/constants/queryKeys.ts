@@ -115,6 +115,7 @@ export const QUERY_KEYS = {
     Zebro: (networkId: NetworkId) => ['zebro', networkId],
     Vault: {
         Data: (vaultAddress: string, networkId: NetworkId) => [vaultAddress, 'data', networkId],
+        Overview: (vaultAddress: string, networkId: NetworkId) => ['overview', vaultAddress, networkId],
         UserData: (vaultAddress: string, walletAddress: string, networkId: NetworkId) => [
             vaultAddress,
             'data',
