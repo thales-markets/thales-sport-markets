@@ -23,12 +23,12 @@ import { RootState } from 'redux/rootReducer';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
 import { getIsAppReady } from 'redux/modules/app';
-import useVaultDataQuery from 'queries/vault/useVaultDataQuery';
-import { VaultData } from 'types/vault';
+import { VaultOverview as VaultOverviewType } from 'types/vault';
 import { formatPercentage, formatPercentageWithSign } from 'utils/formatters/number';
 import SimpleLoader from 'components/SimpleLoader';
 import TimeRemaining from 'components/TimeRemaining';
 import { Colors, FlexDivColumn } from 'styles/common';
+import useVaultOverviewQuery from 'queries/vault/useVaultOverviewQuery';
 
 type VaultOverviewProps = {
     vaultId: string;
@@ -39,11 +39,11 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
     const language = i18n.language;
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const [lastValidVaultData, setLastValidVaultData] = useState<VaultData | undefined>(undefined);
+    const [lastValidVaultData, setLastValidVaultData] = useState<VaultOverviewType | undefined>(undefined);
 
     const vaultAddress = !!VAULT_MAP[vaultId] ? VAULT_MAP[vaultId].addresses[networkId] : undefined;
 
-    const vaultDataQuery = useVaultDataQuery(vaultAddress, networkId, {
+    const vaultDataQuery = useVaultOverviewQuery(vaultAddress, networkId, {
         enabled: isAppReady && !!vaultAddress,
     });
 
@@ -53,7 +53,7 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
         }
     }, [vaultDataQuery.isSuccess, vaultDataQuery.data]);
 
-    const vaultData: VaultData | undefined = useMemo(() => {
+    const vaultData: VaultOverviewType | undefined = useMemo(() => {
         if (vaultDataQuery.isSuccess && vaultDataQuery.data) {
             return vaultDataQuery.data;
         }

@@ -7,20 +7,28 @@ import { Container, Title, Wrapper } from './styled-components';
 import SPAAnchor from 'components/SPAAnchor';
 import { Info } from 'pages/Markets/Home/Home';
 import VaultOverview from './VaultOverview';
+import { NetworkId } from 'types/network';
+import { useSelector } from 'react-redux';
+import { getNetworkId } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import { NetworkIdByName } from 'utils/network';
 
 const Vault: React.FC = () => {
     const { t } = useTranslation();
+    const networkId: NetworkId = useSelector((rootState: RootState) => getNetworkId(rootState));
 
     return (
         <Wrapper>
-            <Info>
-                <Trans
-                    i18nKey="rewards.op-rewards-banner-message"
-                    components={{
-                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                    }}
-                />
-            </Info>
+            {networkId !== NetworkIdByName.ArbitrumOne && (
+                <Info>
+                    <Trans
+                        i18nKey="rewards.op-rewards-banner-message"
+                        components={{
+                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                        }}
+                    />
+                </Info>
+            )}
             <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
             <Title>{t('vaults.title')}</Title>
             <Container>
