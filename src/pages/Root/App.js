@@ -103,7 +103,7 @@ const App = () => {
                     }
                 } else {
                     // without MM, for incognito mode
-                    providerNetworkId = isNetworkSupported(networkId) ? networkId : DEFAULT_NETWORK_ID;
+                    providerNetworkId = networkId;
                 }
             }
             try {
@@ -125,8 +125,8 @@ const App = () => {
                 dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
                 dispatch(setAppReady());
             } catch (e) {
-                dispatch(setAppReady());
                 if (!e.toString().includes('Error: underlying network changed')) {
+                    dispatch(setAppReady());
                     console.log(e);
                 }
             }

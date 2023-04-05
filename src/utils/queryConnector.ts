@@ -41,6 +41,10 @@ export const refetchAfterVoucherMint = (walletAddress: string, networkId: Networ
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.OvertimeVoucher(walletAddress, networkId));
 };
 
+export const refetchAfterVoucherClaim = (walletAddress: string, networkId: NetworkId) => {
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.OvertimeVoucherEscrow(walletAddress, networkId));
+};
+
 export const refetchAfterMarchMadnessMint = (walletAddress: string, networkId: NetworkId) => {
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.MarchMadness(walletAddress, networkId));
 };
