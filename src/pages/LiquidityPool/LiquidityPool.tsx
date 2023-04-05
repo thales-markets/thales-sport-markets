@@ -69,6 +69,7 @@ import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoo
 import { LINKS } from 'constants/links';
 import MaxAllowanceTooltip from './components/MaxAllowanceTooltip';
 import { getDefaultDecimalsForNetwork, getDefaultColleteralForNetwork } from 'utils/collaterals';
+import GetUsd from 'components/GetUsd/GetUsd';
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
@@ -625,6 +626,7 @@ const LiquidityPool: React.FC = () => {
                     </ContentContainer>
                     <ContentContainer>
                         <ButtonContainer>
+                            <GetUsd />
                             <ExternalButton
                                 target="_blank"
                                 rel="noreferrer"
