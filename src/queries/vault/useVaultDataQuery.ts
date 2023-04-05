@@ -101,7 +101,10 @@ const useVaultDataQuery = (
                     );
                     vaultData.round = Number(round);
                     vaultData.roundEndTime = Number(roundEndTime) * 1000;
-                    vaultData.availableAllocationNextRound = bigNumberFormatter(availableAllocationNextRound);
+                    vaultData.availableAllocationNextRound = bigNumberFormmaterWithDecimals(
+                        availableAllocationNextRound,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
                     vaultData.isRoundEnded = new Date().getTime() > vaultData.roundEndTime;
                     vaultData.minDepositAmount = bigNumberFormmaterWithDecimals(
                         minDepositAmount,
@@ -141,15 +144,27 @@ const useVaultDataQuery = (
                         sportVaultContract?.tradingAllocation(),
                     ]);
 
-                    vaultData.allocationCurrentRound = bigNumberFormatter(allocationCurrentRound);
-                    vaultData.allocationNextRound = bigNumberFormatter(allocationNextRound);
+                    vaultData.allocationCurrentRound = bigNumberFormmaterWithDecimals(
+                        allocationCurrentRound,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
+
+                    vaultData.allocationNextRound = bigNumberFormmaterWithDecimals(
+                        allocationNextRound,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
                     vaultData.allocationNextRoundPercentage =
                         (vaultData.allocationNextRound / vaultData.maxAllowedDeposit) * 100;
                     vaultData.lifetimePnl =
                         bigNumberFormatter(lifetimePnl) === 0 ? 0 : bigNumberFormatter(lifetimePnl) - 1;
-                    vaultData.allocationSpentInARound = bigNumberFormatter(allocationSpentInARound);
+                    vaultData.allocationSpentInARound = bigNumberFormmaterWithDecimals(
+                        allocationSpentInARound,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
+
                     vaultData.availableAllocationInARound =
-                        bigNumberFormatter(tradingAllocation) - vaultData.allocationSpentInARound;
+                        bigNumberFormmaterWithDecimals(tradingAllocation, getDefaultDecimalsForNetwork(networkId)) -
+                        vaultData.allocationSpentInARound;
 
                     return vaultData;
                 }

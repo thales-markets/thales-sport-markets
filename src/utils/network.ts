@@ -7,6 +7,7 @@ import { serializeTransaction, UnsignedTransaction } from 'ethers/lib/utils';
 import { NetworkId } from 'types/network';
 import networkConnector from 'utils/networkConnector';
 import { getNavItemFromRoute } from './ui';
+import { getLastSavedOrDefaultStableIndex } from 'redux/modules/parlay';
 
 export const NetworkIdByName: Record<string, NetworkId> = {
     OptimismMainnet: 10,
@@ -160,7 +161,7 @@ export const isRouteAvailableForNetwork = (route: string, networkId: NetworkId):
 };
 
 export const getDefaultCollateralIndexForNetworkId = (networkId: NetworkId) => {
-    return networkId == Network.Arbitrum ? COLLATERALS_INDEX.USDC : COLLATERALS_INDEX.sUSD;
+    return networkId == Network.Arbitrum ? COLLATERALS_INDEX.USDC : getLastSavedOrDefaultStableIndex();
 };
 
 export const isMultiCollateralSupportedForNetwork = (networkId: NetworkId) => {

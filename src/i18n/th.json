@@ -222,7 +222,8 @@
                 "soon": "กีฬาอื่น ๆ เร็ว ๆ นี้!",
                 "motosport": "มอเตอร์สปอร์ต",
                 "favourites": "รายการโปรด",
-                "esports": "อีสปอร์ต"
+                "esports": "อีสปอร์ต",
+                "cricket": "คริกเก็ต"
             },
             "datepicker": {
                 "games": "{{numberOfGames}} เกม"

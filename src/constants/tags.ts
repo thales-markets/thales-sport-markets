@@ -217,6 +217,15 @@ export const TAGS_LIST: Tags = [
         hidden: false,
         priority: 605,
     },
+    {
+        id: 9020,
+        label: 'Indian Premier League',
+        logo: ``,
+        logoClass: 'icon-league league--ipl',
+        favourite: false,
+        hidden: false,
+        priority: 801,
+    },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -245,6 +254,7 @@ export const SPORTS_MAP: SportsMap = {
     18977: 'eSports',
     18983: 'eSports',
     19138: 'eSports',
+    9020: 'Cricket',
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
@@ -263,6 +273,7 @@ export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
     18977,
     18983,
     19138,
+    9020,
 ];
 
 export const SPORTS_TAGS_MAP: SportsTagsMap = {
@@ -275,6 +286,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Motosport: [9100, 9101],
     Tennis: [9153, 9156],
     eSports: [18977, 18983, 19138],
+    Cricket: [9020],
 };
 
 export enum TAGS_FLAGS {
@@ -300,6 +312,7 @@ export enum TAGS_FLAGS {
     CSGO = 18977,
     DOTA2 = 18983,
     LOL = 19138,
+    IPL = 9020,
 }
 
 export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138];
@@ -355,6 +368,7 @@ export const SCORING_MAP: SportsMap = {
     18977: 'round',
     18983: 'round',
     19138: 'round',
+    9020: 'points',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -383,6 +397,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     18977: '',
     18983: '',
     19138: '',
+    9020: '',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -409,4 +424,5 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     18977: 'round',
     18983: 'round',
     19138: 'round',
+    9020: 'inning',
 };

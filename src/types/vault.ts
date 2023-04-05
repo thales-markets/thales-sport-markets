@@ -1,6 +1,16 @@
 import { VaultTradeStatus } from 'constants/vault';
 import { ParlayMarket, SportMarketInfo } from './markets';
 
+export type VaultOverview = {
+    roundEndTime: number;
+    isRoundEnded: boolean;
+    lifetimePnl: number;
+    utilizationRate: number;
+    priceLowerLimit: number;
+    skewImpactLimit: number;
+    allocationLimitsPerMarketPerRound: number;
+};
+
 export type VaultData = {
     round: number;
     roundEndTime: number;
