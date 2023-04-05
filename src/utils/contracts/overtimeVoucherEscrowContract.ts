@@ -2,7 +2,7 @@ export const overtimeVoucherEscrowContract = {
     addresses: {
         10: '0xaB8f1fF41e58Bc5A4587161a9b95F71fa39e1553',
         420: '0xFd4D94e538aF8c176540a1Ad7009184F03476737',
-        42161: '',
+        42161: '0xbd39d496EEBA3842521e8886a04312795c2bC799',
     },
     abi: [
         {
