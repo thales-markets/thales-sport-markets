@@ -61,6 +61,27 @@ const marchMadnessButtonStyle: CSSProperties = {
     width: '240px',
 };
 
+const getStartedButtonStyle: CSSProperties = {
+    background: '#64d9fe',
+    fontSize: '16px',
+    fontWeight: '700',
+    color: '#1a1c2b',
+    padding: '0 20px',
+    width: '100%',
+    textTransform: 'uppercase',
+};
+
+const getStartedMobileButtonStyle: CSSProperties = {
+    background: '#64d9fe',
+    fontSize: '14px',
+    fontWeight: '700',
+    color: '#1a1c2b',
+    width: '100%',
+    textTransform: 'uppercase',
+    marginTop: '10px',
+    padding: '7px',
+};
+
 const DappHeader: React.FC = () => {
     const { t } = useTranslation();
 
@@ -112,7 +133,9 @@ const DappHeader: React.FC = () => {
                         )}
                         {location.pathname !== ROUTES.Wizard && (
                             <SPAAnchor style={{ marginRight: 20 }} href={buildHref(ROUTES.Wizard)}>
-                                <Button fontSize={12.5}>{t('markets.nav-menu.labels.get-started')}</Button>
+                                <Button style={getStartedButtonStyle}>
+                                    {t('markets.nav-menu.labels.get-started')}
+                                </Button>
                             </SPAAnchor>
                         )}
                         <WalletInfo />
@@ -173,10 +196,7 @@ const DappHeader: React.FC = () => {
                     </WrapperMobile>
                     {location.pathname !== ROUTES.Wizard && (
                         <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Wizard)}>
-                            <Button
-                                style={{ width: '100%', marginTop: '10px', padding: '7px', background: '#303656' }}
-                                fontSize={14}
-                            >
+                            <Button style={getStartedMobileButtonStyle}>
                                 {t('markets.nav-menu.labels.get-started')}
                             </Button>
                         </SPAAnchor>

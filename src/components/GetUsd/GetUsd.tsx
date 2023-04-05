@@ -119,8 +119,13 @@ const Container = styled(FlexDivCentered)`
     margin-bottom: 20px;
     height: ${isMobile() ? '28px' : '24px'};
     button {
+        background: #64d9fe;
+        font-size: 16px;
+        font-weight: 700;
+        color: #1a1c2b;
         padding: 0 20px;
         width: 100%;
+        text-transform: uppercase;
     }
     @media (max-width: 500px) {
         width: 100%;
