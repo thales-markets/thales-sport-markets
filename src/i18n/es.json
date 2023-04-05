@@ -578,7 +578,10 @@
             "no-claimable": "No tienes ninguna posición reclamable",
             "no-transactions": "no tienes cambios",
             "ticket-subtitle": "Agregue una posición, elija un mercado y haga su selección.",
-            "canceled-tooltip": "Los mercados cancelados son reclamables 2 horas después de que se resuelva el mercado."
+            "canceled-tooltip": "Los mercados cancelados son reclamables 2 horas después de que se resuelva el mercado.",
+            "transaction-pending": "Transacción pendiente",
+            "voucher-claim-success": "Cupón reclamado con éxito",
+            "no-vouchers": "No tienes ningún vale para reclamar"
         },
         "table": {
             "paid": "Pagado",
@@ -605,7 +608,14 @@
         "go-to-lp": "Ir a LP",
         "lp-title": "fondo de liquidez",
         "in-vault": "en bóveda",
-        "go-to-vault": "ir a la bóveda"
+        "go-to-vault": "ir a la bóveda",
+        "claim-voucher": "Comprobante de reclamación",
+        "left-to-claim": "Izquierda para reclamar",
+        "gift-voucher": "Vale regalo",
+        "voucher-info": "Pero para que veáis de dónde viene todo este error nacido de los que acusan el placer y alaban el dolor, abriré todo el asunto y explicaré las mismas cosas que dijo aquel descubridor de la verdad y, por así decirlo, artífice de una vida feliz.",
+        "claiming-voucher": "Reclamando...",
+        "voucher": "Vale",
+        "voucher-title": "Reclamar vales de horas extras"
     },
     "mint-world-cup-nft": {
         "mint-nft-button": "Mint esta cebra!",

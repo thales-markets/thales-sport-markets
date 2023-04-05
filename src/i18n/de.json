@@ -575,7 +575,10 @@
             "no-claimable": "Sie haben keine beanspruchbaren Positionen",
             "no-transactions": "Sie haben keine Trades",
             "ticket-subtitle": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
-            "canceled-tooltip": "Abgebrochene Märkte können 2 Stunden nach Auflösung des Marktes beansprucht werden."
+            "canceled-tooltip": "Abgebrochene Märkte können 2 Stunden nach Auflösung des Marktes beansprucht werden.",
+            "voucher-claim-success": "Gutschein erfolgreich beansprucht",
+            "transaction-pending": "Transaktion ausstehend",
+            "no-vouchers": "Sie haben keinen Gutschein zu beanspruchen"
         },
         "table": {
             "games": "Spiele",
@@ -602,7 +605,14 @@
         "in-vault": "Im Tresor",
         "go-to-vault": "Gehen Sie zum Tresor",
         "vaults": "Gewölbe/LP",
-        "go-to-lp": "Gehen Sie zu LP"
+        "go-to-lp": "Gehen Sie zu LP",
+        "voucher": "Gutschein",
+        "gift-voucher": "Geschenkgutschein",
+        "left-to-claim": "Links zum Anspruch",
+        "claiming-voucher": "Anspruch...",
+        "claim-voucher": "Gutschein anfordern",
+        "voucher-info": "Aber damit Sie sehen, woher all dieser angeborene Irrtum derer kommt, die Freude anklagen und Schmerz preisen, werde ich die ganze Sache öffnen und genau das erklären, was dieser Entdecker der Wahrheit und sozusagen der Architekt der Wahrheit gesagt hat ein glückliches Leben.",
+        "voucher-title": "Fordern Sie Überstundengutscheine an"
     },
     "mint-world-cup-nft": {
         "eligible-text-2": "Prägen Sie ein Zebro Ihrer Lieblingsnationalmannschaft und qualifizieren Sie sich für 50.000 OP & 30.000 THALES-Bonusprämien!",
@@ -818,38 +828,38 @@
         }
     },
     "wizard": {
-        "title": "Get Started!",
+        "title": "Loslegen!",
         "steps": {
             "title": {
-                "connect-wallet": "Connect Wallet",
-                "fund": "Fund with ETH",
-                "exchange": "Get Crypto USD",
-                "trade": "Overtime Markets"
+                "connect-wallet": "Wallet verbinden",
+                "fund": "Mit ETH auffüllen",
+                "exchange": "Crypto-USD erhalten",
+                "trade": "Overtime-Märkte"
             },
             "description": {
-                "connect-wallet": "If you don't have Optimism connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
-                "fund": "Before you can use Overtime, first you need to get ETH on your Optimism connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
-                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to sUSD button, seamlessly swap ETH to a desired amount of stablecoins.",
-                "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
+                "connect-wallet": "Wenn Sie noch kein installiertes Optimism-Wallet haben, werden Sie aufgefordert, eine Wallet Ihrer Wahl zu installieren, bevor Sie es verbinden können.",
+                "fund": "Bevor Sie Overtime nutzen können, müssen Sie zuerst ETH auf Ihrem Optimism-Wallet haben. Nach dem Klicken auf die Schaltfläche Auffüllen wählen Sie eine der verfügbaren Optionen aus, um fortzufahren.",
+                "exchange": "Overtime verwendet beliebte Stablecoins (Crypto-USD) zum Ausführen von Trades. Klicken Sie auf die Schaltfläche Exchange to sUSD, um ETH nahtlos in die gewünschte Menge an Stablecoins umzutauschen.",
+                "trade": "Nun sind Sie finanziert und bereit, Overtime-Märkte zu nutzen. Viel Glück!"
             },
             "action": {
-                "connect-wallet": "Connect Wallet",
-                "connected": "Connected",
-                "fund": "Fund with ETH",
-                "exchange": "Exchange to USD",
-                "trade": "Trade on Overtime"
+                "connect-wallet": "Wallet verbinden",
+                "connected": "Verbunden",
+                "fund": "Mit ETH auffüllen",
+                "exchange": "In USD umtauschen",
+                "trade": "Auf Overtime handeln"
             }
         },
         "fund-modal": {
-            "title": "Fund, Bridge & Send",
-            "buy": "Fund with card",
-            "buy-banxa": "Fund with Banxa",
-            "buy-mt-pelerin": "Fund with Mt Pelerin",
-            "bridge": "Bridge to optimism  ",
-            "exchange": "Send from exchange",
-            "copy-address": "Copy address",
-            "coppied": "Coppied!",
-            "address": "Your address QR code",
+            "title": "Auffüllen, Brücke & Senden",
+            "buy": "Mit Karte auffüllen",
+            "buy-banxa": "Mit Banxa auffüllen",
+            "buy-mt-pelerin": "Mit Mt Pelerin auffüllen",
+            "bridge": "Zur Optimism-Brücke wechseln",
+            "exchange": "Von der Börse senden",
+            "copy-address": "Adresse kopieren",
+            "coppied": "Kopiert!",
+            "address": "QR-Code Ihrer Adresse",
             "copied": "Kopiert!"
         }
     },

@@ -281,6 +281,7 @@
         "open-claimable": "Open/Claimable",
         "transaction-history": "Transaction history",
         "vaults": "Vaults/LP",
+        "voucher": "Voucher",
         "in-vault": "In vault",
         "go-to-vault": "Go to vault",
         "in-lp": "Liquidity provided",
@@ -290,8 +291,11 @@
             "no-claimable": "You don't have any claimable positions",
             "no-open": "You don't have any open positions",
             "no-transactions": "You don't have any trades",
+            "no-vouchers": "You do not have any voucher to claim",
             "ticket-subtitle": "Add position, choose a market and make your selection.",
-            "canceled-tooltip": "Canceled markets are claimable 2 hours after market is resolved."
+            "canceled-tooltip": "Canceled markets are claimable 2 hours after market is resolved.",
+            "voucher-claim-success": "Voucher successfully claimed",
+            "transaction-pending": "Transaction pending"
         },
         "categories": {
             "claimable": "Claimable",
@@ -324,6 +328,12 @@
             "total-quote": "Total Quote",
             "total-amount": "Total Amount"
         },
+        "voucher-title": "Claim Overtime vouchers",
+        "voucher-info": "<br/>Overtime vouchers are NFTs that can be minted in Optimism or Arbitrum and can be used as collateral for taking positions into its corresponding chain.<br/><br/>In this page you can claim your outstanding vouchers from different campaigns. Once you claim your voucher you can use it in the Overtime platform or transfer it (as a gift, for example) to someone else (after all, it's an NFT!). Once the voucher is used as collateral in the platform it'll dissapear from your wallet.<br/><br/>You can read more about Overtime vouchers <docsLink>in the documentation.</docsLink>",
+        "gift-voucher": "Gift voucher",
+        "left-to-claim": "Left to claim",
+        "claim-voucher": "Claim voucher",
+        "claiming-voucher": "Claiming...",
         "search-field": "Search wallet",
         "winnings-are-forfeit": "*Winnings not claimed within {{amount}} days of a market being resolved are forfeit."
     },

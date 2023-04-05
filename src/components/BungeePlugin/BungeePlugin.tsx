@@ -76,7 +76,7 @@ const BungeePlugin: React.FC = () => {
     return (
         <BungeeWrapper>
             <Bridge
-                provider={networkConnector.provider}
+                provider={networkConnector.signer?.provider}
                 API_KEY={apiKey}
                 sourceNetworks={SOURCE_NETWORK_IDS}
                 defaultSourceNetwork={defaultSourceNetwork}
