@@ -818,38 +818,38 @@
         }
     },
     "wizard": {
-        "title": "Get Started!",
+        "title": "Loslegen!",
         "steps": {
             "title": {
-                "connect-wallet": "Connect Wallet",
-                "fund": "Fund with ETH",
-                "exchange": "Get Crypto USD",
-                "trade": "Overtime Markets"
+                "connect-wallet": "Wallet verbinden",
+                "fund": "Mit ETH auffüllen",
+                "exchange": "Crypto-USD erhalten",
+                "trade": "Overtime-Märkte"
             },
             "description": {
-                "connect-wallet": "If you don't have Optimism connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
-                "fund": "Before you can use Overtime, first you need to get ETH on your Optimism connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
-                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to sUSD button, seamlessly swap ETH to a desired amount of stablecoins.",
-                "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
+                "connect-wallet": "Wenn Sie noch kein installiertes Optimism-Wallet haben, werden Sie aufgefordert, eine Wallet Ihrer Wahl zu installieren, bevor Sie es verbinden können.",
+                "fund": "Bevor Sie Overtime nutzen können, müssen Sie zuerst ETH auf Ihrem Optimism-Wallet haben. Nach dem Klicken auf die Schaltfläche Auffüllen wählen Sie eine der verfügbaren Optionen aus, um fortzufahren.",
+                "exchange": "Overtime verwendet beliebte Stablecoins (Crypto-USD) zum Ausführen von Trades. Klicken Sie auf die Schaltfläche Exchange to sUSD, um ETH nahtlos in die gewünschte Menge an Stablecoins umzutauschen.",
+                "trade": "Nun sind Sie finanziert und bereit, Overtime-Märkte zu nutzen. Viel Glück!"
             },
             "action": {
-                "connect-wallet": "Connect Wallet",
-                "connected": "Connected",
-                "fund": "Fund with ETH",
-                "exchange": "Exchange to USD",
-                "trade": "Trade on Overtime"
+                "connect-wallet": "Wallet verbinden",
+                "connected": "Verbunden",
+                "fund": "Mit ETH auffüllen",
+                "exchange": "In USD umtauschen",
+                "trade": "Auf Overtime handeln"
             }
         },
         "fund-modal": {
-            "title": "Fund, Bridge & Send",
-            "buy": "Fund with card",
-            "buy-banxa": "Fund with Banxa",
-            "buy-mt-pelerin": "Fund with Mt Pelerin",
-            "bridge": "Bridge to optimism  ",
-            "exchange": "Send from exchange",
-            "copy-address": "Copy address",
-            "coppied": "Coppied!",
-            "address": "Your address QR code",
+            "title": "Auffüllen, Brücke & Senden",
+            "buy": "Mit Karte auffüllen",
+            "buy-banxa": "Mit Banxa auffüllen",
+            "buy-mt-pelerin": "Mit Mt Pelerin auffüllen",
+            "bridge": "Zur Optimism-Brücke wechseln",
+            "exchange": "Von der Börse senden",
+            "copy-address": "Adresse kopieren",
+            "coppied": "Kopiert!",
+            "address": "QR-Code Ihrer Adresse",
             "copied": "Kopiert!"
         }
     },
