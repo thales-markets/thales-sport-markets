@@ -1,6 +1,5 @@
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { SportFilterEnum } from 'constants/markets';
 import { SPORTS_MAP, TAGS_LIST } from 'constants/tags';
-import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import _ from 'lodash';
 import React from 'react';
@@ -9,23 +8,19 @@ import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { SportMarkets, TagInfo, Tags } from 'types/markets';
-import { isMobile } from 'utils/device';
-import { addHoursToCurrentDate } from 'utils/formatters/date';
 import MarketsList from '../MarketsList';
 
 type MarketsGridProps = {
     markets: SportMarkets;
+    dateFilter: Date | number;
+    sportFilter: string;
 };
 
-const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
+const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, dateFilter, sportFilter }) => {
     const language = i18n.language;
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const marketsMap = new Map();
     const marketsPartintionedByTag = _(markets).groupBy('tags[0]').values().value();
-    const dateFilter = useLocalStorage<Date | number>(
-        LOCAL_STORAGE_KEYS.FILTER_DATE,
-        !isMobile ? addHoursToCurrentDate(72, true).getTime() : 0
-    );
 
     marketsPartintionedByTag.forEach((marketArrayByTag) =>
         marketsMap.set(marketArrayByTag[0].tags[0], marketArrayByTag)
@@ -33,7 +28,10 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
 
     const marketsKeys = sortMarketKeys(Array.from(marketsMap.keys()), marketsMap, favouriteLeagues, dateFilter);
 
-    const finalOrderKeys = Number(dateFilter) !== 0 ? groupBySortedMarketsKeys(marketsKeys) : marketsKeys;
+    const finalOrderKeys =
+        Number(dateFilter) !== 0 || sportFilter == SportFilterEnum.All
+            ? groupBySortedMarketsKeys(marketsKeys)
+            : marketsKeys;
 
     return (
         <Container>
