@@ -4,9 +4,8 @@ import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 import { NetworkId } from 'types/network';
 import { UserVaultData } from 'types/vault';
-import vaultContract from 'utils/contracts/sportVaultContract';
-import { ethers } from 'ethers';
 import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { VAULT_MAP } from 'constants/vault';
 
 const useUserVaultDataQuery = (
     vaultAddress: string,
@@ -27,34 +26,28 @@ const useUserVaultDataQuery = (
             };
 
             try {
-                const sportVaultContract = new ethers.Contract(
-                    vaultAddress,
-                    vaultContract.abi,
-                    networkConnector.provider
-                );
-                if (sportVaultContract) {
-                    const [round] = await Promise.all([sportVaultContract?.round()]);
+                const isParlayVault = vaultAddress === VAULT_MAP['parlay-discount-vault'].addresses[networkId];
 
-                    const [balanceCurrentRound, balanceNextRound, withdrawalRequested] = await Promise.all([
-                        sportVaultContract?.balancesPerRound(Number(round), walletAddress),
-                        sportVaultContract?.balancesPerRound(Number(round) + 1, walletAddress),
-                        sportVaultContract?.withdrawalRequested(walletAddress),
-                    ]);
+                const { sportVaultDataContract } = networkConnector;
+                if (sportVaultDataContract) {
+                    const contractUserVaultData = isParlayVault
+                        ? await sportVaultDataContract.getUserParlayVaultData(vaultAddress, walletAddress)
+                        : await sportVaultDataContract.getUserSportVaultData(vaultAddress, walletAddress);
 
                     userVaultData.balanceCurrentRound = bigNumberFormmaterWithDecimals(
-                        balanceCurrentRound,
+                        contractUserVaultData.balanceCurrentRound,
                         getDefaultDecimalsForNetwork(networkId)
                     );
 
                     userVaultData.balanceNextRound = bigNumberFormmaterWithDecimals(
-                        balanceNextRound,
+                        contractUserVaultData.balanceNextRound,
                         getDefaultDecimalsForNetwork(networkId)
                     );
 
-                    userVaultData.balanceTotal = withdrawalRequested
+                    userVaultData.balanceTotal = contractUserVaultData.withdrawalRequested
                         ? 0
                         : userVaultData.balanceCurrentRound + userVaultData.balanceNextRound;
-                    userVaultData.isWithdrawalRequested = withdrawalRequested;
+                    userVaultData.isWithdrawalRequested = contractUserVaultData.withdrawalRequested;
                     userVaultData.hasDepositForCurrentRound = userVaultData.balanceCurrentRound > 0;
                     userVaultData.hasDepositForNextRound = userVaultData.balanceNextRound > 0;
 
@@ -66,7 +59,6 @@ const useUserVaultDataQuery = (
             return undefined;
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );

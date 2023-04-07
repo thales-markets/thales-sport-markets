@@ -17,6 +17,8 @@ import gamesOddsObtainerContract from 'utils/contracts/gamesOddsObtainerContract
 import { marchMadnessContract } from './contracts/marchMadnessContract';
 import liquidityPoolContract from 'utils/contracts/liquidityPoolContract';
 import { overtimeVoucherEscrowContract } from './contracts/overtimeVoucherEscrowContract';
+import sportVaultDataContract from 'utils/contracts/sportVaultDataContract';
+import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContract';
 
 type NetworkConnector = {
     initialized: boolean;
@@ -44,6 +46,8 @@ type NetworkConnector = {
     gamesOddsObtainerContract?: ethers.Contract;
     marchMadnessContract?: ethers.Contract;
     liquidityPoolContract?: ethers.Contract;
+    sportVaultDataContract?: ethers.Contract;
+    liquidityPoolDataContract?: ethers.Contract;
 };
 
 // @ts-ignore
@@ -67,6 +71,8 @@ const networkConnector: NetworkConnector = {
         this.gamesOddsObtainerContract = initializeContract(gamesOddsObtainerContract, networkSettings);
         this.marchMadnessContract = initializeContract(marchMadnessContract, networkSettings);
         this.liquidityPoolContract = initializeContract(liquidityPoolContract, networkSettings);
+        this.sportVaultDataContract = initializeContract(sportVaultDataContract, networkSettings);
+        this.liquidityPoolDataContract = initializeContract(liquidityPoolDataContract, networkSettings);
 
         this.multipleCollateral = [
             initializeContract(multipleCollateral['sUSD'], networkSettings),
