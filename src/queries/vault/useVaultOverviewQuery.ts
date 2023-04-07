@@ -15,7 +15,7 @@ const useVaultOverviewQuery = (
     options?: UseQueryOptions<VaultOverview | undefined>
 ) => {
     return useQuery<VaultOverview | undefined>(
-        QUERY_KEYS.Vault.Data(vaultAddress, networkId),
+        QUERY_KEYS.Vault.Overview(vaultAddress, networkId),
         async () => {
             const vaultData: VaultOverview = {
                 roundEndTime: 0,
