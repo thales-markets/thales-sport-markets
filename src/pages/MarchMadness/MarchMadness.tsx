@@ -42,7 +42,6 @@ const MarchMadness: React.FC = () => {
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
         enabled: isAppReady,
-        refetchInterval: 60 * 1000,
     });
     const marchMadnessData =
         marchMadnessDataQuery.isSuccess && marchMadnessDataQuery.data ? marchMadnessDataQuery.data : null;

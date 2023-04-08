@@ -7,7 +7,7 @@ import { OvertimeVoucher, OvertimeVouchers } from 'types/tokens';
 import thalesData from 'thales-data';
 import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
-const useTokenBalanceQuery = (
+const useOvertimeVoucherQuery = (
     walletAddress: string,
     networkId: NetworkId,
     options?: UseQueryOptions<OvertimeVoucher | undefined>
@@ -43,10 +43,9 @@ const useTokenBalanceQuery = (
             return undefined;
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );
 };
 
-export default useTokenBalanceQuery;
+export default useOvertimeVoucherQuery;

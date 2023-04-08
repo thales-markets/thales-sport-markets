@@ -5,7 +5,7 @@ import networkConnector from 'utils/networkConnector';
 import { NetworkId } from 'types/network';
 import { UserVaultData } from 'types/vault';
 import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
-import { VAULT_MAP } from 'constants/vault';
+import { isParlayVault } from 'constants/vault';
 
 const useUserVaultDataQuery = (
     vaultAddress: string,
@@ -26,11 +26,9 @@ const useUserVaultDataQuery = (
             };
 
             try {
-                const isParlayVault = vaultAddress === VAULT_MAP['parlay-discount-vault'].addresses[networkId];
-
                 const { sportVaultDataContract } = networkConnector;
                 if (sportVaultDataContract) {
-                    const contractUserVaultData = isParlayVault
+                    const contractUserVaultData = isParlayVault(vaultAddress, networkId)
                         ? await sportVaultDataContract.getUserParlayVaultData(vaultAddress, walletAddress)
                         : await sportVaultDataContract.getUserSportVaultData(vaultAddress, walletAddress);
 

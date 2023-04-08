@@ -50,7 +50,6 @@ const useAccountPositionsQuery = (
             }
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );

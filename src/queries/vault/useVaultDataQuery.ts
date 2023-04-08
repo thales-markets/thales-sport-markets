@@ -4,7 +4,7 @@ import { bigNumberFormatter, bigNumberFormmaterWithDecimals } from 'utils/format
 import networkConnector from 'utils/networkConnector';
 import { NetworkId } from 'types/network';
 import { VaultData } from 'types/vault';
-import { VAULT_MAP } from 'constants/vault';
+import { isParlayVault } from 'constants/vault';
 import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 const useVaultDataQuery = (
@@ -43,11 +43,9 @@ const useVaultDataQuery = (
             };
 
             try {
-                const isParlayVault = vaultAddress === VAULT_MAP['parlay-discount-vault'].addresses[networkId];
-
                 const { sportVaultDataContract } = networkConnector;
                 if (sportVaultDataContract) {
-                    const contractVaultData = isParlayVault
+                    const contractVaultData = isParlayVault(vaultAddress, networkId)
                         ? await sportVaultDataContract.getParlayVaultData(vaultAddress)
                         : await sportVaultDataContract.getSportVaultData(vaultAddress);
 
@@ -75,10 +73,10 @@ const useVaultDataQuery = (
                     vaultData.priceLowerLimit = bigNumberFormatter(contractVaultData.priceLowerLimit);
                     vaultData.priceUpperLimit = bigNumberFormatter(contractVaultData.priceUpperLimit);
                     vaultData.skewImpactLimit = bigNumberFormatter(contractVaultData.skewImpactLimit);
-                    vaultData.allocationLimitsPerMarketPerRound = isParlayVault
+                    vaultData.allocationLimitsPerMarketPerRound = isParlayVault(vaultAddress, networkId)
                         ? bigNumberFormatter(contractVaultData.maxTradeRate)
                         : bigNumberFormatter(contractVaultData.allocationLimitsPerMarketPerRound) / 100;
-                    vaultData.minTradeAmount = isParlayVault
+                    vaultData.minTradeAmount = isParlayVault(vaultAddress, networkId)
                         ? bigNumberFormmaterWithDecimals(
                               contractVaultData.minTradeAmount,
                               getDefaultDecimalsForNetwork(networkId)

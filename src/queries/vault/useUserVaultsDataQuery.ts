@@ -4,7 +4,7 @@ import { bigNumberFormatter } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 import { NetworkId } from 'types/network';
 import { UserVaultsData } from 'types/vault';
-import { VAULT_MAP } from 'constants/vault';
+import { VAULT_MAP, isParlayVault } from 'constants/vault';
 
 const useUserVaultsDataQuery = (
     walletAddress: string,
@@ -26,11 +26,9 @@ const useUserVaultsDataQuery = (
 
             for (const vaultAddress of vaultAddresses) {
                 try {
-                    const isParlayVault = vaultAddress === VAULT_MAP['parlay-discount-vault'].addresses[networkId];
-
                     const { sportVaultDataContract } = networkConnector;
                     if (sportVaultDataContract) {
-                        const contractUserVaultData = isParlayVault
+                        const contractUserVaultData = isParlayVault(vaultAddress, networkId)
                             ? await sportVaultDataContract.getUserParlayVaultData(vaultAddress, walletAddress)
                             : await sportVaultDataContract.getUserSportVaultData(vaultAddress, walletAddress);
 

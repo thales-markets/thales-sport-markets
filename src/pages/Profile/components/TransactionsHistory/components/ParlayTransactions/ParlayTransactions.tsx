@@ -64,7 +64,6 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
         undefined,
         {
             enabled: isWalletConnected,
-            refetchInterval: false,
         }
     );
     let parlayTx = parlaysTxQuery.isSuccess ? parlaysTxQuery.data : [];

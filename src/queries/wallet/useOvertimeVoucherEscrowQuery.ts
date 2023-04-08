@@ -30,11 +30,11 @@ const useOvertimeVoucherEscrowQuery = (walletAddress: string, networkId: Network
                     const period = await overtimeVoucherEscrowContract.period();
 
                     const [isWhitelisted, isClaimed, voucherAmount, isPeriodEnded, periodEnd] = await Promise.all([
-                        await overtimeVoucherEscrowContract.isWhitelistedAddress(walletAddress),
-                        await overtimeVoucherEscrowContract.addressClaimedVoucherPerPeriod(period, walletAddress),
-                        await overtimeVoucherEscrowContract.voucherAmount(),
-                        await overtimeVoucherEscrowContract.claimingPeriodEnded(),
-                        await overtimeVoucherEscrowContract.periodEnd(period),
+                        overtimeVoucherEscrowContract.isWhitelistedAddress(walletAddress),
+                        overtimeVoucherEscrowContract.addressClaimedVoucherPerPeriod(period, walletAddress),
+                        overtimeVoucherEscrowContract.voucherAmount(),
+                        overtimeVoucherEscrowContract.claimingPeriodEnded(),
+                        overtimeVoucherEscrowContract.periodEnd(period),
                     ]);
 
                     const isClaimable = isWhitelisted && !isPeriodEnded && !isClaimed;

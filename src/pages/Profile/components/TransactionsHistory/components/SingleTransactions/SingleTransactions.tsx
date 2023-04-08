@@ -36,7 +36,6 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
         networkId,
         {
             enabled: isWalletConnected,
-            refetchInterval: false,
         }
     );
     const transactions = txQuery.isSuccess ? txQuery.data : [];
