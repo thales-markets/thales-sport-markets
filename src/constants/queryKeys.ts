@@ -92,7 +92,6 @@ export const QUERY_KEYS = {
             walletAddress,
             networkId,
         ],
-        GetUsdDefaultAmount: (networkId: NetworkId) => ['wallet', 'getUsdDefaultAmount', networkId],
         OvertimeVoucher: (walletAddress: string, networkId: NetworkId) => [
             'wallet',
             'overtimeVoucher',
