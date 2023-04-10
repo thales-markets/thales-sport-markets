@@ -100,14 +100,14 @@ export const QUERY_KEYS = {
         ],
         OvertimeVoucherEscrow: (walletAddress: string, networkId: NetworkId) => [
             'wallet',
-            'OvertimeVoucherEscrow',
+            'overtimeVoucherEscrow',
             walletAddress,
             networkId,
         ],
         Stats: (networkId: NetworkId, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
         VaultsAndLpTxs: (networkId: NetworkId, walletAddress: string) => [
             'wallet',
-            'VaultsAndLpTxs',
+            'vaultsAndLpTxs',
             networkId,
             walletAddress,
         ],

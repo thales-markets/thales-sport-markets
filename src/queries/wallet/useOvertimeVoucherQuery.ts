@@ -25,16 +25,12 @@ const useOvertimeVoucherQuery = (
                     const overtimeVoucher = overtimeVouchers[0];
                     const { overtimeVoucherContract } = networkConnector;
 
-                    const [remainingAmount, image] = await Promise.all([
-                        overtimeVoucherContract?.amountInVoucher(overtimeVoucher.id),
-                        overtimeVoucherContract?.tokenURI(overtimeVoucher.id),
-                    ]);
+                    const remainingAmount = await overtimeVoucherContract?.tokenURI(overtimeVoucher.id);
 
                     overtimeVoucher.remainingAmount = bigNumberFormmaterWithDecimals(
                         remainingAmount,
                         getDefaultDecimalsForNetwork(networkId)
                     );
-                    overtimeVoucher.image = image;
                     return overtimeVoucher;
                 }
             } catch (e) {
