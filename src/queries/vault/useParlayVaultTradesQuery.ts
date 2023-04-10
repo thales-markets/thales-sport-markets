@@ -51,7 +51,6 @@ const useParlayVaultTradesQuery = (
             }
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );

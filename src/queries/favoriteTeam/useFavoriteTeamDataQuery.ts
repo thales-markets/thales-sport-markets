@@ -17,18 +17,19 @@ const useFavoriteTeamDataQuery = (walletAddress: string, networkId: NetworkId, o
             const favoriteTeamDataContract = networkConnector.favoriteTeamContract;
 
             if (favoriteTeamDataContract && walletAddress !== '') {
-                const [isEligible, favoriteTeam] = await Promise.all([
-                    await favoriteTeamDataContract.isMinterEligibleToMint(walletAddress),
-                    await favoriteTeamDataContract.getFavoriteTeamForUser(walletAddress),
-                ]);
+                const favoriteTeam = await favoriteTeamDataContract.getFavoriteTeamForUser(walletAddress);
 
-                favoriteTeamData.isEligible = isEligible;
                 favoriteTeamData.favoriteTeam = Number(favoriteTeam[0]);
             }
 
             return favoriteTeamData;
         },
-        options
+        {
+            ...options,
+            // team is not changed, no need to refresh data
+            staleTime: Infinity,
+            cacheTime: Infinity,
+        }
     );
 };
 

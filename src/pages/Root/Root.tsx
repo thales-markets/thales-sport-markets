@@ -58,7 +58,7 @@ const { chains, provider } = configureChains(
                           process.env.REACT_APP_BLAST_PROJECT_ID
                       }`,
             }),
-            stallTimeout: 1500,
+            stallTimeout: 2000,
         }),
         infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID || '', stallTimeout: 1500 }),
         publicProvider(),

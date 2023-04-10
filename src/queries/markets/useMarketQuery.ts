@@ -115,7 +115,7 @@ const useMarketQuery = (
             }
         },
         {
-            refetchInterval: 5000,
+            refetchInterval: 10 * 1000,
             ...options,
         }
     );

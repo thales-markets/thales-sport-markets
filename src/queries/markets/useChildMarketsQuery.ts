@@ -122,7 +122,7 @@ const useChildMarketsQuery = (
             }
         },
         {
-            refetchInterval: 5000,
+            refetchInterval: 10 * 1000,
             ...options,
         }
     );

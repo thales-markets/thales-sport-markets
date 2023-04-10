@@ -230,7 +230,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         )}
                                 </ResultLabel>
                                 {!SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
-                                    !SPORTS_TAGS_MAP['eSports'].includes(Number(liveResultInfo?.sportId)) && (
+                                    !SPORTS_TAGS_MAP['eSports'].includes(Number(liveResultInfo?.sportId)) &&
+                                    !SPORTS_TAGS_MAP['UFC'].includes(Number(liveResultInfo?.sportId)) && (
                                         <PeriodsContainer directionRow={true}>
                                             {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
                                                 return (

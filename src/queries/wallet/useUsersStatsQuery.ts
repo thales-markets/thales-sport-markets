@@ -18,7 +18,6 @@ const useUsersStatsQuery = (walletAddress: string, networkId: NetworkId, options
             return users;
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );
