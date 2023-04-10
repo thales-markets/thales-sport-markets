@@ -29,7 +29,6 @@ const useLiquidityPoolPnlsQuery = (networkId: NetworkId, options?: UseQueryOptio
             }
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );

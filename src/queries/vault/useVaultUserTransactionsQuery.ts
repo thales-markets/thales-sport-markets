@@ -24,7 +24,6 @@ const useVaultUserTransactionsQuery = (
             }
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );

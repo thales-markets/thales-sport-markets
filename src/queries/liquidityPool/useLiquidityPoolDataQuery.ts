@@ -32,70 +32,49 @@ const useLiquidityPoolDataQuery = (networkId: NetworkId, options?: UseQueryOptio
 
             const decimals = getDefaultDecimalsForNetwork(networkId);
             try {
-                const { liquidityPoolContract } = networkConnector;
-                if (liquidityPoolContract) {
-                    const [
-                        liquidityPoolStarted,
-                        maxAllowedDeposit,
-                        round,
-                        allocationNextRound,
-                        minDepositAmount,
-                        maxAllowedUsers,
-                        usersCurrentlyInLiquidityPool,
-                        canCloseCurrentRound,
-                        paused,
-                        roundLength,
-                        stakedThalesMultiplier,
-                    ] = await Promise.all([
-                        liquidityPoolContract?.started(),
-                        liquidityPoolContract?.maxAllowedDeposit(),
-                        liquidityPoolContract?.round(),
-                        liquidityPoolContract?.totalDeposited(),
-                        liquidityPoolContract?.minDepositAmount(),
-                        liquidityPoolContract?.maxAllowedUsers(),
-                        liquidityPoolContract?.usersCurrentlyInPool(),
-                        liquidityPoolContract?.canCloseCurrentRound(),
-                        liquidityPoolContract?.paused(),
-                        liquidityPoolContract?.roundLength(),
-                        liquidityPoolContract?.stakedThalesMultiplier(),
-                    ]);
+                const { liquidityPoolContract, liquidityPoolDataContract } = networkConnector;
+                if (liquidityPoolContract && liquidityPoolDataContract) {
+                    const contractLiquidityPoolData = await liquidityPoolDataContract.getLiquidityPoolData(
+                        liquidityPoolContract.address
+                    );
 
-                    liquidityPoolData.liquidityPoolStarted = liquidityPoolStarted;
-                    liquidityPoolData.maxAllowedDeposit = bigNumberFormmaterWithDecimals(maxAllowedDeposit, decimals);
-                    liquidityPoolData.round = Number(round);
+                    liquidityPoolData.liquidityPoolStarted = contractLiquidityPoolData.started;
+                    liquidityPoolData.maxAllowedDeposit = bigNumberFormmaterWithDecimals(
+                        contractLiquidityPoolData.maxAllowedDeposit,
+                        decimals
+                    );
+                    liquidityPoolData.round = Number(contractLiquidityPoolData.round);
                     liquidityPoolData.allocationNextRound = bigNumberFormmaterWithDecimals(
-                        allocationNextRound,
+                        contractLiquidityPoolData.totalDeposited,
                         decimals
                     );
                     liquidityPoolData.availableAllocationNextRound =
                         liquidityPoolData.maxAllowedDeposit - liquidityPoolData.allocationNextRound;
                     liquidityPoolData.allocationNextRoundPercentage =
                         (liquidityPoolData.allocationNextRound / liquidityPoolData.maxAllowedDeposit) * 100;
-                    liquidityPoolData.minDepositAmount = bigNumberFormmaterWithDecimals(minDepositAmount, decimals);
-                    liquidityPoolData.maxAllowedUsers = Number(maxAllowedUsers);
-                    liquidityPoolData.usersCurrentlyInLiquidityPool = Number(usersCurrentlyInLiquidityPool);
-                    liquidityPoolData.canCloseCurrentRound = canCloseCurrentRound;
-                    liquidityPoolData.paused = paused;
-                    liquidityPoolData.roundLength = Number(roundLength) / 60 / 60 / 24;
-                    liquidityPoolData.stakedThalesMultiplier = bigNumberFormatter(stakedThalesMultiplier);
-
-                    const [allocationCurrentRound, lifetimePnl, roundEndTime] = await Promise.all([
-                        liquidityPoolContract?.allocationPerRound(liquidityPoolData.round),
-                        liquidityPoolContract?.cumulativeProfitAndLoss(
-                            liquidityPoolData.round > 0 ? liquidityPoolData.round - 1 : 0
-                        ),
-                        liquidityPoolContract?.getRoundEndTime(liquidityPoolData.round),
-                    ]);
-
+                    liquidityPoolData.minDepositAmount = bigNumberFormmaterWithDecimals(
+                        contractLiquidityPoolData.minDepositAmount,
+                        decimals
+                    );
+                    liquidityPoolData.maxAllowedUsers = Number(contractLiquidityPoolData.maxAllowedUsers);
+                    liquidityPoolData.usersCurrentlyInLiquidityPool = Number(
+                        contractLiquidityPoolData.usersCurrentlyInPool
+                    );
+                    liquidityPoolData.canCloseCurrentRound = contractLiquidityPoolData.canCloseCurrentRound;
+                    liquidityPoolData.paused = contractLiquidityPoolData.paused;
+                    liquidityPoolData.roundLength = Number(contractLiquidityPoolData.roundLength) / 60 / 60 / 24;
+                    liquidityPoolData.stakedThalesMultiplier = bigNumberFormatter(
+                        contractLiquidityPoolData.stakedThalesMultiplier
+                    );
                     liquidityPoolData.allocationCurrentRound = bigNumberFormmaterWithDecimals(
-                        allocationCurrentRound,
+                        contractLiquidityPoolData.allocationCurrentRound,
                         decimals
                     );
                     liquidityPoolData.lifetimePnl =
-                        bigNumberFormmaterWithDecimals(lifetimePnl, 18) === 0
+                        bigNumberFormmaterWithDecimals(contractLiquidityPoolData.lifetimePnl, 18) === 0
                             ? 0
-                            : bigNumberFormmaterWithDecimals(lifetimePnl, 18) - 1;
-                    liquidityPoolData.roundEndTime = Number(roundEndTime) * 1000;
+                            : bigNumberFormmaterWithDecimals(contractLiquidityPoolData.lifetimePnl, 18) - 1;
+                    liquidityPoolData.roundEndTime = Number(contractLiquidityPoolData.roundEndTime) * 1000;
                     liquidityPoolData.isRoundEnded = new Date().getTime() > liquidityPoolData.roundEndTime;
 
                     return liquidityPoolData;
@@ -106,7 +85,6 @@ const useLiquidityPoolDataQuery = (networkId: NetworkId, options?: UseQueryOptio
             return undefined;
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );

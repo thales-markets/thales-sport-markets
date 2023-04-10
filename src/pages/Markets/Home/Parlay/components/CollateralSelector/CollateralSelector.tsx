@@ -1,6 +1,4 @@
 import { ReactComponent as OvertimeVoucherIcon } from 'assets/images/overtime-voucher.svg';
-import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
-import Tooltip from 'components/Tooltip';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,13 +8,8 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { OvertimeVoucher } from 'types/tokens';
-import {
-    getCollateralIndexByCollateralKey,
-    getDefaultColleteralForNetwork,
-    getStableIcon,
-    StablecoinKey,
-} from 'utils/collaterals';
-import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
+import { getCollateralIndexByCollateralKey, getStableIcon, StablecoinKey } from 'utils/collaterals';
+import { formatCurrency } from 'utils/formatters/number';
 import { isMultiCollateralSupportedForNetwork } from 'utils/network';
 
 type CollateralSelectorProps = {
@@ -56,49 +49,34 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
         <Container>
             <AssetContainer hasMoreThenTwoCollaterals={isMultiColletaralSupported}>
                 {overtimeVoucher && (
-                    <Tooltip
-                        overlay={
-                            <OvertimeVoucherPopup
-                                title={t('common.voucher.overtime-voucher')}
-                                imageSrc={overtimeVoucher.image}
-                                text={`${t('common.voucher.remaining-amount')}: ${formatCurrencyWithKey(
-                                    getDefaultColleteralForNetwork(networkId),
-                                    overtimeVoucher.remainingAmount
-                                )}`}
+                    <CollateralContainer hasMoreThenTwoCollaterals={isMultiColletaralSupported}>
+                        <CollateralName selected={isVoucherSelected} uppercase={true}>
+                            {t('common.voucher.voucher')}
+                        </CollateralName>
+                        <CollateralIcon active={isVoucherSelected}>
+                            <OvertimeVoucherIcon
+                                onClick={() => {
+                                    setIsVoucherSelected(true);
+                                    onChangeCollateral(0);
+                                }}
+                                style={{
+                                    ...(isVoucherSelected
+                                        ? {
+                                              opacity: '1',
+                                          }
+                                        : {
+                                              opacity: '0.5',
+                                          }),
+                                    marginRight: 7,
+                                    width: '25px',
+                                    height: '25px',
+                                }}
                             />
-                        }
-                        component={
-                            <CollateralContainer hasMoreThenTwoCollaterals={isMultiColletaralSupported}>
-                                <CollateralName selected={isVoucherSelected} uppercase={true}>
-                                    {t('common.voucher.voucher')}
-                                </CollateralName>
-                                <CollateralIcon active={isVoucherSelected}>
-                                    <OvertimeVoucherIcon
-                                        onClick={() => {
-                                            setIsVoucherSelected(true);
-                                            onChangeCollateral(0);
-                                        }}
-                                        style={{
-                                            ...(isVoucherSelected
-                                                ? {
-                                                      opacity: '1',
-                                                  }
-                                                : {
-                                                      opacity: '0.5',
-                                                  }),
-                                            marginRight: 7,
-                                            width: '25px',
-                                            height: '25px',
-                                        }}
-                                    />
-                                </CollateralIcon>
-                                <CollateralBalance selected={isVoucherSelected}>
-                                    {formatCurrency(overtimeVoucher.remainingAmount, 0)}
-                                </CollateralBalance>
-                            </CollateralContainer>
-                        }
-                        overlayClassName="overtime-voucher-overlay"
-                    />
+                        </CollateralIcon>
+                        <CollateralBalance selected={isVoucherSelected}>
+                            {formatCurrency(overtimeVoucher.remainingAmount, 0)}
+                        </CollateralBalance>
+                    </CollateralContainer>
                 )}
                 {collateralArray.length &&
                     collateralArray.map((item) => {

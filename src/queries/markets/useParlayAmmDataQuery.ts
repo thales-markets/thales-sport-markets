@@ -20,32 +20,21 @@ const useParlayAmmDataQuery = (networkId: NetworkId, options?: UseQueryOptions<P
                     parlaySize: 0,
                 };
 
-                const { parlayMarketsAMMContract } = networkConnector;
-                if (parlayMarketsAMMContract) {
-                    const [
-                        minUsdAmount,
-                        maxSupportedAmount,
-                        maxSupportedOdds,
-                        parlayAmmFee,
-                        safeBoxImpact,
-                        parlaySize,
-                    ] = await Promise.all([
-                        parlayMarketsAMMContract.minUSDAmount(),
-                        parlayMarketsAMMContract.maxSupportedAmount(),
-                        parlayMarketsAMMContract.maxSupportedOdds(),
-                        parlayMarketsAMMContract.parlayAmmFee(),
-                        parlayMarketsAMMContract.safeBoxImpact(),
-                        parlayMarketsAMMContract.parlaySize(),
-                    ]);
+                const { parlayMarketDataContract } = networkConnector;
+                if (parlayMarketDataContract) {
+                    const parlayAMMParameters = await parlayMarketDataContract.getParlayAMMParameters();
+
                     parlayData.minUsdAmount = bigNumberFormmaterWithDecimals(
-                        minUsdAmount,
+                        parlayAMMParameters.minUSDAmount,
                         getDefaultDecimalsForNetwork(networkId)
                     );
-                    parlayData.maxSupportedAmount = bigNumberFormmaterWithDecimals(maxSupportedAmount);
-                    parlayData.maxSupportedOdds = bigNumberFormmaterWithDecimals(maxSupportedOdds);
-                    parlayData.parlayAmmFee = bigNumberFormmaterWithDecimals(parlayAmmFee);
-                    parlayData.safeBoxImpact = bigNumberFormmaterWithDecimals(safeBoxImpact);
-                    parlayData.parlaySize = Number(parlaySize);
+                    parlayData.maxSupportedAmount = bigNumberFormmaterWithDecimals(
+                        parlayAMMParameters.maxSupportedAmount
+                    );
+                    parlayData.maxSupportedOdds = bigNumberFormmaterWithDecimals(parlayAMMParameters.maxSupportedOdds);
+                    parlayData.parlayAmmFee = bigNumberFormmaterWithDecimals(parlayAMMParameters.parlayAmmFee);
+                    parlayData.safeBoxImpact = bigNumberFormmaterWithDecimals(parlayAMMParameters.safeBoxImpact);
+                    parlayData.parlaySize = Number(parlayAMMParameters.parlaySize);
                 }
 
                 return parlayData;

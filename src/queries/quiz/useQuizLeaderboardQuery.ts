@@ -32,7 +32,6 @@ const useQuizLeaderboardQuery = (options?: UseQueryOptions<LeaderboardByWeeks>) 
             return [];
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );
