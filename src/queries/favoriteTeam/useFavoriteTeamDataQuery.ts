@@ -17,7 +17,7 @@ const useFavoriteTeamDataQuery = (walletAddress: string, networkId: NetworkId, o
             const favoriteTeamDataContract = networkConnector.favoriteTeamContract;
 
             if (favoriteTeamDataContract && walletAddress !== '') {
-                const favoriteTeam = favoriteTeamDataContract.getFavoriteTeamForUser(walletAddress);
+                const favoriteTeam = await favoriteTeamDataContract.getFavoriteTeamForUser(walletAddress);
 
                 favoriteTeamData.favoriteTeam = Number(favoriteTeam[0]);
             }

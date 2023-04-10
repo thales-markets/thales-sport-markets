@@ -25,7 +25,7 @@ const useOvertimeVoucherQuery = (
                     const overtimeVoucher = overtimeVouchers[0];
                     const { overtimeVoucherContract } = networkConnector;
 
-                    const remainingAmount = await overtimeVoucherContract?.tokenURI(overtimeVoucher.id);
+                    const remainingAmount = await overtimeVoucherContract?.amountInVoucher(overtimeVoucher.id);
 
                     overtimeVoucher.remainingAmount = bigNumberFormmaterWithDecimals(
                         remainingAmount,
