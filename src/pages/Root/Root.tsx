@@ -46,11 +46,11 @@ const { chains, provider } = configureChains(
                           process.env.REACT_APP_BLAST_PROJECT_ID
                       }`,
             }),
+            stallTimeout: 1500,
         }),
-        infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID }),
+        infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID, stallTimeout: 1500 }),
         publicProvider(),
     ]
-    // { targetQuorum: 2 }
 );
 
 const connectors = connectorsForWallets([
