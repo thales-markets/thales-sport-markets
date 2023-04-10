@@ -1,19 +1,24 @@
 import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
-import { Position } from 'constants/options';
+import { Position, POSITION_TO_ODDS_OBJECT_PROPERTY_NAME } from 'constants/options';
 import {
     BetType,
+    COMBINED_MARKETS_SGP,
     DoubleChanceMarketType,
     FIFA_WC_TAG,
+    MARKETS_COMBINATION,
     MATCH_RESOLVE_MAP,
     MLS_TAG,
     PERSON_COMPETITIONS,
     SCORING_MAP,
+    SPORTS_TAGS_MAP,
     TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
 } from 'constants/tags';
 import ordinal from 'ordinal';
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import {
     AccountPosition,
+    CombinedMarket,
+    CombinedMarketsPositionName,
     MarketData,
     MarketInfo,
     ParlayMarket,
@@ -24,6 +29,7 @@ import {
 import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
 import i18n from 'i18n';
+import { isEqual } from 'lodash';
 
 const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 90;
 
@@ -494,3 +500,118 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
 };
 
 export const convertPriceImpactToBonus = (priceImpact: number): number => -((priceImpact / (1 + priceImpact)) * 100);
+
+export const isAllowedToCombineMarketsForTagId = (tags: number[]): boolean => {
+    let isAllowed = false;
+
+    tags.forEach((tag) => {
+        if (
+            SPORTS_TAGS_MAP.Football.includes(Number(tag)) ||
+            SPORTS_TAGS_MAP.Basketball.includes(Number(tag)) ||
+            SPORTS_TAGS_MAP.Soccer.includes(Number(tag)) ||
+            SPORTS_TAGS_MAP.Hockey.includes(Number(tag))
+        ) {
+            isAllowed = true;
+        }
+    });
+
+    return isAllowed;
+};
+
+export const calculateCombinedMarketOdds = (markets: SportMarketInfo[], positions: Position[]) => {
+    const firstPositionOdds = markets[0][POSITION_TO_ODDS_OBJECT_PROPERTY_NAME[positions[0]]];
+    const secondPositionOdds = markets[1][POSITION_TO_ODDS_OBJECT_PROPERTY_NAME[positions[1]]];
+
+    if (!firstPositionOdds || !secondPositionOdds) return 0;
+
+    if (markets[0].tags.find((tag) => SPORTS_TAGS_MAP.Football.includes(Number(tag)))) {
+        return firstPositionOdds * secondPositionOdds * COMBINED_MARKETS_SGP.Football;
+    }
+
+    if (markets[0].tags.find((tag) => SPORTS_TAGS_MAP.Soccer.includes(Number(tag)))) {
+        return firstPositionOdds * secondPositionOdds * COMBINED_MARKETS_SGP.Soccer;
+    }
+
+    if (markets[0].tags.find((tag) => SPORTS_TAGS_MAP.Basketball.includes(Number(tag)))) {
+        return firstPositionOdds * secondPositionOdds * COMBINED_MARKETS_SGP.Basketball;
+    }
+
+    if (markets[0].tags.find((tag) => SPORTS_TAGS_MAP.Hockey.includes(Number(tag)))) {
+        return firstPositionOdds * secondPositionOdds * COMBINED_MARKETS_SGP.Hockey;
+    }
+
+    return firstPositionOdds * secondPositionOdds;
+};
+
+export const getCombinedPositionName = (
+    markets: SportMarketInfo[],
+    positions: Position[]
+): CombinedMarketsPositionName | null => {
+    if (markets[0].betType == BetType.WINNER && markets[1].betType == BetType.TOTAL) {
+        if (positions[0] == 0 && positions[1] == 0) return '1&O';
+        if (positions[0] == 0 && positions[1] == 1) return '1&U';
+        if (positions[0] == 1 && positions[1] == 0) return '2&O';
+        if (positions[0] == 1 && positions[1] == 1) return '2&U';
+        if (positions[0] == 2 && positions[1] == 0) return 'X&O';
+        if (positions[0] == 2 && positions[1] == 1) return 'X&U';
+    }
+
+    if (markets[0].betType == BetType.SPREAD && markets[1].betType == BetType.TOTAL) {
+        if (positions[0] == 0 && positions[1] == 0) return 'H1&O';
+        if (positions[0] == 0 && positions[1] == 1) return 'H1&U';
+        if (positions[0] == 1 && positions[1] == 0) return 'H2&O';
+        if (positions[0] == 1 && positions[1] == 1) return 'H2&U';
+    }
+    return null;
+};
+
+export const getAllCombinationsForTwoMarkets = (markets: SportMarketInfo[]): CombinedMarket[] => {
+    if (!isEqual(markets[0].tags, markets[1].tags)) return [];
+
+    const marketsCombinations: CombinedMarket[] = [];
+
+    [0, 1, 2].forEach((firstPosition) => {
+        [0, 1, 2].forEach((secondPosition) => {
+            const combinationOdds = calculateCombinedMarketOdds(markets, [firstPosition, secondPosition]);
+            const positionName = getCombinedPositionName(markets, [firstPosition, secondPosition]);
+
+            if (!combinationOdds) return;
+
+            marketsCombinations.push({
+                markets: markets,
+                positions: [firstPosition, secondPosition],
+                totalOdd: combinationOdds,
+                totalBonus: 0,
+                positionName: positionName ? positionName : '',
+            });
+        });
+    });
+
+    return marketsCombinations;
+};
+
+export const getAllCombinedMarketsForParentMarket = (parentMarket: SportMarketInfo) => {
+    const allCombinedMarkets: CombinedMarket[] = [];
+
+    if (!isAllowedToCombineMarketsForTagId(parentMarket.tags)) return [];
+
+    MARKETS_COMBINATION.forEach((combination) => {
+        const firstMarket =
+            parentMarket.betType == combination[0]
+                ? parentMarket
+                : parentMarket.childMarkets.find((childMarket) => childMarket.betType == combination[0]);
+
+        if (!firstMarket) return;
+
+        const secondMarket = parentMarket.childMarkets.find((childMarket) => childMarket.betType == combination[1]);
+
+        if (firstMarket && secondMarket) {
+            const markets = getAllCombinationsForTwoMarkets([firstMarket, secondMarket]);
+            if (markets.length) {
+                allCombinedMarkets.push(...markets);
+            }
+        }
+    });
+
+    return allCombinedMarkets;
+};

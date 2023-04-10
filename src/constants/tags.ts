@@ -257,6 +257,13 @@ export const SPORTS_MAP: SportsMap = {
     9020: 'Cricket',
 };
 
+export const COMBINED_MARKETS_SGP: Record<string, number> = {
+    Soccer: 0.7,
+    Basketball: 0.95,
+    Football: 0.9,
+    Hockey: 0.85,
+};
+
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
     9001,
     9002,
@@ -335,6 +342,11 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.TOTAL]: 'total',
     [BetType.DOUBLE_CHANCE]: 'double-chance',
 };
+
+export const MARKETS_COMBINATION: Array<BetType>[] = [
+    [0, 10002],
+    [10001, 10002],
+];
 
 export enum DoubleChanceMarketType {
     HOME_TEAM_NOT_TO_LOSE = 'HomeTeamNotToLose',

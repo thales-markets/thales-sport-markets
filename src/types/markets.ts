@@ -227,6 +227,19 @@ export enum PositionType {
     draw = 'draw',
 }
 
+export type CombinedMarketsPositionName =
+    | '1&O'
+    | '1&U'
+    | 'H1&O'
+    | 'H1&U'
+    | 'X&O'
+    | 'X&U'
+    | '2&O'
+    | '2&U'
+    | 'H2&O'
+    | 'H2&U'
+    | '';
+
 export type AccountPositionGraph = {
     id: string;
     market: SportMarketInfo;
@@ -372,4 +385,12 @@ export type SportMarketLiveResult = {
     sportId: number;
     tournamentName?: string;
     tournamentRound?: string;
+};
+
+export type CombinedMarket = {
+    markets: SportMarketInfo[];
+    positions: Position[];
+    totalOdd: number;
+    totalBonus: number;
+    positionName: CombinedMarketsPositionName;
 };
