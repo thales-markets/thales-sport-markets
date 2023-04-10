@@ -102,7 +102,7 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const defaultBannerImageUrl = `${generalConfig.API_URL}/banners/image/voucher.jpg`;
     const mobileDefultBannerImageUrl = `${generalConfig.API_URL}/banners/image/voucher-mobile.jpg`;
     const bannerImageUrlByNetwork = `${generalConfig.API_URL}/banners/image/voucher-${networkId}.jpg`;
-    const mobilebannerImageUrlByNetwork = `${generalConfig.API_URL}/banners/image/voucher-mobile-${networkId}.jpg`;
+    const mobileBannerImageUrlByNetwork = `${generalConfig.API_URL}/banners/image/voucher-mobile-${networkId}.jpg`;
 
     return (
         <Container>
@@ -113,7 +113,7 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
                     <Banner
                         image={bannerImageUrlByNetwork}
                         defaultImage={defaultBannerImageUrl}
-                        mobileImage={mobilebannerImageUrlByNetwork}
+                        mobileImage={mobileBannerImageUrlByNetwork}
                         mobileDefaultImage={mobileDefultBannerImageUrl}
                     />
                     <TextWrapper>
