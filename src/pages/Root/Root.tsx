@@ -8,6 +8,7 @@ import '@rainbow-me/rainbowkit/dist/index.css';
 import { connectorsForWallets, wallet, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { infuraProvider } from 'wagmi/providers/infura';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
 import WalletDisclaimer from 'components/WalletDisclaimer';
 import { merge } from 'lodash';
@@ -18,9 +19,38 @@ type RootProps = {
     store: Store;
 };
 
+type RpcProvider = {
+    ankr: string;
+    chainnode: string;
+    blast: string;
+};
+
+const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
+    10: {
+        ankr: 'optimism',
+        chainnode: 'optimism-mainnet',
+        blast: 'optimism-mainnet',
+    },
+    420: { ankr: 'optimism_testnet', chainnode: 'optimism-goerli', blast: '' },
+    42161: { ankr: 'arbitrum', chainnode: 'arbitrum-one', blast: 'arbitrum-one' },
+};
+
 const { chains, provider } = configureChains(
     [chain.optimism, chain.optimismGoerli, chain.arbitrum],
-    [infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID }), publicProvider()]
+    [
+        jsonRpcProvider({
+            rpc: (chain) => ({
+                http: !CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].blast
+                    ? chain.rpcUrls.default
+                    : `https://${CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].blast}.blastapi.io/${
+                          process.env.REACT_APP_BLAST_PROJECT_ID
+                      }`,
+            }),
+        }),
+        infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID }),
+        publicProvider(),
+    ]
+    // { targetQuorum: 2 }
 );
 
 const connectors = connectorsForWallets([
