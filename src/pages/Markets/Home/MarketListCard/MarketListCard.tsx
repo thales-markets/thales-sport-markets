@@ -85,13 +85,20 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     });
 
     const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.tags[0], {
-        enabled: isAppReady && isEnetpulseSport,
+        enabled: isAppReady && isEnetpulseSport && (isPendingResolution || !localStorage.getItem(market.address)),
     });
 
     useEffect(() => {
         if (isEnetpulseSport) {
             if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
                 setLiveResultInfo(useEnetpulseLiveResultQuery.data);
+                const tournamentName = useEnetpulseLiveResultQuery.data.tournamentName
+                    ? '| ' + useEnetpulseLiveResultQuery.data.tournamentName
+                    : '';
+                const tournamentRound = useEnetpulseLiveResultQuery.data.tournamentRound
+                    ? ' | ' + useEnetpulseLiveResultQuery.data.tournamentRound
+                    : '';
+                localStorage.setItem(market.address, tournamentName + tournamentRound);
             }
         } else {
             if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
@@ -104,6 +111,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         useEnetpulseLiveResultQuery,
         useEnetpulseLiveResultQuery.data,
         isEnetpulseSport,
+        market.address,
     ]);
 
     return (
@@ -128,10 +136,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             }
                         />
                         <MatchTimeLabel>
-                            {isEnetpulseSport && liveResultInfo ? (
+                            {isEnetpulseSport && (liveResultInfo || localStorage.getItem(market.address)) ? (
                                 <>
-                                    {liveResultInfo.tournamentName ? '| ' + liveResultInfo.tournamentName : ''}
-                                    {liveResultInfo.tournamentRound ? ' | ' + liveResultInfo.tournamentRound : ''}
+                                    {localStorage.getItem(market.address)}
                                     {SPORTS_TAGS_MAP['Tennis'].includes(Number(market.tags[0])) && (
                                         <Tooltip
                                             overlay={t(`common.tennis-tooltip`)}
