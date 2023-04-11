@@ -20,7 +20,7 @@ const useMarketQuery = (
                 const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
 
                 const marketData = await sportPositionalMarketDataContract?.getMarketData(marketAddress);
-                console.log(marketData);
+
                 const gameStarted = marketData.cancelled ? false : Date.now() > Number(marketData.maturity) * 1000;
                 const homeScore = marketData.resolved ? marketData.homeScore : undefined;
                 const awayScore = marketData.resolved ? marketData.awayScore : undefined;
@@ -78,7 +78,6 @@ const useMarketQuery = (
             }
         },
         {
-            refetchInterval: 10 * 1000,
             ...options,
         }
     );

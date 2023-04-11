@@ -91,7 +91,6 @@ const useChildMarketsQuery = (
             }
         },
         {
-            refetchInterval: 10 * 1000,
             ...options,
         }
     );
