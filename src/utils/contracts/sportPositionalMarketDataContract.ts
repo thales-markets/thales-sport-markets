@@ -3,7 +3,7 @@ export const sportPositionalMarketDataContract = {
         5: '0xC7D8c34048D8bf6eB24FC76c7A61F47754990c81',
         10: '0xd8Bc9D6840C701bFAd5E7cf98CAdC2ee637c0701',
         42: '0x05C370827A21E491953BD0b8B1ce3290584aC486',
-        420: '0x61E3F046499F570aDF96c0f92ab1B27f818c305f',
+        420: '0xAca69fa38a08EeF5b03a576387b85a5BFe8BbC19',
         42161: '0x503e7F2C19384Ff68B445E21850fDC61f34434e6',
     },
     abi: [
@@ -44,6 +44,12 @@ export const sportPositionalMarketDataContract = {
             anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: '_sportsAMM', type: 'address' }],
             name: 'SetSportsAMM',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: '_voucherEscrow', type: 'address' }],
+            name: 'SetVoucherEscrow',
             type: 'event',
         },
         {
@@ -167,6 +173,30 @@ export const sportPositionalMarketDataContract = {
             type: 'function',
         },
         {
+            inputs: [
+                { internalType: 'address', name: 'market', type: 'address' },
+                { internalType: 'enum ISportsAMM.Position', name: 'position', type: 'uint8' },
+                { internalType: 'uint256', name: 'amount', type: 'uint256' },
+                { internalType: 'address', name: 'collateral', type: 'address' },
+            ],
+            name: 'getPositionDetails',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'int256', name: 'priceImpact', type: 'int256' },
+                        { internalType: 'uint256', name: 'liquidity', type: 'uint256' },
+                        { internalType: 'uint256', name: 'quote', type: 'uint256' },
+                        { internalType: 'uint256', name: 'quoteDifferentCollateral', type: 'uint256' },
+                    ],
+                    internalType: 'struct SportPositionalMarketData.PositionDetails',
+                    name: '',
+                    type: 'tuple',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [],
             name: 'getPriceImpactForAllActiveMarkets',
             outputs: [
@@ -198,6 +228,27 @@ export const sportPositionalMarketDataContract = {
                     internalType: 'struct SportPositionalMarketData.ActiveMarketsPriceImpact[]',
                     name: '',
                     type: 'tuple[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: 'user', type: 'address' }],
+            name: 'getVoucherEscrowData',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'uint256', name: 'period', type: 'uint256' },
+                        { internalType: 'bool', name: 'isWhitelisted', type: 'bool' },
+                        { internalType: 'bool', name: 'isClaimed', type: 'bool' },
+                        { internalType: 'uint256', name: 'voucherAmount', type: 'uint256' },
+                        { internalType: 'bool', name: 'isPeriodEnded', type: 'bool' },
+                        { internalType: 'uint256', name: 'periodEnd', type: 'uint256' },
+                    ],
+                    internalType: 'struct SportPositionalMarketData.VoucherEscrowData',
+                    name: '',
+                    type: 'tuple',
                 },
             ],
             stateMutability: 'view',
@@ -302,6 +353,13 @@ export const sportPositionalMarketDataContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'address', name: '_voucherEscrow', type: 'address' }],
+            name: 'setVoucherEscrow',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [],
             name: 'sportsAMM',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
@@ -313,6 +371,13 @@ export const sportPositionalMarketDataContract = {
             name: 'transferOwnershipAtInit',
             outputs: [],
             stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'voucherEscrow',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
             type: 'function',
         },
     ],

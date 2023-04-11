@@ -6,6 +6,7 @@ import { ethers } from 'ethers';
 import { bigNumberFormatter, bigNumberFormmaterWithDecimals } from '../../utils/formatters/ethers';
 import { NetworkId } from 'types/network';
 import { getCollateralAddress } from 'utils/collaterals';
+import { ZERO_ADDRESS } from 'constants/network';
 
 const usePositionPriceDetailsMultiMarketsQuery = (
     markets: ParlaysMarket[],
@@ -17,7 +18,7 @@ const usePositionPriceDetailsMultiMarketsQuery = (
     return useQuery<Record<string, AMMPosition> | undefined>(
         QUERY_KEYS.MultiplePositionDetails(markets, amounts, stableIndex, networkId),
         async () => {
-            const sportsAMMContract = networkConnector.sportsAMMContract;
+            const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
             const collateralAddress = getCollateralAddress(
                 stableIndex ? stableIndex !== 0 : false,
                 networkId,
@@ -46,32 +47,20 @@ const usePositionPriceDetailsMultiMarketsQuery = (
                 }
 
                 try {
-                    const [
-                        availableToBuy,
-                        buyFromAmmQuote,
-                        buyPriceImpact,
-                        buyFromAMMQuoteCollateral,
-                    ] = await Promise.all([
-                        sportsAMMContract?.availableToBuyFromAMM(market.address, market.position),
-                        sportsAMMContract?.buyFromAmmQuote(market.address, market.position, parsedAmount),
-                        sportsAMMContract?.buyPriceImpact(market.address, market.position, parsedAmount),
-                        collateralAddress
-                            ? sportsAMMContract?.buyFromAmmQuoteWithDifferentCollateral(
-                                  market.address,
-                                  market.position,
-                                  parsedAmount,
-                                  collateralAddress
-                              )
-                            : 0,
-                    ]);
+                    const positionDetails = await sportPositionalMarketDataContract?.getPositionDetails(
+                        market.address,
+                        market.position,
+                        parsedAmount,
+                        collateralAddress || ZERO_ADDRESS
+                    );
 
                     ammPositionsMap[address] = {
-                        available: bigNumberFormatter(availableToBuy),
+                        available: bigNumberFormatter(positionDetails.liquidity),
                         quote: bigNumberFormmaterWithDecimals(
-                            stableIndex == 0 ? buyFromAmmQuote : buyFromAMMQuoteCollateral[0],
+                            stableIndex == 0 ? positionDetails.quote : positionDetails.quoteDifferentCollateral,
                             stableIndex == 0 || stableIndex == 1 ? 18 : 6
                         ),
-                        priceImpact: bigNumberFormatter(buyPriceImpact),
+                        priceImpact: bigNumberFormatter(positionDetails.priceImpact),
                     };
                 } catch (e) {
                     console.log('Error ', e);
