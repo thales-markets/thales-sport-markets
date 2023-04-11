@@ -43,7 +43,7 @@ const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
         chainnode: 'optimism-mainnet',
         blast: 'optimism-mainnet',
     },
-    420: { ankr: 'optimism_testnet', chainnode: 'optimism-goerli', blast: '' },
+    420: { ankr: 'optimism_testnet', chainnode: 'optimism-goerli', blast: 'optimism-goerli' },
     42161: { ankr: 'arbitrum', chainnode: 'arbitrum-one', blast: 'arbitrum-one' },
 };
 
