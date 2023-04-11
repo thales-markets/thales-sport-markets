@@ -1,9 +1,7 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { MarketData, ChildMarkets } from 'types/markets';
-import { ethers } from 'ethers';
 import networkConnector from 'utils/networkConnector';
-import marketContract from 'utils/contracts/sportsMarketContract';
 import { bigNumberFormmaterWithDecimals } from '../../utils/formatters/ethers';
 import { Position } from '../../constants/options';
 import { groupBy, orderBy } from 'lodash';
@@ -22,38 +20,9 @@ const useChildMarketsQuery = (
             try {
                 const childMarkets = await Promise.all(
                     parentMarket.childMarketsAddresses.map(async (childMarketAddress) => {
-                        const contract = new ethers.Contract(
-                            childMarketAddress,
-                            marketContract.abi,
-                            networkConnector.provider
-                        );
+                        const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
 
-                        const sportsAMMContract = networkConnector.sportsAMMContract;
-                        const gamesOddsObtainerContract = networkConnector.gamesOddsObtainerContract;
-
-                        const [
-                            gameDetails,
-                            tags,
-                            betType,
-                            resolved,
-                            finalResult,
-                            cancelled,
-                            paused,
-                            buyMarketDefaultOdds,
-                            spread,
-                            total,
-                        ] = await Promise.all([
-                            contract?.getGameDetails(),
-                            contract?.tags(0),
-                            contract?.tags(1),
-                            contract?.resolved(),
-                            contract?.finalResult(),
-                            contract?.cancelled(),
-                            contract?.paused(),
-                            sportsAMMContract?.getMarketDefaultOdds(childMarketAddress, false),
-                            gamesOddsObtainerContract?.childMarketSread(childMarketAddress),
-                            gamesOddsObtainerContract?.childMarketTotal(childMarketAddress),
-                        ]);
+                        const marketData = await sportPositionalMarketDataContract?.getMarketData(childMarketAddress);
 
                         const market: MarketData = {
                             address: childMarketAddress.toLowerCase(),
@@ -61,46 +30,46 @@ const useChildMarketsQuery = (
                             positions: {
                                 [Position.HOME]: {
                                     odd: bigNumberFormmaterWithDecimals(
-                                        buyMarketDefaultOdds[0],
+                                        marketData.odds[0],
                                         getDefaultDecimalsForNetwork(networkId)
                                     ),
                                 },
                                 [Position.AWAY]: {
                                     odd: bigNumberFormmaterWithDecimals(
-                                        buyMarketDefaultOdds[1],
+                                        marketData.odds[1],
                                         getDefaultDecimalsForNetwork(networkId)
                                     ),
                                 },
                                 [Position.DRAW]: {
-                                    odd: buyMarketDefaultOdds[2]
+                                    odd: marketData.odds[2]
                                         ? bigNumberFormmaterWithDecimals(
-                                              buyMarketDefaultOdds[2] || 0,
+                                              marketData.odds[2] || 0,
                                               getDefaultDecimalsForNetwork(networkId)
                                           )
                                         : undefined,
                                 },
                             },
-                            tags: [Number(tags)],
+                            tags: [Number(marketData.firstTag)],
                             homeTeam: parentMarket.homeTeam,
                             awayTeam: parentMarket.awayTeam,
                             maturityDate: parentMarket.maturityDate,
-                            resolved,
-                            cancelled,
-                            finalResult: Number(finalResult),
+                            resolved: marketData.resolved,
+                            cancelled: marketData.cancelled,
+                            finalResult: Number(marketData.finalResult),
                             gameStarted: parentMarket.gameStarted,
                             homeScore: parentMarket.homeScore,
                             awayScore: parentMarket.awayScore,
                             leagueRaceName: '',
-                            paused,
-                            betType: Number(betType),
+                            paused: marketData.paused,
+                            betType: Number(marketData.secondTag),
                             isApex: false,
                             parentMarket: parentMarket.address,
                             childMarketsAddresses: [],
                             childMarkets: [],
-                            spread: Number(spread),
-                            total: Number(total),
+                            spread: Number(marketData.spread),
+                            total: Number(marketData.total),
                             doubleChanceMarketType:
-                                Number(betType) === BetType.DOUBLE_CHANCE ? gameDetails.gameLabel : null,
+                                Number(marketData.secondTag) === BetType.DOUBLE_CHANCE ? marketData.gameLabel : null,
                         };
 
                         return market;

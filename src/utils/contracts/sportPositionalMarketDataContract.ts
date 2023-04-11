@@ -3,7 +3,7 @@ export const sportPositionalMarketDataContract = {
         5: '0xC7D8c34048D8bf6eB24FC76c7A61F47754990c81',
         10: '0xd8Bc9D6840C701bFAd5E7cf98CAdC2ee637c0701',
         42: '0x05C370827A21E491953BD0b8B1ce3290584aC486',
-        420: '0x202209397e2A26dc3243bD4bF46480C1f6661032',
+        420: '0x3258E21318d9F0bb97c2bAb5A022e1272CdD9E12',
         42161: '0x503e7F2C19384Ff68B445E21850fDC61f34434e6',
     },
     abi: [
@@ -30,6 +30,18 @@ export const sportPositionalMarketDataContract = {
         },
         {
             anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: '_consumer', type: 'address' }],
+            name: 'SetConsumer',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: '_oddsObtainer', type: 'address' }],
+            name: 'SetOddsObtainer',
+            type: 'event',
+        },
+        {
+            anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: '_sportsAMM', type: 'address' }],
             name: 'SetSportsAMM',
             type: 'event',
@@ -43,6 +55,13 @@ export const sportPositionalMarketDataContract = {
         { inputs: [], name: 'acceptOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
         {
             inputs: [],
+            name: 'consumer',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
             name: 'getBaseOddsForAllActiveMarkets',
             outputs: [
                 {
@@ -53,6 +72,58 @@ export const sportPositionalMarketDataContract = {
                     internalType: 'struct SportPositionalMarketData.ActiveMarketsOdds[]',
                     name: '',
                     type: 'tuple[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: 'market', type: 'address' }],
+            name: 'getMarketData',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
+                        { internalType: 'string', name: 'gameLabel', type: 'string' },
+                        { internalType: 'uint256', name: 'firstTag', type: 'uint256' },
+                        { internalType: 'uint256', name: 'secondTag', type: 'uint256' },
+                        { internalType: 'uint256', name: 'maturity', type: 'uint256' },
+                        { internalType: 'bool', name: 'resolved', type: 'bool' },
+                        { internalType: 'uint256', name: 'finalResult', type: 'uint256' },
+                        { internalType: 'bool', name: 'cancelled', type: 'bool' },
+                        { internalType: 'bool', name: 'paused', type: 'bool' },
+                        { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
+                        { internalType: 'address[]', name: 'childMarkets', type: 'address[]' },
+                        { internalType: 'address[]', name: 'doubleChanceMarkets', type: 'address[]' },
+                        { internalType: 'uint8', name: 'homeScore', type: 'uint8' },
+                        { internalType: 'uint8', name: 'awayScore', type: 'uint8' },
+                        { internalType: 'int16', name: 'spread', type: 'int16' },
+                        { internalType: 'uint24', name: 'total', type: 'uint24' },
+                    ],
+                    internalType: 'struct SportPositionalMarketData.MarketData',
+                    name: '',
+                    type: 'tuple',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: 'market', type: 'address' }],
+            name: 'getMarketLiquidityAndPriceImpact',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'int256', name: 'homePriceImpact', type: 'int256' },
+                        { internalType: 'int256', name: 'awayPriceImpact', type: 'int256' },
+                        { internalType: 'int256', name: 'drawPriceImpact', type: 'int256' },
+                        { internalType: 'uint256', name: 'homeLiquidity', type: 'uint256' },
+                        { internalType: 'uint256', name: 'awayLiquidity', type: 'uint256' },
+                        { internalType: 'uint256', name: 'drawLiquidity', type: 'uint256' },
+                    ],
+                    internalType: 'struct SportPositionalMarketData.MarketLiquidityAndPriceImpact',
+                    name: '',
+                    type: 'tuple',
                 },
             ],
             stateMutability: 'view',
@@ -169,6 +240,13 @@ export const sportPositionalMarketDataContract = {
         },
         {
             inputs: [],
+            name: 'oddsObtainer',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
             name: 'owner',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
             stateMutability: 'view',
@@ -179,6 +257,20 @@ export const sportPositionalMarketDataContract = {
             name: 'paused',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '_consumer', type: 'address' }],
+            name: 'setConsumer',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '_oddsObtainer', type: 'address' }],
+            name: 'setOddsObtainer',
+            outputs: [],
+            stateMutability: 'nonpayable',
             type: 'function',
         },
         {

@@ -52,11 +52,11 @@ const usePositionPriceDetailsMultiMarketsQuery = (
                         buyPriceImpact,
                         buyFromAMMQuoteCollateral,
                     ] = await Promise.all([
-                        await sportsAMMContract?.availableToBuyFromAMM(market.address, market.position),
-                        await sportsAMMContract?.buyFromAmmQuote(market.address, market.position, parsedAmount),
-                        await sportsAMMContract?.buyPriceImpact(market.address, market.position, parsedAmount),
+                        sportsAMMContract?.availableToBuyFromAMM(market.address, market.position),
+                        sportsAMMContract?.buyFromAmmQuote(market.address, market.position, parsedAmount),
+                        sportsAMMContract?.buyPriceImpact(market.address, market.position, parsedAmount),
                         collateralAddress
-                            ? await sportsAMMContract?.buyFromAmmQuoteWithDifferentCollateral(
+                            ? sportsAMMContract?.buyFromAmmQuoteWithDifferentCollateral(
                                   market.address,
                                   market.position,
                                   parsedAmount,

@@ -28,11 +28,11 @@ const usePositionPriceDetailsQuery = (
 
                 const collateralAddress = isMultiCollateral && getCollateralAddress(true, networkId, stableIndex);
                 const [availableToBuy, buyFromAmmQuote, buyPriceImpact, buyFromAMMQuoteCollateral] = await Promise.all([
-                    await sportsAMMContract?.availableToBuyFromAMM(marketAddress, position),
-                    await sportsAMMContract?.buyFromAmmQuote(marketAddress, position, parsedAmount),
-                    await sportsAMMContract?.buyPriceImpact(marketAddress, position, parsedAmount),
+                    sportsAMMContract?.availableToBuyFromAMM(marketAddress, position),
+                    sportsAMMContract?.buyFromAmmQuote(marketAddress, position, parsedAmount),
+                    sportsAMMContract?.buyPriceImpact(marketAddress, position, parsedAmount),
                     collateralAddress
-                        ? await sportsAMMContract?.buyFromAmmQuoteWithDifferentCollateral(
+                        ? sportsAMMContract?.buyFromAmmQuoteWithDifferentCollateral(
                               marketAddress,
                               position,
                               parsedAmount,
