@@ -24,6 +24,7 @@ import {
     ParlayMarket,
     ParlayMarketWithRound,
     ParlaysMarket,
+    ParlaysMarketPosition,
     SportMarketInfo,
 } from 'types/markets';
 import { addDaysToEnteredTimestamp } from './formatters/date';
@@ -110,7 +111,15 @@ export const convertPositionToSymbolType = (position: Position, isApexTopGame: b
     return 0;
 };
 
-export const getSymbolText = (position: Position, market: SportMarketInfo | MarketData) => {
+export const getSymbolText = (
+    position: Position,
+    market: SportMarketInfo | MarketData,
+    combinedMarketPositionSymbol?: CombinedMarketsPositionName
+) => {
+    if (combinedMarketPositionSymbol) {
+        return combinedMarketPositionSymbol;
+    }
+
     switch (position) {
         case Position.HOME:
             switch (Number(market.betType)) {
@@ -614,4 +623,66 @@ export const getAllCombinedMarketsForParentMarket = (parentMarket: SportMarketIn
     });
 
     return allCombinedMarkets;
+};
+
+export const isChildMarketOfMarket = (childMarket: SportMarketInfo, parentMarket: SportMarketInfo): boolean => {
+    if (parentMarket.childMarkets.find((market) => market.address == childMarket.address)) return true;
+    return false;
+};
+
+export const isCombinedMarketsInParlayData = (parlayData: ParlaysMarketPosition[]): boolean => {
+    const combinedMarkets = [];
+
+    for (let i = 0; i < parlayData.length - 1; i++) {
+        for (let j = i + 1; j < parlayData.length; j++) {
+            if (parlayData[i].parentMarket == parlayData[j].parentMarket) {
+                combinedMarkets.push(parlayData[i]);
+            }
+        }
+    }
+
+    if (combinedMarkets.length > 0) return true;
+    return false;
+};
+
+export const isSpecificCombinedPositionAddedToParlay = (
+    parlayData: ParlaysMarketPosition[],
+    markets: SportMarketInfo[],
+    positions: Position[]
+): boolean => {
+    const firstMarket = {
+        parentMarketAddress: markets[0].parentMarket == null ? markets[0].address : markets[0].parentMarket,
+        sportMarketAddress: markets[0].address,
+        position: positions[0],
+    };
+
+    const secondMarket = {
+        parentMarketAddress: markets[1].parentMarket == null ? markets[1].address : markets[1].parentMarket,
+        sportMarketAddress: markets[1].address,
+        position: positions[1],
+    };
+
+    let firstMarketFlag = false;
+    let secondMarketFlag = false;
+
+    parlayData.forEach((data) => {
+        if (
+            data.parentMarket == firstMarket.parentMarketAddress &&
+            data.sportMarketAddress == firstMarket.sportMarketAddress &&
+            data.position == firstMarket.position
+        ) {
+            firstMarketFlag = true;
+        }
+
+        if (
+            data.parentMarket == secondMarket.parentMarketAddress &&
+            data.sportMarketAddress == secondMarket.sportMarketAddress &&
+            data.position == secondMarket.position
+        ) {
+            secondMarketFlag = true;
+        }
+    });
+
+    if (firstMarketFlag && secondMarketFlag) return true;
+    return false;
 };

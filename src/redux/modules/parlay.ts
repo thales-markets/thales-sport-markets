@@ -122,11 +122,17 @@ export const parlaySlice = createSlice({
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
             localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
+        updateParlayWithMultiplePositions: (state, action: PayloadAction<ParlaysMarketPosition[]>) => {
+            state.parlay.push(...action.payload);
+            localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
+        },
         setParlaySize: (state, action: PayloadAction<number>) => {
             state.parlaySize = action.payload;
         },
         removeFromParlay: (state, action: PayloadAction<string>) => {
-            state.parlay = state.parlay.filter((market) => market.sportMarketAddress !== action.payload);
+            state.parlay = state.parlay.filter(
+                (market) => market.sportMarketAddress !== action.payload || market.parentMarket !== action.payload
+            );
             state.multiSingle = state.multiSingle.filter((ms) => ms.sportMarketAddress !== action.payload);
 
             if (state.parlay.length === 0) {
@@ -135,6 +141,14 @@ export const parlaySlice = createSlice({
             state.error = getDefaultError();
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
             localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
+        },
+        removeCombinedMarketFromParlay: (state, action: PayloadAction<string>) => {
+            state.parlay = state.parlay.filter((market) => market.parentMarket !== action.payload);
+            if (state.parlay.length === 0) {
+                state.payment.amountToBuy = getDefaultPayment().amountToBuy;
+            }
+            state.error = getDefaultError();
+            localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
         },
         removeAll: (state) => {
             state.parlay = [];
@@ -189,8 +203,10 @@ export const getLastSavedOrDefaultStableIndex = (): COLLATERALS_INDEX => {
 
 export const {
     updateParlay,
+    updateParlayWithMultiplePositions,
     setParlaySize,
     removeFromParlay,
+    removeCombinedMarketFromParlay,
     removeAll,
     setPayment,
     setMultiSingle,
