@@ -60,7 +60,7 @@ const { chains, provider } = configureChains(
             }),
             stallTimeout: 2000,
         }),
-        infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID || '', stallTimeout: 1500 }),
+        infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID || '', stallTimeout: 2000 }),
         publicProvider(),
     ]
 );
