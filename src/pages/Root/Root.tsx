@@ -5,8 +5,20 @@ import App from 'pages/Root/App';
 import dotenv from 'dotenv';
 import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react';
 import '@rainbow-me/rainbowkit/dist/index.css';
-import { connectorsForWallets, wallet, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
-import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
+import { connectorsForWallets, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
+import {
+    injectedWallet,
+    rainbowWallet,
+    metaMaskWallet,
+    coinbaseWallet,
+    walletConnectWallet,
+    braveWallet,
+    ledgerWallet,
+    imTokenWallet,
+    trustWallet,
+} from '@rainbow-me/rainbowkit/wallets';
+import { configureChains, createClient, WagmiConfig } from 'wagmi';
+import { optimism, optimismGoerli, arbitrum } from 'wagmi/chains';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
@@ -36,19 +48,19 @@ const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
 };
 
 const { chains, provider } = configureChains(
-    [chain.optimism, chain.optimismGoerli, chain.arbitrum],
+    [optimism, optimismGoerli, arbitrum],
     [
         jsonRpcProvider({
             rpc: (chain) => ({
-                http: !CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].blast
-                    ? chain.rpcUrls.default
-                    : `https://${CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].blast}.blastapi.io/${
-                          process.env.REACT_APP_BLAST_PROJECT_ID
+                http: !CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].chainnode
+                    ? chain.rpcUrls.default.http[0]
+                    : `https://${CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].chainnode}.chainnodes.org/${
+                          process.env.REACT_APP_CHAINNODE_PROJECT_ID
                       }`,
             }),
             stallTimeout: 2000,
         }),
-        infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID, stallTimeout: 2000 }),
+        infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID || '', stallTimeout: 2000 }),
         publicProvider(),
     ]
 );
@@ -57,15 +69,15 @@ const connectors = connectorsForWallets([
     {
         groupName: 'Recommended',
         wallets: [
-            wallet.metaMask({ chains }),
-            wallet.walletConnect({ chains }),
-            wallet.brave({ chains }),
-            wallet.ledger({ chains }),
-            wallet.trust({ chains }),
-            wallet.injected({ chains }),
-            wallet.coinbase({ appName: 'Overtime', chains }),
-            wallet.rainbow({ chains }),
-            wallet.imToken({ chains }),
+            metaMaskWallet({ chains }),
+            walletConnectWallet({ chains }),
+            braveWallet({ chains }),
+            ledgerWallet({ chains }),
+            trustWallet({ chains }),
+            injectedWallet({ chains }),
+            coinbaseWallet({ appName: 'Overtime', chains }),
+            rainbowWallet({ chains }),
+            imTokenWallet({ chains }),
         ],
     },
 ]);
