@@ -534,19 +534,19 @@ export const calculateCombinedMarketOdds = (markets: SportMarketInfo[], position
     if (!firstPositionOdds || !secondPositionOdds) return 0;
 
     if (markets[0].tags.find((tag) => SPORTS_TAGS_MAP.Football.includes(Number(tag)))) {
-        return firstPositionOdds * secondPositionOdds * COMBINED_MARKETS_SGP.Football;
+        return (firstPositionOdds * secondPositionOdds) / COMBINED_MARKETS_SGP.Football;
     }
 
     if (markets[0].tags.find((tag) => SPORTS_TAGS_MAP.Soccer.includes(Number(tag)))) {
-        return firstPositionOdds * secondPositionOdds * COMBINED_MARKETS_SGP.Soccer;
+        return (firstPositionOdds * secondPositionOdds) / COMBINED_MARKETS_SGP.Soccer;
     }
 
     if (markets[0].tags.find((tag) => SPORTS_TAGS_MAP.Basketball.includes(Number(tag)))) {
-        return firstPositionOdds * secondPositionOdds * COMBINED_MARKETS_SGP.Basketball;
+        return (firstPositionOdds * secondPositionOdds) / COMBINED_MARKETS_SGP.Basketball;
     }
 
     if (markets[0].tags.find((tag) => SPORTS_TAGS_MAP.Hockey.includes(Number(tag)))) {
-        return firstPositionOdds * secondPositionOdds * COMBINED_MARKETS_SGP.Hockey;
+        return (firstPositionOdds * secondPositionOdds) / COMBINED_MARKETS_SGP.Hockey;
     }
 
     return firstPositionOdds * secondPositionOdds;
