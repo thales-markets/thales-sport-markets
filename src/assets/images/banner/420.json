@@ -1,5 +1,9 @@
 [
     {
+        "image": "playoffs.png",
+        "url": "https://dune.com/leifu/overtime-nhl-and-nba-playoff-campaign-11-apr-2023"
+    },
+    {
         "image": "instant-payouts.jpg",
         "url": ""
     },
@@ -20,7 +24,11 @@
         "url": "https://thalesmarket.io/token"
     },
     {
-        "image": "parlay-leaderboard.jpg",
+        "image": "banner_bi-weekly.png",
         "url": "https://overtimemarkets.xyz/#/parlay-leaderboard"
+    },
+    {
+        "image": "LP_banner.png",
+        "url": "https://overtimemarkets.xyz/#/liquidity-pool"
     }
 ]
