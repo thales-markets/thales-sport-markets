@@ -514,7 +514,7 @@ const Home: React.FC = () => {
                             </NoMarketsContainer>
                         ) : (
                             <Suspense fallback={<Loader />}>
-                                <MarketsGrid markets={finalMarkets} dateFilter={dateFilter} sportFilter={sportFilter} />
+                                <MarketsGrid markets={finalMarkets} />
                             </Suspense>
                         )}
                     </MainContainer>
