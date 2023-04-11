@@ -107,12 +107,11 @@ export enum ParlayErrorCode {
 }
 
 export const INCENTIVIZED_LEAGUE = {
-    id: 9005,
-    startDate: new Date(Date.UTC(2023, 2, 13, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2023, 3, 3, 23, 59, 59)),
-    link:
-        'https://medium.com/@OvertimeMarkets.xyz/overtime-brings-the-bracket-to-the-blockchain-for-march-madness-66777956d87f',
-    opRewards: '13,000 OP',
+    id: 9004,
+    startDate: new Date(Date.UTC(2023, 3, 11, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2023, 5, 30, 23, 59, 59)),
+    link: 'https://dune.com/leifu/overtime-nhl-and-nba-playoff-campaign-11-apr-2023',
+    opRewards: '20,000 OP',
     thalesRewards: '40,000 THALES',
 };
 
