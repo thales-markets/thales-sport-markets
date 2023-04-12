@@ -69,6 +69,7 @@ import vaultContract from 'utils/contracts/sportVaultContract';
 import Toggle from 'components/Toggle/Toggle';
 import Tooltip from 'components/Tooltip';
 import { getDefaultColleteralForNetwork, getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { refetchVaultData } from 'utils/queryConnector';
 
 type VaultProps = RouteComponentProps<{
     vaultId: string;
@@ -206,7 +207,6 @@ const Vault: React.FC<VaultProps> = (props) => {
     }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, vaultAddress, networkId]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
-        console.log('handleAllowance amount: ', approveAmount);
         const { signer, sUSDContract } = networkConnector;
         if (signer && sUSDContract) {
             const id = toast.loading(t('market.toast-message.transaction-pending'));
@@ -262,6 +262,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                     toast.update(id, getSuccessToastOptions(t('vault.button.deposit-confirmation-message')));
                     setAmount('');
                     setIsSubmitting(false);
+                    refetchVaultData(vaultAddress, walletAddress, networkId);
                 }
             } catch (e) {
                 console.log(e);
@@ -288,6 +289,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                     toast.update(id, getSuccessToastOptions(t('vault.button.request-withdrawal-confirmation-message')));
                     setAmount('');
                     setIsSubmitting(false);
+                    refetchVaultData(vaultAddress, walletAddress, networkId);
                 }
             } catch (e) {
                 console.log(e);
@@ -313,6 +315,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                 if (txResult && txResult.events) {
                     toast.update(id, getSuccessToastOptions(t('vault.button.close-round-confirmation-message')));
                     setIsSubmitting(false);
+                    refetchVaultData(vaultAddress, walletAddress, networkId);
                 }
             } catch (e) {
                 console.log(e);

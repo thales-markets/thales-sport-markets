@@ -62,7 +62,6 @@ const useWinningInfoQuery = (walletAddress: string, networkId: NetworkId, option
             }
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );

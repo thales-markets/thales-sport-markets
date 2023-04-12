@@ -29,46 +29,38 @@ const useLiquidityPoolUserDataQuery = (
 
             const decimals = getDefaultDecimalsForNetwork(networkId);
             try {
-                const { liquidityPoolContract } = networkConnector;
-                if (liquidityPoolContract) {
-                    const [round] = await Promise.all([liquidityPoolContract?.round()]);
-
-                    const [
-                        balanceCurrentRound,
-                        balanceNextRound,
-                        withdrawalRequested,
-                        maxAvailableDeposit,
-                        neededStakedThalesToWithdraw,
-                    ] = await Promise.all([
-                        liquidityPoolContract?.balancesPerRound(Number(round), walletAddress),
-                        liquidityPoolContract?.balancesPerRound(Number(round) + 1, walletAddress),
-                        liquidityPoolContract?.withdrawalRequested(walletAddress),
-                        liquidityPoolContract?.getMaxAvailableDepositForUser(walletAddress),
-                        liquidityPoolContract?.getNeededStakedThalesToWithdrawForUser(walletAddress),
-                    ]);
+                const { liquidityPoolContract, liquidityPoolDataContract } = networkConnector;
+                if (liquidityPoolContract && liquidityPoolDataContract) {
+                    const contractUserLiquidityPoolData = await liquidityPoolDataContract.getUserLiquidityPoolData(
+                        liquidityPoolContract.address,
+                        walletAddress
+                    );
 
                     userLiquidityPoolData.balanceCurrentRound = bigNumberFormmaterWithDecimals(
-                        balanceCurrentRound,
+                        contractUserLiquidityPoolData.balanceCurrentRound,
                         decimals
                     );
-                    userLiquidityPoolData.balanceNextRound = bigNumberFormmaterWithDecimals(balanceNextRound, decimals);
-                    userLiquidityPoolData.balanceTotal = withdrawalRequested
+                    userLiquidityPoolData.balanceNextRound = bigNumberFormmaterWithDecimals(
+                        contractUserLiquidityPoolData.balanceNextRound,
+                        decimals
+                    );
+                    userLiquidityPoolData.balanceTotal = contractUserLiquidityPoolData.withdrawalRequested
                         ? 0
                         : userLiquidityPoolData.balanceCurrentRound + userLiquidityPoolData.balanceNextRound;
-                    userLiquidityPoolData.isWithdrawalRequested = withdrawalRequested;
+                    userLiquidityPoolData.isWithdrawalRequested = contractUserLiquidityPoolData.withdrawalRequested;
                     userLiquidityPoolData.hasDepositForCurrentRound = userLiquidityPoolData.balanceCurrentRound > 0;
                     userLiquidityPoolData.hasDepositForNextRound = userLiquidityPoolData.balanceNextRound > 0;
                     userLiquidityPoolData.maxDeposit = bigNumberFormmaterWithDecimals(
-                        maxAvailableDeposit.maxDepositForUser,
+                        contractUserLiquidityPoolData.maxDeposit,
                         decimals
                     );
-                    userLiquidityPoolData.stakedThales = bigNumberFormatter(maxAvailableDeposit.stakedThalesForUser);
+                    userLiquidityPoolData.stakedThales = bigNumberFormatter(contractUserLiquidityPoolData.stakedThales);
                     userLiquidityPoolData.availableToDeposit = bigNumberFormmaterWithDecimals(
-                        maxAvailableDeposit.availableToDepositForUser,
+                        contractUserLiquidityPoolData.availableToDeposit,
                         decimals
                     );
                     userLiquidityPoolData.neededStakedThalesToWithdraw = bigNumberFormatter(
-                        neededStakedThalesToWithdraw
+                        contractUserLiquidityPoolData.neededStakedThalesToWithdraw
                     );
 
                     return userLiquidityPoolData;
@@ -79,7 +71,6 @@ const useLiquidityPoolUserDataQuery = (
             return undefined;
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );

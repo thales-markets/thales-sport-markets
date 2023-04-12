@@ -52,7 +52,6 @@ const useUserVaultAndLpTransactions = (
             }
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );

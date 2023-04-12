@@ -24,29 +24,26 @@ const useOvertimeVoucherEscrowQuery = (walletAddress: string, networkId: Network
             };
 
             try {
-                const { overtimeVoucherEscrowContract } = networkConnector;
+                const { sportPositionalMarketDataContract } = networkConnector;
 
-                if (overtimeVoucherEscrowContract && walletAddress) {
-                    const period = await overtimeVoucherEscrowContract.period();
+                if (sportPositionalMarketDataContract && walletAddress) {
+                    const voucherEscrowData = await sportPositionalMarketDataContract.getVoucherEscrowData(
+                        walletAddress
+                    );
 
-                    const [isWhitelisted, isClaimed, voucherAmount, isPeriodEnded, periodEnd] = await Promise.all([
-                        await overtimeVoucherEscrowContract.isWhitelistedAddress(walletAddress),
-                        await overtimeVoucherEscrowContract.addressClaimedVoucherPerPeriod(period, walletAddress),
-                        await overtimeVoucherEscrowContract.voucherAmount(),
-                        await overtimeVoucherEscrowContract.claimingPeriodEnded(),
-                        await overtimeVoucherEscrowContract.periodEnd(period),
-                    ]);
-
-                    const isClaimable = isWhitelisted && !isPeriodEnded && !isClaimed;
+                    const isClaimable =
+                        voucherEscrowData.isWhitelisted &&
+                        !voucherEscrowData.isPeriodEnded &&
+                        !voucherEscrowData.isClaimed;
 
                     overtimeVoucherEscrowData.isClaimable = isClaimable;
-                    overtimeVoucherEscrowData.isClaimed = isClaimed;
+                    overtimeVoucherEscrowData.isClaimed = voucherEscrowData.isClaimed;
                     overtimeVoucherEscrowData.voucherAmount = bigNumberFormmaterWithDecimals(
-                        voucherAmount,
+                        voucherEscrowData.voucherAmount,
                         getDefaultDecimalsForNetwork(networkId)
                     );
                     overtimeVoucherEscrowData.hoursLeftToClaim = Math.floor(
-                        (Number(periodEnd) * 1000 - Date.now()) / 1000 / 60 / 60
+                        (Number(voucherEscrowData.periodEnd) * 1000 - Date.now()) / 1000 / 60 / 60
                     );
                 }
 

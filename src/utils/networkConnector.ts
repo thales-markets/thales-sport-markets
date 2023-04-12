@@ -1,9 +1,7 @@
 import { ethers, Signer } from 'ethers';
 import { NetworkSettings } from 'types/network';
 import sportMarketManagerContract from 'utils/contracts/sportPositionalMarketManagerContract';
-import sportMarketDataContract, {
-    sportPositionalMarketDataContract,
-} from 'utils/contracts/sportPositionalMarketDataContract';
+import sportPositionalMarketDataContract from 'utils/contracts/sportPositionalMarketDataContract';
 import sportsAMMContract from 'utils/contracts/sportsAMMContract';
 import sUSDContract from 'utils/contracts/sUSDContract';
 import { NetworkIdByName } from './network';
@@ -17,6 +15,9 @@ import gamesOddsObtainerContract from 'utils/contracts/gamesOddsObtainerContract
 import { marchMadnessContract } from './contracts/marchMadnessContract';
 import liquidityPoolContract from 'utils/contracts/liquidityPoolContract';
 import { overtimeVoucherEscrowContract } from './contracts/overtimeVoucherEscrowContract';
+import sportVaultDataContract from 'utils/contracts/sportVaultDataContract';
+import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContract';
+import parlayMarketDataContract from 'utils/contracts/parlayMarketDataContract';
 
 type NetworkConnector = {
     initialized: boolean;
@@ -29,7 +30,6 @@ type NetworkConnector = {
     marketDataContract?: ethers.Contract;
     sportPositionalMarketDataContract?: ethers.Contract;
     sportMarketManagerContract?: ethers.Contract;
-    sportMarketDataContract?: ethers.Contract;
     sportsAMMContract?: ethers.Contract;
     theRundownConsumerContract?: ethers.Contract;
     apexConsumerContract?: ethers.Contract;
@@ -44,6 +44,9 @@ type NetworkConnector = {
     gamesOddsObtainerContract?: ethers.Contract;
     marchMadnessContract?: ethers.Contract;
     liquidityPoolContract?: ethers.Contract;
+    sportVaultDataContract?: ethers.Contract;
+    liquidityPoolDataContract?: ethers.Contract;
+    parlayMarketDataContract?: ethers.Contract;
 };
 
 // @ts-ignore
@@ -55,7 +58,6 @@ const networkConnector: NetworkConnector = {
         this.provider = networkSettings.provider;
         this.sportPositionalMarketDataContract = initializeContract(sportPositionalMarketDataContract, networkSettings);
         this.sportMarketManagerContract = initializeContract(sportMarketManagerContract, networkSettings);
-        this.sportMarketDataContract = initializeContract(sportMarketDataContract, networkSettings);
         this.theRundownConsumerContract = initializeContract(theRundownConsumerContract, networkSettings);
         this.apexConsumerContract = initializeContract(apexConsumerContract, networkSettings);
         this.sportsAMMContract = initializeContract(sportsAMMContract, networkSettings);
@@ -67,6 +69,9 @@ const networkConnector: NetworkConnector = {
         this.gamesOddsObtainerContract = initializeContract(gamesOddsObtainerContract, networkSettings);
         this.marchMadnessContract = initializeContract(marchMadnessContract, networkSettings);
         this.liquidityPoolContract = initializeContract(liquidityPoolContract, networkSettings);
+        this.sportVaultDataContract = initializeContract(sportVaultDataContract, networkSettings);
+        this.liquidityPoolDataContract = initializeContract(liquidityPoolDataContract, networkSettings);
+        this.parlayMarketDataContract = initializeContract(parlayMarketDataContract, networkSettings);
 
         this.multipleCollateral = [
             initializeContract(multipleCollateral['sUSD'], networkSettings),

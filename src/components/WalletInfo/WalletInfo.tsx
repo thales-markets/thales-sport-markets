@@ -10,10 +10,8 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import { hasEthereumInjected } from 'utils/network';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
-import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
+import { formatCurrency } from 'utils/formatters/number';
 import { getDefaultColleteralForNetwork } from 'utils/collaterals';
-import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
-import Tooltip from 'components/Tooltip';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { NetworkId } from 'types/network';
@@ -96,28 +94,11 @@ const WalletInfo: React.FC = () => {
                                     {!isMobile &&
                                         isWalletConnected &&
                                         (overtimeVoucher ? (
-                                            <Tooltip
-                                                overlay={
-                                                    <OvertimeVoucherPopup
-                                                        title={t('common.voucher.overtime-voucher')}
-                                                        imageSrc={overtimeVoucher.image}
-                                                        text={`${t(
-                                                            'common.voucher.remaining-amount'
-                                                        )}: ${formatCurrencyWithKey(
-                                                            getDefaultColleteralForNetwork(networkId),
-                                                            overtimeVoucher.remainingAmount
-                                                        )}`}
-                                                    />
-                                                }
-                                                component={
-                                                    <WalletBalanceInfo>
-                                                        <VoucherText>{t('common.voucher.voucher')}:</VoucherText>
-                                                        <Text>{formatCurrency(walletBalance, 2)}</Text>
-                                                        <Currency>{getDefaultColleteralForNetwork(networkId)}</Currency>
-                                                    </WalletBalanceInfo>
-                                                }
-                                                overlayClassName="overtime-voucher-overlay"
-                                            />
+                                            <WalletBalanceInfo>
+                                                <VoucherText>{t('common.voucher.voucher')}:</VoucherText>
+                                                <Text>{formatCurrency(walletBalance, 2)}</Text>
+                                                <Currency>{getDefaultColleteralForNetwork(networkId)}</Currency>
+                                            </WalletBalanceInfo>
                                         ) : (
                                             <WalletBalanceInfo>
                                                 <Text>{formatCurrency(walletBalance, 2)}</Text>

@@ -1,11 +1,10 @@
 import { useQuery, UseQueryOptions } from 'react-query';
-import { Position } from '../../constants/options';
 import { AvailablePerDoubleChancePosition, MarketData } from '../../types/markets';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
-import { ethers } from 'ethers';
 import { DoubleChanceMarketType } from 'constants/tags';
+import { convertPriceImpactToBonus } from 'utils/markets';
 
 const useAvailablePerDoubleChancePositionQuery = (
     markets: MarketData[],
@@ -15,27 +14,20 @@ const useAvailablePerDoubleChancePositionQuery = (
         QUERY_KEYS.AvailablePerDoubleChancePosition(markets.length > 0 ? markets[0].parentMarket : ''),
         async () => {
             try {
-                const sportsAMMContract = networkConnector.sportsAMMContract;
+                const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
 
                 const availablePerDoubleChancePosition = await Promise.all(
                     markets.map(async (market) => {
-                        const [availableToBuyHome, homePositionPriceImpact] = await Promise.all([
-                            sportsAMMContract?.availableToBuyFromAMM(market.address, Position.HOME),
-                            sportsAMMContract?.buyPriceImpact(
-                                market.address,
-                                Position.HOME,
-                                ethers.utils.parseEther('1')
-                            ),
-                        ]);
+                        const marketLiquidityAndPriceImpact = await sportPositionalMarketDataContract?.getMarketLiquidityAndPriceImpact(
+                            market.address
+                        );
 
                         return {
                             doubleChanceMarketType: market.doubleChanceMarketType,
                             postions: {
-                                available: bigNumberFormatter(availableToBuyHome),
-                                buyBonus: -(
-                                    (bigNumberFormatter(homePositionPriceImpact) /
-                                        (1 + bigNumberFormatter(homePositionPriceImpact))) *
-                                    100
+                                available: bigNumberFormatter(marketLiquidityAndPriceImpact.homeLiquidity),
+                                buyBonus: convertPriceImpactToBonus(
+                                    bigNumberFormatter(marketLiquidityAndPriceImpact.homePriceImpact)
                                 ),
                             },
                         };

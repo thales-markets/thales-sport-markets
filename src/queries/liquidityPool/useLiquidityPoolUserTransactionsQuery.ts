@@ -22,7 +22,6 @@ const useLiquidityPoolUserTransactionsQuery = (
             }
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );

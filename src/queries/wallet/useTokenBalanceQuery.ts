@@ -38,7 +38,6 @@ const useTokenBalanceQuery = (
             }
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );

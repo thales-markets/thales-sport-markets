@@ -25,7 +25,6 @@ const useSUSDWalletBalance = (
             }
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );
