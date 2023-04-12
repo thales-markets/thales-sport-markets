@@ -12,7 +12,7 @@ import networkConnector from 'utils/networkConnector';
 import { convertPriceImpactToBonus } from 'utils/markets';
 import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
-const BATCH_SIZE = 50;
+const BATCH_SIZE = 100;
 
 const marketsCache = {
     [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,
