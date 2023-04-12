@@ -1,9 +1,7 @@
 import { ethers, Signer } from 'ethers';
 import { NetworkSettings } from 'types/network';
 import sportMarketManagerContract from 'utils/contracts/sportPositionalMarketManagerContract';
-import sportMarketDataContract, {
-    sportPositionalMarketDataContract,
-} from 'utils/contracts/sportPositionalMarketDataContract';
+import sportPositionalMarketDataContract from 'utils/contracts/sportPositionalMarketDataContract';
 import sportsAMMContract from 'utils/contracts/sportsAMMContract';
 import sUSDContract from 'utils/contracts/sUSDContract';
 import { NetworkIdByName } from './network';
@@ -32,7 +30,6 @@ type NetworkConnector = {
     marketDataContract?: ethers.Contract;
     sportPositionalMarketDataContract?: ethers.Contract;
     sportMarketManagerContract?: ethers.Contract;
-    sportMarketDataContract?: ethers.Contract;
     sportsAMMContract?: ethers.Contract;
     theRundownConsumerContract?: ethers.Contract;
     apexConsumerContract?: ethers.Contract;
@@ -61,7 +58,6 @@ const networkConnector: NetworkConnector = {
         this.provider = networkSettings.provider;
         this.sportPositionalMarketDataContract = initializeContract(sportPositionalMarketDataContract, networkSettings);
         this.sportMarketManagerContract = initializeContract(sportMarketManagerContract, networkSettings);
-        this.sportMarketDataContract = initializeContract(sportMarketDataContract, networkSettings);
         this.theRundownConsumerContract = initializeContract(theRundownConsumerContract, networkSettings);
         this.apexConsumerContract = initializeContract(apexConsumerContract, networkSettings);
         this.sportsAMMContract = initializeContract(sportsAMMContract, networkSettings);

@@ -1,9 +1,7 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { MarketData } from 'types/markets';
-import { ethers } from 'ethers';
 import networkConnector from 'utils/networkConnector';
-import marketContract from 'utils/contracts/sportsMarketContract';
 import { bigNumberFormmaterWithDecimals } from '../../utils/formatters/ethers';
 import { fixDuplicatedTeamName } from '../../utils/formatters/string';
 import { Position } from '../../constants/options';
@@ -19,90 +17,55 @@ const useMarketQuery = (
         QUERY_KEYS.Market(marketAddress, networkId),
         async () => {
             try {
-                const contract = new ethers.Contract(marketAddress, marketContract.abi, networkConnector.provider);
+                const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
 
-                const {
-                    theRundownConsumerContract,
-                    sportsAMMContract,
-                    gamesOddsObtainerContract,
-                    sportMarketManagerContract,
-                } = networkConnector;
+                const marketData = await sportPositionalMarketDataContract?.getMarketData(marketAddress);
 
-                const [
-                    gameDetails,
-                    tags,
-                    times,
-                    resolved,
-                    finalResult,
-                    cancelled,
-                    paused,
-                    buyMarketDefaultOdds,
-                    childMarketsAddresses,
-                    doubleChanceMarkets,
-                ] = await Promise.all([
-                    contract?.getGameDetails(),
-                    contract?.tags(0),
-                    contract?.times(),
-                    contract?.resolved(),
-                    contract?.finalResult(),
-                    contract?.cancelled(),
-                    contract?.paused(),
-                    sportsAMMContract?.getMarketDefaultOdds(marketAddress, false),
-                    gamesOddsObtainerContract?.getAllChildMarketsFromParent(marketAddress),
-                    sportMarketManagerContract?.getDoubleChanceMarketsByParentMarket(marketAddress),
-                ]);
-
-                const gameStarted = cancelled ? false : Date.now() > Number(times.maturity) * 1000;
-                let result;
-
-                if (resolved) {
-                    result = await theRundownConsumerContract?.gameResolved(gameDetails.gameId);
-                }
-
-                const homeScore = result ? result.homeScore : undefined;
-                const awayScore = result ? result.awayScore : undefined;
+                const gameStarted = marketData.cancelled ? false : Date.now() > Number(marketData.maturity) * 1000;
+                const homeScore = marketData.resolved ? marketData.homeScore : undefined;
+                const awayScore = marketData.resolved ? marketData.awayScore : undefined;
 
                 const market: MarketData = {
                     address: marketAddress.toLowerCase(),
-                    gameDetails,
+                    gameDetails: { gameId: marketData.gameId, gameLabel: marketData.gameLabel },
                     positions: {
                         [Position.HOME]: {
                             odd: bigNumberFormmaterWithDecimals(
-                                buyMarketDefaultOdds[0],
+                                marketData.odds[0],
                                 getDefaultDecimalsForNetwork(networkId)
                             ),
                         },
                         [Position.AWAY]: {
                             odd: bigNumberFormmaterWithDecimals(
-                                buyMarketDefaultOdds[1],
+                                marketData.odds[1],
                                 getDefaultDecimalsForNetwork(networkId)
                             ),
                         },
                         [Position.DRAW]: {
-                            odd: buyMarketDefaultOdds[2]
+                            odd: marketData.odds[2]
                                 ? bigNumberFormmaterWithDecimals(
-                                      buyMarketDefaultOdds[2] || 0,
+                                      marketData.odds[2] || 0,
                                       getDefaultDecimalsForNetwork(networkId)
                                   )
                                 : undefined,
                         },
                     },
-                    tags: [Number(tags)],
-                    homeTeam: fixDuplicatedTeamName(gameDetails.gameLabel.split(' vs ')[0].trim()),
-                    awayTeam: fixDuplicatedTeamName(gameDetails.gameLabel.split(' vs ')[1].trim()),
-                    maturityDate: Number(times.maturity) * 1000,
-                    resolved,
-                    cancelled,
-                    finalResult: Number(finalResult),
+                    tags: [Number(marketData.firstTag)],
+                    homeTeam: fixDuplicatedTeamName(marketData.gameLabel.split(' vs ')[0].trim()),
+                    awayTeam: fixDuplicatedTeamName(marketData.gameLabel.split(' vs ')[1].trim()),
+                    maturityDate: Number(marketData.maturity) * 1000,
+                    resolved: marketData.resolved,
+                    cancelled: marketData.cancelled,
+                    finalResult: Number(marketData.finalResult),
                     gameStarted,
                     homeScore,
                     awayScore,
                     leagueRaceName: '',
-                    paused,
+                    paused: marketData.paused,
                     betType: 0,
                     isApex: false,
                     parentMarket: '',
-                    childMarketsAddresses: [...doubleChanceMarkets, ...childMarketsAddresses],
+                    childMarketsAddresses: [...marketData.doubleChanceMarkets, ...marketData.childMarkets],
                     childMarkets: [],
                     spread: 0,
                     total: 0,
@@ -115,7 +78,6 @@ const useMarketQuery = (
             }
         },
         {
-            refetchInterval: 10 * 1000,
             ...options,
         }
     );
