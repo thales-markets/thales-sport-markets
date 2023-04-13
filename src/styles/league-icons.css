@@ -108,3 +108,7 @@
 .league--ipl:before {
     content: '\0055';
 }
+
+.league--euroleague:before {
+    content: '\0064';
+}
