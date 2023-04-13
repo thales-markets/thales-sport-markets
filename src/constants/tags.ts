@@ -63,7 +63,7 @@ export const TAGS_LIST: Tags = [
         hidden: false,
         priority: 601,
     },
-    { id: 9008, label: 'WNBA', logoClass: 'icon-league league--wnba', favourite: false, hidden: false, priority: 303 },
+    { id: 9008, label: 'WNBA', logoClass: 'icon-league league--wnba', favourite: false, hidden: false, priority: 304 },
     {
         id: 9010,
         label: 'MLS',
@@ -197,7 +197,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--csgo',
         favourite: false,
         hidden: false,
-        priority: 604,
+        priority: 801,
     },
     {
         id: 18983,
@@ -206,7 +206,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--dota2',
         favourite: false,
         hidden: false,
-        priority: 605,
+        priority: 802,
     },
     {
         id: 19138,
@@ -215,7 +215,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--lol',
         favourite: false,
         hidden: false,
-        priority: 605,
+        priority: 803,
     },
     {
         id: 9020,
@@ -224,7 +224,15 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--ipl',
         favourite: false,
         hidden: false,
-        priority: 801,
+        priority: 901,
+    },
+    {
+        id: 9399,
+        label: 'Euroleague',
+        logoClass: 'icon-league league--euroleague',
+        favourite: false,
+        hidden: false,
+        priority: 303,
     },
 ];
 
@@ -255,6 +263,7 @@ export const SPORTS_MAP: SportsMap = {
     18983: 'eSports',
     19138: 'eSports',
     9020: 'Cricket',
+    9399: 'Basketball',
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
@@ -274,12 +283,13 @@ export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
     18983,
     19138,
     9020,
+    9399,
 ];
 
 export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Football: [9001, 9002],
     Baseball: [9003],
-    Basketball: [9004, 9005, 9008],
+    Basketball: [9004, 9005, 9008, 9399],
     Hockey: [9006],
     Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019],
     UFC: [9007],
@@ -313,9 +323,10 @@ export enum TAGS_FLAGS {
     DOTA2 = 18983,
     LOL = 19138,
     IPL = 9020,
+    EUROLEAGUE = 9399,
 }
 
-export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138];
+export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399];
 
 export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
@@ -369,6 +380,7 @@ export const SCORING_MAP: SportsMap = {
     18983: 'round',
     19138: 'round',
     9020: 'points',
+    9399: 'points',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -398,6 +410,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     18983: '',
     19138: '',
     9020: '',
+    9399: 'overtime',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -425,4 +438,5 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     18983: 'round',
     19138: 'round',
     9020: 'inning',
+    9399: 'quarter',
 };
