@@ -24,24 +24,41 @@ const useOvertimeVoucherEscrowQuery = (walletAddress: string, networkId: Network
             };
 
             try {
-                const { sportPositionalMarketDataContract } = networkConnector;
+                const {
+                    sportPositionalMarketDataContract,
+                    sUSDContract,
+                    overtimeVoucherEscrowContract,
+                } = networkConnector;
 
-                if (sportPositionalMarketDataContract && walletAddress) {
-                    const voucherEscrowData = await sportPositionalMarketDataContract.getVoucherEscrowData(
-                        walletAddress
+                if (
+                    sportPositionalMarketDataContract &&
+                    walletAddress &&
+                    sUSDContract &&
+                    overtimeVoucherEscrowContract
+                ) {
+                    const [voucherEscrowData, balance] = await Promise.all([
+                        sportPositionalMarketDataContract.getVoucherEscrowData(walletAddress),
+                        sUSDContract.balanceOf(overtimeVoucherEscrowContract.address),
+                    ]);
+
+                    const voucherEscrowBalance = bigNumberFormmaterWithDecimals(
+                        balance,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
+                    const voucherAmount = bigNumberFormmaterWithDecimals(
+                        voucherEscrowData.voucherAmount,
+                        getDefaultDecimalsForNetwork(networkId)
                     );
 
                     const isClaimable =
                         voucherEscrowData.isWhitelisted &&
                         !voucherEscrowData.isPeriodEnded &&
-                        !voucherEscrowData.isClaimed;
+                        !voucherEscrowData.isClaimed &&
+                        voucherEscrowBalance >= voucherAmount;
 
                     overtimeVoucherEscrowData.isClaimable = isClaimable;
                     overtimeVoucherEscrowData.isClaimed = voucherEscrowData.isClaimed;
-                    overtimeVoucherEscrowData.voucherAmount = bigNumberFormmaterWithDecimals(
-                        voucherEscrowData.voucherAmount,
-                        getDefaultDecimalsForNetwork(networkId)
-                    );
+                    overtimeVoucherEscrowData.voucherAmount = voucherAmount;
                     overtimeVoucherEscrowData.hoursLeftToClaim = Math.floor(
                         (Number(voucherEscrowData.periodEnd) * 1000 - Date.now()) / 1000 / 60 / 60
                     );
