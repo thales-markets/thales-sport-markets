@@ -127,9 +127,6 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                 const combinedMarketsFromParlay = extractCombinedMarketsFromParlayMarkets(parlayMarkets);
                 const parlaysWithoutCombinedMarkets = removeCombinedMarketFromParlayMarkets(parlayMarkets);
 
-                console.log('Parlay ', parlay);
-                console.log('combinedMarketsFromParlay ', combinedMarketsFromParlay);
-
                 if (combinedMarketsFromParlay.length > 0) {
                     setCombinedMarketsData({
                         isCombinedMarketsInParlay: true,
@@ -144,8 +141,6 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                     });
                 }
             }
-
-            console.log('Ovde');
 
             setParlayMarkets(parlayMarkets);
             setMultiSingleAmounts(multiSingleStore);
