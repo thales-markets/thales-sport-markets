@@ -23,7 +23,7 @@ import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
-import { MultiSingleAmounts, ParlaysMarket, SportMarketInfo } from 'types/markets';
+import { CombinedParlayMarket, MultiSingleAmounts, ParlaysMarket, SportMarketInfo } from 'types/markets';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import MatchInfo from './components/MatchInfo';
 import Payment from './components/Payment';
@@ -32,9 +32,17 @@ import MultiSingle from './components/MultiSingle';
 import Ticket from './components/Ticket';
 import ValidationModal from './components/ValidationModal';
 import Toggle from 'components/Toggle/Toggle';
+import { extractCombinedMarketsFromParlayMarkets, removeCombinedMarketFromParlayMarkets } from 'utils/markets';
+import MatchInfoOfCombinedMarket from './components/MatchInfoOfCombinedMarket';
 
 type ParylayProps = {
     onBuySuccess?: () => void;
+};
+
+type CombinedMarketsData = {
+    combinedMarkets: CombinedParlayMarket[];
+    parlaysWithoutCombinedMarkets: ParlaysMarket[];
+    isCombinedMarketsInParlay: boolean;
 };
 
 const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
@@ -50,6 +58,12 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     const hasParlayError = useSelector(getHasParlayError);
 
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
+    const [combinedMarketsData, setCombinedMarketsData] = useState<CombinedMarketsData>({
+        combinedMarkets: [],
+        parlaysWithoutCombinedMarkets: [],
+        isCombinedMarketsInParlay: false,
+    });
+
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
     const [multiSingleAmounts, setMultiSingleAmounts] = useState<MultiSingleAmounts[]>([]);
 
@@ -109,6 +123,30 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                 notOpenedMarkets.forEach((market) => dispatch(removeFromParlay(market.sportMarketAddress)));
             }
 
+            if (parlayMarkets.length) {
+                const combinedMarketsFromParlay = extractCombinedMarketsFromParlayMarkets(parlayMarkets);
+                const parlaysWithoutCombinedMarkets = removeCombinedMarketFromParlayMarkets(parlayMarkets);
+
+                console.log('Parlay ', parlay);
+                console.log('combinedMarketsFromParlay ', combinedMarketsFromParlay);
+
+                if (combinedMarketsFromParlay.length > 0) {
+                    setCombinedMarketsData({
+                        isCombinedMarketsInParlay: true,
+                        combinedMarkets: combinedMarketsFromParlay,
+                        parlaysWithoutCombinedMarkets,
+                    });
+                } else {
+                    setCombinedMarketsData({
+                        isCombinedMarketsInParlay: false,
+                        combinedMarkets: [],
+                        parlaysWithoutCombinedMarkets: [],
+                    });
+                }
+            }
+
+            console.log('Ovde');
+
             setParlayMarkets(parlayMarkets);
             setMultiSingleAmounts(multiSingleStore);
         }
@@ -148,14 +186,37 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                     ) : (
                         <>
                             <ListContainer>
-                                {parlayMarkets.map((market, index) => {
-                                    const outOfLiquidity = outOfLiquidityMarkets.includes(index);
-                                    return (
-                                        <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
-                                            <MatchInfo market={market} isHighlighted={true} />
-                                        </RowMarket>
-                                    );
-                                })}
+                                {combinedMarketsData?.isCombinedMarketsInParlay &&
+                                    combinedMarketsData.combinedMarkets.map((market, index) => {
+                                        return (
+                                            <RowMarket key={index + 'combined'} outOfLiquidity={false}>
+                                                <MatchInfoOfCombinedMarket
+                                                    combinedMarket={market}
+                                                    isHighlighted={true}
+                                                />
+                                            </RowMarket>
+                                        );
+                                    })}
+                                {combinedMarketsData?.isCombinedMarketsInParlay &&
+                                    combinedMarketsData.parlaysWithoutCombinedMarkets.length > 0 &&
+                                    combinedMarketsData.parlaysWithoutCombinedMarkets.map((market, index) => {
+                                        const outOfLiquidity = outOfLiquidityMarkets.includes(index);
+                                        return (
+                                            <RowMarket key={`${index}-non-combined`} outOfLiquidity={outOfLiquidity}>
+                                                <MatchInfo market={market} isHighlighted={true} />
+                                            </RowMarket>
+                                        );
+                                    })}
+                                {!combinedMarketsData?.isCombinedMarketsInParlay &&
+                                    parlayMarkets.length &&
+                                    parlayMarkets.map((market, index) => {
+                                        const outOfLiquidity = outOfLiquidityMarkets.includes(index);
+                                        return (
+                                            <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
+                                                <MatchInfo market={market} isHighlighted={true} />
+                                            </RowMarket>
+                                        );
+                                    })}
                             </ListContainer>
                             <HorizontalLine />
                             {parlayMarkets.length === 1 ? (

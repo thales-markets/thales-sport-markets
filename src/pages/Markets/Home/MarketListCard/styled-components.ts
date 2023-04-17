@@ -24,13 +24,18 @@ export const MainContainer = styled(FlexDivRow)`
 
 export const SecondRowContainer = styled(MainContainer)<{ mobilePaddingRight: number }>`
     background-color: ${MAIN_COLORS.GRAY};
-    justify-content: flex-end;
+    flex-wrap: wrap;
+    justify-content: flex-start;
     border-radius: 0 0 5px 5px;
-    padding-right: 174px;
+    /* padding-right: 174px; */
     @media (max-width: 950px) {
         padding-left: 4px;
         padding-right: ${(props) => props.mobilePaddingRight}px;
     }
+`;
+
+export const ThirdRowContainer = styled(SecondRowContainer)`
+    padding-right: 0px;
 `;
 
 export const MatchInfoConatiner = styled(FlexDivColumn)`
