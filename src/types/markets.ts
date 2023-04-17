@@ -392,5 +392,13 @@ export type CombinedMarket = {
     positions: Position[];
     totalOdd: number;
     totalBonus: number;
-    positionName: CombinedMarketsPositionName;
+    positionName: CombinedMarketsPositionName | null;
+};
+
+export type CombinedParlayMarket = {
+    markets: ParlaysMarket[];
+    positions: Position[];
+    totalOdd: number;
+    totalBonus: number;
+    positionName: CombinedMarketsPositionName | null;
 };
