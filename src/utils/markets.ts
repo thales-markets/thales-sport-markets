@@ -19,6 +19,7 @@ import {
     AccountPosition,
     CombinedMarket,
     CombinedMarketsPositionName,
+    CombinedParlayMarket,
     MarketData,
     MarketInfo,
     ParlayMarket,
@@ -508,6 +509,91 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
     });
 };
 
+export const getCombinedOddTooltipText = (markets: SportMarketInfo[], positions: Position[]) => {
+    let fullTooltipText = '';
+
+    const matchResolve =
+        MATCH_RESOLVE_MAP[markets[0].tags[0]] !== ''
+            ? i18n.t(`markets.market-card.odd-tooltip.match-resolve.${MATCH_RESOLVE_MAP[markets[0].tags[0]]}`)
+            : '';
+    const scoring =
+        SCORING_MAP[markets[0].tags[0]] !== ''
+            ? i18n.t(`markets.market-card.odd-tooltip.scoring.${SCORING_MAP[markets[0].tags[0]]}`)
+            : '';
+
+    if (markets[0].betType == BetType.TOTAL) {
+        let team = '';
+        let translationKey = '';
+        switch (positions[0]) {
+            case Position.HOME:
+                translationKey = 'winner';
+                team = markets[0].homeTeam;
+                break;
+            case Position.DRAW:
+                translationKey = 'draw';
+                break;
+            case Position.AWAY:
+                translationKey = 'winner';
+                team = markets[0].awayTeam;
+                break;
+        }
+
+        fullTooltipText += i18n.t(`markets.market-card.odd-tooltip.${translationKey}`, {
+            team,
+            scoring,
+            matchResolve,
+        });
+    }
+
+    if (markets[0].betType == BetType.SPREAD) {
+        let team = '';
+        const spread = Math.abs(Number(markets[0].spread) / 100);
+        let translationKey = '';
+        switch (positions[0]) {
+            case Position.HOME:
+                team = markets[0].homeTeam;
+                translationKey = Number(markets[0].spread) < 0 ? 'spread.minus' : 'spread.plus';
+                break;
+            case Position.AWAY:
+                team = markets[0].awayTeam;
+                translationKey = Number(markets[0].spread) < 0 ? 'spread.plus' : 'spread.minus';
+                break;
+        }
+        fullTooltipText += i18n.t(`markets.market-card.odd-tooltip.${translationKey}`, {
+            spread,
+            team,
+            scoring,
+            matchResolve,
+        });
+    }
+
+    if (fullTooltipText.trim().endsWith('.')) fullTooltipText = fullTooltipText.slice(0, -1);
+
+    if (fullTooltipText !== '') fullTooltipText += ` ${i18n.t('markets.market-card.odd-tooltip.and')} `;
+
+    if (markets[1].betType == BetType.TOTAL) {
+        const total = Number(markets[1].total) / 100;
+        let translationKey = '';
+        switch (positions[0]) {
+            case Position.HOME:
+                translationKey = 'total.over';
+                break;
+            case Position.AWAY:
+                translationKey = 'total.under';
+                break;
+        }
+        fullTooltipText += i18n
+            .t(`markets.market-card.odd-tooltip.${translationKey}`, {
+                total,
+                scoring,
+                matchResolve,
+            })
+            .toLowerCase();
+    }
+
+    return fullTooltipText;
+};
+
 export const convertPriceImpactToBonus = (priceImpact: number): number => -((priceImpact / (1 + priceImpact)) * 100);
 
 export const isAllowedToCombineMarketsForTagId = (tags: number[]): boolean => {
@@ -643,6 +729,45 @@ export const isCombinedMarketsInParlayData = (parlayData: ParlaysMarketPosition[
 
     if (combinedMarkets.length > 0) return true;
     return false;
+};
+
+export const extractCombinedMarketsFromParlayMarkets = (parlayMarkets: ParlaysMarket[]): CombinedParlayMarket[] => {
+    const combinedMarkets = [];
+    for (let i = 0; i < parlayMarkets.length - 1; i++) {
+        for (let j = i + 1; j < parlayMarkets.length; j++) {
+            if (parlayMarkets[i].gameId == parlayMarkets[j].gameId) {
+                combinedMarkets.push({
+                    markets: [parlayMarkets[i], parlayMarkets[j]],
+                    positions: [parlayMarkets[i].position, parlayMarkets[j].position],
+                    totalOdd: calculateCombinedMarketOdds(
+                        [parlayMarkets[i], parlayMarkets[j]],
+                        [parlayMarkets[i].position, parlayMarkets[j].position]
+                    ),
+                    totalBonus: 0,
+                    positionName: getCombinedPositionName(
+                        [parlayMarkets[i], parlayMarkets[j]],
+                        [parlayMarkets[i].position, parlayMarkets[j].position]
+                    ),
+                });
+            }
+        }
+    }
+    return combinedMarkets;
+};
+
+export const removeCombinedMarketFromParlayMarkets = (parlayMarkets: ParlaysMarket[]): ParlaysMarket[] => {
+    const combinedMarkets = extractCombinedMarketsFromParlayMarkets(parlayMarkets);
+
+    if (!combinedMarkets.length) return [];
+
+    const filteredParlayMarkets = parlayMarkets.filter((market) => {
+        const marketWithSameGameId = combinedMarkets.find(
+            (combinedMarkets) => combinedMarkets.markets[0].gameId == market.gameId
+        );
+        if (!marketWithSameGameId) return market;
+    });
+
+    return filteredParlayMarkets;
 };
 
 export const isSpecificCombinedPositionAddedToParlay = (
