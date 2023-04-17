@@ -354,13 +354,15 @@
                 "winner": "Winner",
                 "spread": "Handicap",
                 "total": "Total",
-                "double-chance": "Double chance"
+                "double-chance": "Double chance",
+                "combined-positions": "Combined positions"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points"
                 },
+                "and": "and",
                 "match-resolve": {
                     "regular": "in regular time",
                     "overtime": "including possible overtime"
