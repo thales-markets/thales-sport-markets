@@ -87,7 +87,12 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
                                                 p: <p />,
                                             }}
                                             values={{
-                                                odds: formatPercentage(vaultData.priceLowerLimit, 0),
+                                                odds: formatPercentage(
+                                                    vaultId === 'upsettoor-vault'
+                                                        ? vaultData.priceUpperLimit
+                                                        : vaultData.priceLowerLimit,
+                                                    0
+                                                ),
                                                 discount: formatPercentage(Math.abs(vaultData.skewImpactLimit), 0),
                                             }}
                                         />
@@ -107,7 +112,12 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
                                                 allocationLimitsPerMarketPerRound: formatPercentage(
                                                     vaultData.allocationLimitsPerMarketPerRound
                                                 ),
-                                                odds: formatPercentage(vaultData.priceLowerLimit, 0),
+                                                odds: formatPercentage(
+                                                    vaultId === 'upsettoor-vault'
+                                                        ? vaultData.priceUpperLimit
+                                                        : vaultData.priceLowerLimit,
+                                                    0
+                                                ),
                                             }}
                                         />
                                     </VaultSectionDescription>

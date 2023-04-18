@@ -463,7 +463,12 @@ const Vault: React.FC<VaultProps> = (props) => {
                                         p: <p />,
                                     }}
                                     values={{
-                                        odds: formatPercentage(vaultData.priceLowerLimit, 0),
+                                        odds: formatPercentage(
+                                            vaultId === 'upsettoor-vault'
+                                                ? vaultData.priceUpperLimit
+                                                : vaultData.priceLowerLimit,
+                                            0
+                                        ),
                                         discount: formatPercentage(Math.abs(vaultData.skewImpactLimit), 0),
                                     }}
                                 />

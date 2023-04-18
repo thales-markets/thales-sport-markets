@@ -35,6 +35,7 @@ const Vault: React.FC = () => {
                 <VaultOverview vaultId="discount-vault" />
                 <VaultOverview vaultId="degen-discount-vault" />
                 <VaultOverview vaultId="safu-discount-vault" />
+                <VaultOverview vaultId="upsettoor-vault" />
                 <VaultOverview vaultId="parlay-discount-vault" />
             </Container>
         </Wrapper>
