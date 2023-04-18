@@ -122,7 +122,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         text={t('market.back')}
                         customStylingContainer={{ position: 'absolute', left: 0, top: 0, marginTop: 0 }}
                     />
-                    {INCENTIVIZED_LEAGUE.id == market.tags[0] &&
+                    {INCENTIVIZED_LEAGUE.ids.includes(market.tags[0]) &&
                         new Date(market.maturityDate) > INCENTIVIZED_LEAGUE.startDate &&
                         new Date(market.maturityDate) < INCENTIVIZED_LEAGUE.endDate && (
                             <Tooltip
