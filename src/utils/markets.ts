@@ -521,7 +521,7 @@ export const getCombinedOddTooltipText = (markets: SportMarketInfo[], positions:
             ? i18n.t(`markets.market-card.odd-tooltip.scoring.${SCORING_MAP[markets[0].tags[0]]}`)
             : '';
 
-    if (markets[0].betType == BetType.TOTAL) {
+    if (markets[0].betType == BetType.WINNER) {
         let team = '';
         let translationKey = '';
         switch (positions[0]) {
@@ -574,7 +574,7 @@ export const getCombinedOddTooltipText = (markets: SportMarketInfo[], positions:
     if (markets[1].betType == BetType.TOTAL) {
         const total = Number(markets[1].total) / 100;
         let translationKey = '';
-        switch (positions[0]) {
+        switch (positions[1]) {
             case Position.HOME:
                 translationKey = 'total.over';
                 break;
