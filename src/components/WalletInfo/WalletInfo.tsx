@@ -61,119 +61,102 @@ const WalletInfo: React.FC = () => {
         <Container>
             <FlexDivColumn>
                 <RainbowConnectButton.Custom>
-                    {({ openConnectModal, openAccountModal, mounted }) => {
+                    {({ openConnectModal, openAccountModal }) => {
                         return (
-                            <div
-                                {...(!mounted && {
-                                    'aria-hidden': true,
-                                    style: {
-                                        opacity: 0,
-                                        pointerEvents: 'none',
-                                        userSelect: 'none',
-                                        position: 'relative',
-                                    },
-                                })}
-                            >
-                                <Wrapper>
-                                    <WalletAddressInfo
-                                        isWalletConnected={isWalletConnected}
-                                        isClickable={true}
-                                        onClick={isWalletConnected ? openAccountModal : openConnectModal}
-                                    >
-                                        <Text className="wallet-info">
-                                            {isWalletConnected
-                                                ? truncateAddress(walletAddress, 5, 5)
-                                                : t('common.wallet.connect-your-wallet')}
-                                        </Text>
-                                        {isWalletConnected && (
-                                            <Text className="wallet-info-hover">
-                                                {t('common.wallet.wallet-options')}
-                                            </Text>
-                                        )}
-                                    </WalletAddressInfo>
-                                    {!isMobile &&
-                                        isWalletConnected &&
-                                        (overtimeVoucher ? (
-                                            <WalletBalanceInfo>
-                                                <VoucherText>{t('common.voucher.voucher')}:</VoucherText>
-                                                <Text>{formatCurrency(walletBalance, 2)}</Text>
-                                                <Currency>{getDefaultColleteralForNetwork(networkId)}</Currency>
-                                            </WalletBalanceInfo>
-                                        ) : (
-                                            <WalletBalanceInfo>
-                                                <Text>{formatCurrency(walletBalance, 2)}</Text>
-                                                <Currency>{getDefaultColleteralForNetwork(networkId)}</Currency>
-                                            </WalletBalanceInfo>
-                                        ))}
-                                    <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
-                                        <NetworkIconWrapper onClick={() => setDropDownOpen(!dropDownOpen)}>
-                                            <NetworkIcon
-                                                className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`}
-                                            />
-                                            {!hideNetworkSwitcher && <DownIcon className={`icon icon--arrow-down`} />}
-                                        </NetworkIconWrapper>
-                                        {dropDownOpen && !hideNetworkSwitcher && (
-                                            <NetworkDropDown>
-                                                {NETWORK_SWITCHER_SUPPORTED_NETWORKS.map((network) => (
-                                                    <NetworkWrapper
-                                                        key={network.shortChainName}
-                                                        onClick={async () => {
-                                                            if (networkId !== network.networkId) {
-                                                                if (hasEthereumInjected()) {
-                                                                    try {
-                                                                        await (window.ethereum as any).request({
-                                                                            method: 'wallet_switchEthereumChain',
-                                                                            params: [{ chainId: network.chainId }],
-                                                                        });
-                                                                    } catch (switchError: any) {
-                                                                        if (switchError.code === 4902) {
-                                                                            try {
-                                                                                await (window.ethereum as any).request({
-                                                                                    method: 'wallet_addEthereumChain',
-                                                                                    params: [
-                                                                                        SUPPORTED_NETWORKS_DESCRIPTIONS[
-                                                                                            +network.chainId
-                                                                                        ],
+                            <Wrapper>
+                                <WalletAddressInfo
+                                    isWalletConnected={isWalletConnected}
+                                    isClickable={true}
+                                    onClick={isWalletConnected ? openAccountModal : openConnectModal}
+                                >
+                                    <Text className="wallet-info">
+                                        {isWalletConnected
+                                            ? truncateAddress(walletAddress, 5, 5)
+                                            : t('common.wallet.connect-your-wallet')}
+                                    </Text>
+                                    {isWalletConnected && (
+                                        <Text className="wallet-info-hover">{t('common.wallet.wallet-options')}</Text>
+                                    )}
+                                </WalletAddressInfo>
+                                {!isMobile &&
+                                    isWalletConnected &&
+                                    (overtimeVoucher ? (
+                                        <WalletBalanceInfo>
+                                            <VoucherText>{t('common.voucher.voucher')}:</VoucherText>
+                                            <Text>{formatCurrency(walletBalance, 2)}</Text>
+                                            <Currency>{getDefaultColleteralForNetwork(networkId)}</Currency>
+                                        </WalletBalanceInfo>
+                                    ) : (
+                                        <WalletBalanceInfo>
+                                            <Text>{formatCurrency(walletBalance, 2)}</Text>
+                                            <Currency>{getDefaultColleteralForNetwork(networkId)}</Currency>
+                                        </WalletBalanceInfo>
+                                    ))}
+                                <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
+                                    <NetworkIconWrapper onClick={() => setDropDownOpen(!dropDownOpen)}>
+                                        <NetworkIcon
+                                            className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`}
+                                        />
+                                        {!hideNetworkSwitcher && <DownIcon className={`icon icon--arrow-down`} />}
+                                    </NetworkIconWrapper>
+                                    {dropDownOpen && !hideNetworkSwitcher && (
+                                        <NetworkDropDown>
+                                            {NETWORK_SWITCHER_SUPPORTED_NETWORKS.map((network) => (
+                                                <NetworkWrapper
+                                                    key={network.shortChainName}
+                                                    onClick={async () => {
+                                                        if (networkId !== network.networkId) {
+                                                            if (hasEthereumInjected()) {
+                                                                try {
+                                                                    await (window.ethereum as any).request({
+                                                                        method: 'wallet_switchEthereumChain',
+                                                                        params: [{ chainId: network.chainId }],
+                                                                    });
+                                                                } catch (switchError: any) {
+                                                                    if (switchError.code === 4902) {
+                                                                        try {
+                                                                            await (window.ethereum as any).request({
+                                                                                method: 'wallet_addEthereumChain',
+                                                                                params: [
+                                                                                    SUPPORTED_NETWORKS_DESCRIPTIONS[
+                                                                                        +network.chainId
                                                                                     ],
-                                                                                });
-                                                                                await (window.ethereum as any).request({
-                                                                                    method:
-                                                                                        'wallet_switchEthereumChain',
-                                                                                    params: [
-                                                                                        { chainId: network.chainId },
-                                                                                    ],
-                                                                                });
-                                                                            } catch (addError) {
-                                                                                console.log(addError);
-                                                                            }
+                                                                                ],
+                                                                            });
+                                                                            await (window.ethereum as any).request({
+                                                                                method: 'wallet_switchEthereumChain',
+                                                                                params: [{ chainId: network.chainId }],
+                                                                            });
+                                                                        } catch (addError) {
+                                                                            console.log(addError);
                                                                         }
                                                                     }
-                                                                } else {
-                                                                    dispatch(
-                                                                        updateNetworkSettings({
-                                                                            networkId: network.networkId as NetworkId,
-                                                                        })
-                                                                    );
                                                                 }
+                                                            } else {
+                                                                dispatch(
+                                                                    updateNetworkSettings({
+                                                                        networkId: network.networkId as NetworkId,
+                                                                    })
+                                                                );
                                                             }
+                                                        }
 
-                                                            setDropDownOpen(false);
-                                                        }}
-                                                    >
-                                                        <NetworkIcon className={network.iconClassName} />
-                                                        <NetworkText>
-                                                            {networkId === network.networkId && (
-                                                                <NetworkSelectedIndicator />
-                                                            )}
-                                                            {network.shortChainName}
-                                                        </NetworkText>
-                                                    </NetworkWrapper>
-                                                ))}
-                                            </NetworkDropDown>
-                                        )}
-                                    </OutsideClickHandler>
-                                </Wrapper>
-                            </div>
+                                                        setDropDownOpen(false);
+                                                    }}
+                                                >
+                                                    <NetworkIcon className={network.iconClassName} />
+                                                    <NetworkText>
+                                                        {networkId === network.networkId && (
+                                                            <NetworkSelectedIndicator />
+                                                        )}
+                                                        {network.shortChainName}
+                                                    </NetworkText>
+                                                </NetworkWrapper>
+                                            ))}
+                                        </NetworkDropDown>
+                                    )}
+                                </OutsideClickHandler>
+                            </Wrapper>
                         );
                     }}
                 </RainbowConnectButton.Custom>

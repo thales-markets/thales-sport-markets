@@ -52,7 +52,7 @@ const { chains, provider } = configureChains(
     [
         jsonRpcProvider({
             rpc: (chain) => ({
-                http: !CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].chainnode
+                http: !CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id]?.chainnode
                     ? chain.rpcUrls.default.http[0]
                     : `https://${CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].chainnode}.chainnodes.org/${
                           process.env.REACT_APP_CHAINNODE_PROJECT_ID
