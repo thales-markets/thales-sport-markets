@@ -20,7 +20,7 @@ import { Theme } from 'constants/ui';
 import ROUTES from 'constants/routes';
 import { generalConfig } from 'config/general';
 import axios from 'axios';
-import useWidgetBotScript from 'hooks/useWidgetBotScript';
+// import useWidgetBotScript from 'hooks/useWidgetBotScript';
 
 const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -84,7 +84,7 @@ const DappLayout: React.FC = ({ children }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location.pathname]);
 
-    useWidgetBotScript();
+    // useWidgetBotScript();
 
     return (
         <>
