@@ -9,7 +9,6 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { WinningInfo } from 'types/markets';
 import { UserVaultsData } from 'types/vault';
-import { getAreVaultsSupportedForNetworkId } from 'utils/network';
 
 const UserStats: React.FC = () => {
     const { t } = useTranslation();
@@ -26,14 +25,12 @@ const UserStats: React.FC = () => {
         : { highestWin: 0, lifetimeWins: 0 };
 
     const userVaultsDataQuery = useUserVaultsDataQuery(walletAddress.toLowerCase(), networkId, {
-        enabled: isWalletConnected && getAreVaultsSupportedForNetworkId(networkId),
+        enabled: isWalletConnected,
     });
 
     const vaultsData = userVaultsDataQuery.isSuccess
         ? (userVaultsDataQuery.data as UserVaultsData)
         : { balanceTotal: 0 };
-
-    const areVaultsSupported = getAreVaultsSupportedForNetworkId(networkId);
 
     return (
         <Wrapper>
@@ -59,16 +56,12 @@ const UserStats: React.FC = () => {
                     <Label>{t('profile.stats.lifetime-wins')}</Label>
                     <Value>{!user ? 0 : winningInfo.lifetimeWins}</Value>
                 </Section>
-                {areVaultsSupported && (
-                    <>
-                        <Separator />
-                        <Section>
-                            <Label>{t('profile.stats.in-vaults')}</Label>
-                            <Value>{!user ? 0 : vaultsData.balanceTotal.toFixed(2)}</Value>
-                            <CurrencyLabel>USD</CurrencyLabel>
-                        </Section>
-                    </>
-                )}
+                <Separator />
+                <Section>
+                    <Label>{t('profile.stats.in-vaults')}</Label>
+                    <Value>{!user ? 0 : vaultsData.balanceTotal.toFixed(2)}</Value>
+                    <CurrencyLabel>USD</CurrencyLabel>
+                </Section>
             </SectionWrapper>
         </Wrapper>
     );

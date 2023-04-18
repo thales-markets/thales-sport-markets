@@ -148,12 +148,6 @@ export const getNetworkKeyByNetworkId = (networkId: NetworkId): string => {
     return network?.chainKey || 'optimism_mainnet';
 };
 
-export const getAreVaultsSupportedForNetworkId = (networkId: NetworkId): boolean => {
-    const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
-    if (network) return network.areVaultsSupported;
-    return false;
-};
-
 export const isRouteAvailableForNetwork = (route: string, networkId: NetworkId): boolean => {
     const navItem = getNavItemFromRoute(route);
     if (navItem && navItem?.supportedNetworks?.includes(networkId)) return true;
