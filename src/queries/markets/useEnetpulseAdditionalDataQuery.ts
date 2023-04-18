@@ -48,18 +48,22 @@ const useEnetpulseAdditionalDataQuery = (
                         }
                     }
                 }
-
                 const event = events.find((sportEvent: any) => sportEvent.id == trimmedMarketId) as any;
 
                 if (event) {
                     const tournamentName = event.tournament_stage_name;
                     const tournamentRound = ENETPULSE_ROUNDS[Number(event.round_typeFK)];
                     const eventParticipants: any[] = Object.values(event.event_participants);
-                    const homeResults: any[] = Object.values(eventParticipants[0].result);
-                    const awayResults: any[] = Object.values(eventParticipants[1].result);
+                    const homeResults: any[] = [];
+                    const awayResults: any[] = [];
+                    if (!SPORTS_TAGS_MAP['eSports'].includes(Number(sportTag))) {
+                        homeResults.push(...Object.values(eventParticipants[0].result));
+                        awayResults.push(...Object.values(eventParticipants[1].result));
+                    }
+
                     let homeScore = 0;
                     let awayScore = 0;
-                    if (SPORTS_TAGS_MAP['Tennis'].includes(sportTag)) {
+                    if (SPORTS_TAGS_MAP['Tennis'].includes(Number(sportTag))) {
                         homeScore = homeResults.find((result) => result.result_code.toLowerCase() == 'setswon').value;
                         awayScore = awayResults.find((result) => result.result_code.toLowerCase() == 'setswon').value;
                     }

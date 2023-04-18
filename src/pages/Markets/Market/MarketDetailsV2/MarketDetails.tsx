@@ -111,6 +111,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         isEnetpulseSport,
     ]);
 
+    const hideResultInfoPerPeriod = hideResultInfoPerPeriodForSports(Number(liveResultInfo?.sportId));
+
     return (
         <RowContainer>
             <MainContainer showAMM={showAMM}>
@@ -120,7 +122,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         text={t('market.back')}
                         customStylingContainer={{ position: 'absolute', left: 0, top: 0, marginTop: 0 }}
                     />
-                    {INCENTIVIZED_LEAGUE.id == market.tags[0] &&
+                    {INCENTIVIZED_LEAGUE.ids.includes(market.tags[0]) &&
                         new Date(market.maturityDate) > INCENTIVIZED_LEAGUE.startDate &&
                         new Date(market.maturityDate) < INCENTIVIZED_LEAGUE.endDate && (
                             <Tooltip
@@ -229,26 +231,24 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                             </InfoLabel>
                                         )}
                                 </ResultLabel>
-                                {!SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
-                                    !SPORTS_TAGS_MAP['eSports'].includes(Number(liveResultInfo?.sportId)) &&
-                                    !SPORTS_TAGS_MAP['UFC'].includes(Number(liveResultInfo?.sportId)) && (
-                                        <PeriodsContainer directionRow={true}>
-                                            {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
-                                                return (
-                                                    <PeriodContainer key={index}>
-                                                        <InfoLabel className="gray">{index + 1}</InfoLabel>
-                                                        <InfoLabel>{homePeriodResult}</InfoLabel>
-                                                        <InfoLabel>{liveResultInfo.scoreAwayByPeriod[index]}</InfoLabel>
-                                                    </PeriodContainer>
-                                                );
-                                            })}
-                                            <PeriodContainer>
-                                                <InfoLabel className="gray">T</InfoLabel>
-                                                <InfoLabel>{liveResultInfo?.homeScore}</InfoLabel>
-                                                <InfoLabel>{liveResultInfo?.awayScore}</InfoLabel>
-                                            </PeriodContainer>
-                                        </PeriodsContainer>
-                                    )}
+                                {hideResultInfoPerPeriod && (
+                                    <PeriodsContainer directionRow={true}>
+                                        {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
+                                            return (
+                                                <PeriodContainer key={index}>
+                                                    <InfoLabel className="gray">{index + 1}</InfoLabel>
+                                                    <InfoLabel>{homePeriodResult}</InfoLabel>
+                                                    <InfoLabel>{liveResultInfo.scoreAwayByPeriod[index]}</InfoLabel>
+                                                </PeriodContainer>
+                                            );
+                                        })}
+                                        <PeriodContainer>
+                                            <InfoLabel className="gray">T</InfoLabel>
+                                            <InfoLabel>{liveResultInfo?.homeScore}</InfoLabel>
+                                            <InfoLabel>{liveResultInfo?.awayScore}</InfoLabel>
+                                        </PeriodContainer>
+                                    </PeriodsContainer>
+                                )}
                             </ResultContainer>
                         )}
                     </Status>
@@ -279,6 +279,15 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
             {isMobile && showParlayMobileModal && <ParlayMobileModal onClose={() => setShowParlayMobileModal(false)} />}
             {isMobile && <FooterSidebarMobile setParlayMobileVisibility={setShowParlayMobileModal} />}
         </RowContainer>
+    );
+};
+
+const hideResultInfoPerPeriodForSports = (sportId: number) => {
+    return (
+        !SPORTS_TAGS_MAP['Soccer'].includes(Number(sportId)) &&
+        !SPORTS_TAGS_MAP['eSports'].includes(sportId) &&
+        !SPORTS_TAGS_MAP['UFC'].includes(sportId) &&
+        !SPORTS_TAGS_MAP['Cricket'].includes(sportId)
     );
 };
 

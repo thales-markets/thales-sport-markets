@@ -50,7 +50,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                         <ArrowIcon down={true} className={`icon-exotic icon-exotic--down`} />
                     )}
                 </LeagueInfo>
-                {INCENTIVIZED_LEAGUE.id == league &&
+                {INCENTIVIZED_LEAGUE.ids.includes(Number(league)) &&
                     new Date() > INCENTIVIZED_LEAGUE.startDate &&
                     new Date() < INCENTIVIZED_LEAGUE.endDate && (
                         <Tooltip
