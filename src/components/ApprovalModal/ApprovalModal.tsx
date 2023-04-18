@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getIsWalletConnected } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { BigNumber, ethers } from 'ethers';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import styled from 'styled-components';
@@ -33,6 +33,7 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
 }) => {
     const { t } = useTranslation();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [amount, setAmount] = useState<number | string>(defaultAmount);
     const [approveAll, setApproveAll] = useState<boolean>(true);
     const [isAmountValid, setIsAmountValid] = useState<boolean>(true);
@@ -43,7 +44,11 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
     const isAmountEntered = Number(amount) > 0;
     const isButtonDisabled = !isWalletConnected || isAllowing || (!approveAll && (!isAmountEntered || !isAmountValid));
 
-    const amountConverted = getAmountForApproval(collateralIndex ? collateralIndex : 0, Number(amount).toString());
+    const amountConverted = getAmountForApproval(
+        collateralIndex ? collateralIndex : 0,
+        Number(amount).toString(),
+        networkId
+    );
 
     const getSubmitButton = () => {
         if (!isWalletConnected) {
@@ -77,6 +82,7 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
             title={t('common.enable-wallet-access.approve-label', { currencyKey: tokenSymbol })}
             onClose={onClose}
             shouldCloseOnOverlayClick={false}
+            customStyle={{ overlay: { zIndex: 201 } }}
         >
             <Container>
                 <CheckboxContainer>

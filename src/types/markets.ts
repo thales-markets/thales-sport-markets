@@ -1,5 +1,7 @@
-import { ApexBetType, MarketStatus } from 'constants/markets';
-import { Position, PositionName, Side } from '../constants/options';
+import { COLLATERALS_INDEX } from 'constants/currency';
+import { MarketStatus } from 'constants/markets';
+import { DoubleChanceMarketType } from 'constants/tags';
+import { Position, PositionName } from '../constants/options';
 
 export type MarketInfo = {
     address: string;
@@ -40,6 +42,7 @@ export type MarketInfo = {
 export type SportMarketInfo = {
     id: string;
     address: string;
+    gameId: string;
     maturityDate: Date;
     tags: number[];
     isOpen: boolean;
@@ -62,10 +65,15 @@ export type SportMarketInfo = {
     leagueRaceName?: string;
     qualifyingStartTime?: number;
     arePostQualifyingOddsFetched: boolean;
-    betType: ApexBetType;
-    homePriceImpact: number;
-    awayPriceImpact: number;
-    drawPriceImpact?: number;
+    betType: number;
+    homeBonus: number;
+    awayBonus: number;
+    drawBonus?: number;
+    parentMarket: string;
+    childMarkets: SportMarketInfo[];
+    spread: number;
+    total: number;
+    doubleChanceMarketType: DoubleChanceMarketType | null;
 };
 
 export type FixedMarketData = {
@@ -79,23 +87,27 @@ export type GameDetails = {
     gameLabel: string;
 };
 
-export type AMMSide = {
+export type AMMPosition = {
+    available: number;
     quote: number;
     priceImpact: number;
 };
 
-export type AMMPosition = {
-    sides: Record<Side, AMMSide>;
-};
+export type AvailablePerPosition = Record<Position, { available?: number; buyBonus?: number }>;
 
-export type AvailablePerSide = {
-    positions: Record<Position, { available: number; buyImpactPrice?: number }>;
-};
+export type AvailablePerDoubleChancePosition = Record<
+    DoubleChanceMarketType,
+    { available?: number; buyBonus?: number }
+>;
+
+export type DoubleChanceMarkets = Record<DoubleChanceMarketType, MarketData>;
+
+export type DoubleChanceMarketsInfo = Record<DoubleChanceMarketType, SportMarketInfo>;
 
 export type MarketData = {
     address: string;
     gameDetails: GameDetails;
-    positions: Record<Position, { sides: Record<Side, { odd: number | undefined }> }>;
+    positions: Record<Position, { odd: number | undefined }>;
     tags: number[];
     homeTeam: string;
     awayTeam: string;
@@ -108,8 +120,51 @@ export type MarketData = {
     awayScore?: number;
     leagueRaceName?: string;
     paused: boolean;
-    betType: ApexBetType;
+    betType: number;
     isApex: boolean;
+    parentMarket: string;
+    childMarketsAddresses: string[];
+    childMarkets: MarketData[];
+    spread: number;
+    total: number;
+    doubleChanceMarketType: DoubleChanceMarketType | null;
+};
+
+export type ChildMarkets = {
+    spreadMarkets: MarketData[];
+    totalMarkets: MarketData[];
+    doubleChanceMarkets: MarketData[];
+};
+
+export type ParlayMarket = {
+    id: string;
+    txHash: string;
+    sportMarkets: SportMarketInfo[];
+    sportMarketsFromContract: string[];
+    positions: PositionData[];
+    positionsFromContract: number[];
+    marketQuotes: number[];
+    account: string;
+    totalAmount: number;
+    sUSDPaid: number;
+    sUSDAfterFees: number;
+    totalQuote: number;
+    skewImpact: number;
+    timestamp: number;
+    lastGameStarts: number;
+    blockNumber: number;
+    claimed: boolean;
+    won: boolean;
+};
+
+export type ParlayMarketWithRank = ParlayMarket & { rank: number; numberOfPositions: number };
+export type ParlayMarketWithRound = ParlayMarket & { round: number };
+
+export type PositionData = {
+    id: string;
+    market: SportMarketInfo;
+    side: PositionName;
+    claimable: boolean;
 };
 
 export type Markets = MarketInfo[];
@@ -122,14 +177,6 @@ export type AccountMarketData = {
     winningAmount: number;
     canWithdraw: boolean;
     userAlreadyClaimedAmount: number;
-};
-
-export type AccountMarketTicketData = AccountMarketData & {
-    position: number;
-};
-
-export type AccountMarketOpenBidData = AccountMarketData & {
-    userPositions: number[];
 };
 
 export type SortOptionType = {
@@ -160,6 +207,10 @@ export type TagInfo = {
     id: number;
     label: string;
     logo?: string;
+    logoClass?: string;
+    favourite?: boolean;
+    hidden?: boolean;
+    priority?: number;
 };
 
 export type Tags = TagInfo[];
@@ -167,6 +218,8 @@ export type Tags = TagInfo[];
 export type SportsMap = Record<number, string>;
 
 export type SportsTagsMap = Record<string, number[]>;
+
+export type SportsPeriodsMap = Record<number, string>;
 
 export enum PositionType {
     home = 'home',
@@ -183,9 +236,11 @@ export type AccountPositionGraph = {
 
 export type PositionBalance = {
     id: string;
+    firstTxHash: string;
     account: string;
     amount: number;
     position: AccountPositionGraph;
+    sUSDPaid: number;
 };
 
 export type AccountPosition = AccountPositionGraph & {
@@ -208,6 +263,7 @@ export type MarketTransaction = {
     position: any;
     market: string;
     paid: number;
+    wholeMarket: SportMarketInfo;
 };
 
 export type MarketTransactions = MarketTransaction[];
@@ -218,7 +274,7 @@ export type ClaimTransaction = {
     amount: number;
     timestamp: number;
     caller: string;
-    market: MarketData;
+    market: SportMarketInfo;
 };
 
 export type ClaimTransactions = ClaimTransaction[];
@@ -256,4 +312,64 @@ export type Odds = {
     home: number;
     away: number;
     draw: number;
+};
+
+export type ParlaysMarketPosition = {
+    parentMarket: string;
+    sportMarketAddress: string;
+    position: Position;
+    homeTeam: string;
+    awayTeam: string;
+    doubleChanceMarketType: DoubleChanceMarketType | null;
+};
+
+export type ParlaysMarket = SportMarketInfo & {
+    position: Position;
+    winning?: boolean;
+};
+
+export type ParlayAmmData = {
+    minUsdAmount: number;
+    maxSupportedAmount: number;
+    maxSupportedOdds: number;
+    parlayAmmFee: number;
+    safeBoxImpact: number;
+    parlaySize: number;
+};
+
+export type ParlayPayment = {
+    selectedStableIndex: COLLATERALS_INDEX;
+    isVoucherSelected: boolean | undefined;
+    amountToBuy: number | string;
+};
+
+export type MultiSingleAmounts = {
+    sportMarketAddress: string;
+    amountToBuy: number;
+};
+
+export type MultiSingleTokenQuoteAndBonus = {
+    sportMarketAddress: string;
+    tokenAmount: number;
+    bonusPercentageDec: number;
+    totalBonusCurrency: number;
+    ammQuote: number;
+};
+
+export type WinningInfo = {
+    highestWin: number;
+    lifetimeWins: number;
+};
+
+export type SportMarketLiveResult = {
+    homeScore: number;
+    awayScore: number;
+    period: number;
+    status: string;
+    scoreHomeByPeriod: number[];
+    scoreAwayByPeriod: number[];
+    displayClock: string;
+    sportId: number;
+    tournamentName?: string;
+    tournamentRound?: string;
 };

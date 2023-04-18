@@ -7,25 +7,33 @@ import { NetworkId } from 'types/network';
 const useMarketTransactionsQuery = (
     marketAddress: string,
     networkId: NetworkId,
+    account?: string,
     options?: UseQueryOptions<MarketTransactions | undefined>
 ) => {
     return useQuery<MarketTransactions | undefined>(
-        QUERY_KEYS.MarketTransactions(marketAddress, networkId),
+        QUERY_KEYS.MarketTransactions(marketAddress, networkId, account),
         async () => {
             try {
-                const marketTransactions = await thalesData.sportMarkets.marketTransactions({
-                    market: marketAddress,
-                    network: networkId,
-                });
+                const [marketTransactions, childMarketTransactions] = await Promise.all([
+                    thalesData.sportMarkets.marketTransactions({
+                        market: marketAddress,
+                        network: networkId,
+                        account,
+                    }),
+                    thalesData.sportMarkets.marketTransactions({
+                        parentMarket: marketAddress,
+                        network: networkId,
+                        account,
+                    }),
+                ]);
 
-                return marketTransactions;
+                return [...marketTransactions, ...childMarketTransactions];
             } catch (e) {
                 console.log(e);
                 return undefined;
             }
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );

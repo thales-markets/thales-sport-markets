@@ -65,10 +65,11 @@ const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaul
 
     return (
         <Select
+            value={defaultOption}
             options={options}
             styles={customStyled}
-            onChange={(_props) => {
-                handleChange(Number(_props?.value));
+            onChange={(props) => {
+                handleChange(Number(props?.value));
             }}
             defaultValue={defaultOption}
             isSearchable={false}

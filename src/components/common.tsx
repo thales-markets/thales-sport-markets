@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 
 export const BondInfo = styled(FlexDivColumn)`
     font-size: 15px;
@@ -290,9 +290,9 @@ export const MatchParticipantName = styled.label<{
     text-align: center;
     margin-top: 5px;
     cursor: pointer;
-    color: ${(_props) =>
-        _props?.winningColor ? _props?.winningColor : _props?.glow ? _props.glowColor : _props.theme.textColor.primary};
-    text-shadow: ${(_props) => (_props?.glow ? '0 0 15px ' + _props.glowColor : '')};
+    color: ${(props) =>
+        props?.winningColor ? props?.winningColor : props?.glow ? props.glowColor : props.theme.textColor.primary};
+    text-shadow: ${(props) => (props?.glow ? '0 0 15px ' + props.glowColor : '')};
 `;
 
 export const OddsLabel = styled.label<{
@@ -376,4 +376,11 @@ export const ProfitLabel = styled.label<{ claimable: boolean }>`
     text-align: center;
     cursor: pointer;
     margin-top: 37px;
+`;
+
+export const Discount = styled(FlexDivCentered)<{ visible?: boolean; color?: string }>`
+    color: ${(props) => (props?.color ? props.color : '')};
+    font-size: 14px;
+    margin-left: 11px;
+    visibility: ${(props) => (props?.visible ? 'visible' : 'hidden')};
 `;

@@ -65,4 +65,11 @@ export default {
             },
         },
     },
+    nav: {
+        background: Colors.GRAY_LIGHT,
+        text: {
+            primary: Colors.LIGHT_BLUE,
+            secondary: Colors.WHITE,
+        },
+    },
 };

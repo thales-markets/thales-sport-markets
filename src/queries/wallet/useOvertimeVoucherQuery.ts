@@ -1,12 +1,13 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 import { NetworkId } from 'types/network';
 import { OvertimeVoucher, OvertimeVouchers } from 'types/tokens';
 import thalesData from 'thales-data';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
-const useTokenBalanceQuery = (
+const useOvertimeVoucherQuery = (
     walletAddress: string,
     networkId: NetworkId,
     options?: UseQueryOptions<OvertimeVoucher | undefined>
@@ -24,13 +25,12 @@ const useTokenBalanceQuery = (
                     const overtimeVoucher = overtimeVouchers[0];
                     const { overtimeVoucherContract } = networkConnector;
 
-                    const [remainingAmount, image] = await Promise.all([
-                        overtimeVoucherContract?.amountInVoucher(overtimeVoucher.id),
-                        overtimeVoucherContract?.tokenURI(overtimeVoucher.id),
-                    ]);
+                    const remainingAmount = await overtimeVoucherContract?.amountInVoucher(overtimeVoucher.id);
 
-                    overtimeVoucher.remainingAmount = bigNumberFormatter(remainingAmount);
-                    overtimeVoucher.image = image;
+                    overtimeVoucher.remainingAmount = bigNumberFormmaterWithDecimals(
+                        remainingAmount,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
                     return overtimeVoucher;
                 }
             } catch (e) {
@@ -39,10 +39,9 @@ const useTokenBalanceQuery = (
             return undefined;
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );
 };
 
-export default useTokenBalanceQuery;
+export default useOvertimeVoucherQuery;

@@ -3,7 +3,6 @@ import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivRowCentered } from '../../styles/common';
-import { PAYMENT_CURRENCY } from '../../constants/currency';
 import { useTranslation } from 'react-i18next';
 import { truncateAddress } from '../../utils/formatters/string';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from '../../redux/modules/wallet';
@@ -12,6 +11,7 @@ import useSUSDWalletBalance from '../../queries/wallet/usesUSDWalletBalance';
 import { formatCurrency } from '../../utils/formatters/number';
 import { getIsAppReady } from '../../redux/modules/app';
 import useOvertimeVoucherQuery from '../../queries/wallet/useOvertimeVoucherQuery';
+import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 
 const ConnectButton: React.FC = () => {
     const { t } = useTranslation();
@@ -74,7 +74,7 @@ const ConnectButton: React.FC = () => {
                                         </Wallet>
                                         <Balance hasVoucher={!!overtimeVoucher}>
                                             <Info>{sUSDBalance}</Info>
-                                            <Currency>{PAYMENT_CURRENCY}</Currency>
+                                            <Currency>{getDefaultColleteralForNetwork(networkId)}</Currency>
                                         </Balance>
                                     </FlexDivRowCentered>
                                 );
@@ -107,6 +107,7 @@ const WalletContainer = styled(FlexDivRowCentered)<{ hasVoucher: boolean }>`
         }
         .wallet-info-hover {
             display: inline;
+            width: fit-content;
         }
     }
     border-radius: ${(props) => (props.hasVoucher ? '5px 5px 0px 0px' : '5px')};
@@ -115,7 +116,7 @@ const WalletContainer = styled(FlexDivRowCentered)<{ hasVoucher: boolean }>`
 
 const Wallet = styled(FlexDivRowCentered)`
     padding-right: 10px;
-    width: 95px;
+    min-width: 95px;
     text-align: center;
 `;
 

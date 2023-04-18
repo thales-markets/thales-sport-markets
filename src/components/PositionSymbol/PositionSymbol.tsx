@@ -1,134 +1,143 @@
 import Tooltip from 'components/Tooltip';
+import { MAIN_COLORS } from 'constants/ui';
 import React, { CSSProperties } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 
 type SymbolProps = {
-    type?: number;
+    symbolText: string;
     symbolColor?: string;
-    additionalText?: {
-        firstText?: string;
-        secondText?: string;
-        firstTextStyle?: CSSProperties;
-        secondTextStyle?: CSSProperties;
+    tooltip?: (() => React.ReactNode) | React.ReactNode;
+    symbolAdditionalText?: {
+        text?: string;
+        tooltip?: string;
+        textStyle?: CSSProperties;
     };
+    symbolUpperText?: {
+        text?: string;
+        tooltip?: string;
+        textStyle?: CSSProperties;
+    };
+    selected?: boolean;
+    disabled?: boolean;
     additionalStyle?: CSSProperties;
-    children?: any;
-    showTooltip?: boolean;
     glow?: boolean;
-    discount?: number;
+    flexDirection?: string;
+    onClick?: () => void;
 };
 
 const PositionSymbol: React.FC<SymbolProps> = ({
-    glow,
-    type,
+    symbolText,
+    tooltip,
     symbolColor,
-    additionalText,
-    showTooltip,
+    symbolAdditionalText,
+    symbolUpperText,
+    selected,
+    disabled,
     additionalStyle,
-    children,
-    discount,
+    glow,
+    flexDirection,
+    onClick,
 }) => {
-    const { t } = useTranslation();
+    const notClickable = !onClick;
+
+    const getSymbol = () => (
+        <Symbol
+            glow={glow}
+            color={symbolColor}
+            style={additionalStyle}
+            selected={selected}
+            notClickable={notClickable}
+            flexDirection={flexDirection}
+            disabled={disabled}
+            onClick={() => {
+                onClick && onClick();
+            }}
+        >
+            {symbolText}
+            {symbolUpperText && <UpperText style={symbolUpperText.textStyle}>{symbolUpperText.text}</UpperText>}
+        </Symbol>
+    );
+
     return (
-        <Wrapper>
-            <Container glow={glow} color={symbolColor} style={additionalStyle}>
-                <Symbol color={symbolColor}>
-                    {type == 0 && '1'}
-                    {type == 1 && '2'}
-                    {type == 2 && 'X'}
-                    {type == 3 && t('common.yes')}
-                    {type == 4 && t('common.no')}
-                    {type == undefined && children}
-                </Symbol>
-            </Container>
-            {additionalText?.firstText && (
-                <AdditionalTextWrapper>
-                    <AdditionalText style={additionalText?.firstTextStyle}>
-                        {additionalText?.firstText}
-                        {showTooltip && (
-                            <Tooltip
-                                overlay={<>{t('markets.zero-odds-tooltip')}</>}
-                                iconFontSize={10}
-                                customIconStyling={{ marginTop: '-10px', display: 'flex', marginLeft: '3px' }}
-                            />
-                        )}
-                    </AdditionalText>
-                    {discount && (
-                        <Discount>
-                            <Tooltip
-                                overlay={
-                                    <span>
-                                        {t(`markets.discounted-per`)}{' '}
-                                        <a
-                                            href="https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-95.md"
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            TIP-95
-                                        </a>
-                                    </span>
-                                }
-                                component={
-                                    <div className="discount-label green">
-                                        <span>-{Math.ceil(Math.abs(discount))}%</span>
-                                    </div>
-                                }
-                                iconFontSize={23}
-                                marginLeft={2}
-                                top={0}
-                            />
-                        </Discount>
+        <Wrapper flexDirection={flexDirection}>
+            {tooltip ? <Tooltip overlay={tooltip} component={getSymbol()} /> : getSymbol()}
+            {symbolAdditionalText && (
+                <BottomText style={symbolAdditionalText.textStyle} flexDirection={flexDirection} color={symbolColor}>
+                    {symbolAdditionalText.text}
+                    {symbolAdditionalText.tooltip && (
+                        <Tooltip overlay={<>{symbolAdditionalText.tooltip}</>} iconFontSize={11} marginLeft={3} />
                     )}
-                </AdditionalTextWrapper>
+                </BottomText>
             )}
-            <AdditionalText style={additionalText?.secondTextStyle}>{additionalText?.secondText}</AdditionalText>
         </Wrapper>
     );
 };
 
-const Wrapper = styled.div`
-    display: flex;
+const Wrapper = styled(FlexDivColumn)<{ flexDirection?: string }>`
     align-items: center;
-    justify-content: center;
-    flex-direction: row;
+    flex-direction: ${(props) => (props.flexDirection ? props.flexDirection : 'row')};
+    font-size: 12px;
 `;
 
-const Container = styled.div<{ glow?: boolean; color?: string }>`
-    width: 40px;
-    height: 40px;
+const Symbol = styled(FlexDivCentered)<{
+    glow?: boolean;
+    color?: string;
+    selected?: boolean;
+    disabled?: boolean;
+    notClickable?: boolean;
+    flexDirection?: string;
+}>`
+    position: relative;
+    width: 30px;
+    height: 30px;
     border-radius: 60%;
-    border: 3px solid #5f6180;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    border: ${(_props) => (_props?.glow ? '3px solid ' + _props.color : '3px solid #5f6180')};
-    box-shadow: ${(_props) => (_props?.glow ? '0 0 6px 2px ' + _props.color : '')};
+    color: ${(props) => (props.selected ? MAIN_COLORS.TEXT.BLUE : props.color || MAIN_COLORS.TEXT.WHITE)};
+    cursor: ${(props) => (props.disabled || props.notClickable ? 'default' : 'pointer')};
+    opacity: ${(props) => (props.disabled ? 0.4 : 1)};
+    border: ${(props) =>
+        `3px solid ${
+            props.glow
+                ? props.color || MAIN_COLORS.BORDERS.WHITE
+                : props.selected
+                ? MAIN_COLORS.BORDERS.BLUE
+                : MAIN_COLORS.BORDERS.GRAY
+        }`};
+    box-shadow: ${(props) => (props.glow ? `0 0 6px 2px ${props.color || MAIN_COLORS.BORDERS.WHITE}` : '')};
+    margin: ${(props) => (props.flexDirection === 'column' ? '0 9px' : '0 0')};
+    @media (hover: hover) {
+        :hover {
+            border-color: ${(props) => (props.disabled || props.notClickable ? '' : MAIN_COLORS.BORDERS.BLUE)};
+            color: ${(props) => (props.disabled || props.notClickable ? '' : MAIN_COLORS.BORDERS.BLUE)};
+        }
+    }
+    @media (max-width: 575px) {
+        margin: ${(props) => (props.flexDirection === 'column' ? '0 8px' : '0 0')};
+    }
 `;
 
-const AdditionalText = styled.span`
-    line-height: 120%;
-    font-size: 13px;
-    margin-right: 10px;
-    display: flex;
-    flex-direction: row;
+const BottomText = styled.span<{
+    flexDirection?: string;
+    color?: string;
+}>`
+    margin-top: ${(props) => (props.flexDirection === 'column' ? 2 : 0)}px;
+    margin-right: ${(props) => (props.flexDirection === 'column' ? 0 : 10)}px;
+    color: ${(props) => props.color || MAIN_COLORS.TEXT.WHITE};
 `;
 
-const Symbol = styled.span<{ color?: string }>`
-    color: ${(_props) => (_props?.color ? _props.color : '')};
-`;
-
-const Discount = styled(FlexDivCentered)<{ color?: string }>`
-    color: ${(_props) => (_props?.color ? _props.color : '')};
-    font-size: 14px;
-    margin-left: 11px;
-`;
-
-const AdditionalTextWrapper = styled(FlexDivColumnCentered)`
-    text-align: center;
+const UpperText = styled(FlexDivCentered)`
+    position: absolute;
+    top: -7px;
+    left: 15px;
+    color: ${MAIN_COLORS.TEXT.WHITE};
+    border-radius: 60%;
+    font-weight: 700;
+    background: ${MAIN_COLORS.LIGHT_GRAY};
+    padding: 2px;
+    font-size: 11px;
+    @media (max-width: 575px) {
+        font-size: 10px;
+    }
 `;
 
 export default PositionSymbol;

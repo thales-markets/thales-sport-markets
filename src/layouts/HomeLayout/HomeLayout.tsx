@@ -1,7 +1,7 @@
 import Loader from 'components/Loader';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import soccer_pitch from 'assets/images/home-background-1.png';
 import tennis from 'assets/images/home-background-2.png';
@@ -59,7 +59,7 @@ const cacheImages = async (srcArray: string[], setIsLoading: (isLoading: boolean
 };
 
 const HomeLayout: React.FC = () => {
-    const isMobile = window.innerWidth < 768;
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const [isLoading, setIsLoading] = useState(true);
 

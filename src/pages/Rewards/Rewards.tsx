@@ -9,7 +9,6 @@ import { buildHref } from 'utils/routes';
 import Table from 'components/Table';
 import { CellProps } from 'react-table';
 import { truncateAddress } from 'utils/formatters/string';
-import { MarketContainer } from 'pages/Markets/Market/MarketDetails/styled-components/MarketDetails';
 import {
     AddressLink,
     BoldText,
@@ -22,14 +21,19 @@ import {
     TableContainer,
     Title,
     TotalPnl,
+    TipLink,
+    ColumnValue,
+    MarketContainer,
 } from './styled-components';
 import useRewardsDataQuery from 'queries/rewards/useRewardsDataQuery';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getIsAppReady } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import Search from 'components/Search';
 import { getEtherscanAddressLink } from 'utils/etherscan';
+import { formatCurrency, formatCurrencyWithSign } from 'utils/formatters/number';
+import { USD_SIGN } from 'constants/currency';
 
 type RewardsType = {
     address: string;
@@ -42,11 +46,16 @@ type RewardsType = {
     };
 };
 
+const TIP_96 =
+    'https://thalesmarket.io/governance/thalesgov.eth/0xb8390244729d261029d9c5510dbd290c745a84693820e2ed229a6dc30ef6f4b8';
+
 const Rewards: React.FC = () => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isMobile = useSelector(getIsMobile);
+
     const [searchText, setSearchText] = useState<string>('');
     const PERIOD_DURATION_IN_DAYS = 14;
     const START_DATE = new Date(Date.UTC(2022, 8, 26, 0, 0, 0));
@@ -62,7 +71,7 @@ const Rewards: React.FC = () => {
             CALCULATED_START = new Date(CALCULATED_START.getTime() + PERIOD_DURATION_IN_DAYS * 24 * 60 * 60 * 1000);
             options.push({
                 value: PERIOD_COUNTER,
-                label: t(`rewards.periods.period-${PERIOD_COUNTER}`),
+                label: `${t(`markets.market-card.period`)} ${PERIOD_COUNTER + 1}`,
             });
             PERIOD_COUNTER++;
         } else {
@@ -106,22 +115,38 @@ const Rewards: React.FC = () => {
                         <Title>{t('rewards.header')}</Title>
                         <Description>
                             <Trans
-                                i18nKey={t('rewards.description')}
-                                components={[
-                                    <div key="0">
-                                        <BoldText />
-                                    </div>,
-                                    <p key="1">
-                                        <BoldText />
-                                    </p>,
-                                ]}
+                                i18nKey="rewards.description"
+                                components={{
+                                    div: <div />,
+                                    bold: <BoldText />,
+                                    tipLink: <TipLink href={TIP_96} rel="noreferrer" target="_blank" />,
+                                    parlayLink: (
+                                        <TipLink
+                                            href={buildHref(ROUTES.Leaderboard)}
+                                            rel="noreferrer"
+                                            target="_blank"
+                                        />
+                                    ),
+                                }}
+                            />
+                            <Trans
+                                i18nKey="rewards.parlay-link"
+                                components={{
+                                    div: <div />,
+                                    parlayLink: (
+                                        <TipLink
+                                            href={buildHref(ROUTES.Leaderboard)}
+                                            rel="noreferrer"
+                                            target="_blank"
+                                        />
+                                    ),
+                                }}
                             />
                         </Description>
                         <Search
                             text={searchText}
                             customPlaceholder={t('rewards.search-placeholder')}
                             handleChange={(e) => setSearchText(e)}
-                            customStyle={{ border: '1px solid #1A1C2B' }}
                             width={300}
                         />
                         <Row>
@@ -133,24 +158,32 @@ const Rewards: React.FC = () => {
                                     width={300}
                                 />
                             </SelectContainer>
-                            <TotalPnl>{`${t('rewards.twap')} is ${Math.abs(
-                                Number(rewardsDataQuery?.data?.twapForPeriod)
-                            ).toFixed(2)} $`}</TotalPnl>
-                            <TotalPnl>{`${t('rewards.total-global-rebates')} is ${Math.abs(
-                                Number(rewardsDataQuery?.data?.rebatesToPay)
-                            ).toFixed(2)} $`}</TotalPnl>
+                            <TotalPnl>{`${t('rewards.twap')} is ${formatCurrencyWithSign(
+                                USD_SIGN,
+                                Math.abs(Number(rewardsDataQuery?.data?.twapForPeriod)),
+                                2
+                            )}`}</TotalPnl>
+                            <TotalPnl>{`${t('rewards.total-global-rebates')} is ${formatCurrencyWithSign(
+                                USD_SIGN,
+                                Math.abs(Number(rewardsDataQuery?.data?.rebatesToPay)),
+                                2
+                            )}`}</TotalPnl>
                         </Row>
                         {userRewardData && (
                             <HighlightRow>
                                 <HighlightColumn>{t('rewards.your-score')}</HighlightColumn>
-                                <HighlightColumn>{`${Number(userRewardData?.volume).toFixed(2)} $`}</HighlightColumn>
-                                <HighlightColumn>{`${Number(userRewardData?.rebates).toFixed(2)} $`}</HighlightColumn>
+                                <HighlightColumn>
+                                    {formatCurrencyWithSign(USD_SIGN, userRewardData?.volume, 2)}
+                                </HighlightColumn>
+                                <HighlightColumn>
+                                    {formatCurrencyWithSign(USD_SIGN, userRewardData?.rebates, 2)}
+                                </HighlightColumn>
                                 <HighlightColumn>{`${Number(userRewardData?.percentage).toFixed(
                                     2
                                 )} %`}</HighlightColumn>
-                                <HighlightColumn>{`${Number(userRewardData?.rewards?.op).toFixed(2)} OP + ${Number(
+                                <HighlightColumn>{`${formatCurrency(userRewardData?.rewards?.op)} OP + ${formatCurrency(
                                     userRewardData?.rewards?.thales
-                                ).toFixed(2)} THALES`}</HighlightColumn>
+                                )} THALES`}</HighlightColumn>
                             </HighlightRow>
                         )}
                         <Table
@@ -164,7 +197,7 @@ const Rewards: React.FC = () => {
                                             target="_blank"
                                             rel="noreferrer"
                                         >
-                                            {truncateAddress(cellProps.cell.value, 5)}
+                                            {truncateAddress(cellProps.cell.value, isMobile ? 3 : 5)}
                                         </AddressLink>
                                     ),
                                     sortable: false,
@@ -173,39 +206,69 @@ const Rewards: React.FC = () => {
                                     Header: <>{t('rewards.table.volume')}</>,
                                     accessor: 'volume',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['volume']>) => (
-                                        <p>{`${Number(cellProps.cell.value).toFixed(2)} $`}</p>
+                                        <ColumnValue>
+                                            {isMobile
+                                                ? formatCurrencyWithSign(USD_SIGN, Number(cellProps.cell.value), 0)
+                                                : formatCurrencyWithSign(USD_SIGN, Number(cellProps.cell.value))}
+                                        </ColumnValue>
                                     ),
                                     sortType: volumeSort(),
                                     sortable: true,
+                                    headStyle: {
+                                        mediaMaxWidth: '600px',
+                                        cssProperties: { textAlign: 'right' },
+                                    },
+                                    headTitleStyle: { mediaMaxWidth: '600px', cssProperties: { width: '100%' } },
                                 },
                                 {
                                     Header: <>{t('rewards.table.rebates')}</>,
                                     accessor: 'rebates',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['rebates']>) => (
-                                        <p>{`${Number(cellProps.cell.value).toFixed(2)} $`}</p>
+                                        <ColumnValue>
+                                            {formatCurrencyWithSign(USD_SIGN, Number(cellProps.cell.value))}
+                                        </ColumnValue>
                                     ),
                                     sortType: volumeSort(),
                                     sortable: true,
+                                    headStyle: {
+                                        mediaMaxWidth: '600px',
+                                        cssProperties: { textAlign: 'right' },
+                                    },
+                                    headTitleStyle: { mediaMaxWidth: '600px', cssProperties: { width: '100%' } },
                                 },
                                 {
-                                    Header: <>{t('rewards.table.percentage')}</>,
+                                    Header: (
+                                        <>{isMobile ? t('rewards.table.percent') : t('rewards.table.percentage')}</>
+                                    ),
                                     accessor: 'percentage',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['percentage']>) => (
-                                        <p>{`${Number(cellProps.cell.value).toFixed(2)} %`}</p>
+                                        <ColumnValue padding={'0 5px 0 0'}>
+                                            {`${Number(cellProps.cell.value).toFixed(2)} %`}
+                                        </ColumnValue>
                                     ),
                                     sortType: percentageSort(),
                                     sortable: true,
+                                    headStyle: {
+                                        mediaMaxWidth: '600px',
+                                        cssProperties: { textAlign: 'right' },
+                                    },
+                                    headTitleStyle: { mediaMaxWidth: '600px', cssProperties: { width: '100%' } },
                                 },
                                 {
                                     Header: <>{t('rewards.table.reward-amount')}</>,
                                     accessor: 'rewards',
                                     Cell: (cellProps: CellProps<RewardsType, RewardsType['rewards']>) => (
-                                        <p>{`${Number(cellProps.cell.value?.op).toFixed(2)} OP + ${Number(
-                                            cellProps.cell.value?.thales
-                                        ).toFixed(2)} THALES`}</p>
+                                        <ColumnValue padding={'5px 0'}>{`${formatCurrency(
+                                            cellProps.cell.value?.op
+                                        )} OP + ${formatCurrency(cellProps.cell.value?.thales)} THALES`}</ColumnValue>
                                     ),
                                     sortType: rewardsSort(),
                                     sortable: true,
+                                    headStyle: {
+                                        mediaMaxWidth: '600px',
+                                        cssProperties: { textAlign: 'right' },
+                                    },
+                                    headTitleStyle: { mediaMaxWidth: '600px', cssProperties: { width: '100%' } },
                                 },
                             ]}
                             initialState={{

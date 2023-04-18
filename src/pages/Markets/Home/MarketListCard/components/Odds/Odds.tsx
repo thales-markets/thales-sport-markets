@@ -1,116 +1,103 @@
-import PositionSymbol from 'components/PositionSymbol';
-import { ODDS_COLOR, STATUS_COLOR } from 'constants/ui';
+import { Position } from 'constants/options';
+import { BetType, BetTypeNameMap, DoubleChanceMarketType } from 'constants/tags';
+import { STATUS_COLOR } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { convertFinalResultToResultType, formatMarketOdds, isDiscounted } from 'utils/markets';
+import { DoubleChanceMarketsInfo, SportMarketInfo } from 'types/markets';
+import { getSpreadTotalText, getVisibilityOfDrawOption } from 'utils/markets';
 import { Status } from '../MatchStatus/MatchStatus';
-import { Container, OddsContainer, WinnerLabel } from './styled-components';
-import { AccountPosition, PositionType } from '../../../../../../types/markets';
-import { useSelector } from 'react-redux';
-import { getOddsType } from '../../../../../../redux/modules/ui';
+import Odd from '../Odd/Odd';
+import { Container, OddsContainer, Title } from './styled-components';
 
 type OddsProps = {
-    isResolved?: boolean;
-    finalResult?: number;
-    isLive?: boolean;
-    isCancelled?: boolean;
-    odds?: {
-        homeOdds: number;
-        awayOdds: number;
-        drawOdds?: number;
-    };
-    accountPositions?: AccountPosition[];
-    isPaused: boolean;
-    isApexTopGame: boolean;
-    awayPriceImpact: number;
-    homePriceImpact: number;
-    drawPriceImpact: number | undefined;
+    market: SportMarketInfo;
+    doubleChanceMarkets?: SportMarketInfo[];
+    isShownInSecondRow?: boolean;
 };
 
-const Odds: React.FC<OddsProps> = ({
-    isResolved,
-    finalResult,
-    isLive,
-    isCancelled,
-    odds,
-    accountPositions,
-    isPaused,
-    isApexTopGame,
-    awayPriceImpact,
-    homePriceImpact,
-    drawPriceImpact,
-}) => {
+const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecondRow }) => {
     const { t } = useTranslation();
 
-    const pendingResolution =
-        odds?.awayOdds == 0 && odds?.homeOdds == 0 && odds?.awayOdds == 0 && isLive && !isResolved;
-    const noOddsFlag =
-        odds?.awayOdds == 0 &&
-        odds?.homeOdds == 0 &&
-        odds?.awayOdds == 0 &&
-        !isLive &&
-        !isResolved &&
-        !isCancelled &&
-        !isPaused;
-    const resolvedGameFlag = isResolved && finalResult;
-    const showOdds = !pendingResolution && !noOddsFlag && !resolvedGameFlag && !isCancelled && !isPaused;
-    const selectedOddsType = useSelector(getOddsType);
+    const isLive = market.maturityDate < new Date();
+    const isGameResolved = market.isResolved || market.isCanceled;
+    const noOdds = market.awayOdds == 0 && market.homeOdds == 0 && !isLive && !isGameResolved && !market.isPaused;
+    const showDrawOdds = getVisibilityOfDrawOption(market.tags, market.betType);
+    const spreadTotalText = getSpreadTotalText(market, Position.HOME);
+
+    const mappedDoubleChanceMarkets = doubleChanceMarkets
+        ? (Object.assign(
+              {},
+              ...doubleChanceMarkets.map((item) => ({
+                  [item.doubleChanceMarketType as DoubleChanceMarketType]: item,
+              }))
+          ) as DoubleChanceMarketsInfo)
+        : undefined;
 
     return (
         <Container>
-            {noOddsFlag && <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>}
-            {resolvedGameFlag && (
-                <>
-                    <PositionSymbol type={convertFinalResultToResultType(finalResult, isApexTopGame)} />
-                    <WinnerLabel>{t('common.winner')}</WinnerLabel>
-                </>
-            )}
-            {showOdds && (
+            <Title>
+                {t(`markets.market-card.bet-type.${BetTypeNameMap[market.betType as BetType]}`)}
+                {spreadTotalText && ` ${spreadTotalText}`}
+            </Title>
+            {noOdds ? (
+                <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>
+            ) : (
                 <OddsContainer>
-                    <PositionSymbol
-                        type={isApexTopGame ? 3 : 0}
-                        symbolColor={ODDS_COLOR.HOME}
-                        additionalText={{
-                            firstText: formatMarketOdds(selectedOddsType, odds?.homeOdds),
-                            firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.HOME, marginLeft: '10px' },
-                        }}
-                        showTooltip={odds?.homeOdds == 0}
-                        glow={
-                            accountPositions &&
-                            !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.home)
-                        }
-                        discount={isDiscounted(homePriceImpact) ? homePriceImpact : undefined}
-                    />
-                    {typeof odds?.drawOdds !== 'undefined' && (
-                        <PositionSymbol
-                            type={2}
-                            symbolColor={ODDS_COLOR.DRAW}
-                            additionalText={{
-                                firstText: formatMarketOdds(selectedOddsType, odds?.drawOdds),
-                                firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.DRAW, marginLeft: '10px' },
-                            }}
-                            glow={
-                                accountPositions &&
-                                !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.draw)
-                            }
-                            discount={isDiscounted(drawPriceImpact) ? drawPriceImpact : undefined}
-                            showTooltip={odds?.drawOdds == 0}
-                        />
+                    {mappedDoubleChanceMarkets ? (
+                        <>
+                            <Odd
+                                market={mappedDoubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE]}
+                                position={Position.HOME}
+                                odd={mappedDoubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE].homeOdds}
+                                bonus={
+                                    mappedDoubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE].homeBonus
+                                }
+                                isShownInSecondRow={isShownInSecondRow}
+                            />
+                            <Odd
+                                market={mappedDoubleChanceMarkets[DoubleChanceMarketType.NO_DRAW]}
+                                position={Position.HOME}
+                                odd={mappedDoubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeOdds}
+                                bonus={mappedDoubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeBonus}
+                                isShownInSecondRow={isShownInSecondRow}
+                            />
+                            <Odd
+                                market={mappedDoubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE]}
+                                position={Position.HOME}
+                                odd={mappedDoubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE].homeOdds}
+                                bonus={
+                                    mappedDoubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE].homeBonus
+                                }
+                                isShownInSecondRow={isShownInSecondRow}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <Odd
+                                market={market}
+                                position={Position.HOME}
+                                odd={market.homeOdds}
+                                bonus={market.homeBonus}
+                                isShownInSecondRow={isShownInSecondRow}
+                            />
+                            {showDrawOdds && (
+                                <Odd
+                                    market={market}
+                                    position={Position.DRAW}
+                                    odd={market.drawOdds}
+                                    bonus={market.drawBonus}
+                                    isShownInSecondRow={isShownInSecondRow}
+                                />
+                            )}
+                            <Odd
+                                market={market}
+                                position={Position.AWAY}
+                                odd={market.awayOdds}
+                                bonus={market.awayBonus}
+                                isShownInSecondRow={isShownInSecondRow}
+                            />
+                        </>
                     )}
-                    <PositionSymbol
-                        type={isApexTopGame ? 4 : 1}
-                        symbolColor={ODDS_COLOR.AWAY}
-                        additionalText={{
-                            firstText: formatMarketOdds(selectedOddsType, odds?.awayOdds),
-                            firstTextStyle: { fontSize: '19px', color: ODDS_COLOR.AWAY, marginLeft: '10px' },
-                        }}
-                        showTooltip={odds?.awayOdds == 0}
-                        glow={
-                            accountPositions &&
-                            !!accountPositions.find((pos) => pos.amount && pos.side === PositionType.away)
-                        }
-                        discount={isDiscounted(awayPriceImpact) ? awayPriceImpact : undefined}
-                    />
                 </OddsContainer>
             )}
         </Container>

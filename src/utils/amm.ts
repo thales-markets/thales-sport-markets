@@ -4,9 +4,9 @@ import { Position } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
 import { NetworkId } from 'types/network';
 import { getCollateralAddress } from './collaterals';
+import { isMultiCollateralSupportedForNetwork, NetworkIdByName } from './network';
 
 export const getAMMSportsTransaction: any = (
-    isBuy: boolean,
     isVoucherSelected: boolean,
     voucherId: number,
     stableIndex: number,
@@ -23,67 +23,47 @@ export const getAMMSportsTransaction: any = (
         gasLimit: number | null;
     }
 ): Promise<ethers.ContractTransaction> => {
-    const collateralAddress = getCollateralAddress(
-        isBuy,
-        stableIndex ? stableIndex !== 0 : false,
-        networkId,
-        stableIndex
-    );
+    const collateralAddress = getCollateralAddress(stableIndex ? stableIndex !== 0 : false, networkId, stableIndex);
+    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
-    if (isBuy) {
-        if (isVoucherSelected) {
-            return overtimeVoucherContract?.buyFromAMMWithVoucher(
-                marketAddress,
-                selectedPosition,
-                parsedAmount,
-                voucherId
-            );
-        }
+    if (isVoucherSelected) {
+        return overtimeVoucherContract?.buyFromAMMWithVoucher(marketAddress, selectedPosition, parsedAmount, voucherId);
+    }
 
-        if (stableIndex !== 0 && collateralAddress) {
-            return sportsAMMContract?.buyFromAMMWithDifferentCollateralAndReferrer(
-                marketAddress,
-                selectedPosition,
-                parsedAmount,
-                ammQuote,
-                additionalSlippage,
-                collateralAddress,
-                referral || ZERO_ADDRESS,
-                providerOptions
-            );
-        }
-
-        return referral
-            ? sportsAMMContract?.buyFromAMMWithReferrer(
-                  marketAddress,
-                  selectedPosition,
-                  parsedAmount,
-                  ammQuote,
-                  additionalSlippage,
-                  referral,
-                  providerOptions
-              )
-            : sportsAMMContract?.buyFromAMM(
-                  marketAddress,
-                  selectedPosition,
-                  parsedAmount,
-                  ammQuote,
-                  additionalSlippage,
-                  providerOptions
-              );
-    } else {
-        return sportsAMMContract?.sellToAMM(
+    if (isMultiCollateralSupported && stableIndex !== 0 && collateralAddress) {
+        return sportsAMMContract?.buyFromAMMWithDifferentCollateralAndReferrer(
             marketAddress,
             selectedPosition,
             parsedAmount,
             ammQuote,
-            additionalSlippage
+            additionalSlippage,
+            collateralAddress,
+            referral || ZERO_ADDRESS,
+            providerOptions
         );
     }
+
+    return referral
+        ? sportsAMMContract?.buyFromAMMWithReferrer(
+              marketAddress,
+              selectedPosition,
+              parsedAmount,
+              ammQuote,
+              additionalSlippage,
+              referral,
+              providerOptions
+          )
+        : sportsAMMContract?.buyFromAMM(
+              marketAddress,
+              selectedPosition,
+              parsedAmount,
+              ammQuote,
+              additionalSlippage,
+              providerOptions
+          );
 };
 
 export const getSportsAMMQuoteMethod: any = (
-    isBuy: boolean,
     stableIndex: number,
     networkId: NetworkId,
     sportsAMMContract: ethers.Contract,
@@ -91,35 +71,31 @@ export const getSportsAMMQuoteMethod: any = (
     selectedPosition: Position,
     parsedAmount: BigNumber
 ) => {
-    const collateralAddress = getCollateralAddress(
-        isBuy,
-        stableIndex ? stableIndex !== 0 : false,
-        networkId,
-        stableIndex
-    );
+    const collateralAddress = getCollateralAddress(stableIndex ? stableIndex !== 0 : false, networkId, stableIndex);
+    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
-    if (isBuy) {
-        if (stableIndex !== 0 && collateralAddress) {
-            return sportsAMMContract.buyFromAmmQuoteWithDifferentCollateral(
-                marketAddress,
-                selectedPosition,
-                parsedAmount,
-                collateralAddress
-            );
-        } else {
-            return sportsAMMContract.buyFromAmmQuote(marketAddress, selectedPosition, parsedAmount);
-        }
+    if (isMultiCollateralSupported && stableIndex !== 0 && collateralAddress) {
+        return sportsAMMContract.buyFromAmmQuoteWithDifferentCollateral(
+            marketAddress,
+            selectedPosition,
+            parsedAmount,
+            collateralAddress
+        );
     } else {
-        return sportsAMMContract.sellToAmmQuote(marketAddress, selectedPosition, parsedAmount);
+        return sportsAMMContract.buyFromAmmQuote(marketAddress, selectedPosition, parsedAmount);
     }
 };
 
-export const getAmountForApproval = (stableIndex: number, amountToApprove: string) => {
-    const stable = (COLLATERAL_INDEX_TO_COLLATERAL as any)[stableIndex];
-
+export const getAmountForApproval = (stableIndex: number, amountToApprove: string, networkId: NetworkId) => {
     let collateralDecimals = 18;
+    if (networkId === NetworkIdByName.ArbitrumOne) {
+        collateralDecimals = 6;
+    } else {
+        const stable = (COLLATERAL_INDEX_TO_COLLATERAL as any)[stableIndex];
 
-    if ((STABLE_DECIMALS as any)[stable]) collateralDecimals = (STABLE_DECIMALS as any)[stable];
-
+        if ((STABLE_DECIMALS as any)[stable]) {
+            collateralDecimals = (STABLE_DECIMALS as any)[stable];
+        }
+    }
     return ethers.utils.parseUnits(amountToApprove, collateralDecimals);
 };

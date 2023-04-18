@@ -1,15 +1,18 @@
 import Button from 'components/Button';
-import { OPTIMISM_NETWORKS } from 'constants/network';
+import { DEFAULT_NETWORK_ID } from 'constants/defaults';
+import { SUPPORTED_NETWORKS_DESCRIPTIONS } from 'constants/network';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
+import { useSwitchNetwork } from 'wagmi';
 
 const UnsupportedNetwork: React.FC = () => {
     const { t } = useTranslation();
+    const { switchNetwork } = useSwitchNetwork();
 
     const switchOrAddOptimismNetwork = async () => {
-        const optimismNetworkParms = OPTIMISM_NETWORKS[10];
+        const optimismNetworkParms = SUPPORTED_NETWORKS_DESCRIPTIONS[DEFAULT_NETWORK_ID];
 
         if (typeof window.ethereum !== 'undefined') {
             try {
@@ -37,6 +40,8 @@ const UnsupportedNetwork: React.FC = () => {
                     console.log(switchError);
                 }
             }
+        } else {
+            switchNetwork?.(DEFAULT_NETWORK_ID);
         }
     };
 

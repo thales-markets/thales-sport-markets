@@ -13,7 +13,7 @@ const getQuery = () => {
     return new URLSearchParams();
 };
 
-const getQueryStringVal = (key: string): string | null => {
+export const getQueryStringVal = (key: string): string | null => {
     return getQuery().get(key);
 };
 

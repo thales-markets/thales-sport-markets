@@ -20,10 +20,8 @@
             "get-usd": "Obtener {{amount}}",
             "approve": "Aprobar",
             "get-usd-progress": "Obteniendo {{amount}}...",
-            "disclaimer": "Al conectar tu billetera reconoce el haber leido y entendido el <a target=\"_blank\" href={{link}}>disclaimer</a> de Overtime Markets, aceptando sus condiciones de uso.",
-            "disclaimer1": "Al conectar una billetera, reconoce que ha leído y comprende los Mercados de tiempo extra",
-            "disclaimer2": "y aceptar sus condiciones de uso.",
-            "disclaimer-lowercase": "Descargo de responsabilidad"
+            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
+            "wallet-info": "Información de la billetera"
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -50,10 +48,19 @@
                 "label": "Refiere y gana",
                 "disbled-tooltip": "Conecta tu billetera para generar un enlace de referido.",
                 "enabled-tooltip": "Invita personas a probar Overtime para obtener una comisión por cada transacción que realicen."
-            }
+            },
+            "modal": {
+                "submit-button": "Entregar",
+                "copy-button": "Copiar enlace de referencia",
+                "description": "Elija su ID de referencia",
+                "title": "Identificación de referencia"
+            },
+            "id-create-success": "Establecer ID de referencia con éxito",
+            "id-exists": "El ID de referencia ya existe",
+            "your-referral-id": "Su identificación de referencia"
         },
         "swap": {
-            "title": "Obtener {{currencyKey}}",
+            "title": "Obtener USD",
             "from-label": "Envio",
             "to-label": "Recibo",
             "balance-label": "Balance: {{amount}}",
@@ -82,7 +89,8 @@
             "insufficient-balance-wallet": "Por favor asegurese que su billetera tenga suficiente {{currencyKey}}",
             "user-rejected-tx": "Transacción rechazada por el usuario",
             "enter-address": "Enter address",
-            "invalid-address": "Invalid address"
+            "invalid-address": "Invalid address",
+            "batch-transaction-single-failure": "Una transacción fue rechazada o fallida."
         },
         "time-remaining": {
             "ended": "finalizado",
@@ -117,13 +125,18 @@
         "guidelines": "guias",
         "built-on": "Desarrollado sobre",
         "odds": {
-            "american-odds": "Odds americanas",
+            "american-odds": "Odds USA",
             "decimal-odds": "Probabilidades decimales",
             "normalized-implied-odds": "Odds implícitas normalizadas"
         },
         "pagination": {
             "page": "Página",
             "rows-per-page": "Filas por página:"
+        },
+        "filter": {
+            "date": {
+                "choose": "Choose date"
+            }
         },
         "coming-soon": "Pronto!",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
@@ -133,7 +146,9 @@
         "top5": "TOP 5",
         "top10": "TOP 10",
         "yes": "YES",
-        "no": "NO"
+        "no": "NO",
+        "fifa-tooltip": "Los resultados de los mercados de la Copa Mundial de la FIFA se basan en los resultados reglamentarios; en caso de que vayan a la prórroga, el resultado reglamentario es el que resolverá el mercado.",
+        "tennis-tooltip": "En caso de un walkover, el partido se considerará cancelado. En caso de retiro/descalificación durante el partido, se tratará como una victoria para el jugador que avanza a la siguiente ronda."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS.",
@@ -142,7 +157,10 @@
         "docs": "Documentos",
         "medium": "Medium",
         "twitter": "Twitter",
-        "discord": "Discord"
+        "discord": "Discord",
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own.",
+        "instagram": "Instagram",
+        "reddit": "Reddit"
     },
     "market": {
         "question-label": "Pregunta",
@@ -157,7 +175,7 @@
         "grid-view": "Rejilla",
         "list-view": "Lista",
         "skew-tooltip": "El impacto del skew es la cantidad de premium añadido a una posición basado en el riesgo actual que afecta al AMM en este mercado en específico.",
-        "toast-messsage": {
+        "toast-message": {
             "transaction-pending": "Transacción pendiente",
             "swap-success": "Intercambiado {{ currencyKey }} exitosamente",
             "approve-success": "Aprobado exitosamente",
@@ -166,19 +184,29 @@
             "claim-winnings-success": "Ganancias reclamadas exitosamente",
             "claim-refund-success": "Devolución reclamada exitosamente",
             "withdraw-success": "Retiro exitoso",
-            "get-usd-success": "{{amount}} obtenido exitosamente"
+            "get-usd-success": "{{amount}} obtenido exitosamente",
+            "ios-not-supported": "Compartir imágenes no es compatible con dispositivos iOS. Si desea compartir la imagen, utilice la versión de escritorio",
+            "save-image-cancel": "¡Guardado de imagen cancelado!",
+            "save-image": "Guardar imagen en el portapapeles. Espere por favor...",
+            "open-twitter": "Abriendo Twitter...",
+            "download-image": "Descargando imagen. Espere por favor...",
+            "image-in-clipboard": "¡La imagen está en el portapapeles!",
+            "click-open-twitter": "Haga clic aquí para abrir Twitter",
+            "metamask-not-supported": "¡El navegador Metamask no admite la descarga de imágenes! Utilice otro navegador para compartir la imagen.",
+            "save-image-error": "¡Error al guardar la imagen! Intentar otra vez"
         },
         "filter-label": {
             "global": {
-                "allmarkets": "Todos los mercados",
-                "openmarkets": "Mercados abiertos",
-                "resolvedmarkets": "Mercados resueltos",
                 "yourpositions": "Tus posiciones",
                 "claim": "Reclamable",
                 "history": "Tus transacciones",
-                "canceled": "Cancelados",
                 "archivedmarkets": "Mercados archivados",
-                "tooltip": "Mercados resueltos hace más de 7 días"
+                "tooltip": "Mercados resueltos hace más de 7 días",
+                "openmarkets": "Abierto",
+                "resolvedmarkets": "Acabado",
+                "allmarkets": "Todos",
+                "canceled": "En pausa / Cancelado",
+                "pendingmarkets": "En curso"
             },
             "sport": {
                 "all": "Todos los deportes",
@@ -191,16 +219,23 @@
                 "baseball": "Beisbol",
                 "formula1": "Fórmula 1",
                 "motogp": "MotoGP",
-                "soon": "Más deportes pronto!"
+                "soon": "Más deportes pronto!",
+                "motosport": "Motosport",
+                "favourites": "Favoritos",
+                "esports": "deportes electrónicos",
+                "cricket": "Grillo"
             },
             "all": "Todo",
             "datepicker": {
                 "games": "{{numberOfGames}} juegos"
+            },
+            "mobile-tags": {
+                "search": "Búsqueda"
             }
         },
         "back-to-markets": "Volver a los mercados",
         "back-to-market": "Volver al mercado",
-        "no-markets-found": "Mercados no encontrados",
+        "no-markets-found": "Mercados no encontrados para",
         "view-all-markets": "Ver todos los mercados",
         "table": {
             "title": "Actividad reciente",
@@ -227,8 +262,16 @@
         "tooltip": {
             "amount-exceeded": "Cantidad excede la disponibilidad del AMM",
             "minimal-amount": "Cantidad minima es 1",
-            "no-funds": "Por favor asegurese que su billetera tenga fondos suficientes"
-        }
+            "no-funds": "Por favor asegurese que su billetera tenga fondos suficientes",
+            "min-amount": "La cantidad mínima es {{min}}",
+            "max-quote": "La cotización máxima es {{value}}",
+            "min-quote": "La cotización mínima es {{value}}"
+        },
+        "match-time": "tiempo de partido",
+        "race-starts": "Comienza la carrera",
+        "back": "atrás",
+        "apply-filters": "Aplicar filtros",
+        "incentivized-market": "MERCADO INCENTIVIZADO"
     },
     "markets": {
         "market-card": {
@@ -243,7 +286,48 @@
             "coming-soon": "Pronto",
             "vs": "VS",
             "draw": "Empate",
-            "paused": "En pausa"
+            "paused": "En pausa",
+            "pending": "Pending",
+            "no-liquidity": "No liquidity",
+            "bet-type": {
+                "winner": "Winner",
+                "spread": "Handicap",
+                "total": "Total",
+                "double-chance": "Double chance"
+            },
+            "odd-tooltip": {
+                "scoring": {
+                    "goals": "goals",
+                    "points": "points"
+                },
+                "match-resolve": {
+                    "regular": "in regular time",
+                    "overtime": "including possible overtime"
+                },
+                "winner": "{{team}} will win the match {{matchResolve}}.",
+                "draw": "The match will end in a draw {{matchResolve}}.",
+                "total": {
+                    "over": "The total number of {{scoring}} in the match {{matchResolve}} will be more than {{total}}.",
+                    "under": "The total number of {{scoring}} in the match {{matchResolve}} will be less than {{total}}."
+                },
+                "spread": {
+                    "minus": "{{team}} will win the match with a difference of more than {{spread}} {{scoring}} {{matchResolve}}.",
+                    "plus": "{{team}} will win the match, or lose by less than {{spread}} {{scoring}} {{matchResolve}}."
+                },
+                "double-chance": {
+                    "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
+                    "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
+                },
+                "bonus": "{{bonus}} added bonus on win!"
+            },
+            "starts-in": "Empieza en",
+            "period": "Período",
+            "round": "Ronda",
+            "half": "Mitad",
+            "quarter": "Cuarta parte",
+            "half-time": "Medio tiempo",
+            "inning": "Inning",
+            "total-markets": "Total markets"
         },
         "market-details": {
             "price": "Precio",
@@ -260,15 +344,109 @@
                 "title": "En la billetera"
             },
             "skew": "Sesgar",
-            "discount": "Descuento"
+            "available": "Disponible",
+            "amount-to-buy": "cantidad a comprar",
+            "discount": "Descuento",
+            "positions": "Posiciones",
+            "odds": "Posibilidades"
         },
         "zero-odds-tooltip": "El AMM de deportes sólo ofrece liquidez si el rango de precios ofrecido es entre 0.05 y 0.95 USD. Esto significa que si las probabilidades de una posición son menores a 5% o mayores a 95%, esa posición no tendrá liquidez.",
-        "discounted-per": "Con descuento según"
+        "parlay": {
+            "pay-with": "Pagar con",
+            "total-quote": "Cotización total",
+            "buy-amount": "cantidad a comprar",
+            "available": "Disponible",
+            "skew": "Sesgar",
+            "potential-profit": "Beneficio potencial",
+            "validation": {
+                "title": "Validación combinada",
+                "max-markets": "Máximo 4 mercados en Parlay",
+                "min-amount": "La cantidad mínima es {{min}}",
+                "no-funds": "Asegúrese de que su billetera tenga fondos suficientes",
+                "amount-exceeded": "La cantidad excedió la cantidad disponible en AMM",
+                "max-quote": "La cotización máxima es {{value}}",
+                "min-quote": "La cotización mínima es {{value}}",
+                "availability": "Baja disponibilidad para la posición de los mercados",
+                "not-supported": "Error de validación no compatible {{error}}",
+                "risk-per-comb": "Riesgo por combinación excedido",
+                "single-min-amount": "La cantidad mínima es {{min}}",
+                "same-team": "Un mismo equipo no puede estar en un Parlay más de una vez",
+                "team-in-parlay": "{{team}} ya está en Parlay. El mismo equipo no se puede agregar a un Parlay más de una vez.",
+                "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
+                "max-payout": "El pago máximo admitido es {{max}}",
+                "max-profit": "La ganancia máxima admitida es {{max}}",
+                "max-teams": "Máximo de {{max}} mercados en Parlay",
+                "no-funds-multi-collateral": "Asegúrese de que su billetera tenga fondos suficientes ({{percentage}}% más del monto de la entrada)"
+            },
+            "fee": "Costo total",
+            "payout": "Total recibido",
+            "empty-title": "Sin posiciones",
+            "empty-description": "Agregue una posición, elija un mercado y haga su selección.",
+            "safebox-fee": "Tarifa de SafeBox",
+            "parlay-fee": "Tarifa combinada",
+            "positions": "Posiciones",
+            "clear": "Limpiar todo",
+            "info": {
+                "min-quote": "La COTIZACIÓN TOTAL mínima admitida es {{value}}",
+                "max-quote": "La COTIZACIÓN TOTAL máxima admitida es {{value}}"
+            },
+            "show-parlay": "Mostrar combinación",
+            "share-ticket": {
+                "options": {
+                    "view-details": "Detallado",
+                    "usd-amount": "monto en USD",
+                    "view-simple": "Simple",
+                    "title": "opciones de pantalla"
+                },
+                "parlay": "incrementar dinero en apuestas",
+                "header": "Web 3 Mercados deportivos en",
+                "referral": "Enlace de referencia",
+                "total-quote": "Cotización total",
+                "winner": "Ganador",
+                "share": "Cuota",
+                "loser": "Perdedor",
+                "potential-payout": "Pago potencial",
+                "positions": "Número de posiciones"
+            },
+            "buy-in": "Aceptacion",
+            "total-bonus": "bono total",
+            "toggle-parlay": {
+                "multi-single": "Soltero",
+                "parlay": "Incrementar dinero en apuestas"
+            }
+        },
+        "discounted-per": "Con descuento según",
+        "nav-menu": {
+            "items": {
+                "profile": "Perfil",
+                "history": "Historia",
+                "leaderboard": "Tabla de clasificación",
+                "markets": "Mercados",
+                "onboarding-wizard": "asistente de incorporación",
+                "become-affiliate": "Conviértete en afiliado",
+                "sports-trivia": "curiosidades deportivas",
+                "fee-rebates": "Reembolsos de tarifas",
+                "fifa-campaign": "Campaña Zebro FIFA",
+                "vaults": "Bóvedas",
+                "liquidity-pool": "Proporcionar Liquidez"
+            },
+            "buttons": {
+                "disconnect": "Desconectar",
+                "switch": "Cambiar"
+            },
+            "labels": {
+                "language": "Idioma",
+                "get-started": "Empezar",
+                "march-madness": "locura de Marzo"
+            }
+        },
+        "incentivized-markets": "MERCADOS INCENTIVIZADOS",
+        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>."
     },
     "rewards": {
         "header": "Recompensas",
         "search-placeholder": "Buscar dirección de billetera",
-        "description": "<0>Un total de 8.000 OP y 8.000 THALES seran distribuidos entre el 26 de Septiembre y el 10 de Octubre 00:00 UTC para compensar la comisión pagada al contrato SafeBox. </0>  <0> Esta tabla de posiciones calcula las recompensas como un reembolso del 90% de la comisión que va al contrato SafeBox, que es 2% de la cantidad pagada en sUSD. </0>  <0> El valor en USD de los tokens OP y THALES será calculado usando una medida de TWAP (compras promediadas en el tiempo) de 7 días desde el comienzo de el periodo de recompensas. </0>  <0> Si al final de este periodo de 2 semanas los reembolsos totales terminan siendo mayores que el valor inicial TWAP de los tokens OP y THALES, entonces el reembolso será reducido proporcionalmente por cada participante. </0>",
+        "description": "<div>Un total de <bold>8,000 OP</bold> y <bold>8,000 THALES</bold> tokens serán distribuidos cada 2 semanas de forma continua de acuerdo a <tipLink>TIP-96</tipLink> para así reducir la comisión pagada a al contrato SafeBox.</div>  <div> Este ranking considera el calculo de recompensas como un 90% de lo pagado en comisión al contrato SafeBox, la cual es el 3% de la cantidad pagada en sUSD. </div>  <div> El valor en USD de los tokens OP y THALES será calculada usando el metodo TWAP (del inglés Time-weighted average price, o precio promedio en un rango de tiempo) durante 7 días, comenzando al principio de cada periodo de 2 semanas. Si al final de este periodo de 2 semanas el total de reembolsos termina siendo mayor que el valor TWAP inicial para los tokens de OP y THALES, entonces el reembolso será reducido proporcionalmente para cada participante.</div>",
         "op-rewards-banner-message": "Las recompensas en OP han comenzado, revisa como obtenerlas en <bold>la pagína de recompensas OP</bold>",
         "table": {
             "wallet-address": "Dirección de billetera",
@@ -278,19 +456,15 @@
             "no-data-available": "No hay datos disponibles",
             "volume": "Volumen",
             "rebates": "Reembolsos",
-            "safebox": "Tarifas de SafeBox"
-        },
-        "periods": {
-            "period-0": "Primer periodo",
-            "period-1": "Cuarto periodo",
-            "period-2": "Segundo período",
-            "period-3": "Tercer periodo",
-            "period-4": "Quinto periodo"
+            "safebox": "Tarifas de SafeBox",
+            "percent": "Por ciento",
+            "rank": "Rank"
         },
         "your-score": "Tu puntuación",
         "total-negative-pnl": "pérdidas totales",
         "twap": "TWAP de una semana",
-        "total-global-rebates": "Reembolsos totales a pagar"
+        "total-global-rebates": "Reembolsos totales a pagar",
+        "parlay-link": "<div>Para la competencia parlay mensual OP<parlayLink> haga clic aquí</ parlayLink> .</div>"
     },
     "quiz": {
         "title": "Competencia de trivia sobre deportes (en ingles)",
@@ -348,6 +522,541 @@
             "3": "Moderate",
             "4": "Challenging",
             "5": "Hard"
+        }
+    },
+    "landing-page": {
+        "best-odds": "Las mejores odds en la industria",
+        "try-now": "Pruebalo ahora",
+        "powered-by": "Potenciado por",
+        "no-kyc": "Mercados deportivos sin necesidad de registrarse",
+        "launch-dapp": "Iniciar dapp",
+        "leagues": "Leagues",
+        "info-text-title-1": "No se requiere registro",
+        "info-text-title-2": "Todo esta on-chain",
+        "info-text-title-3": "Mercados sin custodia centralizada",
+        "info-text-title-4": "Chainlink como oraculo",
+        "info-text-title-5": "Transacciones rapidas y de bajo costo",
+        "info-text-1": "No necesitas crear un usuario. No recolectamos ninguna clase de información personal.",
+        "info-text-2": "Cuando las entidades centralizadas fallan la transparencia es clave. Los contratos inteligentes son de acceso publico.",
+        "info-text-3": "No hay una entidad centralizada custodiando tu colateral. Tus llaves, tus tokens.",
+        "info-text-4": "El lider en la industria provee odds y resultados de diferentes ligas y deportes de una forma decentralizada.",
+        "info-text-5": "Cada interaccion con el AMM de Overtime es realizada en la red Optimism, lider en escalabilidad.",
+        "browse-markets": "Ver mercados deportivos",
+        "web3-positioning": "Posicionamiento deportivo en Web3",
+        "learn-more": "Quieres aprender mas?",
+        "documentation": "Revisa nuestra documentacion",
+        "jump-in": "Listo para comenzar?",
+        "open-overtime": "Abrir los mercados de Overtime",
+        "join-discord": "Necesitas ayuda? Unete a nuestro Discord",
+        "read-now": "Leer ahora"
+    },
+    "profile": {
+        "transaction-history": "Historial de transacciones",
+        "open-claimable": "Abierto/Reclamable",
+        "categories": {
+            "open": "Abierto",
+            "claimable": "Reclamable",
+            "parlay": "juegos combinados",
+            "single": "juegos individuales"
+        },
+        "card": {
+            "claim": "Reclamar",
+            "canceled": "Cancelado",
+            "total-quote": "Cotización total",
+            "to-claim": "Reclamar",
+            "ticket-id": "Identificación de entradas",
+            "to-win": "Ganar",
+            "ticket-paid": "boleto pagado",
+            "number-of-games": "Numero de juegos",
+            "result": "Resultado",
+            "starts": "Empieza",
+            "position-size": "Tamaño de la posición",
+            "claim-all": "Reclamar todo"
+        },
+        "messages": {
+            "no-open": "No tienes ninguna posición abierta",
+            "no-claimable": "No tienes ninguna posición reclamable",
+            "no-transactions": "no tienes cambios",
+            "ticket-subtitle": "Agregue una posición, elija un mercado y haga su selección.",
+            "canceled-tooltip": "Los mercados cancelados son reclamables 2 horas después de que se resuelva el mercado.",
+            "transaction-pending": "Transacción pendiente",
+            "voucher-claim-success": "Cupón reclamado con éxito",
+            "no-vouchers": "No tienes ningún vale para reclamar"
+        },
+        "table": {
+            "paid": "Pagado",
+            "time": "Tiempo",
+            "amount": "Monto",
+            "position": "Posición",
+            "id": "Identificación",
+            "games": "Juegos",
+            "status": "Estado",
+            "total-amount": "Cantidad total",
+            "total-quote": "Cotización total"
+        },
+        "winnings-are-forfeit": "*Las ganancias no reclamadas dentro de {{amount}} días de la resolución de un mercado se perderán.",
+        "search-field": "Buscar billetera",
+        "stats": {
+            "total-volume": "Total volume",
+            "trades": "Trades",
+            "highest-win": "Highest win",
+            "lifetime-wins": "Lifetime wins",
+            "in-vaults": "In vaults"
+        },
+        "in-lp": "Liquidez proporcionada",
+        "vaults": "Bóvedas/LP",
+        "go-to-lp": "Ir a LP",
+        "lp-title": "fondo de liquidez",
+        "in-vault": "en bóveda",
+        "go-to-vault": "ir a la bóveda",
+        "claim-voucher": "Comprobante de reclamación",
+        "left-to-claim": "Izquierda para reclamar",
+        "gift-voucher": "Vale regalo",
+        "voucher-info": "Pero para que veáis de dónde viene todo este error nacido de los que acusan el placer y alaban el dolor, abriré todo el asunto y explicaré las mismas cosas que dijo aquel descubridor de la verdad y, por así decirlo, artífice de una vida feliz.",
+        "claiming-voucher": "Reclamando...",
+        "voucher": "Vale",
+        "voucher-title": "Reclamar vales de horas extras"
+    },
+    "mint-world-cup-nft": {
+        "mint-nft-button": "Mint esta cebra!",
+        "eligible-text": "Oye, ahora puedes acuñar tu equipo favorito Zebro NFT.",
+        "follow": "Siga a Overtime Markets en Twitter",
+        "stake-10-thales": "Para poder acuñar un Zebro NFT, debe tener al menos 10 THALES apostados.",
+        "stake-thales": "Juego THALES",
+        "get-thales": "Obtener THALES",
+        "go-to-twitter": "Ir a Twitter",
+        "incentives": "INCENTIVOS",
+        "second-option": "La segunda opción para incluirlo en la lista de permitidos es completar los siguientes pasos:",
+        "tag-3-friends": "En el mismo tweet, comenta tu dirección ETH y etiqueta a 3 amigos",
+        "no": "No",
+        "yes-mint": "Sí, menta NFT",
+        "choose-nft": "Acuñe su Zebro NFT",
+        "success-mint": "acuñado con éxito",
+        "retweet": "Retuitear este tuit",
+        "zebro-campaign": "Zebro FIFA",
+        "minting-is-free": "Minting es gratis, solo puede acuñar un NFT por billetera. Este NFT es intransferible.",
+        "already-minted": "Ya has acuñado tu NFT",
+        "are-you-sure": "¿Estás seguro de que quieres acuñar este NFT? Puede acuñar SOLO UN NFT por monedero.",
+        "eligible-text-1": "La colección Zebro NFT se utiliza como entrada para la campaña de la Copa Mundial de la FIFA en tiempo extra.",
+        "not-eligible-text": "¡Su billetera aún no es elegible para acuñar un Zebro NFT!",
+        "eligible-text-2": "¡Acuña un Zebro de tu equipo nacional favorito y sé elegible para recompensas de bonificación de 50 000 OP y 30 000 THALES!",
+        "mint-this-zebro": "Mint esta cebra!",
+        "leaderboard-title": "Tabla de clasificación",
+        "leaderboard": {
+            "underdog-multiplier": "Multiplicador desvalido:",
+            "parlay-boost": "Impulso combinado:",
+            "three-game-parlay": "+15% si es un parlay de 3 juegos",
+            "four-game-parlay": "+20% si es un parlay de 4 juegos",
+            "underdog-multiplier-text": "Si su posición en el partido de la Copa Mundial tiene un precio inferior a 0,3 (las probabilidades son superiores a 1:3,33), obtendrá un aumento de recompensas del 10 %.",
+            "home-country-multiplier": "Multiplicador NFT del país de origen:",
+            "home-country-multiplier-text": "Si su partido de la Copa Mundial involucra al mismo equipo nacional que su Zebro, recibirá un aumento de recompensas de +10%",
+            "two-game-parlay": "+10% si es un parlay de 2 juegos",
+            "reward-calculations": "Los cálculos de recompensa serán prorrateados en función del volumen con un aumento de volumen adicional máximo del 40 % si se cumplen las siguientes condiciones:",
+            "parlay-boost-text": "Si tu partido de la Copa del Mundo es en un boleto Parlay, obtendrás un impulso de:",
+            "nft": "NFT",
+            "country": "País",
+            "owner": "Dueño",
+            "search-placeholder": "BUSCAR DIRECCIÓN DE CARTERA",
+            "volume": "Volumen",
+            "rewards": "Recompensas",
+            "bonus-volume": "Prima",
+            "base-volume": "Base",
+            "player": "Jugador",
+            "wash-trading": "*El equipo de tiempo extra se reserva el derecho de descalificar a los comerciantes de lavado de la campaña"
+        },
+        "zebro-wct-collection-text": "es parte de una campaña incentivada para representar a su país favorito durante la Copa del Mundo y ser elegible para una parte de 50 000 tokens OP y 30 000 tokens THALES, junto con multiplicadores exclusivos para parlays y partidos individuales.",
+        "zebro-wct-collection": "La colección Zebro WC NFT",
+        "go-to-leaderboard": "Ir a la tabla de clasificación",
+        "congrats": "¡Felicitaciones! ¡Has acuñado con éxito el Zebro NFT!",
+        "get-your-nft": "Página de menta"
+    },
+    "referral": {
+        "generate-link": "Generar enlace",
+        "copy-link": "Copiar enlace",
+        "trades": "Transacciones",
+        "total-volume": "Volumen total",
+        "total-earned": "Ganancia total",
+        "total-trading-fees": "Comisiones de transaccion total",
+        "affiliate-leaderboard-table": {
+            "address": "Direccion",
+            "number-of-trades": "Transacciones",
+            "total-volume": "Volumen total",
+            "first-transaction": "Primera transaccion",
+            "total-earned": "Ganancia total",
+            "amount": "Cantidad",
+            "volume": "Volumen",
+            "type": "Tipo",
+            "timestamp": "Fecha/hora"
+        },
+        "no-result": "No hay resultados para esta tabla",
+        "earned": "Obtenido",
+        "header": "Crear enlace de referido",
+        "paragraph": "<bold>El programa de referidos de Overtime actua como una herramienta on-chain que incentiva la adquisicion de nuevos usuarios.</bold>Este programa permita a cualquiera <bold>generar un enlace de referido</bold> y compartirlo con las personas que quiera invitar a la plataforma.<br /><br /> Al compartir tu enlace personal de referido, obtendras <bold>0.5% de todo el volumen en sUSD que tu referido genere.</bold> No hay necesidad de reclamar manualmente estas comisiones, ya que el sUSD se auto-acumula en tu billetera Web3 en forma de simples transferencias de sUSD.",
+        "nav-items": {
+            "all-transactions": "Todas las transacciones",
+            "see-result-by-trader": "Ver resultado por participante",
+            "affiliate-leaderboard": "Leaderboard de afiliados"
+        }
+    },
+    "vaults": {
+        "title": "Bovedas de deportes",
+        "strategy-label": "Estrategia de la boveda",
+        "risks-label": "Riesgos de la boveda"
+    },
+    "vault": {
+        "discount-vault": {
+            "title": "Boveda de Descuentos",
+            "description": "<p>Compra posiciones que tengan odds mayores a {{odds}} y que esten disponibles con un descuento mayor a {{discount}}.</p>Todos los depositos que sean ingresados a un round cuentan como parte del volumen de la iniciative staking gamificado.</p>",
+            "risks": "<p>Esta boveda tiene una tasa de utilizacion de {{utilizationRate}} lo que asegura que no mas de {{utilizationRate}} del total depositado es expuesto al riesgo de la estrategia. Es mas, de este {{utilizationRate}} un maximo de {{allocationLimitsPerMarketPerRound}} puede ser invertido en un solo mercado, de esta forma diversificando el riesgo en multiples mercados que tienen mas de {{odds}} odds.</p>"
+        },
+        "degen-discount-vault": {
+            "title": "Boveda de Descuentos Degen",
+            "description": "<p>Compra posiciones, sin importar los odds, que esten disponibles por un descuento mayor a {{discount}}.</p><p>Todos los depositos que sean ingresados a un round cuentan como parte del volumen de la iniciative staking gamificado.</p>",
+            "risks": "<p>Esta boveda tiene una tasa de utilizacion de {{utilizationRate}} lo que asegura que no mas de {{utilizationRate}} del total depositado es expuesto al riesgo de la estrategia. Es mas, de este {{utilizationRate}} un maximo de {{allocationLimitsPerMarketPerRound}} puede ser invertido en un solo mercado.</p>"
+        },
+        "safu-discount-vault": {
+            "title": "Boveda de Descuentos Safu",
+            "description": "<p>Compra posiciones que tengan odds mayores a {{odds}} y que esten disponibles con cualquier descuento.</p><p>Todos los depositos que sean ingresados a un round cuentan como parte del volumen de la iniciative staking gamificado.</p>",
+            "risks": "<p>Esta boveda tiene una tasa de utilizacion de {{utilizationRate}} lo que asegura que no mas de {{utilizationRate}} del total depositado es expuesto al riesgo de la estrategia. Es mas, de este {{utilizationRate}} un maximo de {{allocationLimitsPerMarketPerRound}} puede ser invertido en un solo mercado, de esta forma diversificando el riesgo en multiples mercados que tienen mas de {{odds}} odds.</p>"
+        },
+        "variables": "<p>Variables:</p><ul><li>Tasa de utilizacion: {{utilizationRate}}</li><li>Limite inferior del precio: {{priceLowerLimit}}</li><li>Limite superior del precio: {{priceUpperLimit}}</li><li>Impacto maximo de Skew: {{skewImpactLimit}}</li><li>Asignacion maxima por mercado: {{allocationLimitsPerMarketPerRound}}</li><li>Deposito total maximo: {{maxAllowedDeposit}}</li><li>Cantidad de usuarios maxima en la boveda: {{maxAllowedUsers}}</li><li>Cantidad minima por transaccion: {{minTradeAmount}}</li><li>Deposito minimo: {{minDepositAmount}}</li><li>Duracion del round: {{roundLength}} dias</li></ul>",
+        "back-to-vaults": "Volver a bovedas",
+        "vault-not-started-message": "La boveda aun no ha sido iniciada",
+        "vault-paused-message": "La boveda esta en pausa",
+        "round-allocation-label": "Deposito total en este round",
+        "spent-trading-label": "Invertido en estrategia",
+        "available-trading-label": "Disponible para estrategia",
+        "round-end-label": "Este round termina en",
+        "your-round-allocation-label": "Tu deposito para este round: <bold>{{amount}}</bold>",
+        "your-next-round-allocation-label": "Tu deposito para el proximo round: <bold>{{amount}}</bold>",
+        "estimated-amount-tooltip": "Esta es una cantidad estimada. La cantidad definitiva sera calculada una vez finalice el round actual basado en el PnL del round.",
+        "next-round-start-label": "El proximo round comienza en: <counter />",
+        "users-in-vault-label": "Ususarios en la boveda: {{number}} / {{max}}",
+        "vault-filled-label": "Capacidad de la boveda: {{amount}} / {{max}}",
+        "deposit-message": "Fondos depositados en la boveda para el proximo round.",
+        "deposit-amount-label": "Depositar cantidad",
+        "deposit-amount-placeholder": "Ingresar cantidad",
+        "available-to-withdraw-label": "Disponible para retiro: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "Nada que retirar.",
+        "withdrawal-message": "Puedes solicitar un retiro y tus fondos seran enviados automaticamente al finalizar el round una vez este se encuentre cerrado.",
+        "withdraw-round-end-label": "El round termina en: <counter />",
+        "withdrawal-requested-message": "Solicitaste retirar <bold>{{amount}}</bold><tooltip />. Tus fondos seran nviados automaticamente al finalizar el round una vez este se encuentre cerrado.",
+        "withdrawal-request-label": "Solicitud de retiro: <bold>{{amount}}</bold>",
+        "first-deposit-withdrawal-message": "Has depositado para el proximo round y puedes retirar estos fondos al finalizar el proximo round.",
+        "round-ended-label": "Round finalizado",
+        "deposit-withdrawal-warning": "Retiro solicitado, no puedes depositar.",
+        "deposit-max-amount-of-users-warning": "Numero maximo de usuarios en la boveda ha sido alcanzado, no puedes depositar.",
+        "deposit-vault-cap-reached-warning": "El limite de la boveda ha sido alcanzado, no puedes depositar.",
+        "deposit-vault-cap-error": "Cantidad depositada excede el limite de la boveda",
+        "deposit-min-amount-error": "La cantidad minima a depositar es {{amount}}",
+        "withdrawal-deposit-warning": "No puedes retirar ya que has depositado para el siguiente round.",
+        "tabs": {
+            "deposit": "Depositar",
+            "claim": "Reclamar",
+            "withdraw": "Retirar"
+        },
+        "button": {
+            "deposit-label": "Depositar",
+            "deposit-progress-label": "Deposito en proceso...",
+            "deposit-confirmation-message": "Deposito realizado con exito",
+            "request-withdrawal-label": "Solicitar retiro",
+            "request-withdrawal-progress-label": "Solicitud en proceso...",
+            "request-withdrawal-confirmation-message": "Solicitud de retiro enviada con exito",
+            "withdraw-label": "Retirar",
+            "withdraw-progress-label": "Retiro en proceso...",
+            "withdraw-confirmation-message": "Funds successfully withdrawn",
+            "close-round-label": "Round finalizado",
+            "close-round-progress-label": "Finalización de round en proceso...",
+            "close-round-confirmation-message": "Round finalizado con exito"
+        },
+        "trades-history": {
+            "title": "Historia de transacciones de la boveda",
+            "no-trades": "No hay transacciones asociadas con esta boveda en el round seleccionado.",
+            "round-label": "Round"
+        },
+        "pnl": {
+            "title": "PnL por round",
+            "no-data": "No hay data de PnL para rounds previos.",
+            "lifetime-pnl": "PnL Total",
+            "ongoing-pnl": "Ongoing PnL"
+        },
+        "user-transactions": {
+            "type": {
+                "deposit": "Depósito",
+                "withdrawalRequest": "Solicitud de Retiro",
+                "claim": "Reclamo de Retiro"
+            },
+            "no-transactions": "No hay transacciones de usuario asociadas con esta bóveda en la ronda seleccionada.",
+            "title": "Transacciones de usuario",
+            "name": "Nombre"
+        },
+        "parlay-discount-vault": {
+            "title": "Bóveda de descuento Parlay",
+            "description": "<p>Compra boletos parlay donde cada posición individual en el boleto tiene al menos un descuento de {{discount}}.</p><p> Todos los depósitos que ingresan a una ronda cuentan para el volumen de participación gamificado.</p>",
+            "risks": "<p>La bóveda tiene una tasa de utilización de {{utilizationRate}}, lo que garantiza que no se ponga en riesgo más de {{utilizationRate}} de lo depositado en una ronda. Además, de esos {{utilizationRate}}, se puede gastar un máximo de {{allocationLimitsPerMarketPerRound}} en un solo ticket parlay por ronda, diversificando así el riesgo en varios tickets parlay que tienen un descuento superior a {{odds}}.</p>"
+        },
+        "LP": {
+            "title": "LP"
+        },
+        "variables-parlay": "<p>Variables:</p><ul><li> Tasa de utilización: {{utilizationRate}}</li><li> Límite inferior de precio: {{priceLowerLimit}}</li><li> Límite superior de precio: {{priceUpperLimit}}</li><li> Impacto sesgado máximo: {{skewImpactLimit}}</li><li> Asignación máxima en un único parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Depósito total máximo: {{maxAllowedDeposit}}</li><li> Usuarios máximos en la bóveda: {{maxAllowedUsers}}</li><li> Monto mínimo en una sola operación: {{minTradeAmount}}</li><li> Depósito mínimo: {{minDepositAmount}}</li><li> Duración de la ronda: {{roundLength}} días</li></ul>"
+    },
+    "parlay-leaderboard": {
+        "title": "Leaderboard de incentivos en Parlays",
+        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best parlays on a <bold>bi-weekly basis</bold> starting from March 1st. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
+        "distribution-note": "Rewards will be distributed to the <bold>TOP 30 parlays every 2 weeks</bold>!",
+        "no-parlays": "No winning parlays registered in the period yet.",
+        "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
+        "info": "If multiple parlays have the same number of positions and total quote the following will be used as tie-breakers in respective order:",
+        "info1": "- The amount paid",
+        "info2": "- Actual total quote (gotten by multiplying positions individually)",
+        "info3": "*1 winning parlay eligible per wallet",
+        "sidebar": {
+            "title-parlay": "Parlay",
+            "title-leaderboard": "Leaderboard",
+            "player": "Player",
+            "quote": "Quote",
+            "paid": "Paid",
+            "won": "Won",
+            "total-quote": "Total Quote",
+            "total-amount": "Total Amount",
+            "reward": "Premio",
+            "wallet": "Billetera",
+            "positions": "Posiciones"
+        },
+        "periods": {
+            "february": "February",
+            "period-end-label": "The period ends in",
+            "period-ended-label": "Period ended",
+            "bi-weekly-period": "Bi-weekly period"
+        }
+    },
+    "wizard": {
+        "title": "Get Started!",
+        "steps": {
+            "title": {
+                "connect-wallet": "Connect Wallet",
+                "fund": "Fund with ETH",
+                "exchange": "Get Crypto USD",
+                "trade": "Overtime Markets"
+            },
+            "description": {
+                "connect-wallet": "If you don't have Optimism connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
+                "fund": "Before you can use Overtime, first you need to get ETH on your Optimism connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
+                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to sUSD button, seamlessly swap ETH to a desired amount of stablecoins.",
+                "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
+            },
+            "action": {
+                "connect-wallet": "Connect Wallet",
+                "connected": "Connected",
+                "fund": "Fund with ETH",
+                "exchange": "Exchange to USD",
+                "trade": "Trade on Overtime"
+            }
+        },
+        "fund-modal": {
+            "title": "Fund, Bridge & Send",
+            "buy": "Fund with card",
+            "buy-banxa": "Fund with Banxa",
+            "buy-mt-pelerin": "Fund with Mt Pelerin",
+            "bridge": "Bridge to optimism  ",
+            "exchange": "Send from exchange",
+            "copy-address": "Copy address",
+            "coppied": "Coppied!",
+            "address": "Your address QR code",
+            "copied": "¡Copiado!"
+        }
+    },
+    "march-madness": {
+        "tabs": {
+            "leaderboard": "Tabla de clasificación",
+            "home": "Hogar",
+            "brackets": "Soportes"
+        },
+        "back-to-markets": "volver a los mercados",
+        "brackets": {
+            "team-2": "equipo 2",
+            "team-1": "equipo 1",
+            "submit-text": "Soporte de acabado",
+            "submit": "Soporte de acabado",
+            "submit-modify": "Actualizar soporte",
+            "modal": {
+                "button-minting": "Acuñación...",
+                "update-text": "¡Ya has acuñado tu NFT!",
+                "finish-text-1": "¡Bien hecho!",
+                "button-update": "Actualizar soporte",
+                "button-mint": "Me gusta NFT",
+                "button-updating": "Actualizando...",
+                "finish-text-2": "¡Ahora puedes acuñar tu NFT!"
+            },
+            "stats": {
+                "rank": "Rango",
+                "complete": "Completo",
+                "my-stats": "Mis estadísticas",
+                "bonus": "Prima",
+                "points": "Puntos",
+                "incomplete": "Incompleto",
+                "status": "Estado",
+                "my-total-score": "mi puntuación total",
+                "place": "Lugar",
+                "rank-volume": "Clasificar por volumen",
+                "rank-games": "Clasificación por juegos adivinados"
+            },
+            "round-1": "2da ronda",
+            "round-3": "Élite 8",
+            "round-4": "4 finales",
+            "round-0": "1ra Ronda",
+            "round-2": "Dulces 16",
+            "round-5": "Final",
+            "modal-mint": {
+                "finish-text-2": "¡Ahora puedes acuñar tu NFT!",
+                "button-minting": "Acuñación...",
+                "finish-text-1": "¡Bien hecho!",
+                "update-text": "¡Ya has acuñado tu NFT!",
+                "button-updating": "Actualizando...",
+                "button-update": "Actualizar soporte",
+                "button-mint": "Me gusta NFT",
+                "update-text-1": "¡Bien hecho!",
+                "finish-text-3-success": "¡Dirígete a los <marketsLink>mercados de la NCAAB</marketsLink> y comienza a ganar recompensas!",
+                "finish-text-1-success": "¡Felicidades!",
+                "finish-info": "*El soporte NFT de March Madness es un NFT de tiempo extra que permite a los titulares participar en la campaña Overtime March Madness creando su propio soporte de torneo de predicción.",
+                "update-text-2": "Guardamos su predicción de paréntesis, ¡actualice su paréntesis ahora!",
+                "finish-text-2-success": "¡Acabas de acuñar tu March Madness Bracket!",
+                "update-text-2-success": "¡Tu soporte NFT de March Madness ha sido actualizado!"
+            },
+            "modal-share": {
+                "header": "Mis 4 últimas elecciones",
+                "share": "Compartir",
+                "user-selection": "¡Elegí al {{team}} para cortar las redes en Houston!"
+            },
+            "share": "Comparte este paréntesis"
+        },
+        "regions": {
+            "east": "Este",
+            "west": "Oeste",
+            "south": "Sur",
+            "midwest": "medio oeste"
+        },
+        "home": {
+            "title": "Bienvenidos al torneo March Madness",
+            "text-1": "March Madness es un evento de la NCAAB en el que 68 equipos compiten en forma eliminatoria por el campeonato. El evento comienza el 14 de marzo en el que 8 equipos compiten por los últimos 4 lugares en los 64 grupos de la etapa eliminatoria. La acuñación comienza el 12 de marzo y dura hasta el 16 de marzo cuando comienza el evento principal.",
+            "text-2g": "Bono máximo aquí: 32*1+16*2+8*4+4*7+2*10+20=164%",
+            "text-2c": "Resultado de los octavos de final predicho correctamente: bonificación del 4 %",
+            "time-info": "Te quedan {{days}} DÍAS PARA hacer la predicción",
+            "text-2a": "Resultado de la ronda de 64 juegos predicho correctamente: 1% de bonificación",
+            "text-2e": "Resultado de la ronda de 4 juegos predicho correctamente: 10% de bonificación",
+            "button-connect": "Conectar billetera",
+            "text-2": "Una forma alternativa de calcular la bonificación sería basarla en la ronda, ya que cuanto más se avanza en la fase de eliminación de un juego, más difícil es predecir el resultado (ya que también debe adivinar correctamente todos los juegos anteriores), así que tal vez :",
+            "text-2d": "Resultado del juego de la ronda de 8 predicho correctamente: 7% de bonificación",
+            "text-2f": "Resultado final del juego predicho correctamente: 20 % de bonificación",
+            "button-create": "Crear soporte",
+            "text-2b": "Resultado de la ronda de 32 juegos predicho correctamente: 2% de bonificación",
+            "text-3c": "Élite Ocho - 7%",
+            "text-4": "El <bold>segundo grupo</bold> se dividirá entre los poseedores del tramo más preciso con un volumen de referencia de 10 sUSD en los juegos March Madness. Los poseedores que cumplan con el requisito de volumen pueden rastrear su posición en la tabla de clasificación de mejor soporte donde los ganadores dividirán un fondo de recompensa de 3,000 OP.",
+            "text-3d": "Dulce 16 - 4%",
+            "text-5": "Más detalles en nuestra <mediumLink>publicación de blog mediana</mediumLink>.",
+            "text-3e": "Segunda Ronda - 2%",
+            "text-3a": "Campeonato - 20%",
+            "text-3f": "Primera Vuelta - 1%",
+            "text-3b": "Final Four - 10%",
+            "text-3": "Para el <bold>Primer grupo</bold>, 10 000 OP se dividirán entre todo el volumen generado a través de los juegos de March Madness, incluidos todos los tipos de mercado y parlay con al menos un juego de la NCAAB. Los titulares del soporte NFT de March Madness son elegibles para un impulso comercial. Cada juego correcto es elegible para un impulso escalonado, con un máximo de 164%."
+        },
+        "mobile-message": "La página solo está disponible en pantallas más grandes. ¡Utilice la versión de escritorio!",
+        "leaderboard": {
+            "rank": "Rango",
+            "volume": "Volumen",
+            "rewards": "Recompensas",
+            "player": "Jugador",
+            "owner": "Dueño",
+            "address": "DIRECCIÓN",
+            "base-volume": "Base",
+            "search-placeholder": "BUSCAR DIRECCIÓN DE CARTERA",
+            "bonus-volume": "Prima",
+            "guessed-games": "juegos adivinados",
+            "no-data": "No hay datos disponibles actualmente",
+            "tooltip-rewards-volume-table": "10,000 OP (30,000 THALES en Arbitrum) se dividirán en función del volumen prorrateado",
+            "tooltip-correct-correct-table": "Número de juegos adivinados correctamente en su paréntesis",
+            "tooltip-bonus-volume-table": "Volumen de bonificación calculado en función de sus selecciones de soporte",
+            "tooltip-base-volume-table": "Volumen impulsado a través de los juegos de baloncesto de la NCAA",
+            "tooltip-rewards-correct-table": "3,000 OP (10,000 THALES en Arbitrum) se dividirán entre los 10 mejores",
+            "by-guessed-correctly": "Por adivinar correctamente",
+            "my-rewards": "Mi recompensa"
+        },
+        "test-info": "Ya está abierta la fase de pruebas con los equipos de muestra, ¡la selección 2023 se abre el 12 de marzo!"
+    },
+    "liquidity-pool": {
+        "title": "Provide Liquidity",
+        "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round your balance (inclusive of that round's PnL) is sent to you. To withdraw, you need to have at least {{thalesStakedAmount}} THALES staked per each {{currency}} you are withdrawing.</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
+        "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the pool: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
+        "liquidity-pool-not-started-message": "The liquidity pool has not started",
+        "liquidity-pool-paused-message": "The liquidity pool is paused",
+        "round-end-label": "The round ends in",
+        "round-ended-label": "Round ended",
+        "total-info-label": "Total LP info",
+        "users-in-liquidity-pool-label": "Users in the liquidity pool: {{number}} / {{max}}",
+        "your-share-label": "Your share: {{percentage}} of LP",
+        "your-info-label": "Your LP info",
+        "current-balance-label": "Current balance",
+        "next-round-balance-label": "Next round balance",
+        "max-allowance-label": "Max allowance",
+        "your-thales-staked-label": "Your THALES staked",
+        "allowance-multiplier-label": "Allowance multiplier",
+        "withdrawal-request-label": "Withdrawal request: {{amount}}",
+        "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
+        "deposit-amount-placeholder": "Enter amount",
+        "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "Nothing to withdraw.",
+        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
+        "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
+        "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
+        "deposit-max-amount-of-users-warning": "Maximum number of users in the liquidity pool is reached, you cannot deposit.",
+        "deposit-liquidity-pool-cap-reached-warning": "The liquidity pool cap is reached, you cannot deposit.",
+        "deposit-liquidity-pool-cap-error": "Deposit amount exceeds liquidity pool cap",
+        "deposit-staked-thales-error": "Deposit amount exceeds max allowance, stake more THALES to deposit",
+        "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
+        "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
+        "withdrawal-staked-thales-warning": "You cannot withdraw as you need more staked THALES to withdraw. Stake {{amount}} THALES more to enable withdrawal.",
+        "tabs": {
+            "deposit": "Deposit",
+            "withdraw": "Withdraw"
+        },
+        "button": {
+            "deposit-label": "Deposit",
+            "deposit-progress-label": "Deposit in progress...",
+            "deposit-confirmation-message": "Deposit successfully placed",
+            "request-withdrawal-label": "Request withdrawal",
+            "request-withdrawal-progress-label": "Request in progress...",
+            "request-withdrawal-confirmation-message": "Withdrawal request successfully sent",
+            "withdraw-label": "Withdraw",
+            "withdraw-progress-label": "Withdrawal in progress...",
+            "withdraw-confirmation-message": "Funds successfully withdrawn",
+            "close-round-label": "Close round",
+            "close-round-progress-label": "Closing round in progress...",
+            "close-round-confirmation-message": "Round successfully closed",
+            "get-thales-label": "Get THALES",
+            "stake-thales-label": "Stake THALES"
+        },
+        "pnl": {
+            "pnl-per-round": {
+                "title": "PnL per round"
+            },
+            "cumulative-pnl": {
+                "title": "PnL over time"
+            },
+            "no-data": "No PnL data for previous rounds.",
+            "lifetime-pnl": "Lifetime PnL",
+            "ongoing-pnl": "Ongoing PnL"
+        },
+        "user-transactions": {
+            "title": "User transactions",
+            "your-transactions-title": "Your transactions",
+            "no-transactions": "No user transactions associated with this liquidity pool in the selected round.",
+            "round-label": "Round",
+            "type": {
+                "deposit": "Deposit",
+                "withdrawalRequest": "Withdrawal Request",
+                "claim": "Withdrawal Claim"
+            }
         }
     }
 }

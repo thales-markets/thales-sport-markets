@@ -35,7 +35,7 @@ function Dropdown<T>({ list, onSelect, disabled, itemRenderer, selectedItem, sty
                     >
                         {t(`common.odds.${selectedItem}`)}
                         <FlexDiv>
-                            <ArrowDownIcon />
+                            <ArrowDownIcon className={`icon-exotic icon-exotic--down`} />
                         </FlexDiv>
                     </DropdownButton>
                     {dropdownIsOpen && (
@@ -68,29 +68,38 @@ function Dropdown<T>({ list, onSelect, disabled, itemRenderer, selectedItem, sty
 }
 
 const Container = styled(FlexDivColumnCentered)`
-    //width: 200px;
+    width: 200px;
 `;
 
 const DropdownButton = styled.button`
     position: relative;
-    //width: 200px;
-    height: 34px;
+    height: 24px;
     border: none;
-    background: #252940;
-    color: white;
-    border-radius: 10px;
-    font-size: 17px;
-    line-height: 25px;
-    padding-right: 45px;
-    padding-left: 15px;
+    background: transparent;
+    color: ${(props) => props.theme.textColor.secondary};
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 14px;
+    align-items: center;
+    text-align: right;
+    padding-right: 23px;
+    letter-spacing: 0.01em;
     &:hover:not(.disabled) {
         cursor: pointer;
-        background: #5f6180;
+        color: ${(props) => props.theme.textColor.quaternary};
     }
     &.disabled {
         opacity: 0.4;
         cursor: default;
         background: transparent;
+    }
+    @media (max-width: 950px) {
+        font-size: 11px;
+        line-height: 11px;
+        &:hover:not(.disabled) {
+            color: ${(props) => props.theme.textColor.secondary};
+        }
     }
 `;
 
@@ -103,7 +112,7 @@ const DropDown = styled(FlexDivColumn)`
     border: 1px solid ${(props) => props.theme.input.borderColor.secondary};
     background: #252940;
     color: white;
-    border-radius: 10px;
+    border-radius: 5px;
     position: absolute;
     margin-top: 2px;
     padding: 4px;
@@ -115,29 +124,35 @@ const DropDownItem = styled(FlexDiv)`
     cursor: pointer;
     &:hover {
         background: #5f6180;
-        border-radius: 12px;
+        border-radius: 5px;
     }
 `;
 
 const Label = styled.div`
     font-weight: 500;
-    font-size: 17px;
-    line-height: 20px;
+    font-size: 12px;
+    line-height: 14px;
     color: white;
     display: block;
     text-transform: capitalize;
 `;
 
 const ArrowDownIcon = styled.i`
-    font-size: 17px;
-    margin-left: 20px;
+    font-size: 14px;
     position: absolute;
     top: 8px;
-    right: 15px;
-    &:before {
-        font-family: ExoticIcons !important;
-        content: '\\004D';
-        color: white;
+    right: 5px;
+    &:hover {
+        cursor: pointer;
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
+
+    @media (max-width: 950px) {
+        font-size: 13px;
+        top: 10px;
+        &:hover {
+            color: ${(props) => props.theme.textColor.secondary};
+        }
     }
 `;
 

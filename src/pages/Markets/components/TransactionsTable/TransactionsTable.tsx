@@ -6,6 +6,11 @@ import Table from 'components/Table';
 import ViewEtherscanLink from 'components/ViewEtherscanLink';
 import { MarketTransaction, MarketTransactions } from 'types/markets';
 import { formatCurrency } from 'utils/formatters/number';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/rootReducer';
+import { getIsMobile } from 'redux/modules/app';
+import { getOddTooltipText, getSpreadTotalText, getSymbolText } from 'utils/markets';
+import PositionSymbol from 'components/PositionSymbol';
 
 type TransactionsTableProps = {
     transactions: MarketTransactions;
@@ -15,6 +20,7 @@ type TransactionsTableProps = {
 
 export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noResultsMessage, isLoading }) => {
     const { t } = useTranslation();
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     return (
         <>
             <Table
@@ -41,9 +47,47 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                     {
                         Header: <>{t('market.table.position-col')}</>,
                         accessor: 'position',
-                        Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['position']>) => (
-                            <p>{cellProps.cell.value?.toUpperCase()}</p>
-                        ),
+                        Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['position']>) => {
+                            const symbolText = getSymbolText(
+                                cellProps.cell.value,
+                                cellProps.cell.row.original.wholeMarket
+                            );
+
+                            const spreadTotalText = getSpreadTotalText(
+                                cellProps.cell.row.original.wholeMarket,
+                                cellProps.cell.value
+                            );
+                            return symbolText ? (
+                                <PositionSymbol
+                                    symbolText={symbolText}
+                                    additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
+                                    symbolUpperText={
+                                        spreadTotalText
+                                            ? {
+                                                  text: spreadTotalText,
+                                                  textStyle: {
+                                                      backgroundColor: '#1A1C2B',
+                                                      fontSize: '10px',
+                                                      top: '-8px',
+                                                      left: '13px',
+                                                      lineHeight: '100%',
+                                                  },
+                                              }
+                                            : undefined
+                                    }
+                                    tooltip={
+                                        <>
+                                            {getOddTooltipText(
+                                                cellProps.cell.value,
+                                                cellProps.cell.row.original.wholeMarket
+                                            )}
+                                        </>
+                                    }
+                                />
+                            ) : (
+                                <p>N/A</p>
+                            );
+                        },
                         width: 150,
                         sortable: true,
                     },
@@ -52,7 +96,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                         sortType: paidSort(),
                         accessor: 'paid',
                         Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['paid']>) => (
-                            <p>$ {formatCurrency(cellProps.cell.value)}</p>
+                            <p>{cellProps.cell.value ? `$ ${formatCurrency(cellProps.cell.value)}` : 'N/A'}</p>
                         ),
                         width: 150,
                         sortable: true,
@@ -79,10 +123,34 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                 data={transactions}
                 isLoading={isLoading}
                 noResultsMessage={noResultsMessage}
+                tableHeadCellStyles={isMobile ? TableHeaderStyleMobile : TableHeaderStyle}
+                tableRowStyles={{ fontSize: '12px' }}
             />
         </>
     );
 });
+
+const TableHeaderStyle: React.CSSProperties = {
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: 600,
+    fontSize: '12px',
+    lineHeight: '12px',
+    textTransform: 'uppercase',
+    color: '#5F6180',
+    justifyContent: 'flex-start',
+};
+
+const TableHeaderStyleMobile: React.CSSProperties = {
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: 600,
+    fontSize: '10px',
+    lineHeight: '12px',
+    textTransform: 'uppercase',
+    color: '#5F6180',
+    justifyContent: 'center',
+};
 
 const paidSort = () => (rowA: any, rowB: any) => {
     return rowA.original.paid - rowB.original.paid;

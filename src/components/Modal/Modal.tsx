@@ -1,17 +1,23 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { CSSProperties } from 'styled-components';
 import { FlexDiv, FlexDivRow } from 'styles/common';
 import ReactModal from 'react-modal';
+import { convertCssToStyledProperties } from 'utils/style';
 
 type ModalProps = {
     title: string;
     shouldCloseOnOverlayClick?: boolean;
+    customStyle?: ReactModal.Styles;
+    mobileStyle?: {
+        container?: CSSProperties;
+        header?: CSSProperties;
+    };
     onClose: () => void;
 };
 
 ReactModal.setAppElement('#root');
 
-const customStyles = {
+const defaultCustomStyles = {
     content: {
         top: '50%',
         left: '50%',
@@ -22,22 +28,38 @@ const customStyles = {
         padding: '0px',
         background: 'transparent',
         border: 'none',
+        overflow: 'none',
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: 2,
     },
 };
 
-export const Modal: React.FC<ModalProps> = ({ title, onClose, children, shouldCloseOnOverlayClick }) => {
+export const Modal: React.FC<ModalProps> = ({
+    title,
+    onClose,
+    children,
+    shouldCloseOnOverlayClick,
+    customStyle,
+    mobileStyle,
+}) => {
+    const customStylesOverride = customStyle
+        ? {
+              content: { ...defaultCustomStyles.content, ...customStyle.content },
+              overlay: { ...defaultCustomStyles.overlay, ...customStyle.overlay },
+          }
+        : defaultCustomStyles;
+
     return (
         <ReactModal
             isOpen
             onRequestClose={onClose}
             shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
-            style={customStyles}
+            style={customStylesOverride}
         >
-            <Container>
-                <Header>
+            <Container mobileStyle={mobileStyle?.container}>
+                <Header mobileStyle={mobileStyle?.header}>
                     <Title>{title}</Title>
                     <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
                 </Header>
@@ -47,22 +69,24 @@ export const Modal: React.FC<ModalProps> = ({ title, onClose, children, shouldCl
     );
 };
 
-const Container = styled.div`
+const Container = styled.div<{ mobileStyle?: CSSProperties }>`
     border: 1px solid ${(props) => props.theme.borderColor.primary};
     background: ${(props) => props.theme.background.primary};
     padding: 25px 30px 35px 30px;
-    overflow: auto;
     border-radius: 23px;
     @media (max-width: 575px) {
-        padding: 25px 20px 35px 20px;
+        ${(props) =>
+            props.mobileStyle ? convertCssToStyledProperties(props.mobileStyle) : 'padding: 25px 20px 35px 20px;'}
     }
-    overflow-y: auto;
     max-height: 100vh;
     height: fit-content;
 `;
 
-const Header = styled(FlexDivRow)`
+const Header = styled(FlexDivRow)<{ mobileStyle?: CSSProperties }>`
     margin-bottom: 20px;
+    @media (max-width: 575px) {
+        ${(props) => props.mobileStyle && convertCssToStyledProperties(props.mobileStyle)}
+    }
 `;
 
 const Title = styled(FlexDiv)`

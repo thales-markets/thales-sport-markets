@@ -1,91 +1,61 @@
-import { useQuery } from 'react-query';
-import { Position, Side } from '../../constants/options';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { Position } from '../../constants/options';
 import { AMMPosition } from '../../types/markets';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
-import { ethers } from 'ethers';
 import { bigNumberFormatter, bigNumberFormmaterWithDecimals } from '../../utils/formatters/ethers';
 import { NetworkId } from 'types/network';
-import { getCollateralAddress } from 'utils/collaterals';
+import { getCollateralAddress, getDecimalsByStableCoinIndex, getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { ethers } from 'ethers';
+import { ZERO_ADDRESS } from 'constants/network';
 
 const usePositionPriceDetailsQuery = (
     marketAddress: string,
     position: Position,
     amount: number,
     stableIndex: number,
-    networkId: NetworkId
+    networkId: NetworkId,
+    options?: UseQueryOptions<AMMPosition>
 ) => {
     return useQuery<AMMPosition>(
         QUERY_KEYS.PositionDetails(marketAddress, position, amount, stableIndex, networkId),
         async () => {
             try {
-                const sportsAMMContract = networkConnector.sportsAMMContract;
+                const isMultiCollateral = isMultiCollateralSupportedForNetwork(networkId) && stableIndex !== 0;
+
+                const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
                 const parsedAmount = ethers.utils.parseEther(amount.toString());
-                const collateralAddress = getCollateralAddress(
-                    true,
-                    stableIndex ? stableIndex !== 0 : false,
-                    networkId,
-                    stableIndex
+
+                const collateralAddress = isMultiCollateral && getCollateralAddress(true, networkId, stableIndex);
+                const positionDetails = await sportPositionalMarketDataContract?.getPositionDetails(
+                    marketAddress,
+                    position,
+                    parsedAmount,
+                    collateralAddress || ZERO_ADDRESS
                 );
-                const [
-                    availableToBuy,
-                    availableToSell,
-                    buyFromAmmQuote,
-                    sellToAmmQuote,
-                    buyPriceImpact,
-                    sellPriceImpact,
-                    buyFromAMMQuoteCollateral,
-                ] = await Promise.all([
-                    await sportsAMMContract?.availableToBuyFromAMM(marketAddress, position),
-                    await sportsAMMContract?.availableToSellToAMM(marketAddress, position),
-                    await sportsAMMContract?.buyFromAmmQuote(marketAddress, position, parsedAmount),
-                    await sportsAMMContract?.sellToAmmQuote(marketAddress, position, parsedAmount),
-                    await sportsAMMContract?.buyPriceImpact(marketAddress, position, parsedAmount),
-                    await sportsAMMContract?.sellPriceImpact(marketAddress, position, parsedAmount),
-                    collateralAddress
-                        ? await sportsAMMContract?.buyFromAmmQuoteWithDifferentCollateral(
-                              marketAddress,
-                              position,
-                              parsedAmount,
-                              collateralAddress
-                          )
-                        : 0,
-                ]);
 
                 return {
-                    sides: {
-                        [Side.BUY]: {
-                            available: bigNumberFormatter(availableToBuy),
-                            quote: bigNumberFormmaterWithDecimals(
-                                stableIndex == 0 ? buyFromAmmQuote : buyFromAMMQuoteCollateral[0],
-                                stableIndex == 0 || stableIndex == 1 ? 18 : 6
-                            ),
-                            priceImpact: bigNumberFormatter(buyPriceImpact),
-                        },
-                        [Side.SELL]: {
-                            available: bigNumberFormatter(availableToSell),
-                            quote: bigNumberFormatter(sellToAmmQuote),
-                            priceImpact: bigNumberFormatter(sellPriceImpact),
-                        },
-                    },
+                    available: bigNumberFormatter(positionDetails.liquidity),
+                    quote: bigNumberFormmaterWithDecimals(
+                        isMultiCollateral ? positionDetails.quoteDifferentCollateral : positionDetails.quote,
+                        isMultiCollateral
+                            ? getDecimalsByStableCoinIndex(stableIndex)
+                            : getDefaultDecimalsForNetwork(networkId)
+                    ),
+                    priceImpact: bigNumberFormatter(positionDetails.priceImpact),
                 };
             } catch (e) {
                 console.log('Error ', e);
                 return {
-                    sides: {
-                        [Side.BUY]: {
-                            available: 0,
-                            quote: 0,
-                            priceImpact: 0,
-                        },
-                        [Side.SELL]: {
-                            available: 0,
-                            quote: 0,
-                            priceImpact: 0,
-                        },
-                    },
+                    available: 0,
+                    quote: 0,
+                    priceImpact: 0,
                 };
             }
+        },
+        {
+            ...options,
         }
     );
 };

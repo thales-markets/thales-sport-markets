@@ -17,7 +17,7 @@ import {
     MarketTransactionType,
 } from 'types/markets';
 import useClaimTransactionsPerMarket from 'queries/markets/useClaimTransactionsPerMarket';
-import { convertFinalResultToWinnerName, convertPositionToTeamName } from 'utils/markets';
+import { convertFinalResultToResultType } from 'utils/markets';
 
 type TransactionsProps = {
     market: MarketData;
@@ -28,7 +28,7 @@ const Transactions: React.FC<TransactionsProps> = ({ market }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const marketTransactionsQuery = useMarketTransactionsQuery(market.address, networkId, {
+    const marketTransactionsQuery = useMarketTransactionsQuery(market.address, networkId, undefined, {
         enabled: isAppReady,
     });
 
@@ -39,34 +39,36 @@ const Transactions: React.FC<TransactionsProps> = ({ market }) => {
     const marketTransactions: MarketTransactions = useMemo(() => {
         let data: MarketTransaction[] = [];
 
-        if (marketClaimTransactionsQuery?.isSuccess && marketClaimTransactionsQuery?.data) {
-            marketClaimTransactionsQuery?.data.forEach((claimTx: ClaimTransaction) => {
+        if (marketClaimTransactionsQuery.isSuccess && marketClaimTransactionsQuery.data) {
+            marketClaimTransactionsQuery.data.forEach((claimTx: ClaimTransaction) => {
                 return data.push({
-                    hash: claimTx?.id,
+                    hash: claimTx.id,
                     type: 'claim' as MarketTransactionType,
                     account: claimTx.account,
                     timestamp: Number(claimTx.timestamp),
                     amount: claimTx.amount,
-                    position: convertFinalResultToWinnerName(claimTx.market.finalResult, market),
-                    market: claimTx?.market?.address,
-                    paid: claimTx.amount,
+                    position: convertFinalResultToResultType(claimTx.market.finalResult),
+                    market: claimTx.market.address,
+                    paid: 0,
                     blockNumber: 0,
+                    wholeMarket: claimTx.market,
                 });
             });
         }
 
-        if (marketTransactionsQuery?.isSuccess && marketTransactionsQuery?.data) {
-            marketTransactionsQuery?.data.forEach((marketTransaction: MarketTransaction) => {
+        if (marketTransactionsQuery.isSuccess && marketTransactionsQuery.data) {
+            marketTransactionsQuery.data.forEach((marketTransaction: MarketTransaction) => {
                 return data.push({
-                    hash: marketTransaction?.hash,
-                    type: marketTransaction?.type,
+                    hash: marketTransaction.hash,
+                    type: marketTransaction.type,
                     account: marketTransaction.account,
                     timestamp: marketTransaction.timestamp,
                     amount: marketTransaction.amount,
-                    position: convertPositionToTeamName(marketTransaction.position, market),
-                    market: marketTransaction?.market,
-                    paid: marketTransaction?.paid,
+                    position: marketTransaction.position,
+                    market: marketTransaction.market,
+                    paid: marketTransaction.paid,
                     blockNumber: 0,
+                    wholeMarket: marketTransaction.wholeMarket,
                 });
             });
         }
@@ -79,7 +81,6 @@ const Transactions: React.FC<TransactionsProps> = ({ market }) => {
         marketClaimTransactionsQuery?.data,
         marketTransactionsQuery?.isSuccess,
         marketTransactionsQuery?.data,
-        market,
     ]);
 
     const noResults = marketTransactions.length === 0;
@@ -102,19 +103,18 @@ const Transactions: React.FC<TransactionsProps> = ({ market }) => {
 const Title = styled.span`
     font-style: normal;
     font-weight: bold;
-    font-size: 25px;
+    font-size: 18px;
     line-height: 100%;
     text-align: center;
     color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 `;
 
 const Container = styled(FlexDivColumn)`
-    margin-top: 10px;
     border-radius: 15px;
     font-style: normal;
     font-weight: normal;
-    padding: 20px 20px 20px 20px;
+    padding: 20px 0px 20px 0px;
     color: ${(props) => props.theme.textColor.primary};
     position: relative;
     width: 100%;

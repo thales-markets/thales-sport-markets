@@ -1,13 +1,16 @@
 export const overtimeVoucherContract = {
     addresses: {
-        5: '0x671f9654a594f8966b19c0b466f306E1dFe912a6',
-        10: '0xC9183E3306A06E64c2A83E655756F70A83152536',
-        420: '0x9B91d27568c51cEf3C4E04D504EF3CE11D5f2427',
+        5: '0xef4e90b909C0a5919AE049Ea18C997FdA09Ab66c',
+        10: '0x4393F1470317Da64e277b29D96e5bf203f28eFbE',
+        420: '0x9483eFf448042c366a4297dB465FaE108d2e6ea6',
+        42161: '0x9Ee26dcb9A3F1104B37A5dCc8573c8b144c7ce42',
     },
     abi: [
         {
             inputs: [
                 { internalType: 'address', name: '_sUSD', type: 'address' },
+                { internalType: 'string', name: '_tokenURIFive', type: 'string' },
+                { internalType: 'string', name: '_tokenURITen', type: 'string' },
                 { internalType: 'string', name: '_tokenURITwenty', type: 'string' },
                 { internalType: 'string', name: '_tokenURIFifty', type: 'string' },
                 { internalType: 'string', name: '_tokenURIHundred', type: 'string' },
@@ -15,6 +18,7 @@ export const overtimeVoucherContract = {
                 { internalType: 'string', name: '_tokenURIFiveHundred', type: 'string' },
                 { internalType: 'string', name: '_tokenURIThousand', type: 'string' },
                 { internalType: 'address', name: '_sportsamm', type: 'address' },
+                { internalType: 'address', name: '_parlayAMM', type: 'address' },
             ],
             stateMutability: 'nonpayable',
             type: 'constructor',
@@ -41,7 +45,40 @@ export const overtimeVoucherContract = {
         },
         {
             anonymous: false,
-            inputs: [{ indexed: false, internalType: 'address', name: '_thalesRoyaleAddress', type: 'address' }],
+            inputs: [
+                { indexed: false, internalType: 'address', name: 'buyer', type: 'address' },
+                { indexed: false, internalType: 'address', name: 'market', type: 'address' },
+                { indexed: false, internalType: 'enum ISportsAMM.Position', name: 'position', type: 'uint8' },
+                { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
+                { indexed: false, internalType: 'uint256', name: 'sUSDPaid', type: 'uint256' },
+                { indexed: false, internalType: 'address', name: 'susd', type: 'address' },
+                { indexed: false, internalType: 'address', name: 'asset', type: 'address' },
+            ],
+            name: 'BoughtFromAmmWithVoucher',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'address', name: 'buyer', type: 'address' },
+                { indexed: false, internalType: 'address[]', name: '_sportMarkets', type: 'address[]' },
+                { indexed: false, internalType: 'uint256[]', name: '_positions', type: 'uint256[]' },
+                { indexed: false, internalType: 'uint256', name: '_sUSDPaid', type: 'uint256' },
+                { indexed: false, internalType: 'uint256', name: '_expectedPayout', type: 'uint256' },
+                { indexed: false, internalType: 'address', name: 'susd', type: 'address' },
+            ],
+            name: 'BoughtFromParlayWithVoucher',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: '_parlayAMM', type: 'address' }],
+            name: 'NewParlayAMM',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: '_sportsAMM', type: 'address' }],
             name: 'NewSportsAMM',
             type: 'event',
         },
@@ -127,6 +164,20 @@ export const overtimeVoucherContract = {
             type: 'function',
         },
         {
+            inputs: [
+                { internalType: 'address[]', name: '_sportMarkets', type: 'address[]' },
+                { internalType: 'uint256[]', name: '_positions', type: 'uint256[]' },
+                { internalType: 'uint256', name: '_sUSDPaid', type: 'uint256' },
+                { internalType: 'uint256', name: '_additionalSlippage', type: 'uint256' },
+                { internalType: 'uint256', name: '_expectedPayout', type: 'uint256' },
+                { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+            ],
+            name: 'buyFromParlayAMMWithVoucher',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
             name: 'getApproved',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
@@ -176,6 +227,13 @@ export const overtimeVoucherContract = {
         },
         {
             inputs: [],
+            name: 'parlayAMM',
+            outputs: [{ internalType: 'contract IParlayMarketsAMM', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
             name: 'paused',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
@@ -215,7 +273,7 @@ export const overtimeVoucherContract = {
                 { internalType: 'address', name: 'from', type: 'address' },
                 { internalType: 'address', name: 'to', type: 'address' },
                 { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
-                { internalType: 'bytes', name: '_data', type: 'bytes' },
+                { internalType: 'bytes', name: 'data', type: 'bytes' },
             ],
             name: 'safeTransferFrom',
             outputs: [],
@@ -228,6 +286,13 @@ export const overtimeVoucherContract = {
                 { internalType: 'bool', name: 'approved', type: 'bool' },
             ],
             name: 'setApprovalForAll',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '_parlayAMM', type: 'address' }],
+            name: 'setParlayAMM',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -248,6 +313,8 @@ export const overtimeVoucherContract = {
         },
         {
             inputs: [
+                { internalType: 'string', name: '_tokenURIFive', type: 'string' },
+                { internalType: 'string', name: '_tokenURITen', type: 'string' },
                 { internalType: 'string', name: '_tokenURITwenty', type: 'string' },
                 { internalType: 'string', name: '_tokenURIFifty', type: 'string' },
                 { internalType: 'string', name: '_tokenURIHundred', type: 'string' },
@@ -297,6 +364,13 @@ export const overtimeVoucherContract = {
         },
         {
             inputs: [],
+            name: 'tokenURIFive',
+            outputs: [{ internalType: 'string', name: '', type: 'string' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
             name: 'tokenURIFiveHundred',
             outputs: [{ internalType: 'string', name: '', type: 'string' }],
             stateMutability: 'view',
@@ -305,6 +379,13 @@ export const overtimeVoucherContract = {
         {
             inputs: [],
             name: 'tokenURIHundred',
+            outputs: [{ internalType: 'string', name: '', type: 'string' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'tokenURITen',
             outputs: [{ internalType: 'string', name: '', type: 'string' }],
             stateMutability: 'view',
             type: 'function',

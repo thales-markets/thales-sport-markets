@@ -3,6 +3,7 @@ export const OP_SUSD = {
     decimals: 18,
     symbol: 'sUSD',
     name: 'Synth sUSD',
+    chainId: 10,
     logoURI: 'https://tokens.1inch.io/0x57ab1ec28d129707052df4df418d58a2d46d5f51.png',
 };
 
@@ -11,6 +12,7 @@ export const OP_ETH = {
     decimals: 18,
     symbol: 'ETH',
     name: 'Ethereum',
+    chainId: 10,
     logoURI: 'https://tokens.1inch.io/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.png',
 };
 
@@ -19,6 +21,7 @@ export const OP_DAI = {
     decimals: 18,
     symbol: 'DAI',
     name: 'Dai stable coin',
+    chainId: 10,
     logoURI: 'https://tokens.1inch.io/0x6b175474e89094c44da98b954eedeac495271d0f.png',
 };
 
@@ -27,6 +30,7 @@ export const OP_USDC = {
     decimals: 6,
     symbol: 'USDC',
     name: 'USD Coin',
+    chainId: 10,
     logoURI: 'https://tokens.1inch.io/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png',
 };
 
@@ -35,10 +39,20 @@ export const OP_USDT = {
     decimals: 6,
     symbol: 'USDT',
     name: 'Tether USD',
+    chainId: 10,
     logoURI: 'https://tokens.1inch.io/0xdac17f958d2ee523a2206206994597c13d831ec7.png',
 };
 
-export const AVAILABLE_TOKENS = [OP_ETH, OP_DAI, OP_USDC, OP_USDT];
+export const ARB_USDC = {
+    address: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+    decimals: 6,
+    symbol: 'USDC',
+    name: 'USD Coin',
+    chainId: 42161,
+    logoURI: 'https://tokens.1inch.io/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png',
+};
+
+export const AVAILABLE_TOKENS = [OP_SUSD, OP_DAI, OP_USDC, OP_USDT, ARB_USDC];
 
 export const ONE_INCH_EXCHANGE_URL = 'https://api.1inch.exchange/v4.0/';
 export const APPROVE_SPENDER_SUFFIX = '/approve/spender';

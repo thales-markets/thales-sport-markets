@@ -1,9 +1,10 @@
 export const sportPositionalMarketDataContract = {
     addresses: {
         5: '0xC7D8c34048D8bf6eB24FC76c7A61F47754990c81',
-        10: '0x4f2B4e7d0A61622D2bBaeeCCD34888163e175647',
+        10: '0xd8Bc9D6840C701bFAd5E7cf98CAdC2ee637c0701',
         42: '0x05C370827A21E491953BD0b8B1ce3290584aC486',
-        420: '0x5915Bf86aD35330Acf103544aD205774a970a4E0',
+        420: '0xAca69fa38a08EeF5b03a576387b85a5BFe8BbC19',
+        42161: '0x503e7F2C19384Ff68B445E21850fDC61f34434e6',
     },
     abi: [
         {
@@ -29,8 +30,26 @@ export const sportPositionalMarketDataContract = {
         },
         {
             anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: '_consumer', type: 'address' }],
+            name: 'SetConsumer',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: '_oddsObtainer', type: 'address' }],
+            name: 'SetOddsObtainer',
+            type: 'event',
+        },
+        {
+            anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: '_sportsAMM', type: 'address' }],
             name: 'SetSportsAMM',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: '_voucherEscrow', type: 'address' }],
+            name: 'SetVoucherEscrow',
             type: 'event',
         },
         {
@@ -42,16 +61,194 @@ export const sportPositionalMarketDataContract = {
         { inputs: [], name: 'acceptOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
         {
             inputs: [],
-            name: 'getOddsForAllActiveMarkets',
+            name: 'consumer',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'getBaseOddsForAllActiveMarkets',
             outputs: [
                 {
                     components: [
-                        { internalType: 'bytes32', name: 'market', type: 'bytes32' },
+                        { internalType: 'address', name: 'market', type: 'address' },
                         { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
                     ],
                     internalType: 'struct SportPositionalMarketData.ActiveMarketsOdds[]',
                     name: '',
                     type: 'tuple[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: 'market', type: 'address' }],
+            name: 'getMarketData',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
+                        { internalType: 'string', name: 'gameLabel', type: 'string' },
+                        { internalType: 'uint256', name: 'firstTag', type: 'uint256' },
+                        { internalType: 'uint256', name: 'secondTag', type: 'uint256' },
+                        { internalType: 'uint256', name: 'maturity', type: 'uint256' },
+                        { internalType: 'bool', name: 'resolved', type: 'bool' },
+                        { internalType: 'uint256', name: 'finalResult', type: 'uint256' },
+                        { internalType: 'bool', name: 'cancelled', type: 'bool' },
+                        { internalType: 'bool', name: 'paused', type: 'bool' },
+                        { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
+                        { internalType: 'address[]', name: 'childMarkets', type: 'address[]' },
+                        { internalType: 'address[]', name: 'doubleChanceMarkets', type: 'address[]' },
+                        { internalType: 'uint8', name: 'homeScore', type: 'uint8' },
+                        { internalType: 'uint8', name: 'awayScore', type: 'uint8' },
+                        { internalType: 'int16', name: 'spread', type: 'int16' },
+                        { internalType: 'uint24', name: 'total', type: 'uint24' },
+                    ],
+                    internalType: 'struct SportPositionalMarketData.MarketData',
+                    name: '',
+                    type: 'tuple',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: 'market', type: 'address' }],
+            name: 'getMarketLiquidityAndPriceImpact',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'int256', name: 'homePriceImpact', type: 'int256' },
+                        { internalType: 'int256', name: 'awayPriceImpact', type: 'int256' },
+                        { internalType: 'int256', name: 'drawPriceImpact', type: 'int256' },
+                        { internalType: 'uint256', name: 'homeLiquidity', type: 'uint256' },
+                        { internalType: 'uint256', name: 'awayLiquidity', type: 'uint256' },
+                        { internalType: 'uint256', name: 'drawLiquidity', type: 'uint256' },
+                    ],
+                    internalType: 'struct SportPositionalMarketData.MarketLiquidityAndPriceImpact',
+                    name: '',
+                    type: 'tuple',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'getOddsForAllActiveMarkets',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'address', name: 'market', type: 'address' },
+                        { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
+                    ],
+                    internalType: 'struct SportPositionalMarketData.ActiveMarketsOdds[]',
+                    name: '',
+                    type: 'tuple[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'uint256', name: 'batchNumber', type: 'uint256' },
+                { internalType: 'uint256', name: 'batchSize', type: 'uint256' },
+            ],
+            name: 'getOddsForAllActiveMarketsInBatches',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'address', name: 'market', type: 'address' },
+                        { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
+                    ],
+                    internalType: 'struct SportPositionalMarketData.ActiveMarketsOdds[]',
+                    name: '',
+                    type: 'tuple[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'address', name: 'market', type: 'address' },
+                { internalType: 'enum ISportsAMM.Position', name: 'position', type: 'uint8' },
+                { internalType: 'uint256', name: 'amount', type: 'uint256' },
+                { internalType: 'address', name: 'collateral', type: 'address' },
+            ],
+            name: 'getPositionDetails',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'int256', name: 'priceImpact', type: 'int256' },
+                        { internalType: 'uint256', name: 'liquidity', type: 'uint256' },
+                        { internalType: 'uint256', name: 'quote', type: 'uint256' },
+                        { internalType: 'uint256', name: 'quoteDifferentCollateral', type: 'uint256' },
+                    ],
+                    internalType: 'struct SportPositionalMarketData.PositionDetails',
+                    name: '',
+                    type: 'tuple',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'getPriceImpactForAllActiveMarkets',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'address', name: 'market', type: 'address' },
+                        { internalType: 'int256[]', name: 'priceImpact', type: 'int256[]' },
+                    ],
+                    internalType: 'struct SportPositionalMarketData.ActiveMarketsPriceImpact[]',
+                    name: '',
+                    type: 'tuple[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'uint256', name: 'batchNumber', type: 'uint256' },
+                { internalType: 'uint256', name: 'batchSize', type: 'uint256' },
+            ],
+            name: 'getPriceImpactForAllActiveMarketsInBatches',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'address', name: 'market', type: 'address' },
+                        { internalType: 'int256[]', name: 'priceImpact', type: 'int256[]' },
+                    ],
+                    internalType: 'struct SportPositionalMarketData.ActiveMarketsPriceImpact[]',
+                    name: '',
+                    type: 'tuple[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: 'user', type: 'address' }],
+            name: 'getVoucherEscrowData',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'uint256', name: 'period', type: 'uint256' },
+                        { internalType: 'bool', name: 'isWhitelisted', type: 'bool' },
+                        { internalType: 'bool', name: 'isClaimed', type: 'bool' },
+                        { internalType: 'uint256', name: 'voucherAmount', type: 'uint256' },
+                        { internalType: 'bool', name: 'isPeriodEnded', type: 'bool' },
+                        { internalType: 'uint256', name: 'periodEnd', type: 'uint256' },
+                    ],
+                    internalType: 'struct SportPositionalMarketData.VoucherEscrowData',
+                    name: '',
+                    type: 'tuple',
                 },
             ],
             stateMutability: 'view',
@@ -94,6 +291,13 @@ export const sportPositionalMarketDataContract = {
         },
         {
             inputs: [],
+            name: 'oddsObtainer',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
             name: 'owner',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
             stateMutability: 'view',
@@ -104,6 +308,20 @@ export const sportPositionalMarketDataContract = {
             name: 'paused',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '_consumer', type: 'address' }],
+            name: 'setConsumer',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '_oddsObtainer', type: 'address' }],
+            name: 'setOddsObtainer',
+            outputs: [],
+            stateMutability: 'nonpayable',
             type: 'function',
         },
         {
@@ -135,6 +353,13 @@ export const sportPositionalMarketDataContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'address', name: '_voucherEscrow', type: 'address' }],
+            name: 'setVoucherEscrow',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [],
             name: 'sportsAMM',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
@@ -146,6 +371,13 @@ export const sportPositionalMarketDataContract = {
             name: 'transferOwnershipAtInit',
             outputs: [],
             stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'voucherEscrow',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
             type: 'function',
         },
     ],

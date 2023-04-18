@@ -2,6 +2,7 @@ import FieldValidationMessage from 'components/FieldValidationMessage';
 import Tooltip from 'components/Tooltip';
 import { DEFAULT_TOKEN_DECIMALS } from 'constants/defaults';
 import React, { ChangeEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { CurrencyLabel, FieldContainer, FieldLabel, FieldNote, Input, OverlayContainer } from '../common';
 
@@ -18,6 +19,7 @@ type NumericInputProps = {
     validationMessage?: string;
     currencyLabel?: string;
     tooltip?: string;
+    onMaxButton?: any;
 };
 
 const INVALID_CHARS = ['-', '+', 'e'];
@@ -35,8 +37,11 @@ const NumericInput: React.FC<NumericInputProps> = ({
     validationMessage,
     currencyLabel,
     tooltip,
+    onMaxButton,
     ...rest
 }) => {
+    const { t } = useTranslation();
+
     const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
 
@@ -82,8 +87,19 @@ const NumericInput: React.FC<NumericInputProps> = ({
                 min="0"
                 max={max || 'any'}
                 step={step || 'any'}
+                title=""
             />
-            {currencyLabel && <CurrencyLabel className={disabled ? 'disabled' : ''}>{currencyLabel}</CurrencyLabel>}
+            {currencyLabel && (
+                <CurrencyLabel className={disabled ? 'currency-label disabled' : 'currency-label'}>
+                    {currencyLabel}
+                </CurrencyLabel>
+            )}
+
+            {onMaxButton && (
+                <MaxButton disabled={disabled} onClick={onMaxButton}>
+                    {t('markets.market-details.max')}
+                </MaxButton>
+            )}
             <FieldValidationMessage showValidation={showValidation} message={validationMessage} />
             {note && <FieldNote>{note}</FieldNote>}
         </FieldContainer>
@@ -92,6 +108,20 @@ const NumericInput: React.FC<NumericInputProps> = ({
 
 const StyledInput = styled(Input)`
     padding-right: 100px;
+`;
+
+const MaxButton = styled.button`
+    background: #3accfa;
+    font-size: 10px;
+    line-height: 12px;
+    position: absolute;
+    top: 6px;
+    right: 50px;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 600;
+    border-radius: 2px;
 `;
 
 export default NumericInput;

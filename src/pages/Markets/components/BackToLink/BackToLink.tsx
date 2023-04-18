@@ -1,19 +1,24 @@
 import SPAAnchor from 'components/SPAAnchor';
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import styled from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
 
 type BackToLinkProps = {
     link: string;
     text: string;
+    customStylingContainer?: CSSProperties;
+    useArrow?: boolean;
 };
 
-const BackToLink: React.FC<BackToLinkProps> = ({ link, text }) => {
+const BackToLink: React.FC<BackToLinkProps> = ({ link, text, customStylingContainer, useArrow }) => {
     return (
-        <Container>
+        <Container style={customStylingContainer}>
             <SPAAnchor href={link}>
-                <Link>
-                    <LeftIcon />
+                <Link
+                    fontFamily={customStylingContainer?.fontFamily}
+                    lineHeight={customStylingContainer?.lineHeight?.toString()}
+                >
+                    {useArrow ? <LeftArrow /> : <LeftIcon />}
                     {text}
                 </Link>
             </SPAAnchor>
@@ -26,11 +31,12 @@ const Container = styled(FlexDivCentered)`
     cursor: pointer;
 `;
 
-const Link = styled(FlexDivCentered)`
+const Link = styled(FlexDivCentered)<{ fontFamily?: string; lineHeight?: string }>`
+    ${(props) => (props.fontFamily ? `font-family: '${props.fontFamily}' !important;` : '')}
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
-    line-height: 102.6%;
+    font-size: 16px;
+    line-height: ${(props) => (props.lineHeight ? props.lineHeight : '102.6%')};
     letter-spacing: 0.035em;
     color: ${(props) => props.theme.textColor.primary};
     a {
@@ -39,13 +45,25 @@ const Link = styled(FlexDivCentered)`
 `;
 
 const LeftIcon = styled.i`
-    font-size: 25px;
+    font-size: 20px;
     margin-right: 4px;
     margin-top: -2px;
     &:before {
         font-family: ExoticIcons !important;
         content: '\\0041';
         color: ${(props) => props.theme.textColor.primary};
+    }
+`;
+
+const LeftArrow = styled.i`
+    font-size: 14px;
+    margin-right: 8px;
+    text-transform: none;
+    transform: rotate(225deg);
+    font-weight: 400;
+    &:before {
+        font-family: OvertimeIcons !important;
+        content: '\\006C';
     }
 `;
 

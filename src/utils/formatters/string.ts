@@ -1,5 +1,3 @@
-import { SportMarketInfo } from 'types/markets';
-
 export const truncateAddress = (address: string, first = 5, last = 5) =>
     address ? `${address.slice(0, first)}...${address.slice(-last, address.length)}` : null;
 
@@ -7,6 +5,7 @@ export const truncateText = (text: string, maxLength: number) =>
     text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
 
 export const fixDuplicatedTeamName = (name: string) => {
+    if (!name?.length) return '';
     const middle = Math.floor(name.length / 2);
     const firstHalf = name.substring(0, middle).trim();
     const secondHalf = name.substring(middle, name.length).trim();
@@ -22,20 +21,6 @@ export const fixDuplicatedTeamName = (name: string) => {
     }
 
     return name;
-};
-
-export const fixLongTeamName = (market: SportMarketInfo) => {
-    market.homeTeam.toLowerCase() == 'wolverhampton' ? (market.homeTeam = 'Wolves') : '';
-    market.awayTeam.toLowerCase() == 'wolverhampton' ? (market.awayTeam = 'Wolves') : '';
-    market.homeTeam.toLowerCase() == 'borussia monchengladbach' ? (market.homeTeam = "Borussia M'gladbach") : '';
-    market.awayTeam.toLowerCase() == 'borussia monchengladbach' ? (market.awayTeam = "Borussia M'gladbach") : '';
-    return market;
-};
-
-export const fixLongTeamNameString = (team: string) => {
-    team.toLowerCase() == 'wolverhampton' ? (team = 'Wolves') : '';
-    team.toLowerCase() == 'borussia monchengladbach' ? (team = "Borussia M'gladbach") : '';
-    return team;
 };
 
 export const fixApexName = (team: string) =>

@@ -322,6 +322,8 @@ const Quiz: React.FC = () => {
                                         <ValidationTooltip
                                             open={!isTwitterValid}
                                             title={t('quiz.twitter-handle-validation') as string}
+                                            placement={'top'}
+                                            arrow={true}
                                         >
                                             <Input
                                                 type="text"

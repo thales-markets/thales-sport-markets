@@ -4,6 +4,9 @@ import { Theme } from 'constants/ui';
 import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
 import { OddsType } from '../../constants/markets';
+import { TAGS_LIST } from 'constants/tags';
+import { Tags } from 'types/markets';
+import { uniqBy } from 'lodash';
 
 const sliceName = 'ui';
 
@@ -22,16 +25,23 @@ const getDefaultStopPulsing = (): boolean => {
     return (lsStopPulsing !== undefined ? lsStopPulsing : false) as boolean;
 };
 
+const getDefaultFavouriteLeagues = (): Tags => {
+    const lsFavouriteLeagues = localStore.get(LOCAL_STORAGE_KEYS.FAVOURITE_LEAGUES);
+    return (lsFavouriteLeagues !== undefined ? uniqBy(lsFavouriteLeagues as Tags, 'id') : TAGS_LIST) as Tags;
+};
+
 type UISliceState = {
     theme: Theme;
     oddsType: OddsType;
     stopPulsing: boolean;
+    favouriteLeagues: Tags;
 };
 
 const initialState: UISliceState = {
     theme: getDefaultTheme(),
     oddsType: getDefaultOddsType(),
     stopPulsing: getDefaultStopPulsing(),
+    favouriteLeagues: getDefaultFavouriteLeagues(),
 };
 
 export const uiSlice = createSlice({
@@ -50,14 +60,19 @@ export const uiSlice = createSlice({
             state.stopPulsing = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.STOP_PULSING, action.payload);
         },
+        setFavouriteLeagues: (state, action: PayloadAction<Tags>) => {
+            state.favouriteLeagues = uniqBy(action.payload, 'id');
+            localStore.set(LOCAL_STORAGE_KEYS.FAVOURITE_LEAGUES, action.payload);
+        },
     },
 });
 
-export const { setTheme, setOddsType, setStopPulsing } = uiSlice.actions;
+export const { setTheme, setOddsType, setStopPulsing, setFavouriteLeagues } = uiSlice.actions;
 
 export const getUIState = (state: RootState) => state[sliceName];
 export const getTheme = (state: RootState) => getUIState(state).theme;
 export const getOddsType = (state: RootState) => getUIState(state).oddsType;
 export const getStopPulsing = (state: RootState) => getUIState(state).stopPulsing;
+export const getFavouriteLeagues = (state: RootState) => getUIState(state).favouriteLeagues;
 
 export default uiSlice.reducer;

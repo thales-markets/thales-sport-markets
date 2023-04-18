@@ -28,14 +28,14 @@ export const formatCurrencyWithPrecision = (value: NumericValue, trimDecimals = 
     formatCurrency(value, getPrecision(value), trimDecimals);
 
 export const formatCurrencyWithSign = (sign: string | null | undefined, value: NumericValue, decimals?: number) =>
-    `${sign} ${formatCurrency(value, decimals || getPrecision(value))}`;
+    `${sign} ${formatCurrency(value, decimals !== undefined ? decimals : getPrecision(value))}`;
 
 export const formatCurrencyWithKey = (
     currencyKey: string,
     value: NumericValue,
     decimals?: number,
     trimDecimals?: boolean
-) => `${formatCurrency(value, decimals || getPrecision(value), trimDecimals)} ${currencyKey}`;
+) => `${formatCurrency(value, decimals === undefined ? getPrecision(value) : decimals, trimDecimals)} ${currencyKey}`;
 
 export const formatPercentage = (value: NumericValue, decimals = DEFAULT_CURRENCY_DECIMALS) => {
     let percentageValue = value;
@@ -75,6 +75,10 @@ export const formatNumberShort = (value: number) => {
 
 export const floorNumberToDecimals = (value: number, decimals = DEFAULT_CURRENCY_DECIMALS) => {
     return Math.floor(value * Math.pow(10, decimals)) / Math.pow(10, decimals);
+};
+
+export const roundNumberToDecimals = (value: number, decimals = DEFAULT_CURRENCY_DECIMALS) => {
+    return +(Math.round(Number(value + 'e+' + decimals)) + 'e-' + decimals);
 };
 
 export const countDecimals = (value: number) => {
