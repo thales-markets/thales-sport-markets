@@ -716,18 +716,39 @@ export const isChildMarketOfMarket = (childMarket: SportMarketInfo, parentMarket
     return false;
 };
 
-export const isCombinedMarketsInParlayData = (parlayData: ParlaysMarketPosition[]): boolean => {
+export const getCombinedMarketsFromParlayData = (parlayData: ParlaysMarketPosition[]): ParlaysMarketPosition[] => {
     const combinedMarkets = [];
 
     for (let i = 0; i < parlayData.length - 1; i++) {
         for (let j = i + 1; j < parlayData.length; j++) {
             if (parlayData[i].parentMarket == parlayData[j].parentMarket) {
-                combinedMarkets.push(parlayData[i]);
+                combinedMarkets.push(parlayData[i], parlayData[j]);
             }
         }
     }
 
-    if (combinedMarkets.length > 0) return true;
+    if (combinedMarkets.length > 0) return combinedMarkets;
+    return [];
+};
+
+export const isCombinedMarketsInParlayData = (parlayData: ParlaysMarketPosition[]): boolean => {
+    const markets = getCombinedMarketsFromParlayData(parlayData);
+
+    if (markets.length > 0) return true;
+    return false;
+};
+
+export const isMarketPartOfCombinedMarketFromParlayData = (
+    parlayData: ParlaysMarketPosition[],
+    market: SportMarketInfo
+): boolean => {
+    const combinedMarkets = getCombinedMarketsFromParlayData(parlayData);
+    if (combinedMarkets.length > 0) {
+        const sameMarkets = combinedMarkets.filter((_market) => _market.sportMarketAddress == market.address);
+
+        if (sameMarkets.length > 0) return true;
+    }
+
     return false;
 };
 

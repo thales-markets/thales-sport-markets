@@ -12,7 +12,7 @@ import {
     getParentMarketAddress,
     getSymbolText,
     hasBonus,
-    isCombinedMarketsInParlayData,
+    isMarketPartOfCombinedMarketFromParlayData,
 } from 'utils/markets';
 import { getOddsType } from '../../../../../../redux/modules/ui';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
@@ -38,7 +38,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
     const parlay = useSelector(getParlay);
     const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
 
-    const isCombinedMarketAddedToParlay = isCombinedMarketsInParlayData(parlay);
+    const isMarketPartOfCombinedMarket = isMarketPartOfCombinedMarketFromParlayData(parlay, market);
 
     const parentMarketAddress = market.parentMarket !== null ? market.parentMarket : market.address;
     const isParentMarketAddressInParlayData = parlay.filter((data) => data.parentMarket == parentMarketAddress);
@@ -47,8 +47,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
         addedToParlay &&
         addedToParlay.position == position &&
         addedToParlay.doubleChanceMarketType === market.doubleChanceMarketType &&
-        !isCombinedMarketAddedToParlay;
-
+        !isMarketPartOfCombinedMarket;
     const noOdd = !odd || odd == 0;
     const showBonus = hasBonus(bonus) && !noOdd;
 
@@ -75,7 +74,6 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
                 awayTeam: market.awayTeam || '',
                 doubleChanceMarketType: market.doubleChanceMarketType,
             };
-            console.log('Ovde');
             dispatch(updateParlay(parlayMarket));
             if (isMobile) {
                 toast(oddTooltipText, oddToastOptions);
