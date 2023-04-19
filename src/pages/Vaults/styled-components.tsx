@@ -40,4 +40,5 @@ export const Note = styled.span`
     align-items: center;
     color: ${(props) => props.theme.textColor.primary};
     margin-bottom: 20px;
+    padding: 0 10px;
 `;
