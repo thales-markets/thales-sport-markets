@@ -820,12 +820,14 @@ const LiquidityPool: React.FC = () => {
                                             values={{
                                                 amount: formatCurrencyWithSign(
                                                     USD_SIGN,
-                                                    userLiquidityPoolData.balanceCurrentRound
+                                                    userLiquidityPoolData
+                                                        ? userLiquidityPoolData.balanceCurrentRound
+                                                        : 0
                                                 ),
                                             }}
                                         />
                                         <Tooltip
-                                            overlay={t(`vault.estimated-amount-tooltip`)}
+                                            overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
                                             iconFontSize={14}
                                             marginLeft={2}
                                         />
