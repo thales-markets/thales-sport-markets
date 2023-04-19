@@ -17,6 +17,8 @@ export const Container = styled(FlexDivRow)`
         flex-direction: column;
         align-items: center;
     }
+    margin-bottom: 20px;
+    justify-content: center;
 `;
 
 export const Title = styled.span`
@@ -24,7 +26,18 @@ export const Title = styled.span`
     font-weight: bold;
     font-size: 25px;
     line-height: 100%;
-    margin-top: 30px;
     color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 40px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+`;
+
+export const Note = styled.span`
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 15px;
+    display: flex;
+    align-items: center;
+    color: ${(props) => props.theme.textColor.primary};
+    margin-bottom: 20px;
 `;

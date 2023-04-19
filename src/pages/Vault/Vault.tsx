@@ -70,6 +70,7 @@ import Toggle from 'components/Toggle/Toggle';
 import Tooltip from 'components/Tooltip';
 import { getDefaultColleteralForNetwork, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { refetchVaultData } from 'utils/queryConnector';
+import { NewBadge } from 'pages/Vaults/VaultOverview/styled-components';
 
 type VaultProps = RouteComponentProps<{
     vaultId: string;
@@ -449,6 +450,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                     <Title>
                         <TitleVaultIcon className={`icon icon--${vaultId}`} />
                         {t(`vault.${vaultId}.title`)}
+                        {vaultData && vaultData.round === 1 && <NewBadge>NEW</NewBadge>}
                     </Title>
                     {!vaultData ? (
                         <LeftLoaderContainer>
@@ -470,6 +472,12 @@ const Vault: React.FC<VaultProps> = (props) => {
                                             0
                                         ),
                                         discount: formatPercentage(Math.abs(vaultData.skewImpactLimit), 0),
+                                    }}
+                                />
+                                <Trans
+                                    i18nKey={`vault.gamified-staking-message`}
+                                    components={{
+                                        p: <p />,
                                     }}
                                 />
                                 <Trans

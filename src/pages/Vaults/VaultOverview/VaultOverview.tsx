@@ -5,7 +5,6 @@ import {
     VaultContainer,
     SpaContainer,
     VaultTitle,
-    VaultSectionTitle,
     VaultSectionDescription,
     LoaderContainer,
     VaultInfoContainer,
@@ -14,7 +13,7 @@ import {
     VaultBottomWrapper,
     VaultTopWrapper,
     TitleVaultIcon,
-    VaultSectionIcon,
+    NewBadge,
 } from './styled-components';
 import SPAAnchor from 'components/SPAAnchor';
 import i18n from 'i18n';
@@ -68,6 +67,7 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
                         <VaultTitle>
                             <TitleVaultIcon className={`icon icon--${vaultId}`} />
                             {t(`vault.${vaultId}.title`)}
+                            {vaultData && vaultData.round === 1 && <NewBadge>NEW</NewBadge>}
                         </VaultTitle>
                         {!vaultData ? (
                             <LoaderContainer>
@@ -76,10 +76,6 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
                         ) : (
                             <FlexDivColumn>
                                 <VaultTopWrapper>
-                                    <VaultSectionTitle>
-                                        <VaultSectionIcon className={`icon icon--strategy`} />
-                                        {t('vaults.strategy-label')}
-                                    </VaultSectionTitle>
                                     <VaultSectionDescription>
                                         <Trans
                                             i18nKey={`vault.${vaultId}.description`}
@@ -94,30 +90,6 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
                                                     0
                                                 ),
                                                 discount: formatPercentage(Math.abs(vaultData.skewImpactLimit), 0),
-                                            }}
-                                        />
-                                    </VaultSectionDescription>
-                                    <VaultSectionTitle>
-                                        <VaultSectionIcon className={`icon icon--risks`} />
-                                        {t('vaults.risks-label')}
-                                    </VaultSectionTitle>
-                                    <VaultSectionDescription>
-                                        <Trans
-                                            i18nKey={`vault.${vaultId}.risks`}
-                                            components={{
-                                                p: <p />,
-                                            }}
-                                            values={{
-                                                utilizationRate: formatPercentage(vaultData.utilizationRate, 0),
-                                                allocationLimitsPerMarketPerRound: formatPercentage(
-                                                    vaultData.allocationLimitsPerMarketPerRound
-                                                ),
-                                                odds: formatPercentage(
-                                                    vaultId === 'upsettoor-vault'
-                                                        ? vaultData.priceUpperLimit
-                                                        : vaultData.priceLowerLimit,
-                                                    0
-                                                ),
                                             }}
                                         />
                                     </VaultSectionDescription>

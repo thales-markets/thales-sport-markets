@@ -732,29 +732,30 @@
     "vault": {
         "discount-vault": {
             "title": "Discount Vault",
-            "description": "<p>Buys positions that have more than {{odds}} odds and are available at a discount larger than {{discount}}.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "description": "<p>Buys positions that have more than {{odds}} odds and are available at a discount larger than {{discount}}.</p>",
             "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
         },
         "degen-discount-vault": {
             "title": "Degen Discount Vault",
-            "description": "<p>Buys positions at any odds that are available for more than {{discount}} discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "description": "<p>Buys positions at any odds that are available for more than {{discount}} discount.</p>",
             "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market.</p>"
         },
         "upsettoor-vault": {
             "title": "Upsettoor Vault",
-            "description": "<p>Buys positions that have less than {{odds}} odds and are available at a discount larger than {{discount}}.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "description": "<p>Buys positions that have less than {{odds}} odds and are available at a discount larger than {{discount}}.</p>",
             "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds less than {{odds}}.</p>"
         },
         "safu-discount-vault": {
             "title": "Safu Discount Vault",
-            "description": "<p>Buys positions that have more than {{odds}} odds and are available at any discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "description": "<p>Buys positions that have more than {{odds}} odds and are available at any discount.</p>",
             "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single market, thus diversifying the risk into multiple markets that have odds more than {{odds}}.</p>"
         },
         "parlay-discount-vault": {
             "title": "Parlay Discount Vault",
-            "description": "<p>Buys parlay tickets where each individual position in the ticket has at least a {{discount}} discount.</p><p>All deposits that enter a round count towards gamified staking volume.</p>",
+            "description": "<p>Buys parlay tickets where each individual position in the ticket has at least a {{discount}} discount.</p>",
             "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single parlay ticket per round, thus diversifying the risk into multiple parlay tickets that have a discount greater than {{odds}}.</p>"
         },
+        "gamified-staking-message": "<p>All deposits that enter a round count towards gamified staking volume.</p>",
         "LP": {
             "title": "LP"
         },
