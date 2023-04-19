@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import MatchInfo from './components/MatchInfo';
 import BackToLink from 'pages/Markets/components/BackToLink';
-import { ChildMarkets, MarketData, SportMarketLiveResult } from 'types/markets';
+import { SportMarketChildMarkets, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import Positions from './components/Positions';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -17,7 +17,6 @@ import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-wh
 import Parlay from 'pages/Markets/Home/Parlay';
 import Transactions from '../Transactions';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import useChildMarketsQuery from 'queries/markets/useChildMarketsQuery';
 import { GAME_STATUS, MAIN_COLORS } from 'constants/ui';
 import { BetType, ENETPULSE_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
@@ -30,7 +29,7 @@ import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditio
 import { NetworkIdByName } from 'utils/network';
 
 type MarketDetailsPropType = {
-    market: MarketData;
+    market: SportMarketInfo;
 };
 
 const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
@@ -40,21 +39,11 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const [showParlayMobileModal, setShowParlayMobileModal] = useState(false);
-    const [lastValidChildMarkets, setLastValidChildMarkets] = useState<ChildMarkets>({
-        spreadMarkets: [],
-        totalMarkets: [],
-        doubleChanceMarkets: [],
-    });
-
-    const childMarketsQuery = useChildMarketsQuery(market, networkId, {
-        enabled: isAppReady,
-    });
-
-    useEffect(() => {
-        if (childMarketsQuery.isSuccess && childMarketsQuery.data) {
-            setLastValidChildMarkets(childMarketsQuery.data);
-        }
-    }, [childMarketsQuery.isSuccess, childMarketsQuery.data]);
+    const lastValidChildMarkets: SportMarketChildMarkets = {
+        spreadMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.SPREAD),
+        totalMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.TOTAL),
+        doubleChanceMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.DOUBLE_CHANCE),
+    };
 
     const isMounted = useRef(false);
     useEffect(() => {
@@ -66,21 +55,16 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         }
     }, [networkId]);
 
-    const childMarkets: ChildMarkets = useMemo(() => {
-        if (childMarketsQuery.isSuccess && childMarketsQuery.data) {
-            return childMarketsQuery.data;
-        }
-        return lastValidChildMarkets;
-    }, [childMarketsQuery.isSuccess, childMarketsQuery.data, lastValidChildMarkets]);
+    const childMarkets: SportMarketChildMarkets = lastValidChildMarkets;
 
-    const showAMM = !market.resolved && !market.cancelled && !market.gameStarted && !market.paused;
+    const showAMM = !market.isResolved && !market.isCanceled && market.isOpen && !market.isPaused;
 
-    const isGameCancelled = market.cancelled || (!market.gameStarted && market.resolved);
-    const isGameResolved = market.resolved || market.cancelled;
-    const isPendingResolution = market.gameStarted && !isGameResolved;
-    const isGamePaused = market.paused && !isGameResolved;
-    const showStatus = market.resolved || market.cancelled || market.gameStarted || market.paused;
-    const gameIdString = Web3.utils.hexToAscii(market.gameDetails.gameId);
+    const isGameCancelled = market.isCanceled || (market.isOpen && market.isResolved);
+    const isGameResolved = market.isResolved || market.isCanceled;
+    const isPendingResolution = !market.isOpen && !isGameResolved;
+    const isGamePaused = market.isPaused && !isGameResolved;
+    const showStatus = market.isResolved || market.isCanceled || !market.isOpen || market.isPaused;
+    const gameIdString = Web3.utils.hexToAscii(market.gameId);
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.tags[0]));
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
     const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);

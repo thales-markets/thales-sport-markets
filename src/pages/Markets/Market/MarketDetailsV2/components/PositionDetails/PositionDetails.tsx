@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
-import { MarketData, ParlaysMarketPosition } from 'types/markets';
+import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
 import { floorNumberToDecimals } from 'utils/formatters/number';
 import {
     hasBonus,
@@ -36,7 +36,7 @@ import {
 } from './styled-components';
 
 type PositionDetailsProps = {
-    market: MarketData;
+    market: SportMarketInfo;
     odd?: number;
     availablePerPosition: { available?: number; buyBonus?: number };
     position: Position;
@@ -55,12 +55,12 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
         addedToParlay.position == position &&
         addedToParlay.doubleChanceMarketType === market.doubleChanceMarketType;
 
-    const isGameCancelled = market.cancelled || (!market.gameStarted && market.resolved);
-    const isGameResolved = market.resolved || market.cancelled;
-    const isGameRegularlyResolved = market.resolved && !market.cancelled;
-    const isPendingResolution = market.gameStarted && !isGameResolved;
-    const isGamePaused = market.paused && !isGameResolved;
-    const isGameOpen = !market.resolved && !market.cancelled && !market.paused && !market.gameStarted;
+    const isGameCancelled = market.isCanceled || (market.isOpen && market.isResolved);
+    const isGameResolved = market.isResolved || market.isCanceled;
+    const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
+    const isPendingResolution = !market.isOpen && !isGameResolved;
+    const isGamePaused = market.isPaused && !isGameResolved;
+    const isGameOpen = !market.isResolved && !market.isCanceled && !market.isPaused && market.isOpen;
 
     const noLiquidity = !!availablePerPosition.available && availablePerPosition.available < MIN_LIQUIDITY;
     const noOdd = !odd || odd == 0;

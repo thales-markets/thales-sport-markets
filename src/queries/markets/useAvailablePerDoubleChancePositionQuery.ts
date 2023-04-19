@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import { Position } from '../../constants/options';
-import { AvailablePerDoubleChancePosition, MarketData } from '../../types/markets';
+import { AvailablePerDoubleChancePosition, SportMarketInfo } from '../../types/markets';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
@@ -8,7 +8,7 @@ import { ethers } from 'ethers';
 import { DoubleChanceMarketType } from 'constants/tags';
 
 const useAvailablePerDoubleChancePositionQuery = (
-    markets: MarketData[],
+    markets: SportMarketInfo[],
     options?: UseQueryOptions<AvailablePerDoubleChancePosition | undefined>
 ) => {
     return useQuery<AvailablePerDoubleChancePosition | undefined>(

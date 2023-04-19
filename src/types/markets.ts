@@ -136,6 +136,12 @@ export type ChildMarkets = {
     doubleChanceMarkets: MarketData[];
 };
 
+export type SportMarketChildMarkets = {
+    spreadMarkets: SportMarketInfo[];
+    totalMarkets: SportMarketInfo[];
+    doubleChanceMarkets: SportMarketInfo[];
+};
+
 export type ParlayMarket = {
     id: string;
     txHash: string;

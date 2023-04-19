@@ -1,13 +1,13 @@
 import { BetType, BetTypeNameMap } from 'constants/tags';
 import React, { useState } from 'react';
-import { MarketData } from 'types/markets';
+import { SportMarketInfo } from 'types/markets';
 import MarketPositions from '../MarketPositions';
 import { useTranslation } from 'react-i18next';
 import { Container, Header, Title, ContentContianer, Arrow, ContentRow } from './styled-components';
 import DoubleChanceMarketPositions from '../DoubleChanceMarketPositions';
 
 type PositionsProps = {
-    markets: MarketData[];
+    markets: SportMarketInfo[];
     betType: BetType;
     areDoubleChanceMarkets?: boolean;
 };

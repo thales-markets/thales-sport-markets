@@ -1,13 +1,12 @@
 import SimpleLoader from 'components/SimpleLoader';
-import useMarketQuery from 'queries/markets/useMarketQuery';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
-import { MarketData } from 'types/markets';
+import { SportMarketInfo } from 'types/markets';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import MarketDetailsV2 from './MarketDetailsV2';
 import SPAAnchor from 'components/SPAAnchor';
@@ -17,6 +16,8 @@ import { Trans } from 'react-i18next';
 import { Info } from '../Home/Home';
 import { getNetworkId } from 'redux/modules/wallet';
 import { NetworkIdByName } from 'utils/network';
+import useSportMarketsQueryNew from 'queries/markets/useSportsMarketsQueryNew';
+import { GlobalFiltersEnum } from 'constants/markets';
 
 type MarketProps = RouteComponentProps<{
     marketAddress: string;
@@ -24,29 +25,30 @@ type MarketProps = RouteComponentProps<{
 
 const Market: React.FC<MarketProps> = (props) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const [lastValidMarket, setLastValidMarket] = useState<MarketData | undefined>(undefined);
+    const [lastValidMarket, setLastValidMarket] = useState<SportMarketInfo | undefined>(undefined);
     const { trackPageView } = useMatomo();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const { params } = props.match;
     const marketAddress = params && params.marketAddress ? params.marketAddress : '';
 
-    const marketQuery = useMarketQuery(marketAddress, networkId, {
+    const marketQuery = useSportMarketsQueryNew(networkId, {
         enabled: isAppReady,
     });
 
     useEffect(() => {
         if (marketQuery.isSuccess && marketQuery.data) {
-            setLastValidMarket(marketQuery.data);
+            let market: SportMarketInfo | undefined = undefined;
+            for (const propertyName in marketQuery.data) {
+                const marketsGroup = marketQuery.data[propertyName as GlobalFiltersEnum];
+                if (marketsGroup) {
+                    market = marketsGroup.find((market) => market.address == marketAddress);
+                }
+                if (market) break;
+            }
+            setLastValidMarket(market);
         }
-    }, [marketQuery.isSuccess, marketQuery.data]);
-
-    const market: MarketData | undefined = useMemo(() => {
-        if (marketQuery.isSuccess && marketQuery.data) {
-            return marketQuery.data;
-        }
-        return lastValidMarket;
-    }, [marketQuery.isSuccess, marketQuery.data, lastValidMarket]);
+    }, [marketQuery.isSuccess, marketQuery.data, marketAddress]);
 
     useEffect(() => {
         trackPageView({});
@@ -64,7 +66,7 @@ const Market: React.FC<MarketProps> = (props) => {
                     />
                 </Info>
             )}
-            {market ? <MarketDetailsV2 market={market} /> : <SimpleLoader />}
+            {lastValidMarket ? <MarketDetailsV2 market={lastValidMarket} /> : <SimpleLoader />}
         </Container>
     );
 };
