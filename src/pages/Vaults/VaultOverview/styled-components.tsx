@@ -67,7 +67,6 @@ export const VaultSectionTitle = styled.span`
 `;
 
 export const VaultSectionDescription = styled.span`
-    text-align: justify;
     font-weight: 400;
     font-size: 14px;
 `;

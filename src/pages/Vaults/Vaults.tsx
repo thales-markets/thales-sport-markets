@@ -32,7 +32,6 @@ const Vault: React.FC = () => {
             <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
             <Title>{t('vaults.title')}</Title>
             <Note>
-                *
                 <Trans
                     i18nKey={`vault.gamified-staking-message`}
                     components={{
