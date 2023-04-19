@@ -306,7 +306,7 @@
 }
 
 .icon--esports::before {
-    content: '\0085';
+    content: '\003D';
 }
 
 .icon--cricket::before {
