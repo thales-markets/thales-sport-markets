@@ -100,7 +100,7 @@ export const VaultInfo = styled.p<{ color: string }>`
 
 export const TitleVaultIcon = styled.i`
     font-weight: 400;
-    font-size: 22px;
+    font-size: 24px;
     margin-right: 8px;
     top: -2px;
     position: relative;
