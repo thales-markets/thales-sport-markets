@@ -20,6 +20,8 @@ import { setOddsType } from 'redux/modules/ui';
 import { useDispatch, useSelector } from 'react-redux';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { getParlay } from 'redux/modules/parlay';
+import { RootState } from 'redux/rootReducer';
+import { getIsWalletConnected } from 'redux/modules/wallet';
 
 type FooterSidebarMobileProps = {
     setParlayMobileVisibility: (value: boolean) => void;
@@ -28,6 +30,7 @@ type FooterSidebarMobileProps = {
 
 const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobileVisibility, setShowBurger }) => {
     const dispatch = useDispatch();
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const parlayMarkets = useSelector(getParlay);
     const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
     const [pulse, setPulse] = useState(false);
@@ -84,11 +87,13 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
                     </DropdownContainer>
                 )}
 
-                <ItemContainer>
-                    <SPAAnchor href={buildHref(ROUTES.Profile)}>
-                        <ItemIcon className="icon icon--profile" />
-                    </SPAAnchor>
-                </ItemContainer>
+                {isWalletConnected && (
+                    <ItemContainer>
+                        <SPAAnchor href={buildHref(ROUTES.Profile)}>
+                            <ItemIcon className="icon icon--profile" />
+                        </SPAAnchor>
+                    </ItemContainer>
+                )}
                 <ItemContainer onClick={() => setParlayMobileVisibility(true)}>
                     <ItemIcon
                         iteration={parlayMarkets.length}
