@@ -11,12 +11,14 @@ export type WalletSliceState = {
     walletAddress: string | null;
     networkId: NetworkId;
     networkName: string;
+    switchToNetworkId: NetworkId; // used to trigger manually network switch in App.js
 };
 
 const initialState: WalletSliceState = {
     walletAddress: null,
     networkId: DEFAULT_NETWORK_ID,
     networkName: NetworkNameById[DEFAULT_NETWORK_ID],
+    switchToNetworkId: DEFAULT_NETWORK_ID,
 };
 
 export const walletDetailsSlice = createSlice({
@@ -47,6 +49,14 @@ export const walletDetailsSlice = createSlice({
             state.networkId = networkId;
             state.networkName = NetworkNameById[networkId]?.toLowerCase();
         },
+        switchToNetworkId: (
+            state,
+            action: PayloadAction<{
+                networkId: NetworkId;
+            }>
+        ) => {
+            state.switchToNetworkId = action.payload.networkId;
+        },
     },
 });
 
@@ -57,10 +67,11 @@ export const getNetwork = (state: RootState) => ({
     networkId: getNetworkId(state),
     networkName: getNetworkName(state),
 });
+export const getSwitchToNetworkId = (state: RootState) => getWalletState(state).switchToNetworkId;
 export const getWalletAddress = (state: RootState) => getWalletState(state).walletAddress;
 export const getIsWalletConnected = createSelector(getWalletAddress, (walletAddress) => walletAddress != null);
 export const getWalletInfo = (state: RootState) => getWalletState(state);
 
-export const { updateNetworkSettings, resetWallet, updateWallet } = walletDetailsSlice.actions;
+export const { updateNetworkSettings, switchToNetworkId, resetWallet, updateWallet } = walletDetailsSlice.actions;
 
 export default walletDetailsSlice.reducer;
