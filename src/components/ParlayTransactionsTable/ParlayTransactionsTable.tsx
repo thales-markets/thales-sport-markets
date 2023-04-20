@@ -145,7 +145,7 @@ const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?:
                     ],
                 }}
                 data={parlayTx ?? []}
-                noResultsMessage={t('profile.messages.no-transactions')}
+                noResultsMessage={t('vault.trades-history.no-trades')}
                 expandedRow={(row) => {
                     const toRender = row.original.sportMarketsFromContract.map((address: string, index: number) => {
                         const position = row.original.positions.find(
