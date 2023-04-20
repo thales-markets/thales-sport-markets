@@ -312,3 +312,7 @@
 .icon--cricket::before {
     content: '\003C';
 }
+
+.icon--upsettoor-vault::before {
+    content: '\003E';
+}
