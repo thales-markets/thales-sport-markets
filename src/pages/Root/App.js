@@ -48,7 +48,7 @@ const App = () => {
     const switchedToNetworkId = useSelector((state) => getSwitchToNetworkId(state));
 
     const { address } = useAccount();
-    const provider = useProvider({ chainId: switchedToNetworkId });
+    const provider = useProvider(!address && { chainId: switchedToNetworkId }); // when wallet not connected force chain
     const { data: signer } = useSigner();
     const { disconnect } = useDisconnect();
     const { chain } = useNetwork();
