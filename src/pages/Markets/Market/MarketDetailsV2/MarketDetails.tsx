@@ -27,6 +27,8 @@ import { getOrdinalNumberLabel } from 'utils/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import { NetworkIdByName } from 'utils/network';
+import { getAllCombinedMarketsForParentMarket } from 'utils/markets';
+import CombinedPositions from './components/CombinedPositions/CombinedPositions';
 
 type MarketDetailsPropType = {
     market: SportMarketInfo;
@@ -44,6 +46,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         totalMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.TOTAL),
         doubleChanceMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.DOUBLE_CHANCE),
     };
+
+    const combinedMarkets = getAllCombinedMarketsForParentMarket(market);
 
     const isMounted = useRef(false);
     useEffect(() => {
@@ -251,6 +255,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                     {childMarkets.totalMarkets.length > 0 && (
                         <Positions markets={childMarkets.totalMarkets} betType={BetType.TOTAL} />
                     )}
+                    {combinedMarkets.length > 0 && <CombinedPositions combinedMarkets={combinedMarkets} />}
                 </>
                 <Transactions market={market} />
             </MainContainer>
