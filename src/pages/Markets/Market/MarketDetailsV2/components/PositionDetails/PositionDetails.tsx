@@ -20,6 +20,7 @@ import {
     getParentMarketAddress,
     getOddTooltipText,
     getFormattedBonus,
+    isMarketPartOfCombinedMarketFromParlayData,
 } from 'utils/markets';
 import {
     Bonus,
@@ -49,11 +50,13 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
     const isMobile = useSelector(getIsMobile);
     const parlay = useSelector(getParlay);
     const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
+    const isMarketPartOfCombinedMarket = isMarketPartOfCombinedMarketFromParlayData(parlay, market);
 
     const isAddedToParlay =
         addedToParlay &&
         addedToParlay.position == position &&
-        addedToParlay.doubleChanceMarketType === market.doubleChanceMarketType;
+        addedToParlay.doubleChanceMarketType === market.doubleChanceMarketType &&
+        !isMarketPartOfCombinedMarket;
 
     const isGameCancelled = market.isCanceled || (market.isOpen && market.isResolved);
     const isGameResolved = market.isResolved || market.isCanceled;
