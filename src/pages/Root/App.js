@@ -10,7 +10,6 @@ import {
     updateNetworkSettings,
     switchToNetworkId,
     updateWallet,
-    getIsWalletConnected,
     getSwitchToNetworkId,
 } from 'redux/modules/wallet';
 import queryConnector from 'utils/queryConnector';
@@ -47,10 +46,9 @@ const App = () => {
     const { trackPageView, trackEvent } = useMatomo();
     const networkId = useSelector((state) => getNetworkId(state));
     const switchedToNetworkId = useSelector((state) => getSwitchToNetworkId(state));
-    const isWalletConnected = useSelector((state) => getIsWalletConnected(state));
 
     const { address } = useAccount();
-    const provider = useProvider(!isWalletConnected && { chainId: switchedToNetworkId }); // when wallet not connected force chain
+    const provider = useProvider({ chainId: switchedToNetworkId });
     const { data: signer } = useSigner();
     const { disconnect } = useDisconnect();
     const { chain } = useNetwork();
