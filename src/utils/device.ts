@@ -15,11 +15,15 @@ export const isMetamask = async () => {
 };
 
 export const isIos = () => {
+    const userAgent = navigator.userAgent || window.opera;
     return (
-        ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'].includes(
-            navigator.platform
-        ) ||
+        (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) ||
         // iPad on iOS 13 detection
-        (navigator.userAgent.includes('Mac') && 'ontouchend' in document)
+        (userAgent.includes('Mac') && 'ontouchend' in document)
     );
+};
+
+export const isAndroid = () => {
+    const userAgent = navigator.userAgent || window.opera;
+    return /android/i.test(userAgent);
 };
