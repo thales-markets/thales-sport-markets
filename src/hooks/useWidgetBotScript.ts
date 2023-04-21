@@ -1,7 +1,11 @@
 import { useEffect } from 'react';
 
-const useWidgetBotScript = () => {
+const useWidgetBotScript = (loadWidget: boolean) => {
     useEffect(() => {
+        if (!loadWidget) {
+            return;
+        }
+
         const script = document.createElement('script');
 
         script.src = 'https://cdn.jsdelivr.net/npm/@widgetbot/crate@3';
@@ -29,7 +33,7 @@ const useWidgetBotScript = () => {
             // clean up the script when the component in unmounted
             document.body.removeChild(script);
         };
-    }, []);
+    }, [loadWidget]);
 };
 
 export default useWidgetBotScript;
