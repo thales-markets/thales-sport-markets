@@ -16,7 +16,6 @@ import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { NetworkId } from 'types/network';
 import { NETWORK_SWITCHER_SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_DESCRIPTIONS } from 'constants/network';
-import { useSwitchNetwork } from 'wagmi';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -27,7 +26,6 @@ const WalletInfo: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const [dropDownOpen, setDropDownOpen] = useState(false);
     const dispatch = useDispatch();
-    const { switchNetwork } = useSwitchNetwork();
 
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
@@ -132,14 +130,11 @@ const WalletInfo: React.FC = () => {
                                                                         } catch (addError) {
                                                                             console.log(addError);
                                                                         }
-                                                                    } else {
-                                                                        // When wallet_switchEthereumChain is not supported e.g. Coinbase
-                                                                        switchNetwork?.(network.networkId);
                                                                     }
                                                                 }
                                                             }
                                                             // Trigger App.js init
-                                                            // do not use updateNetworkSettings(networkId) as it will trigger queries before provider in App.js is initialized
+                                                            // do not use updateNetworkSettings(networkId) as it will trigger queries before provider is initialized in App.js
                                                             dispatch(
                                                                 switchToNetworkId({
                                                                     networkId: network.networkId as NetworkId,
