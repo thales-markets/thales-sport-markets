@@ -31,7 +31,7 @@ const DappLayout: React.FC = ({ children }) => {
     const location = useLocation();
     const queryParams: { referralId?: string; referrerId?: string } = queryString.parse(location.search);
 
-    const [preventDiscordWidgetLoad, setPreventDiscordWidgetLoad] = useState(false);
+    const [preventDiscordWidgetLoad, setPreventDiscordWidgetLoad] = useState(true);
 
     useEffect(() => {
         if (queryParams.referralId) {
