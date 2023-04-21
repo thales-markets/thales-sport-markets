@@ -120,7 +120,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     const basketballKeys: number[] = [];
     const baseballKeys: number[] = [];
     const hockeyKeys: number[] = [];
-    const ufcKeys: number[] = [];
+    const mmaKeys: number[] = [];
     const tennisKeys: number[] = [];
     const eSportsKeys: number[] = [];
     const cricketKeys: number[] = [];
@@ -141,7 +141,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
             hockeyKeys.push(tag);
         }
         if (SPORTS_MAP[tag] == 'MMA') {
-            ufcKeys.push(tag);
+            mmaKeys.push(tag);
         }
         if (SPORTS_MAP[tag] == 'Tennis') {
             tennisKeys.push(tag);
@@ -160,7 +160,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
         ...basketballKeys,
         ...baseballKeys,
         ...hockeyKeys,
-        ...ufcKeys,
+        ...mmaKeys,
         ...tennisKeys,
         ...eSportsKeys,
         ...cricketKeys,
