@@ -21,7 +21,7 @@ import ROUTES from 'constants/routes';
 import { generalConfig } from 'config/general';
 import axios from 'axios';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
-import { isMetamask, isMobile } from 'utils/device';
+import { isAndroid, isMetamask, isMobile } from 'utils/device';
 
 const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -31,7 +31,7 @@ const DappLayout: React.FC = ({ children }) => {
     const location = useLocation();
     const queryParams: { referralId?: string; referrerId?: string } = queryString.parse(location.search);
 
-    const [loadDiscordWidget, setLoadDiscordWidget] = useState(false);
+    const [preventDiscordWidgetLoad, setPreventDiscordWidgetLoad] = useState(false);
 
     useEffect(() => {
         if (queryParams.referralId) {
@@ -90,12 +90,14 @@ const DappLayout: React.FC = ({ children }) => {
     useEffect(() => {
         const checkMetamaskBrowser = async () => {
             const isMetamaskBrowser = isMobile() && (await isMetamask());
-            setLoadDiscordWidget(!isMetamaskBrowser);
+            // Do not load Discord Widget Bot on Android MM browser due to issue with MM wallet connect
+            // issue raised on https://github.com/rainbow-me/rainbowkit/issues/1181
+            setPreventDiscordWidgetLoad(isMetamaskBrowser && isAndroid());
         };
         checkMetamaskBrowser();
     }, []);
 
-    useWidgetBotScript(loadDiscordWidget);
+    useWidgetBotScript(preventDiscordWidgetLoad);
 
     return (
         <>

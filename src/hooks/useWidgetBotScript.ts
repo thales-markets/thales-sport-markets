@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
-const useWidgetBotScript = (loadWidget: boolean) => {
+const useWidgetBotScript = (preventWidgetLoad: boolean) => {
     useEffect(() => {
-        if (!loadWidget) {
+        if (preventWidgetLoad) {
             return;
         }
 
@@ -33,7 +33,7 @@ const useWidgetBotScript = (loadWidget: boolean) => {
             // clean up the script when the component in unmounted
             document.body.removeChild(script);
         };
-    }, [loadWidget]);
+    }, [preventWidgetLoad]);
 };
 
 export default useWidgetBotScript;
