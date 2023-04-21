@@ -303,7 +303,9 @@
                 "motosport": "Sport automobile",
                 "favourites": "Favoris",
                 "esports": "E-sport",
-                "cricket": "Criquet"
+                "cricket": "Criquet",
+                "boxing": "Boxe",
+                "mma": "BIEN"
             },
             "all": "Tous",
             "datepicker": {

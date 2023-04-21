@@ -140,7 +140,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
         if (SPORTS_MAP[tag] == 'Hockey') {
             hockeyKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'UFC') {
+        if (SPORTS_MAP[tag] == 'MMA') {
             ufcKeys.push(tag);
         }
         if (SPORTS_MAP[tag] == 'Tennis') {
