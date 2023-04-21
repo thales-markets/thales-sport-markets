@@ -100,7 +100,7 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
             {sportFilter != SportFilterEnum.All && (
                 <FilterTagContainer>
                     <FilterTagLabel>
-                        {sportFilter}
+                        {t(`market.filter-label.sport.${sportFilter.toLowerCase()}`)}
                         <ClearButton
                             onClick={() => {
                                 setSportFilter(SportFilterEnum.All);
