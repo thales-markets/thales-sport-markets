@@ -286,9 +286,8 @@ const hideResultInfoPerPeriodForSports = (sportId: number) => {
     return (
         !SPORTS_TAGS_MAP['Soccer'].includes(Number(sportId)) &&
         !SPORTS_TAGS_MAP['eSports'].includes(sportId) &&
-        !SPORTS_TAGS_MAP['UFC'].includes(sportId) &&
+        !SPORTS_TAGS_MAP['MMA'].includes(sportId) &&
         !SPORTS_TAGS_MAP['Cricket'].includes(sportId) &&
-        !SPORTS_TAGS_MAP['Boxing'].includes(sportId)
     );
 };
 
