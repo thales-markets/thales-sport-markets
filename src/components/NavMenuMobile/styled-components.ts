@@ -145,13 +145,9 @@ export const CloseIcon = styled.i.attrs({ className: 'icon icon--arrow-up' })`
     color: white;
     font-size: 20px;
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    bottom: -10px;
+    right: calc(50% - 10px);
     cursor: pointer;
-    @media (min-height: 660px) and (max-height: 725px) {
-        bottom: -10px;
-        right: calc(50% - 10px);
-    }
 `;
 
 export const WalletAddress = styled.span`
