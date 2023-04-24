@@ -2,7 +2,7 @@ import PositionSymbol from 'components/PositionSymbol';
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
 import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -67,19 +67,31 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
             refetchInterval: false,
         }
     );
-    let parlayTx = parlaysTxQuery.isSuccess ? parlaysTxQuery.data : [];
 
-    if (searchText && !isSearchTextWalletAddress) {
-        parlayTx = parlayTx?.filter((item) => {
-            const marketWithSearchTextIncluded = item.sportMarkets.find(
-                (item) =>
-                    item.homeTeam?.toLowerCase().includes(searchText.toLowerCase()) ||
-                    item.awayTeam?.toLowerCase().includes(searchText.toLowerCase())
-            );
+    const parlayTx = useMemo(() => {
+        let _parlayTx;
 
-            if (marketWithSearchTextIncluded) return item;
-        });
-    }
+        if (parlaysTxQuery.data && parlaysTxQuery.isSuccess) {
+            _parlayTx = parlaysTxQuery.data ? parlaysTxQuery.data : [];
+        }
+
+        if (_parlayTx) {
+            if (searchText && !isSearchTextWalletAddress) {
+                _parlayTx = _parlayTx?.filter((item) => {
+                    const marketWithSearchTextIncluded = item.sportMarkets.find(
+                        (item) =>
+                            item.homeTeam?.toLowerCase().includes(searchText.toLowerCase()) ||
+                            item.awayTeam?.toLowerCase().includes(searchText.toLowerCase())
+                    );
+
+                    if (marketWithSearchTextIncluded) return item;
+                });
+            }
+            _parlayTx = parlaysTxQuery.data;
+        }
+
+        return _parlayTx;
+    }, [parlaysTxQuery.data, parlaysTxQuery.isSuccess, searchText, isSearchTextWalletAddress]);
 
     const onTwitterIconClick = (data: any) => {
         const sportMarkets: SportMarketInfo[] = data.sportMarkets;
