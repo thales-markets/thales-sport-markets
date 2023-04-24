@@ -43,7 +43,8 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 630px;
+    max-height: 100vh;
+    overflow-y: auto;
     position: fixed;
     top: 0;
     left: 0;
@@ -55,9 +56,8 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     background-color: ${(props) => props.theme.nav.background};
     justify-content: space-between;
     z-index: 200;
-    ${(_props) => (_props?.show == true ? `-webkit-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
-    ${(_props) => (_props?.show == true ? `-moz-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
-    ${(_props) => (_props?.show == true ? `${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')};
+    ${(_props) => (_props?.show == true ? `-webkit-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')}
+    ${(_props) => (_props?.show == true ? `-moz-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')}
     padding: 20px 10px;
     border-radius: 0px 0px 25px 25px;
 `;
@@ -145,9 +145,13 @@ export const CloseIcon = styled.i.attrs({ className: 'icon icon--arrow-up' })`
     color: white;
     font-size: 20px;
     position: absolute;
-    bottom: 30px;
-    right: 20px;
+    bottom: 10px;
+    right: 10px;
     cursor: pointer;
+    @media (min-height: 660px) and (max-height: 725px) {
+        bottom: -10px;
+        right: calc(50% - 10px);
+    }
 `;
 
 export const WalletAddress = styled.span`
@@ -175,6 +179,7 @@ export const WalletAddressContainer = styled(FlexDivRow)`
 `;
 
 export const LogoContainer = styled.div`
+    position: relative;
     width: 100%;
     display: flex;
     justify-content: center;
