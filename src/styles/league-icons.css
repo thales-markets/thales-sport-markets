@@ -112,3 +112,7 @@
 .league--euroleague:before {
     content: '\0064';
 }
+
+.league--iihf:before {
+    content: '\0065';
+}

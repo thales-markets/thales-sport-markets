@@ -233,7 +233,7 @@ export const TAGS_LIST: Tags = [
     {
         id: 9033,
         label: 'IIHF World Championship',
-        logoClass: 'icon-league league--nhl',
+        logoClass: 'icon-league league--iihf',
         favourite: false,
         hidden: false,
         priority: 502,
