@@ -223,7 +223,8 @@
                 "motosport": "Мотоспорт",
                 "favourites": "Избранное",
                 "esports": "Киберспорт",
-                "cricket": "Крикет"
+                "cricket": "Крикет",
+                "mma": "Боевые виды спорта"
             },
             "all": "All",
             "datepicker": {

@@ -242,6 +242,14 @@ export const TAGS_LIST: Tags = [
         hidden: false,
         priority: 502,
     },
+    {
+        id: 18196,
+        label: 'Boxing',
+        logoClass: 'icon-league league--boxing',
+        favourite: false,
+        hidden: false,
+        priority: 602,
+    },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -251,7 +259,7 @@ export const SPORTS_MAP: SportsMap = {
     9004: 'Basketball',
     9005: 'Basketball',
     9006: 'Hockey',
-    9007: 'UFC',
+    9007: 'MMA',
     9008: 'Basketball',
     9010: 'Soccer',
     9011: 'Soccer',
@@ -273,6 +281,7 @@ export const SPORTS_MAP: SportsMap = {
     9020: 'Cricket',
     9399: 'Basketball',
     9030: 'Hockey',
+    18196: 'MMA',
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
@@ -293,6 +302,7 @@ export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
     19138,
     9020,
     9399,
+    18196,
 ];
 
 export const SPORTS_TAGS_MAP: SportsTagsMap = {
@@ -301,7 +311,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Basketball: [9004, 9005, 9008, 9399],
     Hockey: [9006, 9030],
     Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019],
-    UFC: [9007],
+    MMA: [9007, 18196],
     Motosport: [9100, 9101],
     Tennis: [9153, 9156],
     eSports: [18977, 18983, 19138],
@@ -333,9 +343,10 @@ export enum TAGS_FLAGS {
     LOL = 19138,
     IPL = 9020,
     EUROLEAGUE = 9399,
+    BOXING = 18196,
 }
 
-export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399, 9030];
+export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399, 9030, 18196];
 
 export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
@@ -391,6 +402,7 @@ export const SCORING_MAP: SportsMap = {
     9020: 'points',
     9399: 'points',
     9030: 'goals',
+    18196: '',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -422,6 +434,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9020: '',
     9399: 'overtime',
     9030: 'regular',
+    18196: 'round',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
