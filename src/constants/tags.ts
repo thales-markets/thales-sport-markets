@@ -193,7 +193,6 @@ export const TAGS_LIST: Tags = [
     {
         id: 18977,
         label: 'CS GO',
-        logo: `/logos/csgo/csgo.png`,
         logoClass: 'icon-league league--csgo',
         favourite: false,
         hidden: false,
@@ -202,7 +201,6 @@ export const TAGS_LIST: Tags = [
     {
         id: 18983,
         label: 'DOTA 2',
-        logo: `/logos/dota2/dota2.png`,
         logoClass: 'icon-league league--dota2',
         favourite: false,
         hidden: false,
@@ -211,7 +209,6 @@ export const TAGS_LIST: Tags = [
     {
         id: 19138,
         label: 'LOL',
-        logo: `/logos/lol/lol.png`,
         logoClass: 'icon-league league--lol',
         favourite: false,
         hidden: false,
@@ -220,7 +217,6 @@ export const TAGS_LIST: Tags = [
     {
         id: 9020,
         label: 'Indian Premier League',
-        logo: ``,
         logoClass: 'icon-league league--ipl',
         favourite: false,
         hidden: false,
@@ -434,7 +430,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9020: '',
     9399: 'overtime',
     9030: 'regular',
-    18196: 'round',
+    18196: '',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {

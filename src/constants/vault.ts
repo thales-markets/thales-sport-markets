@@ -40,6 +40,15 @@ export const VAULT_MAP: Record<string, any> = {
             42161: '0xE26374c7aFe71a2a6AB4A61080772547C43B87E6',
         },
     },
+    'upsettoor-vault': {
+        addresses: {
+            5: '',
+            10: '0x5e2b49c68f1fD68AF1354c377eaceC2f05632D3F',
+            42: '',
+            420: '',
+            42161: '0x31c2947c86412A5e33794105aA034DD9312eb711',
+        },
+    },
     'parlay-discount-vault': {
         addresses: {
             5: '',

@@ -215,7 +215,6 @@
                 "hockey": "ฮอกกี้",
                 "tennis": "เทนนิส",
                 "football": "อเมริกันฟุตบอล",
-                "ufc": "MMA",
                 "baseball": "เบสบอล",
                 "formula1": "Formula 1",
                 "motogp": "MotoGP",
@@ -224,7 +223,8 @@
                 "favourites": "รายการโปรด",
                 "esports": "อีสปอร์ต",
                 "cricket": "คริกเก็ต",
-                "mma": "กีฬาต่อสู้"
+                "mma": "ดกีฬาต่อสู้",
+                "boxing": "มวย"
             },
             "datepicker": {
                 "games": "{{numberOfGames}} เกม"
@@ -703,17 +703,22 @@
     "vault": {
         "discount-vault": {
             "title": "Discount Vault",
-            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และมีส่วนลดมากกว่า {{discount}}.</p>การฝากใน Vault จะถูกนับในส่วนของปริมาณการซื้อขายของ gamified staking ด้วย</p>",
+            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และมีส่วนลดมากกว่า {{discount}}.</p>",
             "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
         },
         "degen-discount-vault": {
             "title": "Degen Discount Vault",
-            "description": "<p>ซื้อโพสิชั่นที่ odds ใดๆ ที่มีส่วนลดมากกว่า {{discount}}</p><p>การฝากใน Vault จะถูกนับในส่วนของปริมาณการซื้อขายของ gamified staking ด้วย</p>",
+            "description": "<p>ซื้อโพสิชั่นที่ odds ใดๆ ที่มีส่วนลดมากกว่า {{discount}}</p>",
             "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอด {{utilizationRate}} จะมีเพียงมากที่สุด {{allocationLimitsPerMarketPerRound}} เท่านั้นที่สามารถใช้กับเกมการแข่งขั้นหนึ่งเกม</p>"
         },
         "safu-discount-vault": {
             "title": "Safu Discount Vault",
-            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และ มีส่วนลดใดๆ </p><p>การฝากใน Vault จะถูกนับในส่วนของปริมาณการซื้อขายของ gamified staking ด้วย</p>",
+            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และ มีส่วนลดใดๆ </p>",
+            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
+        },
+        "upsettoor-vault": {
+            "title": "Upsettoor Vault",
+            "description": "<p>ซื้อตำแหน่งที่มีอัตราต่อรองน้อยกว่า {{odds}} และมีส่วนลดมากกว่า {{discount}}.</p>",
             "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
         },
         "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
@@ -788,10 +793,11 @@
             "name": "ชื่อ"
         },
         "parlay-discount-vault": {
-            "description": "<p>ซื้อตั๋วพาร์เลย์โดยแต่ละตำแหน่งในตั๋วมีส่วนลดอย่างน้อย {{discount}}</p><p> เงินฝากทั้งหมดที่เข้าสู่รอบจะนับรวมกับปริมาณการเดิมพันแบบเกม</p>",
+            "description": "<p>ซื้อตั๋วพาร์เลย์โดยแต่ละตำแหน่งในตั๋วมีส่วนลดอย่างน้อย {{discount}}</p>",
             "risks": "<p>ห้องนิรภัยมีอัตราการใช้งาน {{utilizationRate}} ซึ่งรับรองว่าไม่เกิน {{utilizationRate}} ของเงินฝากในแต่ละรอบที่มีความเสี่ยง นอกจากนี้ จาก {{utilizationRate}} เหล่านั้น คุณสามารถใช้จ่ายได้สูงสุด {{allocationLimitsPerMarketPerRound}} กับตั๋วพาร์เลย์ใบเดียวต่อรอบ ดังนั้นจึงเป็นการกระจายความเสี่ยงไปสู่ตั๋วพาร์เลย์หลายใบที่มีส่วนลดมากกว่า {{odds}}</p>",
             "title": "ห้องเก็บส่วนลด Parlay"
         },
+        "gamified-staking-message": "<p>เงินฝากทั้งหมดที่เข้าสู่รอบจะนับรวมกับปริมาณการเดิมพันแบบเกม</p>",
         "LP": {
             "title": "หจก"
         },

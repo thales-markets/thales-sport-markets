@@ -304,6 +304,7 @@
                 "favourites": "Favoris",
                 "esports": "E-sport",
                 "cricket": "Criquet",
+                "boxing": "Boxe",
                 "mma": "Sports de combat"
             },
             "all": "Tous",
@@ -805,18 +806,23 @@
     "vault": {
         "discount-vault": {
             "title": "Discount Vault",
-            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec une remise supérieure à {{discount}}.</p>Tous les dépôts qui entrent dans un tour comptent pour le volume de staking gamifié.</p>",
+            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec une remise supérieure à {{discount}}.</p>",
             "risks": "<p>Le coffre a un taux d'utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôts par tour soient utilisés. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
         },
         "degen-discount-vault": {
             "title": "Degen Discount Vault",
-            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec un rabais supérieur à {{discount}}.</p>Tous les dépôts qui entrent dans un tour comptent pour le volume de staking gamifié.</p>",
+            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec un rabais supérieur à {{discount}}.</p>",
             "risks": "<p>Le coffre a un taux d'utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôt par tour soient utilisés. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
         },
         "safu-discount-vault": {
             "title": "Safu Discount Vault",
-            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec un rabais supérieur à {{discount}}.</p>Tous les dépôts qui entrent dans un tour comptent pour le volume de staking gamifié.</p>",
+            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec un rabais supérieur à {{discount}}.</p>",
             "risks": "<p>Le coffre a un taux d'utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôt par tour soient utilisés. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
+        },
+        "upsettoor-vault": {
+            "title": "Upsettoor Vault",
+            "description": "<p>Achète des positions qui ont une cote inférieures à {{odds}} et sont disponibles avec une remise supérieure à {{discount}}.</p>",
+            "risks": "<p>Le coffre a un taux d'utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôts par tour soient utilisés. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
         },
         "variables": "<p>Variables:</p><ul><li>Taux d’utilisation: {{utilizationRate}}</li><li>Limite inférieure de prix: {{priceLowerLimit}}</li><li>Limite supérieure de prix: {{priceUpperLimit}}</li><li>Impact d'inclinaison maximum: {{skewImpactLimit}}</li><li>Allocation maximale sur un seul marché: {{allocationLimitsPerMarketPerRound}}</li><li>Dépôt total maximum: {{maxAllowedDeposit}}</li><li>Nombre maximal d'utilisateurs dans le coffre: {{maxAllowedUsers}}</li><li>Montant minimum par transaction: {{minTradeAmount}}</li><li>Dépôt minimal: {{minDepositAmount}}</li><li>Durée du tour: {{roundLength}} jours</li></ul>",
         "back-to-vaults": "Retour aux coffres",
@@ -892,8 +898,9 @@
         "parlay-discount-vault": {
             "title": "Coffre-fort de remise Parlay",
             "risks": "<p>Le coffre-fort a un taux d&#39;utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôts pour un tour ne sont mis en danger. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé pour un seul ticket Parlay par tour, diversifiant ainsi le risque en plusieurs tickets Parlay avec une réduction supérieure à {{odds}}.</p>",
-            "description": "<p>Achète des billets Parlay où chaque position individuelle dans le billet bénéficie d&#39;au moins une remise de {{discount}}.</p><p> Tous les dépôts qui entrent dans un tour comptent pour le volume de mise gamifié.</p>"
+            "description": "<p>Achète des billets Parlay où chaque position individuelle dans le billet bénéficie d&#39;au moins une remise de {{discount}}.</p>"
         },
+        "gamified-staking-message": "<p>Tous les dépôts qui entrent dans un tour comptent pour le volume de mise gamifié.</p>",
         "LP": {
             "title": "LP"
         },

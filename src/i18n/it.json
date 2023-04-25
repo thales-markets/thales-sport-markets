@@ -215,7 +215,6 @@
                 "hockey": "Hockey",
                 "tennis": "Tennis",
                 "football": "Football",
-                "ufc": "MMA",
                 "baseball": "Baseball",
                 "formula1": "Formula 1",
                 "motogp": "MotoGP",
@@ -224,7 +223,8 @@
                 "favourites": "Preferiti",
                 "esports": "Esport",
                 "cricket": "Cricket",
-                "mma": "Sport da combattimento"
+                "boxing": "Boxe",
+                "mma": "MMA"
             },
             "all": "All",
             "datepicker": {
@@ -711,17 +711,22 @@
         "discount-vault": {
             "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato, diversificando così il rischio in più mercati che hanno quote superiori a {{odds}}.</p>",
             "title": "Cassaforte scontata",
-            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con uno sconto maggiore di {{discount}}.</p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>"
+            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con uno sconto maggiore di {{discount}}.</p>"
         },
         "degen-discount-vault": {
             "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato.</p>",
-            "description": "<p>Acquista posizioni a qualsiasi quota disponibile per uno sconto superiore a {{discount}}.</p><p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
+            "description": "<p>Acquista posizioni a qualsiasi quota disponibile per uno sconto superiore a {{discount}}.</p>",
             "title": "Degen Discount Vault"
         },
         "safu-discount-vault": {
             "title": "Colonna Sconto Vault",
-            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con qualsiasi sconto.</p><p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
+            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con qualsiasi sconto.</p>",
             "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato, diversificando così il rischio in più mercati che hanno quote superiori a {{odds}}.</p>"
+        },
+        "upsettoor-vault": {
+            "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato, diversificando così il rischio in più mercati che hanno quote superiori a {{odds}}.</p>",
+            "title": "Upsettoor Vault",
+            "description": "<p>Acquista posizioni con quote inferiori a {{odds}} quote e sono disponibili con uno sconto maggiore di {{discount}}.</p>"
         },
         "tabs": {
             "withdraw": "Ritirare",
@@ -795,10 +800,11 @@
             "name": "Nome"
         },
         "parlay-discount-vault": {
-            "description": "<p>Acquista biglietti parlay in cui ogni singola posizione nel biglietto ha almeno uno sconto {{discount}}.</p><p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
+            "description": "<p>Acquista biglietti parlay in cui ogni singola posizione nel biglietto ha almeno uno sconto {{discount}}.</p>",
             "title": "Cassaforte scontata di Parlay",
             "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso per un singolo biglietto parlay per round, diversificando così il rischio in più biglietti parlay che hanno uno sconto maggiore di {{odds}}.</p>"
         },
+        "gamified-staking-message": "<p>Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
         "LP": {
             "title": "LP"
         },

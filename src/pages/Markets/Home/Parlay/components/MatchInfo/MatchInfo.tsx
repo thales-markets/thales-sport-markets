@@ -65,7 +65,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                           }
                         : undefined
                 }
-                tooltip={<>{getOddTooltipText(market.position, market)}</>}
+                tooltip={!readOnly && <>{getOddTooltipText(market.position, market)}</>}
             />
             {!readOnly && <Bonus>{bonus > 0 ? getFormattedBonus(bonus) : ''}</Bonus>}
             {readOnly ? (

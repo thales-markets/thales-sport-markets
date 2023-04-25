@@ -215,7 +215,6 @@
                 "hockey": "Hockey",
                 "tennis": "Tennis",
                 "football": "American Football",
-                "ufc": "MMA",
                 "baseball": "Baseball",
                 "formula1": "Formel 1",
                 "motogp": "MotoGP",
@@ -224,6 +223,7 @@
                 "favourites": "Favoriten",
                 "esports": "Sport",
                 "cricket": "Kricket",
+                "boxing": "Boxen",
                 "mma": "Kampfsport"
             },
             "all": "Alle",
@@ -704,18 +704,23 @@
     "vault": {
         "discount-vault": {
             "title": "Rabatt Vault",
-            "description": "<p>Kauft Positionen, die eine höhere Quote als {{odds}} haben und mit einem größeren Rabatt als {{discount}} erhältlich sind.</p>Alle Einzahlungen, die in eine Runde eingehen, zählen für das gamifizierte Staking Volumen.</p>",
+            "description": "<p>Kauft Positionen, die eine höhere Quote als {{odds}} haben und mit einem größeren Rabatt als {{discount}} erhältlich sind.</p>",
             "risks": "<p>Die Vault hat eine Nutzungsrate von {{UtilizationRate}}, die sicherstellt, dass nicht mehr als {{UtilizationRate}} der für eine Runde eingezahlten Mittel dem Risiko ausgesetzt werden. Darüber hinaus kann von diesen {{UtilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für einen einzigen Markt ausgegeben werden, wodurch das Risiko auf mehrere Märkte verteilt wird, die Quoten von mehr als {{odds}} haben.</p>"
         },
         "degen-discount-vault": {
             "title": "Degen Rabatt Vault",
-            "description": "<p>Kauft Positionen zu allen Quoten, die für mehr als {{Rabatt}} Rabatt verfügbar sind.</p><p>Alle Einzahlungen, die in eine Runde einfließen, zählen für das gamifizierte Staking Volumen.</p>",
+            "description": "<p>Kauft Positionen zu allen Quoten, die für mehr als {{Rabatt}} Rabatt verfügbar sind.</p>",
             "risks": "<p>Die Vault hat eine Nutzungsrate von {{utilizationRate}}, die sicherstellt, dass nicht mehr als {{utilizationRate}} der in einer Runde eingezahlten Mittel riskiert wird. Außerdem kann von diesen {{UtilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für einen einzelnen Markt ausgegeben werden.</p>"
         },
         "safu-discount-vault": {
             "title": "Safu Rabatt Vault",
-            "description": "<p>Kauft Positionen, die mehr als {{odds}} Quoten haben und mit einem beliebigen Rabatt verfügbar sind.</p><p>Alle Einzahlungen, die in einer Runde getätigt werden, zählen für das gamifizierte Staking Volumen.</p>",
+            "description": "<p>Kauft Positionen, die mehr als {{odds}} Quoten haben und mit einem beliebigen Rabatt verfügbar sind.</p>",
             "risks": "<p>Die Vault hat eine Nutzungsrate von {{utilizationRate}}, die sicherstellt, dass nicht mehr als {{utilizationRate}} des eingezahlten Geldes pro Runde riskiert wird. Darüber hinaus kann von diesen {{UtilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für einen einzelnen Markt ausgegeben werden, wodurch das Risiko auf mehrere Märkte verteilt wird, die Quoten von mehr als {{odds}} haben.</p>"
+        },
+        "upsettoor-vault": {
+            "title": "Upsettoor Vault",
+            "description": "<p>Kauft Positionen, mit geringeren Quoten als {{odds}} haben und mit einem größeren Rabatt als {{discount}} erhältlich sind.</p>",
+            "risks": "<p>Die Vault hat eine Nutzungsrate von {{UtilizationRate}}, die sicherstellt, dass nicht mehr als {{UtilizationRate}} der für eine Runde eingezahlten Mittel dem Risiko ausgesetzt werden. Darüber hinaus kann von diesen {{UtilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für einen einzigen Markt ausgegeben werden, wodurch das Risiko auf mehrere Märkte verteilt wird, die Quoten von mehr als {{odds}} haben.</p>"
         },
         "variables": "<p>Variablen:</p><ul><li>Nutzungsrate: {{utilizationRate}}</li><li>Preis-Untergrenze: {{priceLowerLimit}}</li><li>Preis-Obergrenze: {{priceUpperLimit}}</li><li>Max Skew Impact: {{skewImpactLimit}}</li><li>Maximale Allokation auf einem einzelnen Markt:  {{allocationLimitsPerMarketPerRound}}</li><li>Maximale Gesamteinlage: {{maxAllowedDeposit}}</li><li>Maximum Benutzer im Tresor: {{maxAllowedUsers}}</li><li>Mindestbetrag für ein einzelnes Trade: {{minTradeAmount}}</li><li>Mindesteinzahlung: {{minDepositAmount}}</li><li>Dauer der Runde: {{roundLength}} Tage</li></ul>",
         "back-to-vaults": "Zurück zu den Vaults",
@@ -791,8 +796,9 @@
         "parlay-discount-vault": {
             "title": "Parlay-Rabatttresor",
             "risks": "<p>Der Tresor hat eine Auslastungsrate von {{utilizationRate}}, was sicherstellt, dass nicht mehr als {{utilizationRate}} pro Runde eingezahlt werden. Darüber hinaus können von diesen {{utilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für ein einzelnes Parlay-Ticket pro Runde ausgegeben werden, wodurch das Risiko auf mehrere Parlay-Tickets verteilt wird, die einen Rabatt von mehr als {{odds}} haben.</p>",
-            "description": "<p>Kauft Parlay-Tickets, bei denen jede einzelne Position im Ticket mindestens einen Rabatt von {{discount}} hat.</p><p> Alle Einzahlungen, die in eine Runde eingehen, zählen zum gamifizierten Staking-Volumen.</p>"
+            "description": "<p>Kauft Parlay-Tickets, bei denen jede einzelne Position im Ticket mindestens einen Rabatt von {{discount}} hat.</p>"
         },
+        "gamified-staking-message": "<p>Alle Einzahlungen, die in eine Runde eingehen, zählen zum gamifizierten Staking-Volumen.</p>",
         "LP": {
             "title": "LP"
         },
