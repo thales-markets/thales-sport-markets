@@ -2,6 +2,7 @@ import {
     CombinedMarket,
     CombinedMarketsPositionName,
     CombinedParlayMarket,
+    ParlayMarketWithQuotes,
     ParlaysMarket,
     ParlaysMarketPosition,
     SportMarketInfo,
@@ -9,81 +10,7 @@ import {
 import { POSITION_TO_ODDS_OBJECT_PROPERTY_NAME, Position } from 'constants/options';
 import { BetType, COMBINED_MARKETS_SGP, MARKETS_COMBINATION, SPORTS_TAGS_MAP } from 'constants/tags';
 import { isEqual } from 'lodash';
-
-export const getCombinedMarketsFromParlayData = (parlayData: ParlaysMarketPosition[]): ParlaysMarketPosition[] => {
-    const combinedMarkets = [];
-
-    for (let i = 0; i < parlayData.length - 1; i++) {
-        for (let j = i + 1; j < parlayData.length; j++) {
-            if (parlayData[i].parentMarket == parlayData[j].parentMarket) {
-                combinedMarkets.push(parlayData[i], parlayData[j]);
-            }
-        }
-    }
-
-    if (combinedMarkets.length > 0) return combinedMarkets;
-    return [];
-};
-
-export const isCombinedMarketsInParlayData = (parlayData: ParlaysMarketPosition[]): boolean => {
-    const markets = getCombinedMarketsFromParlayData(parlayData);
-
-    if (markets.length > 0) return true;
-    return false;
-};
-
-export const isMarketPartOfCombinedMarketFromParlayData = (
-    parlayData: ParlaysMarketPosition[],
-    market: SportMarketInfo
-): boolean => {
-    const combinedMarkets = getCombinedMarketsFromParlayData(parlayData);
-    if (combinedMarkets.length > 0) {
-        const sameMarkets = combinedMarkets.filter((_market) => _market.sportMarketAddress == market.address);
-
-        if (sameMarkets.length > 0) return true;
-    }
-
-    return false;
-};
-
-export const extractCombinedMarketsFromParlayMarkets = (parlayMarkets: ParlaysMarket[]): CombinedParlayMarket[] => {
-    const combinedMarkets = [];
-    for (let i = 0; i < parlayMarkets.length - 1; i++) {
-        for (let j = i + 1; j < parlayMarkets.length; j++) {
-            if (parlayMarkets[i].gameId == parlayMarkets[j].gameId) {
-                combinedMarkets.push({
-                    markets: [parlayMarkets[i], parlayMarkets[j]],
-                    positions: [parlayMarkets[i].position, parlayMarkets[j].position],
-                    totalOdd: calculateCombinedMarketOdds(
-                        [parlayMarkets[i], parlayMarkets[j]],
-                        [parlayMarkets[i].position, parlayMarkets[j].position]
-                    ),
-                    totalBonus: 0,
-                    positionName: getCombinedPositionName(
-                        [parlayMarkets[i], parlayMarkets[j]],
-                        [parlayMarkets[i].position, parlayMarkets[j].position]
-                    ),
-                });
-            }
-        }
-    }
-    return combinedMarkets;
-};
-
-export const removeCombinedMarketFromParlayMarkets = (parlayMarkets: ParlaysMarket[]): ParlaysMarket[] => {
-    const combinedMarkets = extractCombinedMarketsFromParlayMarkets(parlayMarkets);
-
-    if (!combinedMarkets.length) return [];
-
-    const filteredParlayMarkets = parlayMarkets.filter((market) => {
-        const marketWithSameGameId = combinedMarkets.find(
-            (combinedMarkets) => combinedMarkets.markets[0].gameId == market.gameId
-        );
-        if (!marketWithSameGameId) return market;
-    });
-
-    return filteredParlayMarkets;
-};
+import { convertPositionNameToPositionType, isParentMarketSameForSportMarkets } from './markets';
 
 export const isSpecificCombinedPositionAddedToParlay = (
     parlayData: ParlaysMarketPosition[],
@@ -169,6 +96,31 @@ export const calculateCombinedMarketOdds = (markets: SportMarketInfo[], position
     return firstPositionOdds * secondPositionOdds;
 };
 
+export const calculateCombinedMarketOddBasedOnHistoryOdds = (odds: number[], market: SportMarketInfo) => {
+    const firstPositionOdd = odds[0];
+    const secondPositionOdd = odds[1];
+
+    if (!firstPositionOdd || !secondPositionOdd) return 0;
+
+    if (market.tags.find((tag) => SPORTS_TAGS_MAP.Football.includes(Number(tag)))) {
+        return (firstPositionOdd * firstPositionOdd) / COMBINED_MARKETS_SGP.Football;
+    }
+
+    if (market.tags.find((tag) => SPORTS_TAGS_MAP.Soccer.includes(Number(tag)))) {
+        return (firstPositionOdd * secondPositionOdd) / COMBINED_MARKETS_SGP.Soccer;
+    }
+
+    if (market.tags.find((tag) => SPORTS_TAGS_MAP.Basketball.includes(Number(tag)))) {
+        return (firstPositionOdd * secondPositionOdd) / COMBINED_MARKETS_SGP.Basketball;
+    }
+
+    if (market.tags.find((tag) => SPORTS_TAGS_MAP.Hockey.includes(Number(tag)))) {
+        return (firstPositionOdd * secondPositionOdd) / COMBINED_MARKETS_SGP.Hockey;
+    }
+
+    return firstPositionOdd * secondPositionOdd;
+};
+
 export const getCombinedPositionName = (
     markets: SportMarketInfo[],
     positions: Position[]
@@ -240,4 +192,115 @@ export const getAllCombinedMarketsForParentMarket = (parentMarket: SportMarketIn
     });
 
     return allCombinedMarkets;
+};
+
+export const getCombinedMarketsFromParlayData = (parlayData: ParlaysMarketPosition[]): ParlaysMarketPosition[] => {
+    const combinedMarkets = [];
+
+    for (let i = 0; i < parlayData.length - 1; i++) {
+        for (let j = i + 1; j < parlayData.length; j++) {
+            if (parlayData[i].parentMarket == parlayData[j].parentMarket) {
+                combinedMarkets.push(parlayData[i], parlayData[j]);
+            }
+        }
+    }
+
+    if (combinedMarkets.length > 0) return combinedMarkets;
+    return [];
+};
+
+export const isCombinedMarketsInParlayData = (parlayData: ParlaysMarketPosition[]): boolean => {
+    const markets = getCombinedMarketsFromParlayData(parlayData);
+
+    if (markets.length > 0) return true;
+    return false;
+};
+
+export const isMarketPartOfCombinedMarketFromParlayData = (
+    parlayData: ParlaysMarketPosition[],
+    market: SportMarketInfo
+): boolean => {
+    const combinedMarkets = getCombinedMarketsFromParlayData(parlayData);
+    if (combinedMarkets.length > 0) {
+        const sameMarkets = combinedMarkets.filter((_market) => _market.sportMarketAddress == market.address);
+
+        if (sameMarkets.length > 0) return true;
+    }
+
+    return false;
+};
+
+export const extractCombinedMarketsFromParlayMarkets = (parlayMarkets: ParlaysMarket[]): CombinedParlayMarket[] => {
+    const combinedMarkets = [];
+    for (let i = 0; i < parlayMarkets.length - 1; i++) {
+        for (let j = i + 1; j < parlayMarkets.length; j++) {
+            if (parlayMarkets[i].gameId == parlayMarkets[j].gameId) {
+                combinedMarkets.push({
+                    markets: [parlayMarkets[i], parlayMarkets[j]],
+                    positions: [parlayMarkets[i].position, parlayMarkets[j].position],
+                    totalOdd: calculateCombinedMarketOdds(
+                        [parlayMarkets[i], parlayMarkets[j]],
+                        [parlayMarkets[i].position, parlayMarkets[j].position]
+                    ),
+                    totalBonus: 0,
+                    positionName: getCombinedPositionName(
+                        [parlayMarkets[i], parlayMarkets[j]],
+                        [parlayMarkets[i].position, parlayMarkets[j].position]
+                    ),
+                });
+            }
+        }
+    }
+    return combinedMarkets;
+};
+
+export const extractCombinedMarketsFromParlayMarketType = (parlayMarket: ParlayMarketWithQuotes): CombinedMarket[] => {
+    const combinedMarkets = [];
+    const sportMarkets = parlayMarket.sportMarkets;
+    for (let i = 0; i < sportMarkets.length - 1; i++) {
+        for (let j = i + 1; j < parlayMarket.sportMarkets.length; j++) {
+            if (isParentMarketSameForSportMarkets(sportMarkets[i], sportMarkets[j])) {
+                const firstPositionData = parlayMarket.positions[i];
+                const secondPositionData = parlayMarket.positions[j];
+                const firstPositionOdd = parlayMarket.quotes[i];
+                const secondPositionOdd = parlayMarket.quotes[j];
+
+                combinedMarkets.push({
+                    markets: [sportMarkets[i], sportMarkets[j]],
+                    positions: [
+                        convertPositionNameToPositionType(firstPositionData.side),
+                        convertPositionNameToPositionType(secondPositionData.side),
+                    ],
+                    totalOdd: calculateCombinedMarketOddBasedOnHistoryOdds(
+                        [firstPositionOdd, secondPositionOdd],
+                        sportMarkets[i]
+                    ),
+                    totalBonus: 0,
+                    positionName: getCombinedPositionName(
+                        [sportMarkets[i], sportMarkets[j]],
+                        [
+                            convertPositionNameToPositionType(firstPositionData.side),
+                            convertPositionNameToPositionType(secondPositionData.side),
+                        ]
+                    ),
+                });
+            }
+        }
+    }
+    return combinedMarkets;
+};
+
+export const removeCombinedMarketFromParlayMarkets = (parlayMarkets: ParlaysMarket[]): ParlaysMarket[] => {
+    const combinedMarkets = extractCombinedMarketsFromParlayMarkets(parlayMarkets);
+
+    if (!combinedMarkets.length) return [];
+
+    const filteredParlayMarkets = parlayMarkets.filter((market) => {
+        const marketWithSameGameId = combinedMarkets.find(
+            (combinedMarkets) => combinedMarkets.markets[0].gameId == market.gameId
+        );
+        if (!marketWithSameGameId) return market;
+    });
+
+    return filteredParlayMarkets;
 };

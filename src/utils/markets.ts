@@ -615,3 +615,22 @@ export const syncPositionsAndMarketsPerContractOrderInParlay = (parlayMarket: Pa
 
     return _parlayMarket;
 };
+
+export const isParentMarketSameForSportMarkets = (
+    firstMarket: SportMarketInfo,
+    secondMarket: SportMarketInfo
+): boolean => {
+    if (firstMarket.parentMarket && secondMarket.parentMarket) {
+        return firstMarket.parentMarket == secondMarket.parentMarket;
+    }
+
+    if (!firstMarket.parentMarket && secondMarket.parentMarket) {
+        return firstMarket.address == secondMarket.parentMarket;
+    }
+
+    if (firstMarket.parentMarket && !secondMarket.parentMarket) {
+        return firstMarket.parentMarket == secondMarket.address;
+    }
+
+    return false;
+};
