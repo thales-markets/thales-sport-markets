@@ -5,7 +5,7 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { MultiSingleAmounts, ParlayPayment, ParlaysMarketPosition } from 'types/markets';
 import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
-import { getCombinedMarketsFromParlayData } from 'utils/markets';
+import { getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
 
 const sliceName = 'parlay';
 

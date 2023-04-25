@@ -17,9 +17,8 @@ import {
     getSpreadTotalText,
     getParentMarketAddress,
     getCombinedOddTooltipText,
-    getCombinedPositionName,
-    isSpecificCombinedPositionAddedToParlay,
 } from 'utils/markets';
+import { getCombinedPositionName, isSpecificCombinedPositionAddedToParlay } from 'utils/combinedMarkets';
 import {
     Bonus,
     Container,

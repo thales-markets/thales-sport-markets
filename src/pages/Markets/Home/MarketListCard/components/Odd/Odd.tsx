@@ -12,8 +12,8 @@ import {
     getParentMarketAddress,
     getSymbolText,
     hasBonus,
-    isMarketPartOfCombinedMarketFromParlayData,
 } from 'utils/markets';
+import { isMarketPartOfCombinedMarketFromParlayData } from 'utils/combinedMarkets';
 import { getOddsType } from '../../../../../../redux/modules/ui';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { MAIN_COLORS } from 'constants/ui';

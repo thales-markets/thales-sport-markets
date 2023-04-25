@@ -27,7 +27,7 @@ import { getOrdinalNumberLabel } from 'utils/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import { NetworkIdByName } from 'utils/network';
-import { getAllCombinedMarketsForParentMarket } from 'utils/markets';
+import { getAllCombinedMarketsForParentMarket } from 'utils/combinedMarkets';
 import CombinedPositions from './components/CombinedPositions/CombinedPositions';
 
 type MarketDetailsPropType = {

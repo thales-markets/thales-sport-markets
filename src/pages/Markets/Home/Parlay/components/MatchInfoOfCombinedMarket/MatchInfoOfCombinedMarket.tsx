@@ -5,13 +5,8 @@ import { removeCombinedMarketFromParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { CombinedParlayMarket } from 'types/markets';
-import {
-    formatMarketOdds,
-    getCombinedOddTooltipText,
-    getCombinedPositionName,
-    getFormattedBonus,
-    getSpreadTotalText,
-} from 'utils/markets';
+import { formatMarketOdds, getCombinedOddTooltipText, getFormattedBonus, getSpreadTotalText } from 'utils/markets';
+import { getCombinedPositionName } from 'utils/combinedMarkets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
 import { BetType } from 'constants/tags';

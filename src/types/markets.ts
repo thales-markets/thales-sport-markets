@@ -163,6 +163,8 @@ export type ParlayMarket = {
     won: boolean;
 };
 
+export type ParlayMarketWithQuotes = ParlayMarket & { quotes: number[] };
+
 export type ParlayMarketWithRank = ParlayMarket & { rank: number; numberOfPositions: number };
 export type ParlayMarketWithRound = ParlayMarket & { round: number };
 

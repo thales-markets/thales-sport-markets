@@ -20,8 +20,8 @@ import {
     getParentMarketAddress,
     getOddTooltipText,
     getFormattedBonus,
-    isMarketPartOfCombinedMarketFromParlayData,
 } from 'utils/markets';
+import { isMarketPartOfCombinedMarketFromParlayData } from 'utils/combinedMarkets';
 import {
     Bonus,
     Container,

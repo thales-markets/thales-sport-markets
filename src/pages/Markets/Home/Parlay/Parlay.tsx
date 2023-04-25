@@ -32,7 +32,7 @@ import MultiSingle from './components/MultiSingle';
 import Ticket from './components/Ticket';
 import ValidationModal from './components/ValidationModal';
 import Toggle from 'components/Toggle/Toggle';
-import { extractCombinedMarketsFromParlayMarkets, removeCombinedMarketFromParlayMarkets } from 'utils/markets';
+import { extractCombinedMarketsFromParlayMarkets, removeCombinedMarketFromParlayMarkets } from 'utils/combinedMarkets';
 import MatchInfoOfCombinedMarket from './components/MatchInfoOfCombinedMarket';
 
 type ParylayProps = {

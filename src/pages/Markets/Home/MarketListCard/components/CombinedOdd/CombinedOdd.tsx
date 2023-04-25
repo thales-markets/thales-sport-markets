@@ -8,13 +8,12 @@ import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
 import {
     formatMarketOdds,
     getCombinedOddTooltipText,
-    getCombinedPositionName,
     getFormattedBonus,
     getParentMarketAddress,
     getSymbolText,
     hasBonus,
-    isSpecificCombinedPositionAddedToParlay,
 } from 'utils/markets';
+import { getCombinedPositionName, isSpecificCombinedPositionAddedToParlay } from 'utils/combinedMarkets';
 import { getOddsType } from '../../../../../../redux/modules/ui';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { MAIN_COLORS } from 'constants/ui';

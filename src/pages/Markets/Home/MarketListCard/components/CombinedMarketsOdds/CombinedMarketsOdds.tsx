@@ -2,7 +2,7 @@ import { STATUS_COLOR } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SportMarketInfo } from 'types/markets';
-import { getAllCombinedMarketsForParentMarket } from 'utils/markets';
+import { getAllCombinedMarketsForParentMarket } from 'utils/combinedMarkets';
 import CombinedOdd from '../CombinedOdd';
 import { Status } from '../MatchStatus/MatchStatus';
 import { CombinedOddsContainer, Container, Title } from '../Odds/styled-components';
