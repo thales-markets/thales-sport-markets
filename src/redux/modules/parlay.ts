@@ -86,7 +86,10 @@ export const parlaySlice = createSlice({
             } else if (index === -1) {
                 // ADD new market
                 if (state.parlay.length < state.parlaySize) {
-                    const allParlayTeams = parlayCopy.map((market) => [market.homeTeam, market.awayTeam]).flat();
+                    const allParlayTeams = parlayCopy
+                        .filter((market) => market.tags.includes(action.payload.tags[0]))
+                        .map((market) => [market.homeTeam, market.awayTeam])
+                        .flat();
 
                     const homeTeamInParlay = allParlayTeams.filter((team) => team === action.payload.homeTeam)[0];
                     const awayTeamInParlay = allParlayTeams.filter((team) => team === action.payload.awayTeam)[0];
