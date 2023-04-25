@@ -235,9 +235,8 @@ export const TAGS_LIST: Tags = [
         priority: 303,
     },
     {
-        id: 9310,
-        label: 'Czech League',
-        logo: `/logos/leagueLogos/nhl.png`,
+        id: 9030,
+        label: 'Hockey World Championship',
         logoClass: 'icon-league league--nhl',
         favourite: false,
         hidden: false,
@@ -273,7 +272,7 @@ export const SPORTS_MAP: SportsMap = {
     19138: 'eSports',
     9020: 'Cricket',
     9399: 'Basketball',
-    9310: 'Hockey',
+    9030: 'Hockey',
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
@@ -300,7 +299,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Football: [9001, 9002],
     Baseball: [9003],
     Basketball: [9004, 9005, 9008, 9399],
-    Hockey: [9006, 9310],
+    Hockey: [9006, 9030],
     Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019],
     UFC: [9007],
     Motosport: [9100, 9101],
@@ -336,7 +335,7 @@ export enum TAGS_FLAGS {
     EUROLEAGUE = 9399,
 }
 
-export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399, 9310];
+export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399, 9030];
 
 export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
@@ -391,7 +390,7 @@ export const SCORING_MAP: SportsMap = {
     19138: 'round',
     9020: 'points',
     9399: 'points',
-    9310: 'goals',
+    9030: 'goals',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -422,7 +421,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     19138: '',
     9020: '',
     9399: 'overtime',
-    9310: 'regular',
+    9030: 'regular',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -451,5 +450,5 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     19138: 'round',
     9020: 'inning',
     9399: 'quarter',
-    9310: 'period',
+    9030: 'period',
 };
