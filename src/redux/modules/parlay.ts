@@ -5,11 +5,13 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { MultiSingleAmounts, ParlayPayment, ParlaysMarketPosition } from 'types/markets';
 import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
+import { getCombinedMarketsFromParlayData } from 'utils/markets';
 
 const sliceName = 'parlay';
 
 const DEFAULT_MAX_NUMBER_OF_MATCHES = 8;
 const MAX_NUMBER_OF_DOUBLE_CHANCES_ON_PARLAY = 5;
+const MAX_NUMBER_OF_COMBINED_MARKETS_IN_PARLAY = 4;
 
 const getDefaultParlay = (): ParlaysMarketPosition[] => {
     const lsParlay = localStore.get(LOCAL_STORAGE_KEYS.PARLAY);
@@ -75,6 +77,19 @@ export const parlaySlice = createSlice({
             const parlayCopy = [...state.parlay];
             const index = state.parlay.findIndex((el) => el.parentMarket === action.payload.parentMarket);
             const numberOfDoubleChances = parlayCopy.filter((market) => market.doubleChanceMarketType !== null).length;
+            const combinedMarketsInParlay = getCombinedMarketsFromParlayData(state.parlay);
+
+            if (combinedMarketsInParlay.length) {
+                const nonCombinedMarkets =
+                    state.parlay.length - combinedMarketsInParlay.length > 0
+                        ? state.parlay.length - combinedMarketsInParlay.length
+                        : 0;
+                if (combinedMarketsInParlay.length + nonCombinedMarkets + 1 > state.parlaySize) {
+                    state.error.code = ParlayErrorCode.MAX_NUMBER_OF_MARKETS_WITH_COMBINED_MARKETS;
+                    state.error.data = DEFAULT_MAX_NUMBER_OF_MATCHES.toString();
+                    return;
+                }
+            }
 
             if (
                 action.payload.doubleChanceMarketType !== null &&
@@ -123,6 +138,20 @@ export const parlaySlice = createSlice({
             localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
         updateParlayWithMultiplePositions: (state, action: PayloadAction<ParlaysMarketPosition[]>) => {
+            const combinedMarkets = getCombinedMarketsFromParlayData(state.parlay);
+            const incomingCombinedMarkets = getCombinedMarketsFromParlayData(action.payload);
+
+            if (incomingCombinedMarkets.length && Math.round(combinedMarkets.length / 2) == 4) {
+                state.error.code = ParlayErrorCode.MAX_COMBINED_MARKETS;
+                state.error.data = MAX_NUMBER_OF_COMBINED_MARKETS_IN_PARLAY.toString();
+                return;
+            }
+
+            if (state.parlay.length + action.payload.length > state.parlaySize) {
+                state.error.code = ParlayErrorCode.MAX_MATCHES;
+                state.error.data = state.parlaySize.toString();
+                return;
+            }
             state.parlay.push(...action.payload);
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
         },

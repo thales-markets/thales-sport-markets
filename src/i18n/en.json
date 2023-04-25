@@ -455,6 +455,8 @@
                 "max-teams": "Maximum {{max}} markets in Parlay",
                 "team-in-parlay": "{{team}} is already in Parlay. The same team can't be added to a Parlay more than once.",
                 "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
+                "max-combined-markets": "The maximum number of combined markets in Parlay is {{max}}.",
+                "max-number-of-markets-with-combined-markets": "The maximum number of markets in Parlay is {{max}}. One combined markets is count like two regular markets.",
                 "amount-exceeded": "Amount exceeded the amount available on AMM",
                 "max-profit": "Maximal supported profit is {{max}}",
                 "min-amount": "Minimal buy-in for a Parlay ticket is {{min}}",
