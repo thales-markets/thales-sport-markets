@@ -125,7 +125,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--ucl',
         favourite: false,
         hidden: false,
-        priority: 108,
+        priority: 110,
     },
     {
         id: 9017,
@@ -134,7 +134,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--uel',
         favourite: false,
         hidden: false,
-        priority: 109,
+        priority: 111,
     },
     {
         id: 9018,
@@ -152,7 +152,7 @@ export const TAGS_LIST: Tags = [
         logoClass: 'icon-league league--j1',
         favourite: false,
         hidden: false,
-        priority: 107,
+        priority: 109,
     },
     {
         id: 9100,
@@ -238,6 +238,30 @@ export const TAGS_LIST: Tags = [
         hidden: false,
         priority: 602,
     },
+    {
+        id: 9057,
+        label: 'Eredivisie',
+        logoClass: 'icon-league league--eredivisie',
+        favourite: false,
+        hidden: false,
+        priority: 107,
+    },
+    {
+        id: 9061,
+        label: 'Primeira Liga',
+        logoClass: 'icon-league league--portugal',
+        favourite: false,
+        hidden: false,
+        priority: 108,
+    },
+    {
+        id: 9045,
+        label: 'Copa Libertadores',
+        logoClass: 'icon-league league--copa-libertadores',
+        favourite: false,
+        hidden: false,
+        priority: 112,
+    },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -269,6 +293,9 @@ export const SPORTS_MAP: SportsMap = {
     9020: 'Cricket',
     9399: 'Basketball',
     18196: 'MMA',
+    9057: 'Soccer',
+    9061: 'Soccer',
+    9045: 'Soccer',
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
@@ -297,7 +324,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Baseball: [9003],
     Basketball: [9004, 9005, 9008, 9399],
     Hockey: [9006],
-    Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019],
+    Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9057, 9061, 9045],
     MMA: [9007, 18196],
     Motosport: [9100, 9101],
     Tennis: [9153, 9156],
@@ -331,9 +358,12 @@ export enum TAGS_FLAGS {
     IPL = 9020,
     EUROLEAGUE = 9399,
     BOXING = 18196,
+    EREDIVISIE = 9057,
+    PRIMEIRA_LIGA = 9061,
+    COPA_LIBERTADORES = 9045,
 }
 
-export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399, 18196];
+export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399, 18196, 9057, 9061, 9045];
 
 export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
@@ -389,6 +419,9 @@ export const SCORING_MAP: SportsMap = {
     9020: 'points',
     9399: 'points',
     18196: '',
+    9057: 'goals',
+    9061: 'goals',
+    9045: 'goals',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -420,6 +453,9 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9020: '',
     9399: 'overtime',
     18196: '',
+    9057: 'regular',
+    9061: 'regular',
+    9045: 'regular',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -449,4 +485,7 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     9020: 'inning',
     9399: 'quarter',
     18196: 'round',
+    9057: 'half',
+    9061: 'half',
+    9045: 'half',
 };

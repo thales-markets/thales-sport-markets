@@ -139,6 +139,10 @@ const LeagueFlag = (tagId: number | any) => {
             return <Flag size="l" code="JP" />;
         case TAGS_FLAGS.IPL:
             return <Flag size="l" code="IN" />;
+        case TAGS_FLAGS.EREDIVISIE:
+            return <Flag size="m" code="NL" />;
+        case TAGS_FLAGS.PRIMEIRA_LIGA:
+            return <Flag size="m" code="PT" />;
         default:
             return <FlagWorld alt="World flag" src="/world-flag.png" />;
     }
