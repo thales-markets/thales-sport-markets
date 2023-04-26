@@ -120,3 +120,7 @@
 .league--copa-libertadores:before {
     content: '\0058';
 }
+
+.league--copa-eredivisie:before {
+    content: '\0067';
+}
