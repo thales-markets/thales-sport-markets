@@ -11,14 +11,12 @@ import { getParlay, removeCombinedMarketFromParlay, updateParlayWithMultiplePosi
 import { getOddsType } from 'redux/modules/ui';
 import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
 import { floorNumberToDecimals } from 'utils/formatters/number';
+import { formatMarketOdds, getSpreadTotalText, getParentMarketAddress, getCombinedOddTooltipText } from 'utils/markets';
 import {
-    formatMarketOdds,
-    convertFinalResultToResultType,
-    getSpreadTotalText,
-    getParentMarketAddress,
-    getCombinedOddTooltipText,
-} from 'utils/markets';
-import { getCombinedPositionName, isSpecificCombinedPositionAddedToParlay } from 'utils/combinedMarkets';
+    getCombinedPositionName,
+    isCombinedMarketWinner,
+    isSpecificCombinedPositionAddedToParlay,
+} from 'utils/combinedMarkets';
 import {
     Bonus,
     Container,
@@ -79,9 +77,7 @@ const CombinedPositionDetails: React.FC<CombinedPositionDetailsProps> = ({
     const parentMarketAddress = markets[0].parentMarket !== null ? markets[0].parentMarket : markets[1].parentMarket;
     const isParentMarketAddressInParlayData = parlay.filter((market) => market.parentMarket == parentMarketAddress);
 
-    const isCombinedPositionWinner =
-        convertFinalResultToResultType(markets[0].finalResult) == positions[0] &&
-        convertFinalResultToResultType(markets[1].finalResult) == positions[1];
+    const isCombinedPositionWinner = isCombinedMarketWinner(markets, positions);
 
     const getDetails = () => (
         <Container
