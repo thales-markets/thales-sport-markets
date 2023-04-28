@@ -155,7 +155,7 @@ export const TAGS_LIST: Tags = [
         priority: 109,
     },
     {
-        id: 9100,
+        id: 9455,
         label: 'Formula 1',
         logo: '/logos/leagueLogos/f1.png',
         logoClass: 'icon-league league--f1',
@@ -283,7 +283,7 @@ export const SPORTS_MAP: SportsMap = {
     9017: 'Soccer',
     9018: 'Soccer',
     9019: 'Soccer',
-    9100: 'Motosport',
+    9455: 'Motosport',
     9101: 'Motosport',
     9153: 'Tennis',
     9156: 'Tennis',
@@ -307,7 +307,7 @@ export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
     9006,
     9008,
     9007,
-    9100,
+    9455,
     9101,
     9153,
     9156,
@@ -326,7 +326,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Hockey: [9006],
     Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9057, 9061, 9045],
     MMA: [9007, 18196],
-    Motosport: [9100, 9101],
+    Motosport: [9455, 9101],
     Tennis: [9153, 9156],
     eSports: [18977, 18983, 19138],
     Cricket: [9020],
@@ -350,7 +350,7 @@ export enum TAGS_FLAGS {
     UEFA_CL = 9016,
     UEFA_EL = 9017,
     J1_LEAGUE = 9019,
-    FORMULA1 = 9100,
+    FORMULA1 = 9455,
     MOTOGP = 9101,
     CSGO = 18977,
     DOTA2 = 18983,
@@ -363,12 +363,12 @@ export enum TAGS_FLAGS {
     COPA_LIBERTADORES = 9045,
 }
 
-export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399, 18196, 9057, 9061, 9045];
+export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399, 18196, 9057, 9061, 9045, 9455];
 
 export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
 
-export const PERSON_COMPETITIONS = [9007, 9100, 9101, 9153, 9156];
+export const PERSON_COMPETITIONS = [9007, 9455, 9101, 9153, 9156];
 
 export enum BetType {
     WINNER = 0,
@@ -409,7 +409,7 @@ export const SCORING_MAP: SportsMap = {
     9017: 'goals',
     9018: 'goals',
     9019: 'goals',
-    9100: '',
+    9455: '',
     9101: '',
     9153: 'gems',
     9156: 'gems',
@@ -443,7 +443,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9017: 'regular',
     9018: 'regular',
     9019: 'regular',
-    9100: '',
+    9455: '',
     9101: '',
     9153: '',
     9156: '',
