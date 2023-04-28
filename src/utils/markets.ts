@@ -375,7 +375,7 @@ export const updateTotalQuoteAndAmountFromContract = (
     parlayMarkets: ParlayMarket[] | ParlayMarketWithRound[]
 ): ParlayMarket[] | ParlayMarketWithRound[] => {
     const modifiedParlays = parlayMarkets.map((parlay) => {
-        if ((isParlayOpen(parlay) || isParlayClaimable(parlay)) && isCanceledMarketInParlay(parlay)) {
+        if (isCanceledMarketInParlay(parlay)) {
             const canceledQuotes = getCanceledGamesPreviousQuotes(parlay);
             let totalQuote = parlay.totalQuote;
             canceledQuotes.forEach((quote) => {
