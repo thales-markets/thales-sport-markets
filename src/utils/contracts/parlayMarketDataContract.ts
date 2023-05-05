@@ -3,7 +3,7 @@ export const parlayMarketDataContract = {
         5: '',
         10: '0x3bD77B8FE52242797C29Df251418873Ae34F0641',
         42: '',
-        420: '0x1218A1DF0Fc5934d44Ea52B298e91Fe6C9Bcee1b',
+        420: '0x54822552F51cd15c09bF360958A8e417989a925b',
         42161: '0xff9d1B34f369CAf91c6b69761e2A06f78ed3cd9d',
     },
     abi: [
