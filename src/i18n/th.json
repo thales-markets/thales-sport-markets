@@ -223,7 +223,9 @@
                 "motosport": "มอเตอร์สปอร์ต",
                 "favourites": "รายการโปรด",
                 "esports": "อีสปอร์ต",
-                "cricket": "คริกเก็ต"
+                "cricket": "คริกเก็ต",
+                "mma": "ดี",
+                "boxing": "มวย"
             },
             "datepicker": {
                 "games": "{{numberOfGames}} เกม"
@@ -436,7 +438,7 @@
                 "march-madness": "มาร์ชแมดเนส"
             }
         },
-        "incentivized-tooltip": "NCAA markets are incentivized with {{rewards}} during March Madness. More details <detailsLink>here</detailsLink>.",
+        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
         "incentivized-markets": "ตลาดที่สร้างแรงจูงใจ"
     },
     "rewards": {
@@ -574,7 +576,10 @@
             "no-claimable": "คุณไม่มีตำแหน่งที่อ้างสิทธิ์ได้",
             "no-transactions": "คุณไม่มีการซื้อขายใด ๆ",
             "ticket-subtitle": "เพิ่มตำแหน่ง เลือกตลาด และทำการเลือกของคุณ",
-            "canceled-tooltip": "ตลาดที่ยกเลิกสามารถอ้างสิทธิ์ได้ 2 ชั่วโมงหลังจากตลาดได้รับการแก้ไข"
+            "canceled-tooltip": "ตลาดที่ยกเลิกสามารถอ้างสิทธิ์ได้ 2 ชั่วโมงหลังจากตลาดได้รับการแก้ไข",
+            "transaction-pending": "การทำธุรกรรมที่รอดำเนินการ",
+            "voucher-claim-success": "แลกรับบัตรกำนัลสำเร็จแล้ว",
+            "no-vouchers": "คุณไม่มีบัตรกำนัลที่จะเรียกร้อง"
         },
         "table": {
             "games": "เกม",
@@ -601,7 +606,14 @@
         "in-vault": "ในห้องนิรภัย",
         "go-to-vault": "ไปที่ห้องนิรภัย",
         "go-to-lp": "ไปที่หจก",
-        "in-lp": "มีสภาพคล่อง"
+        "in-lp": "มีสภาพคล่อง",
+        "claiming-voucher": "การอ้างสิทธิ์...",
+        "voucher": "บัตรกำนัล",
+        "left-to-claim": "เหลือแต่เคลม",
+        "gift-voucher": "บัตรกำนัล",
+        "voucher-info": "แต่เพื่อที่เจ้าจะได้เห็นว่าความผิดพลาดแต่กำเนิดของบรรดาผู้ที่กล่าวโทษความเพลิดเพลินและสรรเสริญความเจ็บปวดนั้นมาจากไหน ฉันจะเปิดเรื่องราวทั้งหมดและอธิบายถึงสิ่งที่ผู้ค้นพบความจริงผู้นั้นกล่าว และตามเดิม สถาปนิกของ ชีวิตที่มีความสุข",
+        "claim-voucher": "เรียกร้องบัตรกำนัล",
+        "voucher-title": "รับบัตรกำนัลการทำงานล่วงเวลา"
     },
     "mint-world-cup-nft": {
         "incentives": "สิ่งจูงใจ",
@@ -692,17 +704,22 @@
     "vault": {
         "discount-vault": {
             "title": "Discount Vault",
-            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และมีส่วนลดมากกว่า {{discount}}.</p>การฝากใน Vault จะถูกนับในส่วนของปริมาณการซื้อขายของ gamified staking ด้วย</p>",
+            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และมีส่วนลดมากกว่า {{discount}}.</p>",
             "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
         },
         "degen-discount-vault": {
             "title": "Degen Discount Vault",
-            "description": "<p>ซื้อโพสิชั่นที่ odds ใดๆ ที่มีส่วนลดมากกว่า {{discount}}</p><p>การฝากใน Vault จะถูกนับในส่วนของปริมาณการซื้อขายของ gamified staking ด้วย</p>",
+            "description": "<p>ซื้อโพสิชั่นที่ odds ใดๆ ที่มีส่วนลดมากกว่า {{discount}}</p>",
             "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอด {{utilizationRate}} จะมีเพียงมากที่สุด {{allocationLimitsPerMarketPerRound}} เท่านั้นที่สามารถใช้กับเกมการแข่งขั้นหนึ่งเกม</p>"
         },
         "safu-discount-vault": {
             "title": "Safu Discount Vault",
-            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และ มีส่วนลดใดๆ </p><p>การฝากใน Vault จะถูกนับในส่วนของปริมาณการซื้อขายของ gamified staking ด้วย</p>",
+            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และ มีส่วนลดใดๆ </p>",
+            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
+        },
+        "upsettoor-vault": {
+            "title": "Upsettoor Vault",
+            "description": "<p>ซื้อตำแหน่งที่มีอัตราต่อรองน้อยกว่า {{odds}} และมีส่วนลดมากกว่า {{discount}}.</p>",
             "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
         },
         "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
@@ -777,10 +794,11 @@
             "name": "ชื่อ"
         },
         "parlay-discount-vault": {
-            "description": "<p>ซื้อตั๋วพาร์เลย์โดยแต่ละตำแหน่งในตั๋วมีส่วนลดอย่างน้อย {{discount}}</p><p> เงินฝากทั้งหมดที่เข้าสู่รอบจะนับรวมกับปริมาณการเดิมพันแบบเกม</p>",
+            "description": "<p>ซื้อตั๋วพาร์เลย์โดยแต่ละตำแหน่งในตั๋วมีส่วนลดอย่างน้อย {{discount}}</p>",
             "risks": "<p>ห้องนิรภัยมีอัตราการใช้งาน {{utilizationRate}} ซึ่งรับรองว่าไม่เกิน {{utilizationRate}} ของเงินฝากในแต่ละรอบที่มีความเสี่ยง นอกจากนี้ จาก {{utilizationRate}} เหล่านั้น คุณสามารถใช้จ่ายได้สูงสุด {{allocationLimitsPerMarketPerRound}} กับตั๋วพาร์เลย์ใบเดียวต่อรอบ ดังนั้นจึงเป็นการกระจายความเสี่ยงไปสู่ตั๋วพาร์เลย์หลายใบที่มีส่วนลดมากกว่า {{odds}}</p>",
             "title": "ห้องเก็บส่วนลด Parlay"
         },
+        "gamified-staking-message": "<p>เงินฝากทั้งหมดที่เข้าสู่รอบจะนับรวมกับปริมาณการเดิมพันแบบเกม</p>",
         "LP": {
             "title": "หจก"
         },
@@ -970,41 +988,41 @@
         "test-info": "ขั้นตอนการทดสอบได้เปิดขึ้นแล้วพร้อมกับทีมตัวอย่าง การคัดเลือกในปี 2023 จะเปิดขึ้นในวันที่ 12 มีนาคม!"
     },
     "liquidity-pool": {
-        "title": "Provide Liquidity",
-        "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round your balance (inclusive of that round's PnL) is sent to you. To withdraw, you need to have at least {{thalesStakedAmount}} THALES staked per each {{currency}} you are withdrawing.</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
-        "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the pool: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
-        "liquidity-pool-not-started-message": "The liquidity pool has not started",
-        "liquidity-pool-paused-message": "The liquidity pool is paused",
-        "round-end-label": "The round ends in",
-        "round-ended-label": "Round ended",
-        "total-info-label": "Total LP info",
-        "users-in-liquidity-pool-label": "Users in the liquidity pool: {{number}} / {{max}}",
-        "your-share-label": "Your share: {{percentage}} of LP",
-        "your-info-label": "Your LP info",
-        "current-balance-label": "Current balance",
-        "next-round-balance-label": "Next round balance",
-        "max-allowance-label": "Max allowance",
-        "your-thales-staked-label": "Your THALES staked",
+        "title": "วางสภาพคล่อง",
+        "description": "<h1>รายละเอียด</h1><p>การวางสภาพคล่อง (Liquidity Providing) คือการนำ stablecoin มาวางเป็นหลักประกันในพูลสภาพคล่อง เพื่อใช้ในการเทรดผลกีฬาใน Overtime โดยสภาพคล่องที่นำมาวางนี้จะถูกนำไปใช้กับ AMM เทรดใน Overtime</p><p>คุณต้อง stake โทเค็น THALES ก่อนจึงจะมีสิทธิวางสภาพคล่องได้ ไม่มีจำกัดวงเงินสูงสุดต่อวอลเลท และคุณจะสามารถวางสภาพคล่องสูงสุดได้ที่ 1{{currency}} ต่อ {{thalesStakedAmount}} THALES จนกว่าสระสภาพคล่องเต็ม</p><p>เมื่อรอบเทรดจบ คุณจะได้รับส่วนแบ่ง PnL ของรอบนั้นตามสัดส่วนที่วางสภาพคล่อง โดยจะถูกโอนเข้าไปในยอดเงินวางสภาพคล่องของคุณ</p><p>คุณสามารถถอนเงินระหว่างรอบได้ตลอด เมื่อรอบนั้นสิ้นสุดลง เงินคงเหลือ (รวมถึง PnL ของรอบนั้น) ก็จะถูกโอนเข้าวอลเลทของคุณ ทั้งนี้ ในการถอนเงิน คุณต้องมีโทเค็น THALES ชั้นต่ำ {{thalesStakedAmount}}  THALES  ต่อ 1 {{currency}} ที่คุณจะถอน</p><p>หากคุณตัดสินใจ unstake THALES ระหว่างการวางสภาพคล่อง โปรดอย่าลืมว่าคุณต้องถอนเงินออกจากสระสภาพคล่องก่อน</p><p>การวางสภาพคล่องมีความเสี่ยงจากการขาดทุนเนื่องจากอัตราการทายถูกของผู้ทายผลกีฬา รวมถึงความเสี่ยงของความปลอดภัยในการใช้งาน smart contract คุณต้องมั่นใจว่าศึกษาและเข้าใจความเสี่ยงเหล่านี่อย่างดีแล้วก่อนที่จะวางสภาพคล่อง</p><p>ใน <tipLink>TIP-99</tipLink>  มีรายละเอียดทางเทคนิคที่เกี่ยวข้องกับการวางสภาพคล่อง</p>",
+        "variables": "<h1>ข้อมูลเชิงเทคนิค</h1><ul><li>จำนวนเงินสูงสุด: {{maxAllowedDeposit}}</li><li>จำนวนผู้ใช้สูงสุด: {{maxAllowedUsers}}</li><li>เงินวางขั้นต่ำ: {{minDepositAmount}}</li><li>ระยะเวลา/รอบ: {{roundLength}} วัน</li></ul>",
+        "liquidity-pool-not-started-message": "สระสภาพคล่องยังไม่เริ่มใช้งาน",
+        "liquidity-pool-paused-message": "สระสภาพคล่องหยุดชั่วคราว",
+        "round-end-label": "รอบปัจจุบันจะสิ้นสุดในอีก",
+        "round-ended-label": "สิ้นสุดรอบ",
+        "total-info-label": "จำนวน LP ทั้งหมด",
+        "users-in-liquidity-pool-label": "จำนวนผู้วางสภาพคล่อง: {{number}} / {{max}}",
+        "your-share-label": "สัดส่วน LP ของคุณ: {{percentage}}",
+        "your-info-label": "รายละเอียด LP ของคุณ",
+        "current-balance-label": "จำนวนเงินรอบนี้",
+        "next-round-balance-label": "จำนวนเงินรอบถัดไป",
+        "max-allowance-label": "โควต้าวางสภาพคล่องสูงสุด",
+        "your-thales-staked-label": "จำนวน THALES ที่ stake ไว้",
         "allowance-multiplier-label": "Allowance multiplier",
-        "withdrawal-request-label": "Withdrawal request: {{amount}}",
-        "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
-        "deposit-amount-placeholder": "Enter amount",
-        "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
-        "nothing-to-withdraw-label": "Nothing to withdraw.",
-        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
-        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
-        "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
-        "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
-        "deposit-max-amount-of-users-warning": "Maximum number of users in the liquidity pool is reached, you cannot deposit.",
-        "deposit-liquidity-pool-cap-reached-warning": "The liquidity pool cap is reached, you cannot deposit.",
-        "deposit-liquidity-pool-cap-error": "Deposit amount exceeds liquidity pool cap",
-        "deposit-staked-thales-error": "Deposit amount exceeds max allowance, stake more THALES to deposit",
-        "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
-        "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
-        "withdrawal-staked-thales-warning": "You cannot withdraw as you need more staked THALES to withdraw. Stake {{amount}} THALES more to enable withdrawal.",
+        "withdrawal-request-label": "มีคำสั่งถอนเงินจำนวน: {{amount}}",
+        "estimated-amount-tooltip": "จำนวนนี้เป็นเพียงการประมาณการเท่านั้น จำนวนที่แน่นอนจะถูกคำนวณตาม PnL ที่เกิดขึ้นหลังจากรอบนี้สิ้นสุดลง",
+        "deposit-amount-placeholder": "ใส่จำนวน",
+        "available-to-withdraw-label": "สามารถถอนได้: <bold>{{amount}}</bold>",
+        "nothing-to-withdraw-label": "ไม่มีเงินให้ถอน",
+        "withdrawal-message": "คุณสามารถสั่งถอนเงินได้ และเงินของคุณจะถูกโอนเข้าวอลเลทของคุณโดยอัตโนมัติหลังจากรอบนี้สิ้นสุด",
+        "withdrawal-requested-message": "คุณมีคำสั่งถอนเงินจำนวน<bold>{{amount}}</bold><tooltip /> เงินของคุณจะโอนเข้าวอลเลททันทีเพื่อรอบนี้สิ้นสุดลง",
+        "first-deposit-withdrawal-message": "คุณได้วางสภาพคล่องสำหรับรอบถัดไปแล้ว คุณจะสามารถถอนเงินได้ภายหลังสิ้นสุดรอบถัดไป",
+        "deposit-withdrawal-warning": "อยู่ระหว่างรอถอนเงิน คุณไม่สามารถวางสภาพคล่องได้",
+        "deposit-max-amount-of-users-warning": "จำนวนผู้วางสภาพคล่องครบตามโควต้าที่กำหนดแล้ว คุณไม่สามารถวางสภาพคล่องได้อีก",
+        "deposit-liquidity-pool-cap-reached-warning": "โควต้าพูลสภาพคล่องเต็มแล้ว คุณไม่สามารถวางสภาพคล่องได้",
+        "deposit-liquidity-pool-cap-error": "จำนวนเงินวางสภาพคล่องเกินโควต้าของพูลสภาพคล่อง",
+        "deposit-staked-thales-error": "จำนวนเงินวางสภาพคล่องเกินโควต้า คุณต้อง stake THALES เพิ่มจึงจะวางสภาพคล่องได้",
+        "deposit-min-amount-error": "จำนวนเงินวางสภาพคล่องขั้นต่ำ คือ {{amount}}",
+        "withdrawal-deposit-warning": "ไม่สามารถถอนเงินได้ เนื่องจากคุณได้วางสภาพคล่องสำหรับรอบถัดไปแล้ว",
+        "withdrawal-staked-thales-warning": "ไม่สามารถถอนเงินได้ คุณต้อง stake THALES เพิ่มจำนวน {{amount}} THALES จึงจะสามารถถอนเงินได้",
         "tabs": {
-            "deposit": "Deposit",
-            "withdraw": "Withdraw"
+            "deposit": "ฝาก",
+            "withdraw": "ถอน"
         },
         "button": {
             "deposit-label": "Deposit",

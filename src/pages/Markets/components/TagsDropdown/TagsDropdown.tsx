@@ -98,7 +98,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({ open, tags, tagFilter, setT
                             >
                                 {LeagueFlag(tag.id)}
                                 <Label>{tag.label}</Label>
-                                {INCENTIVIZED_LEAGUE.id == tag.id &&
+                                {INCENTIVIZED_LEAGUE.ids.includes(tag.id) &&
                                     new Date() > INCENTIVIZED_LEAGUE.startDate &&
                                     new Date() < INCENTIVIZED_LEAGUE.endDate && (
                                         <Tooltip
@@ -173,6 +173,10 @@ const LeagueFlag = (tagId: number | any) => {
             return <Flag size="m" code="JP" />;
         case TAGS_FLAGS.IPL:
             return <Flag size="m" code="IN" />;
+        case TAGS_FLAGS.EREDIVISIE:
+            return <Flag size="m" code="NL" />;
+        case TAGS_FLAGS.PRIMEIRA_LIGA:
+            return <Flag size="m" code="PT" />;
         default:
             return <FlagWorld alt="World flag" src="/world-flag.png" />;
     }

@@ -38,7 +38,6 @@ const useClaimTransactionsPerMarket = (
             }
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );

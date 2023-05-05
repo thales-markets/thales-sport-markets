@@ -19,7 +19,7 @@ const useSportMarketLiveResultQuery = (
                     // marketId represents market address in types ParlayMarket and AccountPositionProfile
                     const contract = new ethers.Contract(marketId, marketContract.abi, networkConnector.provider);
 
-                    const [gameId] = await Promise.all([contract?.getGameId()]);
+                    const gameId = await contract?.getGameId();
                     gameIdString = Web3.utils.hexToAscii(gameId);
                 }
 

@@ -69,6 +69,7 @@ import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoo
 import { LINKS } from 'constants/links';
 import MaxAllowanceTooltip from './components/MaxAllowanceTooltip';
 import { getDefaultDecimalsForNetwork, getDefaultColleteralForNetwork } from 'utils/collaterals';
+import { refetchLiquidityPoolData } from 'utils/queryConnector';
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
@@ -271,6 +272,7 @@ const LiquidityPool: React.FC = () => {
                     toast.update(id, getSuccessToastOptions(t('liquidity-pool.button.deposit-confirmation-message')));
                     setAmount('');
                     setIsSubmitting(false);
+                    refetchLiquidityPoolData(walletAddress, networkId);
                 }
             } catch (e) {
                 console.log(e);
@@ -300,6 +302,7 @@ const LiquidityPool: React.FC = () => {
                     );
                     setAmount('');
                     setIsSubmitting(false);
+                    refetchLiquidityPoolData(walletAddress, networkId);
                 }
             } catch (e) {
                 console.log(e);
@@ -328,6 +331,7 @@ const LiquidityPool: React.FC = () => {
                         getSuccessToastOptions(t('liquidity-pool.button.close-round-confirmation-message'))
                     );
                     setIsSubmitting(false);
+                    refetchLiquidityPoolData(walletAddress, networkId);
                 }
             } catch (e) {
                 console.log(e);
@@ -816,12 +820,14 @@ const LiquidityPool: React.FC = () => {
                                             values={{
                                                 amount: formatCurrencyWithSign(
                                                     USD_SIGN,
-                                                    userLiquidityPoolData.balanceCurrentRound
+                                                    userLiquidityPoolData
+                                                        ? userLiquidityPoolData.balanceCurrentRound
+                                                        : 0
                                                 ),
                                             }}
                                         />
                                         <Tooltip
-                                            overlay={t(`vault.estimated-amount-tooltip`)}
+                                            overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
                                             iconFontSize={14}
                                             marginLeft={2}
                                         />

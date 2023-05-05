@@ -12,12 +12,14 @@ The UI is available on [overtimemarkets.xyz](https://overtimemarkets.xyz).
 -   React
 -   React Redux
 -   React Query
--   Styled-Components
+-   react-i18next
+-   styled-components
+-   Recharts
 
 ## Ethereum stack
 
--   ethers.js v5 - Ethereum wallet implementation.
--   Blocknative Onboard - for ethereum wallet connectivity.
+-   `ethers.js` v5 - Ethereum wallet implementation.
+-   `RainbowKit` and `wagmi` - for ethereum wallet connectivity.
 
 ## Development
 
@@ -33,9 +35,9 @@ Copy the `.env.local.example` file in this directory to `.env.local` (which will
 Then, open `.env.local` and add the missing environment variables:
 
 -   `REACT_APP_INFURA_PROJECT_ID` - Infura project id (get it from [infura.io](https://infura.io/)).
--   `REACT_APP_PORTIS_APP_ID` - Portis app id (get it from [portis.io](https://www.portis.io/)).
--   `REACT_APP_THALES_API_URL` - The Thales API URL. Set to `https://api.thalesmarket.io`.
+-   `REACT_APP_CHAINNODE_PROJECT_ID` - Chainnodes project id (get it from [chainnodes.org](https://app.chainnodes.org/)).
 -   `REACT_APP_IPFS_DEPLOYMENT` - Is dApp in the mode for deployment on IPFS. Set to `false`.
+-   `REACT_APP_BUNGEE_API_KEY` - Bungee API key.
 
 ### Set up Google Translate API
 

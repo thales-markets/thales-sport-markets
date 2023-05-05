@@ -4,7 +4,6 @@ import { AvailablePerPosition, ParlaysMarket } from '../../types/markets';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
-import { ethers } from 'ethers';
 import { convertPriceImpactToBonus } from 'utils/markets';
 
 const useAvailablePerPositionMultiQuery = (
@@ -20,36 +19,30 @@ const useAvailablePerPositionMultiQuery = (
                 const address = marketAddresses[i].address;
 
                 try {
-                    const sportsAMMContract = networkConnector.sportsAMMContract;
+                    const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
 
-                    const [
-                        availableToBuyHome,
-                        availableToBuyAway,
-                        availableToBuyDraw,
-                        homePositionPriceImpact,
-                        awayPositionPriceImpact,
-                        drawPositionPriceImpact,
-                    ] = await Promise.all([
-                        sportsAMMContract?.availableToBuyFromAMM(address, Position.HOME),
-                        sportsAMMContract?.availableToBuyFromAMM(address, Position.AWAY),
-                        sportsAMMContract?.availableToBuyFromAMM(address, Position.DRAW),
-                        sportsAMMContract?.buyPriceImpact(address, Position.HOME, ethers.utils.parseEther('1')),
-                        sportsAMMContract?.buyPriceImpact(address, Position.AWAY, ethers.utils.parseEther('1')),
-                        sportsAMMContract?.buyPriceImpact(address, Position.DRAW, ethers.utils.parseEther('1')),
-                    ]);
+                    const marketLiquidityAndPriceImpact = await sportPositionalMarketDataContract?.getMarketLiquidityAndPriceImpact(
+                        address
+                    );
 
                     map[address] = {
                         [Position.HOME]: {
-                            available: bigNumberFormatter(availableToBuyHome),
-                            buyBonus: convertPriceImpactToBonus(bigNumberFormatter(homePositionPriceImpact)),
+                            available: bigNumberFormatter(marketLiquidityAndPriceImpact.homeLiquidity),
+                            buyBonus: convertPriceImpactToBonus(
+                                bigNumberFormatter(marketLiquidityAndPriceImpact.homePriceImpact)
+                            ),
                         },
                         [Position.AWAY]: {
-                            available: bigNumberFormatter(availableToBuyAway),
-                            buyBonus: convertPriceImpactToBonus(bigNumberFormatter(awayPositionPriceImpact)),
+                            available: bigNumberFormatter(marketLiquidityAndPriceImpact.awayLiquidity),
+                            buyBonus: convertPriceImpactToBonus(
+                                bigNumberFormatter(marketLiquidityAndPriceImpact.awayPriceImpact)
+                            ),
                         },
                         [Position.DRAW]: {
-                            available: bigNumberFormatter(availableToBuyDraw),
-                            buyBonus: convertPriceImpactToBonus(bigNumberFormatter(drawPositionPriceImpact)),
+                            available: bigNumberFormatter(marketLiquidityAndPriceImpact.drawLiquidity),
+                            buyBonus: convertPriceImpactToBonus(
+                                bigNumberFormatter(marketLiquidityAndPriceImpact.drawPriceImpact)
+                            ),
                         },
                     };
                 } catch (e) {

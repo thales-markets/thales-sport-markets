@@ -1,12 +1,11 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 import { NetworkId } from 'types/network';
 import { UserVaultsData } from 'types/vault';
-import vaultContract from 'utils/contracts/sportVaultContract';
-import { ethers } from 'ethers';
-import { VAULT_MAP } from 'constants/vault';
+import { VAULT_MAP, isParlayVault } from 'constants/vault';
+import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 const useUserVaultsDataQuery = (
     walletAddress: string,
@@ -28,23 +27,22 @@ const useUserVaultsDataQuery = (
 
             for (const vaultAddress of vaultAddresses) {
                 try {
-                    const sportVaultContract = new ethers.Contract(
-                        vaultAddress,
-                        vaultContract.abi,
-                        networkConnector.provider
-                    );
-                    if (sportVaultContract) {
-                        const [round] = await Promise.all([sportVaultContract?.round()]);
+                    const { sportVaultDataContract } = networkConnector;
+                    if (sportVaultDataContract) {
+                        const contractUserVaultData = isParlayVault(vaultAddress, networkId)
+                            ? await sportVaultDataContract.getUserParlayVaultData(vaultAddress, walletAddress)
+                            : await sportVaultDataContract.getUserSportVaultData(vaultAddress, walletAddress);
 
-                        const [balanceCurrentRound, balanceNextRound, withdrawalRequested] = await Promise.all([
-                            sportVaultContract?.balancesPerRound(Number(round), walletAddress),
-                            sportVaultContract?.balancesPerRound(Number(round) + 1, walletAddress),
-                            sportVaultContract?.withdrawalRequested(walletAddress),
-                        ]);
-
-                        userVaultData.balanceTotal += withdrawalRequested
+                        userVaultData.balanceTotal += contractUserVaultData.withdrawalRequested
                             ? 0
-                            : bigNumberFormatter(balanceCurrentRound) + bigNumberFormatter(balanceNextRound);
+                            : bigNumberFormmaterWithDecimals(
+                                  contractUserVaultData.balanceCurrentRound,
+                                  getDefaultDecimalsForNetwork(networkId)
+                              ) +
+                              bigNumberFormmaterWithDecimals(
+                                  contractUserVaultData.balanceNextRound,
+                                  getDefaultDecimalsForNetwork(networkId)
+                              );
                     }
                 } catch (e) {
                     console.log(e);
@@ -54,7 +52,6 @@ const useUserVaultsDataQuery = (
             return userVaultData;
         },
         {
-            refetchInterval: 5000,
             ...options,
         }
     );

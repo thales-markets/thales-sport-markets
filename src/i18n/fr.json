@@ -303,7 +303,9 @@
                 "motosport": "Sport automobile",
                 "favourites": "Favoris",
                 "esports": "E-sport",
-                "cricket": "Criquet"
+                "cricket": "Criquet",
+                "boxing": "Boxe",
+                "mma": "BIEN"
             },
             "all": "Tous",
             "datepicker": {
@@ -538,7 +540,7 @@
                 "march-madness": "Folie de mars"
             }
         },
-        "incentivized-tooltip": "NCAA markets are incentivized with {{rewards}} during March Madness. More details <detailsLink>here</detailsLink>.",
+        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
         "incentivized-markets": "MARCHÉS RÉCOMPENSÉS"
     },
     "rewards": {
@@ -676,7 +678,10 @@
             "no-open": "Vous n'avez pas de poste ouvert",
             "no-transactions": "Vous n'avez aucun métier",
             "ticket-subtitle": "Ajoutez une position, choisissez un marché et faites votre sélection.",
-            "canceled-tooltip": "Les marchés annulés sont réclamables 2 heures après la résolution du marché."
+            "canceled-tooltip": "Les marchés annulés sont réclamables 2 heures après la résolution du marché.",
+            "voucher-claim-success": "Bon réclamé avec succès",
+            "transaction-pending": "Transaction en attente",
+            "no-vouchers": "Vous n'avez pas de bon à réclamer"
         },
         "table": {
             "paid": "Payé",
@@ -703,7 +708,14 @@
         "in-vault": "Au coffre",
         "go-to-lp": "Aller à LP",
         "go-to-vault": "Aller au coffre",
-        "lp-title": "Pool de liquidité"
+        "lp-title": "Pool de liquidité",
+        "voucher-info": "Mais afin que vous puissiez voir d'où vient toute cette erreur née de ceux qui accusent le plaisir et louent la douleur, je vais ouvrir toute l'affaire et expliquer les choses mêmes qui ont été dites par ce découvreur de la vérité et, pour ainsi dire, l'architecte de une vie heureuse.",
+        "claim-voucher": "Bon de réclamation",
+        "voucher": "Bon",
+        "claiming-voucher": "Affirmant...",
+        "gift-voucher": "Chèque cadeau",
+        "left-to-claim": "Reste à réclamer",
+        "voucher-title": "Réclamer des bons d'heures supplémentaires"
     },
     "mint-world-cup-nft": {
         "no": "Non",
@@ -794,18 +806,23 @@
     "vault": {
         "discount-vault": {
             "title": "Discount Vault",
-            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec une remise supérieure à {{discount}}.</p>Tous les dépôts qui entrent dans un tour comptent pour le volume de staking gamifié.</p>",
+            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec une remise supérieure à {{discount}}.</p>",
             "risks": "<p>Le coffre a un taux d'utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôts par tour soient utilisés. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
         },
         "degen-discount-vault": {
             "title": "Degen Discount Vault",
-            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec un rabais supérieur à {{discount}}.</p>Tous les dépôts qui entrent dans un tour comptent pour le volume de staking gamifié.</p>",
+            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec un rabais supérieur à {{discount}}.</p>",
             "risks": "<p>Le coffre a un taux d'utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôt par tour soient utilisés. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
         },
         "safu-discount-vault": {
             "title": "Safu Discount Vault",
-            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec un rabais supérieur à {{discount}}.</p>Tous les dépôts qui entrent dans un tour comptent pour le volume de staking gamifié.</p>",
+            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec un rabais supérieur à {{discount}}.</p>",
             "risks": "<p>Le coffre a un taux d'utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôt par tour soient utilisés. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
+        },
+        "upsettoor-vault": {
+            "title": "Upsettoor Vault",
+            "description": "<p>Achète des positions qui ont une cote inférieures à {{odds}} et sont disponibles avec une remise supérieure à {{discount}}.</p>",
+            "risks": "<p>Le coffre a un taux d'utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôts par tour soient utilisés. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
         },
         "variables": "<p>Variables:</p><ul><li>Taux d’utilisation: {{utilizationRate}}</li><li>Limite inférieure de prix: {{priceLowerLimit}}</li><li>Limite supérieure de prix: {{priceUpperLimit}}</li><li>Impact d'inclinaison maximum: {{skewImpactLimit}}</li><li>Allocation maximale sur un seul marché: {{allocationLimitsPerMarketPerRound}}</li><li>Dépôt total maximum: {{maxAllowedDeposit}}</li><li>Nombre maximal d'utilisateurs dans le coffre: {{maxAllowedUsers}}</li><li>Montant minimum par transaction: {{minTradeAmount}}</li><li>Dépôt minimal: {{minDepositAmount}}</li><li>Durée du tour: {{roundLength}} jours</li></ul>",
         "back-to-vaults": "Retour aux coffres",
@@ -881,8 +898,9 @@
         "parlay-discount-vault": {
             "title": "Coffre-fort de remise Parlay",
             "risks": "<p>Le coffre-fort a un taux d&#39;utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôts pour un tour ne sont mis en danger. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé pour un seul ticket Parlay par tour, diversifiant ainsi le risque en plusieurs tickets Parlay avec une réduction supérieure à {{odds}}.</p>",
-            "description": "<p>Achète des billets Parlay où chaque position individuelle dans le billet bénéficie d&#39;au moins une remise de {{discount}}.</p><p> Tous les dépôts qui entrent dans un tour comptent pour le volume de mise gamifié.</p>"
+            "description": "<p>Achète des billets Parlay où chaque position individuelle dans le billet bénéficie d&#39;au moins une remise de {{discount}}.</p>"
         },
+        "gamified-staking-message": "<p>Tous les dépôts qui entrent dans un tour comptent pour le volume de mise gamifié.</p>",
         "LP": {
             "title": "LP"
         },

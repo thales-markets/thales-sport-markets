@@ -1,5 +1,3 @@
-import marchMadnessLeftIcon from 'assets/images/march-madness/mm-button-icon-1.svg';
-import marchMadnessRightIcon from 'assets/images/march-madness/mm-button-icon-2.svg';
 import burger from 'assets/images/burger.svg';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
@@ -12,7 +10,7 @@ import ROUTES from 'constants/routes';
 import { MAIN_COLORS } from 'constants/ui';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
-import React, { CSSProperties, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -47,18 +45,6 @@ const customModalStyles = {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         zIndex: '5',
     },
-};
-
-const marchMadnessButtonStyle: CSSProperties = {
-    background: `url(${marchMadnessLeftIcon}) left 20px center no-repeat, url(${marchMadnessRightIcon}) right 20px center no-repeat`,
-    backgroundColor: '#005EB8',
-    backgroundSize: '28px, 28px',
-    border: 'none',
-    fontFamily: "'NCAA' !important",
-    letterSpacing: '2px',
-    textTransform: 'uppercase',
-    color: '#FFFFFF',
-    width: '240px',
 };
 
 const DappHeader: React.FC = () => {
@@ -103,13 +89,6 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <Logo />
                     <RightContainer>
-                        {location.pathname !== ROUTES.MarchMadness && (
-                            <SPAAnchor style={{ marginRight: 20 }} href={buildHref(ROUTES.MarchMadness)}>
-                                <Button fontSize={18} style={marchMadnessButtonStyle}>
-                                    {t('markets.nav-menu.labels.march-madness')}
-                                </Button>
-                            </SPAAnchor>
-                        )}
                         {location.pathname !== ROUTES.Wizard && (
                             <SPAAnchor style={{ marginRight: 20 }} href={buildHref(ROUTES.Wizard)}>
                                 <Button fontSize={12.5}>{t('markets.nav-menu.labels.get-started')}</Button>

@@ -108,3 +108,19 @@
 .league--ipl:before {
     content: '\0055';
 }
+
+.league--euroleague:before {
+    content: '\0064';
+}
+
+.league--portugal:before {
+    content: '\0056';
+}
+
+.league--copa-libertadores:before {
+    content: '\0058';
+}
+
+.league--copa-eredivisie:before {
+    content: '\0067';
+}

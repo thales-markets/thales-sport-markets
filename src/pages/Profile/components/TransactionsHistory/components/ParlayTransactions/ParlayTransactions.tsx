@@ -80,7 +80,6 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
         undefined,
         {
             enabled: isWalletConnected,
-            refetchInterval: false,
         }
     );
 

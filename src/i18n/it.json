@@ -223,7 +223,9 @@
                 "motosport": "Motosport",
                 "favourites": "Preferiti",
                 "esports": "Esport",
-                "cricket": "Cricket"
+                "cricket": "Cricket",
+                "boxing": "Boxe",
+                "mma": "BENE"
             },
             "all": "All",
             "datepicker": {
@@ -441,7 +443,7 @@
             }
         },
         "incentivized-markets": "MERCATI INCENTIVATI",
-        "incentivized-tooltip": "NCAA markets are incentivized with {{rewards}} during March Madness. More details <detailsLink>here</detailsLink>."
+        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",
@@ -581,7 +583,10 @@
             "no-open": "Non hai nessuna posizione aperta",
             "no-transactions": "Non hai scambi",
             "ticket-subtitle": "Aggiungi posizione, scegli un mercato ed effettua la tua selezione.",
-            "canceled-tooltip": "I mercati annullati possono essere rivendicati 2 ore dopo la risoluzione del mercato."
+            "canceled-tooltip": "I mercati annullati possono essere rivendicati 2 ore dopo la risoluzione del mercato.",
+            "transaction-pending": "Transazione in sospeso",
+            "voucher-claim-success": "Buono richiesto con successo",
+            "no-vouchers": "Non hai alcun buono da richiedere"
         },
         "table": {
             "id": "Id",
@@ -608,7 +613,14 @@
         "in-lp": "Liquidità fornita",
         "lp-title": "Pool di liquidità",
         "go-to-lp": "Vai a L.P",
-        "go-to-vault": "Vai al caveau"
+        "go-to-vault": "Vai al caveau",
+        "voucher": "Voucher; tagliando",
+        "gift-voucher": "Buono regalo",
+        "claiming-voucher": "Rivendicazione...",
+        "claim-voucher": "Richiedi il buono",
+        "left-to-claim": "Lasciato a reclamare",
+        "voucher-info": "Ma affinché tu veda donde nasce tutto questo errore di coloro che accusano il piacere e lodano il dolore, aprirò tutta la questione e spiegherò le stesse cose che furono dette da quello scopritore della verità e, per così dire, l'artefice della una vita felice.",
+        "voucher-title": "Richiedi buoni straordinari"
     },
     "mint-world-cup-nft": {
         "second-option": "La seconda opzione per metterti nella lista consentita è completare i seguenti passaggi:",
@@ -700,17 +712,22 @@
         "discount-vault": {
             "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato, diversificando così il rischio in più mercati che hanno quote superiori a {{odds}}.</p>",
             "title": "Cassaforte scontata",
-            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con uno sconto maggiore di {{discount}}.</p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>"
+            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con uno sconto maggiore di {{discount}}.</p>"
         },
         "degen-discount-vault": {
             "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato.</p>",
-            "description": "<p>Acquista posizioni a qualsiasi quota disponibile per uno sconto superiore a {{discount}}.</p><p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
+            "description": "<p>Acquista posizioni a qualsiasi quota disponibile per uno sconto superiore a {{discount}}.</p>",
             "title": "Degen Discount Vault"
         },
         "safu-discount-vault": {
             "title": "Colonna Sconto Vault",
-            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con qualsiasi sconto.</p><p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
+            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con qualsiasi sconto.</p>",
             "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato, diversificando così il rischio in più mercati che hanno quote superiori a {{odds}}.</p>"
+        },
+        "upsettoor-vault": {
+            "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato, diversificando così il rischio in più mercati che hanno quote superiori a {{odds}}.</p>",
+            "title": "Upsettoor Vault",
+            "description": "<p>Acquista posizioni con quote inferiori a {{odds}} quote e sono disponibili con uno sconto maggiore di {{discount}}.</p>"
         },
         "tabs": {
             "withdraw": "Ritirare",
@@ -784,10 +801,11 @@
             "name": "Nome"
         },
         "parlay-discount-vault": {
-            "description": "<p>Acquista biglietti parlay in cui ogni singola posizione nel biglietto ha almeno uno sconto {{discount}}.</p><p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
+            "description": "<p>Acquista biglietti parlay in cui ogni singola posizione nel biglietto ha almeno uno sconto {{discount}}.</p>",
             "title": "Cassaforte scontata di Parlay",
             "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso per un singolo biglietto parlay per round, diversificando così il rischio in più biglietti parlay che hanno uno sconto maggiore di {{odds}}.</p>"
         },
+        "gamified-staking-message": "<p>Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
         "LP": {
             "title": "LP"
         },

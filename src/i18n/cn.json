@@ -223,7 +223,9 @@
                 "motosport": "摩托车运动",
                 "favourites": "收藏夹",
                 "esports": "电子竞技",
-                "cricket": "蟋蟀"
+                "cricket": "蟋蟀",
+                "mma": "好的",
+                "boxing": "拳击"
             },
             "all": "所有",
             "datepicker": {
@@ -441,7 +443,7 @@
             }
         },
         "incentivized-markets": "激励市场",
-        "incentivized-tooltip": "NCAA markets are incentivized with {{rewards}} during March Madness. More details <detailsLink>here</detailsLink>."
+        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>."
     },
     "rewards": {
         "header": "奖励",
@@ -578,7 +580,10 @@
             "no-open": "您没有任何空缺职位",
             "no-transactions": "您没有任何交易",
             "ticket-subtitle": "添加头寸，选择市场并做出选择。",
-            "canceled-tooltip": "已取消的盘口可在盘口解决后 2 小时内提出索赔。"
+            "canceled-tooltip": "已取消的盘口可在盘口解决后 2 小时内提出索赔。",
+            "transaction-pending": "待处理交易",
+            "voucher-claim-success": "代金券领取成功",
+            "no-vouchers": "您没有任何凭证可以领取"
         },
         "table": {
             "position": "位置",
@@ -605,7 +610,14 @@
         "go-to-lp": "去LP",
         "go-to-vault": "去金库",
         "vaults": "金库/LP",
-        "in-lp": "提供流动资金"
+        "in-lp": "提供流动资金",
+        "voucher": "代金券",
+        "gift-voucher": "礼品券",
+        "voucher-info": "但是为了让你明白那些指责快乐和赞美痛苦的人的所有这些天生的错误是从哪里来的，我将揭开整个问题，并解释那个真理的发现者和可以说是世界的建筑师所说的那些话。幸福的生活。",
+        "claim-voucher": "索取凭证",
+        "claiming-voucher": "声称...",
+        "left-to-claim": "留下索赔",
+        "voucher-title": "索取加班券"
     },
     "mint-world-cup-nft": {
         "get-thales": "获得泰雷兹",
@@ -696,18 +708,23 @@
     "vault": {
         "discount-vault": {
             "title": "折扣金库",
-            "description": "<p>买入超过{{odds}}的赔率且折扣大于{{discount}}的头寸。</p>所有进入本轮的存款都将计入交易量的激励。</p>",
+            "description": "<p>买入超过{{odds}}的赔率且折扣大于{{discount}}的头寸。</p>",
             "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。 此外，{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场，从而将风险分散到赔率高于{{odds}}的多个市场。</p>"
         },
         "degen-discount-vault": {
             "title": "激进折扣金库",
-            "description": "<p>买入超过{{discount}}折扣的任何赔率头寸。</p><p>所有进入本轮的存款都将计入交易量的激励。</p>",
+            "description": "<p>买入超过{{discount}}折扣的任何赔率头寸。</p>",
             "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。此外，{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场。</p>"
         },
         "safu-discount-vault": {
             "title": "保守折扣金库",
-            "description": "<p>买入超过{{odds}}赔率且有任何折扣的仓位。</p><p>所有进入本轮的存款都将计入交易量的激励。</p>",
+            "description": "<p>买入超过{{odds}}赔率且有任何折扣的仓位。</p>",
             "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。此外,{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场，从而将风险分散到赔率高于{{odds}}的多个市场。</p>"
+        },
+        "upsettoor-vault": {
+            "title": "Upsettoor Vault",
+            "description": "<p>购买赔率低于{{odds}}的赔率且折扣大于{{discount}}的头寸。</p>",
+            "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。 此外，{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场，从而将风险分散到赔率高于{{odds}}的多个市场。</p>"
         },
         "variables": "<p>金库参数</p><ul><li>金库利用率：{{utilizationRate}}</li><li>价格下限：{{priceLowerLimit}}</li><li>价格上限：{{priceUpperLimit}}</li><li>最大偏度影响：{{skewImpactLimit}}</li><li>单一市场投入上限：{{allocationLimitsPerMarketPerRound}}</li><li>存款上限：{{maxAllowedDeposit}}</li><li>金库最大用户：{{maxAllowedUsers}}</li><li>Minimum amount on a single trade：{{minTradeAmount}}</li><li>Minimum deposit：{{minDepositAmount}}</li><li>本轮时间: {{roundLength}} 天</li></ul>",
         "back-to-vaults": "返回金库选择页面",
@@ -782,9 +799,10 @@
         },
         "parlay-discount-vault": {
             "title": "Parlay 折扣金库",
-            "description": "<p>购买 parlay 彩票，其中彩票中的每个单独位置至少有 {{discount}} 折扣。</p><p>进入一轮的所有存款都计入游戏化的质押量。</p>",
+            "description": "<p>购买 parlay 彩票，其中彩票中的每个单独位置至少有 {{discount}} 折扣。</p>",
             "risks": "<p>金库的利用率为 {{utilizationRate}}，确保不超过 {{utilizationRate}} 的存入一轮风险。此外，在这些 {{utilizationRate}} 中，每轮最多可以将 {{allocationLimitsPerMarketPerRound}} 花在一张连赢彩票上，从而将风险分散到折扣大于 {{odds}} 的多张连赢彩票上。</p>"
         },
+        "gamified-staking-message": "<p>进入一轮的所有存款都计入游戏化的质押量。</p>",
         "LP": {
             "title": "唱片"
         },

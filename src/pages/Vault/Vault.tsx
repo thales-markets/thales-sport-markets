@@ -58,7 +58,7 @@ import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
-import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
+import { checkAllowance, getMaxGasLimitForNetwork, NetworkIdByName } from 'utils/network';
 import { BigNumber, ethers } from 'ethers';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
@@ -68,7 +68,9 @@ import { RouteComponentProps } from 'react-router-dom';
 import vaultContract from 'utils/contracts/sportVaultContract';
 import Toggle from 'components/Toggle/Toggle';
 import Tooltip from 'components/Tooltip';
-import { getDefaultColleteralForNetwork } from 'utils/collaterals';
+import { getDefaultColleteralForNetwork, getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { refetchVaultData } from 'utils/queryConnector';
+import { NewBadge } from 'pages/Vaults/VaultOverview/styled-components';
 
 type VaultProps = RouteComponentProps<{
     vaultId: string;
@@ -184,7 +186,10 @@ const Vault: React.FC<VaultProps> = (props) => {
             const sUSDContractWithSigner = sUSDContract.connect(signer);
             const getAllowance = async () => {
                 try {
-                    const parsedAmount = ethers.utils.parseEther(Number(amount).toString());
+                    const parsedAmount = ethers.utils.parseUnits(
+                        Number(amount).toString(),
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
                     const allowance = await checkAllowance(
                         parsedAmount,
                         sUSDContractWithSigner,
@@ -200,7 +205,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                 getAllowance();
             }
         }
-    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, vaultAddress]);
+    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, vaultAddress, networkId]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { signer, sUSDContract } = networkConnector;
@@ -243,7 +248,11 @@ const Vault: React.FC<VaultProps> = (props) => {
             setIsSubmitting(true);
             try {
                 const sportVaultContractWithSigner = new ethers.Contract(vaultAddress, vaultContract.abi, signer);
-                const parsedAmount = ethers.utils.parseEther(Number(amount).toString());
+
+                const parsedAmount = ethers.utils.parseUnits(
+                    Number(amount).toString(),
+                    getDefaultDecimalsForNetwork(networkId)
+                );
 
                 const tx = await sportVaultContractWithSigner.deposit(parsedAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
@@ -254,6 +263,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                     toast.update(id, getSuccessToastOptions(t('vault.button.deposit-confirmation-message')));
                     setAmount('');
                     setIsSubmitting(false);
+                    refetchVaultData(vaultAddress, walletAddress, networkId);
                 }
             } catch (e) {
                 console.log(e);
@@ -280,6 +290,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                     toast.update(id, getSuccessToastOptions(t('vault.button.request-withdrawal-confirmation-message')));
                     setAmount('');
                     setIsSubmitting(false);
+                    refetchVaultData(vaultAddress, walletAddress, networkId);
                 }
             } catch (e) {
                 console.log(e);
@@ -305,6 +316,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                 if (txResult && txResult.events) {
                     toast.update(id, getSuccessToastOptions(t('vault.button.close-round-confirmation-message')));
                     setIsSubmitting(false);
+                    refetchVaultData(vaultAddress, walletAddress, networkId);
                 }
             } catch (e) {
                 console.log(e);
@@ -365,14 +377,16 @@ const Vault: React.FC<VaultProps> = (props) => {
 
     return (
         <Wrapper>
-            <Info>
-                <Trans
-                    i18nKey="rewards.op-rewards-banner-message"
-                    components={{
-                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                    }}
-                />
-            </Info>
+            {networkId !== NetworkIdByName.ArbitrumOne && (
+                <Info>
+                    <Trans
+                        i18nKey="rewards.op-rewards-banner-message"
+                        components={{
+                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
+                        }}
+                    />
+                </Info>
+            )}
             <BackToLink link={buildHref(ROUTES.Vaults)} text={t('vault.back-to-vaults')} />
             {vaultData && (
                 <>
@@ -436,6 +450,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                     <Title>
                         <TitleVaultIcon className={`icon icon--${vaultId}`} />
                         {t(`vault.${vaultId}.title`)}
+                        {vaultData && vaultData.round === 1 && <NewBadge>NEW</NewBadge>}
                     </Title>
                     {!vaultData ? (
                         <LeftLoaderContainer>
@@ -450,8 +465,19 @@ const Vault: React.FC<VaultProps> = (props) => {
                                         p: <p />,
                                     }}
                                     values={{
-                                        odds: formatPercentage(vaultData.priceLowerLimit, 0),
+                                        odds: formatPercentage(
+                                            vaultId === 'upsettoor-vault'
+                                                ? vaultData.priceUpperLimit
+                                                : vaultData.priceLowerLimit,
+                                            0
+                                        ),
                                         discount: formatPercentage(Math.abs(vaultData.skewImpactLimit), 0),
+                                    }}
+                                />
+                                <Trans
+                                    i18nKey={`vault.gamified-staking-message`}
+                                    components={{
+                                        p: <p />,
                                     }}
                                 />
                                 <Trans

@@ -23,6 +23,7 @@ type SymbolProps = {
     additionalStyle?: CSSProperties;
     glow?: boolean;
     flexDirection?: string;
+    justifyContent?: string;
     onClick?: () => void;
 };
 
@@ -37,6 +38,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     additionalStyle,
     glow,
     flexDirection,
+    justifyContent,
     onClick,
 }) => {
     const notClickable = !onClick;
@@ -60,7 +62,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     );
 
     return (
-        <Wrapper flexDirection={flexDirection}>
+        <Wrapper flexDirection={flexDirection} justifyContent={justifyContent}>
             {tooltip ? <Tooltip overlay={tooltip} component={getSymbol()} /> : getSymbol()}
             {symbolAdditionalText && (
                 <BottomText style={symbolAdditionalText.textStyle} flexDirection={flexDirection} color={symbolColor}>
@@ -74,9 +76,10 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     );
 };
 
-const Wrapper = styled(FlexDivColumn)<{ flexDirection?: string }>`
+const Wrapper = styled(FlexDivColumn)<{ flexDirection?: string; justifyContent?: string }>`
     align-items: center;
     flex-direction: ${(props) => (props.flexDirection ? props.flexDirection : 'row')};
+    ${(props) => (props.justifyContent ? `justify-content: ${props.justifyContent};` : '')};
     font-size: 12px;
 `;
 

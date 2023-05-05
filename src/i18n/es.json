@@ -223,7 +223,9 @@
                 "motosport": "Motosport",
                 "favourites": "Favoritos",
                 "esports": "deportes electrónicos",
-                "cricket": "Grillo"
+                "cricket": "Grillo",
+                "mma": "BIEN",
+                "boxing": "Boxeo"
             },
             "all": "Todo",
             "datepicker": {
@@ -441,7 +443,7 @@
             }
         },
         "incentivized-markets": "MERCADOS INCENTIVIZADOS",
-        "incentivized-tooltip": "NCAA markets are incentivized with {{rewards}} during March Madness. More details <detailsLink>here</detailsLink>."
+        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>."
     },
     "rewards": {
         "header": "Recompensas",
@@ -578,7 +580,10 @@
             "no-claimable": "No tienes ninguna posición reclamable",
             "no-transactions": "no tienes cambios",
             "ticket-subtitle": "Agregue una posición, elija un mercado y haga su selección.",
-            "canceled-tooltip": "Los mercados cancelados son reclamables 2 horas después de que se resuelva el mercado."
+            "canceled-tooltip": "Los mercados cancelados son reclamables 2 horas después de que se resuelva el mercado.",
+            "transaction-pending": "Transacción pendiente",
+            "voucher-claim-success": "Cupón reclamado con éxito",
+            "no-vouchers": "No tienes ningún vale para reclamar"
         },
         "table": {
             "paid": "Pagado",
@@ -605,7 +610,14 @@
         "go-to-lp": "Ir a LP",
         "lp-title": "fondo de liquidez",
         "in-vault": "en bóveda",
-        "go-to-vault": "ir a la bóveda"
+        "go-to-vault": "ir a la bóveda",
+        "claim-voucher": "Comprobante de reclamación",
+        "left-to-claim": "Izquierda para reclamar",
+        "gift-voucher": "Vale regalo",
+        "voucher-info": "Pero para que veáis de dónde viene todo este error nacido de los que acusan el placer y alaban el dolor, abriré todo el asunto y explicaré las mismas cosas que dijo aquel descubridor de la verdad y, por así decirlo, artífice de una vida feliz.",
+        "claiming-voucher": "Reclamando...",
+        "voucher": "Vale",
+        "voucher-title": "Reclamar vales de horas extras"
     },
     "mint-world-cup-nft": {
         "mint-nft-button": "Mint esta cebra!",
@@ -696,17 +708,22 @@
     "vault": {
         "discount-vault": {
             "title": "Boveda de Descuentos",
-            "description": "<p>Compra posiciones que tengan odds mayores a {{odds}} y que esten disponibles con un descuento mayor a {{discount}}.</p>Todos los depositos que sean ingresados a un round cuentan como parte del volumen de la iniciative staking gamificado.</p>",
+            "description": "<p>Compra posiciones que tengan odds mayores a {{odds}} y que esten disponibles con un descuento mayor a {{discount}}.",
             "risks": "<p>Esta boveda tiene una tasa de utilizacion de {{utilizationRate}} lo que asegura que no mas de {{utilizationRate}} del total depositado es expuesto al riesgo de la estrategia. Es mas, de este {{utilizationRate}} un maximo de {{allocationLimitsPerMarketPerRound}} puede ser invertido en un solo mercado, de esta forma diversificando el riesgo en multiples mercados que tienen mas de {{odds}} odds.</p>"
         },
         "degen-discount-vault": {
             "title": "Boveda de Descuentos Degen",
-            "description": "<p>Compra posiciones, sin importar los odds, que esten disponibles por un descuento mayor a {{discount}}.</p><p>Todos los depositos que sean ingresados a un round cuentan como parte del volumen de la iniciative staking gamificado.</p>",
+            "description": "<p>Compra posiciones, sin importar los odds, que esten disponibles por un descuento mayor a {{discount}}.</p>",
             "risks": "<p>Esta boveda tiene una tasa de utilizacion de {{utilizationRate}} lo que asegura que no mas de {{utilizationRate}} del total depositado es expuesto al riesgo de la estrategia. Es mas, de este {{utilizationRate}} un maximo de {{allocationLimitsPerMarketPerRound}} puede ser invertido en un solo mercado.</p>"
         },
         "safu-discount-vault": {
             "title": "Boveda de Descuentos Safu",
-            "description": "<p>Compra posiciones que tengan odds mayores a {{odds}} y que esten disponibles con cualquier descuento.</p><p>Todos los depositos que sean ingresados a un round cuentan como parte del volumen de la iniciative staking gamificado.</p>",
+            "description": "<p>Compra posiciones que tengan odds mayores a {{odds}} y que esten disponibles con cualquier descuento.</p>",
+            "risks": "<p>Esta boveda tiene una tasa de utilizacion de {{utilizationRate}} lo que asegura que no mas de {{utilizationRate}} del total depositado es expuesto al riesgo de la estrategia. Es mas, de este {{utilizationRate}} un maximo de {{allocationLimitsPerMarketPerRound}} puede ser invertido en un solo mercado, de esta forma diversificando el riesgo en multiples mercados que tienen mas de {{odds}} odds.</p>"
+        },
+        "upsettoor-vault": {
+            "title": "Upsettoor Vault",
+            "description": "<p>Compra posiciones que tengan odds inferiores  a {{odds}} y que esten disponibles con un descuento mayor a {{discount}}.",
             "risks": "<p>Esta boveda tiene una tasa de utilizacion de {{utilizationRate}} lo que asegura que no mas de {{utilizationRate}} del total depositado es expuesto al riesgo de la estrategia. Es mas, de este {{utilizationRate}} un maximo de {{allocationLimitsPerMarketPerRound}} puede ser invertido en un solo mercado, de esta forma diversificando el riesgo en multiples mercados que tienen mas de {{odds}} odds.</p>"
         },
         "variables": "<p>Variables:</p><ul><li>Tasa de utilizacion: {{utilizationRate}}</li><li>Limite inferior del precio: {{priceLowerLimit}}</li><li>Limite superior del precio: {{priceUpperLimit}}</li><li>Impacto maximo de Skew: {{skewImpactLimit}}</li><li>Asignacion maxima por mercado: {{allocationLimitsPerMarketPerRound}}</li><li>Deposito total maximo: {{maxAllowedDeposit}}</li><li>Cantidad de usuarios maxima en la boveda: {{maxAllowedUsers}}</li><li>Cantidad minima por transaccion: {{minTradeAmount}}</li><li>Deposito minimo: {{minDepositAmount}}</li><li>Duracion del round: {{roundLength}} dias</li></ul>",
@@ -782,9 +799,10 @@
         },
         "parlay-discount-vault": {
             "title": "Bóveda de descuento Parlay",
-            "description": "<p>Compra boletos parlay donde cada posición individual en el boleto tiene al menos un descuento de {{discount}}.</p><p> Todos los depósitos que ingresan a una ronda cuentan para el volumen de participación gamificado.</p>",
+            "description": "<p>Compra boletos parlay donde cada posición individual en el boleto tiene al menos un descuento de {{discount}}.</p>",
             "risks": "<p>La bóveda tiene una tasa de utilización de {{utilizationRate}}, lo que garantiza que no se ponga en riesgo más de {{utilizationRate}} de lo depositado en una ronda. Además, de esos {{utilizationRate}}, se puede gastar un máximo de {{allocationLimitsPerMarketPerRound}} en un solo ticket parlay por ronda, diversificando así el riesgo en varios tickets parlay que tienen un descuento superior a {{odds}}.</p>"
         },
+        "gamified-staking-message": "<p>Todos los depósitos que ingresan a una ronda cuentan para el volumen de participación gamificado.</p>",
         "LP": {
             "title": "LP"
         },
