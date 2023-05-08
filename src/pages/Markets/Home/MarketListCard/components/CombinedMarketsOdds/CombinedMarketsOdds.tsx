@@ -33,7 +33,7 @@ const CombinedMarketsOdds: React.FC<CombinedOddsProps> = ({ market, isShownInSec
                             return (
                                 <>
                                     <CombinedOdd
-                                        key={`combined-odds-${index}`}
+                                        key={`combined-odds-${index}-${market.address}`}
                                         markets={combinedPosition.markets}
                                         positions={combinedPosition.positions}
                                         odd={combinedPosition.totalOdd}
