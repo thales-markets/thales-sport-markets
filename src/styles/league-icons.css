@@ -113,6 +113,18 @@
     content: '\0064';
 }
 
+.league--portugal:before {
+    content: '\0056';
+}
+
+.league--copa-libertadores:before {
+    content: '\0058';
+}
+
+.league--copa-eredivisie:before {
+    content: '\0067';
+}
+
 .league--iihf:before {
     content: '\0065';
 }

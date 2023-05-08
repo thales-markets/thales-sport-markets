@@ -56,7 +56,10 @@ const useEnetpulseAdditionalDataQuery = (
                     const eventParticipants: any[] = Object.values(event.event_participants);
                     const homeResults: any[] = [];
                     const awayResults: any[] = [];
-                    if (!SPORTS_TAGS_MAP['eSports'].includes(Number(sportTag))) {
+                    if (
+                        !SPORTS_TAGS_MAP['eSports'].includes(Number(sportTag)) ||
+                        !SPORTS_TAGS_MAP['Soccer'].includes(Number(sportTag))
+                    ) {
                         homeResults.push(...Object.values(eventParticipants[0].result));
                         awayResults.push(...Object.values(eventParticipants[1].result));
                     }

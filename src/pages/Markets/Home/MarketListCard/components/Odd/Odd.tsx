@@ -62,7 +62,6 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
                 position: position,
                 homeTeam: market.homeTeam || '',
                 awayTeam: market.awayTeam || '',
-                tags: market.tags,
                 doubleChanceMarketType: market.doubleChanceMarketType,
             };
             dispatch(updateParlay(parlayMarket));
