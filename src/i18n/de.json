@@ -215,7 +215,6 @@
                 "hockey": "Hockey",
                 "tennis": "Tennis",
                 "football": "American Football",
-                "ufc": "MMA",
                 "baseball": "Baseball",
                 "formula1": "Formel 1",
                 "motogp": "MotoGP",
@@ -225,7 +224,7 @@
                 "esports": "Sport",
                 "cricket": "Kricket",
                 "boxing": "Boxen",
-                "mma": "GUT"
+                "mma": "Kampfsport"
             },
             "all": "Alle",
             "datepicker": {

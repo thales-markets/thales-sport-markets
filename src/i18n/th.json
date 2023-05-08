@@ -215,7 +215,6 @@
                 "hockey": "ฮอกกี้",
                 "tennis": "เทนนิส",
                 "football": "อเมริกันฟุตบอล",
-                "ufc": "MMA",
                 "baseball": "เบสบอล",
                 "formula1": "Formula 1",
                 "motogp": "MotoGP",
@@ -224,7 +223,7 @@
                 "favourites": "รายการโปรด",
                 "esports": "อีสปอร์ต",
                 "cricket": "คริกเก็ต",
-                "mma": "ดี",
+                "mma": "ดกีฬาต่อสู้",
                 "boxing": "มวย"
             },
             "datepicker": {

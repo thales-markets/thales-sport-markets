@@ -512,8 +512,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 if (!mountedRef.current || !isSubscribed) return null;
 
                 if (!parlayAmmQuote.error) {
+                    console.log(parlayAmmQuote['totalQuote']);
                     const parlayAmmTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
                     const parlayAmmTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
+                    console.log(parlayAmmTotalQuote);
                     setTotalQuote(parlayAmmTotalQuote);
                     setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
                     setTotalBuyAmount(parlayAmmTotalBuyAmount);

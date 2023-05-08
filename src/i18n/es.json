@@ -215,7 +215,6 @@
                 "hockey": "Hockey",
                 "tennis": "Tenis",
                 "football": "Futbol americano",
-                "ufc": "MMA",
                 "baseball": "Beisbol",
                 "formula1": "Fórmula 1",
                 "motogp": "MotoGP",
@@ -224,7 +223,7 @@
                 "favourites": "Favoritos",
                 "esports": "deportes electrónicos",
                 "cricket": "Grillo",
-                "mma": "BIEN",
+                "mma": "Deportes de lucha",
                 "boxing": "Boxeo"
             },
             "all": "Todo",
