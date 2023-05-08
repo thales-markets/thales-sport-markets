@@ -1,4 +1,4 @@
-import { Tooltip, withStyles } from '@material-ui/core';
+import { Slider, Tooltip, withStyles } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 import {
@@ -282,7 +282,7 @@ export const InputContainer = styled(FlexDivColumnCentered)`
         }
     }
     .currency-label {
-        padding: 1px 10px 10px 0;
+        padding: 2px 10px 10px 0;
         font-size: 14px;
     }
 `;
@@ -376,3 +376,85 @@ export const TipLink: React.FC<{ href: string }> = ({ children, href }) => {
         </TextLink>
     );
 };
+
+export const RadioButtonContainer = styled(FlexDivColumnCentered)`
+    align-items: center;
+    label {
+        padding-left: 26px;
+        font-size: 16px;
+        line-height: 20px;
+        min-height: 24px;
+        text-transform: uppercase;
+        margin-bottom: 0px;
+        :first-child {
+            margin-bottom: 4px;
+        }
+    }
+    .checkmark {
+        height: 18px;
+        width: 18px;
+        border-width: 3px;
+        :after {
+            left: 2px;
+            top: 2px;
+            width: 8px;
+            height: 8px;
+        }
+    }
+`;
+
+export const SliderContainer = styled.div`
+    position: relative;
+    width: 100%;
+    padding: 0 5px;
+    margin-bottom: 10px;
+`;
+
+export const StyledSlider = withStyles({
+    root: {
+        color: '#5fc694',
+        '&$disabled': {
+            color: '#5fc694',
+            opacity: 0.5,
+        },
+        padding: '6px 0 10px 0',
+    },
+    thumb: {
+        width: 14,
+        height: 14,
+        marginTop: '-2px',
+        background: '#FFFFFF',
+        boxShadow: '0px 1px 4px rgba(202, 202, 241, 0.5)',
+        '&:focus, &:hover': {
+            boxShadow: '0px 1px 4px rgba(202, 202, 241, 0.5)',
+        },
+        '&$disabled': {
+            width: 14,
+            height: 14,
+            marginTop: '-2px',
+            marginLeft: '-6px',
+            boxShadow: 'none',
+            outline: 0,
+        },
+    },
+    track: {
+        height: 10,
+        borderRadius: 10,
+    },
+    rail: {
+        height: 10,
+        borderRadius: 10,
+    },
+    disabled: {},
+})(Slider);
+
+export const SliderRange = styled.div`
+    font-size: 13px;
+    line-height: 13px;
+    letter-spacing: 0.4px;
+    color: #5fc694;
+    &.disabled {
+        opacity: 0.4;
+        cursor: default;
+    }
+`;

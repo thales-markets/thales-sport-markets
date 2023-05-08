@@ -99,7 +99,9 @@
             "insufficient-balance-wallet": "Please ensure your wallet has sufficient {{currencyKey}}",
             "user-rejected-tx": "User rejected transaction",
             "enter-address": "Enter address",
-            "invalid-address": "Invalid address"
+            "invalid-address": "Invalid address",
+            "enter-percentage": "Enter percentage",
+            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}"
         },
         "time-remaining": {
             "ended": "ended",
@@ -973,13 +975,16 @@
         "max-allowance-label": "Max allowance",
         "your-thales-staked-label": "Your THALES staked",
         "allowance-multiplier-label": "Allowance multiplier",
-        "withdrawal-request-label": "Withdrawal request: {{amount}}",
+        "full-withdrawal-request-label": "Withdrawal request: {{amount}}<tooltip />",
+        "partial-withdrawal-request-label": "Withdrawal request: {{percentage}} of the balance ({{amount}}<tooltip />)",
         "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
         "deposit-amount-placeholder": "Enter amount",
         "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
         "nothing-to-withdraw-label": "Nothing to withdraw.",
-        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
-        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdrawal-message": "You can request a full/partial withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
+        "full-withdrawal-requested-message": "You requested to withdraw a full balance of <bold>{{amount}}</bold><tooltip />.",
+        "partial-withdrawal-requested-message": "You requested to withdraw {{percentage}} of the balance (<bold>{{amount}}</bold><tooltip />).",
+        "withdrawal-requested-message": "Your funds will be sent to you automatically at the end of the round when the round closes.",
         "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
         "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
         "deposit-max-amount-of-users-warning": "Maximum number of users in the liquidity pool is reached, you cannot deposit.",
@@ -988,7 +993,10 @@
         "deposit-staked-thales-error": "Deposit amount exceeds max allowance, stake more THALES to deposit",
         "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
         "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
-        "withdrawal-staked-thales-warning": "You cannot withdraw as you need more staked THALES to withdraw. Stake {{amount}} THALES more to enable withdrawal.",
+        "full-withdrawal-label": "Full withdrawal",
+        "partial-withdrawal-label": "Partial withdrawal",
+        "percentage-placeholder": "Enter percentage",
+        "withdrawal-amount-label": "Withdrawal amount: <bold>{{amount}}</bold>",
         "tabs": {
             "deposit": "Deposit",
             "withdraw": "Withdraw"
