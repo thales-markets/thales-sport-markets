@@ -19,6 +19,7 @@ import {
     convertPositionNameToPositionType,
     formatMarketOdds,
     isParlayClaimable,
+    syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
 import networkConnector from 'utils/networkConnector';
 import { refetchAfterClaim } from 'utils/queryConnector';
@@ -52,6 +53,11 @@ import {
     ClaimButton,
 } from '../../styled-components';
 import { getMaxGasLimitForNetwork } from 'utils/network';
+import {
+    extractCombinedMarketsFromParlayMarketType,
+    removeCombinedMarketsFromParlayMarketType,
+} from 'utils/combinedMarkets';
+import ParlayCombinedItem from './components/ParlayCombinedItem/ParlayCombinedItem';
 
 type ParlayPosition = {
     parlayMarket: ParlayMarket;
@@ -72,6 +78,11 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+
+    const parlay = syncPositionsAndMarketsPerContractOrderInParlay(parlayMarket);
+
+    const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlay);
+    const parlayWithoutCombinedMarkets = removeCombinedMarketsFromParlayMarketType(parlay);
 
     const claimParlay = async (parlayAddress: string) => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
@@ -208,24 +219,30 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
             <CollapsableContainer show={showDetails}>
                 <Divider />
                 <ParlayDetailContainer>
-                    {parlayMarket.sportMarketsFromContract.map((address, index) => {
-                        const sportMarket = parlayMarket.sportMarkets.find(
-                            (market) => market.address.toLowerCase() == address.toLowerCase()
-                        );
-                        const position = parlayMarket.positions.find(
-                            (position) => position.market.address == sportMarket?.address
-                        );
-                        if (sportMarket && position) {
+                    {combinedMarkets &&
+                        combinedMarkets.map((combinedMarket, index) => {
+                            return (
+                                <ParlayCombinedItem
+                                    combinedMarket={combinedMarket}
+                                    key={`${index}-combined-item-${combinedMarket.markets[0].address}-${combinedMarket.markets[1].address}`}
+                                />
+                            );
+                        })}
+                    {parlayWithoutCombinedMarkets &&
+                        parlayWithoutCombinedMarkets.sportMarkets.map((market, index) => {
                             return (
                                 <ParlayItem
-                                    market={sportMarket}
-                                    position={position}
-                                    quote={parlayMarket.marketQuotes ? parlayMarket.marketQuotes[index] : 0}
+                                    market={market}
+                                    position={parlayWithoutCombinedMarkets.positions[index]}
+                                    quote={
+                                        parlayWithoutCombinedMarkets.marketQuotes
+                                            ? parlayWithoutCombinedMarkets.marketQuotes[index]
+                                            : 0
+                                    }
                                     key={index}
                                 />
                             );
-                        }
-                    })}
+                        })}
                 </ParlayDetailContainer>
                 <CollapseFooterContainer>
                     <TotalQuoteContainer>
