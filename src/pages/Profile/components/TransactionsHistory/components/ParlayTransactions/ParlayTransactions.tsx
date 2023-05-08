@@ -267,9 +267,6 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                     const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlay);
                     const parlayWithoutCombinedMarkets = removeCombinedMarketsFromParlayMarketType(parlay);
 
-                    console.log('combinedMarkets ', combinedMarkets);
-                    console.log('parlayWithoutCombinedMarkets ', parlayWithoutCombinedMarkets);
-
                     const toRender = getParlayRow(
                         parlayWithoutCombinedMarkets,
                         selectedOddsType,
