@@ -74,6 +74,7 @@ export type SportMarketInfo = {
     spread: number;
     total: number;
     doubleChanceMarketType: DoubleChanceMarketType | null;
+    combinedMarketsData?: CombinedMarket[];
 };
 
 export type FixedMarketData = {
@@ -410,3 +411,10 @@ export type CombinedParlayMarket = {
     totalBonus: number;
     positionName: CombinedMarketsPositionName | null;
 };
+
+export type CombinedMarketContractData = {
+    mainMarket: string;
+    combinedOdds: { odds: number[]; tags: number[] }[];
+};
+
+export type CombinedMarketsContractData = CombinedMarketContractData[];

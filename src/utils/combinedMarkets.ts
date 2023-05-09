@@ -1,5 +1,7 @@
 import {
     CombinedMarket,
+    CombinedMarketContractData,
+    CombinedMarketsContractData,
     CombinedMarketsPositionName,
     CombinedParlayMarket,
     ParlayMarketWithQuotes,
@@ -16,6 +18,8 @@ import {
     convertPositionNameToPositionType,
     isParentMarketSameForSportMarkets,
 } from './markets';
+import { COMBINED_MARKETS_CONTRACT_DATA_TO_POSITIONS } from 'constants/markets';
+import { bigNumberFormatter } from './formatters/ethers';
 
 export const isSpecificCombinedPositionAddedToParlay = (
     parlayData: ParlaysMarketPosition[],
@@ -360,4 +364,63 @@ export const isCombinedMarketWinner = (markets: SportMarketInfo[], positions: Po
         return true;
     }
     return false;
+};
+
+export const processCombinedOddsFromContract = (
+    data: CombinedMarketContractData,
+    market: SportMarketInfo
+): CombinedMarket[] | false => {
+    const nonZeroOdds = data.combinedOdds.map((item) => (item.odds.find((odd) => odd > 0) ? true : false));
+
+    if (!nonZeroOdds.find((item) => item == true)) return false;
+
+    const finalData: CombinedMarket[] = [];
+
+    data.combinedOdds.forEach((item) => {
+        if (!item.tags[0] && !item.tags[1]) return;
+        const firstMarket =
+            market.betType == item.tags[0]
+                ? market
+                : market.childMarkets.find((market) => market.betType == item.tags[0]);
+        const secondMarket = market.childMarkets.find((market) => market.betType == item.tags[1]);
+
+        if (!firstMarket || !secondMarket) return;
+
+        item.odds.forEach((odd, index) => {
+            const oddFormatted = bigNumberFormatter(odd);
+            if (oddFormatted) {
+                if (COMBINED_MARKETS_CONTRACT_DATA_TO_POSITIONS[index]) {
+                    finalData.push({
+                        markets: [firstMarket, secondMarket],
+                        positions: COMBINED_MARKETS_CONTRACT_DATA_TO_POSITIONS[index],
+                        totalBonus: 0,
+                        totalOdd: oddFormatted,
+                        positionName: getCombinedPositionName(
+                            [firstMarket, secondMarket],
+                            COMBINED_MARKETS_CONTRACT_DATA_TO_POSITIONS[index]
+                        ),
+                    });
+                }
+            }
+        });
+    });
+
+    return finalData;
+};
+
+export const insertCombinedMarketsIntoArrayOFMarkets = (
+    sportMarkets: SportMarketInfo[],
+    combinedMarketsContractData: CombinedMarketsContractData
+) => {
+    combinedMarketsContractData.forEach((data) => {
+        const marketIndex = sportMarkets.findIndex(
+            (market) => market.address.toLowerCase() == data.mainMarket.toLowerCase()
+        );
+        const market = sportMarkets[marketIndex];
+        if (marketIndex) {
+            const combinedMarkets = processCombinedOddsFromContract(data, market);
+            if (combinedMarkets) sportMarkets[marketIndex].combinedMarketsData = combinedMarkets;
+        }
+    });
+    return sportMarkets;
 };

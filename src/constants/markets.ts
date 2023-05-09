@@ -253,3 +253,12 @@ export const ENETPULSE_ROUNDS: Record<number, string> = {
     [8]: '1/128',
     [9]: 'Final',
 };
+
+export const COMBINED_MARKETS_CONTRACT_DATA_TO_POSITIONS: [0 | 1 | 2, 0 | 1][] = [
+    [0, 0],
+    [0, 1],
+    [1, 0],
+    [1, 1],
+    [2, 0],
+    [2, 1],
+];

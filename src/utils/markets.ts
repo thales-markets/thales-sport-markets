@@ -634,3 +634,7 @@ export const isParentMarketSameForSportMarkets = (
 
     return false;
 };
+
+export const getMarketAddressesFromSportMarketArray = (markets: SportMarketInfo[]): string[] => {
+    return markets.map((market) => market.address);
+};
