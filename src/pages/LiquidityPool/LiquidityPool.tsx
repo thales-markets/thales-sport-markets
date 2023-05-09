@@ -948,20 +948,27 @@ const LiquidityPool: React.FC = () => {
                                 {isWithdrawalRequested && (
                                     <WarningContentInfo>
                                         <Trans
-                                            i18nKey="liquidity-pool.withdrawal-request-label"
+                                            i18nKey={`liquidity-pool.${
+                                                userLiquidityPoolData.isPartialWithdrawalRequested ? 'partial' : 'full'
+                                            }-withdrawal-request-label`}
+                                            components={{
+                                                tooltip: (
+                                                    <Tooltip
+                                                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
+                                                        iconFontSize={14}
+                                                        marginLeft={2}
+                                                    />
+                                                ),
+                                            }}
                                             values={{
                                                 amount: formatCurrencyWithSign(
                                                     USD_SIGN,
-                                                    userLiquidityPoolData
-                                                        ? userLiquidityPoolData.balanceCurrentRound
-                                                        : 0
+                                                    userLiquidityPoolData ? userLiquidityPoolData.withdrawalAmount : 0
+                                                ),
+                                                percentage: formatPercentage(
+                                                    userLiquidityPoolData ? userLiquidityPoolData.withdrawalShare : 0
                                                 ),
                                             }}
-                                        />
-                                        <Tooltip
-                                            overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
-                                            iconFontSize={14}
-                                            marginLeft={2}
                                         />
                                     </WarningContentInfo>
                                 )}

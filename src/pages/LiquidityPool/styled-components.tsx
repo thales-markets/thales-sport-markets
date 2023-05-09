@@ -160,6 +160,9 @@ export const ContentInfo = styled.p`
 
 export const WarningContentInfo = styled(ContentInfo)`
     color: #ffcc00;
+    i {
+        color: #ffcc00;
+    }
 `;
 
 export const BoldContent = styled.span`
