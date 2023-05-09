@@ -76,7 +76,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const gameIdString = Web3.utils.hexToAscii(market.gameId);
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
-    const combinedMarketPositions = getAllCombinedMarketsForParentMarket(market);
+    const combinedMarketPositions = market.combinedMarketsData ? market.combinedMarketsData : [];
 
     MAX_NUMBER_OF_MARKETS = combinedMarketPositions.length + market.childMarkets.length;
 
@@ -89,7 +89,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const showSecondRowOnDesktop = !isMobile && isMaxNumberOfChildMarkets;
     const showSecondRowOnMobile = isMobile && hasChildMarkets;
 
-    const isCombinedMarketPositionsSupported = isAllowedToCombineMarketsForTagId(market.tags);
+    const hasCombinedMarkets = market.combinedMarketsData ? true : false;
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport,
@@ -255,7 +255,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             ))}
                         </OddsWrapper>
                     </SecondRowContainer>
-                    {isCombinedMarketPositionsSupported && (
+                    {hasCombinedMarkets && (
                         <ThirdRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
                             <CombinedMarketsOdds market={market} />
                         </ThirdRowContainer>
