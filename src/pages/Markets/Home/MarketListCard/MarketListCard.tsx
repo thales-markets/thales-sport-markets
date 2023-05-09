@@ -13,7 +13,6 @@ import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame } from 'utils/markets';
-import { getAllCombinedMarketsForParentMarket, isAllowedToCombineMarketsForTagId } from 'utils/combinedMarkets';
 import { buildMarketLink } from 'utils/routes';
 import Web3 from 'web3';
 import CombinedMarketsOdds from './components/CombinedMarketsOdds';
