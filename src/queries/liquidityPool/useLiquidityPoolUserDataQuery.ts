@@ -33,16 +33,17 @@ const useLiquidityPoolUserDataQuery = (
             try {
                 const { liquidityPoolContract, liquidityPoolDataContract } = networkConnector;
                 if (liquidityPoolContract && liquidityPoolDataContract) {
-                    const contractUserLiquidityPoolData = await liquidityPoolDataContract.getUserLiquidityPoolData(
-                        liquidityPoolContract.address,
-                        walletAddress
-                    );
+                    const [contractUserLiquidityPoolData, withdrawalShare] = await Promise.all([
+                        liquidityPoolDataContract.getUserLiquidityPoolData(
+                            liquidityPoolContract.address,
+                            walletAddress
+                        ),
+                        liquidityPoolContract.withdrawalShare(walletAddress),
+                    ]);
 
                     userLiquidityPoolData.isWithdrawalRequested = contractUserLiquidityPoolData.withdrawalRequested;
-                    // userLiquidityPoolData.withdrawalShare = bigNumberFormmaterWithDecimals(
-                    //     contractUserLiquidityPoolData.withdrawalShare
-                    // );
-                    // userLiquidityPoolData.isPartialWithdrawalRequested = userLiquidityPoolData.withdrawalShare > 0;
+                    userLiquidityPoolData.withdrawalShare = bigNumberFormmaterWithDecimals(withdrawalShare);
+                    userLiquidityPoolData.isPartialWithdrawalRequested = userLiquidityPoolData.withdrawalShare > 0;
 
                     userLiquidityPoolData.balanceCurrentRound = bigNumberFormmaterWithDecimals(
                         contractUserLiquidityPoolData.balanceCurrentRound,
@@ -52,11 +53,11 @@ const useLiquidityPoolUserDataQuery = (
                         contractUserLiquidityPoolData.balanceNextRound,
                         decimals
                     );
-                    // userLiquidityPoolData.withdrawalAmount = userLiquidityPoolData.isWithdrawalRequested
-                    //     ? userLiquidityPoolData.isPartialWithdrawalRequested
-                    //         ? userLiquidityPoolData.balanceCurrentRound * userLiquidityPoolData.withdrawalShare
-                    //         : userLiquidityPoolData.balanceCurrentRound
-                    //     : 0;
+                    userLiquidityPoolData.withdrawalAmount = userLiquidityPoolData.isWithdrawalRequested
+                        ? userLiquidityPoolData.isPartialWithdrawalRequested
+                            ? userLiquidityPoolData.balanceCurrentRound * userLiquidityPoolData.withdrawalShare
+                            : userLiquidityPoolData.balanceCurrentRound
+                        : 0;
 
                     userLiquidityPoolData.balanceTotal =
                         userLiquidityPoolData.balanceCurrentRound -

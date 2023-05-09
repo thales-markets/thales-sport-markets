@@ -653,6 +653,7 @@ const LiquidityPool: React.FC = () => {
                                                                                 'liquidity-pool.percentage-placeholder'
                                                                             )}
                                                                             currencyLabel="%"
+                                                                            step="1"
                                                                         />
                                                                     </ValidationTooltip>
                                                                 </InputContainer>
