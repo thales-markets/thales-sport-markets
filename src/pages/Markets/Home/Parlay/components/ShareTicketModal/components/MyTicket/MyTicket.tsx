@@ -23,6 +23,8 @@ import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { formatMarketOdds } from 'utils/markets';
 import { buildReffererLink } from 'utils/routes';
 import MatchInfo from '../../../MatchInfo';
+import { extractCombinedMarketsFromParlayMarkets, removeCombinedMarketFromParlayMarkets } from 'utils/combinedMarkets';
+import MatchInfoOfCombinedMarket from '../../../MatchInfoOfCombinedMarket/MatchInfoOfCombinedMarket';
 
 type MyTicketProps = {
     markets: ParlaysMarket[];
@@ -40,6 +42,12 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, multiSingle, totalQuote, p
     const isTicketLost = markets.some((market) => market.isResolved && market.winning !== undefined && !market.winning);
     const isTicketResolved = markets.every((market) => market.isResolved || market.isCanceled) || isTicketLost;
     const isParlay = markets.length > 1 && !multiSingle;
+
+    const combinedMarkets = extractCombinedMarketsFromParlayMarkets(markets);
+    const parlayGamesWithoutCombinedMarkets = removeCombinedMarketFromParlayMarkets(markets);
+
+    console.log('combinedMarkets ', combinedMarkets);
+    console.log('parlayGamesWithoutCombinedMarkets ', parlayGamesWithoutCombinedMarkets);
 
     const matchInfoStyle = isMobile
         ? { fontSize: '10px', lineHeight: '12px' }
@@ -92,21 +100,38 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, multiSingle, totalQuote, p
             </ContentRow>
             <HorizontalLine />
             <MarketsContainer>
-                {markets.map((market, index) => {
-                    return (
-                        <React.Fragment key={index}>
-                            <RowMarket>
-                                <MatchInfo
-                                    market={market}
-                                    readOnly={true}
-                                    isHighlighted={true}
-                                    customStyle={matchInfoStyle}
-                                />
-                            </RowMarket>
-                            {markets.length !== index + 1 && <HorizontalDashedLine />}
-                        </React.Fragment>
-                    );
-                })}
+                {combinedMarkets.length > 0 &&
+                    combinedMarkets.map((combinedMarket, index) => {
+                        return (
+                            <React.Fragment key={index}>
+                                <RowMarket>
+                                    <MatchInfoOfCombinedMarket
+                                        combinedMarket={combinedMarket}
+                                        readOnly={true}
+                                        isHighlighted={true}
+                                        customStyle={matchInfoStyle}
+                                    />
+                                </RowMarket>
+                                {markets.length !== index + 1 && <HorizontalDashedLine />}
+                            </React.Fragment>
+                        );
+                    })}
+                {parlayGamesWithoutCombinedMarkets.length > 0 &&
+                    parlayGamesWithoutCombinedMarkets.map((market, index) => {
+                        return (
+                            <React.Fragment key={index}>
+                                <RowMarket>
+                                    <MatchInfo
+                                        market={market}
+                                        readOnly={true}
+                                        isHighlighted={true}
+                                        customStyle={matchInfoStyle}
+                                    />
+                                </RowMarket>
+                                {markets.length !== index + 1 && <HorizontalDashedLine />}
+                            </React.Fragment>
+                        );
+                    })}
             </MarketsContainer>
             <HorizontalLine />
             <InfoWrapper>

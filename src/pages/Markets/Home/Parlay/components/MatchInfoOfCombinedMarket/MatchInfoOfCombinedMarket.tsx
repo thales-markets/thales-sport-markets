@@ -9,7 +9,6 @@ import { formatMarketOdds, getCombinedOddTooltipText, getFormattedBonus, getSpre
 import { getCombinedPositionName } from 'utils/combinedMarkets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
-import { BetType } from 'constants/tags';
 
 type MatchInfoCominedMarketProps = {
     combinedMarket: CombinedParlayMarket;
@@ -28,7 +27,9 @@ const MatchInfoOfCombinedMarket: React.FC<MatchInfoCominedMarketProps> = ({
     const selectedOddsType = useSelector(getOddsType);
     const market = combinedMarket.markets[0];
 
-    const spreadTotalText = market.betType == BetType.SPREAD ? getSpreadTotalText(market, market.position) : undefined;
+    const totalMarket = combinedMarket.markets[1];
+
+    const spreadTotalText = getSpreadTotalText(totalMarket, totalMarket.position);
 
     const parentAddressOfCombinedMarket = combinedMarket?.markets[0].parentMarket
         ? combinedMarket?.markets[0].parentMarket
