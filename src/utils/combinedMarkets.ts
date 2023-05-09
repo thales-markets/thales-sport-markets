@@ -218,6 +218,20 @@ export const getCombinedMarketsFromParlayData = (parlayData: ParlaysMarketPositi
     return [];
 };
 
+export const isTwoSportMarketsFromSameParent = (
+    firstMarket: SportMarketInfo,
+    secondMarket: SportMarketInfo
+): boolean => {
+    if (firstMarket.gameId && secondMarket.gameId) return firstMarket.gameId == secondMarket.gameId;
+    if (!firstMarket.parentMarket && secondMarket.parentMarket)
+        return firstMarket.address.toLowerCase() == secondMarket.parentMarket.toLowerCase();
+    if (firstMarket.parentMarket && !secondMarket.parentMarket)
+        return secondMarket.address.toLowerCase() == firstMarket.parentMarket.toLowerCase();
+    if (firstMarket.parentMarket && secondMarket.parentMarket)
+        return firstMarket.parentMarket.toLowerCase() == secondMarket.parentMarket.toLowerCase();
+    return false;
+};
+
 export const isCombinedMarketsInParlayData = (parlayData: ParlaysMarketPosition[]): boolean => {
     const markets = getCombinedMarketsFromParlayData(parlayData);
 
@@ -243,7 +257,7 @@ export const extractCombinedMarketsFromParlayMarkets = (parlayMarkets: ParlaysMa
     const combinedMarkets = [];
     for (let i = 0; i < parlayMarkets.length - 1; i++) {
         for (let j = i + 1; j < parlayMarkets.length; j++) {
-            if (parlayMarkets[i].gameId == parlayMarkets[j].gameId) {
+            if (isTwoSportMarketsFromSameParent(parlayMarkets[i], parlayMarkets[j])) {
                 combinedMarkets.push({
                     markets: [parlayMarkets[i], parlayMarkets[j]],
                     positions: [parlayMarkets[i].position, parlayMarkets[j].position],
@@ -342,7 +356,7 @@ export const removeCombinedMarketsFromParlayMarketType = (
 export const removeCombinedMarketFromParlayMarkets = (parlayMarkets: ParlaysMarket[]): ParlaysMarket[] => {
     const combinedMarkets = extractCombinedMarketsFromParlayMarkets(parlayMarkets);
 
-    if (!combinedMarkets.length) return [];
+    if (!combinedMarkets.length) return parlayMarkets;
 
     const filteredParlayMarkets = parlayMarkets.filter((market) => {
         const marketWithSameGameId = combinedMarkets.find(

@@ -46,9 +46,6 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, multiSingle, totalQuote, p
     const combinedMarkets = extractCombinedMarketsFromParlayMarkets(markets);
     const parlayGamesWithoutCombinedMarkets = removeCombinedMarketFromParlayMarkets(markets);
 
-    console.log('combinedMarkets ', combinedMarkets);
-    console.log('parlayGamesWithoutCombinedMarkets ', parlayGamesWithoutCombinedMarkets);
-
     const matchInfoStyle = isMobile
         ? { fontSize: '10px', lineHeight: '12px' }
         : { fontSize: '11px', lineHeight: '13px' };
