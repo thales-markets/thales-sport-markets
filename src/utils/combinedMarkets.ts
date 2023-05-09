@@ -391,12 +391,15 @@ export const processCombinedOddsFromContract = (
     const finalData: CombinedMarket[] = [];
 
     data.combinedOdds.forEach((item) => {
-        if (!item.tags[0] && !item.tags[1]) return;
+        const firstMarketBetType = Number(item.tags[0]);
+        const secondMarketBetType = Number(item.tags[1]);
+
+        if (!firstMarketBetType && !secondMarketBetType) return;
         const firstMarket =
-            market.betType == item.tags[0]
+            market.betType == firstMarketBetType
                 ? market
-                : market.childMarkets.find((market) => market.betType == item.tags[0]);
-        const secondMarket = market.childMarkets.find((market) => market.betType == item.tags[1]);
+                : market.childMarkets.find((market) => market.betType == firstMarketBetType);
+        const secondMarket = market.childMarkets.find((market) => market.betType == secondMarketBetType);
 
         if (!firstMarket || !secondMarket) return;
 
@@ -431,7 +434,7 @@ export const insertCombinedMarketsIntoArrayOFMarkets = (
             (market) => market.address.toLowerCase() == data.mainMarket.toLowerCase()
         );
         const market = sportMarkets[marketIndex];
-        if (marketIndex) {
+        if (marketIndex !== -1) {
             const combinedMarkets = processCombinedOddsFromContract(data, market);
             if (combinedMarkets) sportMarkets[marketIndex].combinedMarketsData = combinedMarkets;
         }
