@@ -166,6 +166,20 @@ export const getSpreadTotalText = (market: SportMarketInfo | MarketData, positio
     }
 };
 
+export const getSpreadText = (market: SportMarketInfo, position: Position) => {
+    if (market.betType == BetType.SPREAD) {
+        return position === Position.HOME
+            ? `${Number(market.spread) > 0 ? '+' : '-'}${Math.abs(Number(market.spread)) / 100}`
+            : `${Number(market.spread) > 0 ? '-' : '+'}${Math.abs(Number(market.spread)) / 100}`;
+    }
+    return undefined;
+};
+
+export const getTotalText = (market: SportMarketInfo) => {
+    if (market.betType == BetType.TOTAL) return `${Number(market.total) / 100}`;
+    return undefined;
+};
+
 export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) => {
     if (!odds) {
         return '0';

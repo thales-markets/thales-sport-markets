@@ -11,7 +11,13 @@ import { getParlay, removeCombinedMarketFromParlay, updateParlayWithMultiplePosi
 import { getOddsType } from 'redux/modules/ui';
 import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
 import { floorNumberToDecimals } from 'utils/formatters/number';
-import { formatMarketOdds, getSpreadTotalText, getParentMarketAddress, getCombinedOddTooltipText } from 'utils/markets';
+import {
+    formatMarketOdds,
+    getSpreadTotalText,
+    getParentMarketAddress,
+    getCombinedOddTooltipText,
+    getTotalText,
+} from 'utils/markets';
 import {
     getCombinedPositionName,
     isCombinedMarketWinner,
@@ -72,6 +78,8 @@ const CombinedPositionDetails: React.FC<CombinedPositionDetailsProps> = ({
     const symbolText = getCombinedPositionName(markets, positions);
     const spreadTotalText = getSpreadTotalText(markets[0], positions[0]);
 
+    const totalText = getTotalText(markets[1]);
+
     const oddTooltipText = getCombinedOddTooltipText(markets, positions);
 
     const parentMarketAddress = markets[0].parentMarket !== null ? markets[0].parentMarket : markets[1].parentMarket;
@@ -114,6 +122,7 @@ const CombinedPositionDetails: React.FC<CombinedPositionDetailsProps> = ({
             <Text>
                 {symbolText}
                 {spreadTotalText && ` (${spreadTotalText})`}
+                {totalText && ` (${totalText})`}
             </Text>
             {showOdd ? (
                 <Text>
