@@ -27,7 +27,6 @@ import { getOrdinalNumberLabel } from 'utils/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import { NetworkIdByName } from 'utils/network';
-import { getAllCombinedMarketsForParentMarket } from 'utils/combinedMarkets';
 import CombinedPositions from './components/CombinedPositions/CombinedPositions';
 
 type MarketDetailsPropType = {
@@ -47,7 +46,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         doubleChanceMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.DOUBLE_CHANCE),
     };
 
-    const combinedMarkets = getAllCombinedMarketsForParentMarket(market);
+    const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
 
     const isMounted = useRef(false);
     useEffect(() => {
