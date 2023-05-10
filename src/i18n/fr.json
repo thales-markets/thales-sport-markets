@@ -170,7 +170,8 @@
         "yes": "OUI",
         "no": "NON",
         "fifa-tooltip": "Les résultats des marchés de la Coupe du Monde de la FIFA sont basés sur les résultats de la réglementation, s'ils vont en prolongation, le résultat de la réglementation est celui auquel le marché se résoudra.",
-        "tennis-tooltip": "En cas de forfait, le match sera considéré comme annulé. En cas d'abandon / disqualification pendant le match, cela sera traité comme une victoire pour le joueur passant au tour suivant"
+        "tennis-tooltip": "En cas de forfait, le match sera considéré comme annulé. En cas d'abandon / disqualification pendant le match, cela sera traité comme une victoire pour le joueur passant au tour suivant",
+        "iihf-tooltip": "Les résultats des marchés du Championnat du monde de l'IIHF sont basés sur les résultats de la réglementation, s'ils vont en prolongation, le résultat de la réglementation est celui auquel le marché se résoudra."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime - TOUS DROITS RÉSERVÉS.",

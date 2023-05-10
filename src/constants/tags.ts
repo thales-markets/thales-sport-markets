@@ -376,6 +376,7 @@ export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399, 9033, 18
 
 export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
+export const IIHF_WC_TAG = 9033;
 
 export const PERSON_COMPETITIONS = [9007, 9100, 9101, 9153, 9156];
 

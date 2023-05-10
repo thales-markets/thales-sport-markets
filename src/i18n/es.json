@@ -150,7 +150,8 @@
         "yes": "YES",
         "no": "NO",
         "fifa-tooltip": "Los resultados de los mercados de la Copa Mundial de la FIFA se basan en los resultados reglamentarios; en caso de que vayan a la prórroga, el resultado reglamentario es el que resolverá el mercado.",
-        "tennis-tooltip": "En caso de un walkover, el partido se considerará cancelado. En caso de retiro/descalificación durante el partido, se tratará como una victoria para el jugador que avanza a la siguiente ronda."
+        "tennis-tooltip": "En caso de un walkover, el partido se considerará cancelado. En caso de retiro/descalificación durante el partido, se tratará como una victoria para el jugador que avanza a la siguiente ronda.",
+        "iihf-tooltip": "Los resultados de los mercados del Campeonato Mundial de la IIHF se basan en los resultados reglamentarios, en caso de que vayan a la prórroga, el resultado reglamentario es el que resolverá el mercado."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS.",
