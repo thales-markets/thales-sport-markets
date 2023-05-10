@@ -89,13 +89,15 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
                                     isShownInSecondRow={isShownInSecondRow}
                                 />
                             )}
-                            <Odd
-                                market={market}
-                                position={Position.AWAY}
-                                odd={market.awayOdds}
-                                bonus={market.awayBonus}
-                                isShownInSecondRow={isShownInSecondRow}
-                            />
+                            {!market.isEnetpulseRacing && (
+                                <Odd
+                                    market={market}
+                                    position={Position.AWAY}
+                                    odd={market.awayOdds}
+                                    bonus={market.awayBonus}
+                                    isShownInSecondRow={isShownInSecondRow}
+                                />
+                            )}
                         </>
                     )}
                 </OddsContainer>

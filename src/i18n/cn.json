@@ -273,7 +273,8 @@
         "race-starts": "比赛开始",
         "back": "后退",
         "apply-filters": "应用过滤器",
-        "incentivized-market": "激励市场"
+        "incentivized-market": "激励市场",
+        "f1-market": "{{driver}} 赢得 {{race}}"
     },
     "markets": {
         "market-card": {

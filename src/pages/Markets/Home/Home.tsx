@@ -294,7 +294,6 @@ const Home: React.FC = () => {
         trackPageView({});
     }, [trackPageView]);
 
-    console.log(finalMarkets);
     return (
         <Container>
             {networkId !== NetworkIdByName.ArbitrumOne && (

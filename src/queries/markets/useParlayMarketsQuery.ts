@@ -3,7 +3,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import { ParlayMarket } from 'types/markets';
 import { NetworkId } from 'types/network';
 import thalesData from 'thales-data';
-import { fixApexName, fixDuplicatedTeamName } from 'utils/formatters/string';
+import { fixEnetpulseRacingName, fixDuplicatedTeamName } from 'utils/formatters/string';
 import { updateTotalQuoteAndAmountFromContract } from 'utils/markets';
 
 export const useParlayMarketsQuery = (
@@ -31,11 +31,11 @@ export const useParlayMarketsQuery = (
                         sportMarkets: parlayMarket.sportMarkets.map((market) => {
                             return {
                                 ...market,
-                                homeTeam: market.isApex
-                                    ? fixApexName(market.homeTeam)
+                                homeTeam: market.isEnetpulseRacing
+                                    ? fixEnetpulseRacingName(market.homeTeam)
                                     : fixDuplicatedTeamName(market.homeTeam),
-                                awayTeam: market.isApex
-                                    ? fixApexName(market.awayTeam)
+                                awayTeam: market.isEnetpulseRacing
+                                    ? fixEnetpulseRacingName(market.awayTeam)
                                     : fixDuplicatedTeamName(market.awayTeam),
                             };
                         }),

@@ -270,7 +270,8 @@
         "race-starts": "เริ่มการแข่งขัน",
         "back": "กลับ",
         "apply-filters": "ใช้ตัวกรอง",
-        "incentivized-market": "ตลาดที่มีแรงจูงใจ"
+        "incentivized-market": "ตลาดที่มีแรงจูงใจ",
+        "f1-market": "{{driver}} ชนะ {{race}}"
     },
     "markets": {
         "market-card": {

@@ -273,7 +273,8 @@
         "race-starts": "Старт гонки",
         "back": "Назад",
         "apply-filters": "Применить фильтры",
-        "incentivized-market": "СТИМУЛИРОВАННЫЙ РЫНОК"
+        "incentivized-market": "СТИМУЛИРОВАННЫЙ РЫНОК",
+        "f1-market": "{{driver}} выигрывает {{race}}"
     },
     "markets": {
         "market-card": {

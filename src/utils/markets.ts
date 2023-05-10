@@ -1,4 +1,4 @@
-import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
+import { APEX_GAME_MIN_TAG, ApexBetType, MarketStatus, OddsType } from 'constants/markets';
 import { Position } from 'constants/options';
 import {
     BetType,
@@ -10,6 +10,7 @@ import {
     SCORING_MAP,
     TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
 } from 'constants/tags';
+import i18n from 'i18n';
 import ordinal from 'ordinal';
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import {
@@ -23,7 +24,7 @@ import {
 } from 'types/markets';
 import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
-import i18n from 'i18n';
+import { fixEnetpulseRacingName } from './formatters/string';
 
 const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 90;
 
@@ -427,6 +428,8 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
     const team =
         position === Position.AWAY || market.doubleChanceMarketType === DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE
             ? market.awayTeam
+            : market.isEnetpulseRacing
+            ? fixEnetpulseRacingName(market.homeTeam)
             : market.homeTeam;
     const team2 = market.awayTeam;
     const scoring =

@@ -270,7 +270,8 @@
         "race-starts": "Rennen beginnt",
         "back": "Der Rücken",
         "apply-filters": "Filter anwenden",
-        "incentivized-market": "INCENTIVISIERTER MARKT"
+        "incentivized-market": "INCENTIVISIERTER MARKT",
+        "f1-market": "{{driver}} gewinnt {{race}}"
     },
     "markets": {
         "market-card": {

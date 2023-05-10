@@ -16,6 +16,7 @@ import {
 } from 'utils/markets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
+import { fixEnetpulseRacingName } from 'utils/formatters/string';
 
 type MatchInfoProps = {
     market: ParlaysMarket;
@@ -32,17 +33,18 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
     const spreadTotalText = getSpreadTotalText(market, market.position);
 
     const bonus = getBonus(market);
-
     return (
         <>
             <MatchLogos market={market} width={'120px'} padding={'0 0 0 4px'} isHighlighted={isHighlighted} />
             <MatchLabel>
                 <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
-                    {market.homeTeam}
+                    {market.isEnetpulseRacing ? fixEnetpulseRacingName(market.homeTeam) : market.homeTeam}
                 </ClubName>
-                <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
-                    {market.awayTeam}
-                </ClubName>
+                {!market.isEnetpulseRacing && (
+                    <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
+                        {market.awayTeam}
+                    </ClubName>
+                )}
             </MatchLabel>
             <PositionSymbol
                 symbolAdditionalText={{

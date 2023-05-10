@@ -273,7 +273,8 @@
         "race-starts": "Comienza la carrera",
         "back": "atrás",
         "apply-filters": "Aplicar filtros",
-        "incentivized-market": "MERCADO INCENTIVIZADO"
+        "incentivized-market": "MERCADO INCENTIVIZADO",
+        "f1-market": "{{driver}} gana {{race}}"
     },
     "markets": {
         "market-card": {

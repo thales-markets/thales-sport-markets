@@ -21,6 +21,7 @@ import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource 
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { convertFinalResultToResultType, isFifaWCGame } from 'utils/markets';
 import { SPORTS_TAGS_MAP } from 'constants/tags';
+import { fixEnetpulseRacingName } from 'utils/formatters/string';
 
 type MatchInfoPropsType = {
     market: MarketData;
@@ -47,9 +48,15 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
 
     const getTeamsNames = (hideOnMobile: boolean) => (
         <TeamNamesWrapper hideOnMobile={hideOnMobile}>
-            <TeamName isHomeTeam={true}>{market.homeTeam}</TeamName>
-            <Versus>{' vs '}</Versus>
-            <TeamName isHomeTeam={false}>{market.awayTeam}</TeamName>
+            <TeamName isHomeTeam={true} isEnetpulseRacing={market.isEnetpulseRacing}>
+                {market.isEnetpulseRacing ? fixEnetpulseRacingName(market.homeTeam) : market.homeTeam}
+            </TeamName>
+            {!market.isEnetpulseRacing && (
+                <>
+                    <Versus>{' vs '}</Versus>
+                    <TeamName isHomeTeam={false}>{market.awayTeam}</TeamName>
+                </>
+            )}
         </TeamNamesWrapper>
     );
 
@@ -71,17 +78,19 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                                 onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                             />
                         </ParticipantLogoContainer>
-                        <ParticipantLogoContainer
-                            isWinner={isGameResolved && convertFinalResultToResultType(market.finalResult) == 1}
-                            isDraw={isGameResolved && convertFinalResultToResultType(market.finalResult) == 2}
-                            awayTeam={true}
-                        >
-                            <ParticipantLogo
-                                src={awayLogoSrc ? awayLogoSrc : getErrorImage(market.tags[0])}
-                                isFlag={market.tags[0] == 9018}
-                                onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
-                            />
-                        </ParticipantLogoContainer>
+                        {!market.isEnetpulseRacing && (
+                            <ParticipantLogoContainer
+                                isWinner={isGameResolved && convertFinalResultToResultType(market.finalResult) == 1}
+                                isDraw={isGameResolved && convertFinalResultToResultType(market.finalResult) == 2}
+                                awayTeam={true}
+                            >
+                                <ParticipantLogo
+                                    src={awayLogoSrc ? awayLogoSrc : getErrorImage(market.tags[0])}
+                                    isFlag={market.tags[0] == 9018}
+                                    onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
+                                />
+                            </ParticipantLogoContainer>
+                        )}
                     </ParticipantsContainer>
                     {getTeamsNames(false)}
                     <MatchTimeContainer>

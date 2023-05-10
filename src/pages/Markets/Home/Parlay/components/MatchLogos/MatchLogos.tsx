@@ -29,14 +29,16 @@ const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, padding, isHighl
                 isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.AWAY}
                 onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
             />
-            <ClubLogo
-                awayTeam={true}
-                alt="Away team logo"
-                src={awayLogoSrc}
-                isFlag={market.tags[0] == 9018}
-                isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.HOME}
-                onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
-            />
+            {!market.isEnetpulseRacing && (
+                <ClubLogo
+                    awayTeam={true}
+                    alt="Away team logo"
+                    src={awayLogoSrc}
+                    isFlag={market.tags[0] == 9018}
+                    isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.HOME}
+                    onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
+                />
+            )}
         </Container>
     );
 };

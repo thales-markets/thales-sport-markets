@@ -269,7 +269,8 @@
             "minimal-amount": "Minimal amount is {{min}}",
             "no-funds": "Please ensure your wallet has enough funds"
         },
-        "incentivized-market": "INCENTIVIZED MARKET"
+        "incentivized-market": "INCENTIVIZED MARKET",
+        "f1-market": "{{driver}} wins {{race}}"
     },
     "profile": {
         "stats": {

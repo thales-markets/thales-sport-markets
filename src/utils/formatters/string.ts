@@ -23,11 +23,4 @@ export const fixDuplicatedTeamName = (name: string) => {
     return name;
 };
 
-export const fixApexName = (team: string) =>
-    team !== null
-        ? team
-              .toLowerCase()
-              .split(' ')
-              .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
-              .join(' ')
-        : '';
+export const fixEnetpulseRacingName = (team: string) => (team !== null ? team.slice(0, team.length - 4).trim() : '');

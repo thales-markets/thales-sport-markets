@@ -7,6 +7,7 @@ import { fixDuplicatedTeamName } from '../../utils/formatters/string';
 import { Position } from '../../constants/options';
 import { NetworkId } from 'types/network';
 import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { ENETPULSE_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
 
 const useMarketQuery = (
     marketAddress: string,
@@ -70,6 +71,9 @@ const useMarketQuery = (
                     spread: 0,
                     total: 0,
                     doubleChanceMarketType: null,
+                    isEnetpulseRacing:
+                        SPORTS_TAGS_MAP['Motosport'].includes(Number(marketData.firstTag)) &&
+                        ENETPULSE_SPORTS.includes(Number(marketData.firstTag)),
                 };
                 return market;
             } catch (e) {
