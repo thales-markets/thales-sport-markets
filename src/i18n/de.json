@@ -90,7 +90,9 @@
             "user-rejected-tx": "Benutzer hat die Transaktion abgelehnt",
             "enter-address": "Adresse eingeben",
             "invalid-address": "Ungültige Adresse",
-            "batch-transaction-single-failure": "Eine Transaktion wurde abgelehnt oder ist fehlgeschlagen."
+            "batch-transaction-single-failure": "Eine Transaktion wurde abgelehnt oder ist fehlgeschlagen.",
+            "enter-percentage": "Enter percentage",
+            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}"
         },
         "time-remaining": {
             "ended": "zu Ende",
@@ -1004,13 +1006,16 @@
         "max-allowance-label": "Maximales Guthaben",
         "your-thales-staked-label": "Ihre gestakten THALES",
         "allowance-multiplier-label": "Zulagenmultiplikator",
-        "withdrawal-request-label": "Abhebungswunsch: {{amount}}",
+        "full-withdrawal-request-label": "Withdrawal request: {{amount}}<tooltip />",
+        "partial-withdrawal-request-label": "Withdrawal request: {{percentage}} of the balance ({{amount}}<tooltip />)",
         "estimated-amount-tooltip": "Dies ist ein geschätzter Betrag. Der tatsächliche Betrag wird beim Schließen der aktuellen Runde basierend auf dem Round PnL berechnet.",
         "deposit-amount-placeholder": "Betrag eingeben",
         "available-to-withdraw-label": "Verfügbar zum Abheben: <bold>{{amount}}</bold>",
         "nothing-to-withdraw-label": "Nichts zum Abheben.",
         "withdrawal-message": "Sie können eine Abhebung anfordern und Ihre Mittel werden automatisch am Ende der Runde an Sie gesendet, wenn die Runde geschlossen wird.",
-        "withdrawal-requested-message": "Sie haben beantragt, <bold>{{amount}}</bold><tooltip /> abzuheben. Ihre Mittel werden automatisch am Ende der Runde an Sie gesendet, wenn die Runde geschlossen wird.",
+        "full-withdrawal-requested-message": "You requested to withdraw a full balance of <bold>{{amount}}</bold><tooltip />.",
+        "partial-withdrawal-requested-message": "You requested to withdraw {{percentage}} of the balance (<bold>{{amount}}</bold><tooltip />).",
+        "withdrawal-requested-message": "Ihre Mittel werden automatisch am Ende der Runde an Sie gesendet, wenn die Runde geschlossen wird.",
         "first-deposit-withdrawal-message": "Sie haben für die nächste Runde eingezahlt und können diese Mittel am Ende der nächsten Runde abheben.",
         "deposit-withdrawal-warning": "Eine Abhebung wird angefordert, Sie können keine Einzahlung vornehmen.",
         "deposit-max-amount-of-users-warning": "Die maximale Anzahl von Benutzern im Liquiditätspool ist erreicht, Sie können keine Einzahlung vornehmen.",
@@ -1019,7 +1024,10 @@
         "deposit-staked-thales-error": "Der Einzahlungsbetrag überschreitet die maximale Zulage. Staken Sie mehr THALES, um einzuzahlen.",
         "deposit-min-amount-error": "Der Mindestbetrag für die Einzahlung beträgt {{amount}}",
         "withdrawal-deposit-warning": "Sie können keine Abhebung vornehmen, da Sie bereits für die nächste Runde eingezahlt haben.",
-        "withdrawal-staked-thales-warning": "Sie können keine Abhebung vornehmen, da Sie mehr gestakte THALES benötigen, um abzuheben. Staken Sie {{amount}} THALES mehr, um die Abhebung zu ermöglichen.",
+        "full-withdrawal-label": "Full withdrawal",
+        "partial-withdrawal-label": "Partial withdrawal",
+        "percentage-placeholder": "Enter percentage",
+        "withdrawal-amount-label": "Withdrawal amount: <bold>{{amount}}</bold>",
         "tabs": {
             "deposit": "Einzahlung",
             "withdraw": "Abhebung"
