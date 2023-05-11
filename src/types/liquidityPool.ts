@@ -28,7 +28,9 @@ export type UserLiquidityPoolData = {
     stakedThales: number;
     maxDeposit: number;
     availableToDeposit: number;
-    neededStakedThalesToWithdraw: number;
+    withdrawalShare: number;
+    isPartialWithdrawalRequested: boolean;
+    withdrawalAmount: number;
 };
 
 export type UserLiquidityPoolsData = {

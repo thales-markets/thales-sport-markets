@@ -124,3 +124,7 @@
 .league--copa-eredivisie:before {
     content: '\0067';
 }
+
+.league--iihf:before {
+    content: '\0065';
+}

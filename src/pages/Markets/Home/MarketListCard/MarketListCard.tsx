@@ -12,7 +12,7 @@ import { RootState } from 'redux/rootReducer';
 import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isFifaWCGame } from 'utils/markets';
+import { isFifaWCGame, isIIHFWCGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import Web3 from 'web3';
 import CombinedMarketsOdds from './components/CombinedMarketsOdds';
@@ -141,6 +141,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     {formatShortDateWithTime(market.maturityDate)}{' '}
                                     {isFifaWCGame(market.tags[0]) && (
                                         <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
+                                    )}
+                                    {isIIHFWCGame(market.tags[0]) && (
+                                        <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
                                     )}
                                 </MatchTimeLabel>
                             }

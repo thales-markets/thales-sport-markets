@@ -102,6 +102,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                         position: position,
                         homeTeam: market.homeTeam || '',
                         awayTeam: market.awayTeam || '',
+                        tags: market.tags,
                         doubleChanceMarketType: market.doubleChanceMarketType,
                     };
                     dispatch(updateParlay(parlayMarket));

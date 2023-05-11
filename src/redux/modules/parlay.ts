@@ -101,10 +101,13 @@ export const parlaySlice = createSlice({
             } else if (index === -1) {
                 // ADD new market
                 if (state.parlay.length < state.parlaySize) {
-                    const allParlayTeams = parlayCopy.map((market) => [market.homeTeam, market.awayTeam]).flat();
+                    const parlayTeamsByLeague = parlayCopy
+                        .filter((market) => market.tags[0] === action.payload.tags[0])
+                        .map((market) => [market.homeTeam, market.awayTeam])
+                        .flat();
 
-                    const homeTeamInParlay = allParlayTeams.filter((team) => team === action.payload.homeTeam)[0];
-                    const awayTeamInParlay = allParlayTeams.filter((team) => team === action.payload.awayTeam)[0];
+                    const homeTeamInParlay = parlayTeamsByLeague.filter((team) => team === action.payload.homeTeam)[0];
+                    const awayTeamInParlay = parlayTeamsByLeague.filter((team) => team === action.payload.awayTeam)[0];
 
                     if (homeTeamInParlay || awayTeamInParlay) {
                         state.error.code = ParlayErrorCode.SAME_TEAM_TWICE;
