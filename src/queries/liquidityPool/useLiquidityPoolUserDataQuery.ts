@@ -33,16 +33,15 @@ const useLiquidityPoolUserDataQuery = (
             try {
                 const { liquidityPoolContract, liquidityPoolDataContract } = networkConnector;
                 if (liquidityPoolContract && liquidityPoolDataContract) {
-                    const [contractUserLiquidityPoolData, withdrawalShare] = await Promise.all([
-                        liquidityPoolDataContract.getUserLiquidityPoolData(
-                            liquidityPoolContract.address,
-                            walletAddress
-                        ),
-                        liquidityPoolContract.withdrawalShare(walletAddress),
-                    ]);
+                    const contractUserLiquidityPoolData = await liquidityPoolDataContract.getUserLiquidityPoolData(
+                        liquidityPoolContract.address,
+                        walletAddress
+                    );
 
                     userLiquidityPoolData.isWithdrawalRequested = contractUserLiquidityPoolData.withdrawalRequested;
-                    userLiquidityPoolData.withdrawalShare = bigNumberFormmaterWithDecimals(withdrawalShare);
+                    userLiquidityPoolData.withdrawalShare = bigNumberFormmaterWithDecimals(
+                        contractUserLiquidityPoolData.withdrawalShare
+                    );
                     userLiquidityPoolData.isPartialWithdrawalRequested = userLiquidityPoolData.withdrawalShare > 0;
 
                     userLiquidityPoolData.balanceCurrentRound = bigNumberFormmaterWithDecimals(
