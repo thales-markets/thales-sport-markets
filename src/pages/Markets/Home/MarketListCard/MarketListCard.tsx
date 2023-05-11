@@ -33,7 +33,6 @@ import {
     TeamNameLabel,
     TeamNamesConatiner,
     TeamsInfoConatiner,
-    ThirdRowContainer,
     TotalMarkets,
     TotalMarketsArrow,
     TotalMarketsContainer,
@@ -255,13 +254,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             {spreadTotalMarkets.map((childMarket) => (
                                 <Odds market={childMarket} key={childMarket.address} isShownInSecondRow />
                             ))}
+                            {hasCombinedMarkets && <CombinedMarketsOdds market={market} />}
                         </OddsWrapper>
                     </SecondRowContainer>
-                    {hasCombinedMarkets && (
-                        <ThirdRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
-                            <CombinedMarketsOdds market={market} />
-                        </ThirdRowContainer>
-                    )}
                 </>
             )}
         </Wrapper>
