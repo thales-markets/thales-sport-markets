@@ -110,6 +110,7 @@ const CombinedPositionDetails: React.FC<CombinedPositionDetailsProps> = ({
                             homeTeam: market.homeTeam || '',
                             awayTeam: market.awayTeam || '',
                             doubleChanceMarketType: null,
+                            tags: market.tags,
                         });
                     });
                     dispatch(updateParlayWithMultiplePositions(parlayMarkets));

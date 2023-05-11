@@ -73,6 +73,7 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
                     homeTeam: market.homeTeam || '',
                     awayTeam: market.awayTeam || '',
                     doubleChanceMarketType: null,
+                    tags: market.tags,
                 });
             });
             dispatch(updateParlayWithMultiplePositions(parlayMarkets));
