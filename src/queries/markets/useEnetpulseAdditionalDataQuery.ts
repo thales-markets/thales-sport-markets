@@ -50,10 +50,8 @@ const useEnetpulseAdditionalDataQuery = (
                 const event = SPORTS_TAGS_MAP['Motosport'].includes(Number(sportTag))
                     ? events[0]
                     : (events.find((sportEvent: any) => sportEvent.id == trimmedMarketId) as any);
-                console.log(event);
                 if (event) {
                     const tournamentName = event.tournament_stage_name;
-                    console.log(tournamentName);
                     const tournamentRound = ENETPULSE_ROUNDS[Number(event.round_typeFK)];
                     const eventParticipants: any[] = SPORTS_TAGS_MAP['Motosport'].includes(Number(sportTag))
                         ? []

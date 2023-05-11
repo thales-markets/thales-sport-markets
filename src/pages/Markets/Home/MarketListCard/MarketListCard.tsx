@@ -96,8 +96,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 setLiveResultInfo(useEnetpulseLiveResultQuery.data);
                 const tournamentName = useEnetpulseLiveResultQuery.data.tournamentName
                     ? market.isEnetpulseRacing
-                        ? '| ' + useEnetpulseLiveResultQuery.data.tournamentName
-                        : useEnetpulseLiveResultQuery.data.tournamentName
+                        ? useEnetpulseLiveResultQuery.data.tournamentName
+                        : '| ' + useEnetpulseLiveResultQuery.data.tournamentName
                     : '';
                 const tournamentRound = useEnetpulseLiveResultQuery.data.tournamentRound
                     ? ' | ' + useEnetpulseLiveResultQuery.data.tournamentRound

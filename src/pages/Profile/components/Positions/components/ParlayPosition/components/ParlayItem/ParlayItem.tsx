@@ -30,6 +30,7 @@ import {
     TeamScoreLabel,
 } from '../../../SinglePosition/styled-components';
 import { ParlayStatus, Wrapper } from './styled-components';
+import { fixEnetpulseRacingName } from 'utils/formatters/string';
 
 const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | undefined; quote: number }> = ({
     market,
@@ -104,19 +105,23 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                         onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                         customMobileSize={'30px'}
                     />
-                    <ClubLogo
-                        awayTeam={true}
-                        alt={market.awayTeam}
-                        src={awayLogoSrc}
-                        isFlag={market.tags[0] == 9018}
-                        losingTeam={false}
-                        onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
-                        customMobileSize={'30px'}
-                    />
+                    {!market.isEnetpulseRacing && (
+                        <ClubLogo
+                            awayTeam={true}
+                            alt={market.awayTeam}
+                            src={awayLogoSrc}
+                            isFlag={market.tags[0] == 9018}
+                            losingTeam={false}
+                            onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
+                            customMobileSize={'30px'}
+                        />
+                    )}
                 </MatchLogo>
                 <MatchLabel>
-                    <ClubName>{market.homeTeam}</ClubName>
-                    <ClubName>{market.awayTeam}</ClubName>
+                    <ClubName isRacing={market.isEnetpulseRacing}>
+                        {market.isEnetpulseRacing ? fixEnetpulseRacingName(market.homeTeam) : market.homeTeam}
+                    </ClubName>
+                    {!market.isEnetpulseRacing && <ClubName>{market.awayTeam}</ClubName>}
                 </MatchLabel>
             </MatchInfo>
             <StatusContainer>

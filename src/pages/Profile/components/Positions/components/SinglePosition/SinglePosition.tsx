@@ -66,6 +66,7 @@ import {
     TeamScoreLabel,
     Wrapper,
 } from './styled-components';
+import { fixEnetpulseRacingName } from 'utils/formatters/string';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;
@@ -218,7 +219,6 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
 
     const symbolText = getSymbolText(positionEnum, position.market);
     const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
-
     return (
         <Wrapper>
             <MatchInfo>
@@ -231,19 +231,25 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                         onError={getOnImageError(setHomeLogoSrc, position.market.tags[0])}
                         customMobileSize={'30px'}
                     />
-                    <ClubLogo
-                        awayTeam={true}
-                        alt={position.market.awayTeam}
-                        src={awayLogoSrc}
-                        isFlag={position.market.tags[0] == 9018}
-                        losingTeam={false}
-                        onError={getOnImageError(setAwayLogoSrc, position.market.tags[0])}
-                        customMobileSize={'30px'}
-                    />
+                    {!position.market.isEnetpulseRacing && (
+                        <ClubLogo
+                            awayTeam={true}
+                            alt={position.market.awayTeam}
+                            src={awayLogoSrc}
+                            isFlag={position.market.tags[0] == 9018}
+                            losingTeam={false}
+                            onError={getOnImageError(setAwayLogoSrc, position.market.tags[0])}
+                            customMobileSize={'30px'}
+                        />
+                    )}
                 </MatchLogo>
                 <MatchLabel>
-                    <ClubName>{position.market.homeTeam}</ClubName>
-                    <ClubName>{position.market.awayTeam}</ClubName>
+                    <ClubName>
+                        {position.market.isEnetpulseRacing
+                            ? fixEnetpulseRacingName(position.market.homeTeam)
+                            : position.market.homeTeam}
+                    </ClubName>
+                    {!position.market.isEnetpulseRacing && <ClubName>{position.market.awayTeam}</ClubName>}
                 </MatchLabel>
             </MatchInfo>
             <StatusContainer>
