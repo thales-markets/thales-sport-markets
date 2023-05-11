@@ -106,6 +106,9 @@ export const convertPositionToSymbolType = (position: Position, isApexTopGame: b
 };
 
 export const getSymbolText = (position: Position, market: SportMarketInfo | MarketData) => {
+    if (market.isEnetpulseRacing) {
+        return 'YES';
+    }
     switch (position) {
         case Position.HOME:
             switch (Number(market.betType)) {
