@@ -143,7 +143,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         <MatchTimeLabel>
                             {isEnetpulseSport && (liveResultInfo || localStorage.getItem(market.address)) ? (
                                 <>
-                                    {!market.isEnetpulseRacing && localStorage.getItem(market.address)}
+                                    {localStorage.getItem(market.address)}
                                     {SPORTS_TAGS_MAP['Tennis'].includes(Number(market.tags[0])) && (
                                         <Tooltip
                                             overlay={t(`common.tennis-tooltip`)}
@@ -181,10 +181,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             <TeamNamesConatiner>
                                 <TeamNameLabel>
                                     {market.isEnetpulseRacing
-                                        ? t('market.f1-market', {
-                                              driver: fixEnetpulseRacingName(market.homeTeam),
-                                              race: localStorage.getItem(market.address)?.toString(),
-                                          })
+                                        ? fixEnetpulseRacingName(market.homeTeam)
                                         : market.homeTeam}
                                 </TeamNameLabel>
                                 {!market.isEnetpulseRacing && <TeamNameLabel>{market.awayTeam}</TeamNameLabel>}
