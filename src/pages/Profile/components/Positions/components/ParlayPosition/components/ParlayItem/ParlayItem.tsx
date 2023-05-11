@@ -92,7 +92,6 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
     ]);
 
     const displayClockTime = liveResultInfo?.displayClock.replaceAll("'", '');
-
     return (
         <Wrapper style={{ opacity: market.isCanceled ? 0.5 : 1 }}>
             <MatchInfo>
@@ -144,6 +143,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                             : undefined
                     }
                     tooltip={<>{getOddTooltipText(positionEnum, market)}</>}
+                    additionalStyle={market.isEnetpulseRacing ? { fontSize: 11 } : {}}
                 />
                 {isPendingResolution && !isMobile ? (
                     isEnetpulseSport ? (

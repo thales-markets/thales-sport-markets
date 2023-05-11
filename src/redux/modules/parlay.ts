@@ -5,6 +5,7 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { MultiSingleAmounts, ParlayPayment, ParlaysMarketPosition } from 'types/markets';
 import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
+import { fixEnetpulseRacingName } from 'utils/formatters/string';
 
 const sliceName = 'parlay';
 
@@ -75,6 +76,10 @@ export const parlaySlice = createSlice({
             const parlayCopy = [...state.parlay];
             const index = state.parlay.findIndex((el) => el.parentMarket === action.payload.parentMarket);
             const numberOfDoubleChances = parlayCopy.filter((market) => market.doubleChanceMarketType !== null).length;
+            const multipleDriversAtOneRace = parlayCopy
+                .filter((market) => market.isRacingMarket)
+                .map((market) => market.tag)
+                .findIndex((tag) => tag == action.payload.tag);
 
             if (
                 action.payload.doubleChanceMarketType !== null &&
@@ -83,6 +88,14 @@ export const parlaySlice = createSlice({
             ) {
                 state.error.code = ParlayErrorCode.MAX_DOUBLE_CHANCES;
                 state.error.data = MAX_NUMBER_OF_DOUBLE_CHANCES_ON_PARLAY.toString();
+            } else if (multipleDriversAtOneRace !== -1) {
+                const existingRaceDriver = parlayCopy
+                    .filter((market) => market.isRacingMarket)
+                    .map((market) => market.homeTeam)[multipleDriversAtOneRace];
+
+                state.error.code = ParlayErrorCode.SAME_RACE_DRIVERS;
+                state.error.data =
+                    fixEnetpulseRacingName(existingRaceDriver) + '/' + fixEnetpulseRacingName(action.payload.homeTeam);
             } else if (index === -1) {
                 // ADD new market
                 if (state.parlay.length < state.parlaySize) {

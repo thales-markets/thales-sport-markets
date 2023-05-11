@@ -104,6 +104,7 @@ export enum ParlayErrorCode {
     MAX_MATCHES = 1,
     SAME_TEAM_TWICE = 2,
     MAX_DOUBLE_CHANCES = 3,
+    SAME_RACE_DRIVERS = 4,
 }
 
 export const INCENTIVIZED_LEAGUE = {

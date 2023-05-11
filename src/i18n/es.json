@@ -379,7 +379,8 @@
                 "max-payout": "El pago máximo admitido es {{max}}",
                 "max-profit": "La ganancia máxima admitida es {{max}}",
                 "max-teams": "Máximo de {{max}} mercados en Parlay",
-                "no-funds-multi-collateral": "Asegúrese de que su billetera tenga fondos suficientes ({{percentage}}% más del monto de la entrada)"
+                "no-funds-multi-collateral": "Asegúrese de que su billetera tenga fondos suficientes ({{percentage}}% más del monto de la entrada)",
+                "same-race-drivers": "Solo se admite un piloto por carrera. No se puede agregar {{addedDriver}} porque {{existingDriver}} ya está en Parlay"
             },
             "fee": "Costo total",
             "payout": "Total recibido",

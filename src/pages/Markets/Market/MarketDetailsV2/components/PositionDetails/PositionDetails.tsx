@@ -94,6 +94,8 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                         homeTeam: market.homeTeam || '',
                         awayTeam: market.awayTeam || '',
                         doubleChanceMarketType: market.doubleChanceMarketType,
+                        isRacingMarket: market.isEnetpulseRacing,
+                        tag: market.tags[0],
                     };
                     dispatch(updateParlay(parlayMarket));
                     if (isMobile) {

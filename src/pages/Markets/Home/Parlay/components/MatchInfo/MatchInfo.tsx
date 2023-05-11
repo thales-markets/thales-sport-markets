@@ -68,6 +68,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                         : undefined
                 }
                 tooltip={!readOnly && <>{getOddTooltipText(market.position, market)}</>}
+                additionalStyle={market.isEnetpulseRacing ? { fontSize: 10 } : {}}
             />
             {!readOnly && <Bonus>{bonus > 0 ? getFormattedBonus(bonus) : ''}</Bonus>}
             {readOnly ? (

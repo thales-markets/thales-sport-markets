@@ -323,6 +323,8 @@ export type ParlaysMarketPosition = {
     homeTeam: string;
     awayTeam: string;
     doubleChanceMarketType: DoubleChanceMarketType | null;
+    isRacingMarket?: boolean;
+    tag?: number;
 };
 
 export type ParlaysMarket = SportMarketInfo & {

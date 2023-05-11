@@ -379,7 +379,8 @@
                 "max-payout": "Il pagamento massimo supportato è {{max}}",
                 "max-teams": "Massimo {{max}} mercati a Parlay",
                 "max-profit": "Il profitto massimo supportato è {{max}}",
-                "no-funds-multi-collateral": "Assicurati che il tuo portafoglio abbia fondi sufficienti ({{percentage}}% in più dell'importo del buy-in)"
+                "no-funds-multi-collateral": "Assicurati che il tuo portafoglio abbia fondi sufficienti ({{percentage}}% in più dell'importo del buy-in)",
+                "same-race-drivers": "È supportato un solo pilota per gara. Impossibile aggiungere {{addedDriver}} perché {{existingDriver}} è già in Parlay"
             },
             "empty-title": "Nessuna posizione",
             "fee": "Tariffa totale",

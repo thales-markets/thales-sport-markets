@@ -320,6 +320,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                 : undefined
                         }
                         tooltip={<>{getOddTooltipText(positionEnum, position.market)}</>}
+                        additionalStyle={position.market.isEnetpulseRacing ? { fontSize: 11 } : {}}
                     />
                 </PositionContainer>
                 {isClaimable && (
