@@ -44,7 +44,7 @@ import {
 // 3 for double chance, 1 for spread, 1 for total
 const MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT = 5;
 // 1 for winner, 1 for double chance, 1 for spread, 1 for total
-let MAX_NUMBER_OF_MARKETS = 4;
+const MAX_NUMBER_OF_MARKETS = 4;
 
 type MarketRowCardProps = {
     market: SportMarketInfo;
@@ -76,7 +76,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const combinedMarketPositions = market.combinedMarketsData ? market.combinedMarketsData : [];
 
-    MAX_NUMBER_OF_MARKETS = combinedMarketPositions.length + market.childMarkets.length;
+    const MAX_NUMBER_OF_MARKETS_COUNT = combinedMarketPositions.length
+        ? combinedMarketPositions.length + MAX_NUMBER_OF_MARKETS
+        : MAX_NUMBER_OF_MARKETS;
 
     const doubleChanceMarkets = market.childMarkets.filter((market) => market.betType === BetType.DOUBLE_CHANCE);
     const spreadTotalMarkets = market.childMarkets.filter((market) => market.betType !== BetType.DOUBLE_CHANCE);
@@ -215,7 +217,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             {showSecondRowOnDesktop && (
                                 <TotalMarketsContainer>
                                     <TotalMarketsLabel>{t('markets.market-card.total-markets')}</TotalMarketsLabel>
-                                    <TotalMarkets>{MAX_NUMBER_OF_MARKETS}</TotalMarkets>
+                                    <TotalMarkets>{MAX_NUMBER_OF_MARKETS_COUNT}</TotalMarkets>
                                     <TotalMarketsArrow
                                         className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
                                         onClick={() => setIsExpanded(!isExpanded)}
