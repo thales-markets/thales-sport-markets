@@ -84,6 +84,8 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
     const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlay);
     const parlayWithoutCombinedMarkets = removeCombinedMarketsFromParlayMarketType(parlay);
 
+    const NUMBER_OF_GAMES = parlayMarket.sportMarkets.length - combinedMarkets.length;
+
     const claimParlay = async (parlayAddress: string) => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
         const { parlayMarketsAMMContract, signer } = networkConnector;
@@ -155,7 +157,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
                 </TicketIdContainer>
                 <InfoContainer>
                     <Label>{t('profile.card.number-of-games')}:</Label>
-                    <Value>{parlayMarket.sportMarkets?.length}</Value>
+                    <Value>{NUMBER_OF_GAMES}</Value>
                 </InfoContainer>
                 <InfoContainerColumn>
                     <Label>{t('profile.card.ticket-paid')}:</Label>
