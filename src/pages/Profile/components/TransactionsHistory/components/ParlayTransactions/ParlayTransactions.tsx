@@ -204,9 +204,17 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         accessor: 'positions',
                         sortable: false,
                         Cell: (cellProps: any) => {
+                            const parlay = syncPositionsAndMarketsPerContractOrderInParlay(
+                                cellProps.row.original as ParlayMarket
+                            );
+                            const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlay);
+                            const numberOfMarketsModifiedWithCombinedPositions =
+                                combinedMarkets.length > 0
+                                    ? parlay.sportMarkets.length - combinedMarkets.length
+                                    : parlay.sportMarkets.length;
                             return (
                                 <FlexCenter>
-                                    <TableText>{cellProps.cell.value.length}</TableText>
+                                    <TableText>{numberOfMarketsModifiedWithCombinedPositions}</TableText>
                                 </FlexCenter>
                             );
                         },
