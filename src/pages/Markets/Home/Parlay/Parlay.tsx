@@ -14,16 +14,16 @@ import {
     removeFromParlay,
     resetParlayError,
     setPayment,
-    getMultiSingle,
     setPaymentSelectedStableIndex,
     getIsMultiSingle,
     setIsMultiSingle,
+    getMultiSingle,
 } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
-import { CombinedParlayMarket, MultiSingleAmounts, ParlaysMarket, SportMarketInfo } from 'types/markets';
+import { CombinedParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import MatchInfo from './components/MatchInfo';
 import Payment from './components/Payment';
@@ -54,8 +54,8 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     const parlay = useSelector(getParlay);
     const parlayPayment = useSelector(getParlayPayment);
     const isMultiSingleBet = useSelector(getIsMultiSingle);
-    const multiSingleStore = useSelector(getMultiSingle);
     const hasParlayError = useSelector(getHasParlayError);
+    const multiSingleStore = useSelector(getMultiSingle);
 
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
     const [combinedMarketsData, setCombinedMarketsData] = useState<CombinedMarketsData>({
@@ -65,7 +65,6 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     });
 
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
-    const [multiSingleAmounts, setMultiSingleAmounts] = useState<MultiSingleAmounts[]>([]);
 
     const parlayAmmDataQuery = useParlayAmmDataQuery(networkId, {
         enabled: isAppReady,
@@ -143,9 +142,8 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
             }
 
             setParlayMarkets(parlayMarkets);
-            setMultiSingleAmounts(multiSingleStore);
         }
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay, dispatch, multiSingleStore]);
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay, dispatch]);
 
     const onCloseValidationModal = useCallback(() => dispatch(resetParlayError()), [dispatch]);
 
@@ -164,7 +162,7 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                             secondLabel: t('markets.parlay.toggle-parlay.multi-single'),
                         }}
                         active={isMultiSingleBet}
-                        disabled={parlayMarkets.length === 1}
+                        disabled={multiSingleStore.length === 0}
                         dotSize="18px"
                         dotBackground="#303656"
                         dotBorder="3px solid #3FD1FF"
@@ -173,9 +171,8 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                     {isMultiSingleBet && parlayMarkets.length > 1 ? (
                         <>
                             <MultiSingle
-                                markets={parlayMarkets}
+                                markets={combinedMarketsData.parlaysWithoutCombinedMarkets}
                                 parlayPayment={parlayPayment}
-                                multiSingleAmounts={multiSingleAmounts}
                             />
                         </>
                     ) : (

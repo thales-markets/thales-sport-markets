@@ -155,8 +155,17 @@ export const parlaySlice = createSlice({
                 state.error.data = state.parlaySize.toString();
                 return;
             }
+
+            // action.payload.forEach((item) => {
+            //     state.multiSingle.push({
+            //         sportMarketAddress: item.sportMarketAddress,
+            //         amountToBuy: 0,
+            //     });
+            // });
+
             state.parlay.push(...action.payload);
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
+            // localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
         setParlaySize: (state, action: PayloadAction<number>) => {
             state.parlaySize = action.payload;
@@ -176,6 +185,8 @@ export const parlaySlice = createSlice({
         },
         removeCombinedMarketFromParlay: (state, action: PayloadAction<string>) => {
             state.parlay = state.parlay.filter((market) => market.parentMarket !== action.payload);
+            state.multiSingle = state.multiSingle.filter((ms) => ms.sportMarketAddress !== action.payload);
+
             if (state.parlay.length === 0) {
                 state.payment.amountToBuy = getDefaultPayment().amountToBuy;
             }

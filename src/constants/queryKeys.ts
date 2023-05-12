@@ -33,7 +33,7 @@ export const QUERY_KEYS = {
         networkId: NetworkId
     ) => ['multiplePositionDetails', markets, amounts, stableIndex, networkId],
     AvailablePerPosition: (marketAddress: string) => ['availablePerPosition', marketAddress],
-    AvailablePerPositionMulti: (marketAddresses: ParlaysMarket[]) => ['availablePerPositionMulti', marketAddresses],
+    AvailablePerPositionMulti: (marketAddresses: string) => ['availablePerPositionMulti', marketAddresses],
     AvailablePerDoubleChancePosition: (marketAddress: string) => ['availablePerDoubleChancePosition', marketAddress],
     MarketTransactions: (marketAddress: string, networkId: NetworkId, walletAddress?: string) => [
         'market',
