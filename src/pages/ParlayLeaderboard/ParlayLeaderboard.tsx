@@ -8,9 +8,11 @@ import {
     OddsType,
     PARLAY_LEADERBOARD_BIWEEKLY_START_DATE,
     PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC,
-    PARLAY_LEADERBOARD_FEBRUARY_REWARDS,
-    PARLAY_LEADERBOARD_OPTIMISM_REWARDS,
-    PARLAY_LEADERBOARD_ARBITRUM_REWARDS,
+    PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS,
+    PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10,
+    PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10,
+    PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20,
+    PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20,
 } from 'constants/markets';
 import { t } from 'i18next';
 import { addDays, differenceInDays, subMilliseconds } from 'date-fns';
@@ -56,40 +58,26 @@ const ParlayLeaderboard: React.FC = () => {
 
     const periodOptions: Array<{ value: number; label: string }> = [];
 
-    let startingBiweeklyPeriod = 0;
-    if (networkId !== NetworkIdByName.ArbitrumOne) {
-        startingBiweeklyPeriod = 1;
-        periodOptions.push({
-            value: 0,
-            label: `${t(`parlay-leaderboard.periods.february`)} 2023`,
-        });
-    }
     const latestPeriodBiweekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_BIWEEKLY_START_DATE) / 14);
-    const numberOfPeriods = latestPeriodBiweekly + startingBiweeklyPeriod;
 
-    for (let index = startingBiweeklyPeriod; index <= numberOfPeriods; index++) {
+    for (let index = 0; index <= latestPeriodBiweekly; index++) {
         periodOptions.push({
             value: index,
-            label: `${t(`parlay-leaderboard.periods.bi-weekly-period`)} ${index + 1 - startingBiweeklyPeriod}`,
+            label: `${t(`parlay-leaderboard.periods.bi-weekly-period`)} ${index + 1}`,
         });
     }
 
-    const [period, setPeriod] = useState<number>(numberOfPeriods);
+    const [period, setPeriod] = useState<number>(latestPeriodBiweekly);
 
-    useEffect(() => setPeriod(numberOfPeriods), [numberOfPeriods]);
+    useEffect(() => setPeriod(latestPeriodBiweekly), [latestPeriodBiweekly]);
 
-    useEffect(() => {
-        if (networkId !== NetworkIdByName.ArbitrumOne && period == 0) {
-            setPeriodEnd(0);
-        } else {
+    useEffect(
+        () =>
             setPeriodEnd(
-                subMilliseconds(
-                    addDays(PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC, (period + 1 - startingBiweeklyPeriod) * 14),
-                    1
-                ).getTime()
-            );
-        }
-    }, [period, networkId, startingBiweeklyPeriod]);
+                subMilliseconds(addDays(PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC, (period + 1) * 14), 1).getTime()
+            ),
+        [period, networkId]
+    );
 
     const parlayLeaderboardQuery = useParlayLeaderboardQuery(networkId, period, { enabled: isAppReady });
 
@@ -104,12 +92,14 @@ const ParlayLeaderboard: React.FC = () => {
 
     const rewards =
         networkId !== NetworkIdByName.ArbitrumOne
-            ? period === 0
-                ? PARLAY_LEADERBOARD_FEBRUARY_REWARDS
-                : PARLAY_LEADERBOARD_OPTIMISM_REWARDS
-            : PARLAY_LEADERBOARD_ARBITRUM_REWARDS;
+            ? period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS
+                ? PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10
+                : PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20
+            : period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS
+            ? PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10
+            : PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20;
 
-    const rewardsAmount = networkId !== NetworkIdByName.ArbitrumOne ? '2,000 OP' : '5,000 THALES';
+    const rewardsAmount = networkId !== NetworkIdByName.ArbitrumOne ? '1,000 OP' : '1,000 ARB';
 
     const stickyRow = useMemo(() => {
         const data = parlays.find((parlay) => parlay.account.toLowerCase() == walletAddress?.toLowerCase());
@@ -123,7 +113,11 @@ const ParlayLeaderboard: React.FC = () => {
                                 overlay={
                                     <>
                                         {rewards[data.rank - 1]}{' '}
-                                        {networkId !== NetworkIdByName.ArbitrumOne ? 'OP' : 'THALES'}
+                                        {networkId !== NetworkIdByName.ArbitrumOne
+                                            ? 'OP'
+                                            : period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS
+                                            ? 'ARB'
+                                            : 'THALES'}
                                     </>
                                 }
                                 component={
@@ -157,7 +151,7 @@ const ParlayLeaderboard: React.FC = () => {
                 <ExpandedContainer hide={!expandStickyRow}>{getExpandedRow(data, selectedOddsType)}</ExpandedContainer>
             </StickyRow>
         );
-    }, [expandStickyRow, parlays, walletAddress, selectedOddsType, rewards, networkId]);
+    }, [expandStickyRow, parlays, walletAddress, selectedOddsType, rewards, networkId, period]);
 
     const [page, setPage] = useState(0);
     const handleChangePage = (_event: unknown, newPage: number) => {
@@ -248,7 +242,11 @@ const ParlayLeaderboard: React.FC = () => {
                                     overlay={
                                         <>
                                             {rewards[cellProps.cell.value - 1]}{' '}
-                                            {networkId !== NetworkIdByName.ArbitrumOne ? 'OP' : 'THALES'}
+                                            {networkId !== NetworkIdByName.ArbitrumOne
+                                                ? 'OP'
+                                                : period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS
+                                                ? 'ARB'
+                                                : 'THALES'}
                                         </>
                                     }
                                     component={

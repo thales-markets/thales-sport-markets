@@ -120,60 +120,9 @@ export const MIN_LIQUIDITY = 10;
 export const PARLAY_LEADERBOARD_BIWEEKLY_START_DATE = new Date(2023, 2, 1, 0, 0, 0);
 export const PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC = new Date(Date.UTC(2023, 2, 1, 0, 0, 0));
 
-export const PARLAY_LEADERBOARD_FEBRUARY_REWARDS = [
-    750,
-    500,
-    350,
-    260,
-    230,
-    210,
-    200,
-    175,
-    150,
-    125,
-    110,
-    105,
-    100,
-    95,
-    90,
-    85,
-    80,
-    75,
-    70,
-    60,
-    50,
-    50,
-    50,
-    50,
-    50,
-    50,
-    50,
-    50,
-    50,
-    40,
-    40,
-    40,
-    40,
-    40,
-    40,
-    40,
-    40,
-    40,
-    40,
-    30,
-    30,
-    30,
-    30,
-    30,
-    30,
-    30,
-    30,
-    30,
-    30,
-    30,
-];
+export const PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS = 5;
 
-export const PARLAY_LEADERBOARD_OPTIMISM_REWARDS = [
+export const PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20 = [
     300,
     200,
     150,
@@ -206,7 +155,7 @@ export const PARLAY_LEADERBOARD_OPTIMISM_REWARDS = [
     20,
 ];
 
-export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS = [
+export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20 = [
     750,
     500,
     375,
@@ -238,6 +187,10 @@ export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS = [
     53,
     50,
 ];
+
+export const PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10 = [250, 175, 125, 100, 85, 70, 60, 50, 45, 40];
+
+export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10 = [250, 175, 125, 100, 85, 70, 60, 50, 45, 40];
 
 export const ENETPULSE_ROUNDS: Record<number, string> = {
     [0]: '',
