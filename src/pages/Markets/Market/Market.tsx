@@ -37,7 +37,6 @@ const Market: React.FC<MarketProps> = (props) => {
 
     useEffect(() => {
         if (marketQuery.isSuccess && marketQuery.data) {
-            console.log('MarketData ', marketQuery.data);
             setLastValidMarket(marketQuery.data);
         }
     }, [marketQuery.isSuccess, marketQuery.data, marketAddress]);

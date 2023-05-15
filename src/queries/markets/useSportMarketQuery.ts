@@ -1,8 +1,11 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
-import { SportMarketInfo } from 'types/markets';
+import { CombinedMarketsContractData, SportMarketInfo } from 'types/markets';
 import thalesData from 'thales-data';
 import { NetworkId } from 'types/network';
+import networkConnector from 'utils/networkConnector';
+import { insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
+import { getMarketAddressesFromSportMarketArray } from 'utils/markets';
 
 const useSportMarketQuery = (
     marketAddress: string,
@@ -13,6 +16,8 @@ const useSportMarketQuery = (
         QUERY_KEYS.SportMarket(marketAddress, networkId),
         async () => {
             try {
+                const { sportPositionalMarketDataContract } = networkConnector;
+
                 const parentMarket = await thalesData.sportMarkets.markets({
                     network: networkId,
                     market: marketAddress,
@@ -25,6 +30,23 @@ const useSportMarketQuery = (
 
                 if (parentMarket) {
                     parentMarket[0].childMarkets = childMarkets;
+                    const marketAddresses = getMarketAddressesFromSportMarketArray(parentMarket);
+
+                    const combinedMarketsContractData:
+                        | CombinedMarketsContractData
+                        | undefined = await sportPositionalMarketDataContract?.getCombinedOddsForBatchOfMarkets(
+                        marketAddresses
+                    );
+
+                    if (combinedMarketsContractData) {
+                        const modifiedMarkets = insertCombinedMarketsIntoArrayOFMarkets(
+                            parentMarket,
+                            combinedMarketsContractData
+                        );
+
+                        return modifiedMarkets[0];
+                    }
+
                     return parentMarket[0];
                 }
 
