@@ -180,6 +180,16 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                         <>
                             <ListContainer>
                                 {combinedMarketsData?.isCombinedMarketsInParlay &&
+                                    combinedMarketsData.parlaysWithoutCombinedMarkets.length > 0 &&
+                                    combinedMarketsData.parlaysWithoutCombinedMarkets.map((market, index) => {
+                                        const outOfLiquidity = outOfLiquidityMarkets.includes(index);
+                                        return (
+                                            <RowMarket key={`${index}-non-combined`} outOfLiquidity={outOfLiquidity}>
+                                                <MatchInfo market={market} isHighlighted={true} />
+                                            </RowMarket>
+                                        );
+                                    })}
+                                {combinedMarketsData?.isCombinedMarketsInParlay &&
                                     combinedMarketsData.combinedMarkets.map((market, index) => {
                                         return (
                                             <RowMarket key={index + 'combined'} outOfLiquidity={false}>
@@ -187,16 +197,6 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                                                     combinedMarket={market}
                                                     isHighlighted={true}
                                                 />
-                                            </RowMarket>
-                                        );
-                                    })}
-                                {combinedMarketsData?.isCombinedMarketsInParlay &&
-                                    combinedMarketsData.parlaysWithoutCombinedMarkets.length > 0 &&
-                                    combinedMarketsData.parlaysWithoutCombinedMarkets.map((market, index) => {
-                                        const outOfLiquidity = outOfLiquidityMarkets.includes(index);
-                                        return (
-                                            <RowMarket key={`${index}-non-combined`} outOfLiquidity={outOfLiquidity}>
-                                                <MatchInfo market={market} isHighlighted={true} />
                                             </RowMarket>
                                         );
                                     })}
