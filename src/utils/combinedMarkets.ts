@@ -369,6 +369,29 @@ export const removeCombinedMarketFromParlayMarkets = (parlayMarkets: ParlaysMark
 };
 
 export const isCombinedMarketWinner = (markets: SportMarketInfo[], positions: Position[]) => {
+    const canceledMarkets = markets.filter((market) => market.isCanceled);
+
+    if (canceledMarkets.length == 1) {
+        let winner = true;
+        const canceledMarketIndex = markets.findIndex((market) => market.isCanceled);
+        markets.forEach((_market, index) => {
+            if (index !== canceledMarketIndex) {
+                if (
+                    markets[index].isResolved &&
+                    convertFinalResultToResultType(markets[index].finalResult) == positions[index]
+                ) {
+                    return;
+                } else {
+                    winner = false;
+                }
+            }
+        });
+
+        return winner;
+    }
+
+    if (canceledMarkets.length > 1) return true;
+
     if (
         markets[0].isResolved &&
         markets[1].isResolved &&
