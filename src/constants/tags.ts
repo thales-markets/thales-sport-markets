@@ -311,7 +311,7 @@ export const COMBINED_MARKETS_SGP: Record<string, number> = {
     Soccer: 0.7,
     Basketball: 0.95,
     Football: 0.9,
-    Hockey: 0.85,
+    Hockey: 0.9,
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
