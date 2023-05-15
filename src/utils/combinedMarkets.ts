@@ -355,17 +355,23 @@ export const removeCombinedMarketsFromParlayMarketType = (
 
 export const removeCombinedMarketFromParlayMarkets = (parlayMarkets: ParlaysMarket[]): ParlaysMarket[] => {
     const combinedMarkets = extractCombinedMarketsFromParlayMarkets(parlayMarkets);
-
     if (!combinedMarkets.length) return parlayMarkets;
 
-    const filteredParlayMarkets = parlayMarkets.filter((market) => {
-        const marketWithSameGameId = combinedMarkets.find(
-            (combinedMarkets) => combinedMarkets.markets[0].gameId == market.gameId
-        );
-        if (!marketWithSameGameId) return market;
+    const parlaysMarkets: ParlaysMarket[] = [];
+
+    parlayMarkets.forEach((parlayMarket) => {
+        let inCombinedMarket = false;
+        combinedMarkets.forEach((combinedMarket) => {
+            const insideCombinedMarket = combinedMarket.markets.find(
+                (_market) => parlayMarket.address == _market.address
+            );
+            if (insideCombinedMarket) inCombinedMarket = true;
+        });
+
+        if (!inCombinedMarket) parlaysMarkets.push(parlayMarket);
     });
 
-    return filteredParlayMarkets;
+    return parlaysMarkets;
 };
 
 export const isCombinedMarketWinner = (markets: SportMarketInfo[], positions: Position[]) => {

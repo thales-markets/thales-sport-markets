@@ -337,8 +337,7 @@ const getPositionStatus = (position: PositionData) => {
 };
 
 const getPositionStatusForCombinedMarket = (combinedMarket: CombinedMarket) => {
-    const isOpen = combinedMarket.markets[0].isOpen;
-
+    const isOpen = combinedMarket.markets[0].isOpen || combinedMarket.markets[1].isOpen;
     if (isOpen) return <StatusIcon color="#FFFFFF" className={`icon icon--open`} />;
     if (isCombinedMarketWinner(combinedMarket.markets, combinedMarket.positions))
         return <StatusIcon color="#5FC694" className={`icon icon--win`} />;
