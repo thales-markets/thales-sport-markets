@@ -9,6 +9,7 @@ export const QUERY_KEYS = {
     ParlayLeaderboard: (networkId: NetworkId, period: number) => ['parlayLeaderboard', period, networkId],
     SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
     SportMarketsNew: (networkId: NetworkId) => ['sportMarketsNew', networkId],
+    SportMarket: (address: string, networkId: NetworkId) => ['sportMarketQuery', address, networkId],
     ParlayAmmData: (networkId: NetworkId) => ['parlayAmmData', networkId],
     Market: (marketAddress: string, networkId: NetworkId) => ['market', marketAddress, networkId],
     LiveResult: (marketId: string) => ['liveResult', marketId],

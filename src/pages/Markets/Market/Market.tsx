@@ -16,8 +16,7 @@ import { Trans } from 'react-i18next';
 import { Info } from '../Home/Home';
 import { getNetworkId } from 'redux/modules/wallet';
 import { NetworkIdByName } from 'utils/network';
-import useSportMarketsQueryNew from 'queries/markets/useSportsMarketsQueryNew';
-import { GlobalFiltersEnum } from 'constants/markets';
+import useSportMarketQuery from 'queries/markets/useSportMarketQuery';
 
 type MarketProps = RouteComponentProps<{
     marketAddress: string;
@@ -32,21 +31,14 @@ const Market: React.FC<MarketProps> = (props) => {
     const { params } = props.match;
     const marketAddress = params && params.marketAddress ? params.marketAddress : '';
 
-    const marketQuery = useSportMarketsQueryNew(networkId, {
+    const marketQuery = useSportMarketQuery(marketAddress, networkId, {
         enabled: isAppReady,
     });
 
     useEffect(() => {
         if (marketQuery.isSuccess && marketQuery.data) {
-            let market: SportMarketInfo | undefined = undefined;
-            for (const propertyName in marketQuery.data) {
-                const marketsGroup = marketQuery.data[propertyName as GlobalFiltersEnum];
-                if (marketsGroup) {
-                    market = marketsGroup.find((market) => market.address == marketAddress);
-                }
-                if (market) break;
-            }
-            setLastValidMarket(market);
+            console.log('MarketData ', marketQuery.data);
+            setLastValidMarket(marketQuery.data);
         }
     }, [marketQuery.isSuccess, marketQuery.data, marketAddress]);
 
