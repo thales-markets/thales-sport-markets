@@ -11,13 +11,13 @@ import {
     getParlayPayment,
     getHasParlayError,
     setParlaySize,
-    removeFromParlay,
     resetParlayError,
     setPayment,
     setPaymentSelectedStableIndex,
     getIsMultiSingle,
     setIsMultiSingle,
     getMultiSingle,
+    removeAll,
 } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -32,8 +32,8 @@ import MultiSingle from './components/MultiSingle';
 import Ticket from './components/Ticket';
 import ValidationModal from './components/ValidationModal';
 import Toggle from 'components/Toggle/Toggle';
-import { extractCombinedMarketsFromParlayMarkets, removeCombinedMarketFromParlayMarkets } from 'utils/combinedMarkets';
 import MatchInfoOfCombinedMarket from './components/MatchInfoOfCombinedMarket';
+import { extractCombinedMarketsFromParlayMarkets, removeCombinedMarketFromParlayMarkets } from 'utils/combinedMarkets';
 
 type ParylayProps = {
     onBuySuccess?: () => void;
@@ -119,7 +119,8 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                         return market.address !== parlayMarket.sportMarketAddress;
                     });
                 });
-                notOpenedMarkets.forEach((market) => dispatch(removeFromParlay(market.sportMarketAddress)));
+
+                if (notOpenedMarkets.length > 0) dispatch(removeAll());
             }
 
             if (parlayMarkets.length) {
