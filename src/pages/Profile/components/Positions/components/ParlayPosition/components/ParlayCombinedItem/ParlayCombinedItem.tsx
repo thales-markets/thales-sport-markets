@@ -13,7 +13,7 @@ import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { CombinedMarket, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { formatMarketOdds, getCombinedOddTooltipText, getSpreadTotalText } from 'utils/markets';
+import { formatMarketOdds, getCombinedOddTooltipText, getSpreadAndTotalTextForCombinedMarket } from 'utils/markets';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import { ClubLogo, ClubName, MatchInfo, MatchLabel, MatchLogo, StatusContainer } from '../../../../styled-components';
 import {
@@ -32,7 +32,6 @@ const ParlayCombinedItem: React.FC<{ combinedMarket: CombinedMarket }> = ({ comb
     const selectedOddsType = useSelector(getOddsType);
 
     const market = combinedMarket.markets[0];
-    const position = combinedMarket.positions[0];
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
@@ -46,7 +45,6 @@ const ParlayCombinedItem: React.FC<{ combinedMarket: CombinedMarket }> = ({ comb
     const parlayStatus = getParlayItemStatus(market);
 
     const symbolText = getCombinedPositionName(combinedMarket.markets, combinedMarket.positions);
-    const spreadTotalText = getSpreadTotalText(market, position);
 
     const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
     const isGameStarted = market.maturityDate < new Date();
@@ -57,6 +55,14 @@ const ParlayCombinedItem: React.FC<{ combinedMarket: CombinedMarket }> = ({ comb
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
     const tooltipText = getCombinedOddTooltipText(combinedMarket.markets, combinedMarket.positions);
+
+    const spreadAndTotalValues = getSpreadAndTotalTextForCombinedMarket(
+        combinedMarket.markets,
+        combinedMarket.positions
+    );
+    const spreadAndTotalText = `${spreadAndTotalValues.spread ? spreadAndTotalValues.spread + '/' : ''}${
+        spreadAndTotalValues.total ? spreadAndTotalValues.total : ''
+    }`;
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(market.id, {
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport,
@@ -123,9 +129,9 @@ const ParlayCombinedItem: React.FC<{ combinedMarket: CombinedMarket }> = ({ comb
                     }}
                     symbolText={symbolText ? symbolText : ''}
                     symbolUpperText={
-                        spreadTotalText
+                        spreadAndTotalText
                             ? {
-                                  text: spreadTotalText,
+                                  text: spreadAndTotalText,
                                   textStyle: {
                                       top: '-9px',
                                   },

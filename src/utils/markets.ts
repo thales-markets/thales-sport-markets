@@ -181,6 +181,26 @@ export const getTotalText = (market: SportMarketInfo) => {
     return undefined;
 };
 
+export const getSpreadAndTotalTextForCombinedMarket = (
+    markets: SportMarketInfo[],
+    positions: Position[]
+): { total: string; spread: string } => {
+    const result = {
+        total: '',
+        spread: '',
+    };
+
+    const totalMarket = markets.find((_market) => _market.betType == BetType.TOTAL);
+    const spreadMarket = markets.findIndex((_market) => _market.betType == BetType.SPREAD);
+
+    if (totalMarket) result.total = (getTotalText(totalMarket) ? getTotalText(totalMarket) : '') as string;
+    if (spreadMarket !== -1)
+        result.spread = (getSpreadText(markets[spreadMarket], positions[spreadMarket])
+            ? getSpreadText(markets[spreadMarket], positions[spreadMarket])
+            : '') as string;
+    return result;
+};
+
 export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) => {
     if (!odds) {
         return '0';

@@ -28,6 +28,7 @@ import {
     getCombinedOddTooltipText,
     getOddTooltipText,
     getParentMarketAddress,
+    getSpreadAndTotalTextForCombinedMarket,
     getSpreadTotalText,
     getSymbolText,
     isParlayOpen,
@@ -398,7 +399,14 @@ const getParlayRow = (
             const positionStatus = getPositionStatusForCombinedMarket(combinedMarket);
 
             const tooltipText = getCombinedOddTooltipText(combinedMarket.markets, combinedMarket.positions);
-            const spreadTotalText = getSpreadTotalText(combinedMarket.markets[0], combinedMarket.positions[0]);
+
+            const spreadAndTotalValues = getSpreadAndTotalTextForCombinedMarket(
+                combinedMarket.markets,
+                combinedMarket.positions
+            );
+            const spreadAndTotalText = `${spreadAndTotalValues.spread ? spreadAndTotalValues.spread + '/' : ''}${
+                spreadAndTotalValues.total ? spreadAndTotalValues.total : ''
+            }`;
 
             render.push(
                 <ParlayRow style={{ opacity: opacity }} key={`$cm-${index}`}>
@@ -419,9 +427,9 @@ const getParlayRow = (
                         additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
                         symbolText={symbolText ? symbolText : ''}
                         symbolUpperText={
-                            spreadTotalText
+                            spreadAndTotalText
                                 ? {
-                                      text: spreadTotalText,
+                                      text: spreadAndTotalText,
                                       textStyle: {
                                           backgroundColor: '#1A1C2B',
                                           fontSize: '10px',
