@@ -10,6 +10,7 @@ import {
     getCombinedOddTooltipText,
     getFormattedBonus,
     getParentMarketAddress,
+    getSpreadAndTotalTextForCombinedMarket,
     getSymbolText,
     hasBonus,
 } from 'utils/markets';
@@ -49,6 +50,11 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
     const parentMarketAddress = markets[0].parentMarket !== null ? markets[0].parentMarket : markets[1].parentMarket;
 
     const isParentMarketAddressInParlayData = parlay.filter((market) => market.parentMarket == parentMarketAddress);
+
+    const spreadAndTotalValues = getSpreadAndTotalTextForCombinedMarket(markets, positions);
+    const spreadAndTotalText = `${spreadAndTotalValues.spread ? spreadAndTotalValues.spread + '/' : ''}${
+        spreadAndTotalValues.total ? spreadAndTotalValues.total : ''
+    }`;
 
     const onClick = () => {
         if (noOdd) return;
@@ -98,7 +104,12 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
                               backgroundColor: isShownInSecondRow ? MAIN_COLORS.GRAY : MAIN_COLORS.LIGHT_GRAY,
                           },
                       }
-                    : undefined
+                    : {
+                          text: spreadAndTotalText,
+                          textStyle: {
+                              top: '-9px',
+                          },
+                      }
             }
             disabled={noOdd}
             flexDirection="column"

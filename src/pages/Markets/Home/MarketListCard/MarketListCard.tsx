@@ -77,9 +77,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const combinedMarketPositions = market.combinedMarketsData ? market.combinedMarketsData : [];
 
-    const MAX_NUMBER_OF_MARKETS_COUNT = combinedMarketPositions.length
-        ? combinedMarketPositions.length + MAX_NUMBER_OF_MARKETS
-        : MAX_NUMBER_OF_MARKETS;
+    const MAX_NUMBER_OF_MARKETS_COUNT = MAX_NUMBER_OF_MARKETS;
 
     const doubleChanceMarkets = market.childMarkets.filter((market) => market.betType === BetType.DOUBLE_CHANCE);
     const spreadTotalMarkets = market.childMarkets.filter((market) => market.betType !== BetType.DOUBLE_CHANCE);
