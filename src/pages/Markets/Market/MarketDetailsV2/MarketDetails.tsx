@@ -19,7 +19,7 @@ import Transactions from '../Transactions';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import useChildMarketsQuery from 'queries/markets/useChildMarketsQuery';
 import { GAME_STATUS, MAIN_COLORS } from 'constants/ui';
-import { BetType, ENETPULSE_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
+import { BetType, ENETPULSE_SPORTS, IIHF_WC_TAG, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP, TAGS_FLAGS } from 'constants/tags';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
@@ -288,7 +288,9 @@ const hideResultInfoPerPeriodForSports = (sportId: number) => {
         !SPORTS_TAGS_MAP['eSports'].includes(sportId) &&
         !SPORTS_TAGS_MAP['MMA'].includes(sportId) &&
         !SPORTS_TAGS_MAP['Cricket'].includes(sportId) &&
-        sportId != 9399
+        !SPORTS_TAGS_MAP['Hockey'].includes(sportId) &&
+        TAGS_FLAGS.IPL != sportId &&
+        IIHF_WC_TAG != sportId
     );
 };
 
