@@ -311,7 +311,7 @@ export const COMBINED_MARKETS_SGP: SGPItem[] = [
     {
         tags: [9399],
         combination: [0, 10002],
-        SGPFee: 0.9,
+        SGPFee: 0.99,
     },
     {
         tags: [9006],
