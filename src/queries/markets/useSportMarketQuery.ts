@@ -20,7 +20,7 @@ const useSportMarketQuery = (
             try {
                 const { sportPositionalMarketDataContract } = networkConnector;
 
-                const parentMarket: SportMarketInfo[] = await thalesData.sportMarkets.markets({
+                const parentMarketFromGraph: SportMarketInfo[] = await thalesData.sportMarkets.markets({
                     network: networkId,
                     market: marketAddress,
                 });
@@ -32,49 +32,51 @@ const useSportMarketQuery = (
 
                 const parentMarketData = await sportPositionalMarketDataContract?.getMarketData(marketAddress);
 
-                if (parentMarket) {
-                    parentMarket[0].childMarkets = childMarkets;
-                    const marketAddresses = getMarketAddressesFromSportMarketArray(parentMarket);
-                    parentMarket[0].homeOdds = parentMarketData.odds[0]
+                if (parentMarketFromGraph) {
+                    const parentMarket = parentMarketFromGraph[0];
+
+                    parentMarket.childMarkets = childMarkets;
+                    const marketAddresses = getMarketAddressesFromSportMarketArray([parentMarket]);
+                    parentMarket.homeOdds = parentMarketData.odds[0]
                         ? bigNumberFormmaterWithDecimals(
                               parentMarketData.odds[0],
                               getDefaultDecimalsForNetwork(networkId)
                           )
                         : 0;
-                    parentMarket[0].awayOdds = parentMarketData.odds[1]
+                    parentMarket.awayOdds = parentMarketData.odds[1]
                         ? bigNumberFormmaterWithDecimals(
                               parentMarketData.odds[1],
                               getDefaultDecimalsForNetwork(networkId)
                           )
                         : 0;
-                    parentMarket[0].drawOdds = parentMarketData.odds[2]
+                    parentMarket.drawOdds = parentMarketData.odds[2]
                         ? bigNumberFormmaterWithDecimals(
                               parentMarketData.odds[2],
                               getDefaultDecimalsForNetwork(networkId)
                           )
                         : 0;
-                    parentMarket[0].gameId = parentMarketData.gameId;
+                    parentMarket.gameId = parentMarketData.gameId;
 
                     // Child Markets contract odds
-                    for (let i = 0; i < parentMarket[0].childMarkets.length; i++) {
+                    for (let i = 0; i < parentMarket.childMarkets.length; i++) {
                         const marketDataOfChildMarket = await sportPositionalMarketDataContract?.getMarketData(
-                            parentMarket[0].childMarkets[i].address
+                            parentMarket.childMarkets[i].address
                         );
 
                         marketDataOfChildMarket.odds[0]
-                            ? (parentMarket[0].childMarkets[i].homeOdds = bigNumberFormmaterWithDecimals(
+                            ? (parentMarket.childMarkets[i].homeOdds = bigNumberFormmaterWithDecimals(
                                   marketDataOfChildMarket.odds[0],
                                   getDefaultDecimalsForNetwork(networkId)
                               ))
                             : 0;
                         marketDataOfChildMarket.odds[1]
-                            ? (parentMarket[0].childMarkets[i].awayOdds = bigNumberFormmaterWithDecimals(
+                            ? (parentMarket.childMarkets[i].awayOdds = bigNumberFormmaterWithDecimals(
                                   marketDataOfChildMarket.odds[1],
                                   getDefaultDecimalsForNetwork(networkId)
                               ))
                             : 0;
                         marketDataOfChildMarket.odds[2]
-                            ? (parentMarket[0].childMarkets[i].drawOdds = bigNumberFormmaterWithDecimals(
+                            ? (parentMarket.childMarkets[i].drawOdds = bigNumberFormmaterWithDecimals(
                                   marketDataOfChildMarket.odds[2],
                                   getDefaultDecimalsForNetwork(networkId)
                               ))
@@ -89,14 +91,14 @@ const useSportMarketQuery = (
 
                     if (combinedMarketsContractData) {
                         const modifiedMarkets = insertCombinedMarketsIntoArrayOFMarkets(
-                            parentMarket,
+                            [parentMarket],
                             combinedMarketsContractData
                         );
 
                         return modifiedMarkets[0];
                     }
 
-                    return parentMarket[0];
+                    return parentMarket;
                 }
 
                 return undefined;
