@@ -53,6 +53,7 @@ const useSportMarketQuery = (
                               getDefaultDecimalsForNetwork(networkId)
                           )
                         : 0;
+                    parentMarket[0].gameId = parentMarketData.gameId;
 
                     // Child Markets contract odds
                     for (let i = 0; i < parentMarket[0].childMarkets.length; i++) {
