@@ -418,10 +418,12 @@ export const processCombinedOddsFromContract = (
 
         if (!firstMarketBetType && !secondMarketBetType) return;
         const firstMarket =
-            market.betType == firstMarketBetType
+            market.betType == firstMarketBetType && market.isOpen && !market.isPaused
                 ? market
-                : market.childMarkets.find((market) => market.betType == firstMarketBetType);
-        const secondMarket = market.childMarkets.find((market) => market.betType == secondMarketBetType);
+                : market.childMarkets.find((market) => market.betType == firstMarketBetType && market.isOpen);
+        const secondMarket = market.childMarkets.find(
+            (market) => market.betType == secondMarketBetType && market.isOpen && !market.isPaused
+        );
 
         if (!firstMarket || !secondMarket) return;
 
