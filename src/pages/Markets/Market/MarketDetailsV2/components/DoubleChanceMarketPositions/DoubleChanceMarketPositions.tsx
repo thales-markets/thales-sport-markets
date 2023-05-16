@@ -5,7 +5,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
-import { AvailablePerDoubleChancePosition, DoubleChanceMarkets, MarketData } from 'types/markets';
+import { AvailablePerDoubleChancePosition, DoubleChanceMarketsInfo, SportMarketInfo } from 'types/markets';
 import PositionDetails from '../PositionDetails';
 
 const defaultAvailablePerDoubleChancePosition: AvailablePerDoubleChancePosition = {
@@ -24,7 +24,7 @@ const defaultAvailablePerDoubleChancePosition: AvailablePerDoubleChancePosition 
 };
 
 type DoubleChanceMarketPositionsProps = {
-    markets: MarketData[];
+    markets: SportMarketInfo[];
 };
 
 const DoubleChanceMarketPositions: React.FC<DoubleChanceMarketPositionsProps> = ({ markets }) => {
@@ -60,25 +60,25 @@ const DoubleChanceMarketPositions: React.FC<DoubleChanceMarketPositionsProps> = 
         ...markets.map((item) => ({
             [item.doubleChanceMarketType as DoubleChanceMarketType]: item,
         }))
-    ) as DoubleChanceMarkets;
+    ) as DoubleChanceMarketsInfo;
 
     return (
         <>
             <PositionDetails
                 market={doubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE]}
-                odd={doubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE].positions[Position.HOME].odd}
+                odd={doubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE].homeOdds}
                 availablePerPosition={availablePerDoubleChancePosition[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE]}
                 position={Position.HOME}
             />
             <PositionDetails
                 market={doubleChanceMarkets[DoubleChanceMarketType.NO_DRAW]}
-                odd={doubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].positions[Position.HOME].odd}
+                odd={doubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeOdds}
                 availablePerPosition={availablePerDoubleChancePosition[DoubleChanceMarketType.NO_DRAW]}
                 position={Position.HOME}
             />
             <PositionDetails
                 market={doubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE]}
-                odd={doubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE].positions[Position.HOME].odd}
+                odd={doubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE].homeOdds}
                 availablePerPosition={availablePerDoubleChancePosition[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE]}
                 position={Position.HOME}
             />

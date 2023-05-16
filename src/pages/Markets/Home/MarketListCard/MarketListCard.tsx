@@ -14,6 +14,7 @@ import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame, isIIHFWCGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import Web3 from 'web3';
+import CombinedMarketsOdds from './components/CombinedMarketsOdds';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
 import {
@@ -31,6 +32,7 @@ import {
     TeamNameLabel,
     TeamNamesConatiner,
     TeamsInfoConatiner,
+    ThirdRowContainer,
     TotalMarkets,
     TotalMarketsArrow,
     TotalMarketsContainer,
@@ -75,12 +77,23 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const gameIdString = Web3.utils.hexToAscii(market.gameId);
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
+    const combinedMarketPositions = market.combinedMarketsData ? market.combinedMarketsData : [];
+
+    const MAX_NUMBER_OF_MARKETS_COUNT = MAX_NUMBER_OF_MARKETS;
+
     const doubleChanceMarkets = market.childMarkets.filter((market) => market.betType === BetType.DOUBLE_CHANCE);
     const spreadTotalMarkets = market.childMarkets.filter((market) => market.betType !== BetType.DOUBLE_CHANCE);
     const hasChildMarkets = doubleChanceMarkets.length > 0 || spreadTotalMarkets.length > 0;
-    const isMaxNumberOfChildMarkets = market.childMarkets.length === MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT;
+    const isMaxNumberOfChildMarkets =
+        market.childMarkets.length === MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT ||
+        market.childMarkets.length + combinedMarketPositions.length >= MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT;
     const showSecondRowOnDesktop = !isMobile && isMaxNumberOfChildMarkets;
     const showSecondRowOnMobile = isMobile && hasChildMarkets;
+
+    const showOnlyCombinedPositionsInSecondRow =
+        showSecondRowOnDesktop && !isMobile && !doubleChanceMarkets.length && combinedMarketPositions.length > 0;
+
+    const hasCombinedMarkets = market.combinedMarketsData ? true : false;
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport,
@@ -204,6 +217,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         spreadTotalMarkets.map((childMarket) => (
                                             <Odds market={childMarket} key={childMarket.address} />
                                         ))}
+                                    {showOnlyCombinedPositionsInSecondRow &&
+                                        spreadTotalMarkets.map((childMarket) => (
+                                            <Odds market={childMarket} key={childMarket.address} />
+                                        ))}
                                 </>
                             )}
                             {showSecondRowOnMobile && (
@@ -215,7 +232,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             {showSecondRowOnDesktop && (
                                 <TotalMarketsContainer>
                                     <TotalMarketsLabel>{t('markets.market-card.total-markets')}</TotalMarketsLabel>
-                                    <TotalMarkets>{MAX_NUMBER_OF_MARKETS}</TotalMarkets>
+                                    <TotalMarkets>{MAX_NUMBER_OF_MARKETS_COUNT}</TotalMarkets>
                                     <TotalMarketsArrow
                                         className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
                                         onClick={() => setIsExpanded(!isExpanded)}
@@ -241,20 +258,33 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 )}
             </MainContainer>
             {(showSecondRowOnMobile || showSecondRowOnDesktop) && showOdds && isExpanded && (
-                <SecondRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
-                    <OddsWrapper>
-                        {isMobile && doubleChanceMarkets.length > 0 && (
-                            <Odds
-                                market={doubleChanceMarkets[0]}
-                                doubleChanceMarkets={doubleChanceMarkets}
-                                isShownInSecondRow
-                            />
-                        )}
-                        {spreadTotalMarkets.map((childMarket) => (
-                            <Odds market={childMarket} key={childMarket.address} isShownInSecondRow />
-                        ))}
-                    </OddsWrapper>
-                </SecondRowContainer>
+                <>
+                    <SecondRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
+                        <OddsWrapper>
+                            {isMobile && doubleChanceMarkets.length > 0 && (
+                                <Odds
+                                    market={doubleChanceMarkets[0]}
+                                    doubleChanceMarkets={doubleChanceMarkets}
+                                    isShownInSecondRow
+                                />
+                            )}
+                            {!showOnlyCombinedPositionsInSecondRow &&
+                                spreadTotalMarkets.map((childMarket) => (
+                                    <Odds market={childMarket} key={childMarket.address} isShownInSecondRow />
+                                ))}
+                            {hasCombinedMarkets && !isMobile && showOnlyCombinedPositionsInSecondRow && (
+                                <CombinedMarketsOdds market={market} />
+                            )}
+                        </OddsWrapper>
+                    </SecondRowContainer>
+                    {isMobile && hasCombinedMarkets && (
+                        <ThirdRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
+                            <OddsWrapper>
+                                <CombinedMarketsOdds market={market} />
+                            </OddsWrapper>
+                        </ThirdRowContainer>
+                    )}
+                </>
             )}
         </Wrapper>
     );

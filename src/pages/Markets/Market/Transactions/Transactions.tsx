@@ -11,17 +11,17 @@ import TransactionsTable from 'pages/Markets/components/TransactionsTable';
 import { FlexDivColumn } from 'styles/common';
 import {
     ClaimTransaction,
-    MarketData,
     MarketTransaction,
     MarketTransactions,
     MarketTransactionType,
+    SportMarketInfo,
 } from 'types/markets';
 import useClaimTransactionsPerMarket from 'queries/markets/useClaimTransactionsPerMarket';
 import { convertFinalResultToResultType } from 'utils/markets';
 import { SPORTS_TAGS_MAP, ENETPULSE_SPORTS } from 'constants/tags';
 
 type TransactionsProps = {
-    market: MarketData;
+    market: SportMarketInfo;
 };
 
 const Transactions: React.FC<TransactionsProps> = ({ market }) => {

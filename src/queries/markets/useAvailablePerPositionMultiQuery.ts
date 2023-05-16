@@ -11,13 +11,11 @@ const useAvailablePerPositionMultiQuery = (
     options?: UseQueryOptions<Record<string, AvailablePerPosition> | undefined>
 ) => {
     return useQuery<Record<string, AvailablePerPosition> | undefined>(
-        QUERY_KEYS.AvailablePerPositionMulti(marketAddresses),
+        QUERY_KEYS.AvailablePerPositionMulti(marketAddresses.map((market) => market.address).join('-')),
         async () => {
             const map = {} as Record<string, AvailablePerPosition>;
-
             for (let i = 0; i < marketAddresses.length; i++) {
                 const address = marketAddresses[i].address;
-
                 try {
                     const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
 

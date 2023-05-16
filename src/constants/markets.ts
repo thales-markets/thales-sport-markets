@@ -104,6 +104,8 @@ export enum ParlayErrorCode {
     MAX_MATCHES = 1,
     SAME_TEAM_TWICE = 2,
     MAX_DOUBLE_CHANCES = 3,
+    MAX_COMBINED_MARKETS = 4,
+    MAX_NUMBER_OF_MARKETS_WITH_COMBINED_MARKETS = 5,
     SAME_RACE_DRIVERS = 4,
 }
 
@@ -252,3 +254,12 @@ export const ENETPULSE_ROUNDS: Record<number, string> = {
     [8]: '1/128',
     [9]: 'Final',
 };
+
+export const COMBINED_MARKETS_CONTRACT_DATA_TO_POSITIONS: [0 | 1 | 2, 0 | 1][] = [
+    [0, 0],
+    [0, 1],
+    [1, 0],
+    [1, 1],
+    [2, 0],
+    [2, 1],
+];

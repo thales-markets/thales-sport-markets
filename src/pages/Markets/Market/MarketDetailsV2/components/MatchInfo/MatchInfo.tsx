@@ -16,7 +16,7 @@ import {
     Versus,
 } from './styled-components';
 import Tooltip from 'components/Tooltip';
-import { MarketData, SportMarketLiveResult } from 'types/markets';
+import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { convertFinalResultToResultType, isFifaWCGame, isIIHFWCGame } from 'utils/markets';
@@ -24,7 +24,7 @@ import { SPORTS_TAGS_MAP } from 'constants/tags';
 import { fixEnetpulseRacingName } from 'utils/formatters/string';
 
 type MatchInfoPropsType = {
-    market: MarketData;
+    market: SportMarketInfo;
     liveResultInfo: SportMarketLiveResult | undefined;
     isEnetpulseSport: boolean;
 };
@@ -44,7 +44,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
     );
     const leagueLogo = getLeagueLogoClass(market.tags[0]);
 
-    const isGameResolved = market.gameStarted && market.resolved;
+    const isGameResolved = market.isOpen && market.isResolved;
 
     const getTeamsNames = (hideOnMobile: boolean) => (
         <TeamNamesWrapper hideOnMobile={hideOnMobile}>
