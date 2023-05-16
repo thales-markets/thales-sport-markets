@@ -96,6 +96,7 @@ export const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResults
                                             )}
                                         </>
                                     }
+                                    additionalStyle={symbolText.toLowerCase() == 'yes' ? { fontSize: 10 } : {}}
                                 />
                             );
                         },

@@ -150,7 +150,8 @@
         "no": "NO",
         "mls-tooltip": "I risultati dei mercati MLS si basano sui risultati della regolamentazione, se dovessero andare agli straordinari il risultato della regolamentazione è quello in cui il mercato deciderà.",
         "fifa-tooltip": "I risultati dei mercati della Coppa del Mondo FIFA si basano sui risultati regolamentari, se dovessero andare ai tempi supplementari il risultato regolamentare è quello in base al quale si risolverà il mercato.",
-        "tennis-tooltip": "In caso di walkover, la partita sarà considerata annullata. In caso di ritiro/squalifica durante la partita, verrà considerata come una vittoria per il giocatore che avanza al turno successivo"
+        "tennis-tooltip": "In caso di walkover, la partita sarà considerata annullata. In caso di ritiro/squalifica durante la partita, verrà considerata come una vittoria per il giocatore che avanza al turno successivo",
+        "iihf-tooltip": "I risultati dei mercati del campionato mondiale IIHF si basano sui risultati regolamentari, se dovessero andare ai tempi supplementari il risultato regolamentare è quello in base al quale il mercato si risolverà."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -274,7 +275,8 @@
         "race-starts": "La corsa inizia",
         "back": "Di ritorno",
         "apply-filters": "Applicare filtri",
-        "incentivized-market": "MERCATO INCENTIVATO"
+        "incentivized-market": "MERCATO INCENTIVATO",
+        "f1-market": "{{driver}} vince {{race}}"
     },
     "markets": {
         "market-card": {
@@ -379,7 +381,8 @@
                 "max-payout": "Il pagamento massimo supportato è {{max}}",
                 "max-teams": "Massimo {{max}} mercati a Parlay",
                 "max-profit": "Il profitto massimo supportato è {{max}}",
-                "no-funds-multi-collateral": "Assicurati che il tuo portafoglio abbia fondi sufficienti ({{percentage}}% in più dell'importo del buy-in)"
+                "no-funds-multi-collateral": "Assicurati che il tuo portafoglio abbia fondi sufficienti ({{percentage}}% in più dell'importo del buy-in)",
+                "same-race-drivers": "È supportato un solo pilota per gara. Impossibile aggiungere {{addedDriver}} perché {{existingDriver}} è già in Parlay"
             },
             "empty-title": "Nessuna posizione",
             "fee": "Tariffa totale",

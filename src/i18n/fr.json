@@ -170,7 +170,8 @@
         "yes": "OUI",
         "no": "NON",
         "fifa-tooltip": "Les résultats des marchés de la Coupe du Monde de la FIFA sont basés sur les résultats de la réglementation, s'ils vont en prolongation, le résultat de la réglementation est celui auquel le marché se résoudra.",
-        "tennis-tooltip": "En cas de forfait, le match sera considéré comme annulé. En cas d'abandon / disqualification pendant le match, cela sera traité comme une victoire pour le joueur passant au tour suivant"
+        "tennis-tooltip": "En cas de forfait, le match sera considéré comme annulé. En cas d'abandon / disqualification pendant le match, cela sera traité comme une victoire pour le joueur passant au tour suivant",
+        "iihf-tooltip": "Les résultats des marchés du Championnat du monde de l'IIHF sont basés sur les résultats de la réglementation, s'ils vont en prolongation, le résultat de la réglementation est celui auquel le marché se résoudra."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime - TOUS DROITS RÉSERVÉS.",
@@ -362,7 +363,8 @@
         "race-starts": "La course commence",
         "back": "Retour",
         "apply-filters": "Appliquer des filtres",
-        "incentivized-market": "MARCHÉ INCITATIF"
+        "incentivized-market": "MARCHÉ INCITATIF",
+        "f1-market": "{{driver}} gagne {{race}}"
     },
     "markets": {
         "market-card-list": {
@@ -478,7 +480,8 @@
                 "max-payout": "Le paiement maximal pris en charge est de {{max}}",
                 "max-teams": "Maximum {{max}} marchés à Parlay",
                 "max-profit": "Le profit maximal pris en charge est de {{max}}",
-                "no-funds-multi-collateral": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds ({{percentage}} % de plus du montant du buy-in)"
+                "no-funds-multi-collateral": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds ({{percentage}} % de plus du montant du buy-in)",
+                "same-race-drivers": "Un seul pilote par course est pris en charge. Impossible d'ajouter {{addedDriver}} car {{existingDriver}} est déjà dans Parlay"
             },
             "payout": "Total reçu",
             "empty-title": "Aucune position",

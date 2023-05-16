@@ -150,7 +150,8 @@
         "yes": "YES",
         "no": "NO",
         "fifa-tooltip": "FIFA世界杯的盘口结果以规则结果为准，如果他们进入加时赛，规则结果将由盘口决定。",
-        "tennis-tooltip": "如果出现超车，比赛将被视为取消。如果在比赛中退赛/取消资格，将被视为晋级下一轮的球员获胜"
+        "tennis-tooltip": "如果出现超车，比赛将被视为取消。如果在比赛中退赛/取消资格，将被视为晋级下一轮的球员获胜",
+        "iihf-tooltip": "IIHF世界锦标赛的盘口结果是基于监管结果，如果他们进入加时赛，监管结果将由市场决定。"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",
@@ -275,7 +276,8 @@
         "race-starts": "比赛开始",
         "back": "后退",
         "apply-filters": "应用过滤器",
-        "incentivized-market": "激励市场"
+        "incentivized-market": "激励市场",
+        "f1-market": "{{driver}} 赢得 {{race}}"
     },
     "markets": {
         "market-card": {
@@ -380,7 +382,8 @@
                 "max-payout": "支持的最大支出为 {{max}}",
                 "max-teams": "Parlay 中的最大 {{max}} 个盘口",
                 "max-profit": "最大支持利润为 {{max}}",
-                "no-funds-multi-collateral": "请确保您的钱包有足够的资金（买入金额的 {{percentage}}%）"
+                "no-funds-multi-collateral": "请确保您的钱包有足够的资金（买入金额的 {{percentage}}%）",
+                "same-race-drivers": "每场比赛仅支持一名车手。无法添加 {{addedDriver}} 因为 {{existingDriver}} 已经在 Parlay 中"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",

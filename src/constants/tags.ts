@@ -155,7 +155,7 @@ export const TAGS_LIST: Tags = [
         priority: 109,
     },
     {
-        id: 9100,
+        id: 9445,
         label: 'Formula 1',
         logo: '/logos/leagueLogos/f1.png',
         logoClass: 'icon-league league--f1',
@@ -231,14 +231,6 @@ export const TAGS_LIST: Tags = [
         priority: 303,
     },
     {
-        id: 9033,
-        label: 'IIHF World Championship',
-        logoClass: 'icon-league league--iihf',
-        favourite: false,
-        hidden: false,
-        priority: 502,
-    },
-    {
         id: 18196,
         label: 'Boxing',
         logoClass: 'icon-league league--boxing',
@@ -270,6 +262,14 @@ export const TAGS_LIST: Tags = [
         hidden: false,
         priority: 112,
     },
+    {
+        id: 9033,
+        label: 'IIHF World Championship',
+        logoClass: 'icon-league league--iihf',
+        favourite: false,
+        hidden: false,
+        priority: 502,
+    },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -291,7 +291,7 @@ export const SPORTS_MAP: SportsMap = {
     9017: 'Soccer',
     9018: 'Soccer',
     9019: 'Soccer',
-    9100: 'Motosport',
+    9445: 'Motosport',
     9101: 'Motosport',
     9153: 'Tennis',
     9156: 'Tennis',
@@ -300,11 +300,11 @@ export const SPORTS_MAP: SportsMap = {
     19138: 'eSports',
     9020: 'Cricket',
     9399: 'Basketball',
-    9033: 'Hockey',
     18196: 'MMA',
     9057: 'Soccer',
     9061: 'Soccer',
     9045: 'Soccer',
+    9033: 'Hockey',
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
@@ -316,7 +316,7 @@ export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
     9006,
     9008,
     9007,
-    9100,
+    9445,
     9101,
     9153,
     9156,
@@ -335,7 +335,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Hockey: [9006, 9033],
     Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9057, 9061, 9045],
     MMA: [9007, 18196],
-    Motosport: [9100, 9101],
+    Motosport: [9445, 9101],
     Tennis: [9153, 9156],
     eSports: [18977, 18983, 19138],
     Cricket: [9020],
@@ -359,7 +359,7 @@ export enum TAGS_FLAGS {
     UEFA_CL = 9016,
     UEFA_EL = 9017,
     J1_LEAGUE = 9019,
-    FORMULA1 = 9100,
+    FORMULA1 = 9445,
     MOTOGP = 9101,
     CSGO = 18977,
     DOTA2 = 18983,
@@ -370,14 +370,16 @@ export enum TAGS_FLAGS {
     EREDIVISIE = 9057,
     PRIMEIRA_LIGA = 9061,
     COPA_LIBERTADORES = 9045,
+    IIHF_WORLD_CHAMPIONSHIP = 9033,
 }
 
-export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399, 9033, 18196, 9057, 9061, 9045];
+export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399, 18196, 9057, 9061, 9045, 9445, 9033];
 
 export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
+export const IIHF_WC_TAG = 9033;
 
-export const PERSON_COMPETITIONS = [9007, 9100, 9101, 9153, 9156];
+export const PERSON_COMPETITIONS = [9007, 9445, 9101, 9153, 9156];
 
 export enum BetType {
     WINNER = 0,
@@ -418,7 +420,7 @@ export const SCORING_MAP: SportsMap = {
     9017: 'goals',
     9018: 'goals',
     9019: 'goals',
-    9100: '',
+    9445: '',
     9101: '',
     9153: 'gems',
     9156: 'gems',
@@ -427,11 +429,11 @@ export const SCORING_MAP: SportsMap = {
     19138: 'round',
     9020: 'points',
     9399: 'points',
-    9033: 'goals',
     18196: '',
     9057: 'goals',
     9061: 'goals',
     9045: 'goals',
+    9033: 'goals',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -453,7 +455,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9017: 'regular',
     9018: 'regular',
     9019: 'regular',
-    9100: '',
+    9445: '',
     9101: '',
     9153: '',
     9156: '',
@@ -462,11 +464,11 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     19138: '',
     9020: '',
     9399: 'overtime',
-    9033: 'regular',
     18196: '',
     9057: 'regular',
     9061: 'regular',
     9045: 'regular',
+    9033: 'regular',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -495,8 +497,9 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     19138: 'round',
     9020: 'inning',
     9399: 'quarter',
-    9033: 'period',
+    18196: 'round',
     9057: 'half',
     9061: 'half',
     9045: 'half',
+    9033: 'period',
 };

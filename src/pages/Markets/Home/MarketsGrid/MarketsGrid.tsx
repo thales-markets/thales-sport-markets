@@ -124,6 +124,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     const tennisKeys: number[] = [];
     const eSportsKeys: number[] = [];
     const cricketKeys: number[] = [];
+    const motosportKeys: number[] = [];
     marketsKeys.forEach((tag: number) => {
         if (SPORTS_MAP[tag] == 'Soccer') {
             soccerKeys.push(tag);
@@ -140,7 +141,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
         if (SPORTS_MAP[tag] == 'Hockey') {
             hockeyKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'MMA') {
+        if (SPORTS_MAP[tag] == 'Motosport') {
             mmaKeys.push(tag);
         }
         if (SPORTS_MAP[tag] == 'Tennis') {
@@ -151,6 +152,9 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
         }
         if (SPORTS_MAP[tag] == 'Cricket') {
             cricketKeys.push(tag);
+        }
+        if (SPORTS_MAP[tag] == 'MMA') {
+            motosportKeys.push(tag);
         }
     });
 
@@ -164,6 +168,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
         ...tennisKeys,
         ...eSportsKeys,
         ...cricketKeys,
+        ...motosportKeys,
     ];
 };
 

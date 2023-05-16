@@ -91,6 +91,14 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => 
                         {t('markets.parlay.validation.max-double-chances', { max: parlayError.data })}
                     </ErrorMessage>
                 )}
+                {parlayError.code === ParlayErrorCode.SAME_RACE_DRIVERS && (
+                    <ErrorMessage>
+                        {t('markets.parlay.validation.same-race-drivers', {
+                            existingDriver: parlayError.data.split('/')[0],
+                            addedDriver: parlayError.data.split('/')[1],
+                        })}
+                    </ErrorMessage>
+                )}
             </Container>
         </Modal>
     );

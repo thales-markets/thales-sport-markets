@@ -2,7 +2,6 @@ import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { BetType, ENETPULSE_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
-import { t } from 'i18next';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import React, { useEffect, useState } from 'react';
@@ -12,7 +11,7 @@ import { RootState } from 'redux/rootReducer';
 import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isFifaWCGame } from 'utils/markets';
+import { isFifaWCGame, isIIHFWCGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import Web3 from 'web3';
 import MatchStatus from './components/MatchStatus';
@@ -39,6 +38,8 @@ import {
     VSLabel,
     Wrapper,
 } from './styled-components';
+import { useTranslation } from 'react-i18next';
+import { fixEnetpulseRacingName } from 'utils/formatters/string';
 
 // 3 for double chance, 1 for spread, 1 for total
 const MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT = 5;
@@ -51,6 +52,7 @@ type MarketRowCardProps = {
 };
 
 const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
+    const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -93,7 +95,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
                 setLiveResultInfo(useEnetpulseLiveResultQuery.data);
                 const tournamentName = useEnetpulseLiveResultQuery.data.tournamentName
-                    ? '| ' + useEnetpulseLiveResultQuery.data.tournamentName
+                    ? market.isEnetpulseRacing
+                        ? useEnetpulseLiveResultQuery.data.tournamentName
+                        : '| ' + useEnetpulseLiveResultQuery.data.tournamentName
                     : '';
                 const tournamentRound = useEnetpulseLiveResultQuery.data.tournamentRound
                     ? ' | ' + useEnetpulseLiveResultQuery.data.tournamentRound
@@ -111,6 +115,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         useEnetpulseLiveResultQuery,
         useEnetpulseLiveResultQuery.data,
         isEnetpulseSport,
+        market.isEnetpulseRacing,
         market.address,
     ]);
 
@@ -126,15 +131,14 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     <TimeRemaining end={market.maturityDate} fontSize={11} />
                                 </>
                             }
-                            component={
-                                <MatchTimeLabel>
-                                    {formatShortDateWithTime(market.maturityDate)}{' '}
-                                    {isFifaWCGame(market.tags[0]) && (
-                                        <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
-                                    )}
-                                </MatchTimeLabel>
-                            }
+                            component={<MatchTimeLabel>{formatShortDateWithTime(market.maturityDate)} </MatchTimeLabel>}
                         />
+                        {isFifaWCGame(market.tags[0]) && (
+                            <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
+                        )}
+                        {isIIHFWCGame(market.tags[0]) && (
+                            <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
+                        )}
                         <MatchTimeLabel>
                             {isEnetpulseSport && (liveResultInfo || localStorage.getItem(market.address)) ? (
                                 <>
@@ -160,18 +164,26 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     src={homeLogoSrc}
                                     onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                                 />
-                                <VSLabel>VS</VSLabel>
-                                <ClubLogo
-                                    height={market.tags[0] == 9018 ? '17px' : ''}
-                                    width={market.tags[0] == 9018 ? '27px' : ''}
-                                    alt="Away team logo"
-                                    src={awayLogoSrc}
-                                    onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
-                                />
+                                {!market.isEnetpulseRacing && (
+                                    <>
+                                        <VSLabel>VS</VSLabel>
+                                        <ClubLogo
+                                            height={market.tags[0] == 9018 ? '17px' : ''}
+                                            width={market.tags[0] == 9018 ? '27px' : ''}
+                                            alt="Away team logo"
+                                            src={awayLogoSrc}
+                                            onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
+                                        />
+                                    </>
+                                )}
                             </TeamLogosConatiner>
                             <TeamNamesConatiner>
-                                <TeamNameLabel>{market.homeTeam}</TeamNameLabel>
-                                <TeamNameLabel>{market.awayTeam}</TeamNameLabel>
+                                <TeamNameLabel>
+                                    {market.isEnetpulseRacing
+                                        ? fixEnetpulseRacingName(market.homeTeam)
+                                        : market.homeTeam}
+                                </TeamNameLabel>
+                                {!market.isEnetpulseRacing && <TeamNameLabel>{market.awayTeam}</TeamNameLabel>}
                             </TeamNamesConatiner>
                         </TeamsInfoConatiner>
                     </SPAAnchor>

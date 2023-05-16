@@ -1,15 +1,17 @@
-import { ApexBetType, APEX_GAME_MIN_TAG, MarketStatus, OddsType } from 'constants/markets';
+import { APEX_GAME_MIN_TAG, ApexBetType, MarketStatus, OddsType } from 'constants/markets';
 import { Position } from 'constants/options';
 import {
     BetType,
     DoubleChanceMarketType,
     FIFA_WC_TAG,
+    IIHF_WC_TAG,
     MATCH_RESOLVE_MAP,
     MLS_TAG,
     PERSON_COMPETITIONS,
     SCORING_MAP,
     TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
 } from 'constants/tags';
+import i18n from 'i18n';
 import ordinal from 'ordinal';
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import {
@@ -23,7 +25,7 @@ import {
 } from 'types/markets';
 import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
-import i18n from 'i18n';
+import { fixEnetpulseRacingName } from './formatters/string';
 
 const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 90;
 
@@ -105,6 +107,9 @@ export const convertPositionToSymbolType = (position: Position, isApexTopGame: b
 };
 
 export const getSymbolText = (position: Position, market: SportMarketInfo | MarketData) => {
+    if (market.isEnetpulseRacing) {
+        return 'YES';
+    }
     switch (position) {
         case Position.HOME:
             switch (Number(market.betType)) {
@@ -298,6 +303,8 @@ export const isMlsGame = (tag: number) => Number(tag) === MLS_TAG;
 
 export const isFifaWCGame = (tag: number) => Number(tag) === FIFA_WC_TAG;
 
+export const isIIHFWCGame = (tag: number) => Number(tag) === IIHF_WC_TAG;
+
 export const getIsIndividualCompetition = (tag: number) => PERSON_COMPETITIONS.includes(tag);
 
 export const isParlayWon = (parlayMarket: ParlayMarket) => {
@@ -427,6 +434,8 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
     const team =
         position === Position.AWAY || market.doubleChanceMarketType === DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE
             ? market.awayTeam
+            : market.isEnetpulseRacing
+            ? fixEnetpulseRacingName(market.homeTeam)
             : market.homeTeam;
     const team2 = market.awayTeam;
     const scoring =

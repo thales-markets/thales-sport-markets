@@ -144,6 +144,7 @@
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
         "mls-tooltip": "MLS markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "fifa-tooltip": "FIFA World Cup markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
+        "iihf-tooltip": "IIHF World Championship markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
         "top3": "TOP 3",
         "top5": "TOP 5",
@@ -464,8 +465,9 @@
             "validation": {
                 "title": "Parlay Validation",
                 "max-teams": "Maximum {{max}} markets in Parlay",
-                "team-in-parlay": "{{team}} is already in Parlay. The same team can't be added to a Parlay more than once.",
+                "team-in-parlay": "{{team}} is already in Parlay. The same team from the same league can't be added to a Parlay more than once.",
                 "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
+                "same-race-drivers": "Only one driver per race is supported. Cannot add {{addedDriver}} because {{existingDriver}} is already in Parlay",
                 "amount-exceeded": "Amount exceeded the amount available on AMM",
                 "max-profit": "Maximal supported profit is {{max}}",
                 "min-amount": "Minimal buy-in for a Parlay ticket is {{min}}",
