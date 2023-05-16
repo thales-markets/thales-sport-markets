@@ -90,6 +90,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const showSecondRowOnDesktop = !isMobile && isMaxNumberOfChildMarkets;
     const showSecondRowOnMobile = isMobile && hasChildMarkets;
 
+    const showOnlyCombinedPositionsInSecondRow =
+        showSecondRowOnDesktop && !isMobile && !doubleChanceMarkets.length && combinedMarketPositions.length > 0;
+
     const hasCombinedMarkets = market.combinedMarketsData ? true : false;
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
@@ -207,6 +210,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         spreadTotalMarkets.map((childMarket) => (
                                             <Odds market={childMarket} key={childMarket.address} />
                                         ))}
+                                    {showOnlyCombinedPositionsInSecondRow &&
+                                        spreadTotalMarkets.map((childMarket) => (
+                                            <Odds market={childMarket} key={childMarket.address} />
+                                        ))}
                                 </>
                             )}
                             {showSecondRowOnMobile && (
@@ -254,10 +261,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     isShownInSecondRow
                                 />
                             )}
-                            {spreadTotalMarkets.map((childMarket) => (
-                                <Odds market={childMarket} key={childMarket.address} isShownInSecondRow />
-                            ))}
-                            {hasCombinedMarkets && !isMobile && <CombinedMarketsOdds market={market} />}
+                            {!showOnlyCombinedPositionsInSecondRow &&
+                                spreadTotalMarkets.map((childMarket) => (
+                                    <Odds market={childMarket} key={childMarket.address} isShownInSecondRow />
+                                ))}
+                            {hasCombinedMarkets && !isMobile && showOnlyCombinedPositionsInSecondRow && (
+                                <CombinedMarketsOdds market={market} />
+                            )}
                         </OddsWrapper>
                     </SecondRowContainer>
                     {isMobile && hasCombinedMarkets && (
