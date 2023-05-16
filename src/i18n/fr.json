@@ -363,7 +363,8 @@
         "race-starts": "La course commence",
         "back": "Retour",
         "apply-filters": "Appliquer des filtres",
-        "incentivized-market": "MARCHÉ INCITATIF"
+        "incentivized-market": "MARCHÉ INCITATIF",
+        "f1-market": "{{driver}} gagne {{race}}"
     },
     "markets": {
         "market-card-list": {
@@ -479,7 +480,8 @@
                 "max-payout": "Le paiement maximal pris en charge est de {{max}}",
                 "max-teams": "Maximum {{max}} marchés à Parlay",
                 "max-profit": "Le profit maximal pris en charge est de {{max}}",
-                "no-funds-multi-collateral": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds ({{percentage}} % de plus du montant du buy-in)"
+                "no-funds-multi-collateral": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds ({{percentage}} % de plus du montant du buy-in)",
+                "same-race-drivers": "Un seul pilote par course est pris en charge. Impossible d'ajouter {{addedDriver}} car {{existingDriver}} est déjà dans Parlay"
             },
             "payout": "Total reçu",
             "empty-title": "Aucune position",

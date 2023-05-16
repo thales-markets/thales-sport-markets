@@ -1,10 +1,10 @@
-import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
-import { PositionBalance, PositionType, SportMarketInfo } from 'types/markets';
+import { ENETPULSE_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
+import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
+import { PositionBalance, PositionType, SportMarketInfo } from 'types/markets';
 import { NetworkId } from 'types/network';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
-import { fixApexName, fixDuplicatedTeamName } from 'utils/formatters/string';
 
 export type AccountPositionProfile = {
     sUSDPaid: number;
@@ -36,6 +36,9 @@ const useAccountMarketsQuery = (
                 );
 
                 const positions: AccountPositionProfile[] = onlyNonZeroPositions.map((position) => {
+                    const isEnetpulseRacing =
+                        SPORTS_TAGS_MAP['Motosport'].includes(Number(position.position.market.tags[0])) &&
+                        ENETPULSE_SPORTS.includes(Number(position.position.market.tags[0]));
                     return {
                         id: position.id,
                         account: position.account,
@@ -44,14 +47,11 @@ const useAccountMarketsQuery = (
                         open: !position.position.market.isCanceled && !position.position.market.isResolved,
                         market: {
                             ...position.position.market,
-                            homeTeam: position.position.market.isApex
-                                ? fixApexName(position.position.market.homeTeam)
-                                : fixDuplicatedTeamName(position.position.market?.homeTeam),
-                            awayTeam: position.position.market.isApex
-                                ? fixApexName(position.position.market.awayTeam)
-                                : fixDuplicatedTeamName(position.position.market?.awayTeam),
+                            homeTeam: position.position.market.homeTeam,
+                            awayTeam: position.position.market.awayTeam,
                             spread: Number(position.position.market.spread),
                             total: Number(position.position.market.total),
+                            isEnetpulseRacing: isEnetpulseRacing,
                         },
                         side: position.position.side,
                         sUSDPaid: position.sUSDPaid,

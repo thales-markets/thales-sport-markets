@@ -52,7 +52,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                                 cellProps.cell.value,
                                 cellProps.cell.row.original.wholeMarket
                             );
-
+                            const isEnetpulseRacingMarket = cellProps.cell.row.original.wholeMarket.isEnetpulseRacing;
                             const spreadTotalText = getSpreadTotalText(
                                 cellProps.cell.row.original.wholeMarket,
                                 cellProps.cell.value
@@ -60,7 +60,12 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                             return symbolText ? (
                                 <PositionSymbol
                                     symbolText={symbolText}
-                                    additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
+                                    additionalStyle={{
+                                        width: 23,
+                                        height: 23,
+                                        fontSize: isEnetpulseRacingMarket ? 8.5 : 10.5,
+                                        borderWidth: 2,
+                                    }}
                                     symbolUpperText={
                                         spreadTotalText
                                             ? {

@@ -138,13 +138,16 @@ export const MatchLabel = styled(FlexDivColumn)`
     }
 `;
 
-export const ClubName = styled.span`
+export const ClubName = styled.span<{
+    isRacing?: boolean;
+}>`
     font-style: normal;
     font-weight: 300;
     font-size: 12px;
     text-transform: uppercase;
     color: ${MAIN_COLORS.TEXT.WHITE};
     margin-right: 5px;
+    margin-left: ${(props) => (props?.isRacing ? `25px` : '')};
     word-wrap: normal;
     :last-child {
         margin-top: 5px;

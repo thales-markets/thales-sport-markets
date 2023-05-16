@@ -74,6 +74,14 @@ const MarketPositions: React.FC<MarketPositionsProps> = ({ market }) => {
                 availablePerPosition={availablePerPosition[Position.AWAY]}
                 position={Position.AWAY}
             />
+            {!market.isEnetpulseRacing && (
+                <PositionDetails
+                    market={market}
+                    odd={market.awayOdds}
+                    availablePerPosition={availablePerPosition[Position.AWAY]}
+                    position={Position.AWAY}
+                />
+            )}
         </>
     );
 };
