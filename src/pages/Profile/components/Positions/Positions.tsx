@@ -143,7 +143,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                     (sportMarket) => sportMarket.isResolved || sportMarket.isCanceled
                 );
 
-                if (resolvedOrCanceledMarkets?.length !== parlayMarket.sportMarkets.length)
+                if (resolvedOrCanceledMarkets.length !== parlayMarket.sportMarkets.length)
                     if (isParlayOpen(parlayMarket)) data.open.push(parlayMarket);
             });
         }

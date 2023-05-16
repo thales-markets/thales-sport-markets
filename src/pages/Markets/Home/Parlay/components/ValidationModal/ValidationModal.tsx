@@ -91,6 +91,18 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => 
                         {t('markets.parlay.validation.max-double-chances', { max: parlayError.data })}
                     </ErrorMessage>
                 )}
+                {parlayError.code === ParlayErrorCode.MAX_COMBINED_MARKETS && (
+                    <ErrorMessage>
+                        {t('markets.parlay.validation.max-combined-markets', { max: parlayError.data })}
+                    </ErrorMessage>
+                )}
+                {parlayError.code === ParlayErrorCode.MAX_NUMBER_OF_MARKETS_WITH_COMBINED_MARKETS && (
+                    <ErrorMessage>
+                        {t('markets.parlay.validation.max-number-of-markets-with-combined-markets', {
+                            max: parlayError.data,
+                        })}
+                    </ErrorMessage>
+                )}
                 {parlayError.code === ParlayErrorCode.SAME_RACE_DRIVERS && (
                     <ErrorMessage>
                         {t('markets.parlay.validation.same-race-drivers', {

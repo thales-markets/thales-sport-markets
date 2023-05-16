@@ -7,21 +7,22 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getParlay, removeCombinedMarketFromParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
+import { getParlay, removeCombinedMarketFromParlay, updateParlayWithMultiplePositions } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
 import { floorNumberToDecimals } from 'utils/formatters/number';
 import {
-    hasBonus,
     formatMarketOdds,
-    getSymbolText,
-    convertFinalResultToResultType,
     getSpreadTotalText,
     getParentMarketAddress,
-    getOddTooltipText,
-    getFormattedBonus,
+    getCombinedOddTooltipText,
+    getTotalText,
 } from 'utils/markets';
-import { isMarketPartOfCombinedMarketFromParlayData } from 'utils/combinedMarkets';
+import {
+    getCombinedPositionName,
+    isCombinedMarketWinner,
+    isSpecificCombinedPositionAddedToParlay,
+} from 'utils/combinedMarkets';
 import {
     Bonus,
     Container,
@@ -36,78 +37,83 @@ import {
     TooltipBonusText,
 } from './styled-components';
 
-type PositionDetailsProps = {
-    market: SportMarketInfo;
-    odd?: number;
-    availablePerPosition: { available?: number; buyBonus?: number };
-    position: Position;
+type CombinedPositionDetailsProps = {
+    markets: SportMarketInfo[];
+    totalOdd: number;
+    availablePerPosition: number;
+    positions: Position[];
 };
 
-const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availablePerPosition, position }) => {
+const CombinedPositionDetails: React.FC<CombinedPositionDetailsProps> = ({
+    markets,
+    totalOdd,
+    availablePerPosition,
+    positions,
+}) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector(getIsMobile);
     const parlay = useSelector(getParlay);
-    const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
-    const isMarketPartOfCombinedMarket = isMarketPartOfCombinedMarketFromParlayData(parlay, market);
 
-    const isAddedToParlay =
-        addedToParlay &&
-        addedToParlay.position == position &&
-        addedToParlay.doubleChanceMarketType === market.doubleChanceMarketType &&
-        !isMarketPartOfCombinedMarket;
+    const isAddedToParlay = isSpecificCombinedPositionAddedToParlay(parlay, markets, positions);
 
-    const isGameCancelled = market.isCanceled || (market.isOpen && market.isResolved);
-    const isGameResolved = market.isResolved || market.isCanceled;
-    const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
-    const isPendingResolution = !market.isOpen && !isGameResolved;
-    const isGamePaused = market.isPaused && !isGameResolved;
-    const isGameOpen = !market.isResolved && !market.isCanceled && !market.isPaused && market.isOpen;
+    const isGameCancelled = markets[0].isCanceled || (markets[0].isOpen && markets[0].isResolved);
+    const isGameResolved = markets[0].isResolved || markets[0].isCanceled;
+    const isGameRegularlyResolved = markets[0].isResolved && !markets[0].isCanceled;
+    const isPendingResolution = !markets[0].isOpen && !isGameResolved;
+    const isGamePaused = markets[0].isPaused && !isGameResolved;
+    const isGameOpen = !markets[0].isResolved && !markets[0].isCanceled && !markets[0].isPaused && markets[0].isOpen;
 
-    const noLiquidity = !!availablePerPosition.available && availablePerPosition.available < MIN_LIQUIDITY;
-    const noOdd = !odd || odd == 0;
+    const noLiquidity = !!availablePerPosition && availablePerPosition < MIN_LIQUIDITY;
+    const noOdd = !totalOdd || totalOdd == 0;
     const disabledPosition = noOdd || noLiquidity || !isGameOpen;
 
-    const showBonus = isGameOpen && hasBonus(availablePerPosition.buyBonus) && !noOdd;
-    const positionBonus = showBonus ? getFormattedBonus(availablePerPosition.buyBonus) : '0';
+    const showBonus = false;
+    const positionBonus = '0';
 
     const showOdd = isGameOpen && !noLiquidity;
     const showTooltip = showOdd && !isMobile;
 
-    const symbolText = getSymbolText(position, market);
-    const spreadTotalText = getSpreadTotalText(market, position);
+    const symbolText = getCombinedPositionName(markets, positions);
+    const spreadTotalText = getSpreadTotalText(markets[0], positions[0]);
 
-    const oddTooltipText = getOddTooltipText(position, market);
+    const totalText = getTotalText(markets[1]);
 
-    const parentMarketAddress = market.parentMarket !== null ? market.parentMarket : market.address;
-    const isParentMarketAddressInParlayData = parlay.filter((data) => data.parentMarket == parentMarketAddress);
+    const oddTooltipText = getCombinedOddTooltipText(markets, positions);
+
+    const parentMarketAddress = markets[0].parentMarket !== null ? markets[0].parentMarket : markets[1].parentMarket;
+    const isParentMarketAddressInParlayData = parlay.filter((market) => market.parentMarket == parentMarketAddress);
+
+    const isCombinedPositionWinner = isCombinedMarketWinner(markets, positions);
 
     const getDetails = () => (
         <Container
             disabled={disabledPosition}
             selected={isAddedToParlay}
-            isWinner={isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == position}
+            isWinner={isGameRegularlyResolved && isCombinedPositionWinner}
             onClick={() => {
-                if (disabledPosition) return;
+                if (noOdd || disabledPosition) return;
                 if (isParentMarketAddressInParlayData) {
                     dispatch(removeCombinedMarketFromParlay(parentMarketAddress));
                 }
                 if (isAddedToParlay) {
-                    dispatch(removeFromParlay(market.address));
+                    dispatch(removeCombinedMarketFromParlay(parentMarketAddress));
                 } else {
-                    const parlayMarket: ParlaysMarketPosition = {
-                        parentMarket: getParentMarketAddress(market.parentMarket, market.address),
-                        sportMarketAddress: market.address,
-                        position: position,
-                        homeTeam: market.homeTeam || '',
-                        awayTeam: market.awayTeam || '',
-                        tags: market.tags,
-                        doubleChanceMarketType: market.doubleChanceMarketType,
-                        isRacingMarket: market.isEnetpulseRacing,
-                        tag: market.tags[0],
-                    };
-                    dispatch(updateParlay(parlayMarket));
+                    const parlayMarkets: ParlaysMarketPosition[] = [];
+
+                    markets.forEach((market, index) => {
+                        return parlayMarkets.push({
+                            parentMarket: getParentMarketAddress(market.parentMarket, market.address),
+                            sportMarketAddress: market.address,
+                            position: positions[index],
+                            homeTeam: market.homeTeam || '',
+                            awayTeam: market.awayTeam || '',
+                            doubleChanceMarketType: null,
+                            tags: market.tags,
+                        });
+                    });
+                    dispatch(updateParlayWithMultiplePositions(parlayMarkets));
                     if (isMobile) {
                         toast(oddTooltipText, oddToastOptions);
                     }
@@ -117,10 +123,11 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
             <Text>
                 {symbolText}
                 {spreadTotalText && ` (${spreadTotalText})`}
+                {totalText && ` (${totalText})`}
             </Text>
             {showOdd ? (
                 <Text>
-                    {formatMarketOdds(selectedOddsType, odd)}
+                    {formatMarketOdds(selectedOddsType, totalOdd)}
                     {noOdd && (
                         <Tooltip overlay={<>{t('markets.zero-odds-tooltip')}</>} iconFontSize={13} marginLeft={3} />
                     )}
@@ -155,13 +162,11 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                     <TooltipFooter>
                         <TooltipFooterInfoContianer>
                             <TooltipFooterInfoLabel>{t('markets.market-details.odds')}:</TooltipFooterInfoLabel>
-                            <TooltipFooterInfo>{formatMarketOdds(selectedOddsType, odd)}</TooltipFooterInfo>
+                            <TooltipFooterInfo>{formatMarketOdds(selectedOddsType, totalOdd)}</TooltipFooterInfo>
                         </TooltipFooterInfoContianer>
                         <TooltipFooterInfoContianer>
                             <TooltipFooterInfoLabel>{t('markets.market-details.liquidity')}:</TooltipFooterInfoLabel>
-                            <TooltipFooterInfo>
-                                {floorNumberToDecimals(availablePerPosition.available || 0)}
-                            </TooltipFooterInfo>
+                            <TooltipFooterInfo>{floorNumberToDecimals(availablePerPosition || 0)}</TooltipFooterInfo>
                         </TooltipFooterInfoContianer>
                     </TooltipFooter>
                 </>
@@ -172,4 +177,4 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
     return <>{showTooltip ? <Tooltip overlay={getTooltip()} component={getDetails()} /> : getDetails()}</>;
 };
 
-export default PositionDetails;
+export default CombinedPositionDetails;

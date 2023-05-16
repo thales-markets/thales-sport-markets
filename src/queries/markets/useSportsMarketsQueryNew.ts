@@ -4,13 +4,14 @@ import { BetType, ENETPULSE_SPORTS, SPORTS_MAP, SPORTS_TAGS_MAP } from 'constant
 import { groupBy, orderBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
-import { SportMarketInfo, SportMarkets } from 'types/markets';
+import { CombinedMarketsContractData, SportMarketInfo, SportMarkets } from 'types/markets';
 import { NetworkId } from 'types/network';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { fixDuplicatedTeamName } from 'utils/formatters/string';
 import networkConnector from 'utils/networkConnector';
-import { convertPriceImpactToBonus } from 'utils/markets';
+import { convertPriceImpactToBonus, getMarketAddressesFromSportMarketArray } from 'utils/markets';
 import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
 
 const BATCH_SIZE = 100;
 
@@ -145,6 +146,26 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
 
     if (openMarkets.length > 0) {
         marketsCache[GlobalFiltersEnum.OpenMarkets] = groupMarkets(openMarkets);
+        try {
+            const { sportPositionalMarketDataContract } = networkConnector;
+
+            const marketAddresses = getMarketAddressesFromSportMarketArray(groupMarkets(openMarkets));
+            const combinedMarketsContractData:
+                | CombinedMarketsContractData
+                | undefined = await sportPositionalMarketDataContract?.getCombinedOddsForBatchOfMarkets(
+                marketAddresses
+            );
+
+            if (combinedMarketsContractData) {
+                const newMarkets = insertCombinedMarketsIntoArrayOFMarkets(
+                    groupMarkets(openMarkets),
+                    combinedMarketsContractData
+                );
+                marketsCache[GlobalFiltersEnum.OpenMarkets] = newMarkets;
+            }
+        } catch (e) {
+            console.log('Error ', e);
+        }
     }
 
     if (resolvedMarkets.length > 0) {

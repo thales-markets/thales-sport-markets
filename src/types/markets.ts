@@ -1,6 +1,6 @@
 import { COLLATERALS_INDEX } from 'constants/currency';
 import { MarketStatus } from 'constants/markets';
-import { DoubleChanceMarketType } from 'constants/tags';
+import { BetType, DoubleChanceMarketType } from 'constants/tags';
 import { Position, PositionName } from '../constants/options';
 
 export type MarketInfo = {
@@ -74,6 +74,7 @@ export type SportMarketInfo = {
     spread: number;
     total: number;
     doubleChanceMarketType: DoubleChanceMarketType | null;
+    combinedMarketsData?: CombinedMarket[];
     isEnetpulseRacing: boolean;
 };
 
@@ -138,6 +139,12 @@ export type ChildMarkets = {
     doubleChanceMarkets: MarketData[];
 };
 
+export type SportMarketChildMarkets = {
+    spreadMarkets: SportMarketInfo[];
+    totalMarkets: SportMarketInfo[];
+    doubleChanceMarkets: SportMarketInfo[];
+};
+
 export type ParlayMarket = {
     id: string;
     txHash: string;
@@ -158,6 +165,8 @@ export type ParlayMarket = {
     claimed: boolean;
     won: boolean;
 };
+
+export type ParlayMarketWithQuotes = ParlayMarket & { quotes: number[] };
 
 export type ParlayMarketWithRank = ParlayMarket & { rank: number; numberOfPositions: number };
 export type ParlayMarketWithRound = ParlayMarket & { round: number };
@@ -228,6 +237,19 @@ export enum PositionType {
     away = 'away',
     draw = 'draw',
 }
+
+export type CombinedMarketsPositionName =
+    | '1&O'
+    | '1&U'
+    | 'H1&O'
+    | 'H1&U'
+    | 'X&O'
+    | 'X&U'
+    | '2&O'
+    | '2&U'
+    | 'H2&O'
+    | 'H2&U'
+    | '';
 
 export type AccountPositionGraph = {
     id: string;
@@ -378,3 +400,28 @@ export type SportMarketLiveResult = {
     tournamentName?: string;
     tournamentRound?: string;
 };
+
+export type CombinedMarket = {
+    markets: SportMarketInfo[];
+    positions: Position[];
+    totalOdd: number;
+    totalBonus: number;
+    positionName: CombinedMarketsPositionName | null;
+};
+
+export type CombinedParlayMarket = {
+    markets: ParlaysMarket[];
+    positions: Position[];
+    totalOdd: number;
+    totalBonus: number;
+    positionName: CombinedMarketsPositionName | null;
+};
+
+export type CombinedMarketContractData = {
+    mainMarket: string;
+    combinedOdds: { odds: number[]; tags: number[] }[];
+};
+
+export type CombinedMarketsContractData = CombinedMarketContractData[];
+
+export type SGPItem = { tags: number[]; combination: BetType[]; SGPFee: number };

@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
-import { AvailablePerPosition, MarketData } from 'types/markets';
+import { AvailablePerPosition, SportMarketInfo } from 'types/markets';
 import { getVisibilityOfDrawOption } from 'utils/markets';
 import PositionDetails from '../PositionDetails';
 
@@ -24,7 +24,7 @@ const defaultAvailablePerPosition: AvailablePerPosition = {
 };
 
 type MarketPositionsProps = {
-    market: MarketData;
+    market: SportMarketInfo;
 };
 
 const MarketPositions: React.FC<MarketPositionsProps> = ({ market }) => {
@@ -56,22 +56,28 @@ const MarketPositions: React.FC<MarketPositionsProps> = ({ market }) => {
         <>
             <PositionDetails
                 market={market}
-                odd={market.positions[Position.HOME].odd}
+                odd={market.homeOdds}
                 availablePerPosition={availablePerPosition[Position.HOME]}
                 position={Position.HOME}
             />
             {showDrawOdds && (
                 <PositionDetails
                     market={market}
-                    odd={market.positions[Position.DRAW].odd}
+                    odd={market.drawOdds}
                     availablePerPosition={availablePerPosition[Position.DRAW]}
                     position={Position.DRAW}
                 />
             )}
+            <PositionDetails
+                market={market}
+                odd={market.awayOdds}
+                availablePerPosition={availablePerPosition[Position.AWAY]}
+                position={Position.AWAY}
+            />
             {!market.isEnetpulseRacing && (
                 <PositionDetails
                     market={market}
-                    odd={market.positions[Position.AWAY].odd}
+                    odd={market.awayOdds}
                     availablePerPosition={availablePerPosition[Position.AWAY]}
                     position={Position.AWAY}
                 />

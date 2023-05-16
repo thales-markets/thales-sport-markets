@@ -1,4 +1,4 @@
-import { Tags, SportsMap, SportsTagsMap } from 'types/markets';
+import { Tags, SportsMap, SportsTagsMap, SGPItem } from 'types/markets';
 
 export const TAGS_LIST: Tags = [
     {
@@ -307,6 +307,24 @@ export const SPORTS_MAP: SportsMap = {
     9033: 'Hockey',
 };
 
+export const COMBINED_MARKETS_SGP: SGPItem[] = [
+    {
+        tags: [9399],
+        combination: [0, 10002],
+        SGPFee: 0.99,
+    },
+    {
+        tags: [9006],
+        combination: [0, 10002],
+        SGPFee: 0.9,
+    },
+    {
+        tags: [9004],
+        combination: [0, 10002],
+        SGPFee: 0.95,
+    },
+];
+
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
     9001,
     9002,
@@ -394,6 +412,11 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.TOTAL]: 'total',
     [BetType.DOUBLE_CHANCE]: 'double-chance',
 };
+
+export const MARKETS_COMBINATION: Array<BetType>[] = [
+    [0, 10002],
+    [10001, 10002],
+];
 
 export enum DoubleChanceMarketType {
     HOME_TEAM_NOT_TO_LOSE = 'HomeTeamNotToLose',
