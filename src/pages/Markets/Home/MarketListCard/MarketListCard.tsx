@@ -131,18 +131,14 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     <TimeRemaining end={market.maturityDate} fontSize={11} />
                                 </>
                             }
-                            component={
-                                <MatchTimeLabel>
-                                    {formatShortDateWithTime(market.maturityDate)}{' '}
-                                    {isFifaWCGame(market.tags[0]) && (
-                                        <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
-                                    )}
-                                    {isIIHFWCGame(market.tags[0]) && (
-                                        <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
-                                    )}
-                                </MatchTimeLabel>
-                            }
+                            component={<MatchTimeLabel>{formatShortDateWithTime(market.maturityDate)} </MatchTimeLabel>}
                         />
+                        {isFifaWCGame(market.tags[0]) && (
+                            <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
+                        )}
+                        {isIIHFWCGame(market.tags[0]) && (
+                            <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
+                        )}
                         <MatchTimeLabel>
                             {isEnetpulseSport && (liveResultInfo || localStorage.getItem(market.address)) ? (
                                 <>
