@@ -81,7 +81,9 @@
             "user-rejected-tx": "ผู้ใช้ปฏิเสธการทำธุรกรรม",
             "enter-address": "ใส่ที่อยู่กระเป๋าเงิน",
             "invalid-address": "ที่อยู่ที่ไม่ถูกต้อง",
-            "batch-transaction-single-failure": "ธุรกรรมถูกปฏิเสธหรือล้มเหลว"
+            "batch-transaction-single-failure": "ธุรกรรมถูกปฏิเสธหรือล้มเหลว",
+            "enter-percentage": "Enter percentage",
+            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}"
         },
         "time-remaining": {
             "ended": "เสร็จสิ้น",
@@ -148,7 +150,8 @@
         "yes": "YES",
         "no": "NO",
         "fifa-tooltip": "ผลการแข่งขันในตลาด FIFA World Cup อิงตามผลการควบคุม หากเกินเวลา ผลการควบคุมจะเป็นผลที่ตลาดจะแก้ไข",
-        "tennis-tooltip": "ในกรณีของการวอล์กโอเวอร์ การแข่งขันจะถือเป็นการยกเลิก ในกรณีที่ออกจากตำแหน่ง/ถูกตัดสิทธิ์ในระหว่างการแข่งขัน จะถือว่าเป็นชัยชนะสำหรับผู้เล่นที่ผ่านเข้าสู่รอบต่อไป"
+        "tennis-tooltip": "ในกรณีของการวอล์กโอเวอร์ การแข่งขันจะถือเป็นการยกเลิก ในกรณีที่ออกจากตำแหน่ง/ถูกตัดสิทธิ์ในระหว่างการแข่งขัน จะถือว่าเป็นชัยชนะสำหรับผู้เล่นที่ผ่านเข้าสู่รอบต่อไป",
+        "iihf-tooltip": "ผลลัพธ์ของตลาด IIHF World Championship ขึ้นอยู่กับผลการควบคุม หากพวกเขาทำงานล่วงเวลา ผลการควบคุมจะเป็นผลที่ตลาดจะแก้ไข"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -215,7 +218,6 @@
                 "hockey": "ฮอกกี้",
                 "tennis": "เทนนิส",
                 "football": "อเมริกันฟุตบอล",
-                "ufc": "MMA",
                 "baseball": "เบสบอล",
                 "formula1": "Formula 1",
                 "motogp": "MotoGP",
@@ -224,7 +226,7 @@
                 "favourites": "รายการโปรด",
                 "esports": "อีสปอร์ต",
                 "cricket": "คริกเก็ต",
-                "mma": "ดี",
+                "mma": "ดกีฬาต่อสู้",
                 "boxing": "มวย"
             },
             "datepicker": {
@@ -991,7 +993,7 @@
     },
     "liquidity-pool": {
         "title": "วางสภาพคล่อง",
-        "description": "<h1>รายละเอียด</h1><p>การวางสภาพคล่อง (Liquidity Providing) คือการนำ stablecoin มาวางเป็นหลักประกันในพูลสภาพคล่อง เพื่อใช้ในการเทรดผลกีฬาใน Overtime โดยสภาพคล่องที่นำมาวางนี้จะถูกนำไปใช้กับ AMM เทรดใน Overtime</p><p>คุณต้อง stake โทเค็น THALES ก่อนจึงจะมีสิทธิวางสภาพคล่องได้ ไม่มีจำกัดวงเงินสูงสุดต่อวอลเลท และคุณจะสามารถวางสภาพคล่องสูงสุดได้ที่ 1{{currency}} ต่อ {{thalesStakedAmount}} THALES จนกว่าสระสภาพคล่องเต็ม</p><p>เมื่อรอบเทรดจบ คุณจะได้รับส่วนแบ่ง PnL ของรอบนั้นตามสัดส่วนที่วางสภาพคล่อง โดยจะถูกโอนเข้าไปในยอดเงินวางสภาพคล่องของคุณ</p><p>คุณสามารถถอนเงินระหว่างรอบได้ตลอด เมื่อรอบนั้นสิ้นสุดลง เงินคงเหลือ (รวมถึง PnL ของรอบนั้น) ก็จะถูกโอนเข้าวอลเลทของคุณ ทั้งนี้ ในการถอนเงิน คุณต้องมีโทเค็น THALES ชั้นต่ำ {{thalesStakedAmount}}  THALES  ต่อ 1 {{currency}} ที่คุณจะถอน</p><p>หากคุณตัดสินใจ unstake THALES ระหว่างการวางสภาพคล่อง โปรดอย่าลืมว่าคุณต้องถอนเงินออกจากสระสภาพคล่องก่อน</p><p>การวางสภาพคล่องมีความเสี่ยงจากการขาดทุนเนื่องจากอัตราการทายถูกของผู้ทายผลกีฬา รวมถึงความเสี่ยงของความปลอดภัยในการใช้งาน smart contract คุณต้องมั่นใจว่าศึกษาและเข้าใจความเสี่ยงเหล่านี่อย่างดีแล้วก่อนที่จะวางสภาพคล่อง</p><p>ใน <tipLink>TIP-99</tipLink>  มีรายละเอียดทางเทคนิคที่เกี่ยวข้องกับการวางสภาพคล่อง</p>",
+        "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round the amount you signaled for withdrawal (inclusive of that round's PnL) is sent to you.  The minimum amount to be withdrawn is set to 10%</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
         "variables": "<h1>ข้อมูลเชิงเทคนิค</h1><ul><li>จำนวนเงินสูงสุด: {{maxAllowedDeposit}}</li><li>จำนวนผู้ใช้สูงสุด: {{maxAllowedUsers}}</li><li>เงินวางขั้นต่ำ: {{minDepositAmount}}</li><li>ระยะเวลา/รอบ: {{roundLength}} วัน</li></ul>",
         "liquidity-pool-not-started-message": "สระสภาพคล่องยังไม่เริ่มใช้งาน",
         "liquidity-pool-paused-message": "สระสภาพคล่องหยุดชั่วคราว",
@@ -1006,13 +1008,16 @@
         "max-allowance-label": "โควต้าวางสภาพคล่องสูงสุด",
         "your-thales-staked-label": "จำนวน THALES ที่ stake ไว้",
         "allowance-multiplier-label": "Allowance multiplier",
-        "withdrawal-request-label": "มีคำสั่งถอนเงินจำนวน: {{amount}}",
+        "full-withdrawal-request-label": "Withdrawal request: {{amount}}<tooltip />",
+        "partial-withdrawal-request-label": "Withdrawal request: {{percentage}} of the balance ({{amount}}<tooltip />)",
         "estimated-amount-tooltip": "จำนวนนี้เป็นเพียงการประมาณการเท่านั้น จำนวนที่แน่นอนจะถูกคำนวณตาม PnL ที่เกิดขึ้นหลังจากรอบนี้สิ้นสุดลง",
         "deposit-amount-placeholder": "ใส่จำนวน",
         "available-to-withdraw-label": "สามารถถอนได้: <bold>{{amount}}</bold>",
         "nothing-to-withdraw-label": "ไม่มีเงินให้ถอน",
         "withdrawal-message": "คุณสามารถสั่งถอนเงินได้ และเงินของคุณจะถูกโอนเข้าวอลเลทของคุณโดยอัตโนมัติหลังจากรอบนี้สิ้นสุด",
-        "withdrawal-requested-message": "คุณมีคำสั่งถอนเงินจำนวน<bold>{{amount}}</bold><tooltip /> เงินของคุณจะโอนเข้าวอลเลททันทีเพื่อรอบนี้สิ้นสุดลง",
+        "full-withdrawal-requested-message": "You requested to withdraw a full balance of <bold>{{amount}}</bold><tooltip />.",
+        "partial-withdrawal-requested-message": "You requested to withdraw {{percentage}} of the balance (<bold>{{amount}}</bold><tooltip />).",
+        "withdrawal-requested-message": "เงินของคุณจะโอนเข้าวอลเลททันทีเพื่อรอบนี้สิ้นสุดลง",
         "first-deposit-withdrawal-message": "คุณได้วางสภาพคล่องสำหรับรอบถัดไปแล้ว คุณจะสามารถถอนเงินได้ภายหลังสิ้นสุดรอบถัดไป",
         "deposit-withdrawal-warning": "อยู่ระหว่างรอถอนเงิน คุณไม่สามารถวางสภาพคล่องได้",
         "deposit-max-amount-of-users-warning": "จำนวนผู้วางสภาพคล่องครบตามโควต้าที่กำหนดแล้ว คุณไม่สามารถวางสภาพคล่องได้อีก",
@@ -1021,7 +1026,10 @@
         "deposit-staked-thales-error": "จำนวนเงินวางสภาพคล่องเกินโควต้า คุณต้อง stake THALES เพิ่มจึงจะวางสภาพคล่องได้",
         "deposit-min-amount-error": "จำนวนเงินวางสภาพคล่องขั้นต่ำ คือ {{amount}}",
         "withdrawal-deposit-warning": "ไม่สามารถถอนเงินได้ เนื่องจากคุณได้วางสภาพคล่องสำหรับรอบถัดไปแล้ว",
-        "withdrawal-staked-thales-warning": "ไม่สามารถถอนเงินได้ คุณต้อง stake THALES เพิ่มจำนวน {{amount}} THALES จึงจะสามารถถอนเงินได้",
+        "full-withdrawal-label": "Full withdrawal",
+        "partial-withdrawal-label": "Partial withdrawal",
+        "percentage-placeholder": "Enter percentage",
+        "withdrawal-amount-label": "Withdrawal amount: <bold>{{amount}}</bold>",
         "tabs": {
             "deposit": "ฝาก",
             "withdraw": "ถอน"

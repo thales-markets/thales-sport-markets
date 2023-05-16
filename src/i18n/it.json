@@ -81,7 +81,9 @@
             "user-rejected-tx": "User rejected transaction",
             "enter-address": "Enter address",
             "invalid-address": "Invalid address",
-            "batch-transaction-single-failure": "Una transazione è stata rifiutata o fallita."
+            "batch-transaction-single-failure": "Una transazione è stata rifiutata o fallita.",
+            "enter-percentage": "Enter percentage",
+            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}"
         },
         "time-remaining": {
             "ended": "ended",
@@ -148,7 +150,8 @@
         "no": "NO",
         "mls-tooltip": "I risultati dei mercati MLS si basano sui risultati della regolamentazione, se dovessero andare agli straordinari il risultato della regolamentazione è quello in cui il mercato deciderà.",
         "fifa-tooltip": "I risultati dei mercati della Coppa del Mondo FIFA si basano sui risultati regolamentari, se dovessero andare ai tempi supplementari il risultato regolamentare è quello in base al quale si risolverà il mercato.",
-        "tennis-tooltip": "In caso di walkover, la partita sarà considerata annullata. In caso di ritiro/squalifica durante la partita, verrà considerata come una vittoria per il giocatore che avanza al turno successivo"
+        "tennis-tooltip": "In caso di walkover, la partita sarà considerata annullata. In caso di ritiro/squalifica durante la partita, verrà considerata come una vittoria per il giocatore che avanza al turno successivo",
+        "iihf-tooltip": "I risultati dei mercati del campionato mondiale IIHF si basano sui risultati regolamentari, se dovessero andare ai tempi supplementari il risultato regolamentare è quello in base al quale il mercato si risolverà."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -215,7 +218,6 @@
                 "hockey": "Hockey",
                 "tennis": "Tennis",
                 "football": "Football",
-                "ufc": "MMA",
                 "baseball": "Baseball",
                 "formula1": "Formula 1",
                 "motogp": "MotoGP",
@@ -225,7 +227,7 @@
                 "esports": "Esport",
                 "cricket": "Cricket",
                 "boxing": "Boxe",
-                "mma": "BENE"
+                "mma": "MMA"
             },
             "all": "All",
             "datepicker": {
@@ -998,7 +1000,7 @@
     },
     "liquidity-pool": {
         "title": "Provide Liquidity",
-        "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round your balance (inclusive of that round's PnL) is sent to you. To withdraw, you need to have at least {{thalesStakedAmount}} THALES staked per each {{currency}} you are withdrawing.</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
+        "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round the amount you signaled for withdrawal (inclusive of that round's PnL) is sent to you.  The minimum amount to be withdrawn is set to 10%</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
         "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the pool: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
         "liquidity-pool-not-started-message": "The liquidity pool has not started",
         "liquidity-pool-paused-message": "The liquidity pool is paused",
@@ -1013,13 +1015,16 @@
         "max-allowance-label": "Max allowance",
         "your-thales-staked-label": "Your THALES staked",
         "allowance-multiplier-label": "Allowance multiplier",
-        "withdrawal-request-label": "Withdrawal request: {{amount}}",
+        "full-withdrawal-request-label": "Withdrawal request: {{amount}}<tooltip />",
+        "partial-withdrawal-request-label": "Withdrawal request: {{percentage}} of the balance ({{amount}}<tooltip />)",
         "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
         "deposit-amount-placeholder": "Enter amount",
         "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
         "nothing-to-withdraw-label": "Nothing to withdraw.",
-        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
-        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdrawal-message": "You can request a full/partial withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
+        "full-withdrawal-requested-message": "You requested to withdraw a full balance of <bold>{{amount}}</bold><tooltip />.",
+        "partial-withdrawal-requested-message": "You requested to withdraw {{percentage}} of the balance (<bold>{{amount}}</bold><tooltip />).",
+        "withdrawal-requested-message": "Your funds will be sent to you automatically at the end of the round when the round closes.",
         "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
         "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
         "deposit-max-amount-of-users-warning": "Maximum number of users in the liquidity pool is reached, you cannot deposit.",
@@ -1028,7 +1033,10 @@
         "deposit-staked-thales-error": "Deposit amount exceeds max allowance, stake more THALES to deposit",
         "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
         "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
-        "withdrawal-staked-thales-warning": "You cannot withdraw as you need more staked THALES to withdraw. Stake {{amount}} THALES more to enable withdrawal.",
+        "full-withdrawal-label": "Full withdrawal",
+        "partial-withdrawal-label": "Partial withdrawal",
+        "percentage-placeholder": "Enter percentage",
+        "withdrawal-amount-label": "Withdrawal amount: <bold>{{amount}}</bold>",
         "tabs": {
             "deposit": "Deposit",
             "withdraw": "Withdraw"
