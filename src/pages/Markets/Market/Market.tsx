@@ -17,6 +17,8 @@ import { Info } from '../Home/Home';
 import { getNetworkId } from 'redux/modules/wallet';
 import { NetworkIdByName } from 'utils/network';
 import useSportMarketQuery from 'queries/markets/useSportMarketQuery';
+import useSportMarketsQueryNew from 'queries/markets/useSportsMarketsQueryNew';
+import { GlobalFiltersEnum } from 'constants/markets';
 
 type MarketProps = RouteComponentProps<{
     marketAddress: string;
@@ -31,15 +33,46 @@ const Market: React.FC<MarketProps> = (props) => {
     const { params } = props.match;
     const marketAddress = params && params.marketAddress ? params.marketAddress : '';
 
-    const marketQuery = useSportMarketQuery(marketAddress, networkId, {
+    const [refetchWithOtherQuery, setRefetchWithOtherQuery] = useState<boolean>(false);
+
+    const marketQuery = useSportMarketsQueryNew(networkId, {
         enabled: isAppReady,
+    });
+
+    const singleMarketQuery = useSportMarketQuery(marketAddress, networkId, {
+        enabled: isAppReady && refetchWithOtherQuery,
     });
 
     useEffect(() => {
         if (marketQuery.isSuccess && marketQuery.data) {
-            setLastValidMarket(marketQuery.data);
+            let market: SportMarketInfo | undefined = undefined;
+            for (const propertyName in marketQuery.data) {
+                const marketsGroup = marketQuery.data[propertyName as GlobalFiltersEnum];
+                if (marketsGroup) {
+                    market = marketsGroup.find((market) => market.address == marketAddress);
+                }
+                if (market) break;
+            }
+
+            if (market) {
+                setLastValidMarket(market);
+            } else {
+                setRefetchWithOtherQuery(true);
+            }
         }
-    }, [marketQuery.isSuccess, marketQuery.data, marketAddress]);
+
+        if (!lastValidMarket && singleMarketQuery.isSuccess && singleMarketQuery.data && refetchWithOtherQuery) {
+            setLastValidMarket(singleMarketQuery.data);
+        }
+    }, [
+        marketQuery.isSuccess,
+        marketQuery.data,
+        marketAddress,
+        lastValidMarket,
+        singleMarketQuery.isSuccess,
+        singleMarketQuery.data,
+        refetchWithOtherQuery,
+    ]);
 
     useEffect(() => {
         trackPageView({});
