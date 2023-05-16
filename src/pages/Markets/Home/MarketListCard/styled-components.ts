@@ -36,6 +36,7 @@ export const SecondRowContainer = styled(MainContainer)<{ mobilePaddingRight: nu
 
 export const ThirdRowContainer = styled(SecondRowContainer)`
     padding-right: 0px;
+    justify-content: flex-start;
 `;
 
 export const MatchInfoConatiner = styled(FlexDivColumn)`

@@ -1,6 +1,6 @@
 import { COLLATERALS_INDEX } from 'constants/currency';
 import { MarketStatus } from 'constants/markets';
-import { DoubleChanceMarketType } from 'constants/tags';
+import { BetType, DoubleChanceMarketType } from 'constants/tags';
 import { Position, PositionName } from '../constants/options';
 
 export type MarketInfo = {
@@ -419,3 +419,5 @@ export type CombinedMarketContractData = {
 };
 
 export type CombinedMarketsContractData = CombinedMarketContractData[];
+
+export type SGPItem = { tags: number[]; combination: BetType[]; SGPFee: number };

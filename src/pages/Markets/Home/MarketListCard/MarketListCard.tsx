@@ -270,7 +270,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                     </SecondRowContainer>
                     {isMobile && hasCombinedMarkets && (
                         <ThirdRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
-                            <CombinedMarketsOdds market={market} />
+                            <OddsWrapper>
+                                <CombinedMarketsOdds market={market} />
+                            </OddsWrapper>
                         </ThirdRowContainer>
                     )}
                 </>

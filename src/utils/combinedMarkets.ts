@@ -8,6 +8,7 @@ import {
     ParlaysMarket,
     ParlaysMarketPosition,
     PositionData,
+    SGPItem,
     SportMarketInfo,
 } from 'types/markets';
 import { POSITION_TO_ODDS_OBJECT_PROPERTY_NAME, Position } from 'constants/options';
@@ -80,51 +81,43 @@ export const isAllowedToCombineMarketsForTagId = (tags: number[]): boolean => {
     return isAllowed;
 };
 
+export const isMarketCombinationInSGP = (markets: SportMarketInfo[]): SGPItem | undefined => {
+    const sgpItem = COMBINED_MARKETS_SGP.find((sgpItem) => {
+        if (sgpItem.tags.every((value, index) => value == markets[0].tags[index])) {
+            if (sgpItem.combination.includes(markets[0].betType) && sgpItem.combination.includes(markets[1].betType))
+                return sgpItem;
+        }
+    });
+
+    if (sgpItem) return sgpItem;
+    return;
+};
+
 export const calculateCombinedMarketOdds = (markets: SportMarketInfo[], positions: Position[]) => {
     const firstPositionOdds = markets[0][POSITION_TO_ODDS_OBJECT_PROPERTY_NAME[positions[0]]];
     const secondPositionOdds = markets[1][POSITION_TO_ODDS_OBJECT_PROPERTY_NAME[positions[1]]];
 
     if (!firstPositionOdds || !secondPositionOdds) return 0;
 
-    if (markets[0].tags.find((tag) => SPORTS_TAGS_MAP.Football.includes(Number(tag)))) {
-        return (firstPositionOdds * secondPositionOdds) / COMBINED_MARKETS_SGP.Football;
-    }
+    const sgpItem = isMarketCombinationInSGP(markets);
 
-    if (markets[0].tags.find((tag) => SPORTS_TAGS_MAP.Soccer.includes(Number(tag)))) {
-        return (firstPositionOdds * secondPositionOdds) / COMBINED_MARKETS_SGP.Soccer;
-    }
-
-    if (markets[0].tags.find((tag) => SPORTS_TAGS_MAP.Basketball.includes(Number(tag)))) {
-        return (firstPositionOdds * secondPositionOdds) / COMBINED_MARKETS_SGP.Basketball;
-    }
-
-    if (markets[0].tags.find((tag) => SPORTS_TAGS_MAP.Hockey.includes(Number(tag)))) {
-        return (firstPositionOdds * secondPositionOdds) / COMBINED_MARKETS_SGP.Hockey;
+    if (sgpItem) {
+        return (firstPositionOdds * secondPositionOdds) / sgpItem.SGPFee;
     }
 
     return firstPositionOdds * secondPositionOdds;
 };
 
-export const calculateCombinedMarketOddBasedOnHistoryOdds = (odds: number[], market: SportMarketInfo) => {
+export const calculateCombinedMarketOddBasedOnHistoryOdds = (odds: number[], markets: SportMarketInfo[]) => {
     const firstPositionOdd = odds[0];
     const secondPositionOdd = odds[1];
 
     if (!firstPositionOdd || !secondPositionOdd) return 0;
 
-    if (market.tags.find((tag) => SPORTS_TAGS_MAP.Football.includes(Number(tag)))) {
-        return (firstPositionOdd * firstPositionOdd) / COMBINED_MARKETS_SGP.Football;
-    }
+    const sgpItem = isMarketCombinationInSGP(markets);
 
-    if (market.tags.find((tag) => SPORTS_TAGS_MAP.Soccer.includes(Number(tag)))) {
-        return (firstPositionOdd * secondPositionOdd) / COMBINED_MARKETS_SGP.Soccer;
-    }
-
-    if (market.tags.find((tag) => SPORTS_TAGS_MAP.Basketball.includes(Number(tag)))) {
-        return (firstPositionOdd * secondPositionOdd) / COMBINED_MARKETS_SGP.Basketball;
-    }
-
-    if (market.tags.find((tag) => SPORTS_TAGS_MAP.Hockey.includes(Number(tag)))) {
-        return (firstPositionOdd * secondPositionOdd) / COMBINED_MARKETS_SGP.Hockey;
+    if (sgpItem) {
+        return (firstPositionOdd * secondPositionOdd) / sgpItem.SGPFee;
     }
 
     return firstPositionOdd * secondPositionOdd;
@@ -296,7 +289,7 @@ export const extractCombinedMarketsFromParlayMarketType = (parlayMarket: ParlayM
                     ],
                     totalOdd: calculateCombinedMarketOddBasedOnHistoryOdds(
                         [firstPositionOdd, secondPositionOdd],
-                        sportMarkets[i]
+                        [sportMarkets[i], sportMarkets[j]]
                     ),
                     totalBonus: 0,
                     positionName: getCombinedPositionName(
