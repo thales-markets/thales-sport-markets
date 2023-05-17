@@ -216,6 +216,7 @@ export const parlaySlice = createSlice({
             state.payment.amountToBuy = getDefaultPayment().amountToBuy;
             state.multiSingle = [];
             state.error = getDefaultError();
+            localStore.set(LOCAL_STORAGE_KEYS.IS_MULTI_SINGLE, false);
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
             localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
