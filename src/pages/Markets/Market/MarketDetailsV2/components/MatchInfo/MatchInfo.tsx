@@ -20,7 +20,7 @@ import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { convertFinalResultToResultType, isFifaWCGame, isIIHFWCGame } from 'utils/markets';
-import { SPORTS_TAGS_MAP } from 'constants/tags';
+import { FIFA_WC_TAG, FIFA_WC_U20_TAG, SPORTS_TAGS_MAP } from 'constants/tags';
 import { fixEnetpulseRacingName } from 'utils/formatters/string';
 
 type MatchInfoPropsType = {
@@ -74,7 +74,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                         >
                             <ParticipantLogo
                                 src={homeLogoSrc ? homeLogoSrc : getErrorImage(market.tags[0])}
-                                isFlag={market.tags[0] == 9018}
+                                isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                                 onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                             />
                         </ParticipantLogoContainer>
@@ -86,7 +86,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                             >
                                 <ParticipantLogo
                                     src={awayLogoSrc ? awayLogoSrc : getErrorImage(market.tags[0])}
-                                    isFlag={market.tags[0] == 9018}
+                                    isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                                     onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                                 />
                             </ParticipantLogoContainer>

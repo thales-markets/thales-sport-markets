@@ -295,7 +295,8 @@
                 "winner": "Winner",
                 "spread": "Handicap",
                 "total": "Total",
-                "double-chance": "Double chance"
+                "double-chance": "Double chance",
+                "combined-positions": "ตำแหน่งรวมกัน"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -320,7 +321,8 @@
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
                     "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
-                "bonus": "{{bonus}} added bonus on win!"
+                "bonus": "{{bonus}} added bonus on win!",
+                "and": "และ"
             },
             "starts-in": "เริ่มเข้า",
             "period": "ระยะเวลา",
@@ -374,7 +376,9 @@
                 "max-profit": "กำไรที่รองรับสูงสุดคือ {{max}}",
                 "max-teams": "สูงสุด {{max}} ตลาดใน Parlay",
                 "no-funds-multi-collateral": "โปรดตรวจสอบให้แน่ใจว่ากระเป๋าเงินของคุณมีเงินเพียงพอ (เพิ่มขึ้น {{percentage}}% ของจำนวนเงินที่ซื้อเข้า)",
-                "same-race-drivers": "รองรับนักแข่งเพียงหนึ่งคนต่อหนึ่งการแข่งขัน ไม่สามารถเพิ่ม {{addedDriver}} เนื่องจาก {{existingDriver}} อยู่ในพาร์เลย์แล้ว"
+                "same-race-drivers": "รองรับนักแข่งเพียงหนึ่งคนต่อหนึ่งการแข่งขัน ไม่สามารถเพิ่ม {{addedDriver}} เนื่องจาก {{existingDriver}} อยู่ในพาร์เลย์แล้ว",
+                "max-number-of-markets-with-combined-markets": "จำนวนตลาดสูงสุดใน Parlay คือ {{max}} ตลาดรวมเดียวนับเป็นสองตลาดปกติ",
+                "max-combined-markets": "จำนวนตลาดรวมสูงสุดในพาร์เลย์คือ {{max}}"
             },
             "skew": "ลาด",
             "payout": "การจ่ายเงิน",

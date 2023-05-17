@@ -397,7 +397,8 @@
                 "winner": "Gagnant",
                 "spread": "Handicap",
                 "total": "Total",
-                "double-chance": "Double chance"
+                "double-chance": "Double chance",
+                "combined-positions": "Postes combinés"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -422,7 +423,8 @@
                     "12": "{{team}} ou {{team2}} va gagner le match, {{matchResolve}}.",
                     "1x2": "{{team}} va gagner le match ou alors se terminera sur un score de parité, {{matchResolve}}."
                 },
-                "bonus": "{{bonus}} bonus supplémentaire sur la victoire !"
+                "bonus": "{{bonus}} bonus supplémentaire sur la victoire !",
+                "and": "et"
             },
             "starts-in": "Commence dans",
             "period": "Période",
@@ -481,7 +483,9 @@
                 "max-teams": "Maximum {{max}} marchés à Parlay",
                 "max-profit": "Le profit maximal pris en charge est de {{max}}",
                 "no-funds-multi-collateral": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds ({{percentage}} % de plus du montant du buy-in)",
-                "same-race-drivers": "Un seul pilote par course est pris en charge. Impossible d'ajouter {{addedDriver}} car {{existingDriver}} est déjà dans Parlay"
+                "same-race-drivers": "Un seul pilote par course est pris en charge. Impossible d'ajouter {{addedDriver}} car {{existingDriver}} est déjà dans Parlay",
+                "max-number-of-markets-with-combined-markets": "Le nombre maximum de marchés dans Parlay est de {{max}}. Un seul marché combiné compte comme deux marchés réguliers.",
+                "max-combined-markets": "Le nombre maximum de marchés combinés dans Parlay est de {{max}}."
             },
             "payout": "Total reçu",
             "empty-title": "Aucune position",
