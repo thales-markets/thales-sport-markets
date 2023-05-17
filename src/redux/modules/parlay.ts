@@ -185,9 +185,14 @@ export const parlaySlice = createSlice({
         },
         removeFromParlay: (state, action: PayloadAction<string>) => {
             state.parlay = state.parlay.filter(
-                (market) => market.sportMarketAddress !== action.payload || market.parentMarket !== action.payload
+                (market) => market.sportMarketAddress !== action.payload && market.parentMarket !== action.payload
             );
             state.multiSingle = state.multiSingle.filter((ms) => ms.sportMarketAddress !== action.payload);
+
+            if (state.multiSingle.length == 0) {
+                state.isMultiSingle = false;
+                localStore.set(LOCAL_STORAGE_KEYS.IS_MULTI_SINGLE, state.isMultiSingle);
+            }
 
             if (state.parlay.length === 0) {
                 state.payment.amountToBuy = getDefaultPayment().amountToBuy;
