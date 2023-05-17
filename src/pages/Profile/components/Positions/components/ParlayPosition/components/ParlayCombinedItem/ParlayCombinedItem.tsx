@@ -1,5 +1,5 @@
 import PositionSymbol from 'components/PositionSymbol';
-import { ENETPULSE_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
+import { ENETPULSE_SPORTS, FIFA_WC_TAG, FIFA_WC_U20_TAG, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS, STATUS_COLOR } from 'constants/ui';
 import { t } from 'i18next';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
@@ -99,7 +99,7 @@ const ParlayCombinedItem: React.FC<{ combinedMarket: CombinedMarket }> = ({ comb
                     <ClubLogo
                         alt={market.homeTeam}
                         src={homeLogoSrc}
-                        isFlag={market.tags[0] == 9018}
+                        isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                         losingTeam={false}
                         onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                         customMobileSize={'30px'}
@@ -108,7 +108,7 @@ const ParlayCombinedItem: React.FC<{ combinedMarket: CombinedMarket }> = ({ comb
                         awayTeam={true}
                         alt={market.awayTeam}
                         src={awayLogoSrc}
-                        isFlag={market.tags[0] == 9018}
+                        isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                         losingTeam={false}
                         onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                         customMobileSize={'30px'}

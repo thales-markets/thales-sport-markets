@@ -1,7 +1,7 @@
 import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
-import { BetType, ENETPULSE_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
+import { BetType, ENETPULSE_SPORTS, FIFA_WC_TAG, FIFA_WC_U20_TAG, SPORTS_TAGS_MAP } from 'constants/tags';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import React, { useEffect, useState } from 'react';
@@ -171,8 +171,12 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         <TeamsInfoConatiner>
                             <TeamLogosConatiner>
                                 <ClubLogo
-                                    height={market.tags[0] == 9018 ? '17px' : ''}
-                                    width={market.tags[0] == 9018 ? '27px' : ''}
+                                    height={
+                                        market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG ? '17px' : ''
+                                    }
+                                    width={
+                                        market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG ? '27px' : ''
+                                    }
                                     alt="Home team logo"
                                     src={homeLogoSrc}
                                     onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
@@ -181,8 +185,16 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     <>
                                         <VSLabel>VS</VSLabel>
                                         <ClubLogo
-                                            height={market.tags[0] == 9018 ? '17px' : ''}
-                                            width={market.tags[0] == 9018 ? '27px' : ''}
+                                            height={
+                                                market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG
+                                                    ? '17px'
+                                                    : ''
+                                            }
+                                            width={
+                                                market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG
+                                                    ? '27px'
+                                                    : ''
+                                            }
                                             alt="Away team logo"
                                             src={awayLogoSrc}
                                             onError={getOnImageError(setAwayLogoSrc, market.tags[0])}

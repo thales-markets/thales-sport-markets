@@ -299,7 +299,8 @@
                 "winner": "Winner",
                 "spread": "Handicap",
                 "total": "Total",
-                "double-chance": "Double chance"
+                "double-chance": "Double chance",
+                "combined-positions": "Комбинированные позиции"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -324,7 +325,8 @@
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
                     "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
-                "bonus": "{{bonus}} added bonus on win!"
+                "bonus": "{{bonus}} added bonus on win!",
+                "and": "и"
             },
             "starts-in": "Начинается через",
             "period": "Период",
@@ -383,7 +385,9 @@
                 "max-profit": "Максимальная поддерживаемая прибыль составляет {{max}}",
                 "max-teams": "Максимум {{max}} рынков в Parlay",
                 "no-funds-multi-collateral": "Убедитесь, что в вашем кошельке достаточно средств (на {{percentage}}% больше суммы бай-ина)",
-                "same-race-drivers": "Поддерживается только один гонщик на гонку. Невозможно добавить {{addedDriver}}, поскольку {{existingDriver}} уже находится в Parlay"
+                "same-race-drivers": "Поддерживается только один гонщик на гонку. Невозможно добавить {{addedDriver}}, поскольку {{existingDriver}} уже находится в Parlay",
+                "max-number-of-markets-with-combined-markets": "Максимальное количество рынков в Parlay: {{max}}. Один комбинированный рынок считается двумя обычными рынками.",
+                "max-combined-markets": "Максимальное количество комбинированных рынков в Parlay составляет {{max}}."
             },
             "fee": "Общая плата",
             "empty-title": "Нет позиций",
