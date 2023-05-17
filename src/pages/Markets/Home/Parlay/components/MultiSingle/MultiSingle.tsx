@@ -682,6 +682,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
             dispatch(
                 setMultiSingle({
                     sportMarketAddress: market.address,
+                    parentMarketAddress: market.parentMarket ? market.parentMarket : market.address,
                     amountToBuy: value,
                 })
             );
