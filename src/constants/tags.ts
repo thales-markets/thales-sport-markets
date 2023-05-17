@@ -273,7 +273,7 @@ export const TAGS_LIST: Tags = [
     {
         id: 9296,
         label: 'FIFA World Cup U20',
-        logoClass: 'icon-league league--iihf',
+        logoClass: '',
         favourite: false,
         hidden: false,
         priority: 112,
