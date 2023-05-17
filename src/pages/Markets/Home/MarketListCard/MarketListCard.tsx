@@ -5,11 +5,13 @@ import { BetType, ENETPULSE_SPORTS, FIFA_WC_TAG, FIFA_WC_U20_TAG, SPORTS_TAGS_MA
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { formatShortDateWithTime } from 'utils/formatters/date';
+import { fixEnetpulseRacingName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame, isIIHFWCGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
@@ -40,8 +42,6 @@ import {
     VSLabel,
     Wrapper,
 } from './styled-components';
-import { useTranslation } from 'react-i18next';
-import { fixEnetpulseRacingName } from 'utils/formatters/string';
 
 // 3 for double chance, 1 for spread, 1 for total
 const MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT = 5;
@@ -153,7 +153,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
                         )}
                         <MatchTimeLabel>
-                            {isEnetpulseSport && (liveResultInfo || localStorage.getItem(market.address)) ? (
+                            {isEnetpulseSport &&
+                            !isFifaWCGame(market.tags[0]) &&
+                            (liveResultInfo || localStorage.getItem(market.address)) ? (
                                 <>
                                     {localStorage.getItem(market.address)}
                                     {SPORTS_TAGS_MAP['Tennis'].includes(Number(market.tags[0])) && (

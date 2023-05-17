@@ -4,6 +4,7 @@ import {
     BetType,
     DoubleChanceMarketType,
     FIFA_WC_TAG,
+    FIFA_WC_U20_TAG,
     IIHF_WC_TAG,
     MATCH_RESOLVE_MAP,
     MLS_TAG,
@@ -346,7 +347,7 @@ export const getFormattedBonus = (bonus: number | undefined) => `+${Math.ceil(Nu
 
 export const isMlsGame = (tag: number) => Number(tag) === MLS_TAG;
 
-export const isFifaWCGame = (tag: number) => Number(tag) === FIFA_WC_TAG;
+export const isFifaWCGame = (tag: number) => Number(tag) === FIFA_WC_TAG || Number(tag) === FIFA_WC_U20_TAG;
 
 export const isIIHFWCGame = (tag: number) => Number(tag) === IIHF_WC_TAG;
 
