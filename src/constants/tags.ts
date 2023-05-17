@@ -270,6 +270,14 @@ export const TAGS_LIST: Tags = [
         hidden: false,
         priority: 502,
     },
+    {
+        id: 9296,
+        label: 'FIFA World Cup U20',
+        logoClass: '',
+        favourite: false,
+        hidden: false,
+        priority: 112,
+    },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -305,6 +313,7 @@ export const SPORTS_MAP: SportsMap = {
     9061: 'Soccer',
     9045: 'Soccer',
     9033: 'Hockey',
+    9296: 'Soccer',
 };
 
 export const COMBINED_MARKETS_SGP: SGPItem[] = [
@@ -351,7 +360,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Baseball: [9003],
     Basketball: [9004, 9005, 9008, 9399],
     Hockey: [9006, 9033],
-    Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9057, 9061, 9045],
+    Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9057, 9061, 9045, 9296],
     MMA: [9007, 18196],
     Motosport: [9445, 9101],
     Tennis: [9153, 9156],
@@ -389,12 +398,14 @@ export enum TAGS_FLAGS {
     PRIMEIRA_LIGA = 9061,
     COPA_LIBERTADORES = 9045,
     IIHF_WORLD_CHAMPIONSHIP = 9033,
+    FIFA_WORLD_CUP_U20 = 9296,
 }
 
-export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399, 18196, 9057, 9061, 9045, 9445, 9033];
+export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399, 18196, 9057, 9061, 9045, 9445, 9033, 9296];
 
 export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
+export const FIFA_WC_U20_TAG = 9296;
 export const IIHF_WC_TAG = 9033;
 
 export const PERSON_COMPETITIONS = [9007, 9445, 9101, 9153, 9156];
@@ -457,6 +468,7 @@ export const SCORING_MAP: SportsMap = {
     9061: 'goals',
     9045: 'goals',
     9033: 'goals',
+    9296: 'goals',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -492,6 +504,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9061: 'regular',
     9045: 'regular',
     9033: 'regular',
+    9296: 'regular',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -525,4 +538,5 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     9061: 'half',
     9045: 'half',
     9033: 'period',
+    9296: 'half',
 };

@@ -372,6 +372,7 @@ export type ParlayPayment = {
 
 export type MultiSingleAmounts = {
     sportMarketAddress: string;
+    parentMarketAddress: string;
     amountToBuy: number;
 };
 

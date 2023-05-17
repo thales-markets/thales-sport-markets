@@ -1,15 +1,17 @@
 import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
-import { BetType, ENETPULSE_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
+import { BetType, ENETPULSE_SPORTS, FIFA_WC_TAG, FIFA_WC_U20_TAG, SPORTS_TAGS_MAP } from 'constants/tags';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { formatShortDateWithTime } from 'utils/formatters/date';
+import { fixEnetpulseRacingName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame, isIIHFWCGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
@@ -40,8 +42,6 @@ import {
     VSLabel,
     Wrapper,
 } from './styled-components';
-import { useTranslation } from 'react-i18next';
-import { fixEnetpulseRacingName } from 'utils/formatters/string';
 
 // 3 for double chance, 1 for spread, 1 for total
 const MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT = 5;
@@ -153,7 +153,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
                         )}
                         <MatchTimeLabel>
-                            {isEnetpulseSport && (liveResultInfo || localStorage.getItem(market.address)) ? (
+                            {isEnetpulseSport &&
+                            !isFifaWCGame(market.tags[0]) &&
+                            (liveResultInfo || localStorage.getItem(market.address)) ? (
                                 <>
                                     {localStorage.getItem(market.address)}
                                     {SPORTS_TAGS_MAP['Tennis'].includes(Number(market.tags[0])) && (
@@ -171,8 +173,12 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         <TeamsInfoConatiner>
                             <TeamLogosConatiner>
                                 <ClubLogo
-                                    height={market.tags[0] == 9018 ? '17px' : ''}
-                                    width={market.tags[0] == 9018 ? '27px' : ''}
+                                    height={
+                                        market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG ? '17px' : ''
+                                    }
+                                    width={
+                                        market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG ? '27px' : ''
+                                    }
                                     alt="Home team logo"
                                     src={homeLogoSrc}
                                     onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
@@ -181,8 +187,16 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     <>
                                         <VSLabel>VS</VSLabel>
                                         <ClubLogo
-                                            height={market.tags[0] == 9018 ? '17px' : ''}
-                                            width={market.tags[0] == 9018 ? '27px' : ''}
+                                            height={
+                                                market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG
+                                                    ? '17px'
+                                                    : ''
+                                            }
+                                            width={
+                                                market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG
+                                                    ? '27px'
+                                                    : ''
+                                            }
                                             alt="Away team logo"
                                             src={awayLogoSrc}
                                             onError={getOnImageError(setAwayLogoSrc, market.tags[0])}

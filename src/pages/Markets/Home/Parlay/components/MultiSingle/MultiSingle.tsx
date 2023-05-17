@@ -630,11 +630,13 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         setHasValidationError(false);
         setTooltipTextUsdAmount({});
         // No point in adding a tool tip to all vals. Lets just set the tooltip on the highest value
-        const maxMsVal = multiSingleAmounts.reduce((max, ms) => (max.amountToBuy > ms.amountToBuy ? max : ms));
+        if (multiSingleAmounts.length) {
+            const maxMsVal = multiSingleAmounts.reduce((max, ms) => (max.amountToBuy > ms.amountToBuy ? max : ms));
 
-        const market = markets.find((m) => m.address === maxMsVal.sportMarketAddress);
-        if (market !== undefined) {
-            setTooltipTextMessageUsdAmount(market, maxMsVal.amountToBuy, true);
+            const market = markets.find((m) => m.address === maxMsVal.sportMarketAddress);
+            if (market !== undefined) {
+                setTooltipTextMessageUsdAmount(market, maxMsVal.amountToBuy, true);
+            }
         }
     }, [
         isVoucherSelected,
@@ -680,6 +682,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
             dispatch(
                 setMultiSingle({
                     sportMarketAddress: market.address,
+                    parentMarketAddress: market.parentMarket ? market.parentMarket : market.address,
                     amountToBuy: value,
                 })
             );

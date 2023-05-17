@@ -31,15 +31,15 @@ const Market: React.FC<MarketProps> = (props) => {
     const { params } = props.match;
     const marketAddress = params && params.marketAddress ? params.marketAddress : '';
 
-    const marketQuery = useSportMarketQuery(marketAddress, networkId, {
+    const singleMarketQuery = useSportMarketQuery(marketAddress, networkId, {
         enabled: isAppReady,
     });
 
     useEffect(() => {
-        if (marketQuery.isSuccess && marketQuery.data) {
-            setLastValidMarket(marketQuery.data);
+        if (singleMarketQuery.isSuccess && singleMarketQuery.data) {
+            setLastValidMarket(singleMarketQuery.data);
         }
-    }, [marketQuery.isSuccess, marketQuery.data, marketAddress]);
+    }, [marketAddress, singleMarketQuery.isSuccess, singleMarketQuery.data]);
 
     useEffect(() => {
         trackPageView({});

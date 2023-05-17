@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PositionSymbol from 'components/PositionSymbol';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
-import { ENETPULSE_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
+import { ENETPULSE_SPORTS, FIFA_WC_TAG, FIFA_WC_U20_TAG, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS, STATUS_COLOR } from 'constants/ui';
 import { ethers } from 'ethers';
 import i18n from 'i18n';
@@ -226,7 +226,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                     <ClubLogo
                         alt={position.market.homeTeam}
                         src={homeLogoSrc}
-                        isFlag={position.market.tags[0] == 9018}
+                        isFlag={position.market.tags[0] == FIFA_WC_TAG || position.market.tags[0] == FIFA_WC_U20_TAG}
                         losingTeam={false}
                         onError={getOnImageError(setHomeLogoSrc, position.market.tags[0])}
                         customMobileSize={'30px'}
@@ -236,7 +236,9 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                             awayTeam={true}
                             alt={position.market.awayTeam}
                             src={awayLogoSrc}
-                            isFlag={position.market.tags[0] == 9018}
+                            isFlag={
+                                position.market.tags[0] == FIFA_WC_TAG || position.market.tags[0] == FIFA_WC_U20_TAG
+                            }
                             losingTeam={false}
                             onError={getOnImageError(setAwayLogoSrc, position.market.tags[0])}
                             customMobileSize={'30px'}

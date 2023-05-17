@@ -295,7 +295,8 @@
                 "winner": "Gewinner",
                 "spread": "Handicap",
                 "total": "Gesamt",
-                "double-chance": "Doppelte Chance"
+                "double-chance": "Doppelte Chance",
+                "combined-positions": "Kombinierte Positionen"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -320,7 +321,8 @@
                     "12": "{{team}} oder {{team2}} wird das Spiel {{matchResolve}} gewinnen.",
                     "1x2": "{{team}} wird das Spiel gewinnen oder das Spiel endet in einem Unentschieden {{matchResolve}}."
                 },
-                "bonus": "{{bonus}} zusätzlicher Bonus bei Sieg!"
+                "bonus": "{{bonus}} zusätzlicher Bonus bei Sieg!",
+                "and": "Und"
             },
             "starts-in": "Beginnt in",
             "period": "Zeitraum",
@@ -379,7 +381,9 @@
                 "max-profit": "Der maximal unterstützte Gewinn beträgt {{max}}",
                 "max-teams": "Maximal {{max}} Märkte in Parlay",
                 "no-funds-multi-collateral": "Bitte stellen Sie sicher, dass Ihr Guthaben ausreichend ist ({{percentage}} % mehr des Buy-in-Betrags)",
-                "same-race-drivers": "Es wird nur ein Fahrer pro Rennen unterstützt. {{addedDriver}} kann nicht hinzugefügt werden, da {{existingDriver}} bereits in Parlay ist"
+                "same-race-drivers": "Es wird nur ein Fahrer pro Rennen unterstützt. {{addedDriver}} kann nicht hinzugefügt werden, da {{existingDriver}} bereits in Parlay ist",
+                "max-number-of-markets-with-combined-markets": "Die maximale Anzahl an Märkten in Parlay beträgt {{max}}. Ein einzelner kombinierter Markt zählt als zwei reguläre Märkte.",
+                "max-combined-markets": "Die maximale Anzahl kombinierter Märkte in Parlay beträgt {{max}}."
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",

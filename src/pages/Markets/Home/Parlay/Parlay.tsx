@@ -169,10 +169,14 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                         dotBorder="3px solid #3FD1FF"
                         handleClick={onToggleTypeClickHandler}
                     />
-                    {isMultiSingleBet && parlayMarkets.length > 1 ? (
+                    {isMultiSingleBet && multiSingleStore.length ? (
                         <>
                             <MultiSingle
-                                markets={combinedMarketsData.parlaysWithoutCombinedMarkets}
+                                markets={
+                                    combinedMarketsData.parlaysWithoutCombinedMarkets.length
+                                        ? combinedMarketsData.parlaysWithoutCombinedMarkets
+                                        : parlayMarkets
+                                }
                                 parlayPayment={parlayPayment}
                             />
                         </>
