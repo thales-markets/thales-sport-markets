@@ -16,7 +16,18 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
     const { t } = useTranslation();
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
-    return (
+    const areDoubleChanceMarketsOddsValid = areDoubleChanceMarkets
+        ? markets.map((item) => item.homeOdds).every((odd) => odd < 1)
+        : false;
+
+    const latestMarket = markets[markets.length - 1];
+    const areOddsValid = latestMarket.drawOdds
+        ? [latestMarket.homeOdds, latestMarket.awayOdds, latestMarket.drawOdds].every((odd) => odd < 1)
+        : [latestMarket.homeOdds, latestMarket.awayOdds].every((odd) => odd < 1);
+
+    const showContainer = betType == BetType.DOUBLE_CHANCE ? areDoubleChanceMarketsOddsValid : areOddsValid;
+
+    return showContainer ? (
         <Container>
             <Header>
                 <Title isExpanded={isExpanded}>{t(`markets.market-card.bet-type.${BetTypeNameMap[betType]}`)}</Title>
@@ -43,6 +54,8 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
                 </ContentContianer>
             )}
         </Container>
+    ) : (
+        <></>
     );
 };
 
