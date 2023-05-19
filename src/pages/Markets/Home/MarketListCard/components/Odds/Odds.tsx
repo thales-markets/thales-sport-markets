@@ -33,7 +33,17 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
           ) as DoubleChanceMarketsInfo)
         : undefined;
 
-    return (
+    const areDoubleChanceMarketsOddsValid = doubleChanceMarkets
+        ? doubleChanceMarkets.map((item) => item.homeOdds).every((odd) => odd < 1)
+        : false;
+
+    const areOddsValid = market.drawOdds
+        ? [market.homeOdds, market.awayOdds, market.drawOdds].every((odd) => odd < 1)
+        : [market.homeOdds, market.awayOdds].every((odd) => odd < 1);
+
+    const showContainer = market.betType == BetType.DOUBLE_CHANCE ? areDoubleChanceMarketsOddsValid : areOddsValid;
+
+    return showContainer ? (
         <Container>
             <Title>
                 {t(`markets.market-card.bet-type.${BetTypeNameMap[market.betType as BetType]}`)}
@@ -103,6 +113,8 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
                 </OddsContainer>
             )}
         </Container>
+    ) : (
+        <></>
     );
 };
 
