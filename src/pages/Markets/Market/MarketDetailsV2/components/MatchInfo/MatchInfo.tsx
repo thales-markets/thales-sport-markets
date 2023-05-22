@@ -16,14 +16,15 @@ import {
     Versus,
 } from './styled-components';
 import Tooltip from 'components/Tooltip';
-import { MarketData, SportMarketLiveResult } from 'types/markets';
+import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { convertFinalResultToResultType, isFifaWCGame, isIIHFWCGame } from 'utils/markets';
-import { SPORTS_TAGS_MAP } from 'constants/tags';
+import { FIFA_WC_TAG, FIFA_WC_U20_TAG, SPORTS_TAGS_MAP } from 'constants/tags';
+import { fixEnetpulseRacingName } from 'utils/formatters/string';
 
 type MatchInfoPropsType = {
-    market: MarketData;
+    market: SportMarketInfo;
     liveResultInfo: SportMarketLiveResult | undefined;
     isEnetpulseSport: boolean;
 };
@@ -43,13 +44,19 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
     );
     const leagueLogo = getLeagueLogoClass(market.tags[0]);
 
-    const isGameResolved = market.gameStarted && market.resolved;
+    const isGameResolved = market.isOpen && market.isResolved;
 
     const getTeamsNames = (hideOnMobile: boolean) => (
         <TeamNamesWrapper hideOnMobile={hideOnMobile}>
-            <TeamName isHomeTeam={true}>{market.homeTeam}</TeamName>
-            <Versus>{' vs '}</Versus>
-            <TeamName isHomeTeam={false}>{market.awayTeam}</TeamName>
+            <TeamName isHomeTeam={true} isEnetpulseRacing={market.isEnetpulseRacing}>
+                {market.isEnetpulseRacing ? fixEnetpulseRacingName(market.homeTeam) : market.homeTeam}
+            </TeamName>
+            {!market.isEnetpulseRacing && (
+                <>
+                    <Versus>{' vs '}</Versus>
+                    <TeamName isHomeTeam={false}>{market.awayTeam}</TeamName>
+                </>
+            )}
         </TeamNamesWrapper>
     );
 
@@ -67,21 +74,23 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                         >
                             <ParticipantLogo
                                 src={homeLogoSrc ? homeLogoSrc : getErrorImage(market.tags[0])}
-                                isFlag={market.tags[0] == 9018}
+                                isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                                 onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                             />
                         </ParticipantLogoContainer>
-                        <ParticipantLogoContainer
-                            isWinner={isGameResolved && convertFinalResultToResultType(market.finalResult) == 1}
-                            isDraw={isGameResolved && convertFinalResultToResultType(market.finalResult) == 2}
-                            awayTeam={true}
-                        >
-                            <ParticipantLogo
-                                src={awayLogoSrc ? awayLogoSrc : getErrorImage(market.tags[0])}
-                                isFlag={market.tags[0] == 9018}
-                                onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
-                            />
-                        </ParticipantLogoContainer>
+                        {!market.isEnetpulseRacing && (
+                            <ParticipantLogoContainer
+                                isWinner={isGameResolved && convertFinalResultToResultType(market.finalResult) == 1}
+                                isDraw={isGameResolved && convertFinalResultToResultType(market.finalResult) == 2}
+                                awayTeam={true}
+                            >
+                                <ParticipantLogo
+                                    src={awayLogoSrc ? awayLogoSrc : getErrorImage(market.tags[0])}
+                                    isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
+                                    onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
+                                />
+                            </ParticipantLogoContainer>
+                        )}
                     </ParticipantsContainer>
                     {getTeamsNames(false)}
                     <MatchTimeContainer>

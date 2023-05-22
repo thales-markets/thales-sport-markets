@@ -22,6 +22,7 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import { getParlay } from 'redux/modules/parlay';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected } from 'redux/modules/wallet';
+import { getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
 
 type FooterSidebarMobileProps = {
     setParlayMobileVisibility: (value: boolean) => void;
@@ -34,6 +35,14 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
     const parlayMarkets = useSelector(getParlay);
     const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
     const [pulse, setPulse] = useState(false);
+
+    const combinedMarkets = getCombinedMarketsFromParlayData(parlayMarkets);
+    const ticketLength =
+        parlayMarkets.length > 0
+            ? combinedMarkets.length > 0
+                ? parlayMarkets.length - combinedMarkets.length / 2
+                : parlayMarkets.length
+            : 0;
 
     const setSelectedOddsType = useCallback(
         (oddsType: OddsType) => {
@@ -99,7 +108,7 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
                         iteration={parlayMarkets.length}
                         className={`icon icon--parlay ${pulse ? 'pulse' : ''}`}
                     />
-                    <ParlayNumber>{parlayMarkets.length > 0 ? parlayMarkets.length : ''}</ParlayNumber>
+                    <ParlayNumber>{ticketLength || ''}</ParlayNumber>
                 </ItemContainer>
                 {setShowBurger && (
                     <ItemContainer>

@@ -276,7 +276,8 @@
         "race-starts": "比赛开始",
         "back": "后退",
         "apply-filters": "应用过滤器",
-        "incentivized-market": "激励市场"
+        "incentivized-market": "激励市场",
+        "f1-market": "{{driver}} 赢得 {{race}}"
     },
     "markets": {
         "market-card": {
@@ -298,7 +299,8 @@
                 "winner": "Winner",
                 "spread": "Handicap",
                 "total": "Total",
-                "double-chance": "Double chance"
+                "double-chance": "Double chance",
+                "combined-positions": "合并职位"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -323,7 +325,8 @@
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
                     "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
-                "bonus": "{{bonus}} added bonus on win!"
+                "bonus": "{{bonus}} added bonus on win!",
+                "and": "和"
             },
             "starts-in": "开始于",
             "period": "时期",
@@ -381,7 +384,10 @@
                 "max-payout": "支持的最大支出为 {{max}}",
                 "max-teams": "Parlay 中的最大 {{max}} 个盘口",
                 "max-profit": "最大支持利润为 {{max}}",
-                "no-funds-multi-collateral": "请确保您的钱包有足够的资金（买入金额的 {{percentage}}%）"
+                "no-funds-multi-collateral": "请确保您的钱包有足够的资金（买入金额的 {{percentage}}%）",
+                "same-race-drivers": "每场比赛仅支持一名车手。无法添加 {{addedDriver}} 因为 {{existingDriver}} 已经在 Parlay 中",
+                "max-number-of-markets-with-combined-markets": "Parlay 中的最大市场数量为 {{max}}。一个组合市场算作两个常规市场。",
+                "max-combined-markets": "Parlay 中组合市场的最大数量为 {{max}}。"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",

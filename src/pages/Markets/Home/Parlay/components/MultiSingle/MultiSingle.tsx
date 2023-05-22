@@ -13,17 +13,11 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import { removeAll, setPayment, setMultiSingle, removeFromParlay } from 'redux/modules/parlay';
+import { removeAll, setPayment, setMultiSingle, removeFromParlay, getMultiSingle } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
-import {
-    AvailablePerPosition,
-    MultiSingleAmounts,
-    MultiSingleTokenQuoteAndBonus,
-    ParlayPayment,
-    ParlaysMarket,
-} from 'types/markets';
+import { AvailablePerPosition, MultiSingleTokenQuoteAndBonus, ParlayPayment, ParlaysMarket } from 'types/markets';
 import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
@@ -70,10 +64,9 @@ import { bigNumberFormatter } from 'utils/formatters/ethers';
 type MultiSingleProps = {
     markets: ParlaysMarket[];
     parlayPayment: ParlayPayment;
-    multiSingleAmounts: MultiSingleAmounts[];
 };
 
-const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multiSingleAmounts }) => {
+const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
@@ -84,6 +77,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const multiSingleAmounts = useSelector(getMultiSingle);
 
     const [submitDisabled, setSubmitDisabled] = useState(false);
     const [hasAllowance, setHasAllowance] = useState(false);
@@ -636,11 +630,13 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
         setHasValidationError(false);
         setTooltipTextUsdAmount({});
         // No point in adding a tool tip to all vals. Lets just set the tooltip on the highest value
-        const maxMsVal = multiSingleAmounts.reduce((max, ms) => (max.amountToBuy > ms.amountToBuy ? max : ms));
+        if (multiSingleAmounts.length) {
+            const maxMsVal = multiSingleAmounts.reduce((max, ms) => (max.amountToBuy > ms.amountToBuy ? max : ms));
 
-        const market = markets.find((m) => m.address === maxMsVal.sportMarketAddress);
-        if (market !== undefined) {
-            setTooltipTextMessageUsdAmount(market, maxMsVal.amountToBuy, true);
+            const market = markets.find((m) => m.address === maxMsVal.sportMarketAddress);
+            if (market !== undefined) {
+                setTooltipTextMessageUsdAmount(market, maxMsVal.amountToBuy, true);
+            }
         }
     }, [
         isVoucherSelected,
@@ -686,6 +682,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
             dispatch(
                 setMultiSingle({
                     sportMarketAddress: market.address,
+                    parentMarketAddress: market.parentMarket ? market.parentMarket : market.address,
                     amountToBuy: value,
                 })
             );
@@ -700,8 +697,8 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                 {markets.map((market, index) => {
                     const outOfLiquidity = false;
                     return (
-                        <>
-                            <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
+                        <div key={`${index}-${market.address}-ms`}>
+                            <RowMarket outOfLiquidity={outOfLiquidity}>
                                 <MatchInfo market={market} isHighlighted={true} />
                             </RowMarket>
                             <AmountToBuyMultiContainer ref={inputRef}>
@@ -715,7 +712,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                                     arrow={true}
                                 >
                                     <AmountToBuyMultiInput
-                                        key={index}
+                                        key={`${index}-${market.address}-ms-amount`}
                                         name="usdAmount"
                                         type="number"
                                         value={
@@ -743,7 +740,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment, multi
                                           )}
                                 </AmountToBuyMultiPayoutValue>
                             </AmountToBuyMultiContainer>
-                        </>
+                        </div>
                     );
                 })}
             </ListContainer>

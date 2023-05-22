@@ -1,13 +1,13 @@
 import { BetType, BetTypeNameMap } from 'constants/tags';
 import React, { useState } from 'react';
-import { MarketData } from 'types/markets';
+import { SportMarketInfo } from 'types/markets';
 import MarketPositions from '../MarketPositions';
 import { useTranslation } from 'react-i18next';
 import { Container, Header, Title, ContentContianer, Arrow, ContentRow } from './styled-components';
 import DoubleChanceMarketPositions from '../DoubleChanceMarketPositions';
 
 type PositionsProps = {
-    markets: MarketData[];
+    markets: SportMarketInfo[];
     betType: BetType;
     areDoubleChanceMarkets?: boolean;
 };
@@ -16,7 +16,21 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
     const { t } = useTranslation();
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
-    return (
+    const areDoubleChanceMarketsOddsValid = areDoubleChanceMarkets
+        ? markets.map((item) => item.homeOdds).every((odd) => odd < 1 && odd != 0)
+        : false;
+
+    let areOddsValid = true;
+    if (!areDoubleChanceMarkets) {
+        const latestMarket = markets.filter((market) => !market.isCanceled && !market.isPaused)[0];
+        areOddsValid = latestMarket.drawOdds
+            ? [latestMarket.homeOdds, latestMarket.awayOdds, latestMarket.drawOdds].every((odd) => odd < 1 && odd != 0)
+            : [latestMarket.homeOdds, latestMarket.awayOdds].every((odd) => odd < 1 && odd != 0);
+    }
+
+    const showContainer = areDoubleChanceMarkets ? areDoubleChanceMarketsOddsValid : areOddsValid;
+
+    return showContainer ? (
         <Container>
             <Header>
                 <Title isExpanded={isExpanded}>{t(`markets.market-card.bet-type.${BetTypeNameMap[betType]}`)}</Title>
@@ -43,6 +57,8 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
                 </ContentContianer>
             )}
         </Container>
+    ) : (
+        <></>
     );
 };
 

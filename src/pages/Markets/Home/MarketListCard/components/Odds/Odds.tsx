@@ -33,7 +33,17 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
           ) as DoubleChanceMarketsInfo)
         : undefined;
 
-    return (
+    const areDoubleChanceMarketsOddsValid = doubleChanceMarkets
+        ? doubleChanceMarkets.map((item) => item.homeOdds).every((odd) => odd < 1 && odd != 0)
+        : false;
+
+    const areOddsValid = market.drawOdds
+        ? [market.homeOdds, market.awayOdds, market.drawOdds].every((odd) => odd < 1 && odd != 0)
+        : [market.homeOdds, market.awayOdds].every((odd) => odd < 1 && odd != 0);
+
+    const showContainer = market.betType == BetType.DOUBLE_CHANCE ? areDoubleChanceMarketsOddsValid : areOddsValid;
+
+    return showContainer ? (
         <Container>
             <Title>
                 {t(`markets.market-card.bet-type.${BetTypeNameMap[market.betType as BetType]}`)}
@@ -89,18 +99,22 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
                                     isShownInSecondRow={isShownInSecondRow}
                                 />
                             )}
-                            <Odd
-                                market={market}
-                                position={Position.AWAY}
-                                odd={market.awayOdds}
-                                bonus={market.awayBonus}
-                                isShownInSecondRow={isShownInSecondRow}
-                            />
+                            {!market.isEnetpulseRacing && (
+                                <Odd
+                                    market={market}
+                                    position={Position.AWAY}
+                                    odd={market.awayOdds}
+                                    bonus={market.awayBonus}
+                                    isShownInSecondRow={isShownInSecondRow}
+                                />
+                            )}
                         </>
                     )}
                 </OddsContainer>
             )}
         </Container>
+    ) : (
+        <></>
     );
 };
 

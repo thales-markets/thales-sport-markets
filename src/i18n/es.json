@@ -275,7 +275,8 @@
         "race-starts": "Comienza la carrera",
         "back": "atrás",
         "apply-filters": "Aplicar filtros",
-        "incentivized-market": "MERCADO INCENTIVIZADO"
+        "incentivized-market": "MERCADO INCENTIVIZADO",
+        "f1-market": "{{driver}} gana {{race}}"
     },
     "markets": {
         "market-card": {
@@ -297,7 +298,8 @@
                 "winner": "Winner",
                 "spread": "Handicap",
                 "total": "Total",
-                "double-chance": "Double chance"
+                "double-chance": "Double chance",
+                "combined-positions": "Posiciones combinadas"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -322,7 +324,8 @@
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
                     "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
-                "bonus": "{{bonus}} added bonus on win!"
+                "bonus": "{{bonus}} added bonus on win!",
+                "and": "y"
             },
             "starts-in": "Empieza en",
             "period": "Período",
@@ -380,7 +383,10 @@
                 "max-payout": "El pago máximo admitido es {{max}}",
                 "max-profit": "La ganancia máxima admitida es {{max}}",
                 "max-teams": "Máximo de {{max}} mercados en Parlay",
-                "no-funds-multi-collateral": "Asegúrese de que su billetera tenga fondos suficientes ({{percentage}}% más del monto de la entrada)"
+                "no-funds-multi-collateral": "Asegúrese de que su billetera tenga fondos suficientes ({{percentage}}% más del monto de la entrada)",
+                "same-race-drivers": "Solo se admite un piloto por carrera. No se puede agregar {{addedDriver}} porque {{existingDriver}} ya está en Parlay",
+                "max-number-of-markets-with-combined-markets": "El número máximo de mercados en Parlay es {{max}}. Un solo mercado combinado cuenta como dos mercados regulares.",
+                "max-combined-markets": "El número máximo de mercados combinados en Parlay es {{max}}."
             },
             "fee": "Costo total",
             "payout": "Total recibido",

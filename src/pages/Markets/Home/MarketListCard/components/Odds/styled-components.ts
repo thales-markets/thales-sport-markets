@@ -39,3 +39,7 @@ export const Title = styled.span`
 export const OddsContainer = styled(FlexDivRow)`
     align-items: center;
 `;
+
+export const CombinedOddsContainer = styled(FlexDivRow)`
+    align-items: flex-start;
+`;

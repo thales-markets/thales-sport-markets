@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from 'react-query';
-import { AvailablePerDoubleChancePosition, MarketData } from '../../types/markets';
+import { AvailablePerDoubleChancePosition, SportMarketInfo } from '../../types/markets';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
@@ -7,7 +7,7 @@ import { DoubleChanceMarketType } from 'constants/tags';
 import { convertPriceImpactToBonus } from 'utils/markets';
 
 const useAvailablePerDoubleChancePositionQuery = (
-    markets: MarketData[],
+    markets: SportMarketInfo[],
     options?: UseQueryOptions<AvailablePerDoubleChancePosition | undefined>
 ) => {
     return useQuery<AvailablePerDoubleChancePosition | undefined>(
