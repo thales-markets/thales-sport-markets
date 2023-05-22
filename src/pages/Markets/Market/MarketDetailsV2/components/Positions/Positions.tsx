@@ -21,7 +21,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
         : false;
 
     let areOddsValid = true;
-    if (areDoubleChanceMarkets) {
+    if (!areDoubleChanceMarkets) {
         const latestMarket = markets[markets.length - 1];
         if (areDoubleChanceMarkets) console.log(markets);
         areOddsValid = latestMarket.drawOdds
