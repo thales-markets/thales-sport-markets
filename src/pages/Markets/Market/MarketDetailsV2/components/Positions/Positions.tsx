@@ -20,12 +20,16 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
         ? markets.map((item) => item.homeOdds).every((odd) => odd < 1 && odd != 0)
         : false;
 
-    const latestMarket = markets[markets.length - 1];
-    const areOddsValid = latestMarket.drawOdds
-        ? [latestMarket.homeOdds, latestMarket.awayOdds, latestMarket.drawOdds].every((odd) => odd < 1 && odd != 0)
-        : [latestMarket.homeOdds, latestMarket.awayOdds].every((odd) => odd < 1 && odd != 0);
+    let areOddsValid = true;
+    if (areDoubleChanceMarkets) {
+        const latestMarket = markets[markets.length - 1];
+        if (areDoubleChanceMarkets) console.log(markets);
+        areOddsValid = latestMarket.drawOdds
+            ? [latestMarket.homeOdds, latestMarket.awayOdds, latestMarket.drawOdds].every((odd) => odd < 1 && odd != 0)
+            : [latestMarket.homeOdds, latestMarket.awayOdds].every((odd) => odd < 1 && odd != 0);
+    }
 
-    const showContainer = betType == BetType.DOUBLE_CHANCE ? areDoubleChanceMarketsOddsValid : areOddsValid;
+    const showContainer = areDoubleChanceMarkets ? areDoubleChanceMarketsOddsValid : areOddsValid;
 
     return showContainer ? (
         <Container>
