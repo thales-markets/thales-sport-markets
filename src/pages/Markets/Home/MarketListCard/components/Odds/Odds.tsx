@@ -34,12 +34,12 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
         : undefined;
 
     const areDoubleChanceMarketsOddsValid = doubleChanceMarkets
-        ? doubleChanceMarkets.map((item) => item.homeOdds).every((odd) => odd < 1)
+        ? doubleChanceMarkets.map((item) => item.homeOdds).every((odd) => odd < 1 && odd != 0)
         : false;
 
     const areOddsValid = market.drawOdds
-        ? [market.homeOdds, market.awayOdds, market.drawOdds].every((odd) => odd < 1)
-        : [market.homeOdds, market.awayOdds].every((odd) => odd < 1);
+        ? [market.homeOdds, market.awayOdds, market.drawOdds].every((odd) => odd < 1 && odd != 0)
+        : [market.homeOdds, market.awayOdds].every((odd) => odd < 1 && odd != 0);
 
     const showContainer = market.betType == BetType.DOUBLE_CHANCE ? areDoubleChanceMarketsOddsValid : areOddsValid;
 
