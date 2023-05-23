@@ -281,7 +281,7 @@ export const TAGS_LIST: Tags = [
     {
         id: 9021,
         label: 'T20 Blast',
-        logoClass: '',
+        logoClass: 'icon-league league--t20',
         favourite: false,
         hidden: false,
         priority: 902,
