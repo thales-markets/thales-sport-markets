@@ -18,4 +18,5 @@ export const LOCAL_STORAGE_KEYS = {
     IS_MULTI_SINGLE: 'isMultiSingle',
     BRACKETS: 'brackets',
     STABLE_INDEX: 'stableIndex',
+    SGP_FEES: 'sgpFees',
 };
