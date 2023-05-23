@@ -278,6 +278,14 @@ export const TAGS_LIST: Tags = [
         hidden: false,
         priority: 112,
     },
+    {
+        id: 9021,
+        label: 'T20 Blast',
+        logoClass: 'icon-league league--t20',
+        favourite: false,
+        hidden: false,
+        priority: 902,
+    },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -314,6 +322,7 @@ export const SPORTS_MAP: SportsMap = {
     9045: 'Soccer',
     9033: 'Hockey',
     9296: 'Soccer',
+    9021: 'Cricket',
 };
 
 export const COMBINED_MARKETS_SGP: SGPItem[] = [
@@ -353,6 +362,7 @@ export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
     9020,
     9399,
     18196,
+    9021,
 ];
 
 export const SPORTS_TAGS_MAP: SportsTagsMap = {
@@ -365,7 +375,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Motosport: [9445, 9101],
     Tennis: [9153, 9156],
     eSports: [18977, 18983, 19138],
-    Cricket: [9020],
+    Cricket: [9020, 9021],
 };
 
 export enum TAGS_FLAGS {
@@ -399,6 +409,7 @@ export enum TAGS_FLAGS {
     COPA_LIBERTADORES = 9045,
     IIHF_WORLD_CHAMPIONSHIP = 9033,
     FIFA_WORLD_CUP_U20 = 9296,
+    T20_BLAST = 9021,
 }
 
 export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399, 18196, 9057, 9061, 9045, 9445, 9033, 9296];
@@ -469,6 +480,7 @@ export const SCORING_MAP: SportsMap = {
     9045: 'goals',
     9033: 'goals',
     9296: 'goals',
+    9021: 'points',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -505,6 +517,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9045: 'regular',
     9033: 'regular',
     9296: 'regular',
+    9021: '',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -539,4 +552,5 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     9045: 'half',
     9033: 'period',
     9296: 'half',
+    9021: 'inning',
 };

@@ -132,3 +132,7 @@
 .league--fifa-world-cup-u20:before {
     content: '\0069';
 }
+
+.league--t20:before {
+    content: '\005D';
+}
