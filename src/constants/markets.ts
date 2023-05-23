@@ -1,4 +1,5 @@
 import { CRYPTO_CURRENCY_MAP } from './currency';
+import { BetType } from './tags';
 
 export enum GlobalFiltersEnum {
     OpenMarkets = 'OpenMarkets',
@@ -97,6 +98,18 @@ export const ApexBetTypeKeyMapping = {
     [ApexBetType.TOP3]: 'top3',
     [ApexBetType.TOP5]: 'top5',
     [ApexBetType.TOP10]: 'top10',
+};
+
+export enum ContractSGPOrder {
+    MONEYLINETOTALS = 0,
+    MONEYLINESPREAD = 1,
+    SPREADTOTALS = 2,
+}
+
+export const SGPCombinationsFromContractOrderMapping: Record<ContractSGPOrder, BetType[]> = {
+    [ContractSGPOrder.MONEYLINETOTALS]: [0, 10002],
+    [ContractSGPOrder.MONEYLINESPREAD]: [0, 10001],
+    [ContractSGPOrder.SPREADTOTALS]: [10001, 10002],
 };
 
 export enum ParlayErrorCode {
