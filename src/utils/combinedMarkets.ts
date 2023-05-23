@@ -270,6 +270,13 @@ export const extractCombinedMarketsFromParlayMarkets = (parlayMarkets: ParlaysMa
     return combinedMarkets;
 };
 
+export const isSGPInParlayMarkets = (parlayMarkets: ParlaysMarket[]): boolean => {
+    const combinedMarkets = extractCombinedMarketsFromParlayMarkets(parlayMarkets);
+
+    if (combinedMarkets.length) return true;
+    return false;
+};
+
 export const extractCombinedMarketsFromParlayMarketType = (parlayMarket: ParlayMarketWithQuotes): CombinedMarket[] => {
     const combinedMarkets = [];
     const sportMarkets = parlayMarket.sportMarkets;
