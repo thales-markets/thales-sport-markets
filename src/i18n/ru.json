@@ -821,12 +821,12 @@
         "variables-parlay": "<p>Переменные:</p><ul><li> Коэффициент использования: {{utilizationRate}}</li><li> Нижний предел цены: {{priceLowerLimit}}</li><li> Верхний предел цены: {{priceUpperLimit}}</li><li> Максимальное влияние перекоса: {{skewImpactLimit}}</li><li> Максимальное распределение на один экспресс: {{allocationLimitsPerMarketPerRound}}</li><li> Максимальный общий депозит: {{maxAllowedDeposit}}</li><li> Максимальное количество пользователей в хранилище: {{maxAllowedUsers}}</li><li> Минимальная сумма для одной сделки: {{minTradeAmount}}</li><li> Минимальный депозит: {{minDepositAmount}}</li><li> Продолжительность раунда: {{roundLength}} дней</li></ul>"
     },
     "parlay-leaderboard": {
-        "title": "Таблица поощрений Parlay",
-        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best parlays on a <bold>bi-weekly basis</bold> starting from March 1st. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
-        "distribution-note": "Rewards will be distributed to the <bold>TOP 30 parlays every 2 weeks</bold>!",
+        "title": "Parlay Incentives Leaderboard",
+        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best parlays with minimum 3 games on a <bold>bi-weekly basis</bold>. The tickets will be ranked based on a total quote, followed by the number of positions on the parlays.",
+        "distribution-note": "Rewards will be distributed to the <bold>TOP 10 parlays every 2 weeks</bold>!",
         "no-parlays": "No winning parlays registered in the period yet.",
         "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
-        "info": "If multiple parlays have the same number of positions and total quote the following will be used as tie-breakers in respective order:",
+        "info": "If multiple parlays have the same total quote and the number of positions the following will be used as tie-breakers in respective order:",
         "info1": "- The amount paid",
         "info2": "- Actual total quote (gotten by multiplying positions individually)",
         "info3": "*1 winning parlay eligible per wallet",
