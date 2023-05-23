@@ -525,7 +525,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         const marketsAddresses = markets.map((market) => market.address);
                         const selectedPositions = markets.map((market) => market.position);
                         const susdPaid = ethers.utils.parseUnits(
-                            roundNumberToDecimals(Number(usdAmountValue)).toString(),
+                            roundNumberToDecimals(
+                                Number(usdAmountValue) ? Number(usdAmountValue) : minUsdAmountValue
+                            ).toString(),
                             getDefaultDecimalsForNetwork(networkId)
                         );
                         const newSkewData = await parlayMarketsAMMContract?.calculateSkewImpact(
