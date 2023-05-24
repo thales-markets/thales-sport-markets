@@ -23,9 +23,13 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
     let areOddsValid = true;
     if (!areDoubleChanceMarkets) {
         const latestMarket = markets.filter((market) => !market.isCanceled && !market.isPaused)[0];
-        areOddsValid = latestMarket.drawOdds
-            ? [latestMarket.homeOdds, latestMarket.awayOdds, latestMarket.drawOdds].every((odd) => odd < 1 && odd != 0)
-            : [latestMarket.homeOdds, latestMarket.awayOdds].every((odd) => odd < 1 && odd != 0);
+        if (latestMarket) {
+            areOddsValid = latestMarket.drawOdds
+                ? [latestMarket.homeOdds, latestMarket.awayOdds, latestMarket.drawOdds].every(
+                      (odd) => odd < 1 && odd != 0
+                  )
+                : [latestMarket.homeOdds, latestMarket.awayOdds].every((odd) => odd < 1 && odd != 0);
+        }
     }
 
     const showContainer = areDoubleChanceMarkets ? areDoubleChanceMarketsOddsValid : areOddsValid;
