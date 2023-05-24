@@ -50,6 +50,25 @@ export const ContentContainer = styled(FlexDivColumn)`
     }
 `;
 
+export const MainContentContainer = styled(ContentContainer)`
+    padding: 10px 10px 10px 10px;
+    :first-child {
+        padding-right: 0;
+    }
+    :last-child {
+        padding-left: 0;
+    }
+    @media (max-width: 767px) {
+        padding: 10px 5px 10px 5px;
+        :first-child {
+            padding-right: 5px;
+        }
+        :last-child {
+            padding-left: 5px;
+        }
+    }
+`;
+
 export const MainContainer = styled(Container)`
     width: 100%;
     background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
@@ -333,6 +352,16 @@ export const LiquidityPoolInfoLabel = styled.span`
     white-space: nowrap;
     margin-right: 6px;
     width: 122px;
+`;
+
+export const LiquidityPoolReturnlabel = styled(LiquidityPoolInfoLabel)`
+    width: initial;
+`;
+
+export const LiquidityPoolReturnInfo = styled(LiquidityPoolReturnlabel)`
+    font-weight: 600;
+    color: ${(props) => props.theme.winnerColors.primary};
+    font-size: 16px;
 `;
 
 export const LiquidityPoolInfoGraphic = styled(FlexDivStart)<{ background: string; widthPercentage: number }>`
