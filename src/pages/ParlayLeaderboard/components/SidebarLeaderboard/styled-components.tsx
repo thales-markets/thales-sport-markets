@@ -1,5 +1,5 @@
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
-import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
+import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import styled from 'styled-components';
 import {
     FlexDiv,
@@ -141,9 +141,9 @@ export const OPLogoWrapper = styled(OPLogo)`
     margin-left: 5px;
 `;
 
-export const ThalesLogoWrapper = styled(ThalesLogo)`
-    width: 15px;
-    height: 15px;
+export const ArbitrumLogoWrapper = styled(ArbitrumLogo)`
+    width: 17px;
+    height: 17px;
     margin-left: 5px;
 `;
 
