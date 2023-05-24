@@ -161,7 +161,7 @@ const Container = styled(FlexDivColumn)`
 `;
 
 const ChartContainer = styled.div`
-    height: 220px;
+    height: 300px;
     width: 100%;
     @media (max-width: 767px) {
         height: 200px;

@@ -41,6 +41,7 @@ import {
     SliderRange,
     StyledSlider,
     RadioButtonContainer,
+    MainContentContainer,
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -75,6 +76,7 @@ import { getDefaultDecimalsForNetwork, getDefaultColleteralForNetwork } from 'ut
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { FlexDivRow } from 'styles/common';
 import RadioButton from 'components/fields/RadioButton/RadioButton';
+import Return from './Return/Return';
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
@@ -831,7 +833,7 @@ const LiquidityPool: React.FC = () => {
                     </LoaderContainer>
                 ) : (
                     <>
-                        <ContentContainer>
+                        <MainContentContainer>
                             {liquidityPoolData && (
                                 <>
                                     <LiquidityPoolInfoTitle>
@@ -973,23 +975,24 @@ const LiquidityPool: React.FC = () => {
                                     </WarningContentInfo>
                                 )}
                             </ContentInfoContainer>
-                        </ContentContainer>
-                        <ContentContainer>
+                            <Return />
+                        </MainContentContainer>
+                        <MainContentContainer>
                             {liquidityPoolData && (
                                 <PnL
                                     lifetimePnl={liquidityPoolData.lifetimePnl}
                                     type={LiquidityPoolPnlType.PNL_PER_ROUND}
                                 />
                             )}
-                        </ContentContainer>
-                        <ContentContainer>
+                        </MainContentContainer>
+                        <MainContentContainer>
                             {liquidityPoolData && (
                                 <PnL
                                     lifetimePnl={liquidityPoolData.lifetimePnl}
                                     type={LiquidityPoolPnlType.CUMULATIVE_PNL}
                                 />
                             )}
-                        </ContentContainer>
+                        </MainContentContainer>
                     </>
                 )}
             </MainContainer>

@@ -69,3 +69,9 @@ export type VaultsAndLiquidityPoolUserTransaction = {
 };
 
 export type VaultsAndLiquidityPoolUserTransactions = VaultsAndLiquidityPoolUserTransaction[];
+
+export type LiquidityPoolReturn = {
+    arr: number;
+    apr: number;
+    apy: number;
+};

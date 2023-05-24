@@ -1034,6 +1034,12 @@
             "lifetime-pnl": "Lifetime PnL",
             "ongoing-pnl": "Ongoing PnL"
         },
+        "return": {
+            "title": "Return",
+            "arr": "Average round return (ARR)",
+            "apr": "Projected APR based on ARR",
+            "apy": "Projected APY based on APR"
+        },
         "user-transactions": {
             "title": "User transactions",
             "your-transactions-title": "Your transactions",
