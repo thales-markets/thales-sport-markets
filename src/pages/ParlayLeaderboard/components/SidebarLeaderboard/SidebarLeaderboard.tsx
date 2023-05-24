@@ -2,8 +2,8 @@ import PositionSymbol from 'components/PositionSymbol';
 import SimpleLoader from 'components/SimpleLoader';
 import SPAAnchor from 'components/SPAAnchor';
 import {
-    PARLAY_LEADERBOARD_OPTIMISM_REWARDS,
-    PARLAY_LEADERBOARD_ARBITRUM_REWARDS,
+    PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10,
+    PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10,
     PARLAY_LEADERBOARD_BIWEEKLY_START_DATE,
 } from 'constants/markets';
 import { SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
@@ -49,7 +49,7 @@ import {
     ParlayRowResult,
     ParlayRowTeam,
     Rank,
-    ThalesLogoWrapper,
+    ArbitrumLogoWrapper,
     Title,
     TitleLabel,
 } from './styled-components';
@@ -63,11 +63,7 @@ const SidebarLeaderboard: React.FC = () => {
     const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
 
     const latestPeriodBiweekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_BIWEEKLY_START_DATE) / 14);
-    const query = useParlayLeaderboardQuery(
-        networkId,
-        networkId !== NetworkIdByName.ArbitrumOne ? latestPeriodBiweekly + 1 : latestPeriodBiweekly,
-        { enabled: isAppReady }
-    );
+    const query = useParlayLeaderboardQuery(networkId, latestPeriodBiweekly, { enabled: isAppReady });
 
     const parlaysData = useMemo(() => {
         return query.isSuccess ? query.data.slice(0, SIDEBAR_NUMBER_OF_TOP_USERS) : [];
@@ -75,8 +71,8 @@ const SidebarLeaderboard: React.FC = () => {
 
     const rewards =
         networkId !== NetworkIdByName.ArbitrumOne
-            ? PARLAY_LEADERBOARD_OPTIMISM_REWARDS
-            : PARLAY_LEADERBOARD_ARBITRUM_REWARDS;
+            ? PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10
+            : PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10;
 
     return (
         <LeaderboardWrapper>
@@ -138,7 +134,7 @@ const SidebarLeaderboard: React.FC = () => {
                                                 {networkId !== NetworkIdByName.ArbitrumOne ? (
                                                     <OPLogoWrapper />
                                                 ) : (
-                                                    <ThalesLogoWrapper />
+                                                    <ArbitrumLogoWrapper />
                                                 )}
                                             </DataLabel>
                                         </ColumnWrapper>
