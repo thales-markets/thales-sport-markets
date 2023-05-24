@@ -361,6 +361,7 @@ export const LiquidityPoolReturnlabel = styled(LiquidityPoolInfoLabel)`
 export const LiquidityPoolReturnInfo = styled(LiquidityPoolReturnlabel)`
     font-weight: 600;
     color: ${(props) => props.theme.winnerColors.primary};
+    font-size: 16px;
 `;
 
 export const LiquidityPoolInfoGraphic = styled(FlexDivStart)<{ background: string; widthPercentage: number }>`
