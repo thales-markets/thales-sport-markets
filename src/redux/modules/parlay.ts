@@ -2,7 +2,7 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { COLLATERALS_INDEX } from 'constants/currency';
 import { ParlayErrorCode } from 'constants/markets';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { MultiSingleAmounts, ParlayPayment, ParlaysMarketPosition } from 'types/markets';
+import { MultiSingleAmounts, ParlayPayment, ParlaysMarketPosition, SGPItem } from 'types/markets';
 import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
 import { getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
@@ -58,6 +58,7 @@ type ParlaySliceState = {
     payment: ParlayPayment;
     multiSingle: MultiSingleAmounts[];
     isMultiSingle: boolean;
+    sgpFees: SGPItem[];
     error: { code: ParlayErrorCode; data: string };
 };
 
@@ -67,6 +68,7 @@ const initialState: ParlaySliceState = {
     payment: getDefaultPayment(),
     multiSingle: getDefaultMultiSingle(),
     isMultiSingle: getDefaultIsMultiSingle(),
+    sgpFees: [],
     error: getDefaultError(),
 };
 
@@ -266,6 +268,10 @@ export const parlaySlice = createSlice({
         resetParlayError: (state) => {
             state.error = getDefaultError();
         },
+        setSGPFees: (state, action: PayloadAction<SGPItem[]>) => {
+            state.sgpFees = [...action.payload];
+            localStore.set(LOCAL_STORAGE_KEYS.SGP_FEES, state.sgpFees);
+        },
     },
 });
 
@@ -287,6 +293,7 @@ export const {
     setIsMultiSingle,
     setPaymentSelectedStableIndex,
     resetParlayError,
+    setSGPFees,
     removeFromMultiSingle,
 } = parlaySlice.actions;
 
@@ -298,5 +305,6 @@ export const getParlaySize = (state: RootState) => getParlayState(state).parlayS
 export const getParlayPayment = (state: RootState) => getParlayState(state).payment;
 export const getParlayError = (state: RootState) => getParlayState(state).error;
 export const getHasParlayError = createSelector(getParlayError, (error) => error.code != ParlayErrorCode.NO_ERROS);
+export const getSGPFees = (state: RootState) => getParlayState(state).sgpFees;
 
 export default parlaySlice.reducer;

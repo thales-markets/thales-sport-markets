@@ -426,3 +426,7 @@ export type CombinedMarketContractData = {
 export type CombinedMarketsContractData = CombinedMarketContractData[];
 
 export type SGPItem = { tags: number[]; combination: BetType[]; SGPFee: number };
+
+export type SGPContractDataItem = [number, number, number, number];
+
+export type SGPContractData = SGPContractDataItem[];
