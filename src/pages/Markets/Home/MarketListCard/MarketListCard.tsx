@@ -148,7 +148,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         ? [market.homeOdds, market.awayOdds, market.drawOdds].every((odd) => odd < 1 && odd != 0)
         : [market.homeOdds, market.awayOdds].every((odd) => odd < 1 && odd != 0);
 
-    console.log(isMotosport(Number(market.tags[0])));
     const hideGame =
         !areDoubleChanceMarketsOddsValid &&
         !areSpreadTotalsMarketsOddsValid &&
