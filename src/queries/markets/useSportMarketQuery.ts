@@ -8,6 +8,7 @@ import { insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
 import { getMarketAddressesFromSportMarketArray } from 'utils/markets';
 import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
+import { ENETPULSE_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
 
 const useSportMarketQuery = (
     marketAddress: string,
@@ -34,6 +35,9 @@ const useSportMarketQuery = (
 
                 if (parentMarketFromGraph) {
                     const parentMarket = parentMarketFromGraph[0];
+                    parentMarket.isEnetpulseRacing =
+                        SPORTS_TAGS_MAP['Motosport'].includes(Number(parentMarket.tags[0])) &&
+                        ENETPULSE_SPORTS.includes(Number(parentMarket.tags[0]));
 
                     parentMarket.childMarkets = childMarkets;
                     const marketAddresses = getMarketAddressesFromSportMarketArray([parentMarket]);
