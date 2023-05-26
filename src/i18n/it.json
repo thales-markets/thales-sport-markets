@@ -151,7 +151,8 @@
         "mls-tooltip": "I risultati dei mercati MLS si basano sui risultati della regolamentazione, se dovessero andare agli straordinari il risultato della regolamentazione è quello in cui il mercato deciderà.",
         "fifa-tooltip": "I risultati dei mercati della Coppa del Mondo FIFA si basano sui risultati regolamentari, se dovessero andare ai tempi supplementari il risultato regolamentare è quello in base al quale si risolverà il mercato.",
         "tennis-tooltip": "In caso di walkover, la partita sarà considerata annullata. In caso di ritiro/squalifica durante la partita, verrà considerata come una vittoria per il giocatore che avanza al turno successivo",
-        "iihf-tooltip": "I risultati dei mercati del campionato mondiale IIHF si basano sui risultati regolamentari, se dovessero andare ai tempi supplementari il risultato regolamentare è quello in base al quale il mercato si risolverà."
+        "iihf-tooltip": "I risultati dei mercati del campionato mondiale IIHF si basano sui risultati regolamentari, se dovessero andare ai tempi supplementari il risultato regolamentare è quello in base al quale il mercato si risolverà.",
+        "uefa-tooltip": "I risultati dei mercati UEFA si basano sui risultati regolamentari, se dovessero andare ai tempi supplementari il risultato regolamentare è quello in base al quale si risolverà il mercato."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -1082,6 +1083,12 @@
                 "withdrawalRequest": "Withdrawal Request",
                 "claim": "Withdrawal Claim"
             }
+        },
+        "return": {
+            "title": "Ritorno",
+            "apy": "APY previsto basato su APR",
+            "apr": "APR previsto basato su ARR",
+            "arr": "Rendimento tondo medio (ARR)"
         }
     }
 }

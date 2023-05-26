@@ -3,9 +3,11 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Wrapper = styled(FlexDivColumn)<{
+    hideGame: boolean;
     isResolved: boolean;
 }>`
     width: 100%;
+    display: ${(props) => (props.hideGame ? 'none' : '')};
     border-radius: 5px;
     margin-bottom: 8px;
     background-color: ${(props) => (props.isResolved ? 'rgb(36,41,64, 0.5)' : MAIN_COLORS.LIGHT_GRAY)};

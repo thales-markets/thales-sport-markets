@@ -13,7 +13,7 @@ import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { fixEnetpulseRacingName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isFifaWCGame, isIIHFWCGame } from 'utils/markets';
+import { isUEFAGame, isFifaWCGame, isIIHFWCGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import Web3 from 'web3';
 import CombinedMarketsOdds from './components/CombinedMarketsOdds';
@@ -132,8 +132,26 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         market.address,
     ]);
 
+    const areDoubleChanceMarketsOddsValid =
+        doubleChanceMarkets && doubleChanceMarkets.length > 0
+            ? doubleChanceMarkets.map((item) => item.homeOdds).every((odd) => odd < 1 && odd != 0)
+            : false;
+
+    const areSpreadTotalsMarketsOddsValid =
+        spreadTotalMarkets && spreadTotalMarkets.length > 0
+            ? spreadTotalMarkets
+                  .map((item) => [item.homeOdds, item.awayOdds])
+                  .every((oddsArray) => oddsArray[0] < 1 && oddsArray[0] != 0 && oddsArray[1] < 1 && oddsArray[1] != 0)
+            : false;
+
+    const areOddsValid = market.drawOdds
+        ? [market.homeOdds, market.awayOdds, market.drawOdds].every((odd) => odd < 1 && odd != 0)
+        : [market.homeOdds, market.awayOdds].every((odd) => odd < 1 && odd != 0);
+
+    const hideGame = !areDoubleChanceMarketsOddsValid && !areSpreadTotalsMarketsOddsValid && !areOddsValid;
+
     return (
-        <Wrapper isResolved={isGameRegularlyResolved}>
+        <Wrapper hideGame={hideGame} isResolved={isGameRegularlyResolved}>
             <MainContainer>
                 <MatchInfoConatiner data-matomo-category="market-list-card" data-matomo-action="click-market-details">
                     <SPAAnchor href={buildMarketLink(market.address, language)}>
@@ -151,6 +169,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         )}
                         {isIIHFWCGame(market.tags[0]) && (
                             <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
+                        )}
+                        {isUEFAGame(Number(market.tags[0])) && (
+                            <Tooltip overlay={t(`common.uefa-tooltip`)} iconFontSize={12} marginLeft={2} />
                         )}
                         <MatchTimeLabel>
                             {isEnetpulseSport &&

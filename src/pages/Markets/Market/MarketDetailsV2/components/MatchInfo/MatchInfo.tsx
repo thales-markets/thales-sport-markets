@@ -19,7 +19,7 @@ import Tooltip from 'components/Tooltip';
 import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatShortDateWithTime } from 'utils/formatters/date';
-import { convertFinalResultToResultType, isFifaWCGame, isIIHFWCGame } from 'utils/markets';
+import { convertFinalResultToResultType, isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { FIFA_WC_TAG, FIFA_WC_U20_TAG, SPORTS_TAGS_MAP } from 'constants/tags';
 import { fixEnetpulseRacingName } from 'utils/formatters/string';
 
@@ -101,6 +101,9 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                             )}
                             {isIIHFWCGame(market.tags[0]) && (
                                 <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
+                            )}
+                            {isUEFAGame(Number(market.tags[0])) && (
+                                <Tooltip overlay={t(`common.uefa-tooltip`)} iconFontSize={12} marginLeft={2} />
                             )}
                         </MatchTimeLabel>
                         <MatchTime>{formatShortDateWithTime(market.maturityDate)}</MatchTime>
