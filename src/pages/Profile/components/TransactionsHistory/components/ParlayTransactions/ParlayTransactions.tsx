@@ -378,7 +378,7 @@ const StatusIcon = styled.i`
     }
 `;
 
-const getParlayRow = (
+export const getParlayRow = (
     data: ParlayMarketWithQuotes,
     selectedOddsType: OddsType,
     language: string,

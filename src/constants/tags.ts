@@ -1,4 +1,4 @@
-import { Tags, SportsMap, SportsTagsMap, SGPItem } from 'types/markets';
+import { Tags, SportsMap, SportsTagsMap } from 'types/markets';
 
 export const TAGS_LIST: Tags = [
     {
@@ -324,24 +324,6 @@ export const SPORTS_MAP: SportsMap = {
     9296: 'Soccer',
     9021: 'Cricket',
 };
-
-export const COMBINED_MARKETS_SGP: SGPItem[] = [
-    {
-        tags: [9399],
-        combination: [0, 10002],
-        SGPFee: 0.99,
-    },
-    {
-        tags: [9006],
-        combination: [0, 10002],
-        SGPFee: 0.9,
-    },
-    {
-        tags: [9004],
-        combination: [0, 10002],
-        SGPFee: 0.95,
-    },
-];
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
     9001,
