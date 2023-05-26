@@ -40,10 +40,6 @@ const MatchInfoOfCombinedMarket: React.FC<MatchInfoCominedMarketProps> = ({
     const bonus = 0;
     const odd = combinedMarket.totalOdd;
 
-    const isMarketCanceled = combinedMarket.markets[0].isCanceled && combinedMarket.markets[1].isCanceled;
-    const isMarketWinning = combinedMarket.markets[0].winning && combinedMarket.markets[1].winning;
-    const isMarketResolved = combinedMarket.markets[0].isResolved && combinedMarket.markets[1].isResolved;
-
     return (
         <>
             <MatchLogos market={market} width={'120px'} padding={'0 0 0 4px'} isHighlighted={isHighlighted} />
@@ -80,10 +76,10 @@ const MatchInfoOfCombinedMarket: React.FC<MatchInfoCominedMarketProps> = ({
             />
             {!readOnly && <Bonus>{bonus > 0 ? getFormattedBonus(bonus) : ''}</Bonus>}
             {readOnly ? (
-                isMarketCanceled ? (
+                market?.isCanceled ? (
                     <Canceled className={`icon icon--open`} />
-                ) : isMarketResolved ? (
-                    isMarketWinning ? (
+                ) : market?.isResolved ? (
+                    market?.winning ? (
                         <Correct className={`icon icon--correct`} />
                     ) : (
                         <Wrong className={`icon icon--wrong`} />

@@ -1,3 +1,4 @@
+import PositionSymbol from 'components/PositionSymbol';
 import Search from 'components/Search';
 import SelectInput from 'components/SelectInput';
 import Table from 'components/Table';
@@ -28,7 +29,7 @@ import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
-import { ParlayMarket, ParlayMarketWithRank, PositionData, SportMarketInfo } from 'types/markets';
+import { ParlayMarketWithRank, PositionData, SportMarketInfo } from 'types/markets';
 import { getEtherscanAddressLink } from 'utils/etherscan';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
@@ -36,21 +37,17 @@ import { truncateAddress } from 'utils/formatters/string';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
+    convertPositionNameToPositionType,
     formatMarketOdds,
-    syncPositionsAndMarketsPerContractOrderInParlay,
+    getOddTooltipText,
+    getSpreadTotalText,
+    getSymbolText,
 } from 'utils/markets';
 import { NetworkIdByName } from 'utils/network';
 import TimeRemaining from 'components/TimeRemaining';
-import {
-    extractCombinedMarketsFromParlayMarketType,
-    removeCombinedMarketsFromParlayMarketType,
-} from 'utils/combinedMarkets';
-import { getParlayRow } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
-import i18n from 'i18n';
 
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
-    const language = i18n.language;
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -151,12 +148,10 @@ const ParlayLeaderboard: React.FC = () => {
                         onClick={() => setExpandStickyRowState(!expandStickyRow)}
                     />
                 </StickyContrainer>
-                <ExpandedContainer hide={!expandStickyRow}>
-                    {getExpandedRow(data, selectedOddsType, language)}
-                </ExpandedContainer>
+                <ExpandedContainer hide={!expandStickyRow}>{getExpandedRow(data, selectedOddsType)}</ExpandedContainer>
             </StickyRow>
         );
-    }, [parlays, rewards, networkId, period, selectedOddsType, expandStickyRow, language, walletAddress]);
+    }, [expandStickyRow, parlays, walletAddress, selectedOddsType, rewards, networkId, period]);
 
     const [page, setPage] = useState(0);
     const handleChangePage = (_event: unknown, newPage: number) => {
@@ -292,21 +287,9 @@ const ParlayLeaderboard: React.FC = () => {
                     {
                         accessor: 'numberOfPositions',
                         Header: <>{t('parlay-leaderboard.sidebar.positions')}</>,
-                        Cell: (cellProps: any) => {
-                            const parlay = syncPositionsAndMarketsPerContractOrderInParlay(
-                                cellProps.row.original as ParlayMarket
-                            );
-                            const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlay);
-                            const numberOfMarketsModifiedWithCombinedPositions =
-                                combinedMarkets.length > 0
-                                    ? parlay.sportMarkets.length - combinedMarkets.length
-                                    : parlay.sportMarkets.length;
-                            return (
-                                <FlexCenter>
-                                    <TableText>{numberOfMarketsModifiedWithCombinedPositions}</TableText>
-                                </FlexCenter>
-                            );
-                        },
+                        Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['sportMarkets']>) => (
+                            <TableText>{cellProps.cell.value}</TableText>
+                        ),
                         sortable: true,
                     },
                     {
@@ -338,17 +321,56 @@ const ParlayLeaderboard: React.FC = () => {
                 noResultsMessage={t('parlay-leaderboard.no-parlays')}
                 stickyRow={stickyRow}
                 expandedRow={(row) => {
-                    const parlay = syncPositionsAndMarketsPerContractOrderInParlay(row.original as ParlayMarket);
+                    const toRender = row.original.sportMarketsFromContract.map((address: string, index: number) => {
+                        const position = row.original.positions.find(
+                            (position: any) => position.market.address == address
+                        );
 
-                    const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlay);
-                    const parlayWithoutCombinedMarkets = removeCombinedMarketsFromParlayMarketType(parlay);
+                        const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
 
-                    const toRender = getParlayRow(
-                        parlayWithoutCombinedMarkets,
-                        selectedOddsType,
-                        language,
-                        combinedMarkets
-                    );
+                        const symbolText = getSymbolText(positionEnum, position.market);
+                        const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
+
+                        return (
+                            <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
+                                <ParlayRowText>
+                                    {getPositionStatus(position)}
+                                    <ParlayRowTeam title={position.market.homeTeam + ' vs ' + position.market.awayTeam}>
+                                        {position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                                    </ParlayRowTeam>
+                                </ParlayRowText>
+                                <PositionSymbol
+                                    symbolAdditionalText={{
+                                        text: formatMarketOdds(
+                                            selectedOddsType,
+                                            row.original.marketQuotes ? row.original.marketQuotes[index] : 0
+                                        ),
+                                        textStyle: {
+                                            fontSize: '10.5px',
+                                            marginLeft: '10px',
+                                        },
+                                    }}
+                                    additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
+                                    symbolText={symbolText}
+                                    symbolUpperText={
+                                        spreadTotalText
+                                            ? {
+                                                  text: spreadTotalText,
+                                                  textStyle: {
+                                                      backgroundColor: '#1A1C2B',
+                                                      fontSize: '10px',
+                                                      top: '-9px',
+                                                      left: '10px',
+                                                  },
+                                              }
+                                            : undefined
+                                    }
+                                    tooltip={<>{getOddTooltipText(positionEnum, position.market)}</>}
+                                />
+                                <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
+                            </ParlayRow>
+                        );
+                    });
 
                     return (
                         <ExpandedRowWrapper>
@@ -415,17 +437,57 @@ export const getOpacity = (position: PositionData) => {
     }
 };
 
-const getExpandedRow = (parlay: ParlayMarketWithRank, selectedOddsType: OddsType, language: string) => {
-    const modifiedParlay = syncPositionsAndMarketsPerContractOrderInParlay(parlay);
+const getExpandedRow = (parlay: ParlayMarketWithRank, selectedOddsType: OddsType) => {
+    const gameList = parlay.sportMarketsFromContract.map((address: string, index: number) => {
+        const position = parlay.positions.find((position: any) => position.market.address == address);
+        if (!position) return;
 
-    const combinedMarkets = extractCombinedMarketsFromParlayMarketType(modifiedParlay);
-    const parlayWithoutCombinedMarkets = removeCombinedMarketsFromParlayMarketType(modifiedParlay);
+        const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
 
-    const toRender = getParlayRow(parlayWithoutCombinedMarkets, selectedOddsType, language, combinedMarkets);
+        const symbolText = getSymbolText(positionEnum, position.market);
+        const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
+
+        return (
+            <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
+                <ParlayRowText>
+                    {getPositionStatus(position)}
+                    <ParlayRowTeam title={position.market.homeTeam + ' vs ' + position.market.awayTeam}>
+                        {position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                    </ParlayRowTeam>
+                </ParlayRowText>
+                <PositionSymbol
+                    symbolAdditionalText={{
+                        text: formatMarketOdds(selectedOddsType, parlay.marketQuotes ? parlay.marketQuotes[index] : 0),
+                        textStyle: {
+                            fontSize: '10.5px',
+                            marginLeft: '10px',
+                        },
+                    }}
+                    additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
+                    symbolText={symbolText}
+                    symbolUpperText={
+                        spreadTotalText
+                            ? {
+                                  text: spreadTotalText,
+                                  textStyle: {
+                                      backgroundColor: '#1A1C2B',
+                                      fontSize: '10px',
+                                      top: '-9px',
+                                      left: '10px',
+                                  },
+                              }
+                            : undefined
+                    }
+                    tooltip={<>{getOddTooltipText(positionEnum, position.market)}</>}
+                />
+                <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
+            </ParlayRow>
+        );
+    });
 
     return (
         <ExpandedRowWrapper>
-            <FirstSection>{toRender}</FirstSection>
+            <FirstSection>{gameList}</FirstSection>
             <LastExpandedSection style={{ gap: 20 }}>
                 <QuoteWrapper>
                     <QuoteLabel>{t('parlay-leaderboard.sidebar.total-quote')}:</QuoteLabel>
@@ -589,6 +651,25 @@ const ExpandedRowWrapper = styled.div`
     }
 `;
 
+const ParlayRow = styled(FlexDivRowCentered)`
+    margin-top: 10px;
+    justify-content: space-evenly;
+    &:last-child {
+        margin-bottom: 10px;
+    }
+`;
+
+const ParlayRowText = styled(QuoteText)`
+    max-width: 220px;
+`;
+
+const ParlayRowTeam = styled.span`
+    white-space: nowrap;
+    width: 208px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
+
 const FirstSection = styled.div`
     display: flex;
     flex-direction: column;
@@ -641,12 +722,6 @@ const LeaderboardHeader = styled(FlexDivRow)`
     @media screen and (max-width: 767px) {
         flex-direction: column;
     }
-`;
-
-const FlexCenter = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
 `;
 
 const SelectContainer = styled.div`

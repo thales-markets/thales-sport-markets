@@ -56,7 +56,6 @@ import {
     ValidationTooltip,
     XButton,
 } from '../styled-components';
-import { isSGPInParlayMarkets } from 'utils/combinedMarkets';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -114,8 +113,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
     // Due to conversion from non sUSD to sUSD user needs 2% more funds in wallet
     const COLLATERAL_CONVERSION_MULTIPLIER = selectedStableIndex !== COLLATERALS_INDEX.sUSD ? 1.02 : 1;
-
-    const hasParlayCombinedMarkets = isSGPInParlayMarkets(markets);
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -519,26 +516,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     const parlayAmmTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
                     console.log(parlayAmmTotalQuote);
                     setTotalQuote(parlayAmmTotalQuote);
-
-                    // Skew impact calculation if it's SGP
-                    if (hasParlayCombinedMarkets) {
-                        const marketsAddresses = markets.map((market) => market.address);
-                        const selectedPositions = markets.map((market) => market.position);
-                        const susdPaid = ethers.utils.parseUnits(
-                            roundNumberToDecimals(
-                                Number(usdAmountValue) ? Number(usdAmountValue) : minUsdAmountValue
-                            ).toString(),
-                            getDefaultDecimalsForNetwork(networkId)
-                        );
-                        const newSkewData = await parlayMarketsAMMContract?.calculateSkewImpact(
-                            marketsAddresses,
-                            selectedPositions,
-                            susdPaid
-                        );
-                        setSkew(bigNumberFormatter(newSkewData || 0));
-                    } else {
-                        setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
-                    }
+                    setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
                     setTotalBuyAmount(parlayAmmTotalBuyAmount);
 
                     const fetchedFinalQuotes: number[] = (parlayAmmQuote['finalQuotes'] || []).map((quote: BigNumber) =>
@@ -588,9 +566,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         minUsdAmountValue,
         setMarketsOutOfLiquidity,
         calculatedBonusPercentageDec,
-        hasParlayCombinedMarkets,
-        markets,
-        networkId,
     ]);
 
     useEffect(() => {

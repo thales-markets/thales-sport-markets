@@ -23,7 +23,7 @@ import { useLocation } from 'react-router-dom';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
-import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
+import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
@@ -38,8 +38,6 @@ import GlobalFilters from '../components/GlobalFilters';
 import SportFilter from '../components/SportFilter';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import TagsDropdown from '../components/TagsDropdown';
-import useSGPFeesQuery from 'queries/markets/useSGPFeesQuery';
-import { setSGPFees } from 'redux/modules/parlay';
 
 const SidebarLeaderboard = lazy(
     () => import(/* webpackChunkName: "SidebarLeaderboard" */ 'pages/ParlayLeaderboard/components/SidebarLeaderboard')
@@ -69,7 +67,6 @@ const Home: React.FC = () => {
     const dispatch = useDispatch();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
     const { trackPageView } = useMatomo();
     const location = useLocation();
@@ -90,16 +87,6 @@ const Home: React.FC = () => {
     ).map((tag) => {
         return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite };
     });
-
-    const sgpFees = useSGPFeesQuery(networkId, {
-        enabled: isWalletConnected,
-    });
-
-    useEffect(() => {
-        if (sgpFees.isSuccess && sgpFees.data) {
-            dispatch(setSGPFees(sgpFees.data));
-        }
-    }, [dispatch, sgpFees.data, sgpFees.isSuccess]);
 
     const favouriteLeagues = useSelector(getFavouriteLeagues);
 

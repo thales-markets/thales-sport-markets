@@ -13,17 +13,14 @@ import SPAAnchor from 'components/SPAAnchor';
 import { buildHref, navigateTo } from 'utils/routes';
 import ROUTES from 'constants/routes';
 import { NetworkIdByName } from 'utils/network';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import UserVaults from './components/UserVaults';
 import Voucher from './components/Voucher';
-import useSGPFeesQuery from 'queries/markets/useSGPFeesQuery';
-import { setSGPFees } from 'redux/modules/parlay';
 
 const Profile: React.FC = () => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
     const navItemFromQuery = getQueryStringVal('nav-item');
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -34,16 +31,6 @@ const Profile: React.FC = () => {
     useEffect(() => {
         !isWalletConnected && navigateTo(ROUTES.Markets.Home);
     }, [isWalletConnected]);
-
-    const sgpFees = useSGPFeesQuery(networkId, {
-        enabled: isWalletConnected,
-    });
-
-    useEffect(() => {
-        if (sgpFees.isSuccess && sgpFees.data) {
-            dispatch(setSGPFees(sgpFees.data));
-        }
-    }, [dispatch, sgpFees.data, sgpFees.isSuccess]);
 
     return (
         <Container>

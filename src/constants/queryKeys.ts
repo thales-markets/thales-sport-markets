@@ -152,7 +152,6 @@ export const QUERY_KEYS = {
         Return: (networkId: NetworkId) => ['liquidityPool', 'return', networkId],
         UserTransactions: (networkId: NetworkId) => ['liquidityPool', 'userTransactions', networkId],
     },
-    SGPFees: (networkId: NetworkId) => ['sgpFees', networkId],
 };
 
 export default QUERY_KEYS;

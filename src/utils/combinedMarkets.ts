@@ -8,26 +8,19 @@ import {
     ParlaysMarket,
     ParlaysMarketPosition,
     PositionData,
-    SGPContractData,
     SGPItem,
     SportMarketInfo,
 } from 'types/markets';
 import { POSITION_TO_ODDS_OBJECT_PROPERTY_NAME, Position } from 'constants/options';
-import { BetType, MARKETS_COMBINATION, SPORTS_TAGS_MAP } from 'constants/tags';
+import { BetType, COMBINED_MARKETS_SGP, MARKETS_COMBINATION, SPORTS_TAGS_MAP } from 'constants/tags';
 import { isEqual } from 'lodash';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPositionType,
     isParentMarketSameForSportMarkets,
 } from './markets';
-import {
-    COMBINED_MARKETS_CONTRACT_DATA_TO_POSITIONS,
-    ContractSGPOrder,
-    SGPCombinationsFromContractOrderMapping,
-} from 'constants/markets';
-import { bigNumberFormatter, bigNumberFormmaterWithDecimals } from './formatters/ethers';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import localStore from './localStore';
+import { COMBINED_MARKETS_CONTRACT_DATA_TO_POSITIONS } from 'constants/markets';
+import { bigNumberFormatter } from './formatters/ethers';
 
 export const isSpecificCombinedPositionAddedToParlay = (
     parlayData: ParlaysMarketPosition[],
@@ -89,10 +82,6 @@ export const isAllowedToCombineMarketsForTagId = (tags: number[]): boolean => {
 };
 
 export const isMarketCombinationInSGP = (markets: SportMarketInfo[]): SGPItem | undefined => {
-    const COMBINED_MARKETS_SGP = localStore.get(LOCAL_STORAGE_KEYS.SGP_FEES) as SGPItem[];
-
-    if (!COMBINED_MARKETS_SGP) return undefined;
-
     const sgpItem = COMBINED_MARKETS_SGP.find((sgpItem) => {
         if (sgpItem.tags.every((value, index) => value == markets[0].tags[index])) {
             if (sgpItem.combination.includes(markets[0].betType) && sgpItem.combination.includes(markets[1].betType))
@@ -279,13 +268,6 @@ export const extractCombinedMarketsFromParlayMarkets = (parlayMarkets: ParlaysMa
         }
     }
     return combinedMarkets;
-};
-
-export const isSGPInParlayMarkets = (parlayMarkets: ParlaysMarket[]): boolean => {
-    const combinedMarkets = extractCombinedMarketsFromParlayMarkets(parlayMarkets);
-
-    if (combinedMarkets.length) return true;
-    return false;
 };
 
 export const extractCombinedMarketsFromParlayMarketType = (parlayMarket: ParlayMarketWithQuotes): CombinedMarket[] => {
@@ -482,24 +464,4 @@ export const insertCombinedMarketsIntoArrayOFMarkets = (
         }
     });
     return sportMarkets;
-};
-
-export const convertSGPContractDataToSGPItemType = (sgpContractData: SGPContractData): SGPItem[] => {
-    const finalSGPItems: SGPItem[] = [];
-
-    sgpContractData.forEach((item) => {
-        const sgpFees = [item[1], item[2], item[3]];
-        sgpFees.forEach((sgpContractItem, sgpIndex) => {
-            if (bigNumberFormmaterWithDecimals(sgpContractItem.toString()) !== 0) {
-                const marketTypeCombination = SGPCombinationsFromContractOrderMapping[sgpIndex as ContractSGPOrder];
-                finalSGPItems.push({
-                    tags: [Number(item[0])],
-                    combination: marketTypeCombination,
-                    SGPFee: bigNumberFormmaterWithDecimals(sgpContractItem.toString()),
-                });
-            }
-        });
-    });
-
-    return finalSGPItems;
 };
