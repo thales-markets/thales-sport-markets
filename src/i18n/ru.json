@@ -327,7 +327,8 @@
                     "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
                 "bonus": "{{bonus}} added bonus on win!",
-                "and": "и"
+                "and": "и",
+                "race-winner": "{{team}} выиграет гонку {{matchResolve}}"
             },
             "starts-in": "Начинается через",
             "period": "Период",

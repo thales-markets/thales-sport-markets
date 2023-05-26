@@ -323,7 +323,8 @@
                     "1x2": "{{team}} wird das Spiel gewinnen oder das Spiel endet in einem Unentschieden {{matchResolve}}."
                 },
                 "bonus": "{{bonus}} zusätzlicher Bonus bei Sieg!",
-                "and": "Und"
+                "and": "Und",
+                "race-winner": "{{team}} wird das Rennen gewinnen {{matchResolve}}"
             },
             "starts-in": "Beginnt in",
             "period": "Zeitraum",

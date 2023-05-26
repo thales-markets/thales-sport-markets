@@ -383,6 +383,7 @@
                     "overtime": "including possible overtime"
                 },
                 "winner": "{{team}} will win the match {{matchResolve}}.",
+                "race-winner": "{{team}} will win the race {{matchResolve}}",
                 "draw": "The match will end in a draw {{matchResolve}}.",
                 "total": {
                     "over": "The total number of {{scoring}} in the match {{matchResolve}} will be more than {{total}}.",

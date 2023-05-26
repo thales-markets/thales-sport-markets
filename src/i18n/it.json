@@ -326,7 +326,8 @@
                     "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
                 "bonus": "{{bonus}} added bonus on win!",
-                "and": "E"
+                "and": "E",
+                "race-winner": "{{team}} vincerà la gara {{matchResolve}}"
             },
             "starts-in": "Inizia tra",
             "period": "Periodo",
