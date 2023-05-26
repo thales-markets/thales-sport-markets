@@ -8,6 +8,7 @@ import {
     IIHF_WC_TAG,
     MATCH_RESOLVE_MAP,
     MLS_TAG,
+    MOTOSPORT_TAGS,
     PERSON_COMPETITIONS,
     SCORING_MAP,
     TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
@@ -353,6 +354,8 @@ export const isFifaWCGame = (tag: number) => Number(tag) === FIFA_WC_TAG || Numb
 export const isIIHFWCGame = (tag: number) => Number(tag) === IIHF_WC_TAG;
 
 export const isUEFAGame = (tag: number) => UEFA_TAGS.includes(tag);
+
+export const isMotosport = (tag: number) => MOTOSPORT_TAGS.includes(tag);
 
 export const getIsIndividualCompetition = (tag: number) => PERSON_COMPETITIONS.includes(tag);
 

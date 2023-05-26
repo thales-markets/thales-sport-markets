@@ -1,10 +1,11 @@
 import { BetType, BetTypeNameMap } from 'constants/tags';
 import React, { useState } from 'react';
-import { SportMarketInfo } from 'types/markets';
-import MarketPositions from '../MarketPositions';
 import { useTranslation } from 'react-i18next';
-import { Container, Header, Title, ContentContianer, Arrow, ContentRow } from './styled-components';
+import { SportMarketInfo } from 'types/markets';
+import { isMotosport } from 'utils/markets';
 import DoubleChanceMarketPositions from '../DoubleChanceMarketPositions';
+import MarketPositions from '../MarketPositions';
+import { Arrow, Container, ContentContianer, ContentRow, Header, Title } from './styled-components';
 
 type PositionsProps = {
     markets: SportMarketInfo[];
@@ -21,6 +22,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
         : false;
 
     let areOddsValid = true;
+    const sportTag = Number(markets[0].tags[0]);
     if (!areDoubleChanceMarkets) {
         const latestMarket = markets.filter((market) => !market.isCanceled && !market.isPaused)[0];
         if (latestMarket) {
@@ -32,7 +34,11 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
         }
     }
 
-    const showContainer = areDoubleChanceMarkets ? areDoubleChanceMarketsOddsValid : areOddsValid;
+    const showContainer = isMotosport(sportTag)
+        ? true
+        : areDoubleChanceMarkets
+        ? areDoubleChanceMarketsOddsValid
+        : areOddsValid;
 
     return showContainer ? (
         <Container>
