@@ -11,6 +11,7 @@ import {
     PERSON_COMPETITIONS,
     SCORING_MAP,
     TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
+    UEFA_TAGS,
 } from 'constants/tags';
 import i18n from 'i18n';
 import ordinal from 'ordinal';
@@ -350,6 +351,8 @@ export const isMlsGame = (tag: number) => Number(tag) === MLS_TAG;
 export const isFifaWCGame = (tag: number) => Number(tag) === FIFA_WC_TAG || Number(tag) === FIFA_WC_U20_TAG;
 
 export const isIIHFWCGame = (tag: number) => Number(tag) === IIHF_WC_TAG;
+
+export const isUEFAGame = (tag: number) => UEFA_TAGS.includes(tag);
 
 export const getIsIndividualCompetition = (tag: number) => PERSON_COMPETITIONS.includes(tag);
 

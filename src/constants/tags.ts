@@ -400,6 +400,7 @@ export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
 export const FIFA_WC_U20_TAG = 9296;
 export const IIHF_WC_TAG = 9033;
+export const UEFA_TAGS = [9016, 9017];
 
 export const PERSON_COMPETITIONS = [9007, 9445, 9101, 9153, 9156];
 
