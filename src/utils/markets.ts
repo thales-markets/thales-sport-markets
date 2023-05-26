@@ -3,7 +3,6 @@ import { Position } from 'constants/options';
 import {
     BetType,
     DoubleChanceMarketType,
-    ECL_TAG,
     FIFA_WC_TAG,
     FIFA_WC_U20_TAG,
     IIHF_WC_TAG,
