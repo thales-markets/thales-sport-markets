@@ -327,7 +327,8 @@
                     "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
                 "bonus": "{{bonus}} added bonus on win!",
-                "and": "和"
+                "and": "和",
+                "race-winner": "{{team}} 将赢得比赛 {{matchResolve}}"
             },
             "starts-in": "开始于",
             "period": "时期",

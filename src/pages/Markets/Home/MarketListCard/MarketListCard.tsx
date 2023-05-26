@@ -13,7 +13,7 @@ import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { fixEnetpulseRacingName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isUEFAGame, isFifaWCGame, isIIHFWCGame } from 'utils/markets';
+import { isUEFAGame, isFifaWCGame, isIIHFWCGame, isMotosport } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import Web3 from 'web3';
 import CombinedMarketsOdds from './components/CombinedMarketsOdds';
@@ -148,7 +148,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         ? [market.homeOdds, market.awayOdds, market.drawOdds].every((odd) => odd < 1 && odd != 0)
         : [market.homeOdds, market.awayOdds].every((odd) => odd < 1 && odd != 0);
 
-    const hideGame = !areDoubleChanceMarketsOddsValid && !areSpreadTotalsMarketsOddsValid && !areOddsValid;
+    const hideGame =
+        !areDoubleChanceMarketsOddsValid &&
+        !areSpreadTotalsMarketsOddsValid &&
+        !areOddsValid &&
+        !isMotosport(Number(market.tags[0]));
 
     return (
         <Wrapper hideGame={hideGame} isResolved={isGameRegularlyResolved}>

@@ -4,7 +4,7 @@ import { STATUS_COLOR } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DoubleChanceMarketsInfo, SportMarketInfo } from 'types/markets';
-import { getSpreadTotalText, getVisibilityOfDrawOption } from 'utils/markets';
+import { getSpreadTotalText, getVisibilityOfDrawOption, isMotosport } from 'utils/markets';
 import { Status } from '../MatchStatus/MatchStatus';
 import Odd from '../Odd/Odd';
 import { Container, OddsContainer, Title } from './styled-components';
@@ -41,7 +41,11 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
         ? [market.homeOdds, market.awayOdds, market.drawOdds].every((odd) => odd < 1 && odd != 0)
         : [market.homeOdds, market.awayOdds].every((odd) => odd < 1 && odd != 0);
 
-    const showContainer = market.betType == BetType.DOUBLE_CHANCE ? areDoubleChanceMarketsOddsValid : areOddsValid;
+    const showContainer = isMotosport(Number(market.tags[0]))
+        ? true
+        : market.betType == BetType.DOUBLE_CHANCE
+        ? areDoubleChanceMarketsOddsValid
+        : areOddsValid;
 
     return showContainer ? (
         <Container>

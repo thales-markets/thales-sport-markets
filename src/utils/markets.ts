@@ -8,6 +8,7 @@ import {
     IIHF_WC_TAG,
     MATCH_RESOLVE_MAP,
     MLS_TAG,
+    MOTOSPORT_TAGS,
     PERSON_COMPETITIONS,
     SCORING_MAP,
     TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
@@ -354,6 +355,8 @@ export const isIIHFWCGame = (tag: number) => Number(tag) === IIHF_WC_TAG;
 
 export const isUEFAGame = (tag: number) => UEFA_TAGS.includes(tag);
 
+export const isMotosport = (tag: number) => MOTOSPORT_TAGS.includes(tag);
+
 export const getIsIndividualCompetition = (tag: number) => PERSON_COMPETITIONS.includes(tag);
 
 export const isParlayWon = (parlayMarket: ParlayMarket) => {
@@ -522,7 +525,7 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     }
                     break;
                 default:
-                    translationKey = 'winner';
+                    translationKey = market.isEnetpulseRacing ? 'race-winner' : 'winner';
             }
             break;
         case Position.AWAY:
@@ -534,7 +537,7 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     translationKey = 'total.under';
                     break;
                 default:
-                    translationKey = 'winner';
+                    translationKey = market.isEnetpulseRacing ? 'race-winner' : 'winner';
             }
             break;
         case Position.DRAW:
@@ -568,14 +571,14 @@ export const getCombinedOddTooltipText = (markets: SportMarketInfo[], positions:
         let translationKey = '';
         switch (positions[0]) {
             case Position.HOME:
-                translationKey = 'winner';
+                translationKey = markets[0].isEnetpulseRacing ? 'race-winner' : 'winner';
                 team = markets[0].homeTeam;
                 break;
             case Position.DRAW:
                 translationKey = 'draw';
                 break;
             case Position.AWAY:
-                translationKey = 'winner';
+                translationKey = markets[0].isEnetpulseRacing ? 'race-winner' : 'winner';
                 team = markets[0].awayTeam;
                 break;
         }

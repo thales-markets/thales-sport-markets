@@ -425,7 +425,8 @@
                     "1x2": "{{team}} va gagner le match ou alors se terminera sur un score de parité, {{matchResolve}}."
                 },
                 "bonus": "{{bonus}} bonus supplémentaire sur la victoire !",
-                "and": "et"
+                "and": "et",
+                "race-winner": "{{team}} remportera la course {{matchResolve}}"
             },
             "starts-in": "Commence dans",
             "period": "Période",
