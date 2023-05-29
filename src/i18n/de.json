@@ -302,7 +302,8 @@
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
-                    "points": "points"
+                    "points": "points",
+                    "sets": "Sätze"
                 },
                 "match-resolve": {
                     "regular": "in regulärer Spielzeite",

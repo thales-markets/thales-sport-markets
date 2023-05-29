@@ -404,7 +404,8 @@
             "odd-tooltip": {
                 "scoring": {
                     "goals": "buts",
-                    "points": "points"
+                    "points": "points",
+                    "sets": "ensembles"
                 },
                 "match-resolve": {
                     "regular": "dans le temps régulier",
