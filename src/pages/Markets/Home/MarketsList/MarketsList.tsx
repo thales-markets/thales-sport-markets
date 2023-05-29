@@ -8,9 +8,10 @@ import { SportMarkets, TagInfo } from 'types/markets';
 import MarketListCard from '../MarketListCard';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
+import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import Tooltip from 'components/Tooltip';
 import { Trans, useTranslation } from 'react-i18next';
-import { INCENTIVIZED_LEAGUE } from 'constants/markets';
+import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import { getNetworkId } from 'redux/modules/wallet';
 import { NetworkIdByName } from 'utils/network';
 
@@ -74,6 +75,34 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                 <IncentivizedLeague>
                                     <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
                                     {networkId !== NetworkIdByName.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
+                                </IncentivizedLeague>
+                            }
+                        ></Tooltip>
+                    )}
+                {INCENTIVIZED_GRAND_SLAM.ids.includes(Number(league)) &&
+                    new Date() > INCENTIVIZED_GRAND_SLAM.startDate &&
+                    new Date() < INCENTIVIZED_GRAND_SLAM.endDate && (
+                        <Tooltip
+                            overlay={
+                                <Trans
+                                    i18nKey="markets.incentivized-tooltip-tennis"
+                                    components={{
+                                        detailsLink: (
+                                            <a href={INCENTIVIZED_GRAND_SLAM.link} target="_blank" rel="noreferrer" />
+                                        ),
+                                    }}
+                                    values={{
+                                        rewards:
+                                            networkId !== NetworkIdByName.ArbitrumOne
+                                                ? INCENTIVIZED_GRAND_SLAM.opRewards
+                                                : INCENTIVIZED_GRAND_SLAM.arbRewards,
+                                    }}
+                                />
+                            }
+                            component={
+                                <IncentivizedLeague>
+                                    <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
+                                    {networkId !== NetworkIdByName.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
                                 </IncentivizedLeague>
                             }
                         ></Tooltip>

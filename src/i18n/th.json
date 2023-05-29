@@ -334,7 +334,9 @@
             "quarter": "หนึ่งในสี่",
             "round": "กลม",
             "inning": "โอกาส",
-            "total-markets": "Total markets"
+            "total-markets": "Total markets",
+            "race-winner": "ผู้ชนะ",
+            "no-win": "ไม่ชนะ"
         },
         "market-details": {
             "price": "ราคา",
@@ -450,7 +452,8 @@
             }
         },
         "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
-        "incentivized-markets": "ตลาดที่สร้างแรงจูงใจ"
+        "incentivized-markets": "ตลาดที่สร้างแรงจูงใจ",
+        "incentivized-tooltip-tennis": "Roland Garros จะได้รับแรงจูงใจ เริ่มในวันที่ 29 พฤษภาคม เมื่อทัวร์นาเมนต์เริ่มขึ้น ตลาดจะได้รับการกระตุ้นด้วย {{rewards}} จนกว่าจะสิ้นสุดการแข่งขันในวันที่ 12 มิถุนายน รางวัลจะกระจายตามปริมาณของคุณที่ขับเคลื่อนผ่านตลาดเหล่านี้ คุณสามารถติดตามการจัดสรรรางวัลได้ที่ <detailsLink>Dune Dashboard</detailsLink>"
     },
     "rewards": {
         "header": "รางวัล",

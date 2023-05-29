@@ -338,7 +338,9 @@
             "half": "一半",
             "inning": "局",
             "half-time": "半场",
-            "total-markets": "Total markets"
+            "total-markets": "Total markets",
+            "no-win": "没有赢",
+            "race-winner": "优胜者"
         },
         "market-details": {
             "price": "价格",
@@ -455,7 +457,8 @@
             }
         },
         "incentivized-markets": "激励市场",
-        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>."
+        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
+        "incentivized-tooltip-tennis": "Roland Garros 将在 5 月 29 日比赛开始时受到激励。在 6 月 12 日锦标赛结束之前，市场将通过 {{rewards}} 得到提升。奖励将根据您在这些市场上的交易量进行分配。您可以在我们的 <detailsLink>Dune Dashboard</detailsLink> 上跟踪您的奖励分配情况。"
     },
     "rewards": {
         "header": "奖励",
