@@ -100,7 +100,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     ]);
 
     const hideResultInfoPerPeriod = hideResultInfoPerPeriodForSports(Number(liveResultInfo?.sportId));
-
+    console.log(market.tags[0]);
     return (
         <RowContainer>
             <MainContainer showAMM={showAMM}>
@@ -110,7 +110,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         text={t('market.back')}
                         customStylingContainer={{ position: 'absolute', left: 0, top: 0, marginTop: 0 }}
                     />
-                    {INCENTIVIZED_LEAGUE.ids.includes(market.tags[0]) &&
+                    {INCENTIVIZED_LEAGUE.ids.includes(Number(market.tags[0])) &&
                         new Date(market.maturityDate) > INCENTIVIZED_LEAGUE.startDate &&
                         new Date(market.maturityDate) < INCENTIVIZED_LEAGUE.endDate && (
                             <Tooltip
@@ -138,7 +138,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 }
                             ></Tooltip>
                         )}
-                    {INCENTIVIZED_GRAND_SLAM.ids.includes(market.tags[0]) &&
+                    {INCENTIVIZED_GRAND_SLAM.ids.includes(Number(market.tags[0])) &&
                         new Date(market.maturityDate) > INCENTIVIZED_GRAND_SLAM.startDate &&
                         new Date(market.maturityDate) < INCENTIVIZED_GRAND_SLAM.endDate && (
                             <Tooltip
