@@ -100,7 +100,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     ]);
 
     const hideResultInfoPerPeriod = hideResultInfoPerPeriodForSports(Number(liveResultInfo?.sportId));
-    console.log(market.tags[0]);
+
     return (
         <RowContainer>
             <MainContainer showAMM={showAMM}>
