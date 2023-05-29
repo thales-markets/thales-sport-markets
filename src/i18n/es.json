@@ -305,7 +305,8 @@
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
-                    "points": "points"
+                    "points": "points",
+                    "sets": "conjuntos"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -336,7 +337,9 @@
             "quarter": "Cuarta parte",
             "half-time": "Medio tiempo",
             "inning": "Inning",
-            "total-markets": "Total markets"
+            "total-markets": "Total markets",
+            "race-winner": "Ganador",
+            "no-win": "Ahora en"
         },
         "market-details": {
             "price": "Precio",
@@ -453,7 +456,8 @@
             }
         },
         "incentivized-markets": "MERCADOS INCENTIVIZADOS",
-        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>."
+        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
+        "incentivized-tooltip-tennis": "Roland Garros estará incentivado, ya que el torneo comienza el 29 de mayo. Los mercados se potenciarán con {{rewards}} hasta el final del torneo el 12 de junio. Las recompensas se distribuirán en función de su volumen impulsado a través de estos mercados. Puede realizar un seguimiento de la asignación de sus recompensas en nuestro <detailsLink>Dune Dashboard</detailsLink>."
     },
     "rewards": {
         "header": "Recompensas",
