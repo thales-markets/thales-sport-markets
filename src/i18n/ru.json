@@ -306,7 +306,8 @@
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
-                    "points": "points"
+                    "points": "points",
+                    "sets": "наборы"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -337,7 +338,9 @@
             "inning": "Иннинг",
             "half-time": "Перерыв",
             "quarter": "Четверть",
-            "total-markets": "Total markets"
+            "total-markets": "Total markets",
+            "no-win": "Сейчас в",
+            "race-winner": "Победитель"
         },
         "market-details": {
             "price": "Price",
@@ -454,7 +457,8 @@
             }
         },
         "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
-        "incentivized-markets": "СТИМУЛИРОВАННЫЕ РЫНКИ"
+        "incentivized-markets": "СТИМУЛИРОВАННЫЕ РЫНКИ",
+        "incentivized-tooltip-tennis": "Ролан Гаррос будет поощрен, так как турнир стартует 29 мая. Рынки будут получать {{rewards}} до конца турнира 12 июня. Вознаграждения будут распределяться в зависимости от вашего объема продаж на этих рынках. Вы можете отслеживать распределение вознаграждений на нашей <detailsLink>панели управления Dune</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",

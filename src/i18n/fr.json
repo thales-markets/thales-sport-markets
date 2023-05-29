@@ -404,7 +404,8 @@
             "odd-tooltip": {
                 "scoring": {
                     "goals": "buts",
-                    "points": "points"
+                    "points": "points",
+                    "sets": "ensembles"
                 },
                 "match-resolve": {
                     "regular": "dans le temps régulier",
@@ -435,7 +436,9 @@
             "round": "Rond",
             "half-time": "Mi-temps",
             "inning": "Tour de batte",
-            "total-markets": "Marchés totaux"
+            "total-markets": "Marchés totaux",
+            "no-win": "Maintenant en",
+            "race-winner": "Gagnant"
         },
         "market-details": {
             "wallet-info": {
@@ -552,7 +555,8 @@
             }
         },
         "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
-        "incentivized-markets": "MARCHÉS RÉCOMPENSÉS"
+        "incentivized-markets": "MARCHÉS RÉCOMPENSÉS",
+        "incentivized-tooltip-tennis": "Roland Garros sera incité, le tournoi commençant le 29 mai. Les marchés seront boostés avec {{rewards}} jusqu'à la fin du tournoi le 12 juin. Les récompenses seront distribuées en fonction de votre volume généré par ces marchés. Vous pouvez suivre l'attribution de vos récompenses sur notre <detailsLink>Dune Dashboard</detailsLink>."
     },
     "rewards": {
         "table": {

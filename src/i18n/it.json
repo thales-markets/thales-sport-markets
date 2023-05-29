@@ -305,7 +305,8 @@
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
-                    "points": "points"
+                    "points": "points",
+                    "sets": "imposta"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -336,7 +337,9 @@
             "quarter": "Trimestre",
             "round": "Girare",
             "half-time": "Metà tempo",
-            "total-markets": "Total markets"
+            "total-markets": "Total markets",
+            "race-winner": "Vincitore",
+            "no-win": "Ora in"
         },
         "market-details": {
             "price": "Price",
@@ -453,7 +456,8 @@
             }
         },
         "incentivized-markets": "MERCATI INCENTIVATI",
-        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>."
+        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
+        "incentivized-tooltip-tennis": "Il Roland Garros sarà incentivato, dato che il torneo inizierà il 29 maggio. I mercati saranno potenziati con {{rewards}} fino alla fine del torneo il 12 giugno. I premi verranno distribuiti in base al tuo volume guidato attraverso questi mercati. Puoi monitorare l'assegnazione dei tuoi premi sulla nostra <detailsLink>Dune Dashboard</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",

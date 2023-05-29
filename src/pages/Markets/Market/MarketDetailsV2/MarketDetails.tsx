@@ -10,10 +10,11 @@ import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } fro
 import styled from 'styled-components';
 import { buildHref, navigateTo } from 'utils/routes';
 import ROUTES from 'constants/routes';
-import { INCENTIVIZED_LEAGUE } from 'constants/markets';
+import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import Tooltip from 'components/Tooltip';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
+import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import Parlay from 'pages/Markets/Home/Parlay';
 import Transactions from '../Transactions';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
@@ -109,7 +110,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         text={t('market.back')}
                         customStylingContainer={{ position: 'absolute', left: 0, top: 0, marginTop: 0 }}
                     />
-                    {INCENTIVIZED_LEAGUE.ids.includes(market.tags[0]) &&
+                    {INCENTIVIZED_LEAGUE.ids.includes(Number(market.tags[0])) &&
                         new Date(market.maturityDate) > INCENTIVIZED_LEAGUE.startDate &&
                         new Date(market.maturityDate) < INCENTIVIZED_LEAGUE.endDate && (
                             <Tooltip
@@ -133,6 +134,38 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                     <IncentivizedLeague>
                                         <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
                                         {networkId !== NetworkIdByName.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
+                                    </IncentivizedLeague>
+                                }
+                            ></Tooltip>
+                        )}
+                    {INCENTIVIZED_GRAND_SLAM.ids.includes(Number(market.tags[0])) &&
+                        new Date(market.maturityDate) > INCENTIVIZED_GRAND_SLAM.startDate &&
+                        new Date(market.maturityDate) < INCENTIVIZED_GRAND_SLAM.endDate && (
+                            <Tooltip
+                                overlay={
+                                    <Trans
+                                        i18nKey="markets.incentivized-tooltip-tennis"
+                                        components={{
+                                            detailsLink: (
+                                                <a
+                                                    href={INCENTIVIZED_GRAND_SLAM.link}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                />
+                                            ),
+                                        }}
+                                        values={{
+                                            rewards:
+                                                networkId !== NetworkIdByName.ArbitrumOne
+                                                    ? INCENTIVIZED_GRAND_SLAM.opRewards
+                                                    : INCENTIVIZED_GRAND_SLAM.arbRewards,
+                                        }}
+                                    />
+                                }
+                                component={
+                                    <IncentivizedLeague>
+                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
+                                        {networkId !== NetworkIdByName.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>
@@ -206,7 +239,11 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         ) : (
                             <ResultContainer>
                                 <ResultLabel>
-                                    {market.homeScore} - {market.awayScore}{' '}
+                                    {market.isEnetpulseRacing
+                                        ? market.homeScore == 1
+                                            ? t('markets.market-card.race-winner')
+                                            : t('markets.market-card.no-win')
+                                        : `${market.homeScore} - ${market.awayScore}`}{' '}
                                     {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
                                         liveResultInfo?.period == 2 && (
                                             <InfoLabel className="football">
