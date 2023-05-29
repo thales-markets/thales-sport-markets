@@ -454,7 +454,7 @@
         },
         "incentivized-markets": "ANREIZMÄRKTE",
         "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
-        "incentivized-tooltip-tennis": "Roland Garros wird ab dem 29. Mai, wenn das Turnier beginnt, einen Anreiz erhalten. Die Märkte werden bis zum Ende des Turniers am 12. Juni mit {{rewards}} angekurbelt. Die Prämien werden basierend auf Ihrem durch diese Märkte erzielten Volumen verteilt. Sie können Ihre Prämienzuteilung auf unserem <detailsLink>Dune Dashboard</detailsLink> verfolgen."
+        "incentivized-tooltip-tennis": "Roland Garros wird einen Anreiz erhalten, da das Turnier am 29. Mai beginnt. Die Märkte werden bis zum Ende des Turniers am 12. Juni mit {{rewards}} angekurbelt. Die Prämien werden basierend auf Ihrem durch diese Märkte erzielten Volumen verteilt. Sie können Ihre Prämienzuteilung auf unserem <detailsLink>Dune Dashboard</detailsLink> verfolgen."
     },
     "rewards": {
         "header": "Preise",
