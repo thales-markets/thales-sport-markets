@@ -286,6 +286,14 @@ export const TAGS_LIST: Tags = [
         hidden: false,
         priority: 902,
     },
+    {
+        id: 9050,
+        label: 'UEFA EURO Qualifications',
+        logoClass: 'icon-league league--uefa',
+        favourite: false,
+        hidden: false,
+        priority: 113,
+    },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -323,6 +331,7 @@ export const SPORTS_MAP: SportsMap = {
     9033: 'Hockey',
     9296: 'Soccer',
     9021: 'Cricket',
+    9050: 'Soccer',
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
@@ -352,7 +361,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Baseball: [9003],
     Basketball: [9004, 9005, 9008, 9399],
     Hockey: [9006, 9033],
-    Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9057, 9061, 9045, 9296],
+    Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9057, 9061, 9045, 9296, 9050],
     MMA: [9007, 18196],
     Motosport: [9445, 9101],
     Tennis: [9153, 9156],
@@ -392,9 +401,25 @@ export enum TAGS_FLAGS {
     IIHF_WORLD_CHAMPIONSHIP = 9033,
     FIFA_WORLD_CUP_U20 = 9296,
     T20_BLAST = 9021,
+    UEFA_EURO_QUALIFICATIONS = 9050,
 }
 
-export const ENETPULSE_SPORTS = [9153, 9156, 18977, 18983, 19138, 9399, 18196, 9057, 9061, 9045, 9445, 9033, 9296];
+export const ENETPULSE_SPORTS = [
+    9153,
+    9156,
+    18977,
+    18983,
+    19138,
+    9399,
+    18196,
+    9057,
+    9061,
+    9045,
+    9445,
+    9033,
+    9296,
+    9050,
+];
 
 export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
@@ -465,6 +490,7 @@ export const SCORING_MAP: SportsMap = {
     9033: 'goals',
     9296: 'goals',
     9021: 'points',
+    9050: 'goals',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -502,6 +528,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9033: 'regular',
     9296: 'regular',
     9021: '',
+    9050: 'regular',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -537,4 +564,5 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     9033: 'period',
     9296: 'half',
     9021: 'inning',
+    9050: 'half',
 };
