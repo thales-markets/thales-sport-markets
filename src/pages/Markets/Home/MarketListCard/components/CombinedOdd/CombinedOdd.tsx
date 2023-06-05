@@ -66,7 +66,7 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
         } else {
             trackEvent({
                 category: 'position',
-                action: showBonus ? 'discount' : 'non-discount',
+                action: 'combined',
                 value: showBonus ? Number(bonus) : 0,
             });
             const parlayMarkets: ParlaysMarketPosition[] = [];
