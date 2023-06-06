@@ -364,10 +364,11 @@ const getOpacityForCombinedMarket = (combinedMarket: CombinedMarket) => {
     return 1;
 };
 
-const getParlayItemStatus = (market: SportMarketInfo) => {
+const getParlayItemStatus = (market: SportMarketInfo, isCombinedMarket?: boolean) => {
+    console.log('market ', market);
     if (market.isCanceled) return t('profile.card.canceled');
     if (market.isResolved) return `${market.homeScore} : ${market.awayScore}`;
-    return formatDateWithTime(Number(market.maturityDate) * 1000);
+    return formatDateWithTime(!isCombinedMarket ? Number(market.maturityDate) * 1000 : Number(market.maturityDate));
 };
 
 const StatusIcon = styled.i`
@@ -440,7 +441,7 @@ export const getParlayRow = (
                         }
                         tooltip={<>{tooltipText}</>}
                     />
-                    <QuoteText>{getParlayItemStatus(combinedMarket.markets[0])}</QuoteText>
+                    <QuoteText>{getParlayItemStatus(combinedMarket.markets[0], true)}</QuoteText>
                 </ParlayRow>
             );
         });
