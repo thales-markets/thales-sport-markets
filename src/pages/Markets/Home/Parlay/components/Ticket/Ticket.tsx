@@ -356,18 +356,25 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    refetchBalances(walletAddress, networkId);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
-                    setIsBuying(false);
-                    setUsdAmount('');
-                    dispatch(removeAll());
-                    onBuySuccess && onBuySuccess();
+                    if (hasParlayCombinedMarkets) {
+                        trackEvent({
+                            category: 'parlay',
+                            action: 'parlay-has-combined-position',
+                            value: Number(usdAmountValue),
+                        });
+                    }
 
                     trackEvent({
                         category: 'parlay',
                         action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
                         value: Number(usdAmountValue),
                     });
+                    refetchBalances(walletAddress, networkId);
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
+                    setIsBuying(false);
+                    setUsdAmount('');
+                    dispatch(removeAll());
+                    onBuySuccess && onBuySuccess();
                 }
             } catch (e) {
                 setIsBuying(false);

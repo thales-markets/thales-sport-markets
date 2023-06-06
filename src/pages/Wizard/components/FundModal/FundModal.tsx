@@ -31,7 +31,7 @@ const getProviderUrl = (provider: Provider | undefined, networkId: NetworkId) =>
     const networkParam = getNetworkKeyByNetworkId(networkId);
     switch (provider) {
         case Provider.BANXA:
-            return `https://thalesmarket.banxa.com/iframe?code=x68QxHYZ2hQU0rccKDgDSeUO7QonDXsY&coinType=ETH&fiatType=EUR&blockchain=OPTIMISM`;
+            return `https://thalesmarket.banxa.com/?coinType=ETH&fiatType=EUR&blockchain=OPTIMISM`;
         case Provider.MT_PELERIN:
             const baseUrl = 'https://widget.mtpelerin.com/';
             const queryParams = `?type=popup&lang=en&primary=%235F6180&net=${networkParam}&bsc=EUR&bdc=ETH&crys=ETH`;
@@ -138,7 +138,10 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         container: { paddingLeft: '10px', paddingRight: '10px' },
                     }}
                 >
-                    <IFrameWrapper height={iframeProvider === Provider.MT_PELERIN ? 588 : 635}>
+                    <IFrameWrapper
+                        height={iframeProvider === Provider.MT_PELERIN ? 588 : 635}
+                        background={iframeProvider === Provider.MT_PELERIN ? '#ffffff' : ''}
+                    >
                         {iframeLoader && <SimpleLoader />}
                         <IFrame src={getProviderUrl(iframeProvider, networkId)} onLoad={() => setIframeLoader(false)} />
                     </IFrameWrapper>
@@ -231,11 +234,11 @@ const YourAddressLabel = styled.span`
 
 const Link = styled.a``;
 
-const IFrameWrapper = styled.div<{ height?: number }>`
+const IFrameWrapper = styled.div<{ height?: number; background?: string }>`
     width: 530px;
     height: ${(props) => (props.height ? props.height : '635')}px;
     margin: auto;
-    background: white;
+    ${(props) => (props.background ? `background: ${props.background};` : '')}
     margin-top: 10px;
     border-radius: 15px;
     outline: none;
