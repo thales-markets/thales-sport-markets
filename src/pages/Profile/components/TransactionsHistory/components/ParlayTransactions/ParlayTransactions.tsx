@@ -365,7 +365,6 @@ const getOpacityForCombinedMarket = (combinedMarket: CombinedMarket) => {
 };
 
 const getParlayItemStatus = (market: SportMarketInfo, isCombinedMarket?: boolean) => {
-    console.log('market ', market);
     if (market.isCanceled) return t('profile.card.canceled');
     if (market.isResolved) return `${market.homeScore} : ${market.awayScore}`;
     return formatDateWithTime(!isCombinedMarket ? Number(market.maturityDate) * 1000 : Number(market.maturityDate));
