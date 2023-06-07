@@ -4,16 +4,19 @@ import { BetType, ENETPULSE_SPORTS, SPORTS_MAP, SPORTS_TAGS_MAP } from 'constant
 import { groupBy, orderBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
-import { CombinedMarketsContractData, SportMarketInfo, SportMarkets } from 'types/markets';
+import { CombinedMarketsContractData, SGPItem, SportMarketInfo, SportMarkets } from 'types/markets';
 import { NetworkId } from 'types/network';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { fixDuplicatedTeamName } from 'utils/formatters/string';
 import networkConnector from 'utils/networkConnector';
 import { convertPriceImpactToBonus, getMarketAddressesFromSportMarketArray } from 'utils/markets';
 import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
-import { insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
+import { filterMarketsByTagsArray, insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
+import localStore from 'utils/localStore';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 
 const BATCH_SIZE = 100;
+const BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY = 10;
 
 const marketsCache = {
     [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,
@@ -149,19 +152,44 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
         try {
             const { sportPositionalMarketDataContract } = networkConnector;
 
-            const marketAddresses = getMarketAddressesFromSportMarketArray(groupMarkets(openMarkets));
-            const combinedMarketsContractData:
-                | CombinedMarketsContractData
-                | undefined = await sportPositionalMarketDataContract?.getCombinedOddsForBatchOfMarkets(
-                marketAddresses
-            );
+            const tmpOpenMarkets = groupMarkets(openMarkets);
+            const sgpFees: SGPItem[] | undefined = localStore.get(LOCAL_STORAGE_KEYS.SGP_FEES);
+            const tmpTags: number[] = [];
 
-            if (combinedMarketsContractData) {
-                const newMarkets = insertCombinedMarketsIntoArrayOFMarkets(
-                    groupMarkets(openMarkets),
-                    combinedMarketsContractData
-                );
-                marketsCache[GlobalFiltersEnum.OpenMarkets] = newMarkets;
+            if (sgpFees) sgpFees.forEach((sgpItem) => tmpTags.push(...sgpItem.tags));
+
+            const marketsFilteredByTags = filterMarketsByTagsArray(tmpOpenMarkets, tmpTags);
+            const marketAddresses = getMarketAddressesFromSportMarketArray(marketsFilteredByTags);
+
+            if (marketAddresses) {
+                const promises: CombinedMarketsContractData[] = [];
+                const numberOfBatches = Math.trunc(marketAddresses.length / BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY) + 1;
+
+                for (let i = 0; i < numberOfBatches; i++) {
+                    promises.push(
+                        sportPositionalMarketDataContract?.getCombinedOddsForBatchOfMarkets(
+                            marketAddresses.slice(
+                                i * BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY,
+                                i * BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY + BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY
+                            )
+                        )
+                    );
+                }
+
+                const promisesResult = await Promise.all(promises);
+
+                const combinedMarketsData: CombinedMarketsContractData = [];
+
+                promisesResult.forEach((promiseData) => {
+                    promiseData.forEach((_combinedMarketData: any) => {
+                        combinedMarketsData.push(_combinedMarketData);
+                    });
+                });
+
+                if (combinedMarketsData) {
+                    const newMarkets = insertCombinedMarketsIntoArrayOFMarkets(tmpOpenMarkets, combinedMarketsData);
+                    marketsCache[GlobalFiltersEnum.OpenMarkets] = newMarkets;
+                }
             }
         } catch (e) {
             console.log('Error ', e);
