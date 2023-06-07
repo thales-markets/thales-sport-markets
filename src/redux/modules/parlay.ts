@@ -10,9 +10,9 @@ import { fixEnetpulseRacingName } from 'utils/formatters/string';
 
 const sliceName = 'parlay';
 
-const DEFAULT_MAX_NUMBER_OF_MATCHES = 8;
-const MAX_NUMBER_OF_DOUBLE_CHANCES_ON_PARLAY = 5;
-const MAX_NUMBER_OF_COMBINED_MARKETS_IN_PARLAY = 4;
+const DEFAULT_MAX_NUMBER_OF_MATCHES = 10;
+const MAX_NUMBER_OF_DOUBLE_CHANCES_ON_PARLAY = 10;
+const MAX_NUMBER_OF_COMBINED_MARKETS_IN_PARLAY = 10;
 
 const getDefaultParlay = (): ParlaysMarketPosition[] => {
     const lsParlay = localStore.get(LOCAL_STORAGE_KEYS.PARLAY);
