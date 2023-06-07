@@ -50,7 +50,6 @@ const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
 const { chains, provider } = configureChains(
     [optimism, optimismGoerli, arbitrum],
     [
-        infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID || '', stallTimeout: 2000 }),
         jsonRpcProvider({
             rpc: (chain) => ({
                 http: !CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id]?.chainnode
@@ -61,6 +60,7 @@ const { chains, provider } = configureChains(
             }),
             stallTimeout: 2000,
         }),
+        infuraProvider({ apiKey: process.env.REACT_APP_INFURA_PROJECT_ID || '', stallTimeout: 2000 }),
         publicProvider(),
     ]
 );
