@@ -115,7 +115,7 @@ export const OPTIMISM_OPTIONS = [
     },
 ];
 
-export const MAX_GAS_LIMIT = 30000000;
+export const MAX_GAS_LIMIT = 29000000;
 export const MAX_GAS_LIMIT_ARB = 20000000;
 
 export const NETWORK_SWITCHER_SUPPORTED_NETWORKS = [
