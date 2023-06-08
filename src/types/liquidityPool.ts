@@ -75,3 +75,5 @@ export type LiquidityPoolReturn = {
     apr: number;
     apy: number;
 };
+
+export type LiquidityPoolType = 'single' | 'parlay';

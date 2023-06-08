@@ -4,7 +4,7 @@ import { RootState } from 'redux/rootReducer';
 import { getNetworkId } from 'redux/modules/wallet';
 import { useTranslation } from 'react-i18next';
 import { getIsAppReady } from 'redux/modules/app';
-import { LiquidityPoolReturn } from 'types/liquidityPool';
+import { LiquidityPoolReturn, LiquidityPoolType } from 'types/liquidityPool';
 import useLiquidityPoolReturnQuery from 'queries/liquidityPool/useLiquidityPoolReturnQuery';
 import { formatPercentage } from 'utils/formatters/number';
 import {
@@ -13,15 +13,15 @@ import {
     LiquidityPoolInfoTitle,
     LiquidityPoolReturnInfo,
     LiquidityPoolReturnlabel,
-} from '../styled-components';
+} from '../LiqudityPoolSingle/styled-components';
 
-const Return: React.FC = () => {
+const Return: React.FC<{ liquidityPoolType: LiquidityPoolType }> = ({ liquidityPoolType }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [liquidityPoolReturn, setLiquidityPoolReturn] = useState<LiquidityPoolReturn | undefined>(undefined);
 
-    const liquidityPoolReturnQuery = useLiquidityPoolReturnQuery(networkId, {
+    const liquidityPoolReturnQuery = useLiquidityPoolReturnQuery(networkId, liquidityPoolType, {
         enabled: isAppReady,
     });
 

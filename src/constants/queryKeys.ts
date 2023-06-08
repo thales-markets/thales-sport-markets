@@ -1,6 +1,7 @@
 import { NetworkId } from 'types/network';
 import { Position } from './options';
 import { MultiSingleAmounts, ParlaysMarket } from 'types/markets';
+import { LiquidityPoolType } from 'types/liquidityPool';
 
 export const QUERY_KEYS = {
     Rewards: (networkId: NetworkId, period: number) => ['rewards', networkId, period],
@@ -147,10 +148,32 @@ export const QUERY_KEYS = {
     },
     LiquidityPool: {
         Data: (networkId: NetworkId) => ['liquidityPool', 'data', networkId],
+        ParlayData: (networkId: NetworkId) => ['liquidityPool', 'parlayData', networkId],
         UserData: (walletAddress: string, networkId: NetworkId) => ['liquidityPool', 'data', walletAddress, networkId],
-        PnL: (networkId: NetworkId) => ['liquidityPool', 'pnl', networkId],
-        Return: (networkId: NetworkId) => ['liquidityPool', 'return', networkId],
-        UserTransactions: (networkId: NetworkId) => ['liquidityPool', 'userTransactions', networkId],
+        ParlayUserData: (walletAddress: string, networkId: NetworkId) => [
+            'liquidityPool',
+            'parlayLPData',
+            walletAddress,
+            networkId,
+        ],
+        PnL: (networkId: NetworkId, liquidityPoolType: LiquidityPoolType) => [
+            'liquidityPool',
+            'pnl',
+            liquidityPoolType,
+            networkId,
+        ],
+        Return: (networkId: NetworkId, liquidityPoolType: LiquidityPoolType) => [
+            'liquidityPool',
+            'return',
+            liquidityPoolType,
+            networkId,
+        ],
+        UserTransactions: (networkId: NetworkId, liquidityPoolType: LiquidityPoolType) => [
+            'liquidityPool',
+            'userTransactions',
+            liquidityPoolType,
+            networkId,
+        ],
     },
     SGPFees: (networkId: NetworkId) => ['sgpFees', networkId],
 };

@@ -7,7 +7,7 @@ import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { useTranslation } from 'react-i18next';
 import { orderBy } from 'lodash';
 import { getIsAppReady } from 'redux/modules/app';
-import { LiquidityPoolUserTransactions, LiquidityPoolUserTransaction } from 'types/liquidityPool';
+import { LiquidityPoolUserTransactions, LiquidityPoolUserTransaction, LiquidityPoolType } from 'types/liquidityPool';
 import SelectInput from 'components/SelectInput';
 import useLiquidityPoolUserTransactionsQuery from 'queries/liquidityPool/useLiquidityPoolUserTransactionsQuery';
 import UserTransactionsTable from '../UserTransactionsTable';
@@ -15,9 +15,10 @@ import { LiquidityPoolTransaction } from 'constants/liquidityPool';
 
 type TransactionsProps = {
     currentRound: number;
+    liquidityPoolType: LiquidityPoolType;
 };
 
-const Transactions: React.FC<TransactionsProps> = ({ currentRound }) => {
+const Transactions: React.FC<TransactionsProps> = ({ currentRound, liquidityPoolType }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -56,7 +57,7 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound }) => {
         });
     }
 
-    const liquidityPoolUserTransactionsQuery = useLiquidityPoolUserTransactionsQuery(networkId, {
+    const liquidityPoolUserTransactionsQuery = useLiquidityPoolUserTransactionsQuery(networkId, liquidityPoolType, {
         enabled: isAppReady,
     });
 
