@@ -39,7 +39,7 @@ const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
 const Vaults = lazy(() => import('pages/Vaults'));
 const Vault = lazy(() => import('pages/Vault'));
 const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
-const LiquidityPool = lazy(() => import('pages/LiquidityPool/LiqudityPoolSingle'));
+const LiquidityPool = lazy(() => import('pages/LiquidityPool'));
 
 const App = () => {
     const dispatch = useDispatch();
