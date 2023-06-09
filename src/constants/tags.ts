@@ -164,7 +164,7 @@ export const TAGS_LIST: Tags = [
         priority: 701,
     },
     {
-        id: 9101,
+        id: 9497,
         label: 'MotoGP',
         logo: `/logos/leagueLogos/motogp.png`,
         logoClass: 'icon-league league--motogp',
@@ -316,7 +316,7 @@ export const SPORTS_MAP: SportsMap = {
     9018: 'Soccer',
     9019: 'Soccer',
     9445: 'Motosport',
-    9101: 'Motosport',
+    9497: 'Motosport',
     9153: 'Tennis',
     9156: 'Tennis',
     18977: 'eSports',
@@ -344,7 +344,7 @@ export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
     9008,
     9007,
     9445,
-    9101,
+    9497,
     9153,
     9156,
     18977,
@@ -363,7 +363,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Hockey: [9006, 9033],
     Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9057, 9061, 9045, 9296, 9050],
     MMA: [9007, 18196],
-    Motosport: [9445, 9101],
+    Motosport: [9445, 9497],
     Tennis: [9153, 9156],
     eSports: [18977, 18983, 19138],
     Cricket: [9020, 9021],
@@ -388,7 +388,7 @@ export enum TAGS_FLAGS {
     UEFA_EL = 9017,
     J1_LEAGUE = 9019,
     FORMULA1 = 9445,
-    MOTOGP = 9101,
+    MOTOGP = 9497,
     CSGO = 18977,
     DOTA2 = 18983,
     LOL = 19138,
@@ -419,6 +419,7 @@ export const ENETPULSE_SPORTS = [
     9033,
     9296,
     9050,
+    9497,
 ];
 
 export const MLS_TAG = 9010;
@@ -428,7 +429,7 @@ export const IIHF_WC_TAG = 9033;
 export const UEFA_TAGS = [9016, 9017];
 export const MOTOSPORT_TAGS = [9445];
 
-export const PERSON_COMPETITIONS = [9007, 9445, 9101, 9153, 9156];
+export const PERSON_COMPETITIONS = [9007, 9445, 9497, 9153, 9156];
 
 export enum BetType {
     WINNER = 0,
@@ -475,7 +476,7 @@ export const SCORING_MAP: SportsMap = {
     9018: 'goals',
     9019: 'goals',
     9445: '',
-    9101: '',
+    9497: '',
     9153: 'sets',
     9156: 'sets',
     18977: 'round',
@@ -513,7 +514,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9018: 'regular',
     9019: 'regular',
     9445: '',
-    9101: '',
+    9497: '',
     9153: '',
     9156: '',
     18977: '',

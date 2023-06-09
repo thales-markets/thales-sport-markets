@@ -11,6 +11,7 @@ import {
     SGPContractData,
     SGPItem,
     SportMarketInfo,
+    SportMarkets,
 } from 'types/markets';
 import { POSITION_TO_ODDS_OBJECT_PROPERTY_NAME, Position } from 'constants/options';
 import { BetType, MARKETS_COMBINATION, SPORTS_TAGS_MAP } from 'constants/tags';
@@ -502,4 +503,9 @@ export const convertSGPContractDataToSGPItemType = (sgpContractData: SGPContract
     });
 
     return finalSGPItems;
+};
+
+export const filterMarketsByTagsArray = (sportMarkets: SportMarkets, tags: number[]): SportMarkets => {
+    if (!tags.length) return sportMarkets;
+    return sportMarkets.filter((market) => market.tags.findIndex((tag) => tags.includes(Number(tag))) !== -1);
 };

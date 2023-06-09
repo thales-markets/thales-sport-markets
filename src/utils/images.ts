@@ -11,7 +11,6 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
     leagueTag == 9016 ||
     leagueTag == 9100 ||
     leagueTag == 9001 ||
-    leagueTag == 9101 ||
     leagueTag == 9017 ||
     leagueTag == 9018 ||
     leagueTag == 18977 ||
@@ -32,7 +31,7 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
               .toLowerCase()}.png`
         : leagueTag == 9153 || leagueTag == 9156
         ? `/logos/Tennis/${team.trim().replaceAll(' ', '-').toLowerCase()}.png`
-        : leagueTag == 9445
+        : leagueTag == 9445 || leagueTag == 9497
         ? `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${fixEnetpulseRacingName(team)
               .replaceAll(' ', '-')
               .toLowerCase()}.png`
