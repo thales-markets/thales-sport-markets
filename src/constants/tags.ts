@@ -427,7 +427,7 @@ export const FIFA_WC_TAG = 9018;
 export const FIFA_WC_U20_TAG = 9296;
 export const IIHF_WC_TAG = 9033;
 export const UEFA_TAGS = [9016, 9017];
-export const MOTOSPORT_TAGS = [9445];
+export const MOTOSPORT_TAGS = [9445, 9497];
 
 export const PERSON_COMPETITIONS = [9007, 9445, 9497, 9153, 9156];
 
