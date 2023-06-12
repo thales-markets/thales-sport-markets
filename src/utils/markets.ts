@@ -357,6 +357,8 @@ export const isUEFAGame = (tag: number) => UEFA_TAGS.includes(tag);
 
 export const isMotosport = (tag: number) => MOTOSPORT_TAGS.includes(tag);
 
+export const isTwoPositionalSport = (tag: number) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(tag);
+
 export const getIsIndividualCompetition = (tag: number) => PERSON_COMPETITIONS.includes(tag);
 
 export const isParlayWon = (parlayMarket: ParlayMarket) => {
