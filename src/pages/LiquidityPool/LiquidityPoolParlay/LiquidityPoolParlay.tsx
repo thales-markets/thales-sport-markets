@@ -60,7 +60,7 @@ import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
-import { checkAllowance, NetworkIdByName, getMaxGasLimitForNetwork } from 'utils/network';
+import { checkAllowance, NetworkIdByName, getMaxGasLimitForNetwork, delay } from 'utils/network';
 import { BigNumber, ethers } from 'ethers';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
@@ -334,31 +334,67 @@ const LiquidityPoolParlay: React.FC = () => {
     };
 
     const closeRound = async () => {
-        const { signer, parlayAMMLiquidityPoolContract } = networkConnector;
-        if (signer && parlayAMMLiquidityPoolContract) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsSubmitting(true);
-            try {
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
+        setIsSubmitting(true);
+        try {
+            const { signer, parlayAMMLiquidityPoolContract } = networkConnector;
+
+            if (signer && parlayAMMLiquidityPoolContract) {
                 const parlayAMMLiquidityPoolContractWithSigner = parlayAMMLiquidityPoolContract.connect(signer);
 
-                const tx = await parlayAMMLiquidityPoolContractWithSigner.closeRound({
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                });
-                const txResult = await tx.wait();
+                const canCloseCurrentRound = await parlayAMMLiquidityPoolContractWithSigner?.canCloseCurrentRound();
+                const roundClosingPrepared = await parlayAMMLiquidityPoolContractWithSigner?.roundClosingPrepared();
 
-                if (txResult && txResult.events) {
-                    toast.update(
-                        id,
-                        getSuccessToastOptions(t('liquidity-pool.button.close-round-confirmation-message'))
-                    );
-                    setIsSubmitting(false);
-                    refetchLiquidityPoolData(walletAddress, networkId, 'parlay');
+                let getUsersCountInCurrentRound = await parlayAMMLiquidityPoolContractWithSigner?.getUsersCountInCurrentRound();
+                let usersProcessedInRound = await parlayAMMLiquidityPoolContractWithSigner?.usersProcessedInRound();
+                if (canCloseCurrentRound) {
+                    try {
+                        if (!roundClosingPrepared) {
+                            const tx = await parlayAMMLiquidityPoolContractWithSigner.prepareRoundClosing({
+                                type: 2,
+                            });
+                            await tx.wait().then(() => {
+                                console.log('prepareRoundClosing closed');
+                            });
+                            await delay(1000 * 2);
+                        }
+
+                        while (usersProcessedInRound.toString() < getUsersCountInCurrentRound.toString()) {
+                            const tx = await parlayAMMLiquidityPoolContractWithSigner.processRoundClosingBatch(100, {
+                                type: 2,
+                            });
+                            await tx.wait().then(() => {
+                                console.log('Round closed');
+                            });
+                            await delay(1000 * 2);
+                            getUsersCountInCurrentRound = await parlayAMMLiquidityPoolContractWithSigner.getUsersCountInCurrentRound();
+                            usersProcessedInRound = await parlayAMMLiquidityPoolContractWithSigner.usersProcessedInRound();
+                        }
+
+                        const tx = await parlayAMMLiquidityPoolContractWithSigner.closeRound({
+                            type: 2,
+                        });
+                        await tx.wait().then(() => {
+                            console.log('Round closed');
+                        });
+
+                        toast.update(
+                            id,
+                            getSuccessToastOptions(t('liquidity-pool.button.close-round-confirmation-message'))
+                        );
+                        setIsSubmitting(false);
+                        refetchLiquidityPoolData(walletAddress, networkId, 'parlay');
+                    } catch (e) {
+                        toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                        setIsSubmitting(false);
+                        console.log(e);
+                    }
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsSubmitting(false);
             }
+        } catch (e) {
+            console.log('E ', e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            setIsSubmitting(false);
         }
     };
 

@@ -168,3 +168,7 @@ export const getMaxGasLimitForNetwork = (networkId: NetworkId) => {
     if (networkId == Network.Arbitrum) return undefined;
     return MAX_GAS_LIMIT;
 };
+
+export const delay = (interval: number) => {
+    return new Promise((resolve) => setTimeout(resolve, interval));
+};
