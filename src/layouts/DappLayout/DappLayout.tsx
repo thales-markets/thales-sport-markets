@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { getNetworkId } from 'redux/modules/wallet';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { FlexDivColumn } from 'styles/common';
 import DappHeader from './DappHeader';
 import Loader from 'components/Loader';
@@ -26,6 +26,7 @@ import { isAndroid, isMetamask, isMobile } from 'utils/device';
 const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
     const { trackPageView } = useMatomo();
     const dispatch = useDispatch();
     const location = useLocation();
@@ -76,9 +77,16 @@ const DappLayout: React.FC = ({ children }) => {
             });
         }
 
+        if (walletAddress) {
+            customDimensions.push({
+                id: 4,
+                value: walletAddress,
+            });
+        }
+
         trackPageView({ customDimensions });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [networkId, i18n.language]);
+    }, [networkId, i18n.language, walletAddress]);
 
     useEffect(() => {
         if (![ROUTES.MintWorldCupNFT, ROUTES.MarchMadness].includes(location.pathname)) {
