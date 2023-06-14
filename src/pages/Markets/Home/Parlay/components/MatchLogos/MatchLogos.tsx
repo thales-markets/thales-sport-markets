@@ -34,7 +34,7 @@ const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, padding, isHighl
                 isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.AWAY}
                 onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
             />
-            {!market.isEnetpulseRacing && (
+            {!market.isOneSideMarket && (
                 <ClubLogo
                     awayTeam={true}
                     alt="Away team logo"

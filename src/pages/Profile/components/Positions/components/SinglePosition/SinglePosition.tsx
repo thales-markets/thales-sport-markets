@@ -3,7 +3,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PositionSymbol from 'components/PositionSymbol';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
-import { ENETPULSE_SPORTS, FIFA_WC_TAG, FIFA_WC_U20_TAG, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
+import {
+    ENETPULSE_SPORTS,
+    FIFA_WC_TAG,
+    FIFA_WC_U20_TAG,
+    JSON_ODDS_SPORTS,
+    SPORTS_TAGS_MAP,
+    SPORT_PERIODS_MAP,
+} from 'constants/tags';
 import { GAME_STATUS, STATUS_COLOR } from 'constants/ui';
 import { ethers } from 'ethers';
 import i18n from 'i18n';
@@ -66,7 +73,7 @@ import {
     TeamScoreLabel,
     Wrapper,
 } from './styled-components';
-import { fixEnetpulseRacingName } from 'utils/formatters/string';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;
@@ -126,13 +133,14 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const isGameResolved = position.market.isResolved || position.market.isCanceled;
     const isPendingResolution = isGameStarted && !isGameResolved;
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(position.market.tags[0]));
+    const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(position.market.tags[0]));
     // const gameIdString = Web3.utils.hexToAscii(position.market.id);
 
     const gameDate = new Date(position.market.maturityDate).toISOString().split('T')[0];
     const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(position.market.id, {
-        enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isMobile,
+        enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isMobile && isJsonOddsSport,
     });
 
     const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(
@@ -231,7 +239,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                         onError={getOnImageError(setHomeLogoSrc, position.market.tags[0])}
                         customMobileSize={'30px'}
                     />
-                    {!position.market.isEnetpulseRacing && (
+                    {!position.market.isOneSideMarket && (
                         <ClubLogo
                             awayTeam={true}
                             alt={position.market.awayTeam}
@@ -247,11 +255,11 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                 </MatchLogo>
                 <MatchLabel>
                     <ClubName>
-                        {position.market.isEnetpulseRacing
-                            ? fixEnetpulseRacingName(position.market.homeTeam)
+                        {position.market.isOneSideMarket
+                            ? fixOneSideMarketCompetitorName(position.market.homeTeam)
                             : position.market.homeTeam}
                     </ClubName>
-                    {!position.market.isEnetpulseRacing && <ClubName>{position.market.awayTeam}</ClubName>}
+                    {!position.market.isOneSideMarket && <ClubName>{position.market.awayTeam}</ClubName>}
                 </MatchLabel>
             </MatchInfo>
             <StatusContainer>
@@ -322,7 +330,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                 : undefined
                         }
                         tooltip={<>{getOddTooltipText(positionEnum, position.market)}</>}
-                        additionalStyle={position.market.isEnetpulseRacing ? { fontSize: 11 } : {}}
+                        additionalStyle={position.market.isOneSideMarket ? { fontSize: 11 } : {}}
                     />
                 </PositionContainer>
                 {isClaimable && (

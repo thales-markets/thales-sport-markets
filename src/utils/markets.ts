@@ -5,6 +5,8 @@ import {
     DoubleChanceMarketType,
     FIFA_WC_TAG,
     FIFA_WC_U20_TAG,
+    GOLF_TAGS,
+    GOLF_TOURNAMENT_WINNER_TAG,
     IIHF_WC_TAG,
     MATCH_RESOLVE_MAP,
     MLS_TAG,
@@ -31,7 +33,7 @@ import {
 } from 'types/markets';
 import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
-import { fixEnetpulseRacingName } from './formatters/string';
+import { fixOneSideMarketCompetitorName } from './formatters/string';
 
 const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 90;
 
@@ -121,7 +123,7 @@ export const getSymbolText = (
         return combinedMarketPositionSymbol;
     }
 
-    if (market.isEnetpulseRacing) {
+    if (market.isOneSideMarket) {
         return 'YES';
     }
     switch (position) {
@@ -357,6 +359,8 @@ export const isUEFAGame = (tag: number) => UEFA_TAGS.includes(tag);
 
 export const isMotosport = (tag: number) => MOTOSPORT_TAGS.includes(tag);
 
+export const isGolf = (tag: number) => GOLF_TAGS.includes(tag);
+
 export const isTwoPositionalSport = (tag: number) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(tag);
 
 export const getIsIndividualCompetition = (tag: number) => PERSON_COMPETITIONS.includes(tag);
@@ -488,8 +492,8 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
     const team =
         position === Position.AWAY || market.doubleChanceMarketType === DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE
             ? market.awayTeam
-            : market.isEnetpulseRacing
-            ? fixEnetpulseRacingName(market.homeTeam)
+            : market.isOneSideMarket
+            ? fixOneSideMarketCompetitorName(market.homeTeam)
             : market.homeTeam;
     const team2 = market.awayTeam;
     const scoring =
@@ -527,7 +531,11 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     }
                     break;
                 default:
-                    translationKey = market.isEnetpulseRacing ? 'race-winner' : 'winner';
+                    translationKey = market.isOneSideMarket
+                        ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
+                            ? 'tournament-winner'
+                            : 'race-winner'
+                        : 'winner';
             }
             break;
         case Position.AWAY:
@@ -539,7 +547,11 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     translationKey = 'total.under';
                     break;
                 default:
-                    translationKey = market.isEnetpulseRacing ? 'race-winner' : 'winner';
+                    translationKey = market.isOneSideMarket
+                        ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
+                            ? 'tournament-winner'
+                            : 'race-winner'
+                        : 'winner';
             }
             break;
         case Position.DRAW:
@@ -573,14 +585,22 @@ export const getCombinedOddTooltipText = (markets: SportMarketInfo[], positions:
         let translationKey = '';
         switch (positions[0]) {
             case Position.HOME:
-                translationKey = markets[0].isEnetpulseRacing ? 'race-winner' : 'winner';
+                translationKey = markets[0].isOneSideMarket
+                    ? Number(markets[0].tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
+                        ? 'tournament-winner'
+                        : 'race-winner'
+                    : 'winner';
                 team = markets[0].homeTeam;
                 break;
             case Position.DRAW:
                 translationKey = 'draw';
                 break;
             case Position.AWAY:
-                translationKey = markets[0].isEnetpulseRacing ? 'race-winner' : 'winner';
+                translationKey = markets[0].isOneSideMarket
+                    ? Number(markets[0].tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
+                        ? 'tournament-winner'
+                        : 'race-winner'
+                    : 'winner';
                 team = markets[0].awayTeam;
                 break;
         }

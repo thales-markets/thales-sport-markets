@@ -5,7 +5,7 @@ import { NetworkId } from 'types/network';
 import { ParlayVaultTrade } from 'types/vault';
 import { updateTotalQuoteAndAmountFromContract } from 'utils/markets';
 import { ParlayMarketWithRound, SportMarketInfo } from 'types/markets';
-import { fixEnetpulseRacingName, fixDuplicatedTeamName } from 'utils/formatters/string';
+import { fixOneSideMarketCompetitorName, fixDuplicatedTeamName } from 'utils/formatters/string';
 
 const useParlayVaultTradesQuery = (
     vaultAddress: string,
@@ -29,11 +29,11 @@ const useParlayVaultTradesQuery = (
                             sportMarkets: wholeMarket.sportMarkets.map((market: SportMarketInfo) => {
                                 return {
                                     ...market,
-                                    homeTeam: market.isEnetpulseRacing
-                                        ? fixEnetpulseRacingName(market.homeTeam)
+                                    homeTeam: market.isOneSideMarket
+                                        ? fixOneSideMarketCompetitorName(market.homeTeam)
                                         : fixDuplicatedTeamName(market.homeTeam),
-                                    awayTeam: market.isEnetpulseRacing
-                                        ? fixEnetpulseRacingName(market.awayTeam)
+                                    awayTeam: market.isOneSideMarket
+                                        ? fixOneSideMarketCompetitorName(market.awayTeam)
                                         : fixDuplicatedTeamName(market.awayTeam),
                                 };
                             }),

@@ -297,10 +297,18 @@ export const TAGS_LIST: Tags = [
     {
         id: 109021,
         label: 'Golf H2H',
-        logoClass: '',
+        logoClass: 'icon-league league--pga',
         favourite: false,
         hidden: false,
         priority: 1001,
+    },
+    {
+        id: 109121,
+        label: 'Golf Tournament Winner',
+        logoClass: 'icon-league league--pga',
+        favourite: false,
+        hidden: false,
+        priority: 1002,
     },
 ];
 
@@ -341,6 +349,7 @@ export const SPORTS_MAP: SportsMap = {
     9021: 'Cricket',
     9050: 'Soccer',
     109021: 'Golf',
+    109121: 'Golf',
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
@@ -364,6 +373,7 @@ export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
     18196,
     9021,
     109021,
+    109121,
 ];
 
 export const SPORTS_TAGS_MAP: SportsTagsMap = {
@@ -377,7 +387,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Tennis: [9153, 9156],
     eSports: [18977, 18983, 19138],
     Cricket: [9020, 9021],
-    Golf: [109021],
+    Golf: [109021, 109121],
 };
 
 export enum TAGS_FLAGS {
@@ -414,6 +424,7 @@ export enum TAGS_FLAGS {
     T20_BLAST = 9021,
     UEFA_EURO_QUALIFICATIONS = 9050,
     GOLF_H2H = 109021,
+    GOLF_WINNER = 109121,
 }
 
 export const ENETPULSE_SPORTS = [
@@ -434,7 +445,7 @@ export const ENETPULSE_SPORTS = [
     9497,
 ];
 
-export const JSON_ODDS_SPORTS = [109021];
+export const JSON_ODDS_SPORTS = [109021, 109121];
 
 export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
@@ -442,6 +453,8 @@ export const FIFA_WC_U20_TAG = 9296;
 export const IIHF_WC_TAG = 9033;
 export const UEFA_TAGS = [9016, 9017];
 export const MOTOSPORT_TAGS = [9445, 9497];
+export const GOLF_TAGS = [109021, 109121];
+export const GOLF_TOURNAMENT_WINNER_TAG = 109121;
 
 export const PERSON_COMPETITIONS = [9007, 9445, 9497, 9153, 9156, 109021];
 
@@ -507,6 +520,7 @@ export const SCORING_MAP: SportsMap = {
     9021: 'points',
     9050: 'goals',
     109021: '',
+    109121: '',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -546,6 +560,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9021: '',
     9050: 'regular',
     109021: '',
+    109121: '',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -583,4 +598,5 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     9021: 'inning',
     9050: 'half',
     109021: '',
+    109121: '',
 };

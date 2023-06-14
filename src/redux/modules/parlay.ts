@@ -6,7 +6,7 @@ import { MultiSingleAmounts, ParlayPayment, ParlaysMarketPosition, SGPItem } fro
 import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
 import { getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
-import { fixEnetpulseRacingName } from 'utils/formatters/string';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 
 const sliceName = 'parlay';
 
@@ -112,7 +112,9 @@ export const parlaySlice = createSlice({
 
                 state.error.code = ParlayErrorCode.SAME_RACE_DRIVERS;
                 state.error.data =
-                    fixEnetpulseRacingName(existingRaceDriver) + '/' + fixEnetpulseRacingName(action.payload.homeTeam);
+                    fixOneSideMarketCompetitorName(existingRaceDriver) +
+                    '/' +
+                    fixOneSideMarketCompetitorName(action.payload.homeTeam);
             } else if (index === -1) {
                 // ADD new market
                 if (state.parlay.length < state.parlaySize) {

@@ -19,7 +19,7 @@ import Parlay from 'pages/Markets/Home/Parlay';
 import Transactions from '../Transactions';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { GAME_STATUS, MAIN_COLORS } from 'constants/ui';
-import { BetType, ENETPULSE_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
+import { BetType, ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
@@ -70,11 +70,12 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const showStatus = market.isResolved || market.isCanceled || !market.isOpen || market.isPaused;
     const gameIdString = Web3.utils.hexToAscii(market.gameId);
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.tags[0]));
+    const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.tags[0]));
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
     const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
-        enabled: isAppReady && !isEnetpulseSport,
+        enabled: isAppReady && !isEnetpulseSport && !isJsonOddsSport,
     });
 
     const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.tags[0], {
@@ -101,7 +102,6 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
 
     const hideResultInfoPerPeriod = hideResultInfoPerPeriodForSports(Number(liveResultInfo?.sportId));
 
-    console.log(market);
     return (
         <RowContainer>
             <MainContainer showAMM={showAMM}>
@@ -240,7 +240,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         ) : (
                             <ResultContainer>
                                 <ResultLabel>
-                                    {market.isEnetpulseRacing
+                                    {market.isOneSideMarket
                                         ? market.homeScore == 1
                                             ? t('markets.market-card.race-winner')
                                             : t('markets.market-card.no-win')

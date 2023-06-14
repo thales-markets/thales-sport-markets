@@ -330,7 +330,8 @@
                 },
                 "bonus": "{{bonus}} added bonus on win!",
                 "and": "和",
-                "race-winner": "{{team}} 将赢得比赛 {{matchResolve}}"
+                "race-winner": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "tournament-winner": "{{team}} 将赢得比赛 {{matchResolve}}"
             },
             "starts-in": "开始于",
             "period": "时期",

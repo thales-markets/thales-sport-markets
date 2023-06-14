@@ -2,7 +2,7 @@ import { BetType, BetTypeNameMap } from 'constants/tags';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SportMarketInfo } from 'types/markets';
-import { isMotosport } from 'utils/markets';
+import { isGolf, isMotosport } from 'utils/markets';
 import DoubleChanceMarketPositions from '../DoubleChanceMarketPositions';
 import MarketPositions from '../MarketPositions';
 import { Arrow, Container, ContentContianer, ContentRow, Header, Title } from './styled-components';
@@ -34,7 +34,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
         }
     }
 
-    const showContainer = isMotosport(sportTag) || areDoubleChanceMarkets ? true : areOddsValid;
+    const showContainer = isMotosport(sportTag) || isGolf(sportTag) || areDoubleChanceMarkets ? true : areOddsValid;
 
     return showContainer ? (
         <Container>

@@ -136,3 +136,11 @@
 .league--t20:before {
     content: '\005D';
 }
+
+.league--wta:before {
+    content: '\0068';
+}
+
+.league--pga:before {
+    content: '\0069';
+}

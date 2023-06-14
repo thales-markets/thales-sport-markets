@@ -75,7 +75,7 @@ export type SportMarketInfo = {
     total: number;
     doubleChanceMarketType: DoubleChanceMarketType | null;
     combinedMarketsData?: CombinedMarket[];
-    isEnetpulseRacing: boolean;
+    isOneSideMarket: boolean;
 };
 
 export type FixedMarketData = {
@@ -130,7 +130,7 @@ export type MarketData = {
     spread: number;
     total: number;
     doubleChanceMarketType: DoubleChanceMarketType | null;
-    isEnetpulseRacing: boolean;
+    isOneSideMarket: boolean;
 };
 
 export type ChildMarkets = {

@@ -1,5 +1,12 @@
 import PositionSymbol from 'components/PositionSymbol';
-import { ENETPULSE_SPORTS, FIFA_WC_TAG, FIFA_WC_U20_TAG, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
+import {
+    ENETPULSE_SPORTS,
+    FIFA_WC_TAG,
+    FIFA_WC_U20_TAG,
+    JSON_ODDS_SPORTS,
+    SPORTS_TAGS_MAP,
+    SPORT_PERIODS_MAP,
+} from 'constants/tags';
 import { GAME_STATUS, STATUS_COLOR } from 'constants/ui';
 import { t } from 'i18next';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
@@ -30,7 +37,7 @@ import {
     TeamScoreLabel,
 } from '../../../SinglePosition/styled-components';
 import { ParlayStatus, Wrapper } from './styled-components';
-import { fixEnetpulseRacingName } from 'utils/formatters/string';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 
 const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | undefined; quote: number }> = ({
     market,
@@ -63,10 +70,11 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
     const isPendingResolution = isGameStarted && !isGameResolved;
 
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.tags[0]));
+    const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.tags[0]));
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(market.id, {
-        enabled: isAppReady && isPendingResolution && !isEnetpulseSport,
+        enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isJsonOddsSport,
     });
 
     const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(market.id, gameDate, market.tags[0], {
@@ -104,7 +112,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                         onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                         customMobileSize={'30px'}
                     />
-                    {!market.isEnetpulseRacing && (
+                    {!market.isOneSideMarket && (
                         <ClubLogo
                             awayTeam={true}
                             alt={market.awayTeam}
@@ -117,10 +125,10 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                     )}
                 </MatchLogo>
                 <MatchLabel>
-                    <ClubName isRacing={market.isEnetpulseRacing}>
-                        {market.isEnetpulseRacing ? fixEnetpulseRacingName(market.homeTeam) : market.homeTeam}
+                    <ClubName isOneSided={market.isOneSideMarket}>
+                        {market.isOneSideMarket ? fixOneSideMarketCompetitorName(market.homeTeam) : market.homeTeam}
                     </ClubName>
-                    {!market.isEnetpulseRacing && <ClubName>{market.awayTeam}</ClubName>}
+                    {!market.isOneSideMarket && <ClubName>{market.awayTeam}</ClubName>}
                 </MatchLabel>
             </MatchInfo>
             <StatusContainer>
@@ -143,7 +151,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                             : undefined
                     }
                     tooltip={<>{getOddTooltipText(positionEnum, market)}</>}
-                    additionalStyle={market.isEnetpulseRacing ? { fontSize: 11 } : {}}
+                    additionalStyle={market.isOneSideMarket ? { fontSize: 11 } : {}}
                 />
                 {isPendingResolution && !isMobile ? (
                     isEnetpulseSport ? (

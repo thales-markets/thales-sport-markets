@@ -16,7 +16,7 @@ import {
 } from 'utils/markets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
-import { fixEnetpulseRacingName } from 'utils/formatters/string';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 
 type MatchInfoProps = {
     market: ParlaysMarket;
@@ -38,9 +38,9 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
             <MatchLogos market={market} width={'120px'} padding={'0 0 0 4px'} isHighlighted={isHighlighted} />
             <MatchLabel>
                 <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
-                    {market.isEnetpulseRacing ? fixEnetpulseRacingName(market.homeTeam) : market.homeTeam}
+                    {market.isOneSideMarket ? fixOneSideMarketCompetitorName(market.homeTeam) : market.homeTeam}
                 </ClubName>
-                {!market.isEnetpulseRacing && (
+                {!market.isOneSideMarket && (
                     <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
                         {market.awayTeam}
                     </ClubName>
@@ -68,7 +68,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                         : undefined
                 }
                 tooltip={!readOnly && <>{getOddTooltipText(market.position, market)}</>}
-                additionalStyle={market.isEnetpulseRacing ? { fontSize: 10 } : {}}
+                additionalStyle={market.isOneSideMarket ? { fontSize: 10 } : {}}
             />
             {!readOnly && <Bonus>{bonus > 0 ? getFormattedBonus(bonus) : ''}</Bonus>}
             {readOnly ? (

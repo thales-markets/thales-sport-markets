@@ -326,7 +326,8 @@
                 },
                 "bonus": "{{bonus}} zusätzlicher Bonus bei Sieg!",
                 "and": "Und",
-                "race-winner": "{{team}} wird das Rennen gewinnen {{matchResolve}}"
+                "race-winner": "{{team}} wird das Rennen gewinnen {{matchResolve}}",
+                "tournament-winner": "{{team}} wird das Turnier gewinnen {{matchResolve}}"
             },
             "starts-in": "Beginnt in",
             "period": "Zeitraum",

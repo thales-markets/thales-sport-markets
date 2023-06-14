@@ -52,7 +52,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                                 cellProps.cell.value,
                                 cellProps.cell.row.original.wholeMarket
                             );
-                            const isEnetpulseRacingMarket = cellProps.cell.row.original.wholeMarket.isEnetpulseRacing;
+                            const isEnetpulseRacingMarket = cellProps.cell.row.original.wholeMarket.isOneSideMarket;
                             const spreadTotalText = getSpreadTotalText(
                                 cellProps.cell.row.original.wholeMarket,
                                 cellProps.cell.value
