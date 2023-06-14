@@ -228,7 +228,8 @@
                 "esports": "deportes electrónicos",
                 "cricket": "Grillo",
                 "mma": "Deportes de lucha",
-                "boxing": "Boxeo"
+                "boxing": "Boxeo",
+                "golf": "Golf"
             },
             "all": "Todo",
             "datepicker": {

@@ -228,7 +228,8 @@
                 "esports": "อีสปอร์ต",
                 "cricket": "คริกเก็ต",
                 "mma": "ดกีฬาต่อสู้",
-                "boxing": "มวย"
+                "boxing": "มวย",
+                "golf": "กอล์ฟ"
             },
             "datepicker": {
                 "games": "{{numberOfGames}} เกม"

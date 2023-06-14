@@ -35,6 +35,8 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
         ? `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${fixEnetpulseRacingName(team)
               .replaceAll(' ', '-')
               .toLowerCase()}.png`
+        : leagueTag == 109021
+        ? `/logos/PGA/${team.trim().replaceAll(' ', '-').toLowerCase()}.jpeg`
         : `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${team
               .trim()
               .replaceAll(' ', '-')

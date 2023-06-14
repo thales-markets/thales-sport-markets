@@ -309,7 +309,8 @@
                 "esports": "E-sport",
                 "cricket": "Criquet",
                 "boxing": "Boxe",
-                "mma": "Sports de combat"
+                "mma": "Sports de combat",
+                "golf": "Le golf"
             },
             "all": "Tous",
             "datepicker": {

@@ -229,7 +229,8 @@
                 "esports": "电子竞技",
                 "cricket": "蟋蟀",
                 "mma": "格斗运动",
-                "boxing": "拳击"
+                "boxing": "拳击",
+                "golf": "高尔夫球"
             },
             "all": "所有",
             "datepicker": {
