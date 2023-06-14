@@ -71,7 +71,7 @@ const useMarketQuery = (
                     spread: 0,
                     total: 0,
                     doubleChanceMarketType: null,
-                    isEnetpulseRacing:
+                    isOneSideMarket:
                         SPORTS_TAGS_MAP['Motosport'].includes(Number(marketData.firstTag)) &&
                         ENETPULSE_SPORTS.includes(Number(marketData.firstTag)),
                 };
