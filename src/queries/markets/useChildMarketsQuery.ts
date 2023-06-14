@@ -70,7 +70,7 @@ const useChildMarketsQuery = (
                             total: Number(marketData.total),
                             doubleChanceMarketType:
                                 Number(marketData.secondTag) === BetType.DOUBLE_CHANCE ? marketData.gameLabel : null,
-                            isEnetpulseRacing: parentMarket.isEnetpulseRacing,
+                            isOneSideMarket: parentMarket.isOneSideMarket,
                         };
 
                         return market;
