@@ -827,7 +827,7 @@ const LiquidityPoolParlay: React.FC = () => {
                 <CopyContainer>
                     <Description>
                         <Trans
-                            i18nKey={`liquidity-pool.description`}
+                            i18nKey={`liquidity-pool.description-parlay`}
                             components={{
                                 h1: <h1 />,
                                 p: <p />,
