@@ -175,11 +175,12 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
                         )}
                         {isUEFAGame(Number(market.tags[0])) && (
-                            <Tooltip overlay={t(`common.uefa-tooltip`)} iconFontSize={12} marginLeft={2} />
+                            <Tooltip overlay={t(`common.football-tooltip`)} iconFontSize={12} marginLeft={2} />
                         )}
                         <MatchTimeLabel>
                             {isEnetpulseSport &&
                             !isFifaWCGame(market.tags[0]) &&
+                            !isUEFAGame(Number(market.tags[0])) &&
                             (liveResultInfo || localStorage.getItem(market.address)) ? (
                                 <>
                                     {localStorage.getItem(market.address)}
