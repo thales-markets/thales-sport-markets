@@ -297,7 +297,7 @@ export const TAGS_LIST: Tags = [
     {
         id: 18806,
         label: 'UEFA Nations League',
-        logoClass: '',
+        logoClass: 'icon-league league--uefa-nations',
         favourite: false,
         hidden: false,
         priority: 114,
@@ -305,7 +305,7 @@ export const TAGS_LIST: Tags = [
     {
         id: 18821,
         label: 'CONCACAF Nations League',
-        logoClass: '',
+        logoClass: 'icon-league league--concacaf-nations',
         favourite: false,
         hidden: false,
         priority: 115,
