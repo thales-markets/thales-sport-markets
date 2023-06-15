@@ -107,8 +107,8 @@ const useEnetpulseAdditionalDataQuery = (
                         scoreAwayByPeriod,
                         displayClock,
                         sportId,
-                        tournamentName: sportTag == 9033 ? '' : tournamentName,
-                        tournamentRound: sportTag == 9033 ? '' : tournamentRound,
+                        tournamentName: sportTag == 9033 || sportTag == 9050 ? '' : tournamentName,
+                        tournamentRound: sportTag == 9033 || sportTag == 9050 ? '' : tournamentRound,
                     };
                     return finalResult;
                 }

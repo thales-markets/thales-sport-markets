@@ -145,7 +145,7 @@
         "mls-tooltip": "MLS markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "fifa-tooltip": "FIFA World Cup markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "iihf-tooltip": "IIHF World Championship markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
-        "uefa-tooltip": "UEFA markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
+        "football-tooltip": "Markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
         "top3": "TOP 3",
         "top5": "TOP 5",
