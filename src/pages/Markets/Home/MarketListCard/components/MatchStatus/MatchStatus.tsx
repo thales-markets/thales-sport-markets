@@ -13,6 +13,7 @@ type MatchStatusProps = {
     isPaused: boolean;
     liveResultInfo: SportMarketLiveResult | undefined;
     isEnetpulseSport: boolean;
+    isJsonOddsSport: boolean;
 };
 
 const MatchStatus: React.FC<MatchStatusProps> = ({
@@ -21,6 +22,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
     isPaused,
     liveResultInfo,
     isEnetpulseSport,
+    isJsonOddsSport,
 }) => {
     const { t } = useTranslation();
 
@@ -29,7 +31,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
     return (
         <Container bottomAlign={isPendingResolution}>
             {isPendingResolution ? (
-                isEnetpulseSport ? (
+                isEnetpulseSport || isJsonOddsSport ? (
                     <Status color={STATUS_COLOR.STARTED}>{t('markets.market-card.pending')}</Status>
                 ) : (
                     <FlexDivRow>

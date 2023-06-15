@@ -310,6 +310,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         isCanceled={market.isCanceled}
                         isPaused={market.isPaused}
                         isEnetpulseSport={isEnetpulseSport}
+                        isJsonOddsSport={isJsonOddsSport}
                     />
                 )}
             </MainContainer>
