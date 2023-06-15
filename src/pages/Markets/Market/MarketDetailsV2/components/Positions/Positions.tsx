@@ -17,9 +17,9 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
     const { t } = useTranslation();
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
-    const areDoubleChanceMarketsOddsValid = areDoubleChanceMarkets
-        ? markets.map((item) => item.homeOdds).every((odd) => odd < 1 && odd != 0)
-        : false;
+    // const areDoubleChanceMarketsOddsValid = areDoubleChanceMarkets
+    //     ? markets.map((item) => item.homeOdds).every((odd) => odd < 1 && odd != 0)
+    //     : false;
 
     let areOddsValid = true;
     const sportTag = Number(markets[0].tags[0]);
@@ -34,11 +34,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
         }
     }
 
-    const showContainer = isMotosport(sportTag)
-        ? true
-        : areDoubleChanceMarkets
-        ? areDoubleChanceMarketsOddsValid
-        : areOddsValid;
+    const showContainer = isMotosport(sportTag) || areDoubleChanceMarkets ? true : areOddsValid;
 
     return showContainer ? (
         <Container>

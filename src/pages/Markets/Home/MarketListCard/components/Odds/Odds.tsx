@@ -33,19 +33,16 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
           ) as DoubleChanceMarketsInfo)
         : undefined;
 
-    const areDoubleChanceMarketsOddsValid = doubleChanceMarkets
-        ? doubleChanceMarkets.map((item) => item.homeOdds).every((odd) => odd < 1 && odd != 0)
-        : false;
+    // const areDoubleChanceMarketsOddsValid = doubleChanceMarkets
+    //     ? doubleChanceMarkets.map((item) => item.homeOdds).every((odd) => odd < 1 && odd != 0)
+    //     : false;
 
     const areOddsValid = market.drawOdds
         ? [market.homeOdds, market.awayOdds, market.drawOdds].every((odd) => odd < 1 && odd != 0)
         : [market.homeOdds, market.awayOdds].every((odd) => odd < 1 && odd != 0);
 
-    const showContainer = isMotosport(Number(market.tags[0]))
-        ? true
-        : market.betType == BetType.DOUBLE_CHANCE
-        ? areDoubleChanceMarketsOddsValid
-        : areOddsValid;
+    const showContainer =
+        isMotosport(Number(market.tags[0])) || market.betType == BetType.DOUBLE_CHANCE ? true : areOddsValid;
 
     return showContainer ? (
         <Container>
@@ -59,31 +56,50 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
                 <OddsContainer>
                     {mappedDoubleChanceMarkets ? (
                         <>
-                            <Odd
-                                market={mappedDoubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE]}
-                                position={Position.HOME}
-                                odd={mappedDoubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE].homeOdds}
-                                bonus={
-                                    mappedDoubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE].homeBonus
-                                }
-                                isShownInSecondRow={isShownInSecondRow}
-                            />
-                            <Odd
-                                market={mappedDoubleChanceMarkets[DoubleChanceMarketType.NO_DRAW]}
-                                position={Position.HOME}
-                                odd={mappedDoubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeOdds}
-                                bonus={mappedDoubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeBonus}
-                                isShownInSecondRow={isShownInSecondRow}
-                            />
-                            <Odd
-                                market={mappedDoubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE]}
-                                position={Position.HOME}
-                                odd={mappedDoubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE].homeOdds}
-                                bonus={
-                                    mappedDoubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE].homeBonus
-                                }
-                                isShownInSecondRow={isShownInSecondRow}
-                            />
+                            {mappedDoubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE].homeOdds < 1 &&
+                                mappedDoubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE].homeOdds !=
+                                    0 && (
+                                    <Odd
+                                        market={mappedDoubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE]}
+                                        position={Position.HOME}
+                                        odd={
+                                            mappedDoubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE]
+                                                .homeOdds
+                                        }
+                                        bonus={
+                                            mappedDoubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE]
+                                                .homeBonus
+                                        }
+                                        isShownInSecondRow={isShownInSecondRow}
+                                    />
+                                )}
+                            {mappedDoubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeOdds < 1 &&
+                                mappedDoubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeOdds != 0 && (
+                                    <Odd
+                                        market={mappedDoubleChanceMarkets[DoubleChanceMarketType.NO_DRAW]}
+                                        position={Position.HOME}
+                                        odd={mappedDoubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeOdds}
+                                        bonus={mappedDoubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeBonus}
+                                        isShownInSecondRow={isShownInSecondRow}
+                                    />
+                                )}
+                            {mappedDoubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE].homeOdds < 1 &&
+                                mappedDoubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE].homeOdds !=
+                                    0 && (
+                                    <Odd
+                                        market={mappedDoubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE]}
+                                        position={Position.HOME}
+                                        odd={
+                                            mappedDoubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE]
+                                                .homeOdds
+                                        }
+                                        bonus={
+                                            mappedDoubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE]
+                                                .homeBonus
+                                        }
+                                        isShownInSecondRow={isShownInSecondRow}
+                                    />
+                                )}
                         </>
                     ) : (
                         <>

@@ -16,7 +16,7 @@ import localStore from 'utils/localStore';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 
 const BATCH_SIZE = 100;
-const BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY = 10;
+const BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY = 5;
 
 const marketsCache = {
     [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,
@@ -166,14 +166,11 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
                 const numberOfBatches = Math.trunc(marketAddresses.length / BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY) + 1;
 
                 for (let i = 0; i < numberOfBatches; i++) {
-                    promises.push(
-                        sportPositionalMarketDataContract?.getCombinedOddsForBatchOfMarkets(
-                            marketAddresses.slice(
-                                i * BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY,
-                                i * BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY + BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY
-                            )
-                        )
+                    const arraySlice = marketAddresses.slice(
+                        i * BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY,
+                        i * BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY + BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY
                     );
+                    promises.push(sportPositionalMarketDataContract?.getCombinedOddsForBatchOfMarkets(arraySlice));
                 }
 
                 const promisesResult = await Promise.all(promises);
