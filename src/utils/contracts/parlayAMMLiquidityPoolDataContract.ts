@@ -1,10 +1,10 @@
 export const parlayAMMLiquidityPoolDataContract = {
     addresses: {
         5: '',
-        10: '',
+        10: '0x6d4393FAd7A2928c10cdD0bcdd7702B39086d8b2',
         42: '',
         420: '0xb25A2e739D9f10E346c5de5a46520Bf23df769E9',
-        42161: '',
+        42161: '0xB5F1924136d7A72C3E5E746Ba2E23A3bfd499097',
     },
     abi: [
         {
