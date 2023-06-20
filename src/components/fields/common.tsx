@@ -34,6 +34,9 @@ export const CurrencyLabel = styled.label`
         opacity: 0.4;
         cursor: default;
     }
+    @media (max-width: 575px) {
+        padding-top: 47px;
+    }
 `;
 
 export const Input = styled.input`
@@ -63,9 +66,6 @@ export const Input = styled.input`
     }
     &.error {
         border: 2px solid #e53720;
-    }
-    @media (max-width: 575px) {
-        height: 40px;
     }
 `;
 

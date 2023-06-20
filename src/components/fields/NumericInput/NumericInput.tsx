@@ -111,6 +111,7 @@ const StyledInput = styled(Input)`
     @media (max-width: 575px) {
         padding-left: 10px;
         padding-right: 60px;
+        height: 40px;
     }
 `;
 
