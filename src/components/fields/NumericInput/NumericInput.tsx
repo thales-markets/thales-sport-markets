@@ -108,6 +108,10 @@ const NumericInput: React.FC<NumericInputProps> = ({
 
 const StyledInput = styled(Input)`
     padding-right: 100px;
+    @media (max-width: 575px) {
+        padding-left: 10px;
+        padding-right: 60px;
+    }
 `;
 
 const MaxButton = styled.button`

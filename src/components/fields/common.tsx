@@ -15,6 +15,9 @@ export const FieldLabel = styled.label`
     color: ${(props) => props.theme.textColor.primary};
     margin-bottom: 6px;
     display: flex;
+    @media (max-width: 575px) {
+        font-size: 20px;
+    }
 `;
 
 export const CurrencyLabel = styled.label`
@@ -60,6 +63,9 @@ export const Input = styled.input`
     }
     &.error {
         border: 2px solid #e53720;
+    }
+    @media (max-width: 575px) {
+        height: 40px;
     }
 `;
 
