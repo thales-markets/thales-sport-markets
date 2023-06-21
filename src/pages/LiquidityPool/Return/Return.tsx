@@ -13,7 +13,7 @@ import {
     LiquidityPoolInfoTitle,
     LiquidityPoolReturnInfo,
     LiquidityPoolReturnlabel,
-} from '../LiquidityPoolSingle/styled-components';
+} from '../styled-components';
 
 const Return: React.FC<{ liquidityPoolType: LiquidityPoolType }> = ({ liquidityPoolType }) => {
     const { t } = useTranslation();
