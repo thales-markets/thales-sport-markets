@@ -457,6 +457,7 @@ const LiquidityPool: React.FC = () => {
                         );
                         setIsSubmitting(false);
                         refetchLiquidityPoolData(walletAddress, networkId, 'parlay');
+                        refetchLiquidityPoolData(walletAddress, networkId, 'single');
                     } catch (e) {
                         toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                         setIsSubmitting(false);
@@ -470,35 +471,6 @@ const LiquidityPool: React.FC = () => {
             setIsSubmitting(false);
         }
     };
-
-    // const closeRound = async () => {
-    //     const { signer, liquidityPoolContract } = networkConnector;
-    //     if (signer && liquidityPoolContract) {
-    //         const id = toast.loading(t('market.toast-message.transaction-pending'));
-    //         setIsSubmitting(true);
-    //         try {
-    //             const liquidityPoolContractWithSigner = liquidityPoolContract.connect(signer);
-
-    //             const tx = await liquidityPoolContractWithSigner.closeRound({
-    //                 gasLimit: getMaxGasLimitForNetwork(networkId),
-    //             });
-    //             const txResult = await tx.wait();
-
-    //             if (txResult && txResult.events) {
-    //                 toast.update(
-    //                     id,
-    //                     getSuccessToastOptions(t('liquidity-pool.button.close-round-confirmation-message'))
-    //                 );
-    //                 setIsSubmitting(false);
-    //                 refetchLiquidityPoolData(walletAddress, networkId, 'single');
-    //             }
-    //         } catch (e) {
-    //             console.log(e);
-    //             toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-    //             setIsSubmitting(false);
-    //         }
-    //     }
-    // };
 
     const getDepositSubmitButton = () => {
         if (!isWalletConnected) {
