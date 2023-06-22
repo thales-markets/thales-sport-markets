@@ -524,7 +524,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 if (!parlayAmmQuote.error) {
                     const parlayAmmTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
                     const parlayAmmTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
-                    console.log(parlayAmmTotalQuote);
+
                     setTotalQuote(parlayAmmTotalQuote);
 
                     // Skew impact calculation if it's SGP
@@ -702,7 +702,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                             type="number"
                             value={usdAmountValue}
                             onChange={(e) => {
-                                if (countDecimals(Number(e.target.value)) > 2) {
+                                if (Number(countDecimals(Number(e.target.value))) > 2) {
                                     return;
                                 }
                                 setUsdAmount(e.target.value);

@@ -297,7 +297,7 @@ export const TAGS_LIST: Tags = [
     {
         id: 18806,
         label: 'UEFA Nations League',
-        logoClass: '',
+        logoClass: 'icon-league league--uefa-nations',
         favourite: false,
         hidden: false,
         priority: 114,
@@ -305,10 +305,18 @@ export const TAGS_LIST: Tags = [
     {
         id: 18821,
         label: 'CONCACAF Nations League',
-        logoClass: '',
+        logoClass: 'icon-league league--concacaf-nations',
         favourite: false,
         hidden: false,
         priority: 115,
+    },
+    {
+        id: 9288,
+        label: 'UEFA EURO U21',
+        logoClass: '',
+        favourite: false,
+        hidden: false,
+        priority: 116,
     },
 ];
 
@@ -350,6 +358,7 @@ export const SPORTS_MAP: SportsMap = {
     9050: 'Soccer',
     18806: 'Soccer',
     18821: 'Soccer',
+    9288: 'Soccer',
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
@@ -379,7 +388,26 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Baseball: [9003],
     Basketball: [9004, 9005, 9008, 9399],
     Hockey: [9006, 9033],
-    Soccer: [9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9057, 9061, 9045, 9296, 9050, 18806, 18821],
+    Soccer: [
+        9010,
+        9011,
+        9012,
+        9013,
+        9014,
+        9015,
+        9016,
+        9017,
+        9018,
+        9019,
+        9057,
+        9061,
+        9045,
+        9296,
+        9050,
+        18806,
+        18821,
+        9288,
+    ],
     MMA: [9007, 18196],
     Motosport: [9445, 9497],
     Tennis: [9153, 9156],
@@ -422,6 +450,7 @@ export enum TAGS_FLAGS {
     UEFA_EURO_QUALIFICATIONS = 9050,
     UEFA_NATIONS_LEAGUE = 18806,
     CONCACAF_NATIONS_LEAGUE = 18821,
+    UEFA_EURO_U21 = 9288,
 }
 
 export const ENETPULSE_SPORTS = [
@@ -442,13 +471,14 @@ export const ENETPULSE_SPORTS = [
     9497,
     18806,
     18821,
+    9288,
 ];
 
 export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
 export const FIFA_WC_U20_TAG = 9296;
 export const IIHF_WC_TAG = 9033;
-export const UEFA_TAGS = [9016, 9017, 18806, 18821];
+export const UEFA_TAGS = [9016, 9017, 18806, 18821, 9288];
 export const MOTOSPORT_TAGS = [9445, 9497];
 
 export const PERSON_COMPETITIONS = [9007, 9445, 9497, 9153, 9156];
@@ -516,6 +546,7 @@ export const SCORING_MAP: SportsMap = {
     9050: 'goals',
     18806: 'goals',
     18821: 'goals',
+    9288: 'goals',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -556,6 +587,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9050: 'regular',
     18806: 'regular',
     18821: 'regular',
+    9288: 'regular',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -594,4 +626,5 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     9050: 'half',
     18806: 'half',
     18821: 'half',
+    9288: 'half',
 };
