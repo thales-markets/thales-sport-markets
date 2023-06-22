@@ -7,6 +7,7 @@ import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
 import { getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
 import { fixEnetpulseRacingName } from 'utils/formatters/string';
+import { AMMContractsPausedData } from 'queries/markets/useAMMContractsPausedQuery';
 
 const sliceName = 'parlay';
 
@@ -59,6 +60,10 @@ type ParlaySliceState = {
     multiSingle: MultiSingleAmounts[];
     isMultiSingle: boolean;
     sgpFees: SGPItem[];
+    ammStatus: {
+        parlayAMM: boolean;
+        singleAMM: boolean;
+    };
     error: { code: ParlayErrorCode; data: string };
 };
 
@@ -69,6 +74,10 @@ const initialState: ParlaySliceState = {
     multiSingle: getDefaultMultiSingle(),
     isMultiSingle: getDefaultIsMultiSingle(),
     sgpFees: [],
+    ammStatus: {
+        parlayAMM: false,
+        singleAMM: false,
+    },
     error: getDefaultError(),
 };
 
@@ -272,6 +281,10 @@ export const parlaySlice = createSlice({
             state.sgpFees = [...action.payload];
             localStore.set(LOCAL_STORAGE_KEYS.SGP_FEES, state.sgpFees);
         },
+        updateAMMStatus: (state, action: PayloadAction<AMMContractsPausedData>) => {
+            state.ammStatus.parlayAMM = action.payload.parlayAMM;
+            state.ammStatus.singleAMM = action.payload.singleAMM;
+        },
     },
 });
 
@@ -294,6 +307,7 @@ export const {
     setPaymentSelectedStableIndex,
     resetParlayError,
     setSGPFees,
+    updateAMMStatus,
     removeFromMultiSingle,
 } = parlaySlice.actions;
 
@@ -306,5 +320,8 @@ export const getParlayPayment = (state: RootState) => getParlayState(state).paym
 export const getParlayError = (state: RootState) => getParlayState(state).error;
 export const getHasParlayError = createSelector(getParlayError, (error) => error.code != ParlayErrorCode.NO_ERROS);
 export const getSGPFees = (state: RootState) => getParlayState(state).sgpFees;
+export const getAMMStatus = (state: RootState) => getParlayState(state).ammStatus;
+export const getSingleAMMStatus = (state: RootState) => getParlayState(state).ammStatus.singleAMM;
+export const getParlayAMMStatus = (state: RootState) => getParlayState(state).ammStatus.parlayAMM;
 
 export default parlaySlice.reducer;
