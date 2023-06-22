@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import { removeAll, setPayment } from 'redux/modules/parlay';
+import { getParlayAMMStatus, removeAll, setPayment } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -82,6 +82,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
+    const isAMMPaused = useSelector((state: RootState) => getParlayAMMStatus(state));
 
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
         parlayPayment.selectedStableIndex
@@ -386,6 +387,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     };
 
     useEffect(() => {
+        if (isAMMPaused) {
+            setSubmitDisabled(true);
+            return;
+        }
+
         // Minimum of sUSD
         if (!Number(usdAmountValue) || Number(usdAmountValue) < minUsdAmountValue || isBuying || isAllowing) {
             setSubmitDisabled(true);
@@ -415,9 +421,18 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         tooltipTextUsdAmount,
         minUsdAmountValue,
         COLLATERAL_CONVERSION_MULTIPLIER,
+        isAMMPaused,
     ]);
 
     const getSubmitButton = () => {
+        if (isAMMPaused) {
+            return (
+                <SubmitButton disabled={submitDisabled}>
+                    {t('markets.parlay.validation.amm-contract-paused')}
+                </SubmitButton>
+            );
+        }
+
         if (!isWalletConnected) {
             return (
                 <SubmitButton onClick={() => openConnectModal?.()}>

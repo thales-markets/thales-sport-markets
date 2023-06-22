@@ -13,7 +13,14 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import { removeAll, setPayment, setMultiSingle, removeFromParlay, getMultiSingle } from 'redux/modules/parlay';
+import {
+    removeAll,
+    setPayment,
+    setMultiSingle,
+    removeFromParlay,
+    getMultiSingle,
+    getSingleAMMStatus,
+} from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
@@ -78,6 +85,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const multiSingleAmounts = useSelector(getMultiSingle);
+    const isAMMPaused = useSelector((state: RootState) => getSingleAMMStatus(state));
 
     const [submitDisabled, setSubmitDisabled] = useState(false);
     const [hasAllowance, setHasAllowance] = useState(false);
@@ -534,6 +542,12 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
 
     const MIN_TOKEN_AMOUNT = 1;
     useEffect(() => {
+        // If AMM is paused
+        if (isAMMPaused) {
+            setSubmitDisabled(true);
+            return;
+        }
+
         const anyTokenAmtUnderMin = tokenAndBonus.some(
             (t) => Number.isNaN(t.tokenAmount) || Number(t.tokenAmount) < MIN_TOKEN_AMOUNT
         );
@@ -558,9 +572,14 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         multiSingleAmounts,
         tokenAndBonus,
         calculatedTotalBuyIn,
+        isAMMPaused,
     ]);
 
     const getSubmitButton = () => {
+        if (isAMMPaused) {
+            return <SubmitButton disabled={submitDisabled}>{t('common.errors.single-amm-paused')}</SubmitButton>;
+        }
+
         if (!isWalletConnected) {
             return (
                 <SubmitButton onClick={() => openConnectModal?.()}>

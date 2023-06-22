@@ -39,7 +39,8 @@ import SportFilter from '../components/SportFilter';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import TagsDropdown from '../components/TagsDropdown';
 import useSGPFeesQuery from 'queries/markets/useSGPFeesQuery';
-import { setSGPFees } from 'redux/modules/parlay';
+import { setSGPFees, updateAMMStatus } from 'redux/modules/parlay';
+import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 
 const SidebarLeaderboard = lazy(
     () => import(/* webpackChunkName: "SidebarLeaderboard" */ 'pages/ParlayLeaderboard/components/SidebarLeaderboard')
@@ -94,6 +95,22 @@ const Home: React.FC = () => {
     const sgpFees = useSGPFeesQuery(networkId, {
         enabled: isWalletConnected,
     });
+
+    const ammContractsPaused = useAMMContractsPausedQuery(networkId, {
+        enabled: isAppReady,
+    });
+
+    const ammContractsStatusData = useMemo(() => {
+        if (ammContractsPaused.data && ammContractsPaused.isSuccess) {
+            return ammContractsPaused.data;
+        }
+    }, [ammContractsPaused.data, ammContractsPaused.isSuccess]);
+
+    useEffect(() => {
+        if (ammContractsStatusData) {
+            dispatch(updateAMMStatus(ammContractsStatusData));
+        }
+    }, [ammContractsStatusData, dispatch]);
 
     useEffect(() => {
         if (sgpFees.isSuccess && sgpFees.data) {

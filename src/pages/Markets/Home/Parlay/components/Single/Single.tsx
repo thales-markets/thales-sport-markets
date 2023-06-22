@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import { removeAll, setPayment } from 'redux/modules/parlay';
+import { getSingleAMMStatus, removeAll, setPayment } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -79,6 +79,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
+    const isAMMPaused = useSelector((state: RootState) => getSingleAMMStatus(state));
 
     const [submitDisabled, setSubmitDisabled] = useState(false);
     const [hasAllowance, setHasAllowance] = useState(false);
@@ -488,6 +489,12 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
 
     const MIN_TOKEN_AMOUNT = 1;
     useEffect(() => {
+        // If AMM is paused
+        if (isAMMPaused) {
+            setSubmitDisabled(true);
+            return;
+        }
+
         // Minimum of token amount
         if (
             !Number(usdAmountValue) ||
@@ -515,9 +522,14 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         paymentTokenBalance,
         tokenAmount,
         positionPriceDetailsQuery.isLoading,
+        isAMMPaused,
     ]);
 
     const getSubmitButton = () => {
+        if (isAMMPaused) {
+            return <SubmitButton disabled={submitDisabled}>{t('common.errors.single-amm-paused')}</SubmitButton>;
+        }
+
         if (!isWalletConnected) {
             return (
                 <SubmitButton onClick={() => openConnectModal?.()}>
