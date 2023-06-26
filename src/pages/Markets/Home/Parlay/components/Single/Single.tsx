@@ -60,6 +60,7 @@ import {
     TwitterIcon,
     ValidationTooltip,
 } from '../styled-components';
+import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -82,6 +83,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
 
     const [submitDisabled, setSubmitDisabled] = useState(false);
     const [hasAllowance, setHasAllowance] = useState(false);
+    const [isAMMPaused, setIsAMMPaused] = useState(false);
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
         parlayPayment.selectedStableIndex
@@ -130,6 +132,22 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
             mountedRef.current = false;
         };
     }, []);
+
+    const ammContractsPaused = useAMMContractsPausedQuery(networkId, {
+        enabled: isAppReady,
+    });
+
+    const ammContractsStatusData = useMemo(() => {
+        if (ammContractsPaused.data && ammContractsPaused.isSuccess) {
+            return ammContractsPaused.data;
+        }
+    }, [ammContractsPaused.data, ammContractsPaused.isSuccess]);
+
+    useEffect(() => {
+        if (ammContractsStatusData?.singleAMM) {
+            setIsAMMPaused(true);
+        }
+    }, [ammContractsStatusData]);
 
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
@@ -488,6 +506,12 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
 
     const MIN_TOKEN_AMOUNT = 1;
     useEffect(() => {
+        // If AMM is paused
+        if (isAMMPaused) {
+            setSubmitDisabled(true);
+            return;
+        }
+
         // Minimum of token amount
         if (
             !Number(usdAmountValue) ||
@@ -515,9 +539,14 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         paymentTokenBalance,
         tokenAmount,
         positionPriceDetailsQuery.isLoading,
+        isAMMPaused,
     ]);
 
     const getSubmitButton = () => {
+        if (isAMMPaused) {
+            return <SubmitButton disabled={submitDisabled}>{t('common.errors.single-amm-paused')}</SubmitButton>;
+        }
+
         if (!isWalletConnected) {
             return (
                 <SubmitButton onClick={() => openConnectModal?.()}>
