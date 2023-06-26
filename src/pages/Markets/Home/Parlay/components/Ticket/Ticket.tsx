@@ -139,7 +139,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     }, [ammContractsPaused.data, ammContractsPaused.isSuccess]);
 
     useEffect(() => {
-        if (ammContractsStatusData?.parlayAMM && ammContractsStatusData?.singleAMM) {
+        if (ammContractsStatusData?.parlayAMM || ammContractsStatusData?.singleAMM) {
             setIsAMMPaused(true);
         }
     }, [ammContractsStatusData]);
