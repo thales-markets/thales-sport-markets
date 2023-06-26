@@ -49,6 +49,7 @@ export type LiquidityPoolUserTransaction = {
     hash: string;
     timestamp: number;
     blockNumber: number;
+    liquidityPoolType: string;
     type: string;
     account: string;
     amount: number;
