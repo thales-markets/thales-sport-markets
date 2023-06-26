@@ -16,8 +16,10 @@ const useAMMContractsPausedQuery = (networkId: NetworkId, options?: UseQueryOpti
                 const { parlayMarketsAMMContract, sportsAMMContract } = networkConnector;
 
                 if (parlayMarketsAMMContract && sportsAMMContract) {
-                    const isSportsAMMPaused = await sportsAMMContract?.paused();
-                    const isParlayAMMPaused = await parlayMarketsAMMContract?.paused();
+                    const [isSportsAMMPaused, isParlayAMMPaused] = await Promise.all([
+                        sportsAMMContract?.paused(),
+                        parlayMarketsAMMContract?.paused(),
+                    ]);
 
                     return {
                         parlayAMM: isParlayAMMPaused,
