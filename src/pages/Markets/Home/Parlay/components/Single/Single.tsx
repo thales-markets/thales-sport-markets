@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import { getSingleAMMStatus, removeAll, setPayment } from 'redux/modules/parlay';
+import { removeAll, setPayment } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -60,6 +60,7 @@ import {
     TwitterIcon,
     ValidationTooltip,
 } from '../styled-components';
+import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -79,10 +80,10 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
-    const isAMMPaused = useSelector((state: RootState) => getSingleAMMStatus(state));
 
     const [submitDisabled, setSubmitDisabled] = useState(false);
     const [hasAllowance, setHasAllowance] = useState(false);
+    const [isAMMPaused, setIsAMMPaused] = useState(false);
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
         parlayPayment.selectedStableIndex
@@ -131,6 +132,22 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
             mountedRef.current = false;
         };
     }, []);
+
+    const ammContractsPaused = useAMMContractsPausedQuery(networkId, {
+        enabled: isAppReady,
+    });
+
+    const ammContractsStatusData = useMemo(() => {
+        if (ammContractsPaused.data && ammContractsPaused.isSuccess) {
+            return ammContractsPaused.data;
+        }
+    }, [ammContractsPaused.data, ammContractsPaused.isSuccess]);
+
+    useEffect(() => {
+        if (ammContractsStatusData?.singleAMM) {
+            setIsAMMPaused(true);
+        }
+    }, [ammContractsStatusData]);
 
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 

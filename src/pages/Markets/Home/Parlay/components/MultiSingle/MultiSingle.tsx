@@ -13,14 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import {
-    removeAll,
-    setPayment,
-    setMultiSingle,
-    removeFromParlay,
-    getMultiSingle,
-    getSingleAMMStatus,
-} from 'redux/modules/parlay';
+import { removeAll, setPayment, setMultiSingle, removeFromParlay, getMultiSingle } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
@@ -67,6 +60,7 @@ import { ListContainer } from 'pages/Profile/components/Positions/styled-compone
 import MatchInfo from '../MatchInfo';
 import styled from 'styled-components';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
+import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 
 type MultiSingleProps = {
     markets: ParlaysMarket[];
@@ -85,10 +79,10 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const multiSingleAmounts = useSelector(getMultiSingle);
-    const isAMMPaused = useSelector((state: RootState) => getSingleAMMStatus(state));
 
     const [submitDisabled, setSubmitDisabled] = useState(false);
     const [hasAllowance, setHasAllowance] = useState(false);
+    const [isAMMPaused, setIsAMMPaused] = useState(false);
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
         parlayPayment.selectedStableIndex
@@ -132,6 +126,22 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
             mountedRef.current = false;
         };
     }, []);
+
+    const ammContractsPaused = useAMMContractsPausedQuery(networkId, {
+        enabled: isAppReady,
+    });
+
+    const ammContractsStatusData = useMemo(() => {
+        if (ammContractsPaused.data && ammContractsPaused.isSuccess) {
+            return ammContractsPaused.data;
+        }
+    }, [ammContractsPaused.data, ammContractsPaused.isSuccess]);
+
+    useEffect(() => {
+        if (ammContractsStatusData?.singleAMM) {
+            setIsAMMPaused(true);
+        }
+    }, [ammContractsStatusData]);
 
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
