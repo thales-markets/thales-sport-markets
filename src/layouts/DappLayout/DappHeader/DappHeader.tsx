@@ -10,7 +10,7 @@ import ROUTES from 'constants/routes';
 import { MAIN_COLORS } from 'constants/ui';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,12 +18,22 @@ import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, getWalletAddress, updateWallet } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
+// import { Web3Auth } from '@web3auth/modal';
+import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
+import { ADAPTER_EVENTS, CHAIN_NAMESPACES, WALLET_ADAPTERS } from '@web3auth/base';
+import { EnvNames, NetworkNames, Sdk, Web3WalletProvider } from 'etherspot';
+import Web3 from 'web3';
+import { SubmitButton } from '../../../pages/Markets/Home/Parlay/components/styled-components';
+import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider';
+import networkConnector from 'utils/networkConnector';
+import { ethers } from 'ethers';
+import { Web3AuthNoModal } from '@web3auth/no-modal';
 
 const PULSING_COUNT = 10;
 
@@ -46,6 +56,8 @@ const customModalStyles = {
         zIndex: '5',
     },
 };
+
+const clientId = 'BEglQSgt4cUWcj6SKRdu5QkOXTsePmMcusG5EAoyjyOYKlVRjIF1iCNnMOTfpzCiunHRrMui8TIwQPXdkQ8Yxuk'; // get from https://dashboard.web3auth.io
 
 const DappHeader: React.FC = () => {
     const { t } = useTranslation();
@@ -83,10 +95,130 @@ const DappHeader: React.FC = () => {
         }
     }, 1000);
 
+    const [web3auth, setWeb3auth] = useState<Web3AuthNoModal | null>(null);
+    // const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(null);
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const init = async () => {
+            try {
+                const chainConfig = {
+                    chainNamespace: CHAIN_NAMESPACES.EIP155,
+                    chainId: '0x5', // Please use 0x1 for Mainnet
+                    rpcTarget: 'https://rpc.ankr.com/eth_goerli',
+                    displayName: 'Goerli Testnet',
+                    blockExplorer: 'https://goerli.etherscan.io/',
+                    ticker: 'ETH',
+                    tickerName: 'Ethereum',
+                };
+
+                // ETH_Goerli
+
+                const web3AuthInstance = new Web3AuthNoModal({
+                    clientId, // created in the Web3Auth Dashboard as described above
+                    chainConfig,
+                });
+                setWeb3auth(web3AuthInstance);
+
+                const privateKeyProvider = new EthereumPrivateKeyProvider({
+                    config: { chainConfig },
+                });
+
+                const openLoginAdapter = new OpenloginAdapter({
+                    privateKeyProvider,
+                    adapterSettings: {
+                        network: 'mainnet',
+                        clientId,
+                    },
+                    loginSettings: {
+                        mfaLevel: 'none',
+                    },
+                });
+
+                web3AuthInstance.configureAdapter(openLoginAdapter as any);
+
+                // Listen to events emitted by the Web3Auth Adapter
+                web3AuthInstance.on(ADAPTER_EVENTS.CONNECTED, () => {
+                    if (!web3AuthInstance?.provider) {
+                        return;
+                    }
+                });
+
+                web3AuthInstance.on(ADAPTER_EVENTS.ERRORED, (error) => {
+                    console.log(error);
+                });
+
+                // Initialise the web3Auth instance after setting up the Adapter Configuration
+                await web3AuthInstance.init();
+
+                if (web3AuthInstance.connected) {
+                    setLoggedIn(true);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        init();
+    }, []);
+
+    console.log(loggedIn, web3auth);
+
+    const login = async () => {
+        let web3authProvider;
+        try {
+            if (web3auth !== null) {
+                // login_hint is optional parameter which accepts any string and can be set to null
+                web3authProvider = await web3auth.connectTo(WALLET_ADAPTERS.OPENLOGIN, { loginProvider: 'google' });
+            }
+        } catch (e) {
+            console.log(`Failed to login! Reason: ${e instanceof Error && e?.message ? e.message : 'unknown'}.`);
+            return;
+        }
+
+        if (!web3authProvider) {
+            console.log(`Failed to get the provider connected`);
+            return;
+        }
+        // Initialising web3Auth Provider as Web3 Injectable
+        const web3 = new Web3(web3authProvider as any);
+        const web3provider = new Web3WalletProvider(web3.currentProvider as any);
+        // Refresh the web3 Injectable to validate the provider
+        await web3provider.refresh();
+        // Initialise the Etherspot SDK
+        const etherspotSdk = new Sdk(web3provider, {
+            networkName: NetworkNames.Optimism,
+            env: EnvNames.MainNets,
+            omitWalletProviderNetworkCheck: true,
+        });
+        const test = await etherspotSdk.computeContractAccount();
+        console.log(test, web3provider);
+
+        if (web3.currentProvider !== null) {
+            networkConnector.setNetworkSettings({
+                networkId: 10,
+                provider: new ethers.providers.Web3Provider(web3.currentProvider as any, 'any'),
+            });
+        }
+        dispatch(updateWallet({ walletAddress: test.address }));
+    };
+
+    const logout = async () => {
+        if (!web3auth) {
+            console.log('web3auth not initialized yet');
+            return;
+        }
+        await web3auth.logout();
+        // setProvider(null);
+        // setLoggedIn(false);
+    };
+
     return (
         <>
             {!isMobile && (
                 <Container>
+                    <SubmitButton onClick={login}>Login</SubmitButton>
+                    <SubmitButton onClick={logout}>Logout</SubmitButton>
                     <Logo />
                     <RightContainer>
                         {location.pathname !== ROUTES.Wizard && (
