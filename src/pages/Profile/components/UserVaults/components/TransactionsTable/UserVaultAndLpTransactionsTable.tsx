@@ -54,7 +54,7 @@ export const UserVaultAndLpTransactionsTable: React.FC = () => {
                                 VaultsAndLiquidityPoolUserTransaction,
                                 VaultsAndLiquidityPoolUserTransaction['name']
                             >
-                        ) => <TableText> {t(`vault.${cellProps.cell.value}.title`)}</TableText>,
+                        ) => <TableText> {t(`vault.LP.${cellProps.cell.value}`)}</TableText>,
                         width: 150,
                         sortable: true,
                     },

@@ -60,7 +60,7 @@ import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
-import { checkAllowance, NetworkIdByName, getMaxGasLimitForNetwork } from 'utils/network';
+import { checkAllowance, NetworkIdByName, getMaxGasLimitForNetwork, delay } from 'utils/network';
 import { BigNumber, ethers } from 'ethers';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
@@ -77,6 +77,9 @@ import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { FlexDivRow } from 'styles/common';
 import RadioButton from 'components/fields/RadioButton/RadioButton';
 import Return from './Return/Return';
+import { history } from 'utils/routes';
+import useParlayLiquidityPoolUserDataQuery from 'queries/liquidityPool/useParlayLiquidityPoolUserDataQuery';
+import useParlayLiquidityPoolDataQuery from 'queries/liquidityPool/useParlayLiquidityPoolDataQuery';
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
@@ -102,6 +105,19 @@ const LiquidityPool: React.FC = () => {
     const [isWithdrawalPercentageValid, setIsWithdrawalPercentageValid] = useState<boolean>(true);
     const [withdrawalAmount, setWithdrawalAmount] = useState<number>(0);
 
+    const [isParlayLP, setIsParlayLP] = useState<boolean>(false);
+
+    const searchQuery = new URLSearchParams(location.search);
+
+    useEffect(() => {
+        if (searchQuery.get('pool-type') == 'parlay') {
+            setIsParlayLP(true);
+        } else if (searchQuery.get('pool-type') == 'single') {
+            setIsParlayLP(false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const collateral = getDefaultColleteralForNetwork(networkId);
 
     const { openConnectModal } = useConnectModal();
@@ -117,38 +133,85 @@ const LiquidityPool: React.FC = () => {
     }, [paymentTokenBalanceQuery.isSuccess, paymentTokenBalanceQuery.data]);
 
     const liquidityPoolDataQuery = useLiquidityPoolDataQuery(networkId, {
-        enabled: isAppReady,
+        enabled: isAppReady && !isParlayLP,
+    });
+
+    const parlayLiquidityPoolDataQuery = useParlayLiquidityPoolDataQuery(networkId, {
+        enabled: isAppReady && isParlayLP,
     });
 
     useEffect(() => {
-        if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data) {
+        if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data && !isParlayLP) {
             setLastValidLiquidityPoolData(liquidityPoolDataQuery.data);
         }
-    }, [liquidityPoolDataQuery.isSuccess, liquidityPoolDataQuery.data]);
+        if (parlayLiquidityPoolDataQuery.isSuccess && parlayLiquidityPoolDataQuery.data && isParlayLP) {
+            setLastValidLiquidityPoolData(parlayLiquidityPoolDataQuery.data);
+        }
+    }, [
+        liquidityPoolDataQuery.isSuccess,
+        liquidityPoolDataQuery.data,
+        isParlayLP,
+        parlayLiquidityPoolDataQuery.isSuccess,
+        parlayLiquidityPoolDataQuery.data,
+    ]);
 
     const liquidityPoolData: LiquidityPoolData | undefined = useMemo(() => {
-        if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data) {
+        if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data && !isParlayLP) {
             return liquidityPoolDataQuery.data;
         }
+        if (parlayLiquidityPoolDataQuery.isSuccess && parlayLiquidityPoolDataQuery.data && isParlayLP) {
+            return parlayLiquidityPoolDataQuery.data;
+        }
         return lastValidLiquidityPoolData;
-    }, [liquidityPoolDataQuery.isSuccess, liquidityPoolDataQuery.data, lastValidLiquidityPoolData]);
+    }, [
+        liquidityPoolDataQuery.isSuccess,
+        liquidityPoolDataQuery.data,
+        isParlayLP,
+        parlayLiquidityPoolDataQuery.isSuccess,
+        parlayLiquidityPoolDataQuery.data,
+        lastValidLiquidityPoolData,
+    ]);
 
     const userLiquidityPoolDataQuery = useLiquidityPoolUserDataQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
+        enabled: isAppReady && isWalletConnected && !isParlayLP,
+    });
+
+    const userParlayLiquidityPoolDataQuery = useParlayLiquidityPoolUserDataQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected && isParlayLP,
     });
 
     useEffect(() => {
-        if (userLiquidityPoolDataQuery.isSuccess && userLiquidityPoolDataQuery.data) {
+        if (userLiquidityPoolDataQuery.isSuccess && userLiquidityPoolDataQuery.data && !isParlayLP) {
             setLastValidUserLiquidityPoolData(userLiquidityPoolDataQuery.data);
         }
-    }, [userLiquidityPoolDataQuery.isSuccess, userLiquidityPoolDataQuery.data]);
+
+        if (userParlayLiquidityPoolDataQuery.isSuccess && userParlayLiquidityPoolDataQuery.data && isParlayLP) {
+            setLastValidUserLiquidityPoolData(userParlayLiquidityPoolDataQuery.data);
+        }
+    }, [
+        userLiquidityPoolDataQuery.isSuccess,
+        userLiquidityPoolDataQuery.data,
+        isParlayLP,
+        userParlayLiquidityPoolDataQuery.isSuccess,
+        userParlayLiquidityPoolDataQuery.data,
+    ]);
 
     const userLiquidityPoolData: UserLiquidityPoolData | undefined = useMemo(() => {
-        if (userLiquidityPoolDataQuery.isSuccess && userLiquidityPoolDataQuery.data) {
+        if (userLiquidityPoolDataQuery.isSuccess && userLiquidityPoolDataQuery.data && !isParlayLP) {
             return userLiquidityPoolDataQuery.data;
         }
+        if (userParlayLiquidityPoolDataQuery.isSuccess && userParlayLiquidityPoolDataQuery.data && isParlayLP) {
+            return userParlayLiquidityPoolDataQuery.data;
+        }
         return lastValidUserLiquidityPoolData;
-    }, [userLiquidityPoolDataQuery.isSuccess, userLiquidityPoolDataQuery.data, lastValidUserLiquidityPoolData]);
+    }, [
+        userLiquidityPoolDataQuery.isSuccess,
+        userLiquidityPoolDataQuery.data,
+        isParlayLP,
+        userParlayLiquidityPoolDataQuery.isSuccess,
+        userParlayLiquidityPoolDataQuery.data,
+        lastValidUserLiquidityPoolData,
+    ]);
 
     const isAmountEntered = Number(amount) > 0;
     const invalidAmount =
@@ -207,8 +270,11 @@ const LiquidityPool: React.FC = () => {
         isLiquidityPoolCapReached;
 
     useEffect(() => {
-        const { signer, sUSDContract, liquidityPoolContract } = networkConnector;
-        if (signer && sUSDContract && liquidityPoolContract) {
+        const { signer, sUSDContract, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
+
+        const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
+
+        if (signer && sUSDContract && lpContract) {
             const sUSDContractWithSigner = sUSDContract.connect(signer);
             const getAllowance = async () => {
                 try {
@@ -220,7 +286,7 @@ const LiquidityPool: React.FC = () => {
                         parsedAmount,
                         sUSDContractWithSigner,
                         walletAddress,
-                        liquidityPoolContract.address
+                        lpContract.address
                     );
                     setAllowance(allowance);
                 } catch (e) {
@@ -231,18 +297,21 @@ const LiquidityPool: React.FC = () => {
                 getAllowance();
             }
         }
-    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId]);
+    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId, isParlayLP]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
-        const { signer, sUSDContract, liquidityPoolContract } = networkConnector;
-        if (signer && sUSDContract && liquidityPoolContract) {
+        const { signer, sUSDContract, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
+
+        const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
+
+        if (signer && sUSDContract && lpContract) {
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsAllowing(true);
 
             try {
                 const sUSDContractWithSigner = sUSDContract.connect(signer);
 
-                const tx = (await sUSDContractWithSigner.approve(liquidityPoolContract.address, approveAmount, {
+                const tx = (await sUSDContractWithSigner.approve(lpContract.address, approveAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 })) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
@@ -264,12 +333,15 @@ const LiquidityPool: React.FC = () => {
     };
 
     const handleDeposit = async () => {
-        const { signer, liquidityPoolContract } = networkConnector;
-        if (signer && liquidityPoolContract) {
+        const { signer, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
+
+        const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
+
+        if (signer && lpContract) {
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsSubmitting(true);
             try {
-                const liquidityPoolContractWithSigner = liquidityPoolContract.connect(signer);
+                const liquidityPoolContractWithSigner = lpContract.connect(signer);
                 const parsedAmount = ethers.utils.parseUnits(
                     Number(amount).toString(),
                     getDefaultDecimalsForNetwork(networkId)
@@ -284,7 +356,7 @@ const LiquidityPool: React.FC = () => {
                     toast.update(id, getSuccessToastOptions(t('liquidity-pool.button.deposit-confirmation-message')));
                     setAmount('');
                     setIsSubmitting(false);
-                    refetchLiquidityPoolData(walletAddress, networkId);
+                    refetchLiquidityPoolData(walletAddress, networkId, 'single');
                 }
             } catch (e) {
                 console.log(e);
@@ -295,12 +367,15 @@ const LiquidityPool: React.FC = () => {
     };
 
     const handleWithdrawalRequest = async () => {
-        const { signer, liquidityPoolContract } = networkConnector;
-        if (signer && liquidityPoolContract) {
+        const { signer, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
+
+        const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
+
+        if (signer && lpContract) {
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsSubmitting(true);
             try {
-                const liquidityPoolContractWithSigner = liquidityPoolContract.connect(signer);
+                const liquidityPoolContractWithSigner = lpContract.connect(signer);
                 const parsedPercentage = ethers.utils.parseEther((Number(withdrawalPercentage) / 100).toString());
 
                 const tx = withdrawAll
@@ -319,7 +394,7 @@ const LiquidityPool: React.FC = () => {
                     );
                     setAmount('');
                     setIsSubmitting(false);
-                    refetchLiquidityPoolData(walletAddress, networkId);
+                    refetchLiquidityPoolData(walletAddress, networkId, isParlayLP ? 'parlay' : 'single');
                 }
             } catch (e) {
                 console.log(e);
@@ -330,31 +405,70 @@ const LiquidityPool: React.FC = () => {
     };
 
     const closeRound = async () => {
-        const { signer, liquidityPoolContract } = networkConnector;
-        if (signer && liquidityPoolContract) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsSubmitting(true);
-            try {
-                const liquidityPoolContractWithSigner = liquidityPoolContract.connect(signer);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
+        setIsSubmitting(true);
+        try {
+            const { signer, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
 
-                const tx = await liquidityPoolContractWithSigner.closeRound({
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                });
-                const txResult = await tx.wait();
+            const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
 
-                if (txResult && txResult.events) {
-                    toast.update(
-                        id,
-                        getSuccessToastOptions(t('liquidity-pool.button.close-round-confirmation-message'))
-                    );
-                    setIsSubmitting(false);
-                    refetchLiquidityPoolData(walletAddress, networkId);
+            if (signer && lpContract) {
+                const lpContractWithSigner = lpContract.connect(signer);
+
+                const canCloseCurrentRound = await lpContractWithSigner?.canCloseCurrentRound();
+                const roundClosingPrepared = await lpContractWithSigner?.roundClosingPrepared();
+
+                let getUsersCountInCurrentRound = await lpContractWithSigner?.getUsersCountInCurrentRound();
+                let usersProcessedInRound = await lpContractWithSigner?.usersProcessedInRound();
+                if (canCloseCurrentRound) {
+                    try {
+                        if (!roundClosingPrepared) {
+                            const tx = await lpContractWithSigner.prepareRoundClosing({
+                                type: 2,
+                            });
+                            await tx.wait().then(() => {
+                                console.log('prepareRoundClosing closed');
+                            });
+                            await delay(1000 * 2);
+                        }
+
+                        while (usersProcessedInRound.toString() < getUsersCountInCurrentRound.toString()) {
+                            const tx = await lpContractWithSigner.processRoundClosingBatch(100, {
+                                type: 2,
+                            });
+                            await tx.wait().then(() => {
+                                console.log('Round closed');
+                            });
+                            await delay(1000 * 2);
+                            getUsersCountInCurrentRound = await lpContractWithSigner.getUsersCountInCurrentRound();
+                            usersProcessedInRound = await lpContractWithSigner.usersProcessedInRound();
+                        }
+
+                        const tx = await lpContractWithSigner.closeRound({
+                            type: 2,
+                        });
+                        await tx.wait().then(() => {
+                            console.log('Round closed');
+                        });
+
+                        toast.update(
+                            id,
+                            getSuccessToastOptions(t('liquidity-pool.button.close-round-confirmation-message'))
+                        );
+                        setIsSubmitting(false);
+                        refetchLiquidityPoolData(walletAddress, networkId, 'parlay');
+                        refetchLiquidityPoolData(walletAddress, networkId, 'single');
+                    } catch (e) {
+                        toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                        setIsSubmitting(false);
+                        console.log(e);
+                    }
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsSubmitting(false);
             }
+        } catch (e) {
+            console.log('E ', e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            setIsSubmitting(false);
         }
     };
 
@@ -440,6 +554,25 @@ const LiquidityPool: React.FC = () => {
 
     return (
         <Wrapper>
+            <ToggleContainer>
+                <Toggle
+                    label={{
+                        firstLabel: t('liquidity-pool.single-lp'),
+                        secondLabel: t('liquidity-pool.parlay-lp'),
+                        fontSize: '20px',
+                        fontWeight: 'bold',
+                    }}
+                    active={isParlayLP}
+                    dotSize="20px"
+                    dotBackground="#303656"
+                    dotBorder="3px solid #3FD1FF"
+                    handleClick={() => {
+                        searchQuery.set('pool-type', !isParlayLP ? 'parlay' : 'single');
+                        history.push({ search: searchQuery.toString() });
+                        setIsParlayLP(!isParlayLP);
+                    }}
+                />
+            </ToggleContainer>
             {networkId !== NetworkIdByName.ArbitrumOne && (
                 <Info>
                     <Trans
@@ -492,10 +625,10 @@ const LiquidityPool: React.FC = () => {
                                 label={{
                                     firstLabel: t(`liquidity-pool.tabs.${LiquidityPoolTab.DEPOSIT}`),
                                     secondLabel: t(`liquidity-pool.tabs.${LiquidityPoolTab.WITHDRAW}`),
-                                    fontSize: '18px',
+                                    fontSize: '14px',
                                 }}
                                 active={selectedTab === LiquidityPoolTab.WITHDRAW}
-                                dotSize="18px"
+                                dotSize="14px"
                                 dotBackground="#303656"
                                 dotBorder="3px solid #3FD1FF"
                                 handleClick={() => {
@@ -787,11 +920,11 @@ const LiquidityPool: React.FC = () => {
                 <CopyContainer>
                     <Description>
                         <Trans
-                            i18nKey={`liquidity-pool.description`}
+                            i18nKey={isParlayLP ? 'liquidity-pool.description-parlay' : 'liquidity-pool.description'}
                             components={{
                                 h1: <h1 />,
                                 p: <p />,
-                                tipLink: <TipLink href={LINKS.ThalesTip99} />,
+                                tipLink: <TipLink href={isParlayLP ? LINKS.ThalesTip99 : LINKS.ThalesTip99} />,
                             }}
                             values={{
                                 thalesStakedAmount: 1 / liquidityPoolData.stakedThalesMultiplier,
@@ -975,13 +1108,14 @@ const LiquidityPool: React.FC = () => {
                                     </WarningContentInfo>
                                 )}
                             </ContentInfoContainer>
-                            <Return />
+                            <Return liquidityPoolType={isParlayLP ? 'parlay' : 'single'} />
                         </MainContentContainer>
                         <MainContentContainer>
                             {liquidityPoolData && (
                                 <PnL
                                     lifetimePnl={liquidityPoolData.lifetimePnl}
                                     type={LiquidityPoolPnlType.PNL_PER_ROUND}
+                                    liquidityPoolType={isParlayLP ? 'parlay' : 'single'}
                                 />
                             )}
                         </MainContentContainer>
@@ -990,13 +1124,19 @@ const LiquidityPool: React.FC = () => {
                                 <PnL
                                     lifetimePnl={liquidityPoolData.lifetimePnl}
                                     type={LiquidityPoolPnlType.CUMULATIVE_PNL}
+                                    liquidityPoolType={isParlayLP ? 'parlay' : 'single'}
                                 />
                             )}
                         </MainContentContainer>
                     </>
                 )}
             </MainContainer>
-            {liquidityPoolData && <Transactions currentRound={liquidityPoolData.round} />}
+            {liquidityPoolData && (
+                <Transactions
+                    currentRound={liquidityPoolData.round}
+                    liquidityPoolType={isParlayLP ? 'parlay' : 'single'}
+                />
+            )}
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={amount}
