@@ -1,5 +1,6 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { QueryClient } from 'react-query';
+import { LiquidityPoolType } from 'types/liquidityPool';
 import { NetworkId } from 'types/network';
 
 type QueryConnector = {
@@ -52,11 +53,19 @@ export const refetchVaultData = (vaultAddress: string, walletAddress: string, ne
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.UserTransactions(vaultAddress, networkId));
 };
 
-export const refetchLiquidityPoolData = (walletAddress: string, networkId: NetworkId) => {
+export const refetchLiquidityPoolData = (
+    walletAddress: string,
+    networkId: NetworkId,
+    liquidityPoolType: LiquidityPoolType
+) => {
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.Data(networkId));
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.ParlayData(networkId));
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.ParlayUserData(walletAddress, networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.UserData(walletAddress, networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.PnL(networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.UserTransactions(networkId));
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.PnL(networkId, liquidityPoolType));
+    queryConnector.queryClient.invalidateQueries(
+        QUERY_KEYS.LiquidityPool.UserTransactions(networkId, liquidityPoolType)
+    );
 };
 
 export default queryConnector;

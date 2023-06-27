@@ -49,6 +49,7 @@ export type LiquidityPoolUserTransaction = {
     hash: string;
     timestamp: number;
     blockNumber: number;
+    liquidityPoolType: string;
     type: string;
     account: string;
     amount: number;
@@ -75,3 +76,5 @@ export type LiquidityPoolReturn = {
     apr: number;
     apy: number;
 };
+
+export type LiquidityPoolType = 'single' | 'parlay';
