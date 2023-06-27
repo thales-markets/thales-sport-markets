@@ -571,6 +571,7 @@ const LiquidityPool: React.FC = () => {
                         history.push({ search: searchQuery.toString() });
                         setIsParlayLP(!isParlayLP);
                     }}
+                    margin={'15px 0px 5px 0px'}
                 />
             </ToggleContainer>
             {networkId !== NetworkIdByName.ArbitrumOne && (
@@ -924,7 +925,7 @@ const LiquidityPool: React.FC = () => {
                             components={{
                                 h1: <h1 />,
                                 p: <p />,
-                                tipLink: <TipLink href={isParlayLP ? LINKS.ThalesTip99 : LINKS.ThalesTip99} />,
+                                tipLink: <TipLink href={isParlayLP ? LINKS.ThalesTip142 : LINKS.ThalesTip99} />,
                             }}
                             values={{
                                 thalesStakedAmount: 1 / liquidityPoolData.stakedThalesMultiplier,
