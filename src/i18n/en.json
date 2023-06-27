@@ -101,6 +101,7 @@
             "enter-address": "Enter address",
             "invalid-address": "Invalid address",
             "enter-percentage": "Enter percentage",
+            "single-amm-paused": "AMM Paused",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}"
         },
         "time-remaining": {
@@ -472,6 +473,7 @@
             "validation": {
                 "title": "Parlay Validation",
                 "max-teams": "Maximum {{max}} markets in Parlay",
+                "amm-contract-paused": "Parlay AMM Paused",
                 "team-in-parlay": "{{team}} is already in Parlay. The same team from the same league can't be added to a Parlay more than once.",
                 "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
                 "max-combined-markets": "The maximum number of combined markets in Parlay is {{max}}.",

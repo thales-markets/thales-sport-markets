@@ -52,15 +52,13 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
 
     const getSubmitButton = () => {
         if (!isWalletConnected) {
-            return (
-                <ModalButton onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</ModalButton>
-            );
+            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
         }
         if (!approveAll && !isAmountEntered) {
-            return <ModalButton disabled={true}>{t(`common.errors.enter-amount`)}</ModalButton>;
+            return <Button disabled={true}>{t(`common.errors.enter-amount`)}</Button>;
         }
         return (
-            <ModalButton
+            <Button
                 disabled={isButtonDisabled}
                 onClick={() => onSubmit(approveAll ? ethers.constants.MaxUint256 : amountConverted)}
             >
@@ -69,7 +67,7 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
                     : t('common.enable-wallet-access.approve-progress-label', {
                           currencyKey: tokenSymbol,
                       })}
-            </ModalButton>
+            </Button>
         );
     };
 
@@ -82,7 +80,7 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
             title={t('common.enable-wallet-access.approve-label', { currencyKey: tokenSymbol })}
             onClose={onClose}
             shouldCloseOnOverlayClick={false}
-            customStyle={{ overlay: { zIndex: 201 } }}
+            customStyle={{ overlay: { zIndex: 2000 } }}
         >
             <Container>
                 <CheckboxContainer>
@@ -121,8 +119,6 @@ const ButtonContainer = styled(FlexDivCentered)`
     margin: 30px 0 10px 0;
 `;
 
-const ModalButton = styled(Button)``;
-
 const CheckboxContainer = styled(FlexDivCentered)`
     margin: 40px 0 5px 0;
     label {
@@ -130,6 +126,9 @@ const CheckboxContainer = styled(FlexDivCentered)`
         line-height: 52px;
         padding-left: 32px;
         font-weight: bold;
+        @media (max-width: 575px) {
+            font-size: 20px;
+        }
     }
     span {
         :after {

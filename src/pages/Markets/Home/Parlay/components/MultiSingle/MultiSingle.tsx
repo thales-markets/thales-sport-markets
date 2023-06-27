@@ -60,6 +60,7 @@ import { ListContainer } from 'pages/Profile/components/Positions/styled-compone
 import MatchInfo from '../MatchInfo';
 import styled from 'styled-components';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
+import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 
 type MultiSingleProps = {
     markets: ParlaysMarket[];
@@ -81,6 +82,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
 
     const [submitDisabled, setSubmitDisabled] = useState(false);
     const [hasAllowance, setHasAllowance] = useState(false);
+    const [isAMMPaused, setIsAMMPaused] = useState(false);
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
         parlayPayment.selectedStableIndex
@@ -124,6 +126,22 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
             mountedRef.current = false;
         };
     }, []);
+
+    const ammContractsPaused = useAMMContractsPausedQuery(networkId, {
+        enabled: isAppReady,
+    });
+
+    const ammContractsStatusData = useMemo(() => {
+        if (ammContractsPaused.data && ammContractsPaused.isSuccess) {
+            return ammContractsPaused.data;
+        }
+    }, [ammContractsPaused.data, ammContractsPaused.isSuccess]);
+
+    useEffect(() => {
+        if (ammContractsStatusData?.singleAMM) {
+            setIsAMMPaused(true);
+        }
+    }, [ammContractsStatusData]);
 
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
@@ -534,6 +552,12 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
 
     const MIN_TOKEN_AMOUNT = 1;
     useEffect(() => {
+        // If AMM is paused
+        if (isAMMPaused) {
+            setSubmitDisabled(true);
+            return;
+        }
+
         const anyTokenAmtUnderMin = tokenAndBonus.some(
             (t) => Number.isNaN(t.tokenAmount) || Number(t.tokenAmount) < MIN_TOKEN_AMOUNT
         );
@@ -558,9 +582,14 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         multiSingleAmounts,
         tokenAndBonus,
         calculatedTotalBuyIn,
+        isAMMPaused,
     ]);
 
     const getSubmitButton = () => {
+        if (isAMMPaused) {
+            return <SubmitButton disabled={submitDisabled}>{t('common.errors.single-amm-paused')}</SubmitButton>;
+        }
+
         if (!isWalletConnected) {
             return (
                 <SubmitButton onClick={() => openConnectModal?.()}>

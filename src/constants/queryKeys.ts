@@ -176,6 +176,7 @@ export const QUERY_KEYS = {
         ],
     },
     SGPFees: (networkId: NetworkId) => ['sgpFees', networkId],
+    CheckPausedAMM: (networkId: NetworkId) => ['checkPausedAMM', networkId],
 };
 
 export default QUERY_KEYS;

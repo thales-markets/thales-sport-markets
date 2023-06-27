@@ -1,9 +1,5 @@
 [
     {
-        "image": "playoffs.png",
-        "url": "https://dune.com/leifu/overtime-nhl-and-nba-playoff-campaign-11-apr-2023"
-    },
-    {
         "image": "instant-payouts.jpg",
         "url": ""
     },
@@ -12,12 +8,12 @@
         "url": ""
     },
     {
-        "image": "vaults.jpg",
-        "url": "https://overtimemarkets.xyz/#/vaults"
+        "image": "LP_banner.png",
+        "url": "https://overtimemarkets.xyz/#/liquidity-pool"
     },
     {
-        "image": "refer-friends.jpg",
-        "url": "https://overtimemarkets.xyz/#/referral"
+        "image": "vaults.jpg",
+        "url": "https://overtimemarkets.xyz/#/vaults"
     },
     {
         "image": "stake-thales.jpg",
@@ -28,7 +24,7 @@
         "url": "https://overtimemarkets.xyz/#/parlay-leaderboard"
     },
     {
-        "image": "LP_banner.png",
-        "url": "https://overtimemarkets.xyz/#/liquidity-pool"
+        "image": "refer-friends.jpg",
+        "url": "https://overtimemarkets.xyz/#/referral"
     }
 ]
