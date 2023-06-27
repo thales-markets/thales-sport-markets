@@ -925,7 +925,7 @@ const LiquidityPool: React.FC = () => {
                             components={{
                                 h1: <h1 />,
                                 p: <p />,
-                                tipLink: <TipLink href={isParlayLP ? LINKS.ThalesTip99 : LINKS.ThalesTip99} />,
+                                tipLink: <TipLink href={isParlayLP ? LINKS.ThalesTip142 : LINKS.ThalesTip99} />,
                             }}
                             values={{
                                 thalesStakedAmount: 1 / liquidityPoolData.stakedThalesMultiplier,
