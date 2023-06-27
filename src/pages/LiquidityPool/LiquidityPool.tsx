@@ -571,6 +571,7 @@ const LiquidityPool: React.FC = () => {
                         history.push({ search: searchQuery.toString() });
                         setIsParlayLP(!isParlayLP);
                     }}
+                    margin={'15px 0px 5px 0px'}
                 />
             </ToggleContainer>
             {networkId !== NetworkIdByName.ArbitrumOne && (
