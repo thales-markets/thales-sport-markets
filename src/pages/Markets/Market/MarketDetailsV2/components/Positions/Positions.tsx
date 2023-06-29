@@ -31,7 +31,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
         }
     }
 
-    const showContainer = showOdds && (isMotosport(sportTag) || areDoubleChanceMarkets || areOddsValid);
+    const showContainer = !showOdds || isMotosport(sportTag) || areDoubleChanceMarkets || areOddsValid;
 
     return showContainer ? (
         <Container>
@@ -46,7 +46,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
                 <ContentContianer>
                     {areDoubleChanceMarkets ? (
                         <ContentRow>
-                            <DoubleChanceMarketPositions markets={markets} />
+                            <DoubleChanceMarketPositions markets={markets} showOdds={showOdds} />
                         </ContentRow>
                     ) : (
                         markets.map((market) => {

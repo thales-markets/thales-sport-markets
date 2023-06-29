@@ -40,7 +40,7 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
         : [market.homeOdds, market.awayOdds].every((odd) => odd < 1 && odd != 0);
 
     const showContainer =
-        showOdds && (isMotosport(Number(market.tags[0])) || market.betType == BetType.DOUBLE_CHANCE || areOddsValid);
+        !showOdds || isMotosport(Number(market.tags[0])) || market.betType == BetType.DOUBLE_CHANCE || areOddsValid;
 
     return showContainer ? (
         <Container>
