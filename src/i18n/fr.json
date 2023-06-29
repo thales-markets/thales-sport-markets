@@ -91,7 +91,8 @@
             "enter-address": "Entrer l'adresse",
             "batch-transaction-single-failure": "Une transaction a été rejetée ou a échoué.",
             "enter-percentage": "Enter percentage",
-            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}"
+            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
+            "single-amm-paused": "AMM suspendu"
         },
         "time-remaining": {
             "ended": "terminé",
@@ -490,7 +491,8 @@
                 "no-funds-multi-collateral": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds ({{percentage}} % de plus du montant du buy-in)",
                 "same-race-drivers": "Un seul pilote par course est pris en charge. Impossible d'ajouter {{addedDriver}} car {{existingDriver}} est déjà dans Parlay",
                 "max-number-of-markets-with-combined-markets": "Le nombre maximum de marchés dans Parlay est de {{max}}. Un seul marché combiné compte comme deux marchés réguliers.",
-                "max-combined-markets": "Le nombre maximum de marchés combinés dans Parlay est de {{max}}."
+                "max-combined-markets": "Le nombre maximum de marchés combinés dans Parlay est de {{max}}.",
+                "amm-contract-paused": "Parlay AMM mis en pause"
             },
             "payout": "Total reçu",
             "empty-title": "Aucune position",
@@ -556,7 +558,7 @@
         },
         "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
         "incentivized-markets": "MARCHÉS RÉCOMPENSÉS",
-        "incentivized-tooltip-tennis": "Roland Garros sera incité, le tournoi commençant le 29 mai. Les marchés seront boostés avec {{rewards}} jusqu'à la fin du tournoi le 12 juin. Les récompenses seront distribuées en fonction de votre volume généré par ces marchés. Vous pouvez suivre l'attribution de vos récompenses sur notre <detailsLink>Dune Dashboard</detailsLink>."
+        "incentivized-tooltip-tennis": "Wimbledon sera incité, car le tournoi commence le 3 juillet. Les marchés seront boostés avec {{rewards}} jusqu'à la fin du tournoi le 16 juillet. Les récompenses seront distribuées en fonction de votre volume généré par ces marchés. Vous pouvez suivre l'attribution de vos récompenses sur notre <detailsLink>Dune Dashboard</detailsLink>."
     },
     "rewards": {
         "table": {
@@ -730,7 +732,11 @@
         "claiming-voucher": "Affirmant...",
         "gift-voucher": "Chèque cadeau",
         "left-to-claim": "Reste à réclamer",
-        "voucher-title": "Réclamer des bons d'heures supplémentaires"
+        "voucher-title": "Réclamer des bons d'heures supplémentaires",
+        "go-to-parlay-lp": "Aller à Parlay LP",
+        "parlay-lp-title": "Pool de liquidités Parlay",
+        "go-to-single-lp": "Aller à Single LP",
+        "single-lp-title": "Pool de liquidité unique"
     },
     "mint-world-cup-nft": {
         "no": "Non",
@@ -917,9 +923,17 @@
         },
         "gamified-staking-message": "<p>Tous les dépôts qui entrent dans un tour comptent pour le volume de mise gamifié.</p>",
         "LP": {
-            "title": "LP"
+            "title": "LP",
+            "parlay-lp": "Parlay LP",
+            "single-lp": "LP unique"
         },
-        "variables-parlay": "<p>Variable :</p><ul><li> Taux d&#39;utilisation : {{utilizationRate}}</li><li> Limite inférieure de prix : {{priceLowerLimit}}</li><li> Limite supérieure de prix : {{priceUpperLimit}}</li><li> Impact d&#39;inclinaison maximum : {{skewImpactLimit}}</li><li> Allocation maximale sur un seul parlay : {{allocationLimitsPerMarketPerRound}}</li><li> Dépôt total maximum : {{maxAllowedDeposit}}</li><li> Nombre maximum d&#39;utilisateurs dans le coffre : {{maxAllowedUsers}}</li><li> Montant minimum sur une seule transaction : {{minTradeAmount}}</li><li> Dépôt minimum : {{minDepositAmount}}</li><li> Durée du cycle : {{roundLength}} jours</li></ul>"
+        "variables-parlay": "<p>Variable :</p><ul><li> Taux d&#39;utilisation : {{utilizationRate}}</li><li> Limite inférieure de prix : {{priceLowerLimit}}</li><li> Limite supérieure de prix : {{priceUpperLimit}}</li><li> Impact d&#39;inclinaison maximum : {{skewImpactLimit}}</li><li> Allocation maximale sur un seul parlay : {{allocationLimitsPerMarketPerRound}}</li><li> Dépôt total maximum : {{maxAllowedDeposit}}</li><li> Nombre maximum d&#39;utilisateurs dans le coffre : {{maxAllowedUsers}}</li><li> Montant minimum sur une seule transaction : {{minTradeAmount}}</li><li> Dépôt minimum : {{minDepositAmount}}</li><li> Durée du cycle : {{roundLength}} jours</li></ul>",
+        "single-lp": {
+            "title": "LP unique"
+        },
+        "parlay-lp": {
+            "title": "Parlay LP"
+        }
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1190,6 +1204,9 @@
             "apy": "APY projeté basé sur APR",
             "apr": "APR projeté basé sur ARR",
             "arr": "Rendement rond moyen (ARR)"
-        }
+        },
+        "description-parlay": "<h1>Description</h1><p> La fourniture de liquidités implique que les utilisateurs déposent des garanties stables dans un pool de liquidités basé sur un contrat intelligent pour le trading des heures supplémentaires. La garantie déposée est utilisée pour faciliter la négociation sur l&#39;AMM Parlay d&#39;Overtime.</p><p> Pour pouvoir fournir des liquidités, vous devrez jalonner THALES. Il n&#39;y a pas de plafond maximum par portefeuille et vous pouvez déposer un maximum de 1 {{currency}} par {{thalesStakedAmount}} THALES jalonné jusqu&#39;à ce que le pool de liquidités soit rempli.</p><p> À la fin de chaque tour, la part proportionnelle du PnL de ce tour sera ajoutée à votre solde déposé.</p><p> Si vous souhaitez retirer, vous pouvez le signaler à tout moment pendant le tour en cours, et à la fin du tour, le montant que vous avez signalé pour le retrait (y compris le PnL de ce tour) vous est envoyé. Le montant minimum à retirer est fixé à 10%</p><p> Si vous décidez de retirer THALES tout en fournissant des liquidités, sachez que vous devrez d&#39;abord signaler un retrait du pool de liquidités.</p><p> L&#39;apport de liquidités vous expose à divers risques, notamment les pertes potentielles dues aux utilisateurs gagnants dans le trading ainsi que les risques de sécurité des contrats intelligents. Veuillez vous assurer que vous comprenez ces risques avant de déposer.</p><p><tipLink> CONSEIL-142</tipLink> a plus de détails sur la mise en œuvre technique de la fourniture de liquidités pour les heures supplémentaires.</p>",
+        "parlay-lp": "Parlay LP",
+        "single-lp": "LP unique"
     }
 }

@@ -83,7 +83,8 @@
             "invalid-address": "Invalid address",
             "batch-transaction-single-failure": "Una transazione è stata rifiutata o fallita.",
             "enter-percentage": "Enter percentage",
-            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}"
+            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
+            "single-amm-paused": "AMM In pausa"
         },
         "time-remaining": {
             "ended": "ended",
@@ -391,7 +392,8 @@
                 "no-funds-multi-collateral": "Assicurati che il tuo portafoglio abbia fondi sufficienti ({{percentage}}% in più dell'importo del buy-in)",
                 "same-race-drivers": "È supportato un solo pilota per gara. Impossibile aggiungere {{addedDriver}} perché {{existingDriver}} è già in Parlay",
                 "max-combined-markets": "Il numero massimo di mercati combinati in Parlay è {{max}}.",
-                "max-number-of-markets-with-combined-markets": "Il numero massimo di mercati in Parlay è {{max}}. Un singolo mercato combinato conta come due mercati regolari."
+                "max-number-of-markets-with-combined-markets": "Il numero massimo di mercati in Parlay è {{max}}. Un singolo mercato combinato conta come due mercati regolari.",
+                "amm-contract-paused": "Parlay AMM Pausa"
             },
             "empty-title": "Nessuna posizione",
             "fee": "Tariffa totale",
@@ -634,7 +636,11 @@
         "claim-voucher": "Richiedi il buono",
         "left-to-claim": "Lasciato a reclamare",
         "voucher-info": "Ma affinché tu veda donde nasce tutto questo errore di coloro che accusano il piacere e lodano il dolore, aprirò tutta la questione e spiegherò le stesse cose che furono dette da quello scopritore della verità e, per così dire, l'artefice della una vita felice.",
-        "voucher-title": "Richiedi buoni straordinari"
+        "voucher-title": "Richiedi buoni straordinari",
+        "parlay-lp-title": "Piscina di liquidità Parlay",
+        "single-lp-title": "Unico pool di liquidità",
+        "go-to-single-lp": "Vai a LP singolo",
+        "go-to-parlay-lp": "Vai a Parlay LP"
     },
     "mint-world-cup-nft": {
         "second-option": "La seconda opzione per metterti nella lista consentita è completare i seguenti passaggi:",
@@ -821,9 +827,17 @@
         },
         "gamified-staking-message": "<p>Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
         "LP": {
-            "title": "LP"
+            "title": "LP",
+            "single-lp": "LP singolo",
+            "parlay-lp": "Parlay LP"
         },
-        "variables-parlay": "<p>Variabili:</p><ul><li> Tasso di utilizzo: {{utilizationRate}}</li><li> Limite inferiore del prezzo: {{priceLowerLimit}}</li><li> Limite massimo del prezzo: {{priceUpperLimit}}</li><li> Impatto Max Skew: {{skewImpactLimit}}</li><li> Allocazione massima su un singolo parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Deposito totale massimo: {{maxAllowedDeposit}}</li><li> Numero massimo di utenti nel vault: {{maxAllowedUsers}}</li><li> Importo minimo su una singola operazione: {{minTradeAmount}}</li><li> Deposito minimo: {{minDepositAmount}}</li><li> Durata round: {{roundLength}} giorni</li></ul>"
+        "variables-parlay": "<p>Variabili:</p><ul><li> Tasso di utilizzo: {{utilizationRate}}</li><li> Limite inferiore del prezzo: {{priceLowerLimit}}</li><li> Limite massimo del prezzo: {{priceUpperLimit}}</li><li> Impatto Max Skew: {{skewImpactLimit}}</li><li> Allocazione massima su un singolo parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Deposito totale massimo: {{maxAllowedDeposit}}</li><li> Numero massimo di utenti nel vault: {{maxAllowedUsers}}</li><li> Importo minimo su una singola operazione: {{minTradeAmount}}</li><li> Deposito minimo: {{minDepositAmount}}</li><li> Durata round: {{roundLength}} giorni</li></ul>",
+        "single-lp": {
+            "title": "LP singolo"
+        },
+        "parlay-lp": {
+            "title": "Parlay LP"
+        }
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1094,6 +1108,9 @@
             "apy": "APY previsto basato su APR",
             "apr": "APR previsto basato su ARR",
             "arr": "Rendimento tondo medio (ARR)"
-        }
+        },
+        "parlay-lp": "Parlay LP",
+        "description-parlay": "<h1>Descrizione</h1><p> La fornitura di liquidità prevede che gli utenti depositino collaterale in stablecoin in un pool di liquidità basato su contratto intelligente per il trading straordinario. La garanzia depositata viene utilizzata per facilitare il trading su Parlay AMM di Overtime.</p><p> Per essere in grado di fornire liquidità dovrai fare staking su THALES. Non c&#39;è un limite massimo per portafoglio e puoi depositare un massimo di 1 {{currency}} per {{thalesStakedAmount}} THALES puntato fino a riempire il pool di liquidità.</p><p> Alla fine di ogni round, la quota proporzionale del PnL di quel round verrà aggiunta al tuo saldo depositato.</p><p> Se desideri prelevare, puoi segnalarlo in qualsiasi momento durante il round in corso, e alla fine del round ti viene inviato l&#39;importo che hai segnalato per il prelievo (comprensivo del PnL di quel round). L&#39;importo minimo da prelevare è fissato al 10%</p><p> Se decidi di annullare lo staking di THALES mentre fornisci liquidità, tieni presente che dovrai prima segnalare un prelievo dal pool di liquidità.</p><p> Fornire liquidità ti espone a vari rischi, tra cui potenziali perdite dovute agli utenti che vincono nel trading e rischi per la sicurezza dei contratti intelligenti. Assicurati di aver compreso questi rischi prima di depositare.</p><p><tipLink> SUGGERIMENTO-142</tipLink> ha maggiori dettagli sull&#39;implementazione tecnica della fornitura di liquidità per gli straordinari.</p>",
+        "single-lp": "LP singolo"
     }
 }
