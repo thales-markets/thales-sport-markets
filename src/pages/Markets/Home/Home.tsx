@@ -6,7 +6,6 @@ import Logo from 'components/Logo';
 import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
 import SPAAnchor from 'components/SPAAnchor';
-
 import { GlobalFiltersEnum, SortDirection, SportFilterEnum } from 'constants/markets';
 import ROUTES, { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
@@ -14,7 +13,6 @@ import { SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { orderBy } from 'lodash';
-import useSportMarketsQueryNew from 'queries/markets/useSportsMarketsQueryNew';
 import React, { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -40,6 +38,7 @@ import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import TagsDropdown from '../components/TagsDropdown';
 import useSGPFeesQuery from 'queries/markets/useSGPFeesQuery';
 import { setSGPFees } from 'redux/modules/parlay';
+import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';
 
 const SidebarLeaderboard = lazy(
     () => import(/* webpackChunkName: "SidebarLeaderboard" */ 'pages/ParlayLeaderboard/components/SidebarLeaderboard')
@@ -56,13 +55,6 @@ const FooterSidebarMobile = lazy(
 );
 
 const MarketsGrid = lazy(() => import(/* webpackChunkName: "MarketsGrid" */ './MarketsGrid'));
-
-type AllMarkets = {
-    OpenMarkets: SportMarkets;
-    Canceled: SportMarkets;
-    ResolvedMarkets: SportMarkets;
-    PendingMarkets: SportMarkets;
-};
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -187,68 +179,59 @@ const Home: React.FC = () => {
         []
     );
 
-    const sportMarketsQueryNew = useSportMarketsQueryNew(networkId, { enabled: isAppReady });
+    const sportMarketsQueryNew = useSportMarketsQuery(globalFilter, networkId, { enabled: isAppReady });
 
     const finalMarkets = useMemo(() => {
-        const allMarkets: AllMarkets =
-            sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data
-                ? sportMarketsQueryNew.data
-                : {
-                      OpenMarkets: [],
-                      Canceled: [],
-                      ResolvedMarkets: [],
-                      PendingMarkets: [],
-                  };
+        const allMarkets: SportMarkets =
+            sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data ? sportMarketsQueryNew.data : [];
 
-        const filteredMarkets = (allMarkets[globalFilter] || allMarkets[GlobalFiltersEnum.OpenMarkets]).filter(
-            (market: SportMarketInfo) => {
-                if (marketSearch) {
-                    if (
-                        !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
-                        !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
-                    ) {
-                        return false;
-                    }
+        const filteredMarkets = allMarkets.filter((market: SportMarketInfo) => {
+            if (marketSearch) {
+                if (
+                    !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
+                    !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
+                ) {
+                    return false;
                 }
-
-                if (tagFilter.length > 0) {
-                    if (!tagFilter.map((tag) => tag.id).includes(market.tags.map((tag) => Number(tag))[0])) {
-                        return false;
-                    }
-                }
-
-                if (dateFilter !== 0) {
-                    if (typeof dateFilter === 'number') {
-                        if (market.maturityDate.getTime() > dateFilter) {
-                            return false;
-                        }
-                    } else {
-                        const dateToCompare = new Date(dateFilter);
-                        if (market.maturityDate.toDateString() != dateToCompare.toDateString()) {
-                            return false;
-                        }
-                    }
-                }
-
-                if (sportFilter !== SportFilterEnum.All) {
-                    if (sportFilter != SportFilterEnum.Favourites) {
-                        if (market.sport !== sportFilter) {
-                            return false;
-                        }
-                    } else {
-                        if (
-                            !favouriteLeagues
-                                .filter((league) => league.favourite)
-                                .map((league) => league.id)
-                                .includes(market.tags.map((tag) => Number(tag))[0])
-                        )
-                            return false;
-                    }
-                }
-
-                return true;
             }
-        );
+
+            if (tagFilter.length > 0) {
+                if (!tagFilter.map((tag) => tag.id).includes(market.tags.map((tag) => Number(tag))[0])) {
+                    return false;
+                }
+            }
+
+            if (dateFilter !== 0) {
+                if (typeof dateFilter === 'number') {
+                    if (market.maturityDate.getTime() > dateFilter) {
+                        return false;
+                    }
+                } else {
+                    const dateToCompare = new Date(dateFilter);
+                    if (market.maturityDate.toDateString() != dateToCompare.toDateString()) {
+                        return false;
+                    }
+                }
+            }
+
+            if (sportFilter !== SportFilterEnum.All) {
+                if (sportFilter != SportFilterEnum.Favourites) {
+                    if (market.sport !== sportFilter) {
+                        return false;
+                    }
+                } else {
+                    if (
+                        !favouriteLeagues
+                            .filter((league) => league.favourite)
+                            .map((league) => league.id)
+                            .includes(market.tags.map((tag) => Number(tag))[0])
+                    )
+                        return false;
+                }
+            }
+
+            return true;
+        });
 
         const sortedFilteredMarkets = filteredMarkets.sort((a, b) => {
             switch (globalFilter) {
@@ -471,67 +454,70 @@ const Home: React.FC = () => {
                     </Suspense>
                 </SidebarContainer>
                 {/* MAIN PART */}
-                {sportMarketsQueryNew.isLoading ? (
-                    <LoaderContainer>
-                        <SimpleLoader />
-                    </LoaderContainer>
-                ) : (
-                    <MainContainer>
-                        {isMobile && (
-                            <>
-                                <SportFilterMobile
-                                    sportFilter={sportFilter}
-                                    setTagFilter={setTagFilter}
-                                    setTagParam={setTagParam}
-                                    setSportFilter={setSportFilter}
-                                    setSportParam={setSportParam}
-                                    setAvailableTags={setAvailableTags}
-                                    tagsList={tagsList}
-                                />
-                                <FilterTagsMobile
-                                    sportFilter={sportFilter}
-                                    marketSearch={marketSearch}
-                                    globalFilter={globalFilter}
-                                    tagFilter={tagFilter}
-                                    setDateFilter={setDateFilter}
-                                    setDateParam={setDateParam}
-                                    setGlobalFilter={setGlobalFilter}
-                                    setGlobalFilterParam={setGlobalFilterParam}
-                                    setTagFilter={setTagFilter}
-                                    setTagParam={setTagParam}
-                                    setSportFilter={setSportFilter}
-                                    setSportParam={setSportParam}
-                                    setSearchParam={setSearchParam}
-                                />
-                            </>
-                        )}
-                        {!isMobile && (
-                            <GlobalFilters
+
+                <MainContainer>
+                    {isMobile && (
+                        <>
+                            <SportFilterMobile
+                                sportFilter={sportFilter}
+                                setTagFilter={setTagFilter}
+                                setTagParam={setTagParam}
+                                setSportFilter={setSportFilter}
+                                setSportParam={setSportParam}
+                                setAvailableTags={setAvailableTags}
+                                tagsList={tagsList}
+                            />
+                            <FilterTagsMobile
+                                sportFilter={sportFilter}
+                                marketSearch={marketSearch}
+                                globalFilter={globalFilter}
+                                tagFilter={tagFilter}
                                 setDateFilter={setDateFilter}
                                 setDateParam={setDateParam}
                                 setGlobalFilter={setGlobalFilter}
                                 setGlobalFilterParam={setGlobalFilterParam}
-                                globalFilter={globalFilter}
-                                dateFilter={dateFilter}
-                                sportFilter={sportFilter}
-                                isMobile={isMobile}
+                                setTagFilter={setTagFilter}
+                                setTagParam={setTagParam}
+                                setSportFilter={setSportFilter}
+                                setSportParam={setSportParam}
+                                setSearchParam={setSearchParam}
                             />
-                        )}
-                        {finalMarkets.length === 0 ? (
-                            <NoMarketsContainer>
-                                <NoMarketsLabel>
-                                    {t('market.no-markets-found')}{' '}
-                                    {t(`market.filter-label.sport.${sportFilter.toLowerCase()}`)}
-                                </NoMarketsLabel>
-                                <Button onClick={resetFilters}>{t('market.view-all-markets')}</Button>
-                            </NoMarketsContainer>
-                        ) : (
-                            <Suspense fallback={<Loader />}>
-                                <MarketsGrid markets={finalMarkets} />
-                            </Suspense>
-                        )}
-                    </MainContainer>
-                )}
+                        </>
+                    )}
+                    {!isMobile && (
+                        <GlobalFilters
+                            setDateFilter={setDateFilter}
+                            setDateParam={setDateParam}
+                            setGlobalFilter={setGlobalFilter}
+                            setGlobalFilterParam={setGlobalFilterParam}
+                            globalFilter={globalFilter}
+                            dateFilter={dateFilter}
+                            sportFilter={sportFilter}
+                            isMobile={isMobile}
+                        />
+                    )}
+                    {sportMarketsQueryNew.isLoading ? (
+                        <LoaderContainer>
+                            <SimpleLoader />
+                        </LoaderContainer>
+                    ) : (
+                        <>
+                            {finalMarkets.length === 0 ? (
+                                <NoMarketsContainer>
+                                    <NoMarketsLabel>
+                                        {t('market.no-markets-found')}{' '}
+                                        {t(`market.filter-label.sport.${sportFilter.toLowerCase()}`)}
+                                    </NoMarketsLabel>
+                                    <Button onClick={resetFilters}>{t('market.view-all-markets')}</Button>
+                                </NoMarketsContainer>
+                            ) : (
+                                <Suspense fallback={<Loader />}>
+                                    <MarketsGrid markets={finalMarkets} />
+                                </Suspense>
+                            )}
+                        </>
+                    )}
+                </MainContainer>
                 {/* RIGHT PART */}
                 <SidebarContainer maxWidth={320}>
                     {[NetworkIdByName.OptimismMainnet, NetworkIdByName.ArbitrumOne].includes(networkId) && <GetUsd />}

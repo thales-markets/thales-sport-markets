@@ -18,9 +18,11 @@ type OddsProps = {
 const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecondRow }) => {
     const { t } = useTranslation();
 
-    const isLive = market.maturityDate < new Date();
+    const isGameStarted = market.maturityDate < new Date();
     const isGameResolved = market.isResolved || market.isCanceled;
-    const noOdds = market.awayOdds == 0 && market.homeOdds == 0 && !isLive && !isGameResolved && !market.isPaused;
+    const showOdds = !isGameResolved && !isGameStarted && !market.isPaused;
+    const noOdds =
+        market.awayOdds == 0 && market.homeOdds == 0 && !isGameStarted && !isGameResolved && !market.isPaused;
     const showDrawOdds = getVisibilityOfDrawOption(market.tags, market.betType);
     const spreadTotalText = getSpreadTotalText(market, Position.HOME);
 
@@ -33,16 +35,12 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
           ) as DoubleChanceMarketsInfo)
         : undefined;
 
-    // const areDoubleChanceMarketsOddsValid = doubleChanceMarkets
-    //     ? doubleChanceMarkets.map((item) => item.homeOdds).every((odd) => odd < 1 && odd != 0)
-    //     : false;
-
     const areOddsValid = market.drawOdds
         ? [market.homeOdds, market.awayOdds, market.drawOdds].every((odd) => odd < 1 && odd != 0)
         : [market.homeOdds, market.awayOdds].every((odd) => odd < 1 && odd != 0);
 
     const showContainer =
-        isMotosport(Number(market.tags[0])) || market.betType == BetType.DOUBLE_CHANCE ? true : areOddsValid;
+        showOdds && (isMotosport(Number(market.tags[0])) || market.betType == BetType.DOUBLE_CHANCE || areOddsValid);
 
     return showContainer ? (
         <Container>

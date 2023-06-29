@@ -152,7 +152,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         !areDoubleChanceMarketsOddsValid &&
         !areSpreadTotalsMarketsOddsValid &&
         !areOddsValid &&
-        !isMotosport(Number(market.tags[0]));
+        !isMotosport(Number(market.tags[0])) &&
+        showOdds;
 
     return (
         <Wrapper hideGame={hideGame} isResolved={isGameRegularlyResolved}>
