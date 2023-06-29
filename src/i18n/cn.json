@@ -92,7 +92,8 @@
             "invalid-address": "Invalid address",
             "batch-transaction-single-failure": "交易被拒绝或失败。",
             "enter-percentage": "Enter percentage",
-            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}"
+            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
+            "single-amm-paused": "AMM 已暂停"
         },
         "time-remaining": {
             "ended": "ended",
@@ -392,7 +393,8 @@
                 "no-funds-multi-collateral": "请确保您的钱包有足够的资金（买入金额的 {{percentage}}%）",
                 "same-race-drivers": "每场比赛仅支持一名车手。无法添加 {{addedDriver}} 因为 {{existingDriver}} 已经在 Parlay 中",
                 "max-number-of-markets-with-combined-markets": "Parlay 中的最大市场数量为 {{max}}。一个组合市场算作两个常规市场。",
-                "max-combined-markets": "Parlay 中组合市场的最大数量为 {{max}}。"
+                "max-combined-markets": "Parlay 中组合市场的最大数量为 {{max}}。",
+                "amm-contract-paused": "连本带利 AMM 已暂停"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",
@@ -458,7 +460,7 @@
         },
         "incentivized-markets": "激励市场",
         "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
-        "incentivized-tooltip-tennis": "法网将受到激励，因为比赛将于 5 月 29 日开始。在 6 月 12 日锦标赛结束之前，市场将通过 {{rewards}} 得到提升。奖励将根据您在这些市场上的交易量进行分配。您可以在我们的 <detailsLink>Dune Dashboard</detailsLink> 上跟踪您的奖励分配情况。"
+        "incentivized-tooltip-tennis": "温网将受到激励，因为比赛将于 7 月 3 日开始。市场将通过 {{rewards}} 得到提振，直至 7 月 16 日锦标赛结束。奖励将根据您在这些市场上的交易量进行分配。您可以在我们的<detailsLink>Dune Dashboard</detailsLink>上跟踪您的奖励分配。"
     },
     "rewards": {
         "header": "奖励",
@@ -632,7 +634,11 @@
         "claim-voucher": "索取凭证",
         "claiming-voucher": "声称...",
         "left-to-claim": "留下索赔",
-        "voucher-title": "索取加班券"
+        "voucher-title": "索取加班券",
+        "go-to-parlay-lp": "前往 Parlay LP",
+        "go-to-single-lp": "前往单曲唱片",
+        "parlay-lp-title": "连本带利流动资金池",
+        "single-lp-title": "单一流动性池"
     },
     "mint-world-cup-nft": {
         "get-thales": "获得泰雷兹",
@@ -819,9 +825,17 @@
         },
         "gamified-staking-message": "<p>进入一轮的所有存款都计入游戏化的质押量。</p>",
         "LP": {
-            "title": "唱片"
+            "title": "唱片",
+            "parlay-lp": "连本带利LP",
+            "single-lp": "单张唱片"
         },
-        "variables-parlay": "<p>变量：</p><ul><li>利用率：{{utilizationRate}}</li><li>价格下限：{{priceLowerLimit}}</li><li>价格上限：{{priceUpperLimit}}</li><li>最大偏斜影响：{{skewImpactLimit}}</li><li>单个 parlay 的最大分配：{{allocationLimitsPerMarketPerRound}}</li><li>最大总存款：{{maxAllowedDeposit}}</li><li>保险库中的最大用户数：{{maxAllowedUsers}}</li><li>单笔交易的最低金额：{{minTradeAmount}}</li><li>最低存款：{{minDepositAmount}}</li><li>回合持续时间：{{roundLength}} 天</li></ul>"
+        "variables-parlay": "<p>变量：</p><ul><li>利用率：{{utilizationRate}}</li><li>价格下限：{{priceLowerLimit}}</li><li>价格上限：{{priceUpperLimit}}</li><li>最大偏斜影响：{{skewImpactLimit}}</li><li>单个 parlay 的最大分配：{{allocationLimitsPerMarketPerRound}}</li><li>最大总存款：{{maxAllowedDeposit}}</li><li>保险库中的最大用户数：{{maxAllowedUsers}}</li><li>单笔交易的最低金额：{{minTradeAmount}}</li><li>最低存款：{{minDepositAmount}}</li><li>回合持续时间：{{roundLength}} 天</li></ul>",
+        "single-lp": {
+            "title": "单张唱片"
+        },
+        "parlay-lp": {
+            "title": "连本带利LP"
+        }
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1092,6 +1106,9 @@
             "arr": "平均回合回报率（ARR）",
             "apy": "基于 APR 的预计 APY",
             "apr": "基于 ARR 的预计 APR"
-        }
+        },
+        "single-lp": "单张唱片",
+        "description-parlay": "<h1>描述</h1><p>流动性提供涉及用户将稳定币抵押品存入基于智能合约的流动性池中以进行加班交易。存入的抵押品用于促进 Overtime 的 Parlay AMM 上的交易。</p><p>为了能够提供流动性，您需要质押泰雷兹。每个钱包没有最高限额，每质押 {{thalesStakedAmount}} THALES 最多可存入 1 {{currency}}，直至流动资金池填满。</p><p>每轮结束时，该轮盈亏的比例份额将添加到您的存入余额中。</p><p>如果您希望提款，您可以在正在进行的回合中随时发出信号，并在该回合结束时，您发出的提款金额（包括该轮的盈亏）将发送给您。最低提款金额设定为10%</p><p>如果您决定在提供流动性的同时解除泰雷兹质押，请注意，您需要首先发出从流动性池中提款的信号。</p><p>提供流动性会让您面临各种风险，包括用户在交易中获胜造成的潜在损失以及智能合约安全风险。请确保您在存款前了解这些风险。</p><p><tipLink> TIP-142</tipLink>有关加班流动性提供的技术实施的更多详细信息。</p>",
+        "parlay-lp": "连本带利LP"
     }
 }
