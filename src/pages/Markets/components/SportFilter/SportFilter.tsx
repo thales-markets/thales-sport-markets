@@ -123,6 +123,7 @@ const Count = styled(FlexDivCentered)<{ isMobile?: boolean }>`
     font-size: ${(props) => (props.isMobile ? '15px' : '12px')};
     min-width: 30px;
     height: ${(props) => (props.isMobile ? '20px' : '18px')};
+    padding: 0 6px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;

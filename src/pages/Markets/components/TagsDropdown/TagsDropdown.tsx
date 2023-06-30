@@ -326,6 +326,7 @@ const Count = styled(FlexDivCentered)<{ isMobile: boolean }>`
     background: ${(props) => (props.isMobile ? props.theme.background.tertiary : props.theme.background.secondary)};
     min-width: 30px;
     height: 18px;
+    padding: 0 6px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
