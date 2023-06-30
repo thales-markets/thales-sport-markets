@@ -237,6 +237,7 @@ const useSportMarketsQuery = (
             }
         },
         {
+            refetchInterval: 60 * 1000,
             ...options,
         }
     );
