@@ -6,6 +6,7 @@ import { ParlayVaultTrade } from 'types/vault';
 import { updateTotalQuoteAndAmountFromContract } from 'utils/markets';
 import { ParlayMarketWithRound, SportMarketInfo } from 'types/markets';
 import { fixEnetpulseRacingName, fixDuplicatedTeamName } from 'utils/formatters/string';
+import { ENETPULSE_SPORTS } from 'constants/tags';
 
 const useParlayVaultTradesQuery = (
     vaultAddress: string,
@@ -27,14 +28,15 @@ const useParlayVaultTradesQuery = (
                             ...wholeMarket,
                             round,
                             sportMarkets: wholeMarket.sportMarkets.map((market: SportMarketInfo) => {
+                                const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.tags[0]));
                                 return {
                                     ...market,
                                     homeTeam: market.isEnetpulseRacing
                                         ? fixEnetpulseRacingName(market.homeTeam)
-                                        : fixDuplicatedTeamName(market.homeTeam),
+                                        : fixDuplicatedTeamName(market.homeTeam, isEnetpulseSport),
                                     awayTeam: market.isEnetpulseRacing
                                         ? fixEnetpulseRacingName(market.awayTeam)
-                                        : fixDuplicatedTeamName(market.awayTeam),
+                                        : fixDuplicatedTeamName(market.awayTeam, isEnetpulseSport),
                                 };
                             }),
                         };
