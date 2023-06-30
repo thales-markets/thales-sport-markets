@@ -133,7 +133,7 @@ export const INCENTIVIZED_LEAGUE = {
 
 export const INCENTIVIZED_GRAND_SLAM = {
     ids: [9153],
-    startDate: new Date(Date.UTC(2023, 6, 2, 0, 0, 0)),
+    startDate: new Date(Date.UTC(2023, 5, 30, 0, 0, 0)),
     endDate: new Date(Date.UTC(2023, 6, 16, 23, 59, 59)),
     link: 'https://dune.com/leifu/overtime-wimbledon-campaign-2003',
     opRewards: '5000 OP',
