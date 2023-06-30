@@ -114,9 +114,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                 let newFavouriteFlag;
                                 favourite.favourite ? (newFavouriteFlag = false) : (newFavouriteFlag = true);
                                 return {
-                                    id: favourite.id,
-                                    label: favourite.label,
-                                    logo: favourite.logo,
+                                    ...favourite,
                                     favourite: newFavouriteFlag,
                                 };
                             }

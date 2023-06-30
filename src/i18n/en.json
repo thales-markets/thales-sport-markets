@@ -239,7 +239,8 @@
             },
             "mobile-tags": {
                 "search": "Search"
-            }
+            },
+            "show-active": "Show only active sports"
         },
         "back-to-markets": "Back to markets",
         "back": "Back",
