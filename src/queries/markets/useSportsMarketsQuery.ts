@@ -18,6 +18,13 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 const BATCH_SIZE = 100;
 const BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY = 5;
 
+const marketsCache = {
+    [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,
+    [GlobalFiltersEnum.Canceled]: [] as SportMarkets,
+    [GlobalFiltersEnum.ResolvedMarkets]: [] as SportMarkets,
+    [GlobalFiltersEnum.PendingMarkets]: [] as SportMarkets,
+};
+
 const childrenOf = (parentMarket: string, groupedMarkets: any) => {
     return (groupedMarkets[parentMarket] || []).map((market: SportMarketInfo) => ({
         ...market,
@@ -168,12 +175,13 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
     return finalMarkets;
 };
 
+// TODO - there is a problem when return type is SportMarkets (some problem with SGP mapping and query is stuck in fetching), keep logic with typeof marketsCache for now
 const useSportMarketsQuery = (
     globalFilter: GlobalFiltersEnum,
     networkId: NetworkId,
-    options?: UseQueryOptions<SportMarkets>
+    options?: UseQueryOptions<typeof marketsCache>
 ) => {
-    return useQuery<SportMarkets>(
+    return useQuery<typeof marketsCache>(
         QUERY_KEYS.SportMarkets(globalFilter, networkId),
         async () => {
             let markets: SportMarkets = [];
@@ -230,11 +238,15 @@ const useSportMarketsQuery = (
                         break;
                 }
 
-                return mapMarkets(markets, globalFilter === GlobalFiltersEnum.OpenMarkets, networkId);
+                marketsCache[globalFilter] = await mapMarkets(
+                    markets,
+                    globalFilter === GlobalFiltersEnum.OpenMarkets,
+                    networkId
+                );
             } catch (e) {
                 console.log(e);
-                return markets;
             }
+            return marketsCache;
         },
         {
             refetchInterval: 60 * 1000,
