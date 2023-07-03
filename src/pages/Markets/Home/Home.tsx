@@ -5,7 +5,6 @@ import Loader from 'components/Loader';
 import Logo from 'components/Logo';
 import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
-import { GlobalFiltersEnum, SortDirection, SportFilterEnum } from 'constants/markets';
 import { GlobalFiltersEnum, SportFilterEnum } from 'constants/markets';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
