@@ -44,7 +44,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
     );
     const leagueLogo = getLeagueLogoClass(market.tags[0]);
 
-    const isGameResolved = market.isOpen && market.isResolved;
+    const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
 
     const getTeamsNames = (hideOnMobile: boolean) => (
         <TeamNamesWrapper hideOnMobile={hideOnMobile}>
@@ -69,8 +69,10 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                     </LeagueLogoContainer>
                     <ParticipantsContainer>
                         <ParticipantLogoContainer
-                            isWinner={isGameResolved && convertFinalResultToResultType(market.finalResult) == 0}
-                            isDraw={isGameResolved && convertFinalResultToResultType(market.finalResult) == 2}
+                            isWinner={
+                                isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == 0
+                            }
+                            isDraw={isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == 2}
                         >
                             <ParticipantLogo
                                 src={homeLogoSrc ? homeLogoSrc : getErrorImage(market.tags[0])}
@@ -80,8 +82,12 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                         </ParticipantLogoContainer>
                         {!market.isEnetpulseRacing && (
                             <ParticipantLogoContainer
-                                isWinner={isGameResolved && convertFinalResultToResultType(market.finalResult) == 1}
-                                isDraw={isGameResolved && convertFinalResultToResultType(market.finalResult) == 2}
+                                isWinner={
+                                    isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == 1
+                                }
+                                isDraw={
+                                    isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == 2
+                                }
                                 awayTeam={true}
                             >
                                 <ParticipantLogo
