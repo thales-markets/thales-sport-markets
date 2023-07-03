@@ -9,13 +9,7 @@ import { FlexDivColumn } from 'styles/common';
 import { SportMarketInfo } from 'types/markets';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import MarketDetailsV2 from './MarketDetailsV2';
-import SPAAnchor from 'components/SPAAnchor';
-import { buildHref } from 'utils/routes';
-import ROUTES from 'constants/routes';
-import { Trans } from 'react-i18next';
-import { Info } from '../Home/Home';
 import { getNetworkId } from 'redux/modules/wallet';
-import { NetworkIdByName } from 'utils/network';
 import useSportMarketQuery from 'queries/markets/useSportMarketQuery';
 
 type MarketProps = RouteComponentProps<{
@@ -45,21 +39,7 @@ const Market: React.FC<MarketProps> = (props) => {
         trackPageView({});
     }, [trackPageView]);
 
-    return (
-        <Container>
-            {networkId !== NetworkIdByName.ArbitrumOne && (
-                <Info>
-                    <Trans
-                        i18nKey="rewards.op-rewards-banner-message"
-                        components={{
-                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                        }}
-                    />
-                </Info>
-            )}
-            {lastValidMarket ? <MarketDetailsV2 market={lastValidMarket} /> : <SimpleLoader />}
-        </Container>
-    );
+    return <Container>{lastValidMarket ? <MarketDetailsV2 market={lastValidMarket} /> : <SimpleLoader />}</Container>;
 };
 
 const Container = styled(FlexDivColumn)`
