@@ -37,7 +37,8 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
                     <FlexDivRow>
                         {liveResultInfo?.status != GAME_STATUS.FINAL &&
                             liveResultInfo?.status != GAME_STATUS.FULL_TIME &&
-                            !isEnetpulseSport && (
+                            !isEnetpulseSport &&
+                            !isJsonOddsSport && (
                                 <MatchPeriodContainer>
                                     <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveResultInfo?.period))} ${t(
                                         `markets.market-card.${SPORT_PERIODS_MAP[Number(liveResultInfo?.sportId)]}`

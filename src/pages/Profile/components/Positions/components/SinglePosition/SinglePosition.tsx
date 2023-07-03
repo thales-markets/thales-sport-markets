@@ -134,13 +134,12 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const isPendingResolution = isGameStarted && !isGameResolved;
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(position.market.tags[0]));
     const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(position.market.tags[0]));
-    // const gameIdString = Web3.utils.hexToAscii(position.market.id);
 
     const gameDate = new Date(position.market.maturityDate).toISOString().split('T')[0];
     const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(position.market.id, {
-        enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isMobile && isJsonOddsSport,
+        enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isMobile && !isJsonOddsSport,
     });
 
     const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(
@@ -227,6 +226,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
 
     const symbolText = getSymbolText(positionEnum, position.market);
     const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
+
     return (
         <Wrapper>
             <MatchInfo>
@@ -264,7 +264,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
             </MatchInfo>
             <StatusContainer>
                 {isPendingResolution && !isMobile ? (
-                    isEnetpulseSport ? (
+                    isEnetpulseSport || isJsonOddsSport ? (
                         <Status color={STATUS_COLOR.STARTED}>{t('markets.market-card.pending')}</Status>
                     ) : (
                         <FlexDivRow>
