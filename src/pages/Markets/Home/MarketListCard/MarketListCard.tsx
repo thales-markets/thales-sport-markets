@@ -322,20 +322,20 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     <Odds market={childMarket} key={childMarket.address} isShownInSecondRow />
                                 ))}
                             {hasCombinedMarkets && !isMobile && showOnlyCombinedPositionsInSecondRow && (
-                                <CombinedMarketsOdds market={market} />
+                                <CombinedMarketsOdds market={market} isShownInSecondRow />
                             )}
                         </OddsWrapper>
                     </SecondRowContainer>
                     {isMobile && hasCombinedMarkets && (
                         <ThirdRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
                             <OddsWrapper>
-                                <CombinedMarketsOdds market={market} />
+                                <CombinedMarketsOdds market={market} isShownInSecondRow />
                             </OddsWrapper>
                         </ThirdRowContainer>
                     )}
                     {!isMobile && hasCombinedMarkets && doubleChanceMarkets.length > 0 && (
                         <ThirdRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
-                            <CombinedMarketsOdds market={market} />
+                            <CombinedMarketsOdds market={market} isShownInSecondRow />
                         </ThirdRowContainer>
                     )}
                 </>
