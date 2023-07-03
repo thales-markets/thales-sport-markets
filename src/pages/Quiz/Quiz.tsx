@@ -82,7 +82,6 @@ import HelpUsImprove from './HelpUsImprove';
 import useQuizLeaderboardQuery from 'queries/quiz/useQuizLeaderboardQuery';
 import { FinishInfo, LeaderboardItem } from 'types/quiz';
 import ordinal from 'ordinal';
-import { Info } from 'pages/Markets/Home/Home';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 const Quiz: React.FC = () => {
@@ -273,14 +272,6 @@ const Quiz: React.FC = () => {
 
     return (
         <Wrapper>
-            <Info>
-                <Trans
-                    i18nKey="rewards.op-rewards-banner-message"
-                    components={{
-                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                    }}
-                />
-            </Info>
             <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
             <Container>
                 {isQuizInProgress && (
