@@ -5,16 +5,16 @@ import Loader from 'components/Loader';
 import Logo from 'components/Logo';
 import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
-import SPAAnchor from 'components/SPAAnchor';
+import { GlobalFiltersEnum, SortDirection, SportFilterEnum } from 'constants/markets';
 import { GlobalFiltersEnum, SportFilterEnum } from 'constants/markets';
-import ROUTES, { RESET_STATE } from 'constants/routes';
+import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
 import React, { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -28,8 +28,7 @@ import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common'
 import { SportMarketInfo, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { addHoursToCurrentDate } from 'utils/formatters/date';
 import { NetworkIdByName } from 'utils/network';
-
-import { buildHref, history } from 'utils/routes';
+import { history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
 import FilterTagsMobile from '../components/FilterTagsMobile';
 import GlobalFilters from '../components/GlobalFilters';
@@ -353,16 +352,6 @@ const Home: React.FC = () => {
 
     return (
         <Container>
-            {networkId !== NetworkIdByName.ArbitrumOne && (
-                <Info>
-                    <Trans
-                        i18nKey="rewards.op-rewards-banner-message"
-                        components={{
-                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                        }}
-                    />
-                </Info>
-            )}
             <ReactModal
                 isOpen={showBurger && isMobile}
                 onRequestClose={() => {

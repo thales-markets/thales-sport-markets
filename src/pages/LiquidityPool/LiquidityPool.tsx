@@ -1,7 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import ROUTES from 'constants/routes';
-import { buildHref } from 'utils/routes';
 import {
     Container,
     Title,
@@ -46,8 +44,6 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import SPAAnchor from 'components/SPAAnchor';
-import { Info } from 'pages/Markets/Home/Home';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { LiquidityPoolPnlType, LiquidityPoolTab } from 'constants/liquidityPool';
 import NumericInput from 'components/fields/NumericInput';
@@ -574,16 +570,6 @@ const LiquidityPool: React.FC = () => {
                     margin={'15px 0px 5px 0px'}
                 />
             </ToggleContainer>
-            {networkId !== NetworkIdByName.ArbitrumOne && (
-                <Info>
-                    <Trans
-                        i18nKey="rewards.op-rewards-banner-message"
-                        components={{
-                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                        }}
-                    />
-                </Info>
-            )}
             <Title>{t('liquidity-pool.title')}</Title>
             {liquidityPoolData && (
                 <Container>

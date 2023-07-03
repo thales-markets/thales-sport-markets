@@ -51,8 +51,11 @@ const Wrapper = styled(FlexDivColumn)`
     min-height: 100vh;
     margin: auto;
     max-width: 1220px;
-    padding: 40px 20px;
+    padding: 30px 20px;
     align-items: center;
+    @media (max-width: 767px) {
+        padding: 20px 20px;
+    }
 `;
 
 export default LandingPageLayout;

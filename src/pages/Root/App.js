@@ -33,7 +33,6 @@ import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
-const Rewards = lazy(() => import('pages/Rewards'));
 const Quiz = lazy(() => import('pages/Quiz'));
 const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
 const Vaults = lazy(() => import('pages/Vaults'));
@@ -186,13 +185,6 @@ const App = () => {
                                 <Route exact path={ROUTES.Leaderboard}>
                                     <DappLayout>
                                         <ParlayLeaderboard />
-                                    </DappLayout>
-                                </Route>
-                            )}
-                            {isRouteAvailableForNetwork(ROUTES.Rewards, networkId) && (
-                                <Route exact path={ROUTES.Rewards}>
-                                    <DappLayout>
-                                        <Rewards />
                                     </DappLayout>
                                 </Route>
                             )}

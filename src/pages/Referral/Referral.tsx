@@ -1,8 +1,5 @@
 import ReferralButton from 'components/ReferralButton';
-import SPAAnchor from 'components/SPAAnchor';
 import { USD_SIGN } from 'constants/currency';
-import ROUTES from 'constants/routes';
-import { Info } from 'pages/Markets/Home/Home';
 import useReferralTransactionsQuery from 'queries/referral/useReferralTransactionsQuery';
 import useReferredTradersQuery from 'queries/referral/useReferredTradersQuery';
 import useReferrerOverviewQuery from 'queries/referral/useReferrerOverviewQuery';
@@ -14,8 +11,6 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
-import { NetworkIdByName } from 'utils/network';
-import { buildHref } from 'utils/routes';
 import AffiliateLeaderboard from './components/AffiliateLeaderboard';
 import ReferralTransactionsTable from './components/ReferralTransactionsTable';
 import TradersTable from './components/TradersTable';
@@ -91,16 +86,6 @@ const Referral: React.FC = () => {
 
     return (
         <Wrapper>
-            {networkId !== NetworkIdByName.ArbitrumOne && (
-                <Info>
-                    <Trans
-                        i18nKey="rewards.op-rewards-banner-message"
-                        components={{
-                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                        }}
-                    />
-                </Info>
-            )}
             <MainInfoContainer>
                 <ButtonContainer>
                     <ReferralButton />
