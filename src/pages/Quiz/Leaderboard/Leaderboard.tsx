@@ -34,7 +34,6 @@ import SelectInput from 'components/SelectInput';
 import overtimeVoucherIcon from 'assets/images/overtime-voucher.svg';
 import Tooltip from 'components/Tooltip';
 import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
-import { Info } from 'pages/Markets/Home/Home';
 import SPAAnchor from 'components/SPAAnchor';
 
 const Leaderboard: React.FC = () => {
@@ -102,14 +101,6 @@ const Leaderboard: React.FC = () => {
 
     return (
         <Wrapper>
-            <Info>
-                <Trans
-                    i18nKey="rewards.op-rewards-banner-message"
-                    components={{
-                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                    }}
-                />
-            </Info>
             <BackToLink link={buildHref(ROUTES.Quiz)} text={t('quiz.leaderboard.back-to-quiz')} />
             <Container>
                 <LeaderboardContainer>

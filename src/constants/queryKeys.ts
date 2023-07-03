@@ -2,13 +2,14 @@ import { NetworkId } from 'types/network';
 import { Position } from './options';
 import { MultiSingleAmounts, ParlaysMarket } from 'types/markets';
 import { LiquidityPoolType } from 'types/liquidityPool';
+import { GlobalFiltersEnum } from './markets';
 
 export const QUERY_KEYS = {
     Rewards: (networkId: NetworkId, period: number) => ['rewards', networkId, period],
     Markets: (networkId: NetworkId) => ['markets', networkId],
     ParlayMarkets: (networkId: NetworkId, account: string) => ['parlayMarkets', networkId, account],
     ParlayLeaderboard: (networkId: NetworkId, period: number) => ['parlayLeaderboard', period, networkId],
-    SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
+    SportMarkets: (globalFilter: GlobalFiltersEnum, networkId: NetworkId) => ['sportMarkets', globalFilter, networkId],
     SportMarketsNew: (networkId: NetworkId) => ['sportMarketsNew', networkId],
     SportMarket: (address: string, networkId: NetworkId) => ['sportMarketQuery', address, networkId],
     ParlayAmmData: (networkId: NetworkId) => ['parlayAmmData', networkId],

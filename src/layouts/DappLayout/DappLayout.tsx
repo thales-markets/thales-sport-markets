@@ -137,15 +137,15 @@ const Wrapper = styled(FlexDivColumn)`
     width: 99%;
     margin-left: auto;
     margin-right: auto;
-    padding: 40px 0px;
+    padding: 20px 0px;
     max-width: 1350px;
     min-height: 100vh;
     justify-content: space-between;
     @media (max-width: 1260px) {
-        padding: 40px 20px;
+        padding: 0px 20px;
     }
     @media (max-width: 767px) {
-        padding: 40px 10px;
+        padding: 0px 10px;
     }
 `;
 

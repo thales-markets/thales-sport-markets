@@ -42,8 +42,6 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import SPAAnchor from 'components/SPAAnchor';
-import { Info } from 'pages/Markets/Home/Home';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { isParlayVault, VaultTab, VAULT_MAP } from 'constants/vault';
 import NumericInput from 'components/fields/NumericInput';
@@ -58,7 +56,7 @@ import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
-import { checkAllowance, getMaxGasLimitForNetwork, NetworkIdByName } from 'utils/network';
+import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
 import { BigNumber, ethers } from 'ethers';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
@@ -377,16 +375,6 @@ const Vault: React.FC<VaultProps> = (props) => {
 
     return (
         <Wrapper>
-            {networkId !== NetworkIdByName.ArbitrumOne && (
-                <Info>
-                    <Trans
-                        i18nKey="rewards.op-rewards-banner-message"
-                        components={{
-                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                        }}
-                    />
-                </Info>
-            )}
             <BackToLink link={buildHref(ROUTES.Vaults)} text={t('vault.back-to-vaults')} />
             {vaultData && (
                 <>
