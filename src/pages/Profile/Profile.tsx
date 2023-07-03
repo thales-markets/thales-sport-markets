@@ -7,12 +7,9 @@ import TransactionsHistory from './components/TransactionsHistory';
 import UserStats from './components/UserStats';
 import { getQueryStringVal } from 'utils/useQueryParams';
 import SearchField from './components/SearchField';
-import { Info } from 'pages/Markets/Home/Home';
-import { Trans, useTranslation } from 'react-i18next';
-import SPAAnchor from 'components/SPAAnchor';
-import { buildHref, navigateTo } from 'utils/routes';
+import { useTranslation } from 'react-i18next';
+import { navigateTo } from 'utils/routes';
 import ROUTES from 'constants/routes';
-import { NetworkIdByName } from 'utils/network';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -47,16 +44,6 @@ const Profile: React.FC = () => {
 
     return (
         <Container>
-            {networkId !== NetworkIdByName.ArbitrumOne && (
-                <Info>
-                    <Trans
-                        i18nKey="rewards.op-rewards-banner-message"
-                        components={{
-                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                        }}
-                    />
-                </Info>
-            )}
             <UserStats />
             <NavigationWrapper>
                 <NavigationBar itemSelected={navItem} onSelectItem={(index) => setNavItem(index)} />

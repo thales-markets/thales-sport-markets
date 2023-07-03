@@ -1,6 +1,7 @@
 import SPAAnchor from 'components/SPAAnchor';
 import i18n from 'i18n';
 import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
+import useParlayLiquidityPoolUserDataQuery from 'queries/liquidityPool/useParlayLiquidityPoolUserDataQuery';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -15,9 +16,14 @@ const UserLP: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const [lastValidData, setLastValidData] = useState<number>(0);
+    const [parlayLPData, setParlayLPData] = useState<number>(0);
     const language = i18n.language;
 
     const userLpQuery = useLiquidityPoolUserDataQuery(walletAddress, networkId, {
+        enabled: isWalletConnected,
+    });
+
+    const parlayLpQuery = useParlayLiquidityPoolUserDataQuery(walletAddress, networkId, {
         enabled: isWalletConnected,
     });
 
@@ -27,23 +33,47 @@ const UserLP: React.FC = () => {
         }
     }, [userLpQuery.isSuccess, userLpQuery.data]);
 
+    useEffect(() => {
+        if (parlayLpQuery.isSuccess && parlayLpQuery.data) {
+            setParlayLPData(parlayLpQuery.data?.balanceTotal);
+        }
+    }, [parlayLpQuery.isSuccess, parlayLpQuery.data]);
+
     return (
-        <SPAAnchor href={buildLpLink(language)}>
-            <VaultCard>
-                <TitleWrapper>
-                    <Icon className={`icon icon--liquidity-pool`} />
-                    <Title> {t(`profile.lp-title`)}</Title>
-                </TitleWrapper>
-                <ContentWrapper>
-                    <TextWrapper>
-                        <PreLabel>{t('profile.in-lp')}</PreLabel>
-                        <Value>{lastValidData?.toFixed(2)}</Value>
-                        <PostLabel>USD</PostLabel>
-                    </TextWrapper>
-                    <Button>{t('profile.go-to-lp')}</Button>
-                </ContentWrapper>
-            </VaultCard>
-        </SPAAnchor>
+        <>
+            <SPAAnchor href={buildLpLink(language, 'single')}>
+                <VaultCard>
+                    <TitleWrapper>
+                        <Icon className={`icon icon--liquidity-pool`} />
+                        <Title> {t(`profile.single-lp-title`)}</Title>
+                    </TitleWrapper>
+                    <ContentWrapper>
+                        <TextWrapper>
+                            <PreLabel>{t('profile.in-lp')}</PreLabel>
+                            <Value>{lastValidData?.toFixed(2)}</Value>
+                            <PostLabel>USD</PostLabel>
+                        </TextWrapper>
+                        <Button>{t('profile.go-to-single-lp')}</Button>
+                    </ContentWrapper>
+                </VaultCard>
+            </SPAAnchor>
+            <SPAAnchor href={buildLpLink(language, 'parlay')}>
+                <VaultCard>
+                    <TitleWrapper>
+                        <Icon className={`icon icon--liquidity-pool`} />
+                        <Title> {t(`profile.parlay-lp-title`)}</Title>
+                    </TitleWrapper>
+                    <ContentWrapper>
+                        <TextWrapper>
+                            <PreLabel>{t('profile.in-lp')}</PreLabel>
+                            <Value>{parlayLPData?.toFixed(2)}</Value>
+                            <PostLabel>USD</PostLabel>
+                        </TextWrapper>
+                        <Button>{t('profile.go-to-parlay-lp')}</Button>
+                    </ContentWrapper>
+                </VaultCard>
+            </SPAAnchor>
+        </>
     );
 };
 

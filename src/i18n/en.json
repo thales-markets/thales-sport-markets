@@ -101,6 +101,7 @@
             "enter-address": "Enter address",
             "invalid-address": "Invalid address",
             "enter-percentage": "Enter percentage",
+            "single-amm-paused": "AMM Paused",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}"
         },
         "time-remaining": {
@@ -291,6 +292,10 @@
         "go-to-vault": "Go to vault",
         "in-lp": "Liquidity provided",
         "lp-title": "Liquidity pool",
+        "single-lp-title": "Single liquidity pool",
+        "parlay-lp-title": "Parlay liquidity pool",
+        "go-to-single-lp": "Go to Single LP",
+        "go-to-parlay-lp": "Go to Parlay LP",
         "go-to-lp": "Go to LP",
         "messages": {
             "no-claimable": "You don't have any claimable positions",
@@ -472,6 +477,7 @@
             "validation": {
                 "title": "Parlay Validation",
                 "max-teams": "Maximum {{max}} markets in Parlay",
+                "amm-contract-paused": "Parlay AMM Paused",
                 "team-in-parlay": "{{team}} is already in Parlay. The same team from the same league can't be added to a Parlay more than once.",
                 "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
                 "max-combined-markets": "The maximum number of combined markets in Parlay is {{max}}.",
@@ -514,7 +520,7 @@
         "discounted-per": "Discounted as per",
         "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
         "incentivized-markets": "INCENTIVIZED MARKETS",
-        "incentivized-tooltip-tennis": "Roland Garros will be incentivized, as the tournament starts on May 29th. The markets will be boosted with {{rewards}} until the end of the tournament on June 12th. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>."
+        "incentivized-tooltip-tennis": "Wimbledon will be incentivized, as the tournament starts on July 3rd. The markets will be boosted with {{rewards}} until the end of the tournament on July 16th. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",
@@ -771,8 +777,16 @@
             "risks": "<p>The vault has an utilization rate of {{utilizationRate}} which ensures no more than {{utilizationRate}} of deposited to a round is put to risk. Furthermore, out of those {{utilizationRate}} a maximum of {{allocationLimitsPerMarketPerRound}} can be spent on a single parlay ticket per round, thus diversifying the risk into multiple parlay tickets that have a discount greater than {{odds}}.</p>"
         },
         "gamified-staking-message": "<p>All deposits that enter a round count towards gamified staking volume.</p>",
+        "single-lp": {
+            "title": "Single LP"
+        },
+        "parlay-lp": {
+            "title": "Parlay LP"
+        },
         "LP": {
-            "title": "LP"
+            "title": "LP",
+            "single-lp": "Single LP",
+            "parlay-lp": "Parlay LP"
         },
         "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
         "variables-parlay": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single parlay: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
@@ -973,8 +987,11 @@
     "liquidity-pool": {
         "title": "Provide Liquidity",
         "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round the amount you signaled for withdrawal (inclusive of that round's PnL) is sent to you.  The minimum amount to be withdrawn is set to 10%</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
+        "description-parlay": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's Parlay AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round the amount you signaled for withdrawal (inclusive of that round's PnL) is sent to you. The minimum amount to be withdrawn is set to 10%</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-142</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
         "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the pool: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
         "liquidity-pool-not-started-message": "The liquidity pool has not started",
+        "single-lp": "Single LP",
+        "parlay-lp": "Parlay LP",
         "liquidity-pool-paused-message": "The liquidity pool is paused",
         "round-end-label": "The round ends in",
         "round-ended-label": "Round ended",

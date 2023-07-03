@@ -16,6 +16,8 @@ export const ROUTES = {
     Leaderboard: '/parlay-leaderboard',
     MarchMadness: '/march-madness',
     LiquidityPool: '/liquidity-pool',
+    SingleLiquidityPool: '/liquidity-pool?pool-type=single',
+    ParlayLiquidityPool: '/liquidity-pool?pool-type=parlay',
 };
 
 export default ROUTES;

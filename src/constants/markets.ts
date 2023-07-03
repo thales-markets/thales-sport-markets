@@ -133,11 +133,11 @@ export const INCENTIVIZED_LEAGUE = {
 
 export const INCENTIVIZED_GRAND_SLAM = {
     ids: [9153],
-    startDate: new Date(Date.UTC(2023, 4, 29, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2023, 5, 11, 23, 59, 59)),
-    link: 'https://dune.com/leifu/overtime-roland-garros-campaign-22-may-2023',
-    opRewards: '4000 OP',
-    arbRewards: '4000 ARB',
+    startDate: new Date(Date.UTC(2023, 5, 30, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2023, 6, 16, 23, 59, 59)),
+    link: 'https://dune.com/leifu/overtime-wimbledon-campaign-2003',
+    opRewards: '5000 OP',
+    arbRewards: '5000 ARB',
 };
 
 export const MIN_LIQUIDITY = 10;
@@ -213,9 +213,9 @@ export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20 = [
     50,
 ];
 
-export const PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10 = [250, 175, 125, 100, 85, 70, 60, 50, 45, 40];
+export const PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10 = [625, 437.5, 312.5, 250, 212.5, 175, 150, 125, 112.5, 100];
 
-export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10 = [250, 175, 125, 100, 85, 70, 60, 50, 45, 40];
+export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10 = [625, 437.5, 312.5, 250, 212.5, 175, 150, 125, 112.5, 100];
 
 export const ENETPULSE_ROUNDS: Record<number, string> = {
     [0]: '',

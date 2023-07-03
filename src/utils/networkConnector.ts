@@ -18,6 +18,8 @@ import { overtimeVoucherEscrowContract } from './contracts/overtimeVoucherEscrow
 import sportVaultDataContract from 'utils/contracts/sportVaultDataContract';
 import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContract';
 import parlayMarketDataContract from 'utils/contracts/parlayMarketDataContract';
+import parlayAMMLiquidityPoolContract from 'utils/contracts/parlayAMMLiquidityPoolContract';
+import parlayAMMLiquidityPoolDataContract from 'utils/contracts/parlayAMMLiquidityPoolDataContract';
 
 type NetworkConnector = {
     initialized: boolean;
@@ -47,6 +49,8 @@ type NetworkConnector = {
     sportVaultDataContract?: ethers.Contract;
     liquidityPoolDataContract?: ethers.Contract;
     parlayMarketDataContract?: ethers.Contract;
+    parlayAMMLiquidityPoolContract?: ethers.Contract;
+    parlayAMMLiquidityPoolDataContract?: ethers.Contract;
 };
 
 // @ts-ignore
@@ -72,6 +76,11 @@ const networkConnector: NetworkConnector = {
         this.sportVaultDataContract = initializeContract(sportVaultDataContract, networkSettings);
         this.liquidityPoolDataContract = initializeContract(liquidityPoolDataContract, networkSettings);
         this.parlayMarketDataContract = initializeContract(parlayMarketDataContract, networkSettings);
+        this.parlayAMMLiquidityPoolContract = initializeContract(parlayAMMLiquidityPoolContract, networkSettings);
+        this.parlayAMMLiquidityPoolDataContract = initializeContract(
+            parlayAMMLiquidityPoolDataContract,
+            networkSettings
+        );
 
         this.multipleCollateral = [
             initializeContract(multipleCollateral['sUSD'], networkSettings),

@@ -76,7 +76,7 @@ const Container = styled.div<{ mobileStyle?: CSSProperties }>`
     border-radius: 23px;
     @media (max-width: 575px) {
         ${(props) =>
-            props.mobileStyle ? convertCssToStyledProperties(props.mobileStyle) : 'padding: 25px 20px 35px 20px;'}
+            props.mobileStyle ? convertCssToStyledProperties(props.mobileStyle) : 'padding: 20px 15px 30px 15px;'}
     }
     max-height: 100vh;
     height: fit-content;

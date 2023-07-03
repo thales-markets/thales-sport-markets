@@ -5,7 +5,7 @@ import { RootState } from 'redux/rootReducer';
 import { getNetworkId } from 'redux/modules/wallet';
 import { useTranslation } from 'react-i18next';
 import { getIsAppReady } from 'redux/modules/app';
-import { LiquidityPoolPnls } from 'types/liquidityPool';
+import { LiquidityPoolPnls, LiquidityPoolType } from 'types/liquidityPool';
 import useLiquidityPoolPnlsQuery from 'queries/liquidityPool/useLiquidityPoolPnlsQuery';
 import {
     BarChart,
@@ -26,15 +26,16 @@ import { LiquidityPoolPnlType } from 'constants/liquidityPool';
 type PnlProps = {
     lifetimePnl: number;
     type: LiquidityPoolPnlType;
+    liquidityPoolType: LiquidityPoolType;
 };
 
-const PnL: React.FC<PnlProps> = ({ lifetimePnl, type }) => {
+const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolType }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [liquidityPoolPnls, setLiquidityPoolPnls] = useState<LiquidityPoolPnls>([]);
 
-    const liquidityPoolPnlsQuery = useLiquidityPoolPnlsQuery(networkId, {
+    const liquidityPoolPnlsQuery = useLiquidityPoolPnlsQuery(networkId, liquidityPoolType, {
         enabled: isAppReady,
     });
 

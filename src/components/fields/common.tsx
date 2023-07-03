@@ -15,6 +15,9 @@ export const FieldLabel = styled.label`
     color: ${(props) => props.theme.textColor.primary};
     margin-bottom: 6px;
     display: flex;
+    @media (max-width: 575px) {
+        font-size: 20px;
+    }
 `;
 
 export const CurrencyLabel = styled.label`
@@ -30,6 +33,9 @@ export const CurrencyLabel = styled.label`
     &.disabled {
         opacity: 0.4;
         cursor: default;
+    }
+    @media (max-width: 575px) {
+        padding-top: 47px;
     }
 `;
 
