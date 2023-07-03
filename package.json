@@ -5,6 +5,7 @@
     "dependencies": {
         "@datapunt/matomo-tracker-react": "^0.5.1",
         "@eth-optimism/contracts": "^0.5.14",
+        "@etherspot/prime-sdk": "^1.0.1",
         "@google-cloud/translate": "^6.3.0",
         "@material-ui/core": "^4.11.3",
         "@metamask/detect-provider": "^1.2.0",
