@@ -43,9 +43,8 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
         !showOdds ||
         isMotosport(Number(market.tags[0])) ||
         isGolf(Number(market.tags[0])) ||
-        market.betType == BetType.DOUBLE_CHANCE
-            ? true
-            : areOddsValid;
+        market.betType == BetType.DOUBLE_CHANCE ||
+        areOddsValid;
 
     return showContainer ? (
         <Container>
