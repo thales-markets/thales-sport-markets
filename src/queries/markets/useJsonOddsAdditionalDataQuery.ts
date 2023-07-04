@@ -1,5 +1,5 @@
 import QUERY_KEYS from 'constants/queryKeys';
-import { SPORTS_MAP } from 'constants/tags';
+import { GOLF_TOURNAMENT_WINNER_TAG, SPORTS_MAP } from 'constants/tags';
 import { useQuery, UseQueryOptions } from 'react-query';
 
 const useJsonOddsAdditionalDataQuery = (
@@ -14,11 +14,17 @@ const useJsonOddsAdditionalDataQuery = (
             try {
                 const response = await fetch(`https://api.thalesmarket.io/json-odds-data/${sportParameter}`);
                 const events = Object.values(JSON.parse(await response.text()));
-                const eventTournamentName = (events.find(
-                    (event: any) => event.ID.toLowerCase().replaceAll('-', '') == marketId.toLowerCase()
-                ) as any).DisplayLeague;
-                return eventTournamentName;
-                return undefined;
+                if (sportTag == GOLF_TOURNAMENT_WINNER_TAG) {
+                    const eventTournamentName = (events.find(
+                        (event: any) => event.HomeTeam == null && event.awayTeam == null
+                    ) as any).DisplayLeague;
+                    return eventTournamentName;
+                } else {
+                    const eventTournamentName = (events.find(
+                        (event: any) => event.ID.toLowerCase().replaceAll('-', '') == marketId.toLowerCase()
+                    ) as any).DisplayLeague;
+                    return eventTournamentName;
+                }
             } catch (e) {
                 console.log(e);
                 return undefined;

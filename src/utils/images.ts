@@ -39,9 +39,9 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
               .replaceAll(' ', '-')
               .toLowerCase()}.png`
         : leagueTag == 109021
-        ? `/logos/PGA/${team.trim().replaceAll(' ', '-').toLowerCase()}.jpeg`
+        ? `/logos/PGA/${team.trim().replaceAll(' ', '-').toLowerCase()}.png`
         : leagueTag == 109121
-        ? `/logos/PGA/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.jpeg`
+        ? `/logos/PGA/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.png`
         : `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${team
               .trim()
               .replaceAll(' ', '-')
