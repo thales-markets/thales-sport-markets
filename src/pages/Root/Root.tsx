@@ -16,6 +16,7 @@ import {
     ledgerWallet,
     imTokenWallet,
     trustWallet,
+    rabbyWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { optimism, optimismGoerli, arbitrum } from 'wagmi/chains';
@@ -72,19 +73,21 @@ const { chains, provider } = configureChains(
     ]
 );
 
+const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
 const connectors = connectorsForWallets([
     {
         groupName: 'Recommended',
         wallets: [
-            metaMaskWallet({ chains }),
-            walletConnectWallet({ chains }),
+            metaMaskWallet({ projectId, chains }),
+            walletConnectWallet({ projectId, chains }),
+            rabbyWallet({ chains }),
             braveWallet({ chains }),
-            ledgerWallet({ chains }),
-            trustWallet({ chains }),
+            ledgerWallet({ projectId, chains }),
+            trustWallet({ projectId, chains }),
             injectedWallet({ chains }),
             coinbaseWallet({ appName: 'Overtime', chains }),
-            rainbowWallet({ chains }),
-            imTokenWallet({ chains }),
+            rainbowWallet({ projectId, chains }),
+            imTokenWallet({ projectId, chains }),
         ],
     },
 ]);

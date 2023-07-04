@@ -237,7 +237,8 @@
             },
             "mobile-tags": {
                 "search": "Ricerca"
-            }
+            },
+            "show-active": "Mostra solo gli sport attivi"
         },
         "back-to-markets": "Back to markets",
         "back-to-market": "Back to market",

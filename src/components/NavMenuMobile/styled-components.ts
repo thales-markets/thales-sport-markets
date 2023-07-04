@@ -50,7 +50,7 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     left: 0;
     right: 0;
     ${(_props) => (_props?.show == true ? 'top: 0;' : '')}
-    ${(_props) => (_props?.show == false || _props?.show == null ? 'top: -630px;' : '')}
+    ${(_props) => (_props?.show == false || _props?.show == null ? 'top: -640px;' : '')}
     ${(_props) => _props?.show === true && animationOpen};
     ${({ show }) => show === false && animationClose};
     background-color: ${(props) => props.theme.nav.background};

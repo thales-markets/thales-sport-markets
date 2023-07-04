@@ -6,7 +6,6 @@ export const ROUTES = {
     },
     Profile: '/profile',
     Referral: '/referral',
-    Rewards: '/rewards',
     Quiz: '/trivia',
     QuizLeaderboard: '/trivia/leaderboard',
     MintWorldCupNFT: '/mint-world-cup-nft',

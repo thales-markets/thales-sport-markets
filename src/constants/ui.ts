@@ -119,14 +119,6 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         route: ROUTES.Leaderboard,
         supportedNetworks: [10, 420, 42161],
     },
-
-    {
-        i18label: 'markets.nav-menu.items.fee-rebates',
-        iconClass: 'icon icon--fee-rebates',
-        name: 'fee-rebates',
-        route: ROUTES.Rewards,
-        supportedNetworks: [10, 420],
-    },
     {
         i18label: 'markets.nav-menu.items.become-affiliate',
         iconClass: 'icon icon--affiliate',
