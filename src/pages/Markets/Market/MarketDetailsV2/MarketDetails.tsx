@@ -1,34 +1,34 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import MatchInfo from './components/MatchInfo';
-import BackToLink from 'pages/Markets/components/BackToLink';
-import { SportMarketChildMarkets, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
-import Positions from './components/Positions';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
-import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import styled from 'styled-components';
-import { buildHref, navigateTo } from 'utils/routes';
-import ROUTES from 'constants/routes';
-import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
-import Tooltip from 'components/Tooltip';
+import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
-import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
-import Parlay from 'pages/Markets/Home/Parlay';
-import Transactions from '../Transactions';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { GAME_STATUS, MAIN_COLORS } from 'constants/ui';
-import { BetType, ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
+import Tooltip from 'components/Tooltip';
+import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
+import ROUTES from 'constants/routes';
+import { BetType, ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
+import { GAME_STATUS, MAIN_COLORS } from 'constants/ui';
+import Parlay from 'pages/Markets/Home/Parlay';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
-import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
-import Web3 from 'web3';
-import { getOrdinalNumberLabel } from 'utils/ui';
-import { getNetworkId } from 'redux/modules/wallet';
+import BackToLink from 'pages/Markets/components/BackToLink';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
+import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
+import React, { useEffect, useRef, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getNetworkId } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import styled from 'styled-components';
+import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { SportMarketChildMarkets, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { NetworkIdByName } from 'utils/network';
+import { buildHref, navigateTo } from 'utils/routes';
+import { getOrdinalNumberLabel } from 'utils/ui';
+import Web3 from 'web3';
+import Transactions from '../Transactions';
 import CombinedPositions from './components/CombinedPositions/CombinedPositions';
+import MatchInfo from './components/MatchInfo';
+import Positions from './components/Positions';
 
 type MarketDetailsPropType = {
     market: SportMarketInfo;
@@ -81,7 +81,6 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.tags[0], {
         enabled: isAppReady && isEnetpulseSport,
     });
-
     useEffect(() => {
         if (isEnetpulseSport) {
             if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {

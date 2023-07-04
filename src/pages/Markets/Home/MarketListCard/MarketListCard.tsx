@@ -132,8 +132,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             }
         } else if (isJsonOddsSport) {
             if (useJsonDataAdditionalInfoQuery.isSuccess && useJsonDataAdditionalInfoQuery.data) {
-                // const tournamentName = useEnetpulseLiveResultQuery.data.
-                // localStorage.setItem(market.address, tournamentName + tournamentRound);
+                const tournamentName = useJsonDataAdditionalInfoQuery.data;
+                localStorage.setItem(market.address, tournamentName);
             }
         } else {
             if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
@@ -200,7 +200,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             <Tooltip overlay={t(`common.uefa-tooltip`)} iconFontSize={12} marginLeft={2} />
                         )}
                         <MatchTimeLabel>
-                            {isEnetpulseSport &&
+                            {(isEnetpulseSport || isJsonOddsSport) &&
                             !isFifaWCGame(market.tags[0]) &&
                             (liveResultInfo || localStorage.getItem(market.address)) ? (
                                 <>
