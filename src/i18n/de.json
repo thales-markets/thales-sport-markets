@@ -237,7 +237,8 @@
             },
             "mobile-tags": {
                 "search": "Suche"
-            }
+            },
+            "show-active": "Nur aktive Sportarten anzeigen"
         },
         "back-to-markets": "Zurück zu den Märkten",
         "back-to-market": "Zurück zum Markt",
