@@ -393,10 +393,11 @@
                 "max-profit": "La ganancia máxima admitida es {{max}}",
                 "max-teams": "Máximo de {{max}} mercados en Parlay",
                 "no-funds-multi-collateral": "Asegúrese de que su billetera tenga fondos suficientes ({{percentage}}% más del monto de la entrada)",
-                "same-race-drivers": "Solo se admite un piloto por carrera. No se puede agregar {{addedDriver}} porque {{existingDriver}} ya está en Parlay",
                 "max-number-of-markets-with-combined-markets": "El número máximo de mercados en Parlay es {{max}}. Un solo mercado combinado cuenta como dos mercados regulares.",
                 "max-combined-markets": "El número máximo de mercados combinados en Parlay es {{max}}.",
-                "amm-contract-paused": "Parlay AMM en pausa"
+                "amm-contract-paused": "Parlay AMM en pausa",
+                "unique-players": "No se puede agregar el mismo participante dos veces en parlay. {{existingParticipant}} ya está en Parlay",
+                "same-event-participant": "Solo se admite un participante por evento. No se puede agregar {{addedParticipant}} porque {{existingParticipant}} ya está en Parlay"
             },
             "fee": "Costo total",
             "payout": "Total recibido",

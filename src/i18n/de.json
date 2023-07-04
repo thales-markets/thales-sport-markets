@@ -390,10 +390,11 @@
                 "max-profit": "Der maximal unterstützte Gewinn beträgt {{max}}",
                 "max-teams": "Maximal {{max}} Märkte in Parlay",
                 "no-funds-multi-collateral": "Bitte stellen Sie sicher, dass Ihr Guthaben ausreichend ist ({{percentage}} % mehr des Buy-in-Betrags)",
-                "same-race-drivers": "Es wird nur ein Fahrer pro Rennen unterstützt. {{addedDriver}} kann nicht hinzugefügt werden, da {{existingDriver}} bereits in Parlay ist",
                 "max-number-of-markets-with-combined-markets": "Die maximale Anzahl an Märkten in Parlay beträgt {{max}}. Ein einzelner kombinierter Markt zählt als zwei reguläre Märkte.",
                 "max-combined-markets": "Die maximale Anzahl kombinierter Märkte in Parlay beträgt {{max}}.",
-                "amm-contract-paused": "Parlay AMM angehalten"
+                "amm-contract-paused": "Parlay AMM angehalten",
+                "unique-players": "Derselbe Teilnehmer kann im Parlay nicht zweimal hinzugefügt werden. {{existingParticipant}} ist bereits in Parlay",
+                "same-event-participant": "Es wird nur ein Teilnehmer pro Veranstaltung unterstützt. {{addedParticipant}} kann nicht hinzugefügt werden, da {{existingParticipant}} bereits in Parlay ist"
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",

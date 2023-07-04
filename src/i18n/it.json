@@ -396,7 +396,9 @@
                 "same-race-drivers": "È supportato un solo pilota per gara. Impossibile aggiungere {{addedDriver}} perché {{existingDriver}} è già in Parlay",
                 "max-combined-markets": "Il numero massimo di mercati combinati in Parlay è {{max}}.",
                 "max-number-of-markets-with-combined-markets": "Il numero massimo di mercati in Parlay è {{max}}. Un singolo mercato combinato conta come due mercati regolari.",
-                "amm-contract-paused": "Parlay AMM Pausa"
+                "amm-contract-paused": "Parlay AMM Pausa",
+                "unique-players": "Impossibile aggiungere lo stesso partecipante due volte in parlay. {{existingParticipant}} è già in Parlay",
+                "same-event-participant": "È supportato un solo partecipante per evento. Impossibile aggiungere {{addedParticipant}} perché {{existingParticipant}} è già in Parlay"
             },
             "empty-title": "Nessuna posizione",
             "fee": "Tariffa totale",

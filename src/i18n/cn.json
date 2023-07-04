@@ -394,10 +394,11 @@
                 "max-teams": "Parlay 中的最大 {{max}} 个盘口",
                 "max-profit": "最大支持利润为 {{max}}",
                 "no-funds-multi-collateral": "请确保您的钱包有足够的资金（买入金额的 {{percentage}}%）",
-                "same-race-drivers": "每场比赛仅支持一名车手。无法添加 {{addedDriver}} 因为 {{existingDriver}} 已经在 Parlay 中",
                 "max-number-of-markets-with-combined-markets": "Parlay 中的最大市场数量为 {{max}}。一个组合市场算作两个常规市场。",
                 "max-combined-markets": "Parlay 中组合市场的最大数量为 {{max}}。",
-                "amm-contract-paused": "连本带利 AMM 已暂停"
+                "amm-contract-paused": "连本带利 AMM 已暂停",
+                "unique-players": "不能在连赢中添加同一参与者两次。 {{existingParticipant}} 已加入连本带利",
+                "same-event-participant": "每个活动仅支持一名参与者。无法添加 {{addedParticipant}}，因为 {{existingParticipant}} 已在连本带利中"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",

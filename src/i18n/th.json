@@ -385,10 +385,11 @@
                 "max-profit": "กำไรที่รองรับสูงสุดคือ {{max}}",
                 "max-teams": "สูงสุด {{max}} ตลาดใน Parlay",
                 "no-funds-multi-collateral": "โปรดตรวจสอบให้แน่ใจว่ากระเป๋าเงินของคุณมีเงินเพียงพอ (เพิ่มขึ้น {{percentage}}% ของจำนวนเงินที่ซื้อเข้า)",
-                "same-race-drivers": "รองรับนักแข่งเพียงหนึ่งคนต่อหนึ่งการแข่งขัน ไม่สามารถเพิ่ม {{addedDriver}} เนื่องจาก {{existingDriver}} อยู่ในพาร์เลย์แล้ว",
                 "max-number-of-markets-with-combined-markets": "จำนวนตลาดสูงสุดใน Parlay คือ {{max}} ตลาดรวมเดียวนับเป็นสองตลาดปกติ",
                 "max-combined-markets": "จำนวนตลาดรวมสูงสุดในพาร์เลย์คือ {{max}}",
-                "amm-contract-paused": "AMM พาร์เลย์หยุดชั่วคราว"
+                "amm-contract-paused": "AMM พาร์เลย์หยุดชั่วคราว",
+                "unique-players": "ไม่สามารถเพิ่มผู้เข้าร่วมคนเดียวกันสองครั้งในพาร์เลย์ {{existingParticipant}} อยู่ในพาร์เลย์แล้ว",
+                "same-event-participant": "รองรับผู้เข้าร่วมเพียงหนึ่งคนต่อเหตุการณ์ ไม่สามารถเพิ่ม {{addedParticipant}} ได้ เนื่องจาก {{existingParticipant}} อยู่ใน Parlay แล้ว"
             },
             "skew": "ลาด",
             "payout": "การจ่ายเงิน",

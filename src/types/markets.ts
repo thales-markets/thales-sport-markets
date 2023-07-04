@@ -346,7 +346,7 @@ export type ParlaysMarketPosition = {
     awayTeam: string;
     tags: number[];
     doubleChanceMarketType: DoubleChanceMarketType | null;
-    isRacingMarket?: boolean;
+    isOneSideMarket?: boolean;
     tag?: number;
 };
 
