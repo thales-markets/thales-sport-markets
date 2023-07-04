@@ -415,6 +415,30 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         isSocialLogin,
     ]);
 
+    function toJSON(op: any): Promise<any> {
+        return ethers.utils.resolveProperties(op).then((userOp: any) =>
+            Object.keys(userOp)
+                .map((key) => {
+                    let val = (userOp as any)[key];
+                    if (typeof val !== 'string' || !val.startsWith('0x')) {
+                        val = ethers.utils.hexValue(val);
+                    }
+                    return [key, val];
+                })
+                .reduce(
+                    (set, [k, v]) => ({
+                        ...set,
+                        [k]: v,
+                    }),
+                    {}
+                )
+        );
+    }
+
+    async function printOp(op: any): Promise<string> {
+        return toJSON(op).then((userOp) => JSON.stringify(userOp, null, 2));
+    }
+
     const handleAllowanceWithSocialLogin = async (approveAmount: BigNumber) => {
         if (primeSdk !== null) {
             const provider = new ethers.providers.JsonRpcProvider('https://optimism-bundler.etherspot.io/');
@@ -440,7 +464,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
 
             // sign transactions added to the batch
             const op = await primeSdk.sign();
-            // console.log(`Signed UserOp: ${await printOp(op)}`);
+            console.log(`Signed UserOp: ${await printOp(op)}`);
 
             // sending to the bundler...
             const uoHash = await primeSdk.send(op);
@@ -530,7 +554,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
 
             // sign transactions added to the batch
             const op = await primeSdk.sign();
-            // console.log(`Signed UserOp: ${await printOp(op)}`);
+            console.log(`Signed UserOp: ${await printOp(op)}`);
 
             // getting gas estimated...
             const totalGasEstimated = await primeSdk.totalGasEstimated(op);
