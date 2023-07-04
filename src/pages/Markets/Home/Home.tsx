@@ -254,7 +254,11 @@ const Home: React.FC = () => {
         const sortedFilteredMarkets = orderBy(
             filteredMarkets,
             ['maturityDate'],
-            [globalFilter === GlobalFiltersEnum.ResolvedMarkets || GlobalFiltersEnum.Canceled ? 'desc' : 'asc']
+            [
+                globalFilter === GlobalFiltersEnum.ResolvedMarkets || globalFilter === GlobalFiltersEnum.Canceled
+                    ? 'desc'
+                    : 'asc',
+            ]
         );
 
         return sortedFilteredMarkets;
