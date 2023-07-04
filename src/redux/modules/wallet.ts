@@ -4,6 +4,7 @@ import { NetworkNameById } from 'utils/network';
 import { RootState } from 'redux/rootReducer';
 import { NetworkId } from 'types/network';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
+import { PrimeSdk } from '@etherspot/prime-sdk';
 
 const sliceName = 'wallet';
 
@@ -12,6 +13,8 @@ export type WalletSliceState = {
     networkId: NetworkId;
     networkName: string;
     switchToNetworkId: NetworkId; // used to trigger manually network switch in App.js
+    isSocialLogin: boolean;
+    primeSdk: PrimeSdk | null;
 };
 
 const initialState: WalletSliceState = {
@@ -19,6 +22,8 @@ const initialState: WalletSliceState = {
     networkId: DEFAULT_NETWORK_ID,
     networkName: NetworkNameById[DEFAULT_NETWORK_ID],
     switchToNetworkId: DEFAULT_NETWORK_ID,
+    isSocialLogin: false,
+    primeSdk: null,
 };
 
 export const walletDetailsSlice = createSlice({
@@ -57,6 +62,12 @@ export const walletDetailsSlice = createSlice({
         ) => {
             state.switchToNetworkId = action.payload.networkId;
         },
+        updateIsSocialLogin: (state, action: PayloadAction<boolean>) => {
+            state.isSocialLogin = action.payload;
+        },
+        updatePrimeSdk: (state, action: PayloadAction<PrimeSdk | null>) => {
+            state.primeSdk = action.payload;
+        },
     },
 });
 
@@ -71,7 +82,16 @@ export const getSwitchToNetworkId = (state: RootState) => getWalletState(state).
 export const getWalletAddress = (state: RootState) => getWalletState(state).walletAddress;
 export const getIsWalletConnected = createSelector(getWalletAddress, (walletAddress) => walletAddress != null);
 export const getWalletInfo = (state: RootState) => getWalletState(state);
+export const getIsSocialLogin = (state: RootState) => getWalletState(state).isSocialLogin;
+export const getPrimeSdk = (state: RootState) => getWalletState(state).primeSdk;
 
-export const { updateNetworkSettings, switchToNetworkId, resetWallet, updateWallet } = walletDetailsSlice.actions;
+export const {
+    updateNetworkSettings,
+    switchToNetworkId,
+    resetWallet,
+    updateWallet,
+    updateIsSocialLogin,
+    updatePrimeSdk,
+} = walletDetailsSlice.actions;
 
 export default walletDetailsSlice.reducer;

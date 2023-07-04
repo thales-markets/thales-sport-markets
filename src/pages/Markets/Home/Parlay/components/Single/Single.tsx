@@ -18,7 +18,13 @@ import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
 import { removeAll, setPayment } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsSocialLogin,
+    getIsWalletConnected,
+    getNetworkId,
+    getPrimeSdk,
+    getWalletAddress,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { AMMPosition, AvailablePerPosition, ParlayPayment, ParlaysMarket } from 'types/markets';
@@ -61,6 +67,8 @@ import {
     ValidationTooltip,
 } from '../styled-components';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
+import sportsAMMContract from 'utils/contracts/sportsAMMContract';
+import sUSDContract from 'utils/contracts/sUSDContract';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -79,6 +87,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
+    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
     const selectedOddsType = useSelector(getOddsType);
 
     const [submitDisabled, setSubmitDisabled] = useState(false);
@@ -274,10 +284,9 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
     useDebouncedEffect(() => {
         const fetchData = async () => {
             const divider = selectedStableIndex == 0 || selectedStableIndex == 1 ? 1e18 : 1e6;
-            const { sportsAMMContract, signer } = networkConnector;
-            if (signer && sportsAMMContract) {
-                const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
-                contract.connect(signer);
+            const { sportsAMMContract, provider } = networkConnector;
+            if (provider && sportsAMMContract) {
+                const contract = new ethers.Contract(market.address, sportsMarketContract.abi, provider);
                 const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
                 if (roundedMaxAmount) {
                     const [sUSDToSpendForMaxAmount, ammBalances] = await Promise.all([
@@ -363,15 +372,12 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
     }, [availablePerPositionQuery.isSuccess, availablePerPositionQuery.data]);
 
     useEffect(() => {
-        const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
-        if (sportsAMMContract && signer) {
-            let collateralContractWithSigner: ethers.Contract | undefined;
-
-            if (selectedStableIndex !== 0 && multipleCollateral && isMultiCollateralSupported) {
-                collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
-            } else {
-                collateralContractWithSigner = sUSDContract?.connect(signer);
-            }
+        const { sportsAMMContract, sUSDContract, multipleCollateral } = networkConnector;
+        if (sportsAMMContract) {
+            const collateralContract: ethers.Contract | undefined =
+                selectedStableIndex !== 0 && multipleCollateral && isMultiCollateralSupported
+                    ? multipleCollateral[selectedStableIndex]
+                    : sUSDContract;
 
             const getAllowance = async () => {
                 try {
@@ -382,7 +388,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                     );
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
-                        collateralContractWithSigner,
+                        collateralContract,
                         walletAddress,
                         sportsAMMContract.address
                     );
@@ -406,9 +412,53 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         isVoucherSelected,
         isMultiCollateralSupported,
         networkId,
+        isSocialLogin,
     ]);
 
+    const handleAllowanceWithSocialLogin = async (approveAmount: BigNumber) => {
+        if (primeSdk !== null) {
+            const provider = new ethers.providers.JsonRpcProvider('https://optimism-bundler.etherspot.io/');
+            // get erc20 Contract Interface
+            const erc20Instance = new ethers.Contract(sUSDContract.addresses[networkId], sUSDContract.abi, provider);
+
+            // get transferFrom encoded data
+            const { sportsAMMContract } = networkConnector;
+            const transactionData = erc20Instance.interface.encodeFunctionData('approve', [
+                sportsAMMContract?.address || '',
+                approveAmount,
+            ]);
+
+            // clear the transaction batch
+            await primeSdk.clearUserOpsFromBatch();
+
+            // add transactions to the batch
+            const userOpsBatch = await primeSdk.addUserOpsToBatch({
+                to: sUSDContract.addresses[networkId],
+                data: transactionData,
+            });
+            console.log('transactions: ', userOpsBatch);
+
+            // sign transactions added to the batch
+            const op = await primeSdk.sign();
+            // console.log(`Signed UserOp: ${await printOp(op)}`);
+
+            // sending to the bundler...
+            const uoHash = await primeSdk.send(op);
+            console.log(`UserOpHash: ${uoHash}`);
+
+            // get transaction hash...
+            console.log('Waiting for transaction...');
+            const txHash = await primeSdk.getUserOpReceipt(uoHash);
+            console.log('\x1b[33m%s\x1b[0m', `Transaction hash: ${txHash}`);
+        }
+    };
+
     const handleAllowance = async (approveAmount: BigNumber) => {
+        if (isSocialLogin) {
+            await handleAllowanceWithSocialLogin(approveAmount);
+            return;
+        }
+
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMContract && signer) {
             setIsAllowing(true);
@@ -447,7 +497,62 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         }
     };
 
+    const handleSubmitWithSocialLogin = async () => {
+        if (primeSdk !== null) {
+            const provider = new ethers.providers.JsonRpcProvider('https://optimism-bundler.etherspot.io/');
+            // get erc20 Contract Interface
+            const erc20Instance = new ethers.Contract(
+                sportsAMMContract.addresses[networkId],
+                sportsAMMContract.abi,
+                provider
+            );
+
+            const ammQuote = await fetchAmmQuote(tokenAmount || 1);
+            const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(tokenAmount).toString());
+            // get transferFrom encoded data
+            const transactionData = erc20Instance.interface.encodeFunctionData('buyFromAMM', [
+                market.address,
+                Number(market.position),
+                parsedAmount,
+                ammQuote,
+                ethers.utils.parseEther('0.02'),
+            ]);
+
+            // clear the transaction batch
+            await primeSdk.clearUserOpsFromBatch();
+
+            // add transactions to the batch
+            const userOpsBatch = await primeSdk.addUserOpsToBatch({
+                to: sportsAMMContract.addresses[networkId],
+                data: transactionData,
+            });
+            console.log('transactions: ', userOpsBatch);
+
+            // sign transactions added to the batch
+            const op = await primeSdk.sign();
+            // console.log(`Signed UserOp: ${await printOp(op)}`);
+
+            // getting gas estimated...
+            const totalGasEstimated = await primeSdk.totalGasEstimated(op);
+            console.log(`Total gas estimated: ${totalGasEstimated}`);
+
+            // sending to the bundler...
+            const uoHash = await primeSdk.send(op);
+            console.log(`UserOpHash: ${uoHash}`);
+
+            // get transaction hash...
+            console.log('Waiting for transaction...');
+            const txHash = await primeSdk.getUserOpReceipt(uoHash);
+            console.log('\x1b[33m%s\x1b[0m', `Transaction hash: ${txHash}`);
+        }
+    };
+
     const handleSubmit = async () => {
+        if (isSocialLogin) {
+            await handleSubmitWithSocialLogin();
+            return;
+        }
+
         const { sportsAMMContract, overtimeVoucherContract, signer } = networkConnector;
         if (sportsAMMContract && overtimeVoucherContract && signer) {
             setIsBuying(true);
@@ -530,7 +635,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
             return;
         }
 
-        setSubmitDisabled(!paymentTokenBalance || usdAmountValue > paymentTokenBalance);
+        setSubmitDisabled(!paymentTokenBalance || Number(usdAmountValue) > Number(paymentTokenBalance));
     }, [
         usdAmountValue,
         isBuying,
@@ -606,13 +711,13 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
-        (!!tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
+        (!!tooltipTextUsdAmount && Number(usdAmountValue) <= Number(paymentTokenBalance));
     const hideProfit =
         ammPosition.quote <= 0 ||
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
-        (!!tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
+        (!!tooltipTextUsdAmount && Number(usdAmountValue) <= Number(paymentTokenBalance));
 
     const profitPercentage = (tokenAmount - ammPosition.quote) / ammPosition.quote;
 
@@ -672,7 +777,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                             type="number"
                             value={usdAmountValue}
                             onChange={(e) => {
-                                if (countDecimals(Number(e.target.value)) > 2) {
+                                if (Number(countDecimals(Number(e.target.value))) > 2) {
                                     return;
                                 }
                                 setUsdAmount(e.target.value);

@@ -7,7 +7,7 @@ import { SubmitButton } from '../../../pages/Markets/Home/Parlay/components/styl
 import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider';
 import { Web3AuthNoModal } from '@web3auth/no-modal';
 import { useDispatch } from 'react-redux';
-import { updateWallet } from '../../../redux/modules/wallet';
+import { updateIsSocialLogin, updatePrimeSdk, updateWallet } from 'redux/modules/wallet';
 
 const clientId = 'BEglQSgt4cUWcj6SKRdu5QkOXTsePmMcusG5EAoyjyOYKlVRjIF1iCNnMOTfpzCiunHRrMui8TIwQPXdkQ8Yxuk'; // get from https://dashboard.web3auth.io
 
@@ -22,10 +22,10 @@ const Etherspot: React.FC = () => {
             try {
                 const chainConfig = {
                     chainNamespace: CHAIN_NAMESPACES.EIP155,
-                    chainId: '0x5', // Please use 0x1 for Mainnet
-                    rpcTarget: 'https://rpc.ankr.com/eth_goerli',
-                    displayName: 'Goerli Testnet',
-                    blockExplorer: 'https://goerli.etherscan.io/',
+                    chainId: '0xa', // Please use 0x1 for Mainnet
+                    rpcTarget: 'https://rpc.ankr.com/optimism',
+                    displayName: 'Optimism Mainnet',
+                    blockExplorer: 'https://optimistic.etherscan.io/',
                     ticker: 'ETH',
                     tickerName: 'Ethereum',
                 };
@@ -70,6 +70,20 @@ const Etherspot: React.FC = () => {
                 await web3AuthInstance.init();
 
                 if (web3AuthInstance.connected) {
+                    const web3authProvider = web3AuthInstance.provider;
+                    const web3 = new Web3(web3authProvider as any);
+
+                    const web3provider = new Web3WalletProvider(web3.currentProvider as any);
+                    // Refresh the web3 Injectable to validate the provider
+                    await web3provider.refresh();
+                    const etherspotPrimeSdk = new PrimeSdk(web3provider, {
+                        chainId: 10,
+                    });
+                    const address = await etherspotPrimeSdk.getCounterFactualAddress();
+
+                    dispatch(updatePrimeSdk(etherspotPrimeSdk));
+                    dispatch(updateWallet({ walletAddress: address }));
+                    dispatch(updateIsSocialLogin(true));
                     setLoggedIn(true);
                 }
             } catch (error) {
@@ -78,7 +92,7 @@ const Etherspot: React.FC = () => {
         };
 
         init();
-    }, []);
+    }, [dispatch]);
 
     const login = async () => {
         let web3authProvider;
@@ -116,7 +130,9 @@ const Etherspot: React.FC = () => {
         });
         const address = await etherspotPrimeSdk.getCounterFactualAddress();
 
+        dispatch(updatePrimeSdk(etherspotPrimeSdk));
         dispatch(updateWallet({ walletAddress: address }));
+        dispatch(updateIsSocialLogin(true));
         setLoggedIn(true);
 
         console.log(address);
@@ -131,7 +147,9 @@ const Etherspot: React.FC = () => {
             await web3auth.logout();
 
             setLoggedIn(false);
+            dispatch(updatePrimeSdk(null));
             dispatch(updateWallet({ walletAddress: null }));
+            dispatch(updateIsSocialLogin(false));
         } catch (e) {
             console.log(e);
         }
