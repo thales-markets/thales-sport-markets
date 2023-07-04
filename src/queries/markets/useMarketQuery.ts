@@ -25,7 +25,7 @@ const useMarketQuery = (
                 const gameStarted = marketData.cancelled ? false : Date.now() > Number(marketData.maturity) * 1000;
                 const homeScore = marketData.resolved ? marketData.homeScore : undefined;
                 const awayScore = marketData.resolved ? marketData.awayScore : undefined;
-
+                const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(marketData.firstTag));
                 const market: MarketData = {
                     address: marketAddress.toLowerCase(),
                     gameDetails: { gameId: marketData.gameId, gameLabel: marketData.gameLabel },
@@ -52,8 +52,8 @@ const useMarketQuery = (
                         },
                     },
                     tags: [Number(marketData.firstTag)],
-                    homeTeam: fixDuplicatedTeamName(marketData.gameLabel.split(' vs ')[0].trim()),
-                    awayTeam: fixDuplicatedTeamName(marketData.gameLabel.split(' vs ')[1].trim()),
+                    homeTeam: fixDuplicatedTeamName(marketData.gameLabel.split(' vs ')[0].trim(), isEnetpulseSport),
+                    awayTeam: fixDuplicatedTeamName(marketData.gameLabel.split(' vs ')[1].trim(), isEnetpulseSport),
                     maturityDate: Number(marketData.maturity) * 1000,
                     resolved: marketData.resolved,
                     cancelled: marketData.cancelled,

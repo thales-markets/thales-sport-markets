@@ -137,6 +137,13 @@
     content: '\005D';
 }
 
+.league--uefa-nations:before {
+    content: '\006A';
+}
+.league--concacaf-nations:before {
+    content: '\006B';
+}
+
 .league--wta:before {
     content: '\0068';
 }

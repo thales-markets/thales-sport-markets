@@ -92,7 +92,8 @@
             "invalid-address": "Invalid address",
             "batch-transaction-single-failure": "Una transacción fue rechazada o fallida.",
             "enter-percentage": "Enter percentage",
-            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}"
+            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
+            "single-amm-paused": "AMM en pausa"
         },
         "time-remaining": {
             "ended": "finalizado",
@@ -152,7 +153,7 @@
         "fifa-tooltip": "Los resultados de los mercados de la Copa Mundial de la FIFA se basan en los resultados reglamentarios; en caso de que vayan a la prórroga, el resultado reglamentario es el que resolverá el mercado.",
         "tennis-tooltip": "En caso de un walkover, el partido se considerará cancelado. En caso de retiro/descalificación durante el partido, se tratará como una victoria para el jugador que avanza a la siguiente ronda.",
         "iihf-tooltip": "Los resultados de los mercados del Campeonato Mundial de la IIHF se basan en los resultados reglamentarios, en caso de que vayan a la prórroga, el resultado reglamentario es el que resolverá el mercado.",
-        "uefa-tooltip": "Los resultados de los mercados de la UEFA se basan en los resultados reglamentarios, si se van a la prórroga, el resultado reglamentario es el que resolverá el mercado."
+        "football-tooltip": "Los resultados de los mercados se basan en los resultados de la regulación, en caso de que vayan a tiempo extra, el resultado de la regulación es el que resolverá el mercado."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS.",
@@ -237,7 +238,8 @@
             },
             "mobile-tags": {
                 "search": "Búsqueda"
-            }
+            },
+            "show-active": "Mostrar solo deportes activos"
         },
         "back-to-markets": "Volver a los mercados",
         "back-to-market": "Volver al mercado",
@@ -393,7 +395,8 @@
                 "no-funds-multi-collateral": "Asegúrese de que su billetera tenga fondos suficientes ({{percentage}}% más del monto de la entrada)",
                 "same-race-drivers": "Solo se admite un piloto por carrera. No se puede agregar {{addedDriver}} porque {{existingDriver}} ya está en Parlay",
                 "max-number-of-markets-with-combined-markets": "El número máximo de mercados en Parlay es {{max}}. Un solo mercado combinado cuenta como dos mercados regulares.",
-                "max-combined-markets": "El número máximo de mercados combinados en Parlay es {{max}}."
+                "max-combined-markets": "El número máximo de mercados combinados en Parlay es {{max}}.",
+                "amm-contract-paused": "Parlay AMM en pausa"
             },
             "fee": "Costo total",
             "payout": "Total recibido",
@@ -459,7 +462,7 @@
         },
         "incentivized-markets": "MERCADOS INCENTIVIZADOS",
         "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
-        "incentivized-tooltip-tennis": "Roland Garros estará incentivado, ya que el torneo comienza el 29 de mayo. Los mercados se potenciarán con {{rewards}} hasta el final del torneo el 12 de junio. Las recompensas se distribuirán en función de su volumen impulsado a través de estos mercados. Puede realizar un seguimiento de la asignación de sus recompensas en nuestro <detailsLink>Dune Dashboard</detailsLink>."
+        "incentivized-tooltip-tennis": "Wimbledon será incentivado, ya que el torneo comienza el 3 de julio. Los mercados se potenciarán con {{rewards}} hasta el final del torneo el 16 de julio. Las recompensas se distribuirán en función de su volumen impulsado a través de estos mercados. Puede realizar un seguimiento de la asignación de sus recompensas en nuestro <detailsLink>Dune Dashboard</detailsLink>."
     },
     "rewards": {
         "header": "Recompensas",
@@ -633,7 +636,11 @@
         "voucher-info": "Pero para que veáis de dónde viene todo este error nacido de los que acusan el placer y alaban el dolor, abriré todo el asunto y explicaré las mismas cosas que dijo aquel descubridor de la verdad y, por así decirlo, artífice de una vida feliz.",
         "claiming-voucher": "Reclamando...",
         "voucher": "Vale",
-        "voucher-title": "Reclamar vales de horas extras"
+        "voucher-title": "Reclamar vales de horas extras",
+        "go-to-single-lp": "Ir a LP individual",
+        "single-lp-title": "Fondo único de liquidez",
+        "go-to-parlay-lp": "Ir a Parlay LP",
+        "parlay-lp-title": "Fondo de liquidez parlay"
     },
     "mint-world-cup-nft": {
         "mint-nft-button": "Mint esta cebra!",
@@ -820,9 +827,17 @@
         },
         "gamified-staking-message": "<p>Todos los depósitos que ingresan a una ronda cuentan para el volumen de participación gamificado.</p>",
         "LP": {
-            "title": "LP"
+            "title": "LP",
+            "parlay-lp": "Parlay LP",
+            "single-lp": "LP individual"
         },
-        "variables-parlay": "<p>Variables:</p><ul><li> Tasa de utilización: {{utilizationRate}}</li><li> Límite inferior de precio: {{priceLowerLimit}}</li><li> Límite superior de precio: {{priceUpperLimit}}</li><li> Impacto sesgado máximo: {{skewImpactLimit}}</li><li> Asignación máxima en un único parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Depósito total máximo: {{maxAllowedDeposit}}</li><li> Usuarios máximos en la bóveda: {{maxAllowedUsers}}</li><li> Monto mínimo en una sola operación: {{minTradeAmount}}</li><li> Depósito mínimo: {{minDepositAmount}}</li><li> Duración de la ronda: {{roundLength}} días</li></ul>"
+        "variables-parlay": "<p>Variables:</p><ul><li> Tasa de utilización: {{utilizationRate}}</li><li> Límite inferior de precio: {{priceLowerLimit}}</li><li> Límite superior de precio: {{priceUpperLimit}}</li><li> Impacto sesgado máximo: {{skewImpactLimit}}</li><li> Asignación máxima en un único parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Depósito total máximo: {{maxAllowedDeposit}}</li><li> Usuarios máximos en la bóveda: {{maxAllowedUsers}}</li><li> Monto mínimo en una sola operación: {{minTradeAmount}}</li><li> Depósito mínimo: {{minDepositAmount}}</li><li> Duración de la ronda: {{roundLength}} días</li></ul>",
+        "single-lp": {
+            "title": "LP individual"
+        },
+        "parlay-lp": {
+            "title": "Parlay LP"
+        }
     },
     "parlay-leaderboard": {
         "title": "Leaderboard de incentivos en Parlays",
@@ -1093,6 +1108,9 @@
             "apr": "APR proyectado basado en ARR",
             "arr": "Retorno redondo promedio (ARR)",
             "apy": "APY proyectado basado en APR"
-        }
+        },
+        "single-lp": "LP individual",
+        "parlay-lp": "Parlay LP",
+        "description-parlay": "<h1>Descripción</h1><p> La provisión de liquidez implica que los usuarios depositen garantías de monedas estables en un grupo de liquidez basado en contratos inteligentes para el comercio de horas extra. La garantía depositada se utiliza para facilitar la negociación en Parlay AMM de Overtime.</p><p> Para poder proporcionar liquidez, deberá apostar THALES. No hay un límite máximo por billetera y puede depositar un máximo de 1 {{currency}} por {{thalesStakedAmount}} THALES apostado hasta que se llene el fondo de liquidez.</p><p> Al final de cada ronda, la parte proporcional del PnL de esa ronda se agregará a su saldo depositado.</p><p> Si desea retirar dinero, puede indicarlo en cualquier momento durante la ronda en curso y, al final de la ronda, se le enviará la cantidad que indicó para el retiro (incluido el PnL de esa ronda). El importe mínimo a retirar está fijado en el 10%</p><p> Si decide dejar de participar en THALES mientras proporciona liquidez, tenga en cuenta que primero deberá señalar un retiro del grupo de liquidez.</p><p> Proporcionar liquidez lo expone a varios riesgos, incluidas pérdidas potenciales debido a que los usuarios ganan en el comercio, así como riesgos de seguridad de contratos inteligentes. Asegúrese de comprender estos riesgos antes de depositar.</p><p><tipLink> TIP-142</tipLink> tiene más detalles sobre la implementación técnica de la provisión de liquidez de horas extras.</p>"
     }
 }

@@ -11,15 +11,12 @@ type PositionsProps = {
     markets: SportMarketInfo[];
     betType: BetType;
     areDoubleChanceMarkets?: boolean;
+    showOdds: boolean;
 };
 
-const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChanceMarkets }) => {
+const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChanceMarkets, showOdds }) => {
     const { t } = useTranslation();
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
-
-    // const areDoubleChanceMarketsOddsValid = areDoubleChanceMarkets
-    //     ? markets.map((item) => item.homeOdds).every((odd) => odd < 1 && odd != 0)
-    //     : false;
 
     let areOddsValid = true;
     const sportTag = Number(markets[0].tags[0]);
@@ -34,7 +31,8 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
         }
     }
 
-    const showContainer = isMotosport(sportTag) || isGolf(sportTag) || areDoubleChanceMarkets ? true : areOddsValid;
+    const showContainer =
+        !showOdds || isMotosport(sportTag) || isGolf(sportTag) || areDoubleChanceMarkets || areOddsValid;
 
     return showContainer ? (
         <Container>
@@ -49,7 +47,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
                 <ContentContianer>
                     {areDoubleChanceMarkets ? (
                         <ContentRow>
-                            <DoubleChanceMarketPositions markets={markets} />
+                            <DoubleChanceMarketPositions markets={markets} showOdds={showOdds} />
                         </ContentRow>
                     ) : (
                         markets.map((market) => {

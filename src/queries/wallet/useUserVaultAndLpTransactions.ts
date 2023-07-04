@@ -41,7 +41,7 @@ const useUserVaultAndLpTransactions = (
 
                 vaultTx.push(
                     ...liquidityPoolUserTransactions.map((tx) => {
-                        return { name: 'LP', ...tx };
+                        return { name: tx.liquidityPoolType == 'parlay' ? 'parlay-lp' : 'single-lp', ...tx };
                     })
                 );
 

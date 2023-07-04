@@ -25,9 +25,10 @@ const defaultAvailablePerDoubleChancePosition: AvailablePerDoubleChancePosition 
 
 type DoubleChanceMarketPositionsProps = {
     markets: SportMarketInfo[];
+    showOdds: boolean;
 };
 
-const DoubleChanceMarketPositions: React.FC<DoubleChanceMarketPositionsProps> = ({ markets }) => {
+const DoubleChanceMarketPositions: React.FC<DoubleChanceMarketPositionsProps> = ({ markets, showOdds }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const [
         lastValidAvailablePerDoubleChancePosition,
@@ -64,37 +65,40 @@ const DoubleChanceMarketPositions: React.FC<DoubleChanceMarketPositionsProps> = 
 
     return (
         <>
-            {doubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE].homeOdds < 1 &&
-                doubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE].homeOdds != 0 && (
-                    <PositionDetails
-                        market={doubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE]}
-                        odd={doubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE].homeOdds}
-                        availablePerPosition={
-                            availablePerDoubleChancePosition[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE]
-                        }
-                        position={Position.HOME}
-                    />
-                )}
-            {doubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeOdds < 1 &&
-                doubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeOdds != 0 && (
-                    <PositionDetails
-                        market={doubleChanceMarkets[DoubleChanceMarketType.NO_DRAW]}
-                        odd={doubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeOdds}
-                        availablePerPosition={availablePerDoubleChancePosition[DoubleChanceMarketType.NO_DRAW]}
-                        position={Position.HOME}
-                    />
-                )}
-            {doubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE].homeOdds < 1 &&
-                doubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE].homeOdds != 0 && (
-                    <PositionDetails
-                        market={doubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE]}
-                        odd={doubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE].homeOdds}
-                        availablePerPosition={
-                            availablePerDoubleChancePosition[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE]
-                        }
-                        position={Position.HOME}
-                    />
-                )}
+            {((doubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE].homeOdds < 1 &&
+                doubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE].homeOdds != 0) ||
+                !showOdds) && (
+                <PositionDetails
+                    market={doubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE]}
+                    odd={doubleChanceMarkets[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE].homeOdds}
+                    availablePerPosition={
+                        availablePerDoubleChancePosition[DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE]
+                    }
+                    position={Position.HOME}
+                />
+            )}
+            {((doubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeOdds < 1 &&
+                doubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeOdds != 0) ||
+                !showOdds) && (
+                <PositionDetails
+                    market={doubleChanceMarkets[DoubleChanceMarketType.NO_DRAW]}
+                    odd={doubleChanceMarkets[DoubleChanceMarketType.NO_DRAW].homeOdds}
+                    availablePerPosition={availablePerDoubleChancePosition[DoubleChanceMarketType.NO_DRAW]}
+                    position={Position.HOME}
+                />
+            )}
+            {((doubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE].homeOdds < 1 &&
+                doubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE].homeOdds != 0) ||
+                !showOdds) && (
+                <PositionDetails
+                    market={doubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE]}
+                    odd={doubleChanceMarkets[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE].homeOdds}
+                    availablePerPosition={
+                        availablePerDoubleChancePosition[DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE]
+                    }
+                    position={Position.HOME}
+                />
+            )}
         </>
     );
 };

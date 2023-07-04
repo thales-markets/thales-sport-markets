@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { FlexDivRowCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
 
 type SportFilterProps = {
     disabled?: boolean;
@@ -9,32 +9,38 @@ type SportFilterProps = {
     sport: string;
     isMobile?: boolean;
     onClick: () => void;
+    count: number;
 };
 
-const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, isMobile, onClick, children }) => {
+const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, isMobile, onClick, count, children }) => {
     const { t } = useTranslation();
 
     return (
         <Container isMobile={isMobile}>
-            <LabelContainer
-                className={`${disabled ? 'disabled' : ''} ${selected ? 'selected' : ''}`}
-                onClick={() => (!disabled ? onClick() : '')}
-            >
-                <SportIcon className={`icon icon--${sport.toLowerCase() == 'all' ? 'logo' : sport.toLowerCase()}`} />
-                <Label>{`${children} ${disabled ? `\n ${t('common.coming-soon')}` : ''} `}</Label>
-                {sport.toLowerCase() != 'all' ? (
-                    !selected ? (
-                        <ArrowIcon className={`icon-exotic icon-exotic--right ${selected ? 'selected' : ''}`} />
+            <LeftContainer>
+                <LabelContainer
+                    className={`${disabled ? 'disabled' : ''} ${selected ? 'selected' : ''}`}
+                    onClick={() => (!disabled ? onClick() : '')}
+                >
+                    <SportIcon
+                        className={`icon icon--${sport.toLowerCase() == 'all' ? 'logo' : sport.toLowerCase()}`}
+                    />
+                    <Label>{`${children} ${disabled ? `\n ${t('common.coming-soon')}` : ''} `}</Label>
+                    {sport.toLowerCase() != 'all' ? (
+                        !selected ? (
+                            <ArrowIcon className={`icon-exotic icon-exotic--right ${selected ? 'selected' : ''}`} />
+                        ) : (
+                            <ArrowIcon
+                                down={true}
+                                className={`icon-exotic icon-exotic--down ${selected ? 'selected' : ''}`}
+                            />
+                        )
                     ) : (
-                        <ArrowIcon
-                            down={true}
-                            className={`icon-exotic icon-exotic--down ${selected ? 'selected' : ''}`}
-                        />
-                    )
-                ) : (
-                    ''
-                )}
-            </LabelContainer>
+                        ''
+                    )}
+                </LabelContainer>
+            </LeftContainer>
+            {count > 0 && <Count isMobile={isMobile}>{count}</Count>}
         </Container>
     );
 };
@@ -48,11 +54,16 @@ const Container = styled(FlexDivRowCentered)<{ isMobile?: boolean }>`
     text-transform: uppercase;
     cursor: pointer;
     height: 36px;
-    margin-left: ${(props) => (props.isMobile ? '50px' : '10px')};
+    margin-left: ${(props) => (props.isMobile ? '30px' : '0px')};
+    margin-right: ${(props) => (props.isMobile ? '30px' : '0px')};
     position: relative;
     color: ${(props) => props.theme.textColor.secondary};
     margin-bottom: 5px;
     justify-content: flex-start;
+`;
+
+const LeftContainer = styled(FlexDivRowCentered)`
+    width: 100%;
 `;
 
 const LabelContainer = styled(FlexDivRowCentered)`
@@ -103,6 +114,21 @@ const ArrowIcon = styled.i<{ down?: boolean }>`
             color: ${(props) => props.theme.textColor.quaternary};
         }
     }
+`;
+
+const Count = styled(FlexDivCentered)<{ isMobile?: boolean }>`
+    border-radius: 8px;
+    color: ${(props) => props.theme.textColor.quaternary};
+    background: ${(props) => (props.isMobile ? props.theme.background.tertiary : props.theme.background.secondary)};
+    font-size: ${(props) => (props.isMobile ? '15px' : '12px')};
+    min-width: 30px;
+    height: ${(props) => (props.isMobile ? '20px' : '18px')};
+    padding: 0 6px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 `;
 
 export default SportFilter;

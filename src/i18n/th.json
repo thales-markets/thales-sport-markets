@@ -83,7 +83,8 @@
             "invalid-address": "ที่อยู่ที่ไม่ถูกต้อง",
             "batch-transaction-single-failure": "ธุรกรรมถูกปฏิเสธหรือล้มเหลว",
             "enter-percentage": "Enter percentage",
-            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}"
+            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
+            "single-amm-paused": "AMM หยุดชั่วคราว"
         },
         "time-remaining": {
             "ended": "เสร็จสิ้น",
@@ -152,7 +153,7 @@
         "fifa-tooltip": "ผลการแข่งขันในตลาด FIFA World Cup อิงตามผลการควบคุม หากเกินเวลา ผลการควบคุมจะเป็นผลที่ตลาดจะแก้ไข",
         "tennis-tooltip": "ในกรณีของการวอล์กโอเวอร์ การแข่งขันจะถือเป็นการยกเลิก ในกรณีที่ออกจากตำแหน่ง/ถูกตัดสิทธิ์ในระหว่างการแข่งขัน จะถือว่าเป็นชัยชนะสำหรับผู้เล่นที่ผ่านเข้าสู่รอบต่อไป",
         "iihf-tooltip": "ผลลัพธ์ของตลาด IIHF World Championship ขึ้นอยู่กับผลการควบคุม หากพวกเขาทำงานล่วงเวลา ผลการควบคุมจะเป็นผลที่ตลาดจะแก้ไข",
-        "uefa-tooltip": "ผลการแข่งขันในตลาดของยูฟ่าขึ้นอยู่กับผลการควบคุม หากพวกเขาไปต่อเวลา ผลการแข่งขันจะเป็นไปตามที่ตลาดจะแก้ไข"
+        "football-tooltip": "ผลลัพธ์ของตลาดขึ้นอยู่กับผลลัพธ์ของกฎข้อบังคับ หากพวกเขาทำงานล่วงเวลา ผลลัพธ์ของกฎข้อบังคับคือผลลัพธ์ของกฎข้อบังคับที่ตลาดจะแก้ไข"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -237,7 +238,8 @@
             "all": "ทั้งหมด",
             "mobile-tags": {
                 "search": "ค้นหา"
-            }
+            },
+            "show-active": "แสดงเฉพาะกีฬาที่ใช้งานอยู่"
         },
         "back-to-markets": "กลับไปที่ตลาด",
         "back-to-market": "กลับไปที่ตลาด",
@@ -385,7 +387,8 @@
                 "no-funds-multi-collateral": "โปรดตรวจสอบให้แน่ใจว่ากระเป๋าเงินของคุณมีเงินเพียงพอ (เพิ่มขึ้น {{percentage}}% ของจำนวนเงินที่ซื้อเข้า)",
                 "same-race-drivers": "รองรับนักแข่งเพียงหนึ่งคนต่อหนึ่งการแข่งขัน ไม่สามารถเพิ่ม {{addedDriver}} เนื่องจาก {{existingDriver}} อยู่ในพาร์เลย์แล้ว",
                 "max-number-of-markets-with-combined-markets": "จำนวนตลาดสูงสุดใน Parlay คือ {{max}} ตลาดรวมเดียวนับเป็นสองตลาดปกติ",
-                "max-combined-markets": "จำนวนตลาดรวมสูงสุดในพาร์เลย์คือ {{max}}"
+                "max-combined-markets": "จำนวนตลาดรวมสูงสุดในพาร์เลย์คือ {{max}}",
+                "amm-contract-paused": "AMM พาร์เลย์หยุดชั่วคราว"
             },
             "skew": "ลาด",
             "payout": "การจ่ายเงิน",
@@ -455,7 +458,7 @@
         },
         "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
         "incentivized-markets": "ตลาดที่สร้างแรงจูงใจ",
-        "incentivized-tooltip-tennis": "Roland Garros จะได้รับสิ่งจูงใจ เนื่องจากทัวร์นาเมนต์จะเริ่มในวันที่ 29 พฤษภาคม ตลาดจะได้รับการกระตุ้นด้วย {{rewards}} จนกว่าจะสิ้นสุดการแข่งขันในวันที่ 12 มิถุนายน รางวัลจะกระจายตามปริมาณของคุณที่ขับเคลื่อนผ่านตลาดเหล่านี้ คุณสามารถติดตามการจัดสรรรางวัลได้ที่ <detailsLink>Dune Dashboard</detailsLink>"
+        "incentivized-tooltip-tennis": "วิมเบิลดันจะได้รับแรงจูงใจ เนื่องจากทัวร์นาเมนต์จะเริ่มในวันที่ 3 กรกฎาคม ตลาดจะได้รับการกระตุ้นด้วย {{rewards}} จนกว่าจะสิ้นสุดทัวร์นาเมนต์ในวันที่ 16 กรกฎาคม รางวัลจะกระจายตามปริมาณของคุณที่ขับเคลื่อนผ่านตลาดเหล่านี้ คุณสามารถติดตามการจัดสรรรางวัลได้ที่ <detailsLink>Dune Dashboard</detailsLink>"
     },
     "rewards": {
         "header": "รางวัล",
@@ -629,7 +632,11 @@
         "gift-voucher": "บัตรกำนัล",
         "voucher-info": "แต่เพื่อที่เจ้าจะได้เห็นว่าความผิดพลาดแต่กำเนิดของบรรดาผู้ที่กล่าวโทษความเพลิดเพลินและสรรเสริญความเจ็บปวดนั้นมาจากไหน ฉันจะเปิดเรื่องราวทั้งหมดและอธิบายถึงสิ่งที่ผู้ค้นพบความจริงผู้นั้นกล่าว และตามเดิม สถาปนิกของ ชีวิตที่มีความสุข",
         "claim-voucher": "เรียกร้องบัตรกำนัล",
-        "voucher-title": "รับบัตรกำนัลการทำงานล่วงเวลา"
+        "voucher-title": "รับบัตรกำนัลการทำงานล่วงเวลา",
+        "go-to-parlay-lp": "ไปที่หจก.พาร์เลย์",
+        "go-to-single-lp": "ไปที่ Single หจก",
+        "parlay-lp-title": "พูลสภาพคล่องของ Parlay",
+        "single-lp-title": "พูลสภาพคล่องเดียว"
     },
     "mint-world-cup-nft": {
         "incentives": "สิ่งจูงใจ",
@@ -816,9 +823,17 @@
         },
         "gamified-staking-message": "<p>เงินฝากทั้งหมดที่เข้าสู่รอบจะนับรวมกับปริมาณการเดิมพันแบบเกม</p>",
         "LP": {
-            "title": "หจก"
+            "title": "หจก",
+            "parlay-lp": "หจก.พาร์เลย์",
+            "single-lp": "หจก.เดียว"
         },
-        "variables-parlay": "<p>ตัวแปร:</p><ul><li> อัตราการใช้: {{utilizationRate}}</li><li> ขีดจำกัดล่างของราคา: {{priceLowerLimit}}</li><li> ขีดจำกัดสูงสุดของราคา: {{priceUpperLimit}}</li><li> ผลกระทบเอียงสูงสุด: {{skewImpactLimit}}</li><li> การจัดสรรสูงสุดในพาร์เลย์เดียว: {{allocationLimitsPerMarketPerRound}}</li><li> เงินฝากทั้งหมดสูงสุด: {{maxAllowedDeposit}}</li><li> ผู้ใช้สูงสุดในห้องนิรภัย: {{maxAllowedUsers}}</li><li> จำนวนเงินขั้นต่ำในการซื้อขายครั้งเดียว: {{minTradeAmount}}</li><li> เงินฝากขั้นต่ำ: {{minDepositAmount}}</li><li> ระยะเวลาของรอบ: {{roundLength}} วัน</li></ul>"
+        "variables-parlay": "<p>ตัวแปร:</p><ul><li> อัตราการใช้: {{utilizationRate}}</li><li> ขีดจำกัดล่างของราคา: {{priceLowerLimit}}</li><li> ขีดจำกัดสูงสุดของราคา: {{priceUpperLimit}}</li><li> ผลกระทบเอียงสูงสุด: {{skewImpactLimit}}</li><li> การจัดสรรสูงสุดในพาร์เลย์เดียว: {{allocationLimitsPerMarketPerRound}}</li><li> เงินฝากทั้งหมดสูงสุด: {{maxAllowedDeposit}}</li><li> ผู้ใช้สูงสุดในห้องนิรภัย: {{maxAllowedUsers}}</li><li> จำนวนเงินขั้นต่ำในการซื้อขายครั้งเดียว: {{minTradeAmount}}</li><li> เงินฝากขั้นต่ำ: {{minDepositAmount}}</li><li> ระยะเวลาของรอบ: {{roundLength}} วัน</li></ul>",
+        "single-lp": {
+            "title": "หจก.เดียว"
+        },
+        "parlay-lp": {
+            "title": "หจก.พาร์เลย์"
+        }
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1089,6 +1104,9 @@
             "apy": "APY ที่คาดการณ์ตาม APR",
             "arr": "ผลตอบแทนเฉลี่ย (ARR)",
             "apr": "APR ที่คาดการณ์ตาม ARR"
-        }
+        },
+        "parlay-lp": "หจก.พาร์เลย์",
+        "single-lp": "หจก.เดียว",
+        "description-parlay": "<h1>คำอธิบาย</h1><p> การจัดหาสภาพคล่องนั้นเกี่ยวข้องกับผู้ใช้ที่ฝากหลักประกัน Stablecoin ไว้ในกลุ่มสภาพคล่องตามสัญญาอัจฉริยะสำหรับการซื้อขายล่วงเวลา หลักประกันที่ฝากไว้ใช้เพื่ออำนวยความสะดวกในการซื้อขาย Parlay AMM ของค่าล่วงเวลา</p><p> เพื่อให้สามารถจัดหาสภาพคล่องได้ คุณจะต้องเดิมพันกับ THALES ไม่มีขีดจำกัดสูงสุดต่อกระเป๋าเงินหนึ่งใบ และคุณสามารถฝากได้สูงสุด 1 {{currency}} ต่อ {{thalesStakedAmount}} THALES ที่เดิมพันไปจนกว่าสภาพคล่องจะเต็ม</p><p> เมื่อสิ้นสุดแต่ละรอบ ส่วนแบ่งตามสัดส่วนของ PnL ของรอบนั้นจะถูกเพิ่มไปยังยอดเงินฝากของคุณ</p><p> หากคุณต้องการถอน คุณสามารถส่งสัญญาณได้ตลอดเวลาในระหว่างรอบที่กำลังดำเนินอยู่ และเมื่อสิ้นสุดรอบ จำนวนเงินที่คุณส่งสัญญาณให้ถอน (รวมถึง PnL ของรอบนั้น) จะถูกส่งถึงคุณ จำนวนเงินขั้นต่ำที่จะถอนถูกกำหนดไว้ที่ 10%</p><p> หากคุณตัดสินใจที่จะถอนเงินเดิมพันของ THALES ในขณะที่ให้สภาพคล่อง โปรดทราบว่าคุณจะต้องส่งสัญญาณการถอนออกจากกลุ่มสภาพคล่องก่อน</p><p> การจัดหาสภาพคล่องทำให้คุณมีความเสี่ยงต่างๆ รวมถึงการสูญเสียที่อาจเกิดขึ้นจากการที่ผู้ใช้ชนะในการซื้อขาย เช่นเดียวกับความเสี่ยงด้านความปลอดภัยของสัญญาอัจฉริยะ โปรดแน่ใจว่าคุณเข้าใจความเสี่ยงเหล่านี้ก่อนฝากเงิน</p><p><tipLink> TIP-142</tipLink> มีรายละเอียดเพิ่มเติมเกี่ยวกับการดำเนินการทางเทคนิคของการจัดหาสภาพคล่องล่วงเวลา</p>"
     }
 }

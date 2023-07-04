@@ -2,7 +2,6 @@ import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.sv
 import { GlobalFiltersEnum } from 'constants/markets';
 import { t } from 'i18next';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
-import useSportMarketsQueryNew from 'queries/markets/useSportsMarketsQueryNew';
 import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
@@ -34,6 +33,7 @@ import ValidationModal from './components/ValidationModal';
 import Toggle from 'components/Toggle/Toggle';
 import MatchInfoOfCombinedMarket from './components/MatchInfoOfCombinedMarket';
 import { extractCombinedMarketsFromParlayMarkets, removeCombinedMarketFromParlayMarkets } from 'utils/combinedMarkets';
+import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';
 
 type ParylayProps = {
     onBuySuccess?: () => void;
@@ -70,7 +70,7 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
         enabled: isAppReady,
     });
 
-    const sportMarketsQuery = useSportMarketsQueryNew(networkId, {
+    const sportMarketsQuery = useSportMarketsQuery(GlobalFiltersEnum.OpenMarkets, networkId, {
         enabled: isAppReady,
     });
 

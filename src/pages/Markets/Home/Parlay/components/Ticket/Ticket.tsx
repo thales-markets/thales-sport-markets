@@ -57,6 +57,7 @@ import {
     XButton,
 } from '../styled-components';
 import { isSGPInParlayMarkets } from 'utils/combinedMarkets';
+import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -86,6 +87,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
         parlayPayment.selectedStableIndex
     );
+
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [minUsdAmountValue, setMinUsdAmountValue] = useState<number>(0);
@@ -97,6 +99,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const [totalBuyAmount, setTotalBuyAmount] = useState(0);
     const [isFetching, setIsFetching] = useState(false);
     const [isAllowing, setIsAllowing] = useState(false);
+    const [isAMMPaused, setIsAMMPaused] = useState(false);
     const [isBuying, setIsBuying] = useState(false);
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState<string>('');
@@ -124,6 +127,22 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             mountedRef.current = false;
         };
     }, []);
+
+    const ammContractsPaused = useAMMContractsPausedQuery(networkId, {
+        enabled: isAppReady,
+    });
+
+    const ammContractsStatusData = useMemo(() => {
+        if (ammContractsPaused.data && ammContractsPaused.isSuccess) {
+            return ammContractsPaused.data;
+        }
+    }, [ammContractsPaused.data, ammContractsPaused.isSuccess]);
+
+    useEffect(() => {
+        if (ammContractsStatusData?.parlayAMM || ammContractsStatusData?.singleAMM) {
+            setIsAMMPaused(true);
+        }
+    }, [ammContractsStatusData]);
 
     const parlayAmmDataQuery = useParlayAmmDataQuery(networkId, {
         enabled: isAppReady,
@@ -386,6 +405,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     };
 
     useEffect(() => {
+        if (isAMMPaused) {
+            setSubmitDisabled(true);
+            return;
+        }
+
         // Minimum of sUSD
         if (!Number(usdAmountValue) || Number(usdAmountValue) < minUsdAmountValue || isBuying || isAllowing) {
             setSubmitDisabled(true);
@@ -415,9 +439,18 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         tooltipTextUsdAmount,
         minUsdAmountValue,
         COLLATERAL_CONVERSION_MULTIPLIER,
+        isAMMPaused,
     ]);
 
     const getSubmitButton = () => {
+        if (isAMMPaused) {
+            return (
+                <SubmitButton disabled={submitDisabled}>
+                    {t('markets.parlay.validation.amm-contract-paused')}
+                </SubmitButton>
+            );
+        }
+
         if (!isWalletConnected) {
             return (
                 <SubmitButton onClick={() => openConnectModal?.()}>
@@ -524,7 +557,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 if (!parlayAmmQuote.error) {
                     const parlayAmmTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
                     const parlayAmmTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
-                    console.log(parlayAmmTotalQuote);
+
                     setTotalQuote(parlayAmmTotalQuote);
 
                     // Skew impact calculation if it's SGP
@@ -702,7 +735,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                             type="number"
                             value={usdAmountValue}
                             onChange={(e) => {
-                                if (countDecimals(Number(e.target.value)) > 2) {
+                                if (Number(countDecimals(Number(e.target.value))) > 2) {
                                     return;
                                 }
                                 setUsdAmount(e.target.value);

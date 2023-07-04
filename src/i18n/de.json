@@ -92,7 +92,8 @@
             "invalid-address": "Ungültige Adresse",
             "batch-transaction-single-failure": "Eine Transaktion wurde abgelehnt oder ist fehlgeschlagen.",
             "enter-percentage": "Enter percentage",
-            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}"
+            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
+            "single-amm-paused": "AMM angehalten"
         },
         "time-remaining": {
             "ended": "zu Ende",
@@ -152,7 +153,7 @@
         "fifa-tooltip": "Die Ergebnisse der FIFA-Weltmeisterschaftsmärkte basieren auf den regulären Ergebnissen. Sollte es in die Verlängerung gehen, ist das reguläre Ergebnis dasjenige, zu dem der Markt entscheidet.",
         "tennis-tooltip": "Im Falle eines Walkovers wird das Spiel als abgebrochen behandelt. Im Falle einer Aufgabe / Disqualifikation während des Spiels wird dies als Gewinn für den Spieler gewertet, der in die nächste Runde aufsteigt",
         "iihf-tooltip": "Die Ergebnisse der IIHF-Weltmeisterschaftsmärkte basieren auf den regulären Ergebnissen. Sollten sie in die Verlängerung gehen, ist das reguläre Ergebnis dasjenige, das der Markt zugrunde legt.",
-        "uefa-tooltip": "Die Ergebnisse der UEFA-Märkte basieren auf den regulären Ergebnissen. Sollte es zu einer Verlängerung kommen, ist das reguläre Ergebnis dasjenige, das der Markt zugrunde legt."
+        "football-tooltip": "Marktergebnisse basieren auf Regulierungsergebnissen. Sollten sie in die Verlängerung gehen, ist das Regulierungsergebnis dasjenige, zu dem der Markt auflösen wird."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",
@@ -237,7 +238,8 @@
             },
             "mobile-tags": {
                 "search": "Suche"
-            }
+            },
+            "show-active": "Nur aktive Sportarten anzeigen"
         },
         "back-to-markets": "Zurück zu den Märkten",
         "back-to-market": "Zurück zum Markt",
@@ -390,7 +392,8 @@
                 "no-funds-multi-collateral": "Bitte stellen Sie sicher, dass Ihr Guthaben ausreichend ist ({{percentage}} % mehr des Buy-in-Betrags)",
                 "same-race-drivers": "Es wird nur ein Fahrer pro Rennen unterstützt. {{addedDriver}} kann nicht hinzugefügt werden, da {{existingDriver}} bereits in Parlay ist",
                 "max-number-of-markets-with-combined-markets": "Die maximale Anzahl an Märkten in Parlay beträgt {{max}}. Ein einzelner kombinierter Markt zählt als zwei reguläre Märkte.",
-                "max-combined-markets": "Die maximale Anzahl kombinierter Märkte in Parlay beträgt {{max}}."
+                "max-combined-markets": "Die maximale Anzahl kombinierter Märkte in Parlay beträgt {{max}}.",
+                "amm-contract-paused": "Parlay AMM angehalten"
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",
@@ -456,7 +459,7 @@
         },
         "incentivized-markets": "ANREIZMÄRKTE",
         "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
-        "incentivized-tooltip-tennis": "Roland Garros wird einen Anreiz erhalten, da das Turnier am 29. Mai beginnt. Die Märkte werden bis zum Ende des Turniers am 12. Juni mit {{rewards}} angekurbelt. Die Prämien werden basierend auf Ihrem durch diese Märkte erzielten Volumen verteilt. Sie können Ihre Prämienzuteilung auf unserem <detailsLink>Dune Dashboard</detailsLink> verfolgen."
+        "incentivized-tooltip-tennis": "Wimbledon wird einen Anreiz erhalten, da das Turnier am 3. Juli beginnt. Die Märkte werden bis zum Ende des Turniers am 16. Juli mit {{rewards}} angekurbelt. Die Prämien werden basierend auf Ihrem durch diese Märkte erzielten Volumen verteilt. Sie können Ihre Prämienzuteilung auf unserem <detailsLink>Dune Dashboard</detailsLink> verfolgen."
     },
     "rewards": {
         "header": "Preise",
@@ -630,7 +633,11 @@
         "claiming-voucher": "Anspruch...",
         "claim-voucher": "Gutschein anfordern",
         "voucher-info": "Aber damit Sie sehen, woher all dieser angeborene Irrtum derer kommt, die Freude anklagen und Schmerz preisen, werde ich die ganze Sache öffnen und genau das erklären, was dieser Entdecker der Wahrheit und sozusagen der Architekt der Wahrheit gesagt hat ein glückliches Leben.",
-        "voucher-title": "Fordern Sie Überstundengutscheine an"
+        "voucher-title": "Fordern Sie Überstundengutscheine an",
+        "go-to-single-lp": "Gehen Sie zu Single LP",
+        "parlay-lp-title": "Parlay-Liquiditätspool",
+        "single-lp-title": "Einzelner Liquiditätspool",
+        "go-to-parlay-lp": "Gehen Sie zu Parlay LP"
     },
     "mint-world-cup-nft": {
         "eligible-text-2": "Prägen Sie ein Zebro Ihrer Lieblingsnationalmannschaft und qualifizieren Sie sich für 50.000 OP & 30.000 THALES-Bonusprämien!",
@@ -817,9 +824,17 @@
         },
         "gamified-staking-message": "<p>Alle Einzahlungen, die in eine Runde eingehen, zählen zum gamifizierten Staking-Volumen.</p>",
         "LP": {
-            "title": "LP"
+            "title": "LP",
+            "single-lp": "Einzel-LP",
+            "parlay-lp": "Parlay-LP"
         },
-        "variables-parlay": "<p>Variablen:</p><ul><li> Nutzungsrate: {{utilizationRate}}</li><li> Preisuntergrenze: {{priceLowerLimit}}</li><li> Preisobergrenze: {{priceUpperLimit}}</li><li> Max. Skew-Auswirkung: {{skewImpactLimit}}</li><li> Maximale Zuweisung für eine einzelne Parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Maximale Gesamteinzahlung: {{maxAllowedDeposit}}</li><li> Max. Benutzer im Tresor: {{maxAllowedUsers}}</li><li> Mindestbetrag für einen einzelnen Trade: {{minTradeAmount}}</li><li> Mindesteinzahlung: {{minDepositAmount}}</li><li> Rundendauer: {{roundLength}} Tage</li></ul>"
+        "variables-parlay": "<p>Variablen:</p><ul><li> Nutzungsrate: {{utilizationRate}}</li><li> Preisuntergrenze: {{priceLowerLimit}}</li><li> Preisobergrenze: {{priceUpperLimit}}</li><li> Max. Skew-Auswirkung: {{skewImpactLimit}}</li><li> Maximale Zuweisung für eine einzelne Parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Maximale Gesamteinzahlung: {{maxAllowedDeposit}}</li><li> Max. Benutzer im Tresor: {{maxAllowedUsers}}</li><li> Mindestbetrag für einen einzelnen Trade: {{minTradeAmount}}</li><li> Mindesteinzahlung: {{minDepositAmount}}</li><li> Rundendauer: {{roundLength}} Tage</li></ul>",
+        "single-lp": {
+            "title": "Einzel-LP"
+        },
+        "parlay-lp": {
+            "title": "Parlay-LP"
+        }
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1090,6 +1105,9 @@
             "arr": "Durchschnittliche Rundenrendite (ARR)",
             "apy": "Projizierter effektiver Jahreszins basierend auf effektivem Jahreszins",
             "apr": "Voraussichtlicher effektiver Jahreszins basierend auf ARR"
-        }
+        },
+        "parlay-lp": "Parlay-LP",
+        "single-lp": "Einzel-LP",
+        "description-parlay": "<h1>Beschreibung</h1><p> Bei der Liquiditätsbereitstellung hinterlegen Benutzer Stablecoin-Sicherheiten in einem auf Smart Contracts basierenden Liquiditätspool für den Overtime-Handel. Die hinterlegten Sicherheiten werden verwendet, um den Handel auf Parlay AMM von Overtime zu erleichtern.</p><p> Um Liquidität bereitstellen zu können, müssen Sie THALES einsetzen. Es gibt keine maximale Obergrenze pro Wallet und Sie können maximal 1 {{currency}} pro eingesetzten {{thalesStakedAmount}} THALES einzahlen, bis der Liquiditätspool gefüllt ist.</p><p> Am Ende jeder Runde wird der proportionale Anteil des PnL dieser Runde zu Ihrem eingezahlten Guthaben hinzugefügt.</p><p> Wenn Sie eine Auszahlung wünschen, können Sie dies jederzeit während der laufenden Runde signalisieren. Am Ende der Runde wird Ihnen der von Ihnen zur Auszahlung angegebene Betrag (einschließlich des PnL dieser Runde) zugesandt. Der Mindestauszahlungsbetrag ist auf 10 % festgelegt</p><p> Wenn Sie sich entscheiden, THALES unter Bereitstellung von Liquidität aufzulösen, beachten Sie bitte, dass Sie zunächst einen Rückzug aus dem Liquiditätspool signalisieren müssen.</p><p> Durch die Bereitstellung von Liquidität sind Sie verschiedenen Risiken ausgesetzt, darunter potenzielle Verluste aufgrund von Handelsgewinnen der Benutzer sowie Sicherheitsrisiken bei Smart Contracts. Bitte stellen Sie sicher, dass Sie diese Risiken verstehen, bevor Sie eine Einzahlung tätigen.</p><p><tipLink> TIPP-142</tipLink> Weitere Einzelheiten zur technischen Umsetzung der Überstundenliquiditätsbereitstellung finden Sie hier.</p>"
     }
 }

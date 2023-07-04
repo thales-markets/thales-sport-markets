@@ -61,13 +61,14 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
 
     const childMarkets: SportMarketChildMarkets = lastValidChildMarkets;
 
-    const showAMM = !market.isResolved && !market.isCanceled && market.isOpen && !market.isPaused;
+    const isGameStarted = market.maturityDate < new Date();
+    const showAMM = !market.isResolved && !market.isCanceled && !isGameStarted && !market.isPaused;
 
-    const isGameCancelled = market.isCanceled || (market.isOpen && market.isResolved);
+    const isGameCancelled = market.isCanceled || (!isGameStarted && market.isResolved);
     const isGameResolved = market.isResolved || market.isCanceled;
-    const isPendingResolution = !market.isOpen && !isGameResolved;
+    const isPendingResolution = isGameStarted && !isGameResolved;
     const isGamePaused = market.isPaused && !isGameResolved;
-    const showStatus = market.isResolved || market.isCanceled || !market.isOpen || market.isPaused;
+    const showStatus = market.isResolved || market.isCanceled || isGameStarted || market.isPaused;
     const gameIdString = Web3.utils.hexToAscii(market.gameId);
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.tags[0]));
     const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.tags[0]));
@@ -278,19 +279,20 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                     </Status>
                 )}
                 <>
-                    <Positions markets={[market]} betType={BetType.WINNER} />
+                    <Positions markets={[market]} betType={BetType.WINNER} showOdds={showAMM} />
                     {childMarkets.doubleChanceMarkets.length > 0 && (
                         <Positions
                             markets={childMarkets.doubleChanceMarkets}
                             betType={BetType.DOUBLE_CHANCE}
                             areDoubleChanceMarkets
+                            showOdds={showAMM}
                         />
                     )}
                     {childMarkets.spreadMarkets.length > 0 && (
-                        <Positions markets={childMarkets.spreadMarkets} betType={BetType.SPREAD} />
+                        <Positions markets={childMarkets.spreadMarkets} betType={BetType.SPREAD} showOdds={showAMM} />
                     )}
                     {childMarkets.totalMarkets.length > 0 && (
-                        <Positions markets={childMarkets.totalMarkets} betType={BetType.TOTAL} />
+                        <Positions markets={childMarkets.totalMarkets} betType={BetType.TOTAL} showOdds={showAMM} />
                     )}
                     {combinedMarkets.length > 0 && <CombinedPositions combinedMarkets={combinedMarkets} />}
                 </>

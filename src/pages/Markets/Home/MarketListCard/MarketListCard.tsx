@@ -174,7 +174,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         !areSpreadTotalsMarketsOddsValid &&
         !areOddsValid &&
         !isMotosport(Number(market.tags[0])) &&
-        !isGolf(Number(market.tags[0]));
+        !isGolf(Number(market.tags[0])) &&
+        showOdds;
 
     return (
         <Wrapper hideGame={hideGame} isResolved={isGameRegularlyResolved}>
@@ -197,11 +198,12 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
                         )}
                         {isUEFAGame(Number(market.tags[0])) && (
-                            <Tooltip overlay={t(`common.uefa-tooltip`)} iconFontSize={12} marginLeft={2} />
+                            <Tooltip overlay={t(`common.football-tooltip`)} iconFontSize={12} marginLeft={2} />
                         )}
                         <MatchTimeLabel>
                             {(isEnetpulseSport || isJsonOddsSport) &&
                             !isFifaWCGame(market.tags[0]) &&
+                            !isUEFAGame(Number(market.tags[0])) &&
                             (liveResultInfo || localStorage.getItem(market.address)) ? (
                                 <>
                                     {localStorage.getItem(market.address)}
@@ -343,20 +345,20 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     <Odds market={childMarket} key={childMarket.address} isShownInSecondRow />
                                 ))}
                             {hasCombinedMarkets && !isMobile && showOnlyCombinedPositionsInSecondRow && (
-                                <CombinedMarketsOdds market={market} />
+                                <CombinedMarketsOdds market={market} isShownInSecondRow />
                             )}
                         </OddsWrapper>
                     </SecondRowContainer>
                     {isMobile && hasCombinedMarkets && (
                         <ThirdRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
                             <OddsWrapper>
-                                <CombinedMarketsOdds market={market} />
+                                <CombinedMarketsOdds market={market} isShownInSecondRow />
                             </OddsWrapper>
                         </ThirdRowContainer>
                     )}
                     {!isMobile && hasCombinedMarkets && doubleChanceMarkets.length > 0 && (
                         <ThirdRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
-                            <CombinedMarketsOdds market={market} />
+                            <CombinedMarketsOdds market={market} isShownInSecondRow />
                         </ThirdRowContainer>
                     )}
                 </>

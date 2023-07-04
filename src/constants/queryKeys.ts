@@ -1,13 +1,15 @@
 import { NetworkId } from 'types/network';
 import { Position } from './options';
 import { MultiSingleAmounts, ParlaysMarket } from 'types/markets';
+import { LiquidityPoolType } from 'types/liquidityPool';
+import { GlobalFiltersEnum } from './markets';
 
 export const QUERY_KEYS = {
     Rewards: (networkId: NetworkId, period: number) => ['rewards', networkId, period],
     Markets: (networkId: NetworkId) => ['markets', networkId],
     ParlayMarkets: (networkId: NetworkId, account: string) => ['parlayMarkets', networkId, account],
     ParlayLeaderboard: (networkId: NetworkId, period: number) => ['parlayLeaderboard', period, networkId],
-    SportMarkets: (networkId: NetworkId) => ['sportMarkets', networkId],
+    SportMarkets: (globalFilter: GlobalFiltersEnum, networkId: NetworkId) => ['sportMarkets', globalFilter, networkId],
     SportMarketsNew: (networkId: NetworkId) => ['sportMarketsNew', networkId],
     SportMarket: (address: string, networkId: NetworkId) => ['sportMarketQuery', address, networkId],
     ParlayAmmData: (networkId: NetworkId) => ['parlayAmmData', networkId],
@@ -148,12 +150,35 @@ export const QUERY_KEYS = {
     },
     LiquidityPool: {
         Data: (networkId: NetworkId) => ['liquidityPool', 'data', networkId],
+        ParlayData: (networkId: NetworkId) => ['liquidityPool', 'parlayData', networkId],
         UserData: (walletAddress: string, networkId: NetworkId) => ['liquidityPool', 'data', walletAddress, networkId],
-        PnL: (networkId: NetworkId) => ['liquidityPool', 'pnl', networkId],
-        Return: (networkId: NetworkId) => ['liquidityPool', 'return', networkId],
-        UserTransactions: (networkId: NetworkId) => ['liquidityPool', 'userTransactions', networkId],
+        ParlayUserData: (walletAddress: string, networkId: NetworkId) => [
+            'liquidityPool',
+            'parlayLPData',
+            walletAddress,
+            networkId,
+        ],
+        PnL: (networkId: NetworkId, liquidityPoolType: LiquidityPoolType) => [
+            'liquidityPool',
+            'pnl',
+            liquidityPoolType,
+            networkId,
+        ],
+        Return: (networkId: NetworkId, liquidityPoolType: LiquidityPoolType) => [
+            'liquidityPool',
+            'return',
+            liquidityPoolType,
+            networkId,
+        ],
+        UserTransactions: (networkId: NetworkId, liquidityPoolType: LiquidityPoolType) => [
+            'liquidityPool',
+            'userTransactions',
+            liquidityPoolType,
+            networkId,
+        ],
     },
     SGPFees: (networkId: NetworkId) => ['sgpFees', networkId],
+    CheckPausedAMM: (networkId: NetworkId) => ['checkPausedAMM', networkId],
 };
 
 export default QUERY_KEYS;
