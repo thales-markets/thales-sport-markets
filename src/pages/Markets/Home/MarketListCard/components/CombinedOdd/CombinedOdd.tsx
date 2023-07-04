@@ -108,6 +108,7 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
                           text: spreadAndTotalText,
                           textStyle: {
                               top: '-9px',
+                              backgroundColor: isShownInSecondRow ? MAIN_COLORS.GRAY : MAIN_COLORS.LIGHT_GRAY,
                           },
                       }
             }
