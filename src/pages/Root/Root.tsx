@@ -18,7 +18,7 @@ import {
     trustWallet,
     rabbyWallet,
 } from '@rainbow-me/rainbowkit/wallets';
-import { configureChains, createClient, WagmiConfig } from 'wagmi';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { optimism, optimismGoerli, arbitrum } from 'wagmi/chains';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
@@ -48,9 +48,7 @@ const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
     42161: { ankr: 'arbitrum', chainnode: 'arbitrum-one', blast: 'arbitrum-one' },
 };
 
-const STALL_TIMEOUT = 2000;
-
-const { chains, provider } = configureChains(
+const { chains, publicClient } = configureChains(
     [optimism, optimismGoerli, arbitrum],
     [
         jsonRpcProvider({
@@ -61,16 +59,13 @@ const { chains, provider } = configureChains(
                           process.env.REACT_APP_CHAINNODE_PROJECT_ID
                       }`,
             }),
-            stallTimeout: STALL_TIMEOUT,
-            priority: 1,
         }),
         infuraProvider({
             apiKey: process.env.REACT_APP_INFURA_PROJECT_ID || '',
-            stallTimeout: STALL_TIMEOUT,
-            priority: process.env.REACT_APP_PRIMARY_PROVIDER_ID === 'INFURA' ? 0 : 2,
         }),
-        publicProvider({ stallTimeout: STALL_TIMEOUT, priority: 5 }),
-    ]
+        publicProvider(),
+    ],
+    { stallTimeout: 2000 }
 );
 
 const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
@@ -92,10 +87,10 @@ const connectors = connectorsForWallets([
     },
 ]);
 
-const wagmiClient = createClient({
+const wagmiConfig = createConfig({
     autoConnect: true,
     connectors,
-    provider,
+    publicClient,
 });
 
 const instance = createInstance({
@@ -122,7 +117,7 @@ const Root: React.FC<RootProps> = ({ store }) => {
     return (
         <Provider store={store}>
             <MatomoProvider value={instance}>
-                <WagmiConfig client={wagmiClient}>
+                <WagmiConfig config={wagmiConfig}>
                     <RainbowKitProvider
                         chains={chains}
                         theme={customTheme}

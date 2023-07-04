@@ -16,6 +16,7 @@ import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { NetworkId } from 'types/network';
 import { NETWORK_SWITCHER_SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_DESCRIPTIONS } from 'constants/network';
+import 'wagmi/window';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();

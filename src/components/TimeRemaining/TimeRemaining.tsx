@@ -24,7 +24,7 @@ export const TimeRemaining: React.FC<TimeRemainingProps> = ({
     showFullCounter,
 }) => {
     const now = Date.now();
-    const [timeElapsed, setTimeElapsed] = useState(now >= end);
+    const [timeElapsed, setTimeElapsed] = useState(now >= Number(end));
     const [weeksDiff, setWeekDiff] = useState(Math.abs(differenceInWeeks(now, end)));
     const [showRemainingInWeeks, setShowRemainingInWeeks] = useState(weeksDiff > 4);
     const [countdownDisabled, setCountdownDisabled] = useState(timeElapsed || showRemainingInWeeks);
@@ -62,15 +62,15 @@ export const TimeRemaining: React.FC<TimeRemainingProps> = ({
 
     useMemo(() => {
         const today = Date.now();
-        setTimeElapsed(today >= end);
+        setTimeElapsed(today >= Number(end));
         setWeekDiff(Math.abs(differenceInWeeks(today, end)));
         setShowRemainingInWeeks(Math.abs(differenceInWeeks(today, end)) > 4);
-        setCountdownDisabled(today >= end || Math.abs(differenceInWeeks(today, end)) > 4);
+        setCountdownDisabled(today >= Number(end) || Math.abs(differenceInWeeks(today, end)) > 4);
         setDuration(intervalToDuration({ start: today, end }));
     }, [end]);
 
     useInterval(() => {
-        if (now <= end) {
+        if (now <= Number(end)) {
             setDuration(intervalToDuration({ start: now, end }));
         } else {
             setTimeElapsed(true);

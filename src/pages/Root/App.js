@@ -20,7 +20,7 @@ import ROUTES from 'constants/routes';
 import Theme from 'layouts/Theme';
 import DappLayout from 'layouts/DappLayout';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-import { useAccount, useProvider, useSigner, useDisconnect, useNetwork } from 'wagmi';
+import { useAccount, usePublicClient, useWalletClient, useDisconnect, useNetwork } from 'wagmi';
 import LandingPageLayout from 'layouts/LandingPageLayout';
 import BannerCarousel from 'components/BannerCarousel';
 import { isMobile } from 'utils/device';
@@ -47,8 +47,8 @@ const App = () => {
     const switchedToNetworkId = useSelector((state) => getSwitchToNetworkId(state));
 
     const { address } = useAccount();
-    const provider = useProvider(!address && { chainId: switchedToNetworkId }); // when wallet not connected force chain
-    const { data: signer } = useSigner();
+    const provider = usePublicClient(!address && { chainId: switchedToNetworkId }); // when wallet not connected force chain
+    const { data: signer } = useWalletClient();
     const { disconnect } = useDisconnect();
     const { chain } = useNetwork();
 

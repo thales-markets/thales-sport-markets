@@ -530,7 +530,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
             return;
         }
 
-        setSubmitDisabled(!paymentTokenBalance || usdAmountValue > paymentTokenBalance);
+        setSubmitDisabled(!paymentTokenBalance || Number(usdAmountValue) > paymentTokenBalance);
     }, [
         usdAmountValue,
         isBuying,
@@ -606,13 +606,13 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
-        (!!tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
+        (!!tooltipTextUsdAmount && Number(usdAmountValue) <= paymentTokenBalance);
     const hideProfit =
         ammPosition.quote <= 0 ||
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
-        (!!tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
+        (!!tooltipTextUsdAmount && Number(usdAmountValue) <= paymentTokenBalance);
 
     const profitPercentage = (tokenAmount - ammPosition.quote) / ammPosition.quote;
 
