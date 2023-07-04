@@ -122,7 +122,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     );
 };
 
-export const Container = styled.div`
+const Container = styled.div`
     display: flex;
     flex-direction: row;
     margin-bottom: 5px;

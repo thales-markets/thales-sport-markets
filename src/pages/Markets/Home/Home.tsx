@@ -780,33 +780,6 @@ const LogoContainer = styled.div`
     text-align: center;
 `;
 
-export const Info = styled.div`
-    width: 100%;
-    color: #ffffff;
-    text-align: center;
-    padding: 10px;
-    font-size: 16px;
-    margin-bottom: 20px;
-    background-color: #303656;
-    box-shadow: 0px 0px 20px rgb(0 0 0 / 40%);
-    z-index: 1;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    strong {
-        font-weight: bold;
-        cursor: pointer;
-        margin-left: 0.2em;
-        color: #91bced;
-    }
-    a {
-        display: contents;
-        font-weight: bold;
-        cursor: pointer;
-        color: #91bced;
-    }
-`;
-
 const ApplyFiltersButton = styled(Button)`
     align-self: center;
     height: 43px;

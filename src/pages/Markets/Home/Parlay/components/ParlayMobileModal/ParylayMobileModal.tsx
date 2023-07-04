@@ -8,7 +8,7 @@ type ParylayMobileModalProps = {
     onClose: () => void;
 };
 
-export const ParylayMobileModal: React.FC<ParylayMobileModalProps> = ({ onClose }) => {
+const ParylayMobileModal: React.FC<ParylayMobileModalProps> = ({ onClose }) => {
     return (
         <MobileModal onClose={() => onClose()} shouldCloseOnOverlayClick={true}>
             <Container>

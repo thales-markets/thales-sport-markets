@@ -1,11 +1,8 @@
-import { getContractFactory, predeploys } from '@eth-optimism/contracts';
 import { COLLATERALS_INDEX } from 'constants/currency';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
-import { GWEI_UNIT, MAX_GAS_LIMIT, SUPPORTED_NETWORKS } from 'constants/network';
+import { MAX_GAS_LIMIT, SUPPORTED_NETWORKS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
-import { serializeTransaction, UnsignedTransaction } from 'ethers/lib/utils';
 import { NetworkId } from 'types/network';
-import networkConnector from 'utils/networkConnector';
 import { getNavItemFromRoute } from './ui';
 import { getLastSavedOrDefaultStableIndex } from 'redux/modules/parlay';
 
@@ -39,14 +36,6 @@ export enum Network {
     'POLYGON-MAINNET' = 137,
 }
 
-export const InfuraNetworkNameById: Record<NetworkId, string> = {
-    10: 'optimism-mainnet',
-    42: 'kovan',
-    5: 'goerli',
-    420: 'optimism-goerli',
-    42161: 'arbitrum-mainnet',
-};
-
 export const CollateralByNetworkId: Record<NetworkId, string> = {
     10: 'sUSD',
     42: 'sUSD',
@@ -71,49 +60,8 @@ export async function getDefaultNetworkId(): Promise<NetworkId> {
     }
 }
 
-export const getTransactionPrice = (
-    gasPrice: number | null,
-    gasLimit: number | null,
-    ethPrice: number | null,
-    l1Fee?: number | null
-) => {
-    if (!gasPrice || !gasLimit || !ethPrice) return 0;
-    const transsactionPrice = (gasPrice * ethPrice * gasLimit) / GWEI_UNIT;
-    const l1TranactionPrice = l1Fee && l1Fee !== null ? (l1Fee * ethPrice) / GWEI_UNIT / GWEI_UNIT : 0;
-    return transsactionPrice + l1TranactionPrice;
-};
-
-export const gasPriceInWei = (gasPrice: number) => gasPrice * GWEI_UNIT;
-
-export const getInfuraRpcURL = (networkId: NetworkId) => {
-    const network = InfuraNetworkNameById[networkId];
-    return `https://${network?.toLowerCase()}.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`;
-};
-
 export const isNetworkSupported = (networkId: number | string): networkId is NetworkId => {
     return networkId in NetworkNameById;
-};
-
-export const formatGwei = (wei: number) => wei / GWEI_UNIT;
-
-export const getL1FeeInWei = async (txRequest: any) => {
-    const OVM_GasPriceOracle = getContractFactory('OVM_GasPriceOracle', networkConnector.signer).attach(
-        predeploys.OVM_GasPriceOracle
-    );
-    const unsignedTx = (await networkConnector.signer?.populateTransaction(txRequest)) as UnsignedTransaction;
-    if (unsignedTx) {
-        const serializedTx = serializeTransaction({
-            nonce: unsignedTx.nonce ? parseInt(unsignedTx.nonce.toString(10), 10) : 0,
-            value: unsignedTx.value,
-            gasPrice: unsignedTx.gasPrice,
-            gasLimit: unsignedTx.gasLimit,
-            to: unsignedTx.to,
-            data: unsignedTx.data,
-        });
-        const l1FeeInWei = await OVM_GasPriceOracle.getL1Fee(serializedTx);
-        return l1FeeInWei.toNumber();
-    }
-    return null;
 };
 
 export const checkAllowance = async (amount: BigNumber, token: any, walletAddress: string, spender: string) => {

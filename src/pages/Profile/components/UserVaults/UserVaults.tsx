@@ -5,7 +5,7 @@ import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
-import UserVaultAndLpTransactionsTable from './components/TransactionsTable/UserVaultAndLpTransactionsTable';
+import UserVaultAndLpTransactionsTable from './components/TransactionsTable';
 import UserLP from './components/UserLP';
 import UserVault from './components/UserVault';
 

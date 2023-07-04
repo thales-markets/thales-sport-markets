@@ -44,7 +44,7 @@ const initialState: UISliceState = {
     favouriteLeagues: getDefaultFavouriteLeagues(),
 };
 
-export const uiSlice = createSlice({
+const uiSlice = createSlice({
     name: sliceName,
     initialState,
     reducers: {
@@ -69,7 +69,7 @@ export const uiSlice = createSlice({
 
 export const { setTheme, setOddsType, setStopPulsing, setFavouriteLeagues } = uiSlice.actions;
 
-export const getUIState = (state: RootState) => state[sliceName];
+const getUIState = (state: RootState) => state[sliceName];
 export const getTheme = (state: RootState) => getUIState(state).theme;
 export const getOddsType = (state: RootState) => getUIState(state).oddsType;
 export const getStopPulsing = (state: RootState) => getUIState(state).stopPulsing;

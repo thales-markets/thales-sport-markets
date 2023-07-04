@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { DoubleChanceMarketsInfo, SportMarketInfo } from 'types/markets';
 import { getSpreadTotalText, getVisibilityOfDrawOption, isMotosport } from 'utils/markets';
 import { Status } from '../MatchStatus/MatchStatus';
-import Odd from '../Odd/Odd';
+import Odd from '../Odd';
 import { Container, OddsContainer, Title } from './styled-components';
 
 type OddsProps = {

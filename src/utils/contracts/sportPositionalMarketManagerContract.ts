@@ -1,4 +1,4 @@
-export const sportPositionalMarketManagerContract = {
+const sportPositionalMarketManagerContract = {
     addresses: {
         5: '0x7465c5d60d3d095443CF9991Da03304A30D42Eae',
         10: '0xFBffEbfA2bF2cF84fdCf77917b358fC59Ff5771e',

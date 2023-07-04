@@ -45,7 +45,7 @@ const IconContainer = styled(FlexDiv)`
     cursor: pointer;
 `;
 
-export const ItemIcon = styled.i`
+const ItemIcon = styled.i`
     font-size: 33px;
     color: black;
 `;

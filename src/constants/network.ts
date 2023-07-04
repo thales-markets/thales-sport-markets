@@ -1,17 +1,4 @@
-export const GWEI_UNIT = 1000000000;
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
-
-export type NetworkMapper = Record<number, number>;
-
-export const L1_TO_L2_NETWORK_MAPPER: NetworkMapper = {
-    1: 10,
-    42: 69,
-};
-
-export const L2_TO_L1_NETWORK_MAPPER: NetworkMapper = {
-    10: 1,
-    69: 42,
-};
 
 export const SUPPORTED_NETWORKS = [
     {
@@ -40,7 +27,7 @@ export const SUPPORTED_NETWORKS = [
     },
 ];
 
-export type OptimismNetwork = {
+type OptimismNetwork = {
     chainId: string;
     chainName: string;
     rpcUrls: string[];
@@ -100,23 +87,7 @@ export const SUPPORTED_NETWORKS_DESCRIPTIONS: Record<number, OptimismNetwork> = 
     },
 };
 
-export const OPTIMISM_OPTIONS = [
-    {
-        label: 'optimism.optimistic-gateway',
-        link: 'https://gateway.optimism.io/',
-    },
-    {
-        label: 'optimism.optimistic-etherscan',
-        link: 'https://optimistic.etherscan.io/',
-    },
-    {
-        label: 'optimism.learn-more',
-        link: 'https://www.optimism.io/',
-    },
-];
-
 export const MAX_GAS_LIMIT = 29000000;
-export const MAX_GAS_LIMIT_ARB = 20000000;
 
 export const NETWORK_SWITCHER_SUPPORTED_NETWORKS = [
     {

@@ -11,7 +11,7 @@ type ViewEtherscanLinkProps = {
     hash: string;
 };
 
-export const ViewEtherscanLink: React.FC<ViewEtherscanLinkProps> = ({ hash }) => {
+const ViewEtherscanLink: React.FC<ViewEtherscanLinkProps> = ({ hash }) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 

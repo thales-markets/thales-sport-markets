@@ -1,4 +1,4 @@
-export const theRundownConsumerContract = {
+const theRundownConsumerContract = {
     addresses: {
         5: '0x4dB7AfB6b777fB47101C86Bdeb56669ffA8cD656',
         10: '0x2B91c14Ce9aa828eD124D12541452a017d8a2148',

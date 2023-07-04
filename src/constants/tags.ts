@@ -474,14 +474,11 @@ export const ENETPULSE_SPORTS = [
     9288,
 ];
 
-export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
 export const FIFA_WC_U20_TAG = 9296;
 export const IIHF_WC_TAG = 9033;
 export const UEFA_TAGS = [9016, 9017, 18806, 18821, 9288];
 export const MOTOSPORT_TAGS = [9445, 9497];
-
-export const PERSON_COMPETITIONS = [9007, 9445, 9497, 9153, 9156];
 
 export enum BetType {
     WINNER = 0,
@@ -496,11 +493,6 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.TOTAL]: 'total',
     [BetType.DOUBLE_CHANCE]: 'double-chance',
 };
-
-export const MARKETS_COMBINATION: Array<BetType>[] = [
-    [0, 10002],
-    [10001, 10002],
-];
 
 export enum DoubleChanceMarketType {
     HOME_TEAM_NOT_TO_LOSE = 'HomeTeamNotToLose',

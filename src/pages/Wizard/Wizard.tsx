@@ -7,7 +7,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivStart } from 'styles/common';
 import YouTubeVideo from '../../components/YouTubeVideo';
-import Step from './components/Step/Step';
+import Step from './components/Step';
 
 export enum WizardStep {
     CONNECT_METAMASK,

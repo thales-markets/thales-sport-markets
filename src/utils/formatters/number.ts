@@ -3,10 +3,10 @@ import numbro from 'numbro';
 
 type NumericValue = string | number;
 const getPrecision = (amount: NumericValue) => {
-    if (amount >= 1) {
+    if (Number(amount) >= 1) {
         return DEFAULT_CURRENCY_DECIMALS;
     }
-    if (amount > 0.01) {
+    if (Number(amount) > 0.01) {
         return SHORT_CURRENCY_DECIMALS;
     }
     return LONG_CURRENCY_DECIMALS;
@@ -50,28 +50,7 @@ export const formatPercentage = (value: NumericValue, decimals = DEFAULT_CURRENC
 };
 
 export const formatPercentageWithSign = (value: NumericValue, decimals = DEFAULT_CURRENCY_DECIMALS) =>
-    `${value > 0 ? '+' : ''}${formatPercentage(value, decimals)}`;
-
-export const getPercentageDifference = (firstNumber: number, secondNumber: number): number =>
-    Math.abs(((firstNumber - secondNumber) / firstNumber) * 100);
-
-export const truncToDecimals = (value: NumericValue, decimals = DEFAULT_CURRENCY_DECIMALS): string => {
-    const matchedValue = value.toString().match(`^-?\\\d+(?:\\\.\\\d{0,${decimals}})?`);
-    return matchedValue !== null ? matchedValue[0] : '0';
-};
-
-export const formatNumberShort = (value: number) => {
-    // Nine Zeroes for Billions
-    return value >= 1.0e9
-        ? formatCurrency(value / 1.0e9, 2, true) + 'b'
-        : // Six Zeroes for Millions
-        value >= 1.0e6
-        ? formatCurrency(value / 1.0e6, 2, true) + 'm'
-        : // Three Zeroes for Thousands
-        value >= 1.0e3
-        ? formatCurrency(value / 1.0e3, 2, true) + 'k'
-        : formatCurrency(value, 2, true);
-};
+    `${Number(value) > 0 ? '+' : ''}${formatPercentage(value, decimals)}`;
 
 export const floorNumberToDecimals = (value: number, decimals = DEFAULT_CURRENCY_DECIMALS) => {
     return Math.floor(value * Math.pow(10, decimals)) / Math.pow(10, decimals);

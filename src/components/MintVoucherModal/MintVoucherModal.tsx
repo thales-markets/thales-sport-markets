@@ -43,7 +43,7 @@ const getVoucherOptions = (networkId: NetworkId): Array<{ value: number; label: 
     ];
 };
 
-export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
+const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));

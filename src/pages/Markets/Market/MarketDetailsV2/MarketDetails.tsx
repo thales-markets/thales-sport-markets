@@ -28,7 +28,7 @@ import { getOrdinalNumberLabel } from 'utils/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import { NetworkIdByName } from 'utils/network';
-import CombinedPositions from './components/CombinedPositions/CombinedPositions';
+import CombinedPositions from './components/CombinedPositions';
 
 type MarketDetailsPropType = {
     market: SportMarketInfo;

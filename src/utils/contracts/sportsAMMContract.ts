@@ -1,4 +1,4 @@
-export const sportsAMMContract = {
+const sportsAMMContract = {
     addresses: {
         5: '0x707075f0B619acF5A614Efb54FA8aC9B2FB55188',
         10: '0x170a5714112daEfF20E798B6e92e25B86Ea603C1',

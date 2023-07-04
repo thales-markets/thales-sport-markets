@@ -15,7 +15,7 @@ type StatusDropdownProps = {
     disabled?: boolean;
 };
 
-export const TokenDropdown: React.FC<StatusDropdownProps> = ({ selectedToken, onSelect, readOnly, disabled }) => {
+const TokenDropdown: React.FC<StatusDropdownProps> = ({ selectedToken, onSelect, readOnly, disabled }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const [tokenDropdownIsOpen, setTokenDropdownIsOpen] = useState(false);

@@ -3,7 +3,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { NetworkId } from 'types/network';
 import networkConnector from 'utils/networkConnector';
 
-export type AMMContractsPausedData = {
+type AMMContractsPausedData = {
     parlayAMM: boolean;
     singleAMM: boolean;
 };

@@ -88,7 +88,7 @@ export const LeaderboardTitleContainer = styled(FlexDivStart)`
     justify-content: center;
 `;
 
-export const Description = styled.p`
+const Description = styled.p`
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -393,7 +393,7 @@ export const PaginationWrapper = styled(TablePagination)`
     }
 `;
 
-export const TextLink = styled.a`
+const TextLink = styled.a`
     color: #91bced;
     &:hover {
         color: #00f9ff;

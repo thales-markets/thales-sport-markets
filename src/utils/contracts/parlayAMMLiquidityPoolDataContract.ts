@@ -1,4 +1,4 @@
-export const parlayAMMLiquidityPoolDataContract = {
+const parlayAMMLiquidityPoolDataContract = {
     addresses: {
         5: '',
         10: '0x6d4393FAd7A2928c10cdD0bcdd7702B39086d8b2',

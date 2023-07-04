@@ -19,14 +19,6 @@ export const ThemeMap: Record<Theme, ThemeInterface> = {
     [Theme.MARCH_MADNESS]: marchMadnessTheme,
 };
 
-export const ODDS_COLOR = {
-    HOME: '#5FC694',
-    AWAY: '#E26A78',
-    DRAW: '#FAC438',
-    YES: '#5FC694',
-    NO: '#E26A78',
-};
-
 export const STATUS_COLOR = {
     CLAIMABLE: '#3FD1FF',
     STARTED: '#E26A78',
