@@ -3,16 +3,19 @@ import { Position } from 'constants/options';
 import {
     BetType,
     DoubleChanceMarketType,
+    ENETPULSE_SPORTS,
     FIFA_WC_TAG,
     FIFA_WC_U20_TAG,
     GOLF_TAGS,
     GOLF_TOURNAMENT_WINNER_TAG,
     IIHF_WC_TAG,
+    JSON_ODDS_SPORTS,
     MATCH_RESOLVE_MAP,
     MLS_TAG,
     MOTOSPORT_TAGS,
     PERSON_COMPETITIONS,
     SCORING_MAP,
+    SPORTS_TAGS_MAP,
     TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
     UEFA_TAGS,
 } from 'constants/tags';
@@ -673,6 +676,13 @@ export const syncPositionsAndMarketsPerContractOrderInParlay = (parlayMarket: Pa
     parlayMarket.sportMarketsFromContract.forEach((address, index) => {
         const _position = parlayMarket.positions.find((position) => position.market.address == address);
         const _market = parlayMarket.sportMarkets.find((market) => market.address == address);
+        const isOneSideMarket =
+            (SPORTS_TAGS_MAP['Motosport'].includes(Number(_market?.tags[0])) &&
+                ENETPULSE_SPORTS.includes(Number(_market?.tags[0]))) ||
+            (Number(_market?.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG &&
+                JSON_ODDS_SPORTS.includes(Number(_market?.tags[0])));
+
+        _position ? (_position.market.isOneSideMarket = isOneSideMarket) : '';
 
         _position ? _positions.push(_position) : '';
         _market ? _markets.push(_market) : '';

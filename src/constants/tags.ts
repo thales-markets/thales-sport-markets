@@ -296,7 +296,7 @@ export const TAGS_LIST: Tags = [
     },
     {
         id: 109021,
-        label: 'Golf H2H',
+        label: 'Golf head-to-head',
         logoClass: 'icon-league league--pga',
         favourite: false,
         hidden: false,

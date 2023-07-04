@@ -4,6 +4,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { MarketTransaction, MarketTransactions } from 'types/markets';
 import { NetworkId } from 'types/network';
 import { Position } from 'constants/options';
+import { SPORTS_TAGS_MAP, ENETPULSE_SPORTS, GOLF_TOURNAMENT_WINNER_TAG, JSON_ODDS_SPORTS } from 'constants/tags';
 
 const useUserTransactionsQuery = (
     walletAddress: string,
@@ -18,7 +19,16 @@ const useUserTransactionsQuery = (
                     account: walletAddress,
                     network: networkId,
                 });
-                return marketTransactions.map((tx: MarketTransaction) => ({ ...tx, position: Position[tx.position] }));
+
+                return marketTransactions.map((tx: MarketTransaction) => {
+                    const isOneSideMarket =
+                        (SPORTS_TAGS_MAP['Motosport'].includes(Number(tx.wholeMarket.tags[0])) &&
+                            ENETPULSE_SPORTS.includes(Number(tx.wholeMarket.tags[0]))) ||
+                        (Number(tx.wholeMarket.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG &&
+                            JSON_ODDS_SPORTS.includes(Number(tx.wholeMarket.tags[0])));
+                    tx.wholeMarket.isOneSideMarket = isOneSideMarket;
+                    return { ...tx, position: Position[tx.position] };
+                });
             } catch (e) {
                 console.log(e);
                 return [];

@@ -49,6 +49,7 @@ import {
     VSLabel,
     Wrapper,
 } from './styled-components';
+import useJsonOddsAdditionalDataQuery from 'queries/markets/useJsonOddsAdditionalDataQuery';
 
 // 3 for double chance, 1 for spread, 1 for total
 const MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT = 5;
@@ -111,6 +112,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         enabled: isAppReady && isEnetpulseSport && (isPendingResolution || !localStorage.getItem(market.address)),
     });
 
+    const useJsonDataAdditionalInfoQuery = useJsonOddsAdditionalDataQuery(gameIdString, market.tags[0], {
+        enabled: isAppReady && isJsonOddsSport && (isPendingResolution || !localStorage.getItem(market.address)),
+    });
+
     useEffect(() => {
         if (isEnetpulseSport) {
             if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
@@ -125,6 +130,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                     : '';
                 localStorage.setItem(market.address, tournamentName + tournamentRound);
             }
+        } else if (isJsonOddsSport) {
+            if (useJsonDataAdditionalInfoQuery.isSuccess && useJsonDataAdditionalInfoQuery.data) {
+                // const tournamentName = useEnetpulseLiveResultQuery.data.
+                // localStorage.setItem(market.address, tournamentName + tournamentRound);
+            }
         } else {
             if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
                 setLiveResultInfo(useLiveResultQuery.data);
@@ -138,6 +148,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         isEnetpulseSport,
         market.isOneSideMarket,
         market.address,
+        useJsonDataAdditionalInfoQuery,
+        useJsonDataAdditionalInfoQuery.data,
+        isJsonOddsSport,
     ]);
 
     const areDoubleChanceMarketsOddsValid =
