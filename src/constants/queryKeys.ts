@@ -21,6 +21,7 @@ const QUERY_KEYS = {
         gameDate,
         sportTag,
     ],
+    JsonOddsData: (marketId: string, sportTag: number) => ['jsonOddsData', marketId, sportTag],
     ChildMarkets: (marketAddress: string, networkId: NetworkId) => ['childMarkets', marketAddress, networkId],
     PositionDetails: (
         marketAddress: string,

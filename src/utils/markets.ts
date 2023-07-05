@@ -3,12 +3,17 @@ import { Position } from 'constants/options';
 import {
     BetType,
     DoubleChanceMarketType,
+    ENETPULSE_SPORTS,
     FIFA_WC_TAG,
     FIFA_WC_U20_TAG,
+    GOLF_TAGS,
+    GOLF_TOURNAMENT_WINNER_TAG,
     IIHF_WC_TAG,
+    JSON_ODDS_SPORTS,
     MATCH_RESOLVE_MAP,
     MOTOSPORT_TAGS,
     SCORING_MAP,
+    SPORTS_TAGS_MAP,
     TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
     UEFA_TAGS,
 } from 'constants/tags';
@@ -26,7 +31,7 @@ import {
 } from 'types/markets';
 import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
-import { fixEnetpulseRacingName } from './formatters/string';
+import { fixOneSideMarketCompetitorName } from './formatters/string';
 
 const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 90;
 
@@ -48,7 +53,7 @@ export const getSymbolText = (
         return combinedMarketPositionSymbol;
     }
 
-    if (market.isEnetpulseRacing) {
+    if (market.isOneSideMarket) {
         return 'YES';
     }
     switch (position) {
@@ -206,6 +211,8 @@ export const isUEFAGame = (tag: number) => UEFA_TAGS.includes(tag);
 
 export const isMotosport = (tag: number) => MOTOSPORT_TAGS.includes(tag);
 
+export const isGolf = (tag: number) => GOLF_TAGS.includes(tag);
+
 export const isParlayWon = (parlayMarket: ParlayMarket) => {
     const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved || market?.isCanceled);
     const claimablePositions = parlayMarket.positions.filter((position) => position.claimable);
@@ -333,8 +340,8 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
     const team =
         position === Position.AWAY || market.doubleChanceMarketType === DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE
             ? market.awayTeam
-            : market.isEnetpulseRacing
-            ? fixEnetpulseRacingName(market.homeTeam)
+            : market.isOneSideMarket
+            ? fixOneSideMarketCompetitorName(market.homeTeam)
             : market.homeTeam;
     const team2 = market.awayTeam;
     const scoring =
@@ -372,7 +379,11 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     }
                     break;
                 default:
-                    translationKey = market.isEnetpulseRacing ? 'race-winner' : 'winner';
+                    translationKey = market.isOneSideMarket
+                        ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
+                            ? 'tournament-winner'
+                            : 'race-winner'
+                        : 'winner';
             }
             break;
         case Position.AWAY:
@@ -384,7 +395,11 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     translationKey = 'total.under';
                     break;
                 default:
-                    translationKey = market.isEnetpulseRacing ? 'race-winner' : 'winner';
+                    translationKey = market.isOneSideMarket
+                        ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
+                            ? 'tournament-winner'
+                            : 'race-winner'
+                        : 'winner';
             }
             break;
         case Position.DRAW:
@@ -418,14 +433,22 @@ export const getCombinedOddTooltipText = (markets: SportMarketInfo[], positions:
         let translationKey = '';
         switch (positions[0]) {
             case Position.HOME:
-                translationKey = markets[0].isEnetpulseRacing ? 'race-winner' : 'winner';
+                translationKey = markets[0].isOneSideMarket
+                    ? Number(markets[0].tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
+                        ? 'tournament-winner'
+                        : 'race-winner'
+                    : 'winner';
                 team = markets[0].homeTeam;
                 break;
             case Position.DRAW:
                 translationKey = 'draw';
                 break;
             case Position.AWAY:
-                translationKey = markets[0].isEnetpulseRacing ? 'race-winner' : 'winner';
+                translationKey = markets[0].isOneSideMarket
+                    ? Number(markets[0].tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
+                        ? 'tournament-winner'
+                        : 'race-winner'
+                    : 'winner';
                 team = markets[0].awayTeam;
                 break;
         }
@@ -498,6 +521,13 @@ export const syncPositionsAndMarketsPerContractOrderInParlay = (parlayMarket: Pa
     parlayMarket.sportMarketsFromContract.forEach((address, index) => {
         const _position = parlayMarket.positions.find((position) => position.market.address == address);
         const _market = parlayMarket.sportMarkets.find((market) => market.address == address);
+        const isOneSideMarket =
+            (SPORTS_TAGS_MAP['Motosport'].includes(Number(_market?.tags[0])) &&
+                ENETPULSE_SPORTS.includes(Number(_market?.tags[0]))) ||
+            (Number(_market?.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG &&
+                JSON_ODDS_SPORTS.includes(Number(_market?.tags[0])));
+
+        _position ? (_position.market.isOneSideMarket = isOneSideMarket) : '';
 
         _position ? _positions.push(_position) : '';
         _market ? _markets.push(_market) : '';

@@ -103,11 +103,18 @@ const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => {
                         })}
                     </ErrorMessage>
                 )}
-                {parlayError.code === ParlayErrorCode.SAME_RACE_DRIVERS && (
+                {parlayError.code === ParlayErrorCode.SAME_EVENT_PARTICIPANT && (
                     <ErrorMessage>
-                        {t('markets.parlay.validation.same-race-drivers', {
-                            existingDriver: parlayError.data.split('/')[0],
-                            addedDriver: parlayError.data.split('/')[1],
+                        {t('markets.parlay.validation.same-event-participant', {
+                            existingParticipant: parlayError.data.split('/')[0],
+                            addedParticipant: parlayError.data.split('/')[1],
+                        })}
+                    </ErrorMessage>
+                )}
+                {parlayError.code === ParlayErrorCode.UNIQUE_TOURNAMENT_PLAYERS && (
+                    <ErrorMessage>
+                        {t('markets.parlay.validation.unique-players', {
+                            existingParticipant: parlayError.data,
                         })}
                     </ErrorMessage>
                 )}

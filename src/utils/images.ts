@@ -1,5 +1,5 @@
 import { TAGS_LIST } from '../constants/tags';
-import { fixEnetpulseRacingName } from './formatters/string';
+import { fixOneSideMarketCompetitorName } from './formatters/string';
 
 export const getTeamImageSource = (team: string, leagueTag: number) =>
     leagueTag == 9005 ||
@@ -35,9 +35,13 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
         : leagueTag == 9153 || leagueTag == 9156
         ? `/logos/Tennis/${team.trim().replaceAll(' ', '-').toLowerCase()}.png`
         : leagueTag == 9445 || leagueTag == 9497
-        ? `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${fixEnetpulseRacingName(team)
+        ? `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${fixOneSideMarketCompetitorName(team)
               .replaceAll(' ', '-')
               .toLowerCase()}.png`
+        : leagueTag == 109021
+        ? `/logos/PGA/${team.trim().replaceAll(' ', '-').toLowerCase()}.png`
+        : leagueTag == 109121
+        ? `/logos/PGA/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.png`
         : `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${team
               .trim()
               .replaceAll(' ', '-')

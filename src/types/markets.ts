@@ -38,7 +38,7 @@ export type SportMarketInfo = {
     total: number;
     doubleChanceMarketType: DoubleChanceMarketType | null;
     combinedMarketsData?: CombinedMarket[];
-    isEnetpulseRacing: boolean;
+    isOneSideMarket: boolean;
 };
 
 export type AMMPosition = {
@@ -84,7 +84,7 @@ export type MarketData = {
     spread: number;
     total: number;
     doubleChanceMarketType: DoubleChanceMarketType | null;
-    isEnetpulseRacing: boolean;
+    isOneSideMarket: boolean;
 };
 
 export type SportMarketChildMarkets = {
@@ -215,7 +215,7 @@ export type ParlaysMarketPosition = {
     awayTeam: string;
     tags: number[];
     doubleChanceMarketType: DoubleChanceMarketType | null;
-    isRacingMarket?: boolean;
+    isOneSideMarket?: boolean;
     tag?: number;
 };
 

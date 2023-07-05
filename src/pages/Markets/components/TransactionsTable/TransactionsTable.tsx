@@ -52,7 +52,7 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                                 cellProps.cell.value,
                                 cellProps.cell.row.original.wholeMarket
                             );
-                            const isEnetpulseRacingMarket = cellProps.cell.row.original.wholeMarket.isEnetpulseRacing;
+                            const isOneSideMarket = cellProps.cell.row.original.wholeMarket.isOneSideMarket;
                             const spreadTotalText = getSpreadTotalText(
                                 cellProps.cell.row.original.wholeMarket,
                                 cellProps.cell.value
@@ -63,7 +63,7 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                                     additionalStyle={{
                                         width: 23,
                                         height: 23,
-                                        fontSize: isEnetpulseRacingMarket ? 8.5 : 10.5,
+                                        fontSize: isOneSideMarket ? 8.5 : 10.5,
                                         borderWidth: 2,
                                     }}
                                     symbolUpperText={

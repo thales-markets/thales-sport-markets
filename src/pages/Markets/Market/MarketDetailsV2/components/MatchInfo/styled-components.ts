@@ -106,10 +106,10 @@ export const TeamNamesWrapper = styled(FlexDivCentered)<{ hideOnMobile: boolean 
     }
 `;
 
-export const TeamName = styled.span<{ isHomeTeam?: boolean; isEnetpulseRacing?: boolean }>`
+export const TeamName = styled.span<{ isHomeTeam?: boolean; isOneSided?: boolean }>`
     width: 300px;
-    text-align: ${(props) => (props.isEnetpulseRacing ? 'center' : props.isHomeTeam ? 'end' : 'start')};
-    padding-right: ${(props) => (props.isHomeTeam && !props.isEnetpulseRacing ? 10 : 0)}px;
+    text-align: ${(props) => (props.isOneSided ? 'center' : props.isHomeTeam ? 'end' : 'start')};
+    padding-right: ${(props) => (props.isHomeTeam && !props.isOneSided ? 10 : 0)}px;
     padding-left: ${(props) => (props.isHomeTeam ? 0 : 10)}px;
 `;
 
