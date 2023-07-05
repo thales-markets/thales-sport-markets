@@ -26,6 +26,7 @@ import ShareTicketModal, {
     ShareTicketModalProps,
 } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import { ParlaysMarket } from 'types/markets';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 
 const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -118,7 +119,9 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                             return (
                                 <TableColumnClickable>
                                     <TableText>
-                                        {cellProps.cell.value.homeTeam} vs {cellProps.cell.value.awayTeam}
+                                        {cellProps.cell.value.isOneSideMarket
+                                            ? fixOneSideMarketCompetitorName(cellProps.cell.value.homeTeam)
+                                            : `${cellProps.cell.value.homeTeam} vs ${cellProps.cell.value.awayTeam}`}
                                     </TableText>
                                 </TableColumnClickable>
                             );

@@ -6,7 +6,8 @@ import { MultiSingleAmounts, ParlayPayment, ParlaysMarketPosition, SGPItem } fro
 import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
 import { getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
-import { fixEnetpulseRacingName } from 'utils/formatters/string';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
+import { GOLF_TAGS } from 'constants/tags';
 
 const sliceName = 'parlay';
 
@@ -93,10 +94,20 @@ export const parlaySlice = createSlice({
                     return;
                 }
             }
-            const multipleDriversAtOneRace = parlayCopy
-                .filter((market) => market.isRacingMarket)
+            const multipleSidesAtOneEvent = parlayCopy
+                .filter((market) => market.isOneSideMarket)
                 .map((market) => market.tag)
                 .findIndex((tag) => tag == action.payload.tag);
+
+            const existingGolfPlayerInParlay = parlayCopy
+                .filter((market) => GOLF_TAGS.includes(Number(market.tag)))
+                .findIndex(
+                    (market) =>
+                        market.homeTeam == action.payload.homeTeam ||
+                        market.homeTeam == action.payload.awayTeam ||
+                        market.awayTeam == action.payload.homeTeam ||
+                        market.awayTeam == action.payload.awayTeam
+                );
 
             if (
                 action.payload.doubleChanceMarketType !== null &&
@@ -105,14 +116,36 @@ export const parlaySlice = createSlice({
             ) {
                 state.error.code = ParlayErrorCode.MAX_DOUBLE_CHANCES;
                 state.error.data = MAX_NUMBER_OF_DOUBLE_CHANCES_ON_PARLAY.toString();
-            } else if (multipleDriversAtOneRace !== -1) {
-                const existingRaceDriver = parlayCopy
-                    .filter((market) => market.isRacingMarket)
-                    .map((market) => market.homeTeam)[multipleDriversAtOneRace];
+            } else if (multipleSidesAtOneEvent !== -1) {
+                const existingSide = parlayCopy
+                    .filter((market) => market.isOneSideMarket)
+                    .map((market) => market.homeTeam)[multipleSidesAtOneEvent];
 
-                state.error.code = ParlayErrorCode.SAME_RACE_DRIVERS;
+                state.error.code = ParlayErrorCode.SAME_EVENT_PARTICIPANT;
                 state.error.data =
-                    fixEnetpulseRacingName(existingRaceDriver) + '/' + fixEnetpulseRacingName(action.payload.homeTeam);
+                    fixOneSideMarketCompetitorName(existingSide) +
+                    '/' +
+                    fixOneSideMarketCompetitorName(action.payload.homeTeam);
+            } else if (existingGolfPlayerInParlay != -1) {
+                const existingHomeSide = parlayCopy
+                    .filter((market) => GOLF_TAGS.includes(Number(market.tag)))
+                    .map((market) => market.homeTeam)[existingGolfPlayerInParlay];
+
+                const existingAwaySide = parlayCopy
+                    .filter((market) => GOLF_TAGS.includes(Number(market.tag)))
+                    .map((market) => market.awayTeam)[existingGolfPlayerInParlay];
+
+                const existingSides =
+                    action.payload.homeTeam == existingHomeSide
+                        ? existingHomeSide
+                        : action.payload.homeTeam == existingAwaySide
+                        ? existingAwaySide
+                        : action.payload.awayTeam == existingHomeSide
+                        ? existingHomeSide
+                        : existingAwaySide;
+
+                state.error.code = ParlayErrorCode.UNIQUE_TOURNAMENT_PLAYERS;
+                state.error.data = fixOneSideMarketCompetitorName(existingSides);
             } else if (index === -1) {
                 // ADD new market
                 if (state.parlay.length < state.parlaySize) {

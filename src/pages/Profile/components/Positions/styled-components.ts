@@ -139,7 +139,7 @@ export const MatchLabel = styled(FlexDivColumn)`
 `;
 
 export const ClubName = styled.span<{
-    isRacing?: boolean;
+    isOneSided?: boolean;
 }>`
     font-style: normal;
     font-weight: 300;
@@ -147,7 +147,7 @@ export const ClubName = styled.span<{
     text-transform: uppercase;
     color: ${MAIN_COLORS.TEXT.WHITE};
     margin-right: 5px;
-    margin-left: ${(props) => (props?.isRacing ? `25px` : '')};
+    margin-left: ${(props) => (props?.isOneSided ? `25px` : '')};
     word-wrap: normal;
     :last-child {
         margin-top: 5px;

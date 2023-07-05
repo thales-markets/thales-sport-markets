@@ -316,3 +316,7 @@
 .icon--upsettoor-vault::before {
     content: '\003E';
 }
+
+.icon--golf::before {
+    content: '\003F';
+}

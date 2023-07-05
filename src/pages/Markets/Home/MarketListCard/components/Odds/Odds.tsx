@@ -4,7 +4,7 @@ import { STATUS_COLOR } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DoubleChanceMarketsInfo, SportMarketInfo } from 'types/markets';
-import { getSpreadTotalText, getVisibilityOfDrawOption, isMotosport } from 'utils/markets';
+import { getSpreadTotalText, getVisibilityOfDrawOption, isGolf, isMotosport } from 'utils/markets';
 import { Status } from '../MatchStatus/MatchStatus';
 import Odd from '../Odd/Odd';
 import { Container, OddsContainer, Title } from './styled-components';
@@ -40,7 +40,11 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
         : [market.homeOdds, market.awayOdds].every((odd) => odd < 1 && odd != 0);
 
     const showContainer =
-        !showOdds || isMotosport(Number(market.tags[0])) || market.betType == BetType.DOUBLE_CHANCE || areOddsValid;
+        !showOdds ||
+        isMotosport(Number(market.tags[0])) ||
+        isGolf(Number(market.tags[0])) ||
+        market.betType == BetType.DOUBLE_CHANCE ||
+        areOddsValid;
 
     return showContainer ? (
         <Container>
@@ -117,7 +121,7 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
                                     isShownInSecondRow={isShownInSecondRow}
                                 />
                             )}
-                            {!market.isEnetpulseRacing && (
+                            {!market.isOneSideMarket && (
                                 <Odd
                                     market={market}
                                     position={Position.AWAY}
