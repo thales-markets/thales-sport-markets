@@ -26,7 +26,7 @@ const getDefaultPayment = (): ParlayPayment => {
     return {
         selectedStableIndex:
             lsSelectedStable !== undefined ? (lsSelectedStable as COLLATERALS_INDEX) : COLLATERALS_INDEX.sUSD,
-        isVoucherSelected: false,
+        isVoucherSelected: undefined,
         amountToBuy: '',
     };
 };
