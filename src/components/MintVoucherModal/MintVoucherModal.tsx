@@ -20,7 +20,6 @@ import Checkbox from 'components/fields/Checkbox';
 import { getAddress, isAddress } from 'ethers/lib/utils';
 import { LINKS } from 'constants/links';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { Tooltip, withStyles } from '@material-ui/core';
 import { NetworkId } from 'types/network';
 import { getDefaultColleteralForNetwork, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { refetchBalances } from 'utils/queryConnector';
