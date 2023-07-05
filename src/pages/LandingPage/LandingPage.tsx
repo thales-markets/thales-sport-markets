@@ -174,6 +174,9 @@ const LandingPage: React.FC = () => {
                             <LogoLink target="_blank" rel="norefferer" href="https://www.atptour.com/en/">
                                 <LeagueIcon className="icon-league league--atp" />
                             </LogoLink>
+                            <LogoLink target="_blank" rel="norefferer" href="https://www.wtatennis.com/">
+                                <LeagueIcon className="icon-league league--wta" />
+                            </LogoLink>
                             <LogoLink target="_blank" rel="norefferer" href="https://iesf.org/">
                                 <LeagueIcon className="icon-league league--csgo" />
                             </LogoLink>

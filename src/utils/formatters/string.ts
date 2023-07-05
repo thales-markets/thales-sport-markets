@@ -24,4 +24,6 @@ export const fixDuplicatedTeamName = (name: string, isEnetpulseSport: boolean) =
     return name;
 };
 
-export const fixEnetpulseRacingName = (team: string) => (team !== null ? team.slice(0, team.length - 4).trim() : '');
+export const fixOneSideMarketCompetitorName = (team: string) => {
+    return team.endsWith('YES') ? (team !== null ? team.slice(0, team.length - 4).trim() : '') : team;
+};
