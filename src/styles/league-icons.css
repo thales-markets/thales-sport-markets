@@ -143,3 +143,11 @@
 .league--concacaf-nations:before {
     content: '\006B';
 }
+
+.league--wta:before {
+    content: '\0068';
+}
+
+.league--pga:before {
+    content: '\0069';
+}

@@ -74,7 +74,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
                 awayTeam: market.awayTeam || '',
                 tags: market.tags,
                 doubleChanceMarketType: market.doubleChanceMarketType,
-                isRacingMarket: market.isEnetpulseRacing,
+                isOneSideMarket: market.isOneSideMarket,
                 tag: market.tags[0],
             };
             dispatch(updateParlay(parlayMarket));
@@ -104,7 +104,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
             disabled={noOdd}
             flexDirection="column"
             symbolText={getSymbolText(position, market)}
-            additionalStyle={market.isEnetpulseRacing ? { fontSize: 11 } : {}}
+            additionalStyle={market.isOneSideMarket ? { fontSize: 11 } : {}}
             onClick={onClick}
             selected={isAddedToParlay}
             tooltip={!isMobile && <>{oddTooltipText}</>}

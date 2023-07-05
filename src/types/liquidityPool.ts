@@ -33,11 +33,7 @@ export type UserLiquidityPoolData = {
     withdrawalAmount: number;
 };
 
-export type UserLiquidityPoolsData = {
-    balanceTotal: number;
-};
-
-export type LiquidityPoolPnlPerRound = {
+type LiquidityPoolPnlPerRound = {
     round: number | string;
     pnlPerRound: number;
     cumulativePnl: number;

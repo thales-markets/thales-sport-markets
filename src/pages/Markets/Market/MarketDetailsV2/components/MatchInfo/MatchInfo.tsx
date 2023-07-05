@@ -21,7 +21,7 @@ import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource 
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { convertFinalResultToResultType, isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { FIFA_WC_TAG, FIFA_WC_U20_TAG, SPORTS_TAGS_MAP } from 'constants/tags';
-import { fixEnetpulseRacingName } from 'utils/formatters/string';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 
 type MatchInfoPropsType = {
     market: SportMarketInfo;
@@ -44,14 +44,14 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
     );
     const leagueLogo = getLeagueLogoClass(market.tags[0]);
 
-    const isGameResolved = market.isOpen && market.isResolved;
+    const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
 
     const getTeamsNames = (hideOnMobile: boolean) => (
         <TeamNamesWrapper hideOnMobile={hideOnMobile}>
-            <TeamName isHomeTeam={true} isEnetpulseRacing={market.isEnetpulseRacing}>
-                {market.isEnetpulseRacing ? fixEnetpulseRacingName(market.homeTeam) : market.homeTeam}
+            <TeamName isHomeTeam={true} isOneSided={market.isOneSideMarket}>
+                {market.isOneSideMarket ? fixOneSideMarketCompetitorName(market.homeTeam) : market.homeTeam}
             </TeamName>
-            {!market.isEnetpulseRacing && (
+            {!market.isOneSideMarket && (
                 <>
                     <Versus>{' vs '}</Versus>
                     <TeamName isHomeTeam={false}>{market.awayTeam}</TeamName>
@@ -69,8 +69,10 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                     </LeagueLogoContainer>
                     <ParticipantsContainer>
                         <ParticipantLogoContainer
-                            isWinner={isGameResolved && convertFinalResultToResultType(market.finalResult) == 0}
-                            isDraw={isGameResolved && convertFinalResultToResultType(market.finalResult) == 2}
+                            isWinner={
+                                isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == 0
+                            }
+                            isDraw={isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == 2}
                         >
                             <ParticipantLogo
                                 src={homeLogoSrc ? homeLogoSrc : getErrorImage(market.tags[0])}
@@ -78,10 +80,14 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                                 onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                             />
                         </ParticipantLogoContainer>
-                        {!market.isEnetpulseRacing && (
+                        {!market.isOneSideMarket && (
                             <ParticipantLogoContainer
-                                isWinner={isGameResolved && convertFinalResultToResultType(market.finalResult) == 1}
-                                isDraw={isGameResolved && convertFinalResultToResultType(market.finalResult) == 2}
+                                isWinner={
+                                    isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == 1
+                                }
+                                isDraw={
+                                    isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == 2
+                                }
                                 awayTeam={true}
                             >
                                 <ParticipantLogo

@@ -68,7 +68,7 @@ const MarketPositions: React.FC<MarketPositionsProps> = ({ market }) => {
                     position={Position.DRAW}
                 />
             )}
-            {!market.isEnetpulseRacing && (
+            {!market.isOneSideMarket && (
                 <PositionDetails
                     market={market}
                     odd={market.awayOdds}

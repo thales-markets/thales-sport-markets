@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import { CombinedMarket } from 'types/markets';
-import CombinedPositionDetails from '../CombinedPositionDetails/CombinedPositionDetails';
+import CombinedPositionDetails from '../CombinedPositionDetails';
 
 type CombinedMarketPositionsProps = {
     combinedMarket: CombinedMarket;
@@ -60,14 +60,12 @@ const CombinedMarketPositions: React.FC<CombinedMarketPositionsProps> = ({ combi
     ]);
 
     return (
-        <>
-            <CombinedPositionDetails
-                markets={combinedMarket.markets}
-                totalOdd={totalOdd}
-                availablePerPosition={availablePositions}
-                positions={combinedMarket.positions}
-            />
-        </>
+        <CombinedPositionDetails
+            markets={combinedMarket.markets}
+            totalOdd={totalOdd}
+            availablePerPosition={availablePositions}
+            positions={combinedMarket.positions}
+        />
     );
 };
 

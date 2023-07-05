@@ -16,18 +16,20 @@ import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { NetworkId } from 'types/network';
 import { NETWORK_SWITCHER_SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_DESCRIPTIONS } from 'constants/network';
+import { useSwitchNetwork } from 'wagmi';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const { switchNetwork } = useSwitchNetwork();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const [dropDownOpen, setDropDownOpen] = useState(false);
-    const dispatch = useDispatch();
-
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+
+    const [dropDownOpen, setDropDownOpen] = useState(false);
 
     const stableCointBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -54,8 +56,7 @@ const WalletInfo: React.FC = () => {
         !window.ethereum?.isMetaMask &&
         !window.ethereum?.isBraveWallet &&
         !window.ethereum?.isCoinbaseWallet &&
-        !window.ethereum?.isTrust &&
-        !window.ethereum?.isCoinbaseWallet;
+        !window.ethereum?.isTrust;
 
     return (
         <Container>
@@ -133,6 +134,7 @@ const WalletInfo: React.FC = () => {
                                                                     }
                                                                 }
                                                             }
+                                                            switchNetwork?.(network.networkId);
                                                             // Trigger App.js init
                                                             // do not use updateNetworkSettings(networkId) as it will trigger queries before provider is initialized in App.js
                                                             dispatch(

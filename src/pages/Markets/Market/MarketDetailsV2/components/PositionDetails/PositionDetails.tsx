@@ -58,12 +58,13 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
         addedToParlay.doubleChanceMarketType === market.doubleChanceMarketType &&
         !isMarketPartOfCombinedMarket;
 
-    const isGameCancelled = market.isCanceled || (market.isOpen && market.isResolved);
+    const isGameStarted = market.maturityDate < new Date();
+    const isGameCancelled = market.isCanceled || (!isGameStarted && market.isResolved);
     const isGameResolved = market.isResolved || market.isCanceled;
     const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
-    const isPendingResolution = !market.isOpen && !isGameResolved;
+    const isPendingResolution = isGameStarted && !isGameResolved;
     const isGamePaused = market.isPaused && !isGameResolved;
-    const isGameOpen = !market.isResolved && !market.isCanceled && !market.isPaused && market.isOpen;
+    const isGameOpen = !market.isResolved && !market.isCanceled && !market.isPaused && !isGameStarted;
 
     const noLiquidity = !!availablePerPosition.available && availablePerPosition.available < MIN_LIQUIDITY;
     const noOdd = !odd || odd == 0;
@@ -104,7 +105,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                         awayTeam: market.awayTeam || '',
                         tags: market.tags,
                         doubleChanceMarketType: market.doubleChanceMarketType,
-                        isRacingMarket: market.isEnetpulseRacing,
+                        isOneSideMarket: market.isOneSideMarket,
                         tag: market.tags[0],
                     };
                     dispatch(updateParlay(parlayMarket));

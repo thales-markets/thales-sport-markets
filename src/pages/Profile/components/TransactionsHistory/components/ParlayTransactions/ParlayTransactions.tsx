@@ -19,7 +19,7 @@ import {
 } from 'types/markets';
 import { formatDateWithTime, formatTxTimestamp } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
-import { truncateAddress } from 'utils/formatters/string';
+import { fixOneSideMarketCompetitorName, truncateAddress } from 'utils/formatters/string';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
@@ -464,8 +464,16 @@ export const getParlayRow = (
                 >
                     <ParlayRowText style={{ cursor: 'pointer' }}>
                         {getPositionStatus(position)}
-                        <ParlayRowTeam title={position.market.homeTeam + ' vs ' + position.market.awayTeam}>
-                            {position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                        <ParlayRowTeam
+                            title={
+                                position.market.isOneSideMarket
+                                    ? fixOneSideMarketCompetitorName(position.market.homeTeam)
+                                    : position.market.homeTeam + ' vs ' + position.market.awayTeam
+                            }
+                        >
+                            {position.market.isOneSideMarket
+                                ? fixOneSideMarketCompetitorName(position.market.homeTeam)
+                                : position.market.homeTeam + ' vs ' + position.market.awayTeam}
                         </ParlayRowTeam>
                     </ParlayRowText>
                 </SPAAnchor>

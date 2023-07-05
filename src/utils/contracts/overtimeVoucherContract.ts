@@ -1,4 +1,4 @@
-export const overtimeVoucherContract = {
+const overtimeVoucherContract = {
     addresses: {
         5: '0xef4e90b909C0a5919AE049Ea18C997FdA09Ab66c',
         10: '0x4393F1470317Da64e277b29D96e5bf203f28eFbE',

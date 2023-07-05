@@ -1,30 +1,13 @@
 import { NavMenuItem, ThemeInterface } from 'types/ui';
-import lightTheme from 'styles/themes/light';
 import darkTheme from 'styles/themes/dark';
-import worldCupTheme from 'styles/themes/worldcup';
-import marchMadnessTheme from 'styles/themes/marchMadness';
 import ROUTES from './routes';
 
 export enum Theme {
-    LIGHT,
     DARK,
-    WORLDCUP,
-    MARCH_MADNESS,
 }
 
 export const ThemeMap: Record<Theme, ThemeInterface> = {
-    [Theme.LIGHT]: lightTheme,
     [Theme.DARK]: darkTheme,
-    [Theme.WORLDCUP]: worldCupTheme,
-    [Theme.MARCH_MADNESS]: marchMadnessTheme,
-};
-
-export const ODDS_COLOR = {
-    HOME: '#5FC694',
-    AWAY: '#E26A78',
-    DRAW: '#FAC438',
-    YES: '#5FC694',
-    NO: '#E26A78',
 };
 
 export const STATUS_COLOR = {
@@ -118,14 +101,6 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         name: 'parlay-competition',
         route: ROUTES.Leaderboard,
         supportedNetworks: [10, 420, 42161],
-    },
-
-    {
-        i18label: 'markets.nav-menu.items.fee-rebates',
-        iconClass: 'icon icon--fee-rebates',
-        name: 'fee-rebates',
-        route: ROUTES.Rewards,
-        supportedNetworks: [10, 420],
     },
     {
         i18label: 'markets.nav-menu.items.become-affiliate',

@@ -5,7 +5,7 @@ import { NetworkId } from 'types/network';
 import { ParlayVaultTrade } from 'types/vault';
 import { updateTotalQuoteAndAmountFromContract } from 'utils/markets';
 import { ParlayMarketWithRound, SportMarketInfo } from 'types/markets';
-import { fixEnetpulseRacingName, fixDuplicatedTeamName } from 'utils/formatters/string';
+import { fixOneSideMarketCompetitorName, fixDuplicatedTeamName } from 'utils/formatters/string';
 import { ENETPULSE_SPORTS } from 'constants/tags';
 
 const useParlayVaultTradesQuery = (
@@ -31,11 +31,11 @@ const useParlayVaultTradesQuery = (
                                 const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.tags[0]));
                                 return {
                                     ...market,
-                                    homeTeam: market.isEnetpulseRacing
-                                        ? fixEnetpulseRacingName(market.homeTeam)
+                                    homeTeam: market.isOneSideMarket
+                                        ? fixOneSideMarketCompetitorName(market.homeTeam)
                                         : fixDuplicatedTeamName(market.homeTeam, isEnetpulseSport),
-                                    awayTeam: market.isEnetpulseRacing
-                                        ? fixEnetpulseRacingName(market.awayTeam)
+                                    awayTeam: market.isOneSideMarket
+                                        ? fixOneSideMarketCompetitorName(market.awayTeam)
                                         : fixDuplicatedTeamName(market.awayTeam, isEnetpulseSport),
                                 };
                             }),

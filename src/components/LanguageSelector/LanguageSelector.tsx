@@ -12,7 +12,7 @@ type LanguageSelectorProps = {
     isBurger?: boolean;
 };
 
-export const LanguageSelectorV2: React.FC<LanguageSelectorProps> = ({ isBurger }) => {
+const LanguageSelector: React.FC<LanguageSelectorProps> = ({ isBurger }) => {
     const [languageDropdownIsOpen, setLanguageDropdownIsOpen] = useState(false);
     const setDropdownIsOpen = (isOpen: boolean) => {
         if (!isOpen && !languageDropdownIsOpen) {
@@ -177,4 +177,4 @@ const LanguageFlag = (language: SupportedLanguages | any) => {
     }
 };
 
-export default withTranslation()(LanguageSelectorV2);
+export default withTranslation()(LanguageSelector);

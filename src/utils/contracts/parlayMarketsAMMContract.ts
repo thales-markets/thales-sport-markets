@@ -1,4 +1,4 @@
-export const parlayMarketsAMMContract = {
+const parlayMarketsAMMContract = {
     addresses: {
         5: '0xDA10FEd3bf26BDC131f408Ec224C38816C2B15cB',
         10: '0x82B3634C0518507D5d817bE6dAb6233ebE4D68D9',

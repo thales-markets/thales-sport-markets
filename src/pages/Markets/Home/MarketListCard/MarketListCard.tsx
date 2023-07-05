@@ -1,7 +1,14 @@
 import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
-import { BetType, ENETPULSE_SPORTS, FIFA_WC_TAG, FIFA_WC_U20_TAG, SPORTS_TAGS_MAP } from 'constants/tags';
+import {
+    BetType,
+    ENETPULSE_SPORTS,
+    FIFA_WC_TAG,
+    FIFA_WC_U20_TAG,
+    JSON_ODDS_SPORTS,
+    SPORTS_TAGS_MAP,
+} from 'constants/tags';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import React, { useEffect, useState } from 'react';
@@ -11,9 +18,9 @@ import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { formatShortDateWithTime } from 'utils/formatters/date';
-import { fixEnetpulseRacingName } from 'utils/formatters/string';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isUEFAGame, isFifaWCGame, isIIHFWCGame, isMotosport } from 'utils/markets';
+import { isUEFAGame, isFifaWCGame, isIIHFWCGame, isMotosport, isGolf } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import Web3 from 'web3';
 import CombinedMarketsOdds from './components/CombinedMarketsOdds';
@@ -42,6 +49,7 @@ import {
     VSLabel,
     Wrapper,
 } from './styled-components';
+import useJsonOddsAdditionalDataQuery from 'queries/markets/useJsonOddsAdditionalDataQuery';
 
 // 3 for double chance, 1 for spread, 1 for total
 const MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT = 5;
@@ -74,6 +82,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isPendingResolution = isGameStarted && !isGameResolved;
     const showOdds = !isPendingResolution && !isGameResolved && !market.isPaused;
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.tags[0]));
+    const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.tags[0]));
     const gameIdString = Web3.utils.hexToAscii(market.gameId);
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
@@ -96,11 +105,15 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const hasCombinedMarkets = market.combinedMarketsData ? true : false;
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
-        enabled: isAppReady && isPendingResolution && !isEnetpulseSport,
+        enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isJsonOddsSport,
     });
 
     const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.tags[0], {
         enabled: isAppReady && isEnetpulseSport && (isPendingResolution || !localStorage.getItem(market.address)),
+    });
+
+    const useJsonDataAdditionalInfoQuery = useJsonOddsAdditionalDataQuery(gameIdString, market.tags[0], {
+        enabled: isAppReady && isJsonOddsSport && (isPendingResolution || !localStorage.getItem(market.address)),
     });
 
     useEffect(() => {
@@ -108,7 +121,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
                 setLiveResultInfo(useEnetpulseLiveResultQuery.data);
                 const tournamentName = useEnetpulseLiveResultQuery.data.tournamentName
-                    ? market.isEnetpulseRacing
+                    ? market.isOneSideMarket
                         ? useEnetpulseLiveResultQuery.data.tournamentName
                         : '| ' + useEnetpulseLiveResultQuery.data.tournamentName
                     : '';
@@ -116,6 +129,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                     ? ' | ' + useEnetpulseLiveResultQuery.data.tournamentRound
                     : '';
                 localStorage.setItem(market.address, tournamentName + tournamentRound);
+            }
+        } else if (isJsonOddsSport) {
+            if (useJsonDataAdditionalInfoQuery.isSuccess && useJsonDataAdditionalInfoQuery.data) {
+                const tournamentName = useJsonDataAdditionalInfoQuery.data;
+                localStorage.setItem(market.address, tournamentName);
             }
         } else {
             if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
@@ -128,8 +146,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         useEnetpulseLiveResultQuery,
         useEnetpulseLiveResultQuery.data,
         isEnetpulseSport,
-        market.isEnetpulseRacing,
+        market.isOneSideMarket,
         market.address,
+        useJsonDataAdditionalInfoQuery,
+        useJsonDataAdditionalInfoQuery.data,
+        isJsonOddsSport,
     ]);
 
     const areDoubleChanceMarketsOddsValid =
@@ -152,7 +173,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         !areDoubleChanceMarketsOddsValid &&
         !areSpreadTotalsMarketsOddsValid &&
         !areOddsValid &&
-        !isMotosport(Number(market.tags[0]));
+        !isMotosport(Number(market.tags[0])) &&
+        !isGolf(Number(market.tags[0])) &&
+        showOdds;
 
     return (
         <Wrapper hideGame={hideGame} isResolved={isGameRegularlyResolved}>
@@ -178,7 +201,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             <Tooltip overlay={t(`common.football-tooltip`)} iconFontSize={12} marginLeft={2} />
                         )}
                         <MatchTimeLabel>
-                            {isEnetpulseSport &&
+                            {(isEnetpulseSport || isJsonOddsSport) &&
                             !isFifaWCGame(market.tags[0]) &&
                             !isUEFAGame(Number(market.tags[0])) &&
                             (liveResultInfo || localStorage.getItem(market.address)) ? (
@@ -209,7 +232,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     src={homeLogoSrc}
                                     onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                                 />
-                                {!market.isEnetpulseRacing && (
+                                {!market.isOneSideMarket && (
                                     <>
                                         <VSLabel>VS</VSLabel>
                                         <ClubLogo
@@ -232,11 +255,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             </TeamLogosConatiner>
                             <TeamNamesConatiner>
                                 <TeamNameLabel>
-                                    {market.isEnetpulseRacing
-                                        ? fixEnetpulseRacingName(market.homeTeam)
+                                    {market.isOneSideMarket
+                                        ? fixOneSideMarketCompetitorName(market.homeTeam)
                                         : market.homeTeam}
                                 </TeamNameLabel>
-                                {!market.isEnetpulseRacing && <TeamNameLabel>{market.awayTeam}</TeamNameLabel>}
+                                {!market.isOneSideMarket && <TeamNameLabel>{market.awayTeam}</TeamNameLabel>}
                             </TeamNamesConatiner>
                         </TeamsInfoConatiner>
                     </SPAAnchor>
@@ -285,10 +308,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 {isGameRegularlyResolved ? (
                     <ResultWrapper>
                         <ResultLabel>
-                            {!market.isEnetpulseRacing ? `${t('markets.market-card.result')}:` : ''}
+                            {!market.isOneSideMarket ? `${t('markets.market-card.result')}:` : ''}
                         </ResultLabel>
                         <Result>
-                            {market.isEnetpulseRacing
+                            {market.isOneSideMarket
                                 ? market.homeScore == 1
                                     ? t('markets.market-card.race-winner')
                                     : t('markets.market-card.no-win')
@@ -302,6 +325,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         isCanceled={market.isCanceled}
                         isPaused={market.isPaused}
                         isEnetpulseSport={isEnetpulseSport}
+                        isJsonOddsSport={isJsonOddsSport}
                     />
                 )}
             </MainContainer>
@@ -321,20 +345,20 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     <Odds market={childMarket} key={childMarket.address} isShownInSecondRow />
                                 ))}
                             {hasCombinedMarkets && !isMobile && showOnlyCombinedPositionsInSecondRow && (
-                                <CombinedMarketsOdds market={market} />
+                                <CombinedMarketsOdds market={market} isShownInSecondRow />
                             )}
                         </OddsWrapper>
                     </SecondRowContainer>
                     {isMobile && hasCombinedMarkets && (
                         <ThirdRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
                             <OddsWrapper>
-                                <CombinedMarketsOdds market={market} />
+                                <CombinedMarketsOdds market={market} isShownInSecondRow />
                             </OddsWrapper>
                         </ThirdRowContainer>
                     )}
                     {!isMobile && hasCombinedMarkets && doubleChanceMarkets.length > 0 && (
                         <ThirdRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
-                            <CombinedMarketsOdds market={market} />
+                            <CombinedMarketsOdds market={market} isShownInSecondRow />
                         </ThirdRowContainer>
                     )}
                 </>

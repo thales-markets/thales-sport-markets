@@ -70,11 +70,6 @@ export const Value = styled(TicketId)`
     }
 `;
 
-export const NumberOfGames = styled(Label)`
-    font-weight: 700;
-    text-transform: none;
-`;
-
 export const WinLabel = styled(Label)`
     font-weight: 900;
     color: ${MAIN_COLORS.TEXT.POTENTIAL_PROFIT};
@@ -95,15 +90,6 @@ export const ArrowIcon = styled.i`
         margin-left: 5px;
         font-size: 9px;
     }
-`;
-
-export const ArrowIconFooter = styled.i`
-    cursor: pointer;
-    font-size: 12px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
-    margin-right: 10px;
-    position: absolute;
-    left: 10px;
 `;
 
 export const CollapsableContainer = styled(FlexDivColumnNative)<{ show?: boolean }>`

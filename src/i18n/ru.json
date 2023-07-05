@@ -230,7 +230,8 @@
                 "esports": "Киберспорт",
                 "cricket": "Крикет",
                 "mma": "ХОРОШИЙ",
-                "boxing": "Заниматься боксом"
+                "boxing": "Заниматься боксом",
+                "golf": "Гольф"
             },
             "all": "All",
             "datepicker": {
@@ -238,7 +239,8 @@
             },
             "mobile-tags": {
                 "search": "Поиск"
-            }
+            },
+            "show-active": "Показывать только активные виды спорта"
         },
         "back-to-markets": "Back to markets",
         "back-to-market": "Back to market",
@@ -330,7 +332,8 @@
                 },
                 "bonus": "{{bonus}} added bonus on win!",
                 "and": "и",
-                "race-winner": "{{team}} выиграет гонку {{matchResolve}}"
+                "race-winner": "{{team}} выиграет гонку {{matchResolve}}",
+                "tournament-winner": "{{team}} выиграет турнир {{matchResolve}}"
             },
             "starts-in": "Начинается через",
             "period": "Период",
@@ -394,7 +397,9 @@
                 "same-race-drivers": "Поддерживается только один гонщик на гонку. Невозможно добавить {{addedDriver}}, поскольку {{existingDriver}} уже находится в Parlay",
                 "max-number-of-markets-with-combined-markets": "Максимальное количество рынков в Parlay: {{max}}. Один комбинированный рынок считается двумя обычными рынками.",
                 "max-combined-markets": "Максимальное количество комбинированных рынков в Parlay составляет {{max}}.",
-                "amm-contract-paused": "Экспресс AMM приостановлен"
+                "amm-contract-paused": "Экспресс AMM приостановлен",
+                "unique-players": "Нельзя дважды добавить одного и того же участника в экспресс. {{existingParticipant}} уже находится в Parlay",
+                "same-event-participant": "Поддерживается только один участник на событие. Невозможно добавить {{addedParticipant}}, поскольку {{existingParticipant}} уже находится в Parlay"
             },
             "fee": "Общая плата",
             "empty-title": "Нет позиций",

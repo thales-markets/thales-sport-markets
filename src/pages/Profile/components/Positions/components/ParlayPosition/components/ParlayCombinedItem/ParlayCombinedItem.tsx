@@ -1,5 +1,12 @@
 import PositionSymbol from 'components/PositionSymbol';
-import { ENETPULSE_SPORTS, FIFA_WC_TAG, FIFA_WC_U20_TAG, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
+import {
+    ENETPULSE_SPORTS,
+    FIFA_WC_TAG,
+    FIFA_WC_U20_TAG,
+    JSON_ODDS_SPORTS,
+    SPORTS_TAGS_MAP,
+    SPORT_PERIODS_MAP,
+} from 'constants/tags';
 import { GAME_STATUS, STATUS_COLOR } from 'constants/ui';
 import { t } from 'i18next';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
@@ -52,6 +59,7 @@ const ParlayCombinedItem: React.FC<{ combinedMarket: CombinedMarket }> = ({ comb
     const isPendingResolution = isGameStarted && !isGameResolved;
 
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.tags[0]));
+    const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.tags[0]));
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
     const tooltipText = getCombinedOddTooltipText(combinedMarket.markets, combinedMarket.positions);
@@ -65,7 +73,7 @@ const ParlayCombinedItem: React.FC<{ combinedMarket: CombinedMarket }> = ({ comb
     }`;
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(market.id, {
-        enabled: isAppReady && isPendingResolution && !isEnetpulseSport,
+        enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isJsonOddsSport,
     });
 
     const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(market.id, gameDate, market.tags[0], {

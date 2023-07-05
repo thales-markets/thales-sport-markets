@@ -1,5 +1,5 @@
 import QUERY_KEYS from 'constants/queryKeys';
-import { ENETPULSE_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
+import { ENETPULSE_SPORTS, GOLF_TOURNAMENT_WINNER_TAG, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { PositionBalance, PositionType, SportMarketInfo } from 'types/markets';
@@ -36,9 +36,11 @@ const useAccountMarketsQuery = (
                 );
 
                 const positions: AccountPositionProfile[] = onlyNonZeroPositions.map((position) => {
-                    const isEnetpulseRacing =
-                        SPORTS_TAGS_MAP['Motosport'].includes(Number(position.position.market.tags[0])) &&
-                        ENETPULSE_SPORTS.includes(Number(position.position.market.tags[0]));
+                    const isOneSideMarket =
+                        (SPORTS_TAGS_MAP['Motosport'].includes(Number(position.position.market.tags[0])) &&
+                            ENETPULSE_SPORTS.includes(Number(position.position.market.tags[0]))) ||
+                        (Number(position.position.market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG &&
+                            JSON_ODDS_SPORTS.includes(Number(position.position.market.tags[0])));
                     return {
                         id: position.id,
                         account: position.account,
@@ -51,7 +53,7 @@ const useAccountMarketsQuery = (
                             awayTeam: position.position.market.awayTeam,
                             spread: Number(position.position.market.spread),
                             total: Number(position.position.market.total),
-                            isEnetpulseRacing: isEnetpulseRacing,
+                            isOneSideMarket: isOneSideMarket,
                         },
                         side: position.position.side,
                         sUSDPaid: position.sUSDPaid,

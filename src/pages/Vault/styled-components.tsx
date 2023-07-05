@@ -28,7 +28,7 @@ export const Container = styled(FlexDivRow)`
     }
 `;
 
-export const ContentContainer = styled(FlexDivColumn)`
+const ContentContainer = styled(FlexDivColumn)`
     width: 100%;
     flex: initial;
     align-items: center;
@@ -122,8 +122,6 @@ export const RoundAllocation = styled.p`
 export const RoundInfoContainer = styled(FlexDivColumn)`
     align-items: center;
 `;
-
-export const RoundInfoLabel = styled.p``;
 
 export const RoundInfo = styled.p`
     font-size: 20px;

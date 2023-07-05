@@ -18,7 +18,7 @@ const initialState: MarketSliceState = {
     marketSearch: getDefaultMarketSearch(),
 };
 
-export const marketSlice = createSlice({
+const marketSlice = createSlice({
     name: sliceName,
     initialState,
     reducers: {
@@ -31,7 +31,7 @@ export const marketSlice = createSlice({
 
 export const { setMarketSearch } = marketSlice.actions;
 
-export const getMarketState = (state: RootState) => state[sliceName];
+const getMarketState = (state: RootState) => state[sliceName];
 export const getMarketSearch = (state: RootState) => getMarketState(state).marketSearch;
 
 export default marketSlice.reducer;

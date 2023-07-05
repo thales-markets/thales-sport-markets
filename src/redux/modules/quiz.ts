@@ -45,7 +45,7 @@ const defaultState: QuizSliceState = {
 
 const initialState: QuizSliceState = getInitialQuizState();
 
-export const uiSlice = createSlice({
+const quizSlice = createSlice({
     name: sliceName,
     initialState,
     reducers: {
@@ -107,9 +107,9 @@ export const {
     setAnswer,
     setTwitter,
     setDiscord,
-} = uiSlice.actions;
+} = quizSlice.actions;
 
-export const getQuizState = (state: RootState) => state[sliceName];
+const getQuizState = (state: RootState) => state[sliceName];
 export const getIsQuizStarted = (state: RootState) => getQuizState(state).isQuizStarted;
 export const getIsQuizFinished = (state: RootState) => getQuizState(state).isQuizFinished;
 export const getPlayerUuid = (state: RootState) => getQuizState(state).playerUuid;
@@ -122,4 +122,4 @@ export const getEndOfQuiz = (state: RootState) => getQuizState(state).endOfQuiz;
 export const getTwitter = (state: RootState) => getQuizState(state).twitter;
 export const getDiscord = (state: RootState) => getQuizState(state).discord;
 
-export default uiSlice.reducer;
+export default quizSlice.reducer;

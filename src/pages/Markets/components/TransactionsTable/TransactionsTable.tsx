@@ -18,7 +18,7 @@ type TransactionsTableProps = {
     isLoading: boolean;
 };
 
-export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noResultsMessage, isLoading }) => {
+const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noResultsMessage, isLoading }) => {
     const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     return (
@@ -52,7 +52,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                                 cellProps.cell.value,
                                 cellProps.cell.row.original.wholeMarket
                             );
-                            const isEnetpulseRacingMarket = cellProps.cell.row.original.wholeMarket.isEnetpulseRacing;
+                            const isOneSideMarket = cellProps.cell.row.original.wholeMarket.isOneSideMarket;
                             const spreadTotalText = getSpreadTotalText(
                                 cellProps.cell.row.original.wholeMarket,
                                 cellProps.cell.value
@@ -63,7 +63,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                                     additionalStyle={{
                                         width: 23,
                                         height: 23,
-                                        fontSize: isEnetpulseRacingMarket ? 8.5 : 10.5,
+                                        fontSize: isOneSideMarket ? 8.5 : 10.5,
                                         borderWidth: 2,
                                     }}
                                     symbolUpperText={

@@ -290,15 +290,4 @@ const Count = styled.span`
     font-size: 12px;
 `;
 
-// const MMButtonLeftIcon = styled.img.attrs({ src: marchMadnessLeftIcon })`
-//     cursor: pointer;
-//     height: 25px;
-//     width: 35px;
-// `;
-
-// const MMButtonRightIcon = styled.img.attrs({ src: marchMadnessRightIcon })`
-//     cursor: pointer;
-//     height: 25px;
-//     width: 35px;
-// `;
 export default DappHeader;

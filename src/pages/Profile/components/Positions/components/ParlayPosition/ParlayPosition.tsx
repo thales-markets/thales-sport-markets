@@ -57,7 +57,7 @@ import {
     extractCombinedMarketsFromParlayMarketType,
     removeCombinedMarketsFromParlayMarketType,
 } from 'utils/combinedMarkets';
-import ParlayCombinedItem from './components/ParlayCombinedItem/ParlayCombinedItem';
+import ParlayCombinedItem from './components/ParlayCombinedItem';
 
 type ParlayPosition = {
     parlayMarket: ParlayMarket;

@@ -7,7 +7,7 @@ import { DEFAULT_NETWORK_ID } from 'constants/defaults';
 
 const sliceName = 'wallet';
 
-export type WalletSliceState = {
+type WalletSliceState = {
     walletAddress: string | null;
     networkId: NetworkId;
     networkName: string;
@@ -21,13 +21,10 @@ const initialState: WalletSliceState = {
     switchToNetworkId: DEFAULT_NETWORK_ID,
 };
 
-export const walletDetailsSlice = createSlice({
+const walletDetailsSlice = createSlice({
     name: sliceName,
     initialState,
     reducers: {
-        resetWallet: () => {
-            return initialState;
-        },
         updateWallet: (state, action: PayloadAction<Partial<WalletSliceState>>) => {
             const { payload } = action;
             const newState = {
@@ -60,18 +57,12 @@ export const walletDetailsSlice = createSlice({
     },
 });
 
-export const getWalletState = (state: RootState) => state[sliceName];
+const getWalletState = (state: RootState) => state[sliceName];
 export const getNetworkId = (state: RootState) => getWalletState(state).networkId;
-export const getNetworkName = (state: RootState) => getWalletState(state).networkName;
-export const getNetwork = (state: RootState) => ({
-    networkId: getNetworkId(state),
-    networkName: getNetworkName(state),
-});
 export const getSwitchToNetworkId = (state: RootState) => getWalletState(state).switchToNetworkId;
 export const getWalletAddress = (state: RootState) => getWalletState(state).walletAddress;
 export const getIsWalletConnected = createSelector(getWalletAddress, (walletAddress) => walletAddress != null);
-export const getWalletInfo = (state: RootState) => getWalletState(state);
 
-export const { updateNetworkSettings, switchToNetworkId, resetWallet, updateWallet } = walletDetailsSlice.actions;
+export const { updateNetworkSettings, switchToNetworkId, updateWallet } = walletDetailsSlice.actions;
 
 export default walletDetailsSlice.reducer;

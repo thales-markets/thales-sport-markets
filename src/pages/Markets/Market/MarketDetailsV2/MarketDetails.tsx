@@ -1,34 +1,34 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import MatchInfo from './components/MatchInfo';
-import BackToLink from 'pages/Markets/components/BackToLink';
-import { SportMarketChildMarkets, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
-import Positions from './components/Positions';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
-import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import styled from 'styled-components';
-import { buildHref, navigateTo } from 'utils/routes';
-import ROUTES from 'constants/routes';
-import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
-import Tooltip from 'components/Tooltip';
+import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
-import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
-import Parlay from 'pages/Markets/Home/Parlay';
-import Transactions from '../Transactions';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { GAME_STATUS, MAIN_COLORS } from 'constants/ui';
-import { BetType, ENETPULSE_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
+import Tooltip from 'components/Tooltip';
+import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
+import ROUTES from 'constants/routes';
+import { BetType, ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
+import { GAME_STATUS, MAIN_COLORS } from 'constants/ui';
+import Parlay from 'pages/Markets/Home/Parlay';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
-import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
-import Web3 from 'web3';
-import { getOrdinalNumberLabel } from 'utils/ui';
-import { getNetworkId } from 'redux/modules/wallet';
+import BackToLink from 'pages/Markets/components/BackToLink';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
+import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
+import React, { useEffect, useRef, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getNetworkId } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import styled from 'styled-components';
+import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { SportMarketChildMarkets, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { NetworkIdByName } from 'utils/network';
-import CombinedPositions from './components/CombinedPositions/CombinedPositions';
+import { buildHref, navigateTo } from 'utils/routes';
+import { getOrdinalNumberLabel } from 'utils/ui';
+import Web3 from 'web3';
+import Transactions from '../Transactions';
+import CombinedPositions from './components/CombinedPositions';
+import MatchInfo from './components/MatchInfo';
+import Positions from './components/Positions';
 
 type MarketDetailsPropType = {
     market: SportMarketInfo;
@@ -61,26 +61,27 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
 
     const childMarkets: SportMarketChildMarkets = lastValidChildMarkets;
 
-    const showAMM = !market.isResolved && !market.isCanceled && market.isOpen && !market.isPaused;
+    const isGameStarted = market.maturityDate < new Date();
+    const showAMM = !market.isResolved && !market.isCanceled && !isGameStarted && !market.isPaused;
 
-    const isGameCancelled = market.isCanceled || (market.isOpen && market.isResolved);
+    const isGameCancelled = market.isCanceled || (!isGameStarted && market.isResolved);
     const isGameResolved = market.isResolved || market.isCanceled;
-    const isPendingResolution = !market.isOpen && !isGameResolved;
+    const isPendingResolution = isGameStarted && !isGameResolved;
     const isGamePaused = market.isPaused && !isGameResolved;
-    const showStatus = market.isResolved || market.isCanceled || !market.isOpen || market.isPaused;
+    const showStatus = market.isResolved || market.isCanceled || isGameStarted || market.isPaused;
     const gameIdString = Web3.utils.hexToAscii(market.gameId);
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.tags[0]));
+    const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.tags[0]));
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
     const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
-        enabled: isAppReady && !isEnetpulseSport,
+        enabled: isAppReady && !isEnetpulseSport && !isJsonOddsSport,
     });
 
     const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.tags[0], {
         enabled: isAppReady && isEnetpulseSport,
     });
-
     useEffect(() => {
         if (isEnetpulseSport) {
             if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
@@ -239,7 +240,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         ) : (
                             <ResultContainer>
                                 <ResultLabel>
-                                    {market.isEnetpulseRacing
+                                    {market.isOneSideMarket
                                         ? market.homeScore == 1
                                             ? t('markets.market-card.race-winner')
                                             : t('markets.market-card.no-win')
@@ -278,19 +279,20 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                     </Status>
                 )}
                 <>
-                    <Positions markets={[market]} betType={BetType.WINNER} />
+                    <Positions markets={[market]} betType={BetType.WINNER} showOdds={showAMM} />
                     {childMarkets.doubleChanceMarkets.length > 0 && (
                         <Positions
                             markets={childMarkets.doubleChanceMarkets}
                             betType={BetType.DOUBLE_CHANCE}
                             areDoubleChanceMarkets
+                            showOdds={showAMM}
                         />
                     )}
                     {childMarkets.spreadMarkets.length > 0 && (
-                        <Positions markets={childMarkets.spreadMarkets} betType={BetType.SPREAD} />
+                        <Positions markets={childMarkets.spreadMarkets} betType={BetType.SPREAD} showOdds={showAMM} />
                     )}
                     {childMarkets.totalMarkets.length > 0 && (
-                        <Positions markets={childMarkets.totalMarkets} betType={BetType.TOTAL} />
+                        <Positions markets={childMarkets.totalMarkets} betType={BetType.TOTAL} showOdds={showAMM} />
                     )}
                     {combinedMarkets.length > 0 && <CombinedPositions combinedMarkets={combinedMarkets} />}
                 </>

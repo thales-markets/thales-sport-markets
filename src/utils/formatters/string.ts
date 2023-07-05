@@ -1,9 +1,6 @@
 export const truncateAddress = (address: string, first = 5, last = 5) =>
     address ? `${address.slice(0, first)}...${address.slice(-last, address.length)}` : null;
 
-export const truncateText = (text: string, maxLength: number) =>
-    text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
-
 export const fixDuplicatedTeamName = (name: string, isEnetpulseSport: boolean) => {
     if (isEnetpulseSport) return name;
     if (!name?.length) return '';
@@ -24,4 +21,6 @@ export const fixDuplicatedTeamName = (name: string, isEnetpulseSport: boolean) =
     return name;
 };
 
-export const fixEnetpulseRacingName = (team: string) => (team !== null ? team.slice(0, team.length - 4).trim() : '');
+export const fixOneSideMarketCompetitorName = (team: string) => {
+    return team.endsWith('YES') ? (team !== null ? team.slice(0, team.length - 4).trim() : '') : team;
+};

@@ -1,4 +1,4 @@
-export const liquidityPoolContract = {
+const liquidityPoolContract = {
     addresses: {
         5: '',
         10: '0x842e89b7a7eF8Ce099540b3613264C933cE0eBa5',

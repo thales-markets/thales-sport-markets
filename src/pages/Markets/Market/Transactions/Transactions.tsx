@@ -18,7 +18,7 @@ import {
 } from 'types/markets';
 import useClaimTransactionsPerMarket from 'queries/markets/useClaimTransactionsPerMarket';
 import { convertFinalResultToResultType } from 'utils/markets';
-import { SPORTS_TAGS_MAP, ENETPULSE_SPORTS } from 'constants/tags';
+import { SPORTS_TAGS_MAP, ENETPULSE_SPORTS, GOLF_TOURNAMENT_WINNER_TAG } from 'constants/tags';
 
 type TransactionsProps = {
     market: SportMarketInfo;
@@ -42,10 +42,10 @@ const Transactions: React.FC<TransactionsProps> = ({ market }) => {
 
         if (marketClaimTransactionsQuery.isSuccess && marketClaimTransactionsQuery.data) {
             marketClaimTransactionsQuery.data.forEach((claimTx: ClaimTransaction) => {
-                claimTx.market.isEnetpulseRacing =
-                    SPORTS_TAGS_MAP['Motosport'].includes(Number(market.tags[0])) &&
-                    ENETPULSE_SPORTS.includes(Number(market.tags[0]));
-
+                claimTx.market.isOneSideMarket =
+                    (SPORTS_TAGS_MAP['Motosport'].includes(Number(market.tags[0])) &&
+                        ENETPULSE_SPORTS.includes(Number(market.tags[0]))) ||
+                    Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG;
                 return data.push({
                     hash: claimTx.id,
                     type: 'claim' as MarketTransactionType,
@@ -63,9 +63,10 @@ const Transactions: React.FC<TransactionsProps> = ({ market }) => {
 
         if (marketTransactionsQuery.isSuccess && marketTransactionsQuery.data) {
             marketTransactionsQuery.data.forEach((marketTransaction: MarketTransaction) => {
-                marketTransaction.wholeMarket.isEnetpulseRacing =
-                    SPORTS_TAGS_MAP['Motosport'].includes(Number(market.tags[0])) &&
-                    ENETPULSE_SPORTS.includes(Number(market.tags[0]));
+                marketTransaction.wholeMarket.isOneSideMarket =
+                    (SPORTS_TAGS_MAP['Motosport'].includes(Number(market.tags[0])) &&
+                        ENETPULSE_SPORTS.includes(Number(market.tags[0]))) ||
+                    Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG;
                 return data.push({
                     hash: marketTransaction.hash,
                     type: marketTransaction.type,
