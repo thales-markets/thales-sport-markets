@@ -69,7 +69,7 @@ export type ParlayVaultTrade = {
 
 export type VaultTrades = VaultTrade[];
 
-export type VaultPnlPerRound = {
+type VaultPnlPerRound = {
     round: number | string;
     pnl: number;
 };

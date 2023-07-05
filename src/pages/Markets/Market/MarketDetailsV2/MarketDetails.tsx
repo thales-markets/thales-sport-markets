@@ -26,7 +26,7 @@ import { buildHref, navigateTo } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import Web3 from 'web3';
 import Transactions from '../Transactions';
-import CombinedPositions from './components/CombinedPositions/CombinedPositions';
+import CombinedPositions from './components/CombinedPositions';
 import MatchInfo from './components/MatchInfo';
 import Positions from './components/Positions';
 

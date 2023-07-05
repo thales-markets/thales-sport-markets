@@ -48,7 +48,6 @@ const Container = styled.div`
     z-index: 0;
     width: 1700px;
     height: 165px;
-    border: 1.4px solid #5f6180;
     border-radius: 11px;
     overflow: hidden;
     margin: 30px 0;
@@ -62,7 +61,6 @@ const StyledDiv = styled.div<{ image: string; hasHref: boolean }>`
     max-width: 100%;
     width: 1700px;
     height: 165px;
-    margin: -1px;
     background-image: ${(props) => `url(${props.image})`};
     cursor: ${(props) => (props.hasHref ? 'pointer' : 'default')};
     background-position: center;

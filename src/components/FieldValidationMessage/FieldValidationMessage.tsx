@@ -10,7 +10,7 @@ type FieldValidationMessageProps = {
     hideArrow?: boolean;
 };
 
-export const FieldValidationMessage: React.FC<FieldValidationMessageProps> = ({
+const FieldValidationMessage: React.FC<FieldValidationMessageProps> = ({
     showValidation,
     message,
     marginLeft,

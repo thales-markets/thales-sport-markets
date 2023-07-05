@@ -1,4 +1,4 @@
-export const erc20Contract = {
+const erc20Contract = {
     addresses: {
         5: '0x2851715A8d25e176413A77b495762435D5dDBd0d',
         10: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9',

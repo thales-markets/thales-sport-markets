@@ -69,37 +69,6 @@ export const Input = styled.input`
     }
 `;
 
-export const TextArea = styled.textarea`
-    background: ${(props) => props.theme.input.background.primary};
-    border: 2px solid ${(props) => props.theme.input.borderColor.primary};
-    box-sizing: border-box;
-    mix-blend-mode: normal;
-    border-radius: 12px;
-    height: 120px;
-    padding: 20px 20px 20px 20px;
-    outline: 0;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 25px;
-    color: ${(props) => props.theme.input.textColor.primary};
-    &::selection {
-        background: ${(props) => props.theme.input.background.selection.primary};
-    }
-    &:focus {
-        border: 2px solid ${(props) => props.theme.input.borderColor.focus.primary};
-        box-sizing: border-box;
-    }
-    &:disabled {
-        opacity: 0.4;
-        cursor: default;
-    }
-    &.error {
-        border: 2px solid #e53720;
-    }
-    resize: none;
-`;
-
 export const FieldNote = styled(FlexDivEnd)`
     font-style: normal;
     font-weight: bold;

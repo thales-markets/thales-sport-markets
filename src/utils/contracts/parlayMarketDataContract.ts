@@ -1,4 +1,4 @@
-export const parlayMarketDataContract = {
+const parlayMarketDataContract = {
     addresses: {
         5: '',
         10: '0x3bD77B8FE52242797C29Df251418873Ae34F0641',

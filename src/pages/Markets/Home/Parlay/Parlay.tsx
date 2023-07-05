@@ -30,7 +30,7 @@ import Single from './components/Single';
 import MultiSingle from './components/MultiSingle';
 import Ticket from './components/Ticket';
 import ValidationModal from './components/ValidationModal';
-import Toggle from 'components/Toggle/Toggle';
+import Toggle from 'components/Toggle';
 import MatchInfoOfCombinedMarket from './components/MatchInfoOfCombinedMarket';
 import { extractCombinedMarketsFromParlayMarkets, removeCombinedMarketFromParlayMarkets } from 'utils/combinedMarkets';
 import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';

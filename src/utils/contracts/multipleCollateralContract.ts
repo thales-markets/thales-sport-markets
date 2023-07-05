@@ -597,7 +597,7 @@ const abi = [
     },
 ];
 
-export const multipleCollateral = {
+const multipleCollateral = {
     sUSD: {
         addresses: {
             5: '0x2851715A8d25e176413A77b495762435D5dDBd0d', // eUSD

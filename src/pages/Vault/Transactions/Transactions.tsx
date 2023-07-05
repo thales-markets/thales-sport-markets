@@ -302,7 +302,7 @@ const TableContainer = styled(FlexDivColumn)`
     }
 `;
 
-export const SelectContainer = styled.div`
+const SelectContainer = styled.div`
     width: 230px;
 `;
 

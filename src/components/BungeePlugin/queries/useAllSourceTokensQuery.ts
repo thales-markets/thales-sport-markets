@@ -2,7 +2,7 @@ import { Currency } from '@socket.tech/plugin';
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 
-export interface TokenListOutput {
+interface TokenListOutput {
     success: boolean;
     result: Currency[];
 }

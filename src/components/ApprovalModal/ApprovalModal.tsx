@@ -23,7 +23,7 @@ type ApprovalModalProps = {
     onClose: () => void;
 };
 
-export const ApprovalModal: React.FC<ApprovalModalProps> = ({
+const ApprovalModal: React.FC<ApprovalModalProps> = ({
     defaultAmount,
     collateralIndex,
     tokenSymbol,

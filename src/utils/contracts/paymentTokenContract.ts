@@ -1,4 +1,4 @@
-export const paymentTokenContract = {
+const paymentTokenContract = {
     addresses: {
         5: '0x2851715A8d25e176413A77b495762435D5dDBd0d', // eUSD
         10: '0x8c6f28f2f1a3c87f0f938b96d27520d9751ec8d9',

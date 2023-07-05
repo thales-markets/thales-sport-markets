@@ -1,4 +1,4 @@
-export const sportVaultDataContract = {
+const sportVaultDataContract = {
     addresses: {
         5: '',
         10: '0x741AD22a9444D1B5e6606a3587EfFA5b8995321c',

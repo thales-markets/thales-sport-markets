@@ -28,7 +28,7 @@ type SwapModalProps = {
     onClose: () => void;
 };
 
-export const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
+const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));

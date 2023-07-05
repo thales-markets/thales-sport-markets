@@ -72,7 +72,7 @@ import { getDefaultDecimalsForNetwork, getDefaultColleteralForNetwork } from 'ut
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { FlexDivRow } from 'styles/common';
 import RadioButton from 'components/fields/RadioButton/RadioButton';
-import Return from './Return/Return';
+import Return from './Return';
 import { history } from 'utils/routes';
 import useParlayLiquidityPoolUserDataQuery from 'queries/liquidityPool/useParlayLiquidityPoolUserDataQuery';
 import useParlayLiquidityPoolDataQuery from 'queries/liquidityPool/useParlayLiquidityPoolDataQuery';

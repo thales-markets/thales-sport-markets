@@ -17,7 +17,7 @@ type RefferalModalProps = {
     onClose: () => void;
 };
 
-export const RefferalModal: React.FC<RefferalModalProps> = ({ onClose }) => {
+const RefferalModal: React.FC<RefferalModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
     const [reffererID, setReffererID] = useState('');
     const [savedReffererID, setSavedReffererID] = useState('');

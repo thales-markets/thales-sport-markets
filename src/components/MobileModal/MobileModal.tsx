@@ -30,7 +30,7 @@ const customStyles = {
     },
 };
 
-export const MobileModal: React.FC<MobileModalProps> = ({ onClose, children, shouldCloseOnOverlayClick }) => {
+const MobileModal: React.FC<MobileModalProps> = ({ onClose, children, shouldCloseOnOverlayClick }) => {
     return (
         <ReactModal
             isOpen

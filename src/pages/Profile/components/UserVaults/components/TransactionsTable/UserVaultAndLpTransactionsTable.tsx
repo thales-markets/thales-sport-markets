@@ -12,7 +12,7 @@ import { RootState } from 'redux/rootReducer';
 import { VaultsAndLiquidityPoolUserTransaction, VaultsAndLiquidityPoolUserTransactions } from 'types/liquidityPool';
 import styled from 'styled-components';
 
-export const UserVaultAndLpTransactionsTable: React.FC = () => {
+const UserVaultAndLpTransactionsTable: React.FC = () => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';

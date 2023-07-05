@@ -2,7 +2,7 @@ import { MAIN_COLORS } from 'constants/ui';
 import styled, { css, keyframes } from 'styled-components';
 import { FlexDivColumnNative, FlexDivRow, FlexDiv, FlexDivColumn } from 'styles/common';
 
-export const WrapperAnimation = keyframes`
+const WrapperAnimation = keyframes`
     0% {
         visibility: none;
         top: -70vh;
@@ -17,7 +17,7 @@ export const WrapperAnimation = keyframes`
     }
 `;
 
-export const WrapperAnimationClose = keyframes`
+const WrapperAnimationClose = keyframes`
     0% {
         visibility: visible;
         top: 0vh;
@@ -98,20 +98,6 @@ export const NavIcon = styled.i<{ active?: boolean }>`
     color: ${(_props) => (_props?.active ? `${_props.theme.nav.text.primary}` : `${_props.theme.nav.text.secondary}`)};
 `;
 
-export const ButtonsContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-`;
-
-export const Button = styled.button`
-    width: 49%;
-    border: 1.5px solid #5f6180;
-    padding: 6px 0px;
-    color: ${(props) => props.theme.nav.text.secondary};
-    background: transparent;
-    cursor: pointer;
-`;
-
 export const FooterContainer = styled(FlexDivColumn)`
     align-items: center;
     justify-content: center;
@@ -148,30 +134,6 @@ export const CloseIcon = styled.i.attrs({ className: 'icon icon--arrow-up' })`
     bottom: -10px;
     right: calc(50% - 10px);
     cursor: pointer;
-`;
-
-export const WalletAddress = styled.span`
-    font-weight: 600;
-    font-size: 10px;
-    line-height: 120%;
-`;
-
-export const WalletIcon = styled.i.attrs({ className: 'icon icon--wallet' })`
-    color: white;
-    font-size: 15px;
-    margin-right: 6px;
-`;
-
-export const WalletAddressContainer = styled(FlexDivRow)`
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    :hover {
-        i {
-            color: ${(props) => props.theme.nav.text.primary} !important;
-        }
-        color: ${(props) => props.theme.nav.text.primary} !important;
-    }
 `;
 
 export const LogoContainer = styled.div`

@@ -4,7 +4,7 @@ import { MultiSingleAmounts, ParlaysMarket } from 'types/markets';
 import { LiquidityPoolType } from 'types/liquidityPool';
 import { GlobalFiltersEnum } from './markets';
 
-export const QUERY_KEYS = {
+const QUERY_KEYS = {
     Rewards: (networkId: NetworkId, period: number) => ['rewards', networkId, period],
     Markets: (networkId: NetworkId) => ['markets', networkId],
     ParlayMarkets: (networkId: NetworkId, account: string) => ['parlayMarkets', networkId, account],
@@ -139,15 +139,7 @@ export const QUERY_KEYS = {
     Bungee: {
         Tokens: () => ['bungee', 'tokens'],
     },
-    MarchMadness: (walletAddress: string, networkId: NetworkId) => ['marchMadness', walletAddress, networkId],
     Banners: (networkId: NetworkId) => ['banners', networkId],
-    MarchMadnessCompetition: {
-        LeaderboardByVolume: (networkId: NetworkId) => ['marchMadnessLeaderboardByVolume ', networkId],
-        LeaderboardByNumberOfCorrectPredictions: (networkId: NetworkId) => [
-            'marchMadnessLeaderboardByCorrectPred',
-            networkId,
-        ],
-    },
     LiquidityPool: {
         Data: (networkId: NetworkId) => ['liquidityPool', 'data', networkId],
         ParlayData: (networkId: NetworkId) => ['liquidityPool', 'parlayData', networkId],

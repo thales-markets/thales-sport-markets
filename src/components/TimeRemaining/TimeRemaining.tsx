@@ -16,15 +16,9 @@ type TimeRemainingProps = {
 
 const ONE_SECOND_IN_MS = 1000;
 
-export const TimeRemaining: React.FC<TimeRemainingProps> = ({
-    end,
-    onEnded,
-    fontSize,
-    fontWeight,
-    showFullCounter,
-}) => {
+const TimeRemaining: React.FC<TimeRemainingProps> = ({ end, onEnded, fontSize, fontWeight, showFullCounter }) => {
     const now = Date.now();
-    const [timeElapsed, setTimeElapsed] = useState(now >= end);
+    const [timeElapsed, setTimeElapsed] = useState(now >= Number(end));
     const [weeksDiff, setWeekDiff] = useState(Math.abs(differenceInWeeks(now, end)));
     const [showRemainingInWeeks, setShowRemainingInWeeks] = useState(weeksDiff > 4);
     const [countdownDisabled, setCountdownDisabled] = useState(timeElapsed || showRemainingInWeeks);
@@ -62,15 +56,15 @@ export const TimeRemaining: React.FC<TimeRemainingProps> = ({
 
     useMemo(() => {
         const today = Date.now();
-        setTimeElapsed(today >= end);
+        setTimeElapsed(today >= Number(end));
         setWeekDiff(Math.abs(differenceInWeeks(today, end)));
         setShowRemainingInWeeks(Math.abs(differenceInWeeks(today, end)) > 4);
-        setCountdownDisabled(today >= end || Math.abs(differenceInWeeks(today, end)) > 4);
+        setCountdownDisabled(today >= Number(end) || Math.abs(differenceInWeeks(today, end)) > 4);
         setDuration(intervalToDuration({ start: today, end }));
     }, [end]);
 
     useInterval(() => {
-        if (now <= end) {
+        if (now <= Number(end)) {
             setDuration(intervalToDuration({ start: now, end }));
         } else {
             setTimeElapsed(true);
@@ -90,21 +84,6 @@ export const TimeRemaining: React.FC<TimeRemainingProps> = ({
         </Container>
     );
 };
-
-// const getColor = (duration: Duration) => {
-//     if (duration.years || duration.months || duration.days) {
-//         return `#f6f6fe`;
-//     }
-//     if (duration.hours) {
-//         return `#FFCC00`;
-//     }
-//     if (duration.minutes && duration.minutes > 10) {
-//         if (duration.minutes > 10) {
-//             return `#FF8800`;
-//         }
-//     }
-//     return '#D82418';
-// };
 
 const Container = styled.span<{ fontSize?: number; fontWeight?: number; duration: Duration; showBorder?: boolean }>`
     font-size: ${(props) => props.fontSize || 20}px;

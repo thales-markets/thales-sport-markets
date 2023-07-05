@@ -201,7 +201,7 @@ const DropdownContrainer = styled.div`
     width: auto;
 `;
 
-export const Filters = styled(FlexDiv)<{ isMobile?: boolean }>`
+const Filters = styled(FlexDiv)<{ isMobile?: boolean }>`
     width: 100%;
     height: ${(props) => (props.isMobile ? '' : '24px')};
     flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
@@ -218,7 +218,7 @@ export const Filters = styled(FlexDiv)<{ isMobile?: boolean }>`
     padding: ${(props) => (props.isMobile ? '0px' : '0px 10px')};
 `;
 
-export const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: boolean; isMobile?: boolean }>`
+const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: boolean; isMobile?: boolean }>`
     width: ${(props) => (props.isMobile ? '100%' : '70%')};
     justify-content: 'space-around';
     align-items: ${(props) => (props.isMobile ? 'flex-start' : 'center')};
@@ -226,7 +226,7 @@ export const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: bo
     height: ${(props) => (props.isMobile && props.timeFilters ? '120px' : '')};
 `;
 
-export const GlobalFilter = styled.span<{ selected?: boolean; isMobile?: boolean; cancelled?: boolean }>`
+const GlobalFilter = styled.span<{ selected?: boolean; isMobile?: boolean; cancelled?: boolean }>`
     margin: ${(props) => (props.isMobile ? '2px 0px' : '0px 2px')};
     text-transform: uppercase;
     white-space: nowrap;
@@ -239,7 +239,7 @@ export const GlobalFilter = styled.span<{ selected?: boolean; isMobile?: boolean
     }
 `;
 
-export const TimeFilterContainer = styled(FlexDivRow)<{ selected: boolean; isMobile?: boolean }>`
+const TimeFilterContainer = styled(FlexDivRow)<{ selected: boolean; isMobile?: boolean }>`
     margin: 0px 2px;
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
     & > div {
@@ -258,7 +258,7 @@ export const TimeFilterContainer = styled(FlexDivRow)<{ selected: boolean; isMob
     }
 `;
 
-export const Circle = styled.div<{ isMobile: boolean }>`
+const Circle = styled.div<{ isMobile: boolean }>`
     height: ${(props) => (props.isMobile ? '23px' : '9px')};
     width: ${(props) => (props.isMobile ? '23px' : '9px')};
     border-radius: 50px;
@@ -268,7 +268,7 @@ export const Circle = styled.div<{ isMobile: boolean }>`
     margin-right: 3px;
 `;
 
-export const Label = styled.label`
+const Label = styled.label`
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;

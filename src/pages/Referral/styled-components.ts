@@ -29,29 +29,6 @@ export const ButtonContainer = styled(FlexDivColumnNative)`
     }
 `;
 
-export const GenerateLink = styled.button`
-    background-color: ${MAIN_COLORS.LIGHT_BLUE};
-    width: 100%;
-    padding: 10px 0px;
-    text-align: center;
-    border: none;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    font-weight: 700;
-`;
-
-export const CopyLink = styled.button`
-    position: relative;
-    border: 1px solid ${MAIN_COLORS.LIGHT_BLUE};
-    color: ${MAIN_COLORS.LIGHT_BLUE};
-    background-color: ${MAIN_COLORS.LIGHT_GRAY};
-    text-align: center;
-    width: 100%;
-    border-radius: 5px;
-    padding: 10px 0px;
-    font-weight: 700;
-`;
-
 export const InfoContainer = styled(FlexDivColumnNative)`
     border: 1.5px solid ${MAIN_COLORS.LIGHT_BLUE};
     border-radius: 12px;

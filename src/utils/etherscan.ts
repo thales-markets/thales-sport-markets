@@ -1,6 +1,6 @@
 import { NetworkId } from 'types/network';
 
-export const EtherscanNetworkNameById: Record<NetworkId, string> = {
+const EtherscanNetworkNameById: Record<NetworkId, string> = {
     10: 'optimistic',
     42: 'kovan',
     5: 'goerli',

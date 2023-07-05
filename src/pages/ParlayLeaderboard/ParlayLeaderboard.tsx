@@ -16,7 +16,6 @@ import {
 import { t } from 'i18next';
 import { addDays, differenceInDays, subMilliseconds } from 'date-fns';
 import { PaginationWrapper } from 'pages/Quiz/styled-components';
-import { AddressLink } from 'pages/Rewards/styled-components';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -516,7 +515,7 @@ const quoteSort = (oddsType: OddsType) => (rowA: any, rowB: any) => {
         : rowB.original.totalQuote - rowA.original.totalQuote;
 };
 
-export const StatusIcon = styled.i`
+const StatusIcon = styled.i`
     font-size: 12px;
     font-weight: 700;
     margin-right: 4px;
@@ -680,8 +679,15 @@ const PeriodEndLabel = styled.span`
     margin-right: 6px;
 `;
 
-export const BoldContent = styled.span`
+const BoldContent = styled.span`
     font-weight: 600;
+`;
+
+const AddressLink = styled.a`
+    color: ${(props) => props.theme.textColor.primary};
+    &:hover {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
 `;
 
 export default ParlayLeaderboard;

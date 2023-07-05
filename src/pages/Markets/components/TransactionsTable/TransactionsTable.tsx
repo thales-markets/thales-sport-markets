@@ -18,7 +18,7 @@ type TransactionsTableProps = {
     isLoading: boolean;
 };
 
-export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noResultsMessage, isLoading }) => {
+const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noResultsMessage, isLoading }) => {
     const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     return (
