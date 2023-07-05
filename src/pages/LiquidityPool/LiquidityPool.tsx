@@ -5,7 +5,6 @@ import {
     Title,
     SubmitButton,
     ButtonContainer,
-    ValidationTooltip,
     InputContainer,
     Wrapper,
     ToggleContainer,
@@ -645,42 +644,37 @@ const LiquidityPool: React.FC = () => {
                                     </WarningContentInfo>
                                 )}
                                 <InputContainer>
-                                    <ValidationTooltip
-                                        open={
+                                    <NumericInput
+                                        value={amount}
+                                        disabled={isDepositAmountInputDisabled}
+                                        onChange={(_, value) => setAmount(value)}
+                                        placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                                        currencyLabel={collateral}
+                                        onMaxButton={setMaxAmount}
+                                        showValidation={
                                             insufficientBalance ||
                                             exceededLiquidityPoolCap ||
                                             exceededMaxAllowance ||
                                             invalidAmount
                                         }
-                                        title={
-                                            t(
-                                                `${
-                                                    insufficientBalance
-                                                        ? 'common.errors.insufficient-balance'
-                                                        : exceededLiquidityPoolCap
-                                                        ? 'liquidity-pool.deposit-liquidity-pool-cap-error'
-                                                        : exceededMaxAllowance
-                                                        ? 'liquidity-pool.deposit-staked-thales-error'
-                                                        : 'liquidity-pool.deposit-min-amount-error'
-                                                }`,
-                                                {
-                                                    amount: formatCurrencyWithSign(
-                                                        USD_SIGN,
-                                                        liquidityPoolData.minDepositAmount
-                                                    ),
-                                                }
-                                            ) as string
-                                        }
-                                    >
-                                        <NumericInput
-                                            value={amount}
-                                            disabled={isDepositAmountInputDisabled}
-                                            onChange={(_, value) => setAmount(value)}
-                                            placeholder={t('liquidity-pool.deposit-amount-placeholder')}
-                                            currencyLabel={collateral}
-                                            onMaxButton={setMaxAmount}
-                                        />
-                                    </ValidationTooltip>
+                                        validationMessage={t(
+                                            `${
+                                                insufficientBalance
+                                                    ? 'common.errors.insufficient-balance'
+                                                    : exceededLiquidityPoolCap
+                                                    ? 'liquidity-pool.deposit-liquidity-pool-cap-error'
+                                                    : exceededMaxAllowance
+                                                    ? 'liquidity-pool.deposit-staked-thales-error'
+                                                    : 'liquidity-pool.deposit-min-amount-error'
+                                            }`,
+                                            {
+                                                amount: formatCurrencyWithSign(
+                                                    USD_SIGN,
+                                                    liquidityPoolData.minDepositAmount
+                                                ),
+                                            }
+                                        )}
+                                    />
                                 </InputContainer>
                                 {getDepositSubmitButton()}
                             </>
@@ -754,9 +748,19 @@ const LiquidityPool: React.FC = () => {
                                                                     />
                                                                 </RadioButtonContainer>
                                                                 <InputContainer>
-                                                                    <ValidationTooltip
-                                                                        open={!isWithdrawalPercentageValid}
-                                                                        title={
+                                                                    <NumericInput
+                                                                        value={withdrawalPercentage}
+                                                                        disabled={isPartialWithdrawalDisabled}
+                                                                        onChange={(_, value) =>
+                                                                            setWithdrawalPercentage(value)
+                                                                        }
+                                                                        placeholder={t(
+                                                                            'liquidity-pool.percentage-placeholder'
+                                                                        )}
+                                                                        currencyLabel="%"
+                                                                        step="1"
+                                                                        showValidation={!isWithdrawalPercentageValid}
+                                                                        validationMessage={
                                                                             t(
                                                                                 Number(withdrawalPercentage) == 0
                                                                                     ? 'common.errors.enter-percentage'
@@ -764,20 +768,7 @@ const LiquidityPool: React.FC = () => {
                                                                                 { min: 10, max: 90 }
                                                                             ) as string
                                                                         }
-                                                                    >
-                                                                        <NumericInput
-                                                                            value={withdrawalPercentage}
-                                                                            disabled={isPartialWithdrawalDisabled}
-                                                                            onChange={(_, value) =>
-                                                                                setWithdrawalPercentage(value)
-                                                                            }
-                                                                            placeholder={t(
-                                                                                'liquidity-pool.percentage-placeholder'
-                                                                            )}
-                                                                            currencyLabel="%"
-                                                                            step="1"
-                                                                        />
-                                                                    </ValidationTooltip>
+                                                                    />
                                                                 </InputContainer>
                                                                 <SliderContainer>
                                                                     <StyledSlider

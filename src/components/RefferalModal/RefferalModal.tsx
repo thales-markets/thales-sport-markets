@@ -12,6 +12,7 @@ import { generalConfig } from 'config/general';
 import { buildReffererLink } from 'utils/routes';
 import { useTranslation } from 'react-i18next';
 import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';
+import TextInput from 'components/fields/TextInput';
 
 type RefferalModalProps = {
     onClose: () => void;
@@ -68,7 +69,7 @@ const RefferalModal: React.FC<RefferalModalProps> = ({ onClose }) => {
             <Container>
                 <Description>{t('common.referral.modal.description')}</Description>
                 <FlexDivRowCentered>
-                    <StyledInput value={reffererID} onChange={(e) => setReffererID(e.target.value)} />
+                    <TextInput value={reffererID} onChange={(e) => setReffererID(e.target.value)} margin="0" />
                     <SubmitButton disabled={!reffererID || savedReffererID === reffererID} onClick={onSubmit}>
                         {t('common.referral.modal.submit-button')}
                     </SubmitButton>
@@ -111,22 +112,6 @@ const Description = styled.div`
         &:hover {
             color: #00f9ff;
         }
-    }
-`;
-
-const StyledInput = styled.input`
-    background: #ffffff;
-    border-radius: 5px;
-    border: 2px solid #1a1c2b;
-    color: #1a1c2b;
-    width: 300px;
-    height: 34px;
-    padding-left: 10px;
-    padding-right: 60px;
-    font-size: 18px;
-    outline: none;
-    @media (max-width: 575px) {
-        width: 250px;
     }
 `;
 

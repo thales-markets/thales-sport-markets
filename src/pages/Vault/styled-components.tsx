@@ -265,47 +265,7 @@ export const ButtonContainer = styled(FlexDivCentered)<{ mobileDirection?: strin
 export const InputContainer = styled(FlexDivColumnCentered)`
     margin-top: 20px;
     margin-bottom: 10px;
-    input {
-        background: ${(props) => props.theme.input.background.primary};
-        border-radius: 5px;
-        border: 2px solid ${(props) => props.theme.borderColor.tertiary};
-        color: ${(props) => props.theme.input.textColor.primary};
-        width: 300px;
-        height: 34px;
-        padding-left: 10px;
-        padding-right: 60px;
-        font-size: 18px;
-        outline: none;
-        &::placeholder {
-            color: ${(props) => props.theme.textColor.secondary};
-        }
-        &:focus {
-            border: 2px solid ${(props) => props.theme.borderColor.quaternary};
-        }
-    }
-    .currency-label {
-        padding: 9px 10px 10px 0;
-    }
 `;
-
-export const InputLabel = styled.p`
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    margin-bottom: 6px;
-    color: ${(props) => props.theme.textColor.primary};
-`;
-
-export const ValidationTooltip = withStyles(() => ({
-    tooltip: {
-        minWidth: '100%',
-        width: '100%',
-        margin: '1px',
-        backgroundColor: '#FDB7B7',
-        color: '#F30101',
-        fontSize: '12px',
-    },
-}))(Tooltip);
 
 export const LeftLoaderContainer = styled(FlexDivCentered)`
     position: relative;

@@ -8,8 +8,6 @@ import {
     Title,
     SubmitButton,
     ButtonContainer,
-    ValidationTooltip,
-    InputLabel,
     InputContainer,
     Wrapper,
     ToggleContainer,
@@ -611,35 +609,30 @@ const Vault: React.FC<VaultProps> = (props) => {
                                         </WarningContentInfo>
                                     )}
                                     <InputContainer>
-                                        <InputLabel>{t('vault.deposit-amount-label')}:</InputLabel>
-                                        <ValidationTooltip
-                                            open={insufficientBalance || exceededVaultCap || invalidAmount}
-                                            title={
-                                                t(
-                                                    `${
-                                                        insufficientBalance
-                                                            ? 'common.errors.insufficient-balance'
-                                                            : exceededVaultCap
-                                                            ? 'vault.deposit-vault-cap-error'
-                                                            : 'vault.deposit-min-amount-error'
-                                                    }`,
-                                                    {
-                                                        amount: formatCurrencyWithSign(
-                                                            USD_SIGN,
-                                                            vaultData.minDepositAmount
-                                                        ),
-                                                    }
-                                                ) as string
-                                            }
-                                        >
-                                            <NumericInput
-                                                value={amount}
-                                                disabled={isDepositAmountInputDisabled}
-                                                onChange={(_, value) => setAmount(value)}
-                                                placeholder={t('vault.deposit-amount-placeholder')}
-                                                currencyLabel={getDefaultColleteralForNetwork(networkId)}
-                                            />
-                                        </ValidationTooltip>
+                                        <NumericInput
+                                            value={amount}
+                                            label={t('vault.deposit-amount-label')}
+                                            disabled={isDepositAmountInputDisabled}
+                                            onChange={(_, value) => setAmount(value)}
+                                            placeholder={t('vault.deposit-amount-placeholder')}
+                                            currencyLabel={getDefaultColleteralForNetwork(networkId)}
+                                            showValidation={insufficientBalance || exceededVaultCap || invalidAmount}
+                                            validationMessage={t(
+                                                `${
+                                                    insufficientBalance
+                                                        ? 'common.errors.insufficient-balance'
+                                                        : exceededVaultCap
+                                                        ? 'vault.deposit-vault-cap-error'
+                                                        : 'vault.deposit-min-amount-error'
+                                                }`,
+                                                {
+                                                    amount: formatCurrencyWithSign(
+                                                        USD_SIGN,
+                                                        vaultData.minDepositAmount
+                                                    ),
+                                                }
+                                            )}
+                                        />
                                     </InputContainer>
                                     {vaultData && (
                                         <>

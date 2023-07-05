@@ -279,46 +279,7 @@ export const ButtonContainer = styled(FlexDivColumnCentered)`
     width: 100%;
 `;
 
-export const InputContainer = styled(FlexDivColumnCentered)`
-    margin-bottom: 5px;
-    width: 100%;
-    div {
-        margin-bottom: 0px;
-        width: 100%;
-    }
-    input {
-        background: ${(props) => props.theme.input.background.primary};
-        border-radius: 5px;
-        border: 2px solid ${(props) => props.theme.input.background.primary};
-        color: ${(props) => props.theme.input.textColor.primary};
-        width: 100%;
-        height: 26px;
-        padding: 12px 50px 10px 10px;
-        font-size: 14px;
-        outline: none;
-        &::placeholder {
-            color: ${(props) => props.theme.textColor.secondary};
-        }
-        &:focus {
-            border: 2px solid ${(props) => props.theme.borderColor.quaternary};
-        }
-    }
-    .currency-label {
-        padding: 2px 10px 10px 0;
-        font-size: 14px;
-    }
-`;
-
-export const ValidationTooltip = withStyles(() => ({
-    tooltip: {
-        minWidth: '100%',
-        width: '100%',
-        margin: '1px',
-        backgroundColor: '#FDB7B7',
-        color: '#F30101',
-        fontSize: '12px',
-    },
-}))(Tooltip);
+export const InputContainer = styled(FlexDivColumnCentered)``;
 
 export const LoaderContainer = styled(FlexDivCentered)`
     position: relative;

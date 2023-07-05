@@ -14,7 +14,6 @@ import {
     FinishedInfoContainer,
     FinishedInfoLabel,
     ButtonContainer,
-    Input,
     TimeRemainingText,
     TimeRemainingGraphicContainer,
     TimeRemainingGraphicPercentage,
@@ -22,12 +21,10 @@ import {
     QuestionIndicator,
     CurrentQuestion,
     Footer,
-    ValidationTooltip,
     LoaderContainer,
     QuestionIndicatorContainer,
     QuizFirstNextContainer,
     QuizSecondNextContainer,
-    InputLabel,
     InputContainer,
     QuizLink,
     Copy,
@@ -83,6 +80,7 @@ import useQuizLeaderboardQuery from 'queries/quiz/useQuizLeaderboardQuery';
 import { FinishInfo, LeaderboardItem } from 'types/quiz';
 import ordinal from 'ordinal';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import TextInput from 'components/fields/TextInput';
 
 const Quiz: React.FC = () => {
     const { t } = useTranslation();
@@ -309,33 +307,26 @@ const Quiz: React.FC = () => {
                                         />
                                     </Copy>
                                     <InputContainer>
-                                        <InputLabel>{t('quiz.twitter-handle-label')}:</InputLabel>
-                                        <ValidationTooltip
-                                            open={!isTwitterValid}
-                                            title={t('quiz.twitter-handle-validation') as string}
-                                            placement={'top'}
-                                            arrow={true}
-                                        >
-                                            <Input
-                                                type="text"
-                                                placeholder={t('quiz.twitter-handle-placeholder')}
-                                                value={twitter}
-                                                onChange={(event) => {
-                                                    setIsTwitterValid(true);
-                                                    dispatch(setTwitter(event.target.value));
-                                                }}
-                                            />
-                                        </ValidationTooltip>
+                                        <TextInput
+                                            placeholder={t('quiz.twitter-handle-placeholder')}
+                                            value={twitter}
+                                            onChange={(event) => {
+                                                setIsTwitterValid(true);
+                                                dispatch(setTwitter(event.target.value));
+                                            }}
+                                            label={t('quiz.twitter-handle-label')}
+                                            showValidation={!isTwitterValid}
+                                            validationMessage={t('quiz.twitter-handle-validation')}
+                                        />
                                     </InputContainer>
                                     <InputContainer>
-                                        <InputLabel>{t('quiz.discord-label')}:</InputLabel>
-                                        <Input
-                                            type="text"
+                                        <TextInput
                                             placeholder={t('quiz.discord-placeholder')}
                                             value={discord}
                                             onChange={(event) => {
                                                 dispatch(setDiscord(event.target.value));
                                             }}
+                                            label={t('quiz.discord-label')}
                                         />
                                     </InputContainer>
                                     <ButtonContainer>{getSubmitButton()}</ButtonContainer>

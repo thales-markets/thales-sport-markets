@@ -1,5 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 type SelectOptions = Array<{ value: number | string; label: string }>;
 
@@ -12,6 +14,7 @@ type SelectInputProps = {
 };
 
 const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaultValue, width, isDisabled }) => {
+    const theme: ThemeInterface = useTheme();
     const defaultOption = options[defaultValue ? defaultValue : 0];
 
     const customStyled = {
@@ -19,46 +22,47 @@ const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaul
             ...provided,
             width: '100%',
             color: state.selectProps.menuColor,
-            backgroundColor: '#2f3656',
-            border: '1px solid #191C2B',
+            backgroundColor: theme.background.secondary,
+            border: `1px solid ${theme.borderColor.tertiary}`,
             marginTop: 5,
             borderRadius: 10,
         }),
         option: (provided: any, state: any) => ({
             ...provided,
-            color: '#FFFFFF',
-            backgroundColor: state?.isFocused ? '#252940' : state.isSelected ? '#1e2134' : 'transparent',
+            color: theme.textColor.primary,
+            backgroundColor: state?.isFocused || state.isSelected ? theme.background.primary : 'transparent',
+            opacity: state.isSelected && !state?.isFocused ? 0.7 : 0.9,
             cursor: 'pointer',
         }),
         control: (provided: any, state: any) => ({
             ...provided,
-            backgroundColor: '#2f3656',
-            borderColor: '#191C2B',
-            color: '#FFFFFF',
+            backgroundColor: theme.background.secondary,
+            borderColor: theme.borderColor.tertiary,
+            color: theme.textColor.primary,
             borderRadius: '10px',
             width: width,
             cursor: 'pointer',
             boxShadow: 'none',
             '&:hover': {
-                border: '1px solid #3fd1ff',
+                border: `1px solid ${theme.borderColor.quaternary}`,
                 boxShadow: 'none',
             },
             opacity: state.isDisabled ? 0.4 : 1,
         }),
         placeholder: (provided: any) => ({
             ...provided,
-            color: '#FFFFFF',
+            color: theme.textColor.primary,
         }),
         singleValue: (provided: any) => ({
             ...provided,
-            color: '#FFFFFF',
+            color: theme.textColor.primary,
         }),
         dropdownIndicator: (provided: any) => ({
             ...provided,
-            color: '#FFFFFF',
+            color: theme.textColor.primary,
             [':hover']: {
                 ...provided[':hover'],
-                color: '#FFFFFF',
+                color: theme.textColor.primary,
             },
         }),
     };

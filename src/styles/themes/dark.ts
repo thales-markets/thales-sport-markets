@@ -35,6 +35,7 @@ export default {
             primary: Colors.GREEN,
             secondary: Colors.GRAY_LIGHT,
             tertiary: Colors.GRAY_DARK,
+            quaternary: Colors.BLUE,
         },
         textColor: {
             primary: Colors.GRAY_LIGHT,
@@ -61,7 +62,7 @@ export default {
             primary: Colors.WHITE,
             secondary: Colors.GRAY_LIGHT,
             focus: {
-                primary: Colors.GREEN,
+                primary: Colors.BLUE,
             },
         },
     },
@@ -76,6 +77,17 @@ export default {
         textColor: {
             primary: Colors.WHITE,
             secondary: Colors.BLUE,
+        },
+    },
+    error: {
+        background: {
+            primary: Colors.GRAY,
+        },
+        textColor: {
+            primary: Colors.RED,
+        },
+        borderColor: {
+            primary: Colors.RED,
         },
     },
 };
