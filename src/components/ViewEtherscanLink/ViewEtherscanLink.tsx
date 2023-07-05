@@ -25,7 +25,7 @@ const ViewEtherscanLink: React.FC<ViewEtherscanLinkProps> = ({ hash }) => {
 };
 
 const StyledLink = styled.a`
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.link.textColor.primary};
     :hover {
         text-decoration: underline;
     }

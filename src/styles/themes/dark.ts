@@ -72,4 +72,10 @@ export default {
             secondary: Colors.WHITE,
         },
     },
+    link: {
+        textColor: {
+            primary: Colors.WHITE,
+            secondary: Colors.BLUE,
+        },
+    },
 };

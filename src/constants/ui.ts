@@ -1,22 +1,13 @@
 import { NavMenuItem, ThemeInterface } from 'types/ui';
-import lightTheme from 'styles/themes/light';
 import darkTheme from 'styles/themes/dark';
-import worldCupTheme from 'styles/themes/worldcup';
-import marchMadnessTheme from 'styles/themes/marchMadness';
 import ROUTES from './routes';
 
 export enum Theme {
-    LIGHT,
     DARK,
-    WORLDCUP,
-    MARCH_MADNESS,
 }
 
 export const ThemeMap: Record<Theme, ThemeInterface> = {
-    [Theme.LIGHT]: lightTheme,
     [Theme.DARK]: darkTheme,
-    [Theme.WORLDCUP]: worldCupTheme,
-    [Theme.MARCH_MADNESS]: marchMadnessTheme,
 };
 
 export const STATUS_COLOR = {

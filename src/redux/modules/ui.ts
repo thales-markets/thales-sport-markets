@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { Theme } from 'constants/ui';
+import { Theme, ThemeMap } from 'constants/ui';
 import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
 import { OddsType } from '../../constants/markets';
@@ -17,7 +17,7 @@ const getDefaultOddsType = (): OddsType => {
 
 const getDefaultTheme = (): Theme => {
     const lsTheme = localStore.get(LOCAL_STORAGE_KEYS.UI_THEME);
-    return (lsTheme !== undefined ? lsTheme : Theme.DARK) as Theme;
+    return (lsTheme !== undefined && ThemeMap[lsTheme as Theme] !== undefined ? lsTheme : Theme.DARK) as Theme;
 };
 
 const getDefaultStopPulsing = (): boolean => {
