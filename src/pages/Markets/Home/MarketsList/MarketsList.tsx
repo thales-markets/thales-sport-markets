@@ -1,4 +1,4 @@
-import { TAGS_FLAGS, TAGS_LIST } from 'constants/tags';
+import { GOLF_TOURNAMENT_WINNER_TAG, MOTOSPORT_TAGS, TAGS_FLAGS, TAGS_LIST } from 'constants/tags';
 import React, { useState } from 'react';
 import Flag from 'react-flagpack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,6 +30,8 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
     const networkId = useSelector(getNetworkId);
     const favouriteLeague = favouriteLeagues.find((favourite: TagInfo) => favourite.id == league);
     const isFavourite = favouriteLeague && favouriteLeague.favourite;
+
+    const sortedMarkets = sortWinnerMarkets(markets, league);
 
     return (
         <>
@@ -126,7 +128,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                 />
             </LeagueCard>
             <GamesContainer hidden={hideLeague}>
-                {markets.map((market: any, index: number) => (
+                {sortedMarkets.map((market: any, index: number) => (
                     <MarketListCard language={language} market={market} key={index + 'list'} />
                 ))}
             </GamesContainer>
@@ -175,6 +177,13 @@ const LeagueFlag = (tagId: number | any) => {
         default:
             return <FlagWorld alt="World flag" src="/world-flag.png" />;
     }
+};
+
+const sortWinnerMarkets = (markets: SportMarkets, leagueId: number) => {
+    if (leagueId == GOLF_TOURNAMENT_WINNER_TAG || MOTOSPORT_TAGS.includes(leagueId)) {
+        return markets.sort((a, b) => b.homeOdds - a.homeOdds);
+    }
+    return markets;
 };
 
 const LeagueCard = styled.div`
