@@ -54,7 +54,7 @@ export const ARB_USDC = {
 
 export const AVAILABLE_TOKENS = [OP_SUSD, OP_DAI, OP_USDC, OP_USDT, ARB_USDC];
 
-export const ONE_INCH_EXCHANGE_URL = 'https://api.1inch.exchange/v4.0/';
+export const ONE_INCH_API_URL = 'https://api.1inch.io/v5.0/';
 export const APPROVE_SPENDER_SUFFIX = '/approve/spender';
 export const QUOTE_SUFFIX = '/quote';
 export const SWAP_SUFFIX = '/swap';

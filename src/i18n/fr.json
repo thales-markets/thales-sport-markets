@@ -310,7 +310,8 @@
                 "esports": "E-sport",
                 "cricket": "Criquet",
                 "boxing": "Boxe",
-                "mma": "Sports de combat"
+                "mma": "Sports de combat",
+                "golf": "Le golf"
             },
             "all": "Tous",
             "datepicker": {
@@ -318,7 +319,8 @@
             },
             "mobile-tags": {
                 "search": "Chercher"
-            }
+            },
+            "show-active": "Afficher uniquement les sports actifs"
         },
         "back-to-markets": "Retour aux marchés",
         "back-to-market": "Retour au marché",
@@ -428,7 +430,8 @@
                 },
                 "bonus": "{{bonus}} bonus supplémentaire sur la victoire !",
                 "and": "et",
-                "race-winner": "{{team}} remportera la course {{matchResolve}}"
+                "race-winner": "{{team}} remportera la course {{matchResolve}}",
+                "tournament-winner": "{{team}} remportera le tournoi {{matchResolve}}"
             },
             "starts-in": "Commence dans",
             "period": "Période",
@@ -489,10 +492,11 @@
                 "max-teams": "Maximum {{max}} marchés à Parlay",
                 "max-profit": "Le profit maximal pris en charge est de {{max}}",
                 "no-funds-multi-collateral": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds ({{percentage}} % de plus du montant du buy-in)",
-                "same-race-drivers": "Un seul pilote par course est pris en charge. Impossible d'ajouter {{addedDriver}} car {{existingDriver}} est déjà dans Parlay",
                 "max-number-of-markets-with-combined-markets": "Le nombre maximum de marchés dans Parlay est de {{max}}. Un seul marché combiné compte comme deux marchés réguliers.",
                 "max-combined-markets": "Le nombre maximum de marchés combinés dans Parlay est de {{max}}.",
-                "amm-contract-paused": "Parlay AMM mis en pause"
+                "amm-contract-paused": "Parlay AMM mis en pause",
+                "unique-players": "Impossible d'ajouter deux fois le même participant dans Parlay. {{existingParticipant}} est déjà dans Parlay",
+                "same-event-participant": "Un seul participant par événement est pris en charge. Impossible d'ajouter {{addedParticipant}} car {{existingParticipant}} est déjà dans Parlay"
             },
             "payout": "Total reçu",
             "empty-title": "Aucune position",

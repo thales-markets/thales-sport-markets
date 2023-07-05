@@ -8,7 +8,7 @@ import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import SwapNumericInput from 'components/fields/SwapNumericInput';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
-import { AVAILABLE_TOKENS, ONE_INCH_EXCHANGE_URL, OP_ETH, QUOTE_SUFFIX, SWAP_SUFFIX } from 'constants/tokens';
+import { AVAILABLE_TOKENS, ONE_INCH_API_URL, OP_ETH, QUOTE_SUFFIX, SWAP_SUFFIX } from 'constants/tokens';
 import TokenDropdown from './TokenDropdown';
 import { Token } from 'types/tokens';
 import { getIsAppReady } from 'redux/modules/app';
@@ -84,7 +84,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
             if (!isRefresh) {
                 setIsGettingQuote(true);
             }
-            const fetchUrl = `${ONE_INCH_EXCHANGE_URL}${networkId}${QUOTE_SUFFIX}?fromTokenAddress=${
+            const fetchUrl = `${ONE_INCH_API_URL}${networkId}${QUOTE_SUFFIX}?fromTokenAddress=${
                 sourceToken.address
             }&toTokenAddress=${selectedToken.address}&amount=${ethers.utils.parseUnits(
                 Number(amount).toString(),
@@ -115,7 +115,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
         setIsSubmitting(true);
         try {
-            const fetchUrl = `${ONE_INCH_EXCHANGE_URL}${networkId}${SWAP_SUFFIX}?fromTokenAddress=${
+            const fetchUrl = `${ONE_INCH_API_URL}${networkId}${SWAP_SUFFIX}?fromTokenAddress=${
                 sourceToken.address
             }&toTokenAddress=${selectedToken.address}&amount=${ethers.utils.parseUnits(
                 Number(amount).toString(),
