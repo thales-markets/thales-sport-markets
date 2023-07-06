@@ -154,21 +154,19 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
 
     const getSubmitButton = () => {
         if (!isWalletConnected) {
-            return (
-                <ModalButton onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</ModalButton>
-            );
+            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
         }
         if (insufficientBalance) {
-            return <ModalButton disabled={true}>{t(`common.errors.insufficient-balance`)}</ModalButton>;
+            return <Button disabled={true}>{t(`common.errors.insufficient-balance`)}</Button>;
         }
         if (!isAmountEntered) {
-            return <ModalButton disabled={true}>{t(`common.errors.enter-amount`)}</ModalButton>;
+            return <Button disabled={true}>{t(`common.errors.enter-amount`)}</Button>;
         }
 
         return (
-            <ModalButton disabled={isButtonDisabled} onClick={handleSubmit}>
+            <Button disabled={isButtonDisabled} onClick={handleSubmit}>
                 {!isSubmitting ? t('common.swap.swap-label') : t('common.swap.swap-progress-label')}
-            </ModalButton>
+            </Button>
         );
     };
 
@@ -223,7 +221,5 @@ const InputContainer = styled(FlexDivCentered)`
 const ButtonContainer = styled(FlexDivCentered)`
     margin: 30px 0 10px 0;
 `;
-
-const ModalButton = styled(Button)``;
 
 export default SwapModal;

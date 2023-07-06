@@ -134,18 +134,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                     })}
                 </ItemsContainer>
                 <FooterContainer>
-                    <MintVoucher
-                        style={{ margin: '20px auto 0px auto', width: 205 }}
-                        buttonStyle={{
-                            width: '100%',
-                            background: '#303656',
-                            borderRadius: 3,
-                            border: `1.5px solid #3FD1FF`,
-                            color: '#3FD1FF',
-                            fontSize: 14,
-                            lineHeight: '16px',
-                        }}
-                    />
+                    <MintVoucher style={{ margin: '20px auto 0px auto', width: 205 }} />
                     <LogoContainer>
                         <Logo />
                         <CloseIcon onClick={() => setNavMenuVisibility(false)} />

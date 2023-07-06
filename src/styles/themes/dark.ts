@@ -33,18 +33,18 @@ export default {
     button: {
         background: {
             primary: Colors.GREEN,
-            secondary: Colors.GRAY_LIGHT,
-            tertiary: Colors.GRAY_DARK,
+            secondary: Colors.GRAY,
+            tertiary: Colors.GRAY_LIGHT,
             quaternary: Colors.BLUE,
         },
         textColor: {
-            primary: Colors.GRAY_LIGHT,
-            secondary: Colors.GRAY_DARK,
+            primary: Colors.GRAY_DARK,
+            secondary: Colors.WHITE,
             tertiary: Colors.GRAY,
             quaternary: Colors.BLUE,
         },
         borderColor: {
-            primary: Colors.GRAY_LIGHT,
+            primary: Colors.GREEN,
             secondary: Colors.BLUE,
         },
     },

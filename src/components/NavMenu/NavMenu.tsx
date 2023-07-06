@@ -128,18 +128,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                     })}
                 </ItemsContainer>
                 <FooterContainer>
-                    <MintVoucher
-                        style={{ width: '100%' }}
-                        buttonStyle={{
-                            width: '100%',
-                            background: '#303656',
-                            borderRadius: 3,
-                            border: `1.5px solid #3FD1FF`,
-                            color: '#3FD1FF',
-                            fontSize: 14,
-                            lineHeight: '16px',
-                        }}
-                    />
+                    <MintVoucher style={{ width: '100%' }} />
                 </FooterContainer>
             </Wrapper>
         </OutsideClickHandler>

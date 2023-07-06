@@ -28,6 +28,7 @@ type NumericInputProps = {
     width?: string;
     height?: string;
     enableCurrencyComponentOnly?: boolean;
+    validationPlacement?: string;
 };
 
 const INVALID_CHARS = ['-', '+', 'e'];
@@ -53,6 +54,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
     width,
     height,
     enableCurrencyComponentOnly,
+    validationPlacement,
     ...rest
 }) => {
     const { t } = useTranslation();
@@ -84,7 +86,12 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     <InfoText>{info}</InfoText>
                 </InfoWrapper>
             )}
-            <ValidationTooltip open={showValidation} title={validationMessage || ''} placement={'top'} arrow={true}>
+            <ValidationTooltip
+                open={showValidation}
+                title={showValidation ? validationMessage || '' : ''}
+                placement={validationPlacement || 'top'}
+                arrow={true}
+            >
                 <StyledInput
                     {...rest}
                     value={value}
@@ -173,7 +180,8 @@ const ValidationTooltip = styled((props) => <MuiTooltip classes={{ popper: props
     & .MuiTooltip-tooltip {
         min-width: 100%;
         max-width: 300px;
-        margin-bottom: 7px;
+        margin-bottom: ${(props) => (props.placement === 'top' ? '7px' : '0px')} !important;
+        margin-top: ${(props) => (props.placement === 'top' ? '0px' : '7px')} !important;
         background-color: ${(props) => props.theme.error.background.primary};
         color: ${(props) => props.theme.error.textColor.primary};
         border: 1.5px solid ${(props) => props.theme.error.borderColor.primary};
@@ -190,7 +198,8 @@ const ValidationTooltip = styled((props) => <MuiTooltip classes={{ popper: props
         }
         width: 13px;
         height: 10px;
-        bottom: -3px !important;
+        bottom: ${(props) => (props.placement === 'top' ? '-3px' : '0px')} !important;
+        top: ${(props) => (props.placement === 'top' ? '0px' : '-3px')} !important;
     }
 `;
 

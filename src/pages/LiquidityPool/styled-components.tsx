@@ -1,4 +1,4 @@
-import { Slider, Tooltip, withStyles } from '@material-ui/core';
+import { Slider, withStyles } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 import {
@@ -229,32 +229,14 @@ export const LiquidityPoolFilledGraphicPercentage = styled(FlexDivStart)<{ width
     border-radius: 9px;
 `;
 
-export const SubmitButton = styled.button`
-    background: #36e5d0;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 20px;
-    color: #1a1c2b;
-    width: 100%;
-    border: none;
-    padding: 3px;
-    cursor: pointer;
-    text-transform: uppercase;
-    &:disabled {
-        opacity: 0.4;
-        cursor: default;
-    }
-`;
-
 export const ExternalButton = styled.a`
-    background: #64d9fe;
+    background: ${(props) => props.theme.button.background.quaternary};
     margin-top: 5px;
     border-radius: 5px;
     font-size: 16px;
     font-weight: 700;
     line-height: 20px;
-    color: #1a1c2b;
+    color: ${(props) => props.theme.button.textColor.primary};
     width: 100%;
     border: none;
     padding: 3px;
@@ -262,17 +244,6 @@ export const ExternalButton = styled.a`
     text-align: center;
     text-transform: uppercase;
     height: 26px;
-`;
-
-export const CloseRoundButton = styled(SubmitButton)`
-    margin: 0;
-    width: auto;
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 14px;
-    top: -3px;
-    position: relative;
-    background: #64d9fe;
 `;
 
 export const ButtonContainer = styled(FlexDivColumnCentered)`
@@ -451,3 +422,7 @@ export const SliderRange = styled.div`
         cursor: default;
     }
 `;
+
+export const defaultButtonProps = {
+    width: '100%',
+};

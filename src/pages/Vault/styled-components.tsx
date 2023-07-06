@@ -1,4 +1,3 @@
-import { Tooltip, withStyles } from '@material-ui/core';
 import styled from 'styled-components';
 import {
     FlexDivCentered,
@@ -197,7 +196,7 @@ export const VaultFilledGraphicContainer = styled(FlexDivStart)`
     height: 14px;
     background: rgba(100, 217, 254, 0.2);
     border-radius: 15px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     @media (max-width: 575px) {
         width: 250px;
     }
@@ -216,35 +215,6 @@ export const VaultFilledGraphicPercentage = styled(FlexDivStart)<{ width: number
     @media (max-width: 575px) {
         max-width: 250px;
     }
-`;
-
-export const SubmitButton = styled.button`
-    background: linear-gradient(88.84deg, #2fc9dd 19.98%, #1ca6b9 117.56%);
-    border-radius: 8px;
-    margin: 20px 20px;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 23px;
-    color: #1a1c2b;
-    width: 252px;
-    border: none;
-    padding: 7px;
-    cursor: pointer;
-    text-transform: uppercase;
-    &:disabled {
-        opacity: 0.4;
-        cursor: default;
-    }
-`;
-
-export const CloseRoundButton = styled(SubmitButton)`
-    margin: 0;
-    width: auto;
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 14px;
-    top: -2px;
-    position: relative;
 `;
 
 export const ButtonContainer = styled(FlexDivCentered)<{ mobileDirection?: string }>`

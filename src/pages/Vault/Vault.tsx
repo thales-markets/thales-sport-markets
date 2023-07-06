@@ -6,7 +6,6 @@ import { buildHref } from 'utils/routes';
 import {
     Container,
     Title,
-    SubmitButton,
     ButtonContainer,
     InputContainer,
     Wrapper,
@@ -24,7 +23,6 @@ import {
     ContentInfo,
     BoldContent,
     WarningContentInfo,
-    CloseRoundButton,
     LeftLoaderContainer,
     RightLoaderContainer,
     RoundEndContainer,
@@ -67,6 +65,9 @@ import Tooltip from 'components/Tooltip';
 import { getDefaultColleteralForNetwork, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { refetchVaultData } from 'utils/queryConnector';
 import { NewBadge } from 'pages/Vaults/VaultOverview/styled-components';
+import Button from 'components/Button';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 type VaultProps = RouteComponentProps<{
     vaultId: string;
@@ -74,6 +75,7 @@ type VaultProps = RouteComponentProps<{
 
 const Vault: React.FC<VaultProps> = (props) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -324,21 +326,17 @@ const Vault: React.FC<VaultProps> = (props) => {
 
     const getDepositSubmitButton = () => {
         if (!isWalletConnected) {
-            return (
-                <SubmitButton onClick={() => openConnectModal?.()}>
-                    {t('common.wallet.connect-your-wallet')}
-                </SubmitButton>
-            );
+            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
         }
         if (insufficientBalance) {
-            return <SubmitButton disabled={true}>{t(`common.errors.insufficient-balance`)}</SubmitButton>;
+            return <Button disabled={true}>{t(`common.errors.insufficient-balance`)}</Button>;
         }
         if (!isAmountEntered) {
-            return <SubmitButton disabled={true}>{t(`common.errors.enter-amount`)}</SubmitButton>;
+            return <Button disabled={true}>{t(`common.errors.enter-amount`)}</Button>;
         }
         if (!hasAllowance) {
             return (
-                <SubmitButton disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
+                <Button disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
                     {!isAllowing
                         ? t('common.enable-wallet-access.approve-label', {
                               currencyKey: getDefaultColleteralForNetwork(networkId),
@@ -346,28 +344,24 @@ const Vault: React.FC<VaultProps> = (props) => {
                         : t('common.enable-wallet-access.approve-progress-label', {
                               currencyKey: getDefaultColleteralForNetwork(networkId),
                           })}
-                </SubmitButton>
+                </Button>
             );
         }
         return (
-            <SubmitButton disabled={isDepositButtonDisabled} onClick={handleDeposit}>
+            <Button disabled={isDepositButtonDisabled} onClick={handleDeposit}>
                 {!isSubmitting ? t('vault.button.deposit-label') : t('vault.button.deposit-progress-label')}
-            </SubmitButton>
+            </Button>
         );
     };
 
-    const getWithdrawSubmitButton = () => {
+    const getWithdrawButton = () => {
         if (!isWalletConnected) {
-            return (
-                <SubmitButton onClick={() => openConnectModal?.()}>
-                    {t('common.wallet.connect-your-wallet')}
-                </SubmitButton>
-            );
+            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
         }
         return (
-            <SubmitButton disabled={isRequestWithdrawalButtonDisabled} onClick={handleWithdrawalRequest}>
+            <Button disabled={isRequestWithdrawalButtonDisabled} onClick={handleWithdrawalRequest}>
                 {t('vault.button.request-withdrawal-label')}
-            </SubmitButton>
+            </Button>
         );
     };
 
@@ -392,9 +386,17 @@ const Vault: React.FC<VaultProps> = (props) => {
                                             <TimeRemaining end={vaultData.roundEndTime} fontSize={20} showFullCounter />
                                         )}{' '}
                                         {vaultData.canCloseCurrentRound && (
-                                            <CloseRoundButton disabled={isSubmitting} onClick={closeRound}>
+                                            <Button
+                                                disabled={isSubmitting}
+                                                onClick={closeRound}
+                                                fontSize="12px"
+                                                margin="5px 0 0 0"
+                                                height="24px"
+                                                backgroundColor={theme.button.background.quaternary}
+                                                borderColor={theme.button.borderColor.secondary}
+                                            >
                                                 {t('vault.button.close-round-label')}
-                                            </CloseRoundButton>
+                                            </Button>
                                         )}
                                     </RoundEnd>
                                 </RoundEndContainer>
@@ -632,6 +634,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                                                     ),
                                                 }
                                             )}
+                                            validationPlacement="bottom"
                                         />
                                     </InputContainer>
                                     {vaultData && (
@@ -758,7 +761,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                                                     )}
                                                 </>
                                             )}
-                                            <ButtonContainer>{getWithdrawSubmitButton()}</ButtonContainer>
+                                            <ButtonContainer>{getWithdrawButton()}</ButtonContainer>
                                         </>
                                     )}
                                     {vaultData && userVaultData && userVaultData.isWithdrawalRequested && (

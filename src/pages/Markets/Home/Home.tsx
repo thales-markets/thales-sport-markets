@@ -38,6 +38,9 @@ import useSGPFeesQuery from 'queries/markets/useSGPFeesQuery';
 import { setSGPFees } from 'redux/modules/parlay';
 import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';
 import Checkbox from '../../../components/fields/Checkbox/Checkbox';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
+import { CSSProperties } from 'styled-components';
 
 const SidebarLeaderboard = lazy(
     () => import(/* webpackChunkName: "SidebarLeaderboard" */ 'pages/ParlayLeaderboard/components/SidebarLeaderboard')
@@ -65,6 +68,7 @@ type AllMarkets = {
 const Home: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -473,10 +477,19 @@ const Home: React.FC = () => {
                             isMobile={isMobile}
                         />
                     </GlobalFiltersContainer>
-                    <ApplyFiltersButton onClick={() => setShowBurger(false)}>
+                    <Button
+                        onClick={() => setShowBurger(false)}
+                        width="180px"
+                        height="43px"
+                        fontSize="16px"
+                        padding="5px 10px"
+                        backgroundColor={theme.button.background.quaternary}
+                        borderColor={theme.button.borderColor.secondary}
+                        additionalStyles={additionalApplyFiltersButtonStyle}
+                    >
                         {t('market.apply-filters')}
                         <ArrowIcon className={`icon icon--arrow-up`} />
-                    </ApplyFiltersButton>
+                    </Button>
                 </BurgerFiltersContainer>
             </ReactModal>
 
@@ -643,7 +656,16 @@ const Home: React.FC = () => {
                                         {t('market.no-markets-found')}{' '}
                                         {t(`market.filter-label.sport.${sportFilter.toLowerCase()}`)}
                                     </NoMarketsLabel>
-                                    <Button onClick={resetFilters}>{t('market.view-all-markets')}</Button>
+                                    <Button
+                                        onClick={resetFilters}
+                                        backgroundColor={theme.button.background.tertiary}
+                                        textColor={theme.button.textColor.quaternary}
+                                        borderColor={theme.button.borderColor.secondary}
+                                        fontWeight="400"
+                                        fontSize="15px"
+                                    >
+                                        {t('market.view-all-markets')}
+                                    </Button>
                                 </NoMarketsContainer>
                             ) : (
                                 <Suspense fallback={<Loader />}>
@@ -736,9 +758,6 @@ const NoMarketsContainer = styled(FlexDivColumnCentered)`
     font-weight: bold;
     font-size: 28px;
     line-height: 100%;
-    button {
-        padding-top: 1px;
-    }
 `;
 
 const NoMarketsLabel = styled.span`
@@ -823,6 +842,13 @@ const customModalStyles = {
         backgroundColor: '#303656',
         zIndex: '1000',
     },
+};
+
+const additionalApplyFiltersButtonStyle: CSSProperties = {
+    alignSelf: 'center',
+    borderRadius: '40px',
+    bottom: '3%',
+    position: 'fixed',
 };
 
 const CheckboxContainer = styled.div<{ isMobile: boolean }>`

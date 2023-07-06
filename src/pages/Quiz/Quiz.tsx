@@ -310,7 +310,7 @@ const Quiz: React.FC = () => {
                                         <TextInput
                                             placeholder={t('quiz.twitter-handle-placeholder')}
                                             value={twitter}
-                                            onChange={(event) => {
+                                            onChange={(event: any) => {
                                                 setIsTwitterValid(true);
                                                 dispatch(setTwitter(event.target.value));
                                             }}
@@ -323,7 +323,7 @@ const Quiz: React.FC = () => {
                                         <TextInput
                                             placeholder={t('quiz.discord-placeholder')}
                                             value={discord}
-                                            onChange={(event) => {
+                                            onChange={(event: any) => {
                                                 dispatch(setDiscord(event.target.value));
                                             }}
                                             label={t('quiz.discord-label')}

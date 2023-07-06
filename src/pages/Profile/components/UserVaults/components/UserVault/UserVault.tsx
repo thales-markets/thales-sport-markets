@@ -8,9 +8,13 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { buildVaultLink } from 'utils/routes';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
+import Button from 'components/Button';
 
 const UserVault: React.FC<{ vaultName: string; vaultAddress: string }> = ({ vaultName, vaultAddress }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -40,7 +44,16 @@ const UserVault: React.FC<{ vaultName: string; vaultAddress: string }> = ({ vaul
                         <Value>{lastValidVaultData?.toFixed(2)}</Value>
                         <PostLabel>USD</PostLabel>
                     </TextWrapper>
-                    <Button>{t('profile.go-to-vault')}</Button>
+                    <Button
+                        backgroundColor={theme.button.background.quaternary}
+                        borderColor={theme.button.borderColor.secondary}
+                        width="136px"
+                        fontSize="14px"
+                        padding="1px 2px"
+                        height="20px"
+                    >
+                        {t('profile.go-to-vault')}
+                    </Button>
                 </ContentWrapper>
             </VaultCard>
         </SPAAnchor>
@@ -127,21 +140,6 @@ const PostLabel = styled.span`
     font-size: 14px;
     line-height: 23px;
     text-align: center;
-`;
-const Button = styled.button`
-    width: 136px;
-    background: #3fd1ff;
-    border-radius: 3.64362px;
-    text-transform: uppercase;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 19px;
-    text-align: center;
-    letter-spacing: 0.025em;
-    cursor: pointer;
-    border: none;
 `;
 
 export default UserVault;

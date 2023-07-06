@@ -21,6 +21,7 @@ type TextInputProps = {
     height?: string;
     iconClass?: string;
     onIconClick?: () => void;
+    validationPlacement?: string;
 };
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -39,6 +40,7 @@ const TextInput: React.FC<TextInputProps> = ({
     height,
     iconClass,
     onIconClick,
+    validationPlacement,
     ...rest
 }) => {
     return (
@@ -49,7 +51,12 @@ const TextInput: React.FC<TextInputProps> = ({
                     {tooltip && <Tooltip overlay={tooltip} />}:
                 </FieldLabel>
             )}
-            <ValidationTooltip open={showValidation} title={validationMessage || ''} placement={'top'} arrow={true}>
+            <ValidationTooltip
+                open={showValidation}
+                title={showValidation ? validationMessage || '' : ''}
+                placement={validationPlacement || 'top'}
+                arrow={true}
+            >
                 <StyledInput
                     {...rest}
                     readOnly={!onChange}
@@ -108,7 +115,8 @@ const ValidationTooltip = styled((props) => <MuiTooltip classes={{ popper: props
     & .MuiTooltip-tooltip {
         min-width: 100%;
         max-width: 300px;
-        margin-bottom: 7px;
+        margin-bottom: ${(props) => (props.placement === 'top' ? '7px' : '0px')} !important;
+        margin-top: ${(props) => (props.placement === 'top' ? '0px' : '7px')} !important;
         background-color: ${(props) => props.theme.error.background.primary};
         color: ${(props) => props.theme.error.textColor.primary};
         border: 1.5px solid ${(props) => props.theme.error.borderColor.primary};
@@ -125,7 +133,8 @@ const ValidationTooltip = styled((props) => <MuiTooltip classes={{ popper: props
         }
         width: 13px;
         height: 10px;
-        bottom: -3px !important;
+        bottom: ${(props) => (props.placement === 'top' ? '-3px' : '0px')} !important;
+        top: ${(props) => (props.placement === 'top' ? '0px' : '-3px')} !important;
     }
 `;
 

@@ -195,25 +195,23 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
 
     const getSubmitButton = () => {
         if (!isWalletConnected) {
-            return (
-                <ModalButton onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</ModalButton>
-            );
+            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
         }
         if (insufficientBalance) {
-            return <ModalButton disabled={true}>{t(`common.errors.insufficient-balance`)}</ModalButton>;
+            return <Button disabled={true}>{t(`common.errors.insufficient-balance`)}</Button>;
         }
         if (!isAmountEntered) {
-            return <ModalButton disabled={true}>{t(`common.errors.enter-amount`)}</ModalButton>;
+            return <Button disabled={true}>{t(`common.errors.enter-amount`)}</Button>;
         }
         if (!isRecipientValid) {
-            return <ModalButton disabled={true}>{t(`common.errors.invalid-address`)}</ModalButton>;
+            return <Button disabled={true}>{t(`common.errors.invalid-address`)}</Button>;
         }
         if (!isRecipientEntered) {
-            return <ModalButton disabled={true}>{t(`common.errors.enter-address`)}</ModalButton>;
+            return <Button disabled={true}>{t(`common.errors.enter-address`)}</Button>;
         }
         if (!hasAllowance) {
             return (
-                <ModalButton disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
+                <Button disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
                     {!isAllowing
                         ? t('common.enable-wallet-access.approve-label', {
                               currencyKey: getDefaultColleteralForNetwork(networkId),
@@ -221,15 +219,15 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
                         : t('common.enable-wallet-access.approve-progress-label', {
                               currencyKey: getDefaultColleteralForNetwork(networkId),
                           })}
-                </ModalButton>
+                </Button>
             );
         }
         return (
-            <ModalButton disabled={isButtonDisabled} onClick={handleSubmit}>
+            <Button disabled={isButtonDisabled} onClick={handleSubmit}>
                 {!isSubmitting
                     ? t('common.voucher.modal.button.mint-label')
                     : t('common.voucher.modal.button.mint-progress-label')}
-            </ModalButton>
+            </Button>
         );
     };
 
@@ -278,7 +276,7 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
                             disabled={isAllowing || isSubmitting}
                             placeholder={t('common.voucher.modal.recipient-wallet-placeholder')}
                             value={recipient}
-                            onChange={(event) => {
+                            onChange={(event: any) => {
                                 setRecipient(event.target.value);
                             }}
                             showValidation={!isRecipientValid}
@@ -361,7 +359,5 @@ const InputLabel = styled.p`
 `;
 
 const ButtonContainer = styled(FlexDivCentered)``;
-
-const ModalButton = styled(Button)``;
 
 export default MintVoucherModal;
