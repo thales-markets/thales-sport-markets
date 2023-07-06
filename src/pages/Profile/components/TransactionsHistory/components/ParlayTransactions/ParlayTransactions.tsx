@@ -40,7 +40,6 @@ import { useTranslation } from 'react-i18next';
 import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import ShareTicketModal from 'pages/Markets/Home/Parlay/components/ShareTicketModal';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
-import { Position } from 'constants/options';
 import { ethers } from 'ethers';
 import { CollateralByNetworkId } from 'utils/network';
 import { buildMarketLink } from 'utils/routes';
@@ -52,7 +51,7 @@ import {
     isCombinedMarketWinner,
     removeCombinedMarketsFromParlayMarketType,
 } from 'utils/combinedMarkets';
-import { OddsType } from 'constants/markets';
+import { OddsType, Position } from 'enums/markets';
 
 const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();

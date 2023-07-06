@@ -1,5 +1,4 @@
-import { Position } from 'constants/options';
-import { BetType, BetTypeNameMap, DoubleChanceMarketType } from 'constants/tags';
+import { BetTypeNameMap } from 'constants/tags';
 import { STATUS_COLOR } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +7,7 @@ import { getSpreadTotalText, getVisibilityOfDrawOption, isGolf, isMotosport } fr
 import { Status } from '../MatchStatus/MatchStatus';
 import Odd from '../Odd';
 import { Container, OddsContainer, Title } from './styled-components';
+import { BetType, DoubleChanceMarketType, Position } from 'enums/markets';
 
 type OddsProps = {
     market: SportMarketInfo;

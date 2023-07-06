@@ -1,8 +1,4 @@
-import { OddsType } from 'constants/markets';
-import { Position } from 'constants/options';
 import {
-    BetType,
-    DoubleChanceMarketType,
     ENETPULSE_SPORTS,
     FIFA_WC_TAG,
     FIFA_WC_U20_TAG,
@@ -32,6 +28,7 @@ import {
 import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
+import { BetType, DoubleChanceMarketType, OddsType, Position } from 'enums/markets';
 
 const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 90;
 

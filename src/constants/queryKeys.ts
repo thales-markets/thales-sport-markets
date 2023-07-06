@@ -1,8 +1,7 @@
 import { NetworkId } from 'types/network';
-import { Position } from './options';
 import { MultiSingleAmounts, ParlaysMarket } from 'types/markets';
 import { LiquidityPoolType } from 'types/liquidityPool';
-import { GlobalFiltersEnum } from './markets';
+import { GlobalFiltersEnum, Position } from 'enums/markets';
 
 const QUERY_KEYS = {
     Rewards: (networkId: NetworkId, period: number) => ['rewards', networkId, period],

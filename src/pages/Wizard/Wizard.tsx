@@ -8,13 +8,7 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivStart } from 'styles/common';
 import YouTubeVideo from '../../components/YouTubeVideo';
 import Step from './components/Step';
-
-export enum WizardStep {
-    CONNECT_METAMASK,
-    FUND,
-    EXCHANGE,
-    TRADE,
-}
+import { WizardStep } from 'enums/wizard';
 
 const Wizard: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));

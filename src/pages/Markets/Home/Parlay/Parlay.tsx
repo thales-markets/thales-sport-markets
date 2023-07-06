@@ -1,5 +1,4 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
-import { GlobalFiltersEnum } from 'constants/markets';
 import { t } from 'i18next';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
 import React, { useEffect, useCallback, useState } from 'react';
@@ -34,6 +33,7 @@ import Toggle from 'components/Toggle';
 import MatchInfoOfCombinedMarket from './components/MatchInfoOfCombinedMarket';
 import { extractCombinedMarketsFromParlayMarkets, removeCombinedMarketFromParlayMarkets } from 'utils/combinedMarkets';
 import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';
+import { GlobalFiltersEnum } from 'enums/markets';
 
 type ParylayProps = {
     onBuySuccess?: () => void;

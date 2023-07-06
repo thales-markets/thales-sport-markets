@@ -7,7 +7,7 @@ import {
 import { COLLATERALS } from 'constants/markets';
 import { NetworkId } from 'types/network';
 import multipleCollateral from './contracts/multipleCollateralContract';
-import { Network } from './network';
+import { Network } from 'enums/network';
 
 export type StablecoinKey = 'sUSD' | 'USDC' | 'USDT' | 'DAI';
 

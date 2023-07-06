@@ -5,7 +5,7 @@ import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import Tooltip from 'components/Tooltip';
 import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import ROUTES from 'constants/routes';
-import { BetType, ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
+import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS, MAIN_COLORS } from 'constants/ui';
 import Parlay from 'pages/Markets/Home/Parlay';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
@@ -29,6 +29,7 @@ import Transactions from '../Transactions';
 import CombinedPositions from './components/CombinedPositions';
 import MatchInfo from './components/MatchInfo';
 import Positions from './components/Positions';
+import { BetType } from 'enums/markets';
 
 type MarketDetailsPropType = {
     market: SportMarketInfo;

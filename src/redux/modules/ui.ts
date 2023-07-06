@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { Theme, ThemeMap } from 'constants/ui';
+import { ThemeMap } from 'constants/ui';
 import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
-import { OddsType } from '../../constants/markets';
 import { TAGS_LIST } from 'constants/tags';
 import { Tags } from 'types/markets';
 import { uniqBy } from 'lodash';
+import { OddsType } from 'enums/markets';
+import { Theme } from 'enums/ui';
 
 const sliceName = 'ui';
 

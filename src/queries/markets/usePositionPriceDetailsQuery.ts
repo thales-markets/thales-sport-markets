@@ -1,5 +1,4 @@
 import { useQuery, UseQueryOptions } from 'react-query';
-import { Position } from '../../constants/options';
 import { AMMPosition } from '../../types/markets';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
@@ -9,6 +8,7 @@ import { getCollateralAddress, getDecimalsByStableCoinIndex, getDefaultDecimalsF
 import { isMultiCollateralSupportedForNetwork } from 'utils/network';
 import { ethers } from 'ethers';
 import { ZERO_ADDRESS } from 'constants/network';
+import { Position } from 'enums/markets';
 
 const usePositionPriceDetailsQuery = (
     marketAddress: string,

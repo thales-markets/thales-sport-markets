@@ -4,7 +4,6 @@ import Table from 'components/Table';
 import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import {
-    OddsType,
     PARLAY_LEADERBOARD_BIWEEKLY_START_DATE,
     PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC,
     PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS,
@@ -46,6 +45,7 @@ import {
 } from 'utils/combinedMarkets';
 import { getParlayRow } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
 import i18n from 'i18n';
+import { OddsType } from 'enums/markets';
 
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();

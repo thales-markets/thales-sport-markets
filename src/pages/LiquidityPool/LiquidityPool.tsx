@@ -43,7 +43,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { LiquidityPoolPnlType, LiquidityPoolTab } from 'constants/liquidityPool';
+import { LiquidityPoolPnlType, LiquidityPoolTab } from 'enums/liquidityPool';
 import NumericInput from 'components/fields/NumericInput';
 import { getIsAppReady } from 'redux/modules/app';
 import { UserLiquidityPoolData, LiquidityPoolData } from 'types/liquidityPool';

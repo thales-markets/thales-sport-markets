@@ -21,7 +21,7 @@ import {
 } from 'recharts';
 import { Colors, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { formatPercentageWithSign } from 'utils/formatters/number';
-import { LiquidityPoolPnlType } from 'constants/liquidityPool';
+import { LiquidityPoolPnlType } from 'enums/liquidityPool';
 
 type PnlProps = {
     lifetimePnl: number;

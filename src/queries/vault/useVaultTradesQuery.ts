@@ -4,8 +4,8 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { NetworkId } from 'types/network';
 import { VaultTrades, VaultTrade } from 'types/vault';
 import { getEtherscanTxLink } from 'utils/etherscan';
-import { VaultTradeStatus } from 'constants/vault';
 import { convertFinalResultToResultType } from 'utils/markets';
+import { VaultTradeStatus } from 'enums/vault';
 
 const useVaultTradesQuery = (vaultAddress: string, networkId: NetworkId, options?: UseQueryOptions<VaultTrades>) => {
     return useQuery<VaultTrades>(

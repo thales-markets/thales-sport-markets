@@ -1,7 +1,7 @@
 import checkmarkAnimationData from 'assets/lotties/green-checkmark.json';
 import crossmarkAnimationData from 'assets/lotties/red-checkmark.json';
 import Modal from 'components/Modal';
-import { ParlayErrorCode } from 'constants/markets';
+import { ParlayErrorCode } from 'enums/markets';
 import useInterval from 'hooks/useInterval';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import React, { createRef, CSSProperties, useRef } from 'react';

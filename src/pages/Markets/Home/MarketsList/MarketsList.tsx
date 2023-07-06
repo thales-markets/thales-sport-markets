@@ -1,4 +1,4 @@
-import { GOLF_TOURNAMENT_WINNER_TAG, MOTOSPORT_TAGS, TAGS_FLAGS, TAGS_LIST } from 'constants/tags';
+import { GOLF_TOURNAMENT_WINNER_TAG, MOTOSPORT_TAGS, TAGS_LIST } from 'constants/tags';
 import React, { useState } from 'react';
 import Flag from 'react-flagpack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import { getNetworkId } from 'redux/modules/wallet';
 import { NetworkIdByName } from 'utils/network';
+import { TAGS_FLAGS } from 'enums/tags';
 
 type MarketsList = {
     markets: SportMarkets;

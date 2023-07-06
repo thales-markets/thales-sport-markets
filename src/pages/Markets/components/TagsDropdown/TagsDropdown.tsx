@@ -1,5 +1,4 @@
 import Tooltip from 'components/Tooltip';
-import { TAGS_FLAGS } from 'constants/tags';
 import React from 'react';
 import Flag from 'react-flagpack';
 import { Trans } from 'react-i18next';
@@ -16,6 +15,7 @@ import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg'
 import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import { getNetworkId } from 'redux/modules/wallet';
 import { NetworkIdByName } from 'utils/network';
+import { TAGS_FLAGS } from 'enums/tags';
 
 type TagsDropdownProps = {
     open: boolean;

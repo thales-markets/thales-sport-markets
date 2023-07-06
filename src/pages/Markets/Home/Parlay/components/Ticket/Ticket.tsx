@@ -3,7 +3,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
-import { APPROVAL_BUFFER, COLLATERALS, OddsType } from 'constants/markets';
+import { APPROVAL_BUFFER, COLLATERALS } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -58,6 +58,7 @@ import {
 } from '../styled-components';
 import { isSGPInParlayMarkets } from 'utils/combinedMarkets';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
+import { OddsType } from 'enums/markets';
 
 type TicketProps = {
     markets: ParlaysMarket[];

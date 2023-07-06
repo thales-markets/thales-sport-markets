@@ -1,4 +1,4 @@
-import { VaultTradeStatus } from 'constants/vault';
+import { VaultTradeStatus } from 'enums/vault';
 import { ParlayMarket, SportMarketInfo } from './markets';
 
 export type VaultData = {

@@ -5,7 +5,6 @@ import Loader from 'components/Loader';
 import Logo from 'components/Logo';
 import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
-import { GlobalFiltersEnum, SportFilterEnum } from 'constants/markets';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
@@ -41,6 +40,7 @@ import Checkbox from '../../../components/fields/Checkbox/Checkbox';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { CSSProperties } from 'styled-components';
+import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 
 const SidebarLeaderboard = lazy(
     () => import(/* webpackChunkName: "SidebarLeaderboard" */ 'pages/ParlayLeaderboard/components/SidebarLeaderboard')
@@ -797,24 +797,6 @@ const LogoContainer = styled.div`
     margin-top: 20px;
     margin-bottom: 10px;
     text-align: center;
-`;
-
-const ApplyFiltersButton = styled(Button)`
-    align-self: center;
-    height: 43px;
-    width: 180px;
-    margin-right: 5px;
-    position: fixed;
-    background: ${(props) => props.theme.background.quaternary};
-    color: ${(props) => props.theme.background.primary};
-    border: none;
-    border-radius: 40px;
-    font-weight: 800;
-    font-size: 16px;
-    line-height: 210%;
-    letter-spacing: 0.035em;
-    text-transform: uppercase;
-    bottom: 3%;
 `;
 
 const ArrowIcon = styled.i`

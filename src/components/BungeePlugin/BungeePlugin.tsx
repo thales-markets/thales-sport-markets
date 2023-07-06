@@ -6,10 +6,11 @@ import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { getDefaultCollateralIndexForNetworkId, Network } from 'utils/network';
+import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import useAllSourceTokensQuery, { SOURCE_NETWORK_IDS } from './queries/useAllSourceTokensQuery';
 import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 
 type CustomizationProps = {
     width?: number;

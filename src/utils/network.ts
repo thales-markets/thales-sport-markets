@@ -5,6 +5,7 @@ import { BigNumber, ethers } from 'ethers';
 import { NetworkId } from 'types/network';
 import { getNavItemFromRoute } from './ui';
 import { getLastSavedOrDefaultStableIndex } from 'redux/modules/parlay';
+import { Network } from 'enums/network';
 
 export const NetworkIdByName: Record<string, NetworkId> = {
     OptimismMainnet: 10,
@@ -21,20 +22,6 @@ export const NetworkNameById: Record<NetworkId, string> = {
     420: 'optimism goerli',
     42161: 'ARBITRUM ONE',
 };
-
-export enum Network {
-    Mainnet = 1,
-    Ropsten = 3,
-    Rinkeby = 4,
-    Goerli = 5,
-    Kovan = 42,
-    'Mainnet-Ovm' = 10,
-    'Arbitrum' = 42161,
-    'Kovan-Ovm' = 69,
-    'Goerli-Ovm' = 420,
-    'POLYGON-MUMBAI' = 80001,
-    'POLYGON-MAINNET' = 137,
-}
 
 export const CollateralByNetworkId: Record<NetworkId, string> = {
     10: 'sUSD',

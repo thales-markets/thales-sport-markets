@@ -11,7 +11,7 @@ import { LiquidityPoolUserTransactions, LiquidityPoolUserTransaction, LiquidityP
 import SelectInput from 'components/SelectInput';
 import useLiquidityPoolUserTransactionsQuery from 'queries/liquidityPool/useLiquidityPoolUserTransactionsQuery';
 import UserTransactionsTable from '../UserTransactionsTable';
-import { LiquidityPoolTransaction } from 'constants/liquidityPool';
+import { LiquidityPoolTransaction } from 'enums/liquidityPool';
 
 type TransactionsProps = {
     currentRound: number;

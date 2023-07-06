@@ -1,7 +1,5 @@
-import { GlobalFiltersEnum } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import {
-    BetType,
     ENETPULSE_SPORTS,
     GOLF_TOURNAMENT_WINNER_TAG,
     JSON_ODDS_SPORTS,
@@ -21,6 +19,7 @@ import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { filterMarketsByTagsArray, insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
 import localStore from 'utils/localStore';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { BetType, GlobalFiltersEnum } from 'enums/markets';
 
 const BATCH_SIZE = 100;
 const BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY = 5;

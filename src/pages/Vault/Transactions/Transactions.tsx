@@ -10,7 +10,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import useVaultTradesQuery from 'queries/vault/useVaultTradesQuery';
 import { VaultTrades, VaultTrade, VaultUserTransactions, VaultUserTransaction } from 'types/vault';
 import SelectInput from 'components/SelectInput';
-import { isParlayVault, VaultTradeStatus, VaultTransaction } from 'constants/vault';
+import { isParlayVault } from 'constants/vault';
 import { formatCurrency, formatPercentageWithSign } from 'utils/formatters/number';
 import useVaultUserTransactionsQuery from 'queries/vault/useVaultUserTransactionsQuery';
 import UserTransactionsTable from '../UserTransactionsTable';
@@ -19,6 +19,7 @@ import ParlayTransactionsTable from 'components/ParlayTransactionsTable/ParlayTr
 import TradesTable from '../TradesTable';
 import { ParlayMarketWithRound } from 'types/markets';
 import { isParlayClaimable, isParlayOpen } from 'utils/markets';
+import { VaultTradeStatus, VaultTransaction } from 'enums/vault';
 
 type TransactionsProps = {
     vaultAddress: string;

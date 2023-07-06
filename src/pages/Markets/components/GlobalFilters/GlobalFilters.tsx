@@ -1,6 +1,7 @@
 import CalendarDatepicker from 'components/CalendarDatepicker';
 import Dropdown from 'components/Dropdown';
-import { GlobalFiltersEnum, OddsType, ODDS_TYPES, SportFilterEnum } from 'constants/markets';
+import { ODDS_TYPES } from 'constants/markets';
+import { GlobalFiltersEnum, OddsType, SportFilterEnum } from 'enums/markets';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';

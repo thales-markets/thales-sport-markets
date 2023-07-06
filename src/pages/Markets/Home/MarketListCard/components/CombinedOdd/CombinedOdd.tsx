@@ -1,5 +1,4 @@
 import PositionSymbol from 'components/PositionSymbol';
-import { Position } from 'constants/options';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,6 +20,7 @@ import { MAIN_COLORS } from 'constants/ui';
 import { getIsMobile } from 'redux/modules/app';
 import { toast } from 'react-toastify';
 import { oddToastOptions } from 'config/toast';
+import { Position } from 'enums/markets';
 
 type CombinedMarketOddsProps = {
     markets: SportMarketInfo[];

@@ -93,7 +93,8 @@
             "batch-transaction-single-failure": "Eine Transaktion wurde abgelehnt oder ist fehlgeschlagen.",
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
-            "single-amm-paused": "AMM angehalten"
+            "single-amm-paused": "AMM angehalten",
+            "invalid-amount-max": "Der Betrag darf nicht höher sein als {{max}}"
         },
         "time-remaining": {
             "ended": "zu Ende",

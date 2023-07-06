@@ -1,10 +1,10 @@
 import { COLLATERAL_INDEX_TO_COLLATERAL, STABLE_DECIMALS } from 'constants/currency';
 import { ZERO_ADDRESS } from 'constants/network';
-import { Position } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
 import { NetworkId } from 'types/network';
 import { getCollateralAddress } from './collaterals';
 import { isMultiCollateralSupportedForNetwork, NetworkIdByName } from './network';
+import { Position } from 'enums/markets';
 
 export const getAMMSportsTransaction: any = (
     isVoucherSelected: boolean,

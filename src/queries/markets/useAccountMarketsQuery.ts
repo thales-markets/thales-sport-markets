@@ -1,8 +1,9 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { ENETPULSE_SPORTS, GOLF_TOURNAMENT_WINNER_TAG, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
+import { PositionType } from 'enums/markets';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
-import { PositionBalance, PositionType, SportMarketInfo } from 'types/markets';
+import { PositionBalance, SportMarketInfo } from 'types/markets';
 import { NetworkId } from 'types/network';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 

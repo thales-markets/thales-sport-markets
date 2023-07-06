@@ -39,7 +39,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { isParlayVault, VaultTab, VAULT_MAP } from 'constants/vault';
+import { isParlayVault, VAULT_MAP } from 'constants/vault';
 import NumericInput from 'components/fields/NumericInput';
 import { getIsAppReady } from 'redux/modules/app';
 import { UserVaultData, VaultData } from 'types/vault';
@@ -68,6 +68,7 @@ import { NewBadge } from 'pages/Vaults/VaultOverview/styled-components';
 import Button from 'components/Button';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
+import { VaultTab } from 'enums/vault';
 
 type VaultProps = RouteComponentProps<{
     vaultId: string;

@@ -3,8 +3,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
-import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE, OddsType } from 'constants/markets';
-import { Position } from 'constants/options';
+import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useAvailablePerPositionQuery from 'queries/markets/useAvailablePerPositionQuery';
@@ -61,6 +60,7 @@ import {
     ValidationTooltip,
 } from '../styled-components';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
+import { OddsType, Position } from 'enums/markets';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -530,7 +530,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
             return;
         }
 
-        setSubmitDisabled(!paymentTokenBalance || usdAmountValue > paymentTokenBalance);
+        setSubmitDisabled(!paymentTokenBalance || Number(usdAmountValue) > paymentTokenBalance);
     }, [
         usdAmountValue,
         isBuying,
@@ -606,13 +606,13 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
-        (!!tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
+        (!!tooltipTextUsdAmount && Number(usdAmountValue) <= paymentTokenBalance);
     const hideProfit =
         ammPosition.quote <= 0 ||
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
-        (!!tooltipTextUsdAmount && usdAmountValue <= paymentTokenBalance);
+        (!!tooltipTextUsdAmount && Number(usdAmountValue) <= paymentTokenBalance);
 
     const profitPercentage = (tokenAmount - ammPosition.quote) / ammPosition.quote;
 

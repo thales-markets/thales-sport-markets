@@ -1,3 +1,4 @@
+import { BetType } from 'enums/markets';
 import { Tags, SportsMap, SportsTagsMap } from 'types/markets';
 
 export const TAGS_LIST: Tags = [
@@ -436,46 +437,6 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Golf: [109021, 109121],
 };
 
-export enum TAGS_FLAGS {
-    NCAA_FOOTBALL = 9001,
-    NFL = 9002,
-    MLB = 9003,
-    NBA = 9004,
-    NCAA_BASKETBALL = 9005,
-    NHL = 9006,
-    UFC = 9007,
-    WNBA = 9008,
-    MLS = 9010,
-    EPL = 9011,
-    LIGUE_ONE = 9012,
-    BUNDESLIGA = 9013,
-    LA_LIGA = 9014,
-    SERIE_A = 9015,
-    UEFA_CL = 9016,
-    UEFA_EL = 9017,
-    J1_LEAGUE = 9019,
-    FORMULA1 = 9445,
-    MOTOGP = 9497,
-    CSGO = 18977,
-    DOTA2 = 18983,
-    LOL = 19138,
-    IPL = 9020,
-    EUROLEAGUE = 9399,
-    BOXING = 18196,
-    EREDIVISIE = 9057,
-    PRIMEIRA_LIGA = 9061,
-    COPA_LIBERTADORES = 9045,
-    IIHF_WORLD_CHAMPIONSHIP = 9033,
-    FIFA_WORLD_CUP_U20 = 9296,
-    T20_BLAST = 9021,
-    UEFA_EURO_QUALIFICATIONS = 9050,
-    GOLF_H2H = 109021,
-    GOLF_WINNER = 109121,
-    UEFA_NATIONS_LEAGUE = 18806,
-    CONCACAF_NATIONS_LEAGUE = 18821,
-    UEFA_EURO_U21 = 9288,
-}
-
 export const ENETPULSE_SPORTS = [
     9153,
     9156,
@@ -507,25 +468,12 @@ export const MOTOSPORT_TAGS = [9445, 9497];
 export const GOLF_TAGS = [109021, 109121];
 export const GOLF_TOURNAMENT_WINNER_TAG = 109121;
 
-export enum BetType {
-    WINNER = 0,
-    SPREAD = 10001,
-    TOTAL = 10002,
-    DOUBLE_CHANCE = 10003,
-}
-
 export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.WINNER]: 'winner',
     [BetType.SPREAD]: 'spread',
     [BetType.TOTAL]: 'total',
     [BetType.DOUBLE_CHANCE]: 'double-chance',
 };
-
-export enum DoubleChanceMarketType {
-    HOME_TEAM_NOT_TO_LOSE = 'HomeTeamNotToLose',
-    NO_DRAW = 'NoDraw',
-    AWAY_TEAM_NOT_TO_LOSE = 'AwayTeamNotToLose',
-}
 
 export const SCORING_MAP: SportsMap = {
     9001: 'points',

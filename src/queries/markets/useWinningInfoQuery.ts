@@ -1,5 +1,5 @@
-import { Position } from 'constants/options';
 import QUERY_KEYS from 'constants/queryKeys';
+import { Position } from 'enums/markets';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { MarketTransaction, ParlayMarket, WinningInfo } from 'types/markets';

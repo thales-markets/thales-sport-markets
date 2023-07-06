@@ -12,8 +12,8 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { getDefaultCollateralIndexForNetworkId, getDefaultNetworkName, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
-import { WizardStep } from '../../Wizard';
 import FundModal from '../FundModal';
+import { WizardStep } from 'enums/wizard';
 
 type StepProps = {
     stepNumber: number;

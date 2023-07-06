@@ -1,6 +1,5 @@
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
-import { Position } from 'constants/options';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -58,6 +57,7 @@ import {
     removeCombinedMarketsFromParlayMarketType,
 } from 'utils/combinedMarkets';
 import ParlayCombinedItem from './components/ParlayCombinedItem';
+import { Position } from 'enums/markets';
 
 type ParlayPosition = {
     parlayMarket: ParlayMarket;
