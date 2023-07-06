@@ -1,4 +1,4 @@
-import { TablePagination, Tooltip, withStyles } from '@material-ui/core';
+import { TablePagination } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 import {
@@ -304,31 +304,6 @@ export const Footer = styled(FlexDivColumn)`
     margin-top: 20px;
     align-items: center;
 `;
-
-export const ValidationTooltip = withStyles(() => ({
-    tooltip: {
-        minWidth: '100%',
-        width: '300px',
-        marginBottom: '7px',
-        backgroundColor: '#303656',
-        color: '#E26A78',
-        border: '1.5px solid #E26A78',
-        borderRadius: '2px',
-        fontSize: '12px',
-        fontWeight: 600,
-        textTransform: 'uppercase',
-    },
-    arrow: {
-        '&:before': {
-            border: '1.5px solid #E26A78',
-            backgroundColor: '#303656',
-            boxSizing: 'border-box',
-        },
-        width: '13px',
-        height: '10px',
-        bottom: '-2px !important',
-    },
-}))(Tooltip);
 
 export const LoaderContainer = styled(FlexDivCentered)`
     position: relative;

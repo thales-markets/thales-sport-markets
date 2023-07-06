@@ -29,7 +29,7 @@ export const currencyKeyToAssetIconMap = {
     [CRYPTO_CURRENCY_MAP.USDT]: USDTIcon,
 };
 
-// TODO: this will be deleted wheb define collaterals by network
+// TODO: this will be deleted when define collaterals by network
 export enum COLLATERALS_INDEX {
     'sUSD' = 0,
     'DAI' = 1,

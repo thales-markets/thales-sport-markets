@@ -58,7 +58,3 @@ export const FieldNote = styled(FlexDivEnd)`
     color: ${(props) => props.theme.textColor.primary};
     margin-top: 4px;
 `;
-
-export const OverlayContainer = styled(FlexDivColumn)`
-    text-align: justify;
-`;

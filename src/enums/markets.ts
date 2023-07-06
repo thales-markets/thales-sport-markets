@@ -39,8 +39,7 @@ export enum ContractSGPOrder {
     SPREADTOTALS = 2,
 }
 
-// TODO: not type, rename it
-export enum PositionType {
+export enum PositionName {
     home = 'home',
     away = 'away',
     draw = 'draw',
