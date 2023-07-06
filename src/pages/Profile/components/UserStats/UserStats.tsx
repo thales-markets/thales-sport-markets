@@ -104,7 +104,7 @@ const Label = styled.span`
     font-size: 11px;
     line-height: 11px;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin: 10px 0px 5px 0px;
 `;
 
@@ -128,7 +128,7 @@ const CurrencyLabel = styled.span`
     font-size: 12px;
     line-height: 12px;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const Value = styled.span`

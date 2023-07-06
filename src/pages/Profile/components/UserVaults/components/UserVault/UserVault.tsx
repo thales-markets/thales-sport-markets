@@ -93,8 +93,7 @@ const Title = styled.span`
     font-weight: 800;
     font-size: 16px;
     line-height: 19px;
-
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const Icon = styled.i`

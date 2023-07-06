@@ -104,7 +104,7 @@ const Toggle: React.FC<SwitchProps> = ({
 };
 
 const Wrapper = styled.div<{ margin?: string; disabled?: boolean }>`
-    ${(props) => (props?.margin ? `margin: ${props.margin}` : '')};
+    ${(props) => (props.margin ? `margin: ${props.margin}` : '')};
     opacity: ${(props: any) => (props.disabled ? '0.4' : '1')};
     display: flex;
     flex-direction: row;
@@ -115,7 +115,7 @@ const Wrapper = styled.div<{ margin?: string; disabled?: boolean }>`
 `;
 
 const Label = styled.span<{ fontSize?: string; fontWeight?: string; lineHeight?: string }>`
-    font-size: ${(props) => (props?.fontSize ? props.fontSize : '12px')};
+    font-size: ${(props) => (props.fontSize ? props.fontSize : '12px')};
     ${(props) => (props.fontWeight ? `font-weight: ${props.fontWeight};` : '')}
     ${(props) => (props.lineHeight ? `line-height: ${props.lineHeight};` : '')}
     color: white;
@@ -128,13 +128,13 @@ const SwitchContainer = styled.div<SwitchContainerProps>`
     align-items: center;
     position: relative;
     cursor: ${(props: any) => (props.disabled ? 'not-allowed' : 'pointer')};
-    border-width: ${(props: any) => (props?.borderWidth ? props.borderWidth : '2px')};
+    border-width: ${(props: any) => (props.borderWidth ? props.borderWidth : '2px')};
     border-style: solid;
-    border-color: ${(props: any) => (props?.borderColor ? props.borderColor : '#5F6180')};
+    border-color: ${(props: any) => (props.borderColor ? props.borderColor : props.theme.borderColor.primary)};
     border-radius: 30px;
-    width: ${(props: any) => (props?.width ? props.width : defaultSwitchHeight * 2.18 + 'px')};
-    height: ${(props: any) => (props?.height ? props.height : defaultSwitchHeight + 'px')};
-    ${(props) => (props.shadow ? 'box-shadow: 0px 0px 40px #64d9fe' : '')}
+    width: ${(props: any) => (props.width ? props.width : defaultSwitchHeight * 2.18 + 'px')};
+    height: ${(props: any) => (props.height ? props.height : defaultSwitchHeight + 'px')};
+    ${(props) => (props.shadow ? `box-shadow: ${props.theme.shadow.toggle};` : '')}
 `;
 
 const Circle = styled.div<CircleProps>`
@@ -142,9 +142,12 @@ const Circle = styled.div<CircleProps>`
     height: ${(props: any) => (props.size ? props.size : '15px')};
     border-radius: 60%;
     position: absolute;
-    ${(props: any) => (props?.background ? `background-color: ${props.background}` : `background-color: #5F6180`)};
-    border: ${(props: any) => (props?.dotBorder ? props.dotBorder : '')};
-    ${(props: any) => (props?.active ? `right: 5px;` : `left: 5px;`)};
+    ${(props: any) =>
+        props.background
+            ? `background-color: ${props.background}`
+            : `background-color: ${props.theme.background.tertiary}`};
+    border: ${(props: any) => (props.dotBorder ? props.dotBorder : '')};
+    ${(props: any) => (props.active ? `right: 5px;` : `left: 5px;`)};
 `;
 
 export default Toggle;

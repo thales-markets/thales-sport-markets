@@ -179,7 +179,7 @@ const Header = styled.span<{ isParlay: boolean }>`
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.175em;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     ${(props) => (props.isParlay ? 'white-space: nowrap;' : '')};
     ${(props) => (props.isParlay ? 'margin-top: 3px' : '')};
     @media (max-width: 950px) {
@@ -197,7 +197,7 @@ const ParlayLabel = styled.span`
     letter-spacing: 0.3em;
     font-weight: 300;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     padding-left: 8px;
     opacity: 0.8;
     @media (max-width: 950px) {
@@ -258,7 +258,7 @@ const InfoWrapper = styled(FlexDivRow)`
     line-height: 18px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     width: 100%;
     padding: 5px 5px 0 5px;
 `;
@@ -280,7 +280,7 @@ const ReferralLabel = styled.span`
     font-size: 10px;
     line-height: 12px;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin-top: 3px;
     white-space: nowrap;
 `;

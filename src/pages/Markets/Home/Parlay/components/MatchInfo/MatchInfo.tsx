@@ -109,7 +109,7 @@ const ClubName = styled.span<{ fontSize?: string; lineHeight?: string }>`
     font-size: ${(props) => (props.fontSize ? props.fontSize : '10px')};
     line-height: ${(props) => (props.lineHeight ? props.lineHeight : '11px')};
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const Bonus = styled.div`
@@ -130,7 +130,7 @@ const Wrong = styled(Icon)`
     color: #ca4c53;
 `;
 const Canceled = styled(Icon)`
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 const Empty = styled(Icon)`
     visibility: hidden;

@@ -308,7 +308,7 @@ const InfoText = styled.p`
     font-size: 14px;
     line-height: 16px;
     text-align: justify;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const Text = styled.span<{ isUppercase?: boolean }>`
@@ -316,7 +316,7 @@ const Text = styled.span<{ isUppercase?: boolean }>`
     font-weight: 300;
     font-size: 14px;
     line-height: 16px;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     text-align: center;
     text-transform: ${(props) => (props.isUppercase ? 'uppercase' : 'none')};
 `;

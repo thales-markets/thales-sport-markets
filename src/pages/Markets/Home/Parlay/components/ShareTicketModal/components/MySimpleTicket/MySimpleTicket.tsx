@@ -97,7 +97,7 @@ const Header = styled.span`
     line-height: 15px;
     text-align: center;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin-bottom: 10px;
     letter-spacing: 0.08em;
     white-space: nowrap;
@@ -118,7 +118,7 @@ const ParlayLabel = styled.span`
     line-height: 29px;
     font-weight: 200;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     padding-left: 5px;
     opacity: 0.8;
 `;
@@ -165,7 +165,7 @@ const ReferralLabel = styled.span`
     font-size: 11px;
     line-height: 13px;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin-top: 5px;
     white-space: nowrap;
     text-align: center;

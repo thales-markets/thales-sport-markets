@@ -170,7 +170,7 @@ const CollateralBalance = styled.span<{ selected?: boolean }>`
     font-weight: 400;
     font-size: 10px;
     line-height: 150%;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     ${(props) => (props?.selected ? `opacity: 1;` : `opacity: 0.5`)};
 `;
 

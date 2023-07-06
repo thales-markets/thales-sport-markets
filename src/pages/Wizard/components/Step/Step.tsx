@@ -276,7 +276,7 @@ const StepActionIcon = styled.i<{ isDisabled?: boolean }>`
     cursor: ${(props) => (props.isDisabled ? 'not-allowed' : 'pointer')};
     @media (max-width: 950px) {
         padding-bottom: 0;
-        color: #ffffff;
+        color: ${(props) => props.theme.textColor.primary};
         font-size: 30px;
     }
 `;

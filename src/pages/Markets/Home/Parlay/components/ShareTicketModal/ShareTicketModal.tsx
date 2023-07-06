@@ -305,7 +305,7 @@ const CloseIcon = styled.i`
     right: -20px;
     font-size: 20px;
     cursor: pointer;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     @media (max-width: 950px) {
         top: 10px;
         right: 10px;
@@ -333,7 +333,7 @@ const TwitterShareLabel = styled.span`
     font-size: 18px;
     line-height: 25px;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 export default React.memo(ShareTicketModal);

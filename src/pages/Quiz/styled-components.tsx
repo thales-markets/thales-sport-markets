@@ -256,7 +256,7 @@ export const TwitterImage = styled.img`
     border-radius: 50%;
     height: 30px;
     width: 30px;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin-right: 6px;
     @media (max-width: 767px) {
         height: 25px;

@@ -50,14 +50,14 @@ export const InfoLabel = styled.span<{ marginLeft?: number }>`
     font-weight: 300;
     font-size: 10px;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     ${(props) => (props.marginLeft ? `margin-left: ${props.marginLeft}px;` : '')}
 `;
 
 export const InfoValue = styled.span`
     font-weight: 700;
     font-size: 10px;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin-left: 4px;
 `;
 
@@ -180,7 +180,7 @@ export const BalanceLabel = styled.span<{ marginLeft?: string; bold?: boolean; o
     line-height: 27px;
     letter-spacing: 0.025em;
     ${(props) => (props.originalText ? '' : 'text-transform: uppercase;')}
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     ${(props) => (props.marginLeft ? `margin-left: ${props.marginLeft};` : '')}
     font-weight: ${(props) => (props.bold ? '700' : '400')};
     @media (max-width: 950px) {
@@ -193,7 +193,7 @@ export const BalanceValue = styled.span`
     font-size: 11px;
     line-height: 27px;
     letter-spacing: 0.025em;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin-left: 5px;
     @media (max-width: 950px) {
         line-height: 24px;

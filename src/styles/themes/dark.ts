@@ -102,5 +102,6 @@ export default {
     },
     shadow: {
         navBar: '-64px 0px 38px 3px rgba(0,0,0,0.41)',
+        toggle: '0px 0px 40px #64d9fe',
     },
 };
