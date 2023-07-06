@@ -21,6 +21,8 @@ type NumericInputProps = {
     currencyLabel?: string;
     tooltip?: string;
     onMaxButton?: any;
+    balance?: string;
+    isBalanceLoading?: boolean;
     info?: string;
     inputPadding?: string;
     margin?: string;
@@ -50,6 +52,8 @@ const NumericInput: React.FC<NumericInputProps> = ({
     currencyLabel,
     tooltip,
     onMaxButton,
+    balance,
+    isBalanceLoading,
     info,
     inputPadding,
     margin,
@@ -87,6 +91,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     {tooltip && <Tooltip overlay={tooltip} />}:
                 </FieldLabel>
             )}
+            {balance && <BalanceContainer>{isBalanceLoading ? '-' : balance}</BalanceContainer>}
             {info && (
                 <InfoWrapper>
                     <InfoText>{info}</InfoText>
@@ -124,7 +129,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     borderColor={borderColor}
                 />
             </ValidationTooltip>
-            <RightContainer>
+            <RightContainer height={height}>
                 {onMaxButton && (
                     <MaxButton disabled={disabled} onClick={onMaxButton}>
                         {t('markets.market-details.max')}
@@ -136,10 +141,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     </CurrencyLabel>
                 )}
                 {currencyComponent && (
-                    <CurrencyComponentContainer
-                        className={disabled && !enableCurrencyComponentOnly ? 'disabled' : ''}
-                        hasSeparator={onMaxButton}
-                    >
+                    <CurrencyComponentContainer className={disabled && !enableCurrencyComponentOnly ? 'disabled' : ''}>
                         {currencyComponent}
                     </CurrencyComponentContainer>
                 )}
@@ -152,10 +154,11 @@ const StyledInput = styled(Input)<{ padding?: string }>`
     padding: ${(props) => props.padding || '5px 100px 5px 10px'};
 `;
 
-const RightContainer = styled(FlexDivCentered)`
+const RightContainer = styled(FlexDivCentered)<{ height?: string }>`
     position: absolute;
     right: 0;
-    height: 100%;
+    bottom: 0;
+    height: ${(props) => props.height || '30px'};
     padding-right: 10px;
 `;
 
@@ -166,7 +169,6 @@ const CurrencyLabel = styled.label`
     padding-left: 8px;
     pointer-events: none;
     &.disabled {
-        opacity: 0.4;
         cursor: default;
     }
 `;
@@ -212,10 +214,19 @@ const ValidationTooltip = styled((props) => <MuiTooltip classes={{ popper: props
     }
 `;
 
-const CurrencyComponentContainer = styled(FlexDivCentered)<{ hasSeparator?: boolean }>`
-    ${(props) => (props.hasSeparator ? `border-left: 2px solid ${props.theme.input.borderColor.primary};` : '')}
+const BalanceContainer = styled(FlexDivCentered)`
+    position: absolute;
+    right: 0;
+    bottom: 36px;
+    font-weight: normal;
+    font-size: 13px;
     line-height: 15px;
-    padding-right: 2px;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+const CurrencyComponentContainer = styled(FlexDivCentered)`
+    line-height: 15px;
     &.disabled {
         opacity: 0.4;
         cursor: default;

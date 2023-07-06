@@ -11,11 +11,10 @@ import { useSelector } from 'react-redux';
 type StatusDropdownProps = {
     selectedToken: Token;
     onSelect: any;
-    readOnly?: boolean;
     disabled?: boolean;
 };
 
-const TokenDropdown: React.FC<StatusDropdownProps> = ({ selectedToken, onSelect, readOnly, disabled }) => {
+const TokenDropdown: React.FC<StatusDropdownProps> = ({ selectedToken, onSelect, disabled }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const [tokenDropdownIsOpen, setTokenDropdownIsOpen] = useState(false);
@@ -29,20 +28,18 @@ const TokenDropdown: React.FC<StatusDropdownProps> = ({ selectedToken, onSelect,
     return (
         <>
             <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
-                <Container readOnly={readOnly}>
+                <Container>
                     <TokenButton
                         onClick={() => {
-                            if (!readOnly && !disabled) {
+                            if (!disabled) {
                                 setDropdownIsOpen(!tokenDropdownIsOpen);
                             }
                         }}
-                        readOnly={readOnly}
-                        className={disabled ? 'disabled' : ''}
+                        disabled={!!disabled}
                     >
                         <ButtonContent>
-                            <TokenIcon src={selectedToken.logoURI} />
                             {selectedToken.symbol}
-                            {!readOnly && <ArrowDownIcon />}
+                            <ArrowDownIcon />
                         </ButtonContent>
                     </TokenButton>
                     {tokenDropdownIsOpen && (
@@ -58,10 +55,7 @@ const TokenDropdown: React.FC<StatusDropdownProps> = ({ selectedToken, onSelect,
                                             }}
                                         >
                                             <FlexDivCentered>
-                                                <TokenName>
-                                                    <TokenIcon src={token.logoURI} />
-                                                    {token.symbol}
-                                                </TokenName>
+                                                <TokenName>{token.symbol}</TokenName>
                                             </FlexDivCentered>
                                         </DropDownItem>
                                     )
@@ -75,40 +69,33 @@ const TokenDropdown: React.FC<StatusDropdownProps> = ({ selectedToken, onSelect,
     );
 };
 
-const Container = styled(FlexDivColumnCentered)<{ readOnly?: boolean }>`
-    position: absolute;
-    top: 28px;
-    left: 7px;
-    z-index: ${(props) => (props.readOnly ? 1 : 2)};
-`;
-
-const TokenButton = styled.button<{ readOnly?: boolean }>`
+const Container = styled(FlexDivColumnCentered)`
     position: relative;
-    width: 140px;
-    height: 34px;
-    border: ${(props) => (props.readOnly ? 'none' : `1px solid ${props.theme.button.borderColor.primary}`)};
-    background: ${(props) => (props.readOnly ? 'transparent' : props.theme.button.background.tertiary)};
-    color: ${(props) => (props.readOnly ? props.theme.button.textColor.secondary : props.theme.textColor.primary)};
-    border-radius: 10px;
-    font-size: 18px;
-    line-height: 25px;
-    padding-left: 12px;
-    &:hover:not(.disabled) {
-        cursor: ${(props) => (props.readOnly ? 'default' : 'pointer')};
-        background: ${(props) => (props.readOnly ? 'transparent' : '#51546f')};
-    }
-    &.disabled {
-        opacity: ${(props) => (props.readOnly ? 1 : 0.4)};
-        cursor: default;
-        background: transparent;
-    }
-    @media (max-width: 950px) {
-        width: 125px;
-    }
+    align-items: center;
+    z-index: 2;
 `;
 
-const ButtonContent = styled(FlexDiv)`
-    line-height: 24px;
+const TokenButton = styled.button<{ disabled: boolean }>`
+    min-width: 80px;
+    background: ${(props) => props.theme.background.secondary};
+    border: ${(props) => props.theme.background.secondary};
+    outline: none;
+    border-radius: 8px;
+    padding: 2px 10px;
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+    opacity: ${(props) => (props.disabled ? '0.4' : '1')};
+`;
+
+const ButtonContent = styled(FlexDivCentered)`
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 20px;
+    color: ${(props) => props.theme.textColor.primary};
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 `;
 
 const DropdownContainer = styled.div`
@@ -118,51 +105,41 @@ const DropdownContainer = styled.div`
 
 const DropDown = styled(FlexDivColumn)`
     border: 1px solid ${(props) => props.theme.input.borderColor.secondary};
-    background: ${(props) => props.theme.button.background.tertiary};
-    color: ${(props) => props.theme.input.textColor.primary};
-    border-radius: 10px;
     position: absolute;
-    margin-top: 2px;
-    padding: 4px;
-    width: 100%;
+    top: 10px;
+    left: -40px;
+    width: 80px;
+    padding: 5px 5px;
+    border-radius: 8px;
+    background: ${(props) => props.theme.background.secondary};
 `;
 
 const DropDownItem = styled(FlexDiv)`
-    padding: 7px 10px 9px 10px;
+    padding: 4px 6px;
     cursor: pointer;
     &:hover {
-        background: #51546f;
-        border-radius: 12px;
+        background: ${(props) => props.theme.background.tertiary};
+        border-radius: 8px;
     }
 `;
 
 const TokenName = styled.div`
-    font-weight: 500;
-    font-size: 18px;
+    font-weight: 400;
+    font-size: 15px;
     line-height: 20px;
     color: ${(props) => props.theme.textColor.primary};
     display: block;
 `;
 
-const TokenIcon = styled.img`
-    width: 24px;
-    height: 24px;
-    margin-bottom: -6px;
-    margin-right: 6px;
-`;
-
 const ArrowDownIcon = styled.i`
-    font-size: 18px;
-    position: absolute;
-    top: 8px;
-    right: 15px;
+    font-size: 12px;
+    margin-bottom: -4px !important;
+    position: relative;
+    margin-left: 6px;
     &:before {
         font-family: ExoticIcons !important;
         content: '\\004D';
         color: ${(props) => props.theme.textColor.primary};
-    }
-    @media (max-width: 950px) {
-        right: 10px;
     }
 `;
 
