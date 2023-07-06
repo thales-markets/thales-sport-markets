@@ -57,6 +57,10 @@ import {
 import { isSGPInParlayMarkets } from 'utils/combinedMarkets';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import { OddsType } from 'enums/markets';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
+import Button from 'components/Button';
+import NumericInput from 'components/fields/NumericInput';
 
 type TicketProps = {
     markets: ParlaysMarket[];

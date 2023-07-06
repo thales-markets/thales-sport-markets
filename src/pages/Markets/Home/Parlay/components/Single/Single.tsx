@@ -58,6 +58,10 @@ import {
 } from '../styled-components';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import { OddsType, Position } from 'enums/markets';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
+import Button from 'components/Button';
+import NumericInput from 'components/fields/NumericInput';
 
 type SingleProps = {
     market: ParlaysMarket;
