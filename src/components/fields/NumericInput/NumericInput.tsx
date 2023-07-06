@@ -25,10 +25,13 @@ type NumericInputProps = {
     inputPadding?: string;
     margin?: string;
     inputFontSize?: string;
+    inputFontWeight?: string;
+    inputTextAlign?: string;
     width?: string;
     height?: string;
     enableCurrencyComponentOnly?: boolean;
     validationPlacement?: string;
+    borderColor?: string;
 };
 
 const INVALID_CHARS = ['-', '+', 'e'];
@@ -51,10 +54,13 @@ const NumericInput: React.FC<NumericInputProps> = ({
     inputPadding,
     margin,
     inputFontSize,
+    inputFontWeight,
+    inputTextAlign,
     width,
     height,
     enableCurrencyComponentOnly,
     validationPlacement,
+    borderColor,
     ...rest
 }) => {
     const { t } = useTranslation();
@@ -111,8 +117,11 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     title=""
                     padding={inputPadding}
                     fontSize={inputFontSize}
+                    fontWeight={inputFontWeight}
+                    textAlign={inputTextAlign}
                     width={width}
                     height={height}
+                    borderColor={borderColor}
                 />
             </ValidationTooltip>
             <RightContainer>
@@ -140,13 +149,14 @@ const NumericInput: React.FC<NumericInputProps> = ({
 };
 
 const StyledInput = styled(Input)<{ padding?: string }>`
-    padding: ${(props) => props.padding || '5px 120px 5px 10px'};
+    padding: ${(props) => props.padding || '5px 100px 5px 10px'};
 `;
 
 const RightContainer = styled(FlexDivCentered)`
     position: absolute;
     right: 0;
-    bottom: 4px;
+    height: 100%;
+    padding-right: 10px;
 `;
 
 const CurrencyLabel = styled.label`
@@ -154,7 +164,6 @@ const CurrencyLabel = styled.label`
     line-height: 20px;
     color: ${(props) => props.theme.input.textColor.primary};
     padding-left: 8px;
-    padding-right: 10px;
     pointer-events: none;
     &.disabled {
         opacity: 0.4;
@@ -198,8 +207,8 @@ const ValidationTooltip = styled((props) => <MuiTooltip classes={{ popper: props
         }
         width: 13px;
         height: 10px;
-        bottom: ${(props) => (props.placement === 'top' ? '-3px' : '0px')} !important;
-        top: ${(props) => (props.placement === 'top' ? '0px' : '-3px')} !important;
+        bottom: ${(props) => (props.placement === 'top' ? '-3px' : 'auto')} !important;
+        top: ${(props) => (props.placement === 'top' ? 'auto' : '-3px')} !important;
     }
 `;
 

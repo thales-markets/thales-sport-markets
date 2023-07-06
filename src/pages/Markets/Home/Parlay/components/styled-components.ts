@@ -114,17 +114,7 @@ export const InfoTooltip = withStyles(() => ({
 
 export const AmountToBuyContainer = styled.div`
     position: relative;
-`;
-
-export const AmountToBuyInput = styled.input`
-    width: 296px;
-    margin-bottom: 5px;
-    border: 3px solid #3accfa;
-    border-radius: 5px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 18px;
-    outline: none;
+    width: 100%;
 `;
 
 export const AmountToBuyMultiContainer = styled.div`
@@ -177,37 +167,6 @@ export const AmountToBuyMultiPayoutValue = styled.span<{ isInfo?: boolean; isCur
     display: ${(props) => (props.isHidden ? 'none' : '')};
     color: ${(props) => (props.isInfo || props.isCurrency ? '#5fc694' : '#ffffff')};
     margin-left: 5px;
-`;
-
-export const MaxButton = styled.button`
-    background: #3accfa;
-    font-size: 10px;
-    line-height: 12px;
-    position: absolute;
-    top: 6px;
-    right: 5px;
-    border: none;
-    cursor: pointer;
-`;
-
-export const SubmitButton = styled.button`
-    margin-top: 10px;
-    background: #5fc694;
-    border-radius: 5px;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 17px;
-    letter-spacing: 0.025em;
-    color: #1c1f2f;
-    width: 100%;
-    border: none;
-    padding: 7px;
-    cursor: pointer;
-    text-transform: uppercase;
-    &:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-    }
 `;
 
 export const BalanceWrapper = styled.div`
@@ -267,3 +226,9 @@ export const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; pad
         content: '\\005C';
     }
 `;
+
+export const defaultButtonProps = {
+    width: '100%',
+    margin: '10px 0 0 0',
+    padding: '5px 30px',
+};

@@ -61,6 +61,7 @@ export default {
         borderColor: {
             primary: Colors.WHITE,
             secondary: Colors.GRAY_LIGHT,
+            tertiary: Colors.BLUE,
             focus: {
                 primary: Colors.BLUE,
             },

@@ -49,12 +49,12 @@ import {
     RowContainer,
     RowSummary,
     ShareWrapper,
-    SubmitButton,
     SummaryLabel,
     SummaryValue,
     TwitterIcon,
     ValidationTooltip,
     XButton,
+    defaultButtonProps,
 } from '../styled-components';
 import { ListContainer } from 'pages/Profile/components/Positions/styled-components';
 import MatchInfo from '../MatchInfo';
@@ -62,6 +62,7 @@ import styled from 'styled-components';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import { OddsType } from 'enums/markets';
+import Button from 'components/Button';
 
 type MultiSingleProps = {
     markets: ParlaysMarket[];
@@ -588,29 +589,33 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
 
     const getSubmitButton = () => {
         if (isAMMPaused) {
-            return <SubmitButton disabled={submitDisabled}>{t('common.errors.single-amm-paused')}</SubmitButton>;
+            return (
+                <Button disabled={submitDisabled} {...defaultButtonProps}>
+                    {t('common.errors.single-amm-paused')}
+                </Button>
+            );
         }
 
         if (!isWalletConnected) {
             return (
-                <SubmitButton onClick={() => openConnectModal?.()}>
+                <Button onClick={() => openConnectModal?.()} {...defaultButtonProps}>
                     {t('common.wallet.connect-your-wallet')}
-                </SubmitButton>
+                </Button>
             );
         }
 
         if (!hasAllowance) {
             return (
-                <SubmitButton disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)}>
+                <Button disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)} {...defaultButtonProps}>
                     {t('common.wallet.approve')}
-                </SubmitButton>
+                </Button>
             );
         }
 
         return (
-            <SubmitButton disabled={submitDisabled} onClick={async () => handleSubmit()}>
+            <Button disabled={submitDisabled} onClick={async () => handleSubmit()} {...defaultButtonProps}>
                 {t(`common.buy-side`)}
-            </SubmitButton>
+            </Button>
         );
     };
 
@@ -750,7 +755,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                                                 ?.amountToBuy || ''
                                         }
                                         onChange={(e) => {
-                                            if (countDecimals(Number(e.target.value)) > 2) {
+                                            if (Number(countDecimals(Number(e.target.value))) > 2) {
                                                 return;
                                             }
                                             setMultiSingleUsd(market, Number(e.target.value));
