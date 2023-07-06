@@ -13,7 +13,7 @@ import Tooltip from 'components/Tooltip';
 import { Trans, useTranslation } from 'react-i18next';
 import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import { getNetworkId } from 'redux/modules/wallet';
-import { NetworkIdByName } from 'utils/network';
+import { NetworkIdByName } from 'constants/network';
 import { TAGS_FLAGS } from 'enums/tags';
 
 type MarketsList = {

@@ -54,7 +54,7 @@ import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
-import { checkAllowance, NetworkIdByName, getMaxGasLimitForNetwork, delay } from 'utils/network';
+import { checkAllowance, getMaxGasLimitForNetwork, delay } from 'utils/network';
 import { BigNumber, ethers } from 'ethers';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
@@ -77,6 +77,7 @@ import useParlayLiquidityPoolDataQuery from 'queries/liquidityPool/useParlayLiqu
 import Button from 'components/Button';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
+import { NetworkIdByName } from 'constants/network';
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();

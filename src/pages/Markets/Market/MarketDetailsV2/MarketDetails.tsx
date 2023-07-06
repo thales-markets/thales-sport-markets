@@ -21,7 +21,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarketChildMarkets, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
-import { NetworkIdByName } from 'utils/network';
+import { NetworkIdByName } from 'constants/network';
 import { buildHref, navigateTo } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import Web3 from 'web3';

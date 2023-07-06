@@ -25,7 +25,6 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarketInfo, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { addHoursToCurrentDate } from 'utils/formatters/date';
-import { NetworkIdByName } from 'utils/network';
 import { history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
 import FilterTagsMobile from '../components/FilterTagsMobile';
@@ -41,6 +40,7 @@ import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { CSSProperties } from 'styled-components';
 import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
+import { NetworkIdByName } from 'constants/network';
 
 const SidebarLeaderboard = lazy(
     () => import(/* webpackChunkName: "SidebarLeaderboard" */ 'pages/ParlayLeaderboard/components/SidebarLeaderboard')

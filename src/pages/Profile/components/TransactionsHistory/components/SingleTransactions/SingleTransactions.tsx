@@ -20,13 +20,13 @@ import {
     getSpreadTotalText,
     getSymbolText,
 } from 'utils/markets';
-import { CollateralByNetworkId } from 'utils/network';
 import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import ShareTicketModal, {
     ShareTicketModalProps,
 } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import { ParlaysMarket } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
+import { CollateralByNetworkId } from 'constants/network';
 
 const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';

@@ -8,8 +8,7 @@ import { COLLATERALS } from 'constants/markets';
 import { NetworkId } from 'types/network';
 import multipleCollateral from './contracts/multipleCollateralContract';
 import { Network } from 'enums/network';
-
-export type StablecoinKey = 'sUSD' | 'USDC' | 'USDT' | 'DAI';
+import { StablecoinKey } from 'types/tokens';
 
 export const getStableIcon = (currencyKey: StablecoinKey) => currencyKeyToAssetIconMap[currencyKey];
 

@@ -1,3 +1,5 @@
+export type StablecoinKey = 'sUSD' | 'USDC' | 'USDT' | 'DAI';
+
 export type Token = {
     address: string;
     decimals: number;

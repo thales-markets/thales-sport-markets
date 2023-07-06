@@ -14,8 +14,8 @@ import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-wh
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import { getNetworkId } from 'redux/modules/wallet';
-import { NetworkIdByName } from 'utils/network';
 import { TAGS_FLAGS } from 'enums/tags';
+import { NetworkIdByName } from 'constants/network';
 
 type TagsDropdownProps = {
     open: boolean;

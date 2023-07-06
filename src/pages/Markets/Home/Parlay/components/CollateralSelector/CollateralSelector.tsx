@@ -7,8 +7,8 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { OvertimeVoucher } from 'types/tokens';
-import { getCollateralIndexByCollateralKey, getStableIcon, StablecoinKey } from 'utils/collaterals';
+import { OvertimeVoucher, StablecoinKey } from 'types/tokens';
+import { getCollateralIndexByCollateralKey, getStableIcon } from 'utils/collaterals';
 import { formatCurrency } from 'utils/formatters/number';
 import { isMultiCollateralSupportedForNetwork } from 'utils/network';
 

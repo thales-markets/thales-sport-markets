@@ -27,10 +27,10 @@ import {
 import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { ethers } from 'ethers';
-import { CollateralByNetworkId } from 'utils/network';
 import { buildMarketLink } from 'utils/routes';
 import i18n from 'i18n';
 import SPAAnchor from 'components/SPAAnchor';
+import { CollateralByNetworkId } from 'constants/network';
 
 const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?: string }> = ({
     parlayTx,

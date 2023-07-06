@@ -1,17 +1,18 @@
+import { Network } from 'enums/network';
 import { NetworkId } from 'types/network';
 
 const EtherscanNetworkNameById: Record<NetworkId, string> = {
-    10: 'optimistic',
-    42: 'kovan',
-    5: 'goerli',
-    420: 'goerli-optimism',
-    42161: '',
+    [Network.Goerli]: 'goerli',
+    [Network['Mainnet-Ovm']]: 'optimistic',
+    [Network.Kovan]: 'kovan',
+    [Network['Goerli-Ovm']]: 'goerli-optimism',
+    [Network.Arbitrum]: '',
 };
 
 const getEtherscanBaseURL = (networkId: NetworkId) => {
     const network = EtherscanNetworkNameById[networkId];
 
-    if (networkId === 42161) {
+    if (networkId === Network.Arbitrum) {
         return 'https://arbiscan.io/';
     }
 

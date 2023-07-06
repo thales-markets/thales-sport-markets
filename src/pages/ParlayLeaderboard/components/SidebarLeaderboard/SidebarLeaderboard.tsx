@@ -27,7 +27,7 @@ import {
     getSpreadTotalText,
     getSymbolText,
 } from 'utils/markets';
-import { NetworkIdByName } from 'utils/network';
+import { NetworkIdByName } from 'constants/network';
 import { buildHref } from 'utils/routes';
 import {
     ArrowIcon,

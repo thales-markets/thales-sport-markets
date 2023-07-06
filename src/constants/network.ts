@@ -1,4 +1,30 @@
+import { NetworkId } from 'types/network';
+
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+
+export const NetworkIdByName: Record<string, NetworkId> = {
+    OptimismMainnet: 10,
+    Kovan: 42,
+    Goerli: 5,
+    OptimismGoerli: 420,
+    ArbitrumOne: 42161,
+};
+
+export const NetworkNameById: Record<NetworkId, string> = {
+    5: 'goerli',
+    10: 'optimism mainnet',
+    42: 'kovan',
+    420: 'optimism goerli',
+    42161: 'ARBITRUM ONE',
+};
+
+export const CollateralByNetworkId: Record<NetworkId, string> = {
+    5: 'sUSD',
+    10: 'sUSD',
+    42: 'sUSD',
+    420: 'sUSD',
+    42161: 'USDC',
+};
 
 export const SUPPORTED_NETWORKS = [
     {

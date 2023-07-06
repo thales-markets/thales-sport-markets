@@ -1,9 +1,9 @@
 import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
 import { getAddress } from 'utils/formatters/ethers';
-import { NetworkNameById } from 'utils/network';
 import { RootState } from 'redux/rootReducer';
 import { NetworkId } from 'types/network';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
+import { NetworkNameById } from 'constants/network';
 
 const sliceName = 'wallet';
 

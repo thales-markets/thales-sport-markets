@@ -1,35 +1,11 @@
 import { COLLATERALS_INDEX } from 'constants/currency';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
-import { MAX_GAS_LIMIT, SUPPORTED_NETWORKS } from 'constants/network';
+import { MAX_GAS_LIMIT, NetworkNameById, SUPPORTED_NETWORKS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { NetworkId } from 'types/network';
 import { getNavItemFromRoute } from './ui';
 import { getLastSavedOrDefaultStableIndex } from 'redux/modules/parlay';
 import { Network } from 'enums/network';
-
-export const NetworkIdByName: Record<string, NetworkId> = {
-    OptimismMainnet: 10,
-    Kovan: 42,
-    Goerli: 5,
-    OptimismGoerli: 420,
-    ArbitrumOne: 42161,
-};
-
-export const NetworkNameById: Record<NetworkId, string> = {
-    10: 'optimism mainnet',
-    42: 'kovan',
-    5: 'goerli',
-    420: 'optimism goerli',
-    42161: 'ARBITRUM ONE',
-};
-
-export const CollateralByNetworkId: Record<NetworkId, string> = {
-    10: 'sUSD',
-    42: 'sUSD',
-    5: 'sUSD',
-    420: 'sUSD',
-    42161: 'USDC',
-};
 
 export const hasEthereumInjected = () => !!window.ethereum;
 

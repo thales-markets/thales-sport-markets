@@ -37,7 +37,6 @@ import {
     formatMarketOdds,
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
-import { NetworkIdByName } from 'utils/network';
 import TimeRemaining from 'components/TimeRemaining';
 import {
     extractCombinedMarketsFromParlayMarketType,
@@ -46,6 +45,7 @@ import {
 import { getParlayRow } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
 import i18n from 'i18n';
 import { OddsType } from 'enums/markets';
+import { NetworkIdByName } from 'constants/network';
 
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();

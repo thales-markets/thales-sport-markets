@@ -4,7 +4,6 @@ import sportMarketManagerContract from 'utils/contracts/sportPositionalMarketMan
 import sportPositionalMarketDataContract from 'utils/contracts/sportPositionalMarketDataContract';
 import sportsAMMContract from 'utils/contracts/sportsAMMContract';
 import sUSDContract from 'utils/contracts/sUSDContract';
-import { NetworkIdByName } from './network';
 import theRundownConsumerContract from 'utils/contracts/theRundownConsumerContract';
 import multipleCollateral from './contracts/multipleCollateralContract';
 import overtimeVoucherContract from './contracts/overtimeVoucherContract';
@@ -18,6 +17,7 @@ import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContract
 import parlayMarketDataContract from 'utils/contracts/parlayMarketDataContract';
 import parlayAMMLiquidityPoolContract from 'utils/contracts/parlayAMMLiquidityPoolContract';
 import parlayAMMLiquidityPoolDataContract from 'utils/contracts/parlayAMMLiquidityPoolDataContract';
+import { NetworkIdByName } from 'constants/network';
 
 type NetworkConnector = {
     initialized: boolean;
