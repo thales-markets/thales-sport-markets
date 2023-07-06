@@ -13,12 +13,6 @@ export default {
         tertiary: Colors.GRAY,
         quaternary: Colors.BLUE,
     },
-    oddsColor: {
-        primary: Colors.GREEN,
-        secondary: Colors.RED,
-        tertiary: Colors.BLUE,
-        quaternary: Colors.YELLOW,
-    },
     borderColor: {
         primary: Colors.GRAY_LIGHT,
         secondary: Colors.WHITE,
@@ -27,7 +21,7 @@ export default {
     },
     winnerColors: {
         primary: Colors.GREEN,
-        secondary: Colors.YELLOW,
+        secondary: Colors.ORANGE,
         tertiary: Colors.BLUE,
     },
     button: {
@@ -67,17 +61,10 @@ export default {
             },
         },
     },
-    nav: {
-        background: Colors.LIGHT_GRAY,
-        text: {
-            primary: Colors.LIGHT_BLUE,
-            secondary: Colors.WHITE,
-        },
-    },
     link: {
         textColor: {
-            primary: Colors.WHITE,
-            secondary: Colors.BLUE,
+            primary: Colors.BLUE,
+            secondary: Colors.WHITE,
         },
     },
     error: {
@@ -90,5 +77,30 @@ export default {
         borderColor: {
             primary: Colors.RED,
         },
+    },
+    warining: {
+        background: {
+            primary: Colors.GRAY,
+        },
+        textColor: {
+            primary: Colors.ORANGE,
+        },
+        borderColor: {
+            primary: Colors.ORANGE,
+        },
+    },
+    info: {
+        background: {
+            primary: Colors.GRAY,
+        },
+        textColor: {
+            primary: Colors.BLUE,
+        },
+        borderColor: {
+            primary: Colors.BLUE,
+        },
+    },
+    shadow: {
+        navBar: '-64px 0px 38px 3px rgba(0,0,0,0.41)',
     },
 };

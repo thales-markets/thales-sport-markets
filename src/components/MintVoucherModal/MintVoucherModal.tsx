@@ -319,7 +319,7 @@ const Description = styled.div`
     }
     a {
         cursor: pointer;
-        color: ${(props) => props.theme.link.textColor.secondary};
+        color: ${(props) => props.theme.link.textColor.primary};
         :hover {
             text-decoration: underline;
         }
