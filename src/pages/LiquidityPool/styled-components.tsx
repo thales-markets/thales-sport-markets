@@ -250,8 +250,6 @@ export const ButtonContainer = styled(FlexDivColumnCentered)`
     width: 100%;
 `;
 
-export const InputContainer = styled(FlexDivColumnCentered)``;
-
 export const LoaderContainer = styled(FlexDivCentered)`
     position: relative;
     min-height: 240px;

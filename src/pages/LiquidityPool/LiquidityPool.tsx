@@ -4,7 +4,6 @@ import {
     Container,
     Title,
     ButtonContainer,
-    InputContainer,
     Wrapper,
     ToggleContainer,
     LiquidityPoolFilledGraphicContainer,
@@ -659,40 +658,38 @@ const LiquidityPool: React.FC = () => {
                                         <Trans i18nKey="liquidity-pool.deposit-max-amount-of-users-warning" />
                                     </WarningContentInfo>
                                 )}
-                                <InputContainer>
-                                    <NumericInput
-                                        value={amount}
-                                        disabled={isDepositAmountInputDisabled}
-                                        onChange={(_, value) => setAmount(value)}
-                                        placeholder={t('liquidity-pool.deposit-amount-placeholder')}
-                                        currencyLabel={collateral}
-                                        onMaxButton={setMaxAmount}
-                                        showValidation={
-                                            insufficientBalance ||
-                                            exceededLiquidityPoolCap ||
-                                            exceededMaxAllowance ||
-                                            invalidAmount
+                                <NumericInput
+                                    value={amount}
+                                    disabled={isDepositAmountInputDisabled}
+                                    onChange={(_, value) => setAmount(value)}
+                                    placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                                    currencyLabel={collateral}
+                                    onMaxButton={setMaxAmount}
+                                    showValidation={
+                                        insufficientBalance ||
+                                        exceededLiquidityPoolCap ||
+                                        exceededMaxAllowance ||
+                                        invalidAmount
+                                    }
+                                    validationMessage={t(
+                                        `${
+                                            insufficientBalance
+                                                ? 'common.errors.insufficient-balance'
+                                                : exceededLiquidityPoolCap
+                                                ? 'liquidity-pool.deposit-liquidity-pool-cap-error'
+                                                : exceededMaxAllowance
+                                                ? 'liquidity-pool.deposit-staked-thales-error'
+                                                : 'liquidity-pool.deposit-min-amount-error'
+                                        }`,
+                                        {
+                                            amount: formatCurrencyWithSign(
+                                                USD_SIGN,
+                                                liquidityPoolData.minDepositAmount
+                                            ),
                                         }
-                                        validationMessage={t(
-                                            `${
-                                                insufficientBalance
-                                                    ? 'common.errors.insufficient-balance'
-                                                    : exceededLiquidityPoolCap
-                                                    ? 'liquidity-pool.deposit-liquidity-pool-cap-error'
-                                                    : exceededMaxAllowance
-                                                    ? 'liquidity-pool.deposit-staked-thales-error'
-                                                    : 'liquidity-pool.deposit-min-amount-error'
-                                            }`,
-                                            {
-                                                amount: formatCurrencyWithSign(
-                                                    USD_SIGN,
-                                                    liquidityPoolData.minDepositAmount
-                                                ),
-                                            }
-                                        )}
-                                        validationPlacement="bottom"
-                                    />
-                                </InputContainer>
+                                    )}
+                                    validationPlacement="bottom"
+                                />
                                 {getDepositSubmitButton()}
                             </>
                         )}
@@ -764,30 +761,28 @@ const LiquidityPool: React.FC = () => {
                                                                         )}
                                                                     />
                                                                 </RadioButtonContainer>
-                                                                <InputContainer>
-                                                                    <NumericInput
-                                                                        value={withdrawalPercentage}
-                                                                        disabled={isPartialWithdrawalDisabled}
-                                                                        onChange={(_, value) =>
-                                                                            setWithdrawalPercentage(value)
-                                                                        }
-                                                                        placeholder={t(
-                                                                            'liquidity-pool.percentage-placeholder'
-                                                                        )}
-                                                                        currencyLabel="%"
-                                                                        step="1"
-                                                                        showValidation={!isWithdrawalPercentageValid}
-                                                                        validationMessage={
-                                                                            t(
-                                                                                Number(withdrawalPercentage) == 0
-                                                                                    ? 'common.errors.enter-percentage'
-                                                                                    : 'common.errors.invalid-percentage-range',
-                                                                                { min: 10, max: 90 }
-                                                                            ) as string
-                                                                        }
-                                                                        validationPlacement="bottom"
-                                                                    />
-                                                                </InputContainer>
+                                                                <NumericInput
+                                                                    value={withdrawalPercentage}
+                                                                    disabled={isPartialWithdrawalDisabled}
+                                                                    onChange={(_, value) =>
+                                                                        setWithdrawalPercentage(value)
+                                                                    }
+                                                                    placeholder={t(
+                                                                        'liquidity-pool.percentage-placeholder'
+                                                                    )}
+                                                                    currencyLabel="%"
+                                                                    step="1"
+                                                                    showValidation={!isWithdrawalPercentageValid}
+                                                                    validationMessage={
+                                                                        t(
+                                                                            Number(withdrawalPercentage) == 0
+                                                                                ? 'common.errors.enter-percentage'
+                                                                                : 'common.errors.invalid-percentage-range',
+                                                                            { min: 10, max: 90 }
+                                                                        ) as string
+                                                                    }
+                                                                    validationPlacement="bottom"
+                                                                />
                                                                 <SliderContainer>
                                                                     <StyledSlider
                                                                         value={Number(withdrawalPercentage)}
