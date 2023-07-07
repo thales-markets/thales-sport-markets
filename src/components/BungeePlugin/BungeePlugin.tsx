@@ -5,12 +5,14 @@ import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import useAllSourceTokensQuery, { SOURCE_NETWORK_IDS } from './queries/useAllSourceTokensQuery';
 import { Network } from 'enums/network';
 import { mainnet } from 'wagmi';
+import { ThemeInterface } from 'types/ui';
+import { hexToRGB } from 'utils/style';
 
 type CustomizationProps = {
     width?: number;
@@ -30,6 +32,7 @@ type CustomizationProps = {
 const SUPPORTED_DESTINATION_NETWORKS = [Network.OptimismMainnet, Network.ArbitrumOne];
 
 const BungeePlugin: React.FC = () => {
+    const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -63,15 +66,15 @@ const BungeePlugin: React.FC = () => {
     const customize: CustomizationProps = {
         width: isMobile ? 360 : 386, // 360 is min-width
         responsiveWidth: false,
-        accent: 'rgb(95,97,128)', // button
-        onAccent: 'rgb(255,255,255)', // button text
-        primary: 'rgb(26,28,43)', // background
-        secondary: 'rgb(81,84,111)', // main button wrapper
-        text: 'rgb(255,255,255)',
-        secondaryText: 'rgb(255,255,255)',
-        interactive: 'rgb(26,28,43)', // dropdown
-        onInteractive: 'rgb(255,255,255)', // dropdown text
-        outline: 'rgb(95,97,128)',
+        accent: hexToRGB(theme.button.background.primary), // button
+        onAccent: hexToRGB(theme.button.textColor.secondary), // button text
+        primary: hexToRGB(theme.background.primary), // background
+        secondary: hexToRGB(theme.button.background.tertiary), // main button wrapper
+        text: hexToRGB(theme.textColor.primary),
+        secondaryText: hexToRGB(theme.textColor.primary),
+        interactive: hexToRGB(theme.background.primary), // dropdown
+        onInteractive: hexToRGB(theme.textColor.primary), // dropdown text
+        outline: hexToRGB(theme.button.background.primary),
     };
 
     return (
