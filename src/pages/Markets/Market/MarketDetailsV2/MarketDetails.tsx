@@ -176,7 +176,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                 {showStatus && (
                     <Status backgroundColor={isGameCancelled ? MAIN_COLORS.BACKGROUNDS.RED : MAIN_COLORS.LIGHT_GRAY}>
                         {isPendingResolution ? (
-                            !isEnetpulseSport ? (
+                            !isEnetpulseSport && !isJsonOddsSport ? (
                                 <ResultContainer>
                                     <ResultLabel>
                                         {liveResultInfo?.homeScore + ' - ' + liveResultInfo?.awayScore}{' '}
