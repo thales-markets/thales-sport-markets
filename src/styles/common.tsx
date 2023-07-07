@@ -43,7 +43,7 @@ export const Colors = {
     GRAY_LIGHT: '#5F6180',
     GRAY_DARK: '#1A1C2B',
     GRAY_SECOND: '#242842',
-    GRAY_RESOLVED: '#242940',
+    GRAY_RESOLVED: 'rgb(36,41,64, 0.5)',
 
     WHITE: '#FFFFFF',
 

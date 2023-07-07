@@ -84,7 +84,7 @@ export const RoundEndContainer = styled(FlexDivColumn)`
     span {
         font-size: 30px;
         font-weight: 600;
-        color: #3fd1ff;
+        color: ${(props) => props.theme.textColor.quaternary};
         line-height: 34px;
     }
     @media (max-width: 1199px) {
@@ -102,7 +102,7 @@ export const RoundEndLabel = styled.p``;
 export const RoundEnd = styled.p`
     font-weight: 600;
     font-size: 25px;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.textColor.quaternary};
     line-height: 25px;
 `;
 
@@ -116,7 +116,7 @@ export const RoundInfoLabel = styled.p``;
 export const RoundInfo = styled.p`
     font-size: 20px;
     font-weight: 600;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.textColor.quaternary};
     line-height: 20px;
 `;
 
@@ -178,9 +178,9 @@ export const ContentInfo = styled.p`
 `;
 
 export const WarningContentInfo = styled(ContentInfo)`
-    color: #ffcc00;
+    color: ${(props) => props.theme.warning.textColor.primary};
     i {
-        color: #ffcc00;
+        color: ${(props) => props.theme.warning.textColor.primary};
     }
 `;
 

@@ -79,7 +79,7 @@ export default {
             primary: Colors.RED,
         },
     },
-    warining: {
+    warning: {
         background: {
             primary: Colors.GRAY,
         },

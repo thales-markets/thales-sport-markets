@@ -73,7 +73,7 @@ export const RoundEndContainer = styled(FlexDivColumn)`
     span {
         font-size: 30px;
         font-weight: 600;
-        color: #3fd1ff;
+        color: ${(props) => props.theme.textColor.quaternary};
     }
     margin-bottom: 15px;
 `;
@@ -85,7 +85,7 @@ export const RoundEndLabel = styled.p`
 export const RoundEnd = styled.p`
     font-weight: 600;
     font-size: 25px;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export const RoundAllocationWrapper = styled(FlexDivCentered)`
@@ -115,7 +115,7 @@ export const RoundAllocationLabel = styled.p`
 export const RoundAllocation = styled.p`
     font-size: 25px;
     font-weight: 600;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export const RoundInfoContainer = styled(FlexDivColumn)`
@@ -125,7 +125,7 @@ export const RoundInfoContainer = styled(FlexDivColumn)`
 export const RoundInfo = styled.p`
     font-size: 20px;
     font-weight: 600;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export const Description = styled.div`
@@ -153,7 +153,7 @@ export const ContentInfo = styled.p`
 `;
 
 export const WarningContentInfo = styled(ContentInfo)`
-    color: #ffcc00;
+    color: ${(props) => props.theme.warning.textColor.primary};
 `;
 
 export const BoldContent = styled.span`

@@ -23,7 +23,7 @@ export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile' })<{
     iconColor?: string;
 }>`
     font-size: ${(props) => (props.avatarSize ? props.avatarSize : '20')}px;
-    color: ${(props) => (props.iconColor ? props.iconColor : props.theme.button.textColor.primary)};
+    color: ${(props) => (props.iconColor ? props.iconColor : props.theme.textColor.secondary)};
 `;
 
 export const NotificationCount = styled.div`
