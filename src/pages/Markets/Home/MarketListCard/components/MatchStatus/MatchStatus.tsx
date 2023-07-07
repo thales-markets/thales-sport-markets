@@ -1,11 +1,13 @@
 import { SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
-import { GAME_STATUS, STATUS_COLOR } from 'constants/ui';
+import { GAME_STATUS } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarketLiveResult } from 'types/markets';
 import { getOrdinalNumberLabel } from 'utils/ui';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 type MatchStatusProps = {
     isPendingResolution: boolean;
@@ -25,14 +27,14 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
     isJsonOddsSport,
 }) => {
     const { t } = useTranslation();
-
+    const theme: ThemeInterface = useTheme();
     const displayClockTime = liveResultInfo?.displayClock.replaceAll("'", '');
 
     return (
         <Container bottomAlign={isPendingResolution}>
             {isPendingResolution ? (
                 isEnetpulseSport || isJsonOddsSport ? (
-                    <Status color={STATUS_COLOR.STARTED}>{t('markets.market-card.pending')}</Status>
+                    <Status color={theme.status.started}>{t('markets.market-card.pending')}</Status>
                 ) : (
                     <FlexDivRow>
                         {liveResultInfo?.status != GAME_STATUS.FINAL &&
@@ -80,9 +82,9 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
                     </FlexDivRow>
                 )
             ) : isCanceled ? (
-                <Status color={STATUS_COLOR.CANCELED}>{t('markets.market-card.canceled')}</Status>
+                <Status color={theme.status.canceled}>{t('markets.market-card.canceled')}</Status>
             ) : isPaused ? (
-                <Status color={STATUS_COLOR.PAUSED}>{t('markets.market-card.paused')}</Status>
+                <Status color={theme.status.paused}>{t('markets.market-card.paused')}</Status>
             ) : (
                 <></>
             )}
@@ -115,7 +117,7 @@ const MatchPeriodLabel = styled.span`
     text-transform: uppercase;
     white-space: nowrap;
     &.blink {
-        color: #e26a78;
+        color: ${(props) => props.theme.status.loss};
         animation: blinker 1.5s step-start infinite;
         font-weight: 700;
     }
@@ -127,7 +129,7 @@ const MatchPeriodLabel = styled.span`
     }
 
     &.red {
-        color: #e26a78;
+        color: ${(props) => props.theme.status.loss};
     }
 `;
 

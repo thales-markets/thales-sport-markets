@@ -222,7 +222,7 @@ const PayoutLabel = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
     line-height: ${(props) => (props.isResolved ? '32' : '18')}px;
     font-weight: 200;
     padding: 0 5px;
-    color: ${(props) => (props.isLost ? '#ca4c53' : '#5fc694')};
+    color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
     ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')};
 `;
 
@@ -230,14 +230,14 @@ const Square = styled.div<{ isLost?: boolean; isResolved?: boolean }>`
     width: ${(props) => (props.isResolved ? '10' : '8')}px;
     height: ${(props) => (props.isResolved ? '10' : '8')}px;
     transform: rotate(-45deg);
-    background: ${(props) => (props.isLost ? '#ca4c53' : '#5fc694')};
+    background: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
 `;
 
 const PayoutValue = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
     font-size: ${(props) => (props.isResolved ? '35' : '30')}px;
     line-height: ${(props) => (props.isResolved ? '37' : '32')}px;
     font-weight: 800;
-    color: ${(props) => (props.isLost ? '#ca4c53' : '#5fc694')};
+    color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
     ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')}
 `;
 

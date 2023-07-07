@@ -19,11 +19,6 @@ export default {
         tertiary: Colors.GREEN,
         quaternary: Colors.BLUE,
     },
-    winnerColors: {
-        primary: Colors.GREEN,
-        secondary: Colors.ORANGE,
-        tertiary: Colors.BLUE,
-    },
     button: {
         background: {
             primary: Colors.GREEN,
@@ -109,9 +104,14 @@ export default {
         winner: '0px 0px 33px -7px rgba(63,209,255,1)',
     },
     status: {
+        open: Colors.WHITE,
         win: Colors.GREEN,
         loss: Colors.RED,
+        started: Colors.RED,
         canceled: Colors.RED,
+        paused: Colors.RED,
+        sold: Colors.GRAY_LIGHT,
+        comingSoon: Colors.ORANGE,
     },
     oddsContainerBackground: {
         primary: Colors.GRAY,

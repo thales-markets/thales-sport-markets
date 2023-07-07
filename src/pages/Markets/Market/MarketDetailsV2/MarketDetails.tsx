@@ -405,7 +405,7 @@ const InfoLabel = styled.label`
     }
 
     &.red {
-        color: #e26a78;
+        color: ${(props) => props.theme.status.loss};
     }
 
     &.football {
@@ -415,7 +415,7 @@ const InfoLabel = styled.label`
     }
 
     &.blink {
-        color: #e26a78;
+        color: ${(props) => props.theme.status.loss};
         font-weight: 700;
         animation: blinker 1.5s step-start infinite;
     }

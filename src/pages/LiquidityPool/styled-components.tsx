@@ -292,7 +292,7 @@ export const LiquidityPoolReturnlabel = styled(LiquidityPoolInfoLabel)`
 
 export const LiquidityPoolReturnInfo = styled(LiquidityPoolReturnlabel)`
     font-weight: 600;
-    color: ${(props) => props.theme.winnerColors.primary};
+    color: ${(props) => props.theme.status.win};
     font-size: 16px;
 `;
 
@@ -416,7 +416,7 @@ export const SliderRange = styled.div`
     font-size: 13px;
     line-height: 13px;
     letter-spacing: 0.4px;
-    color: #5fc694;
+    color: ${(props) => props.theme.status.win};
     &.disabled {
         opacity: 0.4;
         cursor: default;

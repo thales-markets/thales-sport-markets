@@ -7,15 +7,6 @@ export const ThemeMap: Record<Theme, ThemeInterface> = {
     [Theme.DARK]: darkTheme,
 };
 
-export const STATUS_COLOR = {
-    CLAIMABLE: '#3FD1FF',
-    STARTED: '#E26A78',
-    FINISHED: '#FFFFFF',
-    CANCELED: '#E26A78',
-    COMING_SOON: '#FAC439',
-    PAUSED: '#E26A78',
-};
-
 export const GAME_STATUS = {
     FINAL: 'STATUS_FINAL',
     FULL_TIME: 'STATUS_FULL_TIME',

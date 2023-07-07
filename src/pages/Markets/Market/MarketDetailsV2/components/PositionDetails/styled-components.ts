@@ -54,7 +54,7 @@ export const Status = styled(Text)`
 `;
 
 export const Bonus = styled(FlexDivCentered)`
-    color: #5fc694;
+    color: ${(props) => props.theme.status.win};
     position: absolute;
     top: -9px;
     right: -10px;
@@ -78,7 +78,7 @@ export const TooltipText = styled.span``;
 export const TooltipBonusText = styled(TooltipText)`
     font-weight: 700;
     margin-top: 8px;
-    color: #5fc694;
+    color: ${(props) => props.theme.status.win};
 `;
 
 export const TooltipFooter = styled(FlexDivRow)`

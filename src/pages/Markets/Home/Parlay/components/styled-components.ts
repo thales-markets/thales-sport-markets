@@ -32,7 +32,7 @@ export const SummaryValue = styled.span<{ isInfo?: boolean; isCurrency?: boolean
     line-height: 12px;
     letter-spacing: 0.025em;
     display: ${(props) => (props.isHidden ? 'none' : '')};
-    color: ${(props) => (props.isInfo || props.isCurrency ? '#5fc694' : '#ffffff')};
+    color: ${(props) => (props.isInfo || props.isCurrency ? props.theme.status.win : props.theme.textColor.primary)};
     margin-left: ${(props) => (props.isInfo ? 'auto' : '5px')};
 `;
 
@@ -62,31 +62,6 @@ export const InfoValue = styled.span`
 `;
 
 export const InputContainer = styled(FlexDiv)``;
-
-export const ValidationTooltip = withStyles(() => ({
-    tooltip: {
-        minWidth: '100%',
-        width: '296px',
-        marginBottom: '7px',
-        backgroundColor: '#23273D',
-        color: '#E26A78',
-        border: '1.5px solid #E26A78',
-        borderRadius: '2px',
-        fontSize: '10px',
-        fontWeight: 600,
-        textTransform: 'uppercase',
-    },
-    arrow: {
-        '&:before': {
-            border: '1.5px solid #E26A78',
-            backgroundColor: '#23273D',
-            boxSizing: 'border-box',
-        },
-        width: '13px',
-        height: '10px',
-        bottom: '-3px !important',
-    },
-}))(Tooltip);
 
 export const InfoTooltip = withStyles(() => ({
     tooltip: {
@@ -153,7 +128,7 @@ export const AmountToBuyMultiPayoutValue = styled.span<{ isInfo?: boolean; isCur
     line-height: 27px;
     letter-spacing: 0.025em;
     display: ${(props) => (props.isHidden ? 'none' : '')};
-    color: ${(props) => (props.isInfo || props.isCurrency ? '#5fc694' : '#ffffff')};
+    color: ${(props) => (props.isInfo || props.isCurrency ? props.theme.status.win : props.theme.textColor.primary)};
     margin-left: 5px;
 `;
 

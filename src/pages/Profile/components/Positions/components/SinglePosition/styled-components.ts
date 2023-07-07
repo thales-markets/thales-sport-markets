@@ -66,7 +66,7 @@ export const MatchPeriodLabel = styled.span`
     text-transform: uppercase;
     white-space: nowrap;
     &.blink {
-        color: #e26a78;
+        color: ${(props) => props.theme.status.loss};
         animation: blinker 1.5s step-start infinite;
         font-weight: 700;
     }
@@ -78,7 +78,7 @@ export const MatchPeriodLabel = styled.span`
     }
 
     &.red {
-        color: #e26a78;
+        color: ${(props) => props.theme.status.loss};
     }
 `;
 
