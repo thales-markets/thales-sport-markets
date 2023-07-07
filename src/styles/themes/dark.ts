@@ -113,4 +113,9 @@ export default {
         loss: Colors.RED,
         canceled: Colors.RED,
     },
+    oddsContainerBackground: {
+        primary: Colors.GRAY,
+        secondary: Colors.GRAY_SECOND,
+        tertiary: Colors.GRAY_RESOLVED,
+    },
 };

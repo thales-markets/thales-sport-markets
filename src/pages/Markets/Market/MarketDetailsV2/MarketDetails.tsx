@@ -6,7 +6,7 @@ import Tooltip from 'components/Tooltip';
 import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import ROUTES from 'constants/routes';
 import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
-import { GAME_STATUS, MAIN_COLORS } from 'constants/ui';
+import { GAME_STATUS } from 'constants/ui';
 import Parlay from 'pages/Markets/Home/Parlay';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
 import BackToLink from 'pages/Markets/components/BackToLink';
@@ -18,7 +18,7 @@ import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarketChildMarkets, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { NetworkIdByName } from 'constants/network';
@@ -30,6 +30,7 @@ import CombinedPositions from './components/CombinedPositions';
 import MatchInfo from './components/MatchInfo';
 import Positions from './components/Positions';
 import { BetType } from 'enums/markets';
+import { ThemeInterface } from 'types/ui';
 
 type MarketDetailsPropType = {
     market: SportMarketInfo;
@@ -37,6 +38,7 @@ type MarketDetailsPropType = {
 
 const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -175,7 +177,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                 </HeaderWrapper>
                 <MatchInfo market={market} liveResultInfo={liveResultInfo} isEnetpulseSport={isEnetpulseSport} />
                 {showStatus && (
-                    <Status backgroundColor={isGameCancelled ? MAIN_COLORS.BACKGROUNDS.RED : MAIN_COLORS.LIGHT_GRAY}>
+                    <Status backgroundColor={isGameCancelled ? theme.status.canceled : theme.background.secondary}>
                         {isPendingResolution ? (
                             !isEnetpulseSport ? (
                                 <ResultContainer>
