@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivColumnNative, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import Button from 'components/Button';
 
 export const Container = styled(FlexDivColumn)`
     width: 100%;
