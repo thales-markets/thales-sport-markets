@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Tooltip, withStyles } from '@material-ui/core';
 import { FlexDiv, FlexDivCentered } from 'styles/common';
+import MuiTooltip from '@material-ui/core/Tooltip';
 
 export const RowSummary = styled.div<{ columnDirection?: boolean }>`
     display: flex;
@@ -63,29 +63,29 @@ export const InfoValue = styled.span`
 
 export const InputContainer = styled(FlexDiv)``;
 
-export const InfoTooltip = withStyles(() => ({
-    tooltip: {
-        minWidth: '100%',
-        marginBottom: '7px',
-        backgroundColor: '#303656',
-        color: '#FAC439',
-        border: '1.5px solid #FAC439',
-        borderRadius: '2px',
-        fontSize: '9px',
-        lineHeight: '12px',
-        textTransform: 'uppercase',
-    },
-    arrow: {
-        '&:before': {
-            border: '1.5px solid #FAC439',
-            backgroundColor: '#303656',
-            boxSizing: 'border-box',
-        },
-        width: '11px',
-        height: '8px',
-        bottom: '-2px !important',
-    },
-}))(Tooltip);
+export const InfoTooltip = styled((props) => <MuiTooltip classes={{ popper: props.className }} {...props} />)`
+    & .MuiTooltip-tooltip {
+        min-width: 100%;
+        margin-bottom: 7px;
+        background-color: ${(props) => props.theme.warning.background.primary};
+        color: ${(props) => props.theme.warning.textColor.primary};
+        border: 1.5px solid ${(props) => props.theme.warning.borderColor.primary};
+        border-radius: 2px;
+        font-size: 9px;
+        line-height: 12px;
+        text-transform: uppercase;
+    }
+    & .MuiTooltip-arrow {
+        &:before {
+            border: 1.5px solid ${(props) => props.theme.warning.borderColor.primary};
+            background-color: ${(props) => props.theme.warning.background.primary};
+            box-sizing: border-box;
+        }
+        width: 11px;
+        height: 8px;
+        bottom: -2px !important;
+    }
+`;
 
 export const AmountToBuyContainer = styled.div`
     position: relative;
@@ -180,7 +180,7 @@ export const ShareWrapper = styled(FlexDivCentered)`
 
 export const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
     font-size: ${(props) => (props.fontSize ? props.fontSize : '20px')};
-    color: ${(props) => (props.color ? props.color : ' #ffffff')};
+    color: ${(props) => (props.color ? props.color : props.theme.textColor.primary)};
     cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     ${(props) => (props.padding ? `padding: ${props.padding};` : '')}

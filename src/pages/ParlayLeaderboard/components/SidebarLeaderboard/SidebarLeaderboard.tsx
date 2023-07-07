@@ -211,7 +211,9 @@ const SidebarLeaderboard: React.FC = () => {
                                                                         ? {
                                                                               text: spreadTotalText,
                                                                               textStyle: {
-                                                                                  backgroundColor: '#2c3250',
+                                                                                  backgroundColor:
+                                                                                      theme.oddsGradiendBackground
+                                                                                          .tertiary,
                                                                                   fontSize: '10px',
                                                                                   top: '-9px',
                                                                                   left: '10px',

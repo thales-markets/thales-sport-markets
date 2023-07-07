@@ -300,7 +300,7 @@ const TableText = styled.span`
 const StatusWrapper = styled.div`
     width: 62px;
     height: 25px;
-    border: 2px solid ${(props) => props.color || 'white'};
+    border: 2px solid ${(props) => props.color || props.theme.status.open};
     border-radius: 5px;
     font-family: 'Roboto';
     font-style: normal;
@@ -310,7 +310,7 @@ const StatusWrapper = styled.div`
     text-align: justify;
     text-transform: uppercase;
     text-align: center;
-    color: ${(props) => props.color || 'white'};
+    color: ${(props) => props.color || props.theme.status.open};
     padding-top: 3px;
 `;
 
@@ -379,7 +379,7 @@ const ExpandedRowWrapper = styled.div`
     @media (max-width: 400px) {
         padding: 0;
     }
-    border-bottom: 2px dotted rgb(95, 97, 128);
+    border-bottom: 2px dotted ${(props) => props.theme.borderColor.primary};
 `;
 
 const ParlayRow = styled(FlexDivRowCentered)`

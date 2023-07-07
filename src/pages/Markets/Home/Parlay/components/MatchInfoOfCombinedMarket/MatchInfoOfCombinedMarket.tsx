@@ -9,6 +9,8 @@ import { formatMarketOdds, getCombinedOddTooltipText, getFormattedBonus, getSpre
 import { getCombinedPositionName } from 'utils/combinedMarkets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 type MatchInfoCominedMarketProps = {
     combinedMarket: CombinedParlayMarket;
@@ -24,6 +26,7 @@ const MatchInfoOfCombinedMarket: React.FC<MatchInfoCominedMarketProps> = ({
     customStyle,
 }) => {
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
     const selectedOddsType = useSelector(getOddsType);
     const market = combinedMarket.markets[0];
 
@@ -70,7 +73,9 @@ const MatchInfoOfCombinedMarket: React.FC<MatchInfoCominedMarketProps> = ({
                         ? {
                               text: spreadTotalText,
                               textStyle: {
-                                  backgroundColor: customStyle ? '#23273e' : '#2f3454',
+                                  backgroundColor: customStyle
+                                      ? theme.oddsGradiendBackground.primary
+                                      : theme.oddsGradiendBackground.secondary,
                                   top: '-9px',
                               },
                           }

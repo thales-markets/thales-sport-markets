@@ -36,6 +36,8 @@ import {
     WalletWrapper,
     Wrapper,
 } from './styled-components';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 type NavMenuMobileProps = {
     visibility?: boolean | null;
@@ -45,6 +47,7 @@ type NavMenuMobileProps = {
 const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVisibility }) => {
     const { t } = useTranslation();
     const location = useLocation();
+    const theme: ThemeInterface = useTheme();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
@@ -75,7 +78,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                     onClick={() => setNavMenuVisibility(false)}
                                 >
                                     {isWalletConnected ? (
-                                        <ProfileIconWidget avatarSize={25} iconColor={'#FFFFFF'} />
+                                        <ProfileIconWidget avatarSize={25} iconColor={theme.textColor.primary} />
                                     ) : (
                                         <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     )}

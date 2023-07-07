@@ -794,7 +794,7 @@ const LiquidityPool: React.FC = () => {
                                                                         step={1}
                                                                         max={90}
                                                                         min={10}
-                                                                        onChange={(_, value) =>
+                                                                        onChange={(_: any, value: any) =>
                                                                             setWithdrawalPercentage(Number(value))
                                                                         }
                                                                         disabled={isPartialWithdrawalDisabled}

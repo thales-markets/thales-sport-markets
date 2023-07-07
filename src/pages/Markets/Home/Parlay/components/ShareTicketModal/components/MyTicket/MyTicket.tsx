@@ -223,7 +223,7 @@ const PayoutLabel = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
     font-weight: 200;
     padding: 0 5px;
     color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
-    ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')};
+    ${(props) => (props.isLost ? `text-decoration: line-through 2px solid ${props.theme.status.loss};` : '')};
 `;
 
 const Square = styled.div<{ isLost?: boolean; isResolved?: boolean }>`
@@ -238,7 +238,7 @@ const PayoutValue = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
     line-height: ${(props) => (props.isResolved ? '37' : '32')}px;
     font-weight: 800;
     color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
-    ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')}
+    ${(props) => (props.isLost ? `text-decoration: line-through 2px solid ${props.theme.status.loss};` : '')}
 `;
 
 const RowMarket = styled.div`

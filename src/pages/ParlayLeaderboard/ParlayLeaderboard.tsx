@@ -129,7 +129,7 @@ const ParlayLeaderboard: React.FC = () => {
                                     <FlexDivRowCentered style={{ position: 'relative', width: 14 }}>
                                         <StatusIcon
                                             style={{ fontSize: 16, position: 'absolute', left: '-20px' }}
-                                            color="rgb(95, 97, 128)"
+                                            color={theme.background.tertiary}
                                             className={`icon ${
                                                 networkId !== Network.ArbitrumOne
                                                     ? 'icon--op-rewards'
@@ -228,7 +228,7 @@ const ParlayLeaderboard: React.FC = () => {
                         text={searchText}
                         customPlaceholder={t('rewards.search-placeholder')}
                         handleChange={(e) => setSearchText(e)}
-                        customStyle={{ border: '1px solid #fffff' }}
+                        customStyle={{ border: `1px solid ${theme.borderColor.secondary}` }}
                         width={200}
                     />
                 </LeaderboardHeader>
@@ -263,7 +263,7 @@ const ParlayLeaderboard: React.FC = () => {
                                         <FlexDivRowCentered style={{ position: 'relative', width: 14 }}>
                                             <StatusIcon
                                                 style={{ fontSize: 16, position: 'absolute', left: '-20px' }}
-                                                color="rgb(95, 97, 128)"
+                                                color={theme.background.tertiary}
                                                 className={`icon ${
                                                     networkId !== Network.ArbitrumOne
                                                         ? 'icon--op-rewards'
@@ -532,7 +532,7 @@ const StatusIcon = styled.i`
     font-weight: 700;
     margin-right: 4px;
     &::before {
-        color: ${(props) => props.color || 'white'};
+        color: ${(props) => props.color || props.theme.status.open};
     }
 `;
 
@@ -588,7 +588,7 @@ const ExpandedRowWrapper = styled.div`
     justify-content: space-evenly;
     padding-left: 60px;
     padding-right: 60px;
-    border-bottom: 2px dotted rgb(95, 97, 128);
+    border-bottom: 2px dotted ${(props) => props.theme.borderColor.primary};
     @media (max-width: 600px) {
         flex-direction: column;
         padding-left: 10px;
@@ -620,7 +620,7 @@ const StickyRow = styled.div`
     display: flex;
     flex-direction: column;
     padding: 10px;
-    border: 1px solid #ffffff;
+    border: 1px solid ${(props) => props.theme.borderColor.secondary};
     border-radius: 7px;
 `;
 

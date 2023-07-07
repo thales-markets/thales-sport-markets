@@ -118,6 +118,11 @@ export default {
         secondary: Colors.GRAY_SECOND,
         tertiary: Colors.GRAY_RESOLVED,
     },
+    oddsGradiendBackground: {
+        primary: Colors.GRAY_GRADIENT_1,
+        secondary: Colors.GRAY_GRADIENT_2,
+        tertiary: Colors.GRAY_GRADIENT_3,
+    },
     chart: {
         primary: Colors.PURPLE,
     },

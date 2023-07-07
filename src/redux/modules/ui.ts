@@ -16,7 +16,7 @@ const getDefaultOddsType = (): OddsType => {
     return (oddsType !== undefined ? oddsType : OddsType.Decimal) as OddsType;
 };
 
-const getDefaultTheme = (): Theme => {
+export const getDefaultTheme = (): Theme => {
     const lsTheme = localStore.get(LOCAL_STORAGE_KEYS.UI_THEME);
     return (lsTheme !== undefined && ThemeMap[lsTheme as Theme] !== undefined ? lsTheme : Theme.DARK) as Theme;
 };

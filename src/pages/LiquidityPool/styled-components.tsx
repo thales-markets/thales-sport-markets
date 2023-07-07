@@ -1,4 +1,4 @@
-import { Slider, withStyles } from '@material-ui/core';
+import { Slider } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 import {
@@ -374,43 +374,57 @@ export const SliderContainer = styled.div`
     margin-bottom: 10px;
 `;
 
-export const StyledSlider = withStyles({
-    root: {
-        color: '#5fc694',
-        '&$disabled': {
-            color: '#5fc694',
-            opacity: 0.5,
+export const StyledSlider = styled((props) => (
+    <Slider
+        classes={{ root: props.className, thumb: props.className, track: props.className, rail: props.className }}
+        {...props}
+    />
+))`
+    &.MuiSlider-root {
+        color: ${(props) => props.theme.status.win};
+        padding: 6px 0 10px 0;
+
+        &.Mui-disabled {
+            color: ${(props) => props.theme.status.win};
+            opacity: 0.5;
+        }
+    }
+
+    &.MuiSlider-thumb {
+        width: 14px;
+        height: 14px;
+        margin-top: -2px;
+        background: ${(props) => props.theme.textColor.primary};
+        boxShadow: 0px 1px 4px rgba(202, 202, 241, 0.5),
+        &:focus, &:hover: {
+            boxShadow: 0px 1px 4px rgba(202, 202, 241, 0.5),
         },
-        padding: '6px 0 10px 0',
-    },
-    thumb: {
-        width: 14,
-        height: 14,
-        marginTop: '-2px',
-        background: '#FFFFFF',
-        boxShadow: '0px 1px 4px rgba(202, 202, 241, 0.5)',
-        '&:focus, &:hover': {
-            boxShadow: '0px 1px 4px rgba(202, 202, 241, 0.5)',
-        },
-        '&$disabled': {
-            width: 14,
-            height: 14,
-            marginTop: '-2px',
-            marginLeft: '-6px',
-            boxShadow: 'none',
-            outline: 0,
-        },
-    },
-    track: {
-        height: 10,
-        borderRadius: 10,
-    },
-    rail: {
-        height: 10,
-        borderRadius: 10,
-    },
-    disabled: {},
-})(Slider);
+
+        &:focus,
+        &:hover {
+            box-shadow: none;
+        }
+
+        &.Mui-disabled {
+            width: 14px;
+            height: 14px;
+            margin-top: -2px;
+            margin-left: -6px;
+            box-shadow: none;
+            outline: 0;
+        }
+    }
+
+    &.MuiSlider-track {
+        height: 10px;
+        border-radius: 10px;
+    }
+
+    &.MuiSlider-rail {
+        height: 10px;
+        border-radius: 10px;
+    }
+`;
 
 export const SliderRange = styled.div`
     font-size: 13px;

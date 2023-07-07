@@ -136,7 +136,7 @@ const PayoutLabel = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
     font-weight: 300;
     padding: 0 5px;
     color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
-    ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')};
+    ${(props) => (props.isLost ? `text-decoration: line-through 2px solid ${props.theme.status.loss};` : '')};
     @media (max-width: 950px) {
         font-size: ${(props) => (props.isResolved ? '32' : '20')}px;
         line-height: ${(props) => (props.isResolved ? '32' : '20')}px;
@@ -155,7 +155,7 @@ const PayoutValue = styled.span<{ isLost?: boolean }>`
     line-height: 37px;
     font-weight: 800;
     color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
-    ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')}
+    ${(props) => (props.isLost ? `text-decoration: line-through 2px solid ${props.theme.status.loss};` : '')}
 `;
 
 const ReferralWrapper = styled(FlexDivColumnCentered)``;

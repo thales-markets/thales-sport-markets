@@ -17,6 +17,8 @@ import {
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 type MatchInfoProps = {
     market: ParlaysMarket;
@@ -27,6 +29,7 @@ type MatchInfoProps = {
 
 const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, customStyle }) => {
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
     const selectedOddsType = useSelector(getOddsType);
 
     const symbolText = getSymbolText(market.position, market);
@@ -61,7 +64,9 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                         ? {
                               text: spreadTotalText,
                               textStyle: {
-                                  backgroundColor: customStyle ? '#23273e' : '#2f3454',
+                                  backgroundColor: customStyle
+                                      ? theme.oddsGradiendBackground.primary
+                                      : theme.oddsGradiendBackground.secondary,
                                   top: '-9px',
                               },
                           }

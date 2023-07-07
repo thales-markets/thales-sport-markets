@@ -365,7 +365,7 @@ const Home: React.FC = () => {
                     setShowBurger(false);
                 }}
                 shouldCloseOnOverlayClick={false}
-                style={customModalStyles}
+                style={getCustomModalStyles(theme)}
             >
                 <BurgerFiltersContainer>
                     <LogoContainer>
@@ -806,7 +806,7 @@ const ArrowIcon = styled.i`
     writing-mode: vertical-lr;
 `;
 
-const customModalStyles = {
+const getCustomModalStyles = (theme: ThemeInterface) => ({
     content: {
         top: '0',
         overflow: 'auto',
@@ -821,10 +821,10 @@ const customModalStyles = {
         height: '100vh',
     },
     overlay: {
-        backgroundColor: '#303656',
+        backgroundColor: theme.background.secondary,
         zIndex: '1000',
     },
-};
+});
 
 const additionalApplyFiltersButtonStyle: CSSProperties = {
     alignSelf: 'center',

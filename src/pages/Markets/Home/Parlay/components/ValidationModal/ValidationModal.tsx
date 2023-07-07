@@ -9,7 +9,9 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getParlayError, resetParlayError, getParlaySize } from 'redux/modules/parlay';
 import styled from 'styled-components';
+import { useTheme } from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import { ThemeInterface } from 'types/ui';
 
 type ValidationModalProps = {
     onClose: () => void;
@@ -21,6 +23,7 @@ const ANIMATION_TIME = 1200;
 const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
 
     const parlayError = useSelector(getParlayError);
     const parlaySize = useSelector(getParlaySize);
@@ -75,7 +78,7 @@ const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => {
             <Container>
                 {parlayError.code === ParlayErrorCode.MAX_MATCHES && (
                     <>
-                        <ErrorMessage color={'#72c69b'}>
+                        <ErrorMessage color={theme.status.win}>
                             {t('markets.parlay.validation.max-teams', { max: parlayError.data })}
                         </ErrorMessage>
                         {getMaxMatchesAnimation()}
@@ -137,7 +140,7 @@ const ErrorMessage = styled.p<{ color?: string }>`
     font-style: normal;
     font-size: 15px;
     line-height: 22px;
-    color: ${(props) => (props.color ? props.color : '#ffffff')};
+    color: ${(props) => (props.color ? props.color : props.theme.textColor.primary)};
     text-transform: uppercase;
 `;
 
