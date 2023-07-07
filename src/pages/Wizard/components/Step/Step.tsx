@@ -183,7 +183,7 @@ const StepNumberSection = styled(FlexDivCentered)`
 
 const StepDescriptionSection = styled(FlexDivColumn)<{ isActive: boolean; isDisabled?: boolean }>`
     width: 60%;
-    color: ${(props) => (props.isActive ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
+    color: ${(props) => (props.isActive ? props.theme.textColor.primary : props.theme.textColor.secondary)};
     cursor: ${(props) => (props.isDisabled ? 'not-allowed' : props.isActive ? 'default' : 'pointer')};
 `;
 
@@ -236,7 +236,8 @@ const StepNumber = styled.span<{ isActive: boolean }>`
     font-size: 29px;
     line-height: 43px;
     text-transform: uppercase;
-    color: ${(props) => (props.isActive ? '#ffffff' : '#1a1c2b')};
+    color: ${(props) =>
+        props.isActive ? props.theme.button.textColor.secondary : props.theme.button.textColor.primary};
 `;
 
 const StepActionIconWrapper = styled.div<{ isActive: boolean; pulsate?: boolean }>`

@@ -166,7 +166,7 @@ export const BalanceValue = styled.span`
 export const XButton = styled.i<{ margin?: string }>`
     font-size: 15px;
     font-weight: 700;
-    color: #ca4c53;
+    color: ${(props) => props.theme.status.loss};
     cursor: pointer;
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
     &:hover {

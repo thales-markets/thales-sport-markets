@@ -60,7 +60,10 @@ const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?:
     return (
         <>
             <Table
-                tableHeadCellStyles={TableHeaderStyle}
+                tableHeadCellStyles={{
+                    ...TableHeaderStyle,
+                    color: theme.textColor.secondary,
+                }}
                 tableRowCellStyles={TableRowStyle}
                 columnsDeps={[networkId]}
                 columns={[
@@ -349,7 +352,6 @@ const TableHeaderStyle: React.CSSProperties = {
     lineHeight: '12px',
     textAlign: 'center',
     textTransform: 'uppercase',
-    color: '#5F6180',
     justifyContent: 'center',
 };
 

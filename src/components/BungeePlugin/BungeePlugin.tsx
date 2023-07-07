@@ -98,7 +98,7 @@ const BungeeWrapper = styled.div`
     width: 386px;
     height: 463px;
     margin: auto;
-    background: #1a1c2b;
+    background: ${(props) => props.theme.background.primary};
     border-radius: 15px;
     outline: none;
     @media (max-width: 950px) {

@@ -175,7 +175,10 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
     return (
         <>
             <Table
-                tableHeadCellStyles={TableHeaderStyle}
+                tableHeadCellStyles={{
+                    ...TableHeaderStyle,
+                    color: theme.textColor.secondary,
+                }}
                 tableRowCellStyles={TableRowStyle}
                 columnsDeps={[networkId]}
                 columns={[
@@ -434,7 +437,7 @@ export const getParlayRow = (
                                 ? {
                                       text: spreadAndTotalText,
                                       textStyle: {
-                                          backgroundColor: '#1A1C2B',
+                                          backgroundColor: theme.background.primary,
                                           fontSize: '10px',
                                           top: '-9px',
                                           left: '10px',
@@ -496,7 +499,7 @@ export const getParlayRow = (
                             ? {
                                   text: spreadTotalText,
                                   textStyle: {
-                                      backgroundColor: '#1A1C2B',
+                                      backgroundColor: theme.background.primary,
                                       fontSize: '10px',
                                       top: '-9px',
                                       left: '10px',
@@ -582,7 +585,6 @@ const TableHeaderStyle: React.CSSProperties = {
     lineHeight: '12px',
     textAlign: 'center',
     textTransform: 'uppercase',
-    color: '#5F6180',
     justifyContent: 'center',
 };
 

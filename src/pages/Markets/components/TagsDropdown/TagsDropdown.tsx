@@ -300,7 +300,7 @@ const StarIcon = styled.i<{ isMobile: boolean }>`
     margin-left: ${(props) => (props.isMobile ? '35px' : '5px')};
     &.selected,
     &:hover {
-        color: #fac439;
+        color: ${(props) => props.theme.button.textColor.tertiary};
     }
 `;
 

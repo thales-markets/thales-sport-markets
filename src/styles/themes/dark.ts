@@ -29,7 +29,7 @@ export default {
         textColor: {
             primary: Colors.GRAY_DARK,
             secondary: Colors.WHITE,
-            tertiary: Colors.GRAY,
+            tertiary: Colors.ORANGE,
             quaternary: Colors.BLUE,
         },
         borderColor: {

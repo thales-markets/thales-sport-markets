@@ -70,7 +70,7 @@ const UserStats: React.FC = () => {
 const Wrapper = styled.div`
     margin-top: 30px;
     display: flex;
-    background:  ${(props) => props.theme.background.secondary}
+    background: ${(props) => props.theme.background.secondary};
     border-radius: 5px;
     width: 100%;
     flex-wrap: wrap;

@@ -236,7 +236,10 @@ const ParlayLeaderboard: React.FC = () => {
             <Table
                 data={parlaysData}
                 tableRowHeadStyles={{ width: '100%' }}
-                tableHeadCellStyles={TableHeaderStyle}
+                tableHeadCellStyles={{
+                    ...TableHeaderStyle,
+                    color: theme.textColor.secondary,
+                }}
                 tableRowCellStyles={TableRowStyle}
                 columnsDeps={[rewards]}
                 columns={[
@@ -572,7 +575,6 @@ const TableHeaderStyle: React.CSSProperties = {
     lineHeight: '12px',
     textAlign: 'center',
     textTransform: 'uppercase',
-    color: '#5F6180',
     justifyContent: 'center',
 };
 

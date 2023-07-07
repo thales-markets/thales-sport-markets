@@ -260,7 +260,7 @@ const StarIcon = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
     &.selected,
     &:hover {
-        color: #fac439;
+        color: ${(props) => props.theme.button.textColor.tertiary};
     }
 `;
 

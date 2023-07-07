@@ -212,7 +212,7 @@ export const LiquidityPoolFilledGraphicContainer = styled(FlexDivStart)`
     position: relative;
     width: 100%;
     height: 14px;
-    background: #3b4472;
+    background: ${(props) => props.theme.background.tertiary};
     border-radius: 9px;
     margin-top: 10px;
 `;

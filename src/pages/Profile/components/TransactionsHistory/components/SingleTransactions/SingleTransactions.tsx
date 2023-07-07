@@ -94,7 +94,10 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
     return (
         <>
             <Table
-                tableHeadCellStyles={TableHeaderStyle}
+                tableHeadCellStyles={{
+                    ...TableHeaderStyle,
+                    color: theme.textColor.secondary,
+                }}
                 tableRowCellStyles={TableRowStyle}
                 onTableCellClick={(row: any, cell: any) => {
                     cell.column.id !== 'share' ? open(getEtherscanTxLink(networkId, row.original.hash)) : undefined;
@@ -157,7 +160,7 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                                                 ? {
                                                       text: spreadTotalText,
                                                       textStyle: {
-                                                          backgroundColor: '#1A1C2B',
+                                                          backgroundColor: theme.background.primary,
                                                           fontSize: '10px',
                                                           top: '-7px',
                                                           left: '13px',
@@ -322,7 +325,6 @@ const TableHeaderStyle: React.CSSProperties = {
     lineHeight: '12px',
     textAlign: 'center',
     textTransform: 'uppercase',
-    color: '#5F6180',
     justifyContent: 'center',
     paddingLeft: 0,
 };
