@@ -20,12 +20,13 @@ export const Container = styled(FlexDivRow)<{
     line-height: 16px;
     background: linear-gradient(180deg, #303656 41.5%, #1a1c2b 100%);
     border: 1px solid
-        ${(props) => (props.selected || props.isWinner ? MAIN_COLORS.BORDERS.LIGHT_BLUE : MAIN_COLORS.BORDERS.GRAY)};
-    box-shadow: ${(props) => (props.isWinner ? MAIN_COLORS.SHADOWS.POSITION_WINNER : '')};
+        ${(props) =>
+            props.selected || props.isWinner ? props.theme.borderColor.quaternary : props.theme.borderColor.primary};
+    box-shadow: ${(props) => (props.isWinner ? props.theme.shadow.positionWinner : '')};
     opacity: ${(props) => (props.disabled && !props.isWinner ? '0.4' : '1')};
     cursor: ${(props) => (props.disabled ? '' : 'pointer')};
     :hover {
-        border: ${(props) => (props.disabled ? undefined : `1px solid ${MAIN_COLORS.LIGHT_BLUE}`)};
+        border: ${(props) => (props.disabled ? undefined : `1px solid ${props.theme.borderColor.quaternary}`)};
     }
     :not(:last-child) {
         margin-right: 10px;
@@ -82,7 +83,7 @@ export const TooltipBonusText = styled(TooltipText)`
 `;
 
 export const TooltipFooter = styled(FlexDivRow)`
-    border-top: 1px solid ${MAIN_COLORS.GRAY};
+    border-top: 1px solid ${(props) => props.theme.background.secondary};
     margin-top: 10px;
     padding-top: 8px;
 `;

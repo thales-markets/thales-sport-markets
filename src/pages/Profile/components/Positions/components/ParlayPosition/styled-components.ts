@@ -1,4 +1,3 @@
-import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivColumnNative, FlexDivRow } from 'styles/common';
 import { Label } from '../../styled-components';
@@ -72,7 +71,7 @@ export const Value = styled(TicketId)`
 
 export const WinLabel = styled(Label)`
     font-weight: 900;
-    color: ${MAIN_COLORS.TEXT.POTENTIAL_PROFIT};
+    color: ${(props) => props.theme.status.win};
     text-transform: uppercase;
 `;
 
@@ -102,8 +101,8 @@ export const CollapsableContainer = styled(FlexDivColumnNative)<{ show?: boolean
 export const Divider = styled.div`
     height: 1px;
     border: none;
-    background-color: ${MAIN_COLORS.DIVIDER_COLOR};
-    color: ${MAIN_COLORS.DIVIDER_COLOR};
+    background-color: ${(props) => props.theme.background.tertiary};
+    color: ${(props) => props.theme.textColor.secondary};
     width: 100%;
     margin-top: 8px;
     margin-bottom: 10px;

@@ -1,4 +1,3 @@
-import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivColumnNative, FlexDivRow } from 'styles/common';
 
@@ -30,7 +29,7 @@ export const ButtonContainer = styled(FlexDivColumnNative)`
 `;
 
 export const InfoContainer = styled(FlexDivColumnNative)`
-    border: 1.5px solid ${MAIN_COLORS.LIGHT_BLUE};
+    border: 1.5px solid ${(props) => props.theme.borderColor.quaternary};
     border-radius: 12px;
     padding: 15px;
     margin-left: 15px;
@@ -50,7 +49,7 @@ export const KeyValueContainer = styled(FlexDivRow)`
 
 export const Label = styled.span<{ win?: boolean }>`
     text-transform: uppercase;
-    color: ${(props) => (props?.win ? `${MAIN_COLORS.TEXT.POTENTIAL_PROFIT}` : `${MAIN_COLORS.LIGHT_BLUE}`)};
+    color: ${(props) => (props?.win ? props.theme.status.win : props.theme.textColor.quaternary)};
     ::after {
         content: ': ';
     }
@@ -58,7 +57,7 @@ export const Label = styled.span<{ win?: boolean }>`
 
 export const Value = styled.span<{ win?: boolean }>`
     font-weight: 800;
-    color: ${(props) => (props?.win ? `${MAIN_COLORS.TEXT.POTENTIAL_PROFIT}` : `${MAIN_COLORS.TEXT.WHITE}`)};
+    color: ${(props) => (props?.win ? props.theme.status.win : props.theme.textColor.primary)};
 `;
 
 export const ParagraphContainer = styled(FlexDivColumnNative)`
@@ -79,7 +78,7 @@ export const Paragraph = styled.p`
 `;
 
 export const TabsContainer = styled(FlexDivRow)`
-    border-bottom: 2px solid ${MAIN_COLORS.LIGHT_GRAY};
+    border-bottom: 2px solid ${(props) => props.theme.background.secondary};
     justify-content: space-around;
     width: 100%;
     margin-top: 20px;
