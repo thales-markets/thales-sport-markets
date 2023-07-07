@@ -218,44 +218,6 @@ export const ExternalLinkArrow = styled.i.attrs({ className: 'icon icon--arrow-e
 
 export const ExternalLink = styled.a``;
 
-export const ClaimButton = styled(Button)<{ claimable?: boolean }>`
-    background: ${(props) => props.theme.background.quaternary};
-    color: ${(props) => props.theme.textColor.tertiary};
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: 0.025em;
-    padding: 1px 15px 1px 15px;
-    visibility: ${(props) => (!props.claimable ? 'hidden' : '')};
-    @media (max-width: 768px) {
-        position: initial;
-        font-size: 9px;
-        padding: 2px 5px;
-        min-height: 12px;
-    }
-`;
-
-export const ClaimAllButton = styled(Button)<{ claimable?: boolean }>`
-    background: ${(props) => props.theme.background.quaternary};
-    color: ${(props) => props.theme.textColor.tertiary};
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: 0.025em;
-    padding: 1px 15px 1px 15px;
-    visibility: ${(props) => (!props.claimable ? 'hidden' : '')};
-    @media (max-width: 768px) {
-        position: initial;
-        font-size: 9px;
-        padding: 2px 5px;
-        min-height: 12px;
-    }
-`;
-
 export const Label = styled.span<{ canceled?: boolean }>`
     font-weight: 400;
     font-size: 12px;

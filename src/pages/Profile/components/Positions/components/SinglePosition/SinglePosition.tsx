@@ -46,7 +46,6 @@ import { refetchAfterClaim } from 'utils/queryConnector';
 import { buildMarketLink } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import {
-    ClaimButton,
     ClaimContainer,
     ClaimLabel,
     ClaimValue,
@@ -76,6 +75,7 @@ import {
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
+import Button from 'components/Button';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;
@@ -351,16 +351,20 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                         {isMobile ? (
                             <ClaimContainer>
                                 <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
-                                <ClaimButton
-                                    claimable={true}
+                                <Button
                                     onClick={(e: any) => {
                                         e.preventDefault();
                                         e.stopPropagation();
                                         claimReward();
                                     }}
+                                    backgroundColor={theme.button.background.quaternary}
+                                    borderColor={theme.button.borderColor.secondary}
+                                    padding="2px 5px"
+                                    fontSize="9px"
+                                    height="19px"
                                 >
                                     {t('profile.card.claim')}
-                                </ClaimButton>
+                                </Button>
                             </ClaimContainer>
                         ) : (
                             <>
@@ -368,16 +372,18 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                     <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
                                     <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
                                 </ColumnDirectionInfo>
-                                <ClaimButton
-                                    claimable={true}
+                                <Button
                                     onClick={(e: any) => {
                                         e.preventDefault();
                                         e.stopPropagation();
                                         claimReward();
                                     }}
+                                    backgroundColor={theme.button.background.quaternary}
+                                    borderColor={theme.button.borderColor.secondary}
+                                    padding="3px 15px"
                                 >
                                     {t('profile.card.claim')}
-                                </ClaimButton>
+                                </Button>
                             </>
                         )}
                     </>
