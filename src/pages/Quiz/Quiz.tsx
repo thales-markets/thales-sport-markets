@@ -9,7 +9,6 @@ import {
     QuizContainer,
     Title,
     Question,
-    SubmitButton,
     FinishedInfo,
     FinishedInfoContainer,
     FinishedInfoLabel,
@@ -34,6 +33,7 @@ import {
     DifficultyLabel,
     DifficultyInfo,
     Wrapper,
+    defaultButtonProps,
 } from './styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -81,10 +81,14 @@ import { FinishInfo, LeaderboardItem } from 'types/quiz';
 import ordinal from 'ordinal';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import TextInput from 'components/fields/TextInput';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
+import Button from 'components/Button';
 
 const Quiz: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isQuizStarted = useSelector((state: RootState) => getIsQuizStarted(state));
@@ -211,18 +215,20 @@ const Quiz: React.FC = () => {
     const getSubmitButton = () => {
         if (!isWalletConnected && !isQuizFinished) {
             return (
-                <SubmitButton onClick={() => openConnectModal?.()}>
+                <Button onClick={() => openConnectModal?.()} {...defaultButtonProps}>
                     {t('common.wallet.connect-your-wallet')}
-                </SubmitButton>
+                </Button>
             );
         }
 
         if (isQuizFinished) {
             return (
                 <>
-                    <SubmitButton onClick={handleNewQuiz}>{t('quiz.button.try-again-label')}</SubmitButton>
+                    <Button onClick={handleNewQuiz} {...defaultButtonProps}>
+                        {t('quiz.button.try-again-label')}
+                    </Button>
                     <SPAAnchor href={buildHref(ROUTES.QuizLeaderboard)}>
-                        <SubmitButton onClick={() => {}}>{t('quiz.button.see-leaderboard-label')}</SubmitButton>
+                        <Button onClick={() => {}}>{t('quiz.button.see-leaderboard-label')}</Button>
                     </SPAAnchor>
                 </>
             );
@@ -232,28 +238,46 @@ const Quiz: React.FC = () => {
             return (
                 <>
                     {currentQuestionIndex > 0 && (
-                        <SubmitButton onClick={handlePreviousQuestion} isNavigation disabled={isSubmitting}>
+                        <Button
+                            onClick={handlePreviousQuestion}
+                            disabled={isSubmitting}
+                            backgroundColor={theme.button.background.quaternary}
+                            borderColor={theme.button.borderColor.secondary}
+                            {...defaultButtonProps}
+                        >
                             {t('quiz.button.previous-question-label')}
-                        </SubmitButton>
+                        </Button>
                     )}
                     {currentQuestionIndex < NUMBER_OF_QUESTIONS - 1 && (
-                        <SubmitButton onClick={handleNextQuestion} isNavigation disabled={isSubmitting}>
+                        <Button
+                            onClick={handleNextQuestion}
+                            disabled={isSubmitting}
+                            backgroundColor={theme.button.background.quaternary}
+                            borderColor={theme.button.borderColor.secondary}
+                            {...defaultButtonProps}
+                        >
                             {t('quiz.button.next-question-label')}
-                        </SubmitButton>
+                        </Button>
                     )}
                     {currentQuestionIndex == NUMBER_OF_QUESTIONS - 1 && (
-                        <SubmitButton onClick={() => handleFinishQuiz(true)} isNavigation disabled={isSubmitting}>
+                        <Button
+                            onClick={() => handleFinishQuiz(true)}
+                            disabled={isSubmitting}
+                            backgroundColor={theme.button.background.quaternary}
+                            borderColor={theme.button.borderColor.secondary}
+                            {...defaultButtonProps}
+                        >
                             {t('quiz.button.finish-quiz-label')}
-                        </SubmitButton>
+                        </Button>
                     )}
                 </>
             );
         }
 
         return (
-            <SubmitButton disabled={isStartQuizDisabled} onClick={handleStartQuiz}>
+            <Button disabled={isStartQuizDisabled} onClick={handleStartQuiz} {...defaultButtonProps}>
                 {t('quiz.button.start-quiz-label')}
-            </SubmitButton>
+            </Button>
         );
     };
 

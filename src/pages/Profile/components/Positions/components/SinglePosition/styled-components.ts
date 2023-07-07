@@ -12,7 +12,7 @@ import { Value } from '../ParlayPosition/styled-components';
 
 export const Wrapper = styled(FlexDivRow)`
     align-items: center;
-    background-color: ${MAIN_COLORS.LIGHT_GRAY};
+    background-color: ${(props) => props.theme.background.secondary};
     border-radius: 4px;
     padding: 7px 10px;
     width: 100%;

@@ -61,7 +61,7 @@ export const Bonus = styled(FlexDivCentered)`
     font-size: 12px;
     font-weight: 700;
     padding: 2px 2px 2px 4px;
-    background-color: ${MAIN_COLORS.LIGHT_GRAY};
+    background-color: ${(props) => props.theme.background.secondary};
     border-radius: 60%;
     @media (max-width: 575px) {
         right: -7px;

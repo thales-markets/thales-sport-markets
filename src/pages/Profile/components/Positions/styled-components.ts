@@ -24,7 +24,7 @@ export const CategoryLabel = styled.span`
     font-weight: 700;
     font-size: 14px;
     line-height: 110%;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
     text-transform: uppercase;
     cursor: pointer;
     @media (max-width: 768px) {
@@ -43,7 +43,7 @@ export const CategoryIcon = styled.i`
 
 export const Arrow = styled.i`
     font-size: 18px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
     margin-left: 15px;
     @media (max-width: 768px) {
         font-size: 10px;
@@ -145,7 +145,7 @@ export const ClubName = styled.span<{
     font-weight: 300;
     font-size: 12px;
     text-transform: uppercase;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
     margin-right: 5px;
     margin-left: ${(props) => (props?.isOneSided ? `25px` : '')};
     word-wrap: normal;
@@ -211,7 +211,7 @@ export const ExternalLinkContainer = styled.div`
 
 export const ExternalLinkArrow = styled.i.attrs({ className: 'icon icon--arrow-external' })`
     font-size: 20px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
     position: absolute;
     right: 15px;
     cursor: pointer;

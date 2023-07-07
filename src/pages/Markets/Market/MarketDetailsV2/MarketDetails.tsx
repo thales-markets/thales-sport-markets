@@ -380,14 +380,14 @@ const IncentivizedTitle = styled.span`
 const Status = styled(FlexDivCentered)<{ backgroundColor?: string }>`
     width: 100%;
     border-radius: 15px;
-    background-color: ${(props) => props.backgroundColor || MAIN_COLORS.LIGHT_GRAY};
+    background-color: ${(props) => props.backgroundColor || props.theme.background.secondary};
     padding: 10px 50px;
     margin-bottom: 7px;
     font-weight: 600;
     font-size: 21px;
     line-height: 110%;
     text-transform: uppercase;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const ResultContainer = styled(FlexDivColumnCentered)`

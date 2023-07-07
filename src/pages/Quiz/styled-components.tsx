@@ -199,28 +199,6 @@ export const FinishedInfoMessage = styled(Description)`
     line-height: 22px;
 `;
 
-export const SubmitButton = styled.button<{ isNavigation?: boolean }>`
-    background: ${(props) =>
-        props.isNavigation
-            ? 'linear-gradient(88.84deg, #5fc694 19.98%, #1ca6b9 117.56%)'
-            : 'linear-gradient(88.84deg, #2FC9DD 19.98%, #1CA6B9 117.56%);'};
-    border-radius: 8px;
-    margin: 20px 20px;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 23px;
-    color: #1a1c2b;
-    width: 252px;
-    border: none;
-    padding: 7px;
-    cursor: pointer;
-    text-transform: uppercase;
-    &:disabled {
-        opacity: 0.4;
-        cursor: default;
-    }
-`;
-
 export const ButtonContainer = styled(FlexDivCentered)<{ mobileDirection?: string }>`
     @media (max-width: 675px) {
         flex-direction: ${(props) => props.mobileDirection || 'column'};
@@ -415,3 +393,7 @@ export const PeriodContainer = styled(FlexDivStart)`
         margin-bottom: 10px;
     }
 `;
+
+export const defaultButtonProps = {
+    margin: '20px 10px',
+};

@@ -75,7 +75,7 @@ export const ParagraphHeader = styled.h1`
 export const Paragraph = styled.p`
     font-size: 12px;
     line-height: 150%;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 export const TabsContainer = styled(FlexDivRow)`
@@ -90,7 +90,7 @@ export const TabsContainer = styled(FlexDivRow)`
 
 export const Tab = styled.span<{ active?: boolean }>`
     text-transform: uppercase;
-    color: ${(props) => (props?.active ? `${MAIN_COLORS.LIGHT_BLUE}` : `${MAIN_COLORS.LIGHT_GRAY}`)};
+    color: ${(props) => (props?.active ? props.theme.textColor.quaternary : props.theme.textColor.tertiary)};
     padding-bottom: 5px;
     cursor: pointer;
     font-weight: 600;

@@ -1,4 +1,3 @@
-import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivRow } from 'styles/common';
 
@@ -9,7 +8,7 @@ export const ProfileContainer = styled(FlexDivRow)`
 export const ProfileLabel = styled.span`
     font-weight: 600;
     font-size: 12px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
     text-transform: uppercase;
     margin-right: 15px;
 `;
@@ -24,7 +23,7 @@ export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile' })<{
     iconColor?: string;
 }>`
     font-size: ${(props) => (props.avatarSize ? props.avatarSize : '20')}px;
-    color: ${(props) => (props.iconColor ? props.iconColor : MAIN_COLORS.TEXT.DARK_GRAY)};
+    color: ${(props) => (props.iconColor ? props.iconColor : props.theme.button.textColor.primary)};
 `;
 
 export const NotificationCount = styled.div`
@@ -38,12 +37,12 @@ export const NotificationCount = styled.div`
     justify-content: center;
     height: 14px;
     width: 14px;
-    background-color: ${MAIN_COLORS.BACKGROUNDS.BLUE};
-    box-shadow: ${MAIN_COLORS.SHADOWS.NOTIFICATION};
+    background-color: ${(props) => props.theme.background.quaternary};
+    box-shadow: ${(props) => props.theme.shadow.notification};
 `;
 
 export const Count = styled.span`
-    color: ${MAIN_COLORS.DARK_GRAY};
+    color: ${(props) => props.theme.button.textColor.primary};
     font-weight: 800;
     font-size: 10px;
 `;

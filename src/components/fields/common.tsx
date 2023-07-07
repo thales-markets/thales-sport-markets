@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivEnd } from 'styles/common';
 
-export const FieldContainer = styled(FlexDivColumn)<{ margin?: string }>`
+export const FieldContainer = styled(FlexDivColumn)<{ margin?: string; width?: string }>`
     flex: initial;
     position: relative;
     margin: ${(props) => props.margin || '0 0 5px 0'};
-    width: 100%;
+    width: ${(props) => props.width || '100%'};
 `;
 
 export const FieldLabel = styled.label`

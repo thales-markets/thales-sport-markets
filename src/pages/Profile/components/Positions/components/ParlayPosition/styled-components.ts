@@ -5,7 +5,7 @@ import { Label } from '../../styled-components';
 
 export const Container = styled(FlexDivColumnNative)`
     align-items: center;
-    background-color: ${MAIN_COLORS.LIGHT_GRAY};
+    background-color: ${(props) => props.theme.background.secondary};
     border-radius: 4px;
     padding: 12px 10px;
     width: 100%;
@@ -82,7 +82,7 @@ export const WinValue = styled(WinLabel)`
 
 export const ArrowIcon = styled.i`
     font-size: 12px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
     margin-right: 10px;
     margin-left: 10px;
     @media (max-width: 768px) {

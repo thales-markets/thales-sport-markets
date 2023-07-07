@@ -7,7 +7,6 @@ import Search from 'components/Search';
 import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
-import { MAIN_COLORS } from 'constants/ui';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
 import React, { useState } from 'react';
@@ -296,12 +295,12 @@ const NotificationCount = styled.div`
     justify-content: center;
     height: 16px;
     width: 16px;
-    background-color: ${MAIN_COLORS.BACKGROUNDS.BLUE};
-    box-shadow: ${MAIN_COLORS.SHADOWS.NOTIFICATION};
+    background-color: ${(props) => props.theme.background.quaternary};
+    box-shadow: ${(props) => props.theme.shadow.notification};
 `;
 
 const Count = styled.span`
-    color: ${MAIN_COLORS.DARK_GRAY};
+    color: ${(props) => props.theme.button.textColor.primary};
     font-weight: 800;
     font-size: 12px;
 `;

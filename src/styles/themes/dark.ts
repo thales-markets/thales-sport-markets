@@ -16,7 +16,7 @@ export default {
     borderColor: {
         primary: Colors.GRAY_LIGHT,
         secondary: Colors.WHITE,
-        tertiary: Colors.GRAY_DARK,
+        tertiary: Colors.GREEN,
         quaternary: Colors.BLUE,
     },
     winnerColors: {
@@ -40,6 +40,7 @@ export default {
         borderColor: {
             primary: Colors.GREEN,
             secondary: Colors.BLUE,
+            tertiary: Colors.GRAY_DARK,
         },
     },
     input: {
@@ -103,5 +104,6 @@ export default {
     shadow: {
         navBar: '-64px 0px 38px 3px rgba(0,0,0,0.41)',
         toggle: '0px 0px 40px #64d9fe',
+        notification: '0px 0px 20px rgba(63, 177, 213, 0.96)',
     },
 };

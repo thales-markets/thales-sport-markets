@@ -112,7 +112,7 @@ const Separator = styled.div`
     width: 2px;
     height: 56px;
     margin-top: 8px;
-    background: ${(props) => props.theme.button.background.secondary};
+    background: ${(props) => props.theme.background.tertiary};
     border-radius: 5px;
     @media (max-width: 600px) {
         &.mobile-hide {

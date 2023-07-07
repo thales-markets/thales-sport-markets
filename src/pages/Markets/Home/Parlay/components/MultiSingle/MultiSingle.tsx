@@ -39,7 +39,6 @@ import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import {
     AmountToBuyMultiContainer,
     AmountToBuyMultiInfoLabel,
-    AmountToBuyMultiInput,
     AmountToBuyMultiPayoutLabel,
     AmountToBuyMultiPayoutValue,
     InfoContainer,
@@ -52,17 +51,18 @@ import {
     SummaryLabel,
     SummaryValue,
     TwitterIcon,
-    ValidationTooltip,
     XButton,
     defaultButtonProps,
 } from '../styled-components';
 import { ListContainer } from 'pages/Profile/components/Positions/styled-components';
 import MatchInfo from '../MatchInfo';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import { OddsType } from 'enums/markets';
 import Button from 'components/Button';
+import NumericInput from 'components/fields/NumericInput';
+import { ThemeInterface } from 'types/ui';
 
 type MultiSingleProps = {
     markets: ParlaysMarket[];
@@ -73,6 +73,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
+    const theme: ThemeInterface = useTheme();
 
     const dispatch = useDispatch();
 
@@ -738,30 +739,32 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                             </RowMarket>
                             <AmountToBuyMultiContainer ref={inputRef}>
                                 <AmountToBuyMultiInfoLabel>{t('markets.parlay.buy-in')}:</AmountToBuyMultiInfoLabel>{' '}
-                                <ValidationTooltip
-                                    open={
+                                <NumericInput
+                                    key={`${index}-${market.address}-ms-amount`}
+                                    value={
+                                        multiSingleAmounts.find((m) => market.address === m.sportMarketAddress)
+                                            ?.amountToBuy || ''
+                                    }
+                                    onChange={(e) => {
+                                        if (Number(countDecimals(Number(e.target.value))) > 2) {
+                                            return;
+                                        }
+                                        setMultiSingleUsd(market, Number(e.target.value));
+                                    }}
+                                    showValidation={
                                         inputRefVisible && !!tooltipTextUsdAmount[market.address] && !openApprovalModal
                                     }
-                                    title={tooltipTextUsdAmount[market.address]}
-                                    placement={'top'}
-                                    arrow={true}
-                                >
-                                    <AmountToBuyMultiInput
-                                        key={`${index}-${market.address}-ms-amount`}
-                                        name="usdAmount"
-                                        type="number"
-                                        value={
-                                            multiSingleAmounts.find((m) => market.address === m.sportMarketAddress)
-                                                ?.amountToBuy || ''
-                                        }
-                                        onChange={(e) => {
-                                            if (Number(countDecimals(Number(e.target.value))) > 2) {
-                                                return;
-                                            }
-                                            setMultiSingleUsd(market, Number(e.target.value));
-                                        }}
-                                    />
-                                </ValidationTooltip>
+                                    validationMessage={tooltipTextUsdAmount[market.address]}
+                                    inputFontSize="13px"
+                                    inputFontWeight="700"
+                                    inputTextAlign="center"
+                                    inputPadding="2px 0px"
+                                    width="80px"
+                                    height="21px"
+                                    margin="0 0 5px 2px"
+                                    containerWidth="auto"
+                                    borderColor={theme.input.borderColor.tertiary}
+                                />
                                 <AmountToBuyMultiPayoutLabel>{t('markets.parlay.payout')}:</AmountToBuyMultiPayoutLabel>{' '}
                                 <AmountToBuyMultiPayoutValue isInfo={true}>
                                     {isFetching[market.address] ||

@@ -133,8 +133,8 @@ const ValidationTooltip = styled((props) => <MuiTooltip classes={{ popper: props
         }
         width: 13px;
         height: 10px;
-        bottom: ${(props) => (props.placement === 'top' ? '-3px' : '0px')} !important;
-        top: ${(props) => (props.placement === 'top' ? '0px' : '-3px')} !important;
+        bottom: ${(props) => (props.placement === 'top' ? '-3px' : 'auto')} !important;
+        top: ${(props) => (props.placement === 'top' ? 'auto' : '-3px')} !important;
     }
 `;
 

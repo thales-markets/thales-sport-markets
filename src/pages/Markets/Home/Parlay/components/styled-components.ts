@@ -124,18 +124,6 @@ export const AmountToBuyMultiContainer = styled.div`
     align-items: flex-end;
 `;
 
-export const AmountToBuyMultiInput = styled.input`
-    width: 80px;
-    margin-left: 2px;
-    margin-bottom: 5px;
-    border: 2px solid #3accfa;
-    border-radius: 3px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 13px;
-    outline: none;
-`;
-
 export const AmountToBuyMultiInfoLabel = styled.span<{ alignRight?: boolean }>`
     font-weight: 400;
     font-size: 11px;
