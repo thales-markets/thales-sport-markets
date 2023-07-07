@@ -228,7 +228,6 @@ const ParlayLeaderboard: React.FC = () => {
                         text={searchText}
                         customPlaceholder={t('rewards.search-placeholder')}
                         handleChange={(e) => setSearchText(e)}
-                        customStyle={{ border: `1px solid ${theme.borderColor.secondary}` }}
                         width={200}
                     />
                 </LeaderboardHeader>

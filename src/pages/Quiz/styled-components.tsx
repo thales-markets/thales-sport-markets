@@ -109,9 +109,9 @@ export const Copy = styled.div`
     }
     a {
         cursor: pointer;
-        color: #91bced;
-        &:hover {
-            color: #00f9ff;
+        color: ${(props) => props.theme.link.textColor.primary};
+        :hover {
+            text-decoration: underline;
         }
     }
 `;
@@ -262,7 +262,7 @@ export const QuestionIndicatorContainer = styled(FlexDivStart)`
 
 export const QuestionIndicator = styled(FlexDivCentered)<{ isPassed: boolean }>`
     border-radius: 50%;
-    background: ${(props) => (props.isPassed ? '#2fc9dd' : '#303656')};
+    background: ${(props) => (props.isPassed ? props.theme.background.quaternary : props.theme.background.secondary)};
     width: 24px;
     height: 24px;
     :not(:last-child) {
@@ -320,9 +320,9 @@ export const PaginationWrapper = styled(TablePagination)`
 `;
 
 const TextLink = styled.a`
-    color: #91bced;
-    &:hover {
-        color: #00f9ff;
+    color: ${(props) => props.theme.link.textColor.primary};
+    :hover {
+        text-decoration: underline;
     }
 `;
 
